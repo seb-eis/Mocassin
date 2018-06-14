@@ -5,12 +5,14 @@
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
 //			© 2018 Sebastian Eisele     //
-// Short:   Array struct + alloc macro  //
+// Short:   Array + buffer definitions  //
 //////////////////////////////////////////
 
 #pragma once
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "../Errors/McErrors.h"
 
 // Defines the default byte to be of unsigned int8 type
 typedef uint8_t byte_t;
@@ -18,11 +20,14 @@ typedef uint8_t byte_t;
 // Defines the signed byte to be of unsigned int8 type
 typedef uint8_t sbyte_t;
 
-// Defines the default byte block to an uint32 value
-typedef uint32_t block_t;
+// Defines the default memory block to an uint32 value
+typedef uint32_t memblock_t;
 
-// Defines the undefined dynamic array boudary type with byte pointers to start and end point
-typedef struct {byte_t* start_it; byte_t* end_it;} byte_array_t;
+// Defines a dynmaic array access with interator pointers to the start byte and first after end byte
+typedef struct { byte_t* start_it; byte_t* end_it; } byte_array_t;
+
+// Defines a dynamic array access with interator pointers to the start byte and first after end byte
+typedef struct { uint32_t* start_it; uint32_t* end_it; } memblock_array_t;
 
 // Define a new named dynamic sized array that supports startd and end iterators
 #define DEFINE_DYNAMIC_ARRAY(name, type) typedef struct { type* start_it; type* end_it; } name;
@@ -63,42 +68,26 @@ DEFINE_DYNAMIC_ARRAY(uint64_array_t, uint64_t);
 // Basic dynamic size_t array definition. Carries start and end iterator pointers
 DEFINE_DYNAMIC_ARRAY(size_array_t, size_t);
 
-// Allocate a new array of size and byte count per entry. Returns a byte array type with pointers to entries 0 and End+1
-byte_array_t allocate_array(size_t array_size, size_t entry_bytes)
-{
-    size_t buffer_size = array_size * entry_bytes;
-    byte_t* start = malloc(buffer_size);
-    byte_t* end = start +buffer_size;
-    return (byte_array_t) {start,end};
-}
+// Checks if casting a byte buffer access struct to an access struct of a new entry byte count could cause invalid memory access. Returns 0 if ok
+int cast_is_memory_save(const byte_array_t* byte_array, size_t new_entry_size);
 
-// Allocate a block buffer with the specfified number of blocks. Each block features 8 bytes
-byte_array_t allocate_block_buffer(size_t num_of_blocks)
-{
-    return allocate_array(sizeof(byte_t) * num_of_blocks, 1);
-}
+// Allocate a new buffer that holds as many bytes as defined by the number of blocks and bytes per block. Returns a byte array access struct to the buffer
+byte_array_t allocate_buffer(size_t num_of_blocks, size_t bytes_per_block);
 
-// Calculates the size of a byte array type with the passed block size
-size_t get_array_size(const byte_array_t* byte_array, size_t block_size)
-{
-    return ((size_t) byte_array->end_it - (size_t) byte_array->start_it) / block_size;
-}
+// Allocate a new buffer that holds the specfified number of 4 byte memory blocks. Returns a byte array access struct to the buffer
+byte_array_t allocate_block_buffer(size_t num_of_blocks);
 
-// Print any array of bytes. Always possible
-void print_array_bytes(const byte_array_t* array_def)
-{
-    for(byte_t* it = (byte_t*)array_def->start_it; it < (byte_t*)array_def->end_it; it++)
-    {
-        printf("%02x ", *it);
-    }   
-}
+// Get the number of bytes accessible thorugh the probided byte buffer access struct
+size_t get_buffer_size(const byte_array_t * byte_array);
 
-// Print any array as blocks of int32_t. Terminates program if buffer byte size of array is not 4*N
-void print_array_blocks(const byte_array_t* array_def)
-{
-    for(block_t* it = (block_t*)array_def->start_it; it < (block_t*)array_def->end_it; it++)
-    {
-        printf("%08x ", *it);
-    }
-}
+// Calculates the size of a byte buffer with the provided block size. Does not check for under or oversize
+size_t get_unchecked_size(const byte_array_t* byte_array, size_t block_size);
 
+// Calculates the size remainder of a byte buffer. If the remainder is zero the buffer can be safely accessed using entries of the defined size
+size_t get_array_remainder(const byte_array_t* byte_array, size_t block_size);
+
+// Print any array of bytes to the target stream in hexadecimal unsigned 8 bit integer blocks
+int byte_dump_memory(const byte_array_t* byte_array, void* target_stream);
+
+// Print any array of bytes to the target stream in hexadecimal unsigned 32 bit integer blocks
+int block_dump_memory(const byte_array_t* byte_array, void* target_stream);

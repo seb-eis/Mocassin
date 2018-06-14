@@ -9,6 +9,7 @@
             "command": "gcc",
             "args": [
                 "-g",
+                "Structs/Array/Array.c",
                 "Math/Types/Vector.c",
                 "MC_Simulator.c",
                 "-o", "Debug/MC_Simulator.exe",
