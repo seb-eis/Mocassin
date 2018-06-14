@@ -1,0 +1,22 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build_mc_simulator_debug",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "Math/Types/Vector.c",
+                "MC_Simulator.c",
+                "-o", "Debug/MC_Simulator.exe",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
