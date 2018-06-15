@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICon.Model", "ICon.Model\IC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICon.Model.Test", "ICon.Model.Test\ICon.Model.Test.csproj", "{909BD965-D3E6-4F3A-AC41-5412184ECA46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Z.QuickTest", "ICon.Framework.QuickTest\Z.QuickTest.csproj", "{775637C2-6419-492E-B69B-9C7FCB7797D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICon.Framework.Test", "ICon.Framework.QuickTest\ICon.Framework.Test.csproj", "{775637C2-6419-492E-B69B-9C7FCB7797D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
