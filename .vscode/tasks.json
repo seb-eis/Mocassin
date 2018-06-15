@@ -4,16 +4,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build_mc_simulator_debug",
+            "label": "build_simulator_debug",
             "type": "shell",
             "command": "gcc",
             "args": [
                 "-g", "-I", "${workspaceFolder}",
-                "Structs/Array/Array.c",
-                "Math/Types/Vector.c",
-                "Errors/McErrors.c",
-                "Main/MC_Simulator.c",
-                "-o", "Debug/MC_Simulator.exe",
+                "Framework/Structs/Array/Array.c",
+                "Framework/Math/Types/Vector.c",
+                "Framework/Errors/McErrors.c",
+                "Main/Simulator.c",
+                "-o", "Debug/Simulator.exe",
             ],
             "group": {
                 "kind": "build",

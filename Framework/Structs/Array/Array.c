@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #include "Array.h"
-#include "Errors/McErrors.h"
+#include "Framework/Errors/McErrors.h"
 
 int byte_dump_memory(const byte_array_t* byte_array, void* target_stream)
 {
