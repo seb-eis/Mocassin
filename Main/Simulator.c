@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Math/Random/PcgRandom.h"
-#include "Math/Types/Vector.h"
-#include "Structs/Array/Array.h"
-#include "Errors/McErrors.h"
+#include "Framework/Math/Random/PcgRandom.h"
+#include "Framework/Math/Types/Vector.h"
+#include "Framework/Structs/Array/Array.h"
+#include "Framework/Errors/McErrors.h"
 
 int main(int argc, char const * const *argv)
 { 

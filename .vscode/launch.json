@@ -20,7 +20,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build_mc_simulator_debug"
+            "preLaunchTask": "build_simulator_debug"
         }
     ]
 }
