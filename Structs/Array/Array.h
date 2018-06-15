@@ -35,7 +35,7 @@ typedef uint8_t sbyte_t;
 typedef uint32_t memblock_t;
 
 // Defines a dyanmic buffer access struct with const iterators to first byte and last byte + 1
-typedef struct { byte_t* start_it; byte_t* end_it; void* free_ptr; } byte_array_t;
+typedef struct { byte_t* start_it; byte_t* end_it; } byte_array_t;
 
 // Defines a dynamic blockwise buffer access with const iterators to first block and last block + 1
 typedef struct { memblock_t* start_it; memblock_t* end_it; } memblock_array_t;
@@ -97,7 +97,7 @@ static inline byte_array_t allocate_block_buffer(size_t num_of_blocks)
 // Free the memory allocation defined by the passed byte array buffer access struct
 static inline void free_buffer(byte_array_t* byte_array)
 {
-    free((void*)byte_array->start_it);
+    free((byte_t*)byte_array->start_it);
 }
 
 // Print any array of bytes to the target stream in hexadecimal unsigned 8 bit integer blocks

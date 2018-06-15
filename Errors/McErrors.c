@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #include "McErrors.h"
-#include "../Structs/Array/Array.h"
+#include "Structs/Array/Array.h"
 
 int on_error_exit(int error_code, const char* error_file, int error_line, const char* error_string)
 {

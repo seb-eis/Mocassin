@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 // Defines the path to the debug stderr dump folder
-#define MC_STDERR_FILE_PATH "./Debug/stderr.txt"
+#define MC_STDERR_FILE_PATH "./Debug/stderr.log"
 
 // Defines the error code for no error
 #define MC_NO_ERROR 0

@@ -8,11 +8,11 @@
             "type": "shell",
             "command": "gcc",
             "args": [
-                "-g",
+                "-g", "-I", "${workspaceFolder}",
                 "Structs/Array/Array.c",
                 "Math/Types/Vector.c",
                 "Errors/McErrors.c",
-                "MC_Simulator.c",
+                "Main/MC_Simulator.c",
                 "-o", "Debug/MC_Simulator.exe",
             ],
             "group": {
