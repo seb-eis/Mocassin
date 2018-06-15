@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using ICon.Mathematics.ValueTypes;
+
+namespace ICon.Model.Structures
+{
+    /// <summary>
+    /// Represents an actual atom position with cartesian coordinates and a particle index to specify the occupation
+    /// </summary>
+    public interface ICartesianAtom : ICartesian3D
+    {
+        /// <summary>
+        /// The particle index
+        /// </summary>
+        Int32 ParticleIndex { get; }
+    }
+}

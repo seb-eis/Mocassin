@@ -1,0 +1,33 @@
+﻿using ICon.Mathematics.ValueTypes;
+using ICon.Model.Basic;
+using ICon.Model.Structures;
+
+namespace ICon.Model.Energies
+{
+    /// <summary>
+    /// Represents an unspecfified pair interaction that describes the interaction between two positions depending on the occupation
+    /// </summary>
+    public interface IPairInteraction : IModelObject
+    {
+        /// <summary>
+        /// The first reference unit cell position
+        /// </summary>
+        IUnitCellPosition Position0 { get; }
+
+        /// <summary>
+        /// The second reference unit cell position
+        /// </summary>
+        IUnitCellPosition Position1 { get; }
+
+        /// <summary>
+        /// The distance value between the positions in internal units
+        /// </summary>
+        double Distance { get; }
+
+        /// <summary>
+        /// Get the actual position vector for the second unit cell position in order to describe the refernce geometry of the pair interaction
+        /// </summary>
+        /// <returns></returns>
+        Fractional3D GetSecondPositionVector();
+    }
+}

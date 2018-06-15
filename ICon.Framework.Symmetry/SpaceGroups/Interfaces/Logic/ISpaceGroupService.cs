@@ -1,0 +1,117 @@
+﻿using System;
+using System.Collections.Generic;
+using ICon.Framework.Collections;
+using ICon.Mathematics.ValueTypes;
+using ICon.Symmetry.CrystalSystems;
+
+namespace ICon.Symmetry.SpaceGroups
+{
+    /// <summary>
+    /// Common interface for all space groups service implementations
+    /// </summary>
+    public interface ISpaceGroupService
+    {
+        /// <summary>
+        /// Get the currently loaded space group interface
+        /// </summary>
+        ISpaceGroup LoadedGroup { get; }
+
+        /// <summary>
+        /// The vector comparer used to compare fractional vectors
+        /// </summary>
+        IComparer<Fractional3D> Comparer { get; }
+
+        /// <summary>
+        /// Creates the crystal system to the currently loaded group from a crystal system provider
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        CrystalSystem CreateCrystalSystem(ICrystalSystemProvider provider);
+
+        /// <summary>
+        /// Creates a wyckoff operation dictionary for the provided source vector that informs about which operations can be used to create which position
+        /// </summary>
+        /// <param name="sourceVector"></param>
+        /// <returns></returns>
+        IWyckoffOperationDictionary GetOperationDictionary(in Fractional3D sourceVector);
+
+        /// <summary>
+        /// Get a list interface of all symmetry operations that do not change the input vector (Optional with shift correction)
+        /// </summary>
+        /// <param name="sourceVector"></param>
+        /// <param name="shiftCorrection"></param>
+        /// <returns></returns>
+        IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection);
+
+        /// <summary>
+        /// Gets the unfiltered and untrimmed list of all wyckoff extended sequences symmetry equivalent to the input sequence
+        /// </summary>
+        /// <param name="refSequence"></param>
+        /// <returns></returns>
+        IList<Fractional3D[]> GetAllWyckoffSequences(IEnumerable<Fractional3D> refSequence);
+
+        /// <summary>
+        /// Gets the filtered and trimmed list of all wyckoff extended seqeunces that begin in the same origin unit cell
+        /// </summary>
+        /// <param name="refSequence"></param>
+        /// <returns></returns>
+        SetList<Fractional3D[]> GetAllWyckoffOriginSequences(IEnumerable<Fractional3D> refSequence);
+
+        /// <summary>
+        /// Gets a sorted list of unique fractional vectors that represent all equivalent wyckoff positions to the original (Including original)
+        /// </summary>
+        /// <param name="refVector"></param>
+        /// <returns></returns>
+        SetList<Fractional3D> GetAllWyckoffPositions(Fractional3D refVector);
+
+        /// <summary>
+        /// Get multiple sorted unique lists of wyckoff extended positions that each includes the original refernce vector
+        /// </summary>
+        /// <param name="refVectors"></param>
+        /// <returns></returns>
+        List<SetList<Fractional3D>> GetAllWyckoffPositions(IEnumerable<Fractional3D> refVectors);
+
+        /// <summary>
+        /// Gets a sorted list of unique structs that implement the fractional vector interface that represent all equivalent wyckoff positions to the original (Including original)
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="refVectors"></param>
+        /// <returns></returns>
+        SetList<TSource> GetAllWyckoffPositions<TSource>(TSource refVector) where TSource : struct, IFractional3D<TSource>;
+
+        /// <summary>
+        /// Get multiple sorted unique sets of wyckoff positions with the same type as the provided fractional vector type
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="refVectors"></param>
+        /// <returns></returns>
+        List<SetList<TSource>> GetAllWyckoffPositions<TSource>(IEnumerable<TSource> refVectors) where TSource : struct, IFractional3D<TSource>;
+
+        /// <summary>
+        /// Translates a reference sequence of positions onto each wyckoff 1 position
+        /// </summary>
+        /// <param name="refSequence"></param>
+        /// <returns></returns>
+        SortedDictionary<Fractional3D, List<Fractional3D>> CreateEnvironmentDictionary(IEnumerable<Fractional3D> refSequence);
+
+        /// <summary>
+        /// Gets a sorted list of all unique space group interfaces the service can provide
+        /// </summary>
+        /// <returns></returns>
+        SetList<ISpaceGroup> GetFullGroupList();
+
+        /// <summary>
+        /// Tries to load a space group into the service using the provided search function (Returns false if no match is found)
+        /// </summary>
+        /// <param name="searchPredicate"></param>
+        /// <returns></returns>
+        bool TryLoadGroup(Predicate<ISpaceGroup> searchPredicate);
+
+        /// <summary>
+        /// Tries to load a space group into the service that matches the provided space group identifier (Returns false if no match is found)
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        bool TryLoadGroup(SpaceGroupEntry entry);
+    }
+}

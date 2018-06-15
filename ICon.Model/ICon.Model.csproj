@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Lattices\Modeling\ModelObjects\BuildingBlock\**" />
+    <Compile Remove="Lattices\Modeling\Objects\BlockedSuperCell\**" />
+    <Compile Remove="Lattices\Modeling\Objects\BuildingBlockStruct\**" />
+    <Compile Remove="Lattices\Modeling\Objects\ElementCounter\**" />
+    <Compile Remove="Lattices\Modeling\Objects\ElementCountMatrix\**" />
+    <Compile Remove="MStructure\**" />
+    <EmbeddedResource Remove="Lattices\Modeling\ModelObjects\BuildingBlock\**" />
+    <EmbeddedResource Remove="Lattices\Modeling\Objects\BlockedSuperCell\**" />
+    <EmbeddedResource Remove="Lattices\Modeling\Objects\BuildingBlockStruct\**" />
+    <EmbeddedResource Remove="Lattices\Modeling\Objects\ElementCounter\**" />
+    <EmbeddedResource Remove="Lattices\Modeling\Objects\ElementCountMatrix\**" />
+    <EmbeddedResource Remove="MStructure\**" />
+    <None Remove="Lattices\Modeling\ModelObjects\BuildingBlock\**" />
+    <None Remove="Lattices\Modeling\Objects\BlockedSuperCell\**" />
+    <None Remove="Lattices\Modeling\Objects\BuildingBlockStruct\**" />
+    <None Remove="Lattices\Modeling\Objects\ElementCounter\**" />
+    <None Remove="Lattices\Modeling\Objects\ElementCountMatrix\**" />
+    <None Remove="MStructure\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
+    <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />
+    <Compile Remove="Transitions\Manager\Services\TransitionConflictResolver.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\ICon.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\ICon.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Symmetry\ICon.Symmetry.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="1.1.9" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Energies\Modeling\Logic\GroupingFinder\" />
+    <Folder Include="Lattices\Manager\EventHandler\" />
+    <Folder Include="Lattices\Manager\Services\Validators\" />
+    <Folder Include="Simulation\" />
+    <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
+    <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
+    <Folder Include="Particles\Modeling\Logic\" />
+    <Folder Include="Structures\Modeling\Logic\" />
+    <Folder Include="Transitions\Manager\ConflictHandling\DataHandlers\" />
+    <Folder Include="Transitions\Manager\ConflictHandling\ObjectHandlers\" />
+    <Folder Include="Transitions\Modeling\ModelParameters\" />
+  </ItemGroup>
+
+</Project>

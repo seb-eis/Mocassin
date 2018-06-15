@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using ICon.Mathematics.Comparers;
+
+namespace ICon.Model.ProjectServices
+{
+    /// <summary>
+    /// Numeric service of the settings manager to provide uniform numeric comparators during the model process
+    /// </summary>
+    public class NumericService : INumericService
+    {
+        /// <summary>
+        /// The numeric settings object used to create the comparers
+        /// </summary>
+        protected BasicNumericSettings Settings { get; set; }
+
+        /// <summary>
+        /// Get the ulp comparer
+        /// </summary>
+        public DoubleComparer UlpComparer { get; protected set; }
+
+        /// <summary>
+        /// Get the range comparer
+        /// </summary>
+        public DoubleComparer RangeComparer { get; protected set; }
+
+        /// <summary>
+        /// Get the relative factor comparer
+        /// </summary>
+        public DoubleComparer RelativeComparer { get; protected set; }
+
+        /// <summary>
+        /// Comparison steps of the ULP comparer
+        /// </summary>
+        public int CompUlp => Settings.CompUlp;
+
+        /// <summary>
+        /// Comparison range of the range comparer
+        /// </summary>
+        public double CompRange => Settings.CompRange;
+
+        /// <summary>
+        /// Comparisons factor of the relative comparer
+        /// </summary>
+        public double CompFactor => Settings.CompFactor;
+
+        /// <summary>
+        /// Creates new service object from settings data
+        /// </summary>
+        /// <param name="data"></param>
+        public NumericService(BasicNumericSettings settings)
+        {
+            Settings = settings;
+            UlpComparer = DoubleComparer.CreateULP(settings.CompUlp);
+            RangeComparer = DoubleComparer.CreateRanged(settings.CompRange);
+            RelativeComparer = DoubleComparer.CreateRelative(settings.CompFactor);
+        }
+
+    }
+}
