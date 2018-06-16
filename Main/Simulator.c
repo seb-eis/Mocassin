@@ -4,20 +4,24 @@
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Structs/Array/Array.h"
 #include "Framework/Errors/McErrors.h"
+#include "Simulator/States/SimStates.h"
 
 int main(int argc, char const * const *argv)
 { 
-    byte_array_t block_buffer = allocate_buffer(10, 2);
-    for(uint32_t* it = (uint32_t*)block_buffer.start_it; it < (uint32_t*)block_buffer.end_it; it++)
+    size_t lattice_size = 16*16*16*32;
+    size_t num_of_species = 4;
+    byte_array_t sim_buffer = alloc_sim_state_buffer(lattice_size, num_of_species);
+    size_t buffer_size = get_buffer_size(&sim_buffer);
+    sim_state_t sim_state = create_sim_state_access(&sim_buffer, lattice_size, num_of_species);
+
+    for (uint32_t* it = sim_buffer.start_it; it < sim_buffer.end_it; it++)
     {
-        *it = (uint32_t)pcg32_global_next();
+        *it = pcg32_global_next();
     }
-    
-    if (block_dump_memory(&block_buffer, stdout) == MC_NO_ERROR)
-    {
-        formatted_buffer_dump(&block_buffer, stdout, 24);
-        free_buffer(&block_buffer);
-    }
+
+    FILE* file_stream = fopen("./Debug/state_hex.log", "w");
+    formatted_buffer_dump(&sim_buffer, file_stream, 16);
+    fclose(file_stream);
     
     return (0);
 }

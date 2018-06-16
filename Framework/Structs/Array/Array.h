@@ -25,6 +25,9 @@
 // Allocate a new object of the specfified type on the heap
 #define MALLOC_OBJECT(type) (type*) malloc(sizeof(type));
 
+// Casts any kind of array buffer access struct to another accessor type without checking for save conversion
+#define BUFFER_CAST(buffer, type) {(type*) buffer.start_it, (type*) buffer.end_it }
+
 // Defines the default byte to be of unsigned int8 type
 typedef uint8_t byte_t;
 
@@ -79,11 +82,11 @@ static inline size_t get_unchecked_size(const byte_array_t* byte_array, size_t b
     return get_buffer_size(byte_array) / block_size;
 }
 
-// Allocate a new buffer that holds as many bytes as defined by the number of blocks and bytes per block. Returns a byte array access struct to the buffer
+// Allocate a new buffer that holds the minmum number of memory blocks to hold the requested number of bytes and returns a buffer access struct to them.
 static inline byte_array_t allocate_buffer(size_t array_size, size_t entry_bytes)
 {
     size_t buffer_size = array_size * entry_bytes;
-    byte_t* start = malloc(buffer_size);
+    byte_t* start = malloc(buffer_size + buffer_size % sizeof(memblock_t));
     byte_t* end = start + buffer_size;
     return (byte_array_t) {start,end};
 }
@@ -91,7 +94,7 @@ static inline byte_array_t allocate_buffer(size_t array_size, size_t entry_bytes
 // Allocate a new buffer that holds the specfified number of 4 byte memory blocks. Returns a byte array access struct to the buffer
 static inline byte_array_t allocate_block_buffer(size_t num_of_blocks)
 {
-    return allocate_buffer(sizeof(byte_t) * num_of_blocks, 1);
+    return allocate_buffer(num_of_blocks, sizeof(memblock_t));
 }
 
 // Free the memory allocation defined by the passed byte array buffer access struct
@@ -108,3 +111,6 @@ int block_dump_memory(const byte_array_t* byte_array, void* target_stream);
 
 // Print any array of bytes to the target stream in hexadecimal unsigend bytes with the provided number of bytes per line
 void formatted_buffer_dump(const byte_array_t* byte_array, void* target_stream, size_t bytes_per_line);
+
+// Print any array of bytes to the target stream in hexadecimal unsigend integers with the provided number of blocks per line
+int formatted_block_dump(const byte_array_t* byte_array, void* target_stream, size_t blocks_per_line);

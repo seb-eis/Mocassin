@@ -5,7 +5,7 @@
             "name": "(gdb) Debug Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Debug/MC_Simulator.exe",
+            "program": "${workspaceFolder}/Debug/Simulator.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

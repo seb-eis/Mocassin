@@ -12,6 +12,7 @@
                 "Framework/Structs/Array/Array.c",
                 "Framework/Math/Types/Vector.c",
                 "Framework/Errors/McErrors.c",
+                "Simulator/States/SImStates.c",
                 "Main/Simulator.c",
                 "-o", "Debug/Simulator.exe",
             ],
