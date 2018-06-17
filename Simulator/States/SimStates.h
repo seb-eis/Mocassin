@@ -10,13 +10,16 @@
 
 #pragma once
 #include "Framework/Math/Types/Vector.h"
-#include "Framework/Structs/Array/Array.h"
+#include "Framework/Basic/BaseTypes/BaseTypes.h"
 
 // Defines the simulation species type to be one unsigned byte
 typedef byte_t species_t;
 
 // Defines the tracker type to be of type vector with 24 bytes
 typedef vector_t tracker_t;
+
+// Defines the integral type for indexing to the int32_t
+typedef int32_t index_t;
 
 // Defines the lattice state buffer that stores the simulation lattice
 typedef struct { species_t* start_it; species_t* end_it; } lattice_state_t;
@@ -36,25 +39,34 @@ typedef struct { double mc_sim_time; long mc_run_timer; } timer_col_t;
 // Defines the timer state as a pointer to a timer collection
 typedef struct { timer_col_t* timer_col; } timer_state_t;
 
+// Defines the indexing type for state redirection
+typedef struct { index_t* start_it; index_t* end_it; } index_state_t;
+
+// Defines the simulation state attribute type that defines the attributes defining the state size
+typedef struct { size_t num_of_atoms, num_of_species, num_of_trackers; } mc_state_attr_t;
+
 // Defines the complete simulation state memory access type
 typedef struct
 {
+    buffer_t state_buffer;
     timer_state_t timer_state;
     lattice_state_t lattice_state;
     counter_state_t counter_state;
     tracking_state_t type_tracking_state;
     tracking_state_t dynamic_tracking_state;
     tracking_state_t static_tracking_state;
-} sim_state_t;
+    index_state_t dyn_track_index_state;
+    index_state_t stat_track_index_state;
+} mc_state_t;
 
-// Calculates the required simulation state size in bytes from the simulation lattice size and the number of simulated species
-size_t calc_sim_state_size(size_t sim_lattice_size, size_t num_of_species);
+// Calculates the required simulation state size in bytes using the provided state attributes
+size_t calc_sim_state_size(const mc_state_attr_t* state_attr);
 
-// Allocates the simulation state as a continous block of memory and returns a byte array access to it. Total buffer size is corrected to even memblock_t count
-byte_array_t alloc_sim_state_buffer(size_t sim_lattice_size, size_t num_of_species);
+// Allocates the required minimum number of memory blocks to host the full simulation state
+buffer_t alloc_sim_state_buffer(const mc_state_attr_t* state_attr);
 
-// Creates a sim state access struct using the provided simulation state buffer, lattice size and num of simulated species
-sim_state_t create_sim_state_access(const byte_array_t* sim_state_buffer, size_t sim_lattice_size, size_t num_of_species);
+// Creates the simulation state from the provided simulation state buffer and state attributes
+mc_state_t create_sim_state(const buffer_t* sim_state_buffer, const mc_state_attr_t* state_attr);
 
-// Loads the simulation state buffer from a dump file into the provided state buffer. Returns an error code if the loaded buffer dump has the wrong size
-int load_sim_state_buffer(const char* file_path, byte_array_t sim_state_buffer);
+// Loads the simulation state from a file stream. Terminates program if an error occures
+mc_state_t load_sim_state(FILE* f_stream, const mc_state_attr_t* state_attr);

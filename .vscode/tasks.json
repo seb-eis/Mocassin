@@ -9,12 +9,30 @@
             "command": "gcc",
             "args": [
                 "-g", "-I", "${workspaceFolder}",
-                "Framework/Structs/Array/Array.c",
                 "Framework/Math/Types/Vector.c",
                 "Framework/Errors/McErrors.c",
-                "Simulator/States/SImStates.c",
+                "Framework/Basic/FileIO/FileIO.c",
+                "Simulator/States/SimStates.c",
                 "Main/Simulator.c",
                 "-o", "Debug/Simulator.exe",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build_simulator_O2",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-O2", "-I", "${workspaceFolder}",
+                "Framework/Math/Types/Vector.c",
+                "Framework/Errors/McErrors.c",
+                "Framework/Basic/FileIO/FileIO.c",
+                "Simulator/States/SimStates.c",
+                "Main/Simulator.c",
+                "-o", "Release/Simulator.exe",
             ],
             "group": {
                 "kind": "build",

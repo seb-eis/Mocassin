@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #include "McErrors.h"
-#include "Framework/Structs/Array/Array.h"
+#include "Framework/Basic/FileIO/FileIO.h"
 
 int on_error_exit(int error_code, const char* error_file, int error_line, const char* error_string)
 {
@@ -23,8 +23,9 @@ int on_error_exit_mem_dump(int error_code, const char* error_file, int error_lin
 {
     FILE* file_stream = fopen(MC_STDERR_FILE_PATH, "w");
     fprintf(file_stream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s\n Buffer:\n\n", error_code, error_file, error_line, error_string);
-    byte_array_t buffer = {mem_start, mem_end};
-    formatted_buffer_dump(&buffer, file_stream, 24);
+
+    buffer_t buffer = {mem_start, mem_end};
+    write_buffer_hex_to_stream(file_stream, &buffer, 24);
     fclose(file_stream);
     exit(error_code);
 }
