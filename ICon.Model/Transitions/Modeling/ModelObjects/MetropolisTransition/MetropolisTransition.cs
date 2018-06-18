@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Runtime.Serialization;
 
 using ICon.Model.Basic;
@@ -28,6 +28,22 @@ namespace ICon.Model.Transitions
         [DataMember]
         [IndexResolvable]
         public IUnitCellPosition CellPosition1 { get; set; }
+
+        /// <summary>
+        /// The list of affiliated metropolis transition rules (Automanaged by model system)
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public List<IMetropolisRule> TransitionRules { get; set; }
+       
+        /// <summary>
+        /// Get the affiliated transition rules as an enumerable sequence
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IMetropolisRule> GetTransitionRules()
+        {
+            return (TransitionRules ?? new List<IMetropolisRule>()).AsEnumerable();
+        }
 
         /// <summary>
         /// Checks for equality to another metropolis transition (Also checks inverted case)
@@ -63,6 +79,7 @@ namespace ICon.Model.Transitions
             {
                 CellPosition0 = transition.CellPosition0;
                 CellPosition1 = transition.CellPosition1;
+                TransitionRules = transition.GetTransitionRules().ToList();
                 return this;
             }
             return null;

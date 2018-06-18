@@ -22,12 +22,6 @@ namespace ICon.Model.Energies
         public Dictionary<AsymParticlePair, double> EnergyDictionary { get; set; }
 
         /// <summary>
-        /// Read only interface access to the energy dictionary
-        /// </summary>
-        [IgnoreDataMember]
-        IReadOnlyDictionary<AsymParticlePair, double> IAsymmetricPairInteraction.EnergyDictionary => EnergyDictionary;
-
-        /// <summary>
         /// Default construction with null energy dictionary
         /// </summary>
         public AsymmetricPairInteraction()
@@ -43,6 +37,16 @@ namespace ICon.Model.Energies
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
         }
+
+        /// <summary>
+        /// Get a read only access to the enrgy dictionary
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyDictionary<AsymParticlePair, double> GetEnergyDictionary()
+        {
+            return EnergyDictionary ?? new Dictionary<AsymParticlePair, double>();
+        }
+
 
         /// <summary>
         /// Get the model object name
@@ -64,8 +68,8 @@ namespace ICon.Model.Energies
             {
                 base.PopulateObject(obj);
 
-                EnergyDictionary = new Dictionary<AsymParticlePair, double>(interaction.EnergyDictionary.Count);
-                foreach (var item in interaction.EnergyDictionary)
+                EnergyDictionary = new Dictionary<AsymParticlePair, double>(interaction.GetEnergyDictionary().Count);
+                foreach (var item in interaction.GetEnergyDictionary())
                 {
                     EnergyDictionary.Add(item.Key, item.Value);
                 }

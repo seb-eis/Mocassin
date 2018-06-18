@@ -28,6 +28,13 @@ namespace ICon.Model.Transitions
         public List<DataVector3D> PathGeometry { get; set; }
 
         /// <summary>
+        /// The list of affiliated kinetic transition rules (automanaged by the model)
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public List<IKineticRule> TransitionRules { get; set; }
+
+        /// <summary>
         /// The number of geometry steps of the transition
         /// </summary>
         [IgnoreDataMember]
@@ -39,7 +46,16 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<Fractional3D> GetGeometrySequence()
         {
-            return PathGeometry.Select(value => value.AsFractional());
+            return (PathGeometry ?? new List<DataVector3D>()).Select(value => value.AsFractional());
+        }
+
+        /// <summary>
+        /// Get the affilaited transition rules of the transiton
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IKineticRule> GetTransitionRules()
+        {
+            return (TransitionRules ?? new List<IKineticRule>()).AsEnumerable();
         }
 
         /// <summary>
@@ -61,6 +77,7 @@ namespace ICon.Model.Transitions
             if (CastWithDepricatedCheck<IKineticTransition>(obj) is var transition)
             {
                 PathGeometry = transition.GetGeometrySequence().Select(value => new DataVector3D(value)).ToList();
+                TransitionRules = transition.GetTransitionRules().ToList();
                 AbstractTransition = transition.AbstractTransition;
                 return this;
             }

@@ -49,22 +49,12 @@ namespace ICon.Model.Energies
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
-        /// Deafult constructor, sets lists to empty
-        /// </summary>
-        public UnstableEnvironment()
-        {
-            IgnoredPositions = new List<IUnitCellPosition>();
-            PairInteractions = new List<IAsymmetricPairInteraction>();
-            GroupInteractions = new List<IGroupInteraction>();
-        }
-
-        /// <summary>
         /// Get all unit cell positions that are ignored during the environment search
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IUnitCellPosition> GetIgnoredPositions()
         {
-            return IgnoredPositions.AsEnumerable();
+            return (IgnoredPositions ?? new List<IUnitCellPosition>()).AsEnumerable();
         }
 
         /// <summary>
@@ -73,7 +63,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public IEnumerable<IAsymmetricPairInteraction> GetPairInteractions()
         {
-            return PairInteractions.AsEnumerable();
+            return (PairInteractions ?? new List<IAsymmetricPairInteraction>()).AsEnumerable();
         }
 
         /// <summary>
@@ -82,7 +72,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public IEnumerable<IGroupInteraction> GetGroupInteractions()
         {
-            return GroupInteractions.AsEnumerable();
+            return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
         }
 
         /// <summary>

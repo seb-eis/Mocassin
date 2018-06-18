@@ -53,7 +53,7 @@ namespace ICon.Model.Basic
         /// Get the name of the model object as a string
         /// </summary>
         /// <returns></returns>
-        public abstract String GetModelObjectName();
+        public abstract string GetModelObjectName();
 
         /// <summary>
         /// Builds the specfified object and populates it by the passed interface

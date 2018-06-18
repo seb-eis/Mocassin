@@ -44,24 +44,12 @@ namespace ICon.Model.Energies
         public Dictionary<IParticle, Dictionary<OccupationState, double>> EnergyDictionarySet { get; set; }
 
         /// <summary>
-        /// Construct new group interaction with empty energy dictionary set
-        /// </summary>
-        /// <param name="energyDictionarySet"></param>
-        public GroupInteraction()
-        {
-            EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
-        }
-
-        /// <summary>
         /// Get the base geometry sequence excluding the start position
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Fractional3D> GetBaseGeometry()
         {
-            foreach (var vector in GeometryVectors)
-            {
-                yield return vector.AsFractional();
-            }
+            return (GeometryVectors ?? new List<DataVector3D>()).Select(a => a.AsFractional());
         }
 
         /// <summary>
@@ -71,6 +59,10 @@ namespace ICon.Model.Energies
         public IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> GetEnergyDictionarySet()
         {
             var result = new Dictionary<IParticle, IReadOnlyDictionary<OccupationState, double>>();
+            if (EnergyDictionarySet == null)
+            {
+                return result;
+            }
             foreach (var item in EnergyDictionarySet)
             {
                 result.Add(item.Key, item.Value);

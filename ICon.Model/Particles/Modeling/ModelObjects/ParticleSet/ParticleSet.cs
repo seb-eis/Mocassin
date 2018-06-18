@@ -34,7 +34,7 @@ namespace ICon.Model.Particles
         /// <returns></returns>
         public IEnumerable<IParticle> GetParticles()
         {
-            return Particles.AsEnumerable();
+            return (Particles ?? new List<IParticle>()).AsEnumerable();
         }
 
 

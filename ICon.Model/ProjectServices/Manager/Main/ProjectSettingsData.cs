@@ -122,7 +122,7 @@ namespace ICon.Model.ProjectServices
                 },
                 SymmetrySettings = new BasicSymmetrySettings()
                 {
-                    DatabaseFilepath = $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Project/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
+                    DatabaseFilepath = $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Program/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
                     VectorTolerance = 1.0e-6,
                     ParameterTolerance = 1.0e-6
                 },

@@ -16,6 +16,6 @@ namespace ICon.Model.Energies
         /// <summary>
         /// Read only access to the energy dictionary
         /// </summary>
-        IReadOnlyDictionary<SymParticlePair, double> EnergyDictionary { get; }
+        IReadOnlyDictionary<SymParticlePair, double> GetEnergyDictionary();
     }
 }

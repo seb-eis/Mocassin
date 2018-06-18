@@ -22,13 +22,7 @@ namespace ICon.Model.Energies
         public Dictionary<SymParticlePair, double> EnergyDictionary { get; set; }
 
         /// <summary>
-        /// Read only interface access to the energy dictionary
-        /// </summary>
-        [IgnoreDataMember]
-        IReadOnlyDictionary<SymParticlePair, double> ISymmetricPairInteraction.EnergyDictionary => EnergyDictionary;
-
-        /// <summary>
-        /// Default construction with null energy dictionary
+        /// Default construction
         /// </summary>
         public SymmetricPairInteraction()
         {
@@ -42,6 +36,15 @@ namespace ICon.Model.Energies
         public SymmetricPairInteraction(in PairCandidate candidate, Dictionary<SymParticlePair, double> energyDictionary) : base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
+        }
+
+        /// <summary>
+        /// Get a read only access t the energy dictionary
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyDictionary<SymParticlePair, double> GetEnergyDictionary()
+        {
+            return EnergyDictionary ?? new Dictionary<SymParticlePair, double>();
         }
 
         /// <summary>
@@ -64,8 +67,8 @@ namespace ICon.Model.Energies
             {
                 base.PopulateObject(obj);
 
-                EnergyDictionary = new Dictionary<SymParticlePair, double>(interaction.EnergyDictionary.Count);
-                foreach (var item in interaction.EnergyDictionary)
+                EnergyDictionary = new Dictionary<SymParticlePair, double>(interaction.GetEnergyDictionary().Count);
+                foreach (var item in interaction.GetEnergyDictionary())
                 {
                     EnergyDictionary.Add(item.Key, item.Value);
                 }

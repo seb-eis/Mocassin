@@ -12,7 +12,7 @@ namespace ICon.Model.Transitions
     /// <summary>
     /// Enum for properties of transition rules
     /// </summary>
-    public enum RuleFlags : uint
+    public enum RuleFlags : int
     {
         Activatable = 0, Active = 1 << 1, Inversion = 1 << 2, CustomTransitionState = 1 << 3, PhysicallyInvalid = 1 << 4
     }
@@ -20,7 +20,7 @@ namespace ICon.Model.Transitions
     /// <summary>
     /// Enum for closed periodic cell boundaries
     /// </summary>
-    public enum CellBoundaryFlags : uint
+    public enum CellBoundaryFlags : int
     {
         AllOpen = 0, ClosedDirectionA = 1, ClosedDirectionB = 1 << 1, ClosedDirectionC = 1 << 2
     }
@@ -143,7 +143,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IParticle> GetStartStateOccupation()
         {
-            return StartState.AsEnumerable();
+            return (StartState ?? new OccupationState()).AsEnumerable();
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IParticle> GetFinalStateOccupation()
         {
-            return FinalState.AsEnumerable();
+            return (FinalState ?? new OccupationState()).AsEnumerable();
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IParticle> GetTransitionStateOccupation()
         {
-            return TransitionState.AsEnumerable();
+            return (TransitionState ?? new OccupationState()).AsEnumerable();
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<int> GetMovementDescription()
         {
-            return MovementCode.AsEnumerable();
+            return (MovementCode ?? new MovementCode()).AsEnumerable();
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<ITransitionRule> GetLinkedRules()
         {
-            return LinkedRules.AsEnumerable();
+            return (LinkedRules ?? new List<ITransitionRule>()).AsEnumerable();
         }
 
         /// <summary>

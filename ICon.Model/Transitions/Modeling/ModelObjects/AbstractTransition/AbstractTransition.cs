@@ -51,7 +51,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<ConnectorType> GetConnectorSequence()
         {
-            return Connectors.AsEnumerable();
+            return (Connectors ?? new List<ConnectorType>()).AsEnumerable();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IPropertyGroup> GetPropertyGroupSequence()
         {
-            return PropertyGroups.AsEnumerable();
+            return (PropertyGroups ?? new List<IPropertyGroup>()).AsEnumerable();
         }
 
         /// <summary>

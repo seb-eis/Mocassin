@@ -44,7 +44,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IPropertyStatePair> GetPropertyStatePairs()
         {
-            return PropertyStatePairs.AsEnumerable();
+            return (PropertyStatePairs ?? new List<IPropertyStatePair>()).AsEnumerable();
         }
 
         /// <summary>
