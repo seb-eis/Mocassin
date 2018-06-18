@@ -53,17 +53,11 @@ namespace ICon.Framework.QuickTest
             inputter.AutoInputData(package.ProjectServices);
             var report = inputter.GetReportJson();
 
-            var group = new GroupInteraction()
-            {
-                Index = 0,
-                UnitCellPosition = new UnitCellPosition() { Index = 0 },
-                GeometryVectors = new List<DataVector3D>
-                {
-                    new DataVector3D(.25,.25,.25), new DataVector3D(-.25,-.25,-.25)
-                }
-            };
+            var particles = package.ParticleManager.QueryPort.Query(port => port.GetParticles());
+            var transitions = package.TransitionManager.QueryPort.Query(port => port.GetAbstractTransitions());
 
-            var result = package.EnergyManager.InputPort.InputModelObject(group).Result;
+            var ruleGenerator = new QuickRuleGenerator<KineticRule>(particles);
+            var rules = ruleGenerator.MakeUniqueRules(transitions).Select(a => a.ToList()).ToList();
 
             Console.ReadLine();
         }

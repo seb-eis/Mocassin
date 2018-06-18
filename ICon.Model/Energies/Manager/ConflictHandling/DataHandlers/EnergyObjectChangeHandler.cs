@@ -31,7 +31,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected IConflictReport ResolveObjectChange(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(UnstableEnvironmentChangeHandler)} was called for {envInfo.GetType().ToString()}");
-            return new UnstableEnvironmentChangeHandler().Resolve(envInfo, dataAccess, ProjectServices);
+            return new UnstableEnvironmentChangeHandler(dataAccess, ProjectServices).HandleConflicts(envInfo);
         }
     }
 }

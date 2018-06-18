@@ -69,8 +69,6 @@
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
     <Folder Include="Structures\Modeling\Logic\" />
-    <Folder Include="Transitions\Manager\ConflictHandling\DataHandlers\" />
-    <Folder Include="Transitions\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />
   </ItemGroup>
 

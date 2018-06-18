@@ -24,6 +24,38 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
+        /// Creates a list interface of state pair groups where indices that are not present in the passed property groups are filled with blank entries
+        /// </summary>
+        /// <param name="propertyGroups"></param>
+        /// <returns></returns>
+        public IList<StatePairGroup> MakeGroupsWithBlanks(IEnumerable<IPropertyGroup> propertyGroups)
+        {
+            int maxIndex = 0;
+            foreach (var item in propertyGroups)
+            {
+                maxIndex = (maxIndex < item.Index) ? item.Index : maxIndex;
+            }
+            var result = new List<StatePairGroup>(maxIndex);
+            for (int i = 0; i <= maxIndex; i++)
+            {
+                var propertyGroup = propertyGroups.FirstOrDefault(a => a.Index == i);
+                result.Add((propertyGroup != null) ? MakeGroup(propertyGroup) : StatePairGroup.CreateEmpty());
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates the state pair group for the provided property group
+        /// </summary>
+        /// <param name="propertyGroup"></param>
+        /// <returns></returns>
+        public StatePairGroup MakeGroup(IPropertyGroup propertyGroup)
+        {
+            return new StatePairGroup(propertyGroup.GetPropertyStatePairs().Select(pair => pair.AsIndexTuple()).ToArray());
+        }
+
+        /// <summary>
         /// Projects a single property group onto a pool of particle indices and state pairs and returns a state pair group cotaining all possible state pairs
         /// </summary>
         /// <param name="propertyGroup"></param>

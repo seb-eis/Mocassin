@@ -35,17 +35,17 @@ namespace ICon.Model.Transitions
         IPropertyGroup GetPropertyGroup(int index);
 
         /// <summary>
-        /// Get a read only list containing all abstract kinetic transitions
+        /// Get a read only list containing all abstract transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IAbstractTransition> GetAbstractKineticTransitions();
+        ReadOnlyList<IAbstractTransition> GetAbstractTransitions();
 
         /// <summary>
-        /// Get the abstract kinetic transition with the provided index
+        /// Get the abstract transition with the provided index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IAbstractTransition GetAbstractKineticTransition(int index);
+        IAbstractTransition GetAbstractTransition(int index);
 
         /// <summary>
         /// Get a read only list containing all kinetic transitions

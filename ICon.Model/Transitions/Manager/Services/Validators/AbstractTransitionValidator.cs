@@ -36,7 +36,7 @@ namespace ICon.Model.Transitions.Validators
             {
                 return report;
             }
-            AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetAbstractKineticTransitions(), report);
+            AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetAbstractTransitions(), report);
             AddContentRestrictionsValidation(obj, report);
             AddConnectorPatternValidation(obj, report);
 

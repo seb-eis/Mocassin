@@ -33,6 +33,17 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
+        /// Makes the unique rule sequence for each passed abstract transition
+        /// </summary>
+        /// <param name="abstractTransitions"></param>
+        /// <returns></returns>
+        public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions)
+        {
+            var statePairGroups = new StatePairGroupCreator().MakeGroupsWithBlanks(abstractTransitions.SelectMany(value => value.GetPropertyGroupSequence()));
+            return MakeUniqueRules(abstractTransitions, statePairGroups);
+        }
+
+        /// <summary>
         /// Creates the unique for a seqeunce of abstract transitions and a general list of state pair groups
         /// </summary>
         /// <param name="abstractTransitions"></param>

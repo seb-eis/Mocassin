@@ -26,26 +26,26 @@ namespace ICon.Model.Structures.ConflictHandling
         /// Resolver method that handles the required internal changes if the space group parameter is replaced
         /// </summary>
         /// <param name="groupInfo"></param>
-        /// <param name="accessor"></param>
+        /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod(DataOperationType.ParameterChange)]
-        protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> accessor)
+        protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(SpaceGroupChangeHandler)} was called for {groupInfo.GetType().ToString()}");
-            return new SpaceGroupChangeHandler().Resolve(groupInfo, accessor, ProjectServices);
+            return new SpaceGroupChangeHandler(dataAccess, ProjectServices).HandleConflicts(groupInfo);
         }
 
         /// <summary>
         /// Resolver method that handles the required internal changes if the cell parameters change
         /// </summary>
         /// <param name="parameters"></param>
-        /// <param name="accessor"></param>
+        /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod(DataOperationType.ParameterChange)]
-        protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> accessor)
+        protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(CellParametersChangeHandler)} was called for {parameters.GetType().ToString()}");
-            return new CellParametersChangeHandler().Resolve(parameters, accessor, ProjectServices);
+            return new CellParametersChangeHandler(dataAccess, ProjectServices).HandleConflicts(parameters);
         }
     }
 }

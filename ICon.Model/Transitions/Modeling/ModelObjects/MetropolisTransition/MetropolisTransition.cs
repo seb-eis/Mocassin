@@ -30,6 +30,13 @@ namespace ICon.Model.Transitions
         public IUnitCellPosition CellPosition1 { get; set; }
 
         /// <summary>
+        /// The affiliated abstract transition
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public IAbstractTransition AbstractTransition { get; set; }
+
+        /// <summary>
         /// The list of affiliated metropolis transition rules (Automanaged by model system)
         /// </summary>
         [DataMember]
@@ -79,6 +86,7 @@ namespace ICon.Model.Transitions
             {
                 CellPosition0 = transition.CellPosition0;
                 CellPosition1 = transition.CellPosition1;
+                AbstractTransition = transition.AbstractTransition;
                 TransitionRules = transition.GetTransitionRules().ToList();
                 return this;
             }

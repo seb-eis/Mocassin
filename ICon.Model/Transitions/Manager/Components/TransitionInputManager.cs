@@ -55,7 +55,7 @@ namespace ICon.Model.Transitions
         [OperationMethod(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewModelObject(IAbstractTransition newObj)
         {
-            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.AbstractKineticTransitions));
+            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.AbstractTransitions));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ICon.Model.Transitions
         [OperationMethod(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveModelObject(IAbstractTransition newObj)
         {
-            return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.AbstractKineticTransitions));
+            return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.AbstractTransitions));
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace ICon.Model.Transitions
         [OperationMethod(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceModelObject(IAbstractTransition orgObj, IAbstractTransition newObj)
         {
-            return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.AbstractKineticTransitions));
+            return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.AbstractTransitions));
         }
 
         /// <summary>

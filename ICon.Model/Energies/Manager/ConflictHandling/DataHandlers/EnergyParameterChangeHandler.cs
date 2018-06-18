@@ -32,7 +32,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected IConflictReport ResolveParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(StableEnvironmentInfoChangeHandler)} was called for {info.GetType().ToString()}");
-            return new StableEnvironmentInfoChangeHandler().Resolve(info, dataAccess, ProjectServices);
+            return new StableEnvironmentInfoChangeHandler(dataAccess, ProjectServices).HandleConflicts(info);
         }
     }
 }

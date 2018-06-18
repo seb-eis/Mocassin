@@ -11,16 +11,24 @@ namespace ICon.Model.Structures.ConflictHandling
     public class CellParametersChangeHandler : ObjectConflictHandler<CellParameters, StructureModelData>
     {
         /// <summary>
+        /// Create new cell parameter changed handler with the provided data acessor and project services
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        /// <param name="projectServices"></param>
+        public CellParametersChangeHandler(IDataAccessor<StructureModelData> dataAccess, IProjectServices projectServices)
+            : base(dataAccess, projectServices)
+        {
+        }
+
+        /// <summary>
         /// Resolves the conflichts caused by a change in the unit cell parameters (Update the crystal system service)
         /// </summary>
         /// <param name="parameters"></param>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
         /// <returns></returns>
-        public override ConflictReport Resolve(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess, IProjectServices projectServices)
+        public override ConflictReport HandleConflicts(CellParameters parameters)
         {
             var report = new ConflictReport();
-            MatchParameterSetsWithCrystalSystem(parameters, projectServices, report);
+            MatchParameterSetsWithCrystalSystem(parameters, report);
             return report;
         }
 
@@ -29,13 +37,12 @@ namespace ICon.Model.Structures.ConflictHandling
         /// (This methods throw if the parameter set is rejected by the cyrstal system service)
         /// </summary>
         /// <param name="parameters"></param>
-        /// <param name="projectServices"></param>
         /// <param name="report"></param>
-        protected void MatchParameterSetsWithCrystalSystem(CellParameters parameters, IProjectServices projectServices, ConflictReport report)
+        protected void MatchParameterSetsWithCrystalSystem(CellParameters parameters, ConflictReport report)
         {
-            if (projectServices.CrystalSystemService.TrySetParameters(parameters.AsParameterSet()))
+            if (ProjectServices.CrystalSystemService.TrySetParameters(parameters.AsParameterSet()))
             {
-                parameters.ParameterSet = projectServices.CrystalSystemService.GetCurrentParameterSet();
+                parameters.ParameterSet = ProjectServices.CrystalSystemService.GetCurrentParameterSet();
                 var detail0 = $"The change in the {parameters.GetParameterName()} was passed to the crystal system provider system";
                 report.Warnings.Add(ModelMessages.CreateConflictHandlingWarning(this, detail0));
             }

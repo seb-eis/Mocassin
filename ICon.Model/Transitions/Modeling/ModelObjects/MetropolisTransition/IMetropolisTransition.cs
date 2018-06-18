@@ -22,6 +22,11 @@ namespace ICon.Model.Transitions
         IUnitCellPosition CellPosition1 { get; }
 
         /// <summary>
+        /// The affiliated abstract transition describing the transition process
+        /// </summary>
+        IAbstractTransition AbstractTransition { get; }
+
+        /// <summary>
         /// Get the affiliated transition rules
         /// </summary>
         /// <returns></returns>

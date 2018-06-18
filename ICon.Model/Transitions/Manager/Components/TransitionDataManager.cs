@@ -21,22 +21,22 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get the abstract kinetic transition with the specified index
+        /// Get the abstract transition with the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public IAbstractTransition GetAbstractKineticTransition(int index)
+        public IAbstractTransition GetAbstractTransition(int index)
         {
-            return Data.AbstractKineticTransitions[index];
+            return Data.AbstractTransitions[index];
         }
 
         /// <summary>
-        /// Get a read only list of all abstract kinetic transitions
+        /// Get a read only list of all abstract transitions
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IAbstractTransition> GetAbstractKineticTransitions()
+        public ReadOnlyList<IAbstractTransition> GetAbstractTransitions()
         {
-            return ReadOnlyList<IAbstractTransition>.FromEnumerable(Data.AbstractKineticTransitions);
+            return ReadOnlyList<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
         }
 
         /// <summary>
