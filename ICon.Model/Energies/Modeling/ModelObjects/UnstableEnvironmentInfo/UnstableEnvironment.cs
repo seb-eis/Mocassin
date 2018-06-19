@@ -21,21 +21,21 @@ namespace ICon.Model.Energies
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
-        /// The unit cell position the environment info belongs to
+        /// The unit cell position the environment info belongs to (Can be null)
         /// </summary>
         [DataMember]
         [IndexResolvable]
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
-        /// The set of unique ignored unit cell positions during environment sampling
+        /// The set of unique ignored unit cell positions during environment sampling (Can be null)
         /// </summary>
         [DataMember]
         [IndexResolvable]
         public List<IUnitCellPosition> IgnoredPositions { get; set; }
 
         /// <summary>
-        /// The list of generated pair interactions (Automatically managed and linked property, not part of object population)
+        /// The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object population)
         /// </summary>
         [DataMember]
         [IndexResolvable]
@@ -49,7 +49,17 @@ namespace ICon.Model.Energies
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
-        /// Get all unit cell positions that are ignored during the environment search
+        /// Create new unstable environemnt and sets all lists to empty
+        /// </summary>
+        public UnstableEnvironment()
+        {
+            IgnoredPositions = new List<IUnitCellPosition>();
+            PairInteractions = new List<IAsymmetricPairInteraction>();
+            GroupInteractions = new List<IGroupInteraction>();
+        }
+
+        /// <summary>
+        /// Get all unit cell positions that are ignored during the environment search (Never null)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IUnitCellPosition> GetIgnoredPositions()
@@ -58,7 +68,7 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Get all pair interactions affiliated with this environment
+        /// Get all pair interactions affiliated with this environment (Never null)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IAsymmetricPairInteraction> GetPairInteractions()
@@ -67,7 +77,7 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Get all group interactions affiliated wit this environment
+        /// Get all group interactions affiliated wit this environment (Never null)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IGroupInteraction> GetGroupInteractions()

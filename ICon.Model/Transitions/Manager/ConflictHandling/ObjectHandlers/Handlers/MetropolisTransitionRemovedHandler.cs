@@ -10,7 +10,7 @@ namespace ICon.Model.Transitions.ConflictHandling
     /// <summary>
     /// Object handler that handles internal data changes of the transition manager system required after a kinetic transition is removed/deprecated
     /// </summary>
-    public class MetropolisTransitionRemovedHandler : ObjectConflictHandler<MetropolisTransition, TransitionModelData>
+    public class MetropolisTransitionRemovedHandler : MetropolisTransitionHandlerBase
     {
         /// <summary>
         /// Create new metropolis transition removed handler with the provided data accessor and project services
@@ -29,7 +29,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <returns></returns>
         public override ConflictReport HandleConflicts(MetropolisTransition obj)
         {
-            throw new NotImplementedException();
+            return new ConflictReport();
         }
     }
 }

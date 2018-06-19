@@ -27,6 +27,11 @@ namespace ICon.Model.Transitions
         string Name { get; }
 
         /// <summary>
+        /// Flag if the abstract transition can only describe a metropolis exchange (State count is 2)
+        /// </summary>
+        bool IsMetropolis { get; }
+
+        /// <summary>
         /// Get theproperty group for each step of the transition
         /// </summary>
         IEnumerable<IPropertyGroup> GetPropertyGroupSequence();

@@ -62,11 +62,5 @@ namespace ICon.Model.Transitions
         /// <param name="index"></param>
         /// <returns></returns>
         IList<KineticRule> GetKineticRuleList(int index);
-
-        /// <summary>
-        /// Get a list of state pair groups for each refernce position of the unit cell. Groups contain all possible state pairs for these positions
-        /// </summary>
-        /// <returns></returns>
-        IList<StatePairGroup> GetPossibleStatePairsForAllPositions();
     }
 }

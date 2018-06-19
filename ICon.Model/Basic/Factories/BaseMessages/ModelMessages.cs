@@ -173,6 +173,29 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
+        /// Creates a new raw warning message for cases where a model object causes an implicit dependency e.g. matter conversion rule erforcement
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateImplicitDependencyWarning(object sender)
+        {
+            return new WarningMessage(sender, "Implicit Model Dependency");
+        }
+
+        /// <summary>
+        /// Creates a new warning message for cases where a model object has implicit model object dependencies due to consistency (With arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateImplicitDependencyWarning(object sender, params string[] details)
+        {
+            var message = CreateImplicitDependencyWarning(sender);
+            message.AddDetails(details);
+            return message;
+        }
+
+        /// <summary>
         /// Creates a new raw warning message for cases where an identical model parameter replacement is detected during validation
         /// </summary>
         /// <param name="sender"></param>

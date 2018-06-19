@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
+using ICon.Framework.Extensions;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
 using ICon.Model.Structures;
@@ -103,38 +102,6 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get a list of state pair groups for each refernce position of the unit cell. Groups contain all possible state pairs for these positions
-        /// </summary>
-        /// <returns></returns>
-        public IList<StatePairGroup> GetPossibleStatePairsForAllPositions()
-        {
-            return AccessCacheableDataEntry(CreatePossibleStatePairsForAllPositions);
-        }
-
-        /// <summary>
-        /// Creates a state pair group for each sublattice position that contains all possible options required for metropolis transitions
-        /// </summary>
-        /// <returns></returns>
-        [CacheableMethod]
-        protected IList<StatePairGroup> CreatePossibleStatePairsForAllPositions()
-        {
-            var structureDataAccess = ProjectServices.GetManager<IStructureManager>().QueryPort;
-            var transitionDataAccess = ProjectServices.GetManager<ITransitionManager>().QueryPort;
-            var result = new List<StatePairGroup>();
-
-            var groupCreator = new StatePairGroupCreator();
-            var statePairs = transitionDataAccess.Query(port => port.GetPropertyStatePairs());
-            var propertyGroups = transitionDataAccess.Query(port => port.GetPropertyGroups());
-            var cellPositions = structureDataAccess.Query(port => port.GetUnitCellPositions());
-
-            foreach (var particleSet in cellPositions.Select(a => a.OccupationSet))
-            {
-                result.Add(groupCreator.MakeMergedGroup(propertyGroups, statePairs, particleSet.GetParticles().Select(a => a.Index)));
-            }
-            return result;
-        }
-
-        /// <summary>
         /// Creates all metropolis transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
@@ -188,35 +155,20 @@ namespace ICon.Model.Transitions
         [CacheableMethod]
         protected IList<IList<MetropolisRule>> CreateAllMetropolisRules()
         {
-            var transitionDataAccess = ProjectServices.GetManager<ITransitionManager>().QueryPort;
-            var particleDataAccess = ProjectServices.GetManager<IParticleManager>().QueryPort;
-            var statePairGroups = GetPossibleStatePairsForAllPositions();
-            var connections = new ConnectorType[] { ConnectorType.Dynamic };
-            var result = new List<IList<MetropolisRule>>();
+            var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
+            var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
 
-            var particles = particleDataAccess.Query(port => port.GetParticles().ToArray());
+            var particles = particlePort.Query(port => port.GetParticles().ToArray());
+            var transitions = transitionPort.Query(port => port.GetMetropolisTransitions().ToArray());
             var ruleGenerator = new QuickRuleGenerator<MetropolisRule>(particles);
 
-            foreach (var transition in transitionDataAccess.Query(port => port.GetMetropolisTransitions()))
-            {
-                if (transition.IsDeprecated)
+            int index = -1;
+            return ruleGenerator
+                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition))
+                .Select(result =>
                 {
-                    result.Add(new List<MetropolisRule>());
-                    continue;
-                }
-
-                var stateDescription = new StatePairGroup[]
-                {
-                    statePairGroups[transition.CellPosition0.Index],
-                    statePairGroups[transition.CellPosition1.Index]
-                };
-
-                var rules = ruleGenerator
-                    .MakeUniqueRules(stateDescription, connections)
-                    .Select(a => { a.Transition = transition; return a; });
-                result.Add(rules.ToList());
-            }
-            return result;
+                    ++index; return (IList<MetropolisRule>)result.Change(value => value.Transition = transitions[index]).ToList();
+                }).ToList();
         }
 
         /// <summary>
@@ -230,10 +182,16 @@ namespace ICon.Model.Transitions
             var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
 
             var particles = particlePort.Query(port => port.GetParticles().ToArray());
-            var transitions = transitionPort.Query(port => port.GetKineticTransitions().Select(a => a.AbstractTransition));
+            var transitions = transitionPort.Query(port => port.GetKineticTransitions().ToArray());
             var ruleGenerator = new QuickRuleGenerator<KineticRule>(particles);
 
-            return ruleGenerator.MakeUniqueRules(transitions).Select(result => (IList<KineticRule>)result.ToList()).ToList();
+            int index = -1;
+            return ruleGenerator
+                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition))
+                .Select(result =>
+                {
+                    ++index; return (IList<KineticRule>)result.Change(value => value.Transition = transitions[index]).ToList();
+                }).ToList();
         }
     }
 }

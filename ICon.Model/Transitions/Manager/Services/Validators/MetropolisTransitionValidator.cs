@@ -32,7 +32,24 @@ namespace ICon.Model.Transitions.Validators
         {
             var report = new ValidationReport();
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetMetropolisTransitions(), report);
+            AddAbstractTransitionValidation(obj, report);
             return report;
+        }
+
+        /// <summary>
+        /// Validates if the abstract transition is valid in the sense of a metropolis transition and adds the results to the report
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void AddAbstractTransitionValidation(IMetropolisTransition transition, ValidationReport report)
+        {
+            var metropolisPattern = ConnectorPattern.GetMetropolisPattern();
+            if (!metropolisPattern.IsValid(transition.AbstractTransition.GetConnectorSequence()))
+            {
+                var detail0 = $"The abstract transition does not describe a valid metropolis pattern";
+                var detail1 = $"Metropolis transition patterns follow the regular expression {metropolisPattern.PatternRegex.ToString()}";
+                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
+            }
         }
     }
 }

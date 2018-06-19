@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 using ICon.Framework.Operations;
 using ICon.Framework.Messaging;
@@ -31,10 +32,8 @@ namespace ICon.Model.Transitions.Validators
         public override IValidationReport Validate(IKineticTransition obj)
         {
             var report = new ValidationReport();
-            if (!AddHasContentValidation(obj, report))
-            {
-                return report;
-            }
+            AddHasContentValidation(obj, report);
+            AddAbstractTransitionValidation(obj, report);
             AddTransitionGeometryValidation(obj, report);
             return report;
         }
@@ -45,15 +44,13 @@ namespace ICon.Model.Transitions.Validators
         /// <param name="transition"></param>
         /// <param name="report"></param>
         /// <returns></returns>
-        protected bool AddHasContentValidation(IKineticTransition transition, ValidationReport report)
+        protected void AddHasContentValidation(IKineticTransition transition, ValidationReport report)
         {
             if (transition.GeometryStepCount == 0)
             {
                 var detail = "The provided kinetic transition contains no geometry information and cannot describe a valid transition";
                 report.AddWarning(ModelMessages.CreateMissingOrEmptyContentWarning(this, detail));
-                return false;
             }
-            return true;
         }
 
         /// <summary>
@@ -74,6 +71,25 @@ namespace ICon.Model.Transitions.Validators
             {
                 var detail = "The transition geometry contains a ring transition where one position is contained multiple times";
                 report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail));
+            }
+        }
+
+        /// <summary>
+        /// Validates that the transition abstract is a kinetic and not a metropolis type and adds the results to the report
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void AddAbstractTransitionValidation(IKineticTransition transition, ValidationReport report)
+        {
+            var patternType = ConnectorPattern.DeterminePatternType(transition.AbstractTransition.GetConnectorSequence());
+            if (patternType == ConnectorPatternType.Metropolis)
+            {
+                var detail0 = $"Kinetic transitions cannot use the {(patternType)} pattern type as is does not support a transition state";
+                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
+            }
+            if (patternType == ConnectorPatternType.Undefined)
+            {
+                throw new InvalidOperationException("Unsupported transition pattern type previously passed validation");
             }
         }
     }

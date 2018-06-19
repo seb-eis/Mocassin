@@ -10,7 +10,7 @@ namespace ICon.Model.Transitions.ConflictHandling
     /// <summary>
     /// Object handler that handles internal data changes of the transition manager system required after a new metropolis transition input
     /// </summary>
-    public class MetropolisTransitionAddedHandler : ObjectConflictHandler<MetropolisTransition, TransitionModelData>
+    public class MetropolisTransitionAddedHandler : MetropolisTransitionHandlerBase
     {
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <returns></returns>
         public override ConflictReport HandleConflicts(MetropolisTransition obj)
         {
-            throw new NotImplementedException();
+            return new ConflictReport();
         }
     }
 }

@@ -37,13 +37,19 @@ namespace ICon.Model.Transitions
         /// The number of sttaes of the transition
         /// </summary>
         [IgnoreDataMember]
-        public int StateCount => PropertyGroups.Count;
+        public int StateCount => (PropertyGroups != null) ? PropertyGroups.Count : 0;
 
         /// <summary>
         /// The number of connectors of the transition
         /// </summary>
         [IgnoreDataMember]
-        public int ConnectorCount => Connectors.Count;
+        public int ConnectorCount => (Connectors != null) ? Connectors.Count : 0;
+
+        /// <summary>
+        /// Checks if the transition abstract is metropolis only (State count of two has to be metropolis)
+        /// </summary>
+        [IgnoreDataMember]
+        public bool IsMetropolis => StateCount == 2;
 
         /// <summary>
         /// Get the connector types

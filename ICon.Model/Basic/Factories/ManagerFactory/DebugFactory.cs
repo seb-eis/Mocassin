@@ -121,12 +121,15 @@ namespace ICon.Model.Basic
                     new Particle() { Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Index = 1 },
                     new Particle() { Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Index = 2 },
                     new Particle() { Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Index = 3 },
-                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4 }
+                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4 },
+                    new Particle() { Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Index = 5 },
+                    new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Index = 6 },
+                    new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Index = 7 },
                 };
                 var particleSets = new ParticleSet[]
                 {
                     new ParticleSet () { Particles = new List<IParticle> { particles[1], particles[2] }, Index = 1 },
-                    new ParticleSet () { Particles = new List<IParticle> { particles[3], particles[4] }, Index = 2 },
+                    new ParticleSet () { Particles = new List<IParticle> { particles[3], particles[4], particles[5], particles[6], particles[7] }, Index = 2 },
                     new ParticleSet () { Particles = new List<IParticle> { particles[0], particles[2] }, Index = 3 },
                 };
                 var unitCellPositions = new UnitCellPosition[]
@@ -148,18 +151,21 @@ namespace ICon.Model.Basic
                 {
                     new PropertyStatePair() { DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0 },
                     new PropertyStatePair() { DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1 },
-                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2}
+                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2},
+                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 3},
+                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 4},
+                    new PropertyStatePair() { DonorParticle = particles[6], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 5},
+                    new PropertyStatePair() { DonorParticle = particles[6], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 6},
                 };
                 var propertyGroups = new PropertyGroup[]
                 {
                     new PropertyGroup() { VacancyGroup = false, Index = 0, ChargeTransfer = -2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[0]} },
                     new PropertyGroup() { VacancyGroup = true, Index = 1, ChargeTransfer = -2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[1]} },
-                    new PropertyGroup() { VacancyGroup = false, Index = 2, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} }
-                };
-                var metropolisTransitions = new MetropolisTransition[]
-                {
-                    new MetropolisTransition() { Index = 0, CellPosition0 = unitCellPositions[0], CellPosition1 = unitCellPositions[0]},
-                    new MetropolisTransition() { Index = 0, CellPosition0 = unitCellPositions[1], CellPosition1 = unitCellPositions[1]}
+                    new PropertyGroup() { VacancyGroup = false, Index = 2, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} },
+                    new PropertyGroup() { VacancyGroup = false, Index = 3, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>
+                    {
+                        propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6]
+                    } }
                 };
                 var abstractTransitions = new AbstractTransition[]
                 {
@@ -168,8 +174,44 @@ namespace ICon.Model.Basic
                         Index = 0, Name = "OxygenMigration",
                         PropertyGroups = new List<IPropertyGroup>{ propertyGroups[1], propertyGroups[0], propertyGroups[1] },
                         Connectors = new List<ConnectorType>{ ConnectorType.Dynamic, ConnectorType.Dynamic }
-                    }
+                    },
+                   new AbstractTransition()
+                    {
+                        Index = 1, Name = "KationExchange",
+                        PropertyGroups = new List<IPropertyGroup> { propertyGroups[2], propertyGroups[2] },
+                        Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
+                    },
+                    new AbstractTransition()
+                    {
+                        Index = 2, Name = "OxygenExchange",
+                        PropertyGroups = new List<IPropertyGroup> { propertyGroups[1], propertyGroups[1] },
+                        Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
+                    },
+                    new AbstractTransition()
+                    {
+                        Index = 3, Name = "KationElectronExchange",
+                        PropertyGroups = new List<IPropertyGroup> { propertyGroups[3], propertyGroups[3] },
+                        Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
+                    },
                 };
+                var metropolisTransitions = new MetropolisTransition[]
+{
+                    new MetropolisTransition()
+                    {
+                        Index = 0, AbstractTransition = abstractTransitions[1],
+                        CellPosition0 = unitCellPositions[0], CellPosition1 = unitCellPositions[0]
+                    },
+                    new MetropolisTransition()
+                    {
+                        Index = 1, AbstractTransition = abstractTransitions[2],
+                        CellPosition0 = unitCellPositions[1], CellPosition1 = unitCellPositions[1]
+                    },
+                    new MetropolisTransition()
+                    {
+                        Index = 2, AbstractTransition = abstractTransitions[3],
+                        CellPosition0 = unitCellPositions[0], CellPosition1 = unitCellPositions[0]
+                    }
+};
                 var kineticTransitions = new KineticTransition[]
                 {
                     new KineticTransition()
@@ -183,7 +225,7 @@ namespace ICon.Model.Basic
 
                 var inputter = new ManagerDataInputter()
                 {
-                    particles[1], particles[2], particles[3], particles[4],
+                    particles[1], particles[2], particles[3], particles[4], particles[5], particles[6], particles[7],
 
                     particleSets[0], particleSets[1], particleSets[2],
 
@@ -195,13 +237,13 @@ namespace ICon.Model.Basic
 
                     unitCellPositions[0], unitCellPositions[1], unitCellPositions[2],
 
-                    propertyPairs[0], propertyPairs[1], propertyPairs[2],
+                    propertyPairs[0], propertyPairs[1], propertyPairs[2], propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6],
 
-                    propertyGroups[0], propertyGroups[1], propertyGroups[2],
+                    propertyGroups[0], propertyGroups[1], propertyGroups[2], propertyGroups[3],
 
-                    abstractTransitions[0],
+                    abstractTransitions[0], abstractTransitions[1], abstractTransitions[2], abstractTransitions[3],
 
-                    metropolisTransitions[0], metropolisTransitions[1],
+                    metropolisTransitions[0], metropolisTransitions[1], metropolisTransitions[2],
 
                     kineticTransitions[0],
 

@@ -7,7 +7,7 @@ namespace ICon.Mathematics.Permutation
     /// <summary>
     /// Single periodic permuter slot that lexocographically and periodically goes through all entries of a list
     /// </summary>
-    public class PermuterSlot<T1>
+    public class PermuterSlot<T1> where T1 : IComparable<T1>
     {
         /// <summary>
         /// Creates a new permuter slot from array, set to the last existing value

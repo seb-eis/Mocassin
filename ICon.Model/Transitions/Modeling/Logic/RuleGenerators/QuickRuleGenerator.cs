@@ -302,5 +302,75 @@ namespace ICon.Model.Transitions
             }
             throw new ArgumentException("Index not found in state pair", nameof(current));
         }
+
+        /// <summary>
+        /// Applies the rules of matter conservation to a rule set based upon the currently known particle set and their symbols
+        /// </summary>
+        /// <typeparam name="TRule"></typeparam>
+        /// <param name="unfiltered"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public IEnumerable<TRule> FilterbyConservationRule(IEnumerable<TRule> unfiltered)
+        {
+            foreach (var rule in unfiltered)
+            {
+                bool isValid = true;
+                var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToArray();
+                var movement = rule.GetMovementDescription().ToArray();
+                for (int i = 0; i < movement.Length - 1; i = i+2)
+                {
+                    if (!IsValidVacancyExchange(zipped[i], zipped[i+1]) && !IsExclusiveStateExchange(zipped[i], zipped[i + 1], rule.AbstractTransition.IsMetropolis))
+                    {
+                        isValid = false;
+                        break;
+                    }
+                }
+                if (isValid)
+                {
+                    yield return rule;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if two particle tuples describing the start and end states of two dynamically exchanging positions describe a valid vacancy exchange
+        /// that does not violated matter conservation
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns> True if the exchange is valid in the sense of a vacancy mechansim step </returns>
+        public bool IsValidVacancyExchange(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs)
+        {
+            if ((!lhs.start.IsVacancy && !lhs.end.IsVacancy) || (lhs.start.IsVacancy && lhs.end.IsVacancy))
+            {
+                return false;
+            }
+            if ((!rhs.start.IsVacancy && !rhs.end.IsVacancy) || (rhs.start.IsVacancy && rhs.end.IsVacancy))
+            {
+                return false;
+            }
+            return lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
+        }
+
+        /// <summary>
+        /// Checks if two particle tuples describing the start and end states of two dynamically exchanging positions describe a valid property exchange
+        /// that does not violated matter conservation
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <param name="isMetropolis"></param>
+        /// <returns> True only if the exchange is either property exchange (KMC and MMC) or physical exchange (MMC) but never both </returns>
+        /// <remarks> Theoretically nothing is wrong with both happening in the MMC case and maybe supporting it could be benefical to the MMC </remarks>
+        public bool IsExclusiveStateExchange(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs, bool isMetropolis)
+        {
+            bool isPropertyExchange = lhs.start.Symbol == lhs.end.Symbol && rhs.start.Symbol == rhs.end.Symbol;
+            bool isPhysicalExchange = lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
+
+            if (isMetropolis)
+            {
+                return isPropertyExchange ^ isPhysicalExchange;
+            }
+            return isPropertyExchange;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace ICon.Model.Transitions.ConflictHandling
     /// <summary>
     /// Object handler that handles internal data changes of the transition manager system required after a kinetic transition data change
     /// </summary>
-    public class KineticTransitionChangedHandler : ObjectConflictHandler<KineticTransition, TransitionModelData>
+    public class KineticTransitionChangedHandler : KineticTransitionHandlerBase
     {
         /// <summary>
         /// Create new kinetic transition change handler with the provided data acessor and project services
@@ -31,7 +31,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <returns></returns>
         public override ConflictReport HandleConflicts(KineticTransition obj)
         {
-            throw new NotImplementedException();
+            return new ConflictReport();
         }
     }
 }

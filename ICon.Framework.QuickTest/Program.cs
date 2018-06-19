@@ -54,10 +54,12 @@ namespace ICon.Framework.QuickTest
             var report = inputter.GetReportJson();
 
             var particles = package.ParticleManager.QueryPort.Query(port => port.GetParticles());
-            var transitions = package.TransitionManager.QueryPort.Query(port => port.GetAbstractTransitions());
+            var generator = new QuickRuleGenerator<MetropolisRule>(particles);
 
-            var ruleGenerator = new QuickRuleGenerator<KineticRule>(particles);
-            var rules = ruleGenerator.MakeUniqueRules(transitions).Select(a => a.ToList()).ToList();
+            var mrules = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisRuleLists());
+            var filtered = mrules.Select(rules => generator.FilterbyConservationRule(rules).ToList()).ToList();
+            var printable = filtered[2].Select(value => (value.GetStartStateOccupation().ToArray(), value.GetFinalStateOccupation().ToArray())).ToList();
+            var print = JsonConvert.SerializeObject(printable, Newtonsoft.Json.Formatting.Indented);
 
             Console.ReadLine();
         }

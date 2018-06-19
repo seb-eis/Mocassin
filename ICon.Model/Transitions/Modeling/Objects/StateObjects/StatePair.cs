@@ -6,7 +6,7 @@ namespace ICon.Model.Transitions
     /// <summary>
     /// Represents a state pair of a donor and acceptor particle index
     /// </summary>
-    public readonly struct StatePair
+    public readonly struct StatePair : IComparable<StatePair>
     {
         /// <summary>
         /// The status of the position the state pair belongs to
@@ -56,6 +56,21 @@ namespace ICon.Model.Transitions
         public static StatePair CreateForStatus(int donorIndex, int acceptorIndex, PositionStatus positionStatus)
         {
             return (positionStatus == PositionStatus.Unstable) ? MakeUnstable(donorIndex) : new StatePair(donorIndex, acceptorIndex, positionStatus);
+        }
+
+        /// <summary>
+        /// Compares donor index than acceptor index
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(StatePair other)
+        {
+            var donorComp = DonorIndex.CompareTo(other.DonorIndex);
+            if (donorComp == 0)
+            {
+                return AcceptorIndex.CompareTo(other.AcceptorIndex);
+            }
+            return donorComp;
         }
     }
 }

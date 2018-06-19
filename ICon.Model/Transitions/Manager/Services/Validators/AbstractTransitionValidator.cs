@@ -1,5 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using System.Linq;
 
+using ICon.Framework.Extensions;
 using ICon.Framework.Operations;
 using ICon.Framework.Constraints;
 using ICon.Model.Basic;
@@ -32,10 +34,7 @@ namespace ICon.Model.Transitions.Validators
         {
             var report = new ValidationReport();
 
-            if (!AddHasContentValidation(obj, report))
-            {
-                return report;
-            }
+            AddHasContentValidation(obj, report);
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetAbstractTransitions(), report);
             AddContentRestrictionsValidation(obj, report);
             AddConnectorPatternValidation(obj, report);
@@ -49,21 +48,18 @@ namespace ICon.Model.Transitions.Validators
         /// <param name="transition"></param>
         /// <param name="report"></param>
         /// <returns></returns>
-        protected bool AddHasContentValidation(IAbstractTransition transition, ValidationReport report)
+        protected void AddHasContentValidation(IAbstractTransition transition, ValidationReport report)
         {
             if (transition.ConnectorCount == 0)
             {
                 var detail = "The set of property groups does not contain any content and cannot describe a valid transition";
                 report.AddWarning(ModelMessages.CreateMissingOrEmptyContentWarning(this, detail));
-                return false;
             }
             if (transition.ConnectorCount == 0)
             {
                 var detail = "The set of position connectors does not contain any content and cannot describe a valid transition";
                 report.AddWarning(ModelMessages.CreateMissingOrEmptyContentWarning(this, detail));
-                return false;
             }
-            return true;
         }
 
         /// <summary>
@@ -99,15 +95,17 @@ namespace ICon.Model.Transitions.Validators
         /// <param name=""></param>
         protected void AddConnectorPatternValidation(IAbstractTransition transition, ValidationReport report)
         {
-            foreach (var pattern in GetValidConnectorPatterns())
+            var validPatterns = GetValidConnectorPatterns();
+            foreach (var pattern in validPatterns)
             {
                 if (pattern.IsValid(transition.GetConnectorSequence()))
                 {
                     return;
                 }
             }
-            var detail = "The provided connector pattern does not result in a supported physical transition";
-            report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail));
+            var detail0 = "The provided connector pattern does not result in a supported physical transition";
+            var detail1 = validPatterns.Select(value => $"Valid type ('{value.PatternType}') pattern regex is ('{value.PatternRegex}')");
+            report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail1.Concat(detail0.AsSingleton()).ToArray()));
         }
 
         /// <summary>
@@ -118,8 +116,10 @@ namespace ICon.Model.Transitions.Validators
         {
             return new ConnectorPattern[]
             {
+                ConnectorPattern.GetMetropolisPattern(),
                 ConnectorPattern.GetBasicKineticPattern(),
-                ConnectorPattern.GetKineticVehiclePattern()
+                ConnectorPattern.GetBasicVehiclePattern(),
+                ConnectorPattern.GetSplittedVehiclePattern()
             };
         }
     }

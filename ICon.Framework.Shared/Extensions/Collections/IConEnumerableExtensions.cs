@@ -42,6 +42,22 @@ namespace ICon.Framework.Extensions
         }
 
         /// <summary>
+        /// Perform an action on each elemnt of an enumerable sequence and returns the modofied value
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IEnumerable<T1> Change<T1>(this IEnumerable<T1> values, Action<T1> action)
+        {
+            foreach (var item in values)
+            {
+                action(item);
+                yield return item;
+            }
+        }
+
+        /// <summary>
         /// Generic lexicographical compare for two sequences of values where the items implement generic IComparable
         /// </summary>
         /// <typeparam name="T1"></typeparam>

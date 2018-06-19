@@ -83,5 +83,20 @@ namespace ICon.Model.Transitions
         {
             return (DonorParticle.Index, AcceptorParticle.Index);
         }
+
+        /// <summary>
+        /// Sorts by donor index than acceptor index. Does not check for inverse equality
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(IPropertyStatePair other)
+        {
+            var donorComp = DonorParticle.Index.CompareTo(other.DonorParticle);
+            if (donorComp == 0)
+            {
+                return AcceptorParticle.Index.CompareTo(other.AcceptorParticle);
+            }
+            return donorComp;
+        }
     }
 }

@@ -71,5 +71,24 @@ namespace ICon.Model.Transitions
             }
             return result;
         }
+
+        /// <summary>
+        /// Check if two rules are dependent on each other. Rules are dependent if disabling one and not the other would cause a species drain in the system
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        public bool RulesAreDependent(ITransitionRule lhs, ITransitionRule rhs)
+        {
+            if (lhs == rhs)
+            {
+                return false;
+            }
+            if (lhs.GetStartStateOccupation().SequenceEqual(rhs.GetFinalStateOccupation().Reverse()))
+            {
+                return rhs.GetStartStateOccupation().SequenceEqual(lhs.GetFinalStateOccupation().Reverse());
+            }
+            return false;
+        }
     }
 }

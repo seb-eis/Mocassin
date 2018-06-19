@@ -61,9 +61,11 @@ namespace ICon.Model.Transitions
         {
             if (CellPosition0.Index == other.CellPosition0.Index && CellPosition1.Index == other.CellPosition1.Index)
             {
-                return true;
+                return AbstractTransition == other.AbstractTransition;
             }
-            return CellPosition0.Index == other.CellPosition1.Index && CellPosition1.Index == other.CellPosition0.Index;
+            return CellPosition0.Index == other.CellPosition1.Index
+                && CellPosition1.Index == other.CellPosition0.Index
+                && AbstractTransition == other.AbstractTransition;
         }
 
         /// <summary>
