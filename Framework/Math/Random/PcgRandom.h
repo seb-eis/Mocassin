@@ -23,7 +23,7 @@ typedef struct { uint64_t state;  uint64_t inc; } pcg32_random_t;
 // Global pcg32 random number generator state
 static pcg32_random_t pcg32_global = PCG32_INITIALIZER;
 
-uint32_t pcg32_random_r(pcg32_random_t* rng)
+static inline uint32_t pcg32_random_r(pcg32_random_t* rng)
 {
 	uint64_t oldstate = rng->state;
 	rng->state = oldstate * 6364136223846793005ULL + (rng->inc | 1);
@@ -33,13 +33,13 @@ uint32_t pcg32_random_r(pcg32_random_t* rng)
 }
 
 // Advance global pcg32 state and get the next random uint32_t value
-uint32_t pcg32_global_next()
+static inline uint32_t pcg32_global_next()
 {
 	return pcg32_random_r(&pcg32_global);
 }
 
 // Advance global pcg32 state and get the next random uint32_t value divided by UINT32_MAX that gives a double in range [0.0,1.0] with 1 / UINT32_MAX stepping
-double pcg32_global_next_d()
+static inline double pcg32_global_next_d()
 {
 	return ((double)pcg32_global_next() / (double)UINT32_MAX);
 }
