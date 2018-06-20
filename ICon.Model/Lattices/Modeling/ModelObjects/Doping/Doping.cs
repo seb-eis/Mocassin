@@ -11,7 +11,6 @@ namespace ICon.Model.Lattices
     /// Doping information that describes the element, concentration, sublattice which is substituted. 
     /// May also contain information about counter doping which is described in the same manner.
     /// </summary>
-    [Serializable]
     [DataContract(Name = "Doping")]
     public class Doping : ModelObject, IDoping
     {
@@ -25,13 +24,15 @@ namespace ICon.Model.Lattices
         /// Information about the doping (particles and sublattice)
         /// </summary>
         [DataMember]
-        public DopingCode DopingInfo { set; get; }
+        [IndexResolvable]
+        public IDopingCombination DopingInfo { set; get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
         [DataMember]
-        public DopingCode CounterDopingInfo { set; get; }
+        [IndexResolvable]
+        public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>
         /// Get the type name string

@@ -11,7 +11,7 @@ namespace ICon.Model.Lattices
     /// Algorithm is by C. T. Fan, M. E. Muller, I. Rezucha, J. Amer. Stat. Assoc. 57 (1962), 387-402
     /// Discussed in D. E. Knuth "The Art of Computer Programming Vol. 2 - Seminumerical Algorithms" (1997) 142-143
     /// </remarks>
-    public class FMRSampler<T1> where T1 : class
+    public class UniquePoolSampler<T1> where T1 : class
     {
         /// <summary>
         /// Get samples from a list

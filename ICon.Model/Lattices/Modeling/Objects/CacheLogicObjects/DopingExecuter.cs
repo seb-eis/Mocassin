@@ -41,7 +41,7 @@ namespace ICon.Model.Lattices
 
             List<CellEntry> dopableCounterCellEntries = GetDopableCellEntries(lattice, doping.CounterDopingInfo);
 
-            int counterDopingCount = CalculateCounterDopantCount(dopableCellEntries.Count, doping);
+            int counterDopingCount = CalculateCounterDopantCount(dopableCounterCellEntries.Count, doping);
 
             ApplyDoping(dopableCounterCellEntries, counterDopingCount, doping.CounterDopingInfo);
         }
@@ -52,7 +52,7 @@ namespace ICon.Model.Lattices
         /// <param name="lattice"></param>
         /// <param name="doping"></param>
         /// <returns></returns>
-        protected List<CellEntry> GetDopableCellEntries(WorkLattice lattice, IDopingCode doping)
+        protected List<CellEntry> GetDopableCellEntries(WorkLattice lattice, IDopingCombination doping)
         {
             List<CellEntry> cellEntries = new List<CellEntry>();
 
@@ -65,7 +65,7 @@ namespace ICon.Model.Lattices
 
                 foreach (var cellEntry in cell.CellEntries)
                 {
-                    if (cellEntry.Particle == doping.DopedParticle && cellEntry.Particle.Index == doping.UnitCellPosition.Index)
+                    if (cellEntry.Particle == doping.DopedParticle && cellEntry.CellPosition.Index == doping.UnitCellPosition.Index)
                     {
                         cellEntries.Add(cellEntry);
                     }
@@ -81,11 +81,11 @@ namespace ICon.Model.Lattices
         /// <param name="dopableCellEntries"></param>
         /// <param name="dopingParticleCount"></param>
         /// <param name="doping"></param>
-        protected void ApplyDoping(List<CellEntry> dopableCellEntries, int dopingParticleCount, IDopingCode doping)
+        protected void ApplyDoping(List<CellEntry> dopableCellEntries, int dopingParticleCount, IDopingCombination doping)
         {
             Action<CellEntry> applyDoping = (entry) => { entry.Particle = doping.Dopant; };
 
-            (new FMRSampler<CellEntry>()).ApplyToSamples(dopableCellEntries, Convert.ToUInt32(dopingParticleCount), applyDoping);
+            (new UniquePoolSampler<CellEntry>()).ApplyToSamples(dopableCellEntries, Convert.ToUInt32(dopingParticleCount), applyDoping);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace ICon.Model.Lattices
     /// <summary>
     /// Set of element indexes and sublattice index for doping information
     /// </summary>
-    public interface IDopingCode : IModelObject
+    public interface IDopingCombination : IModelObject
     {
 
         /// <summary>

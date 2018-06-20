@@ -6,40 +6,46 @@ using ICon.Symmetry.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace ICon.Model.Lattices
 {
+    /// <summary>
+    /// Produces WorkLattices for supercell creation
+    /// </summary>
     public class WorkLatticeFactory
     {
-
-        public WorkLattice Fabricate(ReadOnlyList<IUnitCell<IParticle>> buildingBlocks, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntegralVector3D latticeSize)
+        /// <summary>
+        /// Fabricates the WorkLattice
+        /// </summary>
+        /// <param name="buildingBlocks"></param>
+        /// <param name="blockInfos"></param>
+        /// <param name="sublatticeIDs"></param>
+        /// <param name="latticeSize"></param>
+        /// <returns></returns>
+        public WorkLattice Fabricate(ReadOnlyList<IBuildingBlock> buildingBlocks, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntegralVector3D latticeSize)
         {
-            if (buildingBlocks.Count != blockInfos.Count )
-            {
-                throw new ArgumentException("WorkLatticeFactory", "Number of Building Blocks and Block Infos is not the same");
-            }
-
-            if (!blockInfos[0].Origin.Equals(new DataIntegralVector3D(0,0,0)))
+            if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new DataIntegralVector3D(0,0,0)))
             {
                 throw new ArgumentException("WorkLatticeFactory", "Extent of default building block does not originate at 0, 0, 0");
             }
 
-            if (!blockInfos[0].Extent.Equals(latticeSize))
+            if (!blockInfos.Single(x => x.Index == 0).Extent.Equals(latticeSize))
             {
-                throw new ArgumentException("WorkLatticeFactory", "Default block has smaller extent than lattice size");
+                throw new ArgumentException("WorkLatticeFactory", "Default block has different extent than lattice size");
             }
 
             WorkLattice workLattice = new WorkLattice() { WorkCells = new WorkCell[latticeSize.A, latticeSize.B, latticeSize.C] };
 
-            for (int i = 0; i < buildingBlocks.Count; i++)
+            foreach(var blockInfo in blockInfos)
             {
-                for (int x = blockInfos[i].Origin.A; x < blockInfos[i].Extent.A; x++)
+                for (int x = blockInfo.Origin.A; x < blockInfo.Extent.A; x++)
                 {
-                    for (int y = blockInfos[i].Origin.B; y < blockInfos[i].Extent.B; y++)
+                    for (int y = blockInfo.Origin.B; y < blockInfo.Extent.B; y++)
                     {
-                        for (int z = blockInfos[i].Origin.B; z < blockInfos[i].Extent.C; z++)
+                        for (int z = blockInfo.Origin.B; z < blockInfo.Extent.C; z++)
                         {
-                            workLattice.WorkCells[x, y, z] = (new WorkCellFactory()).Fabricate(buildingBlocks[i], sublatticeIDs, (i != 0));
+                            workLattice.WorkCells[x, y, z] = (new WorkCellFactory()).Fabricate(blockInfo.Block, sublatticeIDs, (blockInfo.Index != 0));
                         }
                     }
                 }

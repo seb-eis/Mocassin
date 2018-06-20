@@ -53,9 +53,18 @@ namespace ICon.Model.Lattices
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IUnitCell<IParticle>> GetBuildingBlocks()
+        public ReadOnlyList<IBuildingBlock> GetBuildingBlocks()
         {
-            return ReadOnlyList<IUnitCell<IParticle>>.FromEnumerable(Data.BuildingBlocks);
+            return ReadOnlyList<IBuildingBlock>.FromEnumerable(Data.BuildingBlocks);
+        }
+
+        /// <summary>
+        /// Get read only list of DopingCombinations
+        /// </summary>
+        /// <returns></returns>
+        public ReadOnlyList<IDopingCombination> GetDopingCombinations()
+        {
+            return ReadOnlyList<IDopingCombination>.FromEnumerable(Data.DopingCombinations);
         }
     }
 }

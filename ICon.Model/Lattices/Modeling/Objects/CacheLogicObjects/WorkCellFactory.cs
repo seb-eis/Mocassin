@@ -15,47 +15,25 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Fabricate the WorkCell
         /// </summary>
-        /// <param name="unitCellWrapper"></param>
+        /// <param name="buildingBlock"></param>
         /// <param name="sublatticeIDs"></param>
         /// <param name="isCustom"></param>
         /// <returns></returns>
-        public WorkCell Fabricate(IUnitCell<IParticle> unitCellWrapper, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, bool isCustom)
+        public WorkCell Fabricate(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, bool isCustom)
         {
-
-            IParticle[] particles = GenerateListOfParticles(unitCellWrapper);
-
-            if (particles.Length != sublatticeIDs.Count)
+            if (buildingBlock.CellEntries.Count != sublatticeIDs.Count)
             {
                 throw new ArgumentException("WorkCellFactory", "Different number of unitCellWrapper entries and sublatticeID entries!");
             }
 
-            WorkCell workCell = new WorkCell { IsCustom = isCustom, CellEntries = new CellEntry[particles.Length] };
+            WorkCell workCell = new WorkCell { IsCustom = isCustom, CellEntries = new CellEntry[buildingBlock.CellEntries.Count] };
 
-            for (int i = 0; i < particles.Length; i++)
+            for (int i = 0; i < buildingBlock.CellEntries.Count; i++)
             {
-                workCell.CellEntries[i] = new CellEntry { Particle = particles[i], CellPosition = sublatticeIDs[i] };
+                workCell.CellEntries[i] = new CellEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i] };
             }
 
             return workCell;
-        }
-
-        /// <summary>
-        /// Translates the UnitCell to an array of particles
-        /// </summary>
-        /// <param name="unitCell"></param>
-        /// <returns></returns>
-        protected IParticle[] GenerateListOfParticles(IUnitCell<IParticle> unitCell)
-        {
-            IParticle[] particles = new IParticle[unitCell.EntryCount];
-
-            int counter = 0;
-            foreach (var entry in unitCell.GetAllEntries())
-            {
-                particles[counter] = entry.Entry;
-                counter++;
-            }
-
-            return particles;
         }
     }
 }

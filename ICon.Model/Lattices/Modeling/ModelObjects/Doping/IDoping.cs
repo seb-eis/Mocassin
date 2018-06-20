@@ -19,11 +19,11 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
-        DopingCode DopingInfo { get; }
+        IDopingCombination DopingInfo { get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
-        DopingCode CounterDopingInfo { get; }
+        IDopingCombination CounterDopingInfo { get; }
     }
 }
