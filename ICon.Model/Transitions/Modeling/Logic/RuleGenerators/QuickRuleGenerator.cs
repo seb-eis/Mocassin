@@ -33,14 +33,18 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Makes the unique rule sequence for each passed abstract transition
+        /// Makes the unique rule sequence for each passed abstract transition. With option flag to control if the system should automatically filter out rules
+        /// that are not supported
         /// </summary>
         /// <param name="abstractTransitions"></param>
+        /// <param name="onlySupported"></param>
         /// <returns></returns>
-        public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions)
+        /// <remarks> Unsupported rules are typically physically meaningless e.g. they violate matter conservation rules </remarks>
+        public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions, bool onlySupported)
         {
             var statePairGroups = new StatePairGroupCreator().MakeGroupsWithBlanks(abstractTransitions.SelectMany(value => value.GetPropertyGroupSequence()));
-            return MakeUniqueRules(abstractTransitions, statePairGroups);
+            var results = MakeUniqueRules(abstractTransitions, statePairGroups);
+            return (onlySupported) ? results.Select(values => FilterByCommonBehaviorAndInversionRules(values)) : results;
         }
 
         /// <summary>
@@ -115,7 +119,7 @@ namespace ICon.Model.Transitions
         protected IEnumerable<TRule> GetValidTransitionRules(StatePairGroup[] statePairGroups, ConnectorType[] connectorTypes)
         {
             var movementCode = GetMovementCode(connectorTypes, statePairGroups);
-            var results = new SetList<TRule>(Comparer<TRule>.Create((a, b) => a.CompareToWithCodeInversion(b)));
+            var results = new SetList<TRule>(Comparer<TRule>.Create((a, b) => a.CompareTo(b)));
 
             foreach (var stateSet in MakeStateSetPermuter(statePairGroups))
             {
@@ -137,6 +141,33 @@ namespace ICon.Model.Transitions
                 }
             }
             return results;
+        }
+
+        /// <summary>
+        /// Takes a list interface of transition rules and filters out both inverted and reversed duplicate rules
+        /// </summary>
+        /// <remarks> Possibly requires changes in the future since correct definition of "meaningfull and duplicate" in all cases is tricky </remarks>
+        /// <param name="rules"></param>
+        protected void FilterInvertedAndReversedDuplicateRules(IList<TRule> rules)
+        {
+            var analyzer = new TransitionAnalyzer();
+            for (int i = 0; i < rules.Count - 1; i++)
+            {
+                var currentRule = rules[i];
+                for (int j = i+1; j < rules.Count;)
+                {
+                    bool isRemovable = analyzer.IsSymmetricRulePair(currentRule, rules[j])
+                        || analyzer.IsBackjumpRulePair(currentRule, rules[j])
+                        || analyzer.IsTwistedRulePair(currentRule, rules[j]);
+
+                    if (isRemovable)
+                    {
+                        rules.RemoveAt(j);
+                        continue;
+                    }
+                    j++;
+                }
+            }
         }
 
         /// <summary>
@@ -304,32 +335,83 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Applies the rules of matter conservation to a rule set based upon the currently known particle set and their symbols
+        /// Filtres a set of rules by assigning common movement tags and removing all rules that can be generated from each other and are therefore equivalent
         /// </summary>
         /// <typeparam name="TRule"></typeparam>
-        /// <param name="unfiltered"></param>
+        /// <param name="unfilteredRules"></param>
         /// <param name="comparer"></param>
+        /// <remarks> Equivalent rules are; Backjump rules, Symmetric rules or twisted symmetric rules  </remarks>
         /// <returns></returns>
-        public IEnumerable<TRule> FilterbyConservationRule(IEnumerable<TRule> unfiltered)
+        public IEnumerable<TRule> FilterByCommonBehaviorAndInversionRules(IEnumerable<TRule> unfilteredRules)
         {
-            foreach (var rule in unfiltered)
+            var results = new List<TRule>(10);
+            foreach (var rule in DetermineAndSetRuleMovementTypes(unfilteredRules))
             {
-                bool isValid = true;
-                var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToArray();
-                var movement = rule.GetMovementDescription().ToArray();
-                for (int i = 0; i < movement.Length - 1; i = i+2)
+                if (!rule.MovementType.HasFlag(RuleMovementType.NotSupported))
                 {
-                    if (!IsValidVacancyExchange(zipped[i], zipped[i+1]) && !IsExclusiveStateExchange(zipped[i], zipped[i + 1], rule.AbstractTransition.IsMetropolis))
+                    // Migration that contain physical migrations without a vacancy are possible but basically meaningless
+                    if (rule.MovementType.HasFlag(RuleMovementType.PhysicalMigration) && !rule.MovementType.HasFlag(RuleMovementType.Vacancy))
                     {
-                        isValid = false;
-                        break;
+                        continue;
                     }
-                }
-                if (isValid)
-                {
-                    yield return rule;
+                    results.Add(rule);
                 }
             }
+            FilterInvertedAndReversedDuplicateRules(results);
+            return results;
+        }
+
+        /// <summary>
+        /// Determines the combination of rule movement flags for each rule and sets the values
+        /// </summary>
+        /// <param name="rules"></param>
+        /// <returns></returns>
+        public IEnumerable<TRule> DetermineAndSetRuleMovementTypes(IEnumerable<TRule> rules)
+        {
+            foreach (var rule in rules)
+            {
+                var moveType = (rule.AbstractTransition.ConnectorCount == 1) ? RuleMovementType.Exchange : RuleMovementType.Migration;
+                var movement = rule.GetMovementDescription().ToArray();
+                var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToArray();
+                for (int i = 0; i < movement.Length - 1; i = i + 2)
+                {
+                    moveType |= GetStepMovementType(zipped[movement[i]], zipped[movement[i + 1]]);
+                }
+                rule.MovementType = moveType;
+                yield return rule;
+            }
+        }
+
+        /// <summary>
+        /// Determines the specfific rule movement type of a single type step based upon the characteristics the involve particles provide
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        protected RuleMovementType GetStepMovementType(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs)
+        {
+            bool isVacancyExchange = IsValidVacancyExchange(lhs, rhs);
+            bool isPropertyExchange = lhs.start.Symbol == lhs.end.Symbol && rhs.start.Symbol == rhs.end.Symbol;
+            bool isPhysicalExchange = lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
+            bool isSameTypeExchange = lhs.start.Symbol == rhs.start.Symbol;
+
+            if (isVacancyExchange)
+            {
+                return RuleMovementType.Physical | RuleMovementType.Vacancy;
+            }
+            if (isPropertyExchange && isPhysicalExchange && isSameTypeExchange)
+            {
+                return RuleMovementType.Property;
+            }
+            if (isPhysicalExchange)
+            {
+                return RuleMovementType.Physical;
+            }
+            if (isPropertyExchange)
+            {
+                return RuleMovementType.Property;
+            }
+            return RuleMovementType.NotSupported;
         }
 
         /// <summary>
@@ -339,7 +421,7 @@ namespace ICon.Model.Transitions
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns> True if the exchange is valid in the sense of a vacancy mechansim step </returns>
-        public bool IsValidVacancyExchange(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs)
+        protected bool IsValidVacancyExchange(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs)
         {
             if ((!lhs.start.IsVacancy && !lhs.end.IsVacancy) || (lhs.start.IsVacancy && lhs.end.IsVacancy))
             {
@@ -350,27 +432,6 @@ namespace ICon.Model.Transitions
                 return false;
             }
             return lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
-        }
-
-        /// <summary>
-        /// Checks if two particle tuples describing the start and end states of two dynamically exchanging positions describe a valid property exchange
-        /// that does not violated matter conservation
-        /// </summary>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
-        /// <param name="isMetropolis"></param>
-        /// <returns> True only if the exchange is either property exchange (KMC and MMC) or physical exchange (MMC) but never both </returns>
-        /// <remarks> Theoretically nothing is wrong with both happening in the MMC case and maybe supporting it could be benefical to the MMC </remarks>
-        public bool IsExclusiveStateExchange(in (IParticle start, IParticle end) lhs, in (IParticle start, IParticle end) rhs, bool isMetropolis)
-        {
-            bool isPropertyExchange = lhs.start.Symbol == lhs.end.Symbol && rhs.start.Symbol == rhs.end.Symbol;
-            bool isPhysicalExchange = lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
-
-            if (isMetropolis)
-            {
-                return isPropertyExchange ^ isPhysicalExchange;
-            }
-            return isPropertyExchange;
         }
     }
 }

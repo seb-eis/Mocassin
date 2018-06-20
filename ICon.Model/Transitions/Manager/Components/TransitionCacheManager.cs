@@ -164,7 +164,7 @@ namespace ICon.Model.Transitions
 
             int index = -1;
             return ruleGenerator
-                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition))
+                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
                 .Select(result =>
                 {
                     ++index; return (IList<MetropolisRule>)result.Change(value => value.Transition = transitions[index]).ToList();
@@ -187,7 +187,7 @@ namespace ICon.Model.Transitions
 
             int index = -1;
             return ruleGenerator
-                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition))
+                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
                 .Select(result =>
                 {
                     ++index; return (IList<KineticRule>)result.Change(value => value.Transition = transitions[index]).ToList();

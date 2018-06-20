@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using ICon.Framework.Operations;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
@@ -31,7 +31,23 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <returns></returns>
         public override ConflictReport HandleConflicts(KineticTransition obj)
         {
-            return new ConflictReport();
+            var report = new ConflictReport();
+            CreateNewRulesandUpdateModelData(obj, report);
+            return report;
+        }
+
+        /// <summary>
+        /// Creates new rule set and links them to the kinetic parent transition. Additionally adds the new rule set to the model data object with a new indexing
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void CreateNewRulesandUpdateModelData(KineticTransition transition, ConflictReport report)
+        {
+            transition.TransitionRules = CreateTransitionRules(transition).ToList();
+            DataAccess.Query(data => data.KineticRules.AddRange(transition.TransitionRules));
+
+            var detail0 = $"Automatically added number of new kinetic model rules is ({transition.TransitionRules.Count})";
+            report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0));
         }
     }
 }

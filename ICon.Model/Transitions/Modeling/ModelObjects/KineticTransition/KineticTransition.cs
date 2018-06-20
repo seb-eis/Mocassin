@@ -32,7 +32,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public List<IKineticRule> TransitionRules { get; set; }
+        public List<KineticRule> TransitionRules { get; set; }
 
         /// <summary>
         /// The number of geometry steps of the transition
@@ -55,7 +55,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IKineticRule> GetTransitionRules()
         {
-            return (TransitionRules ?? new List<IKineticRule>()).AsEnumerable();
+            return (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-            return "'Abstract Transition'";
+            return "'Kinetic Transition'";
         }
 
         /// <summary>
@@ -77,7 +77,6 @@ namespace ICon.Model.Transitions
             if (CastWithDepricatedCheck<IKineticTransition>(obj) is var transition)
             {
                 PathGeometry = transition.GetGeometrySequence().Select(value => new DataVector3D(value)).ToList();
-                TransitionRules = transition.GetTransitionRules().ToList();
                 AbstractTransition = transition.AbstractTransition;
                 return this;
             }

@@ -216,6 +216,7 @@ namespace ICon.Model.Basic
                 {
                     new KineticTransition()
                     {
+
                         Index = 0, AbstractTransition = abstractTransitions[0], PathGeometry = new List<DataVector3D>
                         {
                             new DataVector3D(.25,.25,.25), new DataVector3D(.5,.25,.25), new DataVector3D(.75,.25,.25)

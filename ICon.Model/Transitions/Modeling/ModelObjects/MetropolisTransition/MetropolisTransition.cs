@@ -41,7 +41,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public List<IMetropolisRule> TransitionRules { get; set; }
+        public List<MetropolisRule> TransitionRules { get; set; }
        
         /// <summary>
         /// Get the affiliated transition rules as an enumerable sequence
@@ -49,7 +49,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<IMetropolisRule> GetTransitionRules()
         {
-            return (TransitionRules ?? new List<IMetropolisRule>()).AsEnumerable();
+            return (TransitionRules ?? new List<MetropolisRule>()).AsEnumerable();
         }
 
         /// <summary>
@@ -89,7 +89,6 @@ namespace ICon.Model.Transitions
                 CellPosition0 = transition.CellPosition0;
                 CellPosition1 = transition.CellPosition1;
                 AbstractTransition = transition.AbstractTransition;
-                TransitionRules = transition.GetTransitionRules().ToList();
                 return this;
             }
             return null;

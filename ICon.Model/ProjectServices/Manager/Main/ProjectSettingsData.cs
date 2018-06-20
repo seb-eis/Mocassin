@@ -131,7 +131,8 @@ namespace ICon.Model.ProjectServices
                     MaxTransitionCount = 100,
                     MinTransitionLength = 2,
                     MaxTransitionLength = 4,
-                    AbstractTransitionNameRegex = "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$"
+                    AbstractTransitionNameRegex = "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$",
+                    AutoHandleRuleMovementType = true
                 },
                 EnergySettings = new BasicEnergySettings()
                 {

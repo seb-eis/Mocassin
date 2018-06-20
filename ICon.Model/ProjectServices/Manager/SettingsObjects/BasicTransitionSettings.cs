@@ -35,5 +35,11 @@ namespace ICon.Model.ProjectServices
         /// </summary>
         [DataMember(Name = "AbstractTransitionNameRegex")]
         public string AbstractTransitionNameRegex { get; set; }
+
+        /// <summary>
+        /// Flag if the program should automatically determine rule movement types and filter unsupported types out
+        /// </summary>
+        [DataMember]
+        public bool AutoHandleRuleMovementType { get; set; }
     }
 }

@@ -33,17 +33,9 @@ namespace ICon.Model.Transitions.ConflictHandling
         {
             var particles = ProjectServices.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
             var creator = new QuickRuleGenerator<KineticRule>(particles);
-            return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton()).SingleOrDefault().Change(rule => rule.Transition = transition);
-        }
-
-        /// <summary>
-        /// Determines possible dependencies between the rules and links them together. Adds the information to the conflict report
-        /// </summary>
-        /// <param name="kineticRules"></param>
-        /// <param name="report"></param>
-        protected void LinkDependentRules(IList<KineticRule> kineticRules, ConflictReport report)
-        {
-
+            return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
+                .SingleOrDefault()
+                .Change(rule => rule.Transition = transition);
         }
     }
 }

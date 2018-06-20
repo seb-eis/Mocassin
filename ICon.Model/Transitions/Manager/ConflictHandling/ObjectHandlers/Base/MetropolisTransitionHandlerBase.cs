@@ -5,6 +5,7 @@ using ICon.Framework.Extensions;
 using ICon.Model.Particles;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
+using ICon.Framework.Operations;
 
 namespace ICon.Model.Transitions.ConflictHandling
 {
@@ -32,7 +33,9 @@ namespace ICon.Model.Transitions.ConflictHandling
         {
             var particles = ProjectServices.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
             var creator = new QuickRuleGenerator<MetropolisRule>(particles);
-            return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton()).SingleOrDefault().Change(rule => rule.Transition = transition);
+            return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
+                .SingleOrDefault()
+                .Change(rule => rule.Transition = transition);
         }
     }
 }

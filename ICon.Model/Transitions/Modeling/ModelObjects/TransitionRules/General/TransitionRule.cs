@@ -10,11 +10,25 @@ using ICon.Model.Particles;
 namespace ICon.Model.Transitions
 {
     /// <summary>
-    /// Enum for properties of transition rules
+    /// Enum for properties of transition rules (Inverted: Corss exchanged strat and end state, Reverted: stard and end state are themselves inverted)
     /// </summary>
     public enum RuleFlags : int
     {
-        Activatable = 0, Active = 1 << 1, Inversion = 1 << 2, CustomTransitionState = 1 << 3, PhysicallyInvalid = 1 << 4
+        Activatable = 0, Active = 0b1, Inverted = 0b10, Reversed = 0b100, CustomTransitionState = 0b1000, PhysicallyInvalid = 0b10000
+    }
+
+    /// <summary>
+    /// Further specifies the type of the rule in terms of the physical process
+    /// </summary>
+    public enum RuleMovementType : int
+    {
+        NotSupported = 0b1, Physical = 0b10, Property = 0b100, Exchange = 0b1000, Migration = 0b10000, Vacancy = 0b100000,
+        VacancyMigration = Physical + Migration + Vacancy,
+        PhysicalMigration = Physical + Migration,
+        PhysicalExchange = Physical + Exchange,
+        PropertyMigration = Property + Migration,
+        PropertyExchange = Property + Exchange,
+        CombinatoryMigration = Physical + Property + Migration + Vacancy
     }
 
     /// <summary>
@@ -32,18 +46,6 @@ namespace ICon.Model.Transitions
     public abstract class TransitionRule : ModelObject, ITransitionRule, IComparable<ITransitionRule>
     {
         /// <summary>
-        /// The object used for short term locking
-        /// </summary>
-        [IgnoreDataMember]
-        private object LockObject { get; set; } = new object();
-        
-        /// <summary>
-        /// The updating flag indicating if the object is currently doing an updating process
-        /// </summary>
-        [IgnoreDataMember]
-        private bool UpdatingFlag { get; set; }
-
-        /// <summary>
         /// The path length of the transition
         /// </summary>
         [IgnoreDataMember]
@@ -56,16 +58,16 @@ namespace ICon.Model.Transitions
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
-        /// The list of linked rule objects
-        /// </summary>
-        [DataMember]
-        public List<ITransitionRule> LinkedRules { get; set; }
-
-        /// <summary>
         /// The rule flags of the rule
         /// </summary>
         [DataMember]
         public RuleFlags RuleFlags { get; set; }
+
+        /// <summary>
+        /// The movement type of the rule
+        /// </summary>
+        [DataMember]
+        public RuleMovementType MovementType { get; set; }
 
         /// <summary>
         /// The start state of the transition
@@ -174,53 +176,20 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get all rules that are linked with this one and therefore have an activation toggle dependency
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<ITransitionRule> GetLinkedRules()
-        {
-            return (LinkedRules ?? new List<ITransitionRule>()).AsEnumerable();
-        }
-
-        /// <summary>
         /// Sets the activation status on this and all linked rules (lock protection to prevent self reference deadlock)
         /// </summary>
         /// <param name="activate"></param>
         public void SetActivationStatus(bool activate)
         {
-            if (SetUpdatingFlag(true))
+            if (!RuleFlags.HasFlag(RuleFlags.Active) && activate)
             {
-                if (!RuleFlags.HasFlag(RuleFlags.Active) && activate)
-                {
-                    RuleFlags &= RuleFlags.Active;
-                }
-                if (RuleFlags.HasFlag(RuleFlags.Active) && !activate)
-                {
-                    RuleFlags -= RuleFlags.Active;
-                }
-                foreach (var rule in LinkedRules)
-                {
-                    rule.SetActivationStatus(activate);
-                }
-                SetUpdatingFlag(false);
+                RuleFlags &= RuleFlags.Active;
+                return;
             }
-        }
-
-        /// <summary>
-        /// Thread safe set of the updating flag. Retruns true if the flag sattus actually changed
-        /// </summary>
-        /// <param name="newStatus"></param>
-        /// <returns></returns>
-        private bool SetUpdatingFlag(bool newStatus)
-        {
-            lock (LockObject)
+            if (RuleFlags.HasFlag(RuleFlags.Active) && !activate)
             {
-                if (UpdatingFlag == newStatus)
-                {
-                    return false;
-                }
-                UpdatingFlag = newStatus;
-                return true;
+                RuleFlags -= RuleFlags.Active;
+                return;
             }
         }
 
@@ -238,8 +207,8 @@ namespace ICon.Model.Transitions
                 FinalState = new OccupationState() { Particles = rule.GetFinalStateOccupation().ToList() };
                 MovementCode = new MovementCode() { CodeValues = rule.GetMovementDescription().ToArray() };
                 RuleFlags = rule.RuleFlags;
+                MovementType = rule.MovementType;
                 AbstractTransition = rule.AbstractTransition;
-                LinkedRules = rule.GetLinkedRules().ToList();
                 return this;
             }
             return null;
