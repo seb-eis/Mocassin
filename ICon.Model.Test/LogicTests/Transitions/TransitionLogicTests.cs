@@ -137,7 +137,7 @@ namespace ICon.Model.Test
 
             var generator = new QuickRuleGenerator<KineticRule>(particles);
 
-            // Migration pattern
+            // Migration pattern (Should yield 2 rules, without activated filtering the inverse case is also present)
             var migrationPattern = new ConnectorType[]
             {
                 ConnectorType.Dynamic, ConnectorType.Dynamic
@@ -147,9 +147,9 @@ namespace ICon.Model.Test
                 oxygenStateGroup, oxygenTransGroup, oxygenStateGroup
             };
             var migRules = generator.MakeUniqueRules(migrationGroups, migrationPattern);
-            Assert.IsTrue(migRules.Count() == 1);
+            Assert.IsTrue(migRules.Count() == 2);
 
-            // Chained pattern
+            // Chained pattern (Should yield 1 rule, the inverted case cannot be produced)
             var chainedPattern = new ConnectorType[]
             {
                 ConnectorType.Dynamic, ConnectorType.Dynamic, ConnectorType.Dynamic, ConnectorType.Dynamic
@@ -161,7 +161,7 @@ namespace ICon.Model.Test
             var chainedRules = generator.MakeUniqueRules(chainedGroups, chainedPattern);
             Assert.IsTrue(chainedRules.Count() == 1);
 
-            //Vehicle pattern (Default D-D-S-D-D)
+            //Vehicle pattern (Default D-D-S-D-D, should yield 4 as each single step is treated like an unchained migration with forw/backw jump)
             var vehiclePattern0 = new ConnectorType[]
             {
                 ConnectorType.Dynamic, ConnectorType.Dynamic, ConnectorType.Static, ConnectorType.Dynamic, ConnectorType.Dynamic
@@ -171,9 +171,9 @@ namespace ICon.Model.Test
                 oxygenStateGroup, oxygenTransGroup, oxygenStateGroup, hydrogenStateGroup, hydrogenTransGroup, hydrogenStateGroup
             };
             var vehicleRules0 = generator.MakeUniqueRules(vehicleGroups0, vehiclePattern0);
-            Assert.IsTrue(vehicleRules0.Count() == 2);
+            Assert.IsTrue(vehicleRules0.Count() == 4);
 
-            //Vehicle pattern (special D-S-S-D)
+            //Vehicle pattern (special D-S-S-D, should yield 4, same reason as with default vehicle pattern)
             var vehiclePattern1 = new ConnectorType[]
             {
                 ConnectorType.Dynamic, ConnectorType.Static, ConnectorType.Static, ConnectorType.Dynamic
@@ -183,7 +183,7 @@ namespace ICon.Model.Test
                 oxygenStateGroup, oxygenStateGroup, vehicleTransGroup, hydrogenStateGroup, hydrogenStateGroup
             };
             var vehicleRules1 = generator.MakeUniqueRules(vehicleGroups1, vehiclePattern1);
-            Assert.IsTrue(vehicleRules1.Count() == 2);
+            Assert.IsTrue(vehicleRules1.Count() == 4);
         }
     }
 }

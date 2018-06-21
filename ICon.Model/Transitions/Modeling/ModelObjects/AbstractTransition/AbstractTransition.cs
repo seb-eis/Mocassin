@@ -21,11 +21,11 @@ namespace ICon.Model.Transitions
         public string Name { get; set; }
 
         /// <summary>
-        /// Indices of the affiliated property group for each step
+        /// List of affiliated state change group for each step
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public List<IPropertyGroup> PropertyGroups { get; set; }
+        public List<IStateExchangeGroup> StateExchangeGroups { get; set; }
 
         /// <summary>
         /// Connector types for each step
@@ -37,7 +37,7 @@ namespace ICon.Model.Transitions
         /// The number of sttaes of the transition
         /// </summary>
         [IgnoreDataMember]
-        public int StateCount => (PropertyGroups != null) ? PropertyGroups.Count : 0;
+        public int StateCount => (StateExchangeGroups != null) ? StateExchangeGroups.Count : 0;
 
         /// <summary>
         /// The number of connectors of the transition
@@ -61,12 +61,12 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get the property group seqeunce of the transition
+        /// Get the state exchange groups of the transition
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPropertyGroup> GetPropertyGroupSequence()
+        public IEnumerable<IStateExchangeGroup> GetStateExchangeGroups()
         {
-            return (PropertyGroups ?? new List<IPropertyGroup>()).AsEnumerable();
+            return (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ICon.Model.Transitions
             if (CastWithDepricatedCheck<IAbstractTransition>(obj) is var transition)
             {
                 Name = transition.Name;
-                PropertyGroups = transition.GetPropertyGroupSequence().ToList();
+                StateExchangeGroups = transition.GetStateExchangeGroups().ToList();
                 Connectors = transition.GetConnectorSequence().ToList();
                 return this;
             }
@@ -102,8 +102,8 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public bool Equals(IAbstractTransition other)
         {
-            var indices = PropertyGroups.Select(a => a.Index);
-            var otherIndices = other.GetPropertyGroupSequence().Select(a => a.Index);
+            var indices = StateExchangeGroups.Select(a => a.Index);
+            var otherIndices = other.GetStateExchangeGroups().Select(a => a.Index);
 
             if (indices.SequenceEqual(otherIndices) && Connectors.SequenceEqual(other.GetConnectorSequence()))
             {

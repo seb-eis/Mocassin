@@ -14,18 +14,18 @@ namespace ICon.Model.Transitions
     public class TransitionModelData : ModelData<ITransitionDataPort>
     {
         /// <summary>
-        /// The list of property state pairs
+        /// The list of state exchange pairs
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(IPropertyStatePair))]
-        public List<PropertyStatePair> PropertyStatePairs { get; set; }
+        [IndexedModelData(typeof(IStateExchangePair))]
+        public List<StateExchangePair> StateExchangePairs { get; set; }
 
         /// <summary>
-        /// The list of property groups
+        /// The list of state exchange groups
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(IPropertyGroup))]
-        public List<PropertyGroup> PropertyGroups { get; set; }
+        [IndexedModelData(typeof(IStateExchangeGroup))]
+        public List<StateExchangeGroup> StateExchangeGroups { get; set; }
 
         /// <summary>
         /// The list of existing abstract transitions for KMC and MMC

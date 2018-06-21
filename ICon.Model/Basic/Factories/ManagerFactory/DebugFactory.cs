@@ -147,22 +147,22 @@ namespace ICon.Model.Basic
                         Vector = new DataVector3D(0.50, 0.25, 0.25), OccupationSet = particleSets[2], Status = PositionStatus.Unstable, Index = 2
                     }
                 };
-                var propertyPairs = new PropertyStatePair[]
+                var propertyPairs = new StateExchangePair[]
                 {
-                    new PropertyStatePair() { DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0 },
-                    new PropertyStatePair() { DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1 },
-                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2},
-                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 3},
-                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 4},
-                    new PropertyStatePair() { DonorParticle = particles[6], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 5},
-                    new PropertyStatePair() { DonorParticle = particles[6], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 6},
+                    new StateExchangePair() { DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0 },
+                    new StateExchangePair() { DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1 },
+                    new StateExchangePair() { DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2},
+                    new StateExchangePair() { DonorParticle = particles[3], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 3},
+                    new StateExchangePair() { DonorParticle = particles[3], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 4},
+                    new StateExchangePair() { DonorParticle = particles[6], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 5},
+                    new StateExchangePair() { DonorParticle = particles[6], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 6},
                 };
-                var propertyGroups = new PropertyGroup[]
+                var propertyGroups = new StateExchangeGroup[]
                 {
-                    new PropertyGroup() { VacancyGroup = false, Index = 0, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[0]} },
-                    new PropertyGroup() { VacancyGroup = true, Index = 1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[1]} },
-                    new PropertyGroup() { VacancyGroup = false, Index = 2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} },
-                    new PropertyGroup() { VacancyGroup = false, Index = 3, PropertyStatePairs = new List<IPropertyStatePair>
+                    new StateExchangeGroup() { VacancyGroup = false, Index = 0, StateExchangePairs = new List<IStateExchangePair>{ propertyPairs[0]} },
+                    new StateExchangeGroup() { VacancyGroup = true, Index = 1, StateExchangePairs = new List<IStateExchangePair>{ propertyPairs[1]} },
+                    new StateExchangeGroup() { VacancyGroup = false, Index = 2, StateExchangePairs = new List<IStateExchangePair>{ propertyPairs[2]} },
+                    new StateExchangeGroup() { VacancyGroup = false, Index = 3, StateExchangePairs = new List<IStateExchangePair>
                     {
                         propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6]
                     } }
@@ -172,25 +172,25 @@ namespace ICon.Model.Basic
                     new AbstractTransition()
                     {
                         Index = 0, Name = "OxygenMigration",
-                        PropertyGroups = new List<IPropertyGroup>{ propertyGroups[1], propertyGroups[0], propertyGroups[1] },
+                        StateExchangeGroups = new List<IStateExchangeGroup>{ propertyGroups[1], propertyGroups[0], propertyGroups[1] },
                         Connectors = new List<ConnectorType>{ ConnectorType.Dynamic, ConnectorType.Dynamic }
                     },
                    new AbstractTransition()
                     {
                         Index = 1, Name = "KationExchange",
-                        PropertyGroups = new List<IPropertyGroup> { propertyGroups[2], propertyGroups[2] },
+                        StateExchangeGroups = new List<IStateExchangeGroup> { propertyGroups[2], propertyGroups[2] },
                         Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
                     },
                     new AbstractTransition()
                     {
                         Index = 2, Name = "OxygenExchange",
-                        PropertyGroups = new List<IPropertyGroup> { propertyGroups[1], propertyGroups[1] },
+                        StateExchangeGroups = new List<IStateExchangeGroup> { propertyGroups[1], propertyGroups[1] },
                         Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
                     },
                     new AbstractTransition()
                     {
                         Index = 3, Name = "KationElectronExchange",
-                        PropertyGroups = new List<IPropertyGroup> { propertyGroups[3], propertyGroups[3] },
+                        StateExchangeGroups = new List<IStateExchangeGroup> { propertyGroups[3], propertyGroups[3] },
                         Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
                     },
                 };

@@ -6,9 +6,9 @@ using ICon.Model.Particles;
 namespace ICon.Model.Transitions
 {
     /// <summary>
-    /// Represents a property pair of two particles where one is the acceptor state and the other the donor state
+    /// Represents a state exchange pair of two particles where one is the acceptor state and the other the donor state
     /// </summary>
-    public interface IPropertyStatePair : IModelObject, IEquatable<IPropertyStatePair>, IComparable<IPropertyStatePair>
+    public interface IStateExchangePair : IModelObject, IEquatable<IStateExchangePair>, IComparable<IStateExchangePair>
     {
         /// <summary>
         /// Flag if the property state pair belongs to a vacancy mechanism (Exactly one of the states is a vacancy)

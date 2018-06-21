@@ -42,7 +42,7 @@ namespace ICon.Model.Transitions
         /// <remarks> Unsupported rules are typically physically meaningless e.g. they violate matter conservation rules </remarks>
         public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions, bool onlySupported)
         {
-            var statePairGroups = new StatePairGroupCreator().MakeGroupsWithBlanks(abstractTransitions.SelectMany(value => value.GetPropertyGroupSequence()));
+            var statePairGroups = new StatePairGroupCreator().MakeGroupsWithBlanks(abstractTransitions.SelectMany(value => value.GetStateExchangeGroups()));
             var results = MakeUniqueRules(abstractTransitions, statePairGroups);
             return (onlySupported) ? results.Select(values => FilterByCommonBehaviorAndInversionRules(values)) : results;
         }
@@ -66,7 +66,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
         {
-            var stateDescription = abstractTransition.GetPropertyGroupSequence().Select(value => statePairGroups[value.Index].AutoChangeStatus());
+            var stateDescription = abstractTransition.GetStateExchangeGroups().Select(value => statePairGroups[value.Index].AutoChangeStatus());
             foreach (var rule in MakeUniqueRules(stateDescription, abstractTransition.GetConnectorSequence()))
             {
                 rule.AbstractTransition = abstractTransition;

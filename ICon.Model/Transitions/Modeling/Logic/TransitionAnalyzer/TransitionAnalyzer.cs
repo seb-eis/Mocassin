@@ -130,7 +130,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public bool IsSymmetricTransition(IAbstractTransition abstractTransition)
         {
-            return abstractTransition.GetPropertyGroupSequence().SequenceEqual(abstractTransition.GetPropertyGroupSequence().Reverse());
+            return abstractTransition.GetStateExchangeGroups().SequenceEqual(abstractTransition.GetStateExchangeGroups().Reverse());
         }
 
         /// <summary>
@@ -144,10 +144,10 @@ namespace ICon.Model.Transitions
         public IList<double> GetChargeTransportChain(IAbstractTransition transition, IComparer<double> comparer)
         {
             var transportChain = new List<double>(transition.StateCount);
-            foreach (var propertyGroup in transition.GetPropertyGroupSequence())
+            foreach (var propertyGroup in transition.GetStateExchangeGroups())
             {
-                double chargeTransport = GetStatePairChargeTransport(propertyGroup.GetPropertyStatePairs().First());
-                foreach (var statePair in propertyGroup.GetPropertyStatePairs().Skip(1))
+                double chargeTransport = GetStatePairChargeTransport(propertyGroup.GetStateExchangePairs().First());
+                foreach (var statePair in propertyGroup.GetStateExchangePairs().Skip(1))
                 {
                     chargeTransport = (comparer.Compare(chargeTransport, GetStatePairChargeTransport(statePair)) == 0) ? chargeTransport : double.NaN;
                 }
@@ -157,11 +157,11 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Caclulates the charge transport value of a single state piar
+        /// Calculates the charge transport value of a single state exchange pair
         /// </summary>
         /// <param name="statePair"></param>
         /// <returns></returns>
-        public double GetStatePairChargeTransport(IPropertyStatePair statePair)
+        public double GetStatePairChargeTransport(IStateExchangePair statePair)
         {
             return statePair.DonorParticle.Charge - statePair.AcceptorParticle.Charge;
         }
