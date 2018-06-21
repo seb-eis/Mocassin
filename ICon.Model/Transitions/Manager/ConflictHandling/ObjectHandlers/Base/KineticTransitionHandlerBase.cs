@@ -37,5 +37,14 @@ namespace ICon.Model.Transitions.ConflictHandling
                 .SingleOrDefault()
                 .Change(rule => rule.Transition = transition);
         }
+
+        /// <summary>
+        /// Adds new kinetic rules to the model data at old deprecated places or the end of the list. Indexes objects accordingly
+        /// </summary>
+        /// <param name="rules"></param>
+        protected void IndexAndAddToModelData(IEnumerable<KineticRule> rules)
+        {
+            new IndexedDataManager<KineticRule>().IndexAndAddUseDeprecated(DataAccess.Query(data => data.KineticRules), rules);
+        }
     }
 }

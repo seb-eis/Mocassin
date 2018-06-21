@@ -53,7 +53,9 @@ namespace ICon.Framework.QuickTest
             inputter.AutoInputData(package.ProjectServices);
             var report = inputter.GetReportJson();
 
-            var particles = package.ParticleManager.QueryPort.Query(port => port.GetParticles());
+            var watch = Stopwatch.StartNew();
+            var mrules0 = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisRuleLists()).ToArray();
+            DisplayWatch(watch);
 
             Console.ReadLine();
         }

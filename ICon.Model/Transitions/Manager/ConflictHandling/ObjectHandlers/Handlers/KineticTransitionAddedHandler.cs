@@ -32,7 +32,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         public override ConflictReport HandleConflicts(KineticTransition obj)
         {
             var report = new ConflictReport();
-            CreateNewRulesandUpdateModelData(obj, report);
+            CreateNewRulesAndUpdateModelData(obj, report);
             return report;
         }
 
@@ -41,10 +41,10 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="report"></param>
-        protected void CreateNewRulesandUpdateModelData(KineticTransition transition, ConflictReport report)
+        protected void CreateNewRulesAndUpdateModelData(KineticTransition transition, ConflictReport report)
         {
             transition.TransitionRules = CreateTransitionRules(transition).ToList();
-            DataAccess.Query(data => data.KineticRules.AddRange(transition.TransitionRules));
+            IndexAndAddToModelData(transition.TransitionRules);
 
             var detail0 = $"Automatically added number of new kinetic model rules is ({transition.TransitionRules.Count})";
             report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0));

@@ -38,7 +38,6 @@ namespace ICon.Model.Transitions.Validators
             }
 
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetPropertyGroups(), report);
-            AddChargeTransferValidation(obj, report);
             return report;
         }
 
@@ -56,26 +55,6 @@ namespace ICon.Model.Transitions.Validators
                 return false;
             }
             return true;
-        }
-
-        /// <summary>
-        /// Validates that all state pairs of a property group share the same charge transfer value (acceptor state - donor state) and add the results to the validation report
-        /// </summary>
-        /// <param name="group"></param>
-        /// <param name="report"></param>
-        protected void AddChargeTransferValidation(IPropertyGroup group, ValidationReport report)
-        {
-            var chargeTransfers = new List<double>(10);
-
-            foreach (var statePair in group.GetPropertyStatePairs())
-            {
-                chargeTransfers.Add(statePair.AcceptorParticle.Charge - statePair.DonorParticle.Charge);
-            }
-            if (!chargeTransfers.All(value => ProjectServices.CommonNumerics.RangeComparer.Compare(chargeTransfers[0], value) == 0))
-            {
-                var detail = "The contained property state pairs of the provided group do not share a common charge exchange value";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail));
-            }
         }
     }
 }

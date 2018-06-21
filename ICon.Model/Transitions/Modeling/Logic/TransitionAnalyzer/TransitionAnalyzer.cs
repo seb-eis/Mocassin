@@ -132,5 +132,38 @@ namespace ICon.Model.Transitions
         {
             return abstractTransition.GetPropertyGroupSequence().SequenceEqual(abstractTransition.GetPropertyGroupSequence().Reverse());
         }
+
+        /// <summary>
+        /// Calculates the abstract transitions charge transport chain that assigns each state position a charge change value form donor to acceptor state,
+        /// or NaN if a position has multiple possible values
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="comparer"></param>
+        /// <remarks> Conductivity calculations based on the tracker property alone require this chain to have no Nan values </remarks>
+        /// <returns></returns>
+        public IList<double> GetChargeTransportChain(IAbstractTransition transition, IComparer<double> comparer)
+        {
+            var transportChain = new List<double>(transition.StateCount);
+            foreach (var propertyGroup in transition.GetPropertyGroupSequence())
+            {
+                double chargeTransport = GetStatePairChargeTransport(propertyGroup.GetPropertyStatePairs().First());
+                foreach (var statePair in propertyGroup.GetPropertyStatePairs().Skip(1))
+                {
+                    chargeTransport = (comparer.Compare(chargeTransport, GetStatePairChargeTransport(statePair)) == 0) ? chargeTransport : double.NaN;
+                }
+                transportChain.Add(chargeTransport);
+            }
+            return transportChain;
+        }
+
+        /// <summary>
+        /// Caclulates the charge transport value of a single state piar
+        /// </summary>
+        /// <param name="statePair"></param>
+        /// <returns></returns>
+        public double GetStatePairChargeTransport(IPropertyStatePair statePair)
+        {
+            return statePair.DonorParticle.Charge - statePair.AcceptorParticle.Charge;
+        }
     }
 }

@@ -21,11 +21,6 @@ namespace ICon.Model.Transitions
         bool VacancyGroup { get; }
 
         /// <summary>
-        /// The relative difference in charge between donor and acceptor group
-        /// </summary>
-        double ChargeTransfer { get; }
-
-        /// <summary>
         /// Get the property state pair indices affiliated with this group
         /// </summary>
         IEnumerable<IPropertyStatePair> GetPropertyStatePairs();

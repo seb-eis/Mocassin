@@ -27,12 +27,6 @@ namespace ICon.Model.Transitions
         public bool VacancyGroup { get; set; }
 
         /// <summary>
-        /// The relative charge value from the donor to acceptor state
-        /// </summary>
-        [DataMember]
-        public double ChargeTransfer { get; set; }
-
-        /// <summary>
         /// Get the number of property state pairs in the group
         /// </summary>
         [IgnoreDataMember]
@@ -67,7 +61,6 @@ namespace ICon.Model.Transitions
             {
                 Index = group.Index;
                 VacancyGroup = group.VacancyGroup;
-                ChargeTransfer = group.ChargeTransfer;
                 PropertyStatePairs = group.GetPropertyStatePairs().ToList();
                 return this;
             }

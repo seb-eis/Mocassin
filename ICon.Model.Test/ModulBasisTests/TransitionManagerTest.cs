@@ -44,7 +44,6 @@ namespace ICon.Model.Test
             var propertyGroup = new PropertyGroup()
             {
                 VacancyGroup = true,
-                ChargeTransfer = 2,
                 PropertyStatePairs = new List<IPropertyStatePair>
                 {
                     firstPair, firstPair
@@ -121,7 +120,6 @@ namespace ICon.Model.Test
             var propertyGroup = new PropertyGroup()
             {
                 VacancyGroup = true,
-                ChargeTransfer = 2,
                 PropertyStatePairs = new List<IPropertyStatePair> { firstPair }
             };
             var abstractTransition = new AbstractTransition()

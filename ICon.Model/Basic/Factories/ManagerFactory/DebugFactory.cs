@@ -159,10 +159,10 @@ namespace ICon.Model.Basic
                 };
                 var propertyGroups = new PropertyGroup[]
                 {
-                    new PropertyGroup() { VacancyGroup = false, Index = 0, ChargeTransfer = -2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[0]} },
-                    new PropertyGroup() { VacancyGroup = true, Index = 1, ChargeTransfer = -2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[1]} },
-                    new PropertyGroup() { VacancyGroup = false, Index = 2, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} },
-                    new PropertyGroup() { VacancyGroup = false, Index = 3, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>
+                    new PropertyGroup() { VacancyGroup = false, Index = 0, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[0]} },
+                    new PropertyGroup() { VacancyGroup = true, Index = 1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[1]} },
+                    new PropertyGroup() { VacancyGroup = false, Index = 2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} },
+                    new PropertyGroup() { VacancyGroup = false, Index = 3, PropertyStatePairs = new List<IPropertyStatePair>
                     {
                         propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6]
                     } }

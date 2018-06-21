@@ -64,7 +64,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-            return "'Kinetic Transition'";
+            return "'Kinetic Transition Rule'";
         }
 
         /// <summary>

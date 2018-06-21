@@ -7,7 +7,7 @@ namespace ICon.Model.Basic
     /// <summary>
     /// Abstract base event arguments class for events that inform about reindexing events for model object collections
     /// </summary>
-    public abstract class ReindexingInfo
+    public abstract class ModelReindexingEventArgs
     {
         /// <summary>
         /// The reindexing list that describes the indexing changes
@@ -18,7 +18,7 @@ namespace ICon.Model.Basic
         /// Create new object reindexing event arguments with the provided reindexing list
         /// </summary>
         /// <param name="reindexingList"></param>
-        protected ReindexingInfo(ReindexingList reindexingList)
+        protected ModelReindexingEventArgs(ReindexingList reindexingList)
         {
             ReindexingList = reindexingList ?? throw new ArgumentNullException(nameof(reindexingList));
         }
@@ -28,13 +28,13 @@ namespace ICon.Model.Basic
     /// Reindexing event arguments for a specific type of model objects
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public class ReindexingInfo<T1> : ReindexingInfo where T1 : IModelObject
+    public class ModelReindexingEventArgs<T1> : ModelReindexingEventArgs where T1 : IModelObject
     {
         /// <summary>
         /// Create new object reindexing event arguments with the provided reindeing list
         /// </summary>
         /// <param name="reindexingList"></param>
-        protected ReindexingInfo(ReindexingList reindexingList) : base(reindexingList)
+        protected ModelReindexingEventArgs(ReindexingList reindexingList) : base(reindexingList)
         {
 
         }

@@ -196,6 +196,29 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
+        /// Creates a new raw warning message for cases where a model definition is supported but does implicitly break or reduce feature support
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateFeatureBreakingInputWarning(object sender)
+        {
+            return new WarningMessage(sender, "Feature Breaking Input");
+        }
+
+        /// <summary>
+        /// Creates a new raw warning message for cases where a model definition is supported but does implicitly break or reduce feature support (With arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateFeatureBreakingInputWarning(object sender, params string[] details)
+        {
+            var message = CreateFeatureBreakingInputWarning(sender);
+            message.AddDetails(details);
+            return message;
+        }
+
+        /// <summary>
         /// Creates a new raw warning message for cases where an identical model parameter replacement is detected during validation
         /// </summary>
         /// <param name="sender"></param>

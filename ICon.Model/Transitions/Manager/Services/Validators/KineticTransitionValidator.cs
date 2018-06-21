@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text.RegularExpressions;
+using System.Linq;
 
 using ICon.Framework.Operations;
 using ICon.Framework.Messaging;
@@ -35,6 +35,7 @@ namespace ICon.Model.Transitions.Validators
             AddHasContentValidation(obj, report);
             AddAbstractTransitionValidation(obj, report);
             AddTransitionGeometryValidation(obj, report);
+            AddChargeConsistencyValidation(obj, report);
             return report;
         }
 
@@ -90,6 +91,23 @@ namespace ICon.Model.Transitions.Validators
             if (patternType == ConnectorPatternType.Undefined)
             {
                 throw new InvalidOperationException("Unsupported transition pattern type previously passed validation");
+            }
+        }
+
+        /// <summary>
+        /// Validates that the charge exchange between each consecuticve dynamically linked
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void AddChargeConsistencyValidation(IKineticTransition transition, ValidationReport report)
+        {
+            var swapChain = new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ProjectServices.CommonNumerics.RangeComparer);
+            if (swapChain.Any(value => value == double.NaN))
+            {
+                var detail0 = $"The transition charge transport chain is ill defined. Please reconsider your abstract transition definition!";
+                var detail1 = $"Problem 1 : Property based conductivity calculation will yield nonesense";
+                var detail2 = $"Problem 2 : Separation of complex property and ion movement will yield nonesense";
+                report.AddWarning(ModelMessages.CreateFeatureBreakingInputWarning(this, detail0, detail1, detail2));
             }
         }
     }

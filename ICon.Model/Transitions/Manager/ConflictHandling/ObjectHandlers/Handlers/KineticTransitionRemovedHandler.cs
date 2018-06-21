@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using ICon.Framework.Extensions;
 using ICon.Framework.Operations;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
@@ -30,7 +32,24 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <returns></returns>
         public override ConflictReport HandleConflicts(KineticTransition obj)
         {
-            return new ConflictReport();
+            var report = new ConflictReport();
+            DeprecateRules(obj, report);
+            return report;
+        }
+
+        /// <summary>
+        /// Deprecates all rules of the transition in the model data and writes the information to the report
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void DeprecateRules(KineticTransition transition, ConflictReport report)
+        {
+            var indexManager = new IndexedDataManager<KineticRule>();
+            var builder = new StringBuilder(transition.TransitionRules.Count * 2);
+            builder.BuildCommaSeparatedValueString(indexManager.DeprecateAll(transition.TransitionRules, a => true).ToArray());
+
+            var detail0 = $"Kinetic rules at indices ({builder.ToString()}) are no longer valid and where marked as deprecated";
+            report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0));
         }
     }
 }

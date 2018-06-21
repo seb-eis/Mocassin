@@ -227,7 +227,7 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Checks if a combination of rule start occupation and state pairs can result in a meaningfull transition
+        /// Checks if a combination of rule start occupation and state pairs can result in a meaningfull transition end state
         /// </summary>
         /// <param name="rule"></param>
         /// <param name="statePairs"></param>
