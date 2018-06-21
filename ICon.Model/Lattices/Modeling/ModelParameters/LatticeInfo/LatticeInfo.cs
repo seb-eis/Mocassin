@@ -11,7 +11,6 @@ namespace ICon.Model.Lattices
     /// <summary>
     /// Lattice information, such as the extent of the super cell
     /// </summary>
-    [Serializable]
     [DataContract(Name = "LatticeInfo")]
     public class LatticeInfo : ModelParameter, ILatticeInfo
     {
@@ -22,32 +21,12 @@ namespace ICon.Model.Lattices
         public DataIntegralVector3D Extent { get; set; }
 
         /// <summary>
-        /// Creates a new lattice information set
-        /// </summary>
-        /// <param name="paramX"></param>
-        /// <param name="paramY"></param>
-        /// <param name="paramZ"></param>
-        public LatticeInfo(int paramX, int paramY, int paramZ)
-        {
-            Extent = new DataIntegralVector3D(paramX, paramY, paramZ);
-        }
-
-        /// <summary>
         /// Creates default lattice parameters (no extent of unit cell)
         /// </summary>
         /// <returns></returns>
         public static LatticeInfo CreateDefault()
         {
-            return new LatticeInfo(1, 1, 1);
-        }
-
-        /// <summary>
-        /// creates a string that contains the lattice information
-        /// </summary>
-        /// <returns></returns>
-        public override String ToString()
-        {
-            return $"{GetParameterName()} ({Extent})";
+            return new LatticeInfo() { Extent = (new DataIntegralVector3D(1, 1, 1)) };
         }
 
         /// <summary>

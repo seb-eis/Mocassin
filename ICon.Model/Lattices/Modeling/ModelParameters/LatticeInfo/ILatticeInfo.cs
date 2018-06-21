@@ -14,6 +14,6 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Extent of lattice
         /// </summary>
-        DataIntegralVector3D   Extent { get; }
+        DataIntegralVector3D Extent { get; }
     }
 }

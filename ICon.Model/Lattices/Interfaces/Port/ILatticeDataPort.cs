@@ -28,10 +28,16 @@ namespace ICon.Model.Lattices
         ReadOnlyList<IDoping> GetDopings();
 
         /// <summary>
+        /// Get read only list of DopingCombinations (dopant, doped element, unit cell entry)
+        /// </summary>
+        /// <returns></returns>
+        ReadOnlyList<IDopingCombination> GetDopingCombinations();
+
+        /// <summary>
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IUnitCell<IParticle>> GetBuildingBlocks();
+        ReadOnlyList<IBuildingBlock> GetBuildingBlocks();
 
         /// <summary>
         /// Get read only list of block infos

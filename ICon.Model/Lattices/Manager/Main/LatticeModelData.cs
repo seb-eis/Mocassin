@@ -13,7 +13,7 @@ namespace ICon.Model.Lattices
     /// The reference model data object for the lattice manager
     /// </summary>
     [Serializable]
-    [DataContract(Name ="LatticeModelData")]
+    [DataContract(Name = "LatticeModelData")]
     public class LatticeModelData : ModelData<ILatticeDataPort>
     {
         /// <summary>
@@ -24,25 +24,32 @@ namespace ICon.Model.Lattices
         public LatticeInfo LatticeInfo { get; set; }
 
         /// <summary>
-        /// The dopings specified by the user
-        /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IDoping))]
-        public List<Doping> Dopings { get; set; }
-
-        /// <summary>
         /// Default building block (index = 0) and custom building blocks of lattice
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(UnitCellWrapper<IParticle>))]
-        public List<UnitCellWrapper<IParticle>> BuildingBlocks { get; set; }
+        [IndexedModelData(typeof(IBuildingBlock))]
+        public List<BuildingBlock> BuildingBlocks { get; set; }
 
         /// <summary>
         /// List of building block information (origin and extent)
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(List<BlockInfo>))]
+        [IndexedModelData(typeof(IBlockInfo))]
         public List<BlockInfo> BlockInfos { get; set; }
+
+        /// <summary>
+        /// List of doping combinations (dopant, doped element, unitcell position)
+        /// </summary>
+        [DataMember]
+        [IndexedModelData(typeof(IDopingCombination))]
+        public List<DopingCombination> DopingCombinations {get; set;}
+
+        /// <summary>
+        /// The dopings specified by the user
+        /// </summary>
+        [DataMember]
+        [IndexedModelData(typeof(IDoping))]
+        public List<Doping> Dopings { get; set; }
 
         /// <summary>
         /// Creates new read only wrapper for this data object
@@ -59,9 +66,7 @@ namespace ICon.Model.Lattices
         public override void ResetToDefault()
         {
             LatticeInfo = LatticeInfo.CreateDefault();
-            Dopings = new List<Doping>();
-            BuildingBlocks = new List<UnitCellWrapper<IParticle>>();
-            BlockInfos = new List<BlockInfo>();
+            ResetAllIndexedData();
         }
 
         /// <summary>

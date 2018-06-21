@@ -38,5 +38,158 @@ namespace ICon.Model.Lattices
         {
             return DefaultCleanDeprecatedData();
         }
+
+        /// <summary>
+        /// Tries to set new lattice info if it passes validation (Awaits distribution of affiliated events on operation success)
+        /// </summary>
+        /// <param name="latticeInfo"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ParameterChange)]
+        protected IOperationReport TrySetLatticeInfo(ILatticeInfo latticeInfo)
+        {
+            var result = DefaultSetModelParameter(latticeInfo, accessor => accessor.Query(data => data.LatticeInfo), true);
+            return result;
+        }
+
+        /// <summary>
+        /// Registers a new BuildingBlock to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.NewObject)]
+        protected IOperationReport TryRegisterNewBuildingBlock(IBuildingBlock buildingBlock)
+        {
+            var result = DefaultRegisterModelObject(buildingBlock, accessor => accessor.Query(data => data.BuildingBlocks));
+            return result;
+        }
+
+        /// <summary>
+        /// Removes a BuildingBlock from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectRemoval)]
+        protected IOperationReport TryRemoveBuildingBlock(IBuildingBlock buildingBlock)
+        {
+            return DefaultRemoveModelObject(buildingBlock, accessor => accessor.Query(data => data.BuildingBlocks), 0);
+        }
+
+        /// <summary>
+        /// Replaces a BuildingBlock in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="orgBuildingBlock"></param>
+        /// <param name="newBuildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectChange)]
+        protected IOperationReport TryReplaceBuildingBlock(IBuildingBlock orgBuildingBlock, IBuildingBlock newBuildingBlock)
+        {
+            return DefaultReplaceModelObject(orgBuildingBlock, newBuildingBlock, accessor => accessor.Query(data => data.BuildingBlocks));
+        }
+
+        /// <summary>
+        /// Registers a new BlockInfo to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.NewObject)]
+        protected IOperationReport TryRegisterNewBlockInfo(IBlockInfo blockInfo)
+        {
+            var result = DefaultRegisterModelObject(blockInfo, accessor => accessor.Query(data => data.BlockInfos));
+            return result;
+        }
+
+        /// <summary>
+        /// Removes a BlockInfo from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectRemoval)]
+        protected IOperationReport TryRemoveBlockInfo(IBlockInfo blockInfo)
+        {
+            return DefaultRemoveModelObject(blockInfo, accessor => accessor.Query(data => data.BlockInfos), 0);
+        }
+
+        /// <summary>
+        /// Replaces a BlockInfo in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="orgBuildingBlock"></param>
+        /// <param name="newBuildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectChange)]
+        protected IOperationReport TryReplaceBlockInfo(IBlockInfo orgBlockInfo, IBlockInfo newBlockInfo)
+        {
+            return DefaultReplaceModelObject(orgBlockInfo, newBlockInfo, accessor => accessor.Query(data => data.BlockInfos));
+        }
+
+        /// <summary>
+        /// Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.NewObject)]
+        protected IOperationReport TryRegisterNewDopingCombination(IDopingCombination dopingCombination)
+        {
+            var result = DefaultRegisterModelObject(dopingCombination, accessor => accessor.Query(data => data.DopingCombinations));
+            return result;
+        }
+
+        /// <summary>
+        /// Removes a Doping from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectRemoval)]
+        protected IOperationReport TryRemoveDopingCombination(IDopingCombination dopingCombination)
+        {
+            return DefaultRemoveModelObject(dopingCombination, accessor => accessor.Query(data => data.DopingCombinations), 0);
+        }
+
+        /// <summary>
+        /// Replaces a Doping in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="orgBuildingBlock"></param>
+        /// <param name="newBuildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectChange)]
+        protected IOperationReport TryReplaceDopingCombination(IDopingCombination orgDopingCombination, IDopingCombination newDopingCombination)
+        {
+            return DefaultReplaceModelObject(orgDopingCombination, newDopingCombination, accessor => accessor.Query(data => data.DopingCombinations));
+        }
+
+        /// <summary>
+        /// Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.NewObject)]
+        protected IOperationReport TryRegisterNewDoping(IDoping doping)
+        {
+            var result =  DefaultRegisterModelObject(doping, accessor => accessor.Query(data => data.Dopings));
+            return result;
+        }
+
+        /// <summary>
+        /// Removes a Doping from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectRemoval)]
+        protected IOperationReport TryRemoveDoping(IDoping doping)
+        {
+            return DefaultRemoveModelObject(doping, accessor => accessor.Query(data => data.Dopings), 0);
+        }
+
+        /// <summary>
+        /// Replaces a Doping in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        /// </summary>
+        /// <param name="orgBuildingBlock"></param>
+        /// <param name="newBuildingBlock"></param>
+        /// <returns></returns>
+        [OperationMethod(DataOperationType.ObjectChange)]
+        protected IOperationReport TryReplaceDoping(IDoping orgDoping, IDoping newDoping)
+        {
+            return DefaultReplaceModelObject(orgDoping, newDoping, accessor => accessor.Query(data => data.Dopings));
+        }
     }
+
 }
