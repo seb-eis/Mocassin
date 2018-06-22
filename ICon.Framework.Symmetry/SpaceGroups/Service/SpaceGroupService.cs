@@ -388,6 +388,43 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
+        /// Get the point operation group for the provided origin point and point sequence based upon the currently loaded space group
+        /// </summary>
+        /// <param name="originPoint"></param>
+        /// <param name="pointSequence"></param>
+        /// <returns></returns>
+        public IPointOperationGroup GetPointOperationGroup(in Fractional3D originPoint, IEnumerable<Fractional3D> pointSequence)
+        {
+            var operationGroup = new PointOperationGroup()
+            {
+                SpaceGroupEntry = LoadedGroup.GetGroupEntry(),
+                OriginPoint = new DataVector3D(originPoint),
+                PointSequence = pointSequence.Select(value => new DataVector3D(value)).ToList(),
+                SelfProjectionOperations = new List<SymmetryOperation>()
+            };
+
+            var multiplicityOperations = GetMultiplicityOperations(originPoint, true);
+            var resultSequences = multiplicityOperations.Select(operation => operation.ApplyUntrimmed(pointSequence).ToList()).ToList();
+
+            operationGroup.PointOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
+
+            var equalityComparer = MakeVectorSequenceProjectionComparer();
+            foreach (var index in resultSequences.IndexOfMany(value => equalityComparer.Equals(value, resultSequences.First())))
+            {
+                operationGroup.SelfProjectionOperations.Add((SymmetryOperation)multiplicityOperations[index]);
+            }
+
+            foreach (var index in resultSequences.RemoveDuplicates(MakeVectorSequenceEquivalenceComparer()))
+            {
+                multiplicityOperations.RemoveAt(index);
+            }
+
+            operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
+            operationGroup.ProjectionPointIndexing = MakeProjectionIndexing(pointSequence, operationGroup.SelfProjectionOperations).ToList();
+            return operationGroup;
+        }
+
+        /// <summary>
         /// Translates an environment seqeunce onto each possible wyckoff 1 position and retunrs the results as a sorted dictionay for lookup
         /// </summary>
         /// <param name="refSequence"></param>
@@ -426,6 +463,77 @@ namespace ICon.Symmetry.SpaceGroups
                 TrimTolerance = operation.TrimTolerance,
                 Operations = operationsArray
             };
+        }
+
+        /// <summary>
+        /// Creates a set of index values that groups the vectors of the passed point sequence by the sets that can be projected onto each
+        /// other with the provided set of operations
+        /// </summary>
+        /// <param name="vectors"></param>
+        /// <param name="operations"></param>
+        /// <returns> Operations have to be the self projection operations of the sequence </returns>
+        protected int[] MakeProjectionIndexing(IEnumerable<Fractional3D> vectors, IEnumerable<ISymmetryOperation> symmetryOperations)
+        {
+            var options = vectors.Select(vector => symmetryOperations.Select(operation => operation.ApplyUntrimmed(vector)).ToList()).ToList();
+            var indexing = new int[options.Count].Populate(-1);
+
+            int symIndex = 0;
+            for (int i = 0; i < indexing.Length - 1; i++)
+            {
+                if (indexing[i] != -1)
+                {
+                    continue;
+                }
+
+                indexing[i] = symIndex;
+                for (int j = i + 1; j < indexing.Length; j++)
+                {
+                    if (options[i].Contains(options[j].First()))
+                    {
+                        indexing[j] = symIndex;
+                    }
+                }
+                symIndex++;
+            }
+            return indexing;
+        }
+
+        /// <summary>
+        /// Creates a geometry seqeunce comparer that returns true if two sequences are equivalent or reversing one sequence makes them equivalent
+        /// </summary>
+        /// <returns></returns>
+        protected IEqualityComparer<IList<Fractional3D>> MakeVectorSequenceEquivalenceComparer()
+        {
+            int AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
+            {
+                if (lhs.GetSequenceEqualityDirectionTo(rhs, VectorComparer) != 0)
+                {
+                    return 0;
+                }
+                return -1;
+            }
+            return new CompareAdapter<IList<Fractional3D>>(AreEquivalent);
+        }
+
+        /// <summary>
+        /// Creates a geoemtry sequence comparer that returns true if two sequences contain the same set of vectors in any order
+        /// </summary>
+        /// <returns></returns>
+        protected IEqualityComparer<IList<Fractional3D>> MakeVectorSequenceProjectionComparer()
+        {
+            int AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
+            {
+                if (lhs.Count != rhs.Count)
+                {
+                    return (lhs.Count < rhs.Count) ? -1 : 1;
+                }
+                if (lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value == true))
+                {
+                    return 0;
+                }
+                return -1;
+            }
+            return new CompareAdapter<IList<Fractional3D>>(AreEquivalent);
         }
     }
 }

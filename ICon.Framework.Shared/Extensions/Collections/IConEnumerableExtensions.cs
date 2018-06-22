@@ -127,5 +127,25 @@ namespace ICon.Framework.Extensions
         {
             yield return item;
         }
+
+        /// <summary>
+        /// Returns the enumeration index of all entries that match the search prediacte
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="searchSequence"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static IEnumerable<int> IndexOfMany<T1>(this IEnumerable<T1> searchSequence, Predicate<T1> predicate)
+        {
+            int index = 0;
+            foreach (var item in searchSequence)
+            {
+                if (predicate(item))
+                {
+                    yield return index;
+                }
+                index++;
+            }
+        }
     }
 }

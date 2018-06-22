@@ -61,7 +61,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Energies\Modeling\Logic\GroupingFinder\" />
     <Folder Include="Lattices\Manager\EventHandler\" />
     <Folder Include="Lattices\Manager\Services\Validators\" />
     <Folder Include="Simulation\" />

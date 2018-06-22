@@ -57,5 +57,40 @@ namespace ICon.Model.Energies
         {
             return new SlotMachinePermuter<IParticle>(group.Select(vector => UnitCellProvider.GetEntryValueAt(vector).OccupationSet.GetParticles()));
         }
+        
+        /// <summary>
+        /// Creates the extended position group that results from the provided group interaction
+        /// </summary>
+        /// <param name="groupInteraction"></param>
+        /// <returns></returns>
+        public ExtendedPositionGroup CreateExtendedPositionGroup(IGroupInteraction groupInteraction)
+        {
+            var extendedGroup = new ExtendedPositionGroup() { CenterPosition = groupInteraction.UnitCellPosition };
+
+            extendedGroup.GroupSequenceUcps = GetGroupInteractionUcps(groupInteraction).ToList();
+
+            return extendedGroup;
+        }
+
+        /// <summary>
+        /// Get the unit cell position sequence described by a group interaction. Will contain null values if any of the fractional vector does not point to
+        /// a valid position
+        /// </summary>
+        /// <param name="groupInteraction"></param>
+        /// <returns></returns>
+        protected IEnumerable<IUnitCellPosition> GetGroupInteractionUcps(IGroupInteraction groupInteraction)
+        {
+            return groupInteraction.GetBaseGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
+        }
+
+        /// <summary>
+        /// Extends the group vector sequence based upon the point symmetry operations of the center position. Filters out any duplicates
+        /// </summary>
+        /// <param name="groupInteraction"></param>
+        /// <returns></returns>
+        protected List<IList<Fractional3D>> GetExtendedGroupSequences(IGroupInteraction groupInteraction)
+        {
+            return null;
+        }
     }
 }

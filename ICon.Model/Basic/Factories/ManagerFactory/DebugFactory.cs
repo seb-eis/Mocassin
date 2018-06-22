@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 using ICon.Mathematics.ValueTypes;
 using ICon.Model.ProjectServices;
@@ -156,6 +156,8 @@ namespace ICon.Model.Basic
                     new StateExchangePair() { DonorParticle = particles[3], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 4},
                     new StateExchangePair() { DonorParticle = particles[6], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 5},
                     new StateExchangePair() { DonorParticle = particles[6], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 6},
+                    new StateExchangePair() { DonorParticle = particles[3], AcceptorParticle = particles[6], IsVacancyPair = false, Index = 7},
+                    new StateExchangePair() { DonorParticle = particles[5], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 8},
                 };
                 var propertyGroups = new StateExchangeGroup[]
                 {
@@ -164,7 +166,7 @@ namespace ICon.Model.Basic
                     new StateExchangeGroup() { VacancyGroup = false, Index = 2, StateExchangePairs = new List<IStateExchangePair>{ propertyPairs[2]} },
                     new StateExchangeGroup() { VacancyGroup = false, Index = 3, StateExchangePairs = new List<IStateExchangePair>
                     {
-                        propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6]
+                        propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6], propertyPairs[7], propertyPairs[8]
                     } }
                 };
                 var abstractTransitions = new AbstractTransition[]
@@ -189,7 +191,7 @@ namespace ICon.Model.Basic
                     },
                     new AbstractTransition()
                     {
-                        Index = 3, Name = "KationElectronExchange",
+                        Index = 3, Name = "FullKationMmc",
                         StateExchangeGroups = new List<IStateExchangeGroup> { propertyGroups[3], propertyGroups[3] },
                         Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
                     },
@@ -224,34 +226,26 @@ namespace ICon.Model.Basic
                     }
                 };
 
-                var inputter = new ManagerDataInputter()
+                var inputter = new ManagerDataInputter();
+                inputter.AddMany(particles.Skip(1));
+                inputter.AddMany(particleSets);
+                inputter.Add(new StructureInfo() { Name = "Ceria" });
+                inputter.Add(new SpaceGroupInfo() { GroupEntry = new Symmetry.SpaceGroups.SpaceGroupEntry(225, "Fm-3m", "None") });
+                inputter.Add(new CellParameters() { ParameterSet = new Symmetry.CrystalSystems.CrystalParameterSet(5.411, 5.411, 5.411, 0, 0, 0) });
+                inputter.AddMany(unitCellPositions);
+                inputter.AddMany(propertyPairs);
+                inputter.AddMany(propertyGroups);
+                inputter.AddMany(abstractTransitions);
+                inputter.AddMany(metropolisTransitions);
+                inputter.AddMany(kineticTransitions);
+                inputter.Add(new StableEnvironmentInfo() { MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymParticlePair>() });
+                inputter.Add(new UnstableEnvironment()
                 {
-                    particles[1], particles[2], particles[3], particles[4], particles[5], particles[6], particles[7],
-
-                    particleSets[0], particleSets[1], particleSets[2],
-
-                    new StructureInfo() { Name = "Ceria" },
-
-                    new SpaceGroupInfo() { GroupEntry = new Symmetry.SpaceGroups.SpaceGroupEntry(225, "Fm-3m", "None") },
-
-                    new CellParameters() { ParameterSet = new Symmetry.CrystalSystems.CrystalParameterSet(5.411, 5.411, 5.411, 0, 0, 0) },
-
-                    unitCellPositions[0], unitCellPositions[1], unitCellPositions[2],
-
-                    propertyPairs[0], propertyPairs[1], propertyPairs[2], propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6],
-
-                    propertyGroups[0], propertyGroups[1], propertyGroups[2], propertyGroups[3],
-
-                    abstractTransitions[0], abstractTransitions[1], abstractTransitions[2], abstractTransitions[3],
-
-                    metropolisTransitions[0], metropolisTransitions[1], metropolisTransitions[2],
-
-                    kineticTransitions[0],
-
-                    new StableEnvironmentInfo() { MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymParticlePair>()},
-
-                    new UnstableEnvironment() { Index = 0, MaxInteractionRange = 1.5, UnitCellPosition = unitCellPositions[2], IgnoredPositions = new List<IUnitCellPosition>()}
-                };
+                    Index = 0,
+                    MaxInteractionRange = 1.5,
+                    UnitCellPosition = unitCellPositions[2],
+                    IgnoredPositions = new List<IUnitCellPosition>()
+                });
                 return inputter;
             }
         }

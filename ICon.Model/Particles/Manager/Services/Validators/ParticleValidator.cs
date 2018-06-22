@@ -128,8 +128,8 @@ namespace ICon.Model.Particles.Validators
                 if (item.Symbol == particle.Symbol)
                 {
                     var detail0 = $"Particle symbol is identical to the particle with index ({item.Index})";
-                    var detail1 = $"Programm will autmotically conservation of matter between both partners";
-                    report.AddWarning(ModelMessages.CreateImplicitDependencyWarning(this, detail0));
+                    var detail1 = $"Transition rule generation will auto enforce matter conservation for this symbol";
+                    report.AddWarning(ModelMessages.CreateImplicitDependencyWarning(this, detail0, detail1));
                 }
             }
         }

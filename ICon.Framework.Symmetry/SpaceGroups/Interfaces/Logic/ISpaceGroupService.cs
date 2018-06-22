@@ -44,6 +44,14 @@ namespace ICon.Symmetry.SpaceGroups
         IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection);
 
         /// <summary>
+        /// Get the point operation group for the provided origin point and point sequence based upon the currently loaded space group
+        /// </summary>
+        /// <param name="originPoint"></param>
+        /// <param name="pointSequence"></param>
+        /// <returns></returns>
+        IPointOperationGroup GetPointOperationGroup(in Fractional3D originPoint, IEnumerable<Fractional3D> pointSequence);
+
+        /// <summary>
         /// Gets the unfiltered and untrimmed list of all wyckoff extended sequences symmetry equivalent to the input sequence
         /// </summary>
         /// <param name="refSequence"></param>

@@ -19,5 +19,21 @@ namespace ICon.Framework.Extensions
         {
             return (array != null) ? (array.GetUpperBound(0) + 1, array.GetUpperBound(1) + 1) : throw new ArgumentNullException(nameof(array));
         }
+
+        /// <summary>
+        /// Populates an array with a default value
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T1[] Populate<T1>(this T1[] values, T1 value)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = value;
+            }
+            return values;
+        }
     }
 }
