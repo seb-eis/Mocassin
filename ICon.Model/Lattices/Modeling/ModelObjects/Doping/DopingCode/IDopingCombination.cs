@@ -28,5 +28,10 @@ namespace ICon.Model.Lattices
         /// unit cell position (contains information about the sublattice)
         /// </summary>
         IUnitCellPosition UnitCellPosition { get; }
+
+        /// <summary>
+        /// Building Block in which the doping should take place
+        /// </summary>
+        IBuildingBlock BuildingBlock { get; }
     }
 }

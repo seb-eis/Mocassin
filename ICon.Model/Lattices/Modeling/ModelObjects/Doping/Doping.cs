@@ -44,15 +44,6 @@ namespace ICon.Model.Lattices
         }
 
         /// <summary>
-        /// creates a string that contains the model object information
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{GetModelObjectName()} ({DopingInfo.ToString()}, {CounterDopingInfo.ToString()})";
-        }
-
-        /// <summary>
         /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
         /// </summary>
         /// <param name="obj"></param>

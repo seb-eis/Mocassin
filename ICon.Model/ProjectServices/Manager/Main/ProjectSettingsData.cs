@@ -143,6 +143,10 @@ namespace ICon.Model.ProjectServices
                     MaxStableEnvironmentPositionCount = 5000,
                     MaxUnstableEnvironmentPositionCount = 500,
                     EnvironmentPositionWarningLimit = 250
+                },
+                LatticeSettings = new BasicLatticeSettings()
+                {
+
                 }
         };
         }

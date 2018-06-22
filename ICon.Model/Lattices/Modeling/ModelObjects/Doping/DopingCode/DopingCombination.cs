@@ -38,12 +38,19 @@ namespace ICon.Model.Lattices
         public IUnitCellPosition UnitCellPosition { set; get; }
 
         /// <summary>
+        /// Building Block in which the doping should take place
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public IBuildingBlock BuildingBlock { get; set; }
+
+        /// <summary>
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-            return "'ElementSublatticeCode'";
+            return "'DopingCombination'";
         }
 
          /// <summary>
@@ -58,6 +65,7 @@ namespace ICon.Model.Lattices
                 Dopant = casted.Dopant;
                 DopedParticle = casted.DopedParticle;
                 UnitCellPosition = casted.UnitCellPosition;
+                BuildingBlock = casted.BuildingBlock;
                 return this;
             }
             return null;

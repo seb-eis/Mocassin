@@ -14,23 +14,28 @@ namespace ICon.Model.Lattices
     public class BlockInfo : ModelObject, IBlockInfo
     {
         /// <summary>
-        /// BuildingBlock Index
+        /// BuildingBlock BuildingBlocks
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public IBuildingBlock Block { get; set; }
+        public List<IBuildingBlock> BlockAssembly { get; set; }
 
         /// <summary>
-        /// Origin of BuildingBlock
+        /// Origin of BuildingBlockAssembly
         /// </summary>
         [DataMember]
-        public DataIntegralVector3D Origin { get; set; }
+        public DataIntVector3D Origin { get; set; }
 
         /// <summary>
-        /// Extent of BuildingBlock
+        /// Extent of BuildingBlockAssembly
         /// </summary>
         [DataMember]
-        public DataIntegralVector3D Extent { get; set; }
+        public DataIntVector3D Extent { get; set; }
+
+        /// <summary>
+        /// Size of the BuildingBlockAssembly
+        /// </summary>
+        public DataIntVector3D Size { get; set; }
 
         /// <summary>
         /// Get the type name string
@@ -52,7 +57,8 @@ namespace ICon.Model.Lattices
             {
                 Origin = blockInfo.Origin;
                 Extent = blockInfo.Extent;
-                Block = blockInfo.Block;
+                Size = blockInfo.Size;
+                BlockAssembly = blockInfo.BlockAssembly;
                 return this;
             }
             return null;

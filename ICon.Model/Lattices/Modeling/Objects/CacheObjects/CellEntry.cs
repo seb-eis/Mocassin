@@ -1,6 +1,7 @@
 ﻿using ICon.Model.Particles;
 using ICon.Model.Structures;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,5 +21,10 @@ namespace ICon.Model.Lattices
         /// Sublattice information on cell entry position
         /// </summary>
         public IUnitCellPosition CellPosition { get; set; }
+
+        /// <summary>
+        /// Flag that indicates whether particle movement is tracked at this position
+        /// </summary>
+        public bool IsTrackable { get; set; }
     }
 }

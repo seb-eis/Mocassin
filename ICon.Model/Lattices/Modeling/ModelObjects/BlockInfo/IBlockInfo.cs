@@ -12,19 +12,23 @@ namespace ICon.Model.Lattices
     public interface IBlockInfo : IModelObject
     {
         /// <summary>
-        /// BuildingBlock Index
+        /// Assembly of BuildingBlocks
         /// </summary>
-        IBuildingBlock Block { get; }
+        List<IBuildingBlock> BlockAssembly { get; }
 
         /// <summary>
         /// Origin of building Block
         /// </summary>
-        DataIntegralVector3D Origin { get; }
+        DataIntVector3D Origin { get; }
 
         /// <summary>
         /// Extent of building Block
         /// </summary>
-        DataIntegralVector3D Extent { get; }
+        DataIntVector3D Extent { get; }
 
+        /// <summary>
+        /// Size of the BuildingBlockAssembly
+        /// </summary>
+        DataIntVector3D Size { get; }
     }
 }

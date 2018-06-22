@@ -47,7 +47,7 @@ namespace ICon.Model.Lattices.Validators
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="report"></param>
-        protected void AddNegativeVectorValidation(DataIntegralVector3D vector, ValidationReport report)
+        protected void AddNegativeVectorValidation(DataIntVector3D vector, ValidationReport report)
         {
             if (vector.A < 0 || vector.B < 0 || vector.C < 0)
             {
@@ -63,7 +63,7 @@ namespace ICon.Model.Lattices.Validators
         /// <param name="origin"></param>
         /// <param name="extent"></param>
         /// <param name="report"></param>
-        protected void AddNegativeSizeValidation(DataIntegralVector3D origin, DataIntegralVector3D extent, ValidationReport report)
+        protected void AddNegativeSizeValidation(DataIntVector3D origin, DataIntVector3D extent, ValidationReport report)
         {
             if (extent.A < origin.A || extent.B < origin.B || extent.C < origin.C)
             {
@@ -78,7 +78,7 @@ namespace ICon.Model.Lattices.Validators
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="report"></param>
-        protected void AddOverhangValidation(DataIntegralVector3D vector, ValidationReport report)
+        protected void AddOverhangValidation(DataIntVector3D vector, ValidationReport report)
         {
             var latticeInfo = DataReader.Access.GetLatticeInfo();
 
@@ -86,30 +86,6 @@ namespace ICon.Model.Lattices.Validators
             {
                 var message = new WarningMessage(this, "BlockInfo vector validation failure") { IsCritical = true };
                 message.Details.Add($"A component of a BlockInfo vector is larger than the corresponding component of the super cell vector");
-                report.AddWarning(message);
-            }
-        }
-
-        /// <summary>
-        /// Validate the BlockID of the BlockInfo
-        /// </summary>
-        /// <param name="blockID"></param>
-        /// <param name="report"></param>
-        protected void AddBlockIDValidation(int blockID, ValidationReport report)
-        {
-            if (blockID < 0)
-            {
-                var message = new WarningMessage(this, "BlockInfo BlockID validation failure") { IsCritical = true };
-                message.Details.Add($"The BuildingBlock ID of the BlockInfo is smaller than 0");
-                report.AddWarning(message);
-            }
-
-            var buildingBlockCount = DataReader.Access.GetBuildingBlocks().Count;
-
-            if (blockID > buildingBlockCount)
-            {
-                var message = new WarningMessage(this, "BlockInfo BlockID validation failure") { IsCritical = true };
-                message.Details.Add($"The BuildingBlock ID of the BlockInfo is greater than the number of BuildingBlocks");
                 report.AddWarning(message);
             }
         }

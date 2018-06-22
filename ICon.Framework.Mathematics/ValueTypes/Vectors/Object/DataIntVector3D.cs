@@ -7,7 +7,7 @@ namespace ICon.Mathematics.ValueTypes
     /// Serializable version of the 3D 192bit Flp-Vector that does not specify its coordinate system type. Intended for data storage and serialization
     /// </summary>
     [DataContract]
-    public class DataIntegralVector3D
+    public class DataIntVector3D
     {
         /// <summary>
         /// Value in first direction
@@ -28,12 +28,12 @@ namespace ICon.Mathematics.ValueTypes
         public int C { get; set; }
 
         /// <summary>
-        /// Construct new data vector from 3 double coordinate values
+        /// Construct new data vector from 3 int coordinate values
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="c"></param>
-        public DataIntegralVector3D(int a, int b, int c)
+        public DataIntVector3D(int a, int b, int c)
         {
             A = a;
             B = b;
@@ -47,6 +47,18 @@ namespace ICon.Mathematics.ValueTypes
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DataIntVector3D casted)
+            {
+                return A == casted.A && B == casted.B && C == casted.C;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

@@ -41,7 +41,7 @@ namespace ICon.Model.Lattices
 
             List<CellEntry> dopableCounterCellEntries = GetDopableCellEntries(lattice, doping.CounterDopingInfo);
 
-            int counterDopingCount = CalculateCounterDopantCount(dopableCounterCellEntries.Count, doping);
+            int counterDopingCount = CalculateCounterDopantCount(dopableCellEntries.Count, doping);
 
             ApplyDoping(dopableCounterCellEntries, counterDopingCount, doping.CounterDopingInfo);
         }
@@ -58,7 +58,7 @@ namespace ICon.Model.Lattices
 
             foreach (var cell in lattice.WorkCells)
             {
-                if (cell.IsCustom == true)
+                if (cell.BuildingBlockID != doping.BuildingBlock.Index)
                 {
                     continue;
                 }

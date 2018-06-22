@@ -12,7 +12,7 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Flag to indicate if Workcell may be doped
         /// </summary>
-        public bool IsCustom { get; set; }
+        public int BuildingBlockID { get; set; }
 
         /// <summary>
         /// Cellentries of Workcell

@@ -18,7 +18,7 @@ namespace ICon.Model.Lattices
         /// Extent of lattice
         /// </summary>
         [DataMember]
-        public DataIntegralVector3D Extent { get; set; }
+        public DataIntVector3D Extent { get; set; }
 
         /// <summary>
         /// Creates default lattice parameters (no extent of unit cell)
@@ -26,7 +26,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public static LatticeInfo CreateDefault()
         {
-            return new LatticeInfo() { Extent = (new DataIntegralVector3D(1, 1, 1)) };
+            return new LatticeInfo() { Extent = (new DataIntVector3D(1, 1, 1)) };
         }
 
         /// <summary>

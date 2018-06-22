@@ -61,7 +61,7 @@ namespace ICon.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateLatticeManagementSystem()
             {
-                var package = CreateProjectServicesSystem();
+                var package = CreateEnergyManagementSystem();
                 package.LatticeManager = (ILatticeManager)package.ProjectServices.CreateAndRegister(new LatticeManagerFactory());
                 return package;
             }
@@ -94,7 +94,7 @@ namespace ICon.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateFullManagementSystem()
             {
-                return CreateEnergyManagementSystem();
+                return CreateLatticeManagementSystem();
             }
 
             /// <summary>
@@ -121,12 +121,13 @@ namespace ICon.Model.Basic
                     new Particle() { Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Index = 1 },
                     new Particle() { Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Index = 2 },
                     new Particle() { Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Index = 3 },
-                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4 }
+                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4 },
+                    new Particle() { Name = "Polaron", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Index = 5 }
                 };
                 var particleSets = new ParticleSet[]
                 {
                     new ParticleSet () { Particles = new List<IParticle> { particles[1], particles[2] }, Index = 1 },
-                    new ParticleSet () { Particles = new List<IParticle> { particles[3], particles[4] }, Index = 2 },
+                    new ParticleSet () { Particles = new List<IParticle> { particles[3], particles[4], particles[5] }, Index = 2 },
                     new ParticleSet () { Particles = new List<IParticle> { particles[0], particles[2] }, Index = 3 },
                 };
                 var unitCellPositions = new UnitCellPosition[]
@@ -148,13 +149,15 @@ namespace ICon.Model.Basic
                 {
                     new PropertyStatePair() { DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0 },
                     new PropertyStatePair() { DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1 },
-                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2}
+                    new PropertyStatePair() { DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2},
+                    new PropertyStatePair() { DonorParticle = particles[5], AcceptorParticle = particles[3], IsVacancyPair = false, Index = 3}
                 };
                 var propertyGroups = new PropertyGroup[]
                 {
                     new PropertyGroup() { VacancyGroup = false, Index = 0, ChargeTransfer = -2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[0]} },
                     new PropertyGroup() { VacancyGroup = true, Index = 1, ChargeTransfer = -2, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[1]} },
-                    new PropertyGroup() { VacancyGroup = false, Index = 2, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} }
+                    new PropertyGroup() { VacancyGroup = false, Index = 2, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[2]} },
+                    new PropertyGroup() { VacancyGroup = false, Index = 3, ChargeTransfer = -1, PropertyStatePairs = new List<IPropertyStatePair>{ propertyPairs[3]} }
                 };
                 var metropolisTransitions = new MetropolisTransition[]
                 {
@@ -180,10 +183,79 @@ namespace ICon.Model.Basic
                         }
                     }
                 };
+                var buildingBlocks = new BuildingBlock[]
+                {
+                    new BuildingBlock()
+                    {
+                        Index = 0,
+                        CellEntries = new List<IParticle>()
+                        {
+                            particles[3], particles[0], particles[0], particles[3],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[2], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[2],
+                            particles[3], particles[0], particles[0], particles[3],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[2], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[2]
+                        }
+                    },
+
+                    new BuildingBlock()
+                    {
+                        Index = 1,
+                        CellEntries = new List<IParticle>()
+                        {
+                            particles[4], particles[0], particles[0], particles[4],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[2], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[1],
+                            particles[4], particles[0], particles[0], particles[4],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[1], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[2]
+                        }
+                    }
+                };
+                var blockInfos = new BlockInfo[]
+                {
+                    new BlockInfo()
+                    {
+                        Index = 0, BlockAssembly = new List<IBuildingBlock>()  {buildingBlocks[0]},
+                        Origin = new DataIntVector3D(0,0,0),
+                        Extent = new DataIntVector3D(16,16,16),
+                        Size = new DataIntVector3D(1,1,1)
+                    },
+                    new BlockInfo()
+                    {
+                        Index = 1, BlockAssembly = new List<IBuildingBlock>() {buildingBlocks[0], buildingBlocks[1]},
+                        Origin = new DataIntVector3D(0,0,0),
+                        Extent = new DataIntVector3D(1,1,16),
+                        Size = new DataIntVector3D(1,1,2)
+                    }
+                };
+                var dopingCombinations = new DopingCombination[]
+                {
+                    new DopingCombination()
+                    {
+                         Index = 0, BuildingBlock = buildingBlocks[0], Dopant = particles[5], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
+                    },
+                    new DopingCombination()
+                    {
+                         Index = 1, BuildingBlock = buildingBlocks[0], Dopant = particles[1], DopedParticle = particles[2], UnitCellPosition = unitCellPositions[1]
+                    }
+                };
+                var dopings = new Doping[]
+                {
+                    new Doping()
+                    {
+                        Index = 0, Concentration = 0.5,  DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1]
+                    }
+                };
 
                 var inputter = new ManagerDataInputter()
                 {
-                    particles[1], particles[2], particles[3], particles[4],
+                    particles[1], particles[2], particles[3], particles[4], particles[5],
 
                     particleSets[0], particleSets[1], particleSets[2],
 
@@ -195,9 +267,9 @@ namespace ICon.Model.Basic
 
                     unitCellPositions[0], unitCellPositions[1], unitCellPositions[2],
 
-                    propertyPairs[0], propertyPairs[1], propertyPairs[2],
+                    propertyPairs[0], propertyPairs[1], propertyPairs[2], propertyPairs[3],
 
-                    propertyGroups[0], propertyGroups[1], propertyGroups[2],
+                    propertyGroups[0], propertyGroups[1], propertyGroups[2], propertyGroups[3],
 
                     abstractTransitions[0],
 
@@ -207,7 +279,17 @@ namespace ICon.Model.Basic
 
                     new StableEnvironmentInfo() { MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymParticlePair>()},
 
-                    new UnstableEnvironment() { Index = 0, MaxInteractionRange = 1.5, UnitCellPosition = unitCellPositions[2], IgnoredPositions = new List<IUnitCellPosition>()}
+                    new UnstableEnvironment() { Index = 0, MaxInteractionRange = 1.5, UnitCellPosition = unitCellPositions[2], IgnoredPositions = new List<IUnitCellPosition>()},
+
+                    new LatticeInfo() { Extent = new DataIntVector3D(16,16,16)},
+
+                    buildingBlocks[0], buildingBlocks[1],
+
+                    blockInfos[0], blockInfos[1],
+
+                    dopingCombinations[0], dopingCombinations[1],
+
+                    dopings[0]
                 };
                 return inputter;
             }

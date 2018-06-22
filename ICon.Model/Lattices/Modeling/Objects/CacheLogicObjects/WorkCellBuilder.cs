@@ -10,7 +10,7 @@ namespace ICon.Model.Lattices
     /// <summary>
     /// Produces WorkCells for the WorkLattice
     /// </summary>
-    public class WorkCellFactory
+    public class WorkCellBuilder
     {
         /// <summary>
         /// Fabricate the WorkCell
@@ -19,14 +19,14 @@ namespace ICon.Model.Lattices
         /// <param name="sublatticeIDs"></param>
         /// <param name="isCustom"></param>
         /// <returns></returns>
-        public WorkCell Fabricate(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, bool isCustom)
+        public WorkCell Fabricate(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, int buildingBlockID)
         {
             if (buildingBlock.CellEntries.Count != sublatticeIDs.Count)
             {
                 throw new ArgumentException("WorkCellFactory", "Different number of unitCellWrapper entries and sublatticeID entries!");
             }
 
-            WorkCell workCell = new WorkCell { IsCustom = isCustom, CellEntries = new CellEntry[buildingBlock.CellEntries.Count] };
+            WorkCell workCell = new WorkCell { BuildingBlockID = buildingBlockID, CellEntries = new CellEntry[buildingBlock.CellEntries.Count] };
 
             for (int i = 0; i < buildingBlock.CellEntries.Count; i++)
             {

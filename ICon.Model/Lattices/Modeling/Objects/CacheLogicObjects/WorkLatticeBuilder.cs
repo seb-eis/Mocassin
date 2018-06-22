@@ -8,24 +8,25 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
+using ICon.Mathematics;
+
 namespace ICon.Model.Lattices
 {
     /// <summary>
     /// Produces WorkLattices for supercell creation
     /// </summary>
-    public class WorkLatticeFactory
+    public class WorkLatticeBuilder
     {
         /// <summary>
         /// Fabricates the WorkLattice
         /// </summary>
-        /// <param name="buildingBlocks"></param>
         /// <param name="blockInfos"></param>
         /// <param name="sublatticeIDs"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public WorkLattice Fabricate(ReadOnlyList<IBuildingBlock> buildingBlocks, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntegralVector3D latticeSize)
+        public WorkLattice Fabricate(ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntVector3D latticeSize)
         {
-            if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new DataIntegralVector3D(0,0,0)))
+            if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new DataIntVector3D(0,0,0)))
             {
                 throw new ArgumentException("WorkLatticeFactory", "Extent of default building block does not originate at 0, 0, 0");
             }
@@ -45,7 +46,9 @@ namespace ICon.Model.Lattices
                     {
                         for (int z = blockInfo.Origin.B; z < blockInfo.Extent.C; z++)
                         {
-                            workLattice.WorkCells[x, y, z] = (new WorkCellFactory()).Fabricate(blockInfo.Block, sublatticeIDs, (blockInfo.Index != 0));
+                            DataIntVector3D blockPosition = new DataIntVector3D(x % blockInfo.Size.A, y % blockInfo.Size.B, z % blockInfo.Size.C);
+                            IBuildingBlock block = (new LinearizedVectorSeeker<IBuildingBlock>()).Seek(blockPosition, blockInfo.Size, blockInfo.BlockAssembly);
+                            workLattice.WorkCells[x, y, z] = (new WorkCellBuilder()).Fabricate(block, sublatticeIDs, block.Index);
                         }
                     }
                 }
@@ -53,6 +56,5 @@ namespace ICon.Model.Lattices
 
             return workLattice;
         }
-
     }
 }

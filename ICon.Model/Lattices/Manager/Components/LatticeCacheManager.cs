@@ -47,7 +47,7 @@ namespace ICon.Model.Lattices
             var latticeSize = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetLatticeInfo().Extent);
             var vectorEncoder = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
 
-            WorkLattice workLattice = (new WorkLatticeFactory()).Fabricate(buildingBlocks, blockInfos, sublatticeIDs, latticeSize);
+            WorkLattice workLattice = (new WorkLatticeBuilder()).Fabricate(blockInfos, sublatticeIDs, latticeSize);
 
             var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
 
@@ -72,7 +72,7 @@ namespace ICon.Model.Lattices
             var latticeSize = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetLatticeInfo().Extent);
             var vectorEncoder = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
 
-            WorkLattice workLattice = (new WorkLatticeFactory()).Fabricate(buildingBlocks, blockInfos, sublatticeIDs, latticeSize);
+            WorkLattice workLattice = (new WorkLatticeBuilder()).Fabricate(blockInfos, sublatticeIDs, latticeSize);
 
             var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
             (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
