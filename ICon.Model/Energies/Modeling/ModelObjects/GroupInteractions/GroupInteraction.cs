@@ -29,7 +29,7 @@ namespace ICon.Model.Energies
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public IUnitCellPosition CenterUnitCellPosition { get; set; }
 
         /// <summary>
         /// The list of 3D fractional vectors that describe the group geometry
@@ -88,7 +88,7 @@ namespace ICon.Model.Energies
         {
             if (CastWithDepricatedCheck<IGroupInteraction>(obj) is var interaction)
             {
-                UnitCellPosition = interaction.UnitCellPosition;
+                CenterUnitCellPosition = interaction.CenterUnitCellPosition;
                 GeometryVectors = interaction.GetBaseGeometry().Select(vector => new DataVector3D(vector)).ToList();
                 EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
                 foreach (var item in interaction.GetEnergyDictionarySet())

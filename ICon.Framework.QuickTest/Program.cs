@@ -53,16 +53,19 @@ namespace ICon.Framework.QuickTest
             inputter.AutoInputData(package.ProjectServices);
             var report = inputter.GetReportJson();
 
-            var center = package.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(0));
-            var geometry = new List<Fractional3D> { new Fractional3D(-.25, -.25, -.25), new Fractional3D(.25, .25, .25) };
+            var groupInteraction0 = new GroupInteraction()
+            {
+                CenterUnitCellPosition = new UnitCellPosition() { Index = 0 },
+                GeometryVectors = new List<DataVector3D> { new DataVector3D(.25, .25, .25), new DataVector3D(-.25, -.25, -.25) }
+            };
+            var groupInteraction1 = new GroupInteraction()
+            {
+                CenterUnitCellPosition = new UnitCellPosition() { Index = 0 },
+                GeometryVectors = new List<DataVector3D> { new DataVector3D(.25, .25, .25), new DataVector3D(-.25, -.25, -.25), new DataVector3D(-.25,.25,.25), new DataVector3D(.25,-.25,-.25) }
+            };
 
-            var operations = package.ProjectServices.SpaceGroupService.GetPointOperationGroup(center.Vector, geometry);
-
-            var permProvider = new SlotMachinePermuter<int>(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 });
-
-            var unSeq = operations.GetUniqueSequenceOperations().Select(op => op.ApplyUntrimmed(geometry).ToList()).ToList();
-            var unPoint = operations.GetSelfProjectionOperations().Select(op => op.ApplyUntrimmed(geometry).ToList()).ToList();
-            var symIndexing = operations.GetProjectionIndexing().ToList();
+            var inReport0 = package.EnergyManager.InputPort.InputModelObject(groupInteraction0).Result;
+            var inReport1 = package.EnergyManager.InputPort.InputModelObject(groupInteraction1).Result;
 
             Console.ReadLine();
         }

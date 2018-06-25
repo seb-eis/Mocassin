@@ -287,12 +287,14 @@ namespace ICon.Framework.Extensions
         /// <typeparam name="T1"></typeparam>
         /// <param name="values"></param>
         /// <param name="value"></param>
+        /// <param name="counts"></param>
         /// <returns></returns>
-        public static List<T1> Populate<T1>(this List<T1> values, T1 value)
+        public static List<T1> Populate<T1>(this List<T1> values, T1 value, int counts)
         {
-            for (int i = 0; i < values.Count; i++)
+            values.Clear();
+            for (int i = 0; i < counts; i++)
             {
-                values[i] = value;
+                values.Add(value);
             }
             return values;
         }

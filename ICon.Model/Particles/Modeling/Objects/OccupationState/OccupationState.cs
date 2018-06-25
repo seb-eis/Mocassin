@@ -10,7 +10,7 @@ namespace ICon.Model.Particles
     /// Represents an occupation state for a sequnce of positions that are occupied by a series of particle objects
     /// </summary>
     [DataContract]
-    public class OccupationState : IEnumerable<IParticle>
+    public class OccupationState : IEnumerable<IParticle>, IEquatable<OccupationState>
     {
         /// <summary>
         /// The length of the occupation state
@@ -71,6 +71,36 @@ namespace ICon.Model.Particles
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Checks for exact equality to other occupation state
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(OccupationState other)
+        {
+            if (Particles.Count != other.Particles.Count)
+            {
+                return false;
+            }
+            for (int i = 0; i < Particles.Count; i++)
+            {
+                if (!Particles[i].Equals(other.Particles[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Get the hash code of the particle set
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Particles.Sum(value => value.GetHashCode());
         }
     }
 }

@@ -22,26 +22,21 @@ namespace ICon.Model.Energies
         /// <summary>
         /// The unit cell positions of the group sequences
         /// </summary>
-        public IList<IUnitCellPosition> GroupSequenceUcps { get; set; }
+        public IList<IUnitCellPosition> GroupUnitCellPositions { get; set; }
 
         /// <summary>
-        /// The list of unique pointgroup operations
+        /// The point operation group describing the symmetry operation information of the group
         /// </summary>
-        public IList<ISymmetryOperation> UniquePointOperations { get; set; }
-
-        /// <summary>
-        /// The two dimensional list interface of all known group sequences
-        /// </summary>
-        public IList<IList<Fractional3D>> GroupSequences { get; set; }
-
-        /// <summary>
-        /// The two dimensional list interface of all knwon unique group sequences
-        /// </summary>
-        public IList<IList<Fractional3D>> UniqueGroupSequences { get; set; }
+        public IPointOperationGroup PointOperationGroup { get; set; }
 
         /// <summary>
         /// List of all unique occupation states without the center position
         /// </summary>
         public IList<OccupationState> UniqueOccupationStates { get; set; }
+
+        /// <summary>
+        /// The full unique energy dictionary for each unqiue occupation state arround each unique center particle
+        /// </summary>
+        public Dictionary<IParticle, Dictionary<OccupationState, double>> FullEnergyDictionary { get; set; }
     }
 }

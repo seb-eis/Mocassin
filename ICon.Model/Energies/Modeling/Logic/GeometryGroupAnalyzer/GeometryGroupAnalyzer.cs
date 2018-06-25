@@ -6,7 +6,7 @@ using ICon.Symmetry.Analysis;
 using ICon.Symmetry.SpaceGroups;
 using ICon.Mathematics.Permutation;
 using ICon.Mathematics.ValueTypes;
-using ICon.Mathematics.Coordinates;
+using ICon.Framework.Collections;
 using ICon.Model.Particles;
 using ICon.Model.Structures;
 
@@ -65,12 +65,26 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public ExtendedPositionGroup CreateExtendedPositionGroup(IGroupInteraction groupInteraction)
         {
-            var extendedGroup = new ExtendedPositionGroup() { CenterPosition = groupInteraction.UnitCellPosition };
+            var extGroup = new ExtendedPositionGroup() { CenterPosition = groupInteraction.CenterUnitCellPosition };
 
-            extendedGroup.GroupSequenceUcps = GetGroupInteractionUcps(groupInteraction).ToList();
-
-            return extendedGroup;
+            extGroup.GroupUnitCellPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
+            extGroup.PointOperationGroup = SpaceGroupService.GetPointOperationGroup(extGroup.CenterPosition.Vector, groupInteraction.GetBaseGeometry());
+            extGroup.UniqueOccupationStates = GetUniqueGroupOccupationStates(extGroup.PointOperationGroup, GetGroupStatePermuter(groupInteraction)).ToList();
+            extGroup.FullEnergyDictionary = MakeUniqueEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);
+            return extGroup;
         }
+        /// <summary>
+        /// Get the enumerable sequence off all possible symmetrical pair interactions that can be found within an interaction group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public IEnumerable<SymParticlePair> GetAllGroupPairs(IGroupInteraction group)
+        {
+            var particles = new HashSet<IParticle>(GetGroupUnitCellPositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
+            var permuter = new SlotMachinePermuter<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
+            return new HashSet<SymParticlePair>(permuter.Select(perm => new SymParticlePair() { Particle0 = perm[0], Particle1 = perm[1] })).AsEnumerable();
+        }
+
 
         /// <summary>
         /// Get the unit cell position sequence described by a group interaction. Will contain null values if any of the fractional vector does not point to
@@ -78,19 +92,44 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <returns></returns>
-        protected IEnumerable<IUnitCellPosition> GetGroupInteractionUcps(IGroupInteraction groupInteraction)
+        public IEnumerable<IUnitCellPosition> GetGroupUnitCellPositions(IGroupInteraction groupInteraction)
         {
             return groupInteraction.GetBaseGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
         }
 
         /// <summary>
-        /// Extends the group vector sequence based upon the point symmetry operations of the center position. Filters out any duplicates
+        /// Generates all unique occupation states for the surrounding atoms of a group without permuting the center position
         /// </summary>
-        /// <param name="groupInteraction"></param>
+        /// <param name="operationGroup"></param>
+        /// <param name="permProvider"></param>
         /// <returns></returns>
-        protected List<IList<Fractional3D>> GetExtendedGroupSequences(IGroupInteraction groupInteraction)
+        protected IEnumerable<OccupationState> GetUniqueGroupOccupationStates(IPointOperationGroup operationGroup, IPermutationProvider<IParticle> permProvider)
         {
-            return null;
+            var comparer = new EqualityCompareAdapter<IParticle>((a, b) => a.Index == b.Index, null);
+            var rawPermutations = operationGroup.GetGeometryUniquePermutations(permProvider, comparer, a => 1 << a.Index);
+            return rawPermutations.Select(value => new OccupationState() { Particles = value.ToList() });
+        }
+
+        /// <summary>
+        /// Takes a center position and a set of possible unique occupation states for the surroundings an creates the full energy dictinary for
+        /// all existing occupation combinations of an interaction group
+        /// </summary>
+        /// <param name="occStates"></param>
+        /// <param name="centerPosition"></param>
+        /// <returns></returns>
+        protected Dictionary<IParticle, Dictionary<OccupationState, double>> MakeUniqueEnergyDictionary(IEnumerable<OccupationState> occStates, IUnitCellPosition centerPosition)
+        {
+            var result = new Dictionary<IParticle, Dictionary<OccupationState, double>>(centerPosition.OccupationSet.ParticleCount);
+            foreach (var centerParticle in centerPosition.OccupationSet.GetParticles())
+            {
+                var innerDictionary = new Dictionary<OccupationState, double>(10);
+                foreach (var state in occStates)
+                {
+                    innerDictionary.Add(state, 0.0);
+                }
+                result.Add(centerParticle, innerDictionary);
+            }
+            return result;
         }
     }
 }

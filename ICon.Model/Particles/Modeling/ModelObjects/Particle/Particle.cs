@@ -114,5 +114,24 @@ namespace ICon.Model.Particles
             }
             return null;
         }
+
+        /// <summary>
+        /// Compares to other particle based upon the particle index
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IParticle other)
+        {
+            return Index == other.Index;
+        }
+
+        /// <summary>
+        /// Get the hash code of the particle based upon the particle index
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return 1 << Index;
+        }
     }
 }

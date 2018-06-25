@@ -420,7 +420,7 @@ namespace ICon.Symmetry.SpaceGroups
             }
 
             operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
-            operationGroup.ProjectionPointIndexing = MakeProjectionIndexing(pointSequence, operationGroup.SelfProjectionOperations).ToList();
+            operationGroup.PositionEquivalencyIndexing = MakeProjectionIndexing(pointSequence, operationGroup.SelfProjectionOperations);
             return operationGroup;
         }
 
@@ -466,35 +466,26 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Creates a set of index values that groups the vectors of the passed point sequence by the sets that can be projected onto each
-        /// other with the provided set of operations
+        /// Determines which positions can be projected onto each other within the passed set of vectors using the provided set of operations and assigns
+        /// indices based upon the original sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <param name="operations"></param>
-        /// <returns> Operations have to be the self projection operations of the sequence </returns>
-        protected int[] MakeProjectionIndexing(IEnumerable<Fractional3D> vectors, IEnumerable<ISymmetryOperation> symmetryOperations)
+        /// <returns> Operations have to be self projection operations for this function to yield meaningfull result </returns>
+        protected List<int> MakeProjectionIndexing(IEnumerable<Fractional3D> vectors, IEnumerable<ISymmetryOperation> symmetryOperations)
         {
-            var options = vectors.Select(vector => symmetryOperations.Select(operation => operation.ApplyUntrimmed(vector)).ToList()).ToList();
-            var indexing = new int[options.Count].Populate(-1);
+            var options = symmetryOperations.Select(operation => operation.ApplyUntrimmed(vectors).ToList()).ToList();
+            var indexing = new List<int>(vectors.Count()).Populate(int.MaxValue, vectors.Count());
 
-            int symIndex = 0;
-            for (int i = 0; i < indexing.Length - 1; i++)
+            for (int i = 0; i < options.Count; i++)
             {
-                if (indexing[i] != -1)
+                for (int j = 0; j < options[i].Count; j++)
                 {
-                    continue;
+                    int indexInFirst = options[0].FindIndex(0, value => VectorComparer.Equals(value, options[i][j]));
+                    indexing[j] = (indexInFirst < indexing[j]) ? indexInFirst : indexing[j];
                 }
-
-                indexing[i] = symIndex;
-                for (int j = i + 1; j < indexing.Length; j++)
-                {
-                    if (options[i].Contains(options[j].First()))
-                    {
-                        indexing[j] = symIndex;
-                    }
-                }
-                symIndex++;
             }
+
             return indexing;
         }
 

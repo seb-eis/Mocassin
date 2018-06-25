@@ -4,7 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using ICon.Mathematics.Permutation;
 using ICon.Mathematics.ValueTypes;
-using ICon.Symmetry.Analysis;
+using ICon.Framework.Collections;
+using ICon.Framework.Extensions;
 
 namespace ICon.Symmetry.SpaceGroups
 {
@@ -55,7 +56,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// List that assigns each position a projection index meaning the positions can be created from the same original vector
         /// </summary>
         [DataMember]
-        public List<int> ProjectionPointIndexing { get; set; }
+        public List<int> PositionEquivalencyIndexing { get; set; }
 
         /// <summary>
         /// Interface access to the readonly representation of the origin point
@@ -103,21 +104,31 @@ namespace ICon.Symmetry.SpaceGroups
         /// Enumerbale interface access to the self projection indexing
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GetProjectionIndexing()
+        public IEnumerable<int> GetEquivalencyIndexing()
         {
-            return ProjectionPointIndexing.AsEnumerable();
+            return PositionEquivalencyIndexing.AsEnumerable();
         }
 
         /// <summary>
-        /// Generate all geoemtric unique permutations of the point sequence with the provided values
+        /// Generate all geoemtric unique permutations of the point sequence foud within the permutation provider
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="permProvider"></param>
         /// <param name="comparer"></param>
-        /// <returns></returns>
-        public IEnumerable<T1[]> GetGeometryUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer)
+        /// <param name="selector"></param>
+        /// <returns> Value equality comparer and hash value selector are used for the internal hash set filetring </returns>
+        public IEnumerable<T1[]> GetGeometryUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
         {
-            return null;
+            if (!HasPermutationMultiplicity())
+            {
+                return permProvider.AsEnumerable();
+            }
+            var results = new HashSet<T1[]>(MakePermutationComparer(comparer, value => value.Sum(a => selector(a))));
+            foreach (var permutation in permProvider)
+            {
+                results.Add(permutation);
+            }
+            return results;
         }
 
         /// <summary>
@@ -127,27 +138,43 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         public bool HasPermutationMultiplicity()
         {
-            return false;
+            return new HashSet<int>(PositionEquivalencyIndexing).Count != PositionEquivalencyIndexing.Count;
         }
 
         /// <summary>
-        /// CEchks if two permutations sets are identical by means of the point projection indexing sequence (Geoemtric equivalency)
+        /// Checks if two permutations sets are identical by means of the point equivalency indexing sequence (Geoemtric equivalency)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        protected bool AreIdenticalPermutations<T1>(T1[] lhs, T1[] rhs, IEqualityComparer<T1> comparer)
+        public IEqualityComparer<T1[]> MakePermutationComparer<T1>(IEqualityComparer<T1> comparer, Func<T1[], int> hashFunction)
         {
-            for (int i = 0; i < lhs.Length; i++)
+            bool compareEquality(T1[] lhs, T1[] rhs)
             {
-                if (!comparer.Equals(lhs[i], rhs[i]))
+                if (lhs.Length != rhs.Length)
                 {
                     return false;
                 }
+
+                var indicesInFirst = new int[lhs.Length].Populate(-1);
+                for (int i = 0; i < rhs.Length; i++)
+                {
+                    for (int j = 0; j < lhs.Length; j++)
+                    {
+                        if (comparer.Equals(rhs[i], lhs[j]) && indicesInFirst[i] == -1 && PositionEquivalencyIndexing[i] == PositionEquivalencyIndexing[j])
+                        {
+                            indicesInFirst[i] = PositionEquivalencyIndexing[j];
+                            break;
+                        }
+                    }
+                    if (indicesInFirst[i] == -1)
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
-            return true;
+            return new EqualityCompareAdapter<T1[]>(compareEquality, hashFunction);
         }
     }
 }

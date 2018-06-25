@@ -46,7 +46,17 @@ namespace ICon.Symmetry.SpaceGroups
         /// Get a sequence of indices that assigns each vector point an index describing its projection set
         /// </summary>
         /// <returns></returns>
-        IEnumerable<int> GetProjectionIndexing();
+        IEnumerable<int> GetEquivalencyIndexing();
+
+        /// <summary>
+        /// Get all unique permutations (Value and geometry) within the provided permutation provider using the provioded equality comparer and single value selector
+        /// function for hash value generation
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="permProvider"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        IEnumerable<T1[]> GetGeometryUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector);
 
         /// <summary>
         /// Returns true if permuting the point squence with values can show multiple equivalent values

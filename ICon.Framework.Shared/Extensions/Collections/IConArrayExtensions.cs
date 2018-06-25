@@ -35,5 +35,20 @@ namespace ICon.Framework.Extensions
             }
             return values;
         }
+
+        /// <summary>
+        /// Popultaes an integer array by a continuous counter starting at te provided index
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static int[] PopulateByCounter(this int[] values, int start)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = i + start;
+            }
+            return values;
+        }
     }
 }
