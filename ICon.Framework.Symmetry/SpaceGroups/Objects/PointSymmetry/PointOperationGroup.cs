@@ -53,10 +53,10 @@ namespace ICon.Symmetry.SpaceGroups
         public List<SymmetryOperation> SelfProjectionOperations { get; set; }
 
         /// <summary>
-        /// List that assigns each position a projection index meaning the positions can be created from the same original vector
+        /// Matrix that descibes all possible equivalent orders of the vector sequence when performing a self projection (For value permutations)
         /// </summary>
         [DataMember]
-        public List<int> PositionEquivalencyIndexing { get; set; }
+        public List<List<int>> UniqueSelfProjectionOrders { get; set; }
 
         /// <summary>
         /// Interface access to the readonly representation of the origin point
@@ -101,12 +101,12 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Enumerbale interface access to the self projection indexing
+        /// Get all unqiue orders of the vector sequence when it is projected onto itself with the self projection operations
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GetEquivalencyIndexing()
+        public IEnumerable<int[]> GetUniqueProjectionOrders()
         {
-            return PositionEquivalencyIndexing.AsEnumerable();
+            return UniqueSelfProjectionOrders.Select(value => value.ToArray());
         }
 
         /// <summary>
@@ -123,56 +123,51 @@ namespace ICon.Symmetry.SpaceGroups
             {
                 return permProvider.AsEnumerable();
             }
-            var results = new HashSet<T1[]>(MakePermutationComparer(comparer, value => value.Sum(a => selector(a))));
+            var results = new HashSet<T1[]>(MakePermutationEqualityComparer(comparer, value => value.Sum(a => selector(a))));
             foreach (var permutation in permProvider)
             {
                 results.Add(permutation);
             }
-            return results;
+            return results.AsEnumerable();
         }
 
         /// <summary>
-        /// Returns true if permuting the point squence with values can show multiple equivalent values
+        /// Returns true if permuting the point squence with values can contain multiple equivalent sequences
         /// </summary>
-        /// <remarks> This is the case if the  </remarks>
+        /// <remarks> This is the case if more than one unique order of the self projection exists </remarks>
         /// <returns></returns>
         public bool HasPermutationMultiplicity()
         {
-            return new HashSet<int>(PositionEquivalencyIndexing).Count != PositionEquivalencyIndexing.Count;
+            return UniqueSelfProjectionOrders.Count != 1;
         }
 
         /// <summary>
-        /// Checks if two permutations sets are identical by means of the point equivalency indexing sequence (Geoemtric equivalency)
+        /// Checks if two permutations sets are directly identical or a equivalent within one of the existing equivalent self projection orders
         /// </summary>
         /// <typeparam name="T1"></typeparam>
-        /// <param name="comparer"></param>
+        /// <param name="valueComparer"></param>
         /// <returns></returns>
-        public IEqualityComparer<T1[]> MakePermutationComparer<T1>(IEqualityComparer<T1> comparer, Func<T1[], int> hashFunction)
+        protected IEqualityComparer<T1[]> MakePermutationEqualityComparer<T1>(IEqualityComparer<T1> valueComparer, Func<T1[], int> hashFunction)
         {
             bool compareEquality(T1[] lhs, T1[] rhs)
             {
-                if (lhs.Length != rhs.Length)
+                if (lhs.Length == rhs.Length)
                 {
-                    return false;
-                }
-
-                var indicesInFirst = new int[lhs.Length].Populate(-1);
-                for (int i = 0; i < rhs.Length; i++)
-                {
-                    for (int j = 0; j < lhs.Length; j++)
+                    foreach (var vectorOrder in UniqueSelfProjectionOrders)
                     {
-                        if (comparer.Equals(rhs[i], lhs[j]) && indicesInFirst[i] == -1 && PositionEquivalencyIndexing[i] == PositionEquivalencyIndexing[j])
+                        int index = -1;
+                        bool orderIsMatch = true;
+                        foreach (var orderIndex in vectorOrder)
                         {
-                            indicesInFirst[i] = PositionEquivalencyIndexing[j];
-                            break;
+                            orderIsMatch = orderIsMatch & valueComparer.Equals(lhs[++index], rhs[orderIndex]);
+                        }
+                        if (orderIsMatch == true)
+                        {
+                            return true;
                         }
                     }
-                    if (indicesInFirst[i] == -1)
-                    {
-                        return false;
-                    }
                 }
-                return true;
+                return false;
             }
             return new EqualityCompareAdapter<T1[]>(compareEquality, hashFunction);
         }

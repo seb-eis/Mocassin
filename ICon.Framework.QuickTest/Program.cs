@@ -55,17 +55,27 @@ namespace ICon.Framework.QuickTest
 
             var groupInteraction0 = new GroupInteraction()
             {
-                CenterUnitCellPosition = new UnitCellPosition() { Index = 0 },
-                GeometryVectors = new List<DataVector3D> { new DataVector3D(.25, .25, .25), new DataVector3D(-.25, -.25, -.25) }
+                CenterUnitCellPosition = new UnitCellPosition() { Index = 1 },
+                GeometryVectors = new List<DataVector3D>()
+                {
+                    new DataVector3D(0,0,0),new DataVector3D(.5,.5,0),new DataVector3D(.5,0,.5), new DataVector3D(0,.5,.5),
+                    new DataVector3D(.25,.25,.25), new DataVector3D(-.25,-.25,-.25)
+                }
             };
             var groupInteraction1 = new GroupInteraction()
             {
-                CenterUnitCellPosition = new UnitCellPosition() { Index = 0 },
-                GeometryVectors = new List<DataVector3D> { new DataVector3D(.25, .25, .25), new DataVector3D(-.25, -.25, -.25), new DataVector3D(-.25,.25,.25), new DataVector3D(.25,-.25,-.25) }
+                CenterUnitCellPosition = new UnitCellPosition() { Index = 1 },
+                GeometryVectors = new List<DataVector3D>()
+                {
+                    new DataVector3D(0,0,0),new DataVector3D(.5,.5,0),new DataVector3D(.5,0,.5), new DataVector3D(0,.5,.5)
+                }
             };
 
-            var inReport0 = package.EnergyManager.InputPort.InputModelObject(groupInteraction0).Result;
+            var watch = Stopwatch.StartNew();
             var inReport1 = package.EnergyManager.InputPort.InputModelObject(groupInteraction1).Result;
+            DisplayWatch(watch);
+            var inReport0 = package.EnergyManager.InputPort.InputModelObject(groupInteraction0).Result;
+            DisplayWatch(watch);
 
             Console.ReadLine();
         }

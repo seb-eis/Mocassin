@@ -43,10 +43,10 @@ namespace ICon.Symmetry.SpaceGroups
         IEnumerable<ISymmetryOperation> GetSelfProjectionOperations();
 
         /// <summary>
-        /// Get a sequence of indices that assigns each vector point an index describing its projection set
+        /// Get a sequence of index lists that describe the possible orders if the vector seqeunce is projected onto itself
         /// </summary>
         /// <returns></returns>
-        IEnumerable<int> GetEquivalencyIndexing();
+        IEnumerable<int[]> GetUniqueProjectionOrders();
 
         /// <summary>
         /// Get all unique permutations (Value and geometry) within the provided permutation provider using the provioded equality comparer and single value selector

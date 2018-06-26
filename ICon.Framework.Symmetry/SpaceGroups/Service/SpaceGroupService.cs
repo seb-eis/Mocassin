@@ -420,7 +420,7 @@ namespace ICon.Symmetry.SpaceGroups
             }
 
             operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
-            operationGroup.PositionEquivalencyIndexing = MakeProjectionIndexing(pointSequence, operationGroup.SelfProjectionOperations);
+            operationGroup.UniqueSelfProjectionOrders = MakeProjectionMatrix(pointSequence, operationGroup.SelfProjectionOperations);
             return operationGroup;
         }
 
@@ -466,27 +466,26 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Determines which positions can be projected onto each other within the passed set of vectors using the provided set of operations and assigns
-        /// indices based upon the original sequence
+        /// Determines the unique possible projection orders of the positions within the passed vector sequence and operation set
         /// </summary>
         /// <param name="vectors"></param>
         /// <param name="operations"></param>
-        /// <returns> Operations have to be self projection operations for this function to yield meaningfull result </returns>
-        protected List<int> MakeProjectionIndexing(IEnumerable<Fractional3D> vectors, IEnumerable<ISymmetryOperation> symmetryOperations)
+        /// <returns> Operations have to be self projection operations for this function to yield meaningfull results </returns>
+        protected List<List<int>> MakeProjectionMatrix(IEnumerable<Fractional3D> vectors, IEnumerable<ISymmetryOperation> symmetryOperations)
         {
             var options = symmetryOperations.Select(operation => operation.ApplyUntrimmed(vectors).ToList()).ToList();
-            var indexing = new List<int>(vectors.Count()).Populate(int.MaxValue, vectors.Count());
+            var uniqueIndexings = new HashSet<List<int>>(new EqualityCompareAdapter<List<int>>((a,b) => a.SequenceEqual(b), a => a.Sum()));
 
             for (int i = 0; i < options.Count; i++)
             {
+                var currentIndexing = new List<int>(8);
                 for (int j = 0; j < options[i].Count; j++)
                 {
-                    int indexInFirst = options[0].FindIndex(0, value => VectorComparer.Equals(value, options[i][j]));
-                    indexing[j] = (indexInFirst < indexing[j]) ? indexInFirst : indexing[j];
+                    currentIndexing.Add(options[0].FindIndex(0, value => VectorComparer.Equals(value, options[i][j])));
                 }
+                uniqueIndexings.Add(currentIndexing);
             }
-
-            return indexing;
+            return uniqueIndexings.ToList();
         }
 
         /// <summary>
@@ -495,15 +494,11 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         protected IEqualityComparer<IList<Fractional3D>> MakeVectorSequenceEquivalenceComparer()
         {
-            int AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
+            bool AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
             {
-                if (lhs.GetSequenceEqualityDirectionTo(rhs, VectorComparer) != 0)
-                {
-                    return 0;
-                }
-                return -1;
+                return lhs.GetSequenceEqualityDirectionTo(rhs, VectorComparer) != 0;
             }
-            return new CompareAdapter<IList<Fractional3D>>(AreEquivalent);
+            return new EqualityCompareAdapter<IList<Fractional3D>>(AreEquivalent);
         }
 
         /// <summary>
@@ -512,19 +507,11 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         protected IEqualityComparer<IList<Fractional3D>> MakeVectorSequenceProjectionComparer()
         {
-            int AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
+            bool AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
             {
-                if (lhs.Count != rhs.Count)
-                {
-                    return (lhs.Count < rhs.Count) ? -1 : 1;
-                }
-                if (lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value == true))
-                {
-                    return 0;
-                }
-                return -1;
+                return (lhs.Count == rhs.Count) && lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value == true);
             }
-            return new CompareAdapter<IList<Fractional3D>>(AreEquivalent);
+            return new EqualityCompareAdapter<IList<Fractional3D>>(AreEquivalent);
         }
     }
 }

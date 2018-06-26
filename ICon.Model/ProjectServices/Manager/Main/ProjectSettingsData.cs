@@ -138,7 +138,7 @@ namespace ICon.Model.ProjectServices
                 {
                     GroupingEnabled = false,
                     EnforceStableGroupingConsistency = true,
-                    MaxGroupPermutationCount = 1000,
+                    MaxGroupPermutationCount = 10000,
                     MaxGroupingCount = 10,
                     MaxGroupingSize = 8,
                     MaxStableEnvironmentPositionCount = 5000,

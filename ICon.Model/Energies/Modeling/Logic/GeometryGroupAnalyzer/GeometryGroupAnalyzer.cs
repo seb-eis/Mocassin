@@ -105,7 +105,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         protected IEnumerable<OccupationState> GetUniqueGroupOccupationStates(IPointOperationGroup operationGroup, IPermutationProvider<IParticle> permProvider)
         {
-            var comparer = new EqualityCompareAdapter<IParticle>((a, b) => a.Index == b.Index, null);
+            var comparer = new EqualityCompareAdapter<IParticle>((a, b) => a.Index == b.Index);
             var rawPermutations = operationGroup.GetGeometryUniquePermutations(permProvider, comparer, a => 1 << a.Index);
             return rawPermutations.Select(value => new OccupationState() { Particles = value.ToList() });
         }

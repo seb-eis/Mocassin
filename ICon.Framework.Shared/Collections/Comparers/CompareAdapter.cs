@@ -81,7 +81,17 @@ namespace ICon.Framework.Collections
         public EqualityCompareAdapter(Func<T1, T1, bool> compareDelegate, Func<T1, int> hashFunction)
         {
             CompareDelegate = compareDelegate ?? throw new ArgumentNullException(nameof(compareDelegate));
-            HashFunction = hashFunction;
+            HashFunction = hashFunction ?? throw new ArgumentNullException(nameof(hashFunction));
+        }
+
+        /// <summary>
+        /// Creates new equality compare adapter with the passed compare delegate and the default hash function
+        /// </summary>
+        /// <param name="compareDelegate"></param>
+        public EqualityCompareAdapter(Func<T1, T1, bool> compareDelegate)
+        {
+            CompareDelegate = compareDelegate ?? throw new ArgumentNullException(nameof(compareDelegate));
+            HashFunction = a => a.GetHashCode();
         }
 
         /// <summary>
@@ -102,10 +112,6 @@ namespace ICon.Framework.Collections
         /// <returns></returns>
         public override int GetHashCode(T1 obj)
         {
-            if (HashFunction == null)
-            {
-                return obj.GetHashCode();
-            }
             return HashFunction(obj);
         }
     }

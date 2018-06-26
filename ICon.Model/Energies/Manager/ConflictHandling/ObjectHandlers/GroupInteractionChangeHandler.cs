@@ -53,6 +53,11 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="report"></param>
         protected void LinkToUnstableEnvironment(GroupInteraction group, ConflictReport report)
         {
+            if (group.CenterUnitCellPosition.Status != PositionStatus.Unstable)
+            {
+                return;
+            }
+
             var environment = DataAccess.Query(data => data.UnstableEnvironmentInfos.Find(value => value.Index == group.CenterUnitCellPosition.Index));
             if (!environment.GroupInteractions.Contains(group))
             {
