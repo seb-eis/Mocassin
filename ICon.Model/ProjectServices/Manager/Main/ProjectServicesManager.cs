@@ -20,6 +20,16 @@ namespace ICon.Model.ProjectServices
     internal class ProjectServicesManager : IProjectServices
     {
         /// <summary>
+        /// List of active registered model managers
+        /// </summary>
+        private List<IModelManager> ActiveManagers { get; set; }
+
+        /// <summary>
+        /// Service provider for validations
+        /// </summary>
+        private ValidationServiceProvider ValidationServiceProvider { get; set; }
+
+        /// <summary>
         /// The project lock object to safely set/unset the input in progress flag
         /// </summary>
         private Object ProjectLock { get; } = new Object();
@@ -37,17 +47,7 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// The project settings data object
         /// </summary>
-        private ProjectSettingsData ProjectSettings { get; set; }
-
-        /// <summary>
-        /// List of active registered model managers
-        /// </summary>
-        private List<IModelManager> ActiveManagers { get; set; }
-
-        /// <summary>
-        /// Service provider for validations
-        /// </summary>
-        private ValidationServiceProvider ValidationServiceProvider { get; set; }
+        public ProjectSettingsData SettingsData { get; set; }
 
         /// <summary>
         /// Push notification based messaging system
@@ -139,13 +139,13 @@ namespace ICon.Model.ProjectServices
                     ActiveManagers[i].DisconnectManager();
                     ActiveManagers[i] = manager;
                     ShareAndConnectEventPorts(manager);
-                    ValidationServiceProvider.RegisterService(manager.MakeValidationService(ProjectSettings));
+                    ValidationServiceProvider.RegisterService(manager.MakeValidationService(SettingsData));
                     return;
                 }
             }
             ActiveManagers.Add(manager);
             ShareAndConnectEventPorts(manager);
-            ValidationServiceProvider.RegisterService(manager.MakeValidationService(ProjectSettings));
+            ValidationServiceProvider.RegisterService(manager.MakeValidationService(SettingsData));
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace ICon.Model.ProjectServices
             var dataTracker = new ModelDataTracker();
 
             projectService.SymmetryAnalysisService = symmetryService;
-            projectService.ProjectSettings = data;
+            projectService.SettingsData = data;
             projectService.GeometryNumerics = geometryNumerics;
             projectService.CommonNumerics = commonNumerics;
             projectService.ValidationServiceProvider = validationServices;

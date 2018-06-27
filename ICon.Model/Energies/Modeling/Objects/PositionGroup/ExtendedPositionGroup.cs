@@ -15,6 +15,11 @@ namespace ICon.Model.Energies
     public class ExtendedPositionGroup
     {
         /// <summary>
+        /// The group interaction the extended position group was created from
+        /// </summary>
+        public IGroupInteraction GroupInteraction { get; set; }
+
+        /// <summary>
         /// The center position
         /// </summary>
         public IUnitCellPosition CenterPosition { get; set; }
@@ -22,7 +27,7 @@ namespace ICon.Model.Energies
         /// <summary>
         /// The unit cell positions of the group sequences
         /// </summary>
-        public IList<IUnitCellPosition> GroupUnitCellPositions { get; set; }
+        public List<IUnitCellPosition> SurroundingUnitCellPositions { get; set; }
 
         /// <summary>
         /// The point operation group describing the symmetry operation information of the group
@@ -32,7 +37,7 @@ namespace ICon.Model.Energies
         /// <summary>
         /// List of all unique occupation states without the center position
         /// </summary>
-        public IList<OccupationState> UniqueOccupationStates { get; set; }
+        public List<OccupationState> UniqueOccupationStates { get; set; }
 
         /// <summary>
         /// The full unique energy dictionary for each unqiue occupation state arround each unique center particle

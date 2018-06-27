@@ -238,7 +238,7 @@ namespace ICon.Model.Basic
                 inputter.AddMany(abstractTransitions);
                 inputter.AddMany(metropolisTransitions);
                 inputter.AddMany(kineticTransitions);
-                inputter.Add(new StableEnvironmentInfo() { MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymParticlePair>() });
+                inputter.Add(new StableEnvironmentInfo() { MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymmetricParticlePair>() });
                 inputter.Add(new UnstableEnvironment()
                 {
                     Index = 0,

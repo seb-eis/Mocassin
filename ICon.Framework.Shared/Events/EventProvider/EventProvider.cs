@@ -41,7 +41,7 @@ namespace ICon.Framework.Events
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Task<Unit> DistributeAsync(TSubject value)
+        public Task<Unit> OnNextAsync(TSubject value)
         {
             return Task.Run(() => { EventSubject.OnNext(value); return Unit.Default; });
         }
@@ -50,16 +50,16 @@ namespace ICon.Framework.Events
         /// Distributes a default argument event through a new task
         /// </summary>
         /// <returns></returns>
-        public Task<Unit> DistributeAsync()
+        public Task<Unit> OnNextAsync()
         {
-            return DistributeAsync(default);
+            return OnNextAsync(default);
         }
 
         /// <summary>
         /// Distributes the event synchronous
         /// </summary>
         /// <param name="value"></param>
-        public void Distribute(TSubject value)
+        public void OnNext(TSubject value)
         {
             EventSubject.OnNext(value);
         }
@@ -67,9 +67,26 @@ namespace ICon.Framework.Events
         /// <summary>
         /// Distributes the event synchronous with a subject default argument
         /// </summary>
-        public void Distribute()
+        public void OnNext()
         {
             EventSubject.OnNext(default);
+        }
+
+        /// <summary>
+        /// Distributes an error synchronously to all subscribers
+        /// </summary>
+        /// <param name="exception"></param>
+        public void OnError(Exception exception)
+        {
+            EventSubject.OnError(exception);
+        }
+
+        /// <summary>
+        /// Distributes completion to all subscribers synchronously
+        /// </summary>
+        public void OnCompleted()
+        {
+            EventSubject.OnCompleted();
         }
     }
 }

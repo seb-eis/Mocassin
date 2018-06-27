@@ -10,7 +10,7 @@ namespace ICon.Model.Particles
     /// Represents an occupation state for a sequnce of positions that are occupied by a series of particle objects
     /// </summary>
     [DataContract]
-    public class OccupationState : IEnumerable<IParticle>, IEquatable<OccupationState>
+    public class OccupationState : IOccupationState
     {
         /// <summary>
         /// The length of the occupation state
@@ -25,6 +25,12 @@ namespace ICon.Model.Particles
         public List<IParticle> Particles { get; set; }
 
         /// <summary>
+        /// Read only interface access to the set of particles
+        /// </summary>
+        [IgnoreDataMember]
+        IReadOnlyList<IParticle> IOccupationState.Particles => Particles;
+
+        /// <summary>
         /// Index based access on the particle array of the occupation state
         /// </summary>
         /// <param name="index"></param>
@@ -33,6 +39,22 @@ namespace ICon.Model.Particles
         {
             get { return Particles[index]; }
             set { Particles[index] = value; }
+        }
+
+        /// <summary>
+        /// Default construct an empty occupation state
+        /// </summary>
+        public OccupationState()
+        {
+        }
+
+        /// <summary>
+        /// Construct a new occupation state from an occupation state interface
+        /// </summary>
+        /// <param name="state"></param>
+        public OccupationState(IOccupationState state)
+        {
+            Particles = state.ToList();
         }
 
         /// <summary>
@@ -78,9 +100,9 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(OccupationState other)
+        public bool Equals(IOccupationState other)
         {
-            if (Particles.Count != other.Particles.Count)
+            if (StateLength != other.StateLength)
             {
                 return false;
             }

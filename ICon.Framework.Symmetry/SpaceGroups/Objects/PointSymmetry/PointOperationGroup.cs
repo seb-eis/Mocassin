@@ -110,25 +110,25 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Generate all geoemtric unique permutations of the point sequence foud within the permutation provider
+        /// Generate all unique permutations of the point sequence found within the passed permutation provider
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="permProvider"></param>
         /// <param name="comparer"></param>
         /// <param name="selector"></param>
         /// <returns> Value equality comparer and hash value selector are used for the internal hash set filetring </returns>
-        public IEnumerable<T1[]> GetGeometryUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
+        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
         {
+            if (permProvider.ResultLength != PointSequence.Count)
+            {
+                throw new ArgumentException("Permutation provider does not match the point sequence");
+            }
+
             if (!HasPermutationMultiplicity())
             {
                 return permProvider.AsEnumerable();
             }
-            var results = new HashSet<T1[]>(MakePermutationEqualityComparer(comparer, value => value.Sum(a => selector(a))));
-            foreach (var permutation in permProvider)
-            {
-                results.Add(permutation);
-            }
-            return results.AsEnumerable();
+            return new HashSet<T1[]>(permProvider, MakePermutationEqualityComparer(comparer, value => value.Sum(a => selector(a)))).AsEnumerable();
         }
 
         /// <summary>

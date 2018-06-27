@@ -143,7 +143,11 @@ namespace ICon.Model.ProjectServices
                     MaxGroupingSize = 8,
                     MaxStableEnvironmentPositionCount = 5000,
                     MaxUnstableEnvironmentPositionCount = 500,
-                    EnvironmentPositionWarningLimit = 250
+                    EnvironmentPositionWarningLimit = 250,
+                    MinPairEnergy = -100,
+                    MaxPairEnergy = 100,
+                    MinGroupEnergy = -100,
+                    MaxGroupEnergy = 100
                 }
         };
         }

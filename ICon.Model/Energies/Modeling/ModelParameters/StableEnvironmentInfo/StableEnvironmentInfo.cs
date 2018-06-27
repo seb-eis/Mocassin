@@ -24,13 +24,13 @@ namespace ICon.Model.Energies
         /// The list of ignored pair interactions during environment sampling
         /// </summary>
         [DataMember]
-        public List<SymParticlePair> IgnoredPairInteractions { get; set; }
+        public List<SymmetricParticlePair> IgnoredPairInteractions { get; set; }
 
         /// <summary>
         /// Get the ignroed pair interactions as an enumerable
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<SymParticlePair> GetIgnoredPairs()
+        public IEnumerable<SymmetricParticlePair> GetIgnoredPairs()
         {
             return IgnoredPairInteractions.AsEnumerable();
         }
@@ -90,7 +90,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public static StableEnvironmentInfo CreateDefault()
         {
-            return new StableEnvironmentInfo() { IgnoredPairInteractions = new List<SymParticlePair>(0), MaxInteractionRange = 1.0 };
+            return new StableEnvironmentInfo() { IgnoredPairInteractions = new List<SymmetricParticlePair>(0), MaxInteractionRange = 1.0 };
         }
     }
 }

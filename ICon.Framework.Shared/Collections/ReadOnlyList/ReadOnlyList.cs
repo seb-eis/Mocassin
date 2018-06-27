@@ -9,7 +9,7 @@ namespace ICon.Framework.Collections
     /// Read only wrapper for a list interface to restrict access to it but still be compatible with functions expecting a list interface
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public class ReadOnlyList<T1> : IList<T1>
+    public class ReadOnlyList<T1> : IList<T1>, IReadOnlyList<T1>
     {
         /// <summary>
         /// The encapsulated list interface

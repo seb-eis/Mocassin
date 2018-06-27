@@ -90,7 +90,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="newPairs"></param>
         protected void UpdateInteractionIndexing(UnstableEnvironment envInfo, IList<AsymmetricPairInteraction> newPairs)
         {
-            var dataList = DataAccess.Query(data => data.AsymmetricPairInteractions);
+            var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
             var uniquePairs = new MultisetList<AsymmetricPairInteraction>(GetInteractionComparer(), 100) { newPairs };
 
             foreach (var item in dataList.Where(value => value.Position0 != envInfo.UnitCellPosition))

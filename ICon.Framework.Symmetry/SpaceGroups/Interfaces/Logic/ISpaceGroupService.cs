@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ICon.Framework.Collections;
 using ICon.Mathematics.ValueTypes;
 using ICon.Symmetry.CrystalSystems;
+using ICon.Mathematics.Comparers;
 
 namespace ICon.Symmetry.SpaceGroups
 {
@@ -121,5 +122,12 @@ namespace ICon.Symmetry.SpaceGroups
         /// <param name="entry"></param>
         /// <returns></returns>
         bool TryLoadGroup(SpaceGroupEntry entry);
+
+        /// <summary>
+        /// Creates a vector comparer for a special type of 3D vector interface
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <returns></returns>
+        IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D;
     }
 }

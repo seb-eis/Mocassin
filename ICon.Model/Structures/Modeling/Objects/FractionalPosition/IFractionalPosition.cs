@@ -12,12 +12,12 @@ namespace ICon.Model.Structures
     public interface IFractionalPosition : IFractional3D
     {
         /// <summary>
-        /// Index of the particle set that describes possible occupations
+        /// The particle set index that describes possible occupations
         /// </summary>
         int OccupationIndex { get; }
 
         /// <summary>
-        /// The status of the position (Stable, unstable)
+        /// The status of the position
         /// </summary>
         PositionStatus Status { get; }
     }

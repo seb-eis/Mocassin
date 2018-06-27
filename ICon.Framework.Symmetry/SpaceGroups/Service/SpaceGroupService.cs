@@ -513,5 +513,15 @@ namespace ICon.Symmetry.SpaceGroups
             }
             return new EqualityCompareAdapter<IList<Fractional3D>>(AreEquivalent);
         }
+
+        /// <summary>
+        /// Creates a vector comparer for a special type of 3D vector interface using the generic 3D vector interface
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <returns></returns>
+        public IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D
+        {
+            return Comparer<T1>.Create((a, b) => ((IComparer<IVector3D>)VectorComparer).Compare(a, b));
+        }
     }
 }

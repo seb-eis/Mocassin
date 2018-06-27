@@ -46,7 +46,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected void UpdatePairInteractionModel(IStableEnvironmentInfo info, ConflictReport report)
         {
             var newPairs = GetNewPairInteractions(info);
-            var oldPairs = DataAccess.Query(data => data.SymmetricPairInteractions);
+            var oldPairs = DataAccess.Query(data => data.StablePairInteractions);
 
             PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ProjectServices.GeometryNumerics.RangeComparer);
             MoveNewPairsToModelList(oldPairs, newPairs, report);
