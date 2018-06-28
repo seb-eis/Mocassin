@@ -289,7 +289,7 @@ namespace ICon.Framework.Extensions
         /// <param name="value"></param>
         /// <param name="counts"></param>
         /// <returns></returns>
-        public static List<T1> Populate<T1>(this List<T1> values, T1 value, int counts)
+        public static IList<T1> Populate<T1>(this IList<T1> values, T1 value, int counts)
         {
             values.Clear();
             for (int i = 0; i < counts; i++)
@@ -297,6 +297,57 @@ namespace ICon.Framework.Extensions
                 values.Add(value);
             }
             return values;
+        }
+
+        /// <summary>
+        /// Populates a generic list from a provider function to the specfified size
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="provider"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static IList<T1> Populate<T1>(this IList<T1> list, Func<T1> provider, int count)
+        {
+            list.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(provider());
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Shuffles the entries of a list multiple times using the provided random number generator
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="random"></param>
+        /// <returns></returns>
+        public static IList<T1> Shuffle<T1>(this IList<T1> list, System.Random random, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                for (int j = list.Count; j > 1;)
+                {
+                    list.Swap(random.Next(j), --j);
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Swap the values at the provided indices within a list
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        public static void Swap<T1>(this IList<T1> list, int lhs, int rhs)
+        {
+            T1 tmp = list[lhs];
+            list[lhs] = list[rhs];
+            list[rhs] = tmp;
         }
     }
 }

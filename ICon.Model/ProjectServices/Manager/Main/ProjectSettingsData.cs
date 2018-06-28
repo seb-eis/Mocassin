@@ -73,6 +73,12 @@ namespace ICon.Model.ProjectServices
         public BasicLatticeSettings LatticeSettings { get; set; }
 
         /// <summary>
+        /// The settings for the simulation related input
+        /// </summary>
+        [DataMember]
+        public BasicSimulationSettings SimulationSettings { get; set; }
+
+        /// <summary>
         /// Creates a new default project servies data object
         /// </summary>
         /// <returns></returns>
@@ -148,6 +154,14 @@ namespace ICon.Model.ProjectServices
                     MaxPairEnergy = 100,
                     MinGroupEnergy = -100,
                     MaxGroupEnergy = 100
+                },
+                SimulationSettings = new BasicSimulationSettings()
+                {
+                    MaxSimulationsPerSet = 1000,
+                    MinTemperature = 0.01,
+                    MaxTemperature = 10000,
+                    MinValueSteppingFactor = 0.001,
+                    MaxValueSteppingFactor = 1.0
                 }
         };
         }

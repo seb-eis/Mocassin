@@ -14,7 +14,7 @@ namespace ICon.Model.Energies
         /// <summary>
         /// Read only collection of the group energy entries
         /// </summary>
-        IReadOnlyCollection<GroupEnergyEntry> IGroupEnergySetter.EnergyEntries => throw new NotImplementedException();
+        IReadOnlyCollection<GroupEnergyEntry> IGroupEnergySetter.EnergyEntries => EnergyEntries;
 
         /// <summary>
         /// Interafce access to the group interaction the setter can manipulate

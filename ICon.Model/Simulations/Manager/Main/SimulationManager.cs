@@ -1,0 +1,58 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using ICon.Model.Basic;
+using ICon.Model.ProjectServices;
+
+namespace ICon.Model.Simulations
+{
+    /// <summary>
+    /// Implementation of the simulation manager that handles the creation and packaging of simulation sets for simulation encoding
+    /// </summary>
+    internal class SimulationManager : ModelManager<SimulationModelData, SimulationDataCache, SimulationDataManager, SimulationCacheManager, SimulationInputManager, SimulationQueryManager, SimulationEventManager, SimulationUpdateManager>, ISimulationManager
+    {
+        /// <summary>
+        /// Get access to the simulation manager query port
+        /// </summary>
+        public ISimulationQueryPort QueryPort => QueryManager;
+
+        /// <summary>
+        /// Get access to the simulation manager input port
+        /// </summary>
+        public new ISimulationInputPort InputPort => InputManager;
+
+        /// <summary>
+        /// Get access to the simulatuion manager event port
+        /// </summary>
+        public new ISimulationEventPort EventPort => EventManager;
+
+        /// <summary>
+        /// Create new simulation manager with the provided project services and manages the provided simulation data object
+        /// </summary>
+        /// <param name="projectServices"></param>
+        /// <param name="data"></param>
+        public SimulationManager(IProjectServices projectServices, SimulationModelData data) : base(projectServices, data)
+        {
+        }
+
+        /// <summary>
+        /// Get the type of the manager interface
+        /// </summary>
+        /// <returns></returns>
+        public override Type GetManagerInterfaceType()
+        {
+            return typeof(ISimulationManager);
+        }
+
+        /// <summary>
+        /// Get the validation service for simulation manager related parameters and objects
+        /// </summary>
+        /// <param name="settingsData"></param>
+        /// <returns></returns>
+        public override IValidationService MakeValidationService(ProjectSettingsData settingsData)
+        {
+            return new SimulationValidationService(settingsData.SimulationSettings, ProjectServices);
+        }
+    }
+}
