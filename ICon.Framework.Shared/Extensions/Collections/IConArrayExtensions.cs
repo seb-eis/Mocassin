@@ -50,5 +50,128 @@ namespace ICon.Framework.Extensions
             }
             return values;
         }
+
+        /// <summary>
+        /// Populates a one dimensional array with values from an enumerable sequence
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static T1[] Populate<T1>(this T1[] target, IEnumerable<T1> values)
+        {
+            int index = -1;
+            foreach (var item in values)
+            {
+                target[++index] = item;
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Populates a one dimensional array with values from a provider delegate
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static T1[] Populate<T1>(this T1[] target, Func<T1> provider)
+        {
+            for (int i = 0; i < target.Length; i++)
+            {
+                target[i] = provider();
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Populates a two dimensional array with values from an enumerable sequence
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static T1[,] Populate<T1>(this T1[,] target, IEnumerable<T1> values)
+        {
+            var (Rows, Cols) = target.GetDimensions();
+            var enumerator = values.GetEnumerator();
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Cols; j++)
+                {
+                    enumerator.MoveNext();
+                    target[i, j] = enumerator.Current;
+                }
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Populates a two dimensional array with values from a provider delegate
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static T1[,] Populate<T1>(this T1[,] target, Func<T1> provider)
+        {
+            var (Rows, Cols) = target.GetDimensions();
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Cols; j++)
+                {
+                    target[i, j] = provider();
+                }
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Populates a three dimensional array with values from an enumerable sequence
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static T1[,,] Populate<T1>(this T1[,,] target, IEnumerable<T1> values)
+        {
+            var (a, b, c) = (target.GetLength(0), target.GetLength(1), target.GetLength(2));
+            var enumerator = values.GetEnumerator();
+            for (int i = 0; i < a; i++)
+            {
+                for (int j = 0; j < b; j++)
+                {
+                    for (int k = 0; k < c; k++)
+                    {
+                        enumerator.MoveNext();
+                        target[i, j, k] = enumerator.Current;
+                    }
+                }
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// Populates a three dimensional array with values from an enumerable sequence
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static T1[,,] Populate<T1>(this T1[,,] target, Func<T1> provider)
+        {
+            var (a, b, c) = (target.GetLength(0), target.GetLength(1), target.GetLength(2));
+            for (int i = 0; i < a; i++)
+            {
+                for (int j = 0; j < b; j++)
+                {
+                    for (int k = 0; k < c; k++)
+                    {
+                        target[i, j, k] = provider();
+                    }
+                }
+            }
+            return target;
+        }
     }
 }

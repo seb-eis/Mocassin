@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using ICon.Framework.Extensions;
 using ICon.Mathematics.Coordinates;
 using ICon.Mathematics.ValueTypes;
 
@@ -45,36 +46,41 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         public static SupercellWrapper<T1> CreateSupercell<T1>(IUnitCell<T1> unitCell, in Coordinates<int, int, int> size)
         {
-            return CreateSupercell(unitCell.GetAllEntries().Select(value => value.Entry).ToList(), size, unitCell.VectorEncoder);
+            return CreateSupercell(unitCell.GetAllEntries().Select(value => value.Entry), size, unitCell.VectorEncoder);
         }
 
         /// <summary>
-        /// Takes a set of unit cell entries and evctor encoder
+        /// Takes a set of unit cell entries and vector encoder and creates a supercell with identical unit cells
         /// </summary>
         /// <typeparam name="T1"></typeparam>
-        /// <param name="entries"></param>
+        /// <param name="cellEntry"></param>
         /// <param name="size"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static SupercellWrapper<T1> CreateSupercell<T1>(IList<T1> entries, in Coordinates<int,int,int> size, UnitCellVectorEncoder vectorEncoder)
+        public static SupercellWrapper<T1> CreateSupercell<T1>(IEnumerable<T1> cellEntry, in Coordinates<int,int,int> size, UnitCellVectorEncoder vectorEncoder)
         {
             if (size.A < 1 || size.B < 1 || size.C < 1)
             {
                 throw new ArgumentException("One of the size values is negative", nameof(size));
             }
-            var entryLattice = new T1[size.A, size.B, size.C][];
-            for (int i = 0; i < size.A; i++)
+            return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(() => cellEntry.ToArray()), vectorEncoder);
+        }
+
+        /// <summary>
+        /// Creates a supercell wrapper from a set of unit cell entry sets that each describe the unit cell at the linearized index
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="cellEntries"></param>
+        /// <param name="size"></param>
+        /// <param name="vectorEncoder"></param>
+        /// <returns></returns>
+        public static SupercellWrapper<T1> CreateSupercell<T1>(IEnumerable<T1[]> cellEntries, in Coordinates<int,int,int> size, UnitCellVectorEncoder vectorEncoder)
+        {
+            if (size.A < 1 || size.B < 1 || size.C < 1)
             {
-                for (int j = 0; j < size.B; j++)
-                {
-                    for (int k = 0; k < size.C; k++)
-                    {
-                        entryLattice[i, j, k] = new T1[entries.Count];
-                        entries.CopyTo(entryLattice[i, j, k], 0);
-                    }
-                }
+                throw new ArgumentException("One of the size values is negative", nameof(size));
             }
-            return CreateSupercell(entryLattice, vectorEncoder);
+            return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(cellEntries), vectorEncoder);
         }
     }
 }

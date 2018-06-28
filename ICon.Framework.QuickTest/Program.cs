@@ -53,27 +53,13 @@ namespace ICon.Framework.QuickTest
             inputter.AutoInputData(package.ProjectServices);
             var report = inputter.GetReportJson();
 
-            var groupInteraction0 = new GroupInteraction()
-            {
-                CenterUnitCellPosition = new UnitCellPosition() { Index = 0 },
-                GeometryVectors = new List<DataVector3D>()
-                {
-                    new DataVector3D(.25,.25,.25), new DataVector3D(-.25,-.25,-.25)
-                }
-            };
-            var groupInteraction1 = new GroupInteraction()
-            {
-                CenterUnitCellPosition = new UnitCellPosition() { Index = 1 },
-                GeometryVectors = new List<DataVector3D>()
-                {
-                    new DataVector3D(0,0,0),new DataVector3D(.5,.5,0),new DataVector3D(.5,0,.5), new DataVector3D(0,.5,.5)
-                }
-            };
+            var encoder = package.StructureManager.QueryPort.Query(port => port.GetVectorEncoder());
+            var (a, b, c, d) = (50, 50, 50, 8);
+
+
 
             var watch = Stopwatch.StartNew();
-            var inReport0 = package.EnergyManager.InputPort.InputModelObject(groupInteraction0).Result;
-            DisplayWatch(watch);
-            var inReport1 = package.EnergyManager.InputPort.InputModelObject(groupInteraction1).Result;
+            var supercell = CellWrapperFactory.CreateSupercell(GetIntCells(a, b, c, d), new Coordinates<int, int, int>(a,b,d), encoder);
             DisplayWatch(watch);
 
             Console.ReadLine();
@@ -85,6 +71,15 @@ namespace ICon.Framework.QuickTest
             Console.WriteLine("Watch Dump: {0}", watch.Elapsed.ToString());
             watch.Reset();
             watch.Start();
+        }
+
+        static IEnumerable<double[]> GetIntCells(int a, int b, int c, int d)
+        {
+            var random = new PcgRandom32();
+            for (int i = 0; i < a*b*c; i++)
+            {
+                yield return new double[d].Populate(() => random.NextDouble());
+            }
         }
     }
 }
