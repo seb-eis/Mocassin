@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Model\" />
+    <Folder Include="Data\Objects\" />
+    <Folder Include="Translator\TranslatorSystem\" />
+    <Folder Include="Translator\Components\Energies\" />
+    <Folder Include="Translator\Components\" />
+    <Folder Include="Translator\Components\Settings\" />
+    <Folder Include="Translator\Components\Transitions\" />
+    <Folder Include="Translator\Components\Structural\" />
+  </ItemGroup>
+
+</Project>

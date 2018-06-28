@@ -29,6 +29,11 @@ namespace ICon.Model.ProjectServices
         DataAccessLocker DataAccessLocker { get; }
 
         /// <summary>
+        /// Get the project settings data object that contains all project settings
+        /// </summary>
+        ProjectSettingsData SettingsData { get; }
+
+        /// <summary>
         /// Data tracking system for all known model data objects
         /// </summary>
         IModelDataTracker DataTracker { get; }

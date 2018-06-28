@@ -76,5 +76,17 @@ namespace ICon.Framework.Random
                 return (int)(Next() & (uint.MaxValue >> 1));
             }
         }
+
+        /// <summary>
+        /// Get the next double from the range of [0,1]
+        /// </summary>
+        /// <returns></returns>
+        public double NextDouble()
+        {
+            unchecked
+            {
+                return (double)Next() / uint.MaxValue;
+            }
+        }
     }
 }

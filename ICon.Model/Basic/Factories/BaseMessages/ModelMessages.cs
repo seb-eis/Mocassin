@@ -271,7 +271,7 @@ namespace ICon.Model.Basic
         /// <returns></returns>
         public static WarningMessage CreateContentResetWarning(object sender)
         {
-            return new WarningMessage(sender, "Content Auto-Update (FAILED)");
+            return new WarningMessage(sender, "Content Auto-Update (RESET)");
         }
 
         /// <summary>

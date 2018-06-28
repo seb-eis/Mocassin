@@ -8,9 +8,9 @@ using ICon.Model.ProjectServices;
 namespace ICon.Model.Transitions.Validators
 {
     /// <summary>
-    /// Validator for new property state pair that checks for compatibility with existing data and general object constraints
+    /// Validator for new state exchange pairs that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class PropertyStatePairValidator : DataValidator<IPropertyStatePair, BasicTransitionSettings, ITransitionDataPort>
+    public class PropertyStatePairValidator : DataValidator<IStateExchangePair, BasicTransitionSettings, ITransitionDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
@@ -28,10 +28,10 @@ namespace ICon.Model.Transitions.Validators
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override IValidationReport Validate(IPropertyStatePair obj)
+        public override IValidationReport Validate(IStateExchangePair obj)
         {
             var report = new ValidationReport();
-            AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetPropertyStatePairs(), report);
+            AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetStateExchangePairs(), report);
             AddStateExchangeValidation(obj, report);
             return report;
         }
@@ -41,7 +41,7 @@ namespace ICon.Model.Transitions.Validators
         /// </summary>
         /// <param name="statePair"></param>
         /// <param name="report"></param>
-        protected void AddStateExchangeValidation(IPropertyStatePair statePair, ValidationReport report)
+        protected void AddStateExchangeValidation(IStateExchangePair statePair, ValidationReport report)
         {
             if (statePair.DonorParticle == statePair.AcceptorParticle)
             {

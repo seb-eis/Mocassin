@@ -29,7 +29,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         [ConflictHandlingMethod(DataOperationType.ParameterChange)]
-        protected IConflictReport ResolveParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
+        protected IConflictReport HandleParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(StableEnvironmentInfoChangeHandler)} was called for {info.GetType().ToString()}");
             return new StableEnvironmentInfoChangeHandler(dataAccess, ProjectServices).HandleConflicts(info);

@@ -97,7 +97,7 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddGroupInteractionValidation(IUnstableEnvironment envInfo, ValidationReport report)
         {
-            foreach (var interaction in envInfo.GetGroupInteractions().Where(value => value.UnitCellPosition != envInfo.UnitCellPosition))
+            foreach (var interaction in envInfo.GetGroupInteractions().Where(value => value.CenterUnitCellPosition != envInfo.UnitCellPosition))
             {
                 var detail0 = $"The group interaction with index ({interaction.Index}) cannot be applied to this environment";
                 report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));

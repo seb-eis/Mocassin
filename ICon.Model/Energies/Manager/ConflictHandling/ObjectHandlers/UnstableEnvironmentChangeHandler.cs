@@ -40,6 +40,7 @@ namespace ICon.Model.Energies.ConflictHandling
         {
             var report = new ConflictReport();
             UpdatePairInteractions(envInfo, report);
+            UpdateGroupInteractions(envInfo, report);
             return report;
         }
 
@@ -89,7 +90,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="newPairs"></param>
         protected void UpdateInteractionIndexing(UnstableEnvironment envInfo, IList<AsymmetricPairInteraction> newPairs)
         {
-            var dataList = DataAccess.Query(data => data.AsymmetricPairInteractions);
+            var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
             var uniquePairs = new MultisetList<AsymmetricPairInteraction>(GetInteractionComparer(), 100) { newPairs };
 
             foreach (var item in dataList.Where(value => value.Position0 != envInfo.UnitCellPosition))
@@ -170,6 +171,33 @@ namespace ICon.Model.Energies.ConflictHandling
                 return indexCompare;
             }
             return Comparer<AsymmetricPairInteraction>.Create(Compare);
+        }
+
+        /// <summary>
+        /// Updates all group interactions affiliated with this unstable environment
+        /// (Currently just deprecates all affiliated group interactions and clears envrionment group interaction list)
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="report"></param>
+        protected void UpdateGroupInteractions(UnstableEnvironment environment, ConflictReport report)
+        {
+            int counter = 0;
+            foreach (var groupInteraction in DataAccess.Query(data => data.GroupInteractions))
+            {
+                if (environment.GroupInteractions.Contains(groupInteraction))
+                {
+                    counter++;
+                    groupInteraction.Deprecate();
+                }
+            }
+            environment.GroupInteractions.Clear();
+
+            if (counter != 0)
+            {
+                var detail0 = $"Recovery of group interaction definitions on unstable environment changes is currently not supported";
+                var detail1 = $"Deprecated all group interactions affiliated with the changed unstable environment to avoid conflicts";
+                report.AddWarning(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
+            }
         }
     }
 }

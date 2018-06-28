@@ -9,9 +9,9 @@ using ICon.Model.Particles;
 namespace ICon.Model.Transitions.Validators
 {
     /// <summary>
-    /// Validator for new property group that checks for compatibility with existing data and general object constraints
+    /// Validator for new state exchange groups that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class PropertyGroupValidator : DataValidator<IPropertyGroup, BasicTransitionSettings, ITransitionDataPort>
+    public class PropertyGroupValidator : DataValidator<IStateExchangeGroup, BasicTransitionSettings, ITransitionDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
@@ -29,7 +29,7 @@ namespace ICon.Model.Transitions.Validators
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override IValidationReport Validate(IPropertyGroup obj)
+        public override IValidationReport Validate(IStateExchangeGroup obj)
         {
             var report = new ValidationReport();
             if (!AddHasContentValidation(obj, report))
@@ -37,16 +37,16 @@ namespace ICon.Model.Transitions.Validators
                 return report;
             }
 
-            AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetPropertyGroups(), report);
+            AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetStateExchangeGroups(), report);
             return report;
         }
 
         /// <summary>
-        /// Validates that the property group contains at least one element of each required content element and adds the reults to the validation report (Returns false on failure)
+        /// Validates that the state exchange group contains at least one element of each required content element and adds the reults to the validation report (Returns false on failure)
         /// </summary>
         /// <param name="group"></param>
         /// <param name="report"></param>
-        protected bool AddHasContentValidation(IPropertyGroup group, ValidationReport report)
+        protected bool AddHasContentValidation(IStateExchangeGroup group, ValidationReport report)
         {
             if (group.StatePairCount == 0)
             {

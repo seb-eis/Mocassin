@@ -6,10 +6,10 @@ using ICon.Model.Particles;
 namespace ICon.Model.Transitions
 {
     /// <summary>
-    /// Property state pair that contains the donor and acceptor state of a property exchange
+    /// State exchange pair that contains the donor and acceptor state of a position state change
     /// </summary>
-    [DataContract(Name ="PropertyStatePair")]
-    public class PropertyStatePair : ModelObject, IPropertyStatePair
+    [DataContract]
+    public class StateExchangePair : ModelObject, IStateExchangePair
     {
         /// <summary>
         /// The particle index of the donor state
@@ -47,7 +47,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateObject(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IPropertyStatePair>(obj) is var statePair)
+            if (CastWithDepricatedCheck<IStateExchangePair>(obj) is var statePair)
             {
                 DonorParticle = statePair.DonorParticle;
                 AcceptorParticle = statePair.AcceptorParticle;
@@ -58,11 +58,11 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Checks if equal to other property state pair (Reversed case also counts as equal)
+        /// Checks if equal to other state exchange pair (Reversed case also counts as equal)
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IPropertyStatePair other)
+        public bool Equals(IStateExchangePair other)
         {
             if (DonorParticle == other.DonorParticle && AcceptorParticle == other.AcceptorParticle)
             {
@@ -89,7 +89,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(IPropertyStatePair other)
+        public int CompareTo(IStateExchangePair other)
         {
             var donorComp = DonorParticle.Index.CompareTo(other.DonorParticle);
             if (donorComp == 0)

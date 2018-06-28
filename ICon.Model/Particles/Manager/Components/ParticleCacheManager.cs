@@ -43,7 +43,7 @@ namespace ICon.Model.Particles
         protected SetList<PairCode> CalculatePossiblePairCodes()
         {
             var particles = ProjectServices.GetManager<IParticleManager>().QueryPort
-                .Query((IParticleDataPort port) => port.GetParticles())
+                .Query(port => port.GetParticles())
                 .Where(particle => !particle.IsDeprecated)
                 .Select(particle => particle.Index);
 

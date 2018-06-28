@@ -50,5 +50,25 @@ namespace ICon.Model.ProjectServices
         /// </summary>
         public int EnvironmentPositionWarningLimit { get; set; }
 
+        /// <summary>
+        /// The lower limit for pair interaction energies [eV]
+        /// </summary>
+        public double MinPairEnergy { get; set; }
+
+        /// <summary>
+        /// The upper limit for pair interaction energies [eV]
+        /// </summary>
+        public double MaxPairEnergy { get; set; }
+
+        /// <summary>
+        /// The lower limit for group interaction energies [eV]
+        /// </summary>
+        public double MinGroupEnergy { get; set; }
+
+        /// <summary>
+        /// The upper limit for group interaction energies [eV]
+        /// </summary>
+        public double MaxGroupEnergy { get; set; }
+
     }
 }

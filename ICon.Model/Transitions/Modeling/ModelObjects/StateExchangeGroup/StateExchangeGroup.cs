@@ -8,17 +8,17 @@ using ICon.Model.Basic;
 namespace ICon.Model.Transitions
 {
     /// <summary>
-    /// Property group to define sets of exchangeable properties for transitions 
+    /// State exchange group that defines a set of possible state changes for a position during a transition
     /// </summary>
-    [DataContract(Name ="PropertyGroup")]
-    public class PropertyGroup : ModelObject, IPropertyGroup
+    [DataContract]
+    public class StateExchangeGroup : ModelObject, IStateExchangeGroup
     {
         /// <summary>
-        /// The property state pair indices affiliated with this property group
+        /// The state exchange pairs affiliated with this state exchange group group
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public List<IPropertyStatePair> PropertyStatePairs { get; set; }
+        public List<IStateExchangePair> StateExchangePairs { get; set; }
 
         /// <summary>
         /// Flag if the property group is a vacancy group
@@ -30,15 +30,15 @@ namespace ICon.Model.Transitions
         /// Get the number of property state pairs in the group
         /// </summary>
         [IgnoreDataMember]
-        public int StatePairCount => PropertyStatePairs.Count;
+        public int StatePairCount => StateExchangePairs.Count;
 
         /// <summary>
-        /// Get the property state pair indices as an enumerable
+        /// Get the state exchange pairs of this state exchange group
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPropertyStatePair> GetPropertyStatePairs()
+        public IEnumerable<IStateExchangePair> GetStateExchangePairs()
         {
-            return (PropertyStatePairs ?? new List<IPropertyStatePair>()).AsEnumerable();
+            return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
         }
 
         /// <summary>
@@ -57,11 +57,11 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateObject(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IPropertyGroup>(obj) is var group)
+            if (CastWithDepricatedCheck<IStateExchangeGroup>(obj) is var group)
             {
                 Index = group.Index;
                 VacancyGroup = group.VacancyGroup;
-                PropertyStatePairs = group.GetPropertyStatePairs().ToList();
+                StateExchangePairs = group.GetStateExchangePairs().ToList();
                 return this;
             }
             return null;
@@ -72,21 +72,21 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IPropertyGroup other)
+        public bool Equals(IStateExchangeGroup other)
         {
             bool secondContainsFirst = true;
             bool firstContainsSecond = true;
-            foreach (var index in other.GetPropertyStatePairs().Select(a => a.Index))
+            foreach (var index in other.GetStateExchangePairs().Select(a => a.Index))
             {
-                if (!PropertyStatePairs.Select(a => a.Index).Contains(index))
+                if (!StateExchangePairs.Select(a => a.Index).Contains(index))
                 {
                     firstContainsSecond = false;
                     break;
                 }
             }
-            foreach (var index in PropertyStatePairs.Select(a => a.Index))
+            foreach (var index in StateExchangePairs.Select(a => a.Index))
             {
-                if (!other.GetPropertyStatePairs().Select(a => a.Index).Contains(index))
+                if (!other.GetStateExchangePairs().Select(a => a.Index).Contains(index))
                 {
                     secondContainsFirst = false;
                     break;

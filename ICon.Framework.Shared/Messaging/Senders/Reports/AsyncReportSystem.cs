@@ -53,7 +53,7 @@ namespace ICon.Framework.Messaging
         /// <param name="report"></param>
         public void Send(IOperationReport report)
         {
-            OnOperationReports.DistributeAsync(report);
+            OnOperationReports.OnNextAsync(report);
         }
     }
 }

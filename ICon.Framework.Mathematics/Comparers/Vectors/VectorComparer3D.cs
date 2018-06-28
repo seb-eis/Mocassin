@@ -8,7 +8,7 @@ namespace ICon.Mathematics.Comparers
     /// <summary>
     /// Generic comparator object for structs that implement IVector3D, automatically provides generic comparisons for any IVector3D types
     /// </summary>
-    public class VectorComparer3D<T1> : Comparer<T1>, IEqualityComparer<T1> where T1 : struct, IVector3D
+    public class VectorComparer3D<T1> : Comparer<T1>, IEqualityComparer<T1>, IComparer<IVector3D> where T1 : struct, IVector3D
     {
         /// <summary>
         /// The internal double value comparer for the vector coordinate values
@@ -51,12 +51,12 @@ namespace ICon.Mathematics.Comparers
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override Int32 Compare(T1 x, T1 y)
+        public override int Compare(T1 x, T1 y)
         {
-            Int32 compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
+            int compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
             if (compareA == 0)
             {
-                Int32 compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
+                int compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
                 if (compareB == 0)
                 {
                     return ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C);
@@ -96,6 +96,27 @@ namespace ICon.Mathematics.Comparers
         public VectorComparer3D<TVector> MakeCompatibleComparer<TVector>() where TVector : struct, IVector3D
         {
             return new VectorComparer3D<TVector>(ValueComparer);
+        }
+
+        /// <summary>
+        /// Implementation of generic 3D vector interface comparison
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        int IComparer<IVector3D>.Compare(IVector3D x, IVector3D y)
+        {
+            int compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
+            if (compareA == 0)
+            {
+                int compareB = ValueComparer.Compare(x.Coordinates.B, y.Coordinates.B);
+                if (compareB == 0)
+                {
+                    return ValueComparer.Compare(x.Coordinates.C, y.Coordinates.C);
+                }
+                return compareB;
+            }
+            return compareA;
         }
     }
 

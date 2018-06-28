@@ -11,37 +11,30 @@ namespace ICon.Model.Energies
     /// Represents a polar pair of particles to identify pair interactions where the order of the particles is relevant
     /// </summary>
     [DataContract]
-    public class AsymParticlePair : IEquatable<AsymParticlePair>
+    public class AsymmetricParticlePair : ParticlePair, IEquatable<AsymmetricParticlePair>
     {
-        /// <summary>
-        /// The first particle interface
-        /// </summary>
-        [DataMember]
-        public IParticle Particle0 { get; set; }
-
-        /// <summary>
-        /// The second particle interface
-        /// </summary>
-        [DataMember]
-        public IParticle Particle1 { get; set; }
-
         /// <summary>
         /// Compares for eqality to other unpolar pair
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(AsymParticlePair other)
+        public bool Equals(AsymmetricParticlePair other)
         {
             return Particle0.Index == other.Particle0.Index && Particle1.Index == other.Particle1.Index;
         }
 
         /// <summary>
-        /// Generates the hash code for the polar pair
+        /// Cechks for equality with other particle pair. Always retruns false if other pair is not asymmetric
         /// </summary>
+        /// <param name="other"></param>
         /// <returns></returns>
-        public override int GetHashCode()
+        public override bool Equals(ParticlePair other)
         {
-            return (1 << Particle0.Index) + (1 << Particle1.Index);
+            if (other is AsymmetricParticlePair pair)
+            {
+                return Equals(pair);
+            }
+            return false;
         }
     }
 }

@@ -31,9 +31,9 @@ namespace ICon.Model.Transitions
         /// <param name="newObj"></param>
         /// <returns></returns>
         [OperationMethod(DataOperationType.NewObject)]
-        protected IOperationReport TryRegisterNewModelObject(IPropertyStatePair newObj)
+        protected IOperationReport TryRegisterNewModelObject(IStateExchangePair newObj)
         {
-            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.PropertyStatePairs));
+            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.StateExchangePairs));
         }
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace ICon.Model.Transitions
         /// <param name="newObj"></param>
         /// <returns></returns>
         [OperationMethod(DataOperationType.NewObject)]
-        protected IOperationReport TryRegisterNewModelObject(IPropertyGroup newObj)
+        protected IOperationReport TryRegisterNewModelObject(IStateExchangeGroup newObj)
         {
-            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.PropertyGroups));
+            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.StateExchangeGroups));
         }
 
         /// <summary>
@@ -86,9 +86,9 @@ namespace ICon.Model.Transitions
         /// <param name="newObj"></param>
         /// <returns></returns>
         [OperationMethod(DataOperationType.ObjectRemoval)]
-        protected IOperationReport TryRemoveModelObject(IPropertyStatePair newObj)
+        protected IOperationReport TryRemoveModelObject(IStateExchangePair newObj)
         {
-            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.PropertyStatePairs));
+            return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.StateExchangePairs));
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace ICon.Model.Transitions
         /// <param name="newObj"></param>
         /// <returns></returns>
         [OperationMethod(DataOperationType.ObjectRemoval)]
-        protected IOperationReport TryRemoveModelObject(IPropertyGroup newObj)
+        protected IOperationReport TryRemoveModelObject(IStateExchangeGroup newObj)
         {
-            return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.PropertyGroups));
+            return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.StateExchangeGroups));
         }
 
         /// <summary>
@@ -141,9 +141,9 @@ namespace ICon.Model.Transitions
         /// <param name="newObj"></param>
         /// <returns></returns>
         [OperationMethod(DataOperationType.ObjectChange)]
-        protected IOperationReport TryReplaceModelObject(IPropertyStatePair orgObj, IPropertyStatePair newObj)
+        protected IOperationReport TryReplaceModelObject(IStateExchangePair orgObj, IStateExchangePair newObj)
         {
-            return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.PropertyStatePairs));
+            return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.StateExchangePairs));
         }
 
         /// <summary>
@@ -152,9 +152,9 @@ namespace ICon.Model.Transitions
         /// <param name="newObj"></param>
         /// <returns></returns>
         [OperationMethod(DataOperationType.ObjectChange)]
-        protected IOperationReport TryReplaceModelObject(IPropertyGroup orgObj, IPropertyGroup newObj)
+        protected IOperationReport TryReplaceModelObject(IStateExchangeGroup orgObj, IStateExchangeGroup newObj)
         {
-            return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.PropertyGroups));
+            return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.StateExchangeGroups));
         }
 
         /// <summary>

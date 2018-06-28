@@ -21,20 +21,20 @@ namespace ICon.Model.Test
             var validEnvInfo = new StableEnvironmentInfo()
             {
                 MaxInteractionRange = 5.0,
-                IgnoredPairInteractions = new List<SymParticlePair>
+                IgnoredPairInteractions = new List<SymmetricParticlePair>
                 {
-                    new SymParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
-                    new SymParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
+                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
+                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
                 }
             };
 
             var invalidEnvInfo = new StableEnvironmentInfo()
             {
                 MaxInteractionRange = 100.0,
-                IgnoredPairInteractions = new List<SymParticlePair>
+                IgnoredPairInteractions = new List<SymmetricParticlePair>
                 {
-                    new SymParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
-                    new SymParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
+                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
+                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
                 }
             };
 

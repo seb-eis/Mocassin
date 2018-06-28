@@ -68,6 +68,18 @@ namespace ICon.Model.Basic.Debug
         }
 
         /// <summary>
+        /// Adds many objects to the input request list
+        /// </summary>
+        /// <param name="objects"></param>
+        public void AddMany(IEnumerable<object> objects)
+        {
+            foreach (var item in objects)
+            {
+                Add(item);
+            }
+        }
+
+        /// <summary>
         /// Inpuits all data using the passed project service and returns all operation reports of the input
         /// </summary>
         /// <param name="projectServices"></param>

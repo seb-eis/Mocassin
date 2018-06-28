@@ -79,7 +79,7 @@ namespace ICon.Model.Basic
         /// </summary>
         public virtual void DisconnectManager()
         {
-            EventManagerBase?.OnManagerDisconnectRequests.DistributeAsync().Wait();
+            EventManagerBase?.OnManagerDisconnectRequests.OnNextAsync().Wait();
             UpdateManagerBase?.DisconnectAll();
         }
 

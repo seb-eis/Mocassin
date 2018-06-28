@@ -19,7 +19,7 @@ namespace ICon.Model.Energies
         /// The unpolar pair energy dictionary that assigns each possible particle pair an energy value
         /// </summary>
         [DataMember]
-        public Dictionary<SymParticlePair, double> EnergyDictionary { get; set; }
+        public Dictionary<SymmetricParticlePair, double> EnergyDictionary { get; set; }
 
         /// <summary>
         /// Default construction
@@ -33,7 +33,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="energyDictionary"></param>
-        public SymmetricPairInteraction(in PairCandidate candidate, Dictionary<SymParticlePair, double> energyDictionary) : base(candidate)
+        public SymmetricPairInteraction(in PairCandidate candidate, Dictionary<SymmetricParticlePair, double> energyDictionary) : base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
         }
@@ -42,9 +42,9 @@ namespace ICon.Model.Energies
         /// Get a read only access t the energy dictionary
         /// </summary>
         /// <returns></returns>
-        public IReadOnlyDictionary<SymParticlePair, double> GetEnergyDictionary()
+        public IReadOnlyDictionary<SymmetricParticlePair, double> GetEnergyDictionary()
         {
-            return EnergyDictionary ?? new Dictionary<SymParticlePair, double>();
+            return EnergyDictionary ?? new Dictionary<SymmetricParticlePair, double>();
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-            return "'Unpolar Pair Interaction'";
+            return "'Symmetric Pair Interaction'";
         }
 
         /// <summary>
@@ -67,13 +67,43 @@ namespace ICon.Model.Energies
             {
                 base.PopulateObject(obj);
 
-                EnergyDictionary = new Dictionary<SymParticlePair, double>(interaction.GetEnergyDictionary().Count);
+                EnergyDictionary = new Dictionary<SymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
                 foreach (var item in interaction.GetEnergyDictionary())
                 {
                     EnergyDictionary.Add(item.Key, item.Value);
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Tries to set the passed energy entry in the enrgy dictionary. Returns false if the value cannot be set
+        /// </summary>
+        /// <param name="energyEntry"></param>
+        /// <returns></returns>
+        public override bool TrySetEnergyEntry(in PairEnergyEntry energyEntry)
+        {
+            if (energyEntry.ParticlePair is SymmetricParticlePair particlePair)
+            {
+                if (EnergyDictionary.ContainsKey(particlePair))
+                {
+                    EnergyDictionary[particlePair] = energyEntry.Energy;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Get an enumerable sequence that contains all energy entries of the pair interaction
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<PairEnergyEntry> GetEnergyEntries()
+        {
+            foreach (var item in EnergyDictionary)
+            {
+                yield return new PairEnergyEntry(item.Key, item.Value);
+            }
         }
     }
 }

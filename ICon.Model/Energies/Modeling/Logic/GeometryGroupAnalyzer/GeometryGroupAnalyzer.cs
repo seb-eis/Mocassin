@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using ICon.Symmetry.Analysis;
 using ICon.Symmetry.SpaceGroups;
 using ICon.Mathematics.Permutation;
 using ICon.Mathematics.ValueTypes;
-using ICon.Mathematics.Coordinates;
+using ICon.Framework.Collections;
+using ICon.Framework.Extensions;
 using ICon.Model.Particles;
 using ICon.Model.Structures;
 
@@ -36,6 +38,98 @@ namespace ICon.Model.Energies
         {
             UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
+        }
+        
+        /// <summary>
+        /// Creates the extended position group that results from the provided group interaction. If the interaction is deprecated an incomplete object is returned
+        /// </summary>
+        /// <param name="groupInteraction"></param>
+        /// <returns></returns>
+        public ExtendedPositionGroup CreateExtendedPositionGroup(IGroupInteraction groupInteraction)
+        {
+            var extGroup = new ExtendedPositionGroup() { GroupInteraction = groupInteraction, CenterPosition = groupInteraction.CenterUnitCellPosition };
+            if (groupInteraction.IsDeprecated)
+            {
+                return extGroup;
+            }
+
+            extGroup.SurroundingUnitCellPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
+            extGroup.PointOperationGroup = SpaceGroupService.GetPointOperationGroup(extGroup.CenterPosition.Vector, groupInteraction.GetBaseGeometry());
+            extGroup.UniqueOccupationStates = GetUniqueGroupOccupationStates(extGroup.PointOperationGroup, GetGroupStatePermuter(groupInteraction)).ToList();
+            extGroup.FullEnergyDictionary = MakeUniqueEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);
+            return extGroup;
+        }
+
+        /// <summary>
+        /// Creates the extended position groups for all passed group interactions. Each calculation is done in a single task
+        /// </summary>
+        /// <param name="groupInteractions"></param>
+        /// <returns></returns>
+        public IEnumerable<ExtendedPositionGroup> CreateExtendedPositionGroups(IEnumerable<IGroupInteraction> groupInteractions)
+        {
+            Func<ExtendedPositionGroup> MakeCall(IGroupInteraction groupInteraction)
+            {
+                return () => CreateExtendedPositionGroup(groupInteraction);
+            }
+            return IConTaskingExtensions.RunAndGetResults(groupInteractions.Select(value => MakeCall(value)));
+        }
+
+        /// <summary>
+        /// Get the enumerable sequence off all possible symmetrical pair interactions that can be found within an interaction group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public IEnumerable<SymmetricParticlePair> GetAllGroupPairs(IGroupInteraction group)
+        {
+            var particles = new HashSet<IParticle>(GetGroupUnitCellPositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
+            var permuter = new SlotMachinePermuter<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
+            return new HashSet<SymmetricParticlePair>(permuter.Select(perm => new SymmetricParticlePair() { Particle0 = perm[0], Particle1 = perm[1] })).AsEnumerable();
+        }
+
+        /// <summary>
+        /// Get the unit cell position sequence described by a group interaction. Will contain null values if any of the fractional vector does not point to
+        /// a valid position
+        /// </summary>
+        /// <param name="groupInteraction"></param>
+        /// <returns></returns>
+        public IEnumerable<IUnitCellPosition> GetGroupUnitCellPositions(IGroupInteraction groupInteraction)
+        {
+            return groupInteraction.GetBaseGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
+        }
+
+        /// <summary>
+        /// Generates all unique occupation states for the surrounding atoms of a group without permuting the center position
+        /// </summary>
+        /// <param name="operationGroup"></param>
+        /// <param name="permProvider"></param>
+        /// <returns></returns>
+        protected IEnumerable<OccupationState> GetUniqueGroupOccupationStates(IPointOperationGroup operationGroup, IPermutationProvider<IParticle> permProvider)
+        {
+            var comparer = new EqualityCompareAdapter<IParticle>((a, b) => a.Index == b.Index);
+            var rawPermutations = operationGroup.GetUniquePermutations(permProvider, comparer, a => 1 << a.Index);
+            return rawPermutations.Select(value => new OccupationState() { Particles = value.ToList() });
+        }
+
+        /// <summary>
+        /// Takes a center position and a set of possible unique occupation states for the surroundings an creates the full energy dictinary for
+        /// all existing occupation combinations of an interaction group
+        /// </summary>
+        /// <param name="occStates"></param>
+        /// <param name="centerPosition"></param>
+        /// <returns></returns>
+        protected Dictionary<IParticle, Dictionary<OccupationState, double>> MakeUniqueEnergyDictionary(IEnumerable<OccupationState> occStates, IUnitCellPosition centerPosition)
+        {
+            var result = new Dictionary<IParticle, Dictionary<OccupationState, double>>(centerPosition.OccupationSet.ParticleCount);
+            foreach (var centerParticle in centerPosition.OccupationSet.GetParticles())
+            {
+                var innerDictionary = new Dictionary<OccupationState, double>(10);
+                foreach (var state in occStates)
+                {
+                    innerDictionary.Add(state, 0.0);
+                }
+                result.Add(centerParticle, innerDictionary);
+            }
+            return result;
         }
 
         /// <summary>

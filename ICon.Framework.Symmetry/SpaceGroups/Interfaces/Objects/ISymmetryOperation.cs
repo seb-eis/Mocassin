@@ -32,21 +32,28 @@ namespace ICon.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        Fractional3D ApplyWithTrim(Double orgA, Double orgB, Double orgC);
+        Fractional3D ApplyWithTrim(double orgA, double orgB, double orgC);
 
         /// <summary>
         /// Applies the symmetry operation to an unspecified coordinate point and creates new coordinate information (Does not trim result into unit cell)
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        Fractional3D ApplyUntrimmed(Double orgA, Double orgB, Double orgC);
+        Fractional3D ApplyUntrimmed(double orgA, double orgB, double orgC);
 
         /// <summary>
-        /// Applies operation to a basic fractional vector
+        /// Applies operation to a basic fractional vector with a unit cell trim
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         Fractional3D ApplyWithTrim(in Fractional3D vector);
+
+        /// <summary>
+        /// Applies operation to a sequence of fractional vectors with a unit cell trim
+        /// </summary>
+        /// <param name="vectors"></param>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> ApplyWithTrim(IEnumerable<Fractional3D> vectors);
 
         /// <summary>
         /// Applies operation to a basic fractional vector (Result is not trimmed to unit cell)
@@ -54,6 +61,13 @@ namespace ICon.Symmetry.SpaceGroups
         /// <param name="vector"></param>
         /// <returns></returns>
         Fractional3D ApplyUntrimmed(in Fractional3D vector);
+
+        /// <summary>
+        /// Applies operation to a sequence of fractional vectors without a unit cell trim
+        /// </summary>
+        /// <param name="vectors"></param>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> ApplyUntrimmed(IEnumerable<Fractional3D> vectors);
 
         /// <summary>
         /// Applies the symmetry operation to a 64 bit generic fractional vector (With trim to origin cell)

@@ -58,41 +58,41 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get the property group at the specififed index
+        /// Get the state exchange group at the specififed index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public IPropertyGroup GetPropertyGroup(int index)
+        public IStateExchangeGroup GetStateExchangeGroup(int index)
         {
-            return Data.PropertyGroups[index];
+            return Data.StateExchangeGroups[index];
         }
 
         /// <summary>
-        /// Get a read only list of all property groups
+        /// Get a read only list of all state exchange groups
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IPropertyGroup> GetPropertyGroups()
+        public ReadOnlyList<IStateExchangeGroup> GetStateExchangeGroups()
         {
-            return ReadOnlyList<IPropertyGroup>.FromEnumerable(Data.PropertyGroups);
+            return ReadOnlyList<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
         }
 
         /// <summary>
-        /// Get a read only list of all property state pairs
+        /// Get a read only list of all state exchange pairs
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IPropertyStatePair> GetPropertyStatePairs()
+        public ReadOnlyList<IStateExchangePair> GetStateExchangePairs()
         {
-            return ReadOnlyList<IPropertyStatePair>.FromEnumerable(Data.PropertyStatePairs);
+            return ReadOnlyList<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
         }
 
         /// <summary>
-        /// Get the property state pair at the specified index
+        /// Get the state exchange pair at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public IPropertyStatePair GetProperytStatePair(int index)
+        public IStateExchangePair GetStateExchnagePair(int index)
         {
-            return Data.PropertyStatePairs[index];
+            return Data.StateExchangePairs[index];
         }
     }
 }

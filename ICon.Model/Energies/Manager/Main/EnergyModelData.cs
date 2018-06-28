@@ -39,14 +39,14 @@ namespace ICon.Model.Energies
         /// </summary>
         [DataMember]
         [IndexedModelData(typeof(ISymmetricPairInteraction), IsAutoManaged =true)]
-        public List<SymmetricPairInteraction> SymmetricPairInteractions { get; set; }
+        public List<SymmetricPairInteraction> StablePairInteractions { get; set; }
 
         /// <summary>
         /// The list of asymmetric pair interactions that describe transition pair interactions for unstable positions (Automanaged, no input support)
         /// </summary>
         [DataMember]
         [IndexedModelData(typeof(IAsymmetricPairInteraction), IsAutoManaged = true)]
-        public List<AsymmetricPairInteraction> AsymmetricPairInteractions { get; set; }
+        public List<AsymmetricPairInteraction> UnstablePairInteractions { get; set; }
 
         /// <summary>
         /// Creates new read only wrapper for this data object

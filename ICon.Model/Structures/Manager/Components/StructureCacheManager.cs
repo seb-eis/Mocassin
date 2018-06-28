@@ -8,7 +8,7 @@ using ICon.Mathematics.Comparers;
 using ICon.Mathematics.ValueTypes;
 using ICon.Symmetry.Analysis;
 using ICon.Model.Basic;
-using ICon.Model.Particles;
+using ICon.Framework.Extensions;
 using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Structures
@@ -159,17 +159,10 @@ namespace ICon.Model.Structures
         [CacheableMethod]
         protected IList<SetList<Fractional3D>> CreateExtendedDummyPositionLists()
         {
-            var result = new List<SetList<Fractional3D>>();
-            foreach (var position in ProjectServices.GetManager<IStructureManager>().QueryPort.Query((IStructureDataPort port) => port.GetPositionDummies()))
-            {
-                if (position.IsDeprecated)
-                {
-                    result.Add(ContainerFactory.CreateSetList(Comparer<Fractional3D>.Create((a, b) => throw new InvalidOperationException("Invalid comparer access"))));
-                    continue;
-                }
-                result.Add(ProjectServices.SpaceGroupService.GetAllWyckoffPositions(position.Vector));
-            }
-            return result;
+            var positions = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetPositionDummies());
+            return IConTaskingExtensions
+                .RunAndGetResults(positions.Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
+                .ToList();
         }
 
         /// <summary>
@@ -179,17 +172,10 @@ namespace ICon.Model.Structures
         [CacheableMethod]
         protected IList<SetList<FractionalPosition>> CreateExtendedPositionLists()
         {
-            var result = new List<SetList<FractionalPosition>>();
-            foreach (var position in ProjectServices.GetManager<IStructureManager>().QueryPort.Query((IStructureDataPort port) => port.GetUnitCellPositions()))
-            {
-                if (position.IsDeprecated)
-                {
-                    result.Add(ContainerFactory.CreateSetList(Comparer<FractionalPosition>.Create((a, b) => throw new InvalidOperationException("Invalid comparer access"))));
-                    continue;
-                }
-                result.Add(ProjectServices.SpaceGroupService.GetAllWyckoffPositions(position.AsPosition()));
-            }
-            return result;
+            var positions = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetUnitCellPositions());
+            return IConTaskingExtensions
+                .RunAndGetResults(positions.Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
+                .ToList(); 
         }
 
         /// <summary>
@@ -299,6 +285,44 @@ namespace ICon.Model.Structures
         protected IUnitCellProvider<int> CreateOccupationUnitCellProvider()
         {
             return CellWrapperFactory.CreateUnitCell(GetLinearizedExtendedPositionList().Select(value => value.OccupationIndex).ToList(), GetVectorEncoder());
+        }
+
+        /// <summary>
+        /// Creates a call delegate to create the extended position list of the provided vector or an empty set if the depreacted flag is passed
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="isDeprecated"></param>
+        /// <returns></returns>
+        protected Func<SetList<Fractional3D>> MakeWyckoffExtensionDelegate(Fractional3D vector, bool isDeprecated)
+        {
+            SetList<Fractional3D> Create()
+            {
+                if (isDeprecated)
+                {
+                    return new SetList<Fractional3D>(ProjectServices.SpaceGroupService.Comparer);
+                }
+                return ProjectServices.SpaceGroupService.GetAllWyckoffPositions(vector);
+            };
+            return Create;
+        }
+
+        /// <summary>
+        /// Creates a call delegate to create the extended position list of the provided fractional position or an empty set if the depreacted flag is passed
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="isDeprecated"></param>
+        /// <returns></returns>
+        protected Func<SetList<FractionalPosition>> MakeWyckoffExtensionDelegate(FractionalPosition position, bool isDeprecated)
+        {
+            SetList<FractionalPosition> Create()
+            {               
+                if (isDeprecated)
+                {
+                    return new SetList<FractionalPosition>(ProjectServices.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>());
+                }
+                return ProjectServices.SpaceGroupService.GetAllWyckoffPositions(position);
+            };
+            return Create;
         }
     }
 }

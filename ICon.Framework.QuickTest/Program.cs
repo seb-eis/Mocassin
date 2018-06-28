@@ -53,8 +53,13 @@ namespace ICon.Framework.QuickTest
             inputter.AutoInputData(package.ProjectServices);
             var report = inputter.GetReportJson();
 
+            var encoder = package.StructureManager.QueryPort.Query(port => port.GetVectorEncoder());
+            var (a, b, c, d) = (50, 50, 50, 8);
+
+
+
             var watch = Stopwatch.StartNew();
-            var mrules0 = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisRuleLists()).ToArray();
+            var supercell = CellWrapperFactory.CreateSupercell(GetIntCells(a, b, c, d), new Coordinates<int, int, int>(a,b,d), encoder);
             DisplayWatch(watch);
 
             Console.ReadLine();
@@ -66,6 +71,15 @@ namespace ICon.Framework.QuickTest
             Console.WriteLine("Watch Dump: {0}", watch.Elapsed.ToString());
             watch.Reset();
             watch.Start();
+        }
+
+        static IEnumerable<double[]> GetIntCells(int a, int b, int c, int d)
+        {
+            var random = new PcgRandom32();
+            for (int i = 0; i < a*b*c; i++)
+            {
+                yield return new double[d].Populate(() => random.NextDouble());
+            }
         }
     }
 }

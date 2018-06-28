@@ -6,9 +6,9 @@ using ICon.Model.Basic;
 namespace ICon.Model.Transitions
 {
     /// <summary>
-    /// Represents a property group of donor and acceptor pairs for transitions
+    /// Represents a state exchange group of state exchange pairs to describe state changes in transitions
     /// </summary>
-    public interface IPropertyGroup : IModelObject, IEquatable<IPropertyGroup>
+    public interface IStateExchangeGroup : IModelObject, IEquatable<IStateExchangeGroup>
     {
         /// <summary>
         /// The number of state pairs in the group
@@ -21,8 +21,8 @@ namespace ICon.Model.Transitions
         bool VacancyGroup { get; }
 
         /// <summary>
-        /// Get the property state pair indices affiliated with this group
+        /// Get the state exchange pairs forming the exchange group
         /// </summary>
-        IEnumerable<IPropertyStatePair> GetPropertyStatePairs();
+        IEnumerable<IStateExchangePair> GetStateExchangePairs();
     }
 }

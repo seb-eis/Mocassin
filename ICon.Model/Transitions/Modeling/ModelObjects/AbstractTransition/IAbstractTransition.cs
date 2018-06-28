@@ -32,9 +32,9 @@ namespace ICon.Model.Transitions
         bool IsMetropolis { get; }
 
         /// <summary>
-        /// Get theproperty group for each step of the transition
+        /// Get the state exchange group for each step of the transition
         /// </summary>
-        IEnumerable<IPropertyGroup> GetPropertyGroupSequence();
+        IEnumerable<IStateExchangeGroup> GetStateExchangeGroups();
 
         /// <summary>
         /// Get the set of step connectors that describe the position connection

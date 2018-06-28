@@ -35,6 +35,7 @@ namespace ICon.Model.Energies.ConflictHandling
         {
             var report = new ConflictReport();
             UpdatePairInteractionModel(obj, report);
+            UpdateGroupInteractions(obj, report);
             return report;
         }
 
@@ -45,7 +46,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected void UpdatePairInteractionModel(IStableEnvironmentInfo info, ConflictReport report)
         {
             var newPairs = GetNewPairInteractions(info);
-            var oldPairs = DataAccess.Query(data => data.SymmetricPairInteractions);
+            var oldPairs = DataAccess.Query(data => data.StablePairInteractions);
 
             PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ProjectServices.GeometryNumerics.RangeComparer);
             MoveNewPairsToModelList(oldPairs, newPairs, report);
@@ -135,6 +136,31 @@ namespace ICon.Model.Energies.ConflictHandling
 
             var interactionFinder = new PairInteractionFinder(unitCellProvider, ProjectServices.SpaceGroupService);
             return interactionFinder.CreateUniqueSymmetricPairs(positions, info, comparer).ToList();
+        }
+
+        /// <summary>
+        /// Updates possible conflicts with the group interaction definitions (Currently just sets all stable group definitions to deprecated)
+        /// </summary>
+        /// <param name="report"></param>
+        /// <param name="info"></param>
+        protected void UpdateGroupInteractions(IStableEnvironmentInfo info, ConflictReport report)
+        {
+            int counter = 0;
+            foreach (var item in DataAccess.Query(data => data.GroupInteractions))
+            {
+                if (item.CenterUnitCellPosition.Status == PositionStatus.Stable)
+                {
+                    counter++;
+                    item.Deprecate();
+                }
+            }
+
+            if (counter != 0)
+            {
+                var detail0 = $"Recovery of group interaction definitions on stable environment changes is currently not supported";
+                var detail1 = $"Deprecated all group interactions affiliated with the changed unstable environment to avoid conflicts";
+                report.AddWarning(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
+            }
         }
     }
 }

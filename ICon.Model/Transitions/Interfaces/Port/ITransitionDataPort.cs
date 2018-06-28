@@ -9,30 +9,30 @@ namespace ICon.Model.Transitions
     public interface ITransitionDataPort : IModelDataPort
     {
         /// <summary>
-        /// Get a read only list containing all property state pairs
+        /// Get a read only list containing all state exchange pairs
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IPropertyStatePair> GetPropertyStatePairs();
+        ReadOnlyList<IStateExchangePair> GetStateExchangePairs();
 
         /// <summary>
-        /// Get the property state pair at the specififed index
+        /// Get the state exchaage pair at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IPropertyStatePair GetProperytStatePair(int index);
+        IStateExchangePair GetStateExchnagePair(int index);
 
         /// <summary>
-        /// Get a read only list containing all properts groups
+        /// Get a read only list containing all state exchange groups groups
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IPropertyGroup> GetPropertyGroups();
+        ReadOnlyList<IStateExchangeGroup> GetStateExchangeGroups();
 
         /// <summary>
         /// Get the property group at the specififed index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IPropertyGroup GetPropertyGroup(int index);
+        IStateExchangeGroup GetStateExchangeGroup(int index);
 
         /// <summary>
         /// Get a read only list containing all abstract transitions

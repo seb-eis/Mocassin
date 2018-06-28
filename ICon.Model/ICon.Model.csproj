@@ -46,12 +46,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Energies\Modeling\Logic\GroupingFinder\" />
     <Folder Include="Lattices\Manager\EventHandler\" />
     <Folder Include="Simulation\" />
+    <Folder Include="Lattices\Manager\Services\Validators\" />
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
+    <Folder Include="Simulations\Interfaces\Main\" />
+    <Folder Include="Simulations\Interfaces\Ports\" />
+    <Folder Include="Simulations\Manager\Components\" />
+    <Folder Include="Simulations\Manager\ConflictHandling\DataHandlers\" />
+    <Folder Include="Simulations\Manager\ConflictHandling\ObjectHandler\" />
+    <Folder Include="Simulations\Manager\ConflictHandling\Provider\" />
+    <Folder Include="Simulations\Manager\Main\" />
+    <Folder Include="Simulations\Manager\Services\Validators\" />
+    <Folder Include="Simulations\Manager\Services\ValidationService\" />
+    <Folder Include="Simulations\Modeling\Logic\" />
+    <Folder Include="Simulations\Modeling\ModelObjects\" />
+    <Folder Include="Simulations\Modeling\Objects\" />
     <Folder Include="Structures\Modeling\Logic\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />
   </ItemGroup>

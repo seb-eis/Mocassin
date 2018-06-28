@@ -71,7 +71,7 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddIgnoredPairCodesValidation(IStableEnvironmentInfo envInfo, ValidationReport report)
         {
-            var uniqueIgnoredPairs = new HashSet<SymParticlePair>(envInfo.GetIgnoredPairs());
+            var uniqueIgnoredPairs = new HashSet<SymmetricParticlePair>(envInfo.GetIgnoredPairs());
 
             if (envInfo.GetIgnoredPairs().Count() != uniqueIgnoredPairs.Count())
             {
