@@ -23,8 +23,11 @@
 
   <ItemGroup>
     <Compile Remove="MStructure\**" />
+    <Compile Remove="Simulation\**" />
     <EmbeddedResource Remove="MStructure\**" />
+    <EmbeddedResource Remove="Simulation\**" />
     <None Remove="MStructure\**" />
+    <None Remove="Simulation\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,7 +50,6 @@
 
   <ItemGroup>
     <Folder Include="Lattices\Manager\EventHandler\" />
-    <Folder Include="Simulation\" />
     <Folder Include="Lattices\Manager\Services\Validators\" />
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />

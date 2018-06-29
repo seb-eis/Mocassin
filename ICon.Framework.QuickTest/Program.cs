@@ -56,6 +56,7 @@ namespace ICon.Framework.QuickTest
 
             var watch = Stopwatch.StartNew();
             DisplayWatch(watch);
+            
 
             Console.ReadLine();
         }

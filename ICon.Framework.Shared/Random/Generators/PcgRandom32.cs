@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
+// This implementation is based upon:
+
 // *Really* minimal PCG32 code / (c) 2014 M.E. O'Neill / pcg-random.org
 // Licensed under Apache License 2.0 (NO WARRANTY, etc. see website)
 
@@ -11,9 +13,14 @@ namespace ICon.Framework.Random
     /// <summary>
     /// Implementation of the PCG familiy 32 bit minimal random number generator
     /// </summary>
-    [DataContract(Name ="PcgRandom32")]
+    [DataContract(Name = "PcgRandom32")]
     public sealed class PcgRandom32 : System.Random
     {
+        /// <summary>
+        /// The global pcg 32 random number generator
+        /// </summary>
+        public static readonly PcgRandom32 Global = new PcgRandom32();
+
         /// <summary>
         /// The default state initializer value
         /// </summary>
@@ -45,34 +52,35 @@ namespace ICon.Framework.Random
         public ulong State { get; private set; }
 
         /// <summary>
-        /// Create new random number generator
+        /// Default initialized random generator using the c# crypto provider
         /// </summary>
-        /// <param name="increase"></param>
+        public PcgRandom32()
+        {
+            var provider = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            var buffer = new byte[16];
+            provider.GetBytes(buffer);
+            Seed(BitConverter.ToUInt64(buffer, 0), BitConverter.ToUInt64(buffer, 8));
+        }
+
+        /// <summary>
+        /// Initializes the generator with a single integer seed value (Inherited from system random)
+        /// </summary>
+        /// <param name="seed"></param>
+        public PcgRandom32(int seed)
+        {
+            Increment = DefaultIncrement ^ (((ulong)seed << 32) + (ulong)seed) | 1;
+            State += (ulong)(seed ^ NextUnsigned()) + (ulong)((seed ^ NextUnsigned()) << 32);
+            Seed(Increment, State);
+        }
+
+        /// <summary>
+        /// Seed the pcg by state and increment value
+        /// </summary>
         /// <param name="state"></param>
-        public PcgRandom32(ulong increase, ulong state)
+        /// <param name="increase"></param>
+        public PcgRandom32(ulong state, ulong increment)
         {
-            SeedState = state;
-            Increment = increase | 1;
-            State = state;
-        }
-
-        /// <summary>
-        /// Default initialized random generator
-        /// </summary>
-        public PcgRandom32() : this(DefaultIncrement, DefaultState)
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes the generator with a seed value
-        /// </summary>
-        /// <param name="Seed"></param>
-        public PcgRandom32(int Seed)
-        {
-            SeedState = DefaultState ^ ((ulong)(Seed) + (ulong)(Seed) << 32);
-            Increment = (DefaultIncrement ^ ((ulong)(Seed) + (ulong)(Seed) << 32)) | 1;
-            State = SeedState;
+            Seed(state, increment);
         }
 
         /// <summary>
@@ -162,6 +170,19 @@ namespace ICon.Framework.Random
             {
                 return NextUnsigned() * SampleStepping;
             }
+        }
+
+        /// <summary>
+        /// Seeds the random number genartor from state and increment
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="increment"></param>
+        private void Seed(ulong state, ulong increment)
+        {
+            Increment = (increment << 1) | 1;
+            Next();
+            State += state;
+            Next();
         }
     }
 }
