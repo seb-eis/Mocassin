@@ -72,16 +72,18 @@ namespace ICon.Framework.Random
         /// <param name="list"></param>
         /// <param name="samplingSize"></param>
         /// <param name="action"></param>
-        public List<T1> ApplyToSamplesAndReturn(IEnumerable<T1> list, uint samplingSize, Action<T1> action)
+        public List<T1> ApplyToSamplesAndReturn(IEnumerable<T1> list, uint samplingSize, Func<T1,T1> function)
         {
             List<T1> samples = GetSamples(list, samplingSize);
 
+            List<T1> updatedSamples = new List<T1>();
+
             foreach (T1 item in samples)
             {
-                action(item);
+                updatedSamples.Add(function(item));
             }
 
-            return samples;
+            return updatedSamples;
         }
     }
 }

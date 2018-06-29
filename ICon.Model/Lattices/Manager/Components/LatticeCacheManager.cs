@@ -38,22 +38,22 @@ namespace ICon.Model.Lattices
         [CacheableMethod]
         public SupercellWrapper<IParticle> CreateLattice()
         {
-            var latticeManager = ProjectServices.GetManager<ILatticeManager>();
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var latticeManagerPort = ProjectServices.GetManager<ILatticeManager>().QueryPort;
+            var structureManagerPort = ProjectServices.GetManager<IStructureManager>().QueryPort;
 
-            var buildingBlocks = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBuildingBlocks());
-            var blockInfos = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBlockInfos());
-            var sublatticeIDs = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetExtendedIndexToPositionDictionary());
-            var latticeSize = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetLatticeInfo().Extent);
-            var vectorEncoder = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
+            var buildingBlocks = latticeManagerPort.Query((ILatticeDataPort port) => port.GetBuildingBlocks());
+            var blockInfos = latticeManagerPort.Query((ILatticeDataPort port) => port.GetBlockInfos());
+            var sublatticeIDs = structureManagerPort.Query((IStructureCachePort port) => port.GetExtendedIndexToPositionDictionary());
+            var latticeSize = latticeManagerPort.Query((ILatticeDataPort port) => port.GetLatticeInfo().Extent);
+            var vectorEncoder = structureManagerPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
 
             WorkLattice workLattice = (new WorkLatticeBuilder()).Fabricate(blockInfos, sublatticeIDs, latticeSize);
 
-            var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
+            var dopings = latticeManagerPort.Query((ILatticeDataPort port) => port.GetDopings());
 
             (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
 
-            return (new SupercellTranslater()).Translate(workLattice, vectorEncoder);
+            return (new SupercellTranslator()).Translate(workLattice, vectorEncoder);
 
         }
 

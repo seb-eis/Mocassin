@@ -9,6 +9,7 @@ using System.Text;
 using System.Linq;
 
 using ICon.Mathematics;
+using ICon.Mathematics.Permutation;
 
 namespace ICon.Model.Lattices
 {
@@ -24,31 +25,26 @@ namespace ICon.Model.Lattices
         /// <param name="sublatticeIDs"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public WorkLattice Fabricate(ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntVector3D latticeSize)
+        public WorkLattice Fabricate(ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, CartesianInt3D latticeSize)
         {
-            if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new DataIntVector3D(0,0,0)))
-            {
-                throw new ArgumentException("WorkLatticeFactory", "Extent of default building block does not originate at 0, 0, 0");
-            }
-
-            if (!blockInfos.Single(x => x.Index == 0).Extent.Equals(latticeSize))
-            {
-                throw new ArgumentException("WorkLatticeFactory", "Default block has different extent than lattice size");
-            }
-
             WorkLattice workLattice = new WorkLattice() { WorkCells = new WorkCell[latticeSize.A, latticeSize.B, latticeSize.C] };
 
-            foreach(var blockInfo in blockInfos)
+            foreach (var blockInfo in blockInfos)
             {
                 for (int x = blockInfo.Origin.A; x < blockInfo.Extent.A; x++)
                 {
                     for (int y = blockInfo.Origin.B; y < blockInfo.Extent.B; y++)
                     {
-                        for (int z = blockInfo.Origin.B; z < blockInfo.Extent.C; z++)
+                        for (int z = blockInfo.Origin.C; z < blockInfo.Extent.C; z++)
                         {
-                            DataIntVector3D blockPosition = new DataIntVector3D(x % blockInfo.Size.A, y % blockInfo.Size.B, z % blockInfo.Size.C);
+                            // Get building block coordinates within superblock
+                            CartesianInt3D blockPosition = new CartesianInt3D(x,y,z) % blockInfo.Size;
+
+                            // Find building block from linearised list in BlockInfo
                             IBuildingBlock block = (new LinearizedVectorSeeker<IBuildingBlock>()).Seek(blockPosition, blockInfo.Size, blockInfo.BlockAssembly);
-                            workLattice.WorkCells[x, y, z] = (new WorkCellBuilder()).Fabricate(block, sublatticeIDs, block.Index);
+
+                            // Build workcell
+                            workLattice.WorkCells[x, y, z] = (new WorkCellBuilder()).Build(block, sublatticeIDs, block.Index);
                         }
                     }
                 }

@@ -35,7 +35,26 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Size of the BuildingBlockAssembly
         /// </summary>
+        [DataMember]
         public DataIntVector3D Size { get; set; }
+
+        /// <summary>
+        /// Return origin vector as read only struct
+        /// </summary>
+        [IgnoreDataMember]
+        CartesianInt3D IBlockInfo.Origin => Origin.AsReadOnly();
+
+        /// <summary>
+        /// Return extent vector as read only struct
+        /// </summary>
+        [IgnoreDataMember]
+        CartesianInt3D IBlockInfo.Extent => Extent.AsReadOnly();
+
+        /// <summary>
+        /// Return size vector as read only struct
+        /// </summary>
+        [IgnoreDataMember]
+        CartesianInt3D IBlockInfo.Size => Size.AsReadOnly();
 
         /// <summary>
         /// Get the type name string
@@ -55,9 +74,9 @@ namespace ICon.Model.Lattices
         {
             if (CastWithDepricatedCheck<IBlockInfo>(obj) is var blockInfo)
             {
-                Origin = blockInfo.Origin;
-                Extent = blockInfo.Extent;
-                Size = blockInfo.Size;
+                Origin = new DataIntVector3D(blockInfo.Origin.Coordinates);
+                Extent = new DataIntVector3D(blockInfo.Extent.Coordinates);
+                Size = new DataIntVector3D(blockInfo.Size.Coordinates);
                 BlockAssembly = blockInfo.BlockAssembly;
                 return this;
             }

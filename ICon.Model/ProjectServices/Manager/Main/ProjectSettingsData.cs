@@ -146,7 +146,7 @@ namespace ICon.Model.ProjectServices
                 },
                 LatticeSettings = new BasicLatticeSettings()
                 {
-
+                    MaxNumberOfParticles = 500000
                 }
         };
         }

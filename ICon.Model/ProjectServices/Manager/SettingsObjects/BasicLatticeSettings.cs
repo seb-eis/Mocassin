@@ -10,6 +10,10 @@ namespace ICon.Model.ProjectServices
     [DataContract]
     public class BasicLatticeSettings
     {
-
+        /// <summary>
+        /// The maximum number of ULP steps that are allowed in numeric calculations using ULP comparisons
+        /// </summary>
+        [DataMember]
+        public int MaxNumberOfParticles { get; set; }
     }
 }

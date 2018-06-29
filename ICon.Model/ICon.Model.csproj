@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
+    <Compile Remove="Lattices\Modeling\Objects\UniquePoolSampler\UniquePoolSampler.cs" />
     <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />
     <Compile Remove="Transitions\Manager\Services\TransitionConflictResolver.cs" />
   </ItemGroup>
@@ -48,6 +49,7 @@
   <ItemGroup>
     <Folder Include="Energies\Modeling\Logic\GroupingFinder\" />
     <Folder Include="Lattices\Manager\EventHandler\" />
+    <Folder Include="Lattices\Modeling\Objects\UniquePoolSampler\" />
     <Folder Include="Simulation\" />
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />

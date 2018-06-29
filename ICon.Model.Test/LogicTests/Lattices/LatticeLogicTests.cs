@@ -14,17 +14,24 @@ using ICon.Symmetry.Analysis;
 using ICon.Mathematics.Coordinates;
 using ICon.Mathematics.Comparers;
 using System.Linq;
+using ICon.Framework.Random;
 
 namespace ICon.Model.Test
 {
+    /// <summary>
+    /// Lattice logic test class
+    /// </summary>
     [TestClass]
     public class LatticeLogicTests
     {
 
+        /// <summary>
+        /// Generate lattice test
+        /// </summary>
         [TestMethod]
         public void TestLatticeCreation()
         {
-            var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
             var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
             inputter.AutoInputData(package.ProjectServices);
             var report = inputter.GetReportJson();
@@ -54,9 +61,25 @@ namespace ICon.Model.Test
                 }
             }
 
-            int i = 0;
+            Console.ReadLine();
 
         }
 
+        /// <summary>
+        /// Test NextDouble Method of PcgRandom32-Geneator
+        /// </summary>
+        [TestMethod]
+        public void TestRandom()
+        {
+            Console.WriteLine("new Test2");
+
+            //var random = new PcgRandom32();
+            var random = new Random();
+
+            for (int i = 0; i < 200; i++)
+            {
+                Console.WriteLine(random.NextDouble());
+            }
+        }
     }
 }

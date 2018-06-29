@@ -6,9 +6,20 @@ using System.Text;
 
 namespace ICon.Mathematics
 {
+    /// <summary>
+    /// Logic class to find the entry of a linearised multidimensional enumerable by vector coordinates
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
     public class LinearizedVectorSeeker<T1>
     {
-        public T1 Seek(DataIntVector3D position, DataIntVector3D size, IEnumerable<T1> enumerable)
+        /// <summary>
+        /// Find the entry of a linearised multidimensional enumerable by vector coordinates
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        /// <param name="enumerable"></param>
+        /// <returns></returns>
+        public T1 Seek(CartesianInt3D position, CartesianInt3D size, IEnumerable<T1> enumerable)
         {
             var enumerator = enumerable.GetEnumerator();
 
@@ -30,7 +41,14 @@ namespace ICon.Mathematics
             return enumerator.Current;
         }
 
-        public T1 Seek(DataIntVector3D position, DataIntVector3D size, IList<T1> list)
+        /// <summary>
+        /// find the entry of a linearised multidimensional list by vector coordinates
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public T1 Seek(CartesianInt3D position, CartesianInt3D size, IList<T1> list)
         {
             int index = position.A + position.B * size.A + position.C * size.B * size.A;
             return list[index];

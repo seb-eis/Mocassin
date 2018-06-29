@@ -41,6 +41,17 @@ namespace ICon.Mathematics.ValueTypes
         }
 
         /// <summary>
+        /// Construct new data vector from coordinates
+        /// </summary>
+        /// <param name="coord"></param>
+        public DataIntVector3D(Coordinates<int,int,int> coord)
+        {
+            A = coord.A;
+            B = coord.B;
+            C = coord.C;
+        }
+
+        /// <summary>
         /// Get a JSON representation of this object
         /// </summary>
         /// <returns></returns>
@@ -49,17 +60,19 @@ namespace ICon.Mathematics.ValueTypes
             return JsonConvert.SerializeObject(this);
         }
 
-        public override bool Equals(object obj)
+        /// <summary>
+        /// Compares the components of two vectors for equality
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public bool Equals(DataIntVector3D vector)
         {
-            if (obj is DataIntVector3D casted)
-            {
-                return A == casted.A && B == casted.B && C == casted.C;
-            }
-            else
-            {
-                return false;
-            }
+            return A == vector.A && B == vector.B && C == vector.C;
         }
 
+        public CartesianInt3D AsReadOnly()
+        {
+            return new CartesianInt3D(A, B, C);
+        }
     }
 }

@@ -13,13 +13,13 @@ namespace ICon.Model.Lattices
     public class WorkCellBuilder
     {
         /// <summary>
-        /// Fabricate the WorkCell
+        /// Build the WorkCell
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <param name="sublatticeIDs"></param>
         /// <param name="isCustom"></param>
         /// <returns></returns>
-        public WorkCell Fabricate(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, int buildingBlockID)
+        public WorkCell Build(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, int buildingBlockID)
         {
             if (buildingBlock.CellEntries.Count != sublatticeIDs.Count)
             {

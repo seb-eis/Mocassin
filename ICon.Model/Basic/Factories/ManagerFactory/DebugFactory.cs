@@ -221,17 +221,24 @@ namespace ICon.Model.Basic
                 {
                     new BlockInfo()
                     {
-                        Index = 0, BlockAssembly = new List<IBuildingBlock>()  {buildingBlocks[0]},
+                        Index = 0, BlockAssembly = new List<IBuildingBlock>() {buildingBlocks[0]},
                         Origin = new DataIntVector3D(0,0,0),
-                        Extent = new DataIntVector3D(16,16,16),
+                        Extent = new DataIntVector3D(10,10,10),
                         Size = new DataIntVector3D(1,1,1)
                     },
                     new BlockInfo()
                     {
-                        Index = 1, BlockAssembly = new List<IBuildingBlock>() {buildingBlocks[0], buildingBlocks[1]},
+                        Index = 1,
+                        BlockAssembly = new List<IBuildingBlock>()
+                        {
+                            buildingBlocks[0], buildingBlocks[1],
+                            buildingBlocks[0], buildingBlocks[1],
+                            buildingBlocks[0], buildingBlocks[1],
+                            buildingBlocks[0], buildingBlocks[1],
+                        },
                         Origin = new DataIntVector3D(0,0,0),
-                        Extent = new DataIntVector3D(1,1,16),
-                        Size = new DataIntVector3D(1,1,2)
+                        Extent = new DataIntVector3D(2,2,10),
+                        Size = new DataIntVector3D(2,2,2)
                     }
                 };
                 var dopingCombinations = new DopingCombination[]
@@ -249,7 +256,7 @@ namespace ICon.Model.Basic
                 {
                     new Doping()
                     {
-                        Index = 0, Concentration = 0.5,  DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1]
+                        Index = 0, Concentration = 1.0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1]
                     }
                 };
 
@@ -281,7 +288,7 @@ namespace ICon.Model.Basic
 
                     new UnstableEnvironment() { Index = 0, MaxInteractionRange = 1.5, UnitCellPosition = unitCellPositions[2], IgnoredPositions = new List<IUnitCellPosition>()},
 
-                    new LatticeInfo() { Extent = new DataIntVector3D(16,16,16)},
+                    new LatticeInfo() { Extent = new DataIntVector3D(10, 10 ,10)},
 
                     buildingBlocks[0], buildingBlocks[1],
 

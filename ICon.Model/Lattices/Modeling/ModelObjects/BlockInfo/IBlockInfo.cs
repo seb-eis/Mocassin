@@ -19,16 +19,16 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Origin of building Block
         /// </summary>
-        DataIntVector3D Origin { get; }
+        CartesianInt3D Origin { get; }
 
         /// <summary>
         /// Extent of building Block
         /// </summary>
-        DataIntVector3D Extent { get; }
+        CartesianInt3D Extent { get; }
 
         /// <summary>
         /// Size of the BuildingBlockAssembly
         /// </summary>
-        DataIntVector3D Size { get; }
+        CartesianInt3D Size { get; }
     }
 }

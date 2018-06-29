@@ -11,7 +11,7 @@ namespace ICon.Model.Lattices
     /// <summary>
     /// Translates the WorkLattice to a SupercellWrapper
     /// </summary>
-    public class SupercellTranslater
+    public class SupercellTranslator
     {
         /// <summary>
         /// Translates the WorkLattice to a SupercellWrapper
