@@ -17,7 +17,7 @@ namespace ICon.Model.Transitions
         /// The state exchange pairs affiliated with this state exchange group group
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IStateExchangePair> StateExchangePairs { get; set; }
 
         /// <summary>

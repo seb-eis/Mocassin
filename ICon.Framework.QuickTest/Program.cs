@@ -25,6 +25,7 @@ using ICon.Mathematics.ValueTypes;
 using ICon.Mathematics.Bitmasks;
 using ICon.Framework.Messaging;
 using ICon.Framework.Xml;
+using ICon.Framework.Provider;
 using ICon.Framework.Collections;
 using ICon.Symmetry.CrystalSystems;
 using ICon.Model.ProjectServices;
@@ -49,14 +50,25 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
-            var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
-            inputter.AutoInputData(package.ProjectServices);
-            var report = inputter.GetReportJson();
-
             var watch = Stopwatch.StartNew();
+            var provider = new ExternalProvider<int, int>()
+            {
+                LoadInfo = ("ICon.Framework.dll", "ICon.Framework.Random.PcgRandom32", "Next")
+            };
+            var testLoad = provider.TryLoadProvider(out var exception);
+
+            //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
+            //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
+            //inputter.AutoInputData(package.ProjectServices);
+            //var report = inputter.GetReportJson();
+
+            int count = 100000000;
             DisplayWatch(watch);
-            
+            for (int i = 0; i < count; i++)
+            {
+                provider.GetValue(i);
+            }
+            DisplayWatch(watch);
 
             Console.ReadLine();
         }

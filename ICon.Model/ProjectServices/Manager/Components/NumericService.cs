@@ -34,17 +34,17 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// Comparison steps of the ULP comparer
         /// </summary>
-        public int CompUlp => Settings.CompUlp;
+        public int CompUlp => Settings.UlpValue;
 
         /// <summary>
         /// Comparison range of the range comparer
         /// </summary>
-        public double CompRange => Settings.CompRange;
+        public double CompRange => Settings.RangeValue;
 
         /// <summary>
         /// Comparisons factor of the relative comparer
         /// </summary>
-        public double CompFactor => Settings.CompFactor;
+        public double CompFactor => Settings.FactorValue;
 
         /// <summary>
         /// Creates new service object from settings data
@@ -53,9 +53,9 @@ namespace ICon.Model.ProjectServices
         public NumericService(BasicNumericSettings settings)
         {
             Settings = settings;
-            UlpComparer = DoubleComparer.CreateULP(settings.CompUlp);
-            RangeComparer = DoubleComparer.CreateRanged(settings.CompRange);
-            RelativeComparer = DoubleComparer.CreateRelative(settings.CompFactor);
+            UlpComparer = DoubleComparer.CreateULP(settings.UlpValue);
+            RangeComparer = DoubleComparer.CreateRanged(settings.RangeValue);
+            RelativeComparer = DoubleComparer.CreateRelative(settings.FactorValue);
         }
 
     }

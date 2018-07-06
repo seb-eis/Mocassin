@@ -20,21 +20,21 @@ namespace ICon.Model.Lattices
         /// Dopand particle
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IParticle Dopant { set; get; }
 
         /// <summary>
         /// Particle that is doped
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IParticle DopedParticle { set; get; }
 
         /// <summary>
         /// unit cell position (contains information about the sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition UnitCellPosition { set; get; }
 
         /// <summary>

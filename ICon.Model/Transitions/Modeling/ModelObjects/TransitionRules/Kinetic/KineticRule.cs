@@ -16,7 +16,7 @@ namespace ICon.Model.Transitions
         /// The parent kinetic transition instance
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IKineticTransition Transition { get; set; }
 
         /// <summary>

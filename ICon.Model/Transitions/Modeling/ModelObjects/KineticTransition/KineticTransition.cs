@@ -18,7 +18,7 @@ namespace ICon.Model.Transitions
         /// The index of the abstract transition description
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ICon.Model.Transitions
         /// The list of affiliated kinetic transition rules (automanaged by the model)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<KineticRule> TransitionRules { get; set; }
 
         /// <summary>

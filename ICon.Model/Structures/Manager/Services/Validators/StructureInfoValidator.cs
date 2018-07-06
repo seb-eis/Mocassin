@@ -42,10 +42,10 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddNameValidation(IStructureInfo info, ValidationReport report)
         {
-            if (new Regex(Settings.NameRegex).IsMatch(info.Name) == false)
+            if (new Regex(Settings.NameStringPattern).IsMatch(info.Name) == false)
             {
                 var message = new WarningMessage(this, "Structure name validation failure");
-                message.Details.Add($"Naming violates the the naming restriction regex {Settings.NameRegex}");
+                message.Details.Add($"Naming violates the the naming restriction regex {Settings.NameStringPattern}");
                 report.AddWarning(message);
             }
         }

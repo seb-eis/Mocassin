@@ -69,11 +69,9 @@ namespace ICon.Model.Transitions.Validators
         /// <param name="report"></param>
         protected void AddContentRestrictionsValidation(IAbstractTransition transition, ValidationReport report)
         {
-            var lengthContraint = new ValueConstraint<int>(true, Settings.MinTransitionLength, Settings.MaxTransitionLength, true);
-            if (!lengthContraint.IsValid(transition.StateCount))
+            if (Settings.TransitionCount.ParseValue(transition.StateCount, out var warnings) != 0)
             {
-                var detail = $"The transition has ({transition.StateCount}) base positions. Allowed position counts are {lengthContraint.ToString()}";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail));
+                report.AddWarnings(warnings);
             }
             if (transition.StateCount != transition.ConnectorCount + 1)
             {
@@ -81,9 +79,9 @@ namespace ICon.Model.Transitions.Validators
                 var detail1 = $"The expected number of connector steps is ({transition.StateCount - 1})";
                 report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
             }
-            if (!new Regex(Settings.AbstractTransitionNameRegex).IsMatch(transition.Name))
+            if (!new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name))
             {
-                var detail = $"The abstract transition name ({transition.Name}) violates the contraining regular expression ({Settings.AbstractTransitionNameRegex})";
+                var detail = $"The abstract transition name ({transition.Name}) violates the contraining regular expression ({Settings.TransitionStringPattern})";
                 report.AddWarning(ModelMessages.CreateNamingViolationWarning(this, detail));
             }
         }

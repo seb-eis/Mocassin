@@ -8,38 +8,31 @@ namespace ICon.Model.ProjectServices
     /// <summary>
     /// Basic settings object for transitions that limits the possible input for transitions
     /// </summary>
-    [Serializable]
-    [DataContract(Name ="TransitionSettings")]
+    [DataContract]
     public class BasicTransitionSettings
     {
         /// <summary>
-        /// The maximum number of allowed transitions
-        /// </summary>
-        [DataMember(Name = "MasTransitionCount")]
-        public int MaxTransitionCount { get; set; }
-
-        /// <summary>
-        /// The minimal transition length (usually at least two positions are required)
-        /// </summary>
-        [DataMember(Name ="MinTransitionLength")]
-        public int MinTransitionLength { get; set; }
-
-        /// <summary>
-        /// The maximum number of allowed transtion steps
-        /// </summary>
-        [DataMember(Name = "MaxTransitionLength")]
-        public int MaxTransitionLength { get; set; }
-
-        /// <summary>
-        /// The regular expression string for the abstract transition naming restriction
-        /// </summary>
-        [DataMember(Name = "AbstractTransitionNameRegex")]
-        public string AbstractTransitionNameRegex { get; set; }
-
-        /// <summary>
-        /// Flag if the program should automatically determine rule movement types and filter unsupported types out
+        /// The value restriction setting for the number of transitions
         /// </summary>
         [DataMember]
-        public bool AutoHandleRuleMovementType { get; set; }
+        public ValueSetting<int> TransitionCount { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for the transition length
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> TransitionLength { get; set; }
+
+        /// <summary>
+        /// The regular expression string pattern for the abstract transition naming restriction
+        /// </summary>
+        [DataMember]
+        public string TransitionStringPattern { get; set; }
+
+        /// <summary>
+        /// Boolean flag to activate automatic filtering of unrecognized rule movemnt types during rule generation
+        /// </summary>
+        [DataMember]
+        public bool FilterUnrecognisedRuleTypes { get; set; }
     }
 }

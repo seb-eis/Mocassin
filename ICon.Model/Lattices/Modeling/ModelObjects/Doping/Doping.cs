@@ -24,14 +24,14 @@ namespace ICon.Model.Lattices
         /// Information about the doping (particles and sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IDopingCombination DopingInfo { set; get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>

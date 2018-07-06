@@ -61,7 +61,7 @@ namespace ICon.Symmetry.Analysis
         {
             if (size.A < 1 || size.B < 1 || size.C < 1)
             {
-                throw new ArgumentException("One of the size values is negative", nameof(size));
+                throw new ArgumentException("Invalid size information", nameof(size));
             }
             return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(() => cellEntry.ToArray()), vectorEncoder);
         }
@@ -78,7 +78,7 @@ namespace ICon.Symmetry.Analysis
         {
             if (size.A < 1 || size.B < 1 || size.C < 1)
             {
-                throw new ArgumentException("One of the size values is negative", nameof(size));
+                throw new ArgumentException("Invalid size information", nameof(size));
             }
             return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(cellEntries), vectorEncoder);
         }

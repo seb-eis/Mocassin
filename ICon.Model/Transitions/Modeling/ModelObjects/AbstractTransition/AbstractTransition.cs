@@ -24,7 +24,7 @@ namespace ICon.Model.Transitions
         /// List of affiliated state change group for each step
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IStateExchangeGroup> StateExchangeGroups { get; set; }
 
         /// <summary>

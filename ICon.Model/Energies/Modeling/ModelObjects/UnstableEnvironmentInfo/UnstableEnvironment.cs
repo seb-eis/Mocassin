@@ -24,28 +24,28 @@ namespace ICon.Model.Energies
         /// The unit cell position the environment info belongs to (Can be null)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
         /// The set of unique ignored unit cell positions during environment sampling (Can be null)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IUnitCellPosition> IgnoredPositions { get; set; }
 
         /// <summary>
         /// The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object population)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
 
         /// <summary>
         /// The list of generated group interactions (Automatically linked by the model)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>

@@ -217,9 +217,9 @@ namespace ICon.Model.ProjectServices
             var projectService = new ProjectServicesManager();
             var geometryNumerics = new NumericService(data.GeometryNumericSettings);
             var commonNumerics = new NumericService(data.CommonNumericSettings);
-            var spaceGroupService = new SpaceGroupService(data.SymmetrySettings.DatabaseFilepath, data.SymmetrySettings.VectorTolerance);
-            var crystalSystemProvider = CrystalSystemProvider.CreateSoft(data.StructureSettings.MaxBaseParameterLength, data.SymmetrySettings.ParameterTolerance);
-            var crystalSystemService = new CrystalSystemService(crystalSystemProvider, data.CommonNumericSettings.CompRange);
+            var spaceGroupService = new SpaceGroupService(data.SymmetrySettings.SpaceGroupDbPath, data.SymmetrySettings.VectorTolerance);
+            var crystalSystemProvider = CrystalSystemProvider.CreateSoft(data.StructureSettings.CellParameter.MaxValue, data.SymmetrySettings.ParameterTolerance);
+            var crystalSystemService = new CrystalSystemService(crystalSystemProvider, data.CommonNumericSettings.RangeValue);
             var validationServices = new ValidationServiceProvider();
             var dataAccessLocker = new DataAccessLocker(data.ConcurrencySettings.MaxAttempts, data.ConcurrencySettings.AttemptInterval);
             var messageSystem = new AsyncMessageSystem();

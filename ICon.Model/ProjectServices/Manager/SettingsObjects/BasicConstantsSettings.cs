@@ -15,25 +15,25 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// The boltzmann constant in SI units
         /// </summary>
-        [DataMember(Name ="BoltzmannSI")]
-        public Double BoltzmannConstSI { get; set; }
+        [DataMember]
+        public double BoltzmannConstantSi { get; set; }
 
         /// <summary>
         /// Universal gas constant in SI units
         /// </summary>
-        [DataMember(Name ="GasConstSI")]
-        public Double GasConstSI { get; set; }
+        [DataMember]
+        public double UniversalGasConstantSi { get; set; }
 
         /// <summary>
-        /// The electric permitivity constant in SI units
+        /// The electric permitivity constant in Si units
         /// </summary>
-        [DataMember(Name ="ElectricPermSI")]
-        public Double ElectricPermittivitySI { get; set; }
+        [DataMember]
+        public double VacuumPermittivitySi { get; set; }
 
         /// <summary>
         /// The elemental charge constant in SI units
         /// </summary>
-        [DataMember(Name ="ElemChargeSI")]
-        public Double ElementalChargeSI { get; set; }
+        [DataMember]
+        public double ElementalChargeSi { get; set; }
     }
 }

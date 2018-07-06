@@ -19,28 +19,28 @@ namespace ICon.Model.Transitions
         /// The unit cell position of the first sub-lattice
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition CellPosition0 { get; set; }
 
         /// <summary>
         /// The unit cell position of the second sub-lattice
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition CellPosition1 { get; set; }
 
         /// <summary>
         /// The affiliated abstract transition
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
         /// The list of affiliated metropolis transition rules (Automanaged by model system)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<MetropolisRule> TransitionRules { get; set; }
        
         /// <summary>

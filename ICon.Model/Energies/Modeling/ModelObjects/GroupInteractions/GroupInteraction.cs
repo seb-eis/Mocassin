@@ -28,7 +28,7 @@ namespace ICon.Model.Energies
         /// The unit cell position that describes the start of the grouping
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition CenterUnitCellPosition { get; set; }
 
         /// <summary>

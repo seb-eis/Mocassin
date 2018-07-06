@@ -37,11 +37,6 @@ namespace ICon.Framework.Random
         public const double SampleStepping = 1.0 / uint.MaxValue;
 
         /// <summary>
-        /// The seed state of the generator
-        /// </summary>
-        public readonly ulong SeedState;
-
-        /// <summary>
         /// The increase value of the generator
         /// </summary>
         public ulong Increment { get; private set; }
@@ -117,7 +112,7 @@ namespace ICon.Framework.Random
         /// <returns></returns>
         public override string ToString()
         {
-            return $"Pcg32 (State: {State}, Inc: {Increment}, SeedState: {SeedState})";
+            return $"Pcg32 (State: {State}, Inc: {Increment})";
         }
 
         /// <summary>

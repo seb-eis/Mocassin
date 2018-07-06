@@ -75,18 +75,9 @@ namespace ICon.Model.Energies.Validators
                 report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
             }
 
-            if (approxInteractionCount >= Settings.EnvironmentPositionWarningLimit)
+            if (Settings.PositionsPerUnstable.ParseValue(approxInteractionCount, out var warnings) >= 0)
             {
-                var detail0 = $"Expected interaction count ({approxInteractionCount}) exceeds the warning limit ({Settings.EnvironmentPositionWarningLimit})";
-                var detail1 = $"Large interaction environments for transition positions drastically reduce simulation performance";
-                report.AddWarning(ModelMessages.CreateWarningLimitReachedWarning(this, detail0, detail1));
-            }
-
-            if (approxInteractionCount >= Settings.MaxUnstableEnvironmentPositionCount)
-            {
-                var detail0 = $"Expected interaction count ({approxInteractionCount}) exceeds the limit ({Settings.MaxUnstableEnvironmentPositionCount})";
-                var detail1 = $"Raising the limit in the project settings is not recommended as is may lead to simulation buffer overflows"; 
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
         }
 

@@ -157,8 +157,8 @@ namespace ICon.Model.Energies
         {
             var provider = ProjectServices.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetEnergySetterProvider());
 
-            var (pairMin, pairMax) = (ProjectServices.SettingsData.EnergySettings.MinPairEnergy, ProjectServices.SettingsData.EnergySettings.MaxPairEnergy);
-            var (groupMin, groupMax) = (ProjectServices.SettingsData.EnergySettings.MinGroupEnergy, ProjectServices.SettingsData.EnergySettings.MaxGroupEnergy);
+            var (pairMin, pairMax) = ProjectServices.SettingsData.EnergySettings.PairEnergies.GetMinMaxTuple();
+            var (groupMin, groupMax) = ProjectServices.SettingsData.EnergySettings.GroupEnergies.GetMinMaxTuple();
 
             provider.PairEnergyConstraint = new DoubleConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumerics.RangeComparer);
             provider.GroupEnergyConstraint = new DoubleConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumerics.RangeComparer);

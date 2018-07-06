@@ -79,17 +79,14 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddContentRestrictionValidation(IGroupInteraction group, ValidationReport report)
         {
-            if (group.GroupSize > Settings.MaxGroupingSize)
+            if (Settings.AtomsPerGroup.ParseValue(group.GroupSize, out var warnings) != 0)
             {
-                var detail0 = $"Maximum group position count violated with ({group.GroupSize}) of ({Settings.MaxGroupingSize}) allowed positions";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
 
-            long permCount = GetGroupPermutationCount(group);
-            if (permCount > Settings.MaxGroupPermutationCount)
+            if (Settings.PermutationsPerGroup.ParseValue(GetGroupPermutationCount(group), out warnings) != 0)
             {
-                var detail0 = $"Maximum permutation count violated with ({permCount}) of ({Settings.MaxGroupPermutationCount}) allowed permutations";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
         }
 

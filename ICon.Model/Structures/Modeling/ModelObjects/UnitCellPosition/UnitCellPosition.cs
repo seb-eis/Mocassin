@@ -38,7 +38,7 @@ namespace ICon.Model.Structures
         /// The particle set that describes the occupation
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IParticleSet OccupationSet { get; set; }
 
         /// <summary>

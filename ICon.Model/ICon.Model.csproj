@@ -59,8 +59,7 @@
     <Folder Include="Simulations\Manager\ConflictHandling\Provider\" />
     <Folder Include="Simulations\Manager\Services\Validators\" />
     <Folder Include="Simulations\Modeling\Logic\" />
-    <Folder Include="Simulations\Modeling\ModelObjects\" />
-    <Folder Include="Simulations\Modeling\Objects\" />
+    <Folder Include="Simulations\Modeling\ModelParameters\SimulationInfo\" />
     <Folder Include="Structures\Modeling\Logic\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />
   </ItemGroup>

@@ -15,13 +15,13 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// The maximum number of locking attempts
         /// </summary>
-        [DataMember(Name ="Attempts")]
-        public Int32 MaxAttempts { get; set; }
+        [DataMember]
+        public int MaxAttempts { get; set; }
 
         /// <summary>
         /// The interval in between locking attempts
         /// </summary>
-        [DataMember(Name ="Interval")]
+        [DataMember]
         public TimeSpan AttemptInterval { get; set; }
     }
 }

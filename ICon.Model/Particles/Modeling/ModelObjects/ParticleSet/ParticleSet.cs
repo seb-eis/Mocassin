@@ -25,7 +25,7 @@ namespace ICon.Model.Particles
         /// The list of particles belonging to the particle set
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IParticle> Particles { get; set; }
         
         /// <summary>

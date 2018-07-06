@@ -6,69 +6,55 @@ namespace ICon.Model.ProjectServices
     /// <summary>
     /// Settings data object for the energy managing modul
     /// </summary>
-    [Serializable]
     [DataContract]
     public class BasicEnergySettings
     {
         /// <summary>
-        /// Flags that enables or disables the grouping system
+        /// Boolean flag for the group consistency enforement. If true, groups are automatically translated and added to all positions they include
         /// </summary>
-        public bool GroupingEnabled { get; set; }
+        [DataMember]
+        public bool EnforceGroupConsistency { get; set; }
 
         /// <summary>
-        /// The maximum number of atoms within a single grouping
+        /// Value restriction setting for the number of atoms per group
         /// </summary>
-        public int MaxGroupingSize { get; set; }
+        [DataMember]
+        public ValueSetting<int> AtomsPerGroup { get; set; }
 
         /// <summary>
-        /// The maximum number of overlay groupings for each surrounding
+        /// Value restriction setting for the number of groups per unit cell position
         /// </summary>
-        public int MaxGroupingCount { get; set; }
+        [DataMember]
+        public ValueSetting<int> GroupsPerPosition { get; set; }
 
         /// <summary>
-        /// The maximum number of non-unique permutations a grouping is allowed to support
+        /// Value restriction setting for the number of non-unique permutations per group
         /// </summary>
-        public int MaxGroupPermutationCount { get; set; }
+        [DataMember]
+        public ValueSetting<long> PermutationsPerGroup { get; set; }
 
         /// <summary>
-        /// Flags that indicates if the grouping has to be compatible between all environments that would require to contain it for energy consitency reasons
+        /// Value restriction setting for the number of positions per stable environment
         /// </summary>
-        public bool EnforceStableGroupingConsistency { get; set; }
+        [DataMember]
+        public ValueSetting<long> PositionsPerStable { get; set; }
 
         /// <summary>
-        /// Limits the maximum number of stable environment positions
+        /// Value restriction setting for the number of positions per unstable environment
         /// </summary>
-        public int MaxStableEnvironmentPositionCount { get; set; }
+        [DataMember]
+        public ValueSetting<long> PositionsPerUnstable { get; set; }
 
         /// <summary>
-        /// Limits the maximum number of unstable environment positions
+        /// Value restriction setting for the energy values of pair interactions
         /// </summary>
-        public int MaxUnstableEnvironmentPositionCount { get; set; }
+        [DataMember]
+        public ValueSetting<double> PairEnergies { get; set; }
 
         /// <summary>
-        /// The limit of positions from which on the system returns a non-critical warning about the environment position count
+        /// Value restriction setting for the energy values of group interactions
         /// </summary>
-        public int EnvironmentPositionWarningLimit { get; set; }
-
-        /// <summary>
-        /// The lower limit for pair interaction energies [eV]
-        /// </summary>
-        public double MinPairEnergy { get; set; }
-
-        /// <summary>
-        /// The upper limit for pair interaction energies [eV]
-        /// </summary>
-        public double MaxPairEnergy { get; set; }
-
-        /// <summary>
-        /// The lower limit for group interaction energies [eV]
-        /// </summary>
-        public double MinGroupEnergy { get; set; }
-
-        /// <summary>
-        /// The upper limit for group interaction energies [eV]
-        /// </summary>
-        public double MaxGroupEnergy { get; set; }
-
+        [DataMember]
+        public ValueSetting<double> GroupEnergies { get; set; }
     }
 }

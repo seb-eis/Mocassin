@@ -3,39 +3,111 @@
 namespace ICon.Model.ProjectServices
 {
     /// <summary>
-    /// Settings object for the simulation manager settings
+    /// Settings object for the simulation manager
     /// </summary>
     [DataContract(Name ="SimulationSettings")]
     public class BasicSimulationSettings
     {
         /// <summary>
-        /// Defines the maximum number of simulations that a single simulation set can contain
+        /// The value restriction setting for simulation temperature
         /// </summary>
         [DataMember]
-        public int MaxSimulationsPerSet { get; set; }
+        public ValueSetting<double> Temperature { get; set; }
 
         /// <summary>
-        /// Defines the lower temperature limit for simulations (Typically above 0)
+        /// The value restriction setting for simulation doping (Settings this beyond [0,1] may crash application)
         /// </summary>
         [DataMember]
-        public double MinTemperature { get; set; }
+        public ValueSetting<double> Doping { get; set; }
 
         /// <summary>
-        /// Defines the upper temperature limit for simulations
+        /// The value restriction setting for simulation electirc field (KMC only)
         /// </summary>
         [DataMember]
-        public double MaxTemperature { get; set; }
+        public ValueSetting<double> ElectricField { get; set; }
 
         /// <summary>
-        /// Defines the lower limit for value stepping factors
+        /// The value restriction setting for simulation normalization (KMC only)
         /// </summary>
         [DataMember]
-        public double MinValueSteppingFactor { get; set; }
+        public ValueSetting<double> Normalization { get; set; }
 
         /// <summary>
-        /// Defines the upper limit for value stepping factors (Values beyong 1 make little sense)
+        /// The value restriction setting for simulation monte carlo teps
         /// </summary>
         [DataMember]
-        public double MaxValueSteppingFactor { get; set; }
+        public ValueSetting<int> MonteCarloSteps { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation supercell sizes in a single direction
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> UnitCellsPerDirection { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for the simulation supercell position count
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> SupercellPositionCount { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation break tolerance (MMC only)
+        /// </summary>
+        [DataMember]
+        public ValueSetting<double> BreakTolerance { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation break sample length (MMC only)
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> BreakSampleLength { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation break sampling interval (MMC only)
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> BreakSampleInterval { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation result sample length (MMC only)
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> ResultSampleLength { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation permutation count of a single simulation series
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> SeriesPermutationCount { get; set; }
+
+        /// <summary>
+        /// The value restriction for simulation forced termination by runtime time span in [h]
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> ForceTerminationTime { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation forced termination by success rate
+        /// </summary>
+        [DataMember]
+        public ValueSetting<double> ForceTerminationSuccesRate { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for simulation energy set count (File loaded energy sets)
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> EnergySetCount { get; set; }
+
+        /// <summary>
+        /// The regex pattern for the restriction of simulation related string definitions
+        /// </summary>
+        [DataMember]
+        public string NameStringPattern { get; set; }
+
+        /// <summary>
+        /// The regex pattern for the restriction of simulation related string definitions
+        /// </summary>
+        [DataMember]
+        public string SeedStringPattern { get; set; }
     }
 }
