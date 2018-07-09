@@ -10,7 +10,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Represents a custom simulation that contains all reference data required to describe a metropolis simulation
     /// </summary>
-    public interface IMetropolisSimulation : IModelObject
+    public interface IMetropolisSimulation : ISimulationBase
     {
         /// <summary>
         /// The energy value tolerance used for pre-target-mcsp simulation breaks
@@ -38,9 +38,8 @@ namespace ICon.Model.Simulations
         MetropolisSimulationFlags MetropolisFlags { get; }
 
         /// <summary>
-        /// Get all metropolis transitions attached to this simulation
+        /// Get a read only list of the linked metropolis transitions
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<IMetropolisTransition> GetTransitions();
+        IReadOnlyList<IMetropolisTransition> Transitions { get; }
     }
 }

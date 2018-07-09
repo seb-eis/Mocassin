@@ -20,8 +20,13 @@ namespace ICon.Model.Simulations
     /// Basic simulation model object that carries all reference data required to describe a single custom metropolis simulation
     /// </summary>
     [DataContract]
-    public class MetropolisSimulation : CustomSimulation, IMetropolisSimulation
+    public class MetropolisSimulation : SimulationBase, IMetropolisSimulation
     {
+        /// <summary>
+        /// Get a read only interface access to the list of metropolis transitions for the simulation
+        /// </summary>
+        IReadOnlyList<IMetropolisTransition> IMetropolisSimulation.Transitions => Transitions;
+
         /// <summary>
         /// The relative break tolerance of the MMC simulation
         /// </summary>
@@ -69,12 +74,23 @@ namespace ICon.Model.Simulations
         }
 
         /// <summary>
-        /// Get all metropolis transitions attached to this simulation
+        /// Populates this object from a model object interface and returns this object. Retruns null if the population operation failed
         /// </summary>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public IEnumerable<IMetropolisTransition> GetTransitions()
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            return Transitions.AsEnumerable();
+            if (CastWithDepricatedCheck<IMetropolisSimulation>(base.PopulateFrom(obj)) is IMetropolisSimulation simulation)
+            {
+                Transitions = (simulation.Transitions ?? new List<IMetropolisTransition>()).ToList();
+                RelativeBreakTolerance = simulation.RelativeBreakTolerance;
+                BreakSampleLength = simulation.BreakSampleLength;
+                BreakSampleIntervalMcs = simulation.BreakSampleIntervalMcs;
+                ResultSampleMcs = simulation.ResultSampleMcs;
+                MetropolisFlags = simulation.MetropolisFlags;
+                return this;
+            }
+            return null;
         }
     }
 }

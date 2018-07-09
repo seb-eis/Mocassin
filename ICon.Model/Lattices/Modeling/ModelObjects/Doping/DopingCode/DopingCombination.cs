@@ -51,7 +51,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="modelObject"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject modelObject)
+        public override ModelObject PopulateFrom(IModelObject modelObject)
         {
             if (CastWithDepricatedCheck<IDopingCombination>(modelObject) is var casted)
             {

@@ -61,7 +61,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IUnitCellPosition>(obj) is var position)
             {

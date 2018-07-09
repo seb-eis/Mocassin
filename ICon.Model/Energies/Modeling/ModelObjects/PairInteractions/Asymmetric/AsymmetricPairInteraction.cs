@@ -62,11 +62,11 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IAsymmetricPairInteraction>(obj) is var interaction)
             {
-                base.PopulateObject(obj);
+                base.PopulateFrom(obj);
 
                 EnergyDictionary = new Dictionary<AsymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
                 foreach (var item in interaction.GetEnergyDictionary())

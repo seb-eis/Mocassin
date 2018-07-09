@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 using System.Reflection;
 
 namespace ICon.Framework.Provider
@@ -31,7 +32,12 @@ namespace ICon.Framework.Provider
         /// <summary>
         /// Defines the dll load information by dll path, provider class and method name on the provider
         /// </summary>
-        public (string DllPath, string Class, string Method) LoadInfo { get; set; }
+        public ExternalLoadInfo LoadInfo { get; set; }
+
+        /// <summary>
+        /// Non generic interface access to the provider delegate
+        /// </summary>
+        Delegate IExternalProvider.ProviderDelegate => ProviderDelegate;
 
         /// <summary>
         /// Accepts an input object and retrives the output object affiliated with it from the external provider
@@ -51,27 +57,33 @@ namespace ICon.Framework.Provider
         }
 
         /// <summary>
+        /// Non generic get value overload for the non generic external provider interface
+        /// </summary>
+        /// <param name="inputObject"></param>
+        /// <returns></returns>
+        object IExternalProvider.GetValue(object inputObject)
+        {
+            return GetValue((TIn)inputObject);
+        }
+
+        /// <summary>
         /// Tries to load the provider into the assembly and create a provider instance with the passed construction arguments.
         /// Returns false on fail and provides catched exceptions
         /// </summary>
         /// <param name="exceptions"></param>
-        /// <param name="constructionArgs"></param>
+        /// <param name="constArgs"></param>
         /// <returns></returns>
-        public bool TryLoadProvider(out Exception exception, params object[] constructionArgs)
+        public bool TryLoadProvider(out Exception exception, params object[] constArgs)
         {
             exception = null;
             if (!IsLoaded)
             {
                 try
                 {
-                    var assembly = Assembly.LoadFrom(LoadInfo.DllPath);
-                    ProviderInstance = Activator.CreateInstance(assembly.GetType(LoadInfo.Class), constructionArgs);
-                    var method = ProviderInstance.GetType().GetMethod(LoadInfo.Method, new Type[] { typeof(TIn) });
+                    var assembly = Assembly.LoadFrom(LoadInfo.AssemblyPath);
+                    ProviderInstance = Activator.CreateInstance(assembly.GetType(LoadInfo.FullClassName), constArgs);
+                    var method = ProviderInstance.GetType().GetMethod(LoadInfo.MethodName, new Type[] { typeof(TIn) });
                     ProviderDelegate = (Func<TIn, TOut>)method.CreateDelegate(typeof(Func<TIn, TOut>), ProviderInstance);
-                    if (ProviderDelegate == null)
-                    {
-                        throw new InvalidOperationException("Could not create delegate instance");
-                    }
                     IsLoaded = true;
                 }
                 catch (Exception excep)

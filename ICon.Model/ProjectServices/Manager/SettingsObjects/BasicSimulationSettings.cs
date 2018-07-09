@@ -21,7 +21,7 @@ namespace ICon.Model.ProjectServices
         public ValueSetting<double> Doping { get; set; }
 
         /// <summary>
-        /// The value restriction setting for simulation electirc field (KMC only)
+        /// The value restriction setting for simulation electric field in [V/m] (KMC only)
         /// </summary>
         [DataMember]
         public ValueSetting<double> ElectricField { get; set; }
@@ -37,6 +37,18 @@ namespace ICon.Model.ProjectServices
         /// </summary>
         [DataMember]
         public ValueSetting<int> MonteCarloSteps { get; set; }
+
+        /// <summary>
+        /// The value restriction for the number of calls to the write functions
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> WriteCallCount { get; set; }
+
+        /// <summary>
+        /// The value restriction for the job count of a single simulation
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> JobCount { get; set; } 
 
         /// <summary>
         /// The value restriction setting for simulation supercell sizes in a single direction
@@ -90,7 +102,7 @@ namespace ICon.Model.ProjectServices
         /// The value restriction setting for simulation forced termination by success rate
         /// </summary>
         [DataMember]
-        public ValueSetting<double> ForceTerminationSuccesRate { get; set; }
+        public ValueSetting<double> TerminationSuccessRate { get; set; }
 
         /// <summary>
         /// The value restriction setting for simulation energy set count (File loaded energy sets)
@@ -99,15 +111,21 @@ namespace ICon.Model.ProjectServices
         public ValueSetting<int> EnergySetCount { get; set; }
 
         /// <summary>
-        /// The regex pattern for the restriction of simulation related string definitions
+        /// The value restriction setting for the number of transitions per simulation
         /// </summary>
         [DataMember]
-        public string NameStringPattern { get; set; }
+        public ValueSetting<int> TransitionCount { get; set; }
 
         /// <summary>
         /// The regex pattern for the restriction of simulation related string definitions
         /// </summary>
         [DataMember]
-        public string SeedStringPattern { get; set; }
+        public StringSetting Naming { get; set; }
+
+        /// <summary>
+        /// The regex pattern for the restriction of simulation related string definitions
+        /// </summary>
+        [DataMember]
+        public StringSetting Seeding { get; set; }
     }
 }

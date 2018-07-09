@@ -57,7 +57,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IDoping>(obj) is var doping)
             {

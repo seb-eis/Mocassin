@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using ICon.Framework.Constraints;
+using ICon.Framework.Provider;
 using ICon.Model.Basic;
 
 namespace ICon.Model.Simulations
@@ -11,24 +12,29 @@ namespace ICon.Model.Simulations
     /// Absttract base class for implementations of specialized simulation series model objects that define a set of simulations
     /// </summary>
     [DataContract]
-    public abstract class SimulationSeries : ModelObject, ISimulationSeries
+    public abstract class SimulationSeriesBase : ModelObject, ISimulationSeriesBase
     {
         /// <summary>
-        /// Read only interface access to the energy file path list
+        /// Get read only interface access to the energy file path list
         /// </summary>
-        IReadOnlyList<string> ISimulationSeries.EnergyFilepathSeries => EnergyFilepathSeries;
+        IReadOnlyList<string> ISimulationSeriesBase.EnergyFilepathSeries => EnergyFilepathSeries;
 
         /// <summary>
-        /// REad only interface access to the doping series list
+        /// Get read only interface access to the doping series list
         /// </summary>
-        IReadOnlyList<IDopingSeries> ISimulationSeries.DopingSeriesList => DopingSeriesList;
+        IReadOnlyList<IDopingSeries> ISimulationSeriesBase.DopingSeriesList => DopingSeriesList;
+
+        /// <summary>
+        /// Get read only interface access to the energy background provider laod info list
+        /// </summary>
+        IReadOnlyList<IExternalLoadInfo> ISimulationSeriesBase.EnergyBackgroundLoadInfos => EnergyBackgroundLoadInfos;
 
         /// <summary>
         /// The unspecififed base simulation affiliated with this series
         /// </summary>
         [DataMember]
         [LinkableByIndex]
-        public ICustomSimulation BaseSimulation { get; set; }
+        public ISimulationBase BaseSimulation { get; set; }
 
         /// <summary>
         /// The user given series indetifier string
@@ -86,13 +92,19 @@ namespace ICon.Model.Simulations
         public List<IDopingSeries> DopingSeriesList { get; set; }
 
         /// <summary>
+        /// The list of energy background load informations used to create energy background providers for the simulations
+        /// </summary>
+        [DataMember]
+        public List<ExternalLoadInfo> EnergyBackgroundLoadInfos { get; set; }
+
+        /// <summary>
         /// Populates the components of the base class from a model object interface and retunrs this object. Returns null if the population failed
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<ISimulationSeries>(obj) is ISimulationSeries series)
+            if (CastWithDepricatedCheck<ISimulationSeriesBase>(obj) is ISimulationSeriesBase series)
             {
                 UseCustomBaseLattice = series.UseCustomBaseLattice;
                 Description = series.Description;
@@ -103,6 +115,7 @@ namespace ICon.Model.Simulations
                 LatticeSizeSeriesC = series.LatticeSizeSeriesC;
                 EnergyFilepathSeries = series.EnergyFilepathSeries.ToList();
                 DopingSeriesList = series.DopingSeriesList.ToList();
+                EnergyBackgroundLoadInfos = series.EnergyBackgroundLoadInfos.Select(a => new ExternalLoadInfo(a)).ToList();
                 return this;
             }
             return null;

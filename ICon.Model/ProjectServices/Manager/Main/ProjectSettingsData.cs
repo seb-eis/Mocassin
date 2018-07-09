@@ -156,18 +156,21 @@ namespace ICon.Model.ProjectServices
                     ResultSampleLength = new ValueSetting<int>("Result Sample Length", 1, 1000, 10000, 1000000),
                     BreakTolerance = new ValueSetting<double>("Break Tolerance", 0, 0, 0.1, 1),
                     Doping = new ValueSetting<double>("Doping Concentration", 0, 0, 1, 1),
-                    ElectricField = new ValueSetting<double>("Electric Field", 0, 0.01, 1.0, 100.0),
+                    ElectricField = new ValueSetting<double>("Electric Field", 0, 1e4, 1e9, 1e10),
                     MonteCarloSteps = new ValueSetting<int>("Steps per Particle", 1, 1, 1000, 1000000),
+                    JobCount = new ValueSetting<int>("Jobs per Simulation", 1, 5, 100, 1000),
+                    WriteCallCount = new ValueSetting<int>("Write Calls per Simulation", 0, 5, 100, 1000),
                     Temperature = new ValueSetting<double>("Temperature", 0.1, 100, 5000, 10000),
                     Normalization = new ValueSetting<double>("Normalization", 0, 0, 0.1, 1.0),
                     SeriesPermutationCount = new ValueSetting<int>("Series Simulation Count", 0, 0, 1000, 5000),
                     SupercellPositionCount = new ValueSetting<int>("Supercell Position Count", 1, 100, 100000, 500000),
                     UnitCellsPerDirection = new ValueSetting<int>("Cells per Direction", 1, 1, 100, 256),
                     ForceTerminationTime = new ValueSetting<int>("Forced Termination Time", 0, 1, 48, 120),
-                    ForceTerminationSuccesRate = new ValueSetting<double>("Lower Termintation Success Rate", 1, 10, int.MaxValue, int.MaxValue),
+                    TerminationSuccessRate = new ValueSetting<double>("Lower Termintation Success Rate", 1, 10, int.MaxValue, int.MaxValue),
                     EnergySetCount = new ValueSetting<int>("Energy Set Count", 0, 0, 10, 100),
-                    NameStringPattern = "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$",
-                    SeedStringPattern = "^[a-zA-Z0-9\\+\\-\\(\\)]{4,100}$",
+                    TransitionCount = new ValueSetting<int>("Transitions per Simulation", 0, 0, 10, 100),
+                    Naming = new StringSetting("Name String", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$"),
+                    Seeding = new StringSetting("Seed String", "^[a-zA-Z0-9\\+\\-\\(\\)]{4,100}$")
                 }
         };
         }

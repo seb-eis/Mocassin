@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICon.Framework.Test", "ICon
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GUI", "GUI", "{26076951-0068-4480-804D-C6ADF22CEE23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICon.Model.Translator", "ICon.Model.Translator\ICon.Model.Translator.csproj", "{98009498-C43F-43AC-AC39-C9CC08D30890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICon.Model.Translator", "ICon.Model.Translator\ICon.Model.Translator.csproj", "{98009498-C43F-43AC-AC39-C9CC08D30890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

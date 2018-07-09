@@ -461,7 +461,7 @@ namespace ICon.Model.Basic
         {
             if (replace)
             {
-                orgObject.PopulateObject(replaceObject);
+                orgObject.PopulateFrom(replaceObject);
             }
             orgObject.Restore();
         }

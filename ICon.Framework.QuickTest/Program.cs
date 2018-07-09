@@ -53,7 +53,12 @@ namespace ICon.Framework.QuickTest
             var watch = Stopwatch.StartNew();
             var provider = new ExternalProvider<int, int>()
             {
-                LoadInfo = ("ICon.Framework.dll", "ICon.Framework.Random.PcgRandom32", "Next")
+                LoadInfo = new ExternalLoadInfo()
+                {
+                    AssemblyPath = "ICon.Framework.dll",
+                    FullClassName = "ICon.Framework.Random.PcgRandom32",
+                    MethodName = "Next"
+                }
             };
             var testLoad = provider.TryLoadProvider(out var exception);
 
@@ -62,7 +67,7 @@ namespace ICon.Framework.QuickTest
             //inputter.AutoInputData(package.ProjectServices);
             //var report = inputter.GetReportJson();
 
-            int count = 100000000;
+            int count = 10000;
             DisplayWatch(watch);
             for (int i = 0; i < count; i++)
             {

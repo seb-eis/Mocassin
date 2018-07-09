@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 
 using ICon.Framework.Messaging;
 
@@ -11,6 +11,29 @@ namespace ICon.Model.Basic
     /// </summary>
     public static class ModelMessages
     {
+        /// <summary>
+        /// Creates a non-critical raw warning message for cases where a not recommended settings is detected during validation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateNotRecommendedWarning(object sender)
+        {
+            return new WarningMessage(sender, "Setting Not Recommended");
+        }
+
+        /// <summary>
+        /// Creates a non-critical warning message for cases where a not recommended settings is detected during validation (With arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateNotRecommendedWarning(object sender, params string[] details)
+        {
+            var message = CreateNotRecommendedWarning(sender);
+            message.AddDetails(details);
+            return message;
+        }
+
         /// <summary>
         /// Creates a new raw warning message without further details for cases where modeling objects have missing content during validation
         /// </summary>

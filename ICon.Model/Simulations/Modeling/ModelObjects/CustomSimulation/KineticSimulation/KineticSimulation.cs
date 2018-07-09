@@ -14,14 +14,14 @@ namespace ICon.Model.Simulations
     /// </summary>
     public enum KineticSimulationFlags
     {
-        UseStaticTracking = 0b1, UseSingleAtomTracking = 0b10, UseProbabilityTracking = 0b100
+        UseStaticTrackers = 0b1, UseDynamicTrackers = 0b10
     }
 
     /// <summary>
     /// Implementation of the specialized monte carlo simulation that contains all refernce data for a kinetic monte carlo simulation
     /// </summary>
     [DataContract]
-    public class KineticSimulation : CustomSimulation, IKineticSimulation
+    public class KineticSimulation : SimulationBase, IKineticSimulation
     {
         /// <summary>
         /// Read only interface access to the electric field vector inf fractional coordinates
@@ -29,10 +29,21 @@ namespace ICon.Model.Simulations
         Fractional3D IKineticSimulation.ElectricFieldVector => ElectricFieldVector.AsFractional();
 
         /// <summary>
+        /// Get a read only interface access to the transitions of this simulation
+        /// </summary>
+        IReadOnlyList<IKineticTransition> IKineticSimulation.Transitions => Transitions;
+
+        /// <summary>
         /// The probability value used for dynamic normalization of all jump attempts
         /// </summary>
         [DataMember]
         public double NormalizationProbability { get; set; }
+
+        /// <summary>
+        /// Get the magnitude of the electric field in [V/m]
+        /// </summary>
+        [DataMember]
+        public double ElectricFieldMagnitude { get; set; }
 
         /// <summary>
         /// The set of transitions attached to the simulation
@@ -63,26 +74,18 @@ namespace ICon.Model.Simulations
         }
 
         /// <summary>
-        /// Get all transitions attached to this simulation
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<IKineticTransition> GetTransitions()
-        {
-            return Transitions.AsEnumerable();
-        }
-
-        /// <summary>
         /// Populates this object from a model object interface and returns it as a basic model object. Retruns null if population fails
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IKineticSimulation>(base.PopulateObject(obj)) is IKineticSimulation simulation)
+            if (CastWithDepricatedCheck<IKineticSimulation>(base.PopulateFrom(obj)) is IKineticSimulation simulation)
             {
                 NormalizationProbability = simulation.NormalizationProbability;
+                ElectricFieldVector = new DataVector3D(simulation.ElectricFieldVector);
                 KineticFlags = simulation.KineticFlags;
-                Transitions = simulation.GetTransitions().ToList();
+                Transitions = (simulation.Transitions ?? new List<IKineticTransition>()).ToList();
                 return this;
             }
             return null;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using ICon.Framework.Provider;
 using ICon.Model.Basic;
 
 namespace ICon.Model.Simulations
@@ -9,12 +9,12 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Represents a custom simulation of undefined type that carries all reference data to generate an encoded simulation dataset
     /// </summary>
-    public interface ICustomSimulation : IModelObject
+    public interface ISimulationBase : IModelObject
     {
         /// <summary>
         /// Get the user defined identifier for this simulation
         /// </summary>
-        string UserIndetifier { get; }
+        string Name { get; }
 
         /// <summary>
         /// The user defined custom random number generator seed for lattice creation
@@ -32,14 +32,14 @@ namespace ICon.Model.Simulations
         int TargetMcsp { get; }
 
         /// <summary>
-        /// The number of MCSP between out calls (results, checkpoints,...) of the simulation
+        /// The number of calls to data out (results, checkpoints,...) during the simulation
         /// </summary>
-        int McspPerDataOutCall { get; }
+        int WriteOutCount { get; }
 
         /// <summary>
         /// Get the number of jobs that should be created for this simulation
         /// </summary>
-        int TranslationCount { get; }
+        int JobCount { get; }
 
         /// <summary>
         /// The simulation settings falg that describes basic simulation settings
@@ -47,8 +47,18 @@ namespace ICon.Model.Simulations
         SimulationBaseFlags BaseFlags { get; }
 
         /// <summary>
-        /// Defines the time span after which the simulation will force terminate to avoid shutdown during data write operations
+        /// Defines the save run time for a simulation. After the time span has passed a simulation will automatically terminate to avoid forced shutdown during data out operations
         /// </summary>
-        TimeSpan ForcedTerminationTime { get; }
+        TimeSpan SaveRunTimeLimit { get; }
+
+        /// <summary>
+        /// Get the minimal success rate a simulation has to reach. Simulations that fall below this value will be automatically terminated
+        /// </summary>
+        double LowerSuccessRateLimit { get; set; }
+
+        /// <summary>
+        /// Defines the external provider load information that is used to generate an energy background for the simulation (Null if none is used)
+        /// </summary>
+        IExternalLoadInfo EnergyBackgroundProviderInfo { get; }
     }
 }

@@ -71,6 +71,13 @@ namespace ICon.Model.ProjectServices
         }
 
         /// <summary>
+        /// Default construct new value setting
+        /// </summary>
+        public ValueSetting()
+        {
+        }
+
+        /// <summary>
         /// Get the minimal and maximal value as a two value tuple
         /// </summary>
         /// <returns></returns>

@@ -11,7 +11,7 @@ namespace ICon.Model.Simulations
     /// Implementation of a specialized simulation series for sets of kinetic monte carlo simulations
     /// </summary>
     [DataContract]
-    public class KineticSimulationSeries : SimulationSeries, IKineticSimulationSeries
+    public class KineticSimulationSeries : SimulationSeriesBase, IKineticSimulationSeries
     {
         /// <summary>
         /// The value series for the simulation electric field magnitude
@@ -30,14 +30,29 @@ namespace ICon.Model.Simulations
         /// </summary>
         IKineticSimulation IKineticSimulationSeries.BaseSimulation => (IKineticSimulation)BaseSimulation;
 
+        /// <summary>
+        /// Get a string representing the model object name
+        /// </summary>
+        /// <returns></returns>
         public override string GetModelObjectName()
         {
-            throw new NotImplementedException();
+            return "'Kinetic Simulation Series'";
         }
 
-        public override ModelObject PopulateObject(IModelObject obj)
+        /// <summary>
+        /// Populate this object from a model object intreface and return this. Retruns null if the population failed
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            return base.PopulateObject(obj);
+            if (CastWithDepricatedCheck<IKineticSimulationSeries>(base.PopulateFrom(obj)) is IKineticSimulationSeries series)
+            {
+                ElectricFieldSeries = series.ElectricFieldSeries;
+                NormalizationProbabilitySeries = series.NormalizationProbabilitySeries;
+                return this;
+            }
+            return null;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Represents a specialized simulation series for metropolis monte carlo simulations
     /// </summary>
-    interface IMetropolisSimulationSeries : ISimulationSeries
+    interface IMetropolisSimulationSeries : ISimulationSeriesBase
     {
         /// <summary>
         /// Get the metropolis base simulation this series is based upon

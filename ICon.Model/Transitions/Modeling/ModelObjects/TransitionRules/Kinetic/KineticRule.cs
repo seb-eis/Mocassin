@@ -63,11 +63,11 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IKineticRule>(obj) is var rule)
             {
-                base.PopulateObject(obj);
+                base.PopulateFrom(obj);
                 Transition = rule.Transition;
                 AttemptFrequency = rule.AttemptFrequency;
                 BoundaryFlags = rule.BoundaryFlags;
