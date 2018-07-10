@@ -8,29 +8,41 @@ using ICon.Framework.Random;
 using ICon.Mathematics.Comparers;
 using System.Linq;
 
+using ICon.Framework.Extensions;
+
 namespace ICon.Model.Lattices
 {
+    public class DopingPool
+    {
+        public int OriginalSize { get; set; }
+        public List<CellEntry> Entries { get; set; }
+    }
+
     /// <summary>
     /// Executes dopings on the Worklattice
     /// </summary>
     public class DopingExecuter
     {
-        DoubleRangeComparer comparer;
+        DoubleRangeComparer Comparer { get; }
+        double DopingTolerance { get; }
 
-        public DopingExecuter(double doubleCompareTolerance)
+        public DopingExecuter(double doubleCompareTolerance, double dopingTolerance)
         {
-            comparer = new DoubleRangeComparer(doubleCompareTolerance);
+            Comparer = new DoubleRangeComparer(doubleCompareTolerance);
+            DopingTolerance = dopingTolerance;
         }
+
+
 
         /// <summary>
         /// Execute the doping process for multiple dopings to a worklattice
         /// </summary>
         /// <param name="lattice"></param>
         /// <param name="dopings"></param>
-        public void ExecuteMultible(WorkLattice lattice, ReadOnlyList<IDoping> dopings, double dopingTolerance)
+        public void ExecuteMultiple(CellEntry[,,][] lattice, IDictionary<IDoping, double> dopingsAndConcentration)
         {
             var dopingDict = new Dictionary<int, List<IDoping>>();
-            foreach(var doping in dopings)
+            foreach(var doping in dopingsAndConcentration.Keys)
             {
                 if(dopingDict.ContainsKey(doping.DopingGroup) == false)
                 {
@@ -41,21 +53,43 @@ namespace ICon.Model.Lattices
 
             foreach (var dopingID in (dopingDict.Keys.OrderBy(x => x)))
             {
+                var dopingPool = GenerateDopingPool(lattice);
+
                 foreach(var doping in dopingDict[dopingID])
                 {
-                    Execute(lattice, doping, dopingTolerance);
+                    Execute(doping, dopingsAndConcentration[doping], dopingPool);
                 }
-                UpdateOriginalOccupations(lattice);
             }
+        }
+
+        public Dictionary<CellEntry, DopingPool> GenerateDopingPool(CellEntry[,,][] lattice)
+        {
+            var dopingPoolDict = new Dictionary<CellEntry, DopingPool>();
+
+            foreach (var cell in lattice)
+            {
+                foreach(var entry in cell)
+                {
+                    if (dopingPoolDict.ContainsKey(entry) == false)
+                    {
+                        dopingPoolDict[entry] = new DopingPool() { OriginalSize = 0, Entries = new List<CellEntry>() };
+                    }
+
+                    dopingPoolDict[entry].OriginalSize += 1;
+                    dopingPoolDict[entry].Entries.Add(entry);
+                }
+            }
+
+            return dopingPoolDict;
         }
 
         /// <summary>
         /// Update original occupation with current occupation for next grouped doping process
         /// </summary>
         /// <param name="lattice"></param>
-        public void UpdateOriginalOccupations(WorkLattice lattice)
+        public void UpdateOriginalOccupations(WorkCell[,,] lattice)
         {
-            foreach (var cell in lattice.WorkCells)
+            foreach (var cell in lattice)
             {
                 foreach (var entry in cell.CellEntries)
                 {
@@ -69,46 +103,26 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="lattice"></param>
         /// <param name="doping"></param>
-        public void Execute(WorkLattice lattice, IDoping doping, double dopingTolerance)
+        public void Execute(IDoping doping, double concentration, Dictionary<CellEntry, DopingPool> dopingPool)
         {
-            (int, List<CellEntry>) dopableCellEntries = GetDopableCellEntries(lattice, doping.DopingInfo);
+            CellEntry dopedCellEntry = new CellEntry()
+            {   Particle = doping.DopingInfo.DopedParticle,
+                CellPosition = doping.DopingInfo.UnitCellPosition,
+                Block = doping.DopingInfo.BuildingBlock,
+            };
 
-            (int, List<CellEntry>) dopableCounterCellEntries = GetDopableCellEntries(lattice, doping.CounterDopingInfo);
-
-            (int,int) dopingParticleCount = CalculateDopingCount(dopableCellEntries.Item1, dopableCounterCellEntries.Item1, doping, dopingTolerance);
-
-            ApplyDoping(dopableCellEntries.Item2, dopingParticleCount.Item1, doping.DopingInfo);
-
-            ApplyDoping(dopableCounterCellEntries.Item2, dopingParticleCount.Item2, doping.CounterDopingInfo);
-        }
-
-        /// <summary>
-        /// Get the number of positions which can be doped
-        /// </summary>
-        /// <param name="lattice"></param>
-        /// <param name="doping"></param>
-        /// <returns></returns>
-        public int GetDopableCellEntryCount(WorkLattice lattice, IDopingCombination doping)
-        {
-            int count = 0;
-
-            foreach (var cell in lattice.WorkCells)
+            CellEntry counterDopedCellEntry = new CellEntry()
             {
-                if (cell.BuildingBlockID != doping.BuildingBlock.Index)
-                {
-                    continue;
-                }
+                Particle = doping.CounterDopingInfo.DopedParticle,
+                CellPosition = doping.CounterDopingInfo.UnitCellPosition,
+                Block = doping.CounterDopingInfo.BuildingBlock,
+            };
 
-                foreach (var cellEntry in cell.CellEntries)
-                {
-                    if (cellEntry.OriginalOccupation == doping.DopedParticle && cellEntry.CellPosition.Index == doping.UnitCellPosition.Index)
-                    {
-                        count++;
-                    }
-                }
-            }
+            (int,int) dopingParticleCount = CalculateDopingCount(dopingPool[dopedCellEntry].OriginalSize, dopingPool[counterDopedCellEntry].OriginalSize, doping, concentration);
 
-            return count;
+            ApplyDoping(dopingPool[dopedCellEntry].Entries, dopingParticleCount.Item1, doping.DopingInfo);
+
+            ApplyDoping(dopingPool[counterDopedCellEntry].Entries, dopingParticleCount.Item2, doping.CounterDopingInfo);
         }
 
         /// <summary>
@@ -117,12 +131,12 @@ namespace ICon.Model.Lattices
         /// <param name="lattice"></param>
         /// <param name="doping"></param>
         /// <returns></returns>
-        protected (int, List<CellEntry>) GetDopableCellEntries(WorkLattice lattice, IDopingCombination doping)
+        protected (int, List<CellEntry>) GetDopableCellEntries(WorkCell[,,] lattice, IDopingCombination doping)
         {
             int count = 0;
             List<CellEntry> cellEntries = new List<CellEntry>();
 
-            foreach (var cell in lattice.WorkCells)
+            foreach (var cell in lattice)
             {
                 if (cell.BuildingBlockID != doping.BuildingBlock.Index)
                 {
@@ -158,20 +172,13 @@ namespace ICon.Model.Lattices
         /// <param name="doping"></param>
         protected void ApplyDoping(List<CellEntry> dopableCellEntries, int dopingParticleCount, IDopingCombination doping)
         {
-            Action<CellEntry> applyDoping = (entry) => { entry.Particle = doping.Dopant; };
+            var dopedEntries = dopableCellEntries.SelectRandom(dopingParticleCount, new PcgRandom32());
 
-            (new UniquePoolSampler<CellEntry>()).ApplyToSamples(dopableCellEntries, Convert.ToUInt32(dopingParticleCount), applyDoping);
-        }
-
-        /// <summary>
-        /// Calculate the number of dopants
-        /// </summary>
-        /// <param name="dopableCellEntriesCount"></param>
-        /// <param name="doping"></param>
-        /// <returns></returns>
-        protected int CalculateDopantCount(int dopableCellEntriesCount, IDoping doping)
-        {
-            return (int)(Math.Round(dopableCellEntriesCount * doping.Concentration));
+            foreach (var item in dopedEntries)
+            {
+                item.Particle = doping.Dopant;
+                dopableCellEntries.Remove(item);
+            }
         }
 
         /// <summary>
@@ -180,7 +187,7 @@ namespace ICon.Model.Lattices
         /// <param name="dopableCellEntriesCount"></param>
         /// <param name="doping"></param>
         /// <returns></returns>
-        public (int,int) CalculateDopingCount(int dopableCount, int counterDopableCount, IDoping doping, double dopingTolerance)
+        public (int,int) CalculateDopingCount(int dopableCount, int counterDopableCount, IDoping doping, double concentration)
         {
             double counterDopingMultiplier;
             if (doping.UseCustomMultiplier == false)
@@ -192,7 +199,7 @@ namespace ICon.Model.Lattices
                 counterDopingMultiplier = doping.CounterDopingMultiplier;
             }
 
-            int dopandCount = (int)(Math.Round(dopableCount * doping.Concentration));
+            int dopandCount = (int)(Math.Round(dopableCount * concentration));
 
             if (doping.UseCounterDoping == false)
             {
@@ -201,16 +208,16 @@ namespace ICon.Model.Lattices
 
             double counterDopandCount = dopandCount * counterDopingMultiplier;
 
-            if ( comparer.Compare(counterDopandCount % 1, 0) == 0)
+            if ( Comparer.Compare(counterDopandCount % 1, 0) == 0)
             {
                 return (dopandCount, (int)counterDopandCount);
             }
 
-            for (int i = -(int)(dopandCount*dopingTolerance); i <= (int)(dopandCount * dopingTolerance); i++)
+            for (int i = -(int)(dopandCount*DopingTolerance); i <= (int)(dopandCount * DopingTolerance); i++)
             {
                 counterDopandCount = (dopandCount+i) * counterDopingMultiplier;
 
-                if (comparer.Compare(counterDopandCount % 1, 0) == 0)
+                if (Comparer.Compare(counterDopandCount % 1, 0) == 0)
                 {
                     return (dopandCount+i, (int)counterDopandCount);
                 }
@@ -227,7 +234,7 @@ namespace ICon.Model.Lattices
             double DeltaChargeDopant = doping.DopingInfo.Dopant.Charge - doping.DopingInfo.DopedParticle.Charge;
             double DeltaChargeCounterDopant = doping.CounterDopingInfo.Dopant.Charge - doping.CounterDopingInfo.DopedParticle.Charge;
 
-            if (comparer.Compare((DeltaChargeDopant - DeltaChargeCounterDopant),0) == 0)
+            if (Comparer.Compare((DeltaChargeDopant - DeltaChargeCounterDopant),0) == 0)
             {
                 return 1.0;
             }

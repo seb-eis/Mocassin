@@ -65,5 +65,11 @@ namespace ICon.Model.Test
 
         }
 
+        [TestMethod]
+        public void TestArrayIteration()
+        {
+
+        }
+
     }
 }

@@ -302,7 +302,6 @@ namespace ICon.Model.Basic
                     }
                 };
 
-                var inputter = new ManagerDataInputter()
                 var inputter = new ManagerDataInputter();
                 inputter.AddMany(particles.Skip(1));
                 inputter.AddMany(particleSets);

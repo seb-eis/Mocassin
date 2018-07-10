@@ -38,28 +38,28 @@ namespace ICon.Model.Lattices
         /// Counter doping multiplier
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public double CounterDopingMultiplier { get; set; }
 
         /// <summary>
         /// Flag that indicates whether the custom CounterDopingMultiplier is used
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public bool UseCustomMultiplier { get; set; }
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public bool UseCounterDoping { get; set; }
 
         /// <summary>
         /// Doping Group for simutaneous doping
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public int DopingGroup { get; set; }
 
         /// <summary>

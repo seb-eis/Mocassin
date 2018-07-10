@@ -41,7 +41,7 @@ namespace ICon.Model.Lattices
         /// Building Block in which the doping should take place
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IBuildingBlock BuildingBlock { get; set; }
 
         /// <summary>

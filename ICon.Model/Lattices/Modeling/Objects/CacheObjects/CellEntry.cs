@@ -23,8 +23,28 @@ namespace ICon.Model.Lattices
         public IUnitCellPosition CellPosition { get; set; }
 
         /// <summary>
+        /// Sublattice information on cell entry position
+        /// </summary>
+        public IBuildingBlock Block { get; set; }
+
+        /// <summary>
         /// Original occupation before doping (important for simutaneous doping process)
         /// </summary>
         public IParticle OriginalOccupation { get; set; }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = 37;
+                result *= 397;
+                if (Particle != null) result += Particle.GetHashCode();
+                result *= 397;
+                if (CellPosition != null) result += CellPosition.GetHashCode();
+                result *= 397;
+                if (Block != null) result += Block.GetHashCode();
+                return result;
+            }
+        }
     }
 }

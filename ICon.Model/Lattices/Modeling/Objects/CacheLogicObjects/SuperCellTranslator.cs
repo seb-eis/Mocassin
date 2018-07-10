@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
+using ICon.Framework.Extensions;
+
 namespace ICon.Model.Lattices
 {
     /// <summary>
@@ -22,25 +24,22 @@ namespace ICon.Model.Lattices
         public SupercellWrapper<IParticle> Translate(WorkLattice workLattice, UnitCellVectorEncoder encoder)
         {
 
-            IParticle[,,][] particles = new IParticle[workLattice.WorkCells.GetLength(0), workLattice.WorkCells.GetLength(1), workLattice.WorkCells.GetLength(2)][];
+            IParticle[][] particlesLineratized = new IParticle[workLattice.WorkCells.GetLength(0)*workLattice.WorkCells.GetLength(1)*workLattice.WorkCells.GetLength(2)][];
 
-            for (int x = 0; x < workLattice.WorkCells.GetLength(0); x++)
+            int counter = 0;
+            foreach (var item in workLattice.WorkCells)
             {
-                for (int y = 0; y < workLattice.WorkCells.GetLength(1); y++)
+                IParticle[] entries = new IParticle[item.CellEntries.Length];
+                for (int p = 0; p < item.CellEntries.Length; p++)
                 {
-                    for (int z = 0; z < workLattice.WorkCells.GetLength(2); z++)
-                    {
-                        IParticle[] entries = new IParticle[workLattice.WorkCells[x, y, z].CellEntries.Length];
-                        for (int p = 0; p < workLattice.WorkCells[x, y, z].CellEntries.Length; p++)
-                        {
-                            entries[p] = workLattice.WorkCells[x, y, z].CellEntries[p].Particle;
-                        }
-                        particles[x, y, z] = entries;
-                    }
+                    entries[p] = item.CellEntries[p].Particle;
                 }
+                particlesLineratized[counter] = entries;
             }
 
-            return new SupercellWrapper<IParticle>(particles, encoder);
+            var particlesMultiDim = new IParticle[workLattice.WorkCells.GetLength(0), workLattice.WorkCells.GetLength(1), workLattice.WorkCells.GetLength(2)][].Populate(particlesLineratized);
+
+            return new SupercellWrapper<IParticle>(particlesMultiDim, encoder);
         }
 
     }

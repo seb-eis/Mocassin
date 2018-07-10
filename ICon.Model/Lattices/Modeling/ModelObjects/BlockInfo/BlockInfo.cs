@@ -17,7 +17,6 @@ namespace ICon.Model.Lattices
         /// BuildingBlocks which may construct a superblock
         /// </summary>
         [DataMember]
-        [IndexResolvable]
         public List<IBuildingBlock> BlockGrouping { get; set; }
 
         /// <summary>
