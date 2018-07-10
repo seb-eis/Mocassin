@@ -20,17 +20,27 @@ namespace ICon.Model.Energies.ConflictHandling
     public class UnstableEnvironmentChangeHandler : ObjectConflictHandler<UnstableEnvironment, EnergyModelData>
     {
         /// <summary>
+        /// Create new unstable environement change handler that uses the provided data access and project service instance
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        /// <param name="projectServices"></param>
+        public UnstableEnvironmentChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
+            : base(dataAccess, projectServices)
+        {
+
+        }
+
+        /// <summary>
         /// Takes a changed unstable environment and corrects the internal data object in terms of interactions and potentially invalid
         /// groupings
         /// </summary>
         /// <param name="envInfo"></param>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
         /// <returns></returns>
-        public override ConflictReport Resolve(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
+        public override ConflictReport HandleConflicts(UnstableEnvironment envInfo)
         {
             var report = new ConflictReport();
-            UpdatePairInteractions(envInfo, dataAccess, projectServices, report);
+            UpdatePairInteractions(envInfo, report);
+            UpdateGroupInteractions(envInfo, report);
             return report;
         }
 
@@ -41,10 +51,10 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <param name="report"></param>
         /// <param name="projectServices"></param>
-        protected void UpdatePairInteractions(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices, ConflictReport report)
+        protected void UpdatePairInteractions(UnstableEnvironment envInfo, ConflictReport report)
         {
-            var newPairs = GetNewAsymmetricPairs(envInfo, projectServices).ToList();
-            var comparer = new VectorComparer3D<Fractional3D>(projectServices.GeometryNumerics.RangeComparer);
+            var newPairs = GetNewAsymmetricPairs(envInfo, ProjectServices).ToList();
+            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumerics.RangeComparer);
 
             var warning = ModelMessages.CreateConflictHandlingWarning(this);
             for (int i = 0; i < newPairs.Count;i++)
@@ -68,7 +78,7 @@ namespace ICon.Model.Energies.ConflictHandling
                 report.AddWarning(warning);
             }
 
-            UpdateInteractionIndexing(envInfo, newPairs, dataAccess);
+            UpdateInteractionIndexing(envInfo, newPairs);
             UpdateEnvironmentLinking(envInfo, newPairs, report);
         }
 
@@ -78,10 +88,9 @@ namespace ICon.Model.Energies.ConflictHandling
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="newPairs"></param>
-        /// <param name="dataAccess"></param>
-        protected void UpdateInteractionIndexing(UnstableEnvironment envInfo, IList<AsymmetricPairInteraction> newPairs, IDataAccessor<EnergyModelData> dataAccess)
+        protected void UpdateInteractionIndexing(UnstableEnvironment envInfo, IList<AsymmetricPairInteraction> newPairs)
         {
-            var dataList = dataAccess.Query(data => data.AsymmetricPairInteractions);
+            var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
             var uniquePairs = new MultisetList<AsymmetricPairInteraction>(GetInteractionComparer(), 100) { newPairs };
 
             foreach (var item in dataList.Where(value => value.Position0 != envInfo.UnitCellPosition))
@@ -162,6 +171,33 @@ namespace ICon.Model.Energies.ConflictHandling
                 return indexCompare;
             }
             return Comparer<AsymmetricPairInteraction>.Create(Compare);
+        }
+
+        /// <summary>
+        /// Updates all group interactions affiliated with this unstable environment
+        /// (Currently just deprecates all affiliated group interactions and clears envrionment group interaction list)
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="report"></param>
+        protected void UpdateGroupInteractions(UnstableEnvironment environment, ConflictReport report)
+        {
+            int counter = 0;
+            foreach (var groupInteraction in DataAccess.Query(data => data.GroupInteractions))
+            {
+                if (environment.GroupInteractions.Contains(groupInteraction))
+                {
+                    counter++;
+                    groupInteraction.Deprecate();
+                }
+            }
+            environment.GroupInteractions.Clear();
+
+            if (counter != 0)
+            {
+                var detail0 = $"Recovery of group interaction definitions on unstable environment changes is currently not supported";
+                var detail1 = $"Deprecated all group interactions affiliated with the changed unstable environment to avoid conflicts";
+                report.AddWarning(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
+            }
         }
     }
 }

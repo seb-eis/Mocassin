@@ -98,7 +98,7 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IParticle>(obj) is var particle)
             {
@@ -113,6 +113,25 @@ namespace ICon.Model.Particles
                 return this;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Compares to other particle based upon the particle index
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IParticle other)
+        {
+            return Index == other.Index;
+        }
+
+        /// <summary>
+        /// Get the hash code of the particle based upon the particle index
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return 1 << Index;
         }
     }
 }

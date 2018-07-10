@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ICon.Framework.Collections;
 using ICon.Mathematics.ValueTypes;
 using ICon.Symmetry.CrystalSystems;
+using ICon.Mathematics.Comparers;
 
 namespace ICon.Symmetry.SpaceGroups
 {
@@ -42,6 +43,14 @@ namespace ICon.Symmetry.SpaceGroups
         /// <param name="shiftCorrection"></param>
         /// <returns></returns>
         IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection);
+
+        /// <summary>
+        /// Get the point operation group for the provided origin point and point sequence based upon the currently loaded space group
+        /// </summary>
+        /// <param name="originPoint"></param>
+        /// <param name="pointSequence"></param>
+        /// <returns></returns>
+        IPointOperationGroup GetPointOperationGroup(in Fractional3D originPoint, IEnumerable<Fractional3D> pointSequence);
 
         /// <summary>
         /// Gets the unfiltered and untrimmed list of all wyckoff extended sequences symmetry equivalent to the input sequence
@@ -113,5 +122,12 @@ namespace ICon.Symmetry.SpaceGroups
         /// <param name="entry"></param>
         /// <returns></returns>
         bool TryLoadGroup(SpaceGroupEntry entry);
+
+        /// <summary>
+        /// Creates a vector comparer for a special type of 3D vector interface
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <returns></returns>
+        IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D;
     }
 }

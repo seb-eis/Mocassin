@@ -28,27 +28,27 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Validates a new property state pair in terms of content and potentail conflicts with existing data
+        /// Validates a new state exchange pair in terms of content and potentail conflicts with existing data
         /// </summary>
-        /// <param name="statePair"></param>
+        /// <param name="pair"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationMethod(ValidationType.Object)]
-        protected IValidationReport ValidatePropertyStatePair(IPropertyStatePair statePair, IDataReader<ITransitionDataPort> dataReader)
+        protected IValidationReport ValidateStateExchangePair(IStateExchangePair pair, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new PropertyStatePairValidator(ProjectServices, Settings, dataReader).Validate(statePair);
+            return new PropertyStatePairValidator(ProjectServices, Settings, dataReader).Validate(pair);
         }
 
         /// <summary>
-        /// Validates a new property group in terms of content and potential conflicts with existing data
+        /// Validates a new state exchange group in terms of content and potential conflicts with existing data
         /// </summary>
-        /// <param name="propertyGroup"></param>
+        /// <param name="group"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationMethod(ValidationType.Object)]
-        protected IValidationReport ValidateProperytGroup(IPropertyGroup propertyGroup, IDataReader<ITransitionDataPort> dataReader)
+        protected IValidationReport ValidateStateExchangeGroupp(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new PropertyGroupValidator(ProjectServices, Settings, dataReader).Validate(propertyGroup);
+            return new PropertyGroupValidator(ProjectServices, Settings, dataReader).Validate(group);
         }
 
         /// <summary>

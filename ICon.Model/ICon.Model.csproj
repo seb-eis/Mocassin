@@ -23,8 +23,11 @@
 
   <ItemGroup>
     <Compile Remove="MStructure\**" />
+    <Compile Remove="Simulation\**" />
     <EmbeddedResource Remove="MStructure\**" />
+    <EmbeddedResource Remove="Simulation\**" />
     <None Remove="MStructure\**" />
+    <None Remove="Simulation\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,16 +50,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Energies\Modeling\Logic\GroupingFinder\" />
     <Folder Include="Lattices\Manager\EventHandler\" />
-    <Folder Include="Lattices\Modeling\Objects\UniquePoolSampler\" />
-    <Folder Include="Simulation\" />
+    <Folder Include="Lattices\Manager\Services\Validators\" />
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
+    <Folder Include="Simulations\Manager\ConflictHandling\DataHandlers\" />
+    <Folder Include="Simulations\Manager\ConflictHandling\ObjectHandler\" />
+    <Folder Include="Simulations\Manager\ConflictHandling\Provider\" />
+    <Folder Include="Simulations\Modeling\Logic\" />
+    <Folder Include="Simulations\Modeling\ModelParameters\" />
     <Folder Include="Structures\Modeling\Logic\" />
-    <Folder Include="Transitions\Manager\ConflictHandling\DataHandlers\" />
-    <Folder Include="Transitions\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />
   </ItemGroup>
 

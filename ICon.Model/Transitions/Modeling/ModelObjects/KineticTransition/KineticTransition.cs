@@ -18,7 +18,7 @@ namespace ICon.Model.Transitions
         /// The index of the abstract transition description
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
@@ -26,6 +26,13 @@ namespace ICon.Model.Transitions
         /// </summary>
         [DataMember]
         public List<DataVector3D> PathGeometry { get; set; }
+
+        /// <summary>
+        /// The list of affiliated kinetic transition rules (automanaged by the model)
+        /// </summary>
+        [DataMember]
+        [LinkableByIndex]
+        public List<KineticRule> TransitionRules { get; set; }
 
         /// <summary>
         /// The number of geometry steps of the transition
@@ -39,7 +46,16 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<Fractional3D> GetGeometrySequence()
         {
-            return PathGeometry.Select(value => value.AsFractional());
+            return (PathGeometry ?? new List<DataVector3D>()).Select(value => value.AsFractional());
+        }
+
+        /// <summary>
+        /// Get the affilaited transition rules of the transiton
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IKineticRule> GetTransitionRules()
+        {
+            return (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
         }
 
         /// <summary>
@@ -48,7 +64,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-            return "'Abstract Transition'";
+            return "'Kinetic Transition Rule'";
         }
 
         /// <summary>
@@ -56,7 +72,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IKineticTransition>(obj) is var transition)
             {

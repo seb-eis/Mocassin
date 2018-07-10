@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
+using ICon.Framework.Extensions;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
 using ICon.Model.Structures;
@@ -103,123 +102,6 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get a list of state pair groups for each refernce position of the unit cell. Groups contain all possible state pairs for these positions
-        /// </summary>
-        /// <returns></returns>
-        public IList<StatePairGroup> GetPossibleStatePairsForAllPositions()
-        {
-            return AccessCacheableDataEntry(CreatePossibleStatePairsForAllPositions);
-        }
-
-        /// <summary>
-        /// Get the state pair groups with undefined status for all property groups (Deprecate groups have empty state pair groups)
-        /// </summary>
-        /// <returns></returns>
-        public IList<StatePairGroup> GetAllStatePairGroups()
-        {
-            return AccessCacheableDataEntry(CreateAllStatePairGroups);
-        }
-
-        /// <summary>
-        /// Get the state pair group for the property group at the specfified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public StatePairGroup GetStatePairGroup(int index)
-        {
-            return GetAllStatePairGroups()[index];
-        }
-
-        /// <summary>
-        /// Get all symmetry equivalent intermediate positions for all kinetic transitions
-        /// </summary>
-        /// <returns></returns>
-        IList<IList<SetList<Fractional3D>>> GetKineticIntermediateEquivalencyMaps()
-        {
-            return AccessCacheableDataEntry(CreateKineticIntermediateEquivalencyMaps);
-        }
-
-        /// <summary>
-        /// Get the symmetry equivalent intermediate positions for the transition at the specfified index
-        /// </summary>
-        /// <returns></returns>
-        IList<SetList<Fractional3D>> GetKineticIntermediateEquivalencyMap(int index)
-        {
-            return GetKineticIntermediateEquivalencyMaps()[index];
-        }
-
-        /// <summary>
-        /// Creates the list of symmetry equivalent intermediate positions for all kinetic reference transitions
-        /// </summary>
-        /// <returns></returns>
-        [CacheableMethod]
-        protected IList<IList<SetList<Fractional3D>>> CreateKineticIntermediateEquivalencyMaps()
-        {
-            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
-            var analyzer = new TransitionAnalyzer();
-            var encoder = structureManager.QueryPort.Query(port => port.GetVectorEncoder());
-
-            var result = new List<IList<SetList<Fractional3D>>>();
-            foreach (var transition in transitionManager.QueryPort.Query((ITransitionDataPort port) => port.GetKineticTransitions()))
-            {
-                if (transition.IsDeprecated)
-                {
-                    result.Add(new List<SetList<Fractional3D>>());
-                }
-                result.Add(analyzer.GetEquivalentIntermediatePositions(transition.GetGeometrySequence(), ProjectServices.SpaceGroupService));
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Create all state pair groups for all property groups. The groups have an undefined position status
-        /// </summary>
-        /// <returns></returns>
-        [CacheableMethod]
-        protected IList<StatePairGroup> CreateAllStatePairGroups()
-        {
-            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
-            var statePairs = transitionManager.QueryPort.Query((ITransitionDataPort port) => port.GetPropertyStatePairs());
-            var groupCreator = new StatePairGroupCreator();
-            var result = new List<StatePairGroup>();
-
-            foreach (var propertyGroup in transitionManager.QueryPort.Query((ITransitionDataPort port) => port.GetPropertyGroups()))
-            {
-                if (propertyGroup.IsDeprecated)
-                {
-                    result.Add(StatePairGroup.CreateEmpty());
-                    continue;
-                }
-                result.Add(groupCreator.MakeGroup(propertyGroup, statePairs));
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Creates a state pair group for each sublattice position that contains all possible options required for metropolis transitions
-        /// </summary>
-        /// <returns></returns>
-        [CacheableMethod]
-        protected IList<StatePairGroup> CreatePossibleStatePairsForAllPositions()
-        {
-            var structureDataAccess = ProjectServices.GetManager<IStructureManager>().QueryPort;
-            var transitionDataAccess = ProjectServices.GetManager<ITransitionManager>().QueryPort;
-            var result = new List<StatePairGroup>();
-
-            var groupCreator = new StatePairGroupCreator();
-            var statePairs = transitionDataAccess.Query(port => port.GetPropertyStatePairs());
-            var propertyGroups = transitionDataAccess.Query(port => port.GetPropertyGroups());
-            var cellPositions = structureDataAccess.Query(port => port.GetUnitCellPositions());
-
-            foreach (var particleSet in cellPositions.Select(a => a.OccupationSet))
-            {
-                result.Add(groupCreator.MakeMergedGroup(propertyGroups, statePairs, particleSet.GetParticles().Select(a => a.Index)));
-            }
-            return result;
-        }
-
-        /// <summary>
         /// Creates all metropolis transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
@@ -273,35 +155,20 @@ namespace ICon.Model.Transitions
         [CacheableMethod]
         protected IList<IList<MetropolisRule>> CreateAllMetropolisRules()
         {
-            var transitionDataAccess = ProjectServices.GetManager<ITransitionManager>().QueryPort;
-            var particleDataAccess = ProjectServices.GetManager<IParticleManager>().QueryPort;
-            var statePairGroups = GetPossibleStatePairsForAllPositions();
-            var connections = new ConnectorType[] { ConnectorType.Dynamic };
-            var result = new List<IList<MetropolisRule>>();
+            var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
+            var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
 
-            var particles = particleDataAccess.Query(port => port.GetParticles().ToArray());
+            var particles = particlePort.Query(port => port.GetParticles().ToArray());
+            var transitions = transitionPort.Query(port => port.GetMetropolisTransitions().ToArray());
             var ruleGenerator = new QuickRuleGenerator<MetropolisRule>(particles);
 
-            foreach (var transition in transitionDataAccess.Query(port => port.GetMetropolisTransitions()))
-            {
-                if (transition.IsDeprecated)
+            int index = -1;
+            return ruleGenerator
+                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
+                .Select(result =>
                 {
-                    result.Add(new List<MetropolisRule>());
-                    continue;
-                }
-
-                var stateDescription = new StatePairGroup[]
-                {
-                    statePairGroups[transition.CellPosition0.Index],
-                    statePairGroups[transition.CellPosition1.Index]
-                };
-
-                var rules = ruleGenerator
-                    .MakeUniqueRules(stateDescription, connections)
-                    .Select(a => { a.Transition = transition; return a; });
-                result.Add(rules.ToList());
-            }
-            return result;
+                    ++index; return (IList<MetropolisRule>)result.Change(value => value.Transition = transitions[index]).ToList();
+                }).ToList();
         }
 
         /// <summary>
@@ -311,29 +178,20 @@ namespace ICon.Model.Transitions
         [CacheableMethod]
         protected IList<IList<KineticRule>> CreateAllKineticRules()
         {
-            var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
             var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
-
-            var statePairGroups = GetAllStatePairGroups();
-            var result = new List<IList<KineticRule>>();
+            var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
 
             var particles = particlePort.Query(port => port.GetParticles().ToArray());
+            var transitions = transitionPort.Query(port => port.GetKineticTransitions().ToArray());
             var ruleGenerator = new QuickRuleGenerator<KineticRule>(particles);
 
-            foreach (var transition in transitionPort.Query(port => port.GetKineticTransitions()))
-            {
-                if (transition.IsDeprecated)
+            int index = -1;
+            return ruleGenerator
+                .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
+                .Select(result =>
                 {
-                    result.Add(new List<KineticRule>());
-                    continue;
-                }
-                var rules = ruleGenerator
-                    .MakeUniqueRules(transition.AbstractTransition, statePairGroups)
-                    .Select(rule => { rule.Transition = transition; return rule; });
-                result.Add(rules.ToList());
-            }
-
-            return result;
+                    ++index; return (IList<KineticRule>)result.Change(value => value.Transition = transitions[index]).ToList();
+                }).ToList();
         }
     }
 }

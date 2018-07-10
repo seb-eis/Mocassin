@@ -69,5 +69,11 @@ namespace ICon.Model.Energies
         /// <param name="index"></param>
         /// <returns></returns>
         IUnstableEnvironment GetUnstableEnvironment(int index);
+
+        /// <summary>
+        /// Get a raw energy setter provider that enables creation of energy value setters for interaction objects. Value constraints ahve to be set by receiver
+        /// </summary>
+        /// <returns></returns>
+        IEnergySetterProvider GetEnergySetterProvider();
     }
 }

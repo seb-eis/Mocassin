@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Runtime.Serialization;
 
 using ICon.Model.Basic;
@@ -19,15 +19,38 @@ namespace ICon.Model.Transitions
         /// The unit cell position of the first sub-lattice
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition CellPosition0 { get; set; }
 
         /// <summary>
         /// The unit cell position of the second sub-lattice
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition CellPosition1 { get; set; }
+
+        /// <summary>
+        /// The affiliated abstract transition
+        /// </summary>
+        [DataMember]
+        [LinkableByIndex]
+        public IAbstractTransition AbstractTransition { get; set; }
+
+        /// <summary>
+        /// The list of affiliated metropolis transition rules (Automanaged by model system)
+        /// </summary>
+        [DataMember]
+        [LinkableByIndex]
+        public List<MetropolisRule> TransitionRules { get; set; }
+       
+        /// <summary>
+        /// Get the affiliated transition rules as an enumerable sequence
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IMetropolisRule> GetTransitionRules()
+        {
+            return (TransitionRules ?? new List<MetropolisRule>()).AsEnumerable();
+        }
 
         /// <summary>
         /// Checks for equality to another metropolis transition (Also checks inverted case)
@@ -38,9 +61,11 @@ namespace ICon.Model.Transitions
         {
             if (CellPosition0.Index == other.CellPosition0.Index && CellPosition1.Index == other.CellPosition1.Index)
             {
-                return true;
+                return AbstractTransition == other.AbstractTransition;
             }
-            return CellPosition0.Index == other.CellPosition1.Index && CellPosition1.Index == other.CellPosition0.Index;
+            return CellPosition0.Index == other.CellPosition1.Index
+                && CellPosition1.Index == other.CellPosition0.Index
+                && AbstractTransition == other.AbstractTransition;
         }
 
         /// <summary>
@@ -57,12 +82,13 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IMetropolisTransition>(obj) is var transition)
             {
                 CellPosition0 = transition.CellPosition0;
                 CellPosition1 = transition.CellPosition1;
+                AbstractTransition = transition.AbstractTransition;
                 return this;
             }
             return null;

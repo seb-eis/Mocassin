@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ICon.Framework.Random;
 
 namespace ICon.Framework.Random
 {

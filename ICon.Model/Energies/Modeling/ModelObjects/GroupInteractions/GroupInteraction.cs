@@ -28,8 +28,8 @@ namespace ICon.Model.Energies
         /// The unit cell position that describes the start of the grouping
         /// </summary>
         [DataMember]
-        [IndexResolvable]
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        [LinkableByIndex]
+        public IUnitCellPosition CenterUnitCellPosition { get; set; }
 
         /// <summary>
         /// The list of 3D fractional vectors that describe the group geometry
@@ -44,24 +44,12 @@ namespace ICon.Model.Energies
         public Dictionary<IParticle, Dictionary<OccupationState, double>> EnergyDictionarySet { get; set; }
 
         /// <summary>
-        /// Construct new group interaction with empty energy dictionary set
-        /// </summary>
-        /// <param name="energyDictionarySet"></param>
-        public GroupInteraction()
-        {
-            EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
-        }
-
-        /// <summary>
         /// Get the base geometry sequence excluding the start position
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Fractional3D> GetBaseGeometry()
         {
-            foreach (var vector in GeometryVectors)
-            {
-                yield return vector.AsFractional();
-            }
+            return (GeometryVectors ?? new List<DataVector3D>()).Select(a => a.AsFractional());
         }
 
         /// <summary>
@@ -71,6 +59,10 @@ namespace ICon.Model.Energies
         public IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> GetEnergyDictionarySet()
         {
             var result = new Dictionary<IParticle, IReadOnlyDictionary<OccupationState, double>>();
+            if (EnergyDictionarySet == null)
+            {
+                return result;
+            }
             foreach (var item in EnergyDictionarySet)
             {
                 result.Add(item.Key, item.Value);
@@ -92,11 +84,11 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IGroupInteraction>(obj) is var interaction)
             {
-                UnitCellPosition = interaction.UnitCellPosition;
+                CenterUnitCellPosition = interaction.CenterUnitCellPosition;
                 GeometryVectors = interaction.GetBaseGeometry().Select(vector => new DataVector3D(vector)).ToList();
                 EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
                 foreach (var item in interaction.GetEnergyDictionarySet())
@@ -110,6 +102,40 @@ namespace ICon.Model.Energies
                 return this;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Tries to set the passed energy entry in the energy dictionary. Returns false if the value cannot be set
+        /// </summary>
+        /// <param name="energyEntry"></param>
+        /// <returns></returns>
+        public bool TrySetEnergyEntry(in GroupEnergyEntry energyEntry)
+        {
+            if (EnergyDictionarySet.TryGetValue(energyEntry.CenterParticle, out var innerDictionary))
+            {
+                var searchEntry = energyEntry.GroupOccupation as OccupationState ?? new OccupationState(energyEntry.GroupOccupation);
+                if (innerDictionary.ContainsKey(searchEntry))
+                {
+                    innerDictionary[searchEntry] = energyEntry.Energy;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Get an enumerable sequence of all energy entries of the group interaction
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<GroupEnergyEntry> GetEnergyEntries()
+        {
+            foreach (var outerItem in EnergyDictionarySet)
+            {
+                foreach (var innerItem in outerItem.Value)
+                {
+                    yield return new GroupEnergyEntry(outerItem.Key, innerItem.Key, innerItem.Value);
+                }
+            }
         }
     }
 }

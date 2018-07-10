@@ -49,9 +49,9 @@ namespace ICon.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddNameValidation(IParticle particle, ValidationReport report)
         {
-            if (new Regex(Settings.NameRegex).IsMatch(particle.Name) == false)
+            if (new Regex(Settings.NameStringPattern).IsMatch(particle.Name) == false)
             {
-                var detail0 = $"Particle naming is restriced by the following regular expression: {Settings.NameRegex}";
+                var detail0 = $"Particle naming is restriced by the following regular expression: {Settings.NameStringPattern}";
                 report.AddWarning(ModelMessages.CreateNamingViolationWarning(this, detail0));
             }
         }
@@ -63,9 +63,9 @@ namespace ICon.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddSymbolValidation(IParticle particle, ValidationReport report)
         {
-            if (new Regex(Settings.SymbolRegex).IsMatch(particle.Symbol) == false)
+            if (new Regex(Settings.SymbolStringPattern).IsMatch(particle.Symbol) == false)
             {
-                var detail0 = $"Particle symbol naming is restriced by the following regular expression: {Settings.SymbolRegex}";
+                var detail0 = $"Particle symbol naming is restriced by the following regular expression: {Settings.SymbolStringPattern}";
                 report.AddWarning(ModelMessages.CreateNamingViolationWarning(this, detail0));
             }
         }
@@ -77,11 +77,9 @@ namespace ICon.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddChargeValidation(IParticle particle, ValidationReport report)
         {
-            var constraint = new DoubleConstraint(true, -Settings.ChargeLimit, Settings.ChargeLimit, true, DoubleComparer.CreateRanged(Settings.ChargeTolerance));
-            if (constraint.IsValid(particle.Charge) == false)
+            if (Settings.ParticleCharge.ParseValue(particle.Charge, out var warnings) != 0)
             {
-                var detail0 = $"Particle charge values are restricted to {constraint.ToString()} with a tolerance of {Settings.ChargeTolerance}";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
         }
 
@@ -92,10 +90,9 @@ namespace ICon.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddIndexOutOfRangeValidation(ValidationReport report)
         {
-            if (DataReader.Access.GetValidParticleCount() >= Settings.ParticleLimit)
+            if (Settings.ParticleCount.ParseValue(DataReader.Access.GetValidParticleCount(), out var warnings) != 0)
             {
-                var detail0 = $"Particle manager limit for unique particles is ({Settings.ParticleLimit}) due to encoding for the simulation";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
         }
 
@@ -107,14 +104,13 @@ namespace ICon.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddObjectUniquenessValidation(IParticle particle, ValidationReport report)
         {
-            DoubleComparer comparer = DoubleComparer.CreateRanged(Settings.ChargeTolerance);
             foreach (var item in DataReader.Access.GetParticles())
             {
                 if (item.IsDeprecated)
                 {
                     continue;
                 }
-                if (particle.EqualsInModelProperties(item, comparer))
+                if (particle.EqualsInModelProperties(item, ProjectServices.CommonNumerics.RangeComparer))
                 {
                     var detail0 = $"Particle compares equal in properties to existing particle with index ({item.Index})";
                     report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail0));
@@ -128,7 +124,8 @@ namespace ICon.Model.Particles.Validators
                 if (item.Symbol == particle.Symbol)
                 {
                     var detail0 = $"Particle symbol is identical to the particle with index ({item.Index})";
-                    report.AddWarning(ModelMessages.CreateRedundantContentWarning(this, detail0));
+                    var detail1 = $"Transition rule generation will auto enforce matter conservation for this symbol";
+                    report.AddWarning(ModelMessages.CreateImplicitDependencyWarning(this, detail0, detail1));
                 }
             }
         }

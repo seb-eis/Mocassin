@@ -341,7 +341,7 @@ namespace ICon.Model.Basic
             }
             void OnSuccess()
             {
-                EventManager.OnManagerResets.DistributeAsync().Wait();
+                EventManager.OnManagerResets.OnNextAsync().Wait();
             }
             return InvokeDataOperation("Reset manager data to default state", Operation, OnSuccess);
         }
@@ -461,7 +461,7 @@ namespace ICon.Model.Basic
         {
             if (replace)
             {
-                orgObject.PopulateObject(replaceObject);
+                orgObject.PopulateFrom(replaceObject);
             }
             orgObject.Restore();
         }
@@ -538,9 +538,9 @@ namespace ICon.Model.Basic
             {
                 if (invalidatesCache)
                 {
-                    EventManager.OnExtendedDataExpiration.Distribute();
+                    EventManager.OnExtendedDataExpiration.OnNext();
                 }
-                EventManager.OnChangedModelParameters.Distribute(ModelParameterEventArgs.Create(orgObject));
+                EventManager.OnChangedModelParameters.OnNext(ModelParameterEventArgs.Create(orgObject));
             }
 
             return InvokeDataOperation($"Set model parameter {tmpObject.GetParameterName()} in the manager", Operation, OnSuccess);
@@ -575,7 +575,7 @@ namespace ICon.Model.Basic
             }
             void OnSuccess(bool isGood)
             {
-                EventManager.OnNewModelObjects.Distribute(ModelObjectEventArgs.Create((T1)newInternal));
+                EventManager.OnNewModelObjects.OnNext(ModelObjectEventArgs.Create((T1)newInternal));
             }
             return InvokeDataOperation($"Add new {newInternal.GetModelObjectName()} to the manager", Operation, OnSuccess);
         }
@@ -607,8 +607,8 @@ namespace ICon.Model.Basic
             {
                 if (deprecationSuccess)
                 {
-                    EventManager.OnExtendedDataExpiration.Distribute();
-                    EventManager.OnRemovedModelObjects.Distribute(ModelObjectEventArgs.Create((T1)internalObj));
+                    EventManager.OnExtendedDataExpiration.OnNext();
+                    EventManager.OnRemovedModelObjects.OnNext(ModelObjectEventArgs.Create((T1)internalObj));
                 }
             }
             return InvokeDataOperation($"Remove {internalObj.GetModelObjectName()} ({ internalObj.Index}) from manager", Operation, OnSuccess);
@@ -651,7 +651,7 @@ namespace ICon.Model.Basic
             {
                 if (changedObject != null)
                 {
-                    EventManager.OnChangedModelObjects.Distribute(ModelObjectEventArgs.Create((T1)changedObject));
+                    EventManager.OnChangedModelObjects.OnNext(ModelObjectEventArgs.Create((T1)changedObject));
                 }
             }
             return InvokeDataOperation($"Replace {tmpObject.GetModelObjectName()} ({ orgObj.Index}) in the manager", Operation, OnSuccess);
@@ -675,7 +675,7 @@ namespace ICon.Model.Basic
             {
                 foreach (var (Info, Reindexing) in reindexingData)
                 {
-                    EventManager.OnChangedModelIndexing.Distribute(MakeModelIndexingEventArgs(Info, Reindexing));
+                    EventManager.OnChangedModelIndexing.OnNext(MakeModelIndexingEventArgs(Info, Reindexing));
                 }
             }
             return InvokeDataOperation("Clean deprecated data and reindex model objects", Operation, OnSuccess);

@@ -8,32 +8,31 @@ namespace ICon.Model.ProjectServices
     /// <summary>
     /// Basic settings object for transitions that limits the possible input for transitions
     /// </summary>
-    [Serializable]
-    [DataContract(Name ="TransitionSettings")]
+    [DataContract]
     public class BasicTransitionSettings
     {
         /// <summary>
-        /// The maximum number of allowed transitions
+        /// The value restriction setting for the number of transitions
         /// </summary>
-        [DataMember(Name = "MasTransitionCount")]
-        public int MaxTransitionCount { get; set; }
+        [DataMember]
+        public ValueSetting<int> TransitionCount { get; set; }
 
         /// <summary>
-        /// The minimal transition length (usually at least two positions are required)
+        /// The value restriction setting for the transition length
         /// </summary>
-        [DataMember(Name ="MinTransitionLength")]
-        public int MinTransitionLength { get; set; }
+        [DataMember]
+        public ValueSetting<int> TransitionLength { get; set; }
 
         /// <summary>
-        /// The maximum number of allowed transtion steps
+        /// The regular expression string pattern for the abstract transition naming restriction
         /// </summary>
-        [DataMember(Name = "MaxTransitionLength")]
-        public int MaxTransitionLength { get; set; }
+        [DataMember]
+        public string TransitionStringPattern { get; set; }
 
         /// <summary>
-        /// The regular expression string for the abstract transition naming restriction
+        /// Boolean flag to activate automatic filtering of unrecognized rule movemnt types during rule generation
         /// </summary>
-        [DataMember(Name = "AbstractTransitionNameRegex")]
-        public string AbstractTransitionNameRegex { get; set; }
+        [DataMember]
+        public bool FilterUnrecognisedRuleTypes { get; set; }
     }
 }

@@ -23,6 +23,11 @@ namespace ICon.Model.Transitions
         RuleFlags RuleFlags { get; }
 
         /// <summary>
+        /// The type of movement the rule describes
+        /// </summary>
+        RuleMovementType MovementType { get; }
+
+        /// <summary>
         /// The abstract transition instance
         /// </summary>
         IAbstractTransition AbstractTransition { get; set; }
@@ -41,12 +46,6 @@ namespace ICon.Model.Transitions
         /// The particle indices for the unstable transition positions (Size is always path size - 1 )
         /// </summary>
         IEnumerable<IParticle> GetTransitionStateOccupation();
-
-        /// <summary>
-        /// Get all linked rules of this transition
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<ITransitionRule> GetLinkedRules();
 
         /// <summary>
         /// Get an index based description of the movement from start state to end state

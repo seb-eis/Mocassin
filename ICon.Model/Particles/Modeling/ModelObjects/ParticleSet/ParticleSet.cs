@@ -25,7 +25,7 @@ namespace ICon.Model.Particles
         /// The list of particles belonging to the particle set
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IParticle> Particles { get; set; }
         
         /// <summary>
@@ -34,7 +34,7 @@ namespace ICon.Model.Particles
         /// <returns></returns>
         public IEnumerable<IParticle> GetParticles()
         {
-            return Particles.AsEnumerable();
+            return (Particles ?? new List<IParticle>()).AsEnumerable();
         }
 
 
@@ -93,7 +93,7 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IParticleSet>(obj) is var particleSet)
             {

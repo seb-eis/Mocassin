@@ -42,6 +42,22 @@ namespace ICon.Framework.Extensions
         }
 
         /// <summary>
+        /// Perform an action on each elemnt of an enumerable sequence and returns the modofied value
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IEnumerable<T1> Change<T1>(this IEnumerable<T1> values, Action<T1> action)
+        {
+            foreach (var item in values)
+            {
+                action(item);
+                yield return item;
+            }
+        }
+
+        /// <summary>
         /// Generic lexicographical compare for two sequences of values where the items implement generic IComparable
         /// </summary>
         /// <typeparam name="T1"></typeparam>
@@ -110,6 +126,26 @@ namespace ICon.Framework.Extensions
         public static IEnumerable<T1> AsSingleton<T1>(this T1 item)
         {
             yield return item;
+        }
+
+        /// <summary>
+        /// Returns the enumeration index of all entries that match the search prediacte
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="searchSequence"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static IEnumerable<int> IndexOfMany<T1>(this IEnumerable<T1> searchSequence, Predicate<T1> predicate)
+        {
+            int index = 0;
+            foreach (var item in searchSequence)
+            {
+                if (predicate(item))
+                {
+                    yield return index;
+                }
+                index++;
+            }
         }
     }
 }

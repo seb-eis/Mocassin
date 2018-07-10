@@ -19,13 +19,7 @@ namespace ICon.Model.Energies
         /// The polar pair energy dictionary that assigns each possible particle pair an energy value
         /// </summary>
         [DataMember]
-        public Dictionary<AsymParticlePair, double> EnergyDictionary { get; set; }
-
-        /// <summary>
-        /// Read only interface access to the energy dictionary
-        /// </summary>
-        [IgnoreDataMember]
-        IReadOnlyDictionary<AsymParticlePair, double> IAsymmetricPairInteraction.EnergyDictionary => EnergyDictionary;
+        public Dictionary<AsymmetricParticlePair, double> EnergyDictionary { get; set; }
 
         /// <summary>
         /// Default construction with null energy dictionary
@@ -39,10 +33,20 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="candidate"></param>
         /// <param name="energyDictionary"></param>
-        public AsymmetricPairInteraction(in PairCandidate candidate, Dictionary<AsymParticlePair, double> energyDictionary) :  base(candidate)
+        public AsymmetricPairInteraction(in PairCandidate candidate, Dictionary<AsymmetricParticlePair, double> energyDictionary) :  base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
         }
+
+        /// <summary>
+        /// Get a read only access to the enrgy dictionary
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyDictionary<AsymmetricParticlePair, double> GetEnergyDictionary()
+        {
+            return EnergyDictionary ?? new Dictionary<AsymmetricParticlePair, double>();
+        }
+
 
         /// <summary>
         /// Get the model object name
@@ -50,7 +54,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-            return "'Unpolar Pair Interaction'";
+            return "'Asymmetric Pair Interaction'";
         }
 
         /// <summary>
@@ -58,19 +62,49 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IAsymmetricPairInteraction>(obj) is var interaction)
             {
-                base.PopulateObject(obj);
+                base.PopulateFrom(obj);
 
-                EnergyDictionary = new Dictionary<AsymParticlePair, double>(interaction.EnergyDictionary.Count);
-                foreach (var item in interaction.EnergyDictionary)
+                EnergyDictionary = new Dictionary<AsymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
+                foreach (var item in interaction.GetEnergyDictionary())
                 {
                     EnergyDictionary.Add(item.Key, item.Value);
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Tries to set the passed energy entry in the enrgy dictionary. Returns false if the value cannot be set
+        /// </summary>
+        /// <param name="energyEntry"></param>
+        /// <returns></returns>
+        public override bool TrySetEnergyEntry(in PairEnergyEntry energyEntry)
+        {
+            if (energyEntry.ParticlePair is AsymmetricParticlePair particlePair)
+            {
+                if (EnergyDictionary.ContainsKey(particlePair))
+                {
+                    EnergyDictionary[particlePair] = energyEntry.Energy;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Get an enumerable sequence that contains all energy entries of the pair interaction
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<PairEnergyEntry> GetEnergyEntries()
+        {
+            foreach (var item in EnergyDictionary)
+            {
+                yield return new PairEnergyEntry(item.Key, item.Value);
+            }
         }
     }
 }

@@ -24,6 +24,12 @@ namespace ICon.Model.Transitions
         IAbstractTransition AbstractTransition { get; }
 
         /// <summary>
+        /// Get the affiliated transition rules of the transition
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IKineticRule> GetTransitionRules();
+
+        /// <summary>
         /// Get the geometry of the transition as a sequence of 3D fractional vectors
         /// </summary>
         /// <returns></returns>

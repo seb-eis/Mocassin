@@ -8,7 +8,7 @@ namespace ICon.Model.Particles
     /// <summary>
     /// Represents a single model species in a simulation project
     /// </summary>
-    public interface IParticle : IModelObject, IComparable<IParticle>
+    public interface IParticle : IModelObject, IComparable<IParticle>, IEquatable<IParticle>
     {
         /// <summary>
         /// The charge value in electron volts

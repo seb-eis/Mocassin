@@ -27,9 +27,14 @@ namespace ICon.Model.Transitions
         string Name { get; }
 
         /// <summary>
-        /// Get theproperty group for each step of the transition
+        /// Flag if the abstract transition can only describe a metropolis exchange (State count is 2)
         /// </summary>
-        IEnumerable<IPropertyGroup> GetPropertyGroupSequence();
+        bool IsMetropolis { get; }
+
+        /// <summary>
+        /// Get the state exchange group for each step of the transition
+        /// </summary>
+        IEnumerable<IStateExchangeGroup> GetStateExchangeGroups();
 
         /// <summary>
         /// Get the set of step connectors that describe the position connection

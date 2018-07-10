@@ -8,7 +8,7 @@ namespace ICon.Mathematics.Permutation
     /// <summary>
     /// A generic permutation class that counter lexicographically and periodically generates the permutations of a two dimensional list
     /// </summary>
-    public class SlotMachinePermuter<T1> : IPermutationProvider<T1>
+    public class SlotMachinePermuter<T1> : IPermutationProvider<T1> where T1 : IComparable<T1>
     {
         /// <summary>
         /// The current permutation value

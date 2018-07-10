@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 using ICon.Framework.Collections;
 
@@ -224,6 +224,130 @@ namespace ICon.Framework.Extensions
                 }
             }
             return removed;
+        }
+
+        /// <summary>
+        /// Gets the sequence equality direction for list one to the second. Returns 1 for positive or -1 for inverted direction. Retruns 0 if sequences are not equal in
+        /// either direction
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static int GetSequenceEqualityDirectionTo<T1>(this IList<T1> lhs, IList<T1> rhs, IEqualityComparer<T1> comparer)
+        {
+            if (lhs.Count != rhs.Count)
+            {
+                return 0;
+            }
+            if (lhs == rhs)
+            {
+                return 1;
+            }
+            if (lhs.SequenceEqual(rhs, comparer))
+            {
+                return 1;
+            }
+            int rhsIndex = rhs.Count;
+            for (int lhsIndex = 0; lhsIndex < lhs.Count; lhsIndex++)
+            {
+                if (!comparer.Equals(lhs[lhsIndex], rhs[--rhsIndex]))
+                {
+                    return 0;
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Removes all duplciates from a list based upon the provided equality comparer and returns removed indices
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="comparer"></param>
+        public static IEnumerable<int> RemoveDuplicates<T1>(this IList<T1> list, IEqualityComparer<T1> comparer)
+        {
+            for (int i = 0; i < list.Count - 1; i++)
+            {
+                for (int j = list.Count - 1; j > i; j--)
+                {
+                    if (comparer.Equals(list[i], list[j]))
+                    {
+                        list.RemoveAt(j);
+                        yield return j;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Populates a generic list with a default value
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="value"></param>
+        /// <param name="counts"></param>
+        /// <returns></returns>
+        public static IList<T1> Populate<T1>(this IList<T1> values, T1 value, int counts)
+        {
+            values.Clear();
+            for (int i = 0; i < counts; i++)
+            {
+                values.Add(value);
+            }
+            return values;
+        }
+
+        /// <summary>
+        /// Populates a generic list from a provider function to the specfified size
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="provider"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static IList<T1> Populate<T1>(this IList<T1> list, Func<T1> provider, int count)
+        {
+            list.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(provider());
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Shuffles the entries of a list multiple times using the provided random number generator
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="random"></param>
+        /// <returns></returns>
+        public static IList<T1> Shuffle<T1>(this IList<T1> list, System.Random random, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                for (int j = list.Count; j > 1;)
+                {
+                    list.Swap(random.Next(j), --j);
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Swap the values at the provided indices within a list
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        public static void Swap<T1>(this IList<T1> list, int lhs, int rhs)
+        {
+            T1 tmp = list[lhs];
+            list[lhs] = list[rhs];
+            list[rhs] = tmp;
         }
     }
 }

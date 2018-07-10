@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Reactive.Linq;
 using Newtonsoft.Json;
 
@@ -45,6 +45,19 @@ namespace ICon.Framework.Operations
                 IsGood = false;
             }
         }
+
+        /// <summary>
+        /// Addss multiple warnings messages and sets validation to failed if one is critical
+        /// </summary>
+        /// <param name="messages"></param>
+        public void AddWarnings(IEnumerable<WarningMessage> messages)
+        {
+            foreach (var warning in messages)
+            {
+                AddWarning(warning);
+            }
+        }
+
         /// <summary>
         /// Get warnings enumerator
         /// </summary>

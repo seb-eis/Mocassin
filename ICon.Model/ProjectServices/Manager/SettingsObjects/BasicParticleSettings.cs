@@ -13,39 +13,33 @@ namespace ICon.Model.ProjectServices
     public class BasicParticleSettings
     {
         /// <summary>
-        /// The maximum number of allowed particles (Depens on used bitmask, default is 63)
+        /// The value restriction setting for particle charges
         /// </summary>
-        [DataMember(Name ="Limit")]
-        public Int32 ParticleLimit { get; set; }
+        [DataMember]
+        public ValueSetting<double> ParticleCharge { get; set; }
 
         /// <summary>
-        /// The maximum absolut charge value that can be applied to a particle
+        /// The value restriction setting for the particle count
         /// </summary>
-        [DataMember(Name ="ChargeLimit")]
-        public Double ChargeLimit { get; set; }
+        [DataMember]
+        public ValueSetting<int> ParticleCount { get; set; }
 
         /// <summary>
-        /// The tolerance used to compare charge values for equality during validation
+        /// The value restriction setting for the particle set count
         /// </summary>
-        [DataMember(Name ="ChargeTolerance")]
-        public Double ChargeTolerance { get; set; }
-
-        /// <summary>
-        /// The maximum number of allowed particle masks
-        /// </summary>
-        [DataMember(Name ="MaxOccupants")]
-        public Int32 ParticleSetLimit { get; set; }
+        [DataMember]
+        public ValueSetting<int> ParticleSetCount { get; set; }
 
         /// <summary>
         /// The regular expression for the particle symbol
         /// </summary>
-        [DataMember(Name ="Symbol")]
-        public String SymbolRegex { get; set; }
+        [DataMember]
+        public string SymbolStringPattern { get; set; }
 
         /// <summary>
         /// The regular expression for the particle name
         /// </summary>
-        [DataMember(Name ="Name")]
-        public String NameRegex { get; set; }
+        [DataMember]
+        public string NameStringPattern { get; set; }
     }
 }

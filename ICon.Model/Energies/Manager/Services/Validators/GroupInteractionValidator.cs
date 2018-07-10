@@ -56,9 +56,9 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected bool AddDefinedPositionValidation(IGroupInteraction group, ValidationReport report)
         {
-            if (group.UnitCellPosition.Status != PositionStatus.Unstable && group.UnitCellPosition.Status != PositionStatus.Stable)
+            if (group.CenterUnitCellPosition.Status != PositionStatus.Unstable && group.CenterUnitCellPosition.Status != PositionStatus.Stable)
             {
-                var detail0 = $"The position status type ({group.UnitCellPosition.Status.ToString()}) is not supported for grouping";
+                var detail0 = $"The position status type ({group.CenterUnitCellPosition.Status.ToString()}) is not supported for grouping";
                 var detail1 = $"Supported types are ({PositionStatus.Stable.ToString()}) and ({PositionStatus.Unstable.ToString()})";
                 report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
             }
@@ -79,17 +79,14 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddContentRestrictionValidation(IGroupInteraction group, ValidationReport report)
         {
-            if (group.GroupSize > Settings.MaxGroupingSize)
+            if (Settings.AtomsPerGroup.ParseValue(group.GroupSize, out var warnings) != 0)
             {
-                var detail0 = $"Maximum group position count violated with ({group.GroupSize}) of ({Settings.MaxGroupingSize}) allowed positions";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
 
-            long permCount = GetGroupPermutationCount(group);
-            if (permCount > Settings.MaxGroupPermutationCount)
+            if (Settings.PermutationsPerGroup.ParseValue(GetGroupPermutationCount(group), out warnings) != 0)
             {
-                var detail0 = $"Maximum permutation count violated with ({permCount}) of ({Settings.MaxGroupPermutationCount}) allowed permutations";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
         }
 
@@ -102,7 +99,7 @@ namespace ICon.Model.Energies.Validators
         {
             var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumerics.RangeComparer);
             var currentData = DataReader.Access.GetGroupInteractions()
-                .Where(value => !value.IsDeprecated && value.UnitCellPosition == group.UnitCellPosition)
+                .Where(value => !value.IsDeprecated && value.CenterUnitCellPosition == group.CenterUnitCellPosition)
                 .Select(value => (value, value.GetBaseGeometry().ToArray()));
 
             foreach (var (otherGroup, geometry) in currentData)
@@ -134,6 +131,12 @@ namespace ICon.Model.Energies.Validators
                 var detail0 = $"The group max vector range is ({groupRange}) while the affiliated environment interaction range is ({envRange})";
                 report.AddWarning(ModelMessages.CreateWarningLimitReachedWarning(this, detail0));
             }
+            if (GroupContainsNonEnvironmentPositions(group))
+            {
+                var detail0 = $"The group contains positions that form ignored pair interactions with the center position";
+                var detail1 = $"Groups can only contain positions that are also defined as pair interactions with the center";
+                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
+            }
         }
 
         /// <summary>
@@ -145,7 +148,7 @@ namespace ICon.Model.Energies.Validators
         {
             var unitCellProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
             var permuter = new GeometryGroupAnalyzer(unitCellProvider, ProjectServices.SpaceGroupService).GetGroupStatePermuter(group);
-            return permuter.PermutationCount * group.UnitCellPosition.OccupationSet.ParticleCount;
+            return permuter.PermutationCount * group.CenterUnitCellPosition.OccupationSet.ParticleCount;
         }
 
         /// <summary>
@@ -156,7 +159,7 @@ namespace ICon.Model.Energies.Validators
         protected double GetMaxGroupRange(IGroupInteraction group)
         {
             var transformer = ProjectServices.CrystalSystemService.VectorTransformer;
-            var start = group.UnitCellPosition.AsPosition().Vector;
+            var start = group.CenterUnitCellPosition.AsPosition().Vector;
             double maxDistance = 0.0;
 
             foreach (var distance in group.GetBaseGeometry().Select(vector => transformer.CartesianFromFractional(vector - start).GetLength()))
@@ -194,13 +197,27 @@ namespace ICon.Model.Energies.Validators
         }
 
         /// <summary>
-        /// Determines if a group contains
+        /// Determines if a group contains any forbidden position that are not defined within the set of pair interactions of the environment
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         protected bool GroupContainsNonEnvironmentPositions(IGroupInteraction group)
         {
-            return false;
+            var ucProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var analyzer = new GeometryGroupAnalyzer(ucProvider, ProjectServices.SpaceGroupService);
+            switch(group.CenterUnitCellPosition.Status)
+            {
+                case PositionStatus.Stable:
+                    var ignoredPairs = DataReader.Access.GetStableEnvironmentInfo().GetIgnoredPairs().ToArray();
+                    return analyzer.GetAllGroupPairs(group).Any(value => ignoredPairs.Contains(value));
+
+                case PositionStatus.Unstable:
+                    var ignoredPos = DataReader.Access.GetUnstableEnvironment(group.CenterUnitCellPosition.Index).GetIgnoredPositions().ToArray();
+                    return analyzer.GetGroupUnitCellPositions(group).Any(value => ignoredPos.Contains(value));
+
+                default:
+                    throw new InvalidOperationException("Undefined position reached environment check");
+            }
         }
 
         /// <summary>
@@ -210,14 +227,14 @@ namespace ICon.Model.Energies.Validators
         /// <returns></returns>
         protected object GetGroupAffiliatedEnvironment(IGroupInteraction group)
         {
-            switch (group.UnitCellPosition.Status)
+            switch (group.CenterUnitCellPosition.Status)
             {
                 case PositionStatus.Stable:
                     return DataReader.Access.GetStableEnvironmentInfo();
 
                 case PositionStatus.Unstable:
                     return DataReader.Access.GetUnstableEnvironments()
-                        .Where(value => value.UnitCellPosition == group.UnitCellPosition)
+                        .Where(value => value.UnitCellPosition == group.CenterUnitCellPosition)
                         .SingleOrDefault();
 
                 default:

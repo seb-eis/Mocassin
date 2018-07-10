@@ -24,7 +24,7 @@ namespace ICon.Model.Energies.Handler
         }
 
         /// <summary>
-        /// Event reaction to a change in on of the abstract transition objects
+        /// Event reaction to a change in one of the abstract transition objects
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
@@ -35,18 +35,18 @@ namespace ICon.Model.Energies.Handler
         }
 
         /// <summary>
-        /// Event reaction to a change in on of the property state pair objects
+        /// Event reaction to a change in one of the state exchange pair objects
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandlePropertyStatePair(IModelObjectEventArgs<IPropertyStatePair> eventArgs)
+        protected IConflictReport HandleStateExchangePair(IModelObjectEventArgs<IStateExchangePair> eventArgs)
         {
             return EventTestReaction(eventArgs);
         }
 
         /// <summary>
-        /// Event reaction to a change in on of the kinetic transition objects
+        /// Event reaction to a change in one of the kinetic transition objects
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
@@ -57,7 +57,7 @@ namespace ICon.Model.Energies.Handler
         }
 
         /// <summary>
-        /// Event reaction to a change in on of the metropolis transition objects
+        /// Event reaction to a change in one of the metropolis transition objects
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
@@ -68,12 +68,12 @@ namespace ICon.Model.Energies.Handler
         }
 
         /// <summary>
-        /// Event reaction to a change in on of the property group objects
+        /// Event reaction to a change in one of the state exchange groups
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandlePropertyGroup(IModelObjectEventArgs<IPropertyGroup> eventArgs)
+        protected IConflictReport HandleStateExchangeGroup(IModelObjectEventArgs<IStateExchangeGroup> eventArgs)
         {
             return EventTestReaction(eventArgs);
         }

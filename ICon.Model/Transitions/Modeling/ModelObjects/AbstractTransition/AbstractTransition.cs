@@ -21,11 +21,11 @@ namespace ICon.Model.Transitions
         public string Name { get; set; }
 
         /// <summary>
-        /// Indices of the affiliated property group for each step
+        /// List of affiliated state change group for each step
         /// </summary>
         [DataMember]
-        [IndexResolvable]
-        public List<IPropertyGroup> PropertyGroups { get; set; }
+        [LinkableByIndex]
+        public List<IStateExchangeGroup> StateExchangeGroups { get; set; }
 
         /// <summary>
         /// Connector types for each step
@@ -37,13 +37,19 @@ namespace ICon.Model.Transitions
         /// The number of sttaes of the transition
         /// </summary>
         [IgnoreDataMember]
-        public int StateCount => PropertyGroups.Count;
+        public int StateCount => (StateExchangeGroups != null) ? StateExchangeGroups.Count : 0;
 
         /// <summary>
         /// The number of connectors of the transition
         /// </summary>
         [IgnoreDataMember]
-        public int ConnectorCount => Connectors.Count;
+        public int ConnectorCount => (Connectors != null) ? Connectors.Count : 0;
+
+        /// <summary>
+        /// Checks if the transition abstract is metropolis only (State count of two has to be metropolis)
+        /// </summary>
+        [IgnoreDataMember]
+        public bool IsMetropolis => StateCount == 2;
 
         /// <summary>
         /// Get the connector types
@@ -51,16 +57,16 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<ConnectorType> GetConnectorSequence()
         {
-            return Connectors.AsEnumerable();
+            return (Connectors ?? new List<ConnectorType>()).AsEnumerable();
         }
 
         /// <summary>
-        /// Get the property group seqeunce of the transition
+        /// Get the state exchange groups of the transition
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPropertyGroup> GetPropertyGroupSequence()
+        public IEnumerable<IStateExchangeGroup> GetStateExchangeGroups()
         {
-            return PropertyGroups.AsEnumerable();
+            return (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
         }
 
         /// <summary>
@@ -77,12 +83,12 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IAbstractTransition>(obj) is var transition)
             {
                 Name = transition.Name;
-                PropertyGroups = transition.GetPropertyGroupSequence().ToList();
+                StateExchangeGroups = transition.GetStateExchangeGroups().ToList();
                 Connectors = transition.GetConnectorSequence().ToList();
                 return this;
             }
@@ -96,8 +102,8 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public bool Equals(IAbstractTransition other)
         {
-            var indices = PropertyGroups.Select(a => a.Index);
-            var otherIndices = other.GetPropertyGroupSequence().Select(a => a.Index);
+            var indices = StateExchangeGroups.Select(a => a.Index);
+            var otherIndices = other.GetStateExchangeGroups().Select(a => a.Index);
 
             if (indices.SequenceEqual(otherIndices) && Connectors.SequenceEqual(other.GetConnectorSequence()))
             {

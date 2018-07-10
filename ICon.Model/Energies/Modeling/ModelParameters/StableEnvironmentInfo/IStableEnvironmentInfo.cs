@@ -17,6 +17,6 @@ namespace ICon.Model.Energies
         /// Get an enumerable for all ignroed pair codes that are generally not include during environment sampling
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SymParticlePair> GetIgnoredPairs();
+        IEnumerable<SymmetricParticlePair> GetIgnoredPairs();
     }
 }

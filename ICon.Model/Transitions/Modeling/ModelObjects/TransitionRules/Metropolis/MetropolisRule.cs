@@ -16,7 +16,7 @@ namespace ICon.Model.Transitions
         /// The metropolis transition parent instance
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IMetropolisTransition Transition { get; set; }
 
         /// <summary>
@@ -33,11 +33,11 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IMetropolisRule>(obj) is var rule)
             {
-                base.PopulateObject(obj);
+                base.PopulateFrom(obj);
                 Transition = rule.Transition;
                 return this;
             }

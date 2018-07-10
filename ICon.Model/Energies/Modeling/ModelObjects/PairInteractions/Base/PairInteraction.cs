@@ -72,7 +72,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IPairInteraction>(obj) is var interaction)
             {
@@ -84,5 +84,18 @@ namespace ICon.Model.Energies
             }
             return null;
         }
+
+        /// <summary>
+        /// Tries to set the passed energy entry in the pair interaction energy dictionary. Returns false if value cannot be set
+        /// </summary>
+        /// <param name="energyEntry"></param>
+        /// <returns></returns>
+        public abstract bool TrySetEnergyEntry(in PairEnergyEntry energyEntry);
+
+        /// <summary>
+        /// Get an enumerable sequence that contains all energy entries of the pair interaction
+        /// </summary>
+        /// <returns></returns>
+        public abstract IEnumerable<PairEnergyEntry> GetEnergyEntries();
     }
 }

@@ -51,16 +51,9 @@ namespace ICon.Model.Energies.Validators
         protected void AddInteractionRangeValidation(IStableEnvironmentInfo envInfo, ValidationReport report)
         {
             var expectedPositionCount = AppoximateMaxInteractionsInInfluenceSphere(envInfo);
-            if (expectedPositionCount > Settings.EnvironmentPositionWarningLimit)
+            if (Settings.PositionsPerStable.ParseValue(expectedPositionCount, out var warnings) != 0)
             {
-                var detail0 = $"The expected maximum position environment count ({expectedPositionCount}) exceeds the warning limit ({Settings.EnvironmentPositionWarningLimit})";
-                var detail1 = $"The simulation cycle rate may be low";
-                report.AddWarning(ModelMessages.CreateWarningLimitReachedWarning(this, detail0, detail1));
-            }
-            if (expectedPositionCount > Settings.MaxStableEnvironmentPositionCount)
-            {
-                var details = $"The expected maximum position environment count {expectedPositionCount} exceeds the limit {Settings.MaxStableEnvironmentPositionCount}";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, details));
+                report.AddWarnings(warnings);
             }
         }
 
@@ -71,7 +64,7 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddIgnoredPairCodesValidation(IStableEnvironmentInfo envInfo, ValidationReport report)
         {
-            var uniqueIgnoredPairs = new HashSet<SymParticlePair>(envInfo.GetIgnoredPairs());
+            var uniqueIgnoredPairs = new HashSet<SymmetricParticlePair>(envInfo.GetIgnoredPairs());
 
             if (envInfo.GetIgnoredPairs().Count() != uniqueIgnoredPairs.Count())
             {

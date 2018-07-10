@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 
 using ICon.Framework.Messaging;
 
@@ -11,6 +11,29 @@ namespace ICon.Model.Basic
     /// </summary>
     public static class ModelMessages
     {
+        /// <summary>
+        /// Creates a non-critical raw warning message for cases where a not recommended settings is detected during validation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateNotRecommendedWarning(object sender)
+        {
+            return new WarningMessage(sender, "Setting Not Recommended");
+        }
+
+        /// <summary>
+        /// Creates a non-critical warning message for cases where a not recommended settings is detected during validation (With arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateNotRecommendedWarning(object sender, params string[] details)
+        {
+            var message = CreateNotRecommendedWarning(sender);
+            message.AddDetails(details);
+            return message;
+        }
+
         /// <summary>
         /// Creates a new raw warning message without further details for cases where modeling objects have missing content during validation
         /// </summary>
@@ -173,6 +196,52 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
+        /// Creates a new raw warning message for cases where a model object causes an implicit dependency e.g. matter conversion rule erforcement
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateImplicitDependencyWarning(object sender)
+        {
+            return new WarningMessage(sender, "Implicit Model Dependency");
+        }
+
+        /// <summary>
+        /// Creates a new warning message for cases where a model object has implicit model object dependencies due to consistency (With arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateImplicitDependencyWarning(object sender, params string[] details)
+        {
+            var message = CreateImplicitDependencyWarning(sender);
+            message.AddDetails(details);
+            return message;
+        }
+
+        /// <summary>
+        /// Creates a new raw warning message for cases where a model definition is supported but does implicitly break or reduce feature support
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateFeatureBreakingInputWarning(object sender)
+        {
+            return new WarningMessage(sender, "Feature Breaking Input");
+        }
+
+        /// <summary>
+        /// Creates a new raw warning message for cases where a model definition is supported but does implicitly break or reduce feature support (With arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateFeatureBreakingInputWarning(object sender, params string[] details)
+        {
+            var message = CreateFeatureBreakingInputWarning(sender);
+            message.AddDetails(details);
+            return message;
+        }
+
+        /// <summary>
         /// Creates a new raw warning message for cases where an identical model parameter replacement is detected during validation
         /// </summary>
         /// <param name="sender"></param>
@@ -225,7 +294,7 @@ namespace ICon.Model.Basic
         /// <returns></returns>
         public static WarningMessage CreateContentResetWarning(object sender)
         {
-            return new WarningMessage(sender, "Content Auto-Update (FAILED)");
+            return new WarningMessage(sender, "Content Auto-Update (RESET)");
         }
 
         /// <summary>

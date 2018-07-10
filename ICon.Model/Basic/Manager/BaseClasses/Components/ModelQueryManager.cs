@@ -108,7 +108,7 @@ namespace ICon.Model.Basic
         /// <param name="dataLocker"></param>
         public ModelQueryManager(TData baseData, TDataCache cacheData, DataAccessLocker dataLocker) : base(baseData, dataLocker)
         {
-            CacheReaderProvider = Basic.DataReadProvider.Create(cacheData, cacheData.AsReadOnly(), dataLocker);
+            CacheReaderProvider = DataReadProvider.Create(cacheData, cacheData.AsReadOnly(), dataLocker);
         }
 
         /// <summary>

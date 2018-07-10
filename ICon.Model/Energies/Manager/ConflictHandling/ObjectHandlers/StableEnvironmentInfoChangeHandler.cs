@@ -16,31 +16,39 @@ namespace ICon.Model.Energies.ConflictHandling
     public class StableEnvironmentInfoChangeHandler : ObjectConflictHandler<StableEnvironmentInfo, EnergyModelData>
     {
         /// <summary>
+        /// Create new stable environment change handler with the provided data access and project services
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        /// <param name="projectServices"></param>
+        public StableEnvironmentInfoChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
+            : base(dataAccess, projectServices)
+        {
+
+        }
+
+        /// <summary>
         /// Main resolver method that handles the changes induced due to the new stable environment information
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
         /// <returns></returns>
-        public override ConflictReport Resolve(StableEnvironmentInfo obj, IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
+        public override ConflictReport HandleConflicts(StableEnvironmentInfo obj)
         {
             var report = new ConflictReport();
-            UpdatePairInteractionModel(obj, dataAccess, report, projectServices);
+            UpdatePairInteractionModel(obj, report);
+            UpdateGroupInteractions(obj, report);
             return report;
         }
 
         /// <summary>
         /// Updates the pair interaction model to the new set of pair interactions and inputs them into the model data object
         /// </summary>
-        /// <param name="dataAccess"></param>
         /// <param name="report"></param>
-        /// <param name="projectServices"></param>
-        protected void UpdatePairInteractionModel(IStableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess, ConflictReport report, IProjectServices projectServices)
+        protected void UpdatePairInteractionModel(IStableEnvironmentInfo info, ConflictReport report)
         {
-            var newPairs = GetNewPairInteractions(info, projectServices);
-            var oldPairs = dataAccess.Query(data => data.SymmetricPairInteractions);
+            var newPairs = GetNewPairInteractions(info);
+            var oldPairs = DataAccess.Query(data => data.StablePairInteractions);
 
-            PullEnergyInfoFromOldModel(oldPairs, newPairs, report, projectServices.GeometryNumerics.RangeComparer);
+            PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ProjectServices.GeometryNumerics.RangeComparer);
             MoveNewPairsToModelList(oldPairs, newPairs, report);
         }
 
@@ -116,19 +124,43 @@ namespace ICon.Model.Energies.ConflictHandling
         /// Calculates the new set of pair interactions with the provided project services and new stable environment info
         /// </summary>
         /// <param name="info"></param>
-        /// <param name="projectServices"></param>
         /// <returns></returns>
-        protected IList<SymmetricPairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info, IProjectServices projectServices)
+        protected IList<SymmetricPairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info)
         {
-            var energyQueries = projectServices.GetManager<IEnergyManager>().QueryPort;
-            var structureQueries = projectServices.GetManager<IStructureManager>().QueryPort;
+            var energyQueries = ProjectServices.GetManager<IEnergyManager>().QueryPort;
+            var structureQueries = ProjectServices.GetManager<IStructureManager>().QueryPort;
 
             var unitCellProvider = structureQueries.Query(port => port.GetFullUnitCellProvider());
             var positions = structureQueries.Query(port => port.GetUnitCellPositions().Where(value => value.IsValidAndStable()));
-            var comparer = projectServices.GeometryNumerics.RangeComparer;
+            var comparer = ProjectServices.GeometryNumerics.RangeComparer;
 
-            var interactionFinder = new PairInteractionFinder(unitCellProvider, projectServices.SpaceGroupService);
+            var interactionFinder = new PairInteractionFinder(unitCellProvider, ProjectServices.SpaceGroupService);
             return interactionFinder.CreateUniqueSymmetricPairs(positions, info, comparer).ToList();
+        }
+
+        /// <summary>
+        /// Updates possible conflicts with the group interaction definitions (Currently just sets all stable group definitions to deprecated)
+        /// </summary>
+        /// <param name="report"></param>
+        /// <param name="info"></param>
+        protected void UpdateGroupInteractions(IStableEnvironmentInfo info, ConflictReport report)
+        {
+            int counter = 0;
+            foreach (var item in DataAccess.Query(data => data.GroupInteractions))
+            {
+                if (item.CenterUnitCellPosition.Status == PositionStatus.Stable)
+                {
+                    counter++;
+                    item.Deprecate();
+                }
+            }
+
+            if (counter != 0)
+            {
+                var detail0 = $"Recovery of group interaction definitions on stable environment changes is currently not supported";
+                var detail1 = $"Deprecated all group interactions affiliated with the changed unstable environment to avoid conflicts";
+                report.AddWarning(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
+            }
         }
     }
 }

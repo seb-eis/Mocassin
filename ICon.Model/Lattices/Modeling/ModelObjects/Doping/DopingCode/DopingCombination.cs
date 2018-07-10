@@ -20,21 +20,21 @@ namespace ICon.Model.Lattices
         /// Dopand particle
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IParticle Dopant { set; get; }
 
         /// <summary>
         /// Particle that is doped
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IParticle DopedParticle { set; get; }
 
         /// <summary>
         /// unit cell position (contains information about the sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition UnitCellPosition { set; get; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="modelObject"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject modelObject)
+        public override ModelObject PopulateFrom(IModelObject modelObject)
         {
             if (CastWithDepricatedCheck<IDopingCombination>(modelObject) is var casted)
             {

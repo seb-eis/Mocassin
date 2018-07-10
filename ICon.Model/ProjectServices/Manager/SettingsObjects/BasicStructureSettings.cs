@@ -8,34 +8,33 @@ using ICon.Mathematics.Extensions;
 namespace ICon.Model.ProjectServices
 {
     /// <summary>
-    /// The basic settings for the structure managing module
+    /// The basic settings for the structure managing module data validations
     /// </summary>
-    [Serializable]
     [DataContract]
     public class BasicStructureSettings
     {
         /// <summary>
-        /// The maximum number of user added positions allowed (Before application of the space group position extensions)
+        /// The value restriction setting for the structure base position count
         /// </summary>
-        [DataMember(Name ="MaxBasePositions")]
-        public Int32 BasePositionsLimit { get; set; }
+        [DataMember]
+        public ValueSetting<int> BasePositionCount { get; set; }
 
         /// <summary>
-        /// The maximum number of total positions allowed (After application of the space group position extensions)
+        /// The value restriction setting for the structure total position count (After application of space group wyckoff extension)
         /// </summary>
-        [DataMember(Name ="MaxPositions")]
-        public Int32 TotalPositionsLimit { get; set; }
+        [DataMember]
+        public ValueSetting<int> TotalPositionCount { get; set; }
 
         /// <summary>
-        /// The upper limit for the base vector length in arbitrary units
+        /// The value restriction for the structure cell parameter length in [Angstrom]
         /// </summary>
-        [DataMember(Name ="MaxParameter")]
-        public Double MaxBaseParameterLength { get; set; }
+        [DataMember]
+        public ValueSetting<double> CellParameter { get; set; }
 
         /// <summary>
-        /// The regular expression for the structure name
+        /// The string restriction pattern for structure naming
         /// </summary>
-        [DataMember(Name ="Name")]
-        public String NameRegex { get; set; }
+        [DataMember]
+        public string NameStringPattern { get; set; }
     }
 }

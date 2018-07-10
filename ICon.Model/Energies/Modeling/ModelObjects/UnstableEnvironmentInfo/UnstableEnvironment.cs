@@ -21,35 +21,35 @@ namespace ICon.Model.Energies
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
-        /// The unit cell position the environment info belongs to
+        /// The unit cell position the environment info belongs to (Can be null)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
-        /// The set of unique ignored unit cell positions during environment sampling
+        /// The set of unique ignored unit cell positions during environment sampling (Can be null)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IUnitCellPosition> IgnoredPositions { get; set; }
 
         /// <summary>
-        /// The list of generated pair interactions (Automatically managed and linked property, not part of object population)
+        /// The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object population)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
 
         /// <summary>
         /// The list of generated group interactions (Automatically linked by the model)
         /// </summary>
         [DataMember]
-        [IndexResolvable]
+        [LinkableByIndex]
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
-        /// Deafult constructor, sets lists to empty
+        /// Create new unstable environemnt and sets all lists to empty
         /// </summary>
         public UnstableEnvironment()
         {
@@ -59,30 +59,30 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Get all unit cell positions that are ignored during the environment search
+        /// Get all unit cell positions that are ignored during the environment search (Never null)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IUnitCellPosition> GetIgnoredPositions()
         {
-            return IgnoredPositions.AsEnumerable();
+            return (IgnoredPositions ?? new List<IUnitCellPosition>()).AsEnumerable();
         }
 
         /// <summary>
-        /// Get all pair interactions affiliated with this environment
+        /// Get all pair interactions affiliated with this environment (Never null)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IAsymmetricPairInteraction> GetPairInteractions()
         {
-            return PairInteractions.AsEnumerable();
+            return (PairInteractions ?? new List<IAsymmetricPairInteraction>()).AsEnumerable();
         }
 
         /// <summary>
-        /// Get all group interactions affiliated wit this environment
+        /// Get all group interactions affiliated wit this environment (Never null)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IGroupInteraction> GetGroupInteractions()
         {
-            return GroupInteractions.AsEnumerable();
+            return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override ModelObject PopulateObject(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IUnstableEnvironment>(obj) is var info)
             {

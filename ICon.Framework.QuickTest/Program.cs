@@ -25,6 +25,7 @@ using ICon.Mathematics.ValueTypes;
 using ICon.Mathematics.Bitmasks;
 using ICon.Framework.Messaging;
 using ICon.Framework.Xml;
+using ICon.Framework.Provider;
 using ICon.Framework.Collections;
 using ICon.Symmetry.CrystalSystems;
 using ICon.Model.ProjectServices;
@@ -38,6 +39,7 @@ using ICon.Symmetry.Analysis;
 using ICon.Mathematics.Constraints;
 using ICon.Framework.Reflection;
 using ICon.Model.Transitions;
+using ICon.Model.Lattices;
 using ICon.Framework.Random;
 using System.Linq;
 using ICon.Model.DataManagement;
@@ -48,22 +50,30 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
-            var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
-            inputter.AutoInputData(package.ProjectServices);
-            var report = inputter.GetReportJson();
-
-            var group = new GroupInteraction()
+            var watch = Stopwatch.StartNew();
+            var provider = new ExternalProvider<int, int>()
             {
-                Index = 0,
-                UnitCellPosition = new UnitCellPosition() { Index = 0 },
-                GeometryVectors = new List<DataVector3D>
+                LoadInfo = new ExternalLoadInfo()
                 {
-                    new DataVector3D(.25,.25,.25), new DataVector3D(-.25,-.25,-.25)
+                    AssemblyPath = "ICon.Framework.dll",
+                    FullClassName = "ICon.Framework.Random.PcgRandom32",
+                    MethodName = "Next"
                 }
             };
+            var testLoad = provider.TryLoadProvider(out var exception);
 
-            var result = package.EnergyManager.InputPort.InputModelObject(group).Result;
+            //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
+            //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
+            //inputter.AutoInputData(package.ProjectServices);
+            //var report = inputter.GetReportJson();
+
+            int count = 10000;
+            DisplayWatch(watch);
+            for (int i = 0; i < count; i++)
+            {
+                provider.GetValue(i);
+            }
+            DisplayWatch(watch);
 
             Console.ReadLine();
         }

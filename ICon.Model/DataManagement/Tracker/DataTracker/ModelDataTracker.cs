@@ -108,7 +108,7 @@ namespace ICon.Model.DataManagement
                 LinkModelObject(obj);
                 return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -143,15 +143,15 @@ namespace ICon.Model.DataManagement
             var linkers = new List<Action<object>>();
             foreach (var property in objectType.GetProperties(flags))
             {
-                if (property.GetCustomAttribute(typeof(IndexResolvableAttribute)) is IndexResolvableAttribute attribute)
+                if (property.GetCustomAttribute(typeof(LinkableByIndexAttribute)) is LinkableByIndexAttribute attribute)
                 {
-                    switch (attribute.Level)
+                    switch (attribute.LinkableType)
                     {
-                        case IndexResolverLevel.ObjectOrList:
+                        case LinkableType.Value:
                             linkers.Add(MakeLinkDelegate(property));
                             break;
-                        case IndexResolverLevel.Content:
-                            LinkModelObject(property.GetValue(obj));
+                        case LinkableType.Content:
+                            HandleContentLinkableProperty(property);
                             break;
                         default:
                             throw new NotSupportedException("Linking flag is currently not supported by the tracker");
@@ -167,6 +167,25 @@ namespace ICon.Model.DataManagement
                 }
             }
             return LinkAll;
+        }
+
+        /// <summary>
+        /// Handles a property value that is marked as content linkable depending on it beeing a single value or a list of content linkables
+        /// </summary>
+        /// <param name="propertyValue"></param>
+        protected void HandleContentLinkableProperty(object propertyValue)
+        {
+            if (propertyValue is IList linkables)
+            {
+                foreach (var item in linkables)
+                {
+                    LinkModelObject(item);
+                }
+            }
+            else
+            {
+                LinkModelObject(propertyValue);
+            }
         }
 
         /// <summary>

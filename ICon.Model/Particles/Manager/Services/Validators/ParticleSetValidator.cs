@@ -46,11 +46,9 @@ namespace ICon.Model.Particles.Validators
         /// <param name="result"></param>
         protected void AddIndexOutOfRangeValidation(ValidationReport result)
         {
-            if (DataReader.Access.GetValidParticleSetCount() >= Settings.ParticleSetLimit)
-            {
-                var warning = new WarningMessage(this, "Particle manager is full") { IsCritical = true };
-                warning.Details.Add($"Particle manager can not hold more than {Settings.ParticleSetLimit.ToString()} particle sets at once, please remove a particle set before adding a new one");
-                result.AddWarning(warning);
+            if (Settings.ParticleSetCount.ParseValue(DataReader.Access.GetValidParticleSetCount(), out var warnings) != 0)
+            {             
+                result.AddWarnings(warnings);
             }
         }
 

@@ -53,7 +53,7 @@ namespace ICon.Model.Basic
         /// Get the name of the model object as a string
         /// </summary>
         /// <returns></returns>
-        public abstract String GetModelObjectName();
+        public abstract string GetModelObjectName();
 
         /// <summary>
         /// Builds the specfified object and populates it by the passed interface
@@ -63,7 +63,7 @@ namespace ICon.Model.Basic
         /// <returns></returns>
         public static TObject BuildInternalObject<TObject>(IModelObject obj) where TObject : ModelObject, new()
         {
-           return new TObject().PopulateObject(obj) as TObject;
+           return new TObject().PopulateFrom(obj) as TObject;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ICon.Model.Basic
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract ModelObject PopulateObject(IModelObject obj);
+        public abstract ModelObject PopulateFrom(IModelObject obj);
 
         /// <summary>
         /// Cast the passed model object inetrafec to the correct type (Retruns null if not possible or object ist dprectaed)

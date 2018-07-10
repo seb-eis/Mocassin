@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ICon.Model.Simulations
+{
+    /// <summary>
+    /// A lattice blueprint that describes a building instruction to create a custom lattice
+    /// </summary>
+    public class LatticeBlueprint
+    {
+
+    }
+}

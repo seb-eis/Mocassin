@@ -154,8 +154,8 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         protected SymmetricPairInteraction CreateSymmetricPair(PairCandidate candidate, SlotMachinePermuter<IParticle> particlePermuter)
         {
-            var energyDictionary = new Dictionary<SymParticlePair, double>((int)particlePermuter.PermutationCount / 2);
-            foreach (var key in particlePermuter.Select(value => new SymParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
+            var energyDictionary = new Dictionary<SymmetricParticlePair, double>((int)particlePermuter.PermutationCount / 2);
+            foreach (var key in particlePermuter.Select(value => new SymmetricParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
             {
                 energyDictionary[key] = 0.0;
             }
@@ -170,8 +170,8 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         protected AsymmetricPairInteraction CreateAsymmetricPair(PairCandidate candidate, SlotMachinePermuter<IParticle> particlePermuter)
         {
-            var energyDictionary = new Dictionary<AsymParticlePair, double>((int)particlePermuter.PermutationCount / 2);
-            foreach (var key in particlePermuter.Select(value => new AsymParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
+            var energyDictionary = new Dictionary<AsymmetricParticlePair, double>((int)particlePermuter.PermutationCount / 2);
+            foreach (var key in particlePermuter.Select(value => new AsymmetricParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
             {
                 energyDictionary[key] = 0.0;
             }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using ICon.Framework.Collections;
 using ICon.Model.Basic;
 
@@ -54,7 +54,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public ISymmetricPairInteraction GetStablePairInteraction(int index)
         {
-            return Data.SymmetricPairInteractions[index];
+            return Data.StablePairInteractions[index];
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public ReadOnlyList<ISymmetricPairInteraction> GetStablePairInteractions()
         {
-            return ReadOnlyList<ISymmetricPairInteraction>.FromEnumerable(Data.SymmetricPairInteractions);
+            return ReadOnlyList<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public IAsymmetricPairInteraction GetUnstablePairInteractions(int index)
         {
-            return Data.AsymmetricPairInteractions[index];
+            return Data.UnstablePairInteractions[index];
         }
 
         /// <summary>
@@ -101,7 +101,16 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public ReadOnlyList<IAsymmetricPairInteraction> GetUnstablePairInteractions()
         {
-            return ReadOnlyList<IAsymmetricPairInteraction>.FromEnumerable(Data.AsymmetricPairInteractions);
+            return ReadOnlyList<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
+        }
+
+        /// <summary>
+        /// Get a raw energy setter provider that enables creation of energy value setters for interaction objects
+        /// </summary>
+        /// <returns></returns>
+        public IEnergySetterProvider GetEnergySetterProvider()
+        {
+            return new EnergySetterProvider(Data);
         }
     }
 }
