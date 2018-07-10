@@ -146,7 +146,8 @@ namespace ICon.Model.ProjectServices
                 },
                 LatticeSettings = new BasicLatticeSettings()
                 {
-                    MaxNumberOfParticles = 500000
+                    MaxNumberOfParticles = 500000,
+                    DopingCompensationTolerance = 1e-2
                 }
         };
         }

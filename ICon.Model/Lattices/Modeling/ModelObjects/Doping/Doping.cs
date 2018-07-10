@@ -35,6 +35,34 @@ namespace ICon.Model.Lattices
         public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>
+        /// Counter doping multiplier
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public double CounterDopingMultiplier { get; set; }
+
+        /// <summary>
+        /// Flag that indicates whether the custom CounterDopingMultiplier is used
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public bool UseCustomMultiplier { get; set; }
+
+        /// <summary>
+        /// Flag to indicate whether a counter doping should be applied
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public bool UseCounterDoping { get; set; }
+
+        /// <summary>
+        /// Doping Group for simutaneous doping
+        /// </summary>
+        [DataMember]
+        [IndexResolvable]
+        public int DopingGroup { get; set; }
+
+        /// <summary>
         /// Get the type name string
         /// </summary>
         /// <returns></returns>

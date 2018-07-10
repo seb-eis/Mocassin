@@ -152,7 +152,7 @@ namespace ICon.Model.Lattices.Validators
         /// <param name="report"></param>
         protected void AddUnfittingSuperBlockSizeValidation(IBlockInfo blockInfo, ValidationReport report)
         {
-            if (blockInfo.BlockAssembly.Count != blockInfo.Size.A * blockInfo.Size.B * blockInfo.Size.C)
+            if (blockInfo.BlockGrouping.Count != blockInfo.Size.A * blockInfo.Size.B * blockInfo.Size.C)
             {
                 var detail0 = $"Number of super block elements does not match the provided BuildingBlocks";
                 report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));

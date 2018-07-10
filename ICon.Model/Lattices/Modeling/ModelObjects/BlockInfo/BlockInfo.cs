@@ -14,11 +14,11 @@ namespace ICon.Model.Lattices
     public class BlockInfo : ModelObject, IBlockInfo
     {
         /// <summary>
-        /// BuildingBlock BuildingBlocks
+        /// BuildingBlocks which may construct a superblock
         /// </summary>
         [DataMember]
         [IndexResolvable]
-        public List<IBuildingBlock> BlockAssembly { get; set; }
+        public List<IBuildingBlock> BlockGrouping { get; set; }
 
         /// <summary>
         /// Origin of BuildingBlockAssembly
@@ -77,7 +77,7 @@ namespace ICon.Model.Lattices
                 Origin = new DataIntVector3D(blockInfo.Origin.Coordinates);
                 Extent = new DataIntVector3D(blockInfo.Extent.Coordinates);
                 Size = new DataIntVector3D(blockInfo.Size.Coordinates);
-                BlockAssembly = blockInfo.BlockAssembly;
+                BlockGrouping = blockInfo.BlockGrouping;
                 return this;
             }
             return null;

@@ -14,7 +14,7 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Assembly of BuildingBlocks
         /// </summary>
-        List<IBuildingBlock> BlockAssembly { get; }
+        List<IBuildingBlock> BlockGrouping { get; }
 
         /// <summary>
         /// Origin of building Block

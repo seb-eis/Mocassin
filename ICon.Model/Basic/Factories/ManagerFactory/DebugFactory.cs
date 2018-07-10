@@ -221,7 +221,7 @@ namespace ICon.Model.Basic
                 {
                     new BlockInfo()
                     {
-                        Index = 0, BlockAssembly = new List<IBuildingBlock>() {buildingBlocks[0]},
+                        Index = 0, BlockGrouping = new List<IBuildingBlock>() {buildingBlocks[0]},
                         Origin = new DataIntVector3D(0,0,0),
                         Extent = new DataIntVector3D(10,10,10),
                         Size = new DataIntVector3D(1,1,1)
@@ -229,7 +229,7 @@ namespace ICon.Model.Basic
                     new BlockInfo()
                     {
                         Index = 1,
-                        BlockAssembly = new List<IBuildingBlock>()
+                        BlockGrouping = new List<IBuildingBlock>()
                         {
                             buildingBlocks[0], buildingBlocks[1],
                             buildingBlocks[0], buildingBlocks[1],

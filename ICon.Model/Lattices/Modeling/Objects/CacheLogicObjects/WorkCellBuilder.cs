@@ -30,7 +30,7 @@ namespace ICon.Model.Lattices
 
             for (int i = 0; i < buildingBlock.CellEntries.Count; i++)
             {
-                workCell.CellEntries[i] = new CellEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i] };
+                workCell.CellEntries[i] = new CellEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i],  OriginalOccupation = buildingBlock.CellEntries[i] };
             }
 
             return workCell;

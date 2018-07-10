@@ -65,21 +65,5 @@ namespace ICon.Model.Test
 
         }
 
-        /// <summary>
-        /// Test NextDouble Method of PcgRandom32-Geneator
-        /// </summary>
-        [TestMethod]
-        public void TestRandom()
-        {
-            Console.WriteLine("new Test2");
-
-            //var random = new PcgRandom32();
-            var random = new Random();
-
-            for (int i = 0; i < 200; i++)
-            {
-                Console.WriteLine(random.NextDouble());
-            }
-        }
     }
 }

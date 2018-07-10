@@ -41,7 +41,7 @@ namespace ICon.Model.Lattices
                             CartesianInt3D blockPosition = new CartesianInt3D(x,y,z) % blockInfo.Size;
 
                             // Find building block from linearised list in BlockInfo
-                            IBuildingBlock block = (new LinearizedVectorSeeker<IBuildingBlock>()).Seek(blockPosition, blockInfo.Size, blockInfo.BlockAssembly);
+                            IBuildingBlock block = (new LinearizedVectorSeeker<IBuildingBlock>()).Seek(blockPosition, blockInfo.Size, blockInfo.BlockGrouping);
 
                             // Build workcell
                             workLattice.WorkCells[x, y, z] = (new WorkCellBuilder()).Build(block, sublatticeIDs, block.Index);

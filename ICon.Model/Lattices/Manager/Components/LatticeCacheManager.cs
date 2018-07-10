@@ -51,7 +51,7 @@ namespace ICon.Model.Lattices
 
             var dopings = latticeManagerPort.Query((ILatticeDataPort port) => port.GetDopings());
 
-            (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
+            //(new DopingExecuter()).ExecuteMultible(workLattice, dopings);
 
             return (new SupercellTranslator()).Translate(workLattice, vectorEncoder);
 
@@ -75,7 +75,7 @@ namespace ICon.Model.Lattices
             WorkLattice workLattice = (new WorkLatticeBuilder()).Fabricate(blockInfos, sublatticeIDs, latticeSize);
 
             var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
-            (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
+            //(new DopingExecuter()).ExecuteMultible(workLattice, dopings);
 
             return workLattice;
         }

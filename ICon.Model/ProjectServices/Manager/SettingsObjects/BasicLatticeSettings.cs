@@ -15,5 +15,11 @@ namespace ICon.Model.ProjectServices
         /// </summary>
         [DataMember]
         public int MaxNumberOfParticles { get; set; }
+
+        /// <summary>
+        /// The tolerance with which the counter doping is applied
+        /// </summary>
+        [DataMember]
+        public double DopingCompensationTolerance { get; set; }
     }
 }

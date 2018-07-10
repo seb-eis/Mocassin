@@ -13,7 +13,7 @@ namespace ICon.Model.Lattices
     public class CellEntry
     {
         /// <summary>
-        /// Particle information on cell entry position
+        /// Occupation on cell entry
         /// </summary>
         public IParticle Particle { get; set; }
 
@@ -23,8 +23,8 @@ namespace ICon.Model.Lattices
         public IUnitCellPosition CellPosition { get; set; }
 
         /// <summary>
-        /// Flag that indicates whether particle movement is tracked at this position
+        /// Original occupation before doping (important for simutaneous doping process)
         /// </summary>
-        public bool IsTrackable { get; set; }
+        public IParticle OriginalOccupation { get; set; }
     }
 }
