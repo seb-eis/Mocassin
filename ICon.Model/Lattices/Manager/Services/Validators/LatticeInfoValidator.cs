@@ -33,7 +33,7 @@ namespace ICon.Model.Lattices.Validators
         public override IValidationReport Validate(ILatticeInfo obj)
         {
             ValidationReport report = new ValidationReport();
-            AddOccupationValidation(obj, report);
+            //AddOccupationValidation(obj, report);
             return report;
         }
         

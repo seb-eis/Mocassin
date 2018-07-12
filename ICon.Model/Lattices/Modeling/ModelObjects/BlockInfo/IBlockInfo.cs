@@ -30,5 +30,7 @@ namespace ICon.Model.Lattices
         /// Size of the BuildingBlockAssembly
         /// </summary>
         CartesianInt3D Size { get; }
+
+        IEnumerable<IBuildingBlock> GetBlockGrouping();
     }
 }

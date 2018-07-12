@@ -9,22 +9,36 @@ using System.Text;
 using ICon.Framework.Extensions;
 using ICon.Mathematics;
 using ICon.Mathematics.Coordinates;
+using ICon.Model.Basic;
+using ICon.Model.Simulations;
+using System.Linq;
 
 namespace ICon.Model.Lattices
 {
     public class LatticeCreationProvider
     {
-        SupercellWrapper<IParticle> ConstructCustomLattice(ReadOnlyList<IBlockInfo> blockInfos, 
-            IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, IDictionary<IDoping, double> dopingConcentration, 
-            CartesianInt3D latticeSize, UnitCellVectorEncoder encoder)
+        public SupercellWrapper<IParticle> ConstructCustomLattice(ManagerPackage manager, ILatticeBlueprint bluePrint)
         {
-            CellEntry[,,][] workLattice = GenerateDefaultLattice(blockInfos[0], sublatticeIDs, latticeSize);
+            var latticePort = manager.LatticeManager.QueryPort;
+            var structurePort = manager.StructureManager.QueryPort;
+
+            var blockInfos = latticePort.Query(port => port.GetBlockInfos());
+            var sublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
+            var buildingBlocks = latticePort.Query(port => port.GetBuildingBlocks());
+            var vectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
+            var dopings = latticePort.Query(port => port.GetDopings());
+            var dopingTolerance = manager.ProjectServices.SettingsData.LatticeSettings.DopingCompensationTolerance;
+            var doubleCompareTolerance = manager.ProjectServices.SettingsData.CommonNumericSettings.RangeValue;
+
+            CellEntry[,,][] workLattice = GenerateDefaultLattice(blockInfos[0], sublatticeIDs, bluePrint.SizeVector);
 
             FillLatticeWithCustomBlocks(workLattice, blockInfos, sublatticeIDs);
 
-            new DopingExecuter(0.001, 0.01).ExecuteMultiple(workLattice, dopingConcentration);
+            var dopingExecuter = new DopingExecuter(doubleCompareTolerance, dopingTolerance, bluePrint.CustomRng);
 
-            return Translate(workLattice, encoder);
+            dopingExecuter.ExecuteMultiple(workLattice, dopings, bluePrint.DopingConcentrations);
+
+            return Translate(workLattice, vectorEncoder);
         }
 
         CellEntry[,,][] GenerateDefaultLattice(IBlockInfo blockInfo, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, CartesianInt3D latticeSize)
@@ -79,7 +93,7 @@ namespace ICon.Model.Lattices
 
             for (int i = 0; i < buildingBlock.CellEntries.Count; i++)
             {
-                workCell[i] = new CellEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i], OriginalOccupation = buildingBlock.CellEntries[i], Block = buildingBlock };
+                workCell[i] = new CellEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i], IsDoped = false, Block = buildingBlock };
             }
 
             return workCell;

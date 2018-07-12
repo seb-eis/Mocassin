@@ -30,7 +30,7 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Original occupation before doping (important for simutaneous doping process)
         /// </summary>
-        public IParticle OriginalOccupation { get; set; }
+        public bool IsDoped { get; set; }
 
         public override int GetHashCode()
         {
@@ -43,8 +43,23 @@ namespace ICon.Model.Lattices
                 if (CellPosition != null) result += CellPosition.GetHashCode();
                 result *= 397;
                 if (Block != null) result += Block.GetHashCode();
+                result *= 397;
+                result += IsDoped.GetHashCode();
                 return result;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            //if (obj == null || GetType() != obj.GetType()) return false;
+            //return GetHashCode() == obj.GetHashCode();
+
+            if (obj is CellEntry cast)
+            {
+                return (Particle == cast.Particle && CellPosition == cast.CellPosition && Block == cast.Block && IsDoped == cast.IsDoped);
+            }
+
+            return false;
         }
     }
 }

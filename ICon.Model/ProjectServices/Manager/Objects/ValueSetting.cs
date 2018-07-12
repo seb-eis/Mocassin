@@ -155,9 +155,9 @@ namespace ICon.Model.ProjectServices
         /// <returns></returns>
         protected int ParseLower(T value)
         {
-            if (value.CompareTo(UpperWarningLimit) < 0)
+            if (value.CompareTo(LowerWarningLimit) < 0)
             {
-                if (value.CompareTo(MaxValue) < 0)
+                if (value.CompareTo(MinValue) < 0)
                 {
                     return -2;
                 }

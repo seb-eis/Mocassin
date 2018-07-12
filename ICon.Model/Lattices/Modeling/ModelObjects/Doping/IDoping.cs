@@ -12,11 +12,6 @@ namespace ICon.Model.Lattices
     public interface IDoping : IModelObject
     {
         /// <summary>
-        /// Specifies the doping concentration
-        /// </summary>
-        double Concentration { get; }
-
-        /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
         IDopingCombination DopingInfo { get; }

@@ -15,12 +15,6 @@ namespace ICon.Model.Lattices
     public class Doping : ModelObject, IDoping
     {
         /// <summary>
-        /// Specifies the doping concentration
-        /// </summary>
-        [DataMember]
-        public double Concentration { set; get; }
-
-        /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
         [DataMember]
@@ -38,28 +32,24 @@ namespace ICon.Model.Lattices
         /// Counter doping multiplier
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
         public double CounterDopingMultiplier { get; set; }
 
         /// <summary>
         /// Flag that indicates whether the custom CounterDopingMultiplier is used
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
         public bool UseCustomMultiplier { get; set; }
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
         public bool UseCounterDoping { get; set; }
 
         /// <summary>
         /// Doping Group for simutaneous doping
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
         public int DopingGroup { get; set; }
 
         /// <summary>
@@ -80,9 +70,12 @@ namespace ICon.Model.Lattices
         {
             if (CastWithDepricatedCheck<IDoping>(obj) is var doping)
             {
-                Concentration = doping.Concentration;
                 DopingInfo = doping.DopingInfo;
                 CounterDopingInfo = doping.CounterDopingInfo;
+                CounterDopingMultiplier = doping.CounterDopingMultiplier;
+                UseCustomMultiplier = doping.UseCustomMultiplier;
+                UseCounterDoping = doping.UseCounterDoping;
+                DopingGroup = doping.DopingGroup;
                 return this;
             }
             return null;

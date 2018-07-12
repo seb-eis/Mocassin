@@ -121,7 +121,7 @@ namespace ICon.Model.Basic
                     new Particle() { Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Index = 1 },
                     new Particle() { Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Index = 2 },
                     new Particle() { Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Index = 3 },
-                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4 },
+                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 2.4532, IsVacancy = false, Index = 4 },
                     new Particle() { Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Index = 5 },
                     new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Index = 6 },
                     new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Index = 7 },
@@ -267,27 +267,27 @@ namespace ICon.Model.Basic
                         Origin = new DataIntVector3D(0,0,0),
                         Extent = new DataIntVector3D(10,10,10),
                         Size = new DataIntVector3D(1,1,1)
-                    },
-                    new BlockInfo()
-                    {
-                        Index = 1,
-                        BlockGrouping = new List<IBuildingBlock>()
-                        {
-                            buildingBlocks[0], buildingBlocks[1],
-                            buildingBlocks[0], buildingBlocks[1],
-                            buildingBlocks[0], buildingBlocks[1],
-                            buildingBlocks[0], buildingBlocks[1],
-                        },
-                        Origin = new DataIntVector3D(0,0,0),
-                        Extent = new DataIntVector3D(2,2,10),
-                        Size = new DataIntVector3D(2,2,2)
-                    }
+                    }//,
+                    //new BlockInfo()
+                    //{
+                    //    Index = 1,
+                    //    BlockGrouping = new List<IBuildingBlock>()
+                    //    {
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //    },
+                    //    Origin = new DataIntVector3D(0,0,0),
+                    //    Extent = new DataIntVector3D(2,2,10),
+                    //    Size = new DataIntVector3D(2,2,2)
+                    //}
                 };
                 var dopingCombinations = new DopingCombination[]
                 {
                     new DopingCombination()
                     {
-                         Index = 0, BuildingBlock = buildingBlocks[0], Dopant = particles[5], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
+                         Index = 0, BuildingBlock = buildingBlocks[0], Dopant = particles[4], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
                     },
                     new DopingCombination()
                     {
@@ -298,7 +298,7 @@ namespace ICon.Model.Basic
                 {
                     new Doping()
                     {
-                        Index = 0, Concentration = 1.0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1]
+                        Index = 0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
                     }
                 };
 
@@ -322,6 +322,10 @@ namespace ICon.Model.Basic
                     UnitCellPosition = unitCellPositions[2],
                     IgnoredPositions = new List<IUnitCellPosition>()
                 });
+                inputter.AddMany(buildingBlocks);
+                inputter.AddMany(blockInfos);
+                inputter.AddMany(dopingCombinations);
+                inputter.AddMany(dopings);
                 return inputter;
             }
         }

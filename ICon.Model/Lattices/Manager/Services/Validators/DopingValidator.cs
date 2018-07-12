@@ -32,8 +32,8 @@ namespace ICon.Model.Lattices.Validators
         public override IValidationReport Validate(IDoping obj)
         {
             ValidationReport report = new ValidationReport();
-            AddNegativeDopingValidation(obj.Concentration, report);
-            AddOverdopingValidation(obj.Concentration, report);
+            //AddNegativeDopingValidation(obj.Concentration, report);
+            //AddOverdopingValidation(obj.Concentration, report);
             return report;
         }
 

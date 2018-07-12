@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using ICon.Mathematics.ValueTypes;
@@ -16,6 +17,7 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// BuildingBlocks which may construct a superblock
         /// </summary>
+        [LinkableByIndex]
         [DataMember]
         public List<IBuildingBlock> BlockGrouping { get; set; }
 
@@ -55,6 +57,11 @@ namespace ICon.Model.Lattices
         [IgnoreDataMember]
         CartesianInt3D IBlockInfo.Size => Size.AsReadOnly();
 
+        IEnumerable<IBuildingBlock> IBlockInfo.GetBlockGrouping()
+        {
+            return (BlockGrouping ?? new List<IBuildingBlock>()).AsEnumerable();
+        }
+
         /// <summary>
         /// Get the type name string
         /// </summary>
@@ -76,7 +83,7 @@ namespace ICon.Model.Lattices
                 Origin = new DataIntVector3D(blockInfo.Origin.Coordinates);
                 Extent = new DataIntVector3D(blockInfo.Extent.Coordinates);
                 Size = new DataIntVector3D(blockInfo.Size.Coordinates);
-                BlockGrouping = blockInfo.BlockGrouping;
+                BlockGrouping = blockInfo.GetBlockGrouping().ToList();
                 return this;
             }
             return null;

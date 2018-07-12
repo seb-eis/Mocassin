@@ -33,11 +33,11 @@ namespace ICon.Model.Lattices.Validators
         public override IValidationReport Validate(IBlockInfo obj)
         {
             ValidationReport report = new ValidationReport();
-            AddBasicVectorValidation(obj, report);
-            AddExtentGreaterOriginValidation(obj, report);
-            AddUnfittingBlockSizeValidation(obj, report);
-            AddDefaultBlockExtentValidation(obj, report);
-            AddUnfittingSuperBlockSizeValidation(obj, report);
+            //AddBasicVectorValidation(obj, report);
+            //AddExtentGreaterOriginValidation(obj, report);
+            //AddUnfittingBlockSizeValidation(obj, report);
+            //AddDefaultBlockExtentValidation(obj, report);
+            //AddUnfittingSuperBlockSizeValidation(obj, report);
 
             return report;
         }

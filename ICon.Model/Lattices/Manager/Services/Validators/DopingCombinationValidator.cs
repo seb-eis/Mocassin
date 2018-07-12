@@ -35,8 +35,8 @@ namespace ICon.Model.Lattices.Validators
         public override IValidationReport Validate(IDopingCombination obj)
         {
             ValidationReport report = new ValidationReport();
-            AddOccupationValidation(obj.Dopant, obj.UnitCellPosition, report);
-            AddOccupationValidation(obj.DopedParticle, obj.UnitCellPosition, report);
+            //AddOccupationValidation(obj.Dopant, obj.UnitCellPosition, report);
+            //AddOccupationValidation(obj.DopedParticle, obj.UnitCellPosition, report);
             return report;
         }
 
