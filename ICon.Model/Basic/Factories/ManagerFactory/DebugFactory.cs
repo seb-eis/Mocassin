@@ -121,7 +121,7 @@ namespace ICon.Model.Basic
                     new Particle() { Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Index = 1 },
                     new Particle() { Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Index = 2 },
                     new Particle() { Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Index = 3 },
-                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 2.4532, IsVacancy = false, Index = 4 },
+                    new Particle() { Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4 },
                     new Particle() { Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Index = 5 },
                     new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Index = 6 },
                     new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Index = 7 },
@@ -292,6 +292,10 @@ namespace ICon.Model.Basic
                     new DopingCombination()
                     {
                          Index = 1, BuildingBlock = buildingBlocks[0], Dopant = particles[1], DopedParticle = particles[2], UnitCellPosition = unitCellPositions[1]
+                    },
+                    new DopingCombination()
+                    {
+                         Index = 2, BuildingBlock = buildingBlocks[0], Dopant = particles[7], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
                     }
                 };
                 var dopings = new Doping[]
@@ -299,6 +303,18 @@ namespace ICon.Model.Basic
                     new Doping()
                     {
                         Index = 0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+                    },
+                    new Doping()
+                    {
+                        Index = 1, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+                    },
+                    new Doping()
+                    {
+                        Index = 2, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+                    },
+                    new Doping()
+                    {
+                        Index = 3, DopingInfo = dopingCombinations[2], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
                     }
                 };
 

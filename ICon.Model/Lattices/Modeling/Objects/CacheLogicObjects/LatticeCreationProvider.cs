@@ -12,47 +12,99 @@ using ICon.Mathematics.Coordinates;
 using ICon.Model.Basic;
 using ICon.Model.Simulations;
 using System.Linq;
+using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Lattices
 {
+    /// <summary>
+    /// Provider to create superlattice from data in structure and lattice manager
+    /// </summary>
+    /// <remarks>
+    /// The lattice is created by first creating an internal WorkLattice consisting of LatticeEntries. These contain information about
+    /// the occupation, symmetry position and building block. The structure of the WorkLattice corresponds to unit cells ordered in a supercell.
+    /// This WorkLattice is then doped with the DopingExecuter and finally translated to a SuperCellWrapper.
+    /// </remarks>
     public class LatticeCreationProvider
     {
-        public SupercellWrapper<IParticle> ConstructCustomLattice(ManagerPackage manager, ILatticeBlueprint bluePrint)
+        /// <summary>
+        /// Lattice query port
+        /// </summary>
+        private ILatticeQueryPort LatticePort { get; set; }
+
+        /// <summary>
+        /// Structure query port
+        /// </summary>
+        private IStructureQueryPort StructurePort { get; set; }
+
+        /// <summary>
+        /// Settings data
+        /// </summary>
+        private ProjectSettingsData SettingsData { get; set; }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="latticePort"></param>
+        /// <param name="structurePort"></param>
+        /// <param name="settingsData"></param>
+        public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettingsData settingsData)
         {
-            var latticePort = manager.LatticeManager.QueryPort;
-            var structurePort = manager.StructureManager.QueryPort;
+            LatticePort = latticePort;
+            StructurePort = structurePort;
+            SettingsData = settingsData;
+        }
 
-            var blockInfos = latticePort.Query(port => port.GetBlockInfos());
-            var sublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
-            var buildingBlocks = latticePort.Query(port => port.GetBuildingBlocks());
-            var vectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
-            var dopings = latticePort.Query(port => port.GetDopings());
-            var dopingTolerance = manager.ProjectServices.SettingsData.LatticeSettings.DopingCompensationTolerance;
-            var doubleCompareTolerance = manager.ProjectServices.SettingsData.CommonNumericSettings.RangeValue;
+        /// <summary>
+        /// Construct the lattice with informations provided in blueprint and managers
+        /// </summary>
+        /// <param name="bluePrint"></param>
+        /// <returns></returns>
+        public SupercellWrapper<IParticle> ConstructLattice(ILatticeBlueprint bluePrint)
+        {
+            var defaultBlock = LatticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
+            var blockInfos = LatticePort.Query(port => port.GetBlockInfos());
+            var sublatticeIDs = StructurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
+            var vectorEncoder = StructurePort.Query(port => port.GetVectorEncoder());
+            var dopings = LatticePort.Query(port => port.GetDopings());
+            var dopingTolerance = SettingsData.LatticeSettings.DopingCompensationTolerance;
+            var doubleCompareTolerance = SettingsData.CommonNumericSettings.RangeValue;
 
-            CellEntry[,,][] workLattice = GenerateDefaultLattice(blockInfos[0], sublatticeIDs, bluePrint.SizeVector);
+            LatticeEntry[,,][] workLattice = GenerateDefaultLattice(defaultBlock, sublatticeIDs, bluePrint.SizeVector);
 
             FillLatticeWithCustomBlocks(workLattice, blockInfos, sublatticeIDs);
 
             var dopingExecuter = new DopingExecuter(doubleCompareTolerance, dopingTolerance, bluePrint.CustomRng);
 
-            dopingExecuter.ExecuteMultiple(workLattice, dopings, bluePrint.DopingConcentrations);
+            dopingExecuter.DopeLattice(workLattice, dopings, bluePrint.DopingConcentrations);
 
             return Translate(workLattice, vectorEncoder);
         }
 
-        CellEntry[,,][] GenerateDefaultLattice(IBlockInfo blockInfo, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, CartesianInt3D latticeSize)
+        /// <summary>
+        /// Generate a default lattice with user defined size and the BuildingBlocks with index 0 
+        /// </summary>
+        /// <param name="blockInfo"></param>
+        /// <param name="sublatticeIDs"></param>
+        /// <param name="latticeSize"></param>
+        /// <returns></returns>
+        LatticeEntry[,,][] GenerateDefaultLattice(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, VectorInt3D latticeSize)
         {
-            CellEntry[,,][] workLattice = new CellEntry[latticeSize.A, latticeSize.B, latticeSize.C][];
+            LatticeEntry[,,][] workLattice = new LatticeEntry[latticeSize.A, latticeSize.B, latticeSize.C][];
 
-            Func<CellEntry[]> func = delegate () { return CreateWorkCell(blockInfo.BlockGrouping[0], sublatticeIDs); };
+            Func<LatticeEntry[]> func = delegate () { return CreateWorkCell(buildingBlock, sublatticeIDs); };
 
             workLattice.Populate(func);
 
             return workLattice;
         }
 
-        void FillLatticeWithCustomBlocks(CellEntry[,,][] workLattice, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
+        /// <summary>
+        /// Replace blocks in default superlattice with user defined custom BuildingBlocks
+        /// </summary>
+        /// <param name="workLattice"></param>
+        /// <param name="blockInfos"></param>
+        /// <param name="sublatticeIDs"></param>
+        void FillLatticeWithCustomBlocks(LatticeEntry[,,][] workLattice, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
         {
             foreach (var blockInfo in blockInfos)
             {
@@ -68,7 +120,7 @@ namespace ICon.Model.Lattices
                             if (x > workLattice.GetLength(0) || y > workLattice.GetLength(1) || z > workLattice.GetLength(2)) continue;
 
                             // Get building block coordinates within superblock
-                            CartesianInt3D blockPosition = new CartesianInt3D(x, y, z) % blockInfo.Size;
+                            VectorInt3D blockPosition = new VectorInt3D(x, y, z) % blockInfo.Size;
 
                             // Find building block from linearised list in BlockInfo
                             int index = blockPosition.A + blockPosition.B * blockInfo.Size.A + blockPosition.C * blockInfo.Size.B * blockInfo.Size.A;
@@ -82,18 +134,24 @@ namespace ICon.Model.Lattices
             }
         }
 
-        CellEntry[] CreateWorkCell(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
+        /// <summary>
+        /// Create a unit cell which consists of LatticeEntries for later manipulation from BuildingBlock
+        /// </summary>
+        /// <param name="buildingBlock"></param>
+        /// <param name="sublatticeIDs"></param>
+        /// <returns></returns>
+        LatticeEntry[] CreateWorkCell(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
         {
             if (buildingBlock.CellEntries.Count != sublatticeIDs.Count)
             {
                 throw new ArgumentException("WorkCellFactory", "Different number of unitCellWrapper entries and sublatticeID entries!");
             }
 
-            CellEntry[] workCell = new CellEntry[buildingBlock.CellEntries.Count];
+            LatticeEntry[] workCell = new LatticeEntry[buildingBlock.CellEntries.Count];
 
             for (int i = 0; i < buildingBlock.CellEntries.Count; i++)
             {
-                workCell[i] = new CellEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i], IsDoped = false, Block = buildingBlock };
+                workCell[i] = new LatticeEntry { Particle = buildingBlock.CellEntries[i], CellPosition = sublatticeIDs[i], Block = buildingBlock };
             }
 
             return workCell;
@@ -105,7 +163,7 @@ namespace ICon.Model.Lattices
         /// <param name="workLattice"></param>
         /// <param name="encoder"></param>
         /// <returns></returns>
-        public SupercellWrapper<IParticle> Translate(CellEntry[,,][] workLattice, UnitCellVectorEncoder encoder)
+        public SupercellWrapper<IParticle> Translate(LatticeEntry[,,][] workLattice, UnitCellVectorEncoder encoder)
         {
 
             IParticle[][] particlesLineratized = new IParticle[workLattice.GetLength(0) * workLattice.GetLength(1) * workLattice.GetLength(2)][];

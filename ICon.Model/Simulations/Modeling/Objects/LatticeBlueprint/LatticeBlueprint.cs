@@ -15,7 +15,7 @@ namespace ICon.Model.Simulations
 
         public bool UseCustomBase { get; set; }
 
-        public CartesianInt3D SizeVector { get; set; }
+        public VectorInt3D SizeVector { get; set; }
 
         public IDictionary<IDoping, double> DopingConcentrations { get; set; }
 

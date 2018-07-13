@@ -43,19 +43,19 @@ namespace ICon.Model.Lattices
         /// Return origin vector as read only struct
         /// </summary>
         [IgnoreDataMember]
-        CartesianInt3D IBlockInfo.Origin => Origin.AsReadOnly();
+        VectorInt3D IBlockInfo.Origin => Origin.AsReadOnly();
 
         /// <summary>
         /// Return extent vector as read only struct
         /// </summary>
         [IgnoreDataMember]
-        CartesianInt3D IBlockInfo.Extent => Extent.AsReadOnly();
+        VectorInt3D IBlockInfo.Extent => Extent.AsReadOnly();
 
         /// <summary>
         /// Return size vector as read only struct
         /// </summary>
         [IgnoreDataMember]
-        CartesianInt3D IBlockInfo.Size => Size.AsReadOnly();
+        VectorInt3D IBlockInfo.Size => Size.AsReadOnly();
 
         IEnumerable<IBuildingBlock> IBlockInfo.GetBlockGrouping()
         {

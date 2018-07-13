@@ -25,7 +25,7 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// The size of the lattice that should be created
         /// </summary>
-        CartesianInt3D SizeVector { get; }
+        VectorInt3D SizeVector { get; }
 
         /// <summary>
         /// Get all doping infos of the blueprint

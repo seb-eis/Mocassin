@@ -14,26 +14,6 @@ namespace ICon.Model.Lattices
     [DataContract(Name = "LatticeInfo")]
     public class LatticeInfo : ModelParameter, ILatticeInfo
     {
-        /// <summary>
-        /// Extent of lattice
-        /// </summary>
-        [DataMember]
-        public DataIntVector3D Extent { get; set; }
-
-        /// <summary>
-        /// Get read only extent vector of lattice
-        /// </summary>
-        [IgnoreDataMember]
-        CartesianInt3D ILatticeInfo.Extent => Extent.AsReadOnly();
-
-        /// <summary>
-        /// Creates default lattice parameters (no extent of unit cell)
-        /// </summary>
-        /// <returns></returns>
-        public static LatticeInfo CreateDefault()
-        {
-            return new LatticeInfo() { Extent = (new DataIntVector3D(1, 1, 1)) };
-        }
 
         /// <summary>
         /// Get the type name string
@@ -53,7 +33,6 @@ namespace ICon.Model.Lattices
         {
             if (modelParameter is ILatticeInfo casted)
             {
-                Extent = new DataIntVector3D(casted.Extent.A, casted.Extent.B, casted.Extent.C);
                 return this;
             }
             return null;
@@ -68,7 +47,7 @@ namespace ICon.Model.Lattices
         {
             if (other is ILatticeInfo castOther)
             {
-                return Extent.Equals(castOther.Extent);
+                return true;
             }
             return false;
         }

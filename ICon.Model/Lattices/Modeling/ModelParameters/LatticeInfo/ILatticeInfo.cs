@@ -11,9 +11,5 @@ namespace ICon.Model.Lattices
     /// </summary>
     public interface ILatticeInfo : IModelParameter
     {
-        /// <summary>
-        /// Extent of lattice
-        /// </summary>
-        CartesianInt3D Extent { get; }
     }
 }

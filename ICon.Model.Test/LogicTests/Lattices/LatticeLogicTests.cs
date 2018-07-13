@@ -16,6 +16,7 @@ using ICon.Mathematics.Comparers;
 using System.Linq;
 using ICon.Framework.Random;
 using ICon.Model.Simulations;
+using ICon.Framework.Extensions;
 
 namespace ICon.Model.Test
 {
@@ -25,47 +26,6 @@ namespace ICon.Model.Test
     [TestClass]
     public class LatticeLogicTests
     {
-
-        /// <summary>
-        /// Generate lattice test
-        /// </summary>
-        [TestMethod]
-        public void TestLatticeCreation()
-        {
-            var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
-            var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
-            inputter.AutoInputData(package.ProjectServices);
-            var report = inputter.GetReportJson();
-
-            var lattice = package.LatticeManager.QueryPort.Query(port => port.CreateLattice());
-
-            Dictionary<string, int> elementCount = new Dictionary<string, int>();
-            for (int x = 0; x < lattice.CellSizeInfo.A; x++)
-            {
-                for (int y = 0; y < lattice.CellSizeInfo.B; y++)
-                {
-                    for (int z = 0; z < lattice.CellSizeInfo.C; z++)
-                    {
-                        for (int p = 0; p < lattice.CellSizeInfo.D; p++)
-                        {
-                            var elem = lattice.GetCellEntry(x, y, z, p).Entry.Name;
-                            if (elementCount.ContainsKey(elem))
-                            {
-                                elementCount[elem]++;
-                            }
-                            else
-                            {
-                                elementCount[elem] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.ReadLine();
-
-        }
-
         [TestMethod]
         public void TestDopingProcess()
         {
@@ -80,16 +40,19 @@ namespace ICon.Model.Test
             var latticeBlueprint = new LatticeBlueprint()
             {
                 CustomRng = new PcgRandom32(),
-                SizeVector = new CartesianInt3D(10, 10, 10),
+                SizeVector = new VectorInt3D(16, 16, 16),
                 DopingConcentrations = new Dictionary<IDoping, double>
                 {
-                    { dopings[0], 0.1 }
+                    { dopings[0], 0.2 },
+                    { dopings[1], 0.2 },
+                    { dopings[2], 0.2 },
+                    { dopings[3], 0.0 }
                 }
             };
 
-            var latticeCreationProvider = new LatticeCreationProvider();
+            var latticeCreationProvider = package.LatticeManager.QueryPort.Query(port => port.GetLatticeCreationProvider());
 
-            var lattice = latticeCreationProvider.ConstructCustomLattice(package, latticeBlueprint);
+            var lattice = latticeCreationProvider.ConstructLattice(latticeBlueprint);
 
             //var lattice = package.LatticeManager.QueryPort.Query(port => port.CreateLattice());
 
@@ -116,7 +79,7 @@ namespace ICon.Model.Test
                 }
             }
 
-            Console.ReadLine();
+            Console.WriteLine();
         }
 
         [TestMethod]
@@ -139,32 +102,38 @@ namespace ICon.Model.Test
             var unitCellEntries = package.StructureManager.QueryPort.Query(port => port.GetExtendedIndexToPositionDictionary());
             var buildingBlocks = package.LatticeManager.QueryPort.Query(port => port.GetBuildingBlocks());
 
-            var cellEntry1 = new CellEntry()
+            var cellEntry1 = new LatticeEntry()
             {
                 Particle = particles[1],
                 CellPosition = unitCellEntries[1],
                 Block = buildingBlocks[0],
-                IsDoped = false
             };
 
-            var cellEntry2 = new CellEntry()
+            var cellEntry2 = new LatticeEntry()
             {
                 Particle = particles[1],
                 CellPosition = unitCellEntries[1],
                 Block = buildingBlocks[0],
-                IsDoped = false
             };
 
             Console.WriteLine(cellEntry1.Equals(cellEntry2));
             Console.WriteLine(cellEntry1.GetHashCode().ToString());
             Console.WriteLine(cellEntry2.GetHashCode().ToString());
 
-            var dict = new Dictionary<CellEntry, int>();
+            var dict = new Dictionary<LatticeEntry, int>();
             dict[cellEntry1] = 0;
             dict[cellEntry2]++;
 
 
         }
 
+
+        [TestMethod]
+        public void TestRandomSelect()
+        {
+            List<int> list = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+            List<int> selectList = list.SelectRandom(9, new Random()).ToList();
+            Console.WriteLine();
+        }
     }
 }

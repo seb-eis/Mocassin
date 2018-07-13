@@ -43,6 +43,7 @@ using ICon.Model.Lattices;
 using ICon.Framework.Random;
 using System.Linq;
 using ICon.Model.DataManagement;
+using ICon.Model.Simulations;
 
 namespace ICon.Framework.QuickTest
 {

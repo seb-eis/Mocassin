@@ -33,26 +33,8 @@ namespace ICon.Model.Lattices.Validators
         public override IValidationReport Validate(ILatticeInfo obj)
         {
             ValidationReport report = new ValidationReport();
-            //AddOccupationValidation(obj, report);
             return report;
         }
         
-        /// <summary>
-        /// Validate if the lattice size is reasonable
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="report"></param>
-        protected void AddOccupationValidation(ILatticeInfo obj, ValidationReport report)
-        {
-            var structurePort = ProjectServices.GetManager<IStructureManager>().QueryPort;
-
-            int positionNumber = structurePort.Query(port => port.GetLinearizedExtendedPositionList().Count);
-
-            if (obj.Extent.A * obj.Extent.B * obj.Extent.C * positionNumber > Settings.MaxNumberOfParticles)
-            {
-                var detail0 = $"The specified lattice is too large";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
-            }
-        }
     }
 }

@@ -26,6 +26,8 @@ namespace ICon.Framework.Extensions
                 {
                     yield return item;
                 }
+
+                yield break;
             }
 
             int passed = -1, used = 0;
@@ -58,6 +60,33 @@ namespace ICon.Framework.Extensions
             foreach (var item in collection.SelectRandom(count, random))
             {
                 yield return selector(item);
+            }
+        }
+
+        public static IEnumerable<int> SelectRandomIndex<T1>(this ICollection<T1> collection, int count, System.Random random)
+        {
+            if (count >= collection.Count)
+            {
+                for(int i = 0; i < collection.Count; i++)
+                {
+                    yield return i;
+                }
+
+                yield break;
+            }
+
+            int passed = -1, used = 0;
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (used == count)
+                {
+                    yield break;
+                }
+                if ((count - used) > (collection.Count - ++passed) * random.NextDouble())
+                {
+                    ++used;
+                    yield return i;
+                }
             }
         }
     }

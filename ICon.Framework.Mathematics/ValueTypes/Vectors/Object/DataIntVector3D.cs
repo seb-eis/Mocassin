@@ -70,9 +70,9 @@ namespace ICon.Mathematics.ValueTypes
             return A == vector.A && B == vector.B && C == vector.C;
         }
 
-        public CartesianInt3D AsReadOnly()
+        public VectorInt3D AsReadOnly()
         {
-            return new CartesianInt3D(A, B, C);
+            return new VectorInt3D(A, B, C);
         }
     }
 }

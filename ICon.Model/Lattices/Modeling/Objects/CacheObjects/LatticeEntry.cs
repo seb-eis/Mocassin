@@ -8,9 +8,9 @@ using System.Text;
 namespace ICon.Model.Lattices
 {
     /// <summary>
-    /// Temporary Object for lattice creation
+    /// Contains information about a CellEntry within the WorkLattice
     /// </summary>
-    public class CellEntry
+    public class LatticeEntry
     {
         /// <summary>
         /// Occupation on cell entry
@@ -23,15 +23,14 @@ namespace ICon.Model.Lattices
         public IUnitCellPosition CellPosition { get; set; }
 
         /// <summary>
-        /// Sublattice information on cell entry position
+        /// BuildingBlock information on cell entry position
         /// </summary>
         public IBuildingBlock Block { get; set; }
 
         /// <summary>
-        /// Original occupation before doping (important for simutaneous doping process)
+        /// Return the HashCode resulting from MemberVariables (LatticeEntries with the same Members return the same HashCode)
         /// </summary>
-        public bool IsDoped { get; set; }
-
+        /// <returns></returns>
         public override int GetHashCode()
         {
             unchecked
@@ -43,23 +42,29 @@ namespace ICon.Model.Lattices
                 if (CellPosition != null) result += CellPosition.GetHashCode();
                 result *= 397;
                 if (Block != null) result += Block.GetHashCode();
-                result *= 397;
-                result += IsDoped.GetHashCode();
                 return result;
             }
         }
 
+        /// <summary>
+        /// Equal comparison based on HashCode
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
-            //if (obj == null || GetType() != obj.GetType()) return false;
-            //return GetHashCode() == obj.GetHashCode();
-
-            if (obj is CellEntry cast)
-            {
-                return (Particle == cast.Particle && CellPosition == cast.CellPosition && Block == cast.Block && IsDoped == cast.IsDoped);
-            }
-
-            return false;
+            if (obj == null || GetType() != obj.GetType()) return false;
+            return GetHashCode() == obj.GetHashCode();
         }
+
+        /// <summary>
+        /// Make a shallow copy of this object (members variables are not compied)
+        /// </summary>
+        /// <returns></returns>
+        public LatticeEntry ShallowCopy()
+        {
+            return (LatticeEntry) MemberwiseClone();
+        }
+
     }
 }

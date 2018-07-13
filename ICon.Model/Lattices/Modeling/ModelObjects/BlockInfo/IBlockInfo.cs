@@ -19,17 +19,17 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Origin of building Block
         /// </summary>
-        CartesianInt3D Origin { get; }
+        VectorInt3D Origin { get; }
 
         /// <summary>
         /// Extent of building Block
         /// </summary>
-        CartesianInt3D Extent { get; }
+        VectorInt3D Extent { get; }
 
         /// <summary>
         /// Size of the BuildingBlockAssembly
         /// </summary>
-        CartesianInt3D Size { get; }
+        VectorInt3D Size { get; }
 
         IEnumerable<IBuildingBlock> GetBlockGrouping();
     }
