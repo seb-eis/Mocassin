@@ -21,12 +21,7 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// User defined identification string for this series
         /// </summary>
-        string Description { get; }
-
-        /// <summary>
-        /// Get the flag that defines if the user defined base lattice should be used for lattice creation (Prohibits size series if true)
-        /// </summary>
-        bool UseCustomBaseLattice { get; }
+        string Name { get; }
 
         /// <summary>
         /// Get the series of temperature values
@@ -39,34 +34,14 @@ namespace ICon.Model.Simulations
         IValueSeries McspSeries { get; }
 
         /// <summary>
-        /// Get the series of size values for the A direction
-        /// </summary>
-        IValueSeries LatticeSizeSeriesA { get; }
-
-        /// <summary>
-        /// Get the series of size values for the B direction
-        /// </summary>
-        IValueSeries LatticeSizeSeriesB { get; }
-
-        /// <summary>
-        /// Get the series of size values for the C direction
-        /// </summary>
-        IValueSeries LatticeSizeSeriesC { get; }
-
-        /// <summary>
-        /// Get a read only list of file paths to serialized energy infos
-        /// </summary>
-        IReadOnlyList<string> EnergyFilepathSeries { get; }
-
-        /// <summary>
-        /// Get a read only list of the doping series informations
-        /// </summary>
-        /// <returns></returns>
-        IReadOnlyList<IDopingSeries> DopingSeriesList { get; }
-
-        /// <summary>
         /// Get a read only list of all defined energy background load informations used to provider energetic background parametrizations
         /// </summary>
         IReadOnlyList<IExternalLoadInfo> EnergyBackgroundLoadInfos { get; }
+
+        /// <summary>
+        /// Get the number of simulations described by this series
+        /// </summary>
+        /// <returns></returns>
+        long GetSimulationCount(); 
     }
 }

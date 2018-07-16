@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using ICon.Framework.Operations;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;

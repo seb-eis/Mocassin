@@ -28,7 +28,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         /// <remarks> This method uses the same handler as the analog object change handler as the action is identical </remarks>
-        [ConflictHandlingMethod(DataOperationType.NewObject)]
+        [ConflictHandlingMethod]
         protected IConflictReport HandleObjectChange(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(UnstableEnvironmentChangeHandler)} was called for {envInfo.GetType().ToString()}");
@@ -42,7 +42,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="dataAccess"></param>
         /// <returns></returns>
         /// <remarks> This method uses the same handler as the analog object change handler as the action is identical </remarks>
-        [ConflictHandlingMethod(DataOperationType.NewObject)]
+        [ConflictHandlingMethod]
         protected IConflictReport HandleObjectChange(GroupInteraction groupInteraction, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(GroupInteractionChangeHandler)} was called for {groupInteraction.GetType().ToString()}");

@@ -40,7 +40,8 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// Interface access to the metropolis base simulation of the series
         /// </summary>
-        IMetropolisSimulation IMetropolisSimulationSeries.BaseSimulation => (IMetropolisSimulation)BaseSimulation;
+        [DataMember]
+        public new IMetropolisSimulation BaseSimulation { get; set; }
 
         /// <summary>
         /// Get a string representing the model object name

@@ -26,6 +26,7 @@ namespace ICon.Framework.Extensions
                 {
                     yield return item;
                 }
+                yield break;
             }
 
             int passed = -1, used = 0;

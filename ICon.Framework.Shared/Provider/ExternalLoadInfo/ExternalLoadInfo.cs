@@ -81,7 +81,7 @@ namespace ICon.Framework.Provider
                 var method = classType.GetMethod(MethodName, new Type[] { inputType });
                 if (method == null)
                 {
-                    exception = new InvalidOperationException("The method name does not exist with the provided parameter type does not exist");
+                    exception = new InvalidOperationException("The method name with the provided parameter type does not exist");
                     return false;
                 }
                 if (!method.ReturnType.IsAssignableFrom(outputType))
@@ -96,6 +96,15 @@ namespace ICon.Framework.Provider
                 exception = caught;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Returns a string representing the load information
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"[AssemblyPath = {AssemblyPath}, ClassName = {FullClassName}, MethodName = {MethodName}]";
         }
     }
 }

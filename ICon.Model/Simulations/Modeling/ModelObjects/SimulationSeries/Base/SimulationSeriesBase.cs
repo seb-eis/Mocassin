@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Reflection;
 using ICon.Framework.Constraints;
 using ICon.Framework.Provider;
 using ICon.Model.Basic;
@@ -14,16 +16,6 @@ namespace ICon.Model.Simulations
     [DataContract]
     public abstract class SimulationSeriesBase : ModelObject, ISimulationSeriesBase
     {
-        /// <summary>
-        /// Get read only interface access to the energy file path list
-        /// </summary>
-        IReadOnlyList<string> ISimulationSeriesBase.EnergyFilepathSeries => EnergyFilepathSeries;
-
-        /// <summary>
-        /// Get read only interface access to the doping series list
-        /// </summary>
-        IReadOnlyList<IDopingSeries> ISimulationSeriesBase.DopingSeriesList => DopingSeriesList;
-
         /// <summary>
         /// Get read only interface access to the energy background provider laod info list
         /// </summary>
@@ -40,13 +32,7 @@ namespace ICon.Model.Simulations
         /// The user given series indetifier string
         /// </summary>
         [DataMember]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Boolean flag taht specifies if the simulation should use the custom defined lattice or generate a fully randomized one
-        /// </summary>
-        [DataMember]
-        public bool UseCustomBaseLattice { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The value series for the simulation temperature parameter
@@ -59,37 +45,6 @@ namespace ICon.Model.Simulations
         /// </summary>
         [DataMember]
         public IValueSeries McspSeries { get; set; }
-
-        /// <summary>
-        /// The value series for the number of unit cells in A direction
-        /// </summary>
-        [DataMember]
-        public IValueSeries LatticeSizeSeriesA { get; set; }
-
-        /// <summary>
-        /// The value series for the number of unit cells in B direction
-        /// </summary>
-        [DataMember]
-        public IValueSeries LatticeSizeSeriesB { get; set; }
-
-        /// <summary>
-        /// The value series for the number of unit cells in C direction
-        /// </summary>
-        [DataMember]
-        public IValueSeries LatticeSizeSeriesC { get; set; }
-
-        /// <summary>
-        /// The file path string series to load predfined energy datasets not currently loaded in the energy management system
-        /// </summary>
-        [DataMember]
-        public List<string> EnergyFilepathSeries { get; set; }
-
-        /// <summary>
-        /// The list of values series for doping the lattice
-        /// </summary>
-        [DataMember]
-        [LinkableByIndex(LinkableType =LinkableType.Content)]
-        public List<IDopingSeries> DopingSeriesList { get; set; }
 
         /// <summary>
         /// The list of energy background load informations used to create energy background providers for the simulations
@@ -106,19 +61,35 @@ namespace ICon.Model.Simulations
         {
             if (CastWithDepricatedCheck<ISimulationSeriesBase>(obj) is ISimulationSeriesBase series)
             {
-                UseCustomBaseLattice = series.UseCustomBaseLattice;
-                Description = series.Description;
+                Name = series.Name;
                 TemperatureSeries = series.TemperatureSeries;
                 McspSeries = series.McspSeries;
-                LatticeSizeSeriesA = series.LatticeSizeSeriesA;
-                LatticeSizeSeriesB = series.LatticeSizeSeriesB;
-                LatticeSizeSeriesC = series.LatticeSizeSeriesC;
-                EnergyFilepathSeries = series.EnergyFilepathSeries.ToList();
-                DopingSeriesList = series.DopingSeriesList.ToList();
                 EnergyBackgroundLoadInfos = series.EnergyBackgroundLoadInfos.Select(a => new ExternalLoadInfo(a)).ToList();
                 return this;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Get the number of simulations described by this series
+        /// </summary>
+        /// <returns></returns>
+        public long GetSimulationCount()
+        {
+            long count = BaseSimulation.JobCount;
+            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var item in properties.Select(a => a.GetValue(this)).Where(value => value != null))
+            {
+                if (item is IValueSeries series)
+                {
+                    count *= series.GetValueCount();
+                }
+                if (item is IList list)
+                {
+                    count *= list.Count;
+                }
+            }
+            return count;
         }
     }
 }

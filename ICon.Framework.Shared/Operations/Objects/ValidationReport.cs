@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Reactive.Linq;
+using System.Linq;
 using Newtonsoft.Json;
 
 using ICon.Framework.Extensions;
@@ -34,6 +34,24 @@ namespace ICon.Framework.Operations
         }
 
         /// <summary>
+        /// Create new validation report froma validation report interface
+        /// </summary>
+        /// <param name="report"></param>
+        public ValidationReport(IValidationReport report) : this()
+        {
+            if (report is ValidationReport casted)
+            {
+                IsGood = casted.IsGood;
+                Warnings = casted.Warnings;
+            }
+            else
+            {
+                IsGood = report.IsGood;
+                AddWarnings(report.GetWarnings());
+            }
+        }
+
+        /// <summary>
         /// Adds a warning message and sets validation to failed if the warning is critical
         /// </summary>
         /// <param name="message"></param>
@@ -59,12 +77,12 @@ namespace ICon.Framework.Operations
         }
 
         /// <summary>
-        /// Get warnings enumerator
+        /// Get an enumerbale seqeunce of all stored warnings
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<WarningMessage> GetWarningsEnumerator()
+        public IEnumerable<WarningMessage> GetWarnings()
         {
-            return Warnings.GetEnumerator();
+            return Warnings.AsEnumerable();
         }
 
         /// <summary>

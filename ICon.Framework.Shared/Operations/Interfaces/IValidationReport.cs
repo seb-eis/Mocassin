@@ -11,9 +11,9 @@ namespace ICon.Framework.Operations
     public interface IValidationReport : IReport
     {
         /// <summary>
-        /// Get an enumerator to access the stored warning messages
+        /// Get all stored warnings messages
         /// </summary>
         /// <returns></returns>
-        IEnumerator<WarningMessage> GetWarningsEnumerator();
+        IEnumerable<WarningMessage> GetWarnings();
     }
 }

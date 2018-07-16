@@ -28,7 +28,8 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// Interface access to the kinetic base simulation
         /// </summary>
-        IKineticSimulation IKineticSimulationSeries.BaseSimulation => (IKineticSimulation)BaseSimulation;
+        [DataMember]
+        public new IKineticSimulation BaseSimulation { get; set; }
 
         /// <summary>
         /// Get a string representing the model object name

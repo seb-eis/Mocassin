@@ -35,38 +35,27 @@ namespace ICon.Model.Particles.Validators
         {
             var report = new ValidationReport();
             AddIndexOutOfRangeValidation(report);
-            AddNameValidation(obj, report);
-            AddSymbolValidation(obj, report);
+            AddStringPropertyValidations(obj, report);
             AddChargeValidation(obj, report);
             AddObjectUniquenessValidation(obj, report);
             return report;
         }
 
         /// <summary>
-        /// Validates if the naming of a particle is allowed and adds the results to the report
+        /// Validates all string properties of the particle and adds the results to the validation report
         /// </summary>
         /// <param name="particle"></param>
         /// <param name="report"></param>
-        protected void AddNameValidation(IParticle particle, ValidationReport report)
+        protected void AddStringPropertyValidations(IParticle particle, ValidationReport report)
         {
-            if (new Regex(Settings.NameStringPattern).IsMatch(particle.Name) == false)
+            if (!Settings.ParticleName.ParseValue(particle.Name, out var warnings))
             {
-                var detail0 = $"Particle naming is restriced by the following regular expression: {Settings.NameStringPattern}";
-                report.AddWarning(ModelMessages.CreateNamingViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
-        }
 
-        /// <summary>
-        /// Validates if the symbol naming of a particle is allowed and adds the results to the validation report
-        /// </summary>
-        /// <param name="particle"></param>
-        /// <param name="report"></param>
-        protected void AddSymbolValidation(IParticle particle, ValidationReport report)
-        {
-            if (new Regex(Settings.SymbolStringPattern).IsMatch(particle.Symbol) == false)
+            if (!Settings.ParticleSymbol.ParseValue(particle.Symbol, out warnings))
             {
-                var detail0 = $"Particle symbol naming is restriced by the following regular expression: {Settings.SymbolStringPattern}";
-                report.AddWarning(ModelMessages.CreateNamingViolationWarning(this, detail0));
+                report.AddWarnings(warnings);
             }
         }
 
@@ -90,7 +79,7 @@ namespace ICon.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddIndexOutOfRangeValidation(ValidationReport report)
         {
-            if (Settings.ParticleCount.ParseValue(DataReader.Access.GetValidParticleCount(), out var warnings) != 0)
+            if (Settings.ParticleCount.ParseValue(DataReader.Access.GetValidParticleCount() + 1, out var warnings) != 0)
             {
                 report.AddWarnings(warnings);
             }

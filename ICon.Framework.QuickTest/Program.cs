@@ -15,6 +15,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using ICon.Framework.Constraints;
 using ICon.Mathematics.Permutation;
 using ICon.Mathematics.Extensions;
 using ICon.Mathematics.Comparers;
@@ -43,6 +44,7 @@ using ICon.Model.Lattices;
 using ICon.Framework.Random;
 using System.Linq;
 using ICon.Model.DataManagement;
+using ICon.Model.Simulations;
 
 namespace ICon.Framework.QuickTest
 {
@@ -50,30 +52,25 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var watch = Stopwatch.StartNew();
-            var provider = new ExternalProvider<int, int>()
+            var test0 = Guid.NewGuid().ToString();
+            var test1 = Guid.NewGuid().ToString();
+
+            var rng0 = new PcgRandom32(test0.GetHashCode());
+            var rng1 = new PcgRandom32(test1.GetHashCode());
+
+            for (long i = 0;; i++)
             {
-                LoadInfo = new ExternalLoadInfo()
+                if (rng0.Next() == rng1.Next())
                 {
-                    AssemblyPath = "ICon.Framework.dll",
-                    FullClassName = "ICon.Framework.Random.PcgRandom32",
-                    MethodName = "Next"
+                    Console.WriteLine("Cycle till same value = {0}", i);
+                    break;
                 }
-            };
-            var testLoad = provider.TryLoadProvider(out var exception);
+            }
 
             //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
             //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
             //inputter.AutoInputData(package.ProjectServices);
-            //var report = inputter.GetReportJson();
-
-            int count = 10000;
-            DisplayWatch(watch);
-            for (int i = 0; i < count; i++)
-            {
-                provider.GetValue(i);
-            }
-            DisplayWatch(watch);
+            //var report = inputter.GetReportJson();         
 
             Console.ReadLine();
         }
