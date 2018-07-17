@@ -52,20 +52,18 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var test0 = Guid.NewGuid().ToString();
-            var test1 = Guid.NewGuid().ToString();
-
-            var rng0 = new PcgRandom32(test0.GetHashCode());
-            var rng1 = new PcgRandom32(test1.GetHashCode());
-
-            for (long i = 0;; i++)
+            var rng = new PcgRandom32();
+            var list = new StringConvertibleList<int>(1000000);
+            var list0 = new StringConvertibleList<int>();
+            for (int i = 0; i < 1000000; i++)
             {
-                if (rng0.Next() == rng1.Next())
-                {
-                    Console.WriteLine("Cycle till same value = {0}", i);
-                    break;
-                }
+                list.Add(rng.Next());
             }
+            var watch = Stopwatch.StartNew();
+            var serial = list.ToString();
+            DisplayWatch(watch);
+            list0.FromString(serial, value => value.ToPrimitive<int>());
+            DisplayWatch(watch);
 
             //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
             //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();

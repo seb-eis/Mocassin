@@ -23,22 +23,22 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The database set of mccs meta component entities
         /// </summary>
-        DbSet<MccsMetaEntity> MccsMetaEntities { get; set; }
+        DbSet<MccsMetaInfo> MccsMetaEntities { get; set; }
 
         /// <summary>
         /// The database set of mccs structure component entities
         /// </summary>
-        DbSet<MccsStructureEntity> MccsStructureEntities { get; set; }
+        DbSet<MccsStructureInfo> MccsStructureEntities { get; set; }
 
         /// <summary>
         /// The database set of mccs transition component entities
         /// </summary>
-        DbSet<MccsTransitionEntity> MccsTransitionEntities { get; set; }
+        DbSet<MccsTransitionInfo> MccsTransitionEntities { get; set; }
 
         /// <summary>
         /// The database set of mccs energy component entities
         /// </summary>
-        DbSet<MccsEnergyEntity> MccsEnergyEntities { get; set; }
+        DbSet<MccsEnergyInfo> MccsEnergyEntities { get; set; }
 
         /// <summary>
         /// The database set of mccs job entities

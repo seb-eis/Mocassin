@@ -60,13 +60,13 @@ namespace ICon.Framework.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="convertibles"></param>
-        public static void AppendSeparated(this StringBuilder builder, Char seperator, params IConvertible[] convertibles)
+        public static void AppendSeparated(this StringBuilder builder, char separator, IEnumerable<IConvertible> convertibles)
         {
             foreach (IConvertible item in convertibles)
             {
-                builder.Append(item.PrimitiveToString() + seperator);
+                builder.Append(item.PrimitiveToString() + separator);
             }
-            builder.Remove(builder.Length - 1, 1);
+            builder.PopBack(1);
         }
 
         /// <summary>

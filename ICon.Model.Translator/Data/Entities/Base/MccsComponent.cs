@@ -9,13 +9,13 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Base class for all MccsParent component entities
     /// </summary>
-    public abstract class MccsComponentEntity : EntityBase
+    public abstract class MccsComponent : EntityBase
     {
         /// <summary>
         /// The mccs parent context key
         /// </summary>
         [ForeignKey(nameof(MccsParent))]
-        public int ParentKey { get; set; }
+        public int MccsParentId { get; set; }
 
         /// <summary>
         /// The mccs parent of the component

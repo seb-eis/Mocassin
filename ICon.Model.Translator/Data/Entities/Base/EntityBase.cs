@@ -12,6 +12,6 @@ namespace ICon.Model.Translator
         /// The database entity context key
         /// </summary>
         [Key]
-        public int Key { get; set; }
+        public int Id { get; set; }
     }
 }

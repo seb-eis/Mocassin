@@ -23,13 +23,13 @@ namespace ICon.Model.Translator
         /// The context key of the mccs parent
         /// </summary>
         [ForeignKey(nameof(MccsParent))]
-        public int ParentKey { get; set; }
+        public int MccsParentId { get; set; }
 
         /// <summary>
         /// The context key of the mcss job result
         /// </summary>
         [ForeignKey(nameof(MccsJobResult))]
-        public int JobResultKey { get; set; }
+        public int MccsJobResultId { get; set; }
 
         /// <summary>
         /// The mccs parent object. Defines data translation of the simulation data components

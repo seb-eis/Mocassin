@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Entities\Components\Meta\Objects\" />
+    <Folder Include="Data\Entities\Components\Transition\Objects\" />
+    <Folder Include="Data\Entities\Objects\" />
     <Folder Include="Data\Model\" />
     <Folder Include="Data\Objects\" />
     <Folder Include="Translator\TranslatorSystem\" />
@@ -21,6 +24,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="1.1.11" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Shared\ICon.Framework.csproj" />
   </ItemGroup>
 
 </Project>

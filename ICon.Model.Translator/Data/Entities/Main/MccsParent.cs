@@ -59,22 +59,22 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The mccs meta entity of this simulation parent
         /// </summary>
-        public MccsMetaEntity MccsMetaEntity { get; set; }
+        public MccsMetaInfo MccsMetaEntity { get; set; }
 
         /// <summary>
         /// The mccs structure entity of this simulation parent
         /// </summary>
-        public MccsStructureEntity MccsStructureEntity { get; set; }
+        public MccsStructureInfo MccsStructureEntity { get; set; }
 
         /// <summary>
         /// The mccs transition entity of this simulation parent
         /// </summary>
-        public MccsTransitionEntity MccsTransitionEntity { get; set; }
+        public MccsTransitionInfo MccsTransitionEntity { get; set; }
 
         /// <summary>
         /// The mccs energy entity of this simulation parent
         /// </summary>
-        public MccsEnergyEntity MccsEnergyEntity { get; set; }
+        public MccsEnergyInfo MccsEnergyEntity { get; set; }
 
         /// <summary>
         /// The mccs parent result entity. Stores collective results information
