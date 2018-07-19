@@ -115,15 +115,15 @@ namespace ICon.Model.ProjectServices
                     ParticleCharge = new ValueSetting<double>("Particle Charge", -1000, 1000),
                     ParticleCount = new ValueSetting<int>("Particle Count", 0, 64),
                     ParticleSetCount = new ValueSetting<int>("Particle Set Count", 0, 100),
-                    NameStringPattern = "^[a-zA-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{1,100}$",
-                    SymbolStringPattern = "^[A-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{0,4}$"
+                    ParticleName = new StringSetting("Particle Name", "^[a-zA-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{1,100}$"),
+                    ParticleSymbol = new StringSetting("Particle Symbol", "^[A-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{0,4}$")
                 },
                 StructureSettings = new BasicStructureSettings()
                 {
                     BasePositionCount = new ValueSetting<int>("Base Position Count", 0, 1000),
                     TotalPositionCount = new ValueSetting<int>("Total Position Count", 0, 10000),
                     CellParameter = new ValueSetting<double>("Cell Parameter Length", 0.1, 1000),
-                    NameStringPattern = "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$"
+                    StructureName = new StringSetting("Structure Name", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$")
                 },
                 SymmetrySettings = new BasicSymmetrySettings()
                 {
@@ -162,7 +162,8 @@ namespace ICon.Model.ProjectServices
                     WriteCallCount = new ValueSetting<int>("Write Calls per Simulation", 0, 5, 100, 1000),
                     Temperature = new ValueSetting<double>("Temperature", 0.1, 100, 5000, 10000),
                     Normalization = new ValueSetting<double>("Normalization", 0, 0, 0.1, 1.0),
-                    SeriesPermutationCount = new ValueSetting<int>("Series Simulation Count", 0, 0, 1000, 5000),
+                    SeriesPermutation = new ValueSetting<long>("Series Simulation Count", 0, 0, 1000, 5000),
+                    SingleValuePermutation = new ValueSetting<int>("Value Series Count", 0, 0, 100, 5000),
                     SupercellPositionCount = new ValueSetting<int>("Supercell Position Count", 1, 100, 100000, 500000),
                     UnitCellsPerDirection = new ValueSetting<int>("Cells per Direction", 1, 1, 100, 256),
                     ForceTerminationTime = new ValueSetting<int>("Forced Termination Time", 0, 1, 48, 120),

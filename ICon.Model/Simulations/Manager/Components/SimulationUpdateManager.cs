@@ -21,6 +21,7 @@ namespace ICon.Model.Simulations
         public SimulationUpdateManager(SimulationModelData baseData, SimulationEventManager eventManager, IProjectServices projectServices)
             : base(baseData, eventManager, projectServices)
         {
+
         }
     }
 }

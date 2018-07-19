@@ -28,7 +28,7 @@ namespace ICon.Model.Structures.ConflictHandling
         /// <param name="groupInfo"></param>
         /// <param name="dataAccess"></param>
         /// <returns></returns>
-        [ConflictHandlingMethod(DataOperationType.ParameterChange)]
+        [ConflictHandlingMethod]
         protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(SpaceGroupChangeHandler)} was called for {groupInfo.GetType().ToString()}");
@@ -41,7 +41,7 @@ namespace ICon.Model.Structures.ConflictHandling
         /// <param name="parameters"></param>
         /// <param name="dataAccess"></param>
         /// <returns></returns>
-        [ConflictHandlingMethod(DataOperationType.ParameterChange)]
+        [ConflictHandlingMethod]
         protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(CellParametersChangeHandler)} was called for {parameters.GetType().ToString()}");

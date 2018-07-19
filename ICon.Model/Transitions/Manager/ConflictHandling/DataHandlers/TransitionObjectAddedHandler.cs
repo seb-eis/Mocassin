@@ -27,7 +27,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <param name="transition"></param>
         /// <param name="dataAccess"></param>
         /// <returns></returns>
-        [ConflictHandlingMethod(DataOperationType.NewObject)]
+        [ConflictHandlingMethod]
         protected IConflictReport HandleNewKineticTransition(KineticTransition transition, IDataAccessor<TransitionModelData> dataAccess)
         {
             return new KineticTransitionAddedHandler(dataAccess, ProjectServices).HandleConflicts(transition);
@@ -39,7 +39,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <param name="transition"></param>
         /// <param name="dataAccess"></param>
         /// <returns></returns>
-        [ConflictHandlingMethod(DataOperationType.NewObject)]
+        [ConflictHandlingMethod]
         protected IConflictReport HandleNewMetropolisTransition(MetropolisTransition transition, IDataAccessor<TransitionModelData> dataAccess)
         {
             return new MetropolisTransitionAddedHandler(dataAccess, ProjectServices).HandleConflicts(transition);

@@ -14,6 +14,34 @@ namespace ICon.Model.Simulations
     public class SimulationModelData : ModelData<ISimulationDataPort>
     {
         /// <summary>
+        /// List of all indexed single kinetic simulation model objects
+        /// </summary>
+        [DataMember]
+        [IndexedModelData(typeof(IKineticSimulation))]
+        public List<KineticSimulation> KineticSimulations { get; set; }
+
+        /// <summary>
+        /// List of all indexed single metropolis simulation model objects
+        /// </summary>
+        [DataMember]
+        [IndexedModelData(typeof(IMetropolisSimulation))]
+        public List<MetropolisSimulation> MetropolisSimulations { get; set; }
+
+        /// <summary>
+        /// List of all indexed kinetic simulation series model objects
+        /// </summary>
+        [DataMember]
+        [IndexedModelData(typeof(IKineticSimulationSeries))]
+        public List<KineticSimulationSeries> KineticSeries { get; set; }
+
+        /// <summary>
+        /// List of all indexed metropolis simulation series model objects
+        /// </summary>
+        [DataMember]
+        [IndexedModelData(typeof(IMetropolisSimulationSeries))]
+        public List<MetropolisSimulationSeries> MetropolisSeries { get; set; }
+
+        /// <summary>
         /// Creates an adapter interface that provides read only access to the model data object
         /// </summary>
         /// <returns></returns>

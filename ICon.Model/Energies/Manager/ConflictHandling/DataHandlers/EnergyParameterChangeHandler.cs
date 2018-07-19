@@ -28,7 +28,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="info"></param>
         /// <param name="dataAccess"></param>
         /// <returns></returns>
-        [ConflictHandlingMethod(DataOperationType.ParameterChange)]
+        [ConflictHandlingMethod]
         protected IConflictReport HandleParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(StableEnvironmentInfoChangeHandler)} was called for {info.GetType().ToString()}");
