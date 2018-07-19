@@ -143,6 +143,12 @@ namespace ICon.Model.Simulations
             {
                 return;
             }
+            if (!simulation.EnergyBackgroundProviderInfo.IsValidProviderFor(typeof(object), typeof(IEnergyBackground), out var exception))
+            {
+                var detail0 = $"The defined assembly load information {(simulation.EnergyBackgroundProviderInfo)} for energy background provision is invalid";
+                var detail1 = $"Exception message:\n {exception.Message}";
+                report.AddWarning(ModelMessages.CreateUserInducedExceptionWarning(this, detail0, detail1));
+            }
         }
 
 

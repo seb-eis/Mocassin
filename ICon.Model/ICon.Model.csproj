@@ -45,8 +45,8 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="1.1.9" />
-    <PackageReference Include="System.Reactive" Version="3.1.1" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="1.1.11" />
+    <PackageReference Include="System.Reactive" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,10 +55,6 @@
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
-    <Folder Include="Simulations\Manager\ConflictHandling\DataHandlers\" />
-    <Folder Include="Simulations\Manager\ConflictHandling\ObjectHandler\" />
-    <Folder Include="Simulations\Manager\ConflictHandling\Provider\" />
-    <Folder Include="Simulations\Modeling\Logic\" />
     <Folder Include="Simulations\Modeling\ModelParameters\" />
     <Folder Include="Structures\Modeling\Logic\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />

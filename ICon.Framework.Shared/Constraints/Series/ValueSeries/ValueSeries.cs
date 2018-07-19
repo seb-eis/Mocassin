@@ -31,11 +31,35 @@ namespace ICon.Framework.Constraints
         public double Increment { get; set; }
 
         /// <summary>
+        /// Create new value series with lower limit, upper limit and the increment value. Auto sorts lower and upper by value
+        /// </summary>
+        /// <param name="lowerLimit"></param>
+        /// <param name="upperLimit"></param>
+        /// <param name="increment"></param>
+        public ValueSeries(double lowerLimit, double upperLimit, double increment)
+        {
+            LowerLimit = Math.Min(lowerLimit, UpperLimit);
+            UpperLimit = Math.Max(lowerLimit, upperLimit);
+            Increment = increment;
+        }
+
+        /// <summary>
+        /// Create new default value series
+        /// </summary>
+        public ValueSeries()
+        {
+        }
+
+        /// <summary>
         /// Get the number of values in the series which is greater or equal to one
         /// </summary>
         /// <returns></returns>
         public int GetValueCount()
         {
+            if (Increment == 0 && LowerLimit == UpperLimit)
+            {
+                return 1;
+            }
             return (int)(Math.Round(Math.Abs(UpperLimit - LowerLimit)) / Math.Abs(Increment)) + 1;
         }
 
@@ -67,6 +91,16 @@ namespace ICon.Framework.Constraints
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Creates a pseudo value series that contains only a single value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static ValueSeries MakeSingle(double value)
+        {
+            return new ValueSeries(value, value, 0);
         }
     }
 }

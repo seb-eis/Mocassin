@@ -35,6 +35,6 @@ namespace ICon.Model.ProjectServices
         /// The string restriction pattern for structure naming
         /// </summary>
         [DataMember]
-        public string NameStringPattern { get; set; }
+        public StringSetting StructureName { get; set; }
     }
 }

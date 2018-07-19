@@ -34,12 +34,12 @@ namespace ICon.Model.ProjectServices
         /// The regular expression for the particle symbol
         /// </summary>
         [DataMember]
-        public string SymbolStringPattern { get; set; }
+        public StringSetting ParticleSymbol { get; set; }
 
         /// <summary>
         /// The regular expression for the particle name
         /// </summary>
         [DataMember]
-        public string NameStringPattern { get; set; }
+        public StringSetting ParticleName { get; set; }
     }
 }

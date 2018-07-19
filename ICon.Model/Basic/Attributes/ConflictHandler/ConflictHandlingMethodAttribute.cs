@@ -11,15 +11,6 @@ namespace ICon.Model.Basic
         /// <summary>
         /// Get the type of the conflict the method is supposed to handle
         /// </summary>
-        public DataOperationType DataOperationType { get; }
-
-        /// <summary>
-        /// Create new conflict resolver method attribute with the specified type of conflict source
-        /// </summary>
-        /// <param name="conflictSource"></param>
-        public ConflictHandlingMethodAttribute(DataOperationType conflictSource)
-        {
-            DataOperationType = conflictSource;
-        }
+        public DataOperationType DataOperationType { get; set; }
     }
 }

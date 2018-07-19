@@ -90,7 +90,13 @@ namespace ICon.Model.ProjectServices
         /// The value restriction setting for simulation permutation count of a single simulation series
         /// </summary>
         [DataMember]
-        public ValueSetting<int> SeriesPermutationCount { get; set; }
+        public ValueSetting<long> SeriesPermutation { get; set; }
+
+        /// <summary>
+        /// The value restriction setting for a single value series permutation count
+        /// </summary>
+        [DataMember]
+        public ValueSetting<int> SingleValuePermutation { get; set; }
 
         /// <summary>
         /// The value restriction for simulation forced termination by runtime time span in [h]
