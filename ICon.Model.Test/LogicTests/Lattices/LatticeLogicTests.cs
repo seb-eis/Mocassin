@@ -131,9 +131,11 @@ namespace ICon.Model.Test
         [TestMethod]
         public void TestRandomSelect()
         {
-            List<int> list = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
-            List<int> selectList = list.SelectRandom(9, new Random()).ToList();
-            Console.WriteLine();
+            var random = new PcgRandom32();
+            for (int i = 0; i < 100; i++)
+            {
+                Console.WriteLine(random.Next());
+            }
         }
     }
 }

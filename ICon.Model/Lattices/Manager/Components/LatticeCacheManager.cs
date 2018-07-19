@@ -26,6 +26,10 @@ namespace ICon.Model.Lattices
         {
         }
 
+        /// <summary>
+        /// Get provider for generating a lattice with the model data
+        /// </summary>
+        /// <returns></returns>
         public LatticeCreationProvider GetLatticeCreationProvider()
         {
 

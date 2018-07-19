@@ -202,7 +202,7 @@ namespace ICon.Model.Basic.Debug
         /// <returns></returns>
         public string JsonSerialize()
         {
-            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto, PreserveReferencesHandling = PreserveReferencesHandling.All }); //TODO: change this back
+            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto });
         }
 
         /// <summary>

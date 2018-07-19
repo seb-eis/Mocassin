@@ -10,7 +10,7 @@ namespace ICon.Model.Lattices
     /// <summary>
     /// Contains information about a CellEntry within the WorkLattice
     /// </summary>
-    public class LatticeEntry
+    public class LatticeEntry : IEquatable<LatticeEntry>
     {
         /// <summary>
         /// Occupation on cell entry
@@ -35,30 +35,29 @@ namespace ICon.Model.Lattices
         {
             unchecked
             {
-                int result = 37;
-                result *= 397;
+                int result = -1261372869;
+                result *= -1521134295;
                 if (Particle != null) result += Particle.GetHashCode();
-                result *= 397;
+                result *= -1521134295;
                 if (CellPosition != null) result += CellPosition.GetHashCode();
-                result *= 397;
+                result *= -1521134295;
                 if (Block != null) result += Block.GetHashCode();
                 return result;
             }
         }
 
         /// <summary>
-        /// Equal comparison based on HashCode
+        /// Equality comparison
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType()) return false;
-            return GetHashCode() == obj.GetHashCode();
+            return Equals(obj as LatticeEntry);
         }
 
         /// <summary>
-        /// Make a shallow copy of this object (members variables are not compied)
+        /// Make a shallow copy of this object
         /// </summary>
         /// <returns></returns>
         public LatticeEntry ShallowCopy()
@@ -66,5 +65,15 @@ namespace ICon.Model.Lattices
             return (LatticeEntry) MemberwiseClone();
         }
 
+        /// <summary>
+        /// Equality comparison
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(LatticeEntry other)
+        {
+            return other != null && Particle == other.Particle &&
+                CellPosition == other.CellPosition && Block == other.Block;
+        }
     }
 }

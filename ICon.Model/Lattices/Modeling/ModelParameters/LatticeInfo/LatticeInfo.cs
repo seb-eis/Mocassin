@@ -21,7 +21,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public override String GetParameterName()
         {
-            return "'Super Cell Extent Parameters'";
+            return "'Super Cell Parameters'";
         }
 
         /// <summary>

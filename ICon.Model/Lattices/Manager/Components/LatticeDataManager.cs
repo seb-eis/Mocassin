@@ -66,7 +66,5 @@ namespace ICon.Model.Lattices
         {
             return ReadOnlyList<IDopingCombination>.FromEnumerable(Data.DopingCombinations);
         }
-
-        //public (ReadOnlyList<IDoping>, ReadOnlyList<IBlockInfo>, ReadOnlyList<IBuildingBlock>, ReadOnlyList<IDopingCombination>)   TODO: delete this
     }
 }
