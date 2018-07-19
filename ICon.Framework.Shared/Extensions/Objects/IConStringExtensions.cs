@@ -31,17 +31,17 @@ namespace ICon.Framework.Extensions
         }
 
         /// <summary>
-        /// Parse a character seprarated string of values into the actual values using the provided converter delegate.
+        /// Parse a character seprarated string into the actual values using the provided converter delegate.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="separated"></param>
-        /// <param name="separator"></param>
         /// <param name="converter"></param>
+        /// <param name="separator"></param>
         /// <returns></returns>
-        public static List<T> ParseToValueList<T>(this string separated, char separator, Func<string,T> converter)
+        public static List<T> ParseToValueList<T>(this string separated, Func<string, T> converter, char separator)
         {
             int index = 0, numOfValues = 1;
-            var workSpan = separated.AsSpan();
+            var workSpan = separated.AsSpan();            
 
             for (int i = 0; i < workSpan.Length; i++)
             {

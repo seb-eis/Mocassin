@@ -4,10 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Folder Include="Data\Entities\Components\Meta\Objects\" />
     <Folder Include="Data\Entities\Components\Transition\Objects\" />
-    <Folder Include="Data\Entities\Objects\" />
     <Folder Include="Data\Model\" />
     <Folder Include="Data\Objects\" />
     <Folder Include="Translator\TranslatorSystem\" />
@@ -27,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\ICon.Mathematics.csproj" />
     <ProjectReference Include="..\ICon.Framework.Shared\ICon.Framework.csproj" />
   </ItemGroup>
 

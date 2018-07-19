@@ -13,24 +13,34 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The environment entity key
         /// </summary>
-        [ForeignKey(nameof(Environment))]
-        public int EnvironmentId { get; set; }
+        [ForeignKey(nameof(CellPositionEntity))]
+        public int CellPositionEntityId { get; set; }
 
         /// <summary>
         /// Environment entity that this pair energy table belongs to
         /// </summary>
-        Environment Environment { get; set; }
+        Environment CellPositionEntity { get; set; }
 
         /// <summary>
-        /// The pair energy table entity key
+        /// Pair energy map entity key
         /// </summary>
-        [ForeignKey(nameof(PairEnergyTable))]
-        public int PairEnergyTableId { get; set; }
+        [ForeignKey(nameof(PairEnergyMatrix))]
+        public int PairEnergyMatrixId { get; set; }
 
         /// <summary>
-        /// Navigation property for the pair energy table that belongs to this shell
+        /// Navigation property for the pair energy map affiliated with this shell
         /// </summary>
-        PairEnergyTable PairEnergyTable { get; set; }
+        PairEnergyMatrix PairEnergyMatrix { get; set; }
+
+        /// <summary>
+        /// The index of the shell within its affiliated environment
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// The distance of this shell from its core position
+        /// </summary>
+        public double CoreDistance { get; set; }
 
         /// <summary>
         /// The list of environment positions that describe the shell

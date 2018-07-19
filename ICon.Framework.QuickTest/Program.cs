@@ -45,6 +45,8 @@ using ICon.Framework.Random;
 using System.Linq;
 using ICon.Model.DataManagement;
 using ICon.Model.Simulations;
+using ICon.Model.Translator;
+using Microsoft.EntityFrameworkCore;
 
 namespace ICon.Framework.QuickTest
 {
@@ -52,18 +54,19 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             var rng = new PcgRandom32();
-            var list = new StringConvertibleList<int>(1000000);
-            var list0 = new StringConvertibleList<int>();
-            for (int i = 0; i < 1000000; i++)
+
+            var test = new TestEntity()
             {
-                list.Add(rng.Next());
-            }
-            var watch = Stopwatch.StartNew();
-            var serial = list.ToString();
-            DisplayWatch(watch);
-            list0.FromString(serial, value => value.ToPrimitive<int>());
-            DisplayWatch(watch);
+                Matrix = MatrixEntity<int>.FromArray(new int[1000].Populate(() => rng.Next()))
+            };
+
+            var context = new MccsDatabaseContext("./mccs.sqlite", true);
+            context.Tests.Add(test);
+            context.SaveChanges();
+            context.Dispose();
+            context = new MccsDatabaseContext("./mccs.sqlite", false);
 
             //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
             //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();

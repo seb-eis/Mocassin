@@ -22,9 +22,9 @@ namespace ICon.Model.Translator
         public EnvironmentShell EnvironmentShell { get; set; }
 
         /// <summary>
-        /// The linear index of this position in the environment position list
+        /// The relative index of the position in the total environment position set
         /// </summary>
-        public int IndexInEnvironment { get; set; }
+        public int RelativeIndex { get; set; }
 
         /// <summary>
         /// Relative vector component in A direction

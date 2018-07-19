@@ -9,6 +9,14 @@ namespace ICon.Model.Translator
     /// </summary>
     public class MccsEnergyInfo : MccsComponent
     {
+        /// <summary>
+        /// The list of cluster energy matrices for the simulation
+        /// </summary>
+        public List<ClusterEnergyMatrix> ClusterEnergyMatrices { get; set; }
 
+        /// <summary>
+        /// The list of pair energy matrices for the simulation
+        /// </summary>
+        public List<PairEnergyMatrix> PairEnergyMatrices { get; set; }
     }
 }

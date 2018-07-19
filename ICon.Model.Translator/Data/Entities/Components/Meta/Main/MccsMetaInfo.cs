@@ -10,6 +10,11 @@ namespace ICon.Model.Translator
     public class MccsMetaInfo : MccsComponent
     {
         /// <summary>
+        /// The list of particles used in the simulation
+        /// </summary>
+        public List<ParticleEntity> Particles { get; set; }
+
+        /// <summary>
         /// Normed component of the electric field vector in A direction
         /// </summary>
         public double EFieldComponentA { get; set; }

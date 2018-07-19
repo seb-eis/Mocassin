@@ -9,6 +9,9 @@ namespace ICon.Model.Translator
     /// </summary>
     public class MccsStructureInfo : MccsComponent
     {
-        
+        /// <summary>
+        /// The list of cell positions and their surroundings for the simulation
+        /// </summary>
+        public List<Environment> CellPositionEntities { get; set; }
     }
 }

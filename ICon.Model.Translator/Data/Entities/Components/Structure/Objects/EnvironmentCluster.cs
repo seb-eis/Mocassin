@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ICon.Framework.Collections;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ICon.Model.Translator
@@ -13,33 +14,34 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The environment entity key
         /// </summary>
-        [ForeignKey(nameof(Environment))]
-        public int EnvironmentId { get; set; }
+        [ForeignKey(nameof(CellPositionEntity))]
+        public int CellPositionEntityId { get; set; }
 
         /// <summary>
         /// Navigation property for the environment this cluster belongs to
         /// </summary>
-        public Environment Environment { get; set; }
+        public Environment CellPositionEntity { get; set; }
 
         /// <summary>
         /// The cluster energy table entity key
         /// </summary>
-        [ForeignKey(nameof(ClusterEnergyTable))]
-        public int ClusterEnergyTableId { get; set; }
+        [ForeignKey(nameof(ClusterEnergyMatrix))]
+        public int ClusterEnergyMatrixId { get; set; }
 
         /// <summary>
         /// Navigation property for the cluster energy table describing the energy model of the cluster
         /// </summary>
-        public ClusterEnergyTable ClusterEnergyTable { get; set; }
+        public ClusterEnergyMatrix ClusterEnergyMatrix { get; set; }
 
         /// <summary>
-        /// The number of positions in this cluster
+        /// The position matrix blob entity key
         /// </summary>
-        public int PositionCount { get; set; }
+        [ForeignKey(nameof(PositionMatrix))]
+        public int PositionMatrixId { get; set; }
 
         /// <summary>
-        /// String encoded version of the environment position indices that belong to the cluster
+        /// The 1D position index matrix that describes which position indices of the environment form the cluster
         /// </summary>
-        public string PositionIndexingString { get; set; }
+        public MatrixEntity<int> PositionMatrix { get; set; }
     }
 }

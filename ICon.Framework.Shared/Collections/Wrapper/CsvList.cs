@@ -8,10 +8,10 @@ using ICon.Framework.Extensions;
 namespace ICon.Framework.Collections
 {
     /// <summary>
-    /// Generic string convertible list wrapper that supplies serializing and deserializing the list into a string
+    /// Generic string convertible list wrapper that supplies serializing and deserializing the list into a string in a csv style
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class StringConvertibleList<T> : IList<T> where T : IConvertible
+    public class CsvList<T> : IList<T>
     {
         /// <summary>
         /// The separator used to sepraarted the values
@@ -44,7 +44,7 @@ namespace ICon.Framework.Collections
         /// <summary>
         /// Default construct a new string convertible list. Default separator is a comma
         /// </summary>
-        public StringConvertibleList()
+        public CsvList()
         {
             Separator = ',';
             Values = new List<T>();
@@ -54,7 +54,7 @@ namespace ICon.Framework.Collections
         /// Default construct new convertible list with initial capacity
         /// </summary>
         /// <param name="capacity"></param>
-        public StringConvertibleList(int capacity) : this()
+        public CsvList(int capacity) : this()
         {
             Values.Capacity = capacity;
         }
@@ -169,8 +169,13 @@ namespace ICon.Framework.Collections
         /// <returns></returns>
         public override string ToString()
         {
-            var builder = new StringBuilder(Values.Count * 10);
-            builder.AppendSeparated(Separator, Values.Cast<IConvertible>());
+            int charsPerEntry = 1;
+            if (Values.Count != 0)
+            {
+                charsPerEntry = Values[0].ToString().Length;
+            }
+            var builder = new StringBuilder(Values.Count * (1 + charsPerEntry));
+            builder.AppendSeparatedToString(Values, Separator);
             return builder.ToString();
         }
 
@@ -178,9 +183,34 @@ namespace ICon.Framework.Collections
         /// Loads the list from a single separated value string and a converter delegate that converts a substring to the correct type
         /// </summary>
         /// <param name="linearized"></param>
-        public void FromString(string linearized, Func<string,T> converter)
+        public void FromString(string linearized, Func<string, T> converter)
         {
-            Values = linearized.ParseToValueList(Separator, converter);
+            Values = linearized.ParseToValueList(converter, Separator);
+        }
+
+        /// <summary>
+        /// Parse a string of separated values into a csv list of the specfied type using the provided string to value converter and separator
+        /// </summary>
+        /// <param name="linearized"></param>
+        /// <param name="converter"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static CsvList<T> Parse(string linearized, Func<string, T> converter, char separator)
+        {
+            var list = new CsvList<T>() { Separator = separator };
+            list.FromString(linearized, converter);
+            return list;
+        }
+
+        /// <summary>
+        /// Parses a string of separated values into a csv list of the specified type using the provided converter and default seprarator ','
+        /// </summary>
+        /// <param name="linearized"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
+        public static CsvList<T> Parse(string linearized, Func<string, T> converter)
+        {
+            return CsvList<T>.Parse(linearized, converter, ',');
         }
     }
 }

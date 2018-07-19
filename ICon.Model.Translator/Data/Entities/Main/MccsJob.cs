@@ -57,8 +57,33 @@ namespace ICon.Model.Translator
         public double ElectricField { get; set; }
 
         /// <summary>
-        /// The encoded simulation lattice string description
+        /// LAttice csv property that enables indirect get/set of the encoded lattice through a csv style string representation
         /// </summary>
-        public string LatticeString { get; set; }
+        public string LatticeCsv
+        {
+            get { return EncodedLattice.ToString(); }
+            set { EncodedLattice = CsvEncodedMatrix<int>.Parse(value, int.Parse); }
+        }
+
+        /// <summary>
+        /// Indirectly mapped encoded linear matrix that describes the simulation lattice
+        /// </summary>
+        [NotMapped]
+        public CsvEncodedMatrix<int> EncodedLattice { get; set; }
+
+        /// <summary>
+        /// Energy background csv property that enables indirect get/set of the encoded background thorugh a csv stael string representation
+        /// </summary>
+        public string BackgroundCsv
+        {
+            get { return EncodedBackground.ToString(); }
+            set { EncodedBackground = CsvEncodedMatrix<double>.Parse(value, double.Parse); }
+        }
+
+        /// <summary>
+        /// Indirectly mapped encoded energy background for the simulation
+        /// </summary>
+        [NotMapped]
+        public CsvEncodedMatrix<double> EncodedBackground { get; set; }
     }
 }
