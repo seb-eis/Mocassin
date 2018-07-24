@@ -11,19 +11,15 @@ namespace ICon.Model.Translator
     public class TrackingHeader : EntityBase
     {
         /// <summary>
-        /// The mccs metra info entity id
+        /// The mcs structure info entity id
         /// </summary>
-        public int MccsMetaInfoId { get; set; }
+        [ForeignKey(nameof(McsStructure))]
+        public int McsStructureId { get; set; }
 
         /// <summary>
-        /// Navigation property for the mccs meta info this tracking header belongs to
+        /// Navigation property for the mcs structure info this tracking header belongs to
         /// </summary>
-        public MccsMetaInfo MccsMetaInfo { get; set; }
-
-        /// <summary>
-        /// Defines the total number of dynamic trackers that are required
-        /// </summary>
-        public int DynamicTrackerCount { get; set; }
+        public McsStructure McsStructure { get; set; }
 
         /// <summary>
         /// Defines the number of static trackers required per unit cell

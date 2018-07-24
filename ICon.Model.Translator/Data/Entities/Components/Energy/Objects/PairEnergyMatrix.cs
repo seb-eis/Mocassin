@@ -21,7 +21,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Navigation property for the mccs energy info this pair table belongs to
         /// </summary>
-        public MccsEnergyInfo MccsEnergyInfo { get; set; }
+        public McsEnergies MccsEnergyInfo { get; set; }
 
         /// <summary>
         /// The energy matrix blob entity uid

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class MccsJobResult
+    public class McsJobResult
     {
     }
 }

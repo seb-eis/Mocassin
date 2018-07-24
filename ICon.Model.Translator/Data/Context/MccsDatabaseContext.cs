@@ -13,7 +13,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The list of blob redirection actions on the model
         /// </summary>
-        protected static List<Action<ModelBuilder>> BlobRedirections { get; set; }
+        protected static List<Action<ModelBuilder>> BlobTableAssigners { get; set; }
 
         /// <summary>
         /// The full filepath used for opening the database
@@ -82,18 +82,18 @@ namespace ICon.Model.Translator
         /// <param name="modelBuilder"></param>
         protected void RedirectBlobEntities(ModelBuilder modelBuilder)
         {
-            if (BlobRedirections == null)
+            if (BlobTableAssigners == null)
             {
-                BlobRedirections = MakeBlobRedirectionList();
+                BlobTableAssigners = MakeBlobTableAssigners();
             }
-            BlobRedirections.ForEach(a => a(modelBuilder));
+            BlobTableAssigners.ForEach(a => a(modelBuilder));
         }
 
         /// <summary>
         /// Searches all data entities for blob inheriting properties and creates a list of model builder table redirections for their types
         /// </summary>
         /// <returns></returns>
-        protected List<Action<ModelBuilder>> MakeBlobRedirectionList()
+        protected List<Action<ModelBuilder>> MakeBlobTableAssigners()
         {
             var list = new List<Action<ModelBuilder>>();
             foreach (var item in GetType().GetProperties().Where(a => a.PropertyType.IsGenericType))

@@ -11,15 +11,15 @@ namespace ICon.Model.Translator
     public class ParticleEntity : EntityBase
     {
         /// <summary>
-        /// Navigation property for the mccs meta info this particle belongs to
+        /// Navigation property for the mcs structure info this particle belongs to
         /// </summary>
-        public MccsMetaInfo MccsMetaInfo { get; set; }
+        public McsStructure McsStructure { get; set; }
 
         /// <summary>
-        /// The mccs meta info entity key
+        /// The mcs structure info entity key
         /// </summary>
-        [ForeignKey(nameof(MccsMetaInfo))]
-        public int MccsMetaInfoId { get; set; }
+        [ForeignKey(nameof(McsStructure))]
+        public int McsStructureId { get; set; }
 
         /// <summary>
         /// The index of the particle used during calculations

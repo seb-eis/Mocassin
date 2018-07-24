@@ -14,24 +14,13 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The environment entity key
         /// </summary>
-        [ForeignKey(nameof(CellPositionEntity))]
-        public int CellPositionEntityId { get; set; }
+        [ForeignKey(nameof(Environment))]
+        public int EnvironmentId { get; set; }
 
         /// <summary>
         /// Navigation property for the environment this cluster belongs to
         /// </summary>
-        public Environment CellPositionEntity { get; set; }
-
-        /// <summary>
-        /// The cluster energy table entity key
-        /// </summary>
-        [ForeignKey(nameof(ClusterEnergyMatrix))]
-        public int ClusterEnergyMatrixId { get; set; }
-
-        /// <summary>
-        /// Navigation property for the cluster energy table describing the energy model of the cluster
-        /// </summary>
-        public ClusterEnergyMatrix ClusterEnergyMatrix { get; set; }
+        public Environment Environment { get; set; }
 
         /// <summary>
         /// The position matrix blob entity key
@@ -43,5 +32,10 @@ namespace ICon.Model.Translator
         /// The 1D position index matrix that describes which position indices of the environment form the cluster
         /// </summary>
         public MatrixEntity<int> PositionMatrix { get; set; }
+
+        /// <summary>
+        /// The list of cluster energy sets that describe the cluster energy modelling
+        /// </summary>
+        public List<ClusterEnergySet> ClusterEnergySets { get; set; }
     }
 }

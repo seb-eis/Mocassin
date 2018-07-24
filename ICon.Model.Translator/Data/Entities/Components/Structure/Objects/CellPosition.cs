@@ -12,15 +12,15 @@ namespace ICon.Model.Translator
     public class CellPosition : EntityBase
     {
         /// <summary>
-        /// The mccs structure entity id
+        /// The mcs structure entity id
         /// </summary>
-        [ForeignKey(nameof(MccsStructureInfo))]
-        public int MccsStructureInfoId { get; set; }
+        [ForeignKey(nameof(McsStructure))]
+        public int McsStructureId { get; set; }
 
         /// <summary>
-        /// Navigation property for the mccs structure info this position belongs to
+        /// Navigation property for the mcs structure info this position belongs to
         /// </summary>
-        public MccsStructureInfo MccsStructureInfo { get; set; }
+        public McsStructure McsStructure { get; set; }
 
         /// <summary>
         /// The environment entity id

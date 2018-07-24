@@ -7,9 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ICon.Model.Translator
 {
     /// <summary>
-    /// Base class for all MccsParent component entities
+    /// Base class for all monte carlo simulation components
     /// </summary>
-    public abstract class MccsComponent : EntityBase
+    public abstract class McsComponent : EntityBase
     {
         /// <summary>
         /// The mccs parent context key
@@ -20,6 +20,6 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The mccs parent of the component
         /// </summary>
-        public MccsParent MccsParent { get; set; }
+        public McsParent MccsParent { get; set; }
     }
 }

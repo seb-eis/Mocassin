@@ -30,7 +30,13 @@ namespace ICon.Model.Translator
         /// The dimension of the matrix entity
         /// </summary>
         [NotMapped]
-        public int Dimension => IndexSkips == null ? -1 : IndexSkips.Length + 1;
+        public int Dimension => IndexSkips.Length + 1;
+
+        /// <summary>
+        /// The total length of the matrix entries in all dimensions
+        /// </summary>
+        [NotMapped]
+        public int Length => Values.Length;
 
         /// <summary>
         /// Get the value at the given indices. Throws if the number of indices does not match dimension

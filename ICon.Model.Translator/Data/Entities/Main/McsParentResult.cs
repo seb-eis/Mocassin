@@ -8,7 +8,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// The mccs parent result entity. Stores collective results of all jobs affiliated with a mccs parent
     /// </summary>
-    public class MccsParentResult : MccsComponent
+    public class McsParentResult : McsComponent
     {
 
     }

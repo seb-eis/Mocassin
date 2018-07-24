@@ -17,7 +17,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Mccs job entity that describes a single simulation job belonging to a parent simulation definition
     /// </summary>
-    public class MccsJob : EntityBase
+    public class McsJob : EntityBase
     {
         /// <summary>
         /// The context key of the mccs parent
@@ -26,20 +26,20 @@ namespace ICon.Model.Translator
         public int MccsParentId { get; set; }
 
         /// <summary>
+        /// The mccs parent object. Defines data translation of the simulation data components
+        /// </summary>
+        public McsParent MccsParent { get; set; }
+
+        /// <summary>
         /// The context key of the mcss job result
         /// </summary>
         [ForeignKey(nameof(MccsJobResult))]
         public int MccsJobResultId { get; set; }
 
         /// <summary>
-        /// The mccs parent object. Defines data translation of the simulation data components
-        /// </summary>
-        public MccsParent MccsParent { get; set; }
-
-        /// <summary>
         /// The mccs job result object. Contains simulation result information created by the simulator
         /// </summary>
-        public MccsJobResult MccsJobResult { get; set; }
+        public McsJobResult MccsJobResult { get; set; }
 
         /// <summary>
         /// Status flag of the job. Dirty status bit indicates that a simulation is running or crashed
@@ -57,33 +57,8 @@ namespace ICon.Model.Translator
         public double ElectricField { get; set; }
 
         /// <summary>
-        /// LAttice csv property that enables indirect get/set of the encoded lattice through a csv style string representation
+        /// Defines the number of dynmaic trackers the simulation requires
         /// </summary>
-        public string LatticeCsv
-        {
-            get { return EncodedLattice.ToString(); }
-            set { EncodedLattice = CsvEncodedMatrix<int>.Parse(value, int.Parse); }
-        }
-
-        /// <summary>
-        /// Indirectly mapped encoded linear matrix that describes the simulation lattice
-        /// </summary>
-        [NotMapped]
-        public CsvEncodedMatrix<int> EncodedLattice { get; set; }
-
-        /// <summary>
-        /// Energy background csv property that enables indirect get/set of the encoded background thorugh a csv stael string representation
-        /// </summary>
-        public string BackgroundCsv
-        {
-            get { return EncodedBackground.ToString(); }
-            set { EncodedBackground = CsvEncodedMatrix<double>.Parse(value, double.Parse); }
-        }
-
-        /// <summary>
-        /// Indirectly mapped encoded energy background for the simulation
-        /// </summary>
-        [NotMapped]
-        public CsvEncodedMatrix<double> EncodedBackground { get; set; }
+        public int DynamicTrackerCount { get; set; }
     }
 }
