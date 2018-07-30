@@ -7,6 +7,8 @@ using System.Reflection;
 using ICon.Framework.Constraints;
 using ICon.Framework.Provider;
 using ICon.Model.Basic;
+using ICon.Mathematics.ValueTypes;
+using ICon.Model.Lattices;
 
 namespace ICon.Model.Simulations
 {
@@ -51,6 +53,16 @@ namespace ICon.Model.Simulations
         /// </summary>
         [DataMember]
         public List<ExternalLoadInfo> EnergyBackgroundLoadInfos { get; set; }
+
+        /// <summary>
+        /// The list of lattice sizes used for lattice creation
+        /// </summary>
+        public List<VectorInt3D> LatticeSizeSeries { get; set; }
+
+        /// <summary>
+        /// Series of doping concentration
+        /// </summary>
+        public List<IDictionary<IDoping, double>> DopingSeries { get; set; }
 
         /// <summary>
         /// Populates the components of the base class from a model object interface and retunrs this object. Returns null if the population failed

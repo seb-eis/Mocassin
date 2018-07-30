@@ -30,7 +30,7 @@ namespace ICon.Model.Lattices
         /// Get provider for generating a lattice with the model data
         /// </summary>
         /// <returns></returns>
-        public LatticeCreationProvider GetLatticeCreationProvider()
+        public ILatticeCreationProvider GetLatticeCreationProvider()
         {
 
             return new LatticeCreationProvider(ProjectServices.GetManager<LatticeManager>().QueryPort, 

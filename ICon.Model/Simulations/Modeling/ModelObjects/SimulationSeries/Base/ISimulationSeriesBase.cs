@@ -4,7 +4,9 @@ using System.Text;
 
 using ICon.Framework.Constraints;
 using ICon.Framework.Provider;
+using ICon.Mathematics.ValueTypes;
 using ICon.Model.Basic;
+using ICon.Model.Lattices;
 
 namespace ICon.Model.Simulations
 {
@@ -37,6 +39,16 @@ namespace ICon.Model.Simulations
         /// Get a read only list of all defined energy background load informations used to provider energetic background parametrizations
         /// </summary>
         IReadOnlyList<IExternalLoadInfo> EnergyBackgroundLoadInfos { get; }
+
+        /// <summary>
+        /// The list of lattice sizes used for lattice creation
+        /// </summary>
+        List<VectorInt3D> LatticeSizeSeries { get; set; }
+
+        /// <summary>
+        /// Series of doping concentration
+        /// </summary>
+        List<IDictionary<IDoping, double>> DopingSeries { get; set; }
 
         /// <summary>
         /// Get the number of simulations described by this series

@@ -37,11 +37,11 @@ namespace ICon.Model.Lattices
             {
                 int result = -1261372869;
                 result *= -1521134295;
-                if (Particle != null) result += Particle.GetHashCode();
+                if (Particle != null) result += Particle.Index;
                 result *= -1521134295;
-                if (CellPosition != null) result += CellPosition.GetHashCode();
+                if (CellPosition != null) result += CellPosition.Index;
                 result *= -1521134295;
-                if (Block != null) result += Block.GetHashCode();
+                if (Block != null) result += Block.Index;
                 return result;
             }
         }

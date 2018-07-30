@@ -10,7 +10,7 @@ namespace ICon.Model.Lattices
     public interface ILatticeCachePort : IModelCachePort
     {
 
-        LatticeCreationProvider GetLatticeCreationProvider();
+        ILatticeCreationProvider GetLatticeCreationProvider();
 
     }
 }

@@ -13,6 +13,7 @@ using ICon.Model.Basic;
 using ICon.Model.Simulations;
 using System.Linq;
 using ICon.Model.ProjectServices;
+using ICon.Framework.Random;
 
 namespace ICon.Model.Lattices
 {
@@ -24,34 +25,31 @@ namespace ICon.Model.Lattices
     /// the occupation, symmetry position and building block. The structure of the WorkLattice corresponds to unit cells ordered in a supercell.
     /// This WorkLattice is then doped with the DopingExecuter and finally translated to a SuperCellWrapper.
     /// </remarks>
-    public class LatticeCreationProvider
+    public class LatticeCreationProvider : ILatticeCreationProvider
     {
-        /// <summary>
-        /// Lattice query port
-        /// </summary>
-        private ILatticeQueryPort LatticePort { get; set; }
+        private IBuildingBlock DefaultBlock { get; set; }
+        private ReadOnlyList<IBlockInfo> BlockInfos { get; set; }
+        private IReadOnlyDictionary<int, IUnitCellPosition> SublatticeIDs { get; set; }
+        private UnitCellVectorEncoder VectorEncoder { get; set; }
+        private ReadOnlyList<IDoping> Dopings { get; set; }
+        private double DopingTolerance { get; set; }
+        private double DoubleCompareTolerance { get; set; }
 
-        /// <summary>
-        /// Structure query port
-        /// </summary>
-        private IStructureQueryPort StructurePort { get; set; }
-
-        /// <summary>
-        /// Settings data
-        /// </summary>
-        private ProjectSettingsData SettingsData { get; set; }
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="latticePort"></param>
-        /// <param name="structurePort"></param>
-        /// <param name="settingsData"></param>
-        public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettingsData settingsData)
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="latticePort"></param>
+    /// <param name="structurePort"></param>
+    /// <param name="settingsData"></param>
+    public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettingsData settingsData)
         {
-            LatticePort = latticePort;
-            StructurePort = structurePort;
-            SettingsData = settingsData;
+            DefaultBlock = latticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
+            BlockInfos = latticePort.Query(port => port.GetBlockInfos());
+            SublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
+            VectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
+            Dopings = latticePort.Query(port => port.GetDopings());
+            DopingTolerance = settingsData.LatticeSettings.DopingCompensationTolerance;
+            DoubleCompareTolerance = settingsData.CommonNumericSettings.RangeValue;
         }
 
         /// <summary>
@@ -59,25 +57,37 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="bluePrint"></param>
         /// <returns></returns>
-        public SupercellWrapper<IParticle> ConstructLattice(ILatticeBlueprint bluePrint)
+        public List<SupercellWrapper<IParticle>> ConstructLattice(ISimulationSeriesBase simulationSeries)
         {
-            var defaultBlock = LatticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
-            var blockInfos = LatticePort.Query(port => port.GetBlockInfos());
-            var sublatticeIDs = StructurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
-            var vectorEncoder = StructurePort.Query(port => port.GetVectorEncoder());
-            var dopings = LatticePort.Query(port => port.GetDopings());
-            var dopingTolerance = SettingsData.LatticeSettings.DopingCompensationTolerance;
-            var doubleCompareTolerance = SettingsData.CommonNumericSettings.RangeValue;
+            PcgRandom32 randomGenerator;
+            if (int.TryParse(simulationSeries.BaseSimulation.CustomRngSeed, out int seed))
+            {
+                randomGenerator = new PcgRandom32(seed);
+            }
+            else
+            {
+                randomGenerator = new PcgRandom32(simulationSeries.BaseSimulation.CustomRngSeed.GetHashCode());
+            }
 
-            LatticeEntry[,,][] workLattice = GenerateDefaultLattice(defaultBlock, sublatticeIDs, bluePrint.SizeVector);
+            List<SupercellWrapper<IParticle>> supercells = new List<SupercellWrapper<IParticle>>();
 
-            FillLatticeWithCustomBlocks(workLattice, blockInfos, sublatticeIDs);
+            foreach (var sizeSeriesEntry in simulationSeries.LatticeSizeSeries)
+            {
+                foreach (var dopingSeriesEntry in simulationSeries.DopingSeries)
+                {
+                    LatticeEntry[,,][] workLattice = GenerateDefaultLattice(DefaultBlock, SublatticeIDs, sizeSeriesEntry);
 
-            var dopingExecuter = new DopingExecuter(doubleCompareTolerance, dopingTolerance, bluePrint.CustomRng);
+                    FillLatticeWithCustomBlocks(workLattice, BlockInfos, SublatticeIDs);
 
-            dopingExecuter.DopeLattice(workLattice, dopings, bluePrint.DopingConcentrations);
+                    var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, randomGenerator);
 
-            return Translate(workLattice, vectorEncoder);
+                    dopingExecuter.DopeLattice(workLattice, Dopings, dopingSeriesEntry);
+
+                    supercells.Add(Translate(workLattice, VectorEncoder));
+                }
+            }
+
+            return supercells;
         }
 
         /// <summary>
