@@ -11,11 +11,11 @@
 #pragma once
 #include <stdint.h>
 
-// Basic definition of the 192 bit three entry double vector with fields, a, b, c
-typedef struct { double a, b, c; } vector_t;
+// Defines the 192 bit 3D double vector struct and the affiliated type
+typedef struct vector { double a, b, c; } vector_t;
 
-// Basic definition of the 128 bit four entry singned integer vector with fields, a, b, c, d
-typedef struct { int32_t a, b, c, d; } int_vector_t;
+// Defines the 128 bit 4D int vector struct and the affiliated type
+typedef struct int_vector { int32_t a, b, c, d; } int_vector_t;
 
 // Perform a scalar operation on any vector with three entries and create a new unamed struct with the result values
 #define VEC3_SC_OPERATION(vec0, scalar, op) {vec0.a op scalar, vec0.b op scalar, vec0.c op scalar}

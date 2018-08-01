@@ -46,47 +46,50 @@ typedef byte_t bool_t;
 // Defines the values for true and false
 enum { false = 0, true = 1 };
 
-// Defines a dyanmic buffer access struct with const iterators to first byte and last byte + 1
-typedef struct { byte_t* start_it; byte_t* end_it; } buffer_t;
+// Basic dynamic unsigned byte array definition. Carries start and end iterator pointers
+typedef struct byte_array { byte_t* start_it; byte_t* end_it; } buffer_t;
 
-// Defines a dynamic blockwise buffer access with const iterators to first block and last block + 1
-typedef struct { memblock_t* start_it; memblock_t* end_it; } memblock_array_t;
+// Basic dynamic signed byte array definition. Carries start and end iterator pointers
+typedef struct char_array { sbyte_t* start_it; sbyte_t* end_it; } sbuffer_t;
+
+// Basic dynamic memblock array definition. Carries start and end iterator pointers
+typedef struct memblock_array { memblock_t* start_it; memblock_t* end_it; } memblock_array_t;
 
 // Basic dynamic int16_t array definition. Carries start and end iterator pointers
-typedef struct { int16_t* start_it; int16_t* end_it; } int16_array_t;
+typedef struct int16_array { int16_t* start_it; int16_t* end_it; } int16_array_t;
 
 // Basic dynamic int32_t array definition. Carries start and end iterator pointers
-typedef struct { int32_t* start_it; int32_t* end_it; } int32_array_t;
+typedef struct int32_array { int32_t* start_it; int32_t* end_it; } int32_array_t;
 
 // Basic dynamic int64_t array definition. Carries start and end iterator pointers
-typedef struct { int64_t* start_it; int64_t* end_it; } int64_array_t;
+typedef struct int64_array { int64_t* start_it; int64_t* end_it; } int64_array_t;
 
 // Basic dynamic uint16_t array definition. Carries start and end iterator pointers
-typedef struct { uint16_t* start_it; uint16_t* end_it; } uint16_array_t;
+typedef struct uint16_array { uint16_t* start_it; uint16_t* end_it; } uint16_array_t;
 
 // Basic dynamic uint32_t array definition. Carries start and end iterator pointers
-typedef struct { uint32_t* start_it; uint32_t* end_it; } uint32_array_t;
+typedef struct uint32_array { uint32_t* start_it; uint32_t* end_it; } uint32_array_t;
 
 // Basic dynamic uint64_t array definition. Carries start and end iterator pointers
-typedef struct { uint64_t* start_it; uint64_t* end_it; } uint64_array_t;
+typedef struct uint64_array { uint64_t* start_it; uint64_t* end_it; } uint64_array_t;
 
 // Basic dynamic size_t array definition. Carries start and end iterator pointers
-typedef struct { size_t* start_it; size_t* end_it; } size_array_t;
+typedef struct size_array { size_t* start_it; size_t* end_it; } size_array_t;
 
 // Get the number of bytes accessible thorugh the probided byte buffer access struct
-static inline size_t get_buffer_size(const buffer_t * byte_array)
+static inline size_t get_buffer_size(const buffer_t * restrict byte_array)
 {
     return ((size_t) byte_array->end_it - (size_t) byte_array->start_it);
 }
 
 // Calculates how many overflow bytes exist if a buffer is used as an array of with specfified entry block size
-static inline size_t get_overflow_byte_count(const buffer_t* byte_array, size_t block_size)
+static inline size_t get_overflow_byte_count(const buffer_t* restrict byte_array, size_t block_size)
 {
     return get_buffer_size(byte_array) % block_size;
 }
 
 // Calculates the size of a byte buffer with the provided block size. Does not check for under or oversize
-static inline size_t get_unchecked_size(const buffer_t* byte_array, size_t block_size)
+static inline size_t get_unchecked_size(const buffer_t* restrict byte_array, size_t block_size)
 {
     return get_buffer_size(byte_array) / block_size;
 }
@@ -113,24 +116,4 @@ static inline void free_buffer(buffer_t* byte_array)
 }
 
 // Compares if two buffers contain identical binary values (1) or not (0)
-static bool_t buffer_is_identical(const buffer_t* buffer_0, const buffer_t* buffer_1)
-{
-    if (buffer_0->start_it == buffer_1->start_it && buffer_0->end_it == buffer_1->end_it)
-    {
-        return true;
-    }
-    if (get_buffer_size(buffer_0) != get_buffer_size(buffer_1))
-    {
-        return false;
-    }
-    byte_t* it_0 = buffer_0->start_it;
-    byte_t* it_1 = buffer_1->start_it;
-    while (it_0 != buffer_0->end_it)
-    {
-        if (*(++it_0) != *(++it_1))
-        {
-            return false;
-        }
-    }
-    return true;
-}
+bool_t buffer_is_identical(const buffer_t* buffer_0, const buffer_t* buffer_1);

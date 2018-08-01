@@ -6,10 +6,10 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Errors/McErrors.h"
-#include "Simulator/States/SimStates.h"
+#include "Simulator/Data/States/SimStates.h"
 
 int main(int argc, char const * const *argv)
-{ 
+{
     buffer_t buffer = allocate_block_buffer(10000000);
     buffer_t buffer_out;
     

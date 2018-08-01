@@ -10,7 +10,7 @@
 
 #include "Framework/Basic/FileIO/FileIO.h"
 
-int64_t get_file_size(file_t* f_stream)
+cerror_t get_file_size(file_t* restrict f_stream)
 {
     int64_t file_size;
     if (f_stream == NULL || fseek(f_stream, 0L, SEEK_END) != 0)
@@ -25,12 +25,12 @@ int64_t get_file_size(file_t* f_stream)
     return file_size;
 }
 
-bool_t file_exist(const char* file_name)
+bool_t file_exist(const char* restrict file_name)
 {
     return access(file_name, F_OK) != -1;
 }
 
-int32_t write_buffer_to_stream(file_t* f_stream, buffer_t* buffer_in)
+error_t write_buffer_to_stream(file_t* restrict f_stream, const buffer_t* restrict buffer_in)
 {
     if (f_stream == NULL)
     {
@@ -45,7 +45,7 @@ int32_t write_buffer_to_stream(file_t* f_stream, buffer_t* buffer_in)
     return MC_NO_ERROR;
 }
 
-int32_t write_buffer_to_file(const char* file_name, const char* file_mode, buffer_t* buffer_in)
+error_t write_buffer_to_file(const char* restrict file_name, const char* restrict file_mode, const buffer_t* restrict buffer_in)
 {
     file_t* f_stream = NULL;
     int32_t write_result; 
@@ -63,7 +63,7 @@ int32_t write_buffer_to_file(const char* file_name, const char* file_mode, buffe
     return write_result;
 }
 
-int32_t load_buffer_from_stream(file_t* f_stream, buffer_t* byte_array)
+error_t load_buffer_from_stream(file_t* restrict f_stream, buffer_t* restrict byte_array)
 {
     if (f_stream == NULL)
     {
@@ -73,7 +73,7 @@ int32_t load_buffer_from_stream(file_t* f_stream, buffer_t* byte_array)
     return MC_NO_ERROR;
 }
 
-int32_t load_buffer_from_file(const char* file_name, buffer_t* buffer_out)
+error_t load_buffer_from_file(const char* restrict file_name, buffer_t* restrict buffer_out)
 {
     file_t* f_stream;
     int64_t buffer_size;
@@ -91,7 +91,7 @@ int32_t load_buffer_from_file(const char* file_name, buffer_t* buffer_out)
     return load_result;
 }
 
-int32_t write_buffer_hex_to_stream(file_t* f_stream, const buffer_t* byte_array, size_t bytes_per_line)
+error_t write_buffer_hex_to_stream(file_t* restrict f_stream, const buffer_t* restrict byte_array, size_t bytes_per_line)
 {
     if (f_stream == NULL)
     {
@@ -111,7 +111,7 @@ int32_t write_buffer_hex_to_stream(file_t* f_stream, const buffer_t* byte_array,
     return MC_NO_ERROR;
 }
 
-int32_t write_block_hex_to_stream(file_t* f_stream, const memblock_array_t* block_array, size_t blocks_per_line)
+error_t write_block_hex_to_stream(file_t* restrict f_stream, const memblock_array_t* restrict block_array, size_t blocks_per_line)
 {
     if (f_stream == NULL)
     {

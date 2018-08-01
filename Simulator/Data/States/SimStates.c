@@ -8,9 +8,9 @@
 // Short:   Simulation States           //
 //////////////////////////////////////////
 
-#include "Simulator/States/SimStates.h"
+#include "Simulator/Data/States/SimStates.h"
 
-size_t calc_sim_state_size(const mc_state_attr_t* state_attr)
+size_t calc_sim_state_size(mc_state_attr_t* restrict state_attr)
 {
     size_t buffer_size = 0;
     buffer_size += sizeof(timer_col_t);
@@ -22,7 +22,7 @@ size_t calc_sim_state_size(const mc_state_attr_t* state_attr)
     return buffer_size;
 }
 
-buffer_t alloc_sim_state_buffer(const mc_state_attr_t* state_attr)
+buffer_t alloc_sim_state_buffer(mc_state_attr_t* restrict state_attr)
 {
     return allocate_buffer(calc_sim_state_size(state_attr), sizeof(byte_t));
 }
@@ -57,7 +57,7 @@ mc_state_t create_sim_state(const buffer_t* sim_state_buffer, const mc_state_att
     return sim_state;
 }
 
-mc_state_t load_sim_state(FILE* f_stream, const mc_state_attr_t* state_attr)
+mc_state_t load_sim_state(file_t* restrict f_stream, mc_state_attr_t* restrict state_attr)
 {
     mc_state_t sim_state;
 

@@ -14,6 +14,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Defines error codes to be a 32 bit signed integer. Returns type of functions that can return error codes
+typedef int32_t error_t;
+
+// Defines long error codes to be 64 bit signed integer. Returns type of functions that perform count operations and might return negatice error codes
+typedef int64_t cerror_t;
+
 // Defines the path to the debug stderr dump folder
 #define MC_STDERR_FILE_PATH "./Debug/stderr.log"
 

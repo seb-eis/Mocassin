@@ -11,6 +11,7 @@
 #pragma once
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Framework/Basic/FileIO/FileIO.h"
 
 // Defines the simulation species type to be one unsigned byte
 typedef byte_t species_t;
@@ -22,51 +23,52 @@ typedef vector_t tracker_t;
 typedef int32_t index_t;
 
 // Defines the lattice state buffer that stores the simulation lattice
-typedef struct { species_t* start_it; species_t* end_it; } lattice_state_t;
+typedef struct lattice_state { species_t* start_it; species_t* end_it; } lattice_state_t;
 
 // Defines the tracking state buffer to store individual position movement vectors
-typedef struct { tracker_t* start_it; tracker_t* end_it; } tracking_state_t;
+typedef struct tracking_state { tracker_t* start_it; tracker_t* end_it; } tracking_state_t;
 
 // Defines the simulation counters collection that contains the cycle count and all possible cycle outcomes for one species type
-typedef struct { long mc_cycles, mc_steps, mc_rejects, mc_blocks, mc_on_unstable, mc_to_unstable; } counter_col_t;
+typedef struct counter_col { long mc_cycles, mc_steps, mc_rejects, mc_blocks, mc_on_unstable, mc_to_unstable; } counter_col_t;
 
 // Defines the couznter state of the simulation containing a counter collection for each property type
-typedef struct { counter_col_t* start_it; counter_col_t* end_it; } counter_state_t;
+typedef struct counter_state { counter_col_t* start_it; counter_col_t* end_it; } counter_state_t;
 
 // Defines the timer collection for the simulation timers
-typedef struct { double mc_sim_time; long mc_run_timer; } timer_col_t;
+typedef struct timer_col { double mc_sim_time; long mc_run_timer; } timer_col_t;
 
 // Defines the timer state as a pointer to a timer collection
-typedef struct { timer_col_t* timer_col; } timer_state_t;
+typedef struct timer_state { timer_col_t* timer_col; } timer_state_t;
 
 // Defines the indexing type for state redirection
-typedef struct { index_t* start_it; index_t* end_it; } index_state_t;
+typedef struct index_state { index_t* start_it; index_t* end_it; } index_state_t;
 
 // Defines the simulation state attribute type that defines the attributes defining the state size
-typedef struct { size_t num_of_atoms, num_of_species, num_of_trackers; } mc_state_attr_t;
+typedef struct mc_state_attribute { size_t num_of_atoms, num_of_species, num_of_trackers; } mc_state_attr_t;
 
 // Defines the complete simulation state memory access type
-typedef struct
+typedef struct mc_state
 {
-    buffer_t state_buffer;
-    timer_state_t timer_state;
-    lattice_state_t lattice_state;
-    counter_state_t counter_state;
-    tracking_state_t type_tracking_state;
-    tracking_state_t dynamic_tracking_state;
-    tracking_state_t static_tracking_state;
-    index_state_t dyn_track_index_state;
-    index_state_t stat_track_index_state;
+    buffer_t            state_buffer;
+    timer_state_t       timer_state;
+    lattice_state_t     lattice_state;
+    counter_state_t     counter_state;
+    tracking_state_t    type_tracking_state;
+    tracking_state_t    dynamic_tracking_state;
+    tracking_state_t    static_tracking_state;
+    index_state_t       dyn_track_index_state;
+    index_state_t       stat_track_index_state;
+
 } mc_state_t;
 
 // Calculates the required simulation state size in bytes using the provided state attributes
-size_t calc_sim_state_size(const mc_state_attr_t* state_attr);
+size_t calc_sim_state_size(mc_state_attr_t* restrict state_attr);
 
 // Allocates the required minimum number of memory blocks to host the full simulation state
-buffer_t alloc_sim_state_buffer(const mc_state_attr_t* state_attr);
+buffer_t alloc_sim_state_buffer(mc_state_attr_t* restrict state_attr);
 
 // Creates the simulation state from the provided simulation state buffer and state attributes
 mc_state_t create_sim_state(const buffer_t* sim_state_buffer, const mc_state_attr_t* state_attr);
 
 // Loads the simulation state from a file stream. Terminates program if an error occures
-mc_state_t load_sim_state(FILE* f_stream, const mc_state_attr_t* state_attr);
+mc_state_t load_sim_state(file_t* restrict f_stream, mc_state_attr_t* restrict state_attr);
