@@ -11,32 +11,23 @@ namespace ICon.Model.Translator
     public abstract class BlobEntity : EntityBase
     {
         /// <summary>
-        /// The binary header information. Property is for EF data storage only
+        /// The number of bytes of the blobs that are header information and not actual data
         /// </summary>
-        public byte[] HeaderBinary { get; set; }
+        public int HeaderSize { get; protected set; }
 
         /// <summary>
         /// RThe binary data of the entity. Property is for EF data storage only
         /// </summary>
-        public byte[] DataBinary { get; set; }
+        public byte[] Binary { get; set; }
 
         /// <summary>
         /// Parses the blob entity object into the binary data and header properties
         /// </summary>
-        public abstract void DataToBinary();
+        public abstract void ChangeToBlobState();
 
         /// <summary>
         /// Parses the binary data and header properties and populates the object
         /// </summary>
-        public abstract void BinaryToData();
-
-        /// <summary>
-        /// Nulls the binary data and header information
-        /// </summary>
-        public void NullBinaries()
-        {
-            HeaderBinary = null;
-            DataBinary = null;
-        }
+        public abstract void ChangeToDataState();
     }
 }

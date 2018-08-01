@@ -11,19 +11,77 @@ namespace ICon.Model.Translator
     public class MccsDatabaseContext : DbContext
     {
         /// <summary>
-        /// The list of blob redirection actions on the model
+        /// The list of context creation model builder actions
         /// </summary>
-        protected static List<Action<ModelBuilder>> BlobTableAssigners { get; set; }
+        protected static List<Action<ModelBuilder>> ModelBuilderActions { get; set; }
 
         /// <summary>
         /// The full filepath used for opening the database
         /// </summary>
         public string Filename { get; protected set; }
 
-        public DbSet<TestEntity> Tests { get; set; }
+        /// <summary>
+        /// The database set for the mcs package entities
+        /// </summary>
+        public DbSet<McsPackage> McsPackages { get; set; }
 
         /// <summary>
-        /// The database set for all blobs
+        /// The database set for the mcs parent entities
+        /// </summary>
+        public DbSet<McsParent> McsParents { get; set; }
+
+        /// <summary>
+        /// The database set for the mcs job entities
+        /// </summary>
+        public DbSet<McsJob> McsJobs { get; set; }
+
+        /// <summary>
+        /// The database set for the mcs job entities
+        /// </summary>
+        public DbSet<McsJobResult> McsJobResults { get; set; }
+
+        /// <summary>
+        /// The database set for the mcs structure component entities
+        /// </summary>
+        public DbSet<McsStructure> McsStructures { get; set; }
+
+        /// <summary>
+        /// The database set for the mcs transition component entities
+        /// </summary>
+        public DbSet<McsTransitions> McsTransitions { get; set; }
+
+        /// <summary>
+        /// The database set for the mcs energy component entities
+        /// </summary>
+        public DbSet<McsEnergies> McsEnergies { get; set; }
+
+        /// <summary>
+        /// The database set for the position environment entities
+        /// </summary>
+        public DbSet<Environment> Environments { get; set; }
+
+        /// <summary>
+        /// The database set for the jump collection entities
+        /// </summary>
+        public DbSet<JumpCollection> JumpCollections { get; set; }
+
+        /// <summary>
+        /// The database set for the jump direction entities
+        /// </summary>
+        public DbSet<JumpDirection> JumpDirections { get; set; }
+
+        /// <summary>
+        /// The database set for the pair energy table entities
+        /// </summary>
+        public DbSet<PairEnergyTable> PairEnergyTables { get; set; }
+
+        /// <summary>
+        /// The database set for the cluster energy table entities
+        /// </summary>
+        public DbSet<ClusterEnergyTable> ClusterEnergyTables { get; set; }
+
+        /// <summary>
+        /// The database set for all entities that support storing as a blob
         /// </summary>
         public DbSet<BlobEntity> Blobs { get; set; }
 
@@ -51,7 +109,7 @@ namespace ICon.Model.Translator
             base.SaveChanges();
             foreach (var item in Blobs)
             {
-                item.DataToBinary();
+                item.ChangeToBlobState();
             }
             return base.SaveChanges();
         }
@@ -82,18 +140,18 @@ namespace ICon.Model.Translator
         /// <param name="modelBuilder"></param>
         protected void RedirectBlobEntities(ModelBuilder modelBuilder)
         {
-            if (BlobTableAssigners == null)
+            if (ModelBuilderActions == null)
             {
-                BlobTableAssigners = MakeBlobTableAssigners();
+                ModelBuilderActions = CreateRedirectionDelegates();
             }
-            BlobTableAssigners.ForEach(a => a(modelBuilder));
+            ModelBuilderActions.ForEach(a => a(modelBuilder));
         }
 
         /// <summary>
         /// Searches all data entities for blob inheriting properties and creates a list of model builder table redirections for their types
         /// </summary>
         /// <returns></returns>
-        protected List<Action<ModelBuilder>> MakeBlobTableAssigners()
+        protected List<Action<ModelBuilder>> CreateRedirectionDelegates()
         {
             var list = new List<Action<ModelBuilder>>();
             foreach (var item in GetType().GetProperties().Where(a => a.PropertyType.IsGenericType))

@@ -40,12 +40,6 @@ namespace ICon.Model.Translator
         public int McsEnergiesId { get; set; }
 
         /// <summary>
-        /// The mccs parent result cotext key
-        /// </summary>
-        [ForeignKey(nameof(McsParentResult))]
-        public int McsParentResultId { get; set; }
-
-        /// <summary>
         /// The mccs package this parent belongs to
         /// </summary>
         public McsPackage McsPackage { get; set; }
@@ -64,10 +58,5 @@ namespace ICon.Model.Translator
         /// The mcs energy entity of this simulation parent
         /// </summary>
         public McsEnergies McsEnergies { get; set; }
-
-        /// <summary>
-        /// The mcs parent result entity. Stores collective results information
-        /// </summary>
-        public McsParentResult McsParentResult { get; set; }
     }
 }

@@ -62,43 +62,43 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Parses the binary header and data array and populates the matrix. Nulls out the binary info after completion
         /// </summary>
-        public override void BinaryToData()
+        public override void ChangeToDataState()
         {
             int itemSize = Marshal.SizeOf(default(T));
-            IndexSkips = new int[HeaderBinary.Length / sizeof(int) - 1];
+            IndexSkips = new int[HeaderSize / sizeof(int) - 1];
 
             for (int i = 0; i < IndexSkips.Length; i++)
             {
-                IndexSkips[i] = BitConverter.ToInt32(HeaderBinary, 4 * (1 + i));
+                IndexSkips[i] = BitConverter.ToInt32(Binary, 4 * (1 + i));
             }
 
-            Values = new T[DataBinary.Length / itemSize];
+            Values = new T[(Binary.Length - HeaderSize) / itemSize];
             var ptr = Marshal.AllocHGlobal(itemSize);
             for (int i = 0; i < Values.Length; i++)
             {
-                Marshal.Copy(DataBinary, i * itemSize, ptr, itemSize);
+                Marshal.Copy(Binary, HeaderSize + i * itemSize, ptr, itemSize);
                 Values[i] = (T)Marshal.PtrToStructure(ptr, typeof(T));
             }
             Marshal.FreeHGlobal(ptr);
-            NullBinaries();
+            Binary = null;
         }
 
         /// <summary>
         /// Parses the object into its binary header and data array. Nulls out the data objects afterwards
         /// </summary>
-        public override void DataToBinary()
+        public override void ChangeToBlobState()
         {
-            HeaderBinary = new byte[(1 + IndexSkips.Length) * sizeof(int)];
-            Buffer.BlockCopy(BitConverter.GetBytes(Dimension), 0, HeaderBinary, 0, sizeof(int));
-            Buffer.BlockCopy(IndexSkips, 0, HeaderBinary, sizeof(int), IndexSkips.Length * sizeof(int));
+            int itemSize = Marshal.SizeOf(default(T));
+            Binary = new byte[HeaderSize + itemSize * Values.Length];
 
-            int size = Marshal.SizeOf(default(T));
-            DataBinary = new byte[size * Values.Length];
-            var ptr = Marshal.AllocHGlobal(size);
+            Buffer.BlockCopy(BitConverter.GetBytes(Dimension), 0, Binary, 0, sizeof(int));
+            Buffer.BlockCopy(IndexSkips, 0, Binary, sizeof(int), IndexSkips.Length * sizeof(int));
+
+            var ptr = Marshal.AllocHGlobal(itemSize);
             for (int i = 0; i < Values.Length; i++)
             {
                 Marshal.StructureToPtr(Values[i], ptr, true);
-                Marshal.Copy(ptr, DataBinary, i * size, size);
+                Marshal.Copy(ptr, Binary, HeaderSize + i * itemSize, itemSize);
             }
             Marshal.FreeHGlobal(ptr);
 
@@ -159,6 +159,8 @@ namespace ICon.Model.Translator
             {
                 IndexSkips = array.GetDimensionIndexSkips()
             };
+            entity.HeaderSize = sizeof(int) * (1 + entity.IndexSkips.Length);
+
             entity.Values = new T[array.Length];
             int index = 0;
             foreach (T item in array)

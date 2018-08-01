@@ -12,11 +12,11 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The list of cluster energy matrices for the simulation
         /// </summary>
-        public List<ClusterEnergySet> ClusterEnergyMatrices { get; set; }
+        public List<ClusterEnergyTable> ClusterEnergyMatrices { get; set; }
 
         /// <summary>
         /// The list of pair energy matrices for the simulation
         /// </summary>
-        public List<PairEnergyMatrix> PairEnergyMatrices { get; set; }
+        public List<PairEnergyTable> PairEnergyMatrices { get; set; }
     }
 }

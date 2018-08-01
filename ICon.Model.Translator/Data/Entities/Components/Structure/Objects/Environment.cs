@@ -23,24 +23,25 @@ namespace ICon.Model.Translator
         public McsStructure McsStructure { get; set; }
 
         /// <summary>
-        /// The cell position entity id
+        /// The pair matrix entity id
         /// </summary>
-        [ForeignKey(nameof(CellPosition))]
-        public int CellPositionId { get; set; }
+        [ForeignKey(nameof(PairMatrix))]
+        public int PairMatrixId { get; set; }
 
         /// <summary>
-        /// Navigation property for the cell position this environment belongs to
+        /// The 1D pair interaction matrix that describes all positions by relative 4D vector information and pair table index
         /// </summary>
-        public CellPosition CellPosition { get; set; }
+        public MatrixEntity<PairInteraction> PairMatrix { get; set; }
 
         /// <summary>
-        /// The list of environment shells that describe the environment
+        /// The cluster matrix entity id
         /// </summary>
-        public List<EnvironmentShell> EnvironmentShells { get; set; }
+        [ForeignKey(nameof(ClusterMatrix))]
+        public int ClusterMatrixId { get; set; }
 
         /// <summary>
-        /// The list of environment clusters that descirbe more complex energy portions of the environment
+        /// The 1D cluster interaction matrix that describes all clusters as blocks of relative pair interaction indices and a cluster table index
         /// </summary>
-        public List<EnvironmentCluster> EnvironmentClusters { get; set; }
+        public MatrixEntity<ClusterInteraction> ClusterMatrix { get; set; }
     }
 }

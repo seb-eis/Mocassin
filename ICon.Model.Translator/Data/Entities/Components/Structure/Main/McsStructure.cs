@@ -11,24 +11,30 @@ namespace ICon.Model.Translator
     public class McsStructure : McsComponent
     {
         /// <summary>
-        /// The tracking header entity id
+        /// The list of position environments for the simulation
         /// </summary>
-        [ForeignKey(nameof(TrackingHeader))]
-        public int TrackingHeaderId { get; set; }
+        public List<Environment> Environments { get; set; }
+        
+        /// <summary>
+        /// The number of required static trackers per unit cell
+        /// </summary>
+        public int PerCellTrackerCount { get; set; }
 
         /// <summary>
-        /// Navigation property for the tracking header
+        /// The number of required global trackers
         /// </summary>
-        public TrackingHeader TrackingHeader { get; set; }
+        public int GlobalTrackerCount { get; set; }
 
         /// <summary>
-        /// The list of positions environments for the simulation
+        /// The tracker offset matrix entity id
         /// </summary>
-        public List<Environment> Envrionments { get; set; }
+        [ForeignKey(nameof(TrackerOffsetMatrix))]
+        public int TrackerOffsetMatrixId { get; set; }
 
         /// <summary>
-        /// The list of cell positions for the simulation
+        /// The 2D tracker indexing offset matrix. Contains the tracker index offset for each particle and cell position index combination
         /// </summary>
-        public List<CellPosition> CellPositions { get; set; }
+        /// <remarks> Combinations that do not have a static tracker have an index offset of -1 </remarks>
+        public MatrixEntity<int> TrackerOffsetMatrix { get; set; }
     }
 }

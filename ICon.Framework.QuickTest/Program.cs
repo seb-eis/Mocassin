@@ -57,16 +57,7 @@ namespace ICon.Framework.QuickTest
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             var rng = new PcgRandom32();
 
-            var test = new TestEntity()
-            {
-                Matrix = MatrixEntity<int>.FromArray(new int[1000].Populate(() => rng.Next()))
-            };
-
-            var context = new MccsDatabaseContext("./mccs.sqlite", true);
-            context.Tests.Add(test);
-            context.SaveChanges();
-            context.Dispose();
-            context = new MccsDatabaseContext("./mccs.sqlite", false);
+            var context = new MccsDatabaseContext("./mcs.sql", true);
 
             //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
             //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();

@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Status flags of a single mccs job
     /// </summary>
-    public enum MccsJobStatus
+    public enum McsJobStatus
     {
         Unfinished = 0, Finished = 0b1, Error = 0b10, Stuck = 0b100, DirtyBit = 0b1000
     }
@@ -44,7 +44,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Status flag of the job. Dirty status bit indicates that a simulation is running or crashed
         /// </summary>
-        public MccsJobStatus Status { get; set; }
+        public McsJobStatus Status { get; set; }
 
         /// <summary>
         /// The absolute simulation temperature value in [K]

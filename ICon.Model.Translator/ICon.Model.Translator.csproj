@@ -8,8 +8,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Folder Include="Data\Entities\Components\Transition\Objects\" />
     <Folder Include="Data\Model\" />
     <Folder Include="Data\Objects\" />
     <Folder Include="Translator\TranslatorSystem\" />

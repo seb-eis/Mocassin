@@ -7,7 +7,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Mccs package entity that bundles multiple mccs parents and their jobs to describe a full simulation series
     /// </summary>
-    public class McsPackage
+    public class McsPackage : EntityBase
     {
         /// <summary>
         /// The list of mccs parents affiliated wit the package

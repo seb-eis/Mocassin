@@ -10,18 +10,23 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Energy matrix entity that carries the pair energy information for a specific pair interaction set
     /// </summary>
-    public class PairEnergyMatrix : EntityBase
+    public class PairEnergyTable : EntityBase
     {
+        /// <summary>
+        /// The simulation object id for the unmanaged simulation context
+        /// </summary>
+        public int McsObjectId { get; set; }
+
         /// <summary>
         /// The mccs energy info entity key
         /// </summary>
-        [ForeignKey(nameof(MccsEnergyInfo))]
-        public int MccsEnergyInfoId { get; set; }
+        [ForeignKey(nameof(McsEnergies))]
+        public int McsEnergiesId { get; set; }
 
         /// <summary>
         /// Navigation property for the mccs energy info this pair table belongs to
         /// </summary>
-        public McsEnergies MccsEnergyInfo { get; set; }
+        public McsEnergies McsEnergies { get; set; }
 
         /// <summary>
         /// The energy matrix blob entity uid
