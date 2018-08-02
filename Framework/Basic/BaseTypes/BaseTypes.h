@@ -73,6 +73,12 @@ typedef struct { uint64_t* start_it; uint64_t* end_it; } uint64_array_t;
 // Basic dynamic size_t array definition. Carries start and end iterator pointers
 typedef struct { size_t* start_it; size_t* end_it; } size_array_t;
 
+// Get a pointer to the array entry at the specified index as a byte pointer
+static inline byte_t* array_get(const buffer_t* restrict buffer_in, const int32_t entry_size, const int32_t index)
+{
+    return buffer_in->start_it + (index * entry_size);
+}
+
 // Get the number of bytes accessible thorugh the probided byte buffer access struct
 static inline size_t get_buffer_size(const buffer_t * byte_array)
 {

@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Debug Launch",
+            "name": "debug",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Debug/Simulator.exe",
@@ -12,7 +12,7 @@
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "D:\\Programme\\MinGW-W64\\mingw32\\bin\\gdb.exe",
+            "miDebuggerPath": "C:\\Program Files\\DevTools\\MinGw-w64\\mingw32\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

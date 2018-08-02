@@ -7,30 +7,30 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/States/SimStates.h"
+#include "Simulator/Types/DbModel.h"
+
+DEFINE_MATRIX(uint32_array_t, uint32_matrix_t);
 
 int main(int argc, char const * const *argv)
 { 
-    buffer_t buffer = allocate_block_buffer(10000000);
-    buffer_t buffer_out;
-    
-    for(byte_t* it = buffer.start_it; it < buffer.end_it; it++)
-    {
-        *it = (byte_t) (pcg32_global_next() % UINT8_MAX);
-    }
-  
-    if (write_buffer_to_file("./Debug/test.log", "wb", &buffer) != 0)
-    {
-        printf("Write failed");
-    }
-    
-    if (load_buffer_from_file("./Debug/test.log", &buffer_out) != 0)
-    {
-        printf("Load failed");
-    }
+    buffer_t buffer = allocate_block_buffer(102);
+    matrix_t matrix = buffer_to_matrix(&buffer, 2);
+    uint32_matrix_t int_matrix = MATRIX_CAST(uint32_matrix_t, matrix);
 
-    if (buffer_is_identical(&buffer, &buffer_out) != true)
+    int_matrix.header->rank = 2;
+    (&int_matrix.header->block_sizes)[0] = 50;
+
+    uint32_t value = -1;
+    for (uint32_t* it = int_matrix.values.start_it; it < int_matrix.values.end_it; it++)
     {
-        printf("Compare fail");
+        *it = ++value;
+    }
+    for (size_t i = 0; i < 2; i++)
+    {
+        for (size_t j = 0; j < 50; j++)
+        {
+            printf("%i\n", *(uint32_t*)matrix_get_2d(&int_matrix, 4, i, j));
+        }
     }
 
     return (0);

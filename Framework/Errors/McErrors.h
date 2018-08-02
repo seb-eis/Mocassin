@@ -14,6 +14,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Define a debug flag in the VC style
+#ifndef _DEBUG
+    #define _DEBUG
+#endif
+
 // Defines the path to the debug stderr dump folder
 #define MC_STDERR_FILE_PATH "./Debug/stderr.log"
 
@@ -37,6 +42,9 @@
 
 // Defines the error codes for cases where a wrong file mode was passed to a function
 #define MC_FILE_MODE_ERROR -6
+
+// Defines the error code for cases where a matrix is accessed in way it doesnt match the matrix rank
+#define MC_MATRIX_RANK_ERROR -7
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_DUMP_ERROR_AND_EXIT(code, message) on_error_exit(code, __FILE__, __LINE__, message);
