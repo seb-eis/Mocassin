@@ -44,6 +44,15 @@ typedef int64_t cerror_t;
 // Defines the error codes for cases where a wrong file mode was passed to a function
 #define MC_FILE_MODE_ERROR -6
 
+// Defines the error code for cases where the database access caused an unspecified error
+#define MC_DB_ERROR -7
+
+// Defines the error code for cases where simulation routines cause an unspecififed error
+#define MC_SIM_ERROR -8
+
+// Defines the error code for cases where memory allocation fails
+#define MC_MEM_ALLOCATION_ERROR -9
+
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_DUMP_ERROR_AND_EXIT(code, message) on_error_exit(code, __FILE__, __LINE__, message);
 

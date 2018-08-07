@@ -16,7 +16,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "D:\\Programme\\MinGW-W64\\mingw32\\bin\\gcc.exe",
+            "compilerPath": "C:\\Program Files\\DevTools\\MinGw-w64\\mingw32\\bin\\gcc.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
@@ -36,7 +36,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "D:\\Programme\\MinGW-W64\\mingw32\\bin\\gcc.exe",
+            "compilerPath": "C:\\Program Files\\DevTools\\MinGw-w64\\mingw32\\bin\\gcc.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"

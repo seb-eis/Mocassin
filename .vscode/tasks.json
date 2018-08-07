@@ -14,6 +14,8 @@
                 "Framework/Errors/McErrors.c",
                 "Framework/Basic/FileIO/FileIO.c",
                 "Simulator/Data/States/SimStates.c",
+                "Simulator/Logic/Objects/JumpSelection.c",
+                "Simulator/Logic/Routines/MainRoutine.c",
                 "Main/Simulator.c",
                 "-o", "Debug/Simulator.exe",
             ],

@@ -7,31 +7,20 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/States/SimStates.h"
+#include "Simulator/Logic/Objects/JumpSelection.h"
 
 int main(int argc, char const * const *argv)
-{
-    buffer_t buffer = allocate_block_buffer(10000000);
-    buffer_t buffer_out;
-    
-    for(byte_t* it = buffer.start_it; it < buffer.end_it; it++)
+{   
+    buffer_t tmp_buffer = allocate_buffer(10, sizeof(int32_t));
+    int32_list_t int_list = BUFFER_TO_LIST(tmp_buffer, int32_list_t);
+    for (int32_t i = 0; i < 10; i++)
     {
-        *it = (byte_t) (pcg32_global_next() % UINT8_MAX);
+        LIST_ADD(int_list, i);
     }
-  
-    if (write_buffer_to_file("./Debug/test.log", "wb", &buffer) != 0)
+    LIST_POP_BACK(int_list);
+    for (int32_t* it = int_list.start_it; it < int_list.cur_end_it; it++)
     {
-        printf("Write failed");
+        printf("%i\n", *it);
     }
-    
-    if (load_buffer_from_file("./Debug/test.log", &buffer_out) != 0)
-    {
-        printf("Load failed");
-    }
-
-    if (buffer_is_identical(&buffer, &buffer_out) != true)
-    {
-        printf("Compare fail");
-    }
-
     return (0);
 }
