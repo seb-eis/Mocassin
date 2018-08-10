@@ -23,7 +23,8 @@ typedef struct { uint64_t state;  uint64_t inc; } pcg32_random_t;
 // Global pcg32 random number generator state
 static pcg32_random_t pcg32_global = PCG32_INITIALIZER;
 
-static inline uint32_t pcg32_random_r(pcg32_random_t* rng)
+// Get next random unsigned integer from the passed pcg32 rng
+static inline uint32_t Pcg32Next(pcg32_random_t* restrict rng)
 {
 	uint64_t oldstate = rng->state;
 	rng->state = oldstate * 6364136223846793005ULL + (rng->inc | 1);
@@ -32,14 +33,20 @@ static inline uint32_t pcg32_random_r(pcg32_random_t* rng)
 	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
 }
 
-// Advance global pcg32 state and get the next random uint32_t value
-static inline uint32_t pcg32_global_next()
+// Get next random double from range [0.0,1.0] using the passed pcg32 rng
+static inline double Pcg32NextDouble(pcg32_random_t* restrict rng)
 {
-	return pcg32_random_r(&pcg32_global);
+	return ((double)Pcg32Next(rng) / (double)UINT32_MAX);
+}
+
+// Advance global pcg32 state and get the next random uint32_t value
+static inline uint32_t Pcg32GlobalNext()
+{
+	return Pcg32Next(&pcg32_global);
 }
 
 // Advance global pcg32 state and get the next random uint32_t value divided by UINT32_MAX that gives a double in range [0.0,1.0] with 1 / UINT32_MAX stepping
-static inline double pcg32_global_next_d()
+static inline double Pcg32GlobalNextDouble()
 {
-	return ((double)pcg32_global_next() / (double)UINT32_MAX);
+	return ((double)Pcg32GlobalNext() / (double)UINT32_MAX);
 }

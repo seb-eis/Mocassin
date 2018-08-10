@@ -13,59 +13,66 @@
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 
-#define SIMULATION_FLAG_KMC 1
-#define SIMULATION_FLAG_MMC 2
-#define SIMULATION_FLAG_ERR -1
+#define MC_KMC_ROUTINE_FLAG 0b1
+#define MC_MMC_ROUTINE_FLAG 0b10
+#define MC_ERR_ROUTINE_FLAG 1 << 63
 
-#define MC_NEG_ENERGY_LIMIT -0.0003
+error_t LoadCommandLineArgs(sim_context_t* restrict simContext, int32_t argc, char const* const* argv);
 
-// Determines and returns the type id of the routine encoded in the passed simulation context
-error_t get_sim_type_id(sim_context_t* restrict sim_context); 
+error_t LoadSimulationPlugins(sim_context_t* restrict simContext);
 
-// Runs the simulation based on the passed simulation context
-error_t run_simulation(sim_context_t* restrict sim_context);
+error_t LoadSimulationModel(sim_context_t* restrict simContext);
 
-// Runs the simulation as a kmc simulation based on the passed simulation context
-error_t run_kmc_routine(sim_context_t* restrict sim_context);
+error_t LoadSimulationState(sim_context_t* restrict simContext);
 
-// Runs the simulation as a mmc simulation based on the passed simulation context
-error_t run_mmc_routine(sim_context_t* restrict sim_context);
+error_t PrepareDynamicModel(sim_context_t* restrict simContext);
 
-// Rolls a new transition state for the next transition attempt in a kmc simulation
-error_t roll_kmc_jump_state(sim_context_t* restrict sim_context);
+error_t PrepareForMainRoutine(sim_context_t* restrict simContext);
 
-// Rolls a new transition state for the next transition attempt in a mmc simulation
-error_t roll_mmc_jump_state(sim_context_t* restrict sim_context);
+error_t StartMainRoutine(sim_context_t* restrict simContext);
 
-// Checks if the jump rule of the selected transition state is physically possible (returns 0) and increases the affiliated counters if not.
-error_t evaluate_jump_rule(sim_context_t* restrict sim_context);
+error_t StartMainKmcRoutine(sim_context_t* restrict simContext);
 
-// Calculates and sets the state energies S_0, S_1 and S_2
-error_t set_state_energies_kmc(sim_context_t* restrict sim_context);
+error_t StartMainMmcRoutine(sim_context_t* restrict simContext);
 
-// Calculates and sets the state energies S_0, S_2
-error_t set_state_energies_mmc(sim_context_t* restrict sim_context);
+error_t DoNextKmcCycleBlock(sim_context_t* restrict simContext);
 
-// Calculates and sets the forward and backward jump probabilities for a kmc transition in the simulation context
-error_t set_kmc_transition_probs(sim_context_t* restrict sim_context);
+error_t DoNextMmcCycleBlock(sim_context_t* restrict simContext);
 
-// Calculates and sets the forward transition probability for a mmc transition in the simulation context
-error_t set_mmc_transition_probs(sim_context_t* restrict sim_context);
+error_t GetKmcAbortCondEval(sim_context_t* restrict simContext);
 
-// Evalutes the jump probabilities for the kmc case and calls the required update functions
-error_t evaluate_kmc_transition(sim_context_t* restrict sim_context);
+error_t GetMmcAbortCondEval(sim_context_t* restrict simContext);
 
-// Evalutes the jump probabilities for the mmc case and calls the required update functions
-error_t evaluate_mmc_transition(sim_context_t* restrict sim_context);
+error_t SaveSimulationState(sim_context_t* restrict simContext);
 
-// Performs all actions required if the next target mcs goal is reached for a mmc simulation
-error_t on_next_target_reached_kmc(const sim_context_t* restrict sim_context);
+error_t FinishMainRoutine(sim_context_t* restrict simContext);
 
-// Performs all actions required if the next target mcs goal is reached for a kmc simulation
-error_t on_next_target_reached_mmc(const sim_context_t* restrict sim_context);
 
-// Performs all actions required on finishing the kmc routine
-error_t on_kmc_routine_finish(const sim_context_t* restrict sim_context);
+void GetKmcJumpSelection(sim_context_t* restrict simContext);
 
-// Performs all actions required on finishing the mmc routine
-error_t on_mmc_routine_finish(const sim_context_t* restrict sim_context);
+void GetKmcJumpPathState(sim_context_t* restrict simContext);
+
+bool_t GetKmcJumpRuleEval(sim_context_t* restrict simContext);
+
+void GetKmcJumpProbs(sim_context_t* restrict simContext);
+
+bool_t GetKmcJumpEval(sim_context_t* restrict simContext);
+
+void AdvanceKmcState(sim_context_t* restrict simContext);
+
+void RollbackKmcState(sim_context_t* restrict simContext);
+
+
+void GetMmcJumpSelection(sim_context_t* restrict simContext);
+
+void GetMmcJumpPathState(sim_context_t* restrict simContext);
+
+bool_t GetMmcJumpRuleEval(sim_context_t* restrict simContext);
+
+void GetMmcJumpProbs(sim_context_t* restrict simContext);
+
+bool_t GetMmcJumpEval(sim_context_t* restrict simContext);
+
+void AdvanceMmcState(sim_context_t* restrict simContext);
+
+void RollbackMmcState(sim_context_t* restrict simContext);
