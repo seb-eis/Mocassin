@@ -17,6 +17,9 @@
 // Define the restrict keyword for GCC
 #define restrict __restrict__
 
+// Reinterpret pointer as another type
+#define REINTERPRET_CAST(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+
 // Defines a quick macro for arrays of specific types with pointers to end an start of the array
 #define ARRAY_OF(...) struct { __VA_ARGS__* start_it; __VA_ARGS__* end_it; }
 
@@ -215,8 +218,11 @@ static inline void free_blob(const blob_t* restrict i_blob)
 // Returns the pointer to the multidimensional array entry at the specified indices
 #define MDA_GET_4(__ARRAY, _A, _B, _C, _D) ((__ARRAY).start_it + MDA_SKIP((__ARRAY), _A, 1) + MDA_SKIP((__ARRAY), _B, 2) + MDA_SKIP((__ARRAY), _C, 2) + _D)
 
-// Defines the access struct for an 2 dimensional array of 32 bit signed integers with a header information
+// Defines the access struct for a 2 dimensional array of 32 bit signed integers with a header information
 DEFINE_MD_ARRAY(int32_array2_t, int32_t, 2);
+
+// Defines the access struct for a 3 dimensional array of 32 bit signed integers with a header information
+DEFINE_MD_ARRAY(int32_array3_t, int32_t, 3);
 
 // Determines the dimensions of an md array from the passed header pointer and writes the results into the passed buffer
 void get_md_array_dimensions(const int32_t* restrict i_header, int32_t* restrict o_buffer);

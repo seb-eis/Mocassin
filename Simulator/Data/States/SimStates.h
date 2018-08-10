@@ -31,7 +31,7 @@ typedef struct tracking_state { tracker_t* start_it; tracker_t* end_it; } tracki
 // Defines the simulation counters collection that contains the cycle count and all possible cycle outcomes for one species type
 typedef struct counter_col { long mc_cycles, mc_steps, mc_rejects, mc_blocks, mc_on_unstable, mc_to_unstable; } counter_col_t;
 
-// Defines the counter state of the simulation containing a counter collection for each property type
+// Defines the counter state of the simulation containing a counter collection for each particle type of the simulation
 typedef struct counter_state { counter_col_t* start_it; counter_col_t* end_it; } counter_state_t;
 
 // Defines the timer collection for the simulation timers

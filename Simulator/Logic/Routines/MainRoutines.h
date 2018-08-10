@@ -8,11 +8,16 @@
 // Short:   Main simulation routines    //
 //////////////////////////////////////////
 
+#pragma once
+#include <math.h>
 #include "Simulator/Data/Model/SimContext/SimContext.h"
+#include "Simulator/Logic/Routines/EnvRoutines.h"
 
 #define SIMULATION_FLAG_KMC 1
 #define SIMULATION_FLAG_MMC 2
 #define SIMULATION_FLAG_ERR -1
+
+#define MC_NEG_ENERGY_LIMIT -0.0003
 
 // Determines and returns the type id of the routine encoded in the passed simulation context
 error_t get_sim_type_id(sim_context_t* restrict sim_context); 

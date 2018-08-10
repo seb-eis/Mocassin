@@ -35,7 +35,7 @@ DEFINE_DYNAMIC_ARRAY(interaction_array_t, interaction_t);
 DEFINE_DYNAMIC_ARRAY(cluster_array_t, cluster_t);
 
 // Defines the environment type that describes the pair and cluster interactions for a specific unit cell position
-typedef struct { int32_t obj_id; interaction_array_t pair_list; cluster_array_t cluster_list; } environment_t;
+typedef struct { int32_t obj_id; buffer_t particle_ids; interaction_array_t pair_list; cluster_array_t cluster_list; } environment_t;
 
 // Defines the access struct for the environment array
 DEFINE_DYNAMIC_ARRAY(environment_array_t, environment_t);
@@ -59,7 +59,7 @@ DEFINE_DYNAMIC_ARRAY(jump_seq_t, int_vector_t);
 DEFINE_DYNAMIC_ARRAY(move_seq_t, mov_vector_t);
 
 // Defines the jump direction type that describes an actual jump for a specific cell position
-typedef struct { int32_t obj_id, pos_id, jump_length; double field_proj; jump_seq_t jump_sequence; move_seq_t local_mov_list, global_mov_list; } jump_dir_t;
+typedef struct { int32_t obj_id, pos_id, col_id, jump_length; double field_proj; jump_seq_t jump_sequence; move_seq_t local_mov_list, global_mov_list; } jump_dir_t;
 
 // Defines the access struct for an array of jump directions
 DEFINE_DYNAMIC_ARRAY(jump_dir_array_t, jump_dir_t);
@@ -98,7 +98,7 @@ DEFINE_MD_ARRAY(md_background_t, double, 5);
 typedef struct { int32_t size_a, size_b, size_c, size_d, size_e; md_lattice_t lattice; md_background_t energy_background; } lattice_info_t;
 
 // Defines the transition model type that carries all required transition information for the simulation
-typedef struct { jump_col_array_t jump_col_list; jump_dir_array_t jump_dir_list; int32_array2_t jump_count_table; } transition_model_t;
+typedef struct { jump_col_array_t jump_col_list; jump_dir_array_t jump_dir_list; int32_array2_t jump_count_table; int32_array3_t jump_dir_assign_table; } transition_model_t;
 
 // Defines the basic mcs job type to carry the basic job information and a pointer to the mmc or kmc specific header buffer
 typedef struct { bitmask_t job_flags, status_flags; int64_t target_mcsp, time_limit; double temperature, abort_rate; void* job_header; } job_info_t;

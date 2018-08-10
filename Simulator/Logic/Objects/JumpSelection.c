@@ -85,76 +85,8 @@ static error_t allocate_direction_pools(const int32_t pool_count, const int32_t 
     return MC_NO_ERROR;
 }
 
-static error_t allocate_jump_dir_ptr_table(jump_dir_ptr_table_t* restrict jump_dir_ptr_table, const int32_array2_t* restrict jump_count_table)
-{
-    // Tmp items for memory allocation
-    buffer_t tmp_buffer;
-    blob_t tmp_blob;
-
-    // Allocate the correct list sizes for each pos_id + particle_id combination
-    int32_t id_max[2] = {0,0};
-    get_md_array_dimensions((int32_t*)jump_count_table->header, id_max);
-
-    // Allocate a 2D array of list that matches the required combinations of pos_ids and part_ids
-    if (allocate_md_array_checked(2, sizeof(jump_dir_ptr_list_t), id_max, &tmp_blob) != MC_NO_ERROR)
-    {
-        return MC_MEM_ALLOCATION_ERROR;
-    }
-    *jump_dir_ptr_table = BLOB_CAST(jump_dir_ptr_table_t, tmp_blob);
-
-    // Allocate a ptr list of correct size for each combination
-    for (int32_t pos_id = 0; pos_id < id_max[0]; pos_id++)
-    {
-        for (int32_t part_id = 0; part_id < id_max[1]; part_id++)
-        {
-            int32_t jump_count = *MDA_GET_2(*jump_count_table, pos_id, part_id);
-            if (jump_count > 0)
-            {
-                if (allocate_buffer_checked(jump_count, sizeof(jump_dir_t*), &tmp_buffer) != MC_NO_ERROR)
-                {
-                    return MC_MEM_ALLOCATION_ERROR;
-                }
-                *MDA_GET_2(*jump_dir_ptr_table, pos_id, part_id) = BUFFER_TO_LIST(tmp_buffer, jump_dir_ptr_list_t);
-            }
-        }
-    }
-    return MC_NO_ERROR;
-}
-
-static void add_jump_dir_ptr_for_all_particle_ids(jump_dir_ptr_table_t* restrict jump_ptr_table, occode_t particle_mask, jump_dir_t* restrict jump_dir)
-{
-    int32_t part_id = 0;
-    while (particle_mask != 0)
-    {
-        if ((particle_mask & 1ULL) == 1ULL)
-        {
-            jump_dir_ptr_list_t* dir_list = MDA_GET_2(*jump_ptr_table, jump_dir->pos_id, part_id);
-            LIST_ADD(*dir_list, jump_dir);
-        }
-        particle_mask >>= 1;
-        ++part_id;
-    }
-}
-
-static error_t fill_jump_dir_ptr_table(jump_dir_ptr_table_t* restrict jump_ptr_table, const jump_col_array_t* restrict jump_cols)
-{
-    // Iterate over all jump collections and add the pointers to all
-    int32_t id_max[2] = {0,0};
-    get_md_array_dimensions((int32_t*)jump_ptr_table->header, id_max);
-
-    for (jump_col_t* jump_col = jump_cols->start_it; jump_col < jump_cols->end_it; jump_col++)
-    {
-        for (jump_dir_t* jump_dir = jump_col->jump_dir_list.start_it; jump_dir < jump_col->jump_dir_list.end_it; jump_dir++)
-        {
-            add_jump_dir_ptr_for_all_particle_ids(jump_ptr_table, jump_col->particle_mask, jump_dir);
-        }
-    }
-    return MC_NO_ERROR;
-}
-
 static error_t build_new_pool(sim_context_t* restrict sim_context)
 {
-    // Collect the build information and create the id redirection array
     int32_t max_jump_count = get_max_jump_count(&sim_context->db_model.transition_model.jump_count_table);
     int32_t pool_count = set_id_redirection_array(max_jump_count, &sim_context->db_model.transition_model.jump_count_table, &sim_context->jump_pool);
 
@@ -163,32 +95,23 @@ static error_t build_new_pool(sim_context_t* restrict sim_context)
         return MC_SIM_ERROR;
     }
 
-    // Allocate the direction pools and set the jump direction counts on the created pools
     if (allocate_direction_pools(pool_count, sim_context->meta_info.num_of_mobiles, &sim_context->jump_pool) != MC_NO_ERROR)
     {
         return MC_MEM_ALLOCATION_ERROR;
     }
     set_jump_dir_counts(max_jump_count, &sim_context->jump_pool);
 
-    // Allocate and fill the direction pointer table for the pos_id + part_id combinations
-    if (allocate_jump_dir_ptr_table(&sim_context->jump_pool.jump_dir_ptr_table, &sim_context->db_model.transition_model.jump_count_table) != MC_NO_ERROR)
-    {
-        return MC_MEM_ALLOCATION_ERROR;
-    }
-    fill_jump_dir_ptr_table(&sim_context->jump_pool.jump_dir_ptr_table, &sim_context->db_model.transition_model.jump_col_list);
     return MC_NO_ERROR;
 }
 
 static error_t sync_jump_pool_counters(jump_pool_t* restrict jump_pool)
 {
-    // Syncs all jump pool counters
     for (dir_pool_t* it = jump_pool->dir_pools.start_it; it < jump_pool->dir_pools.end_it; it++)
     {
         it->jump_count = it->pos_count * it->jump_count;
         jump_pool->jump_count += it->jump_count;
     }
 
-    // Return ok if the total jump count is not zero
     if (jump_pool->jump_count <= 0)
     {
         return MC_SIM_ERROR;
@@ -198,7 +121,6 @@ static error_t sync_jump_pool_counters(jump_pool_t* restrict jump_pool)
 
 static error_t sync_env_states_and_jump_pool(sim_context_t* restrict sim_context)
 {
-    // Assign each env state its pool id and relative pool id information (if mobile) or the no jump pool tag (not mobile)
     for (env_state_t* it = sim_context->env_states.start_it; it < sim_context->env_states.end_it; it++)
     {
         if (it->is_mobile == true)
@@ -222,13 +144,11 @@ static error_t sync_env_states_and_jump_pool(sim_context_t* restrict sim_context
 
 error_t init_jump_pool(sim_context_t* restrict sim_context)
 {
-    // Build and initialize a pool to the required sizes
     if (build_new_pool(sim_context) != MC_NO_ERROR)
     {
         MC_DUMP_ERROR_AND_EXIT(MC_SIM_ERROR, "Error during jump pool construction");
     }
 
-    // Synchronize the env states with the pool 
     if (sync_env_states_and_jump_pool(sim_context) != MC_NO_ERROR)
     {
         MC_DUMP_ERROR_AND_EXIT(MC_SIM_ERROR, "Error during synchronization of env states and jump pool");

@@ -8,10 +8,24 @@
 // Short:   Env routines for simulation //
 //////////////////////////////////////////
 
+#pragma once
+#include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-// Updates the state of the passed environment and distributes the change to all environment links of the state
-void distribute_env_state_change(env_state_t* restrict env_state, const int32_t new_particle_id);
+// Initializes the linking between all env states and creates the updating information
+error_t init_env_state_linking(sim_context_t* restrict sim_context);
 
-// Uses the passed env link and particle change information to lookup the affiliated env state in the simulation context and update the state
-void update_env_state(sim_context_t* restrict sim_context, const env_link_t* restrict env_link, const int32_t old_par_id, const int32_t new_part_id);
+// Initializes all env states energies from the current status of the lattice
+error_t init_env_state_energies(sim_context_t* restrict sim_context);
+
+// Calculates the error correction for the energy of an mmc S2 state. This function does not update the env states
+double get_tmp_s2_energy_cor_mmc(const sim_context_t* restrict sim_context);
+
+// Calculates the error correction for the energy of an mmc S2 state. This function does not update the env states
+double get_tmp_s2_energy_cor_kmc(const sim_context_t* restrict sim_context);
+
+// Updates the env states of the simulation to the s2 state after an accepted mmc transition
+void update_env_states_to_s2_mmc(sim_context_t* restrict sim_context);
+
+// Updates the env states of the simulation to the s2 state after an accepted kmc transition
+void update_env_states_to_s2_kmc(sim_context_t* restrict sim_context);
