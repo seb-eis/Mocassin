@@ -9,57 +9,29 @@
 //////////////////////////////////////////
 
 #include "Simulator/Data/States/SimStates.h"
+#include "Simulator/Data/Model/SimContext/SimContext.h"
 
-size_t calc_sim_state_size(mc_state_attr_t* restrict state_attr)
+error_t ConstructSimulationState(sim_context_t* restrict simContext)
 {
-    size_t buffer_size = 0;
-    buffer_size += sizeof(timer_col_t);
-    buffer_size += sizeof(species_t) * state_attr->num_of_atoms;
-    buffer_size += sizeof(counter_col_t) * state_attr->num_of_species;
-    buffer_size += sizeof(tracker_t) * state_attr->num_of_species;
-    buffer_size += sizeof(tracker_t) * state_attr->num_of_trackers * 2;
-    buffer_size += sizeof(index_t) * state_attr->num_of_trackers * 2;
-    return buffer_size;
+    return MC_NO_ERROR;
 }
 
-buffer_t alloc_sim_state_buffer(mc_state_attr_t* restrict state_attr)
+error_t PrepareSimulationState(sim_context_t* restrict simContext)
 {
-    return AllocateBufferUnchecked(calc_sim_state_size(state_attr), sizeof(byte_t));
+    return MC_NO_ERROR;
 }
 
-mc_state_t create_sim_state(const buffer_t* sim_state_buffer, const mc_state_attr_t* state_attr)
+error_t WriteSimulationStateToFile(const sim_context_t* restrict simContext)
 {
-    mc_state_t sim_state;
-    sim_state.state_buffer = *sim_state_buffer;
-    sim_state.timer_state = (timer_state_t) { (timer_col_t*)sim_state_buffer->Start };
-
-    sim_state.lattice_state.start_it = (species_t*) (((byte_t*)sim_state.timer_state.timer_col) + sizeof(timer_col_t));
-    sim_state.lattice_state.end_it = sim_state.lattice_state.start_it + state_attr->num_of_atoms;
-
-    sim_state.counter_state.start_it = (counter_col_t*) sim_state.lattice_state.end_it;
-    sim_state.counter_state.end_it = sim_state.counter_state.start_it + state_attr->num_of_species;
-
-    sim_state.type_tracking_state.start_it = (tracker_t*) sim_state.counter_state.end_it;
-    sim_state.type_tracking_state.end_it = sim_state.type_tracking_state.start_it + state_attr->num_of_species;
-
-    sim_state.dynamic_tracking_state.start_it = sim_state.type_tracking_state.end_it;
-    sim_state.dynamic_tracking_state.end_it = sim_state.dynamic_tracking_state.start_it + state_attr->num_of_trackers;
-
-    sim_state.static_tracking_state.start_it = sim_state.dynamic_tracking_state.end_it;
-    sim_state.static_tracking_state.end_it = sim_state.static_tracking_state.start_it + state_attr->num_of_trackers;
-
-    sim_state.dyn_track_index_state.start_it = (index_t*) sim_state.static_tracking_state.end_it;
-    sim_state.dyn_track_index_state.end_it = sim_state.dyn_track_index_state.start_it + state_attr->num_of_atoms;
-
-    sim_state.stat_track_index_state.start_it = sim_state.dyn_track_index_state.end_it;
-    sim_state.stat_track_index_state.end_it = sim_state.stat_track_index_state.start_it + state_attr->num_of_atoms;
-
-    return sim_state;
+    return MC_NO_ERROR;
 }
 
-mc_state_t load_sim_state(file_t* restrict f_stream, mc_state_attr_t* restrict state_attr)
+error_t LoadSimulationStateFromFile(sim_context_t* restrict simContext)
 {
-    mc_state_t sim_state;
+    return MC_NO_ERROR;
+}
 
-    return sim_state;
+error_t GetSimulationStateEval(const sim_context_t* restrict simContext)
+{
+    return MC_NO_ERROR;
 }

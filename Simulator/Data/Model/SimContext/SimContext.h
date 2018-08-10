@@ -54,7 +54,7 @@ typedef struct
     jump_dir_t* ActJumpDir;
     jump_col_t* ActJumpCol;
     jump_rule_t* ActJumpRule;
-    counter_col_t* ActCounterCol;
+    cnt_col_t* ActCounterCol;
     env_state_t* ActPathEnvs[8];
     occode_t ActStateCode;
     roll_info_t ActRollInfo;
