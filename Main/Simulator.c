@@ -11,14 +11,14 @@
 
 int main(int argc, char const * const *argv)
 {   
-    buffer_t tmp_buffer = allocate_buffer(10, sizeof(int32_t));
+    buffer_t tmp_buffer = AllocateBufferUnchecked(10, sizeof(int32_t));
     int32_list_t int_list = BUFFER_TO_LIST(tmp_buffer, int32_list_t);
     for (int32_t i = 0; i < 10; i++)
     {
         LIST_ADD(int_list, i);
     }
     LIST_POP_BACK(int_list);
-    for (int32_t* it = int_list.start_it; it < int_list.cur_end_it; it++)
+    for (int32_t* it = int_list.Start; it < int_list.CurEnd; it++)
     {
         printf("%i\n", *it);
     }

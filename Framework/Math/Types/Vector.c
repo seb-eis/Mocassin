@@ -48,7 +48,7 @@ vector3_t CalcVector3CrossProduct(const vector3_t * lhs, const vector3_t * rhs)
 double CalcVector3SpatProduct(const vector3_t * a, const vector3_t * b, const vector3_t * c)
 {
 	vector3_t cross_product = CalcVector3CrossProduct(b, c);
-	return calc_dot_product(a, &cross_product);
+	return CalcVector3DotProduct(a, &cross_product);
 }
 
 vector4_t AddVector4(const vector4_t * lhs, const vector4_t * rhs)

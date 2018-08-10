@@ -24,14 +24,14 @@ size_t calc_sim_state_size(mc_state_attr_t* restrict state_attr)
 
 buffer_t alloc_sim_state_buffer(mc_state_attr_t* restrict state_attr)
 {
-    return allocate_buffer(calc_sim_state_size(state_attr), sizeof(byte_t));
+    return AllocateBufferUnchecked(calc_sim_state_size(state_attr), sizeof(byte_t));
 }
 
 mc_state_t create_sim_state(const buffer_t* sim_state_buffer, const mc_state_attr_t* state_attr)
 {
     mc_state_t sim_state;
     sim_state.state_buffer = *sim_state_buffer;
-    sim_state.timer_state = (timer_state_t) { (timer_col_t*)sim_state_buffer->start_it };
+    sim_state.timer_state = (timer_state_t) { (timer_col_t*)sim_state_buffer->Start };
 
     sim_state.lattice_state.start_it = (species_t*) (((byte_t*)sim_state.timer_state.timer_col) + sizeof(timer_col_t));
     sim_state.lattice_state.end_it = sim_state.lattice_state.start_it + state_attr->num_of_atoms;

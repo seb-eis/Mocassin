@@ -54,22 +54,22 @@ typedef int64_t cerror_t;
 #define MC_MEM_ALLOCATION_ERROR -9
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
-#define MC_DUMP_ERROR_AND_EXIT(code, message) on_error_exit(code, __FILE__, __LINE__, message);
+#define MC_DUMP_ERROR_AND_EXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
-#define MC_DUMP_ERROR_MEMORY_AND_EXIT(code, message, b_start, b_end) on_error_exit_mem_dump(code, __FILE__, __LINE__, message, b_start, b_end);
+#define MC_DUMP_ERROR_MEMORY_AND_EXIT(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
-int on_error_exit(int error_code, const char* error_file, int error_line, const char* error_string);
+void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. Dumps memory bytes between passed byte pointers
-int on_error_exit_mem_dump(int error_code, const char* error_file, int error_line, const char* error_string, uint8_t* mem_start, uint8_t* mem_end);
+void OnErrorExitWithMemDump(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd);
 
 // Invokes the passed function pointer and returns the elapsed time in milliseconds
-static inline double profile_invoke(void (*func_ptr)(void))
+static inline double InvokeAndProfile(void (*func)(void))
 {
-    clock_t start_time = clock();
-    (*func_ptr)();
-    clock_t end_time = clock();
-    return 1000.0*(double)(end_time - start_time)/(double)CLOCKS_PER_SEC;
+    clock_t start = clock();
+    (*func)();
+    clock_t end = clock();
+    return 1000.0*(double)(start - end)/(double)CLOCKS_PER_SEC;
 }

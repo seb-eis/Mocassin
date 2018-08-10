@@ -17,7 +17,7 @@
 typedef byte_t species_t;
 
 // Defines the tracker type to be of type vector with 24 bytes
-typedef vector_t tracker_t;
+typedef vector3_t tracker_t;
 
 // Defines the integral type for indexing to the int32_t
 typedef int32_t index_t;

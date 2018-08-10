@@ -24,7 +24,7 @@ bool_t HaveSameBufferContent(const buffer_t* lhs, const buffer_t* rhs)
     byte_t* rhsit = rhs->Start;
     while (lhsit != lhs->End)
     {
-        if (*(++lhsit) != *(++lhsit))
+        if (*(++lhsit) != *(++rhsit))
         {
             return false;
         }

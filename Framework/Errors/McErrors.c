@@ -11,21 +11,21 @@
 #include "McErrors.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 
-int on_error_exit(int error_code, const char* error_file, int error_line, const char* error_string)
+void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg)
 {
-    FILE* file_stream = fopen(MC_STDERR_FILE_PATH, "w");
-    fprintf(file_stream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s", error_code, error_file, error_line, error_string);
-    fclose(file_stream);
-    exit(error_code);
+    FILE* fileStream = fopen(MC_STDERR_FILE_PATH, "w");
+    fprintf(fileStream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s", errCode, errFile, errLine, errMsg);
+    fclose(fileStream);
+    exit(errCode);
 }
 
-int on_error_exit_mem_dump(int error_code, const char* error_file, int error_line, const char* error_string, byte_t* mem_start, byte_t* mem_end)
+void OnErrorExitWithMemDump(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
-    FILE* file_stream = fopen(MC_STDERR_FILE_PATH, "w");
-    fprintf(file_stream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s\n Buffer:\n\n", error_code, error_file, error_line, error_string);
+    FILE* fileStream = fopen(MC_STDERR_FILE_PATH, "w");
+    fprintf(fileStream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s\n Buffer:\n\n", errCode, errFile, errLine, errMsg);
 
-    buffer_t buffer = {mem_start, mem_end};
-    write_buffer_hex_to_stream(file_stream, &buffer, 24);
-    fclose(file_stream);
-    exit(error_code);
+    buffer_t buffer = {memStart, memEnd};
+    WriteBufferHexToStream(fileStream, &buffer, 24);
+    fclose(fileStream);
+    exit(errCode);
 }

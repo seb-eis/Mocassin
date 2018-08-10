@@ -42,7 +42,7 @@ error_t PrepareForMainRoutine(sim_context_t* restrict simContext)
 
 error_t StartMainRoutine(sim_context_t* restrict simContext)
 {
-    error_t simFlags;
+    error_t simFlags = 0;
     if (simFlags & MC_ERR_ROUTINE_FLAG)
     {
         MC_DUMP_ERROR_AND_EXIT(MC_SIM_ERROR, "Main routine execution not started. The routine error flag is set.");
@@ -56,6 +56,7 @@ error_t StartMainRoutine(sim_context_t* restrict simContext)
         return StartMainMmcRoutine(simContext);
     }
     MC_DUMP_ERROR_AND_EXIT(MC_SIM_ERROR, "Unexpected simulation error. No routine selection triggered.");
+    return -1;
 }
 
 error_t StartMainKmcRoutine(sim_context_t* restrict simContext)

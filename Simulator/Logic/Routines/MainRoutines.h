@@ -15,7 +15,7 @@
 
 #define MC_KMC_ROUTINE_FLAG 0b1
 #define MC_MMC_ROUTINE_FLAG 0b10
-#define MC_ERR_ROUTINE_FLAG 1 << 63
+#define MC_ERR_ROUTINE_FLAG 1LL << 63
 
 error_t LoadCommandLineArgs(sim_context_t* restrict simContext, int32_t argc, char const* const* argv);
 
