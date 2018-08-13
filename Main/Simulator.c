@@ -6,7 +6,6 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Errors/McErrors.h"
-#include "Simulator/Data/States/SimStates.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 
 int main(int argc, char const * const *argv)

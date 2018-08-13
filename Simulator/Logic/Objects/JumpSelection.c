@@ -53,15 +53,19 @@ void RollNextMmcSelect(sim_context_t* restrict simContext)
     RollMmcOffsetEnvId(simContext);
 }
 
-static inline bool_t GetPoolEntryChange(jump_pool_t* restrict jmpPool, const int32_t oldPoolId, const int32_t oldPosId, const int32_t newPoolId)
+static inline bool_t GetEnvPoolEntryUpdate(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict jmpCntTable, env_state_t* restrict env)
 {
-    if (oldPoolId != newPoolId)
+    int32_t newPoolId = jmpPool->DirCountToPoolId.Start[*MDA_GET_2(*jmpCntTable, env->PosVector.d, env->ParId)];
+    if (env->PoolId != newPoolId)
     {
-        dir_pool_t* oldPool = &jmpPool->DirPools.Start[oldPoolId];
+        dir_pool_t* oldPool = &jmpPool->DirPools.Start[env->PoolId];
         dir_pool_t* newPool = &jmpPool->DirPools.Start[newPoolId];
 
-        LIST_ADD(newPool->EnvPool, oldPool->EnvPool.Start[oldPosId]);
-        oldPool->EnvPool.Start[oldPosId] = *LIST_POP_BACK(oldPool->EnvPool);
+        LIST_ADD(newPool->EnvPool, oldPool->EnvPool.Start[env->PoolPosId]);
+        oldPool->EnvPool.Start[env->PoolPosId] = *LIST_POP_BACK(oldPool->EnvPool);
+
+        env->PoolId = newPoolId;
+        env->PoolPosId = newPool->PosCount;
 
         oldPool->PosCount--;
         oldPool->JumpCount -= oldPool->DirCount;
@@ -72,12 +76,6 @@ static inline bool_t GetPoolEntryChange(jump_pool_t* restrict jmpPool, const int
         return ((newPool->DirCount - oldPool->DirCount) != 0);
     }
     return false;
-}
-
-static inline bool_t GetEnvPoolEntryUpdate(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict jmpCntTable, env_state_t* restrict env)
-{
-    int32_t newPoolId = jmpPool->DirCountToPoolId.Start[*MDA_GET_2(*jmpCntTable, env->PosVector.d, env->ParId)];
-    return GetPoolEntryChange(jmpPool, env->PoolId, env->PoolPosId, newPoolId);
 }
 
 bool_t GetJumpPoolUpdateKmc(sim_context_t* restrict simContext)

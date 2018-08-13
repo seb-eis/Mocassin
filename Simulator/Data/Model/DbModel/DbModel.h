@@ -37,7 +37,7 @@ typedef struct { int32_t Count; pair_def_t * Start, * End; } pair_defs_t;
 
 typedef struct { int32_t Count; clu_def_t * Start, * End; } clu_defs_t;
 
-typedef struct { int32_t ObjId; buffer_t ParIds; pair_defs_t PairDefs; clu_defs_t CluDefs; } env_def_t;
+typedef struct { int32_t ObjId; bitmask_t PosParMask, UptParMask; pair_defs_t PairDefs; clu_defs_t CluDefs; } env_def_t;
 
 typedef struct { int32_t Count; env_def_t * Start, * End; } env_defs_t;
 
@@ -53,9 +53,11 @@ typedef struct { int32_t Count; clu_table_t * Start, * End; } clu_tables_t;
 
 typedef struct { byte_t Count; vector4_t * Start, * End; } jump_seq_t;
 
+typedef struct { byte_t Count; int32_t * Start, * End; } upt_seq_t;
+
 typedef struct { byte_t Count; move_t * Start, * End; } move_seq_t;
 
-typedef struct { int32_t ObjId, PosId, ColId, JumpLength; double FieldProj; jump_seq_t JumpSeq; move_seq_t LocMoveSeq, GloMoveSeq; } jump_dir_t;
+typedef struct { int32_t ObjId, PosId, ColId, JumpLength; double FieldProj; jump_seq_t JumpSeq; upt_seq_t JumpUptSeq; move_seq_t LocMoveSeq, GloMoveSeq; } jump_dir_t;
 
 typedef struct { int32_t Count; jump_dir_t* Start, * End; } jump_dirs_t;
 
@@ -69,7 +71,7 @@ typedef struct { int32_t Count; jump_col_t * Start, * End; } jump_cols_t;
 
 typedef struct { int32_t SizeA, SizeB, SizeC, SizeD, SizeE, MobCount; lattice_t Lattice; eng_background_t EngBackground; } lat_info_t;
 
-typedef struct { int32_t CellTryCount, GloTrcCount; id_redirect_t PosIdToCellTrcOffset; env_defs_t EnvDefs; } str_model_t;
+typedef struct { int32_t CellTrcCount, GloTrcCount; id_redirect_t PosIdToCellTrcOffset; env_defs_t EnvDefs; } str_model_t;
 
 typedef struct { pair_tables_t PairTables; clu_tables_t CluTables; } eng_model_t;
 
