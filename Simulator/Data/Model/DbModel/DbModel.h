@@ -37,7 +37,7 @@ typedef struct { int32_t Count; pair_def_t * Start, * End; } pair_defs_t;
 
 typedef struct { int32_t Count; clu_def_t * Start, * End; } clu_defs_t;
 
-typedef struct { int32_t ObjId; bitmask_t PosParMask, UptParMask; pair_defs_t PairDefs; clu_defs_t CluDefs; } env_def_t;
+typedef struct { int32_t ObjId; byte_t PosParIds[64], UptParIds[64]; pair_defs_t PairDefs; clu_defs_t CluDefs; } env_def_t;
 
 typedef struct { int32_t Count; env_def_t * Start, * End; } env_defs_t;
 
@@ -45,7 +45,7 @@ typedef struct { int32_t Count; occode_t* Start, * End; } occ_codes_t;
 
 typedef struct { int32_t ObjId; eng_table_t EngTable; } pair_table_t;
 
-typedef struct { int32_t ObjId; occ_codes_t OccCodes; id_redirect_t ParToTableId; eng_table_t EngTable; } clu_table_t;
+typedef struct { int32_t ObjId; occ_codes_t OccCodes; byte_t ParToTableId[64]; eng_table_t EngTable; } clu_table_t;
 
 typedef struct { int32_t Count; pair_table_t * Start, * End; } pair_tables_t;
 
@@ -69,7 +69,7 @@ typedef struct { int32_t ObjId; bitmask_t ParMask; jump_dirs_t JumpDirs; jump_ru
 
 typedef struct { int32_t Count; jump_col_t * Start, * End; } jump_cols_t;
 
-typedef struct { int32_t SizeA, SizeB, SizeC, SizeD, SizeE, MobCount; lattice_t Lattice; eng_background_t EngBackground; } lat_info_t;
+typedef struct { vector4_t SizeVec; int32_t MobCount; lattice_t Lattice; eng_background_t EngBackground; } lat_info_t;
 
 typedef struct { int32_t CellTrcCount, GloTrcCount; id_redirect_t PosIdToCellTrcOffset; env_defs_t EnvDefs; } str_model_t;
 

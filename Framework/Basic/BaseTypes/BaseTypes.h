@@ -17,8 +17,11 @@
 // Define the restrict keyword for GCC
 #define restrict __restrict__
 
-// Reinterpret pointer as another type
-#define REINTERPRET_CAST(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+// Marshal a pointer to a value as a pointer of another type for direct memory manipulation
+#define MARSHAL_AS(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+
+// Foreach loop construct with type and iterator name for an array type that define a Start and End pointer
+#define FOR_EACH(__TYPE, __IT, __ARRAY) for(__TYPE* __IT = (__ARRAY).Start; __IT < (__ARRAY).End; __IT++)
 
 // Defines a quick macro for arrays of specific types with pointers to end an start of the array
 #define ARRAY_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; }

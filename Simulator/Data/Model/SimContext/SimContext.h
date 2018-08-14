@@ -31,22 +31,23 @@ typedef struct { byte_t Count; double* Start, * End; } eng_states_t;
 
 typedef struct
 {
-    bool_t IsMobile, IsStable;
-    byte_t ParId;
-    int32_t EnvId, PoolId, PoolPosId;
-    vector4_t PosVector;
-    eng_states_t EnergyStates;
-    clu_states_t ClusterStates;
-    env_links_t EnvLinks;
+    bool_t          IsMobile, IsStable;
+    byte_t          ParId;
+    int32_t         EnvId, PoolId, PoolPosId;
+    vector4_t       PosVector;
+    eng_states_t    EnergyStates;
+    clu_states_t    ClusterStates;
+    env_links_t     EnvLinks;
+    env_def_t*      EnvDef;
 } env_state_t;
 
 DEFINE_MD_ARRAY(env_lattice_t, env_state_t, 4);
 
 DEFINE_MD_ARRAY(clu_buffer_t, clu_state_t, 2);
 
-typedef struct { int32_t EnvId, RelId, OffId; } roll_info_t;
+typedef struct { int32_t EnvId, JmpId, RelId, OffId; } roll_info_t;
 
-typedef struct { double Eng0, Eng1, Eng2, Prob0to2, Prob2to0; } eng_info_t;
+typedef struct { double Eng0, Eng1, Eng2, ConfDel, Prob0to2, Prob2to0; } eng_info_t;
 
 typedef struct { int64_t CurCycles, CurMcs, MinCyclesPerBlock, McsPerBlock, CurTargetMcs, TotTargetMcs; } cycle_cnt_t;
 
@@ -54,15 +55,18 @@ typedef struct { double EngBuffer[8]; clu_buffer_t CluBuffer; } env_backup_t;
 
 typedef struct
 {
-    cycle_cnt_t MainCnts;
-    jump_dir_t* ActJumpDir;
-    jump_col_t* ActJumpCol;
-    jump_rule_t* ActJumpRule;
-    cnt_col_t* ActCntCol;
-    env_state_t* ActPathEnvs[8];
-    occode_t ActStateCode;
-    roll_info_t ActRollInfo;
-    eng_info_t ActEngInfo;
+    cycle_cnt_t     MainCnts;
+    jump_dir_t*     ActJumpDir;
+    jump_col_t*     ActJumpCol;
+    jump_rule_t*    ActJumpRule;
+    cnt_col_t*      ActCntCol;
+    env_state_t*    ActPathEnvs[8];
+    occode_t        ActStateCode;
+    roll_info_t     ActRollInfo;
+    eng_info_t      ActEngInfo;
+    env_state_t*    ActWorkEnv;
+    pair_table_t*   ActPairTable;
+    clu_table_t*    ActCluTable;
 } cycle_state_t;
 
 typedef struct { int32_t * Start, * End, * CurEnd; } env_pool_t;
@@ -91,9 +95,9 @@ typedef struct
     env_lattice_t   EnvLattice;
 } sim_model_t;
 
-typedef error_t (*f_plugin_t)(void* restrict);
+typedef void (*f_plugin_t)(void* restrict);
 
-typedef struct { f_plugin_t OnDataOut, OnStateEnergySet; } plugin_col_t;
+typedef struct { f_plugin_t OnDataOut, OnSetJumpProbs; } plugin_col_t;
 
 typedef struct
 {

@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "jumpselection.h": "c"
+        "jumpselection.h": "c",
+        "mainroutines.h": "c"
     }
 }

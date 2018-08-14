@@ -63,6 +63,53 @@ error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fi
     return result;
 }
 
+error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
+{
+    error_t error = 0;
+    int32_t bufferSize = strlen(lhs) + strlen(rhs) + 1;
+    *result = malloc(bufferSize);
+
+    if(*result == NULL)
+    {
+        return MC_MEM_ALLOCATION_ERROR;
+    }
+
+    error |= strcpy_s(*result, bufferSize, lhs);
+    error |= strcat_s(*result, bufferSize, rhs);
+    return errno;
+}
+
+error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer)
+{
+    error_t error = 0;
+    char* tmpName = NULL;
+
+    if(CheckFileExistance(fileName))
+    {
+        if((error = ConcatStrings(fileName, ".backup", &tmpName)) != MC_NO_ERROR)
+        {
+            free(tmpName);
+            return error;
+        }
+        if((error = rename(fileName, tmpName)) != MC_NO_ERROR)
+        {
+            free(tmpName);
+            return error;
+        }
+    }
+
+    if((error = WriteBufferToFile(fileName, fileMode, buffer)) == MC_NO_ERROR)
+    {
+        if(tmpName != NULL)
+        {
+            error = remove(tmpName);
+        }
+    }
+
+    free(tmpName);
+    return error;
+}
+
 error_t LoadBufferFromStream(file_t* restrict fileStream, buffer_t* restrict buffer)
 {
     if (fileStream == NULL)

@@ -76,9 +76,13 @@ void SetKmcJumpPathProperties(sim_context_t* restrict simContext);
 
 bool_t GetKmcJumpRuleEval(sim_context_t* restrict simContext);
 
+void SetKmcJumpEvalFail(sim_context_t* restrict simContext);
+
 void SetKmcJumpProperties(sim_context_t* restrict simContext);
 
 void SetKmcJumpEvaluation(sim_context_t* restrict simContext);
+
+void SetKmcJumpProbsDefault(sim_context_t* restrict simContext);
 
 
 void SetMmcJumpSelection(sim_context_t* restrict simContext);
@@ -87,6 +91,10 @@ void SetMmcJumpPathProperties(sim_context_t* restrict simContext);
 
 bool_t GetMmcJumpRuleEval(sim_context_t* restrict simContext);
 
+void SetMmcJumpEvalFail(sim_context_t* restrict simContext);
+
 void SetMmcJumpProperties(sim_context_t* restrict simContext);
 
 void SetMmcJumpEvaluation(sim_context_t* restrict simContext);
+
+void SetMmcJumpProbsDefault(sim_context_t* restrict simContext);

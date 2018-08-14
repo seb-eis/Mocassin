@@ -42,3 +42,9 @@ error_t LoadBufferFromFile(const char* restrict fileName, buffer_t* restrict out
 
 // Binary write of the provided buffer to the file. Supports file modes "wb" and "ab"
 error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer);
+
+// Binary write of the provided buffer to the file. Supports file modes "wb" and "ab". Backups original and deletes backup only if the write is successfully completed
+error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer);
+
+// Concats two strings into a new buffer without freeing the originals. Retruns out of memory flag if allocation fails
+error_t ConcatStrings(const char* lhs, const char* rhs, char** result);

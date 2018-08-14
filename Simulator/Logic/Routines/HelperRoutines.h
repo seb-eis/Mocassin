@@ -28,11 +28,30 @@
 
 #define UNSET_FLAG(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
 
-static inline void TrimVectorToCell(vector4_t* restrict vector, const vector4_t* restrict sizes)
+static inline void AddToLhsVector4(vector4_t* restrict lhs, const vector4_t* restrict rhs)
+{
+    lhs->a += rhs->a;
+    lhs->b += rhs->b;
+    lhs->c += rhs->c;
+    lhs->d += rhs->d;
+}
+
+static inline void TrimVector4ToCell(vector4_t* restrict vector, const vector4_t* restrict sizes)
 {
     while(vector->a >= sizes->a) vector->a -= sizes->a;
     while(vector->b >= sizes->b) vector->b -= sizes->b;
     while(vector->c >= sizes->c) vector->c -= sizes->c;
+}
+
+static inline void AddToLhsAndTrimVector4(vector4_t* restrict lhs, const vector4_t* restrict rhs, const vector4_t* sizes)
+{
+    AddToLhsVector4(lhs, rhs);
+    TrimVector4ToCell(lhs, sizes);
+}
+
+static inline env_state_t* GetEnvByVector4(const vector4_t* restrict vec, const env_lattice_t* restrict latt)
+{
+    return MDA_GET_4(*latt, vec->a, vec->b, vec->c, vec->d);
 }
 
 static inline double GetEnergyConvValue(const double temp)

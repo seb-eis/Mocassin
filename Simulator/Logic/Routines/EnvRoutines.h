@@ -23,7 +23,9 @@ void CreateLocalJumpDeltaKmc(sim_context_t* restrict simContext);
 
 void RollbackLocalJumpDeltaKmc(sim_context_t* restrict simContext);
 
-void SetAllStateEnergiesKmc(sim_context_t* restrict simContext);
+void SetState0And1EnergiesKmc(sim_context_t* restrict simContext);
+
+void SetState2EnergyKmc(sim_context_t* restrict simContext);
 
 void DistributeStateDeltaKmc(sim_context_t* restrict simContext);
 
@@ -32,6 +34,8 @@ void CreateLocalJumpDeltaMmc(sim_context_t* restrict simContext);
 
 void RollbackLocalJumpDeltaMmc(sim_context_t* restrict simContext);
 
-void SetAllStateEnergiesMmc(sim_context_t* restrict simContext);
+void SetState0And1EnergiesMmc(sim_context_t* restrict simContext);
+
+void SetState2EnergyMmc(sim_context_t* restrict simContext);
 
 void DistributeStateDeltaMmc(sim_context_t* restrict simContext);
