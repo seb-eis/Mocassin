@@ -15,15 +15,22 @@
 #include "Simulator/Data/Model/DbModel/DbModel.h"
 #include "Simulator/Data/Model/State/StateModel.h"
 
-typedef struct { byte_t CluId, CluPosId; } clu_link_t;
+#ifndef SCT
+    #define SCT simContext
+#endif
+#ifndef _SCTPARAM
+    #define _SCTPARAM sim_context_t* restrict SCT
+#endif
+
+typedef struct { byte_t CluId, RelId; } clu_link_t;
 
 typedef struct { byte_t Count; clu_link_t* Start, * End; } clu_links_t;
 
-typedef struct { int32_t EnvId, EnvPosId; clu_links_t ClusterLinks; } env_link_t;
+typedef struct { int32_t EnvId, EnvPosId; clu_links_t CluLinks; } env_link_t;
 
 typedef struct { int32_t Count; env_link_t* Start, * End; } env_links_t;
 
-typedef struct { int32_t CurTableId; occode_t OccCode; } clu_state_t;
+typedef struct { int32_t CodeId; occode_t OccCode; } clu_state_t;
 
 typedef struct { byte_t Count; clu_state_t* Start, * End; } clu_states_t;
 
@@ -65,6 +72,7 @@ typedef struct
     roll_info_t     ActRollInfo;
     eng_info_t      ActEngInfo;
     env_state_t*    ActWorkEnv;
+    clu_state_t*    ActWorkClu;
     pair_table_t*   ActPairTable;
     clu_table_t*    ActCluTable;
 } cycle_state_t;

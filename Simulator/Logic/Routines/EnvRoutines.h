@@ -12,30 +12,30 @@
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-error_t ConstructEnvLattice(sim_context_t* restrict simContext);
+error_t ConstructEnvLattice(_SCTPARAM);
 
-error_t PrepareEnvLattice(sim_context_t* restrict simContext);
+error_t PrepareEnvLattice(_SCTPARAM);
 
-error_t GetEnvReadyStatusEval(sim_context_t* restrict simContext);
-
-
-void CreateLocalJumpDeltaKmc(sim_context_t* restrict simContext);
-
-void RollbackLocalJumpDeltaKmc(sim_context_t* restrict simContext);
-
-void SetState0And1EnergiesKmc(sim_context_t* restrict simContext);
-
-void SetState2EnergyKmc(sim_context_t* restrict simContext);
-
-void DistributeStateDeltaKmc(sim_context_t* restrict simContext);
+error_t GetEnvReadyStatusEval(_SCTPARAM);
 
 
-void CreateLocalJumpDeltaMmc(sim_context_t* restrict simContext);
+void CreateLocalJumpDeltaKmc(_SCTPARAM);
 
-void RollbackLocalJumpDeltaMmc(sim_context_t* restrict simContext);
+void RollbackLocalJumpDeltaKmc(_SCTPARAM);
 
-void SetState0And1EnergiesMmc(sim_context_t* restrict simContext);
+void SetState0And1EnergiesKmc(_SCTPARAM);
 
-void SetState2EnergyMmc(sim_context_t* restrict simContext);
+void SetState2EnergyKmc(_SCTPARAM);
 
-void DistributeStateDeltaMmc(sim_context_t* restrict simContext);
+void CreateFullStateDeltaKmc(_SCTPARAM);
+
+
+void CreateLocalJumpDeltaMmc(_SCTPARAM);
+
+void RollbackLocalJumpDeltaMmc(_SCTPARAM);
+
+void SetState0And1EnergiesMmc(_SCTPARAM);
+
+void SetState2EnergyMmc(_SCTPARAM);
+
+void CreateFullStateDeltaMmc(_SCTPARAM);

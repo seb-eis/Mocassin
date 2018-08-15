@@ -23,6 +23,9 @@
 // Foreach loop construct with type and iterator name for an array type that define a Start and End pointer
 #define FOR_EACH(__TYPE, __IT, __ARRAY) for(__TYPE* __IT = (__ARRAY).Start; __IT < (__ARRAY).End; __IT++)
 
+// Foreach instruction for a C style array with compile time known size definition
+#define C_FOR_EACH(__TYPE, __IT, __ARRAY) for(__TYPE* __IT = &(__ARRAY)[0]; __IT < &(__ARRAY)[sizeof(__ARRAY)/sizeof(__TYPE)-1]; __IT++)
+
 // Defines a quick macro for arrays of specific types with pointers to end an start of the array
 #define ARRAY_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; }
 

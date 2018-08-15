@@ -9,89 +9,109 @@
 //////////////////////////////////////////
 
 #include "Simulator/Logic/Objects/JumpSelection.h"
+#include "Simulator/Logic/Routines/HelperRoutines.h"
 
-error_t ConstructJumpPool(sim_context_t* restrict simContext)
+error_t ConstructJumpPool(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t PrepareJumpPool(sim_context_t* restrict simContext)
+error_t PrepareJumpPool(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-static inline void RollPosAndDirFromPool(sim_context_t* restrict simContext)
+static inline void AddEnvIdToDirPool(dir_pool_t* restrict pool, const int32_t entry)
 {
-    int32_t rnv = (int32_t) (Pcg32Next(&simContext->RnGen) % simContext->JumpPool.TotJumpCount);
-    for(dir_pool_t* dirPool = simContext->JumpPool.DirPools.Start; dirPool < simContext->JumpPool.DirPools.End; dirPool++)
+    LIST_ADD(pool->EnvPool, entry);
+}
+
+static inline int32_t PopBackDirEnvPool(dir_pool_t* restrict pool)
+{
+    return *LIST_POP_BACK(pool->EnvPool);
+}
+
+static inline void RollPosAndDirFromPool(_SCTPARAM)
+{
+    int32_t rnv = GetNextCeiledRnd(SCT, SCT->JumpPool.TotJumpCount);
+    FOR_EACH(dir_pool_t, dirPool, SCT->JumpPool.DirPools)
     {
         if(rnv >= dirPool->JumpCount)
         {
             rnv -= dirPool->JumpCount;
             continue;
         }
-        simContext->CycleState.ActRollInfo.EnvId = dirPool->EnvPool.Start[rnv];
-        simContext->CycleState.ActRollInfo.RelId = rnv % dirPool->DirCount;
+        RefActRollInfo(SCT)->EnvId = GetEnvPoolEntry(dirPool, rnv);
+        RefActRollInfo(SCT)->RelId = rnv % dirPool->DirCount;
         return;
     }
-    MC_DUMP_ERROR_AND_EXIT(MC_SIM_ERROR, "Selection routine reached end of function. Invalid or corrupted jump pool.");
+    SCT->ErrorCode = MC_SIM_ERROR;
 }
 
-static inline void RollMmcOffsetEnvId(sim_context_t* restrict simContext)
+static inline void RollMmcOffsetEnvId(_SCTPARAM)
 {
-    simContext->CycleState.ActRollInfo.OffId = (int32_t) (Pcg32Next(&simContext->RnGen) % simContext->SimDynModel.EnvLattice.Header->Size);
+    RefActRollInfo(SCT)->OffId = GetNextCeiledRnd(SCT, RefEnvLattice(SCT)->Header->Size);
 }
 
-void RollNextKmcSelect(sim_context_t* restrict simContext)
+void RollNextKmcSelect(_SCTPARAM)
 {
-    RollPosAndDirFromPool(simContext);
+    RollPosAndDirFromPool(SCT);
 }
 
-void RollNextMmcSelect(sim_context_t* restrict simContext)
+void RollNextMmcSelect(_SCTPARAM)
 {
-    RollPosAndDirFromPool(simContext);
-    RollMmcOffsetEnvId(simContext);
+    RollPosAndDirFromPool(SCT);
+    RollMmcOffsetEnvId(SCT);
 }
 
-static inline bool_t GetEnvPoolEntryUpdate(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict jmpCntTable, env_state_t* restrict env)
+static inline void CorrectEnvPoolIds(env_state_t* restrict env, const dir_pool_t* restrict newPool, const int32_t newId)
 {
-    int32_t newPoolId = jmpPool->DirCountToPoolId.Start[*MDA_GET_2(*jmpCntTable, env->PosVector.d, env->ParId)];
-    if (env->PoolId != newPoolId)
-    {
-        dir_pool_t* oldPool = &jmpPool->DirPools.Start[env->PoolId];
-        dir_pool_t* newPool = &jmpPool->DirPools.Start[newPoolId];
-
-        LIST_ADD(newPool->EnvPool, oldPool->EnvPool.Start[env->PoolPosId]);
-        oldPool->EnvPool.Start[env->PoolPosId] = *LIST_POP_BACK(oldPool->EnvPool);
-
-        env->PoolId = newPoolId;
+        env->PoolId = newId;
         env->PoolPosId = newPool->PosCount;
+}
 
+static inline void CorrectPoolCounters(dir_pool_t* restrict oldPool, dir_pool_t* restrict newPool, jump_pool_t* restrict jmpPool)
+{
         oldPool->PosCount--;
         oldPool->JumpCount -= oldPool->DirCount;
         newPool->PosCount++;
         newPool->JumpCount += newPool->DirCount;
         jmpPool->TotJumpCount += newPool->DirCount - oldPool->DirCount;
+}
 
-        return ((newPool->DirCount - oldPool->DirCount) != 0);
+static inline bool_t GetEnvPoolEntryUpdate(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict jmpCntTable, env_state_t* restrict env)
+{
+    int32_t newPoolId = GetEnvDirPoolId(jmpPool, jmpCntTable, env);
+    if (env->PoolId != newPoolId)
+    {
+        dir_pool_t* oldPool = RefJmpDirPoolAt(jmpPool, env->PoolId);
+        dir_pool_t* newPool = RefJmpDirPoolAt(jmpPool, newPoolId);
+
+        AddEnvIdToDirPool(newPool, GetEnvPoolEntry(oldPool, env->PoolPosId));
+        *RefEnvPoolEntry(oldPool, env->PoolPosId) = PopBackDirEnvPool(oldPool);
+
+        CorrectEnvPoolIds(env, newPool, newPoolId);
+        CorrectPoolCounters(oldPool, newPool, jmpPool);
+
+        return (newPool->DirCount - oldPool->DirCount) != 0;
     }
     return false;
 }
 
-bool_t GetJumpPoolUpdateKmc(sim_context_t* restrict simContext)
+bool_t GetJumpPoolUpdateKmc(_SCTPARAM)
 {
     bool_t jmpCntChange = false;
-    for(int32_t i = 0; i < simContext->CycleState.ActJumpDir->JumpLength; i++)
+    for(int32_t i = 0; i < RefActJumpDir(SCT)->JumpLength; i++)
     {
-        jmpCntChange |= GetEnvPoolEntryUpdate(&simContext->JumpPool, &simContext->SimDbModel.Transition.JumpCountTable, simContext->CycleState.ActPathEnvs[i]);
+        jmpCntChange |= GetEnvPoolEntryUpdate(&SCT->JumpPool, RefJmpDirCountTable(SCT), RefPathEnvAt(SCT, i));
     }
     return jmpCntChange;
 }
 
-bool_t GetJumpPoolUpdateMmc(sim_context_t* restrict simContext)
+bool_t GetJumpPoolUpdateMmc(_SCTPARAM)
 {
     bool_t jmpCntChange = false;
-    jmpCntChange |= GetEnvPoolEntryUpdate(&simContext->JumpPool, &simContext->SimDbModel.Transition.JumpCountTable, simContext->CycleState.ActPathEnvs[0]);
-    jmpCntChange |= GetEnvPoolEntryUpdate(&simContext->JumpPool, &simContext->SimDbModel.Transition.JumpCountTable, simContext->CycleState.ActPathEnvs[1]);
+    jmpCntChange |= GetEnvPoolEntryUpdate(&SCT->JumpPool, RefJmpDirCountTable(SCT), RefPathEnvAt(SCT, 0));
+    jmpCntChange |= GetEnvPoolEntryUpdate(&SCT->JumpPool, RefJmpDirCountTable(SCT), RefPathEnvAt(SCT, 1));
     return jmpCntChange;
 }

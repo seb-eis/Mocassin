@@ -27,74 +27,74 @@
 #define MC_SIM_ABORT_FLAG       0x40000000
 #define MC_STATE_ERROR_FLAG     0x80000000
 
-error_t LoadCommandLineArgs(sim_context_t* restrict simContext, int32_t argc, char const* const* argv);
+error_t LoadCommandLineArgs(_SCTPARAM, int32_t argc, char const* const* argv);
 
-error_t LoadSimulationPlugins(sim_context_t* restrict simContext);
+error_t LoadSimulationPlugins(_SCTPARAM);
 
-error_t LoadSimulationModel(sim_context_t* restrict simContext);
+error_t LoadSimulationModel(_SCTPARAM);
 
-error_t LoadSimulationState(sim_context_t* restrict simContext);
+error_t LoadSimulationState(_SCTPARAM);
 
-error_t ResetContextToDefault(sim_context_t* restrict simContext);
+error_t ResetContextToDefault(_SCTPARAM);
 
-error_t PrepareDynamicModel(sim_context_t* restrict simContext);
+error_t PrepareDynamicModel(_SCTPARAM);
 
-error_t PrepareForMainRoutine(sim_context_t* restrict simContext);
+error_t PrepareForMainRoutine(_SCTPARAM);
 
-error_t FinishRoutinePrerun(sim_context_t* restrict simContext);
+error_t FinishRoutinePrerun(_SCTPARAM);
 
-error_t StartMainRoutine(sim_context_t* restrict simContext);
+error_t StartMainRoutine(_SCTPARAM);
 
-error_t StartMainKmcRoutine(sim_context_t* restrict simContext);
+error_t StartMainKmcRoutine(_SCTPARAM);
 
-error_t StartMainMmcRoutine(sim_context_t* restrict simContext);
+error_t StartMainMmcRoutine(_SCTPARAM);
 
-error_t DoNextKmcCycleBlock(sim_context_t* restrict simContext);
+error_t DoNextKmcCycleBlock(_SCTPARAM);
 
-error_t FinishKmcCycleBlock(sim_context_t* restrict simContext);
+error_t FinishKmcCycleBlock(_SCTPARAM);
 
-error_t DoNextMmcCycleBlock(sim_context_t* restrict simContext);
+error_t DoNextMmcCycleBlock(_SCTPARAM);
 
-error_t FinishMmcCycleBlock(sim_context_t* restrict simContext);
+error_t FinishMmcCycleBlock(_SCTPARAM);
 
-error_t GetKmcAbortCondEval(sim_context_t* restrict simContext);
+error_t GetKmcAbortCondEval(_SCTPARAM);
 
-error_t GetMmcAbortCondEval(sim_context_t* restrict simContext);
+error_t GetMmcAbortCondEval(_SCTPARAM);
 
-error_t SyncSimulationState(sim_context_t* restrict simContext);
+error_t SyncSimulationState(_SCTPARAM);
 
-error_t SaveSimulationState(sim_context_t* restrict simContext);
+error_t SaveSimulationState(_SCTPARAM);
 
-error_t FinishMainRoutineKmc(sim_context_t* restrict simContext);
+error_t FinishMainRoutineKmc(_SCTPARAM);
 
-error_t FinishMainRoutineMmc(sim_context_t* restrict simContext);
-
-
-void SetKmcJumpSelection(sim_context_t* restrict simContext);
-
-void SetKmcJumpPathProperties(sim_context_t* restrict simContext);
-
-bool_t GetKmcJumpRuleEval(sim_context_t* restrict simContext);
-
-void SetKmcJumpEvalFail(sim_context_t* restrict simContext);
-
-void SetKmcJumpProperties(sim_context_t* restrict simContext);
-
-void SetKmcJumpEvaluation(sim_context_t* restrict simContext);
-
-void SetKmcJumpProbsDefault(sim_context_t* restrict simContext);
+error_t FinishMainRoutineMmc(_SCTPARAM);
 
 
-void SetMmcJumpSelection(sim_context_t* restrict simContext);
+void SetKmcJumpSelection(_SCTPARAM);
 
-void SetMmcJumpPathProperties(sim_context_t* restrict simContext);
+void SetKmcJumpPathProperties(_SCTPARAM);
 
-bool_t GetMmcJumpRuleEval(sim_context_t* restrict simContext);
+bool_t GetKmcJumpRuleEval(_SCTPARAM);
 
-void SetMmcJumpEvalFail(sim_context_t* restrict simContext);
+void SetKmcJumpEvalFail(_SCTPARAM);
 
-void SetMmcJumpProperties(sim_context_t* restrict simContext);
+void SetKmcJumpProperties(_SCTPARAM);
 
-void SetMmcJumpEvaluation(sim_context_t* restrict simContext);
+void SetKmcJumpEvaluation(_SCTPARAM);
 
-void SetMmcJumpProbsDefault(sim_context_t* restrict simContext);
+void SetKmcJumpProbsDefault(_SCTPARAM);
+
+
+void SetMmcJumpSelection(_SCTPARAM);
+
+void SetMmcJumpPathProperties(_SCTPARAM);
+
+bool_t GetMmcJumpRuleEval(_SCTPARAM);
+
+void SetMmcJumpEvalFail(_SCTPARAM);
+
+void SetMmcJumpProperties(_SCTPARAM);
+
+void SetMmcJumpEvaluation(_SCTPARAM);
+
+void SetMmcJumpProbsDefault(_SCTPARAM);

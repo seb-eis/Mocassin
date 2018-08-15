@@ -9,147 +9,153 @@
 //////////////////////////////////////////
 
 #include "Simulator/Logic/Routines/EnvRoutines.h"
+#include "Simulator/Logic/Routines/HelperRoutines.h"
 
-error_t ConstructEnvLattice(sim_context_t* restrict simContext)
+error_t ConstructEnvLattice(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t PrepareEnvLattice(sim_context_t* restrict simContext)
+error_t PrepareEnvLattice(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t GetEnvReadyStatusEval(sim_context_t* restrict simContext)
+error_t GetEnvReadyStatusEval(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-static inline env_state_t* GetWorkEnv(const sim_context_t* restrict simContext, const env_link_t* restrict envLink)
+static inline void SetActWorkEnv(_SCTPARAM, const env_link_t* restrict envLink)
 {
-    return &simContext->SimDynModel.EnvLattice.Start[envLink->EnvId];
+    SCT->CycleState.ActWorkEnv = RefLatticeEnvAt(SCT, envLink->EnvId);
 }
 
-static inline pair_table_t* GetPairTable(const sim_context_t* restrict simContext, const env_state_t* restrict env, const env_link_t* restrict envLink)
+static inline void SetActWorkPairTable(_SCTPARAM, const env_state_t* restrict env, const env_link_t* restrict envLink)
 {
-    int32_t tabId = env->EnvDef->PairDefs.Start[envLink->EnvPosId].TabId;
-    return &simContext->SimDbModel.Energy.PairTables.Start[tabId];
+    SCT->CycleState.ActPairTable = RefPairTableAt(SCT, RefEnvPairDefAt(env, envLink->EnvPosId)->TabId);
 }
 
-static inline clu_table_t* GetClusterTable(const sim_context_t* restrict simContext, const env_state_t* restrict env, const clu_link_t* restrict cluLink)
+static inline void SetActWorkCluTable(_SCTPARAM, const env_state_t* restrict env, const clu_link_t* restrict cluLink)
 {
-    int32_t tabId = env->EnvDef->CluDefs.Start[cluLink->CluId].TabId;
-    return &simContext->SimDbModel.Energy.CluTables.Start[tabId];
+    SCT->CycleState.ActCluTable = RefCluTableAt(SCT, RefEnvCluDefAt(env, cluLink->CluId)->TabId);
 }
 
-static inline int32_t FindClusterCodeTableId(const clu_table_t* restrict table, const occode_t code)
+static inline int32_t FindCluTableCodeId(const clu_table_t* restrict table, const occode_t code)
 {
-    // Placeholder, replace by binary search during optimization!
+    // Placeholder. Check code pool size and use binary/linear search depending on the pool size
     int32_t index = 0;
     for(occode_t* curCode = table->OccCodes.Start; *curCode != code; curCode++)
     {
         index++;
     }
     return index;
-} 
+}
 
 static inline double GetPairDelta(const pair_table_t* restrict table, const byte_t mainId, const byte_t oldId, const byte_t newId)
 {
-    return *MDA_GET_2(table->EngTable, mainId, oldId) - *MDA_GET_2(table->EngTable, mainId, newId);
+    return GetPairTableEntry(table, mainId, oldId) - GetPairTableEntry(table, mainId, newId);
 }
 
-static inline double GetClusterDelta(const clu_table_t* restrict table, const clu_link_t* restrict cluLink, clu_state_t* restrict cluState, const byte_t mainId, const byte_t newId)
+static inline double MakeCluDelta(const clu_table_t* restrict table, const clu_link_t* restrict cluLink, clu_state_t* restrict clu, const byte_t mainId, const byte_t newId)
 {
-    double delta = -(*MDA_GET_2(table->EngTable, table->ParToTableId[mainId], cluState->CurTableId));
-    MARSHAL_AS(byte_t, &cluState->OccCode)[cluLink->CluPosId] = newId;
-    cluState->CurTableId = FindClusterCodeTableId(table, cluState->OccCode);
-    delta += *MDA_GET_2(table->EngTable, table->ParToTableId[mainId], cluState->CurTableId);
+    double delta = (-1.0) * GetCluTableEntry(table, mainId, clu->CodeId);
+
+    SetCodeByteAt(&clu->OccCode, cluLink->RelId, newId);
+    clu->CodeId = FindCluTableCodeId(table, clu->OccCode);
+
+    delta += GetCluTableEntry(table, mainId, clu->CodeId);
     return delta;
 }
 
-static void ApplyCluLinkChange(sim_context_t* restrict simContext, const clu_link_t* restrict cluLink, const byte_t newId, const byte_t oldId, const byte_t uptId)
+static inline void InvokeEnvLinkCluChanges(_SCTPARAM, const clu_link_t* restrict cluLink, const byte_t uptId, const byte_t newId)
 {
-
+    *RefActStateEngAt(SCT, uptId) = MakeCluDelta(RefActCluTable(SCT), cluLink, RefActWorkClu(SCT), uptId, newId);
 }
 
-static void ApplyUptLinkChange(sim_context_t* restrict simContext, const env_link_t* restrict envLink, const byte_t newId, const byte_t oldId, const byte_t uptId)
+static inline void InvokeEnvLinkPairChange(_SCTPARAM, const env_link_t* restrict envLink, const byte_t uptId, const byte_t oldId, const byte_t newId)
 {
-
+    *RefActStateEngAt(SCT, uptId) += GetPairDelta(RefActPairTable(SCT), uptId, oldId, newId);
 }
 
-static void AplCluLinkChangesToActEnv(sim_context_t* restrict simContext, const clu_link_t* restrict cluLink, const byte_t newParId)
+static void InvokeEnvLinkOnWorkAllIds(_SCTPARAM, const env_link_t* restrict envLink, const byte_t oldId, const byte_t newId)
 {
-    simContext->CycleState.ActCluTable = GetClusterTable(simContext, simContext->CycleState.ActWorkEnv, cluLink);
-    for(byte_t* uptParId = &simContext->CycleState.ActWorkEnv->EnvDef->UptParIds[0]; *uptParId != UINT8_MAX; uptParId++)
+    for(size_t i = 0; GetActUpdateIdAt(SCT, i) != 0; i++)
     {
-        
+        InvokeEnvLinkPairChange(SCT, envLink, GetActUpdateIdAt(SCT, i), oldId, newId);
     }
 }
 
-static void AplAllEnvLinkChanges(sim_context_t* restrict simContext, const env_link_t* restrict envLink, const byte_t newParId)
+static void InvokeEnvLinking(_SCTPARAM, env_state_t* restrict env, const byte_t newId)
 {
-    simContext->CycleState.ActWorkEnv = GetWorkEnv(simContext, envLink);
-    simContext->CycleState.ActPairTable = GetPairTable(simContext, simContext->CycleState.ActWorkEnv, envLink);
-
-    for(byte_t* uptParId = &simContext->CycleState.ActWorkEnv->EnvDef->UptParIds[0]; *uptParId != UINT8_MAX; uptParId++)
+    FOR_EACH(env_link_t, envLink, env->EnvLinks)
     {
-        
-    }
-
-    FOR_EACH(clu_link_t, cluLink, envLink->ClusterLinks)
-    {
-        AplCluLinkChangesToActEnv(simContext, cluLink, newParId);
+        SetActWorkEnv(SCT, envLink);
+        SetActWorkPairTable(SCT, RefActWorkEnv(SCT), envLink);
+        InvokeEnvLinkOnWorkAllIds(SCT, envLink, env->ParId, newId);
     }
 }
 
-
-void CreateLocalJumpDeltaKmc(sim_context_t* restrict simContext)
+void CreateLocalJumpDeltaKmc(_SCTPARAM)
 {
 
 }
 
-void RollbackLocalJumpDeltaKmc(sim_context_t* restrict simContext)
+void RollbackLocalJumpDeltaKmc(_SCTPARAM)
 {
 
 }
 
-void SetState0And1EnergiesKmc(sim_context_t* restrict simContext)
+void SetState0And1EnergiesKmc(_SCTPARAM)
 {
 
 }
 
-void SetState2EnergyKmc(sim_context_t* restrict simContext)
+void SetState2EnergyKmc(_SCTPARAM)
 {
 
 }
 
-void DistributeStateDeltaKmc(sim_context_t* restrict simContext)
+void CreateFullStateDeltaKmc(_SCTPARAM)
+{
+    for(byte_t i = 0; i < RefActJumpDir(SCT)->JumpLength; i++)
+    {
+        byte_t newId = GetCodeByteAt(&RefActJumpRule(SCT)->StCode2, i);
+        if(RefPathEnvAt(SCT, i)->IsStable)
+        {
+            InvokeEnvLinking(SCT, RefPathEnvAt(SCT, i), newId);
+        }
+        RefPathEnvAt(SCT, i)->ParId = newId;
+    }
+}
+
+
+void CreateLocalJumpDeltaMmc(_SCTPARAM)
 {
 
 }
 
-
-void CreateLocalJumpDeltaMmc(sim_context_t* restrict simContext)
+void RollbackLocalJumpDeltaMmc(_SCTPARAM)
 {
 
 }
 
-void RollbackLocalJumpDeltaMmc(sim_context_t* restrict simContext)
+void SetState0And1EnergiesMmc(_SCTPARAM)
 {
 
 }
 
-void SetState0And1EnergiesMmc(sim_context_t* restrict simContext)
-{
-
-}
-
-void SetState2EnergyMmc(sim_context_t* restrict simContext)
+void SetState2EnergyMmc(_SCTPARAM)
 {
     
 }
 
-void DistributeStateDeltaMmc(sim_context_t* restrict simContext)
+void CreateFullStateDeltaMmc(_SCTPARAM)
 {
-
+    byte_t newParId0 = GetCodeByteAt(&RefActJumpRule(SCT)->StCode2, 0);
+    byte_t newParId1 = GetCodeByteAt(&RefActJumpRule(SCT)->StCode2, 1);
+    InvokeEnvLinking(SCT, RefPathEnvAt(SCT, 0), newParId0);
+    InvokeEnvLinking(SCT, RefPathEnvAt(SCT, 1), newParId1);
+    RefPathEnvAt(SCT, 0)->ParId = newParId0;
+    RefPathEnvAt(SCT, 1)->ParId = newParId1;
 }

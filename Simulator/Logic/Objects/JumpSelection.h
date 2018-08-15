@@ -16,15 +16,15 @@
 
 #define MC_NO_POOL 0
 
-error_t ConstructJumpPool(sim_context_t* restrict simContext);
+error_t ConstructJumpPool(_SCTPARAM);
 
-error_t PrepareJumpPool(sim_context_t* restrict simContext);
+error_t PrepareJumpPool(_SCTPARAM);
 
-void RollNextKmcSelect(sim_context_t* restrict simContext);
+void RollNextKmcSelect(_SCTPARAM);
 
-void RollNextMmcSelect(sim_context_t* restrict simContext);
+void RollNextMmcSelect(_SCTPARAM);
 
-bool_t GetJumpPoolUpdateKmc(sim_context_t* restrict sim_context);
+bool_t GetJumpPoolUpdateKmc(_SCTPARAM);
 
-bool_t GetJumpPoolUpdateMmc(sim_context_t* restrict sim_context);
+bool_t GetJumpPoolUpdateMmc(_SCTPARAM);
 

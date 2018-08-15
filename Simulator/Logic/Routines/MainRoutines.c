@@ -13,557 +13,558 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 
-error_t LoadCommandLineArgs(sim_context_t* restrict simContext, int32_t argc, char const* const* argv)
+error_t LoadCommandLineArgs(_SCTPARAM, int32_t argc, char const* const* argv)
 {
     return MC_NO_ERROR;
 }
 
-error_t LoadSimulationPlugins(sim_context_t* restrict simContext)
+error_t LoadSimulationPlugins(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t LoadSimulationModel(sim_context_t* restrict simContext)
+error_t LoadSimulationModel(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t LoadSimulationState(sim_context_t* restrict simContext)
+error_t LoadSimulationState(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t ResetContextToDefault(sim_context_t* restrict simContext)
+error_t ResetContextToDefault(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t PrepareDynamicModel(sim_context_t* restrict simContext)
+error_t PrepareDynamicModel(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t PrepareForMainRoutine(sim_context_t* restrict simContext)
+error_t PrepareForMainRoutine(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t StartMainRoutine(sim_context_t* restrict simContext)
+error_t StartMainRoutine(_SCTPARAM)
 {
-    if (FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_STATE_ERROR_FLAG))
+    if (FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_STATE_ERROR_FLAG))
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Simulation error. Simulation routine not started due to set state error flag.");
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Simulation error. Simulation routine not started due to set state error flag.");
     }
 
-    if (FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_KMC_ROUTINE_FLAG))
+    if (FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_KMC_ROUTINE_FLAG))
     {
-        if(FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_PRE_ROUTINE_FLAG))
+        if(FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_PRE_ROUTINE_FLAG))
         {
-            if(StartMainKmcRoutine(simContext) != MC_NO_ERROR)
+            if(StartMainKmcRoutine(SCT) != MC_NO_ERROR)
             {
-                MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. Prerun execution of main KMC routine returned with an error.");
+                MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. Prerun execution of main KMC routine returned with an error.");
             }
-            if(FinishRoutinePrerun(simContext) != MC_NO_ERROR)
+            if(FinishRoutinePrerun(SCT) != MC_NO_ERROR)
             {
-                MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. Finisher for prerun execution of main KMC routine returned with an error.");
+                MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. Finisher for prerun execution of main KMC routine returned with an error.");
             }
         }
-        return StartMainKmcRoutine(simContext);
+        return StartMainKmcRoutine(SCT);
     }
 
-    if (FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_MMC_ROUTINE_FLAG))
+    if (FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_MMC_ROUTINE_FLAG))
     {
-        if(FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_PRE_ROUTINE_FLAG))
+        if(FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_PRE_ROUTINE_FLAG))
         {
-            if(StartMainKmcRoutine(simContext) != MC_NO_ERROR)
+            if(StartMainKmcRoutine(SCT) != MC_NO_ERROR)
             {
-                MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. Prerun execution of main MMC routine returned with an error.");
+                MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. Prerun execution of main MMC routine returned with an error.");
             }
-            if(FinishRoutinePrerun(simContext) != MC_NO_ERROR)
+            if(FinishRoutinePrerun(SCT) != MC_NO_ERROR)
             {
-                MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. Finisher for prerun execution of main MMC routine returned with an error.");
+                MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. Finisher for prerun execution of main MMC routine returned with an error.");
             }
         }
-        return StartMainMmcRoutine(simContext);
+        return StartMainMmcRoutine(SCT);
     }
     MC_DUMP_ERROR_AND_EXIT(MC_SIM_ERROR, "Unexpected simulation error. No routine selection triggered.");
     return -1;
 }
 
-error_t FinishRoutinePrerun(sim_context_t* restrict simContext)
+error_t FinishRoutinePrerun(_SCTPARAM)
 {
-    if(SaveSimulationState(simContext) != MC_NO_ERROR)
+    if(SaveSimulationState(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Simulation error. State save after prerun completion failed.")
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Simulation error. State save after prerun completion failed.")
     }
 
-    if(ResetContextToDefault(simContext) != MC_NO_ERROR)
+    if(ResetContextToDefault(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Simulation error. Context reset after prerun completion failed.");
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Simulation error. Context reset after prerun completion failed.");
     }
 
-    UNSET_FLAG(simContext->SimState.Header.Data->Flags, MC_PRE_ROUTINE_FLAG);
-    return simContext->ErrorCode;
+    UNSET_FLAG(RefStateHeaderData(SCT)->Flags, MC_PRE_ROUTINE_FLAG);
+    return SCT->ErrorCode;
 }
 
-error_t StartMainKmcRoutine(sim_context_t* restrict simContext)
+error_t StartMainKmcRoutine(_SCTPARAM)
 {
-    while(GetKmcAbortCondEval(simContext) == MC_SIM_CONTINUE_FLAG)
+    while(GetKmcAbortCondEval(SCT) == MC_SIM_CONTINUE_FLAG)
     {
-        if(DoNextKmcCycleBlock(simContext) != MC_NO_ERROR)
+        if(DoNextKmcCycleBlock(SCT) != MC_NO_ERROR)
         {
-            MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. The KMC routine block execution returned with an error.")
+            MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. The KMC routine block execution returned with an error.")
         }
-        if(FinishKmcCycleBlock(simContext) != MC_NO_ERROR)
+        if(FinishKmcCycleBlock(SCT) != MC_NO_ERROR)
         {
-            MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. The finisher for the KMC block routine execution returned with an error.")
+            MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. The finisher for the KMC block routine execution returned with an error.")
         }
     }
-    return FinishMainRoutineKmc(simContext);
+    return FinishMainRoutineKmc(SCT);
 }
 
-error_t StartMainMmcRoutine(sim_context_t* restrict simContext)
+error_t StartMainMmcRoutine(_SCTPARAM)
 {
-    while(GetMmcAbortCondEval(simContext) == MC_SIM_CONTINUE_FLAG)
+    while(GetMmcAbortCondEval(SCT) == MC_SIM_CONTINUE_FLAG)
     {
-        if(DoNextMmcCycleBlock(simContext) != MC_NO_ERROR)
+        if(DoNextMmcCycleBlock(SCT) != MC_NO_ERROR)
         {
-            MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. The MMC routine block execution returned with an error.")
+            MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. The MMC routine block execution returned with an error.")
         }
-        if(FinishMmcCycleBlock(simContext) != MC_NO_ERROR)
+        if(FinishMmcCycleBlock(SCT) != MC_NO_ERROR)
         {
-            MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. The finisher for the MMC block routine execution returned with an error.")
+            MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. The finisher for the MMC block routine execution returned with an error.")
         }
     }
-    return FinishMainRoutineMmc(simContext);
+    return FinishMainRoutineMmc(SCT);
 }
 
-static inline void AdvanceBlockCounters(sim_context_t* restrict simContext)
+static inline void AdvanceBlockCounters(_SCTPARAM)
 {
-    simContext->CycleState.MainCnts.CurTargetMcs += simContext->CycleState.MainCnts.McsPerBlock;
+    RefMainCounters(SCT)->CurTargetMcs += RefMainCounters(SCT)->McsPerBlock;
 }
 
-static inline error_t CallOutputPlugin(sim_context_t* restrict simContext)
+static inline error_t CallOutputPlugin(_SCTPARAM)
 {
-    if(simContext->Plugins.OnDataOut != NULL)
+    if(SCT->Plugins.OnDataOut != NULL)
     {
-        simContext->Plugins.OnDataOut(simContext);
-        return simContext->ErrorCode;
+        SCT->Plugins.OnDataOut(SCT);
+        return SCT->ErrorCode;
     }
     return MC_NO_ERROR;
 }
 
-error_t DoNextKmcCycleBlock(sim_context_t* restrict simContext)
+error_t DoNextKmcCycleBlock(_SCTPARAM)
 {
-    while(simContext->CycleState.MainCnts.CurMcs < simContext->CycleState.MainCnts.CurTargetMcs)
+    while(RefMainCounters(SCT)->CurMcs < RefMainCounters(SCT)->CurTargetMcs)
     {
-        for(size_t i = 0; i < simContext->CycleState.MainCnts.MinCyclesPerBlock; i++)
+        for(size_t i = 0; i < RefMainCounters(SCT)->MinCyclesPerBlock; i++)
         {
-            SetKmcJumpSelection(simContext);
-            SetKmcJumpPathProperties(simContext);
+            SetKmcJumpSelection(SCT);
+            SetKmcJumpPathProperties(SCT);
 
-            if(GetKmcJumpRuleEval(simContext))
+            if(GetKmcJumpRuleEval(SCT))
             {
-                SetKmcJumpProperties(simContext);
-                SetKmcJumpEvaluation(simContext);
+                SetKmcJumpProperties(SCT);
+                SetKmcJumpEvaluation(SCT);
             }
             else
             {
-                SetKmcJumpEvalFail(simContext);
+                SetKmcJumpEvalFail(SCT);
             }
         }
     }
-    return simContext->ErrorCode;
+    return SCT->ErrorCode;
 }
 
-static void SharedCycleBlockFinish(sim_context_t* restrict simContext)
+static void SharedCycleBlockFinish(_SCTPARAM)
 {
-    UNSET_FLAG(simContext->SimState.Header.Data->Flags, MC_SIM_FIRST_CYCLE_FLAG);
+    UNSET_FLAG(RefStateHeaderData(SCT)->Flags, MC_SIM_FIRST_CYCLE_FLAG);
 
-    if(SyncSimulationState(simContext) != MC_NO_ERROR)
+    if(SyncSimulationState(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. Synchronization between simulation data and state object retuned with an error.")
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. Synchronization between simulation data and state object retuned with an error.")
     }
 
-    if(SaveSimulationState(simContext) != MC_NO_ERROR)
+    if(SaveSimulationState(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. State save operation after block completion returned with an error.");
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. State save operation after block completion returned with an error.");
     }
     
-    if(CallOutputPlugin(simContext) != MC_NO_ERROR)
+    if(CallOutputPlugin(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. Loaded ouput plugin call retuned with an error.");
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. Loaded ouput plugin call retuned with an error.");
     }
 }
 
-error_t FinishKmcCycleBlock(sim_context_t* restrict simContext)
+error_t FinishKmcCycleBlock(_SCTPARAM)
 {
-    AdvanceBlockCounters(simContext);
-    SharedCycleBlockFinish(simContext);
+    AdvanceBlockCounters(SCT);
+    SharedCycleBlockFinish(SCT);
 
-    return simContext->ErrorCode;
+    return SCT->ErrorCode;
 }
 
-error_t DoNextMmcCycleBlock(sim_context_t* restrict simContext)
+error_t DoNextMmcCycleBlock(_SCTPARAM)
 {
-    while(simContext->CycleState.MainCnts.CurMcs < simContext->CycleState.MainCnts.CurTargetMcs)
+    while(RefMainCounters(SCT)->CurMcs < RefMainCounters(SCT)->CurTargetMcs)
     {
-        for(size_t i = 0; i < simContext->CycleState.MainCnts.MinCyclesPerBlock; i++)
+        for(size_t i = 0; i < RefMainCounters(SCT)->MinCyclesPerBlock; i++)
         {
-            SetMmcJumpSelection(simContext);
-            SetMmcJumpPathProperties(simContext);
+            SetMmcJumpSelection(SCT);
+            SetMmcJumpPathProperties(SCT);
 
-            if(GetMmcJumpRuleEval(simContext))
+            if(GetMmcJumpRuleEval(SCT))
             {
-                SetMmcJumpProperties(simContext);
-                SetMmcJumpEvaluation(simContext);
+                SetMmcJumpProperties(SCT);
+                SetMmcJumpEvaluation(SCT);
             }
             else
             {
-                SetMmcJumpEvalFail(simContext);
+                SetMmcJumpEvalFail(SCT);
             }
         }
     }
-    return simContext->ErrorCode;
+    return SCT->ErrorCode;
 }
 
-error_t FinishMmcCycleBlock(sim_context_t* restrict simContext)
+error_t FinishMmcCycleBlock(_SCTPARAM)
 {
-    AdvanceBlockCounters(simContext);
-    SharedCycleBlockFinish(simContext);
+    AdvanceBlockCounters(SCT);
+    SharedCycleBlockFinish(SCT);
 
-    return simContext->ErrorCode;
+    return SCT->ErrorCode;
 }
 
-static inline bool_t GetTimeoutAbortEval(sim_context_t* restrict simContext)
+static inline bool_t GetTimeoutAbortEval(_SCTPARAM)
 {
     clock_t newClock = clock();
-    simContext->SimState.Meta.Data->TimePerBlock = (newClock - simContext->SimDynModel.RunInfo.LastClock) / CLOCKS_PER_SEC;
-    simContext->SimDynModel.RunInfo.LastClock = newClock;
-    simContext->SimState.Meta.Data->RunTime = newClock / CLOCKS_PER_SEC;
-    int64_t blockEta = simContext->SimState.Meta.Data->TimePerBlock + simContext->SimState.Meta.Data->RunTime;
+    RefStateMetaData(SCT)->TimePerBlock = (newClock - RefModelRunInfo(SCT)->LastClock) / CLOCKS_PER_SEC;
+    RefModelRunInfo(SCT)->LastClock = newClock;
+    RefStateMetaData(SCT)->RunTime = newClock / CLOCKS_PER_SEC;
+    int64_t blockEta = RefStateMetaData(SCT)->TimePerBlock + RefStateMetaData(SCT)->RunTime;
 
-    if(simContext->SimState.Meta.Data->RunTime >= simContext->SimDbModel.JobInfo.TimeLimit)
+    if(RefStateMetaData(SCT)->RunTime >= RefJobInfo(SCT)->TimeLimit)
     {
         return MC_SIM_TIME_ABORT_FLAG;
     }
-    if(blockEta > simContext->SimDbModel.JobInfo.TimeLimit)
+    if(blockEta > RefJobInfo(SCT)->TimeLimit)
     {
         return MC_SIM_TIME_ABORT_FLAG;
     }
     return MC_SIM_CONTINUE_FLAG;
 }
 
-static inline bool_t GetRateAbortEval(sim_context_t* restrict simContext)
+static inline bool_t GetRateAbortEval(_SCTPARAM)
 {
-    simContext->SimState.Meta.Data->SuccessRate = simContext->CycleState.MainCnts.CurMcs / simContext->SimState.Meta.Data->RunTime;
-    simContext->SimState.Meta.Data->CyleRate = simContext->CycleState.MainCnts.CurCycles / simContext->SimState.Meta.Data->RunTime;
+    RefStateMetaData(SCT)->SuccessRate = RefMainCounters(SCT)->CurMcs / RefStateMetaData(SCT)->RunTime;
+    RefStateMetaData(SCT)->CyleRate = RefMainCounters(SCT)->CurCycles / RefStateMetaData(SCT)->RunTime;
 
-    if(simContext->SimState.Meta.Data->CyleRate < simContext->SimDbModel.JobInfo.MinSuccRate)
+    if(RefStateMetaData(SCT)->CyleRate < RefJobInfo(SCT)->MinSuccRate)
     {
         return true;
     }
     return false;
 }
 
-static inline bool_t GetMcsTargetReachedEval(sim_context_t* restrict simContext)
+static inline bool_t GetMcsTargetReachedEval(_SCTPARAM)
 {
-    if(simContext->CycleState.MainCnts.CurMcs >= simContext->CycleState.MainCnts.TotTargetMcs)
+    if(RefMainCounters(SCT)->CurMcs >= RefMainCounters(SCT)->TotTargetMcs)
     {
         return true;
     }
     return false;
 }
 
-static error_t GetGeneralAbortCondEval(sim_context_t* restrict simContext)
+static error_t GetGeneralAbortCondEval(_SCTPARAM)
 {
-    if(FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_SIM_FIRST_CYCLE_FLAG))
+    if(FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_SIM_FIRST_CYCLE_FLAG))
     {
         return MC_SIM_CONTINUE_FLAG;
     }
 
-    if(GetTimeoutAbortEval(simContext))
+    if(GetTimeoutAbortEval(SCT))
     {
-        SET_FLAG(simContext->SimState.Header.Data->Flags, MC_SIM_TIME_ABORT_FLAG);
+        SET_FLAG(RefStateHeaderData(SCT)->Flags, MC_SIM_TIME_ABORT_FLAG);
         return MC_SIM_TIME_ABORT_FLAG;
     }
 
-    if(GetRateAbortEval(simContext))
+    if(GetRateAbortEval(SCT))
     {
-        SET_FLAG(simContext->SimState.Header.Data->Flags, MC_SIM_RATE_ABORT_FLAG);
+        SET_FLAG(RefStateHeaderData(SCT)->Flags, MC_SIM_RATE_ABORT_FLAG);
         return MC_SIM_RATE_ABORT_FLAG;
     }
 
-    if(GetMcsTargetReachedEval(simContext))
+    if(GetMcsTargetReachedEval(SCT))
     {
-        SET_FLAG(simContext->SimState.Header.Data->Flags, MC_SIM_COMPLETED_FLAG);
+        SET_FLAG(RefStateHeaderData(SCT)->Flags, MC_SIM_COMPLETED_FLAG);
         return MC_SIM_COMPLETED_FLAG;
     }
 
     return MC_SIM_CONTINUE_FLAG;
 }
 
-error_t GetKmcAbortCondEval(sim_context_t* restrict simContext)
+error_t GetKmcAbortCondEval(_SCTPARAM)
 {
-    if(GetGeneralAbortCondEval(simContext) != MC_SIM_CONTINUE_FLAG)
+    if(GetGeneralAbortCondEval(SCT) != MC_SIM_CONTINUE_FLAG)
     {
         return MC_SIM_ABORT_FLAG;
     }
     return MC_SIM_CONTINUE_FLAG;
 }
 
-error_t GetMmcAbortCondEval(sim_context_t* restrict simContext)
+error_t GetMmcAbortCondEval(_SCTPARAM)
 {
-    if(GetGeneralAbortCondEval(simContext) != MC_SIM_CONTINUE_FLAG)
+    if(GetGeneralAbortCondEval(SCT) != MC_SIM_CONTINUE_FLAG)
     {
         return MC_SIM_ABORT_FLAG;
     }
     return MC_SIM_CONTINUE_FLAG;
 }
 
-error_t SyncSimulationState(sim_context_t* restrict simContext)
+error_t SyncSimulationState(_SCTPARAM)
 {
     return MC_NO_ERROR;
 }
 
-error_t SaveSimulationState(sim_context_t* restrict simContext)
+error_t SaveSimulationState(_SCTPARAM)
 {
-    if(FLAG_IS_SET(simContext->SimState.Header.Data->Flags, MC_PRE_ROUTINE_FLAG))
+    if(FLAG_IS_SET(RefStateHeaderData(SCT)->Flags, MC_PRE_ROUTINE_FLAG))
     {
-        simContext->ErrorCode = SaveWriteBufferToFile(MC_PRE_STATE_FILE, MC_BIN_WRITE_MODE, &simContext->SimState.Buffer);
+        SCT->ErrorCode = SaveWriteBufferToFile(MC_PRE_STATE_FILE, MC_BIN_WRITE_MODE, RefStateBuffer(SCT));
     }
     else
     {
-        simContext->ErrorCode = SaveWriteBufferToFile(MC_RUN_STATE_FILE, MC_BIN_WRITE_MODE, &simContext->SimState.Buffer);
+        SCT->ErrorCode = SaveWriteBufferToFile(MC_RUN_STATE_FILE, MC_BIN_WRITE_MODE, RefStateBuffer(SCT));
     }
-    return simContext->ErrorCode;
+    return SCT->ErrorCode;
 }
 
-static error_t GeneralSimulationFinish(sim_context_t* restrict simContext)
+static error_t GeneralSimulationFinish(_SCTPARAM)
 {
-    SET_FLAG(simContext->SimState.Header.Data->Flags, MC_SIM_COMPLETED_FLAG);
-    simContext->ErrorCode = SaveSimulationState(simContext);
-    return simContext->ErrorCode;
+    SET_FLAG(RefStateHeaderData(SCT)->Flags, MC_SIM_COMPLETED_FLAG);
+    SCT->ErrorCode = SaveSimulationState(SCT);
+    return SCT->ErrorCode;
 }
 
-error_t FinishMainRoutineKmc(sim_context_t* restrict simContext)
+error_t FinishMainRoutineKmc(_SCTPARAM)
 {
-    if(GeneralSimulationFinish(simContext) != MC_NO_ERROR)
+    if(GeneralSimulationFinish(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. General simulation finisher KMC/MMC returned with an error.")
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. General simulation finisher KMC/MMC returned with an error.")
     }
     return MC_NO_ERROR;
 }
 
-error_t FinishMainRoutineMmc(sim_context_t* restrict simContext)
+error_t FinishMainRoutineMmc(_SCTPARAM)
 {    
-    if(GeneralSimulationFinish(simContext) != MC_NO_ERROR)
+    if(GeneralSimulationFinish(SCT) != MC_NO_ERROR)
     {
-        MC_DUMP_ERROR_AND_EXIT(simContext->ErrorCode, "Fatal error. General simulation finisher KMC/MMC returned with an error.")
+        MC_DUMP_ERROR_AND_EXIT(SCT->ErrorCode, "Fatal error. General simulation finisher KMC/MMC returned with an error.")
     }
     return MC_NO_ERROR;
 }
 
-static inline int32_t GetActJumpId(const sim_context_t* restrict simContext)
+static inline int32_t LookupActJumpId(const _SCTPARAM)
 {
-        return *MDA_GET_3(
-            simContext->SimDbModel.Transition.JumpAssignTable,
-            simContext->CycleState.ActPathEnvs[0]->PosVector.d,
-            simContext->CycleState.ActPathEnvs[0]->ParId,
-            simContext->CycleState.ActRollInfo.RelId);
+        return *MDA_GET_3(*RefJmpAssignTable(SCT), RefPathEnvAt(SCT, 0)->PosVector.d, RefPathEnvAt(SCT, 0)->ParId, RefActRollInfo(SCT)->RelId);
 }
 
-static inline void SetActJumpDirAndCol(sim_context_t* restrict simContext)
+static inline void SetActJumpDirAndCol(_SCTPARAM)
 {
-    simContext->CycleState.ActRollInfo.JmpId = GetActJumpId(simContext);
-    simContext->CycleState.ActJumpDir = &simContext->SimDbModel.Transition.JumpDirs.Start[simContext->CycleState.ActRollInfo.JmpId];
-    simContext->CycleState.ActJumpCol = &simContext->SimDbModel.Transition.JumpCols.Start[simContext->CycleState.ActJumpDir->ColId];
+    RefActRollInfo(SCT)->JmpId = LookupActJumpId(SCT);
+    SCT->CycleState.ActJumpDir = RefJumpDirAt(SCT, RefActRollInfo(SCT)->JmpId);
+    SCT->CycleState.ActJumpCol = RefJumpColAt(SCT, RefActJumpDir(SCT)->ColId);
 }
 
-static inline void SetActPathStartEnv(sim_context_t* restrict simContext)
+static inline void SetActPathStartEnv(_SCTPARAM)
 {
-    simContext->CycleState.ActPathEnvs[0] = &simContext->SimDynModel.EnvLattice.Start[simContext->CycleState.ActRollInfo.EnvId];
-    MARSHAL_AS(byte_t, &simContext->CycleState.ActStateCode)[0] = simContext->CycleState.ActPathEnvs[0]->ParId;
+    RefActPathArray(SCT)[0] = RefLatticeEnvAt(SCT, RefActRollInfo(SCT)->EnvId);
+    SetCodeByteAt(RefActStateCode(SCT), 0, RefPathEnvAt(SCT, 0)->ParId);
 }
 
-static inline void SetActCounterCol(sim_context_t* restrict simContext)
+static inline void SetActCounterCol(_SCTPARAM)
 {
-    simContext->CycleState.ActCntCol = &simContext->SimState.Counters.Start[simContext->CycleState.ActPathEnvs[0]->ParId];
+    SCT->CycleState.ActCntCol = RefStateCountersAt(SCT, RefPathEnvAt(SCT, 0)->ParId);
 }
 
-void SetKmcJumpSelection(sim_context_t* restrict simContext)
+void SetKmcJumpSelection(_SCTPARAM)
 {
-    RollNextKmcSelect(simContext);
-    simContext->CycleState.ActStateCode = 0ULL;
+    RollNextKmcSelect(SCT);
+    SCT->CycleState.ActStateCode = 0ULL;
 
-    SetActCounterCol(simContext);
-    SetActPathStartEnv(simContext);
-    SetActJumpDirAndCol(simContext);
+    SetActCounterCol(SCT);
+    SetActPathStartEnv(SCT);
+    SetActJumpDirAndCol(SCT);
 }
 
-void SetKmcJumpPathProperties(sim_context_t* restrict simContext)
+void SetKmcJumpPathProperties(_SCTPARAM)
 {
-    vector4_t actVector = simContext->CycleState.ActPathEnvs[0]->PosVector;
-    size_t index = 0;
+    vector4_t actVector = RefPathEnvAt(SCT, 0)->PosVector;
+    byte_t index = 0;
 
-    FOR_EACH(vector4_t, relVector, simContext->CycleState.ActJumpDir->JumpSeq)
+    FOR_EACH(vector4_t, relVector, RefActJumpDir(SCT)->JumpSeq)
     {
-        AddToLhsAndTrimVector4(&actVector, relVector, &simContext->SimDbModel.LattInfo.SizeVec);
-        simContext->CycleState.ActPathEnvs[index] = GetEnvByVector4(&actVector, &simContext->SimDynModel.EnvLattice);
-        MARSHAL_AS(byte_t, &simContext->CycleState.ActStateCode)[index] = simContext->CycleState.ActPathEnvs[index]->ParId;
+        AddToLhsAndTrimVector4(&actVector, relVector, RefLatticeSize(SCT));
+        RefActPathArray(SCT)[index] = GetEnvByVector4(&actVector, RefEnvLattice(SCT));
+        SetCodeByteAt(RefActStateCode(SCT), index, RefPathEnvAt(SCT, index)->ParId);
     }
 }
 
-static inline void FindAndSetActJumpRuleLinear(sim_context_t* restrict simContext)
+static inline occode_t GetLastPossibleJumpCode(const _SCTPARAM)
 {
-    if(simContext->CycleState.ActJumpCol->JumpRules.End[-1].StCode0 < simContext->CycleState.ActStateCode)
+    return RefActJumpCol(SCT)->JumpRules.End[-1].StCode0;
+}
+
+static inline void FindAndSetActJumpRuleLinear(_SCTPARAM)
+{
+    if(GetLastPossibleJumpCode(SCT) < GetActStateCode(SCT))
     {
-        simContext->CycleState.ActJumpRule = NULL;
+        SCT->CycleState.ActJumpRule = NULL;
     }
     else
     {
-        simContext->CycleState.ActJumpRule = simContext->CycleState.ActJumpCol->JumpRules.Start;
-        while(simContext->CycleState.ActJumpRule->StCode0 < simContext->CycleState.ActStateCode)
+        SCT->CycleState.ActJumpRule = RefActJumpCol(SCT)->JumpRules.Start;
+        while(RefActJumpRule(SCT)->StCode0 < GetActStateCode(SCT))
         {
-            simContext->CycleState.ActJumpRule++;
+            SCT->CycleState.ActJumpRule++;
         }
-        if(simContext->CycleState.ActJumpRule->StCode0 != simContext->CycleState.ActStateCode)
+        if(RefActJumpRule(SCT)->StCode0 != GetActStateCode(SCT))
         {
-            simContext->CycleState.ActJumpRule = NULL;
+            SCT->CycleState.ActJumpRule = NULL;
         }
     }
 }
 
-static inline void FindAndSetActJumpRuleBinary(sim_context_t* restrict simContext)
+static inline void FindAndSetActJumpRuleBinary(_SCTPARAM)
 {
     
 }
 
-bool_t GetKmcJumpRuleEval(sim_context_t* restrict simContext)
+bool_t GetKmcJumpRuleEval(_SCTPARAM)
 {
-    FindAndSetActJumpRuleLinear(simContext);
-    return simContext->CycleState.ActJumpRule == 0;
+    FindAndSetActJumpRuleLinear(SCT);
+    return RefActJumpRule(SCT) == NULL;
 }
 
-void SetKmcJumpEvalFail(sim_context_t* restrict simContext)
+void SetKmcJumpEvalFail(_SCTPARAM)
 {
-    simContext->CycleState.ActCntCol->BlockCnt++;
+    RefActCounters(SCT)->BlockCnt++;
 }
 
-void SetKmcJumpProperties(sim_context_t* restrict simContext)
+void SetKmcJumpProperties(_SCTPARAM)
 {
-    SetState0And1EnergiesKmc(simContext);
-    CreateLocalJumpDeltaKmc(simContext);
-    SetState2EnergyKmc(simContext);
+    SetState0And1EnergiesKmc(SCT);
+    CreateLocalJumpDeltaKmc(SCT);
+    SetState2EnergyKmc(SCT);
 }
 
-void SetKmcJumpProbsDefault(sim_context_t* restrict simContext)
+void SetKmcJumpProbsDefault(_SCTPARAM)
 {
-    simContext->CycleState.ActEngInfo.ConfDel = 0.5 * (simContext->CycleState.ActEngInfo.Eng2 - simContext->CycleState.ActEngInfo.Eng0);
-    simContext->CycleState.ActEngInfo.Prob0to2 = exp(simContext->CycleState.ActEngInfo.Eng1 + simContext->CycleState.ActEngInfo.ConfDel);
-    simContext->CycleState.ActEngInfo.Prob2to0 = (simContext->CycleState.ActEngInfo.ConfDel > simContext->CycleState.ActEngInfo.Eng1) ? INFINITY : 0.0;
+    RefActEngInfo(SCT)->ConfDel = 0.5 * (RefActEngInfo(SCT)->Eng2 - RefActEngInfo(SCT)->Eng0);
+    RefActEngInfo(SCT)->Prob0to2 = exp(RefActEngInfo(SCT)->Eng1 + RefActEngInfo(SCT)->ConfDel);
+    RefActEngInfo(SCT)->Prob2to0 = (RefActEngInfo(SCT)->ConfDel > RefActEngInfo(SCT)->Eng1) ? INFINITY : 0.0;
 }
 
-void SetKmcJumpEvaluation(sim_context_t* restrict simContext)
+void SetKmcJumpEvaluation(_SCTPARAM)
 {
-    simContext->Plugins.OnSetJumpProbs(simContext);
+    SCT->Plugins.OnSetJumpProbs(SCT);
 
-    if(simContext->CycleState.ActEngInfo.Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
+    if(RefActEngInfo(SCT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
-        simContext->CycleState.ActCntCol->ToUnstCnt++;
-        RollbackLocalJumpDeltaKmc(simContext);
+        RefActCounters(SCT)->ToUnstCnt++;
+        RollbackLocalJumpDeltaKmc(SCT);
         return;
     }
-    if(simContext->CycleState.ActEngInfo.Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
+    if(RefActEngInfo(SCT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
-        simContext->CycleState.ActCntCol->OnUnstCnt++;
-        RollbackLocalJumpDeltaKmc(simContext);
+        RefActCounters(SCT)->OnUnstCnt++;
+        RollbackLocalJumpDeltaKmc(SCT);
         return;
     }   
-    if(Pcg32NextDouble(&simContext->RnGen) < simContext->CycleState.ActEngInfo.Prob0to2)
+    if(Pcg32NextDouble(&SCT->RnGen) < RefActEngInfo(SCT)->Prob0to2)
     {
-        simContext->CycleState.ActCntCol->StepCnt++;
-        DistributeStateDeltaKmc(simContext);
+        RefActCounters(SCT)->StepCnt++;
+        CreateFullStateDeltaKmc(SCT);
         return;
     }
     else
     {
-        simContext->CycleState.ActCntCol->RejectCnt++;
-        RollbackLocalJumpDeltaKmc(simContext);
+        RefActCounters(SCT)->RejectCnt++;
+        RollbackLocalJumpDeltaKmc(SCT);
     }
 }
 
 
-void SetMmcJumpSelection(sim_context_t* restrict simContext)
+void SetMmcJumpSelection(_SCTPARAM)
 {
-    RollNextMmcSelect(simContext);
+    RollNextMmcSelect(SCT);
 
-    SetActCounterCol(simContext);
-    SetActPathStartEnv(simContext);
-    SetActJumpDirAndCol(simContext);
+    SetActCounterCol(SCT);
+    SetActPathStartEnv(SCT);
+    SetActJumpDirAndCol(SCT);
 }
 
-void SetMmcJumpPathProperties(sim_context_t* restrict simContext)
+void SetMmcJumpPathProperties(_SCTPARAM)
 {
-    simContext->CycleState.ActPathEnvs[2] = &simContext->SimDynModel.EnvLattice.Start[simContext->CycleState.ActRollInfo.OffId];
-    simContext->CycleState.ActPathEnvs[1] = simContext->SimDynModel.EnvLattice.Start;
+    RefActPathArray(SCT)[2] = RefLatticeEnvAt(SCT, RefActRollInfo(SCT)->OffId);
+    RefActPathArray(SCT)[1] = RefLatticeEnvAt(SCT, 0);
 
-    simContext->CycleState.ActPathEnvs[1] += simContext->SimDynModel.EnvLattice.Header->Blocks[0] * simContext->CycleState.ActPathEnvs[2]->PosVector.a;
-    simContext->CycleState.ActPathEnvs[1] += simContext->SimDynModel.EnvLattice.Header->Blocks[1] * simContext->CycleState.ActPathEnvs[2]->PosVector.b;
-    simContext->CycleState.ActPathEnvs[1] += simContext->SimDynModel.EnvLattice.Header->Blocks[2] * simContext->CycleState.ActPathEnvs[2]->PosVector.c;
-    simContext->CycleState.ActPathEnvs[1] += simContext->CycleState.ActPathEnvs[0]->PosVector.d;
+    RefActPathArray(SCT)[1] += RefEnvLattice(SCT)->Header->Blocks[0] * RefPathEnvAt(SCT, 2)->PosVector.a;
+    RefActPathArray(SCT)[1] += RefEnvLattice(SCT)->Header->Blocks[1] * RefPathEnvAt(SCT, 2)->PosVector.b;
+    RefActPathArray(SCT)[1] += RefEnvLattice(SCT)->Header->Blocks[2] * RefPathEnvAt(SCT, 2)->PosVector.c;
+    RefActPathArray(SCT)[1] += RefPathEnvAt(SCT, 0)->PosVector.d;
 
-    MARSHAL_AS(byte_t, &simContext->CycleState.ActStateCode)[1] = simContext->CycleState.ActPathEnvs[1]->ParId;
+    SetCodeByteAt(RefActStateCode(SCT), 1, RefPathEnvAt(SCT, 1)->ParId);
 }
 
-void SetMmcJumpEvalFail(sim_context_t* restrict simContext)
+void SetMmcJumpEvalFail(_SCTPARAM)
 {
-    simContext->CycleState.ActCntCol->BlockCnt++;
+    RefActCounters(SCT)->BlockCnt++;
 }
 
-bool_t GetMmcJumpRuleEval(sim_context_t* restrict simContext)
+bool_t GetMmcJumpRuleEval(_SCTPARAM)
 {
-    FindAndSetActJumpRuleLinear(simContext);
-    return simContext->CycleState.ActJumpRule == 0;
+    FindAndSetActJumpRuleLinear(SCT);
+    return SCT->CycleState.ActJumpRule == 0;
 }
 
-void SetMmcJumpProperties(sim_context_t* restrict simContext)
+void SetMmcJumpProperties(_SCTPARAM)
 {
-    SetState0And1EnergiesMmc(simContext);
-    CreateLocalJumpDeltaMmc(simContext);
-    SetState2EnergyMmc(simContext);
+    SetState0And1EnergiesMmc(SCT);
+    CreateLocalJumpDeltaMmc(SCT);
+    SetState2EnergyMmc(SCT);
 }
 
-void SetMmcJumpProbsDefault(sim_context_t* restrict simContext)
+void SetMmcJumpProbsDefault(_SCTPARAM)
 {
-    simContext->CycleState.ActEngInfo.Prob0to2 = exp(simContext->CycleState.ActEngInfo.Eng2 - simContext->CycleState.ActEngInfo.Eng0);
+    RefActEngInfo(SCT)->Prob0to2 = exp(RefActEngInfo(SCT)->Eng2 - RefActEngInfo(SCT)->Eng0);
 }
 
-void SetMmcJumpEvaluation(sim_context_t* restrict simContext)
+void SetMmcJumpEvaluation(_SCTPARAM)
 {
-    simContext->Plugins.OnSetJumpProbs(simContext);
+    SCT->Plugins.OnSetJumpProbs(SCT);
 
-    if(simContext->CycleState.ActEngInfo.Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
+    if(RefActEngInfo(SCT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
-        simContext->CycleState.ActCntCol->ToUnstCnt++;
-        RollbackLocalJumpDeltaMmc(simContext);
+        RefActCounters(SCT)->ToUnstCnt++;
+        RollbackLocalJumpDeltaMmc(SCT);
         return;
     }
-    if(simContext->CycleState.ActEngInfo.Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
+    if(RefActEngInfo(SCT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
-        simContext->CycleState.ActCntCol->OnUnstCnt++;
-        RollbackLocalJumpDeltaMmc(simContext);
+        RefActCounters(SCT)->OnUnstCnt++;
+        RollbackLocalJumpDeltaMmc(SCT);
         return;
     }   
-    if(Pcg32NextDouble(&simContext->RnGen) < simContext->CycleState.ActEngInfo.Prob0to2)
+    if(Pcg32NextDouble(&SCT->RnGen) < RefActEngInfo(SCT)->Prob0to2)
     {
-        simContext->CycleState.ActCntCol->StepCnt++;
-        DistributeStateDeltaMmc(simContext);
+        RefActCounters(SCT)->StepCnt++;
+        CreateFullStateDeltaMmc(SCT);
         return;
     }
     else
     {
-        simContext->CycleState.ActCntCol->RejectCnt++;
-        RollbackLocalJumpDeltaMmc(simContext);
+        RefActCounters(SCT)->RejectCnt++;
+        RollbackLocalJumpDeltaMmc(SCT);
     }
 }
