@@ -14,17 +14,17 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-#define MC_NO_POOL 0
+#define MC_NOPOOL 0
 
-error_t ConstructJumpPool(_SCTPARAM);
+error_t ConstructJumpPool(__SCONTEXT_PAR);
 
-error_t PrepareJumpPool(_SCTPARAM);
+error_t PrepareJumpPool(__SCONTEXT_PAR);
 
-void RollNextKmcSelect(_SCTPARAM);
+void RollNextKmcSelect(__SCONTEXT_PAR);
 
-void RollNextMmcSelect(_SCTPARAM);
+void RollNextMmcSelect(__SCONTEXT_PAR);
 
-bool_t GetJumpPoolUpdateKmc(_SCTPARAM);
+bool_t GetJumpPoolUpdateKmc(__SCONTEXT_PAR);
 
-bool_t GetJumpPoolUpdateMmc(_SCTPARAM);
+bool_t GetJumpPoolUpdateMmc(__SCONTEXT_PAR);
 

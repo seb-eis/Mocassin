@@ -13,7 +13,7 @@
 
 void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg)
 {
-    FILE* fileStream = fopen(MC_STDERR_FILE_PATH, "w");
+    FILE* fileStream = fopen(STDERR_PATH, "w");
     fprintf(fileStream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s", errCode, errFile, errLine, errMsg);
     fclose(fileStream);
     exit(errCode);
@@ -21,7 +21,7 @@ void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const ch
 
 void OnErrorExitWithMemDump(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
-    FILE* fileStream = fopen(MC_STDERR_FILE_PATH, "w");
+    FILE* fileStream = fopen(STDERR_PATH, "w");
     fprintf(fileStream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Info: %s\n Buffer:\n\n", errCode, errFile, errLine, errMsg);
 
     buffer_t buffer = {memStart, memEnd};

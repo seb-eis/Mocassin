@@ -11,14 +11,14 @@
 #include "Simulator/Logic/Objects/JumpSelection.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 
-error_t ConstructJumpPool(_SCTPARAM)
+error_t ConstructJumpPool(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t PrepareJumpPool(_SCTPARAM)
+error_t PrepareJumpPool(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
 static inline void AddEnvIdToDirPool(dir_pool_t* restrict pool, const int32_t entry)
@@ -31,37 +31,37 @@ static inline int32_t PopBackDirEnvPool(dir_pool_t* restrict pool)
     return *LIST_POP_BACK(pool->EnvPool);
 }
 
-static inline void RollPosAndDirFromPool(_SCTPARAM)
+static inline void RollPosAndDirFromPool(__SCONTEXT_PAR)
 {
-    int32_t rnv = GetNextCeiledRnd(SCT, SCT->JumpPool.TotJumpCount);
-    FOR_EACH(dir_pool_t, dirPool, SCT->JumpPool.DirPools)
+    int32_t rnv = GetNextCeiledRnd(SCONTEXT, SCONTEXT->JumpPool.TotJumpCount);
+    FOR_EACH(dir_pool_t, dirPool, SCONTEXT->JumpPool.DirPools)
     {
         if(rnv >= dirPool->JumpCount)
         {
             rnv -= dirPool->JumpCount;
             continue;
         }
-        RefActRollInfo(SCT)->EnvId = GetEnvPoolEntry(dirPool, rnv);
-        RefActRollInfo(SCT)->RelId = rnv % dirPool->DirCount;
+        RefActRollInfo(SCONTEXT)->EnvId = GetEnvPoolEntry(dirPool, rnv);
+        RefActRollInfo(SCONTEXT)->RelId = rnv % dirPool->DirCount;
         return;
     }
-    SCT->ErrorCode = MC_SIM_ERROR;
+    SIMERROR = ERR_UNKNOWN;
 }
 
-static inline void RollMmcOffsetEnvId(_SCTPARAM)
+static inline void RollMmcOffsetEnvId(__SCONTEXT_PAR)
 {
-    RefActRollInfo(SCT)->OffId = GetNextCeiledRnd(SCT, RefEnvLattice(SCT)->Header->Size);
+    RefActRollInfo(SCONTEXT)->OffId = GetNextCeiledRnd(SCONTEXT, RefEnvLattice(SCONTEXT)->Header->Size);
 }
 
-void RollNextKmcSelect(_SCTPARAM)
+void RollNextKmcSelect(__SCONTEXT_PAR)
 {
-    RollPosAndDirFromPool(SCT);
+    RollPosAndDirFromPool(SCONTEXT);
 }
 
-void RollNextMmcSelect(_SCTPARAM)
+void RollNextMmcSelect(__SCONTEXT_PAR)
 {
-    RollPosAndDirFromPool(SCT);
-    RollMmcOffsetEnvId(SCT);
+    RollPosAndDirFromPool(SCONTEXT);
+    RollMmcOffsetEnvId(SCONTEXT);
 }
 
 static inline void CorrectEnvPoolIds(env_state_t* restrict env, const dir_pool_t* restrict newPool, const int32_t newId)
@@ -98,20 +98,20 @@ static inline bool_t GetEnvPoolEntryUpdate(jump_pool_t* restrict jmpPool, const 
     return false;
 }
 
-bool_t GetJumpPoolUpdateKmc(_SCTPARAM)
+bool_t GetJumpPoolUpdateKmc(__SCONTEXT_PAR)
 {
     bool_t jmpCntChange = false;
-    for(int32_t i = 0; i < RefActJumpDir(SCT)->JumpLength; i++)
+    for(int32_t i = 0; i < RefActJumpDir(SCONTEXT)->JumpLength; i++)
     {
-        jmpCntChange |= GetEnvPoolEntryUpdate(&SCT->JumpPool, RefJmpDirCountTable(SCT), RefPathEnvAt(SCT, i));
+        jmpCntChange |= GetEnvPoolEntryUpdate(&SCONTEXT->JumpPool, RefJmpDirCountTable(SCONTEXT), JUMPPATH[i]);
     }
     return jmpCntChange;
 }
 
-bool_t GetJumpPoolUpdateMmc(_SCTPARAM)
+bool_t GetJumpPoolUpdateMmc(__SCONTEXT_PAR)
 {
     bool_t jmpCntChange = false;
-    jmpCntChange |= GetEnvPoolEntryUpdate(&SCT->JumpPool, RefJmpDirCountTable(SCT), RefPathEnvAt(SCT, 0));
-    jmpCntChange |= GetEnvPoolEntryUpdate(&SCT->JumpPool, RefJmpDirCountTable(SCT), RefPathEnvAt(SCT, 1));
+    jmpCntChange |= GetEnvPoolEntryUpdate(&SCONTEXT->JumpPool, RefJmpDirCountTable(SCONTEXT), JUMPPATH[0]);
+    jmpCntChange |= GetEnvPoolEntryUpdate(&SCONTEXT->JumpPool, RefJmpDirCountTable(SCONTEXT), JUMPPATH[1]);
     return jmpCntChange;
 }

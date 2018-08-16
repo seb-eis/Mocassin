@@ -164,9 +164,9 @@ static inline error_t AllocateBufferChecked(const size_t arraySize, const size_t
     *outBuffer = AllocateBufferUnchecked(arraySize, itemSize);
     if (outBuffer->Start == NULL)
     {
-        return MC_MEM_ALLOCATION_ERROR;
+        return ERR_MEMALLOCATION;
     }
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
 // Allocate a new buffer that holds the specfified number of 4 byte memory blocks. Returns a byte array access struct to the buffer

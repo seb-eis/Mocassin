@@ -21,43 +21,43 @@ typedef int32_t error_t;
 typedef int64_t cerror_t;
 
 // Defines the path to the debug stderr dump folder
-#define MC_STDERR_FILE_PATH "./Debug/stderr.log"
+#define STDERR_PATH "./Debug/stderr.log"
 
 // Defines the error code for no error
-#define MC_NO_ERROR 0
+#define ERR_OK 0
 
 // Defines the error code for errors during stream usage
-#define MC_STREAM_ERROR -1
+#define ERR_STREAM -1
 
 // Defines the error code for errors during memory block dumping due to incompatible dump buffer length
-#define MC_BLOCK_DUMP_ERROR -2
+#define ERR_BLOCKDUMP -2
 
 // Defines the error code for errors during array access type casting where accessing thorugh the new type would cause a buffer overflow
-#define MC_BUFFER_OVERFLOW_CAST -3
+#define ERR_BUFFERCAST -3
 
 // Defines the error code for buffer overflows
-#define MC_BUFFER_OVERFLOW -4
+#define ERR_BUFFEROVERFLOW -4
 
 // Defines the error code for file errors
-#define MC_FILE_ERROR -5
+#define ERR_FILE -5
 
 // Defines the error codes for cases where a wrong file mode was passed to a function
-#define MC_FILE_MODE_ERROR -6
+#define ERR_FILEMODE -6
 
 // Defines the error code for cases where the database access caused an unspecified error
-#define MC_DB_ERROR -7
+#define ERR_DATABASE -7
 
 // Defines the error code for cases where simulation routines cause an unspecififed error
-#define MC_SIM_ERROR -8
+#define ERR_UNKNOWN -8
 
 // Defines the error code for cases where memory allocation fails
-#define MC_MEM_ALLOCATION_ERROR -9
+#define ERR_MEMALLOCATION -9
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
-#define MC_DUMP_ERROR_AND_EXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
+#define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
-#define MC_DUMP_ERROR_MEMORY_AND_EXIT(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
+#define MC_ERROREXIT_MEMDUMP(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
 void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg);

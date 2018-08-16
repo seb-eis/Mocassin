@@ -81,7 +81,7 @@ error_t AllocateMdaChecked(const int32_t rank, const size_t itemSize, const int3
     *outBlob = AllocateMdaUnchecked(rank, itemSize, dimensions);
     if (outBlob->Header == NULL)
     {
-        return MC_MEM_ALLOCATION_ERROR;
+        return ERR_MEMALLOCATION;
     }
-    return MC_NO_ERROR;
+    return ERR_OK;
 }

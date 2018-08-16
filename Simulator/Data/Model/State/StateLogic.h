@@ -21,16 +21,16 @@
 #define MC_RUN_ACTIVE_TAG "[STATUS][__RUNNING]"
 #define MC_BIN_WRITE_MODE "wb"
 
-error_t ConstructSimulationState(sim_context_t* restrict simContext);
+error_t ConstructSimulationState(__SCONTEXT_PAR);
 
-error_t PrepareSimulationState(sim_context_t* restrict simContext);
+error_t PrepareSimulationState(__SCONTEXT_PAR);
 
-error_t WriteSimulationStateToFile(const sim_context_t* restrict simContext);
+error_t WriteSimulationStateToFile(const __SCONTEXT_PAR);
 
-error_t LoadSimulationStateFromFile(sim_context_t* restrict simContext);
+error_t LoadSimulationStateFromFile(__SCONTEXT_PAR);
 
-error_t GetSimulationStateEval(const sim_context_t* restrict simContext);
+error_t GetSimulationStateEval(const __SCONTEXT_PAR);
 
-error_t DumpStateStatsToStream(sim_context_t* restrict simContext, file_t* restrict stream);
+error_t DumpStateStatsToStream(__SCONTEXT_PAR, file_t* restrict stream);
 
-error_t DumpStateStatsToFile(sim_context_t* restrict simContext, const char* restrict filePath);
+error_t DumpStateStatsToFile(__SCONTEXT_PAR, const char* restrict filePath);

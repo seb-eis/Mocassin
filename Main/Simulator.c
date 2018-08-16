@@ -12,10 +12,10 @@
 
 int main(int argc, char const * const *argv)
 {   
-    sim_context_t SCT;
+    sim_context_t* SCONTEXT = malloc(sizeof(sim_context_t));
     for(byte_t i = 0; i < 8; i++)
     {
-        RefActPathArray(&SCT)[i] = NULL;
+        JUMPPATH[i] = NULL;
     }
     return (0);
 }

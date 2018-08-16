@@ -15,12 +15,10 @@
 #include "Simulator/Data/Model/DbModel/DbModel.h"
 #include "Simulator/Data/Model/State/StateModel.h"
 
-#ifndef SCT
-    #define SCT simContext
-#endif
-#ifndef _SCTPARAM
-    #define _SCTPARAM sim_context_t* restrict SCT
-#endif
+#define SCONTEXT        simContext
+#define JUMPPATH        SCONTEXT->CycleState.ActPathEnvs
+#define SIMERROR        SCONTEXT->ErrorCode
+#define __SCONTEXT_PAR  sim_context_t* restrict SCONTEXT
 
 typedef struct { byte_t CluId, RelId; } clu_link_t;
 
@@ -30,7 +28,7 @@ typedef struct { int32_t EnvId, EnvPosId; clu_links_t CluLinks; } env_link_t;
 
 typedef struct { int32_t Count; env_link_t* Start, * End; } env_links_t;
 
-typedef struct { int32_t CodeId; occode_t OccCode; } clu_state_t;
+typedef struct { int32_t CodeId, CodeIdBackup; occode_t OccCode, OccCodeBackup; } clu_state_t;
 
 typedef struct { byte_t Count; clu_state_t* Start, * End; } clu_states_t;
 
@@ -39,7 +37,7 @@ typedef struct { byte_t Count; double* Start, * End; } eng_states_t;
 typedef struct
 {
     bool_t          IsMobile, IsStable;
-    byte_t          ParId;
+    byte_t          ParId, PathId;
     int32_t         EnvId, PoolId, PoolPosId;
     vector4_t       PosVector;
     eng_states_t    EnergyStates;
@@ -50,15 +48,13 @@ typedef struct
 
 DEFINE_MD_ARRAY(env_lattice_t, env_state_t, 4);
 
-DEFINE_MD_ARRAY(clu_buffer_t, clu_state_t, 2);
-
 typedef struct { int32_t EnvId, JmpId, RelId, OffId; } roll_info_t;
 
 typedef struct { double Eng0, Eng1, Eng2, ConfDel, Prob0to2, Prob2to0; } eng_info_t;
 
 typedef struct { int64_t CurCycles, CurMcs, MinCyclesPerBlock, McsPerBlock, CurTargetMcs, TotTargetMcs; } cycle_cnt_t;
 
-typedef struct { double EngBuffer[8]; clu_buffer_t CluBuffer; } env_backup_t;
+typedef struct { double PathEnergies[8]; } env_backup_t;
 
 typedef struct
 {
@@ -75,6 +71,7 @@ typedef struct
     clu_state_t*    ActWorkClu;
     pair_table_t*   ActPairTable;
     clu_table_t*    ActCluTable;
+    env_backup_t    ActEnvBackup;
 } cycle_state_t;
 
 typedef struct { int32_t * Start, * End, * CurEnd; } env_pool_t;
@@ -99,7 +96,6 @@ typedef struct
     phys_val_t      PhysFactors;
     flp_buffer_t    EngBuffer;
     run_info_t      RunInfo;
-    env_backup_t    EnvBackup;
     env_lattice_t   EnvLattice;
 } sim_model_t;
 

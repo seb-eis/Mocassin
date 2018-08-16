@@ -57,7 +57,7 @@ typedef struct { byte_t Count; int32_t * Start, * End; } upt_seq_t;
 
 typedef struct { byte_t Count; move_t * Start, * End; } move_seq_t;
 
-typedef struct { int32_t ObjId, PosId, ColId, JumpLength; double FieldProj; jump_seq_t JumpSeq; upt_seq_t JumpUptSeq; move_seq_t LocMoveSeq, GloMoveSeq; } jump_dir_t;
+typedef struct { int32_t ObjId, PosId, ColId; byte_t JumpLength; double FieldProj; jump_seq_t JumpSeq; upt_seq_t JumpUptSeq; move_seq_t LocMoveSeq, GloMoveSeq; } jump_dir_t;
 
 typedef struct { int32_t Count; jump_dir_t* Start, * End; } jump_dirs_t;
 

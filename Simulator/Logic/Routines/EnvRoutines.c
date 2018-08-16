@@ -11,39 +11,48 @@
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 
-error_t ConstructEnvLattice(_SCTPARAM)
+error_t ConstructEnvLattice(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t PrepareEnvLattice(_SCTPARAM)
+error_t PrepareEnvLattice(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t GetEnvReadyStatusEval(_SCTPARAM)
+error_t GetEnvReadyStatusEval(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-static inline void SetActWorkEnv(_SCTPARAM, const env_link_t* restrict envLink)
+static inline void SetActWorkEnv(__SCONTEXT_PAR, const env_link_t* restrict envLink)
 {
-    SCT->CycleState.ActWorkEnv = RefLatticeEnvAt(SCT, envLink->EnvId);
+    SCONTEXT->CycleState.ActWorkEnv = RefLatticeEnvAt(SCONTEXT, envLink->EnvId);
 }
 
-static inline void SetActWorkPairTable(_SCTPARAM, const env_state_t* restrict env, const env_link_t* restrict envLink)
+static inline void SetActWorkClu(__SCONTEXT_PAR, const env_state_t* restrict env, const byte_t cluId)
 {
-    SCT->CycleState.ActPairTable = RefPairTableAt(SCT, RefEnvPairDefAt(env, envLink->EnvPosId)->TabId);
+    SCONTEXT->CycleState.ActWorkClu = RefCluStateAt(env, cluId);
 }
 
-static inline void SetActWorkCluTable(_SCTPARAM, const env_state_t* restrict env, const clu_link_t* restrict cluLink)
+static inline void SetActWorkPairTable(__SCONTEXT_PAR, const env_state_t* restrict env, const env_link_t* restrict envLink)
 {
-    SCT->CycleState.ActCluTable = RefCluTableAt(SCT, RefEnvCluDefAt(env, cluLink->CluId)->TabId);
+    SCONTEXT->CycleState.ActPairTable = RefPairTableAt(SCONTEXT, RefEnvPairDefAt(env, envLink->EnvPosId)->TabId);
 }
 
-static inline int32_t FindCluTableCodeId(const clu_table_t* restrict table, const occode_t code)
+static inline void SetActWorkCluTable(__SCONTEXT_PAR, const env_state_t* restrict env, const clu_link_t* restrict cluLink)
 {
-    // Placeholder. Check code pool size and use binary/linear search depending on the pool size
+    SCONTEXT->CycleState.ActCluTable = RefCluTableAt(SCONTEXT, RefEnvCluDefAt(env, cluLink->CluId)->TabId);
+}
+
+static inline clu_state_t GetCluStateCopy(const env_state_t* restrict env, const int32_t cluId)
+{
+    return env->ClusterStates.Start[cluId];
+}
+
+static inline int32_t LinearLookupCluCodeId(const clu_table_t* restrict table, const occode_t code)
+{
     int32_t index = 0;
     for(occode_t* curCode = table->OccCodes.Start; *curCode != code; curCode++)
     {
@@ -52,110 +61,182 @@ static inline int32_t FindCluTableCodeId(const clu_table_t* restrict table, cons
     return index;
 }
 
+static inline int32_t BinaryLookupCluCodeId(const clu_table_t* restrict table, const occode_t code)
+{
+    // Placeholder, implement on optimization
+    return -1;
+}
+
+static inline int32_t LookupCluTableCodeId(const clu_table_t* restrict table, const occode_t code)
+{
+    return LinearLookupCluCodeId(table, code);
+}
+
 static inline double GetPairDelta(const pair_table_t* restrict table, const byte_t mainId, const byte_t oldId, const byte_t newId)
 {
     return GetPairTableEntry(table, mainId, oldId) - GetPairTableEntry(table, mainId, newId);
 }
 
-static inline double MakeCluDelta(const clu_table_t* restrict table, const clu_link_t* restrict cluLink, clu_state_t* restrict clu, const byte_t mainId, const byte_t newId)
+static inline double GetCluDelta(const clu_table_t* restrict table, const clu_state_t* restrict clu, const byte_t parId)
 {
-    double delta = (-1.0) * GetCluTableEntry(table, mainId, clu->CodeId);
+    return GetCluTableEntry(table, parId, clu->CodeId) - GetCluTableEntry(table, parId, clu->CodeIdBackup);
+}
 
+static inline void UpdateCluState(const clu_table_t* restrict table, const clu_link_t* restrict cluLink, clu_state_t* restrict clu, const byte_t newId)
+{
     SetCodeByteAt(&clu->OccCode, cluLink->RelId, newId);
-    clu->CodeId = FindCluTableCodeId(table, clu->OccCode);
-
-    delta += GetCluTableEntry(table, mainId, clu->CodeId);
-    return delta;
+    clu->CodeId = LookupCluTableCodeId(table, clu->OccCode);
 }
 
-static inline void InvokeEnvLinkCluChanges(_SCTPARAM, const clu_link_t* restrict cluLink, const byte_t uptId, const byte_t newId)
+static inline void SetCluStateBackup(clu_state_t* restrict clu)
 {
-    *RefActStateEngAt(SCT, uptId) = MakeCluDelta(RefActCluTable(SCT), cluLink, RefActWorkClu(SCT), uptId, newId);
+    clu->CodeIdBackup = clu->CodeId;
+    clu->OccCodeBackup = clu->OccCode;
 }
 
-static inline void InvokeEnvLinkPairChange(_SCTPARAM, const env_link_t* restrict envLink, const byte_t uptId, const byte_t oldId, const byte_t newId)
+static inline void LoadCluStateBackup(clu_state_t* restrict clu)
 {
-    *RefActStateEngAt(SCT, uptId) += GetPairDelta(RefActPairTable(SCT), uptId, oldId, newId);
+    clu->CodeId = clu->CodeIdBackup;
+    clu->OccCode = clu->OccCodeBackup;
 }
 
-static void InvokeEnvLinkOnWorkAllIds(_SCTPARAM, const env_link_t* restrict envLink, const byte_t oldId, const byte_t newId)
+static inline void InvokeDeltaOfActivePair(__SCONTEXT_PAR, const byte_t uptId, const byte_t oldId, const byte_t newId)
 {
-    for(size_t i = 0; GetActUpdateIdAt(SCT, i) != 0; i++)
+    *RefActStateEngAt(SCONTEXT, uptId) += GetPairDelta(RefActPairTable(SCONTEXT), uptId, oldId, newId);
+}
+
+static inline void InvokeDeltaOfActiveClu(__SCONTEXT_PAR, const byte_t uptId)
+{
+    *RefActStateEngAt(SCONTEXT, uptId) += GetCluDelta(RefActCluTable(SCONTEXT), RefActWorkClu(SCONTEXT), uptId);
+}
+
+static void InvokeEnvLinkCluUpdates(__SCONTEXT_PAR, const env_link_t* restrict envLink, const byte_t newId)
+{
+    FOR_EACH(clu_link_t, cluLink, envLink->CluLinks)
     {
-        InvokeEnvLinkPairChange(SCT, envLink, GetActUpdateIdAt(SCT, i), oldId, newId);
+        SetActWorkClu(SCONTEXT, RefActWorkEnv(SCONTEXT), cluLink->CluId);
+        SetActWorkCluTable(SCONTEXT, RefActWorkEnv(SCONTEXT), cluLink);
+
+        UpdateCluState(RefActCluTable(SCONTEXT), cluLink, RefActWorkClu(SCONTEXT), newId);
+        for(byte_t i = 0; GetActUpdateIdAt(SCONTEXT, i) != 0; i++)
+        {
+            InvokeDeltaOfActiveClu(SCONTEXT, i);
+        }
+        SetCluStateBackup(RefActWorkClu(SCONTEXT));
     }
 }
 
-static void InvokeEnvLinking(_SCTPARAM, env_state_t* restrict env, const byte_t newId)
+static void InvokeAllEnvLinkUpdates(__SCONTEXT_PAR, const env_link_t* restrict envLink, const byte_t oldId, const byte_t newId)
+{
+    for(byte_t i = 0; GetActUpdateIdAt(SCONTEXT, i) != 0; i++)
+    {
+        InvokeDeltaOfActivePair(SCONTEXT, i, oldId, newId);
+    }
+    InvokeEnvLinkCluUpdates(SCONTEXT, envLink, newId);
+}
+
+static void InvokeEnvUpdateDistribution(__SCONTEXT_PAR, env_state_t* restrict env, const byte_t newId)
 {
     FOR_EACH(env_link_t, envLink, env->EnvLinks)
     {
-        SetActWorkEnv(SCT, envLink);
-        SetActWorkPairTable(SCT, RefActWorkEnv(SCT), envLink);
-        InvokeEnvLinkOnWorkAllIds(SCT, envLink, env->ParId, newId);
+        SetActWorkEnv(SCONTEXT, envLink);
+        SetActWorkPairTable(SCONTEXT, RefActWorkEnv(SCONTEXT), envLink);
+        InvokeAllEnvLinkUpdates(SCONTEXT, envLink, env->ParId, newId);
     }
 }
 
-void CreateLocalJumpDeltaKmc(_SCTPARAM)
+void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR)
 {
 
 }
 
-void RollbackLocalJumpDeltaKmc(_SCTPARAM)
+void RollbackLocalJumpDeltaKmc(__SCONTEXT_PAR)
 {
 
 }
 
-void SetState0And1EnergiesKmc(_SCTPARAM)
+void SetAllStateEnergiesKmc(__SCONTEXT_PAR)
 {
-
+    SetState0And1EnergiesKmc(SCONTEXT);
+    CreateLocalJumpDeltaKmc(SCONTEXT);
+    SetState2EnergyKmc(SCONTEXT);
 }
 
-void SetState2EnergyKmc(_SCTPARAM)
+void SetState0And1EnergiesKmc(__SCONTEXT_PAR)
 {
-
-}
-
-void CreateFullStateDeltaKmc(_SCTPARAM)
-{
-    for(byte_t i = 0; i < RefActJumpDir(SCT)->JumpLength; i++)
+    for(byte_t i = 0; i < RefActJumpDir(SCONTEXT)->JumpLength;i++)
     {
-        byte_t newId = GetCodeByteAt(&RefActJumpRule(SCT)->StCode2, i);
-        if(RefPathEnvAt(SCT, i)->IsStable)
+        if(JUMPPATH[i]->IsStable)
         {
-            InvokeEnvLinking(SCT, RefPathEnvAt(SCT, i), newId);
+            RefActEngInfo(SCONTEXT)->Eng0 =  GetPathStateEngAt(SCONTEXT, i, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode0, i));
         }
-        RefPathEnvAt(SCT, i)->ParId = newId;
+        else
+        {
+            RefActEngInfo(SCONTEXT)->Eng1 =  GetPathStateEngAt(SCONTEXT, i, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode1, i));
+        }
+    }
+}
+
+void SetState2EnergyKmc(__SCONTEXT_PAR)
+{
+    for(byte_t i = 0; i < RefActJumpDir(SCONTEXT)->JumpLength;i++)
+    {
+        RefActEngInfo(SCONTEXT)->Eng2 =  GetPathStateEngAt(SCONTEXT, i, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, i)); 
+    }
+}
+
+void AdvanceKmcSystemToState2(__SCONTEXT_PAR)
+{
+    for(byte_t i = 0; i < RefActJumpDir(SCONTEXT)->JumpLength; i++)
+    {
+        byte_t newId = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, i);
+        if(JUMPPATH[i]->IsStable)
+        {
+            InvokeEnvUpdateDistribution(SCONTEXT, JUMPPATH[i], newId);
+        }
+        JUMPPATH[i]->ParId = newId;
     }
 }
 
 
-void CreateLocalJumpDeltaMmc(_SCTPARAM)
+void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {
 
 }
 
-void RollbackLocalJumpDeltaMmc(_SCTPARAM)
+void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {
-
+    *RefPathStateEngAt(SCONTEXT, 0, JUMPPATH[0]->ParId) = GetStateEnvBackupEngAt(SCONTEXT, 0);
+    *RefPathStateEngAt(SCONTEXT, 1, JUMPPATH[1]->ParId) = GetStateEnvBackupEngAt(SCONTEXT, 1);
 }
 
-void SetState0And1EnergiesMmc(_SCTPARAM)
-{
 
+void SetAllStateEnergiesMmc(__SCONTEXT_PAR)
+{
+    SetState0EnergyMmc(SCONTEXT);
+    CreateLocalJumpDeltaMmc(SCONTEXT);
+    SetState2EnergyMmc(SCONTEXT);
 }
 
-void SetState2EnergyMmc(_SCTPARAM)
+
+void SetState0EnergyMmc(__SCONTEXT_PAR)
 {
-    
+    RefActEngInfo(SCONTEXT)->Eng0 =  GetPathStateEngAt(SCONTEXT, 0, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode0, 0));
+    RefActEngInfo(SCONTEXT)->Eng0 += GetPathStateEngAt(SCONTEXT, 1, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode0, 1));
 }
 
-void CreateFullStateDeltaMmc(_SCTPARAM)
+void SetState2EnergyMmc(__SCONTEXT_PAR)
 {
-    byte_t newParId0 = GetCodeByteAt(&RefActJumpRule(SCT)->StCode2, 0);
-    byte_t newParId1 = GetCodeByteAt(&RefActJumpRule(SCT)->StCode2, 1);
-    InvokeEnvLinking(SCT, RefPathEnvAt(SCT, 0), newParId0);
-    InvokeEnvLinking(SCT, RefPathEnvAt(SCT, 1), newParId1);
-    RefPathEnvAt(SCT, 0)->ParId = newParId0;
-    RefPathEnvAt(SCT, 1)->ParId = newParId1;
+    RefActEngInfo(SCONTEXT)->Eng2 =  GetPathStateEngAt(SCONTEXT, 0, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 0));
+    RefActEngInfo(SCONTEXT)->Eng2 += GetPathStateEngAt(SCONTEXT, 1, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 1));
+}
+
+void AdvanceMmcSystemToState2(__SCONTEXT_PAR)
+{
+    byte_t newParId0 = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 0);
+    byte_t newParId1 = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 1);
+    InvokeEnvUpdateDistribution(SCONTEXT, JUMPPATH[0], newParId0);
+    InvokeEnvUpdateDistribution(SCONTEXT, JUMPPATH[1], newParId1);
+    JUMPPATH[0]->ParId = newParId0;
+    JUMPPATH[1]->ParId = newParId1;
 }

@@ -20,13 +20,13 @@
 #define MC_CONST_JUMPLIMIT_MIN 0.0e+00
 #define MC_CONST_JUMPLIMIT_MAX 1.0e+00
 
-#define FLAG_IS_SET(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == 0
+#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == 0
 
-#define FLAG_NOT_SET(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != 0
+#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != 0
 
-#define SET_FLAG(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
+#define FLG_SET(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
 
-#define UNSET_FLAG(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
+#define FLG_UNSET(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
 
 static inline void SetCodeByteAt(occode_t* restrict code, const byte_t id, const byte_t value)
 {
@@ -80,169 +80,169 @@ static inline void ConvEnergyBoltzToPhys(double* restrict value, const double co
 }
 
 
-static inline int32_t GetNextCeiledRnd(_SCTPARAM, const int32_t upperLimit)
+static inline int32_t GetNextCeiledRnd(__SCONTEXT_PAR, const int32_t upperLimit)
 {
-    return (int32_t) (Pcg32Next(&SCT->RnGen) % upperLimit);
+    return (int32_t) (Pcg32Next(&SCONTEXT->RnGen) % upperLimit);
 }
 
-static inline env_state_t* RefPathEnvAt(const _SCTPARAM, const byte_t id)
+static inline pair_table_t* RefPairTableAt(const __SCONTEXT_PAR, const int32_t id)
 {
-    return (void*) SCT->CycleState.ActPathEnvs[id];
+    return (void*) &SCONTEXT->SimDbModel.Energy.PairTables.Start[id];
 }
 
-static inline env_state_t** RefActPathArray(const _SCTPARAM)
+static inline clu_table_t* RefCluTableAt(const __SCONTEXT_PAR, const int32_t id)
 {
-    return (void*) &SCT->CycleState.ActPathEnvs[0];
+    return (void*) &SCONTEXT->SimDbModel.Energy.CluTables.Start[id];
 }
 
-static inline pair_table_t* RefPairTableAt(const _SCTPARAM, const int32_t id)
+static inline env_state_t* RefLatticeEnvAt(const __SCONTEXT_PAR, const int32_t id)
 {
-    return (void*) &SCT->SimDbModel.Energy.PairTables.Start[id];
+    return (void*) &SCONTEXT->SimDynModel.EnvLattice.Start[id];
 }
 
-static inline clu_table_t* RefCluTableAt(const _SCTPARAM, const int32_t id)
+static inline double* RefActStateEngAt(const __SCONTEXT_PAR, const byte_t id)
 {
-    return (void*) &SCT->SimDbModel.Energy.CluTables.Start[id];
+    return (void*) &SCONTEXT->CycleState.ActWorkEnv->EnergyStates.Start[id];
 }
 
-static inline env_state_t* RefLatticeEnvAt(const _SCTPARAM, const int32_t id)
+static inline double* RefPathStateEngAt(const __SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
 {
-    return (void*) &SCT->SimDynModel.EnvLattice.Start[id];
+    return (void*) &JUMPPATH[pathId]->ClusterStates.Start[parId];
 }
 
-static inline double* RefActStateEngAt(const _SCTPARAM, const byte_t id)
+static inline double GetPathStateEngAt(const __SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
 {
-    return (void*) &SCT->CycleState.ActWorkEnv->EnergyStates.Start[id];
+    return *RefPathStateEngAt(SCONTEXT, pathId, parId);
 }
 
-static inline jump_dir_t* RefActJumpDir(const _SCTPARAM)
+static inline jump_dir_t* RefActJumpDir(const __SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActJumpDir;
+    return (void*) SCONTEXT->CycleState.ActJumpDir;
 }
 
-static inline jump_col_t* RefActJumpCol(const _SCTPARAM)
+static inline jump_col_t* RefActJumpCol(const __SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActJumpCol;
+    return (void*) SCONTEXT->CycleState.ActJumpCol;
 }
 
-static inline jump_rule_t* RefActJumpRule(const _SCTPARAM)
+static inline jump_rule_t* RefActJumpRule(const __SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActJumpRule;
+    return (void*) SCONTEXT->CycleState.ActJumpRule;
 }
 
-static inline roll_info_t* RefActRollInfo(const _SCTPARAM)
+static inline roll_info_t* RefActRollInfo(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->CycleState.ActRollInfo;
+    return (void*) &SCONTEXT->CycleState.ActRollInfo;
 }
 
-static inline occode_t* RefActStateCode(const _SCTPARAM)
+static inline occode_t* RefActStateCode(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->CycleState.ActStateCode;
+    return (void*) &SCONTEXT->CycleState.ActStateCode;
 }
 
-static inline occode_t GetActStateCode(const _SCTPARAM)
+static inline occode_t GetActStateCode(const __SCONTEXT_PAR)
 {
-    return *RefActStateCode(SCT);
+    return *RefActStateCode(SCONTEXT);
 }
 
-static inline env_state_t* RefActWorkEnv(_SCTPARAM)
+static inline env_state_t* RefActWorkEnv(__SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActWorkEnv;
+    return (void*) SCONTEXT->CycleState.ActWorkEnv;
 }
 
-static inline clu_state_t* RefActWorkClu(_SCTPARAM)
+static inline clu_state_t* RefActWorkClu(__SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActWorkClu;
+    return (void*) SCONTEXT->CycleState.ActWorkClu;
 }
 
-static inline clu_table_t* RefActCluTable(_SCTPARAM)
+static inline clu_table_t* RefActCluTable(__SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActCluTable;
+    return (void*) SCONTEXT->CycleState.ActCluTable;
 }
 
-static inline pair_table_t* RefActPairTable(_SCTPARAM)
+static inline pair_table_t* RefActPairTable(__SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActPairTable;
+    return (void*) SCONTEXT->CycleState.ActPairTable;
 }
 
-static inline byte_t GetActUpdateIdAt(_SCTPARAM, const byte_t id)
+static inline byte_t GetActUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
 {
-    return RefActWorkEnv(SCT)->EnvDef->UptParIds[id];
+    return RefActWorkEnv(SCONTEXT)->EnvDef->UptParIds[id];
 }
 
-static inline eng_info_t* RefActEngInfo(const _SCTPARAM)
+static inline eng_info_t* RefActEngInfo(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->CycleState.ActEngInfo;
+    return (void*) &SCONTEXT->CycleState.ActEngInfo;
 }
 
-static inline cnt_col_t* RefActCounters(const _SCTPARAM)
+static inline cnt_col_t* RefActCounters(const __SCONTEXT_PAR)
 {
-    return (void*) SCT->CycleState.ActCntCol;
+    return (void*) SCONTEXT->CycleState.ActCntCol;
 }
 
-static inline cnt_col_t* RefStateCountersAt(const _SCTPARAM, const byte_t id)
+static inline cnt_col_t* RefStateCountersAt(const __SCONTEXT_PAR, const byte_t id)
 {
-    return (void*) &SCT->SimState.Counters.Start[id];
+    return (void*) &SCONTEXT->SimState.Counters.Start[id];
 }
 
-static inline env_lattice_t* RefEnvLattice(const _SCTPARAM)
+static inline env_lattice_t* RefEnvLattice(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimDynModel.EnvLattice;
+    return (void*) &SCONTEXT->SimDynModel.EnvLattice;
 }
 
-static inline vector4_t* RefLatticeSize(const _SCTPARAM)
+static inline vector4_t* RefLatticeSize(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimDbModel.LattInfo.SizeVec;
+    return (void*) &SCONTEXT->SimDbModel.LattInfo.SizeVec;
 }
 
-static inline buffer_t* RefStateBuffer(const _SCTPARAM)
+static inline buffer_t* RefStateBuffer(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimState.Buffer;
+    return (void*) &SCONTEXT->SimState.Buffer;
 }
 
-static inline hdr_info_t* RefStateHeaderData(const _SCTPARAM)
+static inline hdr_info_t* RefStateHeaderData(const __SCONTEXT_PAR)
 {
-    return (void*) SCT->SimState.Header.Data;
+    return (void*) SCONTEXT->SimState.Header.Data;
 }
 
-static inline meta_info_t* RefStateMetaData(const _SCTPARAM)
+static inline meta_info_t* RefStateMetaData(const __SCONTEXT_PAR)
 {
-    return (void*) SCT->SimState.Meta.Data;
+    return (void*) SCONTEXT->SimState.Meta.Data;
 }
 
-static inline run_info_t* RefModelRunInfo(const _SCTPARAM)
+static inline run_info_t* RefModelRunInfo(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimDynModel.RunInfo;
+    return (void*) &SCONTEXT->SimDynModel.RunInfo;
 }
 
-static inline job_info_t* RefJobInfo(const _SCTPARAM)
+static inline job_info_t* RefJobInfo(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimDbModel.JobInfo;
+    return (void*) &SCONTEXT->SimDbModel.JobInfo;
 }
 
-static inline cycle_cnt_t* RefMainCounters(const _SCTPARAM)
+static inline cycle_cnt_t* RefMainCounters(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->CycleState.MainCnts;
+    return (void*) &SCONTEXT->CycleState.MainCnts;
 }
 
-static inline jump_counts_t* RefJmpDirCountTable(const _SCTPARAM)
+static inline jump_counts_t* RefJmpDirCountTable(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimDbModel.Transition.JumpCountTable;
+    return (void*) &SCONTEXT->SimDbModel.Transition.JumpCountTable;
 }
 
-static inline jump_assign_t* RefJmpAssignTable(const _SCTPARAM)
+static inline jump_assign_t* RefJmpAssignTable(const __SCONTEXT_PAR)
 {
-    return (void*) &SCT->SimDbModel.Transition.JumpAssignTable;
+    return (void*) &SCONTEXT->SimDbModel.Transition.JumpAssignTable;
 }
 
-static inline jump_dir_t* RefJumpDirAt(const _SCTPARAM, const int32_t id)
+static inline jump_dir_t* RefJumpDirAt(const __SCONTEXT_PAR, const int32_t id)
 {
-    return (void*) &SCT->SimDbModel.Transition.JumpDirs.Start[id];
+    return (void*) &SCONTEXT->SimDbModel.Transition.JumpDirs.Start[id];
 }
 
-static inline jump_col_t* RefJumpColAt(const _SCTPARAM, const int32_t id)
+static inline jump_col_t* RefJumpColAt(const __SCONTEXT_PAR, const int32_t id)
 {
-    return (void*) &SCT->SimDbModel.Transition.JumpCols.Start[id];
+    return (void*) &SCONTEXT->SimDbModel.Transition.JumpCols.Start[id];
 }
 
 static inline clu_def_t* RefEnvCluDefAt(const env_state_t* restrict env, const byte_t id)
@@ -255,9 +255,9 @@ static inline pair_def_t* RefEnvPairDefAt(const env_state_t* restrict env, const
     return (void*) &env->EnvDef->PairDefs.Start[id];
 }
 
-static inline double* RefCluTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t relId)
+static inline double* RefCluTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
 {
-    return (void*) MDA_GET_2(table->EngTable, table->ParToTableId[parId], relId);
+    return (void*) MDA_GET_2(table->EngTable, table->ParToTableId[parId], codeId);
 }
 
 static inline double* RefPairTableEntry(const pair_table_t* restrict table, const byte_t id0, const byte_t id1)
@@ -265,9 +265,9 @@ static inline double* RefPairTableEntry(const pair_table_t* restrict table, cons
     return (void*) MDA_GET_2(table->EngTable, id0, id1);
 }
 
-static inline double GetCluTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t relId)
+static inline double GetCluTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
 {
-    return *RefCluTableEntry(table, parId, relId);
+    return *RefCluTableEntry(table, parId, codeId);
 }
 
 static inline double GetPairTableEntry(const pair_table_t* restrict table, const byte_t id0, const byte_t id1)
@@ -293,4 +293,19 @@ static inline dir_pool_t* RefJmpDirPoolAt(const jump_pool_t* restrict jmpPool, c
 static inline int32_t GetEnvDirPoolId(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict cntTable, const env_state_t* restrict env)
 {
     return jmpPool->DirCountToPoolId.Start[*MDA_GET_2(*cntTable, env->PosVector.d, env->ParId)];
+}
+
+static inline clu_state_t* RefCluStateAt(const env_state_t* restrict env, const byte_t id)
+{
+    return (void*) &env->ClusterStates.Start[id];
+}
+
+static inline double* RefStateEnvBackupEngAt(__SCONTEXT_PAR, const byte_t id)
+{
+    return (void*) &SCONTEXT->CycleState.ActEnvBackup.PathEnergies[id];
+}
+
+static inline double GetStateEnvBackupEngAt(__SCONTEXT_PAR, const byte_t id)
+{
+    return *RefStateEnvBackupEngAt(SCONTEXT, id);
 }

@@ -11,42 +11,42 @@
 #include "Simulator/Data/Model/State/StateLogic.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-error_t ConstructSimulationState(sim_context_t* restrict simContext)
+error_t ConstructSimulationState(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t PrepareSimulationState(sim_context_t* restrict simContext)
+error_t PrepareSimulationState(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t WriteSimulationStateToFile(const sim_context_t* restrict simContext)
+error_t WriteSimulationStateToFile(const __SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t LoadSimulationStateFromFile(sim_context_t* restrict simContext)
+error_t LoadSimulationStateFromFile(__SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t GetSimulationStateEval(const sim_context_t* restrict simContext)
+error_t GetSimulationStateEval(const __SCONTEXT_PAR)
 {
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t DumpStateStatsToStream(sim_context_t* restrict simContext, file_t* restrict stream)
+error_t DumpStateStatsToStream(__SCONTEXT_PAR, file_t* restrict stream)
 {
     if(stream == NULL)
     {
-        simContext->ErrorCode |= MC_STREAM_ERROR;
-        return MC_STREAM_ERROR;
+        simContext->ErrorCode |= ERR_STREAM;
+        return ERR_STREAM;
     }
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-error_t DumpStateStatsToFile(sim_context_t* restrict simContext, const char* restrict filePath)
+error_t DumpStateStatsToFile(__SCONTEXT_PAR, const char* restrict filePath)
 {
     file_t* stream = fopen(filePath, "a");
     simContext->ErrorCode |= DumpStateStatsToStream(simContext, stream);

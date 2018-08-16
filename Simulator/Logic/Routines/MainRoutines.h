@@ -14,87 +14,87 @@
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 
-#define MC_KMC_ROUTINE_FLAG     0x1
-#define MC_MMC_ROUTINE_FLAG     0x2
-#define MC_PRE_ROUTINE_FLAG     0x4
-#define MC_SIM_CONTINUE_FLAG    0x8
-#define MC_SIM_COMPLETED_FLAG   0x10
-#define MC_SIM_TIME_ABORT_FLAG  0x20
-#define MC_SIM_COND_ABORT_FLAG  0x40
-#define MC_SIM_RATE_ABORT_FLAG  0x80
-#define MC_SIM_FIRST_CYCLE_FLAG 0x100
-#define MC_STATE_INIT_FLAG      0x20000000
-#define MC_SIM_ABORT_FLAG       0x40000000
-#define MC_STATE_ERROR_FLAG     0x80000000
+#define FLG_KMC             0x1
+#define FLG_MMC             0x2
+#define FLG_PRERUN          0x4
+#define FLG_CONTINUE        0x8
+#define FLG_COMPLETED       0x10
+#define FLG_TIMEOUT         0x20
+#define FLG_ABORTCONDITION  0x40
+#define FLG_RATELIMIT       0x80
+#define FLG_FIRSTCYCLE      0x100
+#define FLG_INITIALIZED     0x20000000
+#define FLG_ABORT           0x40000000
+#define FLG_STATEERROR      0x80000000
 
-error_t LoadCommandLineArgs(_SCTPARAM, int32_t argc, char const* const* argv);
+error_t LoadCommandLineArgs(__SCONTEXT_PAR, int32_t argc, char const* const* argv);
 
-error_t LoadSimulationPlugins(_SCTPARAM);
+error_t LoadSimulationPlugins(__SCONTEXT_PAR);
 
-error_t LoadSimulationModel(_SCTPARAM);
+error_t LoadSimulationModel(__SCONTEXT_PAR);
 
-error_t LoadSimulationState(_SCTPARAM);
+error_t LoadSimulationState(__SCONTEXT_PAR);
 
-error_t ResetContextToDefault(_SCTPARAM);
+error_t ResetContextToDefault(__SCONTEXT_PAR);
 
-error_t PrepareDynamicModel(_SCTPARAM);
+error_t PrepareDynamicModel(__SCONTEXT_PAR);
 
-error_t PrepareForMainRoutine(_SCTPARAM);
+error_t PrepareForMainRoutine(__SCONTEXT_PAR);
 
-error_t FinishRoutinePrerun(_SCTPARAM);
+error_t FinishRoutinePrerun(__SCONTEXT_PAR);
 
-error_t StartMainRoutine(_SCTPARAM);
+error_t StartMainRoutine(__SCONTEXT_PAR);
 
-error_t StartMainKmcRoutine(_SCTPARAM);
+error_t StartMainKmcRoutine(__SCONTEXT_PAR);
 
-error_t StartMainMmcRoutine(_SCTPARAM);
+error_t StartMainMmcRoutine(__SCONTEXT_PAR);
 
-error_t DoNextKmcCycleBlock(_SCTPARAM);
+error_t DoNextKmcCycleBlock(__SCONTEXT_PAR);
 
-error_t FinishKmcCycleBlock(_SCTPARAM);
+error_t FinishKmcCycleBlock(__SCONTEXT_PAR);
 
-error_t DoNextMmcCycleBlock(_SCTPARAM);
+error_t DoNextMmcCycleBlock(__SCONTEXT_PAR);
 
-error_t FinishMmcCycleBlock(_SCTPARAM);
+error_t FinishMmcCycleBlock(__SCONTEXT_PAR);
 
-error_t GetKmcAbortCondEval(_SCTPARAM);
+error_t GetKmcAbortCondEval(__SCONTEXT_PAR);
 
-error_t GetMmcAbortCondEval(_SCTPARAM);
+error_t GetMmcAbortCondEval(__SCONTEXT_PAR);
 
-error_t SyncSimulationState(_SCTPARAM);
+error_t SyncSimulationState(__SCONTEXT_PAR);
 
-error_t SaveSimulationState(_SCTPARAM);
+error_t SaveSimulationState(__SCONTEXT_PAR);
 
-error_t FinishMainRoutineKmc(_SCTPARAM);
+error_t FinishMainRoutineKmc(__SCONTEXT_PAR);
 
-error_t FinishMainRoutineMmc(_SCTPARAM);
-
-
-void SetKmcJumpSelection(_SCTPARAM);
-
-void SetKmcJumpPathProperties(_SCTPARAM);
-
-bool_t GetKmcJumpRuleEval(_SCTPARAM);
-
-void SetKmcJumpEvalFail(_SCTPARAM);
-
-void SetKmcJumpProperties(_SCTPARAM);
-
-void SetKmcJumpEvaluation(_SCTPARAM);
-
-void SetKmcJumpProbsDefault(_SCTPARAM);
+error_t FinishMainRoutineMmc(__SCONTEXT_PAR);
 
 
-void SetMmcJumpSelection(_SCTPARAM);
+void SetKmcJumpSelection(__SCONTEXT_PAR);
 
-void SetMmcJumpPathProperties(_SCTPARAM);
+void SetKmcJumpPathProperties(__SCONTEXT_PAR);
 
-bool_t GetMmcJumpRuleEval(_SCTPARAM);
+bool_t GetKmcJumpRuleEval(__SCONTEXT_PAR);
 
-void SetMmcJumpEvalFail(_SCTPARAM);
+void SetKmcJumpEvalFail(__SCONTEXT_PAR);
 
-void SetMmcJumpProperties(_SCTPARAM);
+void SetKmcJumpProperties(__SCONTEXT_PAR);
 
-void SetMmcJumpEvaluation(_SCTPARAM);
+void SetKmcJumpEvaluation(__SCONTEXT_PAR);
 
-void SetMmcJumpProbsDefault(_SCTPARAM);
+void SetKmcJumpProbsDefault(__SCONTEXT_PAR);
+
+
+void SetMmcJumpSelection(__SCONTEXT_PAR);
+
+void SetMmcJumpPathProperties(__SCONTEXT_PAR);
+
+bool_t GetMmcJumpRuleEval(__SCONTEXT_PAR);
+
+void SetMmcJumpEvalFail(__SCONTEXT_PAR);
+
+void SetMmcJumpProperties(__SCONTEXT_PAR);
+
+void SetMmcJumpEvaluation(__SCONTEXT_PAR);
+
+void SetMmcJumpProbsDefault(__SCONTEXT_PAR);
