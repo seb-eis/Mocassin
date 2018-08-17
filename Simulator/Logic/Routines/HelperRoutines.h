@@ -314,3 +314,14 @@ static inline env_link_t* RefEnvLinkByJmpLink(const __SCONTEXT_PAR, const jump_l
 {
     return (void*) &JUMPPATH[link->PathId]->EnvLinks.Start[link->LinkId];
 }
+
+static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
+{
+    for(byte_t i = 0;; i++)
+    {
+        if(envDef->UptParIds[i] == 0)
+        {
+            return envDef->UptParIds[i-1];
+        }
+    }
+}
