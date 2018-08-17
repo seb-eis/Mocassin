@@ -135,6 +135,51 @@ static void InvokeAllEnvLinkUpdates(__SCONTEXT_PAR, const env_link_t* restrict e
     InvokeEnvLinkCluUpdates(SCONTEXT, envLink, newId);
 }
 
+static inline void InvokeActLocalPairDelta(__SCONTEXT_PAR, const byte_t uptId, const byte_t oldId, const byte_t newId)
+{
+    InvokeDeltaOfActivePair(SCONTEXT, uptId, oldId, newId);
+}
+
+static inline void InvokeLocalEnvLinkCluDeltas(__SCONTEXT_PAR, const env_link_t* restrict envLink, const byte_t uptId)
+{
+    FOR_EACH(clu_link_t, cluLink, envLink->CluLinks)
+    {
+        SetActWorkClu(SCONTEXT, RefActWorkEnv(SCONTEXT), cluLink->CluId);
+        if(RefActWorkClu(SCONTEXT)->OccCode != RefActWorkClu(SCONTEXT)->OccCodeBackup)
+        {        
+            SetActWorkCluTable(SCONTEXT, RefActWorkEnv(SCONTEXT), cluLink);
+            InvokeDeltaOfActiveClu(SCONTEXT, uptId);
+            LoadCluStateBackup(RefActWorkClu(SCONTEXT));
+        }
+    }
+}
+
+static inline void PrepareJumpLinkCluStateChanges(__SCONTEXT_PAR, const jump_link_t* restrict jmpLink)
+{
+    env_link_t* envLink = RefEnvLinkByJmpLink(SCONTEXT, jmpLink);
+    SetActWorkEnv(SCONTEXT, envLink);
+
+    FOR_EACH(clu_link_t, cluLink, envLink->CluLinks)
+    {
+        SetActWorkClu(SCONTEXT, RefActWorkEnv(SCONTEXT), cluLink->CluId);
+        SetCodeByteAt(&RefActWorkClu(SCONTEXT)->OccCode, cluLink->RelId, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, jmpLink->PathId));
+    }
+}
+
+static void InvokeJumpLinkDeltas(__SCONTEXT_PAR, const jump_link_t* restrict jmpLink)
+{
+    env_link_t* envLink = RefEnvLinkByJmpLink(SCONTEXT, jmpLink);
+
+    SetActWorkEnv(SCONTEXT, envLink);
+    SetActWorkPairTable(SCONTEXT, RefActWorkEnv(SCONTEXT), envLink);
+
+    byte_t newId = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, jmpLink->PathId);
+    byte_t uptId = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, RefActWorkEnv(SCONTEXT)->PathId);
+
+    InvokeActLocalPairDelta(SCONTEXT, uptId, JUMPPATH[jmpLink->PathId]->ParId, newId);
+    InvokeLocalEnvLinkCluDeltas(SCONTEXT, envLink, uptId);
+}
+
 static void InvokeEnvUpdateDistribution(__SCONTEXT_PAR, env_state_t* restrict env, const byte_t newId)
 {
     FOR_EACH(env_link_t, envLink, env->EnvLinks)
@@ -147,12 +192,22 @@ static void InvokeEnvUpdateDistribution(__SCONTEXT_PAR, env_state_t* restrict en
 
 void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR)
 {
-
+    FOR_EACH(jump_link_t, jmpLink, RefActJumpDir(SCONTEXT)->JumpLinkSeq)
+    {
+        PrepareJumpLinkCluStateChanges(SCONTEXT, jmpLink);
+    }
+    FOR_EACH(jump_link_t, jmpLink, RefActJumpDir(SCONTEXT)->JumpLinkSeq)
+    {
+        InvokeJumpLinkDeltas(SCONTEXT, jmpLink);
+    }
 }
 
 void RollbackLocalJumpDeltaKmc(__SCONTEXT_PAR)
 {
-
+    for(byte_t i = 0; i < RefActJumpDir(SCONTEXT)->JumpLength; i++)
+    {
+        *RefPathStateEngAt(SCONTEXT, i, JUMPPATH[i]->ParId) = GetStateEnvBackupEngAt(SCONTEXT, i); 
+    }
 }
 
 void SetAllStateEnergiesKmc(__SCONTEXT_PAR)
@@ -160,6 +215,7 @@ void SetAllStateEnergiesKmc(__SCONTEXT_PAR)
     SetState0And1EnergiesKmc(SCONTEXT);
     CreateLocalJumpDeltaKmc(SCONTEXT);
     SetState2EnergyKmc(SCONTEXT);
+    RollbackLocalJumpDeltaKmc(SCONTEXT);
 }
 
 void SetState0And1EnergiesKmc(__SCONTEXT_PAR)
@@ -201,7 +257,14 @@ void AdvanceKmcSystemToState2(__SCONTEXT_PAR)
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {
-
+    FOR_EACH(jump_link_t, jmpLink, RefActJumpDir(SCONTEXT)->JumpLinkSeq)
+    {
+        PrepareJumpLinkCluStateChanges(SCONTEXT, jmpLink);
+    }
+    FOR_EACH(jump_link_t, jmpLink, RefActJumpDir(SCONTEXT)->JumpLinkSeq)
+    {
+        InvokeJumpLinkDeltas(SCONTEXT, jmpLink);
+    }
 }
 
 void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR)
@@ -216,6 +279,7 @@ void SetAllStateEnergiesMmc(__SCONTEXT_PAR)
     SetState0EnergyMmc(SCONTEXT);
     CreateLocalJumpDeltaMmc(SCONTEXT);
     SetState2EnergyMmc(SCONTEXT);
+    RollbackLocalJumpDeltaMmc(SCONTEXT);
 }
 
 

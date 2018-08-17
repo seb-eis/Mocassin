@@ -145,27 +145,27 @@ static inline occode_t GetActStateCode(const __SCONTEXT_PAR)
     return *RefActStateCode(SCONTEXT);
 }
 
-static inline env_state_t* RefActWorkEnv(__SCONTEXT_PAR)
+static inline env_state_t* RefActWorkEnv(const __SCONTEXT_PAR)
 {
     return (void*) SCONTEXT->CycleState.ActWorkEnv;
 }
 
-static inline clu_state_t* RefActWorkClu(__SCONTEXT_PAR)
+static inline clu_state_t* RefActWorkClu(const __SCONTEXT_PAR)
 {
     return (void*) SCONTEXT->CycleState.ActWorkClu;
 }
 
-static inline clu_table_t* RefActCluTable(__SCONTEXT_PAR)
+static inline clu_table_t* RefActCluTable(const __SCONTEXT_PAR)
 {
     return (void*) SCONTEXT->CycleState.ActCluTable;
 }
 
-static inline pair_table_t* RefActPairTable(__SCONTEXT_PAR)
+static inline pair_table_t* RefActPairTable(const __SCONTEXT_PAR)
 {
     return (void*) SCONTEXT->CycleState.ActPairTable;
 }
 
-static inline byte_t GetActUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
+static inline byte_t GetActUpdateIdAt(const __SCONTEXT_PAR, const byte_t id)
 {
     return RefActWorkEnv(SCONTEXT)->EnvDef->UptParIds[id];
 }
@@ -300,12 +300,17 @@ static inline clu_state_t* RefCluStateAt(const env_state_t* restrict env, const 
     return (void*) &env->ClusterStates.Start[id];
 }
 
-static inline double* RefStateEnvBackupEngAt(__SCONTEXT_PAR, const byte_t id)
+static inline double* RefStateEnvBackupEngAt(const __SCONTEXT_PAR, const byte_t id)
 {
     return (void*) &SCONTEXT->CycleState.ActEnvBackup.PathEnergies[id];
 }
 
-static inline double GetStateEnvBackupEngAt(__SCONTEXT_PAR, const byte_t id)
+static inline double GetStateEnvBackupEngAt(const __SCONTEXT_PAR, const byte_t id)
 {
     return *RefStateEnvBackupEngAt(SCONTEXT, id);
+}
+
+static inline env_link_t* RefEnvLinkByJmpLink(const __SCONTEXT_PAR, const jump_link_t* link)
+{
+    return (void*) &JUMPPATH[link->PathId]->EnvLinks.Start[link->LinkId];
 }

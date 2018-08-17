@@ -477,13 +477,11 @@ void SetKmcJumpEvaluation(__SCONTEXT_PAR)
     if(RefActEngInfo(SCONTEXT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
         RefActCounters(SCONTEXT)->ToUnstCnt++;
-        RollbackLocalJumpDeltaKmc(SCONTEXT);
         return;
     }
     if(RefActEngInfo(SCONTEXT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
         RefActCounters(SCONTEXT)->OnUnstCnt++;
-        RollbackLocalJumpDeltaKmc(SCONTEXT);
         return;
     }   
     if(Pcg32NextDouble(&SCONTEXT->RnGen) < RefActEngInfo(SCONTEXT)->Prob0to2)
@@ -495,7 +493,6 @@ void SetKmcJumpEvaluation(__SCONTEXT_PAR)
     else
     {
         RefActCounters(SCONTEXT)->RejectCnt++;
-        RollbackLocalJumpDeltaKmc(SCONTEXT);
     }
 }
 
@@ -551,13 +548,11 @@ void SetMmcJumpEvaluation(__SCONTEXT_PAR)
     if(RefActEngInfo(SCONTEXT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
         RefActCounters(SCONTEXT)->ToUnstCnt++;
-        RollbackLocalJumpDeltaMmc(SCONTEXT);
         return;
     }
     if(RefActEngInfo(SCONTEXT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
         RefActCounters(SCONTEXT)->OnUnstCnt++;
-        RollbackLocalJumpDeltaMmc(SCONTEXT);
         return;
     }   
     if(Pcg32NextDouble(&SCONTEXT->RnGen) < RefActEngInfo(SCONTEXT)->Prob0to2)
@@ -569,6 +564,5 @@ void SetMmcJumpEvaluation(__SCONTEXT_PAR)
     else
     {
         RefActCounters(SCONTEXT)->RejectCnt++;
-        RollbackLocalJumpDeltaMmc(SCONTEXT);
     }
 }
