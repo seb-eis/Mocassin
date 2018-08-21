@@ -27,37 +27,43 @@ typedef int64_t cerror_t;
 #define ERR_OK 0
 
 // Defines the error code for errors during stream usage
-#define ERR_STREAM -1
+#define ERR_STREAM 1
 
 // Defines the error code for errors during memory block dumping due to incompatible dump buffer length
-#define ERR_BLOCKDUMP -2
+#define ERR_BLOCKDUMP 2
 
 // Defines the error code for errors during array access type casting where accessing thorugh the new type would cause a buffer overflow
-#define ERR_BUFFERCAST -3
+#define ERR_BUFFERCAST 3
 
 // Defines the error code for buffer overflows
-#define ERR_BUFFEROVERFLOW -4
+#define ERR_BUFFEROVERFLOW 4
 
 // Defines the error code for file errors
-#define ERR_FILE -5
+#define ERR_FILE 5
 
 // Defines the error codes for cases where a wrong file mode was passed to a function
-#define ERR_FILEMODE -6
+#define ERR_FILEMODE 6
 
 // Defines the error code for cases where the database access caused an unspecified error
-#define ERR_DATABASE -7
+#define ERR_DATABASE 7
 
 // Defines the error code for cases where simulation routines cause an unspecififed error
-#define ERR_UNKNOWN -8
+#define ERR_UNKNOWN 8
 
 // Defines the error code for cases where memory allocation fails
-#define ERR_MEMALLOCATION -9
+#define ERR_MEMALLOCATION 9
+
+// Defines the error code for cases when a data inconsistency is found
+#define ERR_DATACONSISTENCY 10
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT_MEMDUMP(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
+
+// Get an error description string for the passed error Code
+char* ConvErrorToString(error_t errCode);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
 void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg);

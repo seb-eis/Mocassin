@@ -20,9 +20,22 @@
 #define MC_CONST_JUMPLIMIT_MIN 0.0e+00
 #define MC_CONST_JUMPLIMIT_MAX 1.0e+00
 
-#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == 0
+#define FLG_KMC             0x1
+#define FLG_MMC             0x2
+#define FLG_PRERUN          0x4
+#define FLG_CONTINUE        0x8
+#define FLG_COMPLETED       0x10
+#define FLG_TIMEOUT         0x20
+#define FLG_ABORTCONDITION  0x40
+#define FLG_RATELIMIT       0x80
+#define FLG_FIRSTCYCLE      0x100
+#define FLG_INITIALIZED     0x20000000
+#define FLG_ABORT           0x40000000
+#define FLG_STATEERROR      0x80000000
 
-#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != 0
+#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
+
+#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
 
 #define FLG_SET(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
 
@@ -245,6 +258,16 @@ static inline jump_col_t* RefJumpColAt(const __SCONTEXT_PAR, const int32_t id)
     return (void*) &SCONTEXT->SimDbModel.Transition.JumpCols.Start[id];
 }
 
+static inline env_state_t* RefEnvStateAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &SCONTEXT->SimDynModel.EnvLattice.Start[id];
+}
+
+static inline env_def_t* RefEnvDefAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &SCONTEXT->SimDbModel.Structure.EnvDefs.Start[id];
+}
+
 static inline clu_def_t* RefEnvCluDefAt(const env_state_t* restrict env, const byte_t id)
 {
     return (void*) &env->EnvDef->CluDefs.Start[id];
@@ -324,4 +347,19 @@ static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
             return envDef->UptParIds[i-1];
         }
     }
+}
+
+static inline bool_t JobInfoHasFlgs(const __SCONTEXT_PAR, bitmask_t flgs)
+{
+    return FLG_TRUE(SCONTEXT->SimDbModel.JobInfo.JobFlg, flgs);
+}
+
+static inline bool_t JobHeaderHasFlgs(const __SCONTEXT_PAR, bitmask_t flgs)
+{
+    return FLG_TRUE(MARSHAL_AS(mmc_header_t, SCONTEXT->SimDbModel.JobInfo.JobHeader)->JobFlg, flgs);
+}
+
+static inline flp_buffer_t* RefMmcAbortBuffer(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimDynModel.EngBuffer;
 }

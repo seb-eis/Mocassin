@@ -81,7 +81,7 @@ typedef struct { pair_tables_t PairTables; clu_tables_t CluTables; } eng_model_t
 
 typedef struct { jump_cols_t JumpCols; jump_dirs_t JumpDirs; jump_counts_t JumpCountTable; jump_assign_t JumpAssignTable; } tra_model_t;
 
-typedef struct { bitmask_t JobFlg, StaFlg; int64_t TargetMcsp, TimeLimit; double Temp, MinSuccRate; void * JobHeader; } job_info_t;
+typedef struct { bitmask_t JobFlg, StaFlg; int64_t StateSize, TargetMcsp, TimeLimit; double Temp, MinSuccRate; void * JobHeader; } job_info_t;
 
 typedef struct { bitmask_t JobFlg; double AbortTol; int32_t AbortSeqLen, AbortSmplLen, AbortSmplInt; } mmc_header_t;
 

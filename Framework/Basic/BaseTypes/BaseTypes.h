@@ -44,6 +44,9 @@
 // Casts any kind of array buffer access struct to another accessor type without checking for save conversion
 #define BUFFER_TO_ARRAY(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End }
 
+// Casts any kind of array buffer (With count field) access struct to another accessor type (with count field) without checking for save conversion
+#define BUFFER_TO_ARRAY_WCOUNT(__BUFFER, __COUNT, __TYPE) (__TYPE) { __COUNT, (void*) (__BUFFER).Start, (void*) (__BUFFER).End }
+
 // Creates a list access struct from the passed buffer where the current item ptr points to the first element
 #define BUFFER_TO_LIST(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End, (void*) (__BUFFER).Start }
 
@@ -249,7 +252,7 @@ blob_t AllocateMdaUnchecked(const int32_t rank, const size_t itemSize, const int
 error_t AllocateMdaChecked(const int32_t rank, const size_t itemSize, const int32_t* restrict dimensions, blob_t* restrict outBlob);
 
 // Sets all bytes specified by a start and a conter to 0
-void inline ZeroBuffer(void* restrict start, const size_t byteCount)
+static inline void ZeroBuffer(void* restrict start, const size_t byteCount)
 {
     for(size_t i = 0; i < byteCount; i++)
     {

@@ -14,19 +14,6 @@
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 
-#define FLG_KMC             0x1
-#define FLG_MMC             0x2
-#define FLG_PRERUN          0x4
-#define FLG_CONTINUE        0x8
-#define FLG_COMPLETED       0x10
-#define FLG_TIMEOUT         0x20
-#define FLG_ABORTCONDITION  0x40
-#define FLG_RATELIMIT       0x80
-#define FLG_FIRSTCYCLE      0x100
-#define FLG_INITIALIZED     0x20000000
-#define FLG_ABORT           0x40000000
-#define FLG_STATEERROR      0x80000000
-
 error_t LoadCommandLineArgs(__SCONTEXT_PAR, int32_t argc, char const* const* argv);
 
 error_t LoadSimulationPlugins(__SCONTEXT_PAR);

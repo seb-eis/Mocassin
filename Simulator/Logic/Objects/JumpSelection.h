@@ -16,10 +16,6 @@
 
 #define MC_NOPOOL 0
 
-error_t ConstructJumpPool(__SCONTEXT_PAR);
-
-error_t PrepareJumpPool(__SCONTEXT_PAR);
-
 void RollNextKmcSelect(__SCONTEXT_PAR);
 
 void RollNextMmcSelect(__SCONTEXT_PAR);

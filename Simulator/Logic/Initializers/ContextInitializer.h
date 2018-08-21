@@ -9,9 +9,10 @@
 //////////////////////////////////////////
 
 #pragma once
+#include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Simulator/Data/Model/DbModel/DbModel.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-error_t ConstructSimulationContext(__SCONTEXT_PAR);
+void ConstructSimulationContext(__SCONTEXT_PAR);
 
-error_t PopulateSimulationContext(__SCONTEXT_PAR);
+void PopulateSimulationContext(__SCONTEXT_PAR);
