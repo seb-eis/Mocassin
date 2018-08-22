@@ -27,37 +27,64 @@ namespace ICon.Model.Lattices
     /// </remarks>
     public class LatticeCreationProvider : ILatticeCreationProvider
     {
+        /// <summary>
+        /// The default block which is used to fill spaces not defined by custom blocks (default block is the one with Index = 0)
+        /// </summary>
         private IBuildingBlock DefaultBlock { get; set; }
+
+        /// <summary>
+        /// List of block infos
+        /// </summary>
         private ReadOnlyList<IBlockInfo> BlockInfos { get; set; }
+
+        /// <summary>
+        /// Dictionary of sublattice ID and corresponding unit cell position
+        /// </summary>
         private IReadOnlyDictionary<int, IUnitCellPosition> SublatticeIDs { get; set; }
+
+        /// <summary>
+        /// Vector encoder for supercellWrapper
+        /// </summary>
         private UnitCellVectorEncoder VectorEncoder { get; set; }
+
+        /// <summary>
+        /// List of dopings
+        /// </summary>
         private ReadOnlyList<IDoping> Dopings { get; set; }
+
+        /// <summary>
+        /// Doping tolerance for automated calculation of counter dopant
+        /// </summary>
         private double DopingTolerance { get; set; }
+
+        /// <summary>
+        /// General double compare tolerance
+        /// </summary>
         private double DoubleCompareTolerance { get; set; }
 
-    /// <summary>
-    /// Default constructor
-    /// </summary>
-    /// <param name="latticePort"></param>
-    /// <param name="structurePort"></param>
-    /// <param name="settingsData"></param>
-    public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettingsData settingsData)
-        {
-            DefaultBlock = latticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
-            BlockInfos = latticePort.Query(port => port.GetBlockInfos());
-            SublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
-            VectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
-            Dopings = latticePort.Query(port => port.GetDopings());
-            DopingTolerance = settingsData.LatticeSettings.DopingCompensationTolerance;
-            DoubleCompareTolerance = settingsData.CommonNumericSettings.RangeValue;
-        }
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="latticePort"></param>
+        /// <param name="structurePort"></param>
+        /// <param name="settingsData"></param>
+        public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettingsData settingsData)
+            {
+                DefaultBlock = latticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
+                BlockInfos = latticePort.Query(port => port.GetBlockInfos());
+                SublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
+                VectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
+                Dopings = latticePort.Query(port => port.GetDopings());
+                DopingTolerance = settingsData.LatticeSettings.DopingCompensationTolerance;
+                DoubleCompareTolerance = settingsData.CommonNumericSettings.RangeValue;
+            }
 
         /// <summary>
         /// Construct the lattice with informations provided in blueprint and managers
         /// </summary>
         /// <param name="bluePrint"></param>
         /// <returns></returns>
-        public List<SupercellWrapper<IParticle>> ConstructLattice(ISimulationSeriesBase simulationSeries)
+        public List<SupercellWrapper<IParticle>> ConstructLattices(ISimulationSeriesBase simulationSeries)
         {
             PcgRandom32 randomGenerator;
             if (int.TryParse(simulationSeries.BaseSimulation.CustomRngSeed, out int seed))
