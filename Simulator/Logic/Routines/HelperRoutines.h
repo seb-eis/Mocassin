@@ -92,7 +92,6 @@ static inline void ConvEnergyBoltzToPhys(double* restrict value, const double co
     *value /= convValue;
 }
 
-
 static inline int32_t GetNextCeiledRnd(__SCONTEXT_PAR, const int32_t upperLimit)
 {
     return (int32_t) (Pcg32Next(&SCONTEXT->RnGen) % upperLimit);
@@ -193,10 +192,66 @@ static inline cnt_col_t* RefActCounters(const __SCONTEXT_PAR)
     return (void*) SCONTEXT->CycleState.ActCntCol;
 }
 
+static inline cnt_state_t* RefStateCounters(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.Counters;
+}
+
 static inline cnt_col_t* RefStateCountersAt(const __SCONTEXT_PAR, const byte_t id)
 {
     return (void*) &SCONTEXT->SimState.Counters.Start[id];
 }
+
+static inline trc_state_t* RefGlobalMoveTrackers(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.GlobalTrackers;
+}
+
+static inline tracker_t* RefGlobalMoveTrackerAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &RefGlobalMoveTrackers(SCONTEXT)->Start[id];
+}
+
+static inline trc_state_t* RefMobileMoveTrackers(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.MobileTrackers;
+}
+
+static inline tracker_t* RefMobileMoveTrackerAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &RefMobileMoveTrackers(SCONTEXT)->Start[id];
+}
+
+static inline trc_state_t* RefStaticMoveTrackers(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.StaticTrackers;
+}
+
+static inline tracker_t* RefStaticMoveTrackerAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &RefStaticMoveTrackers(SCONTEXT)->Start[id];
+}
+
+static inline idx_state_t* RefMobileMoveTrackerIdx(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.MobileTrackerIdx;
+}
+
+static inline int32_t* RefMobileMoveTrackerIdxAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &RefMobileMoveTrackerIdx(SCONTEXT)->Start[id];
+}
+
+static inline prb_state_t* RefProbabilityStatMap(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.ProbStatMap;
+}
+
+static inline int64_t* RefProbabilityStatMapAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return (void*) &RefProbabilityStatMap(SCONTEXT)->Start[id];
+}
+
 
 static inline env_lattice_t* RefEnvLattice(const __SCONTEXT_PAR)
 {
@@ -213,14 +268,34 @@ static inline buffer_t* RefStateBuffer(const __SCONTEXT_PAR)
     return (void*) &SCONTEXT->SimState.Buffer;
 }
 
+static inline byte_t* RefStateBufferAt(const __SCONTEXT_PAR, const int32_t id)
+{
+    return &RefStateBuffer(SCONTEXT)->Start[id];
+}
+
+static inline hdr_state_t* RefStateHeader(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.Header;
+}
+
 static inline hdr_info_t* RefStateHeaderData(const __SCONTEXT_PAR)
 {
     return (void*) SCONTEXT->SimState.Header.Data;
 }
 
+static inline mta_state_t* RefStateMeta(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.Meta;
+}
+
 static inline meta_info_t* RefStateMetaData(const __SCONTEXT_PAR)
 {
     return (void*) SCONTEXT->SimState.Meta.Data;
+}
+
+static inline lat_state_t* RefStateLattice(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimState.Lattice;
 }
 
 static inline run_info_t* RefModelRunInfo(const __SCONTEXT_PAR)
@@ -251,6 +326,11 @@ static inline jump_assign_t* RefJmpAssignTable(const __SCONTEXT_PAR)
 static inline jump_dir_t* RefJumpDirAt(const __SCONTEXT_PAR, const int32_t id)
 {
     return (void*) &SCONTEXT->SimDbModel.Transition.JumpDirs.Start[id];
+}
+
+static inline jump_cols_t* RefJumpCols(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimDbModel.Transition.JumpCols;
 }
 
 static inline jump_col_t* RefJumpColAt(const __SCONTEXT_PAR, const int32_t id)
@@ -362,4 +442,58 @@ static inline bool_t JobHeaderHasFlgs(const __SCONTEXT_PAR, bitmask_t flgs)
 static inline flp_buffer_t* RefMmcAbortBuffer(const __SCONTEXT_PAR)
 {
     return (void*) &SCONTEXT->SimDynModel.EngBuffer;
+}
+
+static inline int32_t GetTotalPosCount(const __SCONTEXT_PAR)
+{
+    vector4_t* sizes = RefLatticeSize(SCONTEXT);
+    return sizes->a * sizes->b * sizes->c * sizes->d;
+}
+
+static inline byte_t GetMaxParId(const __SCONTEXT_PAR)
+{
+    int32_t dimensions[2];
+    GetMdaDimensions((int32_t*)RefJmpDirCountTable(SCONTEXT)->Header, &dimensions[0]);
+    return dimensions[0];
+}
+
+static inline kmc_header_t* RefJobHeaderAsKmc(const __SCONTEXT_PAR)
+{
+    return (void*) SCONTEXT->SimDbModel.JobInfo.JobHeader;
+}
+
+static inline mmc_header_t* RefJobHeaderAsMmc(const __SCONTEXT_PAR)
+{
+    return (void*) SCONTEXT->SimDbModel.JobInfo.JobHeader;
+}
+
+static inline db_model_t* RefDatabaseModel(const __SCONTEXT_PAR)
+{
+    return (void*) &SCONTEXT->SimDbModel;
+}
+
+static inline str_model_t* RefDbModelStructure(const __SCONTEXT_PAR)
+{
+    return (void*) &RefDatabaseModel(SCONTEXT)->Structure;
+}
+
+static inline eng_model_t* RefDbModelEnergy(const __SCONTEXT_PAR)
+{
+    return (void*) &RefDatabaseModel(SCONTEXT)->Energy;
+}
+
+static inline tra_model_t* RefDbModelTransition(const __SCONTEXT_PAR)
+{
+    return (void*) &RefDatabaseModel(SCONTEXT)->Transition;
+}
+
+static inline lat_info_t* RefDbModelLattInfo(const __SCONTEXT_PAR)
+{
+    return (void*) &RefDatabaseModel(SCONTEXT)->LattInfo;
+}
+
+static inline const int32_t GetNumberOfUnitCells(const __SCONTEXT_PAR)
+{
+    vector4_t* sizes = &RefDbModelLattInfo(SCONTEXT)->SizeVec;
+    return sizes->a * sizes->b * sizes->c;
 }

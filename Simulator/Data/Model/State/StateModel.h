@@ -18,7 +18,7 @@ typedef struct
 {
     int64_t Mcs;
     int32_t Flags;
-    int32_t MetaByte, LatticeByte, CountersByte, GlobalTrcByte, MobileTrcByte, StaticTrcByte, MobileTrcIdxByte, JmpTrcByte;
+    int32_t MetaByte, LatticeByte, CountersByte, GlobalTrcByte, MobileTrcByte, StaticTrcByte, MobileTrcIdxByte, ProbStatMapByte;
 } hdr_info_t;
 
 typedef struct { hdr_info_t* Data; } hdr_state_t;
@@ -37,7 +37,7 @@ typedef struct { meta_info_t* Data; } mta_state_t;
 
 typedef struct { int32_t Count; int32_t * Start, * End; } idx_state_t;
 
-typedef struct { int32_t Count; int64_t * Start, * End; } jmp_state_t;
+typedef struct { int32_t Count; int64_t * Start, * End; } prb_state_t;
 
 typedef struct
 {
@@ -50,5 +50,5 @@ typedef struct
     trc_state_t MobileTrackers;
     trc_state_t StaticTrackers;
     idx_state_t MobileTrackerIdx;
-    jmp_state_t JumpTracker;
+    prb_state_t ProbStatMap;
 } mc_state_t;

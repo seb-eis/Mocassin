@@ -59,19 +59,19 @@ typedef struct { double PathEnergies[8]; } env_backup_t;
 typedef struct
 {
     cycle_cnt_t     MainCnts;
+    occode_t        ActStateCode;
+    roll_info_t     ActRollInfo;
+    eng_info_t      ActEngInfo;
+    env_backup_t    ActEnvBackup;
     jump_dir_t*     ActJumpDir;
     jump_col_t*     ActJumpCol;
     jump_rule_t*    ActJumpRule;
     cnt_col_t*      ActCntCol;
     env_state_t*    ActPathEnvs[8];
-    occode_t        ActStateCode;
-    roll_info_t     ActRollInfo;
-    eng_info_t      ActEngInfo;
     env_state_t*    ActWorkEnv;
     clu_state_t*    ActWorkClu;
     pair_table_t*   ActPairTable;
     clu_table_t*    ActCluTable;
-    env_backup_t    ActEnvBackup;
 } cycle_state_t;
 
 typedef struct { int32_t * Start, * End, * CurEnd; } env_pool_t;

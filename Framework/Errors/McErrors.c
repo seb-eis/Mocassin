@@ -15,18 +15,18 @@ char* ConvErrorToString(error_t errCode)
 {
     static char* errTable[] =
     {
-        "FATAL FAILURE. Runtime error exit triggered without an error flag.",
-        "File stream operation failed",
-        "Memory block dump operation failed",
-        "Incompatible buffer cast operation (Potential overflow)",
-        "Buffer overflow",
-        "File path is missing or invalid",
-        "Invalid file mode passed function",
-        "Database access failure",
-        "Unspecified error",
-        "Memory allocation error",
-        "Data is inconsistent",
-        "Invalid checksum"
+        "FATAL FAILURE. Runtime error exit triggered without an error flag. (Expected reason: Implementation error)",
+        "File stream operation failed                                       (Expected reason: Storage system is full)",
+        "Memory block dump operation failed                                 (Expected reason: Implementation error)",
+        "Incompatible buffer cast operation detected                        (Expected reason: Implementation error)",
+        "Buffer overflow detected                                           (Expected reason: Implementation error)",
+        "File path is missing or invalid                                    (Expected reason: File is missing or has wrong name)",
+        "Invalid file mode passed to I/O                                    (Expected reason: Implementation error)",
+        "Database access failure                                            (Expected reason: Corrupted or invalid database)",
+        "Unspecified error                                                  (Expected reason: Implementation error)",
+        "Dynamic memory allocation returned NULL                            (Expected reason: Process is out of memory)",
+        "Data is inconsistent                                               (Expected reason: Corrupted or invalid input data)",
+        "Invalid file/state/database checksum                               (Expected reason: Unsupported manual file manipulation)"
     };
 
     return (errCode > (sizeof(errTable) / sizeof(char*))) ? "[???]" : errTable[errCode];
