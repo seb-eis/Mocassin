@@ -13,6 +13,7 @@
                 "Framework/Math/Types/Vector.c",
                 "Framework/Errors/McErrors.c",
                 "Framework/Basic/FileIO/FileIO.c",
+                "Framework/Basic/Plugins/PluginLoading.c",
                 "Simulator/Data/Model/State/StateLogic.c",
                 "Simulator/Logic/Objects/JumpSelection.c",
                 "Simulator/Logic/Routines/EnvRoutines.c",

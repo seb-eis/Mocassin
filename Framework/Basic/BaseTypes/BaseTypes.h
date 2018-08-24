@@ -102,7 +102,7 @@ typedef struct { size_t* Start; size_t* End; } size_array_t;
 typedef struct { double* Start; double* End; } double_array_t;
 
 // Defines the id redirect type to be an int32_t array
-typedef int32_array_t id_redirect_t;
+typedef struct { int32_t Count; int32_t * Start, * End; } id_redirect_t;
 
 // Basic dynamic int32_t list definition. Supports start, end and current end iterator 
 typedef LIST_OF(int32_t) int32_list_t;
@@ -213,7 +213,7 @@ static inline void FreeBlob(const blob_t* restrict inBlob)
 }
 
 // Defines the cast of a blob type to another blb type
-#define BLOB_CAST(__TYPE, __BLOB) (__TYPE) { (void*)__BLOB.Header, (void*)__BLOB.Buffer.Start, (void*)__BLOB.Buffer.End };
+#define CAST_OBJECT(__TYPE, __BLOB) (__TYPE) { (void*)__BLOB.Header, (void*)__BLOB.Buffer.Start, (void*)__BLOB.Buffer.End }
 
 // Defines a new multidimensional array type that carries a pointer Header information (rank, size, blocks) and pointers to buffer start and end
 #define DEFINE_MD_ARRAY(__NAME, __TYPE, __RANK) typedef struct { struct { int32_t Rank, Size; int32_t Blocks[__RANK-1]; }* Header; __TYPE* Start, * End; } __NAME;
@@ -252,10 +252,10 @@ blob_t AllocateMdaUnchecked(const int32_t rank, const size_t itemSize, const int
 error_t AllocateMdaChecked(const int32_t rank, const size_t itemSize, const int32_t* restrict dimensions, blob_t* restrict outBlob);
 
 // Sets all bytes specified by a start and a conter to 0
-static inline void ZeroBuffer(void* restrict start, const size_t byteCount)
+static inline void Set_BufferByteValues(void* restrict start, const size_t byteCount, const byte_t value)
 {
     for(size_t i = 0; i < byteCount; i++)
     {
-        ((byte_t*)start)[i] = 0;
+        ((byte_t*)start)[i] = value;
     }
 }

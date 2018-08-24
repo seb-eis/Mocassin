@@ -23,6 +23,9 @@ typedef int64_t cerror_t;
 // Defines the path to the debug stderr dump folder
 #define STDERR_PATH "./Debug/stderr.log"
 
+// Defines the error code that indicates that a default value should be used (Not translatable to string)
+#define ERR_USEDEFAULT -1
+
 // Defines the error code for no error
 #define ERR_OK 0
 
@@ -55,6 +58,15 @@ typedef int64_t cerror_t;
 
 // Defines the error code for cases when a data inconsistency is found
 #define ERR_DATACONSISTENCY 10
+
+// Defines the error code for cases where hash value checks for file manipulation detection fail
+#define ERR_HASHPROTECTION 11
+
+// Defines error code for cases where a requested plugin is not found
+#define ERR_LIBRARYLOADING 12
+
+// Defines the error code for cases where a requested plugin import function is not found
+#define ERR_FUNCTIONIMPORT 13
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);

@@ -7,3 +7,25 @@
 //			© 2018 Sebastian Eisele     //
 // Short:   General plugin loading      //
 //////////////////////////////////////////
+
+#pragma once
+#include "Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Framework/Errors/McErrors.h"
+
+#ifdef MC_USE_PLUGIN_SUPPORT
+    #ifdef _WIN32
+        #include <windows.h>
+    #endif
+        
+    #ifdef linux
+        #include <dlfcn.h>
+    #endif
+
+    #ifndef _DEBUG
+        #define IGNORE_INVALID_PLUGINS
+    #endif
+#else
+    #define IGNORE_INVALID_PLUGINS
+#endif
+
+void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error);

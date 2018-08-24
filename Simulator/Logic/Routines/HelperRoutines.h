@@ -92,6 +92,16 @@ static inline void ConvEnergyBoltzToPhys(double* restrict value, const double co
     *value /= convValue;
 }
 
+static inline int32_t FindMaxJumpDirectionCount(const jump_counts_t* restrict jumpCountTable)
+{
+    int32_t max = 0;
+    FOR_EACH(int32_t, count, *jumpCountTable)
+    {
+        max = (max < *count) ? *count : max;
+    }
+    return max;
+}
+
 static inline int32_t GetNextCeiledRnd(__SCONTEXT_PAR, const int32_t upperLimit)
 {
     return (int32_t) (Pcg32Next(&SCONTEXT->RnGen) % upperLimit);
@@ -441,7 +451,7 @@ static inline bool_t JobHeaderHasFlgs(const __SCONTEXT_PAR, bitmask_t flgs)
 
 static inline flp_buffer_t* RefMmcAbortBuffer(const __SCONTEXT_PAR)
 {
-    return (void*) &SCONTEXT->SimDynModel.EngBuffer;
+    return (void*) &SCONTEXT->SimDynModel.LatticeEnergyBuffer;
 }
 
 static inline int32_t GetTotalPosCount(const __SCONTEXT_PAR)

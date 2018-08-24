@@ -13,6 +13,9 @@
 
 char* ConvErrorToString(error_t errCode)
 {
+    // Redirect all non-critical errors to FATAL FAILURE since they should never cause an error string lookup
+    errCode = (errCode <= 0) ? 0 : errCode;
+
     static char* errTable[] =
     {
         "FATAL FAILURE. Runtime error exit triggered without an error flag. (Expected reason: Implementation error)",
@@ -26,7 +29,9 @@ char* ConvErrorToString(error_t errCode)
         "Unspecified error                                                  (Expected reason: Implementation error)",
         "Dynamic memory allocation returned NULL                            (Expected reason: Process is out of memory)",
         "Data is inconsistent                                               (Expected reason: Corrupted or invalid input data)",
-        "Invalid file/state/database checksum                               (Expected reason: Unsupported manual file manipulation)"
+        "Invalid file/state/database checksum                               (Expected reason: Unsupported manual file manipulation)",
+        "Plugin loading failed                                              (Expected reason: The plugin library path is invalid)",
+        "Plugin function lookup failed                                      (Expected reason: The export function name is invalid)"
     };
 
     return (errCode > (sizeof(errTable) / sizeof(char*))) ? "[???]" : errTable[errCode];

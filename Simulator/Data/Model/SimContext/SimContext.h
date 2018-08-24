@@ -86,7 +86,7 @@ typedef struct { clock_t StartClock, LastClock; } run_info_t;
 
 typedef struct { double EngConvFac, TotJumpNorm, CurTimeStep; } phys_val_t;
 
-typedef struct { char* DbPath; } file_info_t;
+typedef struct { char* DatabasePath, * OutputPluginPath, * OutputImportName, * EnergyPluginPath, * EnergyImportName; } file_info_t;
 
 typedef struct { int32_t Count; double LastAvg; double * Start, * CurEnd, * End; } flp_buffer_t;
 
@@ -94,7 +94,7 @@ typedef struct
 {
     file_info_t     FileInfo;
     phys_val_t      PhysFactors;
-    flp_buffer_t    EngBuffer;
+    flp_buffer_t    LatticeEnergyBuffer;
     run_info_t      RunInfo;
     env_lattice_t   EnvLattice;
 } sim_model_t;
