@@ -354,3 +354,54 @@ static inline dir_pool_t* Get_DirectionPoolByJumpCount(__SCONTEXT_PAR, const int
 {
     return Get_DirectionPoolById(SCONTEXT, Get_DirectionPoolIdByJumpCount(SCONTEXT, count));
 }
+
+/* Command arguments getter/setter */
+
+static inline cmd_args_t* Get_CommandArguments(__SCONTEXT_PAR)
+{
+    return &SCONTEXT->RunArguments;
+}
+
+static inline char const * Get_CommandArgumentStringById(__SCONTEXT_PAR, const int32_t id)
+{
+    if (id >= Get_CommandArguments(SCONTEXT)->Count)
+    {
+        return NULL;
+    }
+    return Get_CommandArguments(SCONTEXT)->Values[id];
+}
+
+static inline void Set_CommandArguments(__SCONTEXT_PAR, const int32_t argc, char const * const * argv)
+{
+    *Get_CommandArguments(SCONTEXT) = (cmd_args_t) { argc, argv };
+}
+
+static inline void Set_ProgramRunPath(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->RunPath = value;
+}
+
+static inline void Set_DatabasePath(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->DatabasePath = value;
+}
+
+static inline void Set_OutputPluginPath(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->OutputPluginPath = value;
+}
+
+static inline void Set_OutputPluginSymbol(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->OutputPluginSymbol = value;
+}
+
+static inline void Set_EnergyPluginPath(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->EnergyPluginPath = value;
+}
+
+static inline void Set_EnergyPluginSymbol(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->EnergyPluginSymbol = value;
+}

@@ -8,11 +8,128 @@
 // Short:   Context initializer logic   //
 //////////////////////////////////////////
 
+#include <strings.h>
+#include "Simulator/Logic/Validators/Validators.h"
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
 #include "Framework/Basic/Plugins/PluginLoading.h"
 #include "Simulator/Logic/Routines/MainRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
+
+static const cmdarg_lookup_t* Get_EssentialCmdArgsResolverTable()
+{
+    static cmdarg_resolver_t resolvers[] =
+    {
+        { "-dbPath", (f_validator_t) ValidateStringNotNullOrEmpty, (f_cmdcallback_t) Set_DatabasePath }
+    };
+    static cmdarg_lookup_t resolverTable = 
+    { 
+        (int32_t) (sizeof(resolvers) / sizeof(cmdarg_resolver_t)),
+        &resolvers[0],
+        &resolvers[sizeof(resolvers) / sizeof(cmdarg_resolver_t)]
+    };
+    return &resolverTable;
+}
+
+static const cmdarg_lookup_t* Get_OptionalCmdArgsResolverTable()
+{
+    static cmdarg_resolver_t resolvers[] =
+    {
+        { "-outPluginPath",   (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_OutputPluginPath },
+        { "-outPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_OutputPluginSymbol },
+        { "-engPluginPath",   (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_EnergyPluginPath },
+        { "-engPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_EnergyPluginSymbol }
+    };
+    static cmdarg_lookup_t resolverTable =
+    {
+        (int32_t) (sizeof(resolvers) / sizeof(cmdarg_resolver_t)),
+        &resolvers[0],
+        &resolvers[sizeof(resolvers) / sizeof(cmdarg_resolver_t)]
+    };
+    return &resolverTable;
+}
+
+static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const cmdarg_lookup_t* restrict resolverTable, const int32_t argId)
+{
+    char const * keyArgument = Get_CommandArgumentStringById(SCONTEXT, argId);
+    char const * valArgument = Get_CommandArgumentStringById(SCONTEXT, argId + 1);
+
+    if (ValidateCmdKeyArgumentFormat(keyArgument) != ERR_OK)
+    {
+        return ERR_CMDARGUMENT;
+    }
+
+    FOR_EACH(cmdarg_resolver_t, argResolver, *resolverTable)
+    {   
+        if (strcmp(keyArgument, argResolver->KeyArgument) == 0)
+        {
+            if(argResolver->ValueValidator(valArgument) != ERR_OK)
+            {
+                return ERR_VALIDATION;
+            }
+            argResolver->ValueCallback(SCONTEXT, valArgument);
+            return ERR_OK;
+        }
+    }
+    return ERR_CMDARGUMENT;
+}
+
+static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
+{
+    const cmdarg_lookup_t* resolverTable = Get_EssentialCmdArgsResolverTable();
+    int32_t unresolved = resolverTable->Count;
+    error_t error = ERR_OK;
+
+    for (int32_t i = 1; i < Get_CommandArguments(SCONTEXT)->Count; i++)
+    {
+        if ((error = LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i)) == ERR_OK)
+        {
+            if((--unresolved) == 0)
+            {
+                return ERR_OK;
+            }
+        }
+        if (error == ERR_VALIDATION)
+        {
+            return error;
+        }
+    }
+    return ERR_CMDARGUMENT;
+}
+
+static error_t ResolveAndSetOptionalCmdArguments(__SCONTEXT_PAR)
+{
+    const cmdarg_lookup_t* resolverTable = Get_OptionalCmdArgsResolverTable();
+    int32_t unresolved = resolverTable->Count;
+
+    for (int32_t i = 1; i < Get_CommandArguments(SCONTEXT)->Count; i++)
+    {
+        if (LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i) == ERR_OK)
+        {
+            if((--unresolved) == 0)
+            {
+                return ERR_OK;
+            }
+        }
+    }
+    return ERR_OK;
+}
+
+void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues)
+{
+    error_t error = ERR_OK;
+    Set_CommandArguments(SCONTEXT, argCount, argValues);
+    Set_ProgramRunPath(SCONTEXT, Get_CommandArgumentStringById(SCONTEXT, 0));
+
+    if ((error = ResolveAndSetEssentialCmdArguments(SCONTEXT)) != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Failed to resolve essential command line arguments.");
+    }
+    if ((error = ResolveAndSetOptionalCmdArguments(SCONTEXT)) != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Failed to resolve optional command line arguments.")
+    }
+}
 
 static error_t ConstructEngStateBuffer(eng_states_t *restrict bufferAccess, const byte_t count)
 {
@@ -212,9 +329,9 @@ static size_t ConfigStateAbstractTrackerAccess(__SCONTEXT_PAR, const size_t used
         trc_state_t* configObject = Get_AbstractMovementTrackers(SCONTEXT);
 
         configObject->Count = Get_StructureModel(SCONTEXT)->GloTrcCount;
-        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
+        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -230,9 +347,9 @@ static size_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const size_t usedBu
         trc_state_t* configObject = Get_MobileMovementTrackers(SCONTEXT);
 
         configObject->Count = Get_LatticeInformation(SCONTEXT)->MobCount;
-        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
+        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -248,9 +365,9 @@ static size_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const size_t usedBu
         trc_state_t* configObject = Get_StaticMovementTrackers(SCONTEXT);
 
         configObject->Count = Get_StructureModel(SCONTEXT)->CellTrcCount * GetNumberOfUnitCells(SCONTEXT);
-        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
+        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -313,7 +430,7 @@ static void ConstructMainState(__SCONTEXT_PAR)
 {
     error_t error = ERR_OK;
 
-    Set_BufferByteValues(&SCONTEXT->SimState, sizeof(mc_state_t), 0);
+    Set_BufferByteValues(Get_SimulationState(SCONTEXT), sizeof(mc_state_t), 0);
 
     if ((error = AllocateBufferChecked(Get_JobInformation(SCONTEXT)->StateSize, 1, Get_MainStateBuffer(SCONTEXT))) != ERR_OK)
     {
@@ -340,12 +457,12 @@ static error_t TryLoadOuputPlugin(__SCONTEXT_PAR)
     error_t error = ERR_OK;
     file_info_t* fileInfo = Get_FileInformation(SCONTEXT);
 
-    if ((fileInfo->OutputPluginPath) == NULL || (fileInfo->OutputImportName == NULL))
+    if ((fileInfo->OutputPluginPath) == NULL || (fileInfo->OutputPluginSymbol == NULL))
     {
         return ERR_USEDEFAULT;
     }
 
-    if ((Get_PluginCollection(SCONTEXT)->OnDataOut = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputImportName, &error)) == NULL)
+    if ((Get_PluginCollection(SCONTEXT)->OnDataOut = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
     {
         #ifdef IGNORE_INVALID_PLUGINS
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
@@ -363,12 +480,12 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
     error_t error = ERR_OK;
     file_info_t* fileInfo = Get_FileInformation(SCONTEXT);
 
-    if ((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyImportName == NULL))
+    if ((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyPluginSymbol == NULL))
     {
         return ERR_USEDEFAULT;
     }
 
-    if ((Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyImportName, &error)) == NULL)
+    if ((Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
         #ifdef IGNORE_INVALID_PLUGINS
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
@@ -381,16 +498,33 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
     return ERR_USEDEFAULT;
 }
 
+static inline void SetEnergyPluginFunctionToDefault(__SCONTEXT_PAR)
+{
+    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    {
+        Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = (f_plugin_t) SetKmcJumpProbsDefault;
+    }
+    else
+    {
+        Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = (f_plugin_t) SetMmcJumpProbsDefault;
+    }
+}
+
+static inline void SetOutputPluginFunctionToDefault(__SCONTEXT_PAR)
+{
+    Get_PluginCollection(SCONTEXT)->OnDataOut = NULL;
+}
+
 static void PopulatePluginDelegateFunctions(__SCONTEXT_PAR)
 {
     if (TryLoadOuputPlugin(SCONTEXT) == ERR_USEDEFAULT)
     {
-        Get_PluginCollection(SCONTEXT)->OnDataOut = NULL;
+        SetOutputPluginFunctionToDefault(SCONTEXT);
     }
 
     if (TryLoadEnergyPlugin(SCONTEXT) == ERR_USEDEFAULT)
     {
-        Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = (f_plugin_t) (JobInfoHasFlgs(SCONTEXT, FLG_KMC) ? SetKmcJumpProbsDefault : SetMmcJumpProbsDefault);
+        SetEnergyPluginFunctionToDefault(SCONTEXT);
     }
 }
 
@@ -409,4 +543,11 @@ void PopulateSimulationContext(__SCONTEXT_PAR)
     PopulatePluginDelegateFunctions(SCONTEXT);
     PopulateDynamicSimulationModel(SCONTEXT);
     PopulateJumpSelectionPool(SCONTEXT);
+}
+
+void PrepareContextForSimulation(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues)
+{
+    ResolveCommandLineArguments(SCONTEXT, argCount, argValues);
+    ConstructSimulationContext(SCONTEXT);
+    PopulateSimulationContext(SCONTEXT);
 }

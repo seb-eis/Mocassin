@@ -14,10 +14,6 @@
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 
-error_t LoadCommandLineArgs(__SCONTEXT_PAR, int32_t argc, char const* const* argv);
-
-error_t LoadSimulationPlugins(__SCONTEXT_PAR);
-
 error_t LoadSimulationModel(__SCONTEXT_PAR);
 
 error_t LoadSimulationState(__SCONTEXT_PAR);

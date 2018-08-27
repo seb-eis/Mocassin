@@ -13,16 +13,6 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 
-error_t LoadCommandLineArgs(__SCONTEXT_PAR, int32_t argc, char const *const *argv)
-{
-    return ERR_OK;
-}
-
-error_t LoadSimulationPlugins(__SCONTEXT_PAR)
-{
-    return ERR_OK;
-}
-
 error_t LoadSimulationModel(__SCONTEXT_PAR)
 {
     return ERR_OK;

@@ -68,6 +68,12 @@ typedef int64_t cerror_t;
 // Defines the error code for cases where a requested plugin import function is not found
 #define ERR_FUNCTIONIMPORT 13
 
+// Defines the error code for cases where a requested command line argument does not exist or is invalid
+#define ERR_CMDARGUMENT 14
+
+// Defines error code for validation failures
+#define ERR_VALIDATION 15
+
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 

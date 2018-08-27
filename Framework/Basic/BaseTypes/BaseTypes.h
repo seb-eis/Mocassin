@@ -14,6 +14,18 @@
 #include <stdlib.h>
 #include "Framework/Errors/McErrors.h"
 
+// Defines the function for cmd argument setters
+typedef void (*f_cmdcallback_t)(void* obj, char const * value);
+
+// Defines a validator function for an arbitrary pointer
+typedef error_t (*f_validator_t)(void const * value);
+
+// Defines a command line argument lookup with expected value in the validator and a callback function for the affiliated value
+typedef struct { char const * KeyArgument; f_validator_t ValueValidator; f_cmdcallback_t ValueCallback; } cmdarg_resolver_t;
+
+// Defines the command line argument lookup table that contains all supported cmd arg lookups
+typedef struct { int32_t Count; cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
+
 // Define the restrict keyword for GCC
 #define restrict __restrict__
 

@@ -86,7 +86,7 @@ typedef struct { clock_t StartClock, LastClock; } run_info_t;
 
 typedef struct { double EngConvFac, TotJumpNorm, CurTimeStep; } phys_val_t;
 
-typedef struct { char* DatabasePath, * OutputPluginPath, * OutputImportName, * EnergyPluginPath, * EnergyImportName; } file_info_t;
+typedef struct { char const * RunPath, * DatabasePath, * OutputPluginPath, * OutputPluginSymbol, * EnergyPluginPath, * EnergyPluginSymbol; } file_info_t;
 
 typedef struct { int32_t Count; double LastAvg; double * Start, * CurEnd, * End; } flp_buffer_t;
 
@@ -103,6 +103,8 @@ typedef void (*f_plugin_t)(void* restrict);
 
 typedef struct { f_plugin_t OnDataOut, OnSetJumpProbs; } plugin_col_t;
 
+typedef struct { int32_t Count; char const * const * Values; } cmd_args_t;
+
 typedef struct
 {
     error_t         ErrorCode;
@@ -113,4 +115,5 @@ typedef struct
     cycle_state_t   CycleState;
     pcg32_random_t  RnGen;
     plugin_col_t    Plugins;
+    cmd_args_t      RunArguments;
 } sim_context_t;
