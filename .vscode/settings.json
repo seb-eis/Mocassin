@@ -3,5 +3,14 @@
         "jumpselection.h": "c",
         "mainroutines.h": "c",
         "pluginloading.h": "c"
-    }
+    },
+    "cmake.mingwSearchDirs": [
+        "C:\\Program Files\\DevTools\\MinGw-w64"
+    ],
+    "cmake.preferredGenerators": [
+        "MinGW Makefiles",
+        "Ninja",
+        "Unix Makefiles"
+    ],
+    "cmake.configureOnOpen": true
 }
