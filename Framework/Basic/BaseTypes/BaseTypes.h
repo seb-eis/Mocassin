@@ -146,12 +146,6 @@ typedef LIST_OF(int32_t) int32_list_t;
 // Checks if the start iterator of an array is a null pointer
 #define IS_NULL_ARRAY(__ARRAY) ((__ARRAY).Start == NULL)
 
-// Get a pointer to the array entry at the specified index as a byte pointer
-static inline byte_t* array_get(const buffer_t* restrict buffer_in, const int32_t entry_size, const int32_t index)
-{
-    return buffer_in->start_it + (index * entry_size);
-}
-
 // Get the number of bytes accessible thorugh the probided byte buffer access struct
 static inline size_t GetBufferSize(const buffer_t * restrict inBuffer)
 {
