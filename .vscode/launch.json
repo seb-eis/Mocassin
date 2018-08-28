@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "debug",
+            "name": "CMake Gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Debug/Simulator.exe",
+            "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -19,8 +19,7 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "build_simulator_debug"
+            ]
         }
     ]
 }

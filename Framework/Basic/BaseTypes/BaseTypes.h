@@ -12,15 +12,40 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "Framework/Errors/McErrors.h"
+
+// Defines the function for cmd argument setters
+typedef void (*f_cmdcallback_t)(void* obj, char const * value);
+
+// Defines a validator function for an arbitrary pointer
+typedef error_t (*f_validator_t)(void const * value);
+
+// Defines a command line argument lookup with expected value in the validator and a callback function for the affiliated value
+typedef struct { char const * KeyArgument; f_validator_t ValueValidator; f_cmdcallback_t ValueCallback; } cmdarg_resolver_t;
+
+// Defines the command line argument lookup table that contains all supported cmd arg lookups
+typedef struct { int32_t Count; cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
 
 // Define the restrict keyword for GCC
 #define restrict __restrict__
 
-// Macro to define a new named dynamic sized array that supports startd and end iterators
-#define DEFINE_DYNAMIC_ARRAY(name, type) typedef struct { type* start_it; type* end_it; } name;
+// Marshal a pointer to a value as a pointer of another type for direct memory manipulation
+#define MARSHAL_AS(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
 
-// Macro to define a new named fixed size array that supports start and end iterators
-#define DEFINE_FIXED_ARRAY(name, type, size) typedef struct { type* start_it; type* end_it; type buffer[size]; } name;
+// Foreach loop construct with type and iterator name for an array type that define a Start and End pointer
+#define FOR_EACH(__TYPE, __IT, __ARRAY) for(__TYPE* __IT = (__ARRAY).Start; __IT < (__ARRAY).End; __IT++)
+
+// Foreach instruction for a C style array with compile time known size definition
+#define C_FOR_EACH(__TYPE, __IT, __ARRAY) for(__TYPE* __IT = &(__ARRAY)[0]; __IT < &(__ARRAY)[sizeof(__ARRAY)/sizeof(__TYPE)-1]; __IT++)
+
+// Defines a quick macro for arrays of specific types with pointers to end an start of the array
+#define ARRAY_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; }
+
+// Defines a list of a specific type with a start pointer, an end pointer and a pointer to the current end of the list
+#define LIST_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; __VA_ARGS__* CurEnd; }
+
+// Macro to define a new named dynamic sized array that supports startd and end iterators
+#define DEFINE_DYNAMIC_ARRAY(__NAME, __TYPE) typedef struct { __TYPE* Start; __TYPE* End; } __NAME;
 
 // MAcro to define a new named dynamic sized buffer that supports start and end iterators
 #define DEFINE_DYNAMIC_BUFFER(name) DEFINE_DYNAMIC_ARRAY(name, byte_t);
@@ -29,7 +54,13 @@
 #define MALLOC_OBJECT(type) (type*) malloc(sizeof(type));
 
 // Casts any kind of array buffer access struct to another accessor type without checking for save conversion
-#define BUFFER_CAST(buffer, type) {(type*) buffer.start_it, (type*) buffer.end_it }
+#define BUFFER_TO_ARRAY(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End }
+
+// Casts any kind of array buffer (With count field) access struct to another accessor type (with count field) without checking for save conversion
+#define BUFFER_TO_ARRAY_WCOUNT(__BUFFER, __COUNT, __TYPE) (__TYPE) { __COUNT, (void*) (__BUFFER).Start, (void*) (__BUFFER).End }
+
+// Creates a list access struct from the passed buffer where the current item ptr points to the first element
+#define BUFFER_TO_LIST(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End, (void*) (__BUFFER).Start }
 
 // Defines the default byte to be of unsigned int8 type
 typedef uint8_t byte_t;
@@ -46,32 +77,74 @@ typedef byte_t bool_t;
 // Defines the values for true and false
 enum { false = 0, true = 1 };
 
-// Defines a dyanmic buffer access struct with const iterators to first byte and last byte + 1
-typedef struct { byte_t* start_it; byte_t* end_it; } buffer_t;
+// Defines the basic bitmask to be an unsigned 64 bit integer
+typedef int64_t bitmask_t;
 
-// Defines a dynamic blockwise buffer access with const iterators to first block and last block + 1
-typedef struct { memblock_t* start_it; memblock_t* end_it; } memblock_array_t;
+// Basic dynamic unsigned byte array definition. Carries start and end iterator pointers
+typedef struct { byte_t* Start; byte_t* End; } buffer_t;
+
+// Basic dynamic signed byte array definition. Carries start and end iterator pointers
+typedef struct { sbyte_t* Start; sbyte_t* End; } sbuffer_t;
+
+// Basic dynamic memblock array definition. Carries start and end iterator pointers
+typedef struct { memblock_t* Start; memblock_t* End; } memblock_array_t;
 
 // Basic dynamic int16_t array definition. Carries start and end iterator pointers
-typedef struct { int16_t* start_it; int16_t* end_it; } int16_array_t;
+typedef struct { int16_t* Start; int16_t* End; } int16_array_t;
 
 // Basic dynamic int32_t array definition. Carries start and end iterator pointers
-typedef struct { int32_t* start_it; int32_t* end_it; } int32_array_t;
+typedef struct { int32_t* Start; int32_t* End; } int32_array_t;
 
 // Basic dynamic int64_t array definition. Carries start and end iterator pointers
-typedef struct { int64_t* start_it; int64_t* end_it; } int64_array_t;
+typedef struct { int64_t* Start; int64_t* End; } int64_array_t;
 
 // Basic dynamic uint16_t array definition. Carries start and end iterator pointers
-typedef struct { uint16_t* start_it; uint16_t* end_it; } uint16_array_t;
+typedef struct { uint16_t* Start; uint16_t* End; } uint16_array_t;
 
 // Basic dynamic uint32_t array definition. Carries start and end iterator pointers
-typedef struct { uint32_t* start_it; uint32_t* end_it; } uint32_array_t;
+typedef struct { uint32_t* Start; uint32_t* End; } uint32_array_t;
 
 // Basic dynamic uint64_t array definition. Carries start and end iterator pointers
-typedef struct { uint64_t* start_it; uint64_t* end_it; } uint64_array_t;
+typedef struct { uint64_t* Start; uint64_t* End; } uint64_array_t;
 
 // Basic dynamic size_t array definition. Carries start and end iterator pointers
-typedef struct { size_t* start_it; size_t* end_it; } size_array_t;
+typedef struct { size_t* Start; size_t* End; } size_array_t;
+
+// Basic dynamic double array definition. Carries startd and end iterator pointers
+typedef struct { double* Start; double* End; } double_array_t;
+
+// Defines the id redirect type to be an int32_t array
+typedef struct { int32_t Count; int32_t * Start, * End; } id_redirect_t;
+
+// Basic dynamic int32_t list definition. Supports start, end and current end iterator 
+typedef LIST_OF(int32_t) int32_list_t;
+
+// Define a new list of the given type with a specified type name
+#define DEFINE_LIST(__NAME, __TYPE) typedef LIST_OF(__TYPE) __NAME
+
+// Get the pointer to the current last entry of a list
+#define LIST_GET_LAST_PTR(__LIST) ((__LIST).CurEnd - 1)
+
+// Moves the entry iterator for the last entry one down so it points to the actual last value
+#define LIST_POP_BACK(__LIST) (--(__LIST).CurEnd);
+
+// Sets the current end iterator the the passed value and advances the iterator to the new end
+#define LIST_ADD(__LIST, __VALUE) *((__LIST).CurEnd++) = (__VALUE)
+
+// Calculates the size of a list from start iterator, end iterator and the number of bytes per entry
+#define LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) (((__LIST).CurEnd - (__LIST).Start) / __BYTES_PER_ENTRY)
+
+// Get the last index of a list
+#define LIST_GET_LAST_INDEX(__LIST, __BYTES_PER_ENTRY) (LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) - 1)
+
+// Access an array by index and gets the value (Can also be used to set the value)
+#define ARRAY_GET(__ARRAY, __INDEX) (__ARRAY).Start[__INDEX]
+
+// Access an array and returns the pointer to the specified index
+#define ARRAY_GET_PTR(__ARRAY, __INDEX) ((__ARRAY).Start + __INDEX)
+
+// Checks if the start iterator of an array is a null pointer
+#define IS_NULL_ARRAY(__ARRAY) ((__ARRAY).Start == NULL)
 
 // Get a pointer to the array entry at the specified index as a byte pointer
 static inline byte_t* array_get(const buffer_t* restrict buffer_in, const int32_t entry_size, const int32_t index)
@@ -80,63 +153,127 @@ static inline byte_t* array_get(const buffer_t* restrict buffer_in, const int32_
 }
 
 // Get the number of bytes accessible thorugh the probided byte buffer access struct
-static inline size_t get_buffer_size(const buffer_t * byte_array)
+static inline size_t GetBufferSize(const buffer_t * restrict inBuffer)
 {
-    return ((size_t) byte_array->end_it - (size_t) byte_array->start_it);
+    return ((size_t) inBuffer->End - (size_t) inBuffer->Start);
 }
 
 // Calculates how many overflow bytes exist if a buffer is used as an array of with specfified entry block size
-static inline size_t get_overflow_byte_count(const buffer_t* byte_array, size_t block_size)
+static inline size_t GetOverflowByteCount(const buffer_t* restrict inBuffer, size_t blockSize)
 {
-    return get_buffer_size(byte_array) % block_size;
+    return GetBufferSize(inBuffer) % blockSize;
 }
 
 // Calculates the size of a byte buffer with the provided block size. Does not check for under or oversize
-static inline size_t get_unchecked_size(const buffer_t* byte_array, size_t block_size)
+static inline size_t GetBufferItemCount(const buffer_t* restrict inBuffer, size_t blockSize)
 {
-    return get_buffer_size(byte_array) / block_size;
+    return GetBufferSize(inBuffer) / blockSize;
 }
 
 // Allocate a new buffer that holds the minmum number of memory blocks to hold the requested number of bytes and returns a buffer access struct to them.
-static inline buffer_t allocate_buffer(size_t array_size, size_t entry_bytes)
+static inline buffer_t AllocateBufferUnchecked(const size_t arraySize, const size_t itemSize)
 {
-    size_t buffer_size = array_size * entry_bytes;
-    byte_t* start = malloc(buffer_size + (sizeof(memblock_t) - buffer_size % sizeof(memblock_t)));
-    byte_t* end = start + buffer_size;
+    size_t bufferSize = arraySize * itemSize;
+    byte_t* start = malloc(bufferSize + (sizeof(memblock_t) - bufferSize % sizeof(memblock_t)));
+    byte_t* end = start + bufferSize;
     return (buffer_t) {start,end};
 }
 
-// Allocate a new buffer that holds the specfified number of 4 byte memory blocks. Returns a byte array access struct to the buffer
-static inline buffer_t allocate_block_buffer(size_t num_of_blocks)
+// Allocates a new buffer savely. Returns a memory allocation error code if the malloc operation returns a null pointer
+static inline error_t AllocateBufferChecked(const size_t arraySize, const size_t itemSize, buffer_t* restrict outBuffer)
 {
-    return allocate_buffer(num_of_blocks, sizeof(memblock_t));
+    *outBuffer = AllocateBufferUnchecked(arraySize, itemSize);
+    if (outBuffer->Start == NULL)
+    {
+        return ERR_MEMALLOCATION;
+    }
+    return ERR_OK;
+}
+
+// Allocate a new buffer that holds the specfified number of 4 byte memory blocks. Returns a byte array access struct to the buffer
+static inline buffer_t AllocateBlockBufferUnchecked(size_t blockCount)
+{
+    return AllocateBufferUnchecked(blockCount, sizeof(memblock_t));
 }
 
 // Free the memory allocation defined by the passed byte array buffer access struct
-static inline void free_buffer(buffer_t* byte_array)
+static inline void FreeBuffer(buffer_t* inBuffer)
 {
-    free((byte_t*)byte_array->start_it);
+    free((byte_t*)inBuffer->Start);
 }
 
 // Compares if two buffers contain identical binary values (1) or not (0)
-static bool_t buffer_is_identical(const buffer_t* buffer_0, const buffer_t* buffer_1)
+bool_t HaveSameBufferContent(const buffer_t* lhs, const buffer_t* rhs);
+
+// Defines the basic blob type with a pointer to the Header and a buffer access struct
+typedef struct { byte_t* Header; buffer_t Buffer; } blob_t;
+
+// Defines the blob array type to store access structs for multiple blobs
+DEFINE_DYNAMIC_ARRAY(blob_array_t, blob_t);
+
+// Creates a basic blob type from a buffer and Header size information
+static inline blob_t BufferToBlob(const buffer_t* restrict inBuffer, size_t headerSize)
 {
-    if (buffer_0->start_it == buffer_1->start_it && buffer_0->end_it == buffer_1->end_it)
+    return (blob_t) { inBuffer->Start, { inBuffer->Start + headerSize, inBuffer->End } };
+}
+
+// ALlocates a blob on the heap with the specified buffer size and Header size
+static inline blob_t AllocateBlobUnchecked(const size_t bufferSize, const size_t headerSize)
+{
+    byte_t* ptr = malloc(bufferSize + headerSize);
+    return (blob_t) { ptr, { ptr + headerSize, ptr + (headerSize + bufferSize) } };
+}
+
+// Free the memory of a blob type
+static inline void FreeBlob(const blob_t* restrict inBlob)
+{
+    free(inBlob->Header);
+}
+
+// Defines the cast of a blob type to another blb type
+#define CAST_OBJECT(__TYPE, __BLOB) (__TYPE) { (void*)__BLOB.Header, (void*)__BLOB.Buffer.Start, (void*)__BLOB.Buffer.End }
+
+// Defines a new multidimensional array type that carries a pointer Header information (rank, size, blocks) and pointers to buffer start and end
+#define DEFINE_MD_ARRAY(__NAME, __TYPE, __RANK) typedef struct { struct { int32_t Rank, Size; int32_t Blocks[__RANK-1]; }* Header; __TYPE* Start, * End; } __NAME;
+
+// Calculate the 1D number of skipped items for an index and dimension combination
+#define MDA_SKIP(__ARRAY, __INDEX, __DIM) ((__ARRAY).Header->Blocks[__DIM-1] * __INDEX)
+
+// Returns the pointer to the multidimensional array entry at the specified indices
+#define MDA_GET_2(__ARRAY, _A, _B) ((__ARRAY).Start + MDA_SKIP((__ARRAY), _A, 1) + _B)
+
+// Returns the pointer to the multidimensional array entry at the specified indices
+#define MDA_GET_3(__ARRAY, _A, _B, _C) ((__ARRAY).Start + MDA_SKIP((__ARRAY), _A, 1) + MDA_SKIP((__ARRAY), _B, 2) + _C)
+
+// Returns the pointer to the multidimensional array entry at the specified indices
+#define MDA_GET_4(__ARRAY, _A, _B, _C, _D) ((__ARRAY).Start + MDA_SKIP((__ARRAY), _A, 1) + MDA_SKIP((__ARRAY), _B, 2) + MDA_SKIP((__ARRAY), _C, 2) + _D)
+
+// Defines the access struct for a 2 dimensional array of 32 bit signed integers with a Header information
+DEFINE_MD_ARRAY(int32_array2_t, int32_t, 2);
+
+// Defines the access struct for a 3 dimensional array of 32 bit signed integers with a Header information
+DEFINE_MD_ARRAY(int32_array3_t, int32_t, 3);
+
+// Determines the dimensions of an md array from the passed Header pointer and writes the results into the passed buffer
+void GetMdaDimensions(const int32_t* restrict inHeader, int32_t* restrict outBuffer);
+
+// Calculates the block sizes of an md array from the given dimension and rank information and writes it to the passed buffer
+void GetMdaBlockSizes(const int32_t rank, const int32_t* restrict dimensions, int32_t* restrict outBuffer);
+
+// Calcualtes the total size of an md array (without Header) based upon the passed rank and dimensions pointer
+int32_t GetMdaSize(const size_t rank, const int32_t* restrict inHeader);
+
+// Allocates a buffer for a multidimensional array with the passed rank, bytes per item and dimensions and returns a blob access struct to the allocated buffer
+blob_t AllocateMdaUnchecked(const int32_t rank, const size_t itemSize, const int32_t* restrict dimensions);
+
+// Allocates a buffer for a multidimensional array with the passed rank, bytes per item and dimensions. Returns an error code if the allocation returned a null ptr
+error_t AllocateMdaChecked(const int32_t rank, const size_t itemSize, const int32_t* restrict dimensions, blob_t* restrict outBlob);
+
+// Sets all bytes specified by a start and a conter to 0
+static inline void Set_BufferByteValues(void* restrict start, const size_t byteCount, const byte_t value)
+{
+    for(size_t i = 0; i < byteCount; i++)
     {
-        return true;
+        ((byte_t*)start)[i] = value;
     }
-    if (get_buffer_size(buffer_0) != get_buffer_size(buffer_1))
-    {
-        return false;
-    }
-    byte_t* it_0 = buffer_0->start_it;
-    byte_t* it_1 = buffer_1->start_it;
-    while (it_0 != buffer_0->end_it)
-    {
-        if (*(++it_0) != *(++it_1))
-        {
-            return false;
-        }
-    }
-    return true;
 }

@@ -10,123 +10,174 @@
 
 #include "Framework/Basic/FileIO/FileIO.h"
 
-int64_t get_file_size(file_t* f_stream)
+cerror_t GetFileSize(file_t* restrict fileStream)
 {
-    int64_t file_size;
-    if (f_stream == NULL || fseek(f_stream, 0L, SEEK_END) != 0)
+    int64_t fileSize;
+    if (fileStream == NULL || fseek(fileStream, 0L, SEEK_END) != 0)
     {
-        return MC_FILE_ERROR;
+        return ERR_FILE;
     }
-    if ((file_size = ftell(f_stream)) < 0)
+    if ((fileSize = ftell(fileStream)) < 0)
     {
-        return MC_FILE_ERROR;
+        return ERR_FILE;
     }
-    rewind(f_stream);
-    return file_size;
+    rewind(fileStream);
+    return fileSize;
 }
 
-bool_t file_exist(const char* file_name)
+bool_t CheckFileExistance(const char* restrict fileName)
 {
-    return access(file_name, F_OK) != -1;
+    return access(fileName, F_OK) != -1;
 }
 
-int32_t write_buffer_to_stream(file_t* f_stream, buffer_t* buffer_in)
+error_t WriteBufferToStream(file_t* restrict fileStream, const buffer_t* restrict buffer)
 {
-    if (f_stream == NULL)
+    if (fileStream == NULL)
     {
-        return MC_STREAM_ERROR;
+        return ERR_STREAM;
     }
 
-    size_t buffer_size = get_buffer_size(buffer_in);
-    if (fwrite(buffer_in->start_it, sizeof(byte_t), buffer_size, f_stream) != buffer_size)
+    size_t bufferSize = GetBufferSize(buffer);
+    if (fwrite(buffer->Start, sizeof(byte_t), bufferSize, fileStream) != bufferSize)
     {
-        return MC_STREAM_ERROR;
+        return ERR_STREAM;
     }
-    return MC_NO_ERROR;
+    return ERR_OK;
 }
 
-int32_t write_buffer_to_file(const char* file_name, const char* file_mode, buffer_t* buffer_in)
+error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer)
 {
-    file_t* f_stream = NULL;
-    int32_t write_result; 
+    file_t* fileStream = NULL;
+    int32_t result; 
 
-    if (strcmp(file_mode, "wb") != 0 && strcmp(file_mode, "ab") != 0)
+    if (strcmp(fileMode, "wb") != 0 && strcmp(fileMode, "ab") != 0)
     {
-        return MC_FILE_MODE_ERROR;
+        return ERR_FILEMODE;
     }
-    if ((f_stream = fopen(file_name, file_mode)) == NULL)
+    if ((fileStream = fopen(fileName, fileMode)) == NULL)
     {
-        return MC_STREAM_ERROR;
+        return ERR_STREAM;
     }
-    write_result = write_buffer_to_stream(f_stream, buffer_in);
-    fclose(f_stream);
-    return write_result;
+    result = WriteBufferToStream(fileStream, buffer);
+    fclose(fileStream);
+    return result;
 }
 
-int32_t load_buffer_from_stream(file_t* f_stream, buffer_t* byte_array)
+error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
 {
-    if (f_stream == NULL)
+    error_t error = 0;
+    int32_t bufferSize = strlen(lhs) + strlen(rhs) + 1;
+    *result = malloc(bufferSize);
+
+    if(*result == NULL)
     {
-        return MC_STREAM_ERROR;
+        return ERR_MEMALLOCATION;
     }
-    fread(byte_array->start_it, 1, get_buffer_size(byte_array), f_stream);
-    return MC_NO_ERROR;
+
+    error |= strcpy_s(*result, bufferSize, lhs);
+    error |= strcat_s(*result, bufferSize, rhs);
+    return errno;
 }
 
-int32_t load_buffer_from_file(const char* file_name, buffer_t* buffer_out)
+error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer)
 {
-    file_t* f_stream;
-    int64_t buffer_size;
-    int32_t load_result;
+    error_t error = 0;
+    char* tmpName = NULL;
 
-    if ((f_stream = fopen(file_name, "rb")) == NULL || (buffer_size = get_file_size(f_stream)) < 0)
+    if(CheckFileExistance(fileName))
     {
-        return MC_STREAM_ERROR;
-    }
-
-    *buffer_out = allocate_buffer(buffer_size, 1);
-    load_result = load_buffer_from_stream(f_stream, buffer_out);
-
-    fclose(f_stream);
-    return load_result;
-}
-
-int32_t write_buffer_hex_to_stream(file_t* f_stream, const buffer_t* byte_array, size_t bytes_per_line)
-{
-    if (f_stream == NULL)
-    {
-        return MC_STREAM_ERROR;
-    }
-
-    size_t line_counter = 0;
-    for (byte_t* it = byte_array->start_it; it < byte_array->end_it; it++)
-    {
-        fprintf(f_stream, "%02x ", *it);
-        if  (++line_counter == bytes_per_line)
+        if((error = ConcatStrings(fileName, ".backup", &tmpName)) != ERR_OK)
         {
-            fprintf(f_stream, "\n");
-            line_counter = 0;
+            free(tmpName);
+            return error;
+        }
+        if((error = rename(fileName, tmpName)) != ERR_OK)
+        {
+            free(tmpName);
+            return error;
         }
     }
-    return MC_NO_ERROR;
-}
 
-int32_t write_block_hex_to_stream(file_t* f_stream, const memblock_array_t* block_array, size_t blocks_per_line)
-{
-    if (f_stream == NULL)
+    if((error = WriteBufferToFile(fileName, fileMode, buffer)) == ERR_OK)
     {
-        return MC_STREAM_ERROR;
-    }
-
-    size_t line_counter = 0;
-    for (memblock_t* it = block_array->start_it; it < block_array->end_it; it++)
-    {
-        fprintf(f_stream, "%08x ", *it);
-        if  (++line_counter == blocks_per_line)
+        if(tmpName != NULL)
         {
-            fprintf(f_stream, "\n");
-            line_counter = 0;
+            error = remove(tmpName);
         }
     }
-    return MC_NO_ERROR;
+
+    free(tmpName);
+    return error;
+}
+
+error_t LoadBufferFromStream(file_t* restrict fileStream, buffer_t* restrict buffer)
+{
+    if (fileStream == NULL)
+    {
+        return ERR_STREAM;
+    }
+    fread(buffer->Start, 1, GetBufferSize(buffer), fileStream);
+    return ERR_OK;
+}
+
+error_t LoadBufferFromFile(const char* restrict fileName, buffer_t* restrict outBuffer)
+{
+    file_t* fileStream;
+    int64_t bufferSize;
+    int32_t writeResult;
+
+    if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = GetFileSize(fileStream)) < 0)
+    {
+        return ERR_STREAM;
+    }
+
+    if (AllocateBufferChecked(bufferSize, 1, outBuffer) != ERR_OK)
+    {     
+        fclose(fileStream);
+        return ERR_MEMALLOCATION;
+    }
+
+    writeResult = LoadBufferFromStream(fileStream, outBuffer);
+    fclose(fileStream);
+    return writeResult;
+}
+
+error_t WriteBufferHexToStream(file_t* restrict fileStream, const buffer_t* restrict buffer, size_t bytesPerLine)
+{
+    if (fileStream == NULL)
+    {
+        return ERR_STREAM;
+    }
+
+    size_t lineCnt = 0;
+    for (byte_t* it = buffer->Start; it < buffer->End; it++)
+    {
+        fprintf(fileStream, "%02x ", *it);
+        if  (++lineCnt == bytesPerLine)
+        {
+            fprintf(fileStream, "\n");
+            lineCnt = 0;
+        }
+    }
+    return ERR_OK;
+}
+
+error_t WriteBlockHexToStream(file_t* restrict fileStream, const memblock_array_t* restrict blockArray, size_t blocksPerLine)
+{
+    if (fileStream == NULL)
+    {
+        return ERR_STREAM;
+    }
+
+    size_t lineCnt = 0;
+    for (memblock_t* it = blockArray->Start; it < blockArray->End; it++)
+    {
+        fprintf(fileStream, "%08x ", *it);
+        if  (++lineCnt == blocksPerLine)
+        {
+            fprintf(fileStream, "\n");
+            lineCnt = 0;
+        }
+    }
+    return ERR_OK;
 }

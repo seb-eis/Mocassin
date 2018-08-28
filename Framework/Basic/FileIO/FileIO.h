@@ -19,26 +19,32 @@
 // Defines the file stream type
 typedef FILE file_t;
 
-// Calculates the size of a file. Returns the number of bytes or MC_FILE_ERROR on failure
-int64_t get_file_size(file_t* f_stream);
-
 // Check if a file name points to an existing file
-bool_t file_exists(const char* file_name);
+bool_t CheckFileExistance(const char* restrict fileName);
+
+// Calculates the size of a file. Returns the number of bytes or MC_FILE_ERROR on failure
+cerror_t GetFileSize(file_t* restrict fileStream);
 
 // Print a buffer as binary to a file stream. The file has to be opened in "wb" mode
-int32_t write_buffer_to_stream(file_t* f_stream, buffer_t* buffer_in);
+error_t WriteBufferToStream(file_t* restrict fileStream, const buffer_t* restrict buffer);
 
 // Print any array of bytes to the target stream in hexadecimal unsigend bytes with the provided number of bytes per line
-int32_t write_buffer_hex_to_stream(file_t* f_stream, const buffer_t* buffer_in, size_t bytes_per_line);
+error_t WriteBufferHexToStream(file_t* restrict fileStream, const buffer_t* restrict buffer, size_t bytesPerLine);
 
 // Print any array of bytes to the target stream in hexadecimal unsigend integers with the provided number of blocks per line
-int32_t write_block_hex_to_stream(file_t* f_stream, const memblock_array_t* block_array, size_t blocks_per_line);
+error_t WriteBlockHexToStream(file_t* restrict fileStream, const memblock_array_t* restrict blockArray, size_t blocksPerLine);
 
 // Loads a file as binary into the memory. Size is autodetermined. The file has to be opened in "rb" mode
-int32_t load_buffer_from_stream(file_t* source_stream, buffer_t* byte_array);
+error_t LoadBufferFromStream(file_t* restrict fileStream, buffer_t* restrict buffer);
 
 // Loads the contents of the provided file as binary into memory and creates the buffer access struct. Returna MC_NO_ERROR on success or error-code otherwise
-int32_t load_buffer_from_file(const char* file_name, buffer_t* buffer_out);
+error_t LoadBufferFromFile(const char* restrict fileName, buffer_t* restrict outBuffer);
 
 // Binary write of the provided buffer to the file. Supports file modes "wb" and "ab"
-int32_t write_buffer_to_file(const char* file_name, const char* file_mode, buffer_t* buffer_in);
+error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer);
+
+// Binary write of the provided buffer to the file. Supports file modes "wb" and "ab". Backups original and deletes backup only if the write is successfully completed
+error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer);
+
+// Concats two strings into a new buffer without freeing the originals. Retruns out of memory flag if allocation fails
+error_t ConcatStrings(const char* lhs, const char* rhs, char** result);

@@ -14,55 +14,86 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define a debug flag in the VC style
-#ifndef _DEBUG
-    #define _DEBUG
-#endif
+// Defines error codes to be a 32 bit signed integer. Returns type of functions that can return error codes
+typedef int32_t error_t;
+
+// Defines long error codes to be 64 bit signed integer. Returns type of functions that perform count operations and might return negatice error codes
+typedef int64_t cerror_t;
 
 // Defines the path to the debug stderr dump folder
-#define MC_STDERR_FILE_PATH "./Debug/stderr.log"
+#define STDERR_PATH "./Debug/stderr.log"
+
+// Defines the error code that indicates that a default value should be used (Not translatable to string)
+#define ERR_USEDEFAULT -1
 
 // Defines the error code for no error
-#define MC_NO_ERROR 0
+#define ERR_OK 0
 
 // Defines the error code for errors during stream usage
-#define MC_STREAM_ERROR -1
+#define ERR_STREAM 1
 
 // Defines the error code for errors during memory block dumping due to incompatible dump buffer length
-#define MC_BLOCK_DUMP_ERROR -2
+#define ERR_BLOCKDUMP 2
 
 // Defines the error code for errors during array access type casting where accessing thorugh the new type would cause a buffer overflow
-#define MC_BUFFER_OVERFLOW_CAST -3
+#define ERR_BUFFERCAST 3
 
 // Defines the error code for buffer overflows
-#define MC_BUFFER_OVERFLOW -4
+#define ERR_BUFFEROVERFLOW 4
 
 // Defines the error code for file errors
-#define MC_FILE_ERROR -5
+#define ERR_FILE 5
 
 // Defines the error codes for cases where a wrong file mode was passed to a function
-#define MC_FILE_MODE_ERROR -6
+#define ERR_FILEMODE 6
 
-// Defines the error code for cases where a matrix is accessed in way it doesnt match the matrix rank
-#define MC_MATRIX_RANK_ERROR -7
+// Defines the error code for cases where the database access caused an unspecified error
+#define ERR_DATABASE 7
+
+// Defines the error code for cases where simulation routines cause an unspecififed error
+#define ERR_UNKNOWN 8
+
+// Defines the error code for cases where memory allocation fails
+#define ERR_MEMALLOCATION 9
+
+// Defines the error code for cases when a data inconsistency is found
+#define ERR_DATACONSISTENCY 10
+
+// Defines the error code for cases where hash value checks for file manipulation detection fail
+#define ERR_HASHPROTECTION 11
+
+// Defines error code for cases where a requested plugin is not found
+#define ERR_LIBRARYLOADING 12
+
+// Defines the error code for cases where a requested plugin import function is not found
+#define ERR_FUNCTIONIMPORT 13
+
+// Defines the error code for cases where a requested command line argument does not exist or is invalid
+#define ERR_CMDARGUMENT 14
+
+// Defines error code for validation failures
+#define ERR_VALIDATION 15
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
-#define MC_DUMP_ERROR_AND_EXIT(code, message) on_error_exit(code, __FILE__, __LINE__, message);
+#define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
-#define MC_DUMP_ERROR_MEMORY_AND_EXIT(code, message, b_start, b_end) on_error_exit_mem_dump(code, __FILE__, __LINE__, message, b_start, b_end);
+#define MC_ERROREXIT_MEMDUMP(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
+
+// Get an error description string for the passed error Code
+char* ConvErrorToString(error_t errCode);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
-int on_error_exit(int error_code, const char* error_file, int error_line, const char* error_string);
+void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. Dumps memory bytes between passed byte pointers
-int on_error_exit_mem_dump(int error_code, const char* error_file, int error_line, const char* error_string, uint8_t* mem_start, uint8_t* mem_end);
+void OnErrorExitWithMemDump(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd);
 
 // Invokes the passed function pointer and returns the elapsed time in milliseconds
-static inline double profile_invoke(void (*func_ptr)(void))
+static inline double InvokeAndProfile(void (*func)(void))
 {
-    clock_t start_time = clock();
-    (*func_ptr)();
-    clock_t end_time = clock();
-    return 1000.0*(double)(end_time - start_time)/(double)CLOCKS_PER_SEC;
+    clock_t start = clock();
+    (*func)();
+    clock_t end = clock();
+    return 1000.0*(double)(start - end)/(double)CLOCKS_PER_SEC;
 }
