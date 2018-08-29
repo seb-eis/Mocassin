@@ -40,7 +40,7 @@ error_t ValidateIsValidFilePath(char const * value)
     {
         return ERR_VALIDATION;
     }
-    if (CheckFileExistance(value) != ERR_OK)
+    if (IsAccessibleFile(value) != ERR_OK)
     {
         return ERR_VALIDATION;
     }

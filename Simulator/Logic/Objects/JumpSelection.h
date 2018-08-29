@@ -16,11 +16,13 @@
 
 #define MC_NOPOOL 0
 
+error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t envId);
+
 void RollNextKmcSelect(__SCONTEXT_PAR);
 
 void RollNextMmcSelect(__SCONTEXT_PAR);
 
-bool_t GetJumpPoolUpdateKmc(__SCONTEXT_PAR);
+bool_t MakeJumpPoolUpdateKmc(__SCONTEXT_PAR);
 
-bool_t GetJumpPoolUpdateMmc(__SCONTEXT_PAR);
+bool_t MakeJumpPoolUpdateMmc(__SCONTEXT_PAR);
 

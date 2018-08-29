@@ -8,8 +8,9 @@
 // Short:   Main simulation routines    //
 //////////////////////////////////////////
 
+#include "Simulator/Logic/Constants/Constants.h"
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
 #include "Simulator/Logic/Routines/MainRoutines.h"
-#include "Simulator/Data/Model/State/StateLogic.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 
@@ -128,11 +129,6 @@ error_t StartMainMmcRoutine(__SCONTEXT_PAR)
     return FinishMainRoutineMmc(SCONTEXT);
 }
 
-static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
-{
-    RefMainCounters(SCONTEXT)->CurTargetMcs += RefMainCounters(SCONTEXT)->McsPerBlock;
-}
-
 static inline error_t CallOutputPlugin(__SCONTEXT_PAR)
 {
     if (SCONTEXT->Plugins.OnDataOut != NULL)
@@ -141,6 +137,11 @@ static inline error_t CallOutputPlugin(__SCONTEXT_PAR)
         return SIMERROR;
     }
     return ERR_OK;
+}
+
+static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
+{
+    Get_MainCycleCounters(SCONTEXT)->CurTargetMcs += Get_MainCycleCounters(SCONTEXT)->McsPerBlock;
 }
 
 error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
@@ -320,11 +321,11 @@ error_t SaveSimulationState(__SCONTEXT_PAR)
 {
     if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_PRERUN))
     {
-        SIMERROR = SaveWriteBufferToFile(MC_PRE_STATE_FILE, MC_BIN_WRITE_MODE, RefStateBuffer(SCONTEXT));
+        SIMERROR = SaveWriteBufferToFile(FILE_PRERSTATE, FMODE_BINARY_W, RefStateBuffer(SCONTEXT));
     }
     else
     {
-        SIMERROR = SaveWriteBufferToFile(MC_RUN_STATE_FILE, MC_BIN_WRITE_MODE, RefStateBuffer(SCONTEXT));
+        SIMERROR = SaveWriteBufferToFile(FILE_MAINSTATE, FMODE_BINARY_W, RefStateBuffer(SCONTEXT));
     }
     return SIMERROR;
 }
@@ -477,6 +478,7 @@ void SetKmcJumpEvaluation(__SCONTEXT_PAR)
     {
         RefActCounters(SCONTEXT)->StepCnt++;
         AdvanceKmcSystemToState2(SCONTEXT);
+        MakeJumpPoolUpdateKmc(SCONTEXT);
         return;
     }
     else
@@ -547,6 +549,7 @@ void SetMmcJumpEvaluation(__SCONTEXT_PAR)
     {
         RefActCounters(SCONTEXT)->StepCnt++;
         AdvanceMmcSystemToState2(SCONTEXT);
+        MakeJumpPoolUpdateMmc(SCONTEXT);
         return;
     }
     else

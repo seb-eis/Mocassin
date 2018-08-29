@@ -85,3 +85,35 @@ error_t AllocateMdaChecked(const int32_t rank, const size_t itemSize, const int3
     }
     return ERR_OK;
 }
+
+void CopyBuffer(byte_t const* source, byte_t* target, const size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        target[i] = source[i];
+    }
+}
+
+error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer)
+{
+    size_t sourceSize = GetBufferSize(sourceBuffer);
+
+    if (sourceSize > GetBufferSize(targetBuffer))
+    {
+        return ERR_BUFFEROVERFLOW;
+    }
+
+    CopyBuffer(sourceBuffer->Start, targetBuffer->Start, sourceSize);
+    return ERR_OK;
+}
+
+error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer)
+{
+    if (SaveCopyBuffer(sourceBuffer, targetBuffer) != ERR_OK)
+    {
+        return ERR_BUFFEROVERFLOW;
+    }
+
+    FreeBuffer(sourceBuffer);
+    return ERR_OK;
+}

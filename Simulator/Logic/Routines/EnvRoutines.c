@@ -10,20 +10,16 @@
 
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
 
-error_t ConstructEnvLattice(__SCONTEXT_PAR)
+error_t BuildEnvironmentLinkingSystem(__SCONTEXT_PAR)
 {
-    return ERR_OK;
+    return ERR_NOTIMPLEMENTED;
 }
 
-error_t PrepareEnvLattice(__SCONTEXT_PAR)
+error_t SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
 {
-    return ERR_OK;
-}
-
-error_t GetEnvReadyStatusEval(__SCONTEXT_PAR)
-{
-    return ERR_OK;
+    return ERR_NOTIMPLEMENTED;
 }
 
 static inline void SetActWorkEnv(__SCONTEXT_PAR, const env_link_t* restrict envLink)
@@ -285,20 +281,20 @@ void SetAllStateEnergiesMmc(__SCONTEXT_PAR)
 
 void SetState0EnergyMmc(__SCONTEXT_PAR)
 {
-    RefActEngInfo(SCONTEXT)->Eng0 =  GetPathStateEngAt(SCONTEXT, 0, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode0, 0));
-    RefActEngInfo(SCONTEXT)->Eng0 += GetPathStateEngAt(SCONTEXT, 1, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode0, 1));
+    Get_JumpEnergyInfo(SCONTEXT)->Eng0 =  GetPathStateEngAt(SCONTEXT, 0, GetCodeByteAt(&Get_ActiveJumpRule(SCONTEXT)->StCode0, 0));
+    Get_JumpEnergyInfo(SCONTEXT)->Eng0 += GetPathStateEngAt(SCONTEXT, 1, GetCodeByteAt(&Get_ActiveJumpRule(SCONTEXT)->StCode0, 1));
 }
 
 void SetState2EnergyMmc(__SCONTEXT_PAR)
 {
-    RefActEngInfo(SCONTEXT)->Eng2 =  GetPathStateEngAt(SCONTEXT, 0, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 0));
-    RefActEngInfo(SCONTEXT)->Eng2 += GetPathStateEngAt(SCONTEXT, 1, GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 1));
+    Get_JumpEnergyInfo(SCONTEXT)->Eng2 =  GetPathStateEngAt(SCONTEXT, 0, GetCodeByteAt(&Get_ActiveJumpRule(SCONTEXT)->StCode2, 0));
+    Get_JumpEnergyInfo(SCONTEXT)->Eng2 += GetPathStateEngAt(SCONTEXT, 1, GetCodeByteAt(&Get_ActiveJumpRule(SCONTEXT)->StCode2, 1));
 }
 
 void AdvanceMmcSystemToState2(__SCONTEXT_PAR)
 {
-    byte_t newParId0 = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 0);
-    byte_t newParId1 = GetCodeByteAt(&RefActJumpRule(SCONTEXT)->StCode2, 1);
+    byte_t newParId0 = GetCodeByteAt(&Get_ActiveJumpRule(SCONTEXT)->StCode2, 0);
+    byte_t newParId1 = GetCodeByteAt(&Get_ActiveJumpRule(SCONTEXT)->StCode2, 1);
     InvokeEnvUpdateDistribution(SCONTEXT, JUMPPATH[0], newParId0);
     InvokeEnvUpdateDistribution(SCONTEXT, JUMPPATH[1], newParId1);
     JUMPPATH[0]->ParId = newParId0;

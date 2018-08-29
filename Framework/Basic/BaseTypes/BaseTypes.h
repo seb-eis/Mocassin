@@ -271,3 +271,12 @@ static inline void Set_BufferByteValues(void* restrict start, const size_t byteC
         ((byte_t*)start)[i] = value;
     }
 }
+
+// Copies the passed number of bytes from ten source buffer to the target buffer. Does not check for potential buffer overflow
+void CopyBuffer(byte_t const* source, byte_t* target, const size_t size);
+
+// Copies the contents of the source buffer into the target buffer. Retruns buffer overflow error if target is smaller than source
+error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);
+
+// Moves the contents of the source buffer into the target buffer and frees the source buffer
+error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);

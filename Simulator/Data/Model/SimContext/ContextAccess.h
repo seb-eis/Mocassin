@@ -8,10 +8,13 @@
 // Short:   Get/Set for sim context     //
 //////////////////////////////////////////
 
+#pragma once
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
+
+/* Context access defines */
 
 /* Context getter/setter */
 
@@ -216,9 +219,24 @@ static inline lat_info_t* Get_LatticeInformation(__SCONTEXT_PAR)
     return &Get_DatabaseModel(SCONTEXT)->LattInfo;
 }
 
+static inline lattice_t* Get_DatabaseModelLattice(__SCONTEXT_PAR)
+{
+    return &Get_LatticeInformation(SCONTEXT)->Lattice;
+}
+
 static inline job_info_t* Get_JobInformation(__SCONTEXT_PAR)
 {
     return &Get_DatabaseModel(SCONTEXT)->JobInfo;
+}
+
+static inline kmc_header_t* Get_JobHeaderAsKmc(__SCONTEXT_PAR)
+{
+    return Get_JobInformation(SCONTEXT)->JobHeader;
+}
+
+static inline mmc_header_t* Get_JobHeaderAsMmc(__SCONTEXT_PAR)
+{
+    return Get_JobInformation(SCONTEXT)->JobHeader;
 }
 
 static inline str_model_t* Get_StructureModel(__SCONTEXT_PAR)
@@ -251,6 +269,36 @@ static inline vector4_t* Get_LatticeSizeVector(__SCONTEXT_PAR)
     return &Get_LatticeInformation(SCONTEXT)->SizeVec;
 }
 
+static inline jump_counts_t* Get_JumpDirectionsPerPositionTable(__SCONTEXT_PAR)
+{
+    return &Get_TransitionModel(SCONTEXT)->JumpCountTable;
+}
+
+static inline int32_t Get_JumpCountByPositionStatus(__SCONTEXT_PAR, const int32_t posId, const byte_t parId)
+{
+    return *MDA_GET_2(*Get_JumpDirectionsPerPositionTable(SCONTEXT), posId, parId);
+}
+
+static inline pair_tables_t* Get_PairEnergyTables(__SCONTEXT_PAR)
+{
+    return &Get_EnergyModel(SCONTEXT)->PairTables;
+}
+
+static inline pair_table_t* Get_PairEnergyTableById(__SCONTEXT_PAR, const int32_t id)
+{
+    return &Get_PairEnergyTables(SCONTEXT)->Start[id];
+}
+
+static inline clu_tables_t* Get_ClusterEnergyTables(__SCONTEXT_PAR)
+{
+    return &Get_EnergyModel(SCONTEXT)->CluTables;
+}
+
+static inline clu_table_t* Get_ClusterEnergyTableById(__SCONTEXT_PAR, const int32_t id)
+{
+    return &Get_ClusterEnergyTables(SCONTEXT)->Start[id];
+}
+
 /* Main state getter/setter */
 
 static inline buffer_t* Get_MainStateBuffer(__SCONTEXT_PAR)
@@ -276,6 +324,11 @@ static inline mta_state_t* Get_MainStateMetaInfo(__SCONTEXT_PAR)
 static inline lat_state_t* Get_MainStateLattice(__SCONTEXT_PAR)
 {
     return &Get_SimulationState(SCONTEXT)->Lattice;
+}
+
+static inline byte_t Get_StateLatticeEntryById(__SCONTEXT_PAR, const int32_t id)
+{
+    return Get_MainStateLattice(SCONTEXT)->Start[id];
 }
 
 static inline cnt_state_t* Get_MainStateCounters(__SCONTEXT_PAR)
@@ -404,4 +457,16 @@ static inline void Set_EnergyPluginPath(__SCONTEXT_PAR, char const * value)
 static inline void Set_EnergyPluginSymbol(__SCONTEXT_PAR, char const * value)
 {
     Get_FileInformation(SCONTEXT)->EnergyPluginSymbol = value;
+}
+
+/* Selection pool getter/setter */
+
+static inline int32_t Get_EnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id)
+{
+    return dirPool->EnvPool.Start[id];
+}
+
+static inline void Set_EnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id, const int32_t value)
+{
+    dirPool->EnvPool.Start[id] = value;
 }

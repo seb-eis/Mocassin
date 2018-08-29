@@ -9,9 +9,14 @@
 //////////////////////////////////////////
 
 #include <strings.h>
+#include "Simulator/Logic/Routines/McStatistics.h"
+#include "Simulator/Logic/Objects/JumpSelection.h"
+#include "Simulator/Logic/Constants/Constants.h"
+#include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Validators/Validators.h"
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
 #include "Framework/Basic/Plugins/PluginLoading.h"
+#include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/MainRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
@@ -35,10 +40,10 @@ static const cmdarg_lookup_t* Get_OptionalCmdArgsResolverTable()
 {
     static cmdarg_resolver_t resolvers[] =
     {
-        { "-outPluginPath",   (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_OutputPluginPath },
-        { "-outPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_OutputPluginSymbol },
-        { "-engPluginPath",   (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_EnergyPluginPath },
-        { "-engPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,    (f_cmdcallback_t) Set_EnergyPluginSymbol }
+        { "-outPluginPath",   (f_validator_t)  ValidateIsValidFilePath,     (f_cmdcallback_t) Set_OutputPluginPath },
+        { "-outPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,(f_cmdcallback_t) Set_OutputPluginSymbol },
+        { "-engPluginPath",   (f_validator_t)  ValidateIsValidFilePath,     (f_cmdcallback_t) Set_EnergyPluginPath },
+        { "-engPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,(f_cmdcallback_t) Set_EnergyPluginSymbol }
     };
     static cmdarg_lookup_t resolverTable =
     {
@@ -159,7 +164,6 @@ static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t 
 
     error |= ConstructEngStateBuffer(&env->EnergyStates, FindLastEnvParId(envDef) + 1);
     error |= ConstructCluStateBuffer(&env->ClusterStates, envDef->CluDefs.Count);
-    error |= ConstructEnvLinkBuffer(&env->EnvLinks, envDef->PairDefs.Count);
 
     return ERR_OK;
 }
@@ -241,7 +245,7 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 {
     buffer_t tmpBuffer;
     int32_t poolCount = Get_DirectionPools(SCONTEXT)->Count;
-    int32_t poolSize = Get_LatticeInformation(SCONTEXT)->MobCount;
+    int32_t poolSize = Get_LatticeInformation(SCONTEXT)->SelectableCount;
 
     if (AllocateBufferChecked(poolCount, sizeof(dir_pool_t), &tmpBuffer) != ERR_OK)
     {
@@ -346,7 +350,7 @@ static size_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const size_t usedBu
     {
         trc_state_t* configObject = Get_MobileMovementTrackers(SCONTEXT);
 
-        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobCount;
+        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobilesCount;
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
         cfgBufferBytes = configObject->Count * sizeof(tracker_t);
@@ -382,7 +386,7 @@ static size_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const size_t usedBuf
     {
         idx_state_t* configObject = Get_MobileTrackerIndexing(SCONTEXT);
 
-        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobCount;
+        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobilesCount;
         cfgBufferBytes = configObject->Count * sizeof(int32_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
@@ -400,7 +404,7 @@ static size_t ConfigStateJumpProbabilityMapAccess(__SCONTEXT_PAR, const size_t u
     {
         prb_state_t* configObject = Get_JumpProbabilityMap(SCONTEXT);
 
-        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobCount;
+        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobilesCount;
         cfgBufferBytes = configObject->Count * sizeof(int32_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
@@ -528,21 +532,167 @@ static void PopulatePluginDelegateFunctions(__SCONTEXT_PAR)
     }
 }
 
-static void PopulateDynamicSimulationModel(__SCONTEXT_PAR)
+static error_t TryLoadStateFromFile(__SCONTEXT_PAR, char const * restrict filePath)
 {
-
+    if (!IsAccessibleFile(filePath))
+    {
+        return ERR_USEDEFAULT;
+    }
+    return LoadBufferFromFile(filePath, Get_MainStateBuffer(SCONTEXT));
 }
 
-static void PopulateJumpSelectionPool(__SCONTEXT_PAR)
+static error_t DropCreateStateFile(__SCONTEXT_PAR, char const * restrict filePath)
 {
+    return WriteBufferToFile(filePath, FMODE_BINARY_W, Get_MainStateBuffer(SCONTEXT));
+}
+
+static error_t TryLoadSimulationState(__SCONTEXT_PAR)
+{
+    error_t error;
+
+    if ((error = TryLoadStateFromFile(SCONTEXT, FILE_MAINSTATE)) == ERR_OK)
+    {
+        EnsureFileIsDeleted(FILE_PRERSTATE);
+        return error;
+    }
+
+    if ((error = TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE)) == ERR_OK)
+    {
+        return error;
+    }
+
+    return error;
+}
+
+static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
+{
+    lattice_t * dbLattice = Get_DatabaseModelLattice(SCONTEXT);
+    lat_state_t * stLattice = Get_MainStateLattice(SCONTEXT);
+
+    if (stLattice->Count != dbLattice->Header->Size)
+    {
+        return ERR_DATACONSISTENCY;
+    }
+
+    CopyBuffer(dbLattice->Start, stLattice->Start, stLattice->Count);
+    return ERR_OK;
+}
+
+static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
+{
+    env_lattice_t* envLattice = Get_EnvironmentLattice(SCONTEXT);
+    lat_state_t* stLattice = Get_MainStateLattice(SCONTEXT);
+
+    if (envLattice->Header->Size != stLattice->Count)
+    {
+        return ERR_DATACONSISTENCY;
+    }
+
+    for (int32_t i = 0; i < stLattice->Count; i++)
+    {
+        env_state_t* envState = Get_EnvironmentStateById(SCONTEXT, i);
+        envState->ParId = Get_StateLatticeEntryById(SCONTEXT, i);
+        envState->EnvId = i;
+    }
+}
+
+static error_t SyncDynamicModelToMainState(__SCONTEXT_PAR)
+{
+    error_t error;
+
+    if ((error = SyncEnvironmentsWithState(SCONTEXT)) != ERR_OK)
+    {
+
+    }
+
+    return ERR_OK;
+}
+
+static void PopulateSimulationState(__SCONTEXT_PAR)
+{
+    error_t error;
+
+    if ((error = TryLoadSimulationState(SCONTEXT)) == ERR_USEDEFAULT)
+    {
+        if((error = SyncMainStateToDatabaseModel(SCONTEXT)) != ERR_OK )
+        {
+            MC_ERROREXIT(error, "Data structure synchronization failure (static model ==> state).")
+        }
+
+        if ((error = DropCreateStateFile(SCONTEXT, FILE_PRERSTATE)) != ERR_OK)
+        {
+            MC_ERROREXIT(error, "Could not create initial state file.");
+        }
+        return;
+    }
+
+    if (error != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Failure during loading of existing state file.");
+    }
+}
+
+static void PopulateDynamicSimulationModel(__SCONTEXT_PAR)
+{
+    error_t error = ERR_OK;
+
+    if ((error = SyncDynamicModelToMainState(SCONTEXT)) != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Data structure synchronization failed (state ==> dynamic model).");
+    }
+
+    if ((error = CalcPhysicalSimulationFactors(SCONTEXT, Get_PhysicalFactors(SCONTEXT))) != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Failed to calculate default physical factors.");
+    }
+}
+
+static error_t SyncCycleCountersWithStateStatus(__SCONTEXT_PAR)
+{
+    cycle_cnt_t* counters = Get_MainCycleCounters(SCONTEXT);
+    hdr_info_t* stHeader = Get_MainStateHeader(SCONTEXT)->Data;
     
+    counters->CurCycles = stHeader->Cycles;
+    counters->CurMcs = stHeader->Mcs;
+
+    return (counters->CurMcs < counters->TotTargetMcs) ? ERR_OK : ERR_DATACONSISTENCY;
+}
+
+static void SyncSimulationCycleStateWithModel(__SCONTEXT_PAR)
+{
+    error_t error;
+
+    if ((error = CalcCycleCounterDefaultStatus(SCONTEXT, Get_MainCycleCounters(SCONTEXT))) != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Failed to set default main counter status.");
+    }
+
+    if ((error = SyncCycleCountersWithStateStatus(SCONTEXT)) != ERR_OK)
+    {
+        MC_ERROREXIT(error, "Failed to synchronize data structure (state ==> cycle counters).");
+    }
+}
+
+static void SyncSelectionPoolWithDynamicModel(__SCONTEXT_PAR)
+{
+    error_t error = ERR_OK;
+
+    for (int32_t i = 0; i < Get_EnvironmentLattice(SCONTEXT)->Header->Size; i++)
+    {
+        if ((error = HandleEnvStatePoolRegistration(SCONTEXT, i)) != ERR_OK)
+        {
+            MC_ERROREXIT(error, "Could not register environment on the jump selection pool.");
+        }
+    }
 }
 
 void PopulateSimulationContext(__SCONTEXT_PAR)
 {
     PopulatePluginDelegateFunctions(SCONTEXT);
+    PopulateSimulationState(SCONTEXT);
     PopulateDynamicSimulationModel(SCONTEXT);
-    PopulateJumpSelectionPool(SCONTEXT);
+    SyncSimulationCycleStateWithModel(SCONTEXT);
+    SyncSelectionPoolWithDynamicModel(SCONTEXT);
 }
 
 void PrepareContextForSimulation(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues)

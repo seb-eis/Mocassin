@@ -21,6 +21,6 @@ int main(int argc, char const * const *argv)
     int32_t count = sizeof(values) / sizeof(char*);
 
     ResolveCommandLineArguments(SCONTEXT, count, &values[0]);
-
+     
     return (0);
 }

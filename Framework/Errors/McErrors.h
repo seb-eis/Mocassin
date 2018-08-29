@@ -74,6 +74,12 @@ typedef int64_t cerror_t;
 // Defines error code for validation failures
 #define ERR_VALIDATION 15
 
+// Defines the error code for functions that are not implemented
+#define ERR_NOTIMPLEMENTED 16
+
+// Defines error for cases where a nullpointer is an invalid result or argument
+#define ERR_NULLPOINTER 17
+
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 

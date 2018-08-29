@@ -16,7 +16,7 @@ typedef vector3_t tracker_t;
 
 typedef struct
 {
-    int64_t Mcs;
+    int64_t Mcs, Cycles;
     int32_t Flags;
     int32_t MetaByte, LatticeByte, CountersByte, GlobalTrcByte, MobileTrcByte, StaticTrcByte, MobileTrcIdxByte, ProbStatMapByte;
 } hdr_info_t;
@@ -31,7 +31,7 @@ typedef struct { int64_t CycleCnt, StepCnt, RejectCnt, BlockCnt, OnUnstCnt, ToUn
 
 typedef struct { int32_t Count; cnt_col_t * Start, * End; } cnt_state_t;
 
-typedef struct { double SimTime, JmpNorm; int64_t RunTime, CyleRate, SuccessRate, TimePerBlock; } meta_info_t;
+typedef struct { double SimTime, JmpNorm, MaxJumpProb; int64_t RunTime, CyleRate, SuccessRate, TimePerBlock; } meta_info_t;
 
 typedef struct { meta_info_t* Data; } mta_state_t;
 

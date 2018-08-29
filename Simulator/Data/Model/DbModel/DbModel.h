@@ -65,7 +65,7 @@ typedef struct { int32_t ObjId, PosId, ColId; byte_t JumpLength; double FieldPro
 
 typedef struct { int32_t Count; jump_dir_t* Start, * End; } jump_dirs_t;
 
-typedef struct { occode_t StCode0, StCode1, StCode2; double Frq, FieldFac; byte_t TrcOrderCode[8]; } jump_rule_t;
+typedef struct { occode_t StCode0, StCode1, StCode2; double FrqFactor, FieldFac; byte_t TrcOrderCode[8]; } jump_rule_t;
 
 typedef struct { int32_t Count; jump_rule_t* Start, * End; } jump_rules_t;
 
@@ -73,7 +73,7 @@ typedef struct { int32_t ObjId; bitmask_t ParMask; jump_dirs_t JumpDirs; jump_ru
 
 typedef struct { int32_t Count; jump_col_t * Start, * End; } jump_cols_t;
 
-typedef struct { vector4_t SizeVec; int32_t MobCount; lattice_t Lattice; eng_background_t EngBackground; } lat_info_t;
+typedef struct { vector4_t SizeVec; int32_t MobilesCount, SelectableCount; lattice_t Lattice; eng_background_t EngBackground; } lat_info_t;
 
 typedef struct { int32_t CellTrcCount, GloTrcCount; id_redirect_t PosIdToCellTrcOffset; env_defs_t EnvDefs; } str_model_t;
 
