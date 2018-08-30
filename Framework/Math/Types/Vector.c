@@ -71,20 +71,26 @@ vector4_t ScalarDivideVector4(const vector4_t * lhs, int32_t rhs)
 	return (vector4_t) { lhs->a / rhs,lhs->b / rhs,lhs->c / rhs,lhs->d / rhs };
 }
 
-int32_t Vector4ToInt32(const vector4_t * value, const vector4_t * blockSizes)
+int32_t Int32FromVector4(const vector4_t * restrict value, const int32_t * restrict blockSizes)
 {
-	return (int32_t)(value->a*blockSizes->a + value->b*blockSizes->b + value->c*blockSizes->c + value->d*blockSizes->d);
+	return (int32_t)(value->a*blockSizes[0] + value->b*blockSizes[1] + value->c*blockSizes[2] + value->d);
 }
 
-vector4_t Int32ToVector4(size_t value, const vector4_t * blockSizes)
+int32_t Int32FromVector4Pair(const vector4_t* restrict start, const vector4_t* restrict offset, const int32_t* restrict blockSizes)
+{
+	vector4_t target = AddVector4(start, offset);
+	return Int32FromVector4(&target, blockSizes);
+}
+
+vector4_t Vector4FromInt32(int32_t value, const int32_t * restrict blockSizes)
 {
 	vector4_t result;
-	result.a = (int32_t)(value / blockSizes->a);
-	value %= blockSizes->a;
-	result.b = (int32_t)(value / blockSizes->b);
-	value %= blockSizes->b;
-	result.c = (int32_t)(value / blockSizes->c);
-	value %= blockSizes->c;
-	result.d = (int32_t)(value);
+	result.a = value / blockSizes[0];
+	value %= blockSizes[0];
+	result.b = value / blockSizes[1];
+	value %= blockSizes[1];
+	result.c = value / blockSizes[2];
+	value %= blockSizes[2];
+	result.d = value;
 	return result;
 }

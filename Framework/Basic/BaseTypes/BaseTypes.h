@@ -21,10 +21,10 @@ typedef void (*f_cmdcallback_t)(void* obj, char const * value);
 typedef error_t (*f_validator_t)(void const * value);
 
 // Defines a command line argument lookup with expected value in the validator and a callback function for the affiliated value
-typedef struct { char const * KeyArgument; f_validator_t ValueValidator; f_cmdcallback_t ValueCallback; } cmdarg_resolver_t;
+typedef struct { char const * KeyArgument; const f_validator_t ValueValidator; const f_cmdcallback_t ValueCallback; } cmdarg_resolver_t;
 
 // Defines the command line argument lookup table that contains all supported cmd arg lookups
-typedef struct { int32_t Count; cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
+typedef struct { const int32_t Count; const cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
 
 // Define the restrict keyword for GCC
 #define restrict __restrict__
@@ -280,3 +280,6 @@ error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targe
 
 // Moves the contents of the source buffer into the target buffer and frees the source buffer
 error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);
+
+#define GET_MAX(a,b) (((a)<(b))?(b):(a))
+#define GET_MIN(a,b) (((a)<(b))?(a):(b))

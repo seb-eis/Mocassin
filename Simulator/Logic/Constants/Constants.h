@@ -34,6 +34,13 @@
 #define JPOOL_DIRCOUNT_PASSIVE   0
 #define JPOOL_NOT_SELECTABLE    -1
 
+/* Particle/position/index constants */
+
+#define PARTICLE_VOID       0
+#define PARTICLE_NULL       255
+#define POSITION_NULL       -1
+#define INVALID_INDEX       -1
+
 /* Job related flag values */
 
 #define FLG_KMC             0x1

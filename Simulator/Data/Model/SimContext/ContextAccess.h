@@ -90,6 +90,11 @@ static inline env_state_t* Get_EnvironmentStateById(__SCONTEXT_PAR, const int32_
     return &Get_DynamicModel(SCONTEXT)->EnvLattice.Start[id];
 }
 
+static inline int32_t* Get_LatticeBlockSizes(__SCONTEXT_PAR)
+{
+    return Get_EnvironmentLattice(SCONTEXT)->Header->Blocks;
+}
+
 /* Cycle state getter/setter */
 
 static inline cycle_cnt_t* Get_MainCycleCounters(__SCONTEXT_PAR)
@@ -434,6 +439,11 @@ static inline void Set_ProgramRunPath(__SCONTEXT_PAR, char const * value)
     Get_FileInformation(SCONTEXT)->RunPath = value;
 }
 
+static inline void Set_DatabaseLoadString(__SCONTEXT_PAR, char const * value)
+{
+    Get_FileInformation(SCONTEXT)->DbLoadString = value;
+}
+
 static inline void Set_DatabasePath(__SCONTEXT_PAR, char const * value)
 {
     Get_FileInformation(SCONTEXT)->DatabasePath = value;
@@ -469,4 +479,16 @@ static inline int32_t Get_EnvironmentPoolEntryById(dir_pool_t* restrict dirPool,
 static inline void Set_EnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id, const int32_t value)
 {
     dirPool->EnvPool.Start[id] = value;
+}
+
+/* Energy table getter/setter */
+
+static inline double Get_PairEnergyTableEntry(const pair_table_t* restrict table, const byte_t parId0, const byte_t parId1)
+{
+    return *MDA_GET_2(table->EngTable, parId0, parId1);
+}
+
+static inline double Get_CluEnergyTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
+{
+    return *MDA_GET_2(table->EngTable, table->ParToTableId[parId], codeId);
 }

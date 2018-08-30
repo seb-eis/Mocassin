@@ -33,7 +33,7 @@ typedef struct { int32_t TrcId; vector4_t Vector; } move_t;
 
 typedef struct { vector4_t RelVector; int32_t TabId; } pair_def_t;
 
-typedef struct { int16_t RelPosIds[8]; int32_t TabId; } clu_def_t;
+typedef struct { int32_t RelPosIds[8]; int32_t TabId; } clu_def_t;
 
 typedef struct { int32_t Count; pair_def_t * Start, * End; } pair_defs_t;
 

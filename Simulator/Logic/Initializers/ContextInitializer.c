@@ -23,34 +23,39 @@
 
 static const cmdarg_lookup_t* Get_EssentialCmdArgsResolverTable()
 {
-    static cmdarg_resolver_t resolvers[] =
+    static const cmdarg_resolver_t resolvers[] =
     {
-        { "-dbPath", (f_validator_t) ValidateStringNotNullOrEmpty, (f_cmdcallback_t) Set_DatabasePath }
+        { "-dbPath",    (f_validator_t) ValidateStringNotNullOrEmpty,   (f_cmdcallback_t) Set_DatabasePath },
+        { "-dbQuery",   (f_validator_t) ValidateStringNotNullOrEmpty,   (f_cmdcallback_t) Set_DatabaseLoadString }
     };
-    static cmdarg_lookup_t resolverTable = 
+
+    static const cmdarg_lookup_t resolverTable = 
     { 
         (int32_t) (sizeof(resolvers) / sizeof(cmdarg_resolver_t)),
         &resolvers[0],
         &resolvers[sizeof(resolvers) / sizeof(cmdarg_resolver_t)]
     };
+
     return &resolverTable;
 }
 
 static const cmdarg_lookup_t* Get_OptionalCmdArgsResolverTable()
 {
-    static cmdarg_resolver_t resolvers[] =
+    static const cmdarg_resolver_t resolvers[] =
     {
         { "-outPluginPath",   (f_validator_t)  ValidateIsValidFilePath,     (f_cmdcallback_t) Set_OutputPluginPath },
         { "-outPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,(f_cmdcallback_t) Set_OutputPluginSymbol },
         { "-engPluginPath",   (f_validator_t)  ValidateIsValidFilePath,     (f_cmdcallback_t) Set_EnergyPluginPath },
         { "-engPluginSymbol", (f_validator_t)  ValidateStringNotNullOrEmpty,(f_cmdcallback_t) Set_EnergyPluginSymbol }
     };
-    static cmdarg_lookup_t resolverTable =
+
+    static const cmdarg_lookup_t resolverTable =
     {
         (int32_t) (sizeof(resolvers) / sizeof(cmdarg_resolver_t)),
         &resolvers[0],
         &resolvers[sizeof(resolvers) / sizeof(cmdarg_resolver_t)]
     };
+
     return &resolverTable;
 }
 
@@ -64,7 +69,7 @@ static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const cmdarg_lookup_t
         return ERR_CMDARGUMENT;
     }
 
-    FOR_EACH(cmdarg_resolver_t, argResolver, *resolverTable)
+    FOR_EACH(const cmdarg_resolver_t, argResolver, *resolverTable)
     {   
         if (strcmp(keyArgument, argResolver->KeyArgument) == 0)
         {
@@ -165,7 +170,7 @@ static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t 
     error |= ConstructEngStateBuffer(&env->EnergyStates, FindLastEnvParId(envDef) + 1);
     error |= ConstructCluStateBuffer(&env->ClusterStates, envDef->CluDefs.Count);
 
-    return ERR_OK;
+    return error;
 }
 
 static void ConstructEnvironmentLattice(__SCONTEXT_PAR)
@@ -468,7 +473,7 @@ static error_t TryLoadOuputPlugin(__SCONTEXT_PAR)
 
     if ((Get_PluginCollection(SCONTEXT)->OnDataOut = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
     {
-        #ifdef IGNORE_INVALID_PLUGINS
+        #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
             return ERR_USEDEFAULT;
         #else
@@ -491,7 +496,7 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
 
     if ((Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
-        #ifdef IGNORE_INVALID_PLUGINS
+        #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
             return ERR_USEDEFAULT;
         #else
@@ -590,19 +595,18 @@ static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
 
     for (int32_t i = 0; i < stLattice->Count; i++)
     {
-        env_state_t* envState = Get_EnvironmentStateById(SCONTEXT, i);
-        envState->ParId = Get_StateLatticeEntryById(SCONTEXT, i);
-        envState->EnvId = i;
+        SetEnvStateStatusToDefault(SCONTEXT, i, Get_StateLatticeEntryById(SCONTEXT, i));
     }
+    return ERR_OK;
 }
 
 static error_t SyncDynamicModelToMainState(__SCONTEXT_PAR)
 {
     error_t error;
 
-    if ((error = SyncEnvironmentsWithState(SCONTEXT)) != ERR_OK)
+    if ((error = SyncDynamicEnvironmentsWithState(SCONTEXT)) != ERR_OK)
     {
-
+        MC_ERROREXIT(error, "Data structure synchronization failure (state ==> environments)")
     }
 
     return ERR_OK;
@@ -695,9 +699,11 @@ void PopulateSimulationContext(__SCONTEXT_PAR)
     SyncSelectionPoolWithDynamicModel(SCONTEXT);
 }
 
-void PrepareContextForSimulation(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues)
+void PrepareContextForSimulation(__SCONTEXT_PAR)
 {
-    ResolveCommandLineArguments(SCONTEXT, argCount, argValues);
     ConstructSimulationContext(SCONTEXT);
     PopulateSimulationContext(SCONTEXT);
+
+    BuildEnvironmentLinkingSystem(SCONTEXT);
+    SyncEnvironmentEnergyStatus(SCONTEXT);
 }

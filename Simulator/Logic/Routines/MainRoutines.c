@@ -14,29 +14,14 @@
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 
-error_t LoadSimulationModel(__SCONTEXT_PAR)
-{
-    return ERR_OK;
-}
-
-error_t LoadSimulationState(__SCONTEXT_PAR)
-{
-    return ERR_OK;
-}
-
-error_t ResetContextToDefault(__SCONTEXT_PAR)
-{
-    return ERR_OK;
-}
-
-error_t PrepareDynamicModel(__SCONTEXT_PAR)
-{
-    return ERR_OK;
-}
-
 error_t PrepareForMainRoutine(__SCONTEXT_PAR)
 {
-    return ERR_OK;
+    return ERR_NOTIMPLEMENTED;
+}
+
+error_t ResetContextAfterPrerun(__SCONTEXT_PAR)
+{
+    return ERR_NOTIMPLEMENTED;
 }
 
 error_t StartMainRoutine(__SCONTEXT_PAR)
@@ -88,7 +73,7 @@ error_t FinishRoutinePrerun(__SCONTEXT_PAR)
         MC_ERROREXIT(SIMERROR, "Simulation error. State save after prerun completion failed.")
     }
 
-    if (ResetContextToDefault(SCONTEXT) != ERR_OK)
+    if (ResetContextAfterPrerun(SCONTEXT) != ERR_OK)
     {
         MC_ERROREXIT(SIMERROR, "Simulation error. Context reset after prerun completion failed.");
     }

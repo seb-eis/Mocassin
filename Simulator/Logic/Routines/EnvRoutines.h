@@ -12,12 +12,11 @@
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-error_t ConstructEnvLattice(__SCONTEXT_PAR);
+void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR);
 
-error_t PrepareEnvLattice(__SCONTEXT_PAR);
+void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR);
 
-error_t GetEnvReadyStatusEval(__SCONTEXT_PAR);
-
+void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t envId, const byte_t parId);
 
 void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR);
 

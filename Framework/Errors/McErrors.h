@@ -86,6 +86,12 @@ typedef int64_t cerror_t;
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT_MEMDUMP(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
 
+// Defines the default exception handling action
+#define ON_ERROR_HANDLE(code, msg) MC_ERROREXIT(code, msg)
+
+// Asserts that the passed condition is true. Calls default error handling if condition is false
+#define RUNTIME_ASSERT(cond, error, msg) if (!(cond)) ON_ERROR_HANDLE(error, msg)
+
 // Get an error description string for the passed error Code
 char* ConvErrorToString(error_t errCode);
 

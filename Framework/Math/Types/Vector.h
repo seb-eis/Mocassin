@@ -64,7 +64,21 @@ vector4_t ScalarMultVector4(const vector4_t* lhs, int32_t rhs);
 vector4_t ScalarDivideVector4(const vector4_t* lhs, int32_t rhs);
 
 // Performs a conversion of a 4d int vector into an size_t value with the provided 4d size information (4D coordinate decoding by block sizes)
-int32_t Vector4ToInt32(const vector4_t* value, const vector4_t* restrict blockSizes);
+int32_t Int32FromVector4(const vector4_t* restrict value, const int32_t* restrict blockSizes);
+
+// Performs conversion of a 4d int vector pair describing start and relative offset into a linear id (4D coordinate decoding by block sizes)
+int32_t Int32FromVector4Pair(const vector4_t* restrict start, const vector4_t* restrict offset, const int32_t* restrict blockSizes);
 
 // Performs a conversion of a size_t value into a 4d int vector with the provided 4d size information (4D coordinate encoding by block sizes)
-vector4_t Int32ToVector4(size_t value, const vector4_t* restrict blockSizes);
+vector4_t Vector4FromInt32(int32_t value, const int32_t* restrict blockSizes);
+
+// Performs a periodic trim of a 4d integer vector with the provided sizes (Loop based, faster than modulo due to rare occurence of actual required trim)
+static inline void PeriodicTrimVector4(vector4_t* restrict vector, const vector4_t* restrict sizes)
+{
+    while (vector->a <  sizes->a) vector->a += sizes->a;
+    while (vector->a >= sizes->a) vector->a -= sizes->a;
+    while (vector->b <  sizes->b) vector->b += sizes->b;
+    while (vector->b >= sizes->b) vector->b -= sizes->b;
+    while (vector->c <  sizes->c) vector->c += sizes->c;
+    while (vector->c >= sizes->c) vector->c -= sizes->c;
+}

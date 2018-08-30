@@ -31,7 +31,11 @@ char* ConvErrorToString(error_t errCode)
         "Data is inconsistent                                               (Expected reason: Corrupted or invalid input data)",
         "Invalid file/state/database checksum                               (Expected reason: Unsupported manual file manipulation)",
         "Plugin loading failed                                              (Expected reason: The plugin library path is invalid)",
-        "Plugin function lookup failed                                      (Expected reason: The export function name is invalid)"
+        "Plugin function lookup failed                                      (Expected reason: The export function name is invalid)",
+        "Failed to resolve required cmd arguments                           (Expected reason: Arguments are missing or invalid)",
+        "Validation failure                                                 (Expected reason: Invalid cmd argument string)",
+        "Function is not implemented                                        (Expected reason: Currently not supported feature)",
+        "Function argument is null                                          (Expected reason: Implementation error/Corrupted model data)"
     };
 
     return (errCode > (sizeof(errTable) / sizeof(char*))) ? "[???]" : errTable[errCode];
@@ -39,16 +43,19 @@ char* ConvErrorToString(error_t errCode)
 
 void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg)
 {
+    static char * format = "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Type: %s\n Info: %s";
+
     FILE* fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Type: %s\n Info: %s", errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(fileStream, format, errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
     fclose(fileStream);
     exit(errCode);
 }
 
 void OnErrorExitWithMemDump(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
+    static char * format = "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Type: %s\n Info: %s\n Buffer:\n\n";
     FILE* fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, "MC Runtime Error: 0x%08x\n File: %s\n Line: %d\n Type: %s\n Info: %s\n Buffer:\n\n", errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(fileStream, format, errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
 
     buffer_t buffer = {memStart, memEnd};
     WriteBufferHexToStream(fileStream, &buffer, 24);

@@ -86,7 +86,7 @@ typedef struct { clock_t StartClock, LastClock; } run_info_t;
 
 typedef struct { double EngConvFac, TotJumpNorm, CurTimeStep; } phys_val_t;
 
-typedef struct { char const * RunPath, * DatabasePath, * OutputPluginPath, * OutputPluginSymbol, * EnergyPluginPath, * EnergyPluginSymbol; } file_info_t;
+typedef struct { char const * DbLoadString, * RunPath, * DatabasePath, * OutputPluginPath, * OutputPluginSymbol, * EnergyPluginPath, * EnergyPluginSymbol; } file_info_t;
 
 typedef struct { int32_t Count; double LastAvg; double * Start, * CurEnd, * End; } flp_buffer_t;
 
