@@ -12,11 +12,15 @@
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
+/* Initializer routines */
+
 void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR);
 
 void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR);
 
 void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t envId, const byte_t parId);
+
+/* Simulation routines KMC */
 
 void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR);
 
@@ -30,6 +34,7 @@ void SetState2EnergyKmc(__SCONTEXT_PAR);
 
 void AdvanceKmcSystemToState2(__SCONTEXT_PAR);
 
+/* Simulation routines MMC */
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR);
 

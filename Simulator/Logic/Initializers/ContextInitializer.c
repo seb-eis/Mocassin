@@ -61,22 +61,20 @@ static const cmdarg_lookup_t* Get_OptionalCmdArgsResolverTable()
 
 static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const cmdarg_lookup_t* restrict resolverTable, const int32_t argId)
 {
+    error_t error;
     char const * keyArgument = Get_CommandArgumentStringById(SCONTEXT, argId);
     char const * valArgument = Get_CommandArgumentStringById(SCONTEXT, argId + 1);
 
-    if (ValidateCmdKeyArgumentFormat(keyArgument) != ERR_OK)
-    {
-        return ERR_CMDARGUMENT;
-    }
+    error = ValidateCmdKeyArgumentFormat(keyArgument);
+    return_if(error, error);
 
     FOR_EACH(const cmdarg_resolver_t, argResolver, *resolverTable)
     {   
         if (strcmp(keyArgument, argResolver->KeyArgument) == 0)
         {
-            if(argResolver->ValueValidator(valArgument) != ERR_OK)
-            {
-                return ERR_VALIDATION;
-            }
+            error = argResolver->ValueValidator(valArgument);
+            return_if(error, error);
+
             argResolver->ValueCallback(SCONTEXT, valArgument);
             return ERR_OK;
         }
@@ -86,22 +84,19 @@ static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const cmdarg_lookup_t
 
 static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
 {
+    error_t error;
+
     const cmdarg_lookup_t* resolverTable = Get_EssentialCmdArgsResolverTable();
     int32_t unresolved = resolverTable->Count;
-    error_t error = ERR_OK;
 
     for (int32_t i = 1; i < Get_CommandArguments(SCONTEXT)->Count; i++)
     {
-        if ((error = LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i)) == ERR_OK)
+        error = LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i);
+        return_if(error == ERR_VALIDATION, error);
+
+        if(error == ERR_OK)
         {
-            if((--unresolved) == 0)
-            {
-                return ERR_OK;
-            }
-        }
-        if (error == ERR_VALIDATION)
-        {
-            return error;
+            --unresolved;
         }
     }
     return ERR_CMDARGUMENT;
@@ -109,18 +104,16 @@ static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
 
 static error_t ResolveAndSetOptionalCmdArguments(__SCONTEXT_PAR)
 {
+    error_t error;
+
     const cmdarg_lookup_t* resolverTable = Get_OptionalCmdArgsResolverTable();
     int32_t unresolved = resolverTable->Count;
 
     for (int32_t i = 1; i < Get_CommandArguments(SCONTEXT)->Count; i++)
     {
-        if (LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i) == ERR_OK)
-        {
-            if((--unresolved) == 0)
-            {
-                return ERR_OK;
-            }
-        }
+        error = LookupAndResolveCmdArgument(SCONTEXT, resolverTable, i);
+        continue_if(error);
+        return_if(--unresolved == 0, ERR_OK);
     }
     return ERR_OK;
 }
@@ -131,27 +124,17 @@ void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char co
     Set_CommandArguments(SCONTEXT, argCount, argValues);
     Set_ProgramRunPath(SCONTEXT, Get_CommandArgumentStringById(SCONTEXT, 0));
 
-    if ((error = ResolveAndSetEssentialCmdArguments(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to resolve essential command line arguments.");
-    }
-    if ((error = ResolveAndSetOptionalCmdArguments(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to resolve optional command line arguments.")
-    }
+    error = ResolveAndSetEssentialCmdArguments(SCONTEXT);
+    ASSERT_ERROR(error, "Failed to resolve essential command line arguments.");
+
+    error = ResolveAndSetOptionalCmdArguments(SCONTEXT);
+    ASSERT_ERROR(error, "Failed to resolve optional command line arguments.");
 }
 
 static error_t ConstructEngStateBuffer(eng_states_t *restrict bufferAccess, const byte_t count)
 {
     buffer_t tmp = AllocateBufferUnchecked(count, sizeof(double));
     *bufferAccess = BUFFER_TO_ARRAY_WCOUNT(tmp, count, eng_states_t);
-    return tmp.Start ? ERR_OK : ERR_MEMALLOCATION;
-}
-
-static error_t ConstructEnvLinkBuffer(env_links_t *restrict bufferAccess, const int32_t count)
-{
-    buffer_t tmp = AllocateBufferUnchecked(count, sizeof(env_link_t));
-    *bufferAccess = BUFFER_TO_ARRAY_WCOUNT(tmp, count, env_links_t);
     return tmp.Start ? ERR_OK : ERR_MEMALLOCATION;
 }
 
@@ -164,33 +147,33 @@ static error_t ConstructCluStateBuffer(clu_states_t *restrict bufferAccess, cons
 
 static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t *restrict envDef)
 {
-    error_t error = ERR_OK;
+    error_t error;;
+
     Set_BufferByteValues(env, sizeof(env_state_t), 0);
 
-    error |= ConstructEngStateBuffer(&env->EnergyStates, FindLastEnvParId(envDef) + 1);
-    error |= ConstructCluStateBuffer(&env->ClusterStates, envDef->CluDefs.Count);
+    error = ConstructEngStateBuffer(&env->EnergyStates, FindLastEnvParId(envDef) + 1);
+    return_if(error, error);
+
+    error = ConstructCluStateBuffer(&env->ClusterStates, envDef->CluDefs.Count);
+    return_if(error, error);
 
     return error;
 }
 
 static void ConstructEnvironmentLattice(__SCONTEXT_PAR)
 {
-    error_t error = ERR_OK;
+    error_t error;
     blob_t tmpBlob;
 
-    if ((error = AllocateMdaChecked(4, sizeof(env_state_t), (int32_t*) Get_LatticeSizeVector(SCONTEXT), &tmpBlob)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to construct the environment lattice buffer.");
-    }
+    error = AllocateMdaChecked(4, sizeof(env_state_t), (int32_t*) Get_LatticeSizeVector(SCONTEXT), &tmpBlob);
+    ASSERT_ERROR(error, "Failed to construct the environment lattice buffer.");
 
     Set_EnvironmentLattice(SCONTEXT, CAST_OBJECT(env_lattice_t, tmpBlob));
 
     for (int32_t i = 0; i < Get_EnvironmentLattice(SCONTEXT)->Header->Size; i++)
     {
-        if ((error = ConstructEnvironmentBuffers(Get_EnvironmentStateById(SCONTEXT, i), Get_EnvironmentModelById(SCONTEXT, i))) != ERR_OK)
-        {
-            MC_ERROREXIT(error, "Failed to construct environment state buffers.");
-        }
+        error = ConstructEnvironmentBuffers(Get_EnvironmentStateById(SCONTEXT, i), Get_EnvironmentModelById(SCONTEXT, i));
+        ASSERT_ERROR(error, "Failed to construct environment state buffers.");
     }
 }
 
@@ -206,10 +189,8 @@ static void ConstructAbortConditionBuffers(__SCONTEXT_PAR)
     error_t error = ERR_OK;
     if (JobInfoHasFlgs(SCONTEXT, FLG_MMC))
     {
-        if ((error = ConstructLatticeEnergyBuffer(Get_LatticeEnergyBuffer(SCONTEXT), Get_JobInformation(SCONTEXT)->JobHeader)) != ERR_OK)
-        {
-            MC_ERROREXIT(error, "Failed to construct lattice energy buffer.")
-        }
+        error = ConstructLatticeEnergyBuffer(Get_LatticeEnergyBuffer(SCONTEXT), Get_JobInformation(SCONTEXT)->JobHeader);
+        ASSERT_ERROR(error, "Failed to construct lattice energy buffer.");
     }
 }
 
@@ -221,18 +202,18 @@ static void ConstructSimulationModel(__SCONTEXT_PAR)
 
 static error_t ConstructSelectionPoolIndexRedirection(__SCONTEXT_PAR)
 {
+    error_t error;
+
     buffer_t tmpBuffer;
     int32_t poolCount = 1 + FindMaxJumpDirectionCount(&Get_TransitionModel(SCONTEXT)->JumpCountTable);
+    int32_t poolIndex = 1;
 
-    if (AllocateBufferChecked(poolCount, sizeof(int32_t), &tmpBuffer) != ERR_OK)
-    {
-        return ERR_MEMALLOCATION;
-    }
+    error = AllocateBufferChecked(poolCount, sizeof(int32_t), &tmpBuffer);
+    return_if(error, error);
 
     Set_BufferByteValues(tmpBuffer.Start, GetBufferSize(&tmpBuffer), 0);
     Set_DirectionPoolIndexing(SCONTEXT, BUFFER_TO_ARRAY_WCOUNT(tmpBuffer, poolCount, id_redirect_t));
 
-    int32_t poolIndex = 1;
     FOR_EACH(int32_t, dirCount, Get_TransitionModel(SCONTEXT)->JumpCountTable)
     {
         if ((*dirCount != 0) && (Get_DirectionPoolIdByJumpCount(SCONTEXT, *dirCount) != 0))
@@ -248,23 +229,22 @@ static error_t ConstructSelectionPoolIndexRedirection(__SCONTEXT_PAR)
 
 static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 {
+    error_t error;
+
     buffer_t tmpBuffer;
     int32_t poolCount = Get_DirectionPools(SCONTEXT)->Count;
     int32_t poolSize = Get_LatticeInformation(SCONTEXT)->SelectableCount;
 
-    if (AllocateBufferChecked(poolCount, sizeof(dir_pool_t), &tmpBuffer) != ERR_OK)
-    {
-        return ERR_MEMALLOCATION;
-    }
+    error = AllocateBufferChecked(poolCount, sizeof(dir_pool_t), &tmpBuffer);
+    return_if(error, error);
     
     Set_DirectionPools(SCONTEXT, BUFFER_TO_ARRAY_WCOUNT(tmpBuffer, poolCount, dir_pools_t));
 
     FOR_EACH(dir_pool_t, dirPool, *Get_DirectionPools(SCONTEXT))
     {
-        if (AllocateBufferChecked(poolSize, sizeof(env_pool_t), &tmpBuffer) != ERR_OK)
-        {
-            return ERR_MEMALLOCATION;
-        }
+        error = AllocateBufferChecked(poolSize, sizeof(env_pool_t), &tmpBuffer);
+        return_if(error, error);
+
         dirPool->EnvPool = BUFFER_TO_LIST(tmpBuffer, env_pool_t);
     }
 
@@ -273,17 +253,13 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 
 static void ConstructJumpSelectionPool(__SCONTEXT_PAR)
 {
-    error_t error = ERR_OK;
+    error_t error;
 
-    if ((error = ConstructSelectionPoolIndexRedirection(SCONTEXT)) != ERR_OK)
-    {        
-        MC_ERROREXIT(error, "Failed to construct selection pool indexing information.");
-    }
+    error = ConstructSelectionPoolIndexRedirection(SCONTEXT);
+    ASSERT_ERROR(error, "Failed to construct selection pool indexing information.");
 
-    if ((error = ConstructSelectionPoolDirectionBuffers(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to construct selection pool direction buffers.");
-    }
+    error = ConstructSelectionPoolDirectionBuffers(SCONTEXT);
+    ASSERT_ERROR(error, "Failed to construct selection pool direction buffers.");
 }
 
 static size_t ConfigStateHeaderAccess(__SCONTEXT_PAR)
@@ -441,17 +417,13 @@ static void ConstructMainState(__SCONTEXT_PAR)
 
     Set_BufferByteValues(Get_SimulationState(SCONTEXT), sizeof(mc_state_t), 0);
 
-    if ((error = AllocateBufferChecked(Get_JobInformation(SCONTEXT)->StateSize, 1, Get_MainStateBuffer(SCONTEXT))) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to construct main state.");
-    }
+    error = AllocateBufferChecked(Get_JobInformation(SCONTEXT)->StateSize, 1, Get_MainStateBuffer(SCONTEXT));
+    ASSERT_ERROR(error, "Failed to construct main state.");
 
     Set_BufferByteValues(Get_MainStateBuffer(SCONTEXT)->Start, Get_JobInformation(SCONTEXT)->StateSize, 0);
 
-    if ((error = ConstructMainStateBufferAccessors(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to construct main state buffer accessor system.");
-    }
+    error = ConstructMainStateBufferAccessors(SCONTEXT);
+    ASSERT_ERROR(error, "Failed to construct main state buffer accessor system.");
 }
 
 void ConstructSimulationContext(__SCONTEXT_PAR)
@@ -477,7 +449,7 @@ static error_t TryLoadOuputPlugin(__SCONTEXT_PAR)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
             return ERR_USEDEFAULT;
         #else
-            MC_ERROREXIT(error, "Cannot load requested ouput plugin.");
+            RUNTIME_ASSERT(false, error, "Cannot load requested ouput plugin.");
         #endif
     }
 
@@ -500,7 +472,7 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
             return ERR_USEDEFAULT;
         #else
-            MC_ERROREXIT(error, "Cannot load requested energy plugin.");
+            RUNTIME_ASSERT(false, error, "Cannot load requested energy plugin.");
         #endif
     }
 
@@ -539,10 +511,7 @@ static void PopulatePluginDelegateFunctions(__SCONTEXT_PAR)
 
 static error_t TryLoadStateFromFile(__SCONTEXT_PAR, char const * restrict filePath)
 {
-    if (!IsAccessibleFile(filePath))
-    {
-        return ERR_USEDEFAULT;
-    }
+    return_if(!IsAccessibleFile(filePath), ERR_USEDEFAULT);
     return LoadBufferFromFile(filePath, Get_MainStateBuffer(SCONTEXT));
 }
 
@@ -561,12 +530,7 @@ static error_t TryLoadSimulationState(__SCONTEXT_PAR)
         return error;
     }
 
-    if ((error = TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE)) == ERR_OK)
-    {
-        return error;
-    }
-
-    return error;
+    return TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE);
 }
 
 static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
@@ -574,10 +538,7 @@ static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
     lattice_t * dbLattice = Get_DatabaseModelLattice(SCONTEXT);
     lat_state_t * stLattice = Get_MainStateLattice(SCONTEXT);
 
-    if (stLattice->Count != dbLattice->Header->Size)
-    {
-        return ERR_DATACONSISTENCY;
-    }
+    return_if(stLattice->Count != dbLattice->Header->Size, ERR_DATACONSISTENCY);
 
     CopyBuffer(dbLattice->Start, stLattice->Start, stLattice->Count);
     return ERR_OK;
@@ -588,28 +549,21 @@ static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
     env_lattice_t* envLattice = Get_EnvironmentLattice(SCONTEXT);
     lat_state_t* stLattice = Get_MainStateLattice(SCONTEXT);
 
-    if (envLattice->Header->Size != stLattice->Count)
-    {
-        return ERR_DATACONSISTENCY;
-    }
+    return_if(envLattice->Header->Size != stLattice->Count, ERR_DATACONSISTENCY);
 
     for (int32_t i = 0; i < stLattice->Count; i++)
     {
         SetEnvStateStatusToDefault(SCONTEXT, i, Get_StateLatticeEntryById(SCONTEXT, i));
     }
+
     return ERR_OK;
 }
 
 static error_t SyncDynamicModelToMainState(__SCONTEXT_PAR)
 {
-    error_t error;
-
-    if ((error = SyncDynamicEnvironmentsWithState(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Data structure synchronization failure (state ==> environments)")
-    }
-
-    return ERR_OK;
+    // Potentially incomplete sync. review during testing
+    error_t error = SyncDynamicEnvironmentsWithState(SCONTEXT);
+    return error;
 }
 
 static void PopulateSimulationState(__SCONTEXT_PAR)
@@ -618,37 +572,27 @@ static void PopulateSimulationState(__SCONTEXT_PAR)
 
     if ((error = TryLoadSimulationState(SCONTEXT)) == ERR_USEDEFAULT)
     {
-        if((error = SyncMainStateToDatabaseModel(SCONTEXT)) != ERR_OK )
-        {
-            MC_ERROREXIT(error, "Data structure synchronization failure (static model ==> state).")
-        }
+        error = SyncMainStateToDatabaseModel(SCONTEXT);
+        ASSERT_ERROR(error, "Data structure synchronization failure (static model ==> state).");
 
-        if ((error = DropCreateStateFile(SCONTEXT, FILE_PRERSTATE)) != ERR_OK)
-        {
-            MC_ERROREXIT(error, "Could not create initial state file.");
-        }
+        error = DropCreateStateFile(SCONTEXT, FILE_PRERSTATE);
+        ASSERT_ERROR(error, "Could not create initial state file.");
+
         return;
     }
 
-    if (error != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failure during loading of existing state file.");
-    }
+    ASSERT_ERROR(error, "A state file exists but failed to load.");
 }
 
 static void PopulateDynamicSimulationModel(__SCONTEXT_PAR)
 {
-    error_t error = ERR_OK;
+    error_t error;
 
-    if ((error = SyncDynamicModelToMainState(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Data structure synchronization failed (state ==> dynamic model).");
-    }
+    error = SyncDynamicModelToMainState(SCONTEXT);
+    ASSERT_ERROR(error, "Data structure synchronization failed (state ==> dynamic model).");
 
-    if ((error = CalcPhysicalSimulationFactors(SCONTEXT, Get_PhysicalFactors(SCONTEXT))) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to calculate default physical factors.");
-    }
+    error = CalcPhysicalSimulationFactors(SCONTEXT, Get_PhysicalFactors(SCONTEXT));
+    ASSERT_ERROR(error, "Failed to calculate default physical factors.");
 }
 
 static error_t SyncCycleCountersWithStateStatus(__SCONTEXT_PAR)
@@ -666,27 +610,21 @@ static void SyncSimulationCycleStateWithModel(__SCONTEXT_PAR)
 {
     error_t error;
 
-    if ((error = CalcCycleCounterDefaultStatus(SCONTEXT, Get_MainCycleCounters(SCONTEXT))) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to set default main counter status.");
-    }
+    error = CalcCycleCounterDefaultStatus(SCONTEXT, Get_MainCycleCounters(SCONTEXT));
+    ASSERT_ERROR(error, "Failed to set default main counter status.");
 
-    if ((error = SyncCycleCountersWithStateStatus(SCONTEXT)) != ERR_OK)
-    {
-        MC_ERROREXIT(error, "Failed to synchronize data structure (state ==> cycle counters).");
-    }
+    error = SyncCycleCountersWithStateStatus(SCONTEXT);
+    ASSERT_ERROR(error, "Failed to synchronize data structure (state ==> cycle counters).");
 }
 
 static void SyncSelectionPoolWithDynamicModel(__SCONTEXT_PAR)
 {
-    error_t error = ERR_OK;
+    error_t error;
 
     for (int32_t i = 0; i < Get_EnvironmentLattice(SCONTEXT)->Header->Size; i++)
     {
-        if ((error = HandleEnvStatePoolRegistration(SCONTEXT, i)) != ERR_OK)
-        {
-            MC_ERROREXIT(error, "Could not register environment on the jump selection pool.");
-        }
+        error = HandleEnvStatePoolRegistration(SCONTEXT, i);
+        ASSERT_ERROR(error, "Could not register environment on the jump selection pool.");
     }
 }
 

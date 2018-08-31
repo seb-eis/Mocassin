@@ -13,6 +13,8 @@
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 #include "Simulator/Data/Model/SimContext/ContextAccess.h" 
 
+/* Local helper routines */
+
 static inline int32_t LookupEnvironmentPoolId(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict cntTable, const env_state_t* restrict env)
 {
     return jmpPool->DirCountToPoolId.Start[*MDA_GET_2(*cntTable, env->PosVector.d, env->ParId)];
@@ -43,6 +45,8 @@ static inline void UpdateEnvStateSelectionStatus(env_state_t* restrict envState,
     envState->PoolId = poolId;
     envState->PoolPosId = poolPosId;
 }
+
+/* Initializer routines*/
 
 static error_t AddEnvStateToSelectionPool(__SCONTEXT_PAR, env_state_t* restrict envState, const int32_t jumpCount)
 {
@@ -89,6 +93,8 @@ error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t envId)
 
     return ERR_UNKNOWN;
 }
+
+/* Simulation routines*/
 
 static inline void RollPosAndDirFromPool(__SCONTEXT_PAR)
 {

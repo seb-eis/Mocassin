@@ -22,11 +22,11 @@
 
 typedef struct { byte_t CluId, RelId; } clu_link_t;
 
-typedef struct { byte_t Count; clu_link_t* Start, * End; } clu_links_t;
+typedef struct { int32_t Count; clu_link_t* Start, * End; } clu_links_t;
 
 typedef struct { int32_t EnvId, EnvPosId; clu_links_t CluLinks; } env_link_t;
 
-typedef struct { int32_t Count; env_link_t* Start, * End; } env_links_t;
+typedef struct { int32_t Count; env_link_t* Start, * End, * CurEnd; } env_links_t;
 
 typedef struct { int32_t CodeId, CodeIdBackup; occode_t OccCode, OccCodeBackup; } clu_state_t;
 

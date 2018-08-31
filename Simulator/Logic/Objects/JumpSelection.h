@@ -14,9 +14,11 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
-#define MC_NOPOOL 0
+/* Initializer routines*/
 
 error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t envId);
+
+/* Simulation routines */
 
 void RollNextKmcSelect(__SCONTEXT_PAR);
 

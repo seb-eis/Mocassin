@@ -90,6 +90,11 @@ static inline env_state_t* Get_EnvironmentStateById(__SCONTEXT_PAR, const int32_
     return &Get_DynamicModel(SCONTEXT)->EnvLattice.Start[id];
 }
 
+static inline env_state_t* Get_EnvironmentStateByVector4(__SCONTEXT_PAR, const vector4_t* restrict vector)
+{
+    return MDA_GET_4(*Get_EnvironmentLattice(SCONTEXT), vector->a, vector->b, vector->c, vector->d);
+}
+
 static inline int32_t* Get_LatticeBlockSizes(__SCONTEXT_PAR)
 {
     return Get_EnvironmentLattice(SCONTEXT)->Header->Blocks;
@@ -150,6 +155,11 @@ static inline void Set_ActiveJumpCollection(__SCONTEXT_PAR, jump_col_t* value)
 static inline jump_rule_t* Get_ActiveJumpRule(__SCONTEXT_PAR)
 {
     return Get_CycleState(SCONTEXT)->ActJumpRule;
+}
+
+static inline occode_t Get_ActiveStateCode(__SCONTEXT_PAR)
+{
+    return Get_CycleState(SCONTEXT)->ActStateCode;
 }
 
 static inline void Set_ActiveJumpRule(__SCONTEXT_PAR, jump_rule_t* value)
@@ -284,6 +294,26 @@ static inline int32_t Get_JumpCountByPositionStatus(__SCONTEXT_PAR, const int32_
     return *MDA_GET_2(*Get_JumpDirectionsPerPositionTable(SCONTEXT), posId, parId);
 }
 
+static inline jump_dirs_t* Get_JumpDirections(__SCONTEXT_PAR)
+{
+    return &Get_TransitionModel(SCONTEXT)->JumpDirs;
+}
+
+static inline jump_dir_t* Get_JumpDirectionById(__SCONTEXT_PAR, const int32_t id)
+{
+    return &Get_JumpDirections(SCONTEXT)->Start[id];
+}
+
+static inline jump_cols_t* Get_JumpCollections(__SCONTEXT_PAR)
+{
+    return &Get_TransitionModel(SCONTEXT)->JumpCols;
+}
+
+static inline jump_col_t* Get_JumpCollectionById(__SCONTEXT_PAR, const int32_t id)
+{
+    return &Get_JumpCollections(SCONTEXT)->Start[id];
+}
+
 static inline pair_tables_t* Get_PairEnergyTables(__SCONTEXT_PAR)
 {
     return &Get_EnergyModel(SCONTEXT)->PairTables;
@@ -326,6 +356,11 @@ static inline mta_state_t* Get_MainStateMetaInfo(__SCONTEXT_PAR)
     return &Get_SimulationState(SCONTEXT)->Meta;
 }
 
+static inline meta_info_t* Get_MainStateMetaData(__SCONTEXT_PAR)
+{
+    return Get_MainStateMetaInfo(SCONTEXT)->Data;
+}
+
 static inline lat_state_t* Get_MainStateLattice(__SCONTEXT_PAR)
 {
     return &Get_SimulationState(SCONTEXT)->Lattice;
@@ -341,7 +376,7 @@ static inline cnt_state_t* Get_MainStateCounters(__SCONTEXT_PAR)
     return &Get_SimulationState(SCONTEXT)->Counters;
 }
 
-static inline cnt_col_t* Get_MainStateCounterAt(__SCONTEXT_PAR, const byte_t id)
+static inline cnt_col_t* Get_MainStateCounterById(__SCONTEXT_PAR, const byte_t id)
 {
     return &Get_MainStateCounters(SCONTEXT)->Start[id];
 }
@@ -491,4 +526,53 @@ static inline double Get_PairEnergyTableEntry(const pair_table_t* restrict table
 static inline double Get_CluEnergyTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
 {
     return *MDA_GET_2(table->EngTable, table->ParToTableId[parId], codeId);
+}
+
+/* Flag getter/setters */
+
+static inline bitmask_t Get_MainStateFlags(__SCONTEXT_PAR)
+{
+    return Get_MainStateHeader(SCONTEXT)->Data->Flags;
+}
+
+static inline void Set_MainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
+{
+    FLG_SET(Get_MainStateHeader(SCONTEXT)->Data->Flags, flags);
+}
+
+static inline void UnSet_MainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
+{
+    FLG_UNSET(Get_MainStateHeader(SCONTEXT)->Data->Flags, flags);
+}
+
+static inline bitmask_t Get_JobInformationFlags(__SCONTEXT_PAR)
+{
+    return Get_JobInformation(SCONTEXT)->JobFlg;
+}
+
+static inline bitmask_t Get_JobHeaderFlagsKmc(__SCONTEXT_PAR)
+{
+    return Get_JobHeaderAsKmc(SCONTEXT)->JobFlg;
+}
+
+static inline bitmask_t Get_JobHeaderFlagsMmc(__SCONTEXT_PAR)
+{
+    return Get_JobHeaderAsKmc(SCONTEXT)->JobFlg;
+}
+
+/* Environment getter/setter */
+
+static inline int32_t Get_EnvironmentPairDefCount(env_state_t* restrict envState)
+{
+    return envState->EnvDef->PairDefs.Count;
+}
+
+static inline pair_def_t* Get_EnvironmentPairDefById(env_state_t* restrict envState, const int32_t id)
+{
+    return &envState->EnvDef->PairDefs.Start[id];
+}
+
+static inline clu_def_t* Get_EnvironmentCluDefById(env_state_t* restrict envState, const int32_t id)
+{
+    return &envState->EnvDef->CluDefs.Start[id];
 }

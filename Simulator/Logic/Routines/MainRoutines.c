@@ -26,57 +26,48 @@ error_t ResetContextAfterPrerun(__SCONTEXT_PAR)
 
 error_t StartMainRoutine(__SCONTEXT_PAR)
 {
-    if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_STATEERROR))
-    {
-        MC_ERROREXIT(SIMERROR, "Simulation error. Simulation routine not started due to set state error flag.");
-    }
+    RUNTIME_ASSERT(MainStateHasFlags(SCONTEXT, FLG_STATEERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
 
-    if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_KMC))
+    if (MainStateHasFlags(SCONTEXT, FLG_KMC))
     {
-        if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_PRERUN))
+        if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
         {
-            if (StartMainKmcRoutine(SCONTEXT) != ERR_OK)
-            {
-                MC_ERROREXIT(SIMERROR, "Fatal error. Prerun execution of main KMC routine returned with an error.");
-            }
-            if (FinishRoutinePrerun(SCONTEXT) != ERR_OK)
-            {
-                MC_ERROREXIT(SIMERROR, "Fatal error. Finisher for prerun execution of main KMC routine returned with an error.");
-            }
+            SIMERROR = StartMainKmcRoutine(SCONTEXT);
+            ASSERT_ERROR(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+
+            SIMERROR = FinishRoutinePrerun(SCONTEXT);
+            ASSERT_ERROR(SIMERROR, "Prerun finish of KMC main routine failed.")
         }
+        
         return StartMainKmcRoutine(SCONTEXT);
     }
 
-    if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_MMC))
+    if (MainStateHasFlags(SCONTEXT, FLG_MMC))
     {
-        if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_PRERUN))
+        if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
         {
-            if (StartMainKmcRoutine(SCONTEXT) != ERR_OK)
-            {
-                MC_ERROREXIT(SIMERROR, "Fatal error. Prerun execution of main MMC routine returned with an error.");
-            }
-            if (FinishRoutinePrerun(SCONTEXT) != ERR_OK)
-            {
-                MC_ERROREXIT(SIMERROR, "Fatal error. Finisher for prerun execution of main MMC routine returned with an error.");
-            }
+            SIMERROR = StartMainMmcRoutine(SCONTEXT);
+            ASSERT_ERROR(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+
+            SIMERROR = FinishRoutinePrerun(SCONTEXT);
+            ASSERT_ERROR(SIMERROR, "Prerun finish of KMC main routine failed.")
         }
-        return StartMainMmcRoutine(SCONTEXT);
+        
+        return StartMainKmcRoutine(SCONTEXT);
     }
-    MC_ERROREXIT(ERR_UNKNOWN, "Unexpected simulation error. No routine selection triggered.");
+
+    // GCC [-Wall] expects return value, even with exit(..) statement
+    ASSERT_ERROR(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
     return -1;
 }
 
 error_t FinishRoutinePrerun(__SCONTEXT_PAR)
 {
-    if (SaveSimulationState(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Simulation error. State save after prerun completion failed.")
-    }
+    SIMERROR = SaveSimulationState(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "State save after prerun completion failed.");
 
-    if (ResetContextAfterPrerun(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Simulation error. Context reset after prerun completion failed.");
-    }
+    SIMERROR = ResetContextAfterPrerun(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "Context reset after prerun completion failed.");
 
     FLG_UNSET(RefStateHeaderData(SCONTEXT)->Flags, FLG_PRERUN);
     return SIMERROR;
@@ -86,15 +77,13 @@ error_t StartMainKmcRoutine(__SCONTEXT_PAR)
 {
     while (GetKmcAbortCondEval(SCONTEXT) == FLG_CONTINUE)
     {
-        if (DoNextKmcCycleBlock(SCONTEXT) != ERR_OK)
-        {
-            MC_ERROREXIT(SIMERROR, "Fatal error. The KMC routine block execution returned with an error.")
-        }
-        if (FinishKmcCycleBlock(SCONTEXT) != ERR_OK)
-        {
-            MC_ERROREXIT(SIMERROR, "Fatal error. The finisher for the KMC block routine execution returned with an error.")
-        }
+        SIMERROR = DoNextKmcCycleBlock(SCONTEXT);
+        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
+
+        SIMERROR = FinishKmcCycleBlock(SCONTEXT);
+        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
     }
+
     return FinishMainRoutineKmc(SCONTEXT);
 }
 
@@ -102,26 +91,21 @@ error_t StartMainMmcRoutine(__SCONTEXT_PAR)
 {
     while (GetMmcAbortCondEval(SCONTEXT) == FLG_CONTINUE)
     {
-        if (DoNextMmcCycleBlock(SCONTEXT) != ERR_OK)
-        {
-            MC_ERROREXIT(SIMERROR, "Fatal error. The MMC routine block execution returned with an error.")
-        }
-        if (FinishMmcCycleBlock(SCONTEXT) != ERR_OK)
-        {
-            MC_ERROREXIT(SIMERROR, "Fatal error. The finisher for the MMC block routine execution returned with an error.")
-        }
+        SIMERROR = DoNextMmcCycleBlock(SCONTEXT);
+        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in MMC cycle block execution.");
+
+        SIMERROR = FinishMmcCycleBlock(SCONTEXT);
+        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
     }
+
     return FinishMainRoutineMmc(SCONTEXT);
 }
 
 static inline error_t CallOutputPlugin(__SCONTEXT_PAR)
 {
-    if (SCONTEXT->Plugins.OnDataOut != NULL)
-    {
-        SCONTEXT->Plugins.OnDataOut(SCONTEXT);
-        return SIMERROR;
-    }
-    return ERR_OK;
+    return_if(SCONTEXT->Plugins.OnDataOut == NULL, ERR_OK);
+    SCONTEXT->Plugins.OnDataOut(SCONTEXT);
+    return SIMERROR;
 }
 
 static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
@@ -131,9 +115,9 @@ static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
 
 error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
 {
-    while (RefMainCounters(SCONTEXT)->CurMcs < RefMainCounters(SCONTEXT)->CurTargetMcs)
+    while (Get_MainCycleCounters(SCONTEXT)->CurMcs < Get_MainCycleCounters(SCONTEXT)->CurTargetMcs)
     {
-        for (size_t i = 0; i < RefMainCounters(SCONTEXT)->MinCyclesPerBlock; i++)
+        for (size_t i = 0; i < Get_MainCycleCounters(SCONTEXT)->MinCyclesPerBlock; i++)
         {
             SetKmcJumpSelection(SCONTEXT);
             SetKmcJumpPathProperties(SCONTEXT);
@@ -154,22 +138,16 @@ error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
 
 static void SharedCycleBlockFinish(__SCONTEXT_PAR)
 {
-    FLG_UNSET(RefStateHeaderData(SCONTEXT)->Flags, FLG_FIRSTCYCLE);
+    UnSet_MainStateFlags(SCONTEXT, FLG_FIRSTCYCLE);
 
-    if (SyncSimulationState(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Fatal error. Synchronization between simulation data and state object retuned with an error.")
-    }
+    SIMERROR = SyncSimulationState(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "Simulation aborted due to failed sycnhronization between dynamic model and state object.");
 
-    if (SaveSimulationState(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Fatal error. State save operation after block completion returned with an error.");
-    }
+    SIMERROR = SaveSimulationState(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
 
-    if (CallOutputPlugin(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Fatal error. Loaded ouput plugin call retuned with an error.");
-    }
+    SIMERROR = CallOutputPlugin(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error in the external output plugin.");
 }
 
 error_t FinishKmcCycleBlock(__SCONTEXT_PAR)
@@ -182,9 +160,9 @@ error_t FinishKmcCycleBlock(__SCONTEXT_PAR)
 
 error_t DoNextMmcCycleBlock(__SCONTEXT_PAR)
 {
-    while (RefMainCounters(SCONTEXT)->CurMcs < RefMainCounters(SCONTEXT)->CurTargetMcs)
+    while (Get_MainCycleCounters(SCONTEXT)->CurMcs < Get_MainCycleCounters(SCONTEXT)->CurTargetMcs)
     {
-        for (size_t i = 0; i < RefMainCounters(SCONTEXT)->MinCyclesPerBlock; i++)
+        for (size_t i = 0; i < Get_MainCycleCounters(SCONTEXT)->MinCyclesPerBlock; i++)
         {
             SetMmcJumpSelection(SCONTEXT);
             SetMmcJumpPathProperties(SCONTEXT);
@@ -211,31 +189,25 @@ error_t FinishMmcCycleBlock(__SCONTEXT_PAR)
     return SIMERROR;
 }
 
-static inline bool_t GetTimeoutAbortEval(__SCONTEXT_PAR)
+static inline bitmask_t GetTimeoutAbortEval(__SCONTEXT_PAR)
 {
     clock_t newClock = clock();
-    RefStateMetaData(SCONTEXT)->TimePerBlock = (newClock - RefModelRunInfo(SCONTEXT)->LastClock) / CLOCKS_PER_SEC;
-    RefModelRunInfo(SCONTEXT)->LastClock = newClock;
-    RefStateMetaData(SCONTEXT)->RunTime = newClock / CLOCKS_PER_SEC;
-    int64_t blockEta = RefStateMetaData(SCONTEXT)->TimePerBlock + RefStateMetaData(SCONTEXT)->RunTime;
+    clock_t lastClock = Get_RuntimeInformation(SCONTEXT)->LastClock;
 
-    if (RefStateMetaData(SCONTEXT)->RunTime >= RefJobInfo(SCONTEXT)->TimeLimit)
-    {
-        return FLG_TIMEOUT;
-    }
-    if (blockEta > RefJobInfo(SCONTEXT)->TimeLimit)
-    {
-        return FLG_TIMEOUT;
-    }
-    return FLG_CONTINUE;
+    Get_MainStateMetaData(SCONTEXT)->TimePerBlock = (newClock - lastClock) / CLOCKS_PER_SEC;
+    Get_MainStateMetaData(SCONTEXT)->RunTime += (newClock - lastClock) / CLOCKS_PER_SEC;
+    int64_t blockEta = Get_MainStateMetaData(SCONTEXT)->TimePerBlock + Get_MainStateMetaData(SCONTEXT)->RunTime;
+
+    bool_t isTimeout = (Get_MainStateMetaData(SCONTEXT)->RunTime >= Get_JobInformation(SCONTEXT)->TimeLimit) || (blockEta > Get_JobInformation(SCONTEXT)->TimeLimit);
+    return (isTimeout) ? FLG_TIMEOUT : FLG_CONTINUE;
 }
 
 static inline bool_t GetRateAbortEval(__SCONTEXT_PAR)
 {
-    RefStateMetaData(SCONTEXT)->SuccessRate = RefMainCounters(SCONTEXT)->CurMcs / RefStateMetaData(SCONTEXT)->RunTime;
-    RefStateMetaData(SCONTEXT)->CyleRate = RefMainCounters(SCONTEXT)->CurCycles / RefStateMetaData(SCONTEXT)->RunTime;
+    Get_MainStateMetaData(SCONTEXT)->SuccessRate = Get_MainCycleCounters(SCONTEXT)->CurMcs / Get_MainStateMetaData(SCONTEXT)->RunTime;
+    Get_MainStateMetaData(SCONTEXT)->CyleRate = Get_MainCycleCounters(SCONTEXT)->CurCycles / Get_MainStateMetaData(SCONTEXT)->RunTime;
 
-    if (RefStateMetaData(SCONTEXT)->CyleRate < RefJobInfo(SCONTEXT)->MinSuccRate)
+    if (Get_MainStateMetaData(SCONTEXT)->CyleRate < Get_JobInformation(SCONTEXT)->MinSuccRate)
     {
         return true;
     }
@@ -253,26 +225,23 @@ static inline bool_t GetMcsTargetReachedEval(__SCONTEXT_PAR)
 
 static error_t GetGeneralAbortCondEval(__SCONTEXT_PAR)
 {
-    if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_FIRSTCYCLE))
+    if (MainStateHasFlags(SCONTEXT, FLG_FIRSTCYCLE))
     {
         return FLG_CONTINUE;
     }
-
     if (GetTimeoutAbortEval(SCONTEXT))
     {
-        FLG_SET(RefStateHeaderData(SCONTEXT)->Flags, FLG_TIMEOUT);
+        Set_MainStateFlags(SCONTEXT, FLG_TIMEOUT);
         return FLG_TIMEOUT;
     }
-
     if (GetRateAbortEval(SCONTEXT))
     {
-        FLG_SET(RefStateHeaderData(SCONTEXT)->Flags, FLG_RATELIMIT);
+        Set_MainStateFlags(SCONTEXT, FLG_RATELIMIT);
         return FLG_RATELIMIT;
     }
-
     if (GetMcsTargetReachedEval(SCONTEXT))
     {
-        FLG_SET(RefStateHeaderData(SCONTEXT)->Flags, FLG_COMPLETED);
+        Set_MainStateFlags(SCONTEXT, FLG_COMPLETED);
         return FLG_COMPLETED;
     }
 
@@ -304,40 +273,36 @@ error_t SyncSimulationState(__SCONTEXT_PAR)
 
 error_t SaveSimulationState(__SCONTEXT_PAR)
 {
-    if (FLG_TRUE(RefStateHeaderData(SCONTEXT)->Flags, FLG_PRERUN))
+    if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
     {
-        SIMERROR = SaveWriteBufferToFile(FILE_PRERSTATE, FMODE_BINARY_W, RefStateBuffer(SCONTEXT));
+        SIMERROR = SaveWriteBufferToFile(FILE_PRERSTATE, FMODE_BINARY_W, Get_MainStateBuffer(SCONTEXT));
     }
     else
     {
-        SIMERROR = SaveWriteBufferToFile(FILE_MAINSTATE, FMODE_BINARY_W, RefStateBuffer(SCONTEXT));
+        SIMERROR = SaveWriteBufferToFile(FILE_MAINSTATE, FMODE_BINARY_W, Get_MainStateBuffer(SCONTEXT));
     }
     return SIMERROR;
 }
 
 static error_t GeneralSimulationFinish(__SCONTEXT_PAR)
 {
-    FLG_SET(RefStateHeaderData(SCONTEXT)->Flags, FLG_COMPLETED);
+    Set_MainStateFlags(SCONTEXT, FLG_COMPLETED);
     SIMERROR = SaveSimulationState(SCONTEXT);
     return SIMERROR;
 }
 
 error_t FinishMainRoutineKmc(__SCONTEXT_PAR)
 {
-    if (GeneralSimulationFinish(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Fatal error. General simulation finisher KMC/MMC returned with an error.")
-    }
-    return ERR_OK;
+    SIMERROR = GeneralSimulationFinish(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    return SIMERROR;
 }
 
 error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
 {
-    if (GeneralSimulationFinish(SCONTEXT) != ERR_OK)
-    {
-        MC_ERROREXIT(SIMERROR, "Fatal error. General simulation finisher KMC/MMC returned with an error.")
-    }
-    return ERR_OK;
+    SIMERROR = GeneralSimulationFinish(SCONTEXT);
+    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    return SIMERROR;
 }
 
 static inline int32_t LookupActJumpId(const __SCONTEXT_PAR)
@@ -347,27 +312,27 @@ static inline int32_t LookupActJumpId(const __SCONTEXT_PAR)
 
 static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
 {
-    RefActRollInfo(SCONTEXT)->JmpId = LookupActJumpId(SCONTEXT);
-    SCONTEXT->CycleState.ActJumpDir = RefJumpDirAt(SCONTEXT, RefActRollInfo(SCONTEXT)->JmpId);
-    SCONTEXT->CycleState.ActJumpCol = RefJumpColAt(SCONTEXT, RefActJumpDir(SCONTEXT)->ColId);
+    Get_JumpSelectionInfo(SCONTEXT)->JmpId = LookupActJumpId(SCONTEXT);
+    Get_CycleState(SCONTEXT)->ActJumpDir = Get_JumpDirectionById(SCONTEXT, Get_JumpSelectionInfo(SCONTEXT)->JmpId);
+    Get_CycleState(SCONTEXT)->ActJumpCol = Get_JumpCollectionById(SCONTEXT, Get_ActiveJumpDirection(SCONTEXT)->ColId);
 }
 
 static inline void SetActPathStartEnv(__SCONTEXT_PAR)
 {
-    JUMPPATH[0] = RefLatticeEnvAt(SCONTEXT, RefActRollInfo(SCONTEXT)->EnvId);
-    SetCodeByteAt(RefActStateCode(SCONTEXT), 0, JUMPPATH[0]->ParId);
+    JUMPPATH[0] = Get_EnvironmentStateById(SCONTEXT, Get_JumpSelectionInfo(SCONTEXT)->EnvId);
+    SetCodeByteAt(&Get_CycleState(SCONTEXT)->ActStateCode, 0, JUMPPATH[0]->ParId);
     JUMPPATH[0]->PathId = 0;
 }
 
 static inline void SetActCounterCol(__SCONTEXT_PAR)
 {
-    SCONTEXT->CycleState.ActCntCol = RefStateCountersAt(SCONTEXT, JUMPPATH[0]->ParId);
+    Get_CycleState(SCONTEXT)->ActCntCol = Get_MainStateCounterById(SCONTEXT, JUMPPATH[0]->ParId);
 }
 
 void SetKmcJumpSelection(__SCONTEXT_PAR)
 {
     RollNextKmcSelect(SCONTEXT);
-    SCONTEXT->CycleState.ActStateCode = 0ULL;
+    Get_CycleState(SCONTEXT)->ActStateCode = 0ULL;
 
     SetActCounterCol(SCONTEXT);
     SetActPathStartEnv(SCONTEXT);
@@ -379,42 +344,44 @@ void SetKmcJumpPathProperties(__SCONTEXT_PAR)
     vector4_t actVector = JUMPPATH[0]->PosVector;
     byte_t index = 0;
 
-    FOR_EACH(vector4_t, relVector, RefActJumpDir(SCONTEXT)->JumpSeq)
+    FOR_EACH(vector4_t, relVector, Get_ActiveJumpDirection(SCONTEXT)->JumpSeq)
     {
-        AddToLhsAndTrimVector4(&actVector, relVector, RefLatticeSize(SCONTEXT));
-        JUMPPATH[index] = GetEnvByVector4(&actVector, RefEnvLattice(SCONTEXT));
-        SetCodeByteAt(RefActStateCode(SCONTEXT), index, JUMPPATH[index]->ParId);
+        AddToLhsAndTrimVector4(&actVector, relVector, Get_LatticeSizeVector(SCONTEXT));
+        JUMPPATH[index] = Get_EnvironmentStateByVector4(SCONTEXT, &actVector);
+
+        SetCodeByteAt(&Get_CycleState(SCONTEXT)->ActStateCode, index, JUMPPATH[index]->ParId);
         JUMPPATH[index]->PathId = index;
     }
 }
 
-static inline occode_t GetLastPossibleJumpCode(const __SCONTEXT_PAR)
+static inline occode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
 {
-    return RefActJumpCol(SCONTEXT)->JumpRules.End[-1].StCode0;
+    return Get_ActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StCode0;
 }
 
 static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
 {
-    if (GetLastPossibleJumpCode(SCONTEXT) < GetActStateCode(SCONTEXT))
+    if (GetLastPossibleJumpCode(SCONTEXT) < Get_ActiveStateCode(SCONTEXT))
     {
-        SCONTEXT->CycleState.ActJumpRule = NULL;
+        Get_CycleState(SCONTEXT)->ActJumpRule = NULL;
     }
     else
     {
-        SCONTEXT->CycleState.ActJumpRule = RefActJumpCol(SCONTEXT)->JumpRules.Start;
-        while (RefActJumpRule(SCONTEXT)->StCode0 < GetActStateCode(SCONTEXT))
+        Get_CycleState(SCONTEXT)->ActJumpRule = Get_ActiveJumpCollection(SCONTEXT)->JumpRules.Start;
+        while (Get_ActiveJumpRule(SCONTEXT)->StCode0 < Get_ActiveStateCode(SCONTEXT))
         {
-            SCONTEXT->CycleState.ActJumpRule++;
+            Get_CycleState(SCONTEXT)->ActJumpRule++;
         }
-        if (RefActJumpRule(SCONTEXT)->StCode0 != GetActStateCode(SCONTEXT))
+        if (Get_ActiveJumpRule(SCONTEXT)->StCode0 != Get_ActiveStateCode(SCONTEXT))
         {
-            SCONTEXT->CycleState.ActJumpRule = NULL;
+            Get_CycleState(SCONTEXT)->ActJumpRule = NULL;
         }
     }
 }
 
 static inline void BinaryJumpRuleLookup(__SCONTEXT_PAR)
 {
+    // Possible implementation on optimization
 }
 
 static inline void LookupAndSetActJumpRule(__SCONTEXT_PAR)
@@ -440,35 +407,37 @@ void SetKmcJumpProperties(__SCONTEXT_PAR)
 
 void SetKmcJumpProbsDefault(__SCONTEXT_PAR)
 {
-    RefActEngInfo(SCONTEXT)->ConfDel = 0.5 * (RefActEngInfo(SCONTEXT)->Eng2 - RefActEngInfo(SCONTEXT)->Eng0);
-    RefActEngInfo(SCONTEXT)->Prob0to2 = exp(RefActEngInfo(SCONTEXT)->Eng1 + RefActEngInfo(SCONTEXT)->ConfDel);
-    RefActEngInfo(SCONTEXT)->Prob2to0 = (RefActEngInfo(SCONTEXT)->ConfDel > RefActEngInfo(SCONTEXT)->Eng1) ? INFINITY : 0.0;
+    eng_info_t* energyInfo = Get_JumpEnergyInfo(SCONTEXT);
+
+    energyInfo->ConfDel = 0.5 * (energyInfo->Eng2 - energyInfo->Eng0);
+    energyInfo->Prob0to2 = exp(energyInfo->Eng1 + energyInfo->ConfDel);
+    energyInfo->Prob2to0 = (energyInfo->ConfDel > energyInfo->Eng1) ? INFINITY : 0.0;
 }
 
 void SetKmcJumpEvaluation(__SCONTEXT_PAR)
 {
     SCONTEXT->Plugins.OnSetJumpProbs(SCONTEXT);
 
-    if (RefActEngInfo(SCONTEXT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
+    if (Get_JumpEnergyInfo(SCONTEXT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
-        RefActCounters(SCONTEXT)->ToUnstCnt++;
+        Get_ActiveCounters(SCONTEXT)->ToUnstCnt++;
         return;
     }
-    if (RefActEngInfo(SCONTEXT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
+    if (Get_JumpEnergyInfo(SCONTEXT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
-        RefActCounters(SCONTEXT)->OnUnstCnt++;
+        Get_ActiveCounters(SCONTEXT)->OnUnstCnt++;
         return;
     }
-    if (Pcg32NextDouble(&SCONTEXT->RnGen) < RefActEngInfo(SCONTEXT)->Prob0to2)
+    if (GetNextCompareDouble(SCONTEXT) < Get_JumpEnergyInfo(SCONTEXT)->Prob0to2)
     {
-        RefActCounters(SCONTEXT)->StepCnt++;
+        Get_ActiveCounters(SCONTEXT)->StepCnt++;
         AdvanceKmcSystemToState2(SCONTEXT);
         MakeJumpPoolUpdateKmc(SCONTEXT);
         return;
     }
     else
     {
-        RefActCounters(SCONTEXT)->RejectCnt++;
+        Get_ActiveCounters(SCONTEXT)->RejectCnt++;
     }
 }
 
@@ -483,27 +452,27 @@ void SetMmcJumpSelection(__SCONTEXT_PAR)
 
 void SetMmcJumpPathProperties(__SCONTEXT_PAR)
 {
-    JUMPPATH[2] = RefLatticeEnvAt(SCONTEXT, RefActRollInfo(SCONTEXT)->OffId);
-    JUMPPATH[1] = RefLatticeEnvAt(SCONTEXT, 0);
+    JUMPPATH[2] = Get_EnvironmentStateById(SCONTEXT, RefActRollInfo(SCONTEXT)->OffId);
+    JUMPPATH[1] = Get_EnvironmentStateById(SCONTEXT, 0);
 
-    JUMPPATH[1] += RefEnvLattice(SCONTEXT)->Header->Blocks[0] * JUMPPATH[2]->PosVector.a;
-    JUMPPATH[1] += RefEnvLattice(SCONTEXT)->Header->Blocks[1] * JUMPPATH[2]->PosVector.b;
-    JUMPPATH[1] += RefEnvLattice(SCONTEXT)->Header->Blocks[2] * JUMPPATH[2]->PosVector.c;
+    JUMPPATH[1] += Get_EnvironmentLattice(SCONTEXT)->Header->Blocks[0] * JUMPPATH[2]->PosVector.a;
+    JUMPPATH[1] += Get_EnvironmentLattice(SCONTEXT)->Header->Blocks[1] * JUMPPATH[2]->PosVector.b;
+    JUMPPATH[1] += Get_EnvironmentLattice(SCONTEXT)->Header->Blocks[2] * JUMPPATH[2]->PosVector.c;
     JUMPPATH[1] += JUMPPATH[0]->PosVector.d;
 
-    SetCodeByteAt(RefActStateCode(SCONTEXT), 1, JUMPPATH[1]->ParId);
+    SetCodeByteAt(&Get_CycleState(SCONTEXT)->ActStateCode, 1, JUMPPATH[1]->ParId);
     JUMPPATH[1]->PathId = 1;
 }
 
 void SetMmcJumpEvalFail(__SCONTEXT_PAR)
 {
-    RefActCounters(SCONTEXT)->BlockCnt++;
+    Get_ActiveCounters(SCONTEXT)->BlockCnt++;
 }
 
 bool_t GetMmcJumpRuleEval(__SCONTEXT_PAR)
 {
     LookupAndSetActJumpRule(SCONTEXT);
-    return SCONTEXT->CycleState.ActJumpRule == 0;
+    return Get_CycleState(SCONTEXT)->ActJumpRule == 0;
 }
 
 void SetMmcJumpProperties(__SCONTEXT_PAR)
@@ -513,32 +482,32 @@ void SetMmcJumpProperties(__SCONTEXT_PAR)
 
 void SetMmcJumpProbsDefault(__SCONTEXT_PAR)
 {
-    RefActEngInfo(SCONTEXT)->Prob0to2 = exp(RefActEngInfo(SCONTEXT)->Eng2 - RefActEngInfo(SCONTEXT)->Eng0);
+    Get_JumpEnergyInfo(SCONTEXT)->Prob0to2 = exp(Get_JumpEnergyInfo(SCONTEXT)->Eng2 - Get_JumpEnergyInfo(SCONTEXT)->Eng0);
 }
 
 void SetMmcJumpEvaluation(__SCONTEXT_PAR)
 {
     SCONTEXT->Plugins.OnSetJumpProbs(SCONTEXT);
 
-    if (RefActEngInfo(SCONTEXT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
+    if (Get_JumpEnergyInfo(SCONTEXT)->Prob2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
-        RefActCounters(SCONTEXT)->ToUnstCnt++;
+        Get_ActiveCounters(SCONTEXT)->ToUnstCnt++;
         return;
     }
-    if (RefActEngInfo(SCONTEXT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
+    if (Get_JumpEnergyInfo(SCONTEXT)->Prob0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
-        RefActCounters(SCONTEXT)->OnUnstCnt++;
+        Get_ActiveCounters(SCONTEXT)->OnUnstCnt++;
         return;
     }
-    if (Pcg32NextDouble(&SCONTEXT->RnGen) < RefActEngInfo(SCONTEXT)->Prob0to2)
+    if (GetNextCompareDouble(SCONTEXT) < Get_JumpEnergyInfo(SCONTEXT)->Prob0to2)
     {
-        RefActCounters(SCONTEXT)->StepCnt++;
+        Get_ActiveCounters(SCONTEXT)->StepCnt++;
         AdvanceMmcSystemToState2(SCONTEXT);
         MakeJumpPoolUpdateMmc(SCONTEXT);
         return;
     }
     else
     {
-        RefActCounters(SCONTEXT)->RejectCnt++;
+        Get_ActiveCounters(SCONTEXT)->RejectCnt++;
     }
 }

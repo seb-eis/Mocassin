@@ -10,36 +10,13 @@
 //////////////////////////////////////////
 
 #pragma once
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Simulator/Logic/Constants/Constants.h"
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
 
-#define MC_CONST_BLOTZMANN_ELV 8.6173303e-05
-#define MC_CONST_JUMPTRACK_MIN 1.0e-05
-#define MC_CONST_JUMPTRACK_MAX 1.0e+00
-#define MC_CONST_JUMPLIMIT_MIN 0.0e+00
-#define MC_CONST_JUMPLIMIT_MAX 1.0e+00
-
-#define FLG_KMC             0x1
-#define FLG_MMC             0x2
-#define FLG_PRERUN          0x4
-#define FLG_CONTINUE        0x8
-#define FLG_COMPLETED       0x10
-#define FLG_TIMEOUT         0x20
-#define FLG_ABORTCONDITION  0x40
-#define FLG_RATELIMIT       0x80
-#define FLG_FIRSTCYCLE      0x100
-#define FLG_INITIALIZED     0x20000000
-#define FLG_ABORT           0x40000000
-#define FLG_STATEERROR      0x80000000
-
-#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
-
-#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
-
-#define FLG_SET(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
-
-#define FLG_UNSET(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
+#define get_compare(lhs,rhs) ((lhs)==(rhs)) ? 0 : ((lhs)<(rhs)) ? -1 : 1;
 
 static inline void SetCodeByteAt(occode_t* restrict code, const byte_t id, const byte_t value)
 {
@@ -59,17 +36,10 @@ static inline void AddToLhsVector4(vector4_t* restrict lhs, const vector4_t* res
     lhs->d += rhs->d;
 }
 
-static inline void TrimVector4ToCell(vector4_t* restrict vector, const vector4_t* restrict sizes)
-{
-    while(vector->a >= sizes->a) vector->a -= sizes->a;
-    while(vector->b >= sizes->b) vector->b -= sizes->b;
-    while(vector->c >= sizes->c) vector->c -= sizes->c;
-}
-
 static inline void AddToLhsAndTrimVector4(vector4_t* restrict lhs, const vector4_t* restrict rhs, const vector4_t* sizes)
 {
     AddToLhsVector4(lhs, rhs);
-    TrimVector4ToCell(lhs, sizes);
+    PeriodicTrimVector4(lhs, sizes);
 }
 
 static inline env_state_t* GetEnvByVector4(const vector4_t* restrict vec, const env_lattice_t* restrict latt)
@@ -79,7 +49,7 @@ static inline env_state_t* GetEnvByVector4(const vector4_t* restrict vec, const 
 
 static inline double GetEnergyConvValue(const double temp)
 {
-    return 1.0 / (temp * MC_CONST_BLOTZMANN_ELV);
+    return 1.0 / (temp * NATCONST_BLOTZMANN);
 }
 
 static inline void ConvEnergyPhysToBoltz(double* restrict value, const double convValue)
@@ -102,9 +72,21 @@ static inline int32_t FindMaxJumpDirectionCount(const jump_counts_t* restrict ju
     return max;
 }
 
+static inline int32_t GetNextCompareDouble(__SCONTEXT_PAR)
+{
+    return Pcg32NextDouble(&SCONTEXT->RnGen);
+}
+
 static inline int32_t GetNextCeiledRnd(__SCONTEXT_PAR, const int32_t upperLimit)
 {
     return (int32_t) (Pcg32Next(&SCONTEXT->RnGen) % upperLimit);
+}
+
+static inline env_state_t* ResolvePairDefTargetEnvironment(__SCONTEXT_PAR, const pair_def_t* restrict pairDef, const env_state_t* startEnv)
+{
+    vector4_t target = AddVector4(&startEnv->PosVector, &pairDef->RelVector);
+    PeriodicTrimVector4(&target, Get_LatticeSizeVector(SCONTEXT));
+    return Get_EnvironmentStateByVector4(SCONTEXT, &target);
 }
 
 static inline pair_table_t* RefPairTableAt(const __SCONTEXT_PAR, const int32_t id)
@@ -439,14 +421,19 @@ static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
     }
 }
 
-static inline bool_t JobInfoHasFlgs(const __SCONTEXT_PAR, bitmask_t flgs)
+static inline bool_t JobInfoHasFlgs(const __SCONTEXT_PAR, const bitmask_t flgs)
 {
     return FLG_TRUE(SCONTEXT->SimDbModel.JobInfo.JobFlg, flgs);
 }
 
-static inline bool_t JobHeaderHasFlgs(const __SCONTEXT_PAR, bitmask_t flgs)
+static inline bool_t JobHeaderHasFlgs(const __SCONTEXT_PAR, const bitmask_t flgs)
 {
     return FLG_TRUE(MARSHAL_AS(mmc_header_t, SCONTEXT->SimDbModel.JobInfo.JobHeader)->JobFlg, flgs);
+}
+
+static inline bool_t MainStateHasFlags(const __SCONTEXT_PAR, const bitmask_t flgs)
+{
+    return FLG_TRUE(SCONTEXT->SimState.Header.Data->Flags, flgs);
 }
 
 static inline flp_buffer_t* RefMmcAbortBuffer(const __SCONTEXT_PAR)
@@ -467,43 +454,8 @@ static inline byte_t GetMaxParId(const __SCONTEXT_PAR)
     return dimensions[0];
 }
 
-static inline kmc_header_t* RefJobHeaderAsKmc(const __SCONTEXT_PAR)
+static inline const int32_t GetNumberOfUnitCells(__SCONTEXT_PAR)
 {
-    return (void*) SCONTEXT->SimDbModel.JobInfo.JobHeader;
-}
-
-static inline mmc_header_t* RefJobHeaderAsMmc(const __SCONTEXT_PAR)
-{
-    return (void*) SCONTEXT->SimDbModel.JobInfo.JobHeader;
-}
-
-static inline db_model_t* RefDatabaseModel(const __SCONTEXT_PAR)
-{
-    return (void*) &SCONTEXT->SimDbModel;
-}
-
-static inline str_model_t* RefDbModelStructure(const __SCONTEXT_PAR)
-{
-    return (void*) &RefDatabaseModel(SCONTEXT)->Structure;
-}
-
-static inline eng_model_t* RefDbModelEnergy(const __SCONTEXT_PAR)
-{
-    return (void*) &RefDatabaseModel(SCONTEXT)->Energy;
-}
-
-static inline tra_model_t* RefDbModelTransition(const __SCONTEXT_PAR)
-{
-    return (void*) &RefDatabaseModel(SCONTEXT)->Transition;
-}
-
-static inline lat_info_t* RefDbModelLattInfo(const __SCONTEXT_PAR)
-{
-    return (void*) &RefDatabaseModel(SCONTEXT)->LattInfo;
-}
-
-static inline const int32_t GetNumberOfUnitCells(const __SCONTEXT_PAR)
-{
-    vector4_t* sizes = &RefDbModelLattInfo(SCONTEXT)->SizeVec;
+    const vector4_t* sizes = Get_LatticeSizeVector(SCONTEXT);
     return sizes->a * sizes->b * sizes->c;
 }

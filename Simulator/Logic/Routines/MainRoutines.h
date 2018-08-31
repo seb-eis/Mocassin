@@ -14,9 +14,13 @@
 #include "Simulator/Logic/Routines/EnvRoutines.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
 
+/* Initializer routines */
+
 error_t PrepareForMainRoutine(__SCONTEXT_PAR);
 
 error_t FinishRoutinePrerun(__SCONTEXT_PAR);
+
+/* Main simulation routines */
 
 error_t ResetContextAfterPrerun(__SCONTEXT_PAR);
 
@@ -46,6 +50,7 @@ error_t FinishMainRoutineKmc(__SCONTEXT_PAR);
 
 error_t FinishMainRoutineMmc(__SCONTEXT_PAR);
 
+/* KMC simulation routines */
 
 void SetKmcJumpSelection(__SCONTEXT_PAR);
 
@@ -61,6 +66,7 @@ void SetKmcJumpEvaluation(__SCONTEXT_PAR);
 
 void SetKmcJumpProbsDefault(__SCONTEXT_PAR);
 
+/* KMC simulation routines */
 
 void SetMmcJumpSelection(__SCONTEXT_PAR);
 

@@ -90,7 +90,19 @@ typedef int64_t cerror_t;
 #define ON_ERROR_HANDLE(code, msg) MC_ERROREXIT(code, msg)
 
 // Asserts that the passed condition is true. Calls default error handling if condition is false
-#define RUNTIME_ASSERT(cond, error, msg) if (!(cond)) ON_ERROR_HANDLE(error, msg)
+#define RUNTIME_ASSERT(cond, error, msg) if (!(cond)) ON_ERROR_HANDLE((error), (msg))
+
+// Asserts that the error is ERR_OK and if not calls the default runtime assert reaction
+#define ASSERT_ERROR(error, msg) RUNTIME_ASSERT((error) == (ERR_OK), (error), (msg))
+
+// Macro for conditional one line returns statements
+#define return_if(cond, value) if (cond) return (value)
+
+// Macro for conditional one line continue statements
+#define continue_if(cond) if (cond) continue
+
+// Macro for conditional one line break statements
+#define break_if(cond) if (cond) break
 
 // Get an error description string for the passed error Code
 char* ConvErrorToString(error_t errCode);

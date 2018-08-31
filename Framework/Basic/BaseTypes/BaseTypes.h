@@ -14,6 +14,17 @@
 #include <stdlib.h>
 #include "Framework/Errors/McErrors.h"
 
+#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
+
+#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
+
+#define FLG_SET(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
+
+#define FLG_UNSET(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
+
+// Defines the void prt compare function type for qsort calls
+typedef int32_t (*f_compare_t)(const void* lhs, const void* rhs);
+
 // Defines the function for cmd argument setters
 typedef void (*f_cmdcallback_t)(void* obj, char const * value);
 
@@ -61,6 +72,9 @@ typedef struct { const int32_t Count; const cmdarg_resolver_t * Start, * End; } 
 
 // Creates a list access struct from the passed buffer where the current item ptr points to the first element
 #define BUFFER_TO_LIST(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End, (void*) (__BUFFER).Start }
+
+// Creates a list access struct from the passed buffer where the current item ptr points to the first element and a count field exists
+#define BUFFER_TO_LIST_WCOUNT(__BUFFER, __COUNT, __TYPE) (__TYPE) { (__COUNT), (void*) (__BUFFER).Start, (void*) (__BUFFER).End, (void*) (__BUFFER).Start }
 
 // Defines the default byte to be of unsigned int8 type
 typedef uint8_t byte_t;

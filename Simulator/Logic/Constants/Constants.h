@@ -10,6 +10,32 @@
 
 #pragma once
 
+/* Optimization toggle defines */
+
+#define OPT_LINK_ONLY_MOBILES
+
+/* Flag values */
+
+#define FLG_KMC             0x1
+#define FLG_MMC             0x2
+#define FLG_PRERUN          0x4
+#define FLG_CONTINUE        0x8
+#define FLG_COMPLETED       0x10
+#define FLG_TIMEOUT         0x20
+#define FLG_ABORTCONDITION  0x40
+#define FLG_RATELIMIT       0x80
+#define FLG_FIRSTCYCLE      0x100
+#define FLG_INITIALIZED     0x20000000
+#define FLG_ABORT           0x40000000
+#define FLG_STATEERROR      0x80000000
+
+/* Monte Carlo constants */
+
+#define MC_CONST_JUMPTRACK_MIN 1.0e-05
+#define MC_CONST_JUMPTRACK_MAX 1.0e+00
+#define MC_CONST_JUMPLIMIT_MIN 0.0e+00
+#define MC_CONST_JUMPLIMIT_MAX 1.0e+00
+
 /* Physical constants */
 
 #define NATCONST_BLOTZMANN  8.6173303e-05
