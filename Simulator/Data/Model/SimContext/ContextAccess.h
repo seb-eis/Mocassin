@@ -16,6 +16,11 @@
 
 /* Context access defines */
 
+#define SCONTEXT        simContext
+#define JUMPPATH        SCONTEXT->CycleState.ActPathEnvs
+#define SIMERROR        SCONTEXT->ErrorCode
+#define __SCONTEXT_PAR  sim_context_t* restrict SCONTEXT
+
 /* Context getter/setter */
 
 static inline mc_state_t* Get_SimulationState(__SCONTEXT_PAR)

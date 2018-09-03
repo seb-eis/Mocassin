@@ -89,11 +89,6 @@ static inline env_state_t* ResolvePairDefTargetEnvironment(__SCONTEXT_PAR, const
     return Get_EnvironmentStateByVector4(SCONTEXT, &target);
 }
 
-static inline int32_t GetEnvDirPoolId(jump_pool_t* restrict jmpPool, const jump_counts_t* restrict cntTable, const env_state_t* restrict env)
-{
-    return jmpPool->DirCountToPoolId.Start[*MDA_GET_2(*cntTable, env->PosVector.d, env->ParId)];
-}
-
 static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
 {
     for(byte_t i = 0;; i++)

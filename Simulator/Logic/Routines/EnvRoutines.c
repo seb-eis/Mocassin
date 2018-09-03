@@ -576,14 +576,12 @@ void AdvanceKmcSystemToState2(__SCONTEXT_PAR)
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {
-    FOR_EACH(jump_link_t, jmpLink, Get_ActiveJumpDirection(SCONTEXT)->JumpLinkSeq)
-    {
-        PrepareJumpLinkClusterStateChanges(SCONTEXT, jmpLink);
-    }
-    FOR_EACH(jump_link_t, jmpLink, Get_ActiveJumpDirection(SCONTEXT)->JumpLinkSeq)
-    {
-        InvokeJumpLinkDeltas(SCONTEXT, jmpLink);
-    }
+    // Implement as soon as KMC functionality of delta principle is validated!
+    // Note: Cannot be done jump link based, requires lookup based implementation
+    //       that finds the env-links beloging to the env-Ids of both Path[0] and Path[1], respectively
+    // Note: Possibly use a precalculated hash of each envState link system that enables to check if specific envIds could be included,
+    //       e.g. 6x64 bit to cover 128 cells in a,b,c direction
+    ASSERT_ERROR(ERR_NOTIMPLEMENTED, "MMC currently not supported");
 }
 
 void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR)

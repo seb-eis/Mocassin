@@ -15,11 +15,6 @@
 #include "Simulator/Data/Model/DbModel/DbModel.h"
 #include "Simulator/Data/Model/State/StateModel.h"
 
-#define SCONTEXT        simContext
-#define JUMPPATH        SCONTEXT->CycleState.ActPathEnvs
-#define SIMERROR        SCONTEXT->ErrorCode
-#define __SCONTEXT_PAR  sim_context_t* restrict SCONTEXT
-
 typedef struct { byte_t CluId, RelId; } clu_link_t;
 
 typedef struct { int32_t Count; clu_link_t* Start, * End; } clu_links_t;

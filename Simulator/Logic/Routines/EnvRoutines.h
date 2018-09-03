@@ -10,7 +10,7 @@
 
 #pragma once
 #include "Framework/Errors/McErrors.h"
-#include "Simulator/Data/Model/SimContext/SimContext.h"
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
 
 /* Initializer routines */
 
