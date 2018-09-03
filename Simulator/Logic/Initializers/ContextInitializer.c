@@ -26,7 +26,7 @@ static const cmdarg_lookup_t* Get_EssentialCmdArgsResolverTable()
     static const cmdarg_resolver_t resolvers[] =
     {
         { "-dbPath",    (f_validator_t) ValidateStringNotNullOrEmpty,   (f_cmdcallback_t) Set_DatabasePath },
-        { "-dbQuery",   (f_validator_t) ValidateStringNotNullOrEmpty,   (f_cmdcallback_t) Set_DatabaseLoadString }
+        { "-dbQuery",   (f_validator_t) ValidateDatabaseQueryString,   (f_cmdcallback_t) Set_DatabaseLoadString }
     };
 
     static const cmdarg_lookup_t resolverTable = 
@@ -66,7 +66,7 @@ static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const cmdarg_lookup_t
     char const * valArgument = Get_CommandArgumentStringById(SCONTEXT, argId + 1);
 
     error = ValidateCmdKeyArgumentFormat(keyArgument);
-    return_if(error, error);
+    return_if(error, ERR_CONTINUE);
 
     FOR_EACH(const cmdarg_resolver_t, argResolver, *resolverTable)
     {   
@@ -98,6 +98,8 @@ static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
         {
             --unresolved;
         }
+        
+        return_if(unresolved == 0, ERR_OK);
     }
     return ERR_CMDARGUMENT;
 }
@@ -120,7 +122,8 @@ static error_t ResolveAndSetOptionalCmdArguments(__SCONTEXT_PAR)
 
 void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues)
 {
-    error_t error = ERR_OK;
+    error_t error;
+
     Set_CommandArguments(SCONTEXT, argCount, argValues);
     Set_ProgramRunPath(SCONTEXT, Get_CommandArgumentStringById(SCONTEXT, 0));
 

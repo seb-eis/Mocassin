@@ -15,15 +15,13 @@
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
 
-#define MC_TESTBUILD
-
-#if defined(MC_TESTBUILD)
+#if !defined(MC_TESTBUILD)
 
     int main(int argc, char const * const *argv)
     {   
         sim_context_t* SCONTEXT = malloc(sizeof(sim_context_t));
         
-        char const * values[] = { "./", "-dbPath", "./Main/Simulator.c", "-outPluginPath", "./Main/Simulator.c", "-outPluginSymbol", "MyFunction" };
+        char const * values[] = { "./", "-dbPath", "./Main/Simulator.c", "-dbQuery", "0.0.192" };
         int32_t count = sizeof(values) / sizeof(char*);
 
         ResolveCommandLineArguments(SCONTEXT, count, &values[0]);

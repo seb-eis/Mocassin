@@ -104,9 +104,13 @@ static error_t BuildClusterLinkingByPairId(const env_def_t* envDef, const int32_
 
 static error_t InPlaceConstructEnvLink(const env_def_t* restrict envDef, const int32_t envId, const int32_t pairId, env_link_t* restrict envLink)
 {
+    error_t error;
+
     envLink->EnvId = envId;
     envLink->EnvPosId = pairId;
-    return BuildClusterLinkingByPairId(envDef, pairId, &envLink->CluLinks);
+    error = BuildClusterLinkingByPairId(envDef, pairId, &envLink->CluLinks);
+
+    return error;
 }
 
 static env_link_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const pair_def_t* restrict pairDef, env_state_t* restrict envState)
@@ -115,6 +119,7 @@ static env_link_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const pair_def_t* re
 
     // Immobility OPT Part 2 - Providing outgoing updates through immobiles is not required, the link will not be triggered during the mc routine
     // Sideffects:  None at this point (ref. to OPT part 1)
+
     #if defined(OPT_LINK_ONLY_MOBILES)
         return (targetEnv->IsMobile) ? targetEnv->EnvLinks.CurEnd++ : NULL;
     #else
@@ -122,9 +127,56 @@ static env_link_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const pair_def_t* re
     #endif
 }
 
+static void ResolvePairTargetAndIncreaseLinkCounter(__SCONTEXT_PAR, const env_state_t* restrict envState, const pair_def_t* restrict pairDef)
+{
+    env_state_t* targetEnv = ResolvePairDefTargetEnvironment(SCONTEXT, pairDef, envState);
+
+    // Immobility OPT Part 1 and 2 - No incomming or outgoing updates for immobiles are required
+    #if defined(OPT_LINK_ONLY_MOBILES)
+        voidreturn_if(!envState->IsMobile || !targetEnv->IsMobile);
+    #endif
+
+    targetEnv->EnvLinks.Count++;
+}
+
+static error_t SetAllLinkListCountersToRequiredSize(__SCONTEXT_PAR)
+{
+    FOR_EACH(env_state_t, envState, *Get_EnvironmentLattice(SCONTEXT))
+    {
+        FOR_EACH(pair_def_t, pairDef, envState->EnvDef->PairDefs)
+        {
+            ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT, envState, pairDef);
+        }
+    }
+    return ERR_OK;
+}
+
+static error_t AllocateEnvLinkListBuffersByPresetCounters(__SCONTEXT_PAR)
+{
+    error_t error;
+    buffer_t tmpBuffer;
+
+    FOR_EACH(env_state_t, envState, *Get_EnvironmentLattice(SCONTEXT))
+    {
+        int32_t linkCount = envState->EnvLinks.Count;
+        error = AllocateBufferChecked(linkCount, sizeof(env_link_t), &tmpBuffer);
+        return_if(error, error);
+
+        envState->EnvLinks = BUFFER_TO_LIST_WCOUNT(tmpBuffer, linkCount, env_links_t);
+    }
+    return ERR_OK;
+}
+
+
 static error_t PrepareLinkingSystemConstruction(__SCONTEXT_PAR)
 {
-    return ERR_OK;
+    error_t error;
+
+    error = SetAllLinkListCountersToRequiredSize(SCONTEXT);
+    return_if(error, error);
+
+    error = AllocateEnvLinkListBuffersByPresetCounters(SCONTEXT);
+    return error;
 }
 
 static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, env_state_t* restrict envState)
