@@ -56,9 +56,8 @@ error_t StartMainRoutine(__SCONTEXT_PAR)
         return StartMainKmcRoutine(SCONTEXT);
     }
 
-    // GCC [-Wall] expects return value, even with exit(..) statement
     ASSERT_ERROR(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
-    return -1;
+    return -1; // GCC [-Wall] expects return value, even with exit(..) statement
 }
 
 error_t FinishRoutinePrerun(__SCONTEXT_PAR)
@@ -69,7 +68,7 @@ error_t FinishRoutinePrerun(__SCONTEXT_PAR)
     SIMERROR = ResetContextAfterPrerun(SCONTEXT);
     ASSERT_ERROR(SIMERROR, "Context reset after prerun completion failed.");
 
-    FLG_UNSET(RefStateHeaderData(SCONTEXT)->Flags, FLG_PRERUN);
+    UnSet_MainStateFlags(SCONTEXT, FLG_PRERUN);
     return SIMERROR;
 }
 
@@ -216,7 +215,7 @@ static inline bool_t GetRateAbortEval(__SCONTEXT_PAR)
 
 static inline bool_t GetMcsTargetReachedEval(__SCONTEXT_PAR)
 {
-    if (RefMainCounters(SCONTEXT)->CurMcs >= RefMainCounters(SCONTEXT)->TotTargetMcs)
+    if (Get_MainCycleCounters(SCONTEXT)->CurMcs >= Get_MainCycleCounters(SCONTEXT)->TotTargetMcs)
     {
         return true;
     }
@@ -305,9 +304,9 @@ error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
     return SIMERROR;
 }
 
-static inline int32_t LookupActJumpId(const __SCONTEXT_PAR)
+static inline int32_t LookupActJumpId(__SCONTEXT_PAR)
 {
-    return *MDA_GET_3(*RefJmpAssignTable(SCONTEXT), JUMPPATH[0]->PosVector.d, JUMPPATH[0]->ParId, RefActRollInfo(SCONTEXT)->RelId);
+    return *MDA_GET_3(*Get_JumpIdToPositionsAssignmentTable(SCONTEXT), JUMPPATH[0]->PosVector.d, JUMPPATH[0]->ParId, Get_JumpSelectionInfo(SCONTEXT)->RelId);
 }
 
 static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
@@ -392,12 +391,12 @@ static inline void LookupAndSetActJumpRule(__SCONTEXT_PAR)
 bool_t GetKmcJumpRuleEval(__SCONTEXT_PAR)
 {
     LookupAndSetActJumpRule(SCONTEXT);
-    return RefActJumpRule(SCONTEXT) == NULL;
+    return Get_ActiveJumpRule(SCONTEXT) == NULL;
 }
 
 void SetKmcJumpEvalFail(__SCONTEXT_PAR)
 {
-    RefActCounters(SCONTEXT)->BlockCnt++;
+    Get_ActiveCounters(SCONTEXT)->BlockCnt++;
 }
 
 void SetKmcJumpProperties(__SCONTEXT_PAR)
@@ -452,7 +451,7 @@ void SetMmcJumpSelection(__SCONTEXT_PAR)
 
 void SetMmcJumpPathProperties(__SCONTEXT_PAR)
 {
-    JUMPPATH[2] = Get_EnvironmentStateById(SCONTEXT, RefActRollInfo(SCONTEXT)->OffId);
+    JUMPPATH[2] = Get_EnvironmentStateById(SCONTEXT, Get_JumpSelectionInfo(SCONTEXT)->OffId);
     JUMPPATH[1] = Get_EnvironmentStateById(SCONTEXT, 0);
 
     JUMPPATH[1] += Get_EnvironmentLattice(SCONTEXT)->Header->Blocks[0] * JUMPPATH[2]->PosVector.a;

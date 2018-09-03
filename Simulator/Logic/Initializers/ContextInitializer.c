@@ -98,7 +98,7 @@ static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
         {
             --unresolved;
         }
-        
+
         return_if(unresolved == 0, ERR_OK);
     }
     return ERR_CMDARGUMENT;
@@ -411,7 +411,7 @@ static error_t ConstructMainStateBufferAccessors(__SCONTEXT_PAR)
     usedBufferBytes = ConfigStateMobileTrcIdxAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateJumpProbabilityMapAccess(SCONTEXT, usedBufferBytes);
 
-    return (usedBufferBytes == GetBufferSize(RefStateBuffer(SCONTEXT)));
+    return (usedBufferBytes == GetBufferSize(Get_MainStateBuffer(SCONTEXT)));
 }
 
 static void ConstructMainState(__SCONTEXT_PAR)

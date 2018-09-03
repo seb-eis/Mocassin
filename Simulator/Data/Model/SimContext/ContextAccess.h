@@ -294,6 +294,11 @@ static inline int32_t Get_JumpCountByPositionStatus(__SCONTEXT_PAR, const int32_
     return *MDA_GET_2(*Get_JumpDirectionsPerPositionTable(SCONTEXT), posId, parId);
 }
 
+static inline jump_assign_t* Get_JumpIdToPositionsAssignmentTable(__SCONTEXT_PAR)
+{
+    return &Get_TransitionModel(SCONTEXT)->JumpAssignTable;
+}
+
 static inline jump_dirs_t* Get_JumpDirections(__SCONTEXT_PAR)
 {
     return &Get_TransitionModel(SCONTEXT)->JumpDirs;
@@ -575,4 +580,36 @@ static inline pair_def_t* Get_EnvironmentPairDefById(env_state_t* restrict envSt
 static inline clu_def_t* Get_EnvironmentCluDefById(env_state_t* restrict envState, const int32_t id)
 {
     return &envState->EnvDef->CluDefs.Start[id];
+}
+
+static inline clu_state_t* Get_EnvironmentCluStateById(env_state_t* restrict envState, const byte_t id)
+{
+    return &envState->ClusterStates.Start[id];
+}
+
+/* Active delta object getter/setter */
+
+static inline double* Get_ActiveStateEnergyById(__SCONTEXT_PAR, const byte_t id)
+{
+    return &Get_ActiveWorkEnvironment(SCONTEXT)->EnergyStates.Start[id];
+}
+
+static inline byte_t Get_ActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
+{
+    return Get_ActiveWorkEnvironment(SCONTEXT)->EnvDef->UptParIds[id];
+}
+
+static inline env_link_t* Get_EnvLinkByJumpLink(__SCONTEXT_PAR, const jump_link_t* restrict link)
+{
+    return &JUMPPATH[link->PathId]->EnvLinks.Start[link->LinkId];
+}
+
+static inline double* Get_PathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
+{
+    return &JUMPPATH[pathId]->EnergyStates.Start[parId];
+}
+
+static inline double* Get_EnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t pathId)
+{
+    return &Get_CycleState(SCONTEXT)->ActEnvBackup.PathEnergies[pathId];
 }
