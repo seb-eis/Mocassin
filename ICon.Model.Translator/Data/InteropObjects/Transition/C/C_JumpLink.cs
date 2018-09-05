@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+
+namespace ICon.Model.Translator
+{
+    /// <summary>
+    /// Simulation jump link object. Layout marshals to its binary unmanaged 'C' representation
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct C_JumpLink
+    {
+        [MarshalAs(UnmanagedType.U1)]
+        private byte jumpPathId;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private int linkId;
+
+        public byte JumpPathId { get => jumpPathId; set => jumpPathId = value; }
+
+        public int LinkId { get => linkId; set => linkId = value; }
+    }
+}

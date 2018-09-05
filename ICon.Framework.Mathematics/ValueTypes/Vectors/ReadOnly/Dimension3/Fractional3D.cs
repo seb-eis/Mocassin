@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Xml.Serialization;
 using System.Runtime.Serialization;
 
 using ICon.Mathematics.Extensions;
-using ICon.Framework.Xml;
+
 
 namespace ICon.Mathematics.ValueTypes
 {
     /// <summary>
     /// Basic fractional vector that carries fractional affine coordinate system information (A,B,C)
     /// </summary>
+    [DataContract]
     public readonly struct Fractional3D : IFractional3D<Fractional3D>
     {
         /// <summary>
@@ -25,16 +25,19 @@ namespace ICon.Mathematics.ValueTypes
         /// <summary>
         /// Get the X coordinate value
         /// </summary>
+        [DataMember]
         public Double A => Coordinates.A;
 
         /// <summary>
         /// Get the Y coordinate value
         /// </summary>
+        [DataMember]
         public Double B => Coordinates.B;
 
         /// <summary>
         /// Get the Z coordinate value
         /// </summary>
+        [DataMember]
         public Double C => Coordinates.C;
 
         /// <summary>

@@ -47,6 +47,7 @@ using ICon.Model.DataManagement;
 using ICon.Model.Simulations;
 using ICon.Model.Translator;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace ICon.Framework.QuickTest
 {
@@ -54,18 +55,10 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            var rng = new PcgRandom32();
-
-            var context = new MccsDatabaseContext("./mcs.sql", true);
-
-            //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
-            //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
-            //inputter.AutoInputData(package.ProjectServices);
-            //var report = inputter.GetReportJson();         
-
-            Console.ReadLine();
+            var context = new InteropDbContext("./interopTest.db", true);
+            Console.WriteLine();
         }
+
 
         static void DisplayWatch(Stopwatch watch)
         {

@@ -13,7 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Model\" />
+    <Compile Remove="Data\Model\**" />
+    <EmbeddedResource Remove="Data\Model\**" />
+    <None Remove="Data\Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Entities\Job\DbSet\" />
+    <Folder Include="Data\InteropObjects\Transition\Net\" />
     <Folder Include="Data\Objects\" />
     <Folder Include="Translator\TranslatorSystem\" />
     <Folder Include="Translator\Components\Energies\" />
