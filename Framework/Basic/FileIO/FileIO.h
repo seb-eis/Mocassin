@@ -20,7 +20,7 @@
 typedef FILE file_t;
 
 // Check if a file name points to an existing file
-bool_t CheckFileExistance(const char* restrict fileName);
+bool_t IsAccessibleFile(const char* restrict fileName);
 
 // Calculates the size of a file. Returns the number of bytes or MC_FILE_ERROR on failure
 cerror_t GetFileSize(file_t* restrict fileStream);
@@ -48,3 +48,6 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
 
 // Concats two strings into a new buffer without freeing the originals. Retruns out of memory flag if allocation fails
 error_t ConcatStrings(const char* lhs, const char* rhs, char** result);
+
+// Ensures that the passed file is delted. Returns true if the file was not already deleted
+bool_t EnsureFileIsDeleted(char const * restrict filePath);

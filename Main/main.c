@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "Simulator/Data/Model/DbModel/DbModelLoad.h"
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
@@ -9,18 +10,45 @@
 #include "Framework/Errors/McErrors.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 #include "Simulator/Logic/Routines/HelperRoutines.h"
+#include "Simulator/Logic/Routines/MainRoutines.h"
 #include "Simulator/Logic/Validators/Validators.h"
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
 
-int main(int argc, char const * const *argv)
-{   
-    sim_context_t* SCONTEXT = malloc(sizeof(sim_context_t));
-    
-    char const * values[] = { "./", "-dbPath", "./Main/Simulator.c", "-outPluginPath", "./Main/Simulator.c", "-outPluginSymbol", "MyFunction" };
-    int32_t count = sizeof(values) / sizeof(char*);
+#if !defined(MC_TESTBUILD)
 
-    ResolveCommandLineArguments(SCONTEXT, count, &values[0]);
+    int main(int argc, char const * const *argv)
+    {   
+        int32_t cellsize = 10*10*10;
+        int32_t mask = 0;
+        for (int32_t i = 0; i < 20; i++)
+        {
+            mask |= Pcg32GlobalNext() % cellsize;
+        }
+        for (int32_t i = 0; i < 20; i++)
+        {
+            int32_t searchValue = Pcg32GlobalNext() % cellsize;
+            bool_t isThere = (mask & searchValue) == searchValue;
+            printf("Cell %i is %i\n", searchValue, isThere);
+        }
+        mask = 0;
+    }
 
-    return (0);
-}
+#else
+
+    int main(int argc, char const * const *argv)
+    {
+        sim_context_t SCONTEXT;
+
+        ResolveCommandLineArguments(&SCONTEXT, argc, argv);
+
+        LoadSimulationModelFromDatabase(&SCONTEXT);
+
+        PrepareContextForSimulation(&SCONTEXT);
+
+        PrepareForMainRoutine(&SCONTEXT);
+
+        StartMainRoutine(&SCONTEXT);
+    }
+
+#endif

@@ -15,8 +15,4 @@
 
 void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues);
 
-void ConstructSimulationContext(__SCONTEXT_PAR);
-
-void PopulateSimulationContext(__SCONTEXT_PAR);
-
-void PrepareContextForSimulation(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues);
+void PrepareContextForSimulation(__SCONTEXT_PAR);

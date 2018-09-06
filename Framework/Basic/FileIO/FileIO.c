@@ -25,7 +25,7 @@ cerror_t GetFileSize(file_t* restrict fileStream)
     return fileSize;
 }
 
-bool_t CheckFileExistance(const char* restrict fileName)
+bool_t IsAccessibleFile(const char* restrict fileName)
 {
     return access(fileName, F_OK) != -1;
 }
@@ -84,7 +84,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
     error_t error = 0;
     char* tmpName = NULL;
 
-    if(CheckFileExistance(fileName))
+    if(IsAccessibleFile(fileName))
     {
         if((error = ConcatStrings(fileName, ".backup", &tmpName)) != ERR_OK)
         {
@@ -180,4 +180,13 @@ error_t WriteBlockHexToStream(file_t* restrict fileStream, const memblock_array_
         }
     }
     return ERR_OK;
+}
+
+bool_t EnsureFileIsDeleted(char const * restrict filePath)
+{
+    if (IsAccessibleFile(filePath))
+    {
+        return remove(filePath) == 0;
+    }
+    return false;
 }

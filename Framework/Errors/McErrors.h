@@ -14,17 +14,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//#define MC_TESTBUILD
+
+#if defined(MC_TESTBUILD)
+    // Defines the default exception handling for debug builds
+    #define ON_ERROR_HANDLE(code, msg) MC_ERRORDISPLAY(code, msg)
+#else
+    // Defines the default exception handling action for non debug builds
+    #define ON_ERROR_HANDLE(code, msg) MC_ERROREXIT(code, msg)
+#endif
+
 // Defines error codes to be a 32 bit signed integer. Returns type of functions that can return error codes
 typedef int32_t error_t;
 
 // Defines long error codes to be 64 bit signed integer. Returns type of functions that perform count operations and might return negatice error codes
 typedef int64_t cerror_t;
 
+// Defines the format of the default error output
+#define ERROR_FORMAT "ERROR:\t0x%08x\nFile:\t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\n"
+
+// Defines the format of the default error output with memory dump
+#define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nFile:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
+
 // Defines the path to the debug stderr dump folder
 #define STDERR_PATH "./Debug/stderr.log"
 
 // Defines the error code that indicates that a default value should be used (Not translatable to string)
 #define ERR_USEDEFAULT -1
+
+// Defines error code for cases where an uncritical error should trigger continue
+#define ERR_CONTINUE -2
 
 // Defines the error code for no error
 #define ERR_OK 0
@@ -74,14 +93,44 @@ typedef int64_t cerror_t;
 // Defines error code for validation failures
 #define ERR_VALIDATION 15
 
+// Defines the error code for functions that are not implemented
+#define ERR_NOTIMPLEMENTED 16
+
+// Defines error for cases where a nullpointer is an invalid result or argument
+#define ERR_NULLPOINTER 17
+
+// Defines the default error display with code and message
+#define MC_ERRORDISPLAY(__CODE, __MSG) DisplayErrorAndAwait(__CODE, __FILE__, __LINE__, __MSG);
+
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT(__CODE, __MSG) OnErrorExit(__CODE, __FILE__, __LINE__, __MSG);
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
 #define MC_ERROREXIT_MEMDUMP(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FILE__, __LINE__, __MSG, __BSTART, __BEND);
 
+// Asserts that the passed condition is true. Calls default error handling if condition is false
+#define RUNTIME_ASSERT(cond, error, msg) if (!(cond)) ON_ERROR_HANDLE((error), (msg))
+
+// Asserts that the error is ERR_OK and if not calls the default runtime assert reaction
+#define ASSERT_ERROR(error, msg) RUNTIME_ASSERT((error) == (ERR_OK), (error), (msg))
+
+// Macro for conditional one line returns statements
+#define return_if(cond, value) if (cond) return (value)
+
+// Macro for conditional one line returns statements without return value
+#define voidreturn_if(cond) if (cond) return;
+
+// Macro for conditional one line continue statements
+#define continue_if(cond) if (cond) continue
+
+// Macro for conditional one line break statements
+#define break_if(cond) if (cond) break
+
 // Get an error description string for the passed error Code
 char* ConvErrorToString(error_t errCode);
+
+// Error handling call for debugging that dumps the information the stdout and awaits a button press without exiting the program
+void DisplayErrorAndAwait(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
 void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg);

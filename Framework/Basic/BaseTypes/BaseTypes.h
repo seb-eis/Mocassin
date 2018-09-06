@@ -14,6 +14,17 @@
 #include <stdlib.h>
 #include "Framework/Errors/McErrors.h"
 
+#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
+
+#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
+
+#define FLG_SET(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
+
+#define FLG_UNSET(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
+
+// Defines the void prt compare function type for qsort calls
+typedef int32_t (*f_compare_t)(const void* lhs, const void* rhs);
+
 // Defines the function for cmd argument setters
 typedef void (*f_cmdcallback_t)(void* obj, char const * value);
 
@@ -21,10 +32,10 @@ typedef void (*f_cmdcallback_t)(void* obj, char const * value);
 typedef error_t (*f_validator_t)(void const * value);
 
 // Defines a command line argument lookup with expected value in the validator and a callback function for the affiliated value
-typedef struct { char const * KeyArgument; f_validator_t ValueValidator; f_cmdcallback_t ValueCallback; } cmdarg_resolver_t;
+typedef struct { char const * KeyArgument; const f_validator_t ValueValidator; const f_cmdcallback_t ValueCallback; } cmdarg_resolver_t;
 
 // Defines the command line argument lookup table that contains all supported cmd arg lookups
-typedef struct { int32_t Count; cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
+typedef struct { const int32_t Count; const cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
 
 // Define the restrict keyword for GCC
 #define restrict __restrict__
@@ -42,7 +53,7 @@ typedef struct { int32_t Count; cmdarg_resolver_t * Start, * End; } cmdarg_looku
 #define ARRAY_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; }
 
 // Defines a list of a specific type with a start pointer, an end pointer and a pointer to the current end of the list
-#define LIST_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; __VA_ARGS__* CurEnd; }
+#define LIST_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; __VA_ARGS__* CurrentEnd; }
 
 // Macro to define a new named dynamic sized array that supports startd and end iterators
 #define DEFINE_DYNAMIC_ARRAY(__NAME, __TYPE) typedef struct { __TYPE* Start; __TYPE* End; } __NAME;
@@ -61,6 +72,9 @@ typedef struct { int32_t Count; cmdarg_resolver_t * Start, * End; } cmdarg_looku
 
 // Creates a list access struct from the passed buffer where the current item ptr points to the first element
 #define BUFFER_TO_LIST(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End, (void*) (__BUFFER).Start }
+
+// Creates a list access struct from the passed buffer where the current item ptr points to the first element and a count field exists
+#define BUFFER_TO_LIST_WCOUNT(__BUFFER, __COUNT, __TYPE) (__TYPE) { (__COUNT), (void*) (__BUFFER).Start, (void*) (__BUFFER).End, (void*) (__BUFFER).Start }
 
 // Defines the default byte to be of unsigned int8 type
 typedef uint8_t byte_t;
@@ -123,16 +137,16 @@ typedef LIST_OF(int32_t) int32_list_t;
 #define DEFINE_LIST(__NAME, __TYPE) typedef LIST_OF(__TYPE) __NAME
 
 // Get the pointer to the current last entry of a list
-#define LIST_GET_LAST_PTR(__LIST) ((__LIST).CurEnd - 1)
+#define LIST_GET_LAST_PTR(__LIST) ((__LIST).CurrentEnd - 1)
 
 // Moves the entry iterator for the last entry one down so it points to the actual last value
-#define LIST_POP_BACK(__LIST) (--(__LIST).CurEnd);
+#define LIST_POP_BACK(__LIST) (--(__LIST).CurrentEnd);
 
 // Sets the current end iterator the the passed value and advances the iterator to the new end
-#define LIST_ADD(__LIST, __VALUE) *((__LIST).CurEnd++) = (__VALUE)
+#define LIST_ADD(__LIST, __VALUE) *((__LIST).CurrentEnd++) = (__VALUE)
 
 // Calculates the size of a list from start iterator, end iterator and the number of bytes per entry
-#define LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) (((__LIST).CurEnd - (__LIST).Start) / __BYTES_PER_ENTRY)
+#define LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) (((__LIST).CurrentEnd - (__LIST).Start) / __BYTES_PER_ENTRY)
 
 // Get the last index of a list
 #define LIST_GET_LAST_INDEX(__LIST, __BYTES_PER_ENTRY) (LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) - 1)
@@ -271,3 +285,15 @@ static inline void Set_BufferByteValues(void* restrict start, const size_t byteC
         ((byte_t*)start)[i] = value;
     }
 }
+
+// Copies the passed number of bytes from ten source buffer to the target buffer. Does not check for potential buffer overflow
+void CopyBuffer(byte_t const* source, byte_t* target, const size_t size);
+
+// Copies the contents of the source buffer into the target buffer. Retruns buffer overflow error if target is smaller than source
+error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);
+
+// Moves the contents of the source buffer into the target buffer and frees the source buffer
+error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);
+
+#define GET_MAX(a,b) (((a)<(b))?(b):(a))
+#define GET_MIN(a,b) (((a)<(b))?(a):(b))
