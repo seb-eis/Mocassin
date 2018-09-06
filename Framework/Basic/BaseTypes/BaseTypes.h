@@ -53,7 +53,7 @@ typedef struct { const int32_t Count; const cmdarg_resolver_t * Start, * End; } 
 #define ARRAY_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; }
 
 // Defines a list of a specific type with a start pointer, an end pointer and a pointer to the current end of the list
-#define LIST_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; __VA_ARGS__* CurEnd; }
+#define LIST_OF(...) struct { __VA_ARGS__* Start; __VA_ARGS__* End; __VA_ARGS__* CurrentEnd; }
 
 // Macro to define a new named dynamic sized array that supports startd and end iterators
 #define DEFINE_DYNAMIC_ARRAY(__NAME, __TYPE) typedef struct { __TYPE* Start; __TYPE* End; } __NAME;
@@ -137,16 +137,16 @@ typedef LIST_OF(int32_t) int32_list_t;
 #define DEFINE_LIST(__NAME, __TYPE) typedef LIST_OF(__TYPE) __NAME
 
 // Get the pointer to the current last entry of a list
-#define LIST_GET_LAST_PTR(__LIST) ((__LIST).CurEnd - 1)
+#define LIST_GET_LAST_PTR(__LIST) ((__LIST).CurrentEnd - 1)
 
 // Moves the entry iterator for the last entry one down so it points to the actual last value
-#define LIST_POP_BACK(__LIST) (--(__LIST).CurEnd);
+#define LIST_POP_BACK(__LIST) (--(__LIST).CurrentEnd);
 
 // Sets the current end iterator the the passed value and advances the iterator to the new end
-#define LIST_ADD(__LIST, __VALUE) *((__LIST).CurEnd++) = (__VALUE)
+#define LIST_ADD(__LIST, __VALUE) *((__LIST).CurrentEnd++) = (__VALUE)
 
 // Calculates the size of a list from start iterator, end iterator and the number of bytes per entry
-#define LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) (((__LIST).CurEnd - (__LIST).Start) / __BYTES_PER_ENTRY)
+#define LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) (((__LIST).CurrentEnd - (__LIST).Start) / __BYTES_PER_ENTRY)
 
 // Get the last index of a list
 #define LIST_GET_LAST_INDEX(__LIST, __BYTES_PER_ENTRY) (LIST_GET_SIZE(__LIST, __BYTES_PER_ENTRY) - 1)

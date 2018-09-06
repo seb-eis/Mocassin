@@ -18,7 +18,7 @@ void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR);
 
 void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR);
 
-void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t envId, const byte_t parId);
+void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId);
 
 /* Simulation routines KMC */
 

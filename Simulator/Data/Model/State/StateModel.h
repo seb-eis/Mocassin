@@ -16,28 +16,94 @@ typedef vector3_t tracker_t;
 
 typedef struct
 {
-    int64_t Mcs, Cycles;
+    int64_t Mcs;
+    int64_t Cycles;
     int32_t Flags;
-    int32_t MetaByte, LatticeByte, CountersByte, GlobalTrcByte, MobileTrcByte, StaticTrcByte, MobileTrcIdxByte, ProbStatMapByte;
+    int32_t MetaStartByte;
+    int32_t LatticeStartByte;
+    int32_t CountersStartByte;
+    int32_t GlobalTrackerStartByte;
+    int32_t MobileTrackerStartByte;
+    int32_t StaticTrackerStartByte;
+    int32_t MobileTrackerIdxStartByte;
+    int32_t ProbabilityMapStartByte;
+
 } hdr_info_t;
 
-typedef struct { hdr_info_t* Data; } hdr_state_t;
+typedef struct
+{
+    hdr_info_t* Data;
 
-typedef struct { int32_t Count; byte_t* Start, * End; } lat_state_t;
+} hdr_state_t;
 
-typedef struct { int32_t Count; tracker_t* Start, * End; } trc_state_t;
+typedef struct
+{
+    int32_t Count;
+    byte_t* Start;
+    byte_t* End;
 
-typedef struct { int64_t CycleCnt, StepCnt, RejectCnt, BlockCnt, OnUnstCnt, ToUnstCnt; } cnt_col_t;
+} lat_state_t;
 
-typedef struct { int32_t Count; cnt_col_t * Start, * End; } cnt_state_t;
+typedef struct
+{
+    int32_t     Count;
+    tracker_t*  Start;
+    tracker_t*  End;
+    
+} trc_state_t;
 
-typedef struct { double SimTime, JmpNorm, MaxJumpProb; int64_t RunTime, CyleRate, SuccessRate, TimePerBlock; } meta_info_t;
+typedef struct
+{
+    int64_t NumOfCyles;
+    int64_t NumOfMcs;
+    int64_t NumOfRejects;
+    int64_t NumOfBlocks;
+    int64_t NumOfUnstableStarts;
+    int64_t NumOfUnstableEnds;
+    
+} cnt_col_t;
 
-typedef struct { meta_info_t* Data; } mta_state_t;
+typedef struct
+{
+    int32_t     Count;
+    cnt_col_t*  Start;
+    cnt_col_t*  End;
+    
+} cnt_state_t;
 
-typedef struct { int32_t Count; int32_t * Start, * End; } idx_state_t;
+typedef struct
+{
+    double  SimulatedTime;
+    double  JumpNormalization;
+    double  MaxJumpProbability;
+    int64_t ProgramRunTime;
+    int64_t CycleRate;
+    int64_t SuccessRate;
+    int64_t TimePerBlock;
+    
+} meta_info_t;
 
-typedef struct { int32_t Count; int64_t * Start, * End; } prb_state_t;
+typedef struct
+{
+    meta_info_t* Data;
+    
+} mta_state_t;
+
+typedef struct
+{
+    int32_t     Count;
+    int32_t*    Start;
+    int32_t*    End;
+
+} idx_state_t;
+
+typedef struct
+{
+    int32_t     Count;
+    int64_t*    Start;
+    int64_t*    End;
+
+} prb_state_t;
 
 typedef struct
 {
@@ -49,6 +115,7 @@ typedef struct
     trc_state_t GlobalTrackers;
     trc_state_t MobileTrackers;
     trc_state_t StaticTrackers;
-    idx_state_t MobileTrackerIdx;
-    prb_state_t ProbStatMap;
+    idx_state_t MobileTrackerIndexing;
+    prb_state_t ProbabilityTrackMap;
+
 } mc_state_t;

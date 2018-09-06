@@ -16,7 +16,7 @@
 
 /* Initializer routines*/
 
-error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t envId);
+error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environmentId);
 
 /* Simulation routines */
 

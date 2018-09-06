@@ -74,17 +74,17 @@ static inline int32_t FindMaxJumpDirectionCount(const jump_counts_t* restrict ju
 
 static inline int32_t GetNextCompareDouble(__SCONTEXT_PAR)
 {
-    return Pcg32NextDouble(&SCONTEXT->RnGen);
+    return Pcg32NextDouble(&SCONTEXT->RandomNumberGenerator);
 }
 
 static inline int32_t GetNextCeiledRnd(__SCONTEXT_PAR, const int32_t upperLimit)
 {
-    return (int32_t) (Pcg32Next(&SCONTEXT->RnGen) % upperLimit);
+    return (int32_t) (Pcg32Next(&SCONTEXT->RandomNumberGenerator) % upperLimit);
 }
 
 static inline env_state_t* ResolvePairDefTargetEnvironment(__SCONTEXT_PAR, const pair_def_t* restrict pairDef, const env_state_t* startEnv)
 {
-    vector4_t target = AddVector4(&startEnv->PosVector, &pairDef->RelVector);
+    vector4_t target = AddVector4(&startEnv->PositionVector, &pairDef->RelativeVector);
     PeriodicTrimVector4(&target, Get_LatticeSizeVector(SCONTEXT));
     return Get_EnvironmentStateByVector4(SCONTEXT, &target);
 }
@@ -93,26 +93,26 @@ static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
 {
     for(byte_t i = 0;; i++)
     {
-        if(envDef->UptParIds[i] == 0)
+        if(envDef->UpdateParticleIds[i] == 0)
         {
-            return envDef->UptParIds[i-1];
+            return envDef->UpdateParticleIds[i-1];
         }
     }
 }
 
-static inline bool_t JobInfoHasFlgs(const __SCONTEXT_PAR, const bitmask_t flgs)
+static inline bool_t JobInfoHasFlgs(__SCONTEXT_PAR, const bitmask_t flgs)
 {
-    return FLG_TRUE(SCONTEXT->SimDbModel.JobInfo.JobFlg, flgs);
+    return FLG_TRUE(Get_JobInformation(SCONTEXT)->JobFlags, flgs);
 }
 
-static inline bool_t JobHeaderHasFlgs(const __SCONTEXT_PAR, const bitmask_t flgs)
+static inline bool_t JobHeaderHasFlgs(__SCONTEXT_PAR, const bitmask_t flgs)
 {
-    return FLG_TRUE(MARSHAL_AS(mmc_header_t, SCONTEXT->SimDbModel.JobInfo.JobHeader)->JobFlg, flgs);
+    return FLG_TRUE(Get_JobHeaderFlagsMmc(SCONTEXT), flgs);
 }
 
-static inline bool_t MainStateHasFlags(const __SCONTEXT_PAR, const bitmask_t flgs)
+static inline bool_t MainStateHasFlags(__SCONTEXT_PAR, const int32_t flgs)
 {
-    return FLG_TRUE(SCONTEXT->SimState.Header.Data->Flags, flgs);
+    return FLG_TRUE(Get_MainStateHeader(SCONTEXT)->Data->Flags, flgs);
 }
 
 static inline int32_t GetTotalPosCount(__SCONTEXT_PAR)

@@ -19,14 +19,19 @@
 
     int main(int argc, char const * const *argv)
     {   
-        sim_context_t* SCONTEXT = malloc(sizeof(sim_context_t));
-        
-        char const * values[] = { "./", "-dbPath", "./Main/Simulator.c", "-dbQuery", "0.0.192" };
-        int32_t count = sizeof(values) / sizeof(char*);
-
-        ResolveCommandLineArguments(SCONTEXT, count, &values[0]);
-        
-        return (0);
+        int32_t cellsize = 10*10*10;
+        int32_t mask = 0;
+        for (int32_t i = 0; i < 20; i++)
+        {
+            mask |= Pcg32GlobalNext() % cellsize;
+        }
+        for (int32_t i = 0; i < 20; i++)
+        {
+            int32_t searchValue = Pcg32GlobalNext() % cellsize;
+            bool_t isThere = (mask & searchValue) == searchValue;
+            printf("Cell %i is %i\n", searchValue, isThere);
+        }
+        mask = 0;
     }
 
 #else

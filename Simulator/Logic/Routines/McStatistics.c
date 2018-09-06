@@ -20,16 +20,16 @@ error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters)
     }
 
     Set_BufferByteValues(counters, sizeof(cycle_cnt_t), 0);
-    counters->TotTargetMcs = Get_JobInformation(SCONTEXT)->TargetMcsp * Get_LatticeInformation(SCONTEXT)->MobilesCount;
+    counters->TotalGoalMcs = Get_JobInformation(SCONTEXT)->TargetMcsp * Get_LatticeInformation(SCONTEXT)->NumOfMobiles;
 
-    int64_t rem = counters->TotTargetMcs % CYCLE_BLOCKCOUNT;
+    int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
     if (rem != 0)
     {
-        counters->TotTargetMcs += CYCLE_BLOCKCOUNT - rem;
+        counters->TotalGoalMcs += CYCLE_BLOCKCOUNT - rem;
     }
 
-    counters->MinCyclesPerBlock = CYCLE_BLOCKSIZE_MIN;
-    counters->McsPerBlock = counters->TotTargetMcs / CYCLE_BLOCKCOUNT;
+    counters->CyclesPerBlock = CYCLE_BLOCKSIZE_MIN;
+    counters->McsPerBlock = counters->TotalGoalMcs / CYCLE_BLOCKCOUNT;
     return ERR_OK;
 }
 
@@ -40,15 +40,15 @@ error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, phys_val_t* factors)
         return ERR_NULLPOINTER;
     }
 
-    factors->EngConvFac = CalcEnergyConversionFactor(SCONTEXT);
-    factors->CurTimeStep = CalcTimeStepPerJump(SCONTEXT);
+    factors->EnergyConversionFactor = CalcEnergyConversionFactor(SCONTEXT);
+    factors->CurrentTimeStepping = CalcTimeStepPerJump(SCONTEXT);
     if (isfinite(CalcBasicJumpNormalization(SCONTEXT)))
     {
-        factors->TotJumpNorm = CalcTotalJumpNormalization(SCONTEXT);
+        factors->TotalNormalizationFactor = CalcTotalJumpNormalization(SCONTEXT);
     }
     else
     {
-        factors->TotJumpNorm = Get_JobHeaderAsKmc(SCONTEXT)->FixNormFac;
+        factors->TotalNormalizationFactor = Get_JobHeaderAsKmc(SCONTEXT)->FixedNormFactor;
     }
 
     return ERR_OK;

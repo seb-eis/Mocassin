@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MC_TESTBUILD
+//#define MC_TESTBUILD
 
 #if defined(MC_TESTBUILD)
     // Defines the default exception handling for debug builds

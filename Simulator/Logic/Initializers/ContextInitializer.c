@@ -157,7 +157,7 @@ static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t 
     error = ConstructEngStateBuffer(&env->EnergyStates, FindLastEnvParId(envDef) + 1);
     return_if(error, error);
 
-    error = ConstructCluStateBuffer(&env->ClusterStates, envDef->CluDefs.Count);
+    error = ConstructCluStateBuffer(&env->ClusterStates, envDef->ClusterDefinitions.Count);
     return_if(error, error);
 
     return error;
@@ -182,8 +182,8 @@ static void ConstructEnvironmentLattice(__SCONTEXT_PAR)
 
 static error_t ConstructLatticeEnergyBuffer(flp_buffer_t* restrict bufferAccess, mmc_header_t* restrict header)
 {
-    buffer_t tmp = AllocateBufferUnchecked(header->AbortSeqLen, sizeof(double));
-    *bufferAccess = (flp_buffer_t) { header->AbortSeqLen, 0.0, (void*) tmp.Start, (void*) tmp.End, (void*) tmp.End };
+    buffer_t tmp = AllocateBufferUnchecked(header->AbortSequenceLength, sizeof(double));
+    *bufferAccess = (flp_buffer_t) { header->AbortSequenceLength, 0.0, (void*) tmp.Start, (void*) tmp.End, (void*) tmp.End };
     return tmp.Start ? ERR_OK : ERR_MEMALLOCATION;
 }
 
@@ -236,7 +236,7 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 
     buffer_t tmpBuffer;
     int32_t poolCount = Get_DirectionPools(SCONTEXT)->Count;
-    int32_t poolSize = Get_LatticeInformation(SCONTEXT)->SelectableCount;
+    int32_t poolSize = Get_LatticeInformation(SCONTEXT)->NumOfSelectables;
 
     error = AllocateBufferChecked(poolCount, sizeof(dir_pool_t), &tmpBuffer);
     return_if(error, error);
@@ -248,7 +248,7 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
         error = AllocateBufferChecked(poolSize, sizeof(env_pool_t), &tmpBuffer);
         return_if(error, error);
 
-        dirPool->EnvPool = BUFFER_TO_LIST(tmpBuffer, env_pool_t);
+        dirPool->EnvironmentPool = BUFFER_TO_LIST(tmpBuffer, env_pool_t);
     }
 
     return ERR_OK;
@@ -275,7 +275,7 @@ static size_t ConfigStateMetaAccess(__SCONTEXT_PAR, const int32_t usedBufferByte
 {
     size_t cfgBufferBytes = sizeof(meta_info_t);
 
-    Get_MainStateHeader(SCONTEXT)->Data->MetaByte = usedBufferBytes;   
+    Get_MainStateHeader(SCONTEXT)->Data->MetaStartByte = usedBufferBytes;   
     Get_MainStateMetaInfo(SCONTEXT)->Data = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
 
     return usedBufferBytes + cfgBufferBytes;
@@ -286,7 +286,7 @@ static size_t ConfigStateLatticeAccess(__SCONTEXT_PAR, const size_t usedBufferBy
     lat_state_t* configObject = Get_MainStateLattice(SCONTEXT);
     size_t cfgBufferBytes = Get_LatticeInformation(SCONTEXT)->Lattice.Header->Size;
     
-    Get_MainStateHeader(SCONTEXT)->Data->LatticeByte = usedBufferBytes;
+    Get_MainStateHeader(SCONTEXT)->Data->LatticeStartByte = usedBufferBytes;
     configObject->Count = cfgBufferBytes;
     configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
     configObject->End = configObject->Start + configObject->Count;
@@ -299,7 +299,7 @@ static size_t ConfigStateCountersAccess(__SCONTEXT_PAR, const size_t usedBufferB
     cnt_state_t* configObject = Get_MainStateCounters(SCONTEXT);
     size_t cfgBufferBytes = sizeof(cnt_col_t) * (size_t) (GetMaxParId(SCONTEXT) + 1);
     
-    Get_MainStateHeader(SCONTEXT)->Data->CountersByte = usedBufferBytes;
+    Get_MainStateHeader(SCONTEXT)->Data->CountersStartByte = usedBufferBytes;
     configObject->Count = cfgBufferBytes / sizeof(cnt_col_t);
     configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
     configObject->End = configObject->Start + configObject->Count;
@@ -310,13 +310,13 @@ static size_t ConfigStateCountersAccess(__SCONTEXT_PAR, const size_t usedBufferB
 static size_t ConfigStateAbstractTrackerAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
 {
     size_t cfgBufferBytes = 0;
-    Get_MainStateHeader(SCONTEXT)->Data->GlobalTrcByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    Get_MainStateHeader(SCONTEXT)->Data->GlobalTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         trc_state_t* configObject = Get_AbstractMovementTrackers(SCONTEXT);
 
-        configObject->Count = Get_StructureModel(SCONTEXT)->GloTrcCount;
+        configObject->Count = Get_StructureModel(SCONTEXT)->NumOfGlobalTrackers;
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
         cfgBufferBytes = configObject->Count * sizeof(tracker_t);
@@ -328,13 +328,13 @@ static size_t ConfigStateAbstractTrackerAccess(__SCONTEXT_PAR, const size_t used
 static size_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
 {
     size_t cfgBufferBytes = 0;
-    Get_MainStateHeader(SCONTEXT)->Data->MobileTrcByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    Get_MainStateHeader(SCONTEXT)->Data->MobileTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         trc_state_t* configObject = Get_MobileMovementTrackers(SCONTEXT);
 
-        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobilesCount;
+        configObject->Count = Get_LatticeInformation(SCONTEXT)->NumOfMobiles;
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
         cfgBufferBytes = configObject->Count * sizeof(tracker_t);
@@ -346,13 +346,13 @@ static size_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const size_t usedBu
 static size_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
 {
     size_t cfgBufferBytes = 0;
-    Get_MainStateHeader(SCONTEXT)->Data->StaticTrcByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    Get_MainStateHeader(SCONTEXT)->Data->StaticTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         trc_state_t* configObject = Get_StaticMovementTrackers(SCONTEXT);
 
-        configObject->Count = Get_StructureModel(SCONTEXT)->CellTrcCount * GetNumberOfUnitCells(SCONTEXT);
+        configObject->Count = Get_StructureModel(SCONTEXT)->NumOfTrackersPerCell * GetNumberOfUnitCells(SCONTEXT);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
         cfgBufferBytes = configObject->Count * sizeof(tracker_t);
@@ -364,13 +364,13 @@ static size_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const size_t usedBu
 static size_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
 {
     size_t cfgBufferBytes = 0;
-    Get_MainStateHeader(SCONTEXT)->Data->MobileTrcIdxByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    Get_MainStateHeader(SCONTEXT)->Data->MobileTrackerIdxStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         idx_state_t* configObject = Get_MobileTrackerIndexing(SCONTEXT);
 
-        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobilesCount;
+        configObject->Count = Get_LatticeInformation(SCONTEXT)->NumOfMobiles;
         cfgBufferBytes = configObject->Count * sizeof(int32_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
@@ -382,13 +382,13 @@ static size_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const size_t usedBuf
 static size_t ConfigStateJumpProbabilityMapAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
 {
     size_t cfgBufferBytes = 0;
-    Get_MainStateHeader(SCONTEXT)->Data->ProbStatMapByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    Get_MainStateHeader(SCONTEXT)->Data->ProbabilityMapStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         prb_state_t* configObject = Get_JumpProbabilityMap(SCONTEXT);
 
-        configObject->Count = Get_LatticeInformation(SCONTEXT)->MobilesCount;
+        configObject->Count = Get_LatticeInformation(SCONTEXT)->NumOfMobiles;
         cfgBufferBytes = configObject->Count * sizeof(int32_t);
         configObject->Start = Get_MainStateBufferAddress(SCONTEXT, usedBufferBytes);
         configObject->End = configObject->Start + configObject->Count;
@@ -446,7 +446,7 @@ static error_t TryLoadOuputPlugin(__SCONTEXT_PAR)
         return ERR_USEDEFAULT;
     }
 
-    if ((Get_PluginCollection(SCONTEXT)->OnDataOut = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
+    if ((Get_PluginCollection(SCONTEXT)->OnDataOutput = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
@@ -469,7 +469,7 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
         return ERR_USEDEFAULT;
     }
 
-    if ((Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
+    if ((Get_PluginCollection(SCONTEXT)->OnSetJumpProbabilities = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
@@ -486,17 +486,17 @@ static inline void SetEnergyPluginFunctionToDefault(__SCONTEXT_PAR)
 {
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
-        Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = (f_plugin_t) SetKmcJumpProbsDefault;
+        Get_PluginCollection(SCONTEXT)->OnSetJumpProbabilities = (f_plugin_t) SetKmcJumpProbsDefault;
     }
     else
     {
-        Get_PluginCollection(SCONTEXT)->OnSetJumpProbs = (f_plugin_t) SetMmcJumpProbsDefault;
+        Get_PluginCollection(SCONTEXT)->OnSetJumpProbabilities = (f_plugin_t) SetMmcJumpProbsDefault;
     }
 }
 
 static inline void SetOutputPluginFunctionToDefault(__SCONTEXT_PAR)
 {
-    Get_PluginCollection(SCONTEXT)->OnDataOut = NULL;
+    Get_PluginCollection(SCONTEXT)->OnDataOutput = NULL;
 }
 
 static void PopulatePluginDelegateFunctions(__SCONTEXT_PAR)
@@ -603,10 +603,10 @@ static error_t SyncCycleCountersWithStateStatus(__SCONTEXT_PAR)
     cycle_cnt_t* counters = Get_MainCycleCounters(SCONTEXT);
     hdr_info_t* stHeader = Get_MainStateHeader(SCONTEXT)->Data;
     
-    counters->CurCycles = stHeader->Cycles;
-    counters->CurMcs = stHeader->Mcs;
+    counters->Cycles = stHeader->Cycles;
+    counters->Mcs = stHeader->Mcs;
 
-    return (counters->CurMcs < counters->TotTargetMcs) ? ERR_OK : ERR_DATACONSISTENCY;
+    return (counters->Mcs < counters->TotalGoalMcs) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 static void SyncSimulationCycleStateWithModel(__SCONTEXT_PAR)

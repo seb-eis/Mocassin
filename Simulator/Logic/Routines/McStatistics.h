@@ -17,22 +17,22 @@
 
 static inline double CalcTimeStepPerJump(__SCONTEXT_PAR)
 {
-    return 1.0 / (Get_JobHeaderAsKmc(SCONTEXT)->BaseFrq * (double) Get_JumpSelectionPool(SCONTEXT)->TotJumpCount);
+    return 1.0 / (Get_JobHeaderAsKmc(SCONTEXT)->BaseFrequency * (double) Get_JumpSelectionPool(SCONTEXT)->NumOfSelectableJumps);
 }
 
 static inline double CalcBasicJumpNormalization(__SCONTEXT_PAR)
 {
-    return 1.0 / Get_MainStateMetaInfo(SCONTEXT)->Data->MaxJumpProb;
+    return 1.0 / Get_MainStateMetaInfo(SCONTEXT)->Data->MaxJumpProbability;
 }
 
 static inline double CalcTotalJumpNormalization(__SCONTEXT_PAR)
 {
-    return CalcBasicJumpNormalization(SCONTEXT) * Get_JobHeaderAsKmc(SCONTEXT)->FixNormFac;
+    return CalcBasicJumpNormalization(SCONTEXT) * Get_JobHeaderAsKmc(SCONTEXT)->FixedNormFactor;
 }
 
 static inline double CalcEnergyConversionFactor(__SCONTEXT_PAR)
 {
-    return 1.0 / (Get_JobInformation(SCONTEXT)->Temp * NATCONST_BLOTZMANN);
+    return 1.0 / (Get_JobInformation(SCONTEXT)->Temperature * NATCONST_BLOTZMANN);
 }
 
 error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters);
