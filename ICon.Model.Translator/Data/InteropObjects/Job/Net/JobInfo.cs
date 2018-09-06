@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class JobInfo : InteropObjectBase<C_JobInfo>
+    public class JobInfo : InteropObject<C_JobInfo>
     {
         public JobInfo()
         {

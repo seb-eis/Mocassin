@@ -97,7 +97,6 @@ namespace ICon.Model.Translator
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ExcludeInteropEntities(modelBuilder);
             RedirectBinaryObjects(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
@@ -119,29 +118,6 @@ namespace ICon.Model.Translator
             }
         }
 
-        protected void ExcludeInteropEntities(ModelBuilder modelBuilder)
-        {
-            var set = new HashSet<Type>();
-            foreach (var item in GetType().GetProperties().Where(a => a.PropertyType.IsGenericType))
-            {
-                if (item.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
-                {
-                    var dbSetType = item.PropertyType.GetGenericArguments()[0];
-                    foreach (var property in dbSetType.GetProperties())
-                    {
-                        if (property.GetCustomAttribute(typeof(OwendBlobPropertyAttribute)) is OwendBlobPropertyAttribute)
-                        {
-                            modelBuilder.Entity(dbSetType).Ignore(property.Name);
-                        }
-
-                        if (property.GetCustomAttribute(typeof(InteropPropertyAttribute)) is InteropPropertyAttribute)
-                        {
-                            modelBuilder.Entity(dbSetType).Ignore(property.Name);
-                        }
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Searches all db set for inheritance from interop binary object and creates redirects to the binary object table

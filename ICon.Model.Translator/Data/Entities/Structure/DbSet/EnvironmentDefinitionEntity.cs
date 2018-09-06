@@ -7,26 +7,41 @@ namespace ICon.Model.Translator
 {
     public class EnvironmentDefinitionEntity : StructureModelComponentBase
     {
+        [Column("ObjectId")]
         public int ObjectId { get; set; }
 
+        [Column("PositionParticleIds")]
         public byte[] PositionParticleIdsBinary { get; set; }
 
-        public byte[] UpdateableParticleIdsBinary { get; set; }
+        [Column("UpdateParticleIds")]
+        public byte[] UpdateParticleIdsBinary { get; set; }
 
+        [Column("PairDefinitionsSize")]
+        public int PairDefinitionListBinarySize { get; set; }
+
+        [Column("PairDefinitions")]
         public byte[] PairDefinitionListBinary { get; set; }
 
+        [Column("ClusterDefinitionsSize")]
+        public int ClusterDefinitionListBinarySize { get; set; }
+
+        [Column("ClusterDefinitions")]
         public byte[] ClusterDefinitionListBinary { get; set; }
 
+        [NotMapped]
         [InteropProperty(nameof(PositionParticleIdsBinary))]
         public ByteBuffer64 PositionParticleIds { get; set; }
 
-        [InteropProperty(nameof(UpdateableParticleIdsBinary))]
-        public ByteBuffer64 UpdateableParticleIds { get; set; }
+        [NotMapped]
+        [InteropProperty(nameof(UpdateParticleIdsBinary))]
+        public ByteBuffer64 UpdateParticleIds { get; set; }
 
-        [OwendBlobProperty(nameof(PairDefinitionListBinary))]
+        [NotMapped]
+        [OwendBlobProperty(nameof(PairDefinitionListBinary), nameof(PairDefinitionListBinarySize))]
         public PairDefinitionListEntity PairDefinitionList { get; set; }
 
-        [OwendBlobProperty(nameof(ClusterDefinitionListBinary))]
+        [NotMapped]
+        [OwendBlobProperty(nameof(ClusterDefinitionListBinary), nameof(ClusterDefinitionListBinarySize))]
         public ClusterDefinitionListEntity GetClusterDefinitionList { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Non generic base class for all wrapped interop objects that can switch between objet and binary unmanaged representation
     /// </summary>
-    public abstract class InteropObjectBase
+    public abstract class InteropObject
     {
         /// <summary>
         /// Write the internal object information to its unmanaged representation using the provided target buffer
@@ -33,7 +33,7 @@ namespace ICon.Model.Translator
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NotMapped]
-    public abstract class InteropObjectBase<T> : InteropObjectBase where T : struct
+    public class InteropObject<T> : InteropObject where T : struct
     {
         /// <summary>
         /// The wrapped structure
@@ -44,12 +44,12 @@ namespace ICon.Model.Translator
         /// Create new interop object base wrapping the passed structure
         /// </summary>
         /// <param name="structure"></param>
-        protected InteropObjectBase(T structure)
+        public InteropObject(T structure)
         {
             this.structure = structure;
         }
 
-        protected InteropObjectBase()
+        public InteropObject()
         {
         }
 

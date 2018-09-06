@@ -15,9 +15,15 @@ namespace ICon.Model.Translator
         /// </summary>
         public string BlobProperyName { get; }
 
-        public OwendBlobPropertyAttribute(string blobProperyName)
+        /// <summary>
+        /// The property name where the size information should be stored
+        /// </summary>
+        public string BlobSizePropertyName { get; }
+
+        public OwendBlobPropertyAttribute(string blobProperyName, string blobSizePropertyName)
         {
             BlobProperyName = blobProperyName ?? throw new ArgumentNullException(nameof(blobProperyName));
+            BlobSizePropertyName = blobSizePropertyName;
         }
     }
 }

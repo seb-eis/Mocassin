@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class JumpRule : InteropObjectBase<C_JumpRule>
+    public class JumpRule : InteropObject<C_JumpRule>
     {
         public JumpRule()
         {

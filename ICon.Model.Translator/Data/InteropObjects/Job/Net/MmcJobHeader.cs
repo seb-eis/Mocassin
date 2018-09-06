@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class MmcJobHeader : InteropObjectBase<C_MmcJobHeader>
+    public class MmcJobHeader : InteropObject<C_MmcJobHeader>
     {
         public MmcJobHeader()
         {

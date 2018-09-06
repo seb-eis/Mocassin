@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class LatticeInfo : InteropObjectBase<C_LatticeInfo>
+    public class LatticeInfo : InteropObject<C_LatticeInfo>
     {
         public LatticeInfo()
         {

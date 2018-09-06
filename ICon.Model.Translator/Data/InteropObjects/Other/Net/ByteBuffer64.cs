@@ -7,7 +7,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Interop object wrapper for the 64 bytes buffer type used in the unmanaged simulation
     /// </summary>
-    public class ByteBuffer64 : InteropObjectBase<C_ByteBuffer64>
+    public class ByteBuffer64 : InteropObject<C_ByteBuffer64>
     {
         public ByteBuffer64()
         {
