@@ -14,11 +14,11 @@
 #include <stdlib.h>
 #include "Framework/Errors/McErrors.h"
 
-#define FLG_TRUE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
+#define flagsAreTrue(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
 
-#define FLG_FALSE(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
+#define flagsAreFalse(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
 
-#define FLG_SET(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
+#define setFlags(__VALUE, __FLAG) (__VALUE) |= (__VALUE)
 
 #define FLG_UNSET(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
 
@@ -37,11 +37,8 @@ typedef struct { char const * KeyArgument; const f_validator_t ValueValidator; c
 // Defines the command line argument lookup table that contains all supported cmd arg lookups
 typedef struct { const int32_t Count; const cmdarg_resolver_t * Start, * End; } cmdarg_lookup_t;
 
-// Define the restrict keyword for GCC
-#define restrict __restrict__
-
 // Marshal a pointer to a value as a pointer of another type for direct memory manipulation
-#define MARSHAL_AS(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+#define marshalAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
 
 // Foreach loop construct with type and iterator name for an array type that define a Start and End pointer
 #define FOR_EACH(__TYPE, __IT, __ARRAY) for(__TYPE* __IT = (__ARRAY).Start; __IT < (__ARRAY).End; __IT++)
@@ -58,11 +55,9 @@ typedef struct { const int32_t Count; const cmdarg_resolver_t * Start, * End; } 
 // Macro to define a new named dynamic sized array that supports startd and end iterators
 #define DEFINE_DYNAMIC_ARRAY(__NAME, __TYPE) typedef struct { __TYPE* Start; __TYPE* End; } __NAME;
 
-// MAcro to define a new named dynamic sized buffer that supports start and end iterators
-#define DEFINE_DYNAMIC_BUFFER(name) DEFINE_DYNAMIC_ARRAY(name, byte_t);
 
 // Allocate a new object of the specfified type on the heap
-#define MALLOC_OBJECT(type) (type*) malloc(sizeof(type));
+#define newObject(type) (type*) malloc(sizeof(type));
 
 // Casts any kind of array buffer access struct to another accessor type without checking for save conversion
 #define BUFFER_TO_ARRAY(__BUFFER, __TYPE) (__TYPE) { (void*) (__BUFFER).Start, (void*) (__BUFFER).End }
@@ -102,30 +97,6 @@ typedef struct { sbyte_t* Start; sbyte_t* End; } sbuffer_t;
 
 // Basic dynamic memblock array definition. Carries start and end iterator pointers
 typedef struct { memblock_t* Start; memblock_t* End; } memblock_array_t;
-
-// Basic dynamic int16_t array definition. Carries start and end iterator pointers
-typedef struct { int16_t* Start; int16_t* End; } int16_array_t;
-
-// Basic dynamic int32_t array definition. Carries start and end iterator pointers
-typedef struct { int32_t* Start; int32_t* End; } int32_array_t;
-
-// Basic dynamic int64_t array definition. Carries start and end iterator pointers
-typedef struct { int64_t* Start; int64_t* End; } int64_array_t;
-
-// Basic dynamic uint16_t array definition. Carries start and end iterator pointers
-typedef struct { uint16_t* Start; uint16_t* End; } uint16_array_t;
-
-// Basic dynamic uint32_t array definition. Carries start and end iterator pointers
-typedef struct { uint32_t* Start; uint32_t* End; } uint32_array_t;
-
-// Basic dynamic uint64_t array definition. Carries start and end iterator pointers
-typedef struct { uint64_t* Start; uint64_t* End; } uint64_array_t;
-
-// Basic dynamic size_t array definition. Carries start and end iterator pointers
-typedef struct { size_t* Start; size_t* End; } size_array_t;
-
-// Basic dynamic double array definition. Carries startd and end iterator pointers
-typedef struct { double* Start; double* End; } double_array_t;
 
 // Defines the id redirect type to be an int32_t array
 typedef struct { int32_t Count; int32_t * Start, * End; } id_redirect_t;

@@ -547,7 +547,7 @@ static inline bitmask_t getMainStateFlags(__SCONTEXT_PAR)
 
 static inline void setMainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
 {
-    FLG_SET(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
+    setFlags(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
 }
 
 static inline void UnsetMainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)

@@ -28,6 +28,7 @@ bld/
 
 #CMake build results
 [Bb]uild/
+[Cc]make-build*/
 
 # Visual Studio 2015 cache/options directory
 .vs/

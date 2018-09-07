@@ -20,12 +20,12 @@
 
 static inline void SetCodeByteAt(occode_t* restrict code, const byte_t id, const byte_t value)
 {
-    MARSHAL_AS(byte_t, code)[id] = value;
+    marshalAs(byte_t, code)[id] = value;
 }
 
 static inline byte_t GetCodeByteAt(occode_t* restrict code, const byte_t id)
 {
-    return MARSHAL_AS(byte_t, code)[id];
+    return marshalAs(byte_t, code)[id];
 }
 
 static inline void AddToLhsVector4(vector4_t* restrict lhs, const vector4_t* restrict rhs)
@@ -102,17 +102,17 @@ static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
 
 static inline bool_t JobInfoHasFlgs(__SCONTEXT_PAR, const bitmask_t flgs)
 {
-    return FLG_TRUE(getJobInformation(SCONTEXT)->JobFlags, flgs);
+    return flagsAreTrue(getJobInformation(SCONTEXT)->JobFlags, flgs);
 }
 
 static inline bool_t JobHeaderHasFlgs(__SCONTEXT_PAR, const bitmask_t flgs)
 {
-    return FLG_TRUE(getJobHeaderFlagsMmc(SCONTEXT), flgs);
+    return flagsAreTrue(getJobHeaderFlagsMmc(SCONTEXT), flgs);
 }
 
 static inline bool_t MainStateHasFlags(__SCONTEXT_PAR, const int32_t flgs)
 {
-    return FLG_TRUE(getMainStateHeader(SCONTEXT)->Data->Flags, flgs);
+    return flagsAreTrue(getMainStateHeader(SCONTEXT)->Data->Flags, flgs);
 }
 
 static inline int32_t GetTotalPosCount(__SCONTEXT_PAR)

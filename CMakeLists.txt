@@ -4,10 +4,12 @@ project(ICon.Simulator VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+
 FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
 FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
-add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE})
+add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE} Framework/Basic/BaseTypes/Buffers.h Framework/Basic/BaseTypes/Buffers.c)
 
 include_directories(${PROJECT_SOURCE_DIR})
 

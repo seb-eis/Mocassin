@@ -14,24 +14,27 @@
 #include "Simulator/Logic/Validators/Validators.h"
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
+#include "Framework/Basic/BaseTypes/Buffers.h"
 
 #if !defined(MC_TESTBUILD)
 
     int main(int argc, char const * const *argv)
-    {   
-        int32_t cellsize = 10*10*10;
-        int32_t mask = 0;
-        for (int32_t i = 0; i < 20; i++)
+    {
+        Span_t(int32_t) span = newSpan(span, 10);
+        Span_t(byte_t) splitted = splitSpan(span, 0, 1);
+
+        int32_t index = 0;
+        cpp_foreach(span, it)
         {
-            mask |= Pcg32GlobalNext() % cellsize;
+            *it = index++;
         }
-        for (int32_t i = 0; i < 20; i++)
+
+        for (int32_t i = 0; i < sizeofSpan(span); ++i)
         {
-            int32_t searchValue = Pcg32GlobalNext() % cellsize;
-            bool_t isThere = (mask & searchValue) == searchValue;
-            printf("Cell %i is %i\n", searchValue, isThere);
+            spanAt(span, i) = 5;
         }
-        mask = 0;
+        deleteSpan(span);
+        return (0);
     }
 
 #else
