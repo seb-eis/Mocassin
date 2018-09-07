@@ -20,20 +20,13 @@
 
     int main(int argc, char const * const *argv)
     {
-        Span_t(int32_t) span = newSpan(span, 10);
-        Span_t(byte_t) splitted = splitSpan(span, 0, 1);
+        List_t(int32_t) list = newList(list, 10);
 
-        int32_t index = 0;
-        cpp_foreach(span, it)
+        for (int i = 0; i < 10; ++i)
         {
-            *it = index++;
+            pushBackList(list, i);
         }
 
-        for (int32_t i = 0; i < sizeofSpan(span); ++i)
-        {
-            spanAt(span, i) = 5;
-        }
-        deleteSpan(span);
         return (0);
     }
 
