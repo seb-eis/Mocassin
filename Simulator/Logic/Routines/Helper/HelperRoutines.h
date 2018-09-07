@@ -85,8 +85,8 @@ static inline int32_t GetNextCeiledRnd(__SCONTEXT_PAR, const int32_t upperLimit)
 static inline env_state_t* ResolvePairDefTargetEnvironment(__SCONTEXT_PAR, const pair_def_t* restrict pairDef, const env_state_t* startEnv)
 {
     vector4_t target = AddVector4(&startEnv->PositionVector, &pairDef->RelativeVector);
-    PeriodicTrimVector4(&target, Get_LatticeSizeVector(SCONTEXT));
-    return Get_EnvironmentStateByVector4(SCONTEXT, &target);
+    PeriodicTrimVector4(&target, getLatticeSizeVector(SCONTEXT));
+    return getEnvironmentStateByVector4(SCONTEXT, &target);
 }
 
 static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
@@ -102,34 +102,34 @@ static inline byte_t FindLastEnvParId(env_def_t* restrict envDef)
 
 static inline bool_t JobInfoHasFlgs(__SCONTEXT_PAR, const bitmask_t flgs)
 {
-    return FLG_TRUE(Get_JobInformation(SCONTEXT)->JobFlags, flgs);
+    return FLG_TRUE(getJobInformation(SCONTEXT)->JobFlags, flgs);
 }
 
 static inline bool_t JobHeaderHasFlgs(__SCONTEXT_PAR, const bitmask_t flgs)
 {
-    return FLG_TRUE(Get_JobHeaderFlagsMmc(SCONTEXT), flgs);
+    return FLG_TRUE(getJobHeaderFlagsMmc(SCONTEXT), flgs);
 }
 
 static inline bool_t MainStateHasFlags(__SCONTEXT_PAR, const int32_t flgs)
 {
-    return FLG_TRUE(Get_MainStateHeader(SCONTEXT)->Data->Flags, flgs);
+    return FLG_TRUE(getMainStateHeader(SCONTEXT)->Data->Flags, flgs);
 }
 
 static inline int32_t GetTotalPosCount(__SCONTEXT_PAR)
 {
-    vector4_t* sizes = Get_LatticeSizeVector(SCONTEXT);
+    vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
     return sizes->a * sizes->b * sizes->c * sizes->d;
 }
 
 static inline byte_t GetMaxParId(__SCONTEXT_PAR)
 {
     int32_t dimensions[2];
-    GetMdaDimensions((int32_t*)Get_JumpDirectionsPerPositionTable(SCONTEXT)->Header, &dimensions[0]);
+    GetMdaDimensions((int32_t*)getJumpDirectionsPerPositionTable(SCONTEXT)->Header, &dimensions[0]);
     return dimensions[0];
 }
 
 static inline const int32_t GetNumberOfUnitCells(__SCONTEXT_PAR)
 {
-    const vector4_t* sizes = Get_LatticeSizeVector(SCONTEXT);
+    const vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
     return sizes->a * sizes->b * sizes->c;
 }

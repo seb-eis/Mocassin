@@ -278,7 +278,7 @@ blob_t AllocateMdaUnchecked(const int32_t rank, const size_t itemSize, const int
 error_t AllocateMdaChecked(const int32_t rank, const size_t itemSize, const int32_t* restrict dimensions, blob_t* restrict outBlob);
 
 // Sets all bytes specified by a start and a conter to 0
-static inline void Set_BufferByteValues(void* restrict start, const size_t byteCount, const byte_t value)
+static inline void setBufferByteValues(void* restrict start, const size_t byteCount, const byte_t value)
 {
     for(size_t i = 0; i < byteCount; i++)
     {

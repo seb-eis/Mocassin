@@ -23,598 +23,598 @@
 
 /* Context getter/setter */
 
-static inline mc_state_t* Get_SimulationState(__SCONTEXT_PAR)
+static inline mc_state_t* getSimulationState(__SCONTEXT_PAR)
 {
     return &SCONTEXT->MainState;
 }
 
-static inline db_model_t* Get_DatabaseModel(__SCONTEXT_PAR)
+static inline db_model_t* getDatabaseModel(__SCONTEXT_PAR)
 {
     return &SCONTEXT->DbModel;
 }
 
-static inline sim_model_t* Get_DynamicModel(__SCONTEXT_PAR)
+static inline sim_model_t* getDynamicModel(__SCONTEXT_PAR)
 {
     return &SCONTEXT->DynamicModel;
 }
 
-static inline jump_pool_t* Get_JumpSelectionPool(__SCONTEXT_PAR)
+static inline jump_pool_t* getJumpSelectionPool(__SCONTEXT_PAR)
 {
     return &SCONTEXT->SelectionPool;
 }
 
-static inline cycle_state_t* Get_CycleState(__SCONTEXT_PAR)
+static inline cycle_state_t* getCycleState(__SCONTEXT_PAR)
 {
     return &SCONTEXT->CycleState;
 }
 
-static inline pcg32_random_t* Get_RandomNumberGen(__SCONTEXT_PAR)
+static inline pcg32_random_t* getRandomNumberGen(__SCONTEXT_PAR)
 {
     return &SCONTEXT->RandomNumberGenerator;
 }
 
-static inline plugin_col_t* Get_PluginCollection(__SCONTEXT_PAR)
+static inline plugin_col_t* getPluginCollection(__SCONTEXT_PAR)
 {
     return &SCONTEXT->Plugins;
 }
 
 /* Simulation model getter/setter */
 
-static inline file_info_t* Get_FileInformation(__SCONTEXT_PAR)
+static inline file_info_t* getFileInformation(__SCONTEXT_PAR)
 {
-    return &Get_DynamicModel(SCONTEXT)->FileInfo;
+    return &getDynamicModel(SCONTEXT)->FileInfo;
 }
 
-static inline phys_val_t* Get_PhysicalFactors(__SCONTEXT_PAR)
+static inline phys_val_t* getPhysicalFactors(__SCONTEXT_PAR)
 {
-    return &Get_DynamicModel(SCONTEXT)->PhysicalFactors;
+    return &getDynamicModel(SCONTEXT)->PhysicalFactors;
 }
 
-static inline flp_buffer_t* Get_LatticeEnergyBuffer(__SCONTEXT_PAR)
+static inline flp_buffer_t* getLatticeEnergyBuffer(__SCONTEXT_PAR)
 {
-    return &Get_DynamicModel(SCONTEXT)->LatticeEnergyBuffer;
+    return &getDynamicModel(SCONTEXT)->LatticeEnergyBuffer;
 }
 
-static inline run_info_t* Get_RuntimeInformation(__SCONTEXT_PAR)
+static inline run_info_t* getRuntimeInformation(__SCONTEXT_PAR)
 {
-    return &Get_DynamicModel(SCONTEXT)->RuntimeInfo;
+    return &getDynamicModel(SCONTEXT)->RuntimeInfo;
 }
 
-static inline env_lattice_t* Get_EnvironmentLattice(__SCONTEXT_PAR)
+static inline env_lattice_t* getEnvironmentLattice(__SCONTEXT_PAR)
 {
-    return &Get_DynamicModel(SCONTEXT)->EnvironmentLattice;
+    return &getDynamicModel(SCONTEXT)->EnvironmentLattice;
 }
 
-static inline void Set_EnvironmentLattice(__SCONTEXT_PAR, env_lattice_t value)
+static inline void setEnvironmentLattice(__SCONTEXT_PAR, env_lattice_t value)
 {
-    *Get_EnvironmentLattice(SCONTEXT) = value;
+    *getEnvironmentLattice(SCONTEXT) = value;
 }
 
-static inline env_state_t* Get_EnvironmentStateById(__SCONTEXT_PAR, const int32_t id)
+static inline env_state_t* getEnvironmentStateById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_EnvironmentLattice(SCONTEXT)->Start[id];
+    return &getEnvironmentLattice(SCONTEXT)->Start[id];
 }
 
-static inline env_state_t* Get_EnvironmentStateByVector4(__SCONTEXT_PAR, const vector4_t* restrict vector)
+static inline env_state_t* getEnvironmentStateByVector4(__SCONTEXT_PAR, const vector4_t* restrict vector)
 {
-    return MDA_GET_4(*Get_EnvironmentLattice(SCONTEXT), vector->a, vector->b, vector->c, vector->d);
+    return MDA_GET_4(*getEnvironmentLattice(SCONTEXT), vector->a, vector->b, vector->c, vector->d);
 }
 
-static inline int32_t* Get_LatticeBlockSizes(__SCONTEXT_PAR)
+static inline int32_t* getLatticeBlockSizes(__SCONTEXT_PAR)
 {
-    return Get_EnvironmentLattice(SCONTEXT)->Header->Blocks;
+    return getEnvironmentLattice(SCONTEXT)->Header->Blocks;
 }
 
 /* Cycle state getter/setter */
 
-static inline cycle_cnt_t* Get_MainCycleCounters(__SCONTEXT_PAR)
+static inline cycle_cnt_t* getMainCycleCounters(__SCONTEXT_PAR)
 {
-    return &Get_CycleState(SCONTEXT)->MainCounters;
+    return &getCycleState(SCONTEXT)->MainCounters;
 }
 
-static inline occode_t Get_PathStateCode(__SCONTEXT_PAR)
+static inline occode_t getPathStateCode(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->ActiveStateCode;
+    return getCycleState(SCONTEXT)->ActiveStateCode;
 }
 
-static inline void Set_PathStateCode(__SCONTEXT_PAR, const occode_t code)
+static inline void setPathStateCode(__SCONTEXT_PAR, const occode_t code)
 {
-    Get_CycleState(SCONTEXT)->ActiveStateCode = code;
+    getCycleState(SCONTEXT)->ActiveStateCode = code;
 }
 
-static inline roll_info_t* Get_JumpSelectionInfo(__SCONTEXT_PAR)
+static inline roll_info_t* getJumpSelectionInfo(__SCONTEXT_PAR)
 {
-    return &Get_CycleState(SCONTEXT)->ActiveSelectionInfo;
+    return &getCycleState(SCONTEXT)->ActiveSelectionInfo;
 }
 
-static inline eng_info_t* Get_JumpEnergyInfo(__SCONTEXT_PAR)
+static inline eng_info_t* getJumpEnergyInfo(__SCONTEXT_PAR)
 {
-    return &Get_CycleState(SCONTEXT)->ActiveEnergyInfo;
+    return &getCycleState(SCONTEXT)->ActiveEnergyInfo;
 }
 
-static inline env_backup_t* Get_EnvironmentBackup(__SCONTEXT_PAR)
+static inline env_backup_t* getEnvironmentBackup(__SCONTEXT_PAR)
 {
-    return &Get_CycleState(SCONTEXT)->ActiveEnvironmentBackup;
+    return &getCycleState(SCONTEXT)->ActiveEnvironmentBackup;
 }
 
-static inline jump_dir_t* Get_ActiveJumpDirection(__SCONTEXT_PAR)
+static inline jump_dir_t* getActiveJumpDirection(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->ActiveJumpDirection;
+    return getCycleState(SCONTEXT)->ActiveJumpDirection;
 }
 
-static inline void Set_ActiveJumpDirection(__SCONTEXT_PAR, jump_dir_t* value)
+static inline void setActiveJumpDirection(__SCONTEXT_PAR, jump_dir_t* value)
 {
-    Get_CycleState(SCONTEXT)->ActiveJumpDirection = value;
+    getCycleState(SCONTEXT)->ActiveJumpDirection = value;
 }
 
-static inline jump_col_t* Get_ActiveJumpCollection(__SCONTEXT_PAR)
+static inline jump_col_t* getActiveJumpCollection(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->ActiveJumpCollection;
+    return getCycleState(SCONTEXT)->ActiveJumpCollection;
 }
 
-static inline void Set_ActiveJumpCollection(__SCONTEXT_PAR, jump_col_t* value)
+static inline void setActiveJumpCollection(__SCONTEXT_PAR, jump_col_t* value)
 {
-    Get_CycleState(SCONTEXT)->ActiveJumpCollection = value;
+    getCycleState(SCONTEXT)->ActiveJumpCollection = value;
 }
 
-static inline jump_rule_t* Get_ActiveJumpRule(__SCONTEXT_PAR)
+static inline jump_rule_t* getActiveJumpRule(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->ActiveJumpRule;
+    return getCycleState(SCONTEXT)->ActiveJumpRule;
 }
 
-static inline occode_t Get_ActiveStateCode(__SCONTEXT_PAR)
+static inline occode_t getActiveStateCode(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->ActiveStateCode;
+    return getCycleState(SCONTEXT)->ActiveStateCode;
 }
 
-static inline void Set_ActiveJumpRule(__SCONTEXT_PAR, jump_rule_t* value)
+static inline void setActiveJumpRule(__SCONTEXT_PAR, jump_rule_t* value)
 {
-    Get_CycleState(SCONTEXT)->ActiveJumpRule = value;
+    getCycleState(SCONTEXT)->ActiveJumpRule = value;
 }
 
-static inline cnt_col_t* Get_ActiveCounters(__SCONTEXT_PAR)
+static inline cnt_col_t* getActiveCounters(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->ActiveCounterCollection;
+    return getCycleState(SCONTEXT)->ActiveCounterCollection;
 }
 
-static inline void Set_ActiveCounters(__SCONTEXT_PAR, cnt_col_t* value)
+static inline void setActiveCounters(__SCONTEXT_PAR, cnt_col_t* value)
 {
-    Get_CycleState(SCONTEXT)->ActiveCounterCollection = value;
+    getCycleState(SCONTEXT)->ActiveCounterCollection = value;
 }
 
-static inline env_state_t* Get_PathEnvironmentAt(__SCONTEXT_PAR, const byte_t id)
+static inline env_state_t* getPathEnvironmentAt(__SCONTEXT_PAR, const byte_t id)
 {
-    return Get_CycleState(SCONTEXT)->ActivePathEnvironments[id]; 
+    return getCycleState(SCONTEXT)->ActivePathEnvironments[id]; 
 }
 
-static inline void Set_PathEnvironmentAt(__SCONTEXT_PAR, const byte_t id, env_state_t* value)
+static inline void setPathEnvironmentAt(__SCONTEXT_PAR, const byte_t id, env_state_t* value)
 {
-    Get_CycleState(SCONTEXT)->ActivePathEnvironments[id] = value;
+    getCycleState(SCONTEXT)->ActivePathEnvironments[id] = value;
 }
 
-static inline env_state_t* Get_ActiveWorkEnvironment(__SCONTEXT_PAR)
+static inline env_state_t* getActiveWorkEnvironment(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->WorkEnvironment;
+    return getCycleState(SCONTEXT)->WorkEnvironment;
 }
 
-static inline void Set_ActiveWorkEnvironment(__SCONTEXT_PAR, env_state_t* value)
+static inline void setActiveWorkEnvironment(__SCONTEXT_PAR, env_state_t* value)
 {
-    Get_CycleState(SCONTEXT)->WorkEnvironment = value;
+    getCycleState(SCONTEXT)->WorkEnvironment = value;
 }
 
-static inline clu_state_t* Get_ActiveWorkCluster(__SCONTEXT_PAR)
+static inline clu_state_t* getActiveWorkCluster(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->WorkCluster;
+    return getCycleState(SCONTEXT)->WorkCluster;
 }
 
-static inline void Set_ActiveWorkCluster(__SCONTEXT_PAR, clu_state_t* value)
+static inline void setActiveWorkCluster(__SCONTEXT_PAR, clu_state_t* value)
 {
-    Get_CycleState(SCONTEXT)->WorkCluster = value;
+    getCycleState(SCONTEXT)->WorkCluster = value;
 }
 
-static inline pair_table_t* Get_ActivePairTable(__SCONTEXT_PAR)
+static inline pair_table_t* getActivePairTable(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->WorkPairTable;
+    return getCycleState(SCONTEXT)->WorkPairTable;
 }
 
-static inline void Set_ActivePairTable(__SCONTEXT_PAR, pair_table_t* value)
+static inline void setActivePairTable(__SCONTEXT_PAR, pair_table_t* value)
 {
-    Get_CycleState(SCONTEXT)->WorkPairTable = value;
+    getCycleState(SCONTEXT)->WorkPairTable = value;
 }
 
-static inline clu_table_t* Get_ActiveClusterTable(__SCONTEXT_PAR)
+static inline clu_table_t* getActiveClusterTable(__SCONTEXT_PAR)
 {
-    return Get_CycleState(SCONTEXT)->WorkClusterTable;
+    return getCycleState(SCONTEXT)->WorkClusterTable;
 }
 
-static inline void Set_ActiveClusterTable(__SCONTEXT_PAR, clu_table_t* value)
+static inline void setActiveClusterTable(__SCONTEXT_PAR, clu_table_t* value)
 {
-    Get_CycleState(SCONTEXT)->WorkClusterTable = value;
+    getCycleState(SCONTEXT)->WorkClusterTable = value;
 }
 
 /* Database model getter/setter */
 
-static inline lat_info_t* Get_LatticeInformation(__SCONTEXT_PAR)
+static inline lat_info_t* getLatticeInformation(__SCONTEXT_PAR)
 {
-    return &Get_DatabaseModel(SCONTEXT)->LattInfo;
+    return &getDatabaseModel(SCONTEXT)->LattInfo;
 }
 
-static inline lattice_t* Get_DatabaseModelLattice(__SCONTEXT_PAR)
+static inline lattice_t* getDatabaseModelLattice(__SCONTEXT_PAR)
 {
-    return &Get_LatticeInformation(SCONTEXT)->Lattice;
+    return &getLatticeInformation(SCONTEXT)->Lattice;
 }
 
-static inline job_info_t* Get_JobInformation(__SCONTEXT_PAR)
+static inline job_info_t* getJobInformation(__SCONTEXT_PAR)
 {
-    return &Get_DatabaseModel(SCONTEXT)->JobInfo;
+    return &getDatabaseModel(SCONTEXT)->JobInfo;
 }
 
-static inline kmc_header_t* Get_JobHeaderAsKmc(__SCONTEXT_PAR)
+static inline kmc_header_t* getJobHeaderAsKmc(__SCONTEXT_PAR)
 {
-    return (kmc_header_t*) Get_JobInformation(SCONTEXT)->JobHeader;
+    return (kmc_header_t*) getJobInformation(SCONTEXT)->JobHeader;
 }
 
-static inline mmc_header_t* Get_JobHeaderAsMmc(__SCONTEXT_PAR)
+static inline mmc_header_t* getJobHeaderAsMmc(__SCONTEXT_PAR)
 {
-    return (mmc_header_t*) Get_JobInformation(SCONTEXT)->JobHeader;
+    return (mmc_header_t*) getJobInformation(SCONTEXT)->JobHeader;
 }
 
-static inline str_model_t* Get_StructureModel(__SCONTEXT_PAR)
+static inline str_model_t* getStructureModel(__SCONTEXT_PAR)
 {
-    return &Get_DatabaseModel(SCONTEXT)->Structure;
+    return &getDatabaseModel(SCONTEXT)->Structure;
 }
 
-static inline eng_model_t* Get_EnergyModel(__SCONTEXT_PAR)
+static inline eng_model_t* getEnergyModel(__SCONTEXT_PAR)
 {
-    return &Get_DatabaseModel(SCONTEXT)->Energy;
+    return &getDatabaseModel(SCONTEXT)->Energy;
 }
 
-static inline tra_model_t* Get_TransitionModel(__SCONTEXT_PAR)
+static inline tra_model_t* getTransitionModel(__SCONTEXT_PAR)
 {
-    return &Get_DatabaseModel(SCONTEXT)->Transition;
+    return &getDatabaseModel(SCONTEXT)->Transition;
 }
 
-static inline env_defs_t* Get_EnvironmentModels(__SCONTEXT_PAR)
+static inline env_defs_t* getEnvironmentModels(__SCONTEXT_PAR)
 {
-    return &Get_StructureModel(SCONTEXT)->EnvironmentDefinitions;
+    return &getStructureModel(SCONTEXT)->EnvironmentDefinitions;
 }
 
-static inline env_def_t* Get_EnvironmentModelById(__SCONTEXT_PAR, const int32_t id)
+static inline env_def_t* getEnvironmentModelById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_EnvironmentModels(SCONTEXT)->Start[id];
+    return &getEnvironmentModels(SCONTEXT)->Start[id];
 }
 
-static inline vector4_t* Get_LatticeSizeVector(__SCONTEXT_PAR)
+static inline vector4_t* getLatticeSizeVector(__SCONTEXT_PAR)
 {
-    return &Get_LatticeInformation(SCONTEXT)->SizeVector;
+    return &getLatticeInformation(SCONTEXT)->SizeVector;
 }
 
-static inline jump_counts_t* Get_JumpDirectionsPerPositionTable(__SCONTEXT_PAR)
+static inline jump_counts_t* getJumpDirectionsPerPositionTable(__SCONTEXT_PAR)
 {
-    return &Get_TransitionModel(SCONTEXT)->JumpCountTable;
+    return &getTransitionModel(SCONTEXT)->JumpCountTable;
 }
 
-static inline int32_t Get_JumpCountByPositionStatus(__SCONTEXT_PAR, const int32_t posId, const byte_t parId)
+static inline int32_t getJumpCountByPositionStatus(__SCONTEXT_PAR, const int32_t posId, const byte_t parId)
 {
-    return *MDA_GET_2(*Get_JumpDirectionsPerPositionTable(SCONTEXT), posId, parId);
+    return *MDA_GET_2(*getJumpDirectionsPerPositionTable(SCONTEXT), posId, parId);
 }
 
-static inline jump_assign_t* Get_JumpIdToPositionsAssignmentTable(__SCONTEXT_PAR)
+static inline jump_assign_t* getJumpIdToPositionsAssignmentTable(__SCONTEXT_PAR)
 {
-    return &Get_TransitionModel(SCONTEXT)->JumpAssignTable;
+    return &getTransitionModel(SCONTEXT)->JumpAssignTable;
 }
 
-static inline jump_dirs_t* Get_JumpDirections(__SCONTEXT_PAR)
+static inline jump_dirs_t* getJumpDirections(__SCONTEXT_PAR)
 {
-    return &Get_TransitionModel(SCONTEXT)->JumpDirections;
+    return &getTransitionModel(SCONTEXT)->JumpDirections;
 }
 
-static inline jump_dir_t* Get_JumpDirectionById(__SCONTEXT_PAR, const int32_t id)
+static inline jump_dir_t* getJumpDirectionById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_JumpDirections(SCONTEXT)->Start[id];
+    return &getJumpDirections(SCONTEXT)->Start[id];
 }
 
-static inline jump_cols_t* Get_JumpCollections(__SCONTEXT_PAR)
+static inline jump_cols_t* getJumpCollections(__SCONTEXT_PAR)
 {
-    return &Get_TransitionModel(SCONTEXT)->JumpCollections;
+    return &getTransitionModel(SCONTEXT)->JumpCollections;
 }
 
-static inline jump_col_t* Get_JumpCollectionById(__SCONTEXT_PAR, const int32_t id)
+static inline jump_col_t* getJumpCollectionById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_JumpCollections(SCONTEXT)->Start[id];
+    return &getJumpCollections(SCONTEXT)->Start[id];
 }
 
-static inline pair_tables_t* Get_PairEnergyTables(__SCONTEXT_PAR)
+static inline pair_tables_t* getPairEnergyTables(__SCONTEXT_PAR)
 {
-    return &Get_EnergyModel(SCONTEXT)->PairTables;
+    return &getEnergyModel(SCONTEXT)->PairTables;
 }
 
-static inline pair_table_t* Get_PairEnergyTableById(__SCONTEXT_PAR, const int32_t id)
+static inline pair_table_t* getPairEnergyTableById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_PairEnergyTables(SCONTEXT)->Start[id];
+    return &getPairEnergyTables(SCONTEXT)->Start[id];
 }
 
-static inline clu_tables_t* Get_ClusterEnergyTables(__SCONTEXT_PAR)
+static inline clu_tables_t* getClusterEnergyTables(__SCONTEXT_PAR)
 {
-    return &Get_EnergyModel(SCONTEXT)->ClusterTables;
+    return &getEnergyModel(SCONTEXT)->ClusterTables;
 }
 
-static inline clu_table_t* Get_ClusterEnergyTableById(__SCONTEXT_PAR, const int32_t id)
+static inline clu_table_t* getClusterEnergyTableById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_ClusterEnergyTables(SCONTEXT)->Start[id];
+    return &getClusterEnergyTables(SCONTEXT)->Start[id];
 }
 
 /* Main state getter/setter */
 
-static inline buffer_t* Get_MainStateBuffer(__SCONTEXT_PAR)
+static inline buffer_t* getMainStateBuffer(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->Buffer;
+    return &getSimulationState(SCONTEXT)->Buffer;
 }
 
-static inline void* Get_MainStateBufferAddress(__SCONTEXT_PAR, const int32_t offsetBytes)
+static inline void* getMainStateBufferAddress(__SCONTEXT_PAR, const int32_t offsetBytes)
 {
-    return &Get_MainStateBuffer(SCONTEXT)->Start[offsetBytes];
+    return &getMainStateBuffer(SCONTEXT)->Start[offsetBytes];
 }
 
-static inline hdr_state_t* Get_MainStateHeader(__SCONTEXT_PAR)
+static inline hdr_state_t* getMainStateHeader(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->Header;
+    return &getSimulationState(SCONTEXT)->Header;
 }
 
-static inline mta_state_t* Get_MainStateMetaInfo(__SCONTEXT_PAR)
+static inline mta_state_t* getMainStateMetaInfo(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->Meta;
+    return &getSimulationState(SCONTEXT)->Meta;
 }
 
-static inline meta_info_t* Get_MainStateMetaData(__SCONTEXT_PAR)
+static inline meta_info_t* getMainStateMetaData(__SCONTEXT_PAR)
 {
-    return Get_MainStateMetaInfo(SCONTEXT)->Data;
+    return getMainStateMetaInfo(SCONTEXT)->Data;
 }
 
-static inline lat_state_t* Get_MainStateLattice(__SCONTEXT_PAR)
+static inline lat_state_t* getMainStateLattice(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->Lattice;
+    return &getSimulationState(SCONTEXT)->Lattice;
 }
 
-static inline byte_t Get_StateLatticeEntryById(__SCONTEXT_PAR, const int32_t id)
+static inline byte_t getStateLatticeEntryById(__SCONTEXT_PAR, const int32_t id)
 {
-    return Get_MainStateLattice(SCONTEXT)->Start[id];
+    return getMainStateLattice(SCONTEXT)->Start[id];
 }
 
-static inline cnt_state_t* Get_MainStateCounters(__SCONTEXT_PAR)
+static inline cnt_state_t* getMainStateCounters(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->Counters;
+    return &getSimulationState(SCONTEXT)->Counters;
 }
 
-static inline cnt_col_t* Get_MainStateCounterById(__SCONTEXT_PAR, const byte_t id)
+static inline cnt_col_t* getMainStateCounterById(__SCONTEXT_PAR, const byte_t id)
 {
-    return &Get_MainStateCounters(SCONTEXT)->Start[id];
+    return &getMainStateCounters(SCONTEXT)->Start[id];
 }
 
-static inline trc_state_t* Get_AbstractMovementTrackers(__SCONTEXT_PAR)
+static inline trc_state_t* getAbstractMovementTrackers(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->GlobalTrackers;
+    return &getSimulationState(SCONTEXT)->GlobalTrackers;
 }
 
-static inline trc_state_t* Get_StaticMovementTrackers(__SCONTEXT_PAR)
+static inline trc_state_t* getStaticMovementTrackers(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->StaticTrackers;
+    return &getSimulationState(SCONTEXT)->StaticTrackers;
 }
 
-static inline trc_state_t* Get_MobileMovementTrackers(__SCONTEXT_PAR)
+static inline trc_state_t* getMobileMovementTrackers(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->MobileTrackers;
+    return &getSimulationState(SCONTEXT)->MobileTrackers;
 }
 
-static inline idx_state_t* Get_MobileTrackerIndexing(__SCONTEXT_PAR)
+static inline idx_state_t* getMobileTrackerIndexing(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->MobileTrackerIndexing;
+    return &getSimulationState(SCONTEXT)->MobileTrackerIndexing;
 }
 
-static inline prb_state_t* Get_JumpProbabilityMap(__SCONTEXT_PAR)
+static inline prb_state_t* getJumpProbabilityMap(__SCONTEXT_PAR)
 {
-    return &Get_SimulationState(SCONTEXT)->ProbabilityTrackMap;
+    return &getSimulationState(SCONTEXT)->ProbabilityTrackMap;
 }
 
 /* Jump selection pool getter/setter */
 
-static inline id_redirect_t* Get_DirectionPoolIndexing(__SCONTEXT_PAR)
+static inline id_redirect_t* getDirectionPoolIndexing(__SCONTEXT_PAR)
 {
-    return &Get_JumpSelectionPool(SCONTEXT)->NumOfDirectionsToPoolId;
+    return &getJumpSelectionPool(SCONTEXT)->NumOfDirectionsToPoolId;
 }
 
-static inline void Set_DirectionPoolIndexing(__SCONTEXT_PAR, id_redirect_t value)
+static inline void setDirectionPoolIndexing(__SCONTEXT_PAR, id_redirect_t value)
 {
-    *Get_DirectionPoolIndexing(SCONTEXT) = value;
+    *getDirectionPoolIndexing(SCONTEXT) = value;
 }
 
-static inline int32_t Get_DirectionPoolIdByJumpCount(__SCONTEXT_PAR, const int32_t count)
+static inline int32_t getDirectionPoolIdByJumpCount(__SCONTEXT_PAR, const int32_t count)
 {
-    return Get_DirectionPoolIndexing(SCONTEXT)->Start[count];
+    return getDirectionPoolIndexing(SCONTEXT)->Start[count];
 }
 
-static inline void Set_DirectionPoolIdByJumpCount(__SCONTEXT_PAR, const int32_t count, const int32_t value)
+static inline void setDirectionPoolIdByJumpCount(__SCONTEXT_PAR, const int32_t count, const int32_t value)
 {
-    Get_DirectionPoolIndexing(SCONTEXT)->Start[count] = value;
+    getDirectionPoolIndexing(SCONTEXT)->Start[count] = value;
 }
 
-static inline dir_pools_t* Get_DirectionPools(__SCONTEXT_PAR)
+static inline dir_pools_t* getDirectionPools(__SCONTEXT_PAR)
 {
-    return &Get_JumpSelectionPool(SCONTEXT)->DirectionPools;
+    return &getJumpSelectionPool(SCONTEXT)->DirectionPools;
 }
 
-static inline void Set_DirectionPools(__SCONTEXT_PAR, dir_pools_t value)
+static inline void setDirectionPools(__SCONTEXT_PAR, dir_pools_t value)
 {
-    *Get_DirectionPools(SCONTEXT) = value;
+    *getDirectionPools(SCONTEXT) = value;
 }
 
-static inline dir_pool_t* Get_DirectionPoolById(__SCONTEXT_PAR, const int32_t id)
+static inline dir_pool_t* getDirectionPoolById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &Get_DirectionPools(SCONTEXT)->Start[id];
+    return &getDirectionPools(SCONTEXT)->Start[id];
 }
 
-static inline dir_pool_t* Get_DirectionPoolByJumpCount(__SCONTEXT_PAR, const int32_t count)
+static inline dir_pool_t* getDirectionPoolByJumpCount(__SCONTEXT_PAR, const int32_t count)
 {
-    return Get_DirectionPoolById(SCONTEXT, Get_DirectionPoolIdByJumpCount(SCONTEXT, count));
+    return getDirectionPoolById(SCONTEXT, getDirectionPoolIdByJumpCount(SCONTEXT, count));
 }
 
 /* Command arguments getter/setter */
 
-static inline cmd_args_t* Get_CommandArguments(__SCONTEXT_PAR)
+static inline cmd_args_t* getCommandArguments(__SCONTEXT_PAR)
 {
     return &SCONTEXT->CommandArguments;
 }
 
-static inline char const * Get_CommandArgumentStringById(__SCONTEXT_PAR, const int32_t id)
+static inline char const * getCommandArgumentStringById(__SCONTEXT_PAR, const int32_t id)
 {
-    if (id >= Get_CommandArguments(SCONTEXT)->Count)
+    if (id >= getCommandArguments(SCONTEXT)->Count)
     {
         return NULL;
     }
-    return Get_CommandArguments(SCONTEXT)->Values[id];
+    return getCommandArguments(SCONTEXT)->Values[id];
 }
 
-static inline void Set_CommandArguments(__SCONTEXT_PAR, const int32_t argc, char const * const * argv)
+static inline void setCommandArguments(__SCONTEXT_PAR, const int32_t argc, char const * const * argv)
 {
-    *Get_CommandArguments(SCONTEXT) = (cmd_args_t) { argc, argv };
+    *getCommandArguments(SCONTEXT) = (cmd_args_t) { argc, argv };
 }
 
-static inline void Set_ProgramRunPath(__SCONTEXT_PAR, char const * value)
+static inline void setProgramRunPath(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->ExecutionPath = value;
+    getFileInformation(SCONTEXT)->ExecutionPath = value;
 }
 
-static inline void Set_DatabaseLoadString(__SCONTEXT_PAR, char const * value)
+static inline void setDatabaseLoadString(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->DbQueryString = value;
+    getFileInformation(SCONTEXT)->DbQueryString = value;
 }
 
-static inline void Set_DatabasePath(__SCONTEXT_PAR, char const * value)
+static inline void setDatabasePath(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->DatabasePath = value;
+    getFileInformation(SCONTEXT)->DatabasePath = value;
 }
 
-static inline void Set_OutputPluginPath(__SCONTEXT_PAR, char const * value)
+static inline void setOutputPluginPath(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->OutputPluginPath = value;
+    getFileInformation(SCONTEXT)->OutputPluginPath = value;
 }
 
-static inline void Set_OutputPluginSymbol(__SCONTEXT_PAR, char const * value)
+static inline void setOutputPluginSymbol(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->OutputPluginSymbol = value;
+    getFileInformation(SCONTEXT)->OutputPluginSymbol = value;
 }
 
-static inline void Set_EnergyPluginPath(__SCONTEXT_PAR, char const * value)
+static inline void setEnergyPluginPath(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->EnergyPluginPath = value;
+    getFileInformation(SCONTEXT)->EnergyPluginPath = value;
 }
 
-static inline void Set_EnergyPluginSymbol(__SCONTEXT_PAR, char const * value)
+static inline void setEnergyPluginSymbol(__SCONTEXT_PAR, char const * value)
 {
-    Get_FileInformation(SCONTEXT)->EnergyPluginSymbol = value;
+    getFileInformation(SCONTEXT)->EnergyPluginSymbol = value;
 }
 
 /* Selection pool getter/setter */
 
-static inline int32_t Get_EnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id)
+static inline int32_t getEnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id)
 {
     return dirPool->EnvironmentPool.Start[id];
 }
 
-static inline void Set_EnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id, const int32_t value)
+static inline void setEnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id, const int32_t value)
 {
     dirPool->EnvironmentPool.Start[id] = value;
 }
 
 /* Energy table getter/setter */
 
-static inline double Get_PairEnergyTableEntry(const pair_table_t* restrict table, const byte_t parId0, const byte_t parId1)
+static inline double getPairEnergyTableEntry(const pair_table_t* restrict table, const byte_t parId0, const byte_t parId1)
 {
     return *MDA_GET_2(table->EnergyTable, parId0, parId1);
 }
 
-static inline double Get_CluEnergyTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
+static inline double getCluEnergyTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
 {
     return *MDA_GET_2(table->EnergyTable, table->ParticleToTableId[parId], codeId);
 }
 
 /* Flag getter/setters */
 
-static inline bitmask_t Get_MainStateFlags(__SCONTEXT_PAR)
+static inline bitmask_t getMainStateFlags(__SCONTEXT_PAR)
 {
-    return Get_MainStateHeader(SCONTEXT)->Data->Flags;
+    return getMainStateHeader(SCONTEXT)->Data->Flags;
 }
 
-static inline void Set_MainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
+static inline void setMainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
 {
-    FLG_SET(Get_MainStateHeader(SCONTEXT)->Data->Flags, flags);
+    FLG_SET(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
 }
 
-static inline void UnSet_MainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
+static inline void UnsetMainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
 {
-    FLG_UNSET(Get_MainStateHeader(SCONTEXT)->Data->Flags, flags);
+    FLG_UNSET(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
 }
 
-static inline bitmask_t Get_JobInformationFlags(__SCONTEXT_PAR)
+static inline bitmask_t getJobInformationFlags(__SCONTEXT_PAR)
 {
-    return Get_JobInformation(SCONTEXT)->JobFlags;
+    return getJobInformation(SCONTEXT)->JobFlags;
 }
 
-static inline bitmask_t Get_JobHeaderFlagsKmc(__SCONTEXT_PAR)
+static inline bitmask_t getJobHeaderFlagsKmc(__SCONTEXT_PAR)
 {
-    return Get_JobHeaderAsKmc(SCONTEXT)->JobFlags;
+    return getJobHeaderAsKmc(SCONTEXT)->JobFlags;
 }
 
-static inline bitmask_t Get_JobHeaderFlagsMmc(__SCONTEXT_PAR)
+static inline bitmask_t getJobHeaderFlagsMmc(__SCONTEXT_PAR)
 {
-    return Get_JobHeaderAsKmc(SCONTEXT)->JobFlags;
+    return getJobHeaderAsKmc(SCONTEXT)->JobFlags;
 }
 
 /* Environment getter/setter */
 
-static inline int32_t Get_EnvironmentPairDefCount(env_state_t* restrict envState)
+static inline int32_t getEnvironmentPairDefCount(env_state_t* restrict envState)
 {
     return envState->EnvironmentDefinition->PairDefinitions.Count;
 }
 
-static inline pair_def_t* Get_EnvironmentPairDefById(env_state_t* restrict envState, const int32_t id)
+static inline pair_def_t* getEnvironmentPairDefById(env_state_t* restrict envState, const int32_t id)
 {
     return &envState->EnvironmentDefinition->PairDefinitions.Start[id];
 }
 
-static inline clu_def_t* Get_EnvironmentCluDefById(env_state_t* restrict envState, const int32_t id)
+static inline clu_def_t* getEnvironmentCluDefById(env_state_t* restrict envState, const int32_t id)
 {
     return &envState->EnvironmentDefinition->ClusterDefinitions.Start[id];
 }
 
-static inline clu_state_t* Get_EnvironmentCluStateById(env_state_t* restrict envState, const byte_t id)
+static inline clu_state_t* getEnvironmentCluStateById(env_state_t* restrict envState, const byte_t id)
 {
     return &envState->ClusterStates.Start[id];
 }
 
 /* Active delta object getter/setter */
 
-static inline double* Get_ActiveStateEnergyById(__SCONTEXT_PAR, const byte_t id)
+static inline double* getActiveStateEnergyById(__SCONTEXT_PAR, const byte_t id)
 {
-    return &Get_ActiveWorkEnvironment(SCONTEXT)->EnergyStates.Start[id];
+    return &getActiveWorkEnvironment(SCONTEXT)->EnergyStates.Start[id];
 }
 
-static inline byte_t Get_ActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
+static inline byte_t getActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
 {
-    return Get_ActiveWorkEnvironment(SCONTEXT)->EnvironmentDefinition->UpdateParticleIds[id];
+    return getActiveWorkEnvironment(SCONTEXT)->EnvironmentDefinition->UpdateParticleIds[id];
 }
 
-static inline env_link_t* Get_EnvLinkByJumpLink(__SCONTEXT_PAR, const jump_link_t* restrict link)
+static inline env_link_t* getEnvLinkByJumpLink(__SCONTEXT_PAR, const jump_link_t* restrict link)
 {
     return &JUMPPATH[link->PathId]->EnvironmentLinks.Start[link->LinkId];
 }
 
-static inline double* Get_PathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
+static inline double* getPathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
 {
     return &JUMPPATH[pathId]->EnergyStates.Start[parId];
 }
 
-static inline double* Get_EnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t pathId)
+static inline double* getEnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t pathId)
 {
-    return &Get_CycleState(SCONTEXT)->ActiveEnvironmentBackup.PathEnergies[pathId];
+    return &getCycleState(SCONTEXT)->ActiveEnvironmentBackup.PathEnergies[pathId];
 }

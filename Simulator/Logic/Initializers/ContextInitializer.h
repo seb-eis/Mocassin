@@ -9,8 +9,6 @@
 //////////////////////////////////////////
 
 #pragma once
-#include "Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Simulator/Data/Model/DbModel/DbModel.h"
 #include "Simulator/Data/Model/SimContext/SimContext.h"
 
 void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues);

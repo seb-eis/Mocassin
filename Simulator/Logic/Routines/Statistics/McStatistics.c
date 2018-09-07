@@ -10,7 +10,7 @@
 
 #include <math.h>
 #include "Simulator/Logic/Constants/Constants.h"
-#include "Simulator/Logic/Routines/McStatistics.h"
+#include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 
 error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters)
 {
@@ -19,8 +19,8 @@ error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters)
         return ERR_NULLPOINTER;
     }
 
-    Set_BufferByteValues(counters, sizeof(cycle_cnt_t), 0);
-    counters->TotalGoalMcs = Get_JobInformation(SCONTEXT)->TargetMcsp * Get_LatticeInformation(SCONTEXT)->NumOfMobiles;
+    setBufferByteValues(counters, sizeof(cycle_cnt_t), 0);
+    counters->TotalGoalMcs = getJobInformation(SCONTEXT)->TargetMcsp * getLatticeInformation(SCONTEXT)->NumOfMobiles;
 
     int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
     if (rem != 0)
@@ -48,7 +48,7 @@ error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, phys_val_t* factors)
     }
     else
     {
-        factors->TotalNormalizationFactor = Get_JobHeaderAsKmc(SCONTEXT)->FixedNormFactor;
+        factors->TotalNormalizationFactor = getJobHeaderAsKmc(SCONTEXT)->FixedNormFactor;
     }
 
     return ERR_OK;

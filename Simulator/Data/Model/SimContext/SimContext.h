@@ -12,7 +12,7 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Random/PcgRandom.h"
-#include "Simulator/Data/Model/DbModel/DbModel.h"
+#include "Simulator/Data/Model/Database/DbModel.h"
 #include "Simulator/Data/Model/State/StateModel.h"
 
 typedef struct

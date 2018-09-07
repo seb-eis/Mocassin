@@ -4,7 +4,8 @@
         "mainroutines.h": "c",
         "pluginloading.h": "c",
         "contextinitializer.h": "c",
-        "basetypes.h": "c"
+        "basetypes.h": "c",
+        "contextaccess.h": "c"
     },
     "cmake.mingwSearchDirs": [
         "C:\\Program Files\\DevTools\\MinGw-w64"

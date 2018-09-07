@@ -8,7 +8,7 @@
 // Short:   SQL functions for db model  //
 //////////////////////////////////////////
 
-#include "Simulator/Data/Model/DbModel/DbModelLoad.h"
+#include "Simulator/Data/Model/Database/DbModelLoad.h"
 
 void LoadSimulationModelFromDatabase(__SCONTEXT_PAR)
 {
