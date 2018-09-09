@@ -41,24 +41,24 @@ char* ConvErrorToString(error_t errCode)
     return (errCode > (sizeof(errTable) / sizeof(char*))) ? "[???]" : errTable[errCode];
 }
 
-void DisplayErrorAndAwait(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg)
+void DisplayErrorAndAwait(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
-    fprintf(stdout, ERROR_FORMAT, errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
     fprintf(stdout, "\nAwait...\n");
 }
 
-void OnErrorExit(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg)
+void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
     FILE* fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT, errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
     fclose(fileStream);
     exit(errCode);
 }
 
-void OnErrorExitWithMemDump(int32_t errCode, const char* errFile, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
+void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
     FILE* fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFile, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
 
     buffer_t buffer = {memStart, memEnd};
     WriteBufferHexToStream(fileStream, &buffer, 24);

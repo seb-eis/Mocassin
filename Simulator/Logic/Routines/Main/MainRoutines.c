@@ -28,17 +28,17 @@ error_t ResetContextAfterPrerun(__SCONTEXT_PAR)
 
 error_t StartMainRoutine(__SCONTEXT_PAR)
 {
-    RUNTIME_ASSERT(MainStateHasFlags(SCONTEXT, FLG_STATEERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
+    runtime_assertion(MainStateHasFlags(SCONTEXT, FLG_STATEERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
 
     if (MainStateHasFlags(SCONTEXT, FLG_KMC))
     {
         if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
         {
             SIMERROR = StartMainKmcRoutine(SCONTEXT);
-            ASSERT_ERROR(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+            error_assert(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
 
             SIMERROR = FinishRoutinePrerun(SCONTEXT);
-            ASSERT_ERROR(SIMERROR, "Prerun finish of KMC main routine failed.")
+            error_assert(SIMERROR, "Prerun finish of KMC main routine failed.")
         }
         
         return StartMainKmcRoutine(SCONTEXT);
@@ -49,26 +49,26 @@ error_t StartMainRoutine(__SCONTEXT_PAR)
         if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
         {
             SIMERROR = StartMainMmcRoutine(SCONTEXT);
-            ASSERT_ERROR(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+            error_assert(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
 
             SIMERROR = FinishRoutinePrerun(SCONTEXT);
-            ASSERT_ERROR(SIMERROR, "Prerun finish of KMC main routine failed.")
+            error_assert(SIMERROR, "Prerun finish of KMC main routine failed.")
         }
         
         return StartMainKmcRoutine(SCONTEXT);
     }
 
-    ASSERT_ERROR(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
+    error_assert(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
     return -1; // GCC [-Wall] expects return value, even with exit(..) statement
 }
 
 error_t FinishRoutinePrerun(__SCONTEXT_PAR)
 {
     SIMERROR = SaveSimulationState(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "State save after prerun completion failed.");
+    error_assert(SIMERROR, "State save after prerun completion failed.");
 
     SIMERROR = ResetContextAfterPrerun(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "Context reset after prerun completion failed.");
+    error_assert(SIMERROR, "Context reset after prerun completion failed.");
 
     UnsetMainStateFlags(SCONTEXT, FLG_PRERUN);
     return SIMERROR;
@@ -79,10 +79,10 @@ error_t StartMainKmcRoutine(__SCONTEXT_PAR)
     while (GetKmcAbortCondEval(SCONTEXT) == FLG_CONTINUE)
     {
         SIMERROR = DoNextKmcCycleBlock(SCONTEXT);
-        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
+        error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
 
         SIMERROR = FinishKmcCycleBlock(SCONTEXT);
-        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
+        error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
     }
 
     return FinishMainRoutineKmc(SCONTEXT);
@@ -93,10 +93,10 @@ error_t StartMainMmcRoutine(__SCONTEXT_PAR)
     while (GetMmcAbortCondEval(SCONTEXT) == FLG_CONTINUE)
     {
         SIMERROR = DoNextMmcCycleBlock(SCONTEXT);
-        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in MMC cycle block execution.");
+        error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block execution.");
 
         SIMERROR = FinishMmcCycleBlock(SCONTEXT);
-        ASSERT_ERROR(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
+        error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
     }
 
     return FinishMainRoutineMmc(SCONTEXT);
@@ -142,13 +142,13 @@ static void SharedCycleBlockFinish(__SCONTEXT_PAR)
     UnsetMainStateFlags(SCONTEXT, FLG_FIRSTCYCLE);
 
     SIMERROR = SyncSimulationState(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "Simulation aborted due to failed sycnhronization between dynamic model and state object.");
+    error_assert(SIMERROR, "Simulation aborted due to failed sycnhronization between dynamic model and state object.");
 
     SIMERROR = SaveSimulationState(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
+    error_assert(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
 
     SIMERROR = CallOutputPlugin(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error in the external output plugin.");
+    error_assert(SIMERROR, "Simulation aborted due to error in the external output plugin.");
 }
 
 error_t FinishKmcCycleBlock(__SCONTEXT_PAR)
@@ -295,14 +295,14 @@ static error_t GeneralSimulationFinish(__SCONTEXT_PAR)
 error_t FinishMainRoutineKmc(__SCONTEXT_PAR)
 {
     SIMERROR = GeneralSimulationFinish(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
     return SIMERROR;
 }
 
 error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
 {
     SIMERROR = GeneralSimulationFinish(SCONTEXT);
-    ASSERT_ERROR(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
     return SIMERROR;
 }
 

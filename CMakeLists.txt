@@ -9,7 +9,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
 FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
-add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE} Framework/Basic/BaseTypes/Buffers.h Framework/Basic/BaseTypes/Buffers.c)
+add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE} Framework/Basic/BaseTypes/Buffers.h Framework/Basic/BaseTypes/Buffers.c Framework/Basic/Macros/Macros.h)
 
 include_directories(${PROJECT_SOURCE_DIR})
 

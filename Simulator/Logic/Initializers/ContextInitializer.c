@@ -130,10 +130,10 @@ void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char co
     setProgramRunPath(SCONTEXT, getCommandArgumentStringById(SCONTEXT, 0));
 
     error = ResolveAndSetEssentialCmdArguments(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to resolve essential command line arguments.");
+    error_assert(error, "Failed to resolve essential command line arguments.");
 
     error = ResolveAndSetOptionalCmdArguments(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to resolve optional command line arguments.");
+    error_assert(error, "Failed to resolve optional command line arguments.");
 }
 
 static error_t ConstructEngStateBuffer(eng_states_t *restrict bufferAccess, const byte_t count)
@@ -171,14 +171,14 @@ static void ConstructEnvironmentLattice(__SCONTEXT_PAR)
     blob_t tmpBlob;
 
     error = AllocateMdaChecked(4, sizeof(env_state_t), (int32_t*) getLatticeSizeVector(SCONTEXT), &tmpBlob);
-    ASSERT_ERROR(error, "Failed to construct the environment lattice buffer.");
+    error_assert(error, "Failed to construct the environment lattice buffer.");
 
     setEnvironmentLattice(SCONTEXT, CAST_OBJECT(env_lattice_t, tmpBlob));
 
     for (int32_t i = 0; i < getEnvironmentLattice(SCONTEXT)->Header->Size; i++)
     {
         error = ConstructEnvironmentBuffers(getEnvironmentStateById(SCONTEXT, i), getEnvironmentModelById(SCONTEXT, i));
-        ASSERT_ERROR(error, "Failed to construct environment state buffers.");
+        error_assert(error, "Failed to construct environment state buffers.");
     }
 }
 
@@ -191,11 +191,11 @@ static error_t ConstructLatticeEnergyBuffer(flp_buffer_t* restrict bufferAccess,
 
 static void ConstructAbortConditionBuffers(__SCONTEXT_PAR)
 {
-    error_t error = ERR_OK;
+    error_t error;
     if (JobInfoHasFlgs(SCONTEXT, FLG_MMC))
     {
         error = ConstructLatticeEnergyBuffer(getLatticeEnergyBuffer(SCONTEXT), getJobInformation(SCONTEXT)->JobHeader);
-        ASSERT_ERROR(error, "Failed to construct lattice energy buffer.");
+        error_assert(error, "Failed to construct lattice energy buffer.");
     }
 }
 
@@ -261,10 +261,10 @@ static void ConstructJumpSelectionPool(__SCONTEXT_PAR)
     error_t error;
 
     error = ConstructSelectionPoolIndexRedirection(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to construct selection pool indexing information.");
+    error_assert(error, "Failed to construct selection pool indexing information.");
 
     error = ConstructSelectionPoolDirectionBuffers(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to construct selection pool direction buffers.");
+    error_assert(error, "Failed to construct selection pool direction buffers.");
 }
 
 static size_t ConfigStateHeaderAccess(__SCONTEXT_PAR)
@@ -418,17 +418,17 @@ static error_t ConstructMainStateBufferAccessors(__SCONTEXT_PAR)
 
 static void ConstructMainState(__SCONTEXT_PAR)
 {
-    error_t error = ERR_OK;
+    error_t error;
 
     setBufferByteValues(getSimulationState(SCONTEXT), sizeof(mc_state_t), 0);
 
     error = AllocateBufferChecked(getJobInformation(SCONTEXT)->StateSize, 1, getMainStateBuffer(SCONTEXT));
-    ASSERT_ERROR(error, "Failed to construct main state.");
+    error_assert(error, "Failed to construct main state.");
 
     setBufferByteValues(getMainStateBuffer(SCONTEXT)->Start, getJobInformation(SCONTEXT)->StateSize, 0);
 
     error = ConstructMainStateBufferAccessors(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to construct main state buffer accessor system.");
+    error_assert(error, "Failed to construct main state buffer accessor system.");
 }
 
 void ConstructSimulationContext(__SCONTEXT_PAR)
@@ -454,7 +454,7 @@ static error_t TryLoadOuputPlugin(__SCONTEXT_PAR)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
             return ERR_USEDEFAULT;
         #else
-            RUNTIME_ASSERT(false, error, "Cannot load requested ouput plugin.");
+            runtime_assertion(false, error, "Cannot load requested ouput plugin.");
         #endif
     }
 
@@ -477,7 +477,7 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
             return ERR_USEDEFAULT;
         #else
-            RUNTIME_ASSERT(false, error, "Cannot load requested energy plugin.");
+            runtime_assertion(false, error, "Cannot load requested energy plugin.");
         #endif
     }
 
@@ -578,15 +578,15 @@ static void PopulateSimulationState(__SCONTEXT_PAR)
     if ((error = TryLoadSimulationState(SCONTEXT)) == ERR_USEDEFAULT)
     {
         error = SyncMainStateToDatabaseModel(SCONTEXT);
-        ASSERT_ERROR(error, "Data structure synchronization failure (static model ==> state).");
+        error_assert(error, "Data structure synchronization failure (static model ==> state).");
 
         error = DropCreateStateFile(SCONTEXT, FILE_PRERSTATE);
-        ASSERT_ERROR(error, "Could not create initial state file.");
+        error_assert(error, "Could not create initial state file.");
 
         return;
     }
 
-    ASSERT_ERROR(error, "A state file exists but failed to load.");
+    error_assert(error, "A state file exists but failed to load.");
 }
 
 static void PopulateDynamicSimulationModel(__SCONTEXT_PAR)
@@ -594,10 +594,10 @@ static void PopulateDynamicSimulationModel(__SCONTEXT_PAR)
     error_t error;
 
     error = SyncDynamicModelToMainState(SCONTEXT);
-    ASSERT_ERROR(error, "Data structure synchronization failed (state ==> dynamic model).");
+    error_assert(error, "Data structure synchronization failed (state ==> dynamic model).");
 
     error = CalcPhysicalSimulationFactors(SCONTEXT, getPhysicalFactors(SCONTEXT));
-    ASSERT_ERROR(error, "Failed to calculate default physical factors.");
+    error_assert(error, "Failed to calculate default physical factors.");
 }
 
 static error_t SyncCycleCountersWithStateStatus(__SCONTEXT_PAR)
@@ -616,10 +616,10 @@ static void SyncSimulationCycleStateWithModel(__SCONTEXT_PAR)
     error_t error;
 
     error = CalcCycleCounterDefaultStatus(SCONTEXT, getMainCycleCounters(SCONTEXT));
-    ASSERT_ERROR(error, "Failed to set default main counter status.");
+    error_assert(error, "Failed to set default main counter status.");
 
     error = SyncCycleCountersWithStateStatus(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to synchronize data structure (state ==> cycle counters).");
+    error_assert(error, "Failed to synchronize data structure (state ==> cycle counters).");
 }
 
 static void SyncSelectionPoolWithDynamicModel(__SCONTEXT_PAR)
@@ -629,7 +629,7 @@ static void SyncSelectionPoolWithDynamicModel(__SCONTEXT_PAR)
     for (int32_t i = 0; i < getEnvironmentLattice(SCONTEXT)->Header->Size; i++)
     {
         error = HandleEnvStatePoolRegistration(SCONTEXT, i);
-        ASSERT_ERROR(error, "Could not register environment on the jump selection pool.");
+        error_assert(error, "Could not register environment on the jump selection pool.");
     }
 }
 

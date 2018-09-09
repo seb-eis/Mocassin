@@ -33,11 +33,11 @@ static inline int32_t FindClusterCodeIdByLinearSearch(const clu_table_t* restric
     return index;
 }
 
-static inline int32_t BinaryLookupCluCodeId(const clu_table_t* restrict clusterTable, const occode_t occupationCode)
-{
-    // Placeholder, implement on optimization
-    return -1;
-}
+//static inline int32_t BinaryLookupCluCodeId(const clu_table_t* restrict clusterTable, const occode_t occupationCode)
+//{
+//    // Placeholder, implement on optimization
+//    return -1;
+//}
 
 static inline void SetCluStateBackup(clu_state_t* restrict cluster)
 {
@@ -222,10 +222,10 @@ void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR)
     error_t error;
 
     error = PrepareLinkingSystemConstruction(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to prepare the environment linking system for construction.");
+    error_assert(error, "Failed to prepare the environment linking system for construction.");
 
     error = ConstructPreparedLinkingSystem(SCONTEXT);
-    ASSERT_ERROR(error, "Failed to construct the environment linking system.");
+    error_assert(error, "Failed to construct the environment linking system.");
 }
 
 static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, buffer_t* restrict buffer)
@@ -347,12 +347,12 @@ void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
     buffer_t occupationBuffer;
 
     error = AllocateDynamicEnvOccupationBuffer(SCONTEXT, &occupationBuffer);
-    ASSERT_ERROR(error, "Buffer creation for environment occupation lookup failed.");
+    error_assert(error, "Buffer creation for environment occupation lookup failed.");
 
     for (int32_t i = 0; i < getMainStateLattice(SCONTEXT)->Count; i++)
     {
         error = DynamicLookupEnvironmentStatus(SCONTEXT, i, &occupationBuffer);
-        ASSERT_ERROR(error, "Dynamic lookup of environment occupation and energy failed.");
+        error_assert(error, "Dynamic lookup of environment occupation and energy failed.");
     }
 
     FreeBuffer(&occupationBuffer);
@@ -580,7 +580,7 @@ void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
     // Note: Cannot be done jump link based, requires lookup based implementation
     //       that finds the environment-links beloging to the environment-Ids of both Path[0] and Path[1], respectively
     // Note: Possibly use a hash system that enables to directly detect if a link could be present or not
-    ASSERT_ERROR(ERR_NOTIMPLEMENTED, "MMC currently not supported");
+    error_assert(ERR_NOTIMPLEMENTED, "MMC currently not supported");
 }
 
 void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR)
