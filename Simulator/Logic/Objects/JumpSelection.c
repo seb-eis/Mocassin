@@ -11,23 +11,25 @@
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Simulator/Data/Model/SimContext/ContextAccess.h" 
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Framework/Basic/BaseTypes/Buffers.h"
 
 /* Local helper routines */
 
 static inline int32_t LookupEnvironmentPoolId(jump_pool_t* restrict selectionPool, const jump_counts_t* restrict jumpCountTable, const env_state_t* restrict environment)
 {
-    return selectionPool->NumOfDirectionsToPoolId.Start[*MDA_GET_2(*jumpCountTable, environment->PositionVector.d, environment->ParticleId)];
+    int32_t idRedirect = array_Get(*jumpCountTable, environment->PositionVector.d, environment->ParticleId);
+    return span_Get(selectionPool->NumOfDirectionsToPoolId, idRedirect);
 }
 
 static inline void PushBackEnvIdToDirectionPool(dir_pool_t *restrict directionPool, const int32_t entry)
 {
-    LIST_ADD(directionPool->EnvironmentPool, entry);
+    list_PushBack(directionPool->EnvironmentPool, entry);
 }
 
 static inline bool_t TryPushBackEnvIdToDirectionPool(dir_pool_t* restrict directionPool, const int32_t entry)
 {
-    if ((directionPool->EnvironmentPool.CurrentEnd + 1) > directionPool->EnvironmentPool.End)
+    if (!list_CanPushBack(directionPool->EnvironmentPool))
     {
         return false;
     }
@@ -37,7 +39,7 @@ static inline bool_t TryPushBackEnvIdToDirectionPool(dir_pool_t* restrict direct
 
 static inline int32_t PopBackDirectionEnvPool(dir_pool_t *restrict directionPool)
 {
-    return *LIST_POP_BACK(directionPool->EnvironmentPool);
+    return list_PopBack(directionPool->EnvironmentPool);
 }
 
 static inline void UpdateEnvStateSelectionStatus(env_state_t* restrict environment, const int32_t poolId, const int32_t poolPositionId)
@@ -98,24 +100,28 @@ error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environment
 
 static inline void RollPosAndDirFromPool(__SCONTEXT_PAR)
 {
-    int32_t randomNumber = GetNextCeiledRnd(SCONTEXT, SCONTEXT->SelectionPool.NumOfSelectableJumps);
-    FOR_EACH(dir_pool_t, directionPool, SCONTEXT->SelectionPool.DirectionPools)
+    int32_t randomNumber = MakeNextCeiledRnd(SCONTEXT, SCONTEXT->SelectionPool.NumOfSelectableJumps);
+
+    cpp_foreach(directionPool, SCONTEXT->SelectionPool.DirectionPools)
     {
         if (randomNumber >= directionPool->NumOfJumps)
         {
             randomNumber -= directionPool->NumOfJumps;
             continue;
         }
+
         getJumpSelectionInfo(SCONTEXT)->EnvironmentId = getEnvironmentPoolEntryById(directionPool, randomNumber);
         getJumpSelectionInfo(SCONTEXT)->RelativeId = randomNumber % directionPool->NumOfDirections;
+
         return;
     }
+
     SIMERROR = ERR_UNKNOWN;
 }
 
 static inline void RollMmcOffsetEnvId(__SCONTEXT_PAR)
 {
-    getJumpSelectionInfo(SCONTEXT)->OffsetId = GetNextCeiledRnd(SCONTEXT, getEnvironmentLattice(SCONTEXT)->Header->Size);
+    getJumpSelectionInfo(SCONTEXT)->OffsetId = MakeNextCeiledRnd(SCONTEXT, getEnvironmentLattice(SCONTEXT)->Header->Size);
 }
 
 void RollNextKmcSelect(__SCONTEXT_PAR)

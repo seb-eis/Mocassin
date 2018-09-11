@@ -14,8 +14,8 @@ add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOUR
 include_directories(${PROJECT_SOURCE_DIR})
 
 set_property(TARGET ICon.Simulator PROPERTY C_STANDARD 11)
-set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
-set(CMAKE_C_FLAGS_RELEASE "-Wall -O2")
+set(CMAKE_C_FLAGS_DEBUG "-Wall -g -msse3")
+set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -msse3")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

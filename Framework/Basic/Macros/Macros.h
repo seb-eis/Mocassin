@@ -43,3 +43,27 @@
 #define __EVAL(MACRO, ...) __PASTE(MACRO, __VA_ARGS__)
 
 #define __CONCAT(A, B) A ## B
+
+/* Ptr usage */
+
+// Marshal a pointer to a value as a pointer of another type for direct memory manipulation
+#define marshalAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+
+// Access the passed value as the given type
+#define addressAs(__TYPE, __VALUE) *((__TYPE*) (__VALUE))
+
+/* Math macros */
+
+#define getMaxOfTwo(A, B) (((A)>(B))?(A):(B))
+
+#define getMinOfTwo(A, B) (((A)>(B))?(B):(A))
+
+/* Flag macros */
+
+#define flagsAreTrue(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) == (__FLAG)
+
+#define flagsAreFalse(__VALUE, __FLAG) ((__VALUE) & (__FLAG)) != (__FLAG)
+
+#define setFlags(__VALUE, __FLAG) (__VALUE) |= (__FLAG)
+
+#define unsetFlags(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))

@@ -11,9 +11,14 @@
 #pragma once
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Framework/Basic/BaseTypes/Buffers.h"
 
+// Type for 3d movement tracking without tracker id (Does currently not support 16 bit alignment!)
+// Layout@ggc_x86_64 => 32@[24]
 typedef vector3_t tracker_t;
 
+// Type for the state header information
+// Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]
 typedef struct
 {
     int64_t Mcs;
@@ -28,30 +33,28 @@ typedef struct
     int32_t MobileTrackerIdxStartByte;
     int32_t ProbabilityMapStartByte;
 
+    int32_t Padding:32;
+
 } hdr_info_t;
 
+// Type for the state header data
+// Layout@ggc_x86_64 => 8@[8]
 typedef struct
 {
     hdr_info_t* Data;
 
 } hdr_state_t;
 
-typedef struct
-{
-    int32_t Count;
-    byte_t* Start;
-    byte_t* End;
+// Type for the linearized state lattice
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(byte_t) lat_state_t;
 
-} lat_state_t;
+// Type for the linearized tracker state
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(tracker_t) trc_state_t;
 
-typedef struct
-{
-    int32_t     Count;
-    tracker_t*  Start;
-    tracker_t*  End;
-    
-} trc_state_t;
-
+// Type for the particle assigned cycle counter collections
+// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct
 {
     int64_t NumOfCyles;
@@ -63,14 +66,12 @@ typedef struct
     
 } cnt_col_t;
 
-typedef struct
-{
-    int32_t     Count;
-    cnt_col_t*  Start;
-    cnt_col_t*  End;
-    
-} cnt_state_t;
+// Type for the list of cnt collections in the state
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(cnt_col_t) cnt_state_t;
 
+// Type for the state meta information
+// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct
 {
     double  SimulatedTime;
@@ -83,28 +84,24 @@ typedef struct
     
 } meta_info_t;
 
+// Type for the state meta information data access
+// Layout@ggc_x86_64 => 8@[8]
 typedef struct
 {
     meta_info_t* Data;
     
 } mta_state_t;
 
-typedef struct
-{
-    int32_t     Count;
-    int32_t*    Start;
-    int32_t*    End;
+// Type for the storage of the dynmaic tracker indexing
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(int32_t) idx_state_t;
 
-} idx_state_t;
+// Type for the 2d rectangular probability count map
+// Layout@ggc_x86_64 => 24@[8,8,4,4,4,4,4,4,4,4,4,{4}]
+typedef Array_t(int64_t, 2) prb_state_t;
 
-typedef struct
-{
-    int32_t     Count;
-    int64_t*    Start;
-    int64_t*    End;
-
-} prb_state_t;
-
+// Type for the simulation state
+// Layout@ggc_x86_64 => 148@[16,8,8,16,16,16,16,16,16,24]
 typedef struct
 {
     buffer_t    Buffer;

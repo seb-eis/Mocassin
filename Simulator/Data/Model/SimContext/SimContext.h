@@ -11,10 +11,13 @@
 #pragma once
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Simulator/Data/Model/Database/DbModel.h"
 #include "Simulator/Data/Model/State/StateModel.h"
 
+// Type for cluster links
+// Layout@ggc_x86_64 => 2@[1,1]
 typedef struct
 {
     byte_t ClusterId;
@@ -22,14 +25,12 @@ typedef struct
     
 } clu_link_t;
 
-typedef struct
-{
-    int32_t     Count;
-    clu_link_t* Start;
-    clu_link_t* End;
-    
-} clu_links_t;
+// Type for cluster link lists
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(clu_link_t) clu_links_t;
 
+// Type for an environment link
+// Layout@ggc_x86_64 => 24@[4,4,16]
 typedef struct
 {
     int32_t     EnvironmentId;
@@ -38,15 +39,12 @@ typedef struct
     
 } env_link_t;
 
-typedef struct
-{
-    int32_t     Count;
-    env_link_t* Start;
-    env_link_t* End;
-    env_link_t* CurrentEnd;
-    
-} env_links_t;
+// Type for env link list that supports push back operation
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef List_t(env_link_t) env_links_t;
 
+// Type for cluster states and affiliated backups
+// Layout@ggc_x86_64 => 24@[4,4,8,8]
 typedef struct
 {
     int32_t     CodeId;
@@ -56,22 +54,16 @@ typedef struct
     
 } clu_state_t;
 
-typedef struct
-{
-    byte_t          Count;
-    clu_state_t*    Start;
-    clu_state_t*    End;
-    
-} clu_states_t;
+// Type for lists of cluster states
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(clu_state_t) clu_states_t;
 
-typedef struct
-{
-    byte_t  Count;
-    double* Start;
-    double* End;
-    
-} eng_states_t;
+// Type for lists of energy states
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(double) eng_states_t;
 
+// Type for a full environment state definition (Supports 16 bit alignment)
+// Layout@ggc_x86_64 => 96@[1,1,1,1,4,4,4,16,16,16,24,8]
 typedef struct
 {
     bool_t          IsMobile;
@@ -86,10 +78,15 @@ typedef struct
     clu_states_t    ClusterStates;
     env_links_t     EnvironmentLinks;
     env_def_t*      EnvironmentDefinition;
+
 } env_state_t;
 
-DEFINE_MD_ARRAY(env_lattice_t, env_state_t, 4);
+// Type for the 4d rectangular environment state lattice access
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(env_state_t, 4) env_lattice_t;
 
+// Type for the jump selection index information
+// Layout@ggc_x86_64 => 16@[4,4,4,4]
 typedef struct
 {
     int32_t EnvironmentId;
@@ -99,6 +96,8 @@ typedef struct
     
 } roll_info_t;
 
+// Type for the transition energy information
+// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct
 {
     double Energy0;
@@ -110,6 +109,8 @@ typedef struct
     
 } eng_info_t;
 
+// Type for the internal simulation cycle counters
+// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct
 {
     int64_t Cycles;
@@ -121,12 +122,16 @@ typedef struct
     
 } cycle_cnt_t;
 
+// Type for the path energy backups
+// Layout@ggc_x86_64 => 64@[8x8]
 typedef struct
 {
     double PathEnergies[8];
     
 } env_backup_t;
 
+// Type for the cycle state storage
+// Layout@ggc_x86_64 => 208@[48,8,16,64,8,8,8,8,8,8,8,8]
 typedef struct
 {
     cycle_cnt_t     MainCounters;
@@ -145,45 +150,48 @@ typedef struct
     clu_table_t*    WorkClusterTable;
 } cycle_state_t;
 
-typedef struct
-{
-    int32_t* Start;
-    int32_t* End;
-    int32_t* CurrentEnd;
-    
-} env_pool_t;
+// Type for the environment pool access
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef List_t(int32_t) env_pool_t;
 
+// Type for the direction pools
+// Layout@ggc_x86_64 => 40@[24,4,4,4,{4}]
 typedef struct
 {
+    env_pool_t  EnvironmentPool;
     int32_t     NumOfPositions;
     int32_t     NumOfDirections;
     int32_t     NumOfJumps;
-    env_pool_t  EnvironmentPool;
-    
-} dir_pool_t; 
 
-typedef struct
-{
-    int32_t     Count;
-    dir_pool_t* Start;
-    dir_pool_t* End;
+    int32_t     Padding:32;
     
-} dir_pools_t;
+} dir_pool_t;
 
+// Type for lists of direction pools
+// Layout@ggc_x86_64 => 40@[24,4,4,4,{4}]
+typedef Span_t(dir_pool_t) dir_pools_t;
+
+// Type for the jump selection pool
+// Layout@ggc_x86_64 => 64@[4,4,16,40]
 typedef struct
 {
     int32_t         NumOfSelectableJumps;
+    int32_t         NumOfDirectionPools;
     id_redirect_t   NumOfDirectionsToPoolId;
     dir_pools_t     DirectionPools;
     
 } jump_pool_t;
 
+// Type for the program run information
+// Layout@ggc_x86_64 => 16@[8,8]
 typedef struct
 {
-    clock_t StartClock;
-    clock_t LastClock;
+    int64_t StartClock;
+    int64_t LastClock;
 } run_info_t;
 
+// Type for physical simulation values
+// Layout@ggc_x86_64 => 24@[8,8,8]
 typedef struct
 {
     double EnergyConversionFactor;
@@ -192,6 +200,8 @@ typedef struct
     
 } phys_val_t;
 
+// Type for the file string information
+// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct
 {
     char const* DbQueryString;
@@ -204,16 +214,19 @@ typedef struct
     
 } file_info_t;
 
+// Type for floating point buffers with storage of last average
+// Layout@ggc_x86_64 => 32@[8,8,8,8]
 typedef struct
 {
-    int32_t Count;
-    double  LastAverage;
-    double* Start;
-    double* CurrentEnd;
+    double* Begin;
     double* End;
+    double* CapacityEnd;
+    double  LastAverage;
     
 } flp_buffer_t;
 
+// Type for the simulation dynamic model
+// Layout@ggc_x86_64 => 152@[56,24,32,16,24]
 typedef struct
 {
     file_info_t     FileInfo;
@@ -223,8 +236,11 @@ typedef struct
     env_lattice_t   EnvironmentLattice;
 } sim_model_t;
 
+// Type for plugin function pointers
 typedef void (*f_plugin_t)(void* restrict);
 
+// Type for storing multiple plugin function pointers
+// Layout@ggc_x86_64 => 16@[8,8]
 typedef struct
 { 
     f_plugin_t OnDataOutput;
@@ -232,16 +248,21 @@ typedef struct
     
 } plugin_col_t;
 
+// Type for storing the programs cmd arguments
+// Layout@ggc_x86_64 => 16@[8,4,{4}]
 typedef struct
 {
-    int32_t             Count;
     char const* const*  Values;
+    int32_t             Count;
+
+    int32_t             Padding:32;
 
 } cmd_args_t;
 
+// Type for the full simulation context that provides access to all simulation data structures
+// Layout@ggc_x86_64 => 32@[4,]
 typedef struct
 {
-    error_t         ErrorCode;
     mc_state_t      MainState;
     cycle_state_t   CycleState;
     db_model_t      DbModel;
@@ -250,5 +271,6 @@ typedef struct
     pcg32_random_t  RandomNumberGenerator;
     plugin_col_t    Plugins;
     cmd_args_t      CommandArguments;
+    error_t         ErrorCode;
     
 } sim_context_t;

@@ -22,6 +22,7 @@
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Framework/Basic/BaseTypes/Buffers.h"
 
 static const cmdarg_lookup_t* getEssentialCmdArgsResolverTable()
 {
@@ -32,8 +33,7 @@ static const cmdarg_lookup_t* getEssentialCmdArgsResolverTable()
     };
 
     static const cmdarg_lookup_t resolverTable = 
-    { 
-        (int32_t) (sizeof(resolvers) / sizeof(cmdarg_resolver_t)),
+    {
         &resolvers[0],
         &resolvers[sizeof(resolvers) / sizeof(cmdarg_resolver_t)]
     };
@@ -53,7 +53,6 @@ static const cmdarg_lookup_t* getOptionalCmdArgsResolverTable()
 
     static const cmdarg_lookup_t resolverTable =
     {
-        (int32_t) (sizeof(resolvers) / sizeof(cmdarg_resolver_t)),
         &resolvers[0],
         &resolvers[sizeof(resolvers) / sizeof(cmdarg_resolver_t)]
     };
@@ -70,7 +69,7 @@ static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const cmdarg_lookup_t
     error = ValidateCmdKeyArgumentFormat(keyArgument);
     return_if(error, ERR_CONTINUE);
 
-    FOR_EACH(const cmdarg_resolver_t, argResolver, *resolverTable)
+    cpp_foreach(argResolver, *resolverTable)
     {   
         if (strcmp(keyArgument, argResolver->KeyArgument) == 0)
         {
@@ -89,7 +88,7 @@ static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
     error_t error;
 
     const cmdarg_lookup_t* resolverTable = getEssentialCmdArgsResolverTable();
-    int32_t unresolved = resolverTable->Count;
+    size_t unresolved = span_GetSize(*resolverTable);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {
@@ -111,7 +110,7 @@ static error_t ResolveAndSetOptionalCmdArguments(__SCONTEXT_PAR)
     error_t error;
 
     const cmdarg_lookup_t* resolverTable = getOptionalCmdArgsResolverTable();
-    int32_t unresolved = resolverTable->Count;
+    size_t unresolved = span_GetSize(*resolverTable);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {
@@ -136,18 +135,18 @@ void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char co
     error_assert(error, "Failed to resolve optional command line arguments.");
 }
 
-static error_t ConstructEngStateBuffer(eng_states_t *restrict bufferAccess, const byte_t count)
+static error_t ConstructEngStateBuffer(eng_states_t *restrict bufferAccess, const size_t count)
 {
-    buffer_t tmp = AllocateBufferUnchecked(count, sizeof(double));
-    *bufferAccess = BUFFER_TO_ARRAY_WCOUNT(tmp, count, eng_states_t);
-    return tmp.Start ? ERR_OK : ERR_MEMALLOCATION;
+    buffer_t tmp = new_Span(tmp, count*sizeof(double));
+    *bufferAccess = (eng_states_t) span_AsVoid(tmp);
+    return tmp.Begin ? ERR_OK : ERR_MEMALLOCATION;
 }
 
-static error_t ConstructCluStateBuffer(clu_states_t *restrict bufferAccess, const byte_t count)
+static error_t ConstructCluStateBuffer(clu_states_t *restrict bufferAccess, const size_t count)
 {
-    buffer_t tmp = AllocateBufferUnchecked(count, sizeof(clu_state_t));
-    *bufferAccess = BUFFER_TO_ARRAY_WCOUNT(tmp, count, clu_states_t);
-    return tmp.Start ? ERR_OK : ERR_MEMALLOCATION;
+    buffer_t tmp = new_Span(tmp, count*sizeof(clu_state_t));
+    *bufferAccess = (clu_states_t) span_AsVoid(tmp);
+    return tmp.Begin ? ERR_OK : ERR_MEMALLOCATION;
 }
 
 static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t *restrict envDef)
@@ -159,7 +158,7 @@ static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t 
     error = ConstructEngStateBuffer(&env->EnergyStates, FindLastEnvParId(envDef) + 1);
     return_if(error, error);
 
-    error = ConstructCluStateBuffer(&env->ClusterStates, envDef->ClusterDefinitions.Count);
+    error = ConstructCluStateBuffer(&env->ClusterStates, span_GetSize(envDef->ClusterDefinitions));
     return_if(error, error);
 
     return error;
@@ -168,12 +167,10 @@ static error_t ConstructEnvironmentBuffers(env_state_t *restrict env, env_def_t 
 static void ConstructEnvironmentLattice(__SCONTEXT_PAR)
 {
     error_t error;
-    blob_t tmpBlob;
+    vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
+    env_lattice_t lattice = new_Array(lattice, sizes->a, sizes->b, sizes->c, sizes->d);
 
-    error = AllocateMdaChecked(4, sizeof(env_state_t), (int32_t*) getLatticeSizeVector(SCONTEXT), &tmpBlob);
-    error_assert(error, "Failed to construct the environment lattice buffer.");
-
-    setEnvironmentLattice(SCONTEXT, CAST_OBJECT(env_lattice_t, tmpBlob));
+    setEnvironmentLattice(SCONTEXT, lattice);
 
     for (int32_t i = 0; i < getEnvironmentLattice(SCONTEXT)->Header->Size; i++)
     {
@@ -184,9 +181,9 @@ static void ConstructEnvironmentLattice(__SCONTEXT_PAR)
 
 static error_t ConstructLatticeEnergyBuffer(flp_buffer_t* restrict bufferAccess, mmc_header_t* restrict header)
 {
-    buffer_t tmp = AllocateBufferUnchecked(header->AbortSequenceLength, sizeof(double));
-    *bufferAccess = (flp_buffer_t) { header->AbortSequenceLength, 0.0, (void*) tmp.Start, (void*) tmp.End, (void*) tmp.End };
-    return tmp.Start ? ERR_OK : ERR_MEMALLOCATION;
+    buffer_t tmp = new_Span(tmp, header->AbortSequenceLength * sizeof(double));
+    *bufferAccess = (flp_buffer_t) { (void*) tmp.Begin, (void*) tmp.Begin, (void*) tmp.End, 0.0 };
+    return tmp.Begin ? ERR_OK : ERR_MEMALLOCATION;
 }
 
 static void ConstructAbortConditionBuffers(__SCONTEXT_PAR)
@@ -213,13 +210,13 @@ static error_t ConstructSelectionPoolIndexRedirection(__SCONTEXT_PAR)
     int32_t poolCount = 1 + FindMaxJumpDirectionCount(&getTransitionModel(SCONTEXT)->JumpCountTable);
     int32_t poolIndex = 1;
 
-    error = AllocateBufferChecked(poolCount, sizeof(int32_t), &tmpBuffer);
+    error = ctor_Buffer(tmpBuffer, poolCount * sizeof(int32_t));
     return_if(error, error);
 
-    setBufferByteValues(tmpBuffer.Start, GetBufferSize(&tmpBuffer), 0);
-    setDirectionPoolIndexing(SCONTEXT, BUFFER_TO_ARRAY_WCOUNT(tmpBuffer, poolCount, id_redirect_t));
+    setBufferByteValues(tmpBuffer.Begin, span_GetSize(tmpBuffer), 0);
+    setDirectionPoolIndexing(SCONTEXT, (id_redirect_t) span_AsVoid(tmpBuffer));
 
-    FOR_EACH(int32_t, dirCount, getTransitionModel(SCONTEXT)->JumpCountTable)
+    cpp_foreach(dirCount, getTransitionModel(SCONTEXT)->JumpCountTable)
     {
         if ((*dirCount != 0) && (getDirectionPoolIdByJumpCount(SCONTEXT, *dirCount) != 0))
         {
@@ -228,7 +225,6 @@ static error_t ConstructSelectionPoolIndexRedirection(__SCONTEXT_PAR)
         }
     }
 
-    getDirectionPools(SCONTEXT)->Count = poolIndex;  
     return ERR_OK;
 }
 
@@ -237,20 +233,20 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
     error_t error;
 
     buffer_t tmpBuffer;
-    int32_t poolCount = getDirectionPools(SCONTEXT)->Count;
+    size_t poolCount = span_GetSize(*getDirectionPools(SCONTEXT));
     int32_t poolSize = getLatticeInformation(SCONTEXT)->NumOfSelectables;
 
-    error = AllocateBufferChecked(poolCount, sizeof(dir_pool_t), &tmpBuffer);
+    error = ctor_Buffer(tmpBuffer, poolCount * sizeof(dir_pool_t));
     return_if(error, error);
     
-    setDirectionPools(SCONTEXT, BUFFER_TO_ARRAY_WCOUNT(tmpBuffer, poolCount, dir_pools_t));
+    setDirectionPools(SCONTEXT, (dir_pools_t) span_AsVoid(tmpBuffer));
 
-    FOR_EACH(dir_pool_t, dirPool, *getDirectionPools(SCONTEXT))
+    cpp_foreach(dirPool, *getDirectionPools(SCONTEXT))
     {
-        error = AllocateBufferChecked(poolSize, sizeof(env_pool_t), &tmpBuffer);
+        error = ctor_Buffer(tmpBuffer, poolSize * sizeof(env_pool_t));
         return_if(error, error);
 
-        dirPool->EnvironmentPool = BUFFER_TO_LIST(tmpBuffer, env_pool_t);
+        dirPool->EnvironmentPool = (env_pool_t) span_AsList(tmpBuffer);
     }
 
     return ERR_OK;
@@ -267,15 +263,15 @@ static void ConstructJumpSelectionPool(__SCONTEXT_PAR)
     error_assert(error, "Failed to construct selection pool direction buffers.");
 }
 
-static size_t ConfigStateHeaderAccess(__SCONTEXT_PAR)
+static int32_t ConfigStateHeaderAccess(__SCONTEXT_PAR)
 {
     getMainStateHeader(SCONTEXT)->Data = getMainStateBufferAddress(SCONTEXT, 0);
     return sizeof(hdr_info_t);
 }
 
-static size_t ConfigStateMetaAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
+static int32_t ConfigStateMetaAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    size_t cfgBufferBytes = sizeof(meta_info_t);
+    int32_t cfgBufferBytes = sizeof(meta_info_t);
 
     getMainStateHeader(SCONTEXT)->Data->MetaStartByte = usedBufferBytes;   
     getMainStateMetaInfo(SCONTEXT)->Data = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
@@ -283,117 +279,115 @@ static size_t ConfigStateMetaAccess(__SCONTEXT_PAR, const int32_t usedBufferByte
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateLatticeAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateLatticeAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
     lat_state_t* configObject = getMainStateLattice(SCONTEXT);
-    size_t cfgBufferBytes = getLatticeInformation(SCONTEXT)->Lattice.Header->Size;
+    int32_t cfgBufferBytes = getLatticeInformation(SCONTEXT)->Lattice.Header->Size;
     
     getMainStateHeader(SCONTEXT)->Data->LatticeStartByte = usedBufferBytes;
-    configObject->Count = cfgBufferBytes;
-    configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Start + configObject->Count;
+    configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+    configObject->End = configObject->Begin + usedBufferBytes;
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateCountersAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateCountersAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
     cnt_state_t* configObject = getMainStateCounters(SCONTEXT);
-    size_t cfgBufferBytes = sizeof(cnt_col_t) * (size_t) (GetMaxParId(SCONTEXT) + 1);
+    int32_t cfgBufferBytes = sizeof(cnt_col_t) * (int32_t) (GetMaxParId(SCONTEXT) + 1);
     
     getMainStateHeader(SCONTEXT)->Data->CountersStartByte = usedBufferBytes;
-    configObject->Count = cfgBufferBytes / sizeof(cnt_col_t);
-    configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Start + configObject->Count;
+    configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+    configObject->End = configObject->Begin + (usedBufferBytes / sizeof(cnt_col_t));
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateAbstractTrackerAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateAbstractTrackerAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    size_t cfgBufferBytes = 0;
+    int32_t cfgBufferBytes = 0;
     getMainStateHeader(SCONTEXT)->Data->GlobalTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         trc_state_t* configObject = getAbstractMovementTrackers(SCONTEXT);
 
-        configObject->Count = getStructureModel(SCONTEXT)->NumOfGlobalTrackers;
-        configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Start + configObject->Count;
-        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
+        configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+        configObject->End = configObject->Begin + getStructureModel(SCONTEXT)->NumOfGlobalTrackers;
+
+        cfgBufferBytes = span_GetSize(*configObject) * sizeof(tracker_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    size_t cfgBufferBytes = 0;
+    int32_t cfgBufferBytes = 0;
     getMainStateHeader(SCONTEXT)->Data->MobileTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         trc_state_t* configObject = getMobileMovementTrackers(SCONTEXT);
 
-        configObject->Count = getLatticeInformation(SCONTEXT)->NumOfMobiles;
-        configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Start + configObject->Count;
-        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
+        configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+        configObject->End = configObject->Begin + getLatticeInformation(SCONTEXT)->NumOfMobiles;
+
+        cfgBufferBytes = span_GetSize(*configObject) * sizeof(tracker_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    size_t cfgBufferBytes = 0;
+    int32_t cfgBufferBytes = 0;
     getMainStateHeader(SCONTEXT)->Data->StaticTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         trc_state_t* configObject = getStaticMovementTrackers(SCONTEXT);
 
-        configObject->Count = getStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetNumberOfUnitCells(SCONTEXT);
-        configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Start + configObject->Count;
-        cfgBufferBytes = configObject->Count * sizeof(tracker_t);
+        configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+        configObject->End = configObject->Begin + (getStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetNumberOfUnitCells(SCONTEXT));
+
+        cfgBufferBytes = span_GetSize(*configObject)* sizeof(tracker_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    size_t cfgBufferBytes = 0;
+    int32_t cfgBufferBytes = 0;
     getMainStateHeader(SCONTEXT)->Data->MobileTrackerIdxStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         idx_state_t* configObject = getMobileTrackerIndexing(SCONTEXT);
 
-        configObject->Count = getLatticeInformation(SCONTEXT)->NumOfMobiles;
-        cfgBufferBytes = configObject->Count * sizeof(int32_t);
-        configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Start + configObject->Count;
+        configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+        configObject->End = configObject->Begin + getLatticeInformation(SCONTEXT)->NumOfMobiles;
+
+        cfgBufferBytes = span_GetSize(*configObject) * sizeof(int32_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-static size_t ConfigStateJumpProbabilityMapAccess(__SCONTEXT_PAR, const size_t usedBufferBytes)
+static int32_t ConfigStateJumpProbabilityMapAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    size_t cfgBufferBytes = 0;
+    int32_t cfgBufferBytes = 0;
     getMainStateHeader(SCONTEXT)->Data->ProbabilityMapStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
 
     if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
     {
         prb_state_t* configObject = getJumpProbabilityMap(SCONTEXT);
 
-        configObject->Count = getLatticeInformation(SCONTEXT)->NumOfMobiles;
-        cfgBufferBytes = configObject->Count * sizeof(int32_t);
-        configObject->Start = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Start + configObject->Count;
+        configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+        configObject->End = configObject->Begin + getLatticeInformation(SCONTEXT)->NumOfMobiles;
+
+        cfgBufferBytes = span_GetSize(*configObject) * sizeof(int32_t);
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -401,7 +395,7 @@ static size_t ConfigStateJumpProbabilityMapAccess(__SCONTEXT_PAR, const size_t u
 
 static error_t ConstructMainStateBufferAccessors(__SCONTEXT_PAR)
 {
-    size_t usedBufferBytes = 0;
+    int32_t usedBufferBytes = 0;
 
     usedBufferBytes = ConfigStateHeaderAccess(SCONTEXT);
     usedBufferBytes = ConfigStateMetaAccess(SCONTEXT, usedBufferBytes);
@@ -413,7 +407,7 @@ static error_t ConstructMainStateBufferAccessors(__SCONTEXT_PAR)
     usedBufferBytes = ConfigStateMobileTrcIdxAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateJumpProbabilityMapAccess(SCONTEXT, usedBufferBytes);
 
-    return (usedBufferBytes == GetBufferSize(getMainStateBuffer(SCONTEXT)));
+    return (usedBufferBytes == span_GetSize(*getMainStateBuffer(SCONTEXT)));
 }
 
 static void ConstructMainState(__SCONTEXT_PAR)
@@ -422,10 +416,12 @@ static void ConstructMainState(__SCONTEXT_PAR)
 
     setBufferByteValues(getSimulationState(SCONTEXT), sizeof(mc_state_t), 0);
 
-    error = AllocateBufferChecked(getJobInformation(SCONTEXT)->StateSize, 1, getMainStateBuffer(SCONTEXT));
+    size_t stateSize =(size_t)getJobInformation(SCONTEXT)->StateSize;
+
+    error = ctor_Buffer(*getMainStateBuffer(SCONTEXT), stateSize);
     error_assert(error, "Failed to construct main state.");
 
-    setBufferByteValues(getMainStateBuffer(SCONTEXT)->Start, getJobInformation(SCONTEXT)->StateSize, 0);
+    setBufferByteValues(getMainStateBuffer(SCONTEXT)->Begin, stateSize, 0);
 
     error = ConstructMainStateBufferAccessors(SCONTEXT);
     error_assert(error, "Failed to construct main state buffer accessor system.");
@@ -543,9 +539,11 @@ static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
     lattice_t * dbLattice = getDatabaseModelLattice(SCONTEXT);
     lat_state_t * stLattice = getMainStateLattice(SCONTEXT);
 
-    return_if(stLattice->Count != dbLattice->Header->Size, ERR_DATACONSISTENCY);
+    size_t latticeSize = span_GetSize(*stLattice);
 
-    CopyBuffer(dbLattice->Start, stLattice->Start, stLattice->Count);
+    return_if(latticeSize != dbLattice->Header->Size, ERR_DATACONSISTENCY);
+
+    CopyBuffer(dbLattice->Begin, stLattice->Begin, latticeSize);
     return ERR_OK;
 }
 
@@ -554,9 +552,11 @@ static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
     env_lattice_t* envLattice = getEnvironmentLattice(SCONTEXT);
     lat_state_t* stLattice = getMainStateLattice(SCONTEXT);
 
-    return_if(envLattice->Header->Size != stLattice->Count, ERR_DATACONSISTENCY);
+    size_t latticeSize = span_GetSize(*stLattice);
 
-    for (int32_t i = 0; i < stLattice->Count; i++)
+    return_if(envLattice->Header->Size != latticeSize, ERR_DATACONSISTENCY);
+
+    for (int32_t i = 0; i < latticeSize; i++)
     {
         SetEnvStateStatusToDefault(SCONTEXT, i, getStateLatticeEntryById(SCONTEXT, i));
     }

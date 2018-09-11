@@ -92,12 +92,13 @@ static inline void setEnvironmentLattice(__SCONTEXT_PAR, env_lattice_t value)
 
 static inline env_state_t* getEnvironmentStateById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getEnvironmentLattice(SCONTEXT)->Start[id];
+    return &getEnvironmentLattice(SCONTEXT)->Begin[id];
 }
 
 static inline env_state_t* getEnvironmentStateByVector4(__SCONTEXT_PAR, const vector4_t* restrict vector)
 {
-    return MDA_GET_4(*getEnvironmentLattice(SCONTEXT), vector->a, vector->b, vector->c, vector->d);
+    env_lattice_t* envLattice = getEnvironmentLattice(SCONTEXT);
+    return &array_Get(*envLattice, vector->a, vector->b, vector->c, vector->d);
 }
 
 static inline int32_t* getLatticeBlockSizes(__SCONTEXT_PAR)
@@ -281,7 +282,7 @@ static inline env_defs_t* getEnvironmentModels(__SCONTEXT_PAR)
 
 static inline env_def_t* getEnvironmentModelById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getEnvironmentModels(SCONTEXT)->Start[id];
+    return &getEnvironmentModels(SCONTEXT)->Begin[id];
 }
 
 static inline vector4_t* getLatticeSizeVector(__SCONTEXT_PAR)
@@ -296,7 +297,8 @@ static inline jump_counts_t* getJumpDirectionsPerPositionTable(__SCONTEXT_PAR)
 
 static inline int32_t getJumpCountByPositionStatus(__SCONTEXT_PAR, const int32_t posId, const byte_t parId)
 {
-    return *MDA_GET_2(*getJumpDirectionsPerPositionTable(SCONTEXT), posId, parId);
+    jump_counts_t* table = getJumpDirectionsPerPositionTable(SCONTEXT);
+    return array_Get(*table, posId, parId);
 }
 
 static inline jump_assign_t* getJumpIdToPositionsAssignmentTable(__SCONTEXT_PAR)
@@ -311,7 +313,7 @@ static inline jump_dirs_t* getJumpDirections(__SCONTEXT_PAR)
 
 static inline jump_dir_t* getJumpDirectionById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getJumpDirections(SCONTEXT)->Start[id];
+    return &getJumpDirections(SCONTEXT)->Begin[id];
 }
 
 static inline jump_cols_t* getJumpCollections(__SCONTEXT_PAR)
@@ -321,7 +323,7 @@ static inline jump_cols_t* getJumpCollections(__SCONTEXT_PAR)
 
 static inline jump_col_t* getJumpCollectionById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getJumpCollections(SCONTEXT)->Start[id];
+    return &getJumpCollections(SCONTEXT)->Begin[id];
 }
 
 static inline pair_tables_t* getPairEnergyTables(__SCONTEXT_PAR)
@@ -331,7 +333,7 @@ static inline pair_tables_t* getPairEnergyTables(__SCONTEXT_PAR)
 
 static inline pair_table_t* getPairEnergyTableById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getPairEnergyTables(SCONTEXT)->Start[id];
+    return &getPairEnergyTables(SCONTEXT)->Begin[id];
 }
 
 static inline clu_tables_t* getClusterEnergyTables(__SCONTEXT_PAR)
@@ -341,7 +343,7 @@ static inline clu_tables_t* getClusterEnergyTables(__SCONTEXT_PAR)
 
 static inline clu_table_t* getClusterEnergyTableById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getClusterEnergyTables(SCONTEXT)->Start[id];
+    return &getClusterEnergyTables(SCONTEXT)->Begin[id];
 }
 
 /* Main state getter/setter */
@@ -353,7 +355,7 @@ static inline buffer_t* getMainStateBuffer(__SCONTEXT_PAR)
 
 static inline void* getMainStateBufferAddress(__SCONTEXT_PAR, const int32_t offsetBytes)
 {
-    return &getMainStateBuffer(SCONTEXT)->Start[offsetBytes];
+    return &getMainStateBuffer(SCONTEXT)->Begin[offsetBytes];
 }
 
 static inline hdr_state_t* getMainStateHeader(__SCONTEXT_PAR)
@@ -378,7 +380,7 @@ static inline lat_state_t* getMainStateLattice(__SCONTEXT_PAR)
 
 static inline byte_t getStateLatticeEntryById(__SCONTEXT_PAR, const int32_t id)
 {
-    return getMainStateLattice(SCONTEXT)->Start[id];
+    return getMainStateLattice(SCONTEXT)->Begin[id];
 }
 
 static inline cnt_state_t* getMainStateCounters(__SCONTEXT_PAR)
@@ -388,7 +390,7 @@ static inline cnt_state_t* getMainStateCounters(__SCONTEXT_PAR)
 
 static inline cnt_col_t* getMainStateCounterById(__SCONTEXT_PAR, const byte_t id)
 {
-    return &getMainStateCounters(SCONTEXT)->Start[id];
+    return &getMainStateCounters(SCONTEXT)->Begin[id];
 }
 
 static inline trc_state_t* getAbstractMovementTrackers(__SCONTEXT_PAR)
@@ -430,12 +432,12 @@ static inline void setDirectionPoolIndexing(__SCONTEXT_PAR, id_redirect_t value)
 
 static inline int32_t getDirectionPoolIdByJumpCount(__SCONTEXT_PAR, const int32_t count)
 {
-    return getDirectionPoolIndexing(SCONTEXT)->Start[count];
+    return getDirectionPoolIndexing(SCONTEXT)->Begin[count];
 }
 
 static inline void setDirectionPoolIdByJumpCount(__SCONTEXT_PAR, const int32_t count, const int32_t value)
 {
-    getDirectionPoolIndexing(SCONTEXT)->Start[count] = value;
+    getDirectionPoolIndexing(SCONTEXT)->Begin[count] = value;
 }
 
 static inline dir_pools_t* getDirectionPools(__SCONTEXT_PAR)
@@ -450,7 +452,7 @@ static inline void setDirectionPools(__SCONTEXT_PAR, dir_pools_t value)
 
 static inline dir_pool_t* getDirectionPoolById(__SCONTEXT_PAR, const int32_t id)
 {
-    return &getDirectionPools(SCONTEXT)->Start[id];
+    return &getDirectionPools(SCONTEXT)->Begin[id];
 }
 
 static inline dir_pool_t* getDirectionPoolByJumpCount(__SCONTEXT_PAR, const int32_t count)
@@ -476,7 +478,7 @@ static inline char const * getCommandArgumentStringById(__SCONTEXT_PAR, const in
 
 static inline void setCommandArguments(__SCONTEXT_PAR, const int32_t argc, char const * const * argv)
 {
-    *getCommandArguments(SCONTEXT) = (cmd_args_t) { argc, argv };
+    *getCommandArguments(SCONTEXT) = (cmd_args_t) {  argv, argc };
 }
 
 static inline void setProgramRunPath(__SCONTEXT_PAR, char const * value)
@@ -518,24 +520,24 @@ static inline void setEnergyPluginSymbol(__SCONTEXT_PAR, char const * value)
 
 static inline int32_t getEnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id)
 {
-    return dirPool->EnvironmentPool.Start[id];
+    return dirPool->EnvironmentPool.Begin[id];
 }
 
 static inline void setEnvironmentPoolEntryById(dir_pool_t* restrict dirPool, const int32_t id, const int32_t value)
 {
-    dirPool->EnvironmentPool.Start[id] = value;
+    dirPool->EnvironmentPool.Begin[id] = value;
 }
 
 /* Energy table getter/setter */
 
 static inline double getPairEnergyTableEntry(const pair_table_t* restrict table, const byte_t parId0, const byte_t parId1)
 {
-    return *MDA_GET_2(table->EnergyTable, parId0, parId1);
+    return array_Get(table->EnergyTable, parId0, parId1);
 }
 
 static inline double getCluEnergyTableEntry(const clu_table_t* restrict table, const byte_t parId, const int32_t codeId)
 {
-    return *MDA_GET_2(table->EnergyTable, table->ParticleToTableId[parId], codeId);
+    return array_Get(table->EnergyTable, table->ParticleToTableId[parId], codeId);
 }
 
 /* Flag getter/setters */
@@ -552,7 +554,7 @@ static inline void setMainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
 
 static inline void UnsetMainStateFlags(__SCONTEXT_PAR, const bitmask_t flags)
 {
-    FLG_UNSET(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
+    unsetFlags(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
 }
 
 static inline bitmask_t getJobInformationFlags(__SCONTEXT_PAR)
@@ -574,29 +576,29 @@ static inline bitmask_t getJobHeaderFlagsMmc(__SCONTEXT_PAR)
 
 static inline int32_t getEnvironmentPairDefCount(env_state_t* restrict envState)
 {
-    return envState->EnvironmentDefinition->PairDefinitions.Count;
+    return (int32_t) span_GetSize(envState->EnvironmentDefinition->PairDefinitions);
 }
 
 static inline pair_def_t* getEnvironmentPairDefById(env_state_t* restrict envState, const int32_t id)
 {
-    return &envState->EnvironmentDefinition->PairDefinitions.Start[id];
+    return &envState->EnvironmentDefinition->PairDefinitions.Begin[id];
 }
 
 static inline clu_def_t* getEnvironmentCluDefById(env_state_t* restrict envState, const int32_t id)
 {
-    return &envState->EnvironmentDefinition->ClusterDefinitions.Start[id];
+    return &envState->EnvironmentDefinition->ClusterDefinitions.Begin[id];
 }
 
 static inline clu_state_t* getEnvironmentCluStateById(env_state_t* restrict envState, const byte_t id)
 {
-    return &envState->ClusterStates.Start[id];
+    return &envState->ClusterStates.Begin[id];
 }
 
 /* Active delta object getter/setter */
 
 static inline double* getActiveStateEnergyById(__SCONTEXT_PAR, const byte_t id)
 {
-    return &getActiveWorkEnvironment(SCONTEXT)->EnergyStates.Start[id];
+    return &getActiveWorkEnvironment(SCONTEXT)->EnergyStates.Begin[id];
 }
 
 static inline byte_t getActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
@@ -606,12 +608,12 @@ static inline byte_t getActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id
 
 static inline env_link_t* getEnvLinkByJumpLink(__SCONTEXT_PAR, const jump_link_t* restrict link)
 {
-    return &JUMPPATH[link->PathId]->EnvironmentLinks.Start[link->LinkId];
+    return &JUMPPATH[link->PathId]->EnvironmentLinks.Begin[link->LinkId];
 }
 
 static inline double* getPathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
 {
-    return &JUMPPATH[pathId]->EnergyStates.Start[parId];
+    return &JUMPPATH[pathId]->EnergyStates.Begin[parId];
 }
 
 static inline double* getEnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t pathId)

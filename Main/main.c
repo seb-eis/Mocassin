@@ -17,39 +17,11 @@
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 
-typedef struct IntSpan { int* Begin, * End; } IntSpan_t ;
-
-NEW_STRUCTTYPE(struct IntSpan, Int32Span_t);
-
 #if !defined(MC_TESTBUILD)
 
     int main(int argc, char const * const *argv)
     {
-        Array_t(Int32Span_t, 3) array = new_Array(array, 2,3,3);
-
-        for (int i = 0; i < 2; ++i)
-        {
-          for (int j = 0; j < 3; ++j)
-          {
-            for (int k = 0; k < 3; ++k)
-            {
-                IntSpan_t span = new_Span(array_Get(array, i,j,k), 100);
-
-                int32_t index = 0;
-                cpp_foreach(it, span)
-                {
-                    *it = index++;
-                }
-            }
-          }
-        }
-
-        vtypeof_span(array) span = array_Get(array, 1,1,1);
-        cpp_rforeach(it, span)
-        {
-            printf("%i, ", *it);
-        }
-
+        size_t value = sizeof(db_model_t);
         return (0);
     }
 

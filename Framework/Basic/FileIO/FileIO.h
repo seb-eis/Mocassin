@@ -15,6 +15,7 @@
 #include <string.h>
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
+#include "Framework/Basic/BaseTypes/Buffers.h"
 
 // Defines the file stream type
 typedef FILE file_t;
@@ -30,9 +31,6 @@ error_t WriteBufferToStream(file_t* restrict fileStream, const buffer_t* restric
 
 // Print any array of bytes to the target stream in hexadecimal unsigend bytes with the provided number of bytes per line
 error_t WriteBufferHexToStream(file_t* restrict fileStream, const buffer_t* restrict buffer, size_t bytesPerLine);
-
-// Print any array of bytes to the target stream in hexadecimal unsigend integers with the provided number of blocks per line
-error_t WriteBlockHexToStream(file_t* restrict fileStream, const memblock_array_t* restrict blockArray, size_t blocksPerLine);
 
 // Loads a file as binary into the memory. Size is autodetermined. The file has to be opened in "rb" mode
 error_t LoadBufferFromStream(file_t* restrict fileStream, buffer_t* restrict buffer);

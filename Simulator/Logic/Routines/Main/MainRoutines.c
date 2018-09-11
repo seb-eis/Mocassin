@@ -192,8 +192,8 @@ error_t FinishMmcCycleBlock(__SCONTEXT_PAR)
 
 static inline bitmask_t GetTimeoutAbortEval(__SCONTEXT_PAR)
 {
-    clock_t newClock = clock();
-    clock_t lastClock = getRuntimeInformation(SCONTEXT)->LastClock;
+    int64_t newClock = clock();
+    int64_t lastClock = getRuntimeInformation(SCONTEXT)->LastClock;
 
     getMainStateMetaData(SCONTEXT)->TimePerBlock = (newClock - lastClock) / CLOCKS_PER_SEC;
     getMainStateMetaData(SCONTEXT)->ProgramRunTime += (newClock - lastClock) / CLOCKS_PER_SEC;
@@ -308,7 +308,7 @@ error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
 
 static inline int32_t LookupActJumpId(__SCONTEXT_PAR)
 {
-    return *MDA_GET_3(*getJumpIdToPositionsAssignmentTable(SCONTEXT), JUMPPATH[0]->PositionVector.d, JUMPPATH[0]->ParticleId, getJumpSelectionInfo(SCONTEXT)->RelativeId);
+    return array_Get(*getJumpIdToPositionsAssignmentTable(SCONTEXT), JUMPPATH[0]->PositionVector.d, JUMPPATH[0]->ParticleId, getJumpSelectionInfo(SCONTEXT)->RelativeId);
 }
 
 static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
@@ -342,12 +342,12 @@ void SetKmcJumpSelection(__SCONTEXT_PAR)
 
 void SetKmcJumpPathProperties(__SCONTEXT_PAR)
 {
-    vector4_t actVector = JUMPPATH[0]->PositionVector;
+    vector4_t actVector;
     byte_t index = 0;
 
-    FOR_EACH(vector4_t, relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
+    cpp_foreach(relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
     {
-        AddToLhsAndTrimVector4(&actVector, relVector, getLatticeSizeVector(SCONTEXT));
+        actVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, getLatticeSizeVector(SCONTEXT));
         JUMPPATH[index] = getEnvironmentStateByVector4(SCONTEXT, &actVector);
 
         SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, index, JUMPPATH[index]->ParticleId);
@@ -368,7 +368,7 @@ static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
     }
     else
     {
-        getCycleState(SCONTEXT)->ActiveJumpRule = getActiveJumpCollection(SCONTEXT)->JumpRules.Start;
+        getCycleState(SCONTEXT)->ActiveJumpRule = getActiveJumpCollection(SCONTEXT)->JumpRules.Begin;
         while (getActiveJumpRule(SCONTEXT)->StateCode0 < getActiveStateCode(SCONTEXT))
         {
             getCycleState(SCONTEXT)->ActiveJumpRule++;

@@ -10,24 +10,16 @@
 
 #pragma once
 #include <stdint.h>
+#include <immintrin.h>
 
-// Defines the 192 bit 3D double vector struct and the affiliated type
+// Defines 4 component int32_t sse2 vector type with 4x4 bytes
+typedef int32_t sse2v4i __attribute__((vector_size(16)));
+
+// Defines the 192 bit 3D double vector struct and the affiliated type (Does not directly support 16 bit alignment)
 typedef struct { double a, b, c; } vector3_t;
 
-// Defines the 128 bit 4D int vector struct and the affiliated type
+// Defines the 128 bit 4D int vector struct and the affiliated type (Supports 16 bit alignment)
 typedef struct { int32_t a, b, c, d; } vector4_t;
-
-// Perform a scalar operation on any vector with three entries and create a new unamed struct with the result values
-#define VEC3_SC_OPERATION(vec0, scalar, op) {vec0.a op scalar, vec0.b op scalar, vec0.c op scalar}
-
-// Perform a memberwise operation on two vectors with three entries and creates new unamed struct with the result values
-#define VEC3_MW_OPERATION(vec0, vec1, op) {vec0.a op vec1.a, vec0.b op vec1.b, vec0.c op vec1.c}
-
-// Perform a scalar operation on any vector with four entries and create a new unamed struct with the values
-#define VEC4_SC_OPERATION(vec0, scalar, op) {vec0.a op scalar, vec0.b op scalar, vec0.c op scalar, vec0.d op scalar}
-
-// Perform a memberwise operation on two vectors with four entries and creates new unamed struct with the result values
-#define VEC4_MW_OPERATION(vec0, vec1, op) {(vec0).a op (vec1).a, (vec0).b op vec1.b, vec0.c op vec1.c, vec0.c op vec1.c, vec0.d op vec1.d}
 
 // Performs a vector addition (a + b) and returns the resulting vector
 vector3_t AddVector3(const vector3_t* restrict lhs, const vector3_t* restrict rhs);
@@ -36,7 +28,7 @@ vector3_t AddVector3(const vector3_t* restrict lhs, const vector3_t* restrict rh
 vector3_t SubstractVector3(const vector3_t* lhs, const vector3_t* rhs);
 
 // Performs a multiplication of the vector with a scalar and returns the resulting vector
-vector3_t ScalarMultVector3(const vector3_t* lhs, const double rhs);
+vector3_t ScalarMultVector3(const vector3_t* lhs, double rhs);
 
 // Performs a divion of the vector with a scalar and returns the resulting vector
 vector3_t ScalarDivideVector3(const vector3_t* lhs, double rhs);
@@ -75,10 +67,10 @@ vector4_t Vector4FromInt32(int32_t value, const int32_t* restrict blockSizes);
 // Performs a periodic trim of a 4d integer vector with the provided sizes (Loop based, faster than modulo due to rare occurence of actual required trim)
 static inline void PeriodicTrimVector4(vector4_t* restrict vector, const vector4_t* restrict sizes)
 {
-    while (vector->a <  sizes->a) vector->a += sizes->a;
+    while (vector->a <  0) vector->a += sizes->a;
     while (vector->a >= sizes->a) vector->a -= sizes->a;
-    while (vector->b <  sizes->b) vector->b += sizes->b;
+    while (vector->b <  0) vector->b += sizes->b;
     while (vector->b >= sizes->b) vector->b -= sizes->b;
-    while (vector->c <  sizes->c) vector->c += sizes->c;
+    while (vector->c <  0) vector->c += sizes->c;
     while (vector->c >= sizes->c) vector->c -= sizes->c;
 }

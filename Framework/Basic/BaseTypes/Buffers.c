@@ -106,3 +106,57 @@ void MakeArrayBlocks(const int32_t rank, const int32_t dimensions[rank], int32_t
         outBuffer[i] = dimensions[i+1] * multiplier;
     }
 }
+
+bool_t HaveSameBufferContent(const buffer_t* lhs, const buffer_t* rhs)
+{
+    if (lhs->Begin == rhs->Begin && lhs->End == rhs->End)
+    {
+        return true;
+    }
+    if (span_GetSize(*lhs) != span_GetSize(*rhs))
+    {
+        return false;
+    }
+    byte_t* lhsit = lhs->Begin;
+    byte_t* rhsit = rhs->Begin;
+    while (lhsit != lhs->End)
+    {
+        if (*(++lhsit) != *(++rhsit))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void CopyBuffer(byte_t const* source, byte_t* target, const size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        target[i] = source[i];
+    }
+}
+
+error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer)
+{
+    size_t sourceSize = span_GetSize(*sourceBuffer);
+
+    if (sourceSize > span_GetSize(*targetBuffer))
+    {
+        return ERR_BUFFEROVERFLOW;
+    }
+
+    CopyBuffer(sourceBuffer->Begin, targetBuffer->Begin, sourceSize);
+    return ERR_OK;
+}
+
+error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer)
+{
+    if (SaveCopyBuffer(sourceBuffer, targetBuffer) != ERR_OK)
+    {
+        return ERR_BUFFEROVERFLOW;
+    }
+
+    delete_Span(*sourceBuffer);
+    return ERR_OK;
+}
