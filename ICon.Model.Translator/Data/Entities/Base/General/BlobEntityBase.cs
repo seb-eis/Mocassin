@@ -33,11 +33,11 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Parses the blob entity object into the binary data and header properties
         /// </summary>
-        public abstract void ChangeStateToBinary();
+        public abstract void ChangeStateToBinary(IMarshalProvider marshalProvider);
 
         /// <summary>
         /// Parses the binary data and header properties and populates the object
         /// </summary>
-        public abstract void ChangeStateToObject();
+        public abstract void ChangeStateToObject(IMarshalProvider marshalProvider);
     }
 }

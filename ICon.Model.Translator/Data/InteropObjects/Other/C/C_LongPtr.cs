@@ -8,7 +8,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Long pointer object. Placeholder for 8 byte pointers on unmanaged objects
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size =8)]
     public readonly struct C_LongPtr
     {
         [MarshalAs(UnmanagedType.I8)]

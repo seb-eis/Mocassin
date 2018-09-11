@@ -8,13 +8,16 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation pair interaction definition. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 32)]
     public struct C_PairDefinition
     {
+        private C_Vector4 relativeVector;
+
         [MarshalAs(UnmanagedType.I4)]
         private int trackerId;
 
-        private C_Vector4 relativeVector;
+        [MarshalAs(UnmanagedType.I8)]
+        private readonly long longPadding;
 
         public int TrackerId { get => trackerId; set => trackerId = value; }
 

@@ -10,7 +10,7 @@ namespace ICon.Model.Translator
         public List<JumpDirectionEntity> JumpDirections { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(JumpRuleListBinary), nameof(JumpRuleListBinarySize))]
+        [OwnedBlobPropertyAttribute(nameof(JumpRuleListBinary))]
         public JumpRuleListEntity JumpRuleList { get; set; }
 
         [Column("ObjectId")]
@@ -18,9 +18,6 @@ namespace ICon.Model.Translator
 
         [Column("ParticleMask")]
         public long ParticleMask { get; set; }
-
-        [Column("JumpRulesSize")]
-        public int JumpRuleListBinarySize { get; set; }
 
         [Column("JumpRules")]
         public byte[] JumpRuleListBinary { get; set; }

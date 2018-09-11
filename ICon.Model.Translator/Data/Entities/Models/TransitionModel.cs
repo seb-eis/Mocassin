@@ -7,6 +7,14 @@ namespace ICon.Model.Translator
 {
     public class TransitionModel : InteropEntityBase
     {
+        private static IList<InteropStateChangeAction> stateChangeDelegates;
+
+        protected override IList<InteropStateChangeAction> StateChangeActions
+        {
+            get => stateChangeDelegates;
+            set => stateChangeDelegates = value;
+        }
+
         public SimulationPackage SimulationPackage { get; set; }
 
         public List<JumpCollectionEntity> JumpCollections { get; set; }
@@ -17,24 +25,18 @@ namespace ICon.Model.Translator
         [ForeignKey(nameof(SimulationPackage))]
         public int SimulationPackageId { get; set; }
 
-        [Column("JumpCounTableSize")]
-        public int JumpCountTableBinarySize { get; set; }
-
         [Column("JumpCountTable")]
         public byte[] JumpCountTableBinary { get; set; }
-
-        [Column("JumpAssignTableSize")]
-        public int JumpAssignTableBinarySize { get; set; }
 
         [Column("JumpAssignTable")]
         public byte[] JumpAssignTableBinary { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(JumpCountTableBinary), nameof(JumpCountTableBinarySize))]
+        [OwnedBlobProperty(nameof(JumpCountTableBinary))]
         public JumpCountTableEntity JumpCountTable { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(JumpAssignTableBinary), nameof(JumpAssignTableBinarySize))]
+        [OwnedBlobProperty(nameof(JumpAssignTableBinary))]
         public JumpAssignTableEntity JumpAssignTable { get; set; }
     }
 }

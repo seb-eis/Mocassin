@@ -55,8 +55,34 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var context = new InteropDbContext("./interopTest.db", true);
-            Console.WriteLine();
+            var binArray0 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+            var binArray1 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+            var binArray2 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+            var binArray3 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+
+            var tasks = new Task[4];
+            var clock = Stopwatch.StartNew();
+            using (var provider = new MarshalProvider())
+            {
+                tasks[0] = Task.Run(() => binArray0.ChangeStateToBinary(provider));
+                tasks[1] = Task.Run(() => binArray1.ChangeStateToBinary(provider));
+                tasks[2] = Task.Run(() => binArray2.ChangeStateToBinary(provider));
+                tasks[3] = Task.Run(() => binArray3.ChangeStateToBinary(provider));
+            }
+            Task.WaitAll(tasks);
+            using (var provider = new MarshalProvider())
+            {
+                tasks[0] = Task.Run(() => binArray0.ChangeStateToObject(provider));
+                tasks[1] = Task.Run(() => binArray1.ChangeStateToObject(provider));
+                tasks[2] = Task.Run(() => binArray2.ChangeStateToObject(provider));
+                tasks[3] = Task.Run(() => binArray3.ChangeStateToObject(provider));
+            }
+            Task.WaitAll(tasks);
+
+            Console.WriteLine("Time is {0}", clock.ElapsedMilliseconds);
+
+            //var context = new InteropDbContext("./interopTest.db", true);
+            Console.ReadLine();
         }
 
 

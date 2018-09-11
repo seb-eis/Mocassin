@@ -10,19 +10,19 @@ namespace ICon.Model.Translator
         public JumpCollectionEntity JumpCollection { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(JumpSequenceBinary), nameof(JumpSequenceBinarySize))]
+        [OwnedBlobProperty(nameof(JumpSequenceBinary))]
         public JumpSequenceEntity JumpSequence { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(JumpLinkSequenceBinary), nameof(JumpLinkSequenceBinarySize))]
+        [OwnedBlobProperty(nameof(JumpLinkSequenceBinary))]
         public JumpLinkSequenceEntity JumpLinkSequence { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(LocalMoveSequenceBinary), nameof(LocalMoveSequenceBinarySize))]
+        [OwnedBlobProperty(nameof(LocalMoveSequenceBinary))]
         public MoveSequenceEntity LocalMoveSequence { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(GlobalMoveSequenceBinary), nameof(GlobalMoveSequenceBinarySize))]
+        [OwnedBlobPropertyAttribute(nameof(GlobalMoveSequenceBinary))]
         public MoveSequenceEntity GlobalMoveSequence { get; set; }
 
         [Column("JumpCollectionId")]
@@ -44,26 +44,14 @@ namespace ICon.Model.Translator
         [Column("FieldProjection")]
         public double FieldProjectionFactor { get; set; }
 
-        [Column("JumpSequenceSize")]
-        public int JumpSequenceBinarySize { get; set; }
-
         [Column("JumpSequence")]
         public byte[] JumpSequenceBinary { get; set; }
-
-        [Column("JumpLinkSequenceSize")]
-        public int JumpLinkSequenceBinarySize { get; set; }
 
         [Column("JumpLinkSequence")]
         public byte[] JumpLinkSequenceBinary { get; set; }
 
-        [Column("LocalMoveSequenceSize")]
-        public int LocalMoveSequenceBinarySize { get; set; }
-
         [Column("LocalMoveSequence")]
         public byte[] LocalMoveSequenceBinary { get; set; }
-
-        [Column("GlobalMoveSequenceSize")]
-        public int GlobalMoveSequenceBinarySize { get; set; }
 
         [Column("GlobalMoveSequence")]
         public byte[] GlobalMoveSequenceBinary { get; set; }

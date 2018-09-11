@@ -7,6 +7,14 @@ namespace ICon.Model.Translator
 {
     public class JobModel : InteropEntityBase
     {
+        private static IList<InteropStateChangeAction> stateChangeDelegates;
+
+        protected override IList<InteropStateChangeAction> StateChangeActions
+        {
+            get => stateChangeDelegates;
+            set => stateChangeDelegates = value;
+        }
+
         public SimulationPackage SimulationPackage { get; set; }
 
         public StructureModel StructureModel { get; set; }

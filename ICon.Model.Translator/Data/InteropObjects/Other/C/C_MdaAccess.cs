@@ -8,7 +8,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// C multidimensional array access object. Placeholder for array access structs with 4 byte count field
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 24)]
     public readonly struct C_MdaAccess
     {
         private readonly C_LongPtr header;

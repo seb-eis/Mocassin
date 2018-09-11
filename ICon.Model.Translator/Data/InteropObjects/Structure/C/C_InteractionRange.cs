@@ -8,7 +8,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation interaction range object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct C_InteractionRange
     {
         [MarshalAs(UnmanagedType.I4)]
@@ -19,6 +19,9 @@ namespace ICon.Model.Translator
 
         [MarshalAs(UnmanagedType.I4)]
         private int c;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
 
         public int A { get => a; set => a = value; }
 

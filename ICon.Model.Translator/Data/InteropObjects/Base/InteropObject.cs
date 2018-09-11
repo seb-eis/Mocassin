@@ -12,6 +12,11 @@ namespace ICon.Model.Translator
     public abstract class InteropObject
     {
         /// <summary>
+        /// Get the size of the binary state of the object
+        /// </summary>
+        public abstract int BinarySize { get; }
+
+        /// <summary>
         /// Write the internal object information to its unmanaged representation using the provided target buffer
         /// </summary>
         /// <param name="targetBuffer"></param>
@@ -57,6 +62,11 @@ namespace ICon.Model.Translator
         /// Refernce access to the wrapped structure
         /// </summary>
         public ref T Structure => ref structure;
+
+        /// <summary>
+        /// Get the binary size of the umnanaged structure
+        /// </summary>
+        public override int BinarySize => Marshal.SizeOf(typeof(T));
 
         /// <summary>
         /// Writes the byte representation of the wrapped struct to the target buffer at specififed offset

@@ -5,7 +5,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation Vector 4 object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct C_Vector4
     {
         [MarshalAs(UnmanagedType.I4)]

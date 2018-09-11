@@ -35,5 +35,24 @@ namespace ICon.Model.Translator
         /// <param name="offset"></param>
         /// <param name="structure"></param>
         void StructureToBytes<TStruct>(byte[] buffer, int offset, in TStruct structure) where TStruct : struct;
+
+        /// <summary>
+        /// Marshal all the passed structures to the passed byte buffer stating at the specified offset
+        /// </summary>
+        /// <typeparam name="TStruct"></typeparam>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="structures"></param>
+        void ManyStructuresToBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures) where TStruct : struct;
+
+        /// <summary>
+        /// Marshals the contents of the passed byte buffer enclosed by offset and upper bound to many structures
+        /// </summary>
+        /// <typeparam name="TStruct"></typeparam>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="upperBound"></param>
+        /// <returns></returns>
+        IEnumerable<TStruct> BytesToManyStructures<TStruct>(byte[] buffer, int offset, int upperBound) where TStruct : struct;
     }
 }

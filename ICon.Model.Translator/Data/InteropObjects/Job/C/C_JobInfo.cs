@@ -8,12 +8,9 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 72)]
     public struct C_JobInfo
     {
-        [MarshalAs(UnmanagedType.I4)]
-        private int objectId;
-
         [MarshalAs(UnmanagedType.I8)]
         private long jobFlags;
 
@@ -36,6 +33,12 @@ namespace ICon.Model.Translator
         private double minimalSuccessRate;
 
         private readonly C_LongPtr jobHeaderPtr;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private int objectId;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
 
         public int ObjectId { get => objectId; set => objectId = value; }
 

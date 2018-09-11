@@ -8,14 +8,11 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 40)]
     public struct C_KmcJobHeader
     {
         [MarshalAs(UnmanagedType.I8)]
         private long jobFalgs;
-
-        [MarshalAs(UnmanagedType.I4)]
-        private int dynamicTrackerCount;
 
         [MarshalAs(UnmanagedType.R8)]
         double fieldMagnitude;
@@ -25,6 +22,12 @@ namespace ICon.Model.Translator
 
         [MarshalAs(UnmanagedType.R8)]
         double fixedNormFactor;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private int dynamicTrackerCount;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
 
         public long JobFalgs { get => jobFalgs; set => jobFalgs = value; }
 

@@ -8,7 +8,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 32)]
     public struct C_MmcJobHeader
     {
         [MarshalAs(UnmanagedType.I8)]
@@ -25,6 +25,9 @@ namespace ICon.Model.Translator
 
         [MarshalAs(UnmanagedType.I4)]
         private int abortSampleInterval;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
 
         public long JobFlags { get => jobFlags; set => jobFlags = value; }
 

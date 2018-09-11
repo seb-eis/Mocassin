@@ -62,7 +62,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Parses the binary header and data array and populates the matrix. Nulls out the binary info after completion
         /// </summary>
-        public override void ChangeStateToObject()
+        public override void ChangeStateToObject(IMarshalProvider marshalProvider)
         {
             int itemSize = Marshal.SizeOf(default(T));
             int arraySize = (BinaryState.Length - HeaderSize) / itemSize;
@@ -74,7 +74,7 @@ namespace ICon.Model.Translator
                 IndexSkips[i] = BitConverter.ToInt32(BinaryState, sizeof(int) * (2 + i));
             }
 
-            Values = new T[arraySize].Populate(BinaryState.ByteArrayToUnmanaged<T>(HeaderSize));
+            Values = new T[arraySize].Populate(marshalProvider.BytesToManyStructures<T>(BinaryState, HeaderSize, BinaryState.Length));
 
             BinaryState = null;
         }
@@ -82,7 +82,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Parses the object into its binary header and data array. Nulls out the data objects afterwards
         /// </summary>
-        public override void ChangeStateToBinary()
+        public override void ChangeStateToBinary(IMarshalProvider marshalProvider)
         {
             int itemSize = Marshal.SizeOf(default(T));
             BinaryState = new byte[HeaderSize + itemSize * Values.Length];
@@ -91,7 +91,7 @@ namespace ICon.Model.Translator
             Buffer.BlockCopy(BitConverter.GetBytes(Length), 0, BinaryState, sizeof(int), sizeof(int));
             Buffer.BlockCopy(IndexSkips, 0, BinaryState, 2 * sizeof(int), IndexSkips.Length * sizeof(int));
 
-            Values.UnmanagedToByteArray(BinaryState, HeaderSize);
+            marshalProvider.ManyStructuresToBytes(BinaryState, HeaderSize, Values);
 
             Values = null;
             IndexSkips = new int[0];

@@ -7,8 +7,10 @@ using ICon.Framework.Extensions;
 
 namespace ICon.Model.Translator
 {
-    public class MarshalProvider : IDisposable
+    public class MarshalProvider : IDisposable, IMarshalProvider
     {
+        private object PoolLock { get; } = new object();
+
         private Dictionary<Type, List<MarshalTarget>> MarshalTargetPool { get; }
 
         public MarshalProvider()
@@ -30,12 +32,38 @@ namespace ICon.Model.Translator
             }
         }
 
+        public IEnumerable<TStruct> BytesToManyStructures<TStruct>(byte[] buffer, int offset, int upperBound) where TStruct : struct
+        {
+            using (var target = GetMarshalTarget(typeof(TStruct)))
+            {
+                for (int i = offset; i < upperBound; i += target.TypeSize)
+                {
+                    Marshal.Copy(buffer, i, target.Pointer, target.TypeSize);
+                    yield return Marshal.PtrToStructure<TStruct>(target.Pointer);
+                }
+            }
+        }
+
         public void StructureToBytes<TStruct>(byte[] buffer, int offset, in TStruct structure) where TStruct : struct
         {
             using (var target = GetMarshalTarget(typeof(TStruct)))
             {
                 Marshal.StructureToPtr(structure, target.Pointer, true);
                 Marshal.Copy(target.Pointer, buffer, offset, target.TypeSize);
+            }
+        }
+
+        public void ManyStructuresToBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures) where TStruct : struct
+        {
+            using (var target = GetMarshalTarget(typeof(TStruct)))
+            {
+                int index = offset;
+                foreach (var item in structures)
+                {
+                    Marshal.StructureToPtr(item, target.Pointer, true);
+                    Marshal.Copy(target.Pointer, buffer, index, target.TypeSize);
+                    index += target.TypeSize;
+                }
             }
         }
 
@@ -57,12 +85,15 @@ namespace ICon.Model.Translator
 
         protected List<MarshalTarget> GetMarshalTargetList(Type structType)
         {
-            if (!MarshalTargetPool.TryGetValue(structType, out var list))
+            lock (PoolLock)
             {
-                list = new List<MarshalTarget>(4).Populate(() => GetNewMarshalTarget(structType), 4);
-                MarshalTargetPool.Add(structType, list);
+                if (!MarshalTargetPool.TryGetValue(structType, out var list))
+                {
+                    list = new List<MarshalTarget>(4).Populate(() => GetNewMarshalTarget(structType), 4);
+                    MarshalTargetPool.Add(structType, list);
+                }
+                return list;
             }
-            return list;
         }
 
         public MarshalTarget GetNewMarshalTarget(Type structType)

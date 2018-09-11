@@ -8,16 +8,16 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation jump link object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
     public struct C_JumpLink
     {
-        [MarshalAs(UnmanagedType.U1)]
-        private byte jumpPathId;
+        [MarshalAs(UnmanagedType.I4)]
+        private int jumpPathId;
 
         [MarshalAs(UnmanagedType.I4)]
         private int linkId;
 
-        public byte JumpPathId { get => jumpPathId; set => jumpPathId = value; }
+        public int JumpPathId { get => jumpPathId; set => jumpPathId = value; }
 
         public int LinkId { get => linkId; set => linkId = value; }
     }

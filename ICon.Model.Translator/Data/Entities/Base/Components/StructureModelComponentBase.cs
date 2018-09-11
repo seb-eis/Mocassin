@@ -7,6 +7,14 @@ namespace ICon.Model.Translator
 {
     public class StructureModelComponentBase : InteropEntityBase
     {
+        private static IList<InteropStateChangeAction> stateChangeDelegates;
+
+        protected override IList<InteropStateChangeAction> StateChangeActions
+        {
+            get => stateChangeDelegates;
+            set => stateChangeDelegates = value;
+        }
+
         [ForeignKey(nameof(StructureModel))]
         public int StructureModelId { get; set; }
 

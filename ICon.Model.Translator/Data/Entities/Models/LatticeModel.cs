@@ -7,6 +7,14 @@ namespace ICon.Model.Translator
 {
     public class LatticeModel : InteropEntityBase
     {
+        private static IList<InteropStateChangeAction> stateChangeDelegates;
+
+        protected override IList<InteropStateChangeAction> StateChangeActions
+        {
+            get => stateChangeDelegates;
+            set => stateChangeDelegates = value;
+        }
+
         public SimulationPackage SimulationPackage { get; set; }
 
         [Column("PackageId")]
@@ -16,14 +24,8 @@ namespace ICon.Model.Translator
         [Column("LatticeInfo")]
         public byte[] LatticeInfoBinary { get; set; }
 
-        [Column("LatticeSize")]
-        public int LatticeBinarySize { get; set; }
-
         [Column("Lattice")]
         public byte[] LatticeBinary { get; set; }
-
-        [Column("EnergyBackgroundSize")]
-        public int EnergyBackgroundBinarySize { get; set; }
 
         [Column("EnergyBackground")]
         public byte[] EnergyBackgroundBinary { get; set; }
@@ -33,11 +35,11 @@ namespace ICon.Model.Translator
         public LatticeInfo LatticeInfo { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(LatticeBinary), nameof(LatticeBinarySize))]
+        [OwnedBlobProperty(nameof(LatticeBinary))]
         public LatticeEntity Lattice { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(EnergyBackgroundBinary), nameof(EnergyBackgroundBinarySize))]
+        [OwnedBlobProperty(nameof(EnergyBackgroundBinary))]
         public EnergyBackgroundEntity EnergyBackground { get; set; }
     }
 }

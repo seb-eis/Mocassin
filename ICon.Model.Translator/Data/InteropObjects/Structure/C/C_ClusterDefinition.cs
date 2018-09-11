@@ -8,14 +8,17 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Simulation cluster definition object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 9 * sizeof(int))]
+    [StructLayout(LayoutKind.Sequential, Size = 40)]
     public struct C_ClusterDefinition
     {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8 * sizeof(int))]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         private int[] relativePositionIds;
 
         [MarshalAs(UnmanagedType.I4)]
         private int tableId;
+
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
 
         public int[] RelativePositionIds
         {

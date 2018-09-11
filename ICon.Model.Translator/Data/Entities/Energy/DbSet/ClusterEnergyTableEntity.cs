@@ -12,24 +12,18 @@ namespace ICon.Model.Translator
         public ByteBuffer64 ParticleToTableIds { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(EnergyTableBinary), nameof(EnergyTableBinarySize))]
+        [OwnedBlobProperty(nameof(EnergyTableBinary))]
         public EnergyTableEntity EnergyTable { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(OccupationCodeListBinary), nameof(OccupationCodeListBinarySize))]
+        [OwnedBlobProperty(nameof(OccupationCodeListBinary))]
         public OccupationCodeListEntity OccupationCodeList { get; set; }
 
         [Column("ObjectId")]
         public int ObjectId { get; set; }
 
         [Column("EnergyTable")]
-        public int EnergyTableBinarySize { get; set; }
-
-        [Column("EnergyTableSize")]
         public byte[] EnergyTableBinary { get; set; }
-
-        [Column("OccupationCodesSize")]
-        public int OccupationCodeListBinarySize { get; set; }
 
         [Column("OccupationCodes")]
         public byte[] OccupationCodeListBinary { get; set; }

@@ -10,13 +10,10 @@ namespace ICon.Model.Translator
         [Column("ObjectId")]
         public int ObjectId { get; set; }
 
-        [Column("EnergyTableSize")]
-        public int EnergyTableBinarySize { get; set; }
-
         [Column("EnergyTable")]
         public byte[] EnergyTableBinary { get; set; }
 
-        [OwendBlobProperty(nameof(EnergyTableBinary), nameof(EnergyTableBinarySize))]
+        [OwnedBlobPropertyAttribute(nameof(EnergyTableBinary))]
         EnergyTableEntity EnergyTable { get; set; }
     }
 }

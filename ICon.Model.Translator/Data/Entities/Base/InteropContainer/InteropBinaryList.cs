@@ -20,6 +20,8 @@ namespace ICon.Model.Translator
         [NotMapped]
         public IList<T> Values { get; set; }
 
+        public override int BlobSize { get => GetBinarySizeOfValueList(); protected set => base.BlobSize = value; }
+
         /// <summary>
         /// Get or set the heaedr size. Return always 0 and throws on set
         /// </summary>
@@ -32,7 +34,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Changes the warpped list into a binary array format
         /// </summary>
-        public override void ChangeStateToBinary()
+        public override void ChangeStateToBinary(IMarshalProvider marshalProvider)
         {
             if (Values == null)
             {
@@ -40,22 +42,20 @@ namespace ICon.Model.Translator
             }
 
             BinaryState = new byte[GetBinarySizeOfValueList()];
-            Values.UnmanagedToByteArray(BinaryState, 0);
-            Values = null;
+            marshalProvider.ManyStructuresToBytes(BinaryState, 0, Values);
         }
 
         /// <summary>
         /// Changes the set binary array format into a list of values
         /// </summary>
-        public override void ChangeStateToObject()
+        public override void ChangeStateToObject(IMarshalProvider marshalProvider)
         {
             if (BinaryState == null)
             {
                 throw new InvalidOperationException("Binary state is null");
             }
 
-            Values = BinaryState.ByteArrayToUnmanaged<T>(0).ToList();
-            BinaryState = null;
+            Values = marshalProvider.BytesToManyStructures<T>(BinaryState, 0, BinaryState.Length).ToList();
         }
 
         /// <summary>

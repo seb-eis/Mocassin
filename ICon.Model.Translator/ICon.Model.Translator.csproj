@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Data\Entities\Job\DbSet\" />
     <Folder Include="Data\InteropObjects\Transition\Net\" />
-    <Folder Include="Data\Objects\" />
     <Folder Include="Translator\TranslatorSystem\" />
     <Folder Include="Translator\Components\Energies\" />
     <Folder Include="Translator\Components\" />

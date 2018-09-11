@@ -7,6 +7,14 @@ namespace ICon.Model.Translator
 {
     public class StructureModel : InteropEntityBase
     {
+        private static IList<InteropStateChangeAction> stateChangeDelegates;
+
+        protected override IList<InteropStateChangeAction> StateChangeActions
+        {
+            get => stateChangeDelegates;
+            set => stateChangeDelegates = value;
+        }
+
         public SimulationPackage SimulationPackage { get; set; }
 
         [Column("PackageId")]
@@ -19,9 +27,6 @@ namespace ICon.Model.Translator
         [Column("NumOfGlobalTrackers")]
         public int NumOfGlobalTrackers { get; set; }
 
-        [Column("CellTrackerIndexingSize")]
-        public int PositionCellTrackerIndexingBinarySize { get; set; }
-
         [Column("CellTrackerIndexing")]
         public byte[] PositionCellTrackerIndexingBinary { get; set; }
 
@@ -31,7 +36,7 @@ namespace ICon.Model.Translator
         public List<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(PositionCellTrackerIndexingBinary), nameof(PositionCellTrackerIndexingBinarySize))]
+        [OwnedBlobProperty(nameof(PositionCellTrackerIndexingBinary))]
         public IndexRedirectionListEntity PositionCellTrackerIndexing { get; set; }
 
         [NotMapped]

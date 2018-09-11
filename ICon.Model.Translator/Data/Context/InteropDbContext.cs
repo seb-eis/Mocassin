@@ -12,14 +12,14 @@ namespace ICon.Model.Translator
     public class InteropDbContext : DbContext
     {
         /// <summary>
-        /// The database filename 
-        /// </summary>
-        private string DbFilename { get; }
-
-        /// <summary>
         /// List of actions performed on model building
         /// </summary>
         private static IList<Action<ModelBuilder>> ModelBuildActions { get; set; }
+
+        /// <summary>
+        /// The database filename 
+        /// </summary>
+        private string DbFilename { get; }
 
         public DbSet<SimulationPackage> SimulationPackages { get; set; }
 
@@ -74,11 +74,18 @@ namespace ICon.Model.Translator
         public override int SaveChanges()
         {
             base.SaveChanges();
-            foreach (var item in Blobs)
+
+            using (var marhshalProvider = new MarshalProvider())
             {
-                item.ChangeStateToBinary();
+                foreach (var item in Blobs)
+                {
+                    item.ChangeStateToBinary(marhshalProvider);
+                }
+
+                PerformActionOnAllInteropEntities(a => a.ChangePropertyStatesToBinaries(marhshalProvider));
+
+                return base.SaveChanges();
             }
-            return base.SaveChanges();
         }
 
         /// <summary>
@@ -126,20 +133,46 @@ namespace ICon.Model.Translator
         protected List<Action<ModelBuilder>> CreateRedirectionDelegates()
         {
             var list = new List<Action<ModelBuilder>>();
-            foreach (var item in GetType().GetProperties().Where(a => a.PropertyType.IsGenericType))
+            foreach (var dbSetProperty in GetDbSetPropertyInfos())
             {
-                if (item.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                foreach (var property in dbSetProperty.PropertyType.GetGenericArguments()[0].GetProperties())
                 {
-                    foreach (var property in item.PropertyType.GetGenericArguments()[0].GetProperties())
+                    if (typeof(BlobEntityBase).IsAssignableFrom(property.PropertyType))
                     {
-                        if (typeof(BlobEntityBase).IsAssignableFrom(property.PropertyType))
-                        {
-                            list.Add(builder => builder.Entity(property.PropertyType).ToTable(nameof(Blobs)));
-                        }
+                        list.Add(builder => builder.Entity(property.PropertyType).ToTable(nameof(Blobs)));
                     }
                 }
             }
             return list;
+        }
+
+        protected void PerformActionOnAllInteropEntities(Action<InteropEntityBase> action)
+        {
+            foreach (var dbSetProperty in GetDbSetPropertyInfos())
+            {
+                if (typeof(InteropEntityBase).IsAssignableFrom(dbSetProperty.PropertyType.GetGenericArguments()[0]))
+                {
+                    foreach (var item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this))
+                    {
+                        action(item);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all database sets property info of the context by reflection
+        /// </summary>
+        /// <returns></returns>
+        protected IEnumerable<PropertyInfo> GetDbSetPropertyInfos()
+        {
+            foreach (var item in GetType().GetProperties().Where(a => a.PropertyType.IsGenericType))
+            {
+                if (item.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                {
+                    yield return item;
+                }
+            }
         }
     }
 }

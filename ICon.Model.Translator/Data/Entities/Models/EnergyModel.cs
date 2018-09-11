@@ -7,6 +7,14 @@ namespace ICon.Model.Translator
 {
     public class EnergyModel : InteropEntityBase
     {
+        private static IList<InteropStateChangeAction> stateChangeDelegates;
+
+        protected override IList<InteropStateChangeAction> StateChangeActions
+        {
+            get => stateChangeDelegates;
+            set => stateChangeDelegates = value;
+        }
+
         public SimulationPackage SimulationPackage { get; set; }
 
         [Column("PackageId")]

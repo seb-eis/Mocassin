@@ -16,14 +16,8 @@ namespace ICon.Model.Translator
         [Column("UpdateParticleIds")]
         public byte[] UpdateParticleIdsBinary { get; set; }
 
-        [Column("PairDefinitionsSize")]
-        public int PairDefinitionListBinarySize { get; set; }
-
         [Column("PairDefinitions")]
         public byte[] PairDefinitionListBinary { get; set; }
-
-        [Column("ClusterDefinitionsSize")]
-        public int ClusterDefinitionListBinarySize { get; set; }
 
         [Column("ClusterDefinitions")]
         public byte[] ClusterDefinitionListBinary { get; set; }
@@ -37,11 +31,11 @@ namespace ICon.Model.Translator
         public ByteBuffer64 UpdateParticleIds { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(PairDefinitionListBinary), nameof(PairDefinitionListBinarySize))]
+        [OwnedBlobProperty(nameof(PairDefinitionListBinary))]
         public PairDefinitionListEntity PairDefinitionList { get; set; }
 
         [NotMapped]
-        [OwendBlobProperty(nameof(ClusterDefinitionListBinary), nameof(ClusterDefinitionListBinarySize))]
+        [OwnedBlobProperty(nameof(ClusterDefinitionListBinary))]
         public ClusterDefinitionListEntity GetClusterDefinitionList { get; set; }
     }
 }
