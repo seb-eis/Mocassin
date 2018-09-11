@@ -35,6 +35,6 @@ static inline double CalcEnergyConversionFactor(__SCONTEXT_PAR)
     return 1.0 / (getJobInformation(SCONTEXT)->Temperature * NATCONST_BLOTZMANN);
 }
 
-error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters);
+error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, CycleCounterState_t* counters);
 
-error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, phys_val_t* factors);
+error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, PhysicalInfo_t* factors);

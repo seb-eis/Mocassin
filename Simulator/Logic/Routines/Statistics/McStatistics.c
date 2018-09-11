@@ -12,14 +12,14 @@
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 
-error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters)
+error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, CycleCounterState_t* counters)
 {
     if (counters == NULL)
     {
         return ERR_NULLPOINTER;
     }
 
-    setBufferByteValues(counters, sizeof(cycle_cnt_t), 0);
+    setBufferByteValues(counters, sizeof(CycleCounterState_t), 0);
     counters->TotalGoalMcs = getJobInformation(SCONTEXT)->TargetMcsp * getLatticeInformation(SCONTEXT)->NumOfMobiles;
 
     int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
@@ -33,7 +33,7 @@ error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, cycle_cnt_t* counters)
     return ERR_OK;
 }
 
-error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, phys_val_t* factors)
+error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, PhysicalInfo_t* factors)
 {
     if (factors == NULL)
     {

@@ -16,18 +16,18 @@
 
 /* Local helper routines */
 
-static inline int32_t LookupEnvironmentPoolId(jump_pool_t* restrict selectionPool, const jump_counts_t* restrict jumpCountTable, const env_state_t* restrict environment)
+static inline int32_t LookupEnvironmentPoolId(JumpSelectionPool_t* restrict selectionPool, const JumpCountTable_t* restrict jumpCountTable, const EnvironmentState_t* restrict environment)
 {
     int32_t idRedirect = array_Get(*jumpCountTable, environment->PositionVector.d, environment->ParticleId);
     return span_Get(selectionPool->NumOfDirectionsToPoolId, idRedirect);
 }
 
-static inline void PushBackEnvIdToDirectionPool(dir_pool_t *restrict directionPool, const int32_t entry)
+static inline void PushBackEnvIdToDirectionPool(DirectionPool_t *restrict directionPool, const int32_t entry)
 {
     list_PushBack(directionPool->EnvironmentPool, entry);
 }
 
-static inline bool_t TryPushBackEnvIdToDirectionPool(dir_pool_t* restrict directionPool, const int32_t entry)
+static inline bool_t TryPushBackEnvIdToDirectionPool(DirectionPool_t* restrict directionPool, const int32_t entry)
 {
     if (!list_CanPushBack(directionPool->EnvironmentPool))
     {
@@ -37,12 +37,12 @@ static inline bool_t TryPushBackEnvIdToDirectionPool(dir_pool_t* restrict direct
     return true;
 }
 
-static inline int32_t PopBackDirectionEnvPool(dir_pool_t *restrict directionPool)
+static inline int32_t PopBackDirectionEnvPool(DirectionPool_t *restrict directionPool)
 {
     return list_PopBack(directionPool->EnvironmentPool);
 }
 
-static inline void UpdateEnvStateSelectionStatus(env_state_t* restrict environment, const int32_t poolId, const int32_t poolPositionId)
+static inline void UpdateEnvStateSelectionStatus(EnvironmentState_t* restrict environment, const int32_t poolId, const int32_t poolPositionId)
 {
     environment->PoolId = poolId;
     environment->PoolPositionId = poolPositionId;
@@ -50,11 +50,11 @@ static inline void UpdateEnvStateSelectionStatus(env_state_t* restrict environme
 
 /* Initializer routines*/
 
-static error_t AddEnvStateToSelectionPool(__SCONTEXT_PAR, env_state_t* restrict environment, const int32_t numOfJumps)
+static error_t AddEnvStateToSelectionPool(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, const int32_t numOfJumps)
 {
     int32_t poolId = getDirectionPoolIdByJumpCount(SCONTEXT, numOfJumps);
-    jump_pool_t* selectionPool = getJumpSelectionPool(SCONTEXT);
-    dir_pool_t* directionPool = getDirectionPoolById(SCONTEXT, poolId);
+    JumpSelectionPool_t* selectionPool = getJumpSelectionPool(SCONTEXT);
+    DirectionPool_t* directionPool = getDirectionPoolById(SCONTEXT, poolId);
 
     if (!TryPushBackEnvIdToDirectionPool(directionPool, environment->EnvironmentId))
     {
@@ -72,7 +72,7 @@ static error_t AddEnvStateToSelectionPool(__SCONTEXT_PAR, env_state_t* restrict 
 
 error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environmentId)
 {
-    env_state_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
+    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
     int32_t numOfJumps = getJumpCountByPositionStatus(SCONTEXT, environment->PositionVector.d, environment->ParticleId);
     
     if (!environment->IsStable || (numOfJumps <= JPOOL_DIRCOUNT_STATIC))
@@ -135,13 +135,13 @@ void RollNextMmcSelect(__SCONTEXT_PAR)
     RollMmcOffsetEnvId(SCONTEXT);
 }
 
-static inline void CorrectEnvPoolIds(env_state_t *restrict environment, const dir_pool_t *restrict newDirectionPool, const int32_t newPoolId)
+static inline void CorrectEnvPoolIds(EnvironmentState_t *restrict environment, const DirectionPool_t *restrict newDirectionPool, const int32_t newPoolId)
 {
     environment->PoolId = newPoolId;
     environment->PoolPositionId = newDirectionPool->NumOfPositions;
 }
 
-static inline void CorrectPoolCounters(dir_pool_t *restrict oldDirectionPool, dir_pool_t *restrict newDirectionPool, jump_pool_t *restrict selectionPool)
+static inline void CorrectPoolCounters(DirectionPool_t *restrict oldDirectionPool, DirectionPool_t *restrict newDirectionPool, JumpSelectionPool_t *restrict selectionPool)
 {
     oldDirectionPool->NumOfPositions--;
     oldDirectionPool->NumOfJumps -= oldDirectionPool->NumOfDirections;
@@ -150,15 +150,15 @@ static inline void CorrectPoolCounters(dir_pool_t *restrict oldDirectionPool, di
     selectionPool->NumOfSelectableJumps += newDirectionPool->NumOfDirections - oldDirectionPool->NumOfDirections;
 }
 
-static inline bool_t MakeEnvironmentPoolEntriesUpdate(__SCONTEXT_PAR, const jump_counts_t *restrict jumpCountTable, env_state_t *restrict environment)
+static inline bool_t MakeEnvironmentPoolEntriesUpdate(__SCONTEXT_PAR, const JumpCountTable_t *restrict jumpCountTable, EnvironmentState_t *restrict environment)
 {
-    jump_pool_t* selectionPool = getJumpSelectionPool(SCONTEXT);
+    JumpSelectionPool_t* selectionPool = getJumpSelectionPool(SCONTEXT);
     int32_t newPoolId = LookupEnvironmentPoolId(selectionPool, jumpCountTable, environment);
 
     if (environment->PoolId != newPoolId)
     {
-        dir_pool_t *oldDirectionPool = getDirectionPoolById(SCONTEXT, environment->PoolId);
-        dir_pool_t *newDirectionPool = getDirectionPoolById(SCONTEXT, newPoolId);
+        DirectionPool_t *oldDirectionPool = getDirectionPoolById(SCONTEXT, environment->PoolId);
+        DirectionPool_t *newDirectionPool = getDirectionPoolById(SCONTEXT, newPoolId);
 
         PushBackEnvIdToDirectionPool(newDirectionPool, getEnvironmentPoolEntryById(oldDirectionPool, environment->PoolPositionId));
         setEnvironmentPoolEntryById(oldDirectionPool, environment->PoolPositionId, PopBackDirectionEnvPool(oldDirectionPool));

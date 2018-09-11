@@ -30,7 +30,7 @@ bool_t IsAccessibleFile(const char* restrict fileName)
     return access(fileName, F_OK) != -1;
 }
 
-error_t WriteBufferToStream(file_t* restrict fileStream, const buffer_t* restrict buffer)
+error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
 {
     if (fileStream == NULL)
     {
@@ -45,7 +45,7 @@ error_t WriteBufferToStream(file_t* restrict fileStream, const buffer_t* restric
     return ERR_OK;
 }
 
-error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer)
+error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const Buffer_t* restrict buffer)
 {
     file_t* fileStream = NULL;
     int32_t result; 
@@ -79,7 +79,7 @@ error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
     return error;
 }
 
-error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const buffer_t* restrict buffer)
+error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const Buffer_t* restrict buffer)
 {
     error_t error = 0;
     char* tmpName = NULL;
@@ -110,7 +110,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
     return error;
 }
 
-error_t LoadBufferFromStream(file_t* restrict fileStream, buffer_t* restrict buffer)
+error_t LoadBufferFromStream(file_t* restrict fileStream, Buffer_t* restrict buffer)
 {
     if (fileStream == NULL)
     {
@@ -120,7 +120,7 @@ error_t LoadBufferFromStream(file_t* restrict fileStream, buffer_t* restrict buf
     return ERR_OK;
 }
 
-error_t LoadBufferFromFile(const char* restrict fileName, buffer_t* restrict outBuffer)
+error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict outBuffer)
 {
     file_t* fileStream;
     int64_t bufferSize;
@@ -142,7 +142,7 @@ error_t LoadBufferFromFile(const char* restrict fileName, buffer_t* restrict out
     return writeResult;
 }
 
-error_t WriteBufferHexToStream(file_t* restrict fileStream, const buffer_t* restrict buffer, size_t bytesPerLine)
+error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer, size_t bytesPerLine)
 {
     if (fileStream == NULL)
     {

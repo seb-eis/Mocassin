@@ -16,7 +16,7 @@
 
 /* Local helper routines */
 
-static inline int32_t SaveFindClusterCodeIdByLinearSearch(const clu_table_t* restrict clusterTable, const occode_t occupationCode)
+static inline int32_t SaveFindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
 {
     int32_t index = 0;
     size_t numOfCodes = span_GetSize(clusterTable->OccupationCodes);
@@ -27,26 +27,26 @@ static inline int32_t SaveFindClusterCodeIdByLinearSearch(const clu_table_t* res
     return (index < numOfCodes) ? index : INVALID_INDEX;
 }
 
-static inline int32_t FindClusterCodeIdByLinearSearch(const clu_table_t* restrict clusterTable, const occode_t occupationCode)
+static inline int32_t FindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
 {
     int32_t index = 0;
     while (span_Get(clusterTable->OccupationCodes, index++) != occupationCode) {};
     return index;
 }
 
-//static inline int32_t BinaryLookupCluCodeId(const clu_table_t* restrict clusterTable, const occode_t occupationCode)
+//static inline int32_t BinaryLookupCluCodeId(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
 //{
 //    // Placeholder, implement on optimization
 //    return -1;
 //}
 
-static inline void SetCluStateBackup(clu_state_t* restrict cluster)
+static inline void SetCluStateBackup(ClusterState_t* restrict cluster)
 {
     cluster->CodeIdBackup = cluster->CodeId;
     cluster->OccupationCodeBackup = cluster->OccupationCode;
 }
 
-static inline void LoadCluStateBackup(clu_state_t* restrict cluster)
+static inline void LoadCluStateBackup(ClusterState_t* restrict cluster)
 {
     cluster->CodeId = cluster->CodeIdBackup;
     cluster->OccupationCode = cluster->OccupationCodeBackup;
@@ -54,7 +54,7 @@ static inline void LoadCluStateBackup(clu_state_t* restrict cluster)
 
 /* Initializer routines */
 
-static int32_t CompareClusterLinks(const clu_link_t* lhs, const clu_link_t* rhs)
+static int32_t CompareClusterLinks(const ClusterLink_t* lhs, const ClusterLink_t* rhs)
 {
     int32_t value = get_compare(lhs->ClusterId, rhs->ClusterId);
     if (value)
@@ -64,25 +64,25 @@ static int32_t CompareClusterLinks(const clu_link_t* lhs, const clu_link_t* rhs)
     return value;
 }
 
-static error_t SortAndBuildClusterLinks(clu_link_t* restrict linkBuffer, const size_t count, clu_links_t* restrict clusterLinks)
+static error_t SortAndBuildClusterLinks(ClusterLink_t* restrict linkBuffer, const size_t count, ClusterLinks_t* restrict clusterLinks)
 {
     error_t error;
-    buffer_t tmpBuffer;
+    Buffer_t tmpBuffer;
 
-    error = ctor_Buffer(tmpBuffer, count* sizeof(clu_link_t));
+    error = ctor_Buffer(tmpBuffer, count* sizeof(ClusterLink_t));
     return_if(error, error);
 
-    qsort(linkBuffer, count, sizeof(clu_link_t), (f_compare_t) CompareClusterLinks);
+    qsort(linkBuffer, count, sizeof(ClusterLink_t), (FComparer_t) CompareClusterLinks);
 
-    CopyBuffer((byte_t*) linkBuffer, tmpBuffer.Begin, sizeof(clu_link_t) * count);
-    *clusterLinks = (clu_links_t) span_AsVoid(tmpBuffer);
+    CopyBuffer((byte_t*) linkBuffer, tmpBuffer.Begin, sizeof(ClusterLink_t) * count);
+    *clusterLinks = (ClusterLinks_t) span_AsVoid(tmpBuffer);
 
     return ERR_OK;
 }
 
-static error_t BuildClusterLinkingByPairId(const env_def_t* environmentDefinition, const int32_t pairId, clu_links_t* restrict clusterLinks)
+static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* environmentDefinition, const int32_t pairId, ClusterLinks_t* restrict clusterLinks)
 {
-    clu_link_t tmpLinkBuffer[sizeof(clu_link_t) * 256]; // There are a max of 256 clusters a single pair could belong to
+    ClusterLink_t tmpLinkBuffer[sizeof(ClusterLink_t) * 256]; // There are a max of 256 clusters a single pair could belong to
     byte_t clusterId = 0, relativeId = 0;
     size_t linkCount = 0;
 
@@ -93,7 +93,7 @@ static error_t BuildClusterLinkingByPairId(const env_def_t* environmentDefinitio
         {
             if (*environmentPairId == pairId)
             {
-                tmpLinkBuffer[linkCount] = (clu_link_t) { clusterId , relativeId++ };
+                tmpLinkBuffer[linkCount] = (ClusterLink_t) { clusterId , relativeId++ };
                 linkCount++;
             }
         }
@@ -103,7 +103,7 @@ static error_t BuildClusterLinkingByPairId(const env_def_t* environmentDefinitio
     return SortAndBuildClusterLinks(tmpLinkBuffer, linkCount, clusterLinks);
 }
 
-static error_t InPlaceConstructEnvironmentLink(const env_def_t* restrict environmentDefinition, const int32_t environmentId, const int32_t pairId, env_link_t* restrict environmentLink)
+static error_t InPlaceConstructEnvironmentLink(const EnvironmentDefinition_t* restrict environmentDefinition, const int32_t environmentId, const int32_t pairId, EnvironmentLink_t* restrict environmentLink)
 {
     error_t error;
 
@@ -114,9 +114,9 @@ static error_t InPlaceConstructEnvironmentLink(const env_def_t* restrict environ
     return error;
 }
 
-static env_link_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const pair_def_t* restrict pairDefinition, env_state_t* restrict environment)
+static EnvironmentLink_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const PairDefinition_t* restrict pairDefinition, EnvironmentState_t* restrict environment)
 {
-    env_state_t* targetEnvironment = ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, environment);
+    EnvironmentState_t* targetEnvironment = ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
     // Immobility OPT Part 2 - Providing outgoing updates through immobiles is not required, the link will not be triggered during the mc routine
     // Sideffects:  None at this point (ref. to OPT part 1)
@@ -128,9 +128,9 @@ static env_link_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const pair_def_t* re
     #endif
 }
 
-static void ResolvePairTargetAndIncreaseLinkCounter(__SCONTEXT_PAR, const env_state_t* restrict environment, const pair_def_t* restrict pairDefinition)
+static void ResolvePairTargetAndIncreaseLinkCounter(__SCONTEXT_PAR, const EnvironmentState_t* restrict environment, const PairDefinition_t* restrict pairDefinition)
 {
-    env_state_t* targetEnvironment = ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, environment);
+    EnvironmentState_t* targetEnvironment = ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
     // Immobility OPT Part 1 and 2 - No incoming or outgoing updates for immobiles are required
     #if defined(OPT_LINK_ONLY_MOBILES)
@@ -156,17 +156,17 @@ static error_t SetAllLinkListCountersToRequiredSize(__SCONTEXT_PAR)
 static error_t AllocateEnvLinkListBuffersByPresetCounters(__SCONTEXT_PAR)
 {
     error_t error;
-    buffer_t tmpBuffer;
+    Buffer_t tmpBuffer;
 
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
     {
         // Link is counted using the NULL initialized span access struct
         size_t linkCount = span_GetSize(environment->EnvironmentLinks);
 
-        error = ctor_Buffer(tmpBuffer, linkCount * sizeof(env_link_t));
+        error = ctor_Buffer(tmpBuffer, linkCount * sizeof(EnvironmentLink_t));
         return_if(error, error);
 
-        environment->EnvironmentLinks = (env_links_t) span_AsList(tmpBuffer);
+        environment->EnvironmentLinks = (EnvironmentLinks_t) span_AsList(tmpBuffer);
     }
     return ERR_OK;
 }
@@ -184,14 +184,14 @@ static error_t PrepareLinkingSystemConstruction(__SCONTEXT_PAR)
     return error;
 }
 
-static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, env_state_t* restrict environment)
+static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, EnvironmentState_t* restrict environment)
 {
     error_t error;
     int32_t pairId = 0;
 
     cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairDefinitions)
     {
-        env_link_t* environmentLink = GetNextLinkFromTargetEnv(SCONTEXT, pairDefinition, environment);
+        EnvironmentLink_t* environmentLink = GetNextLinkFromTargetEnv(SCONTEXT, pairDefinition, environment);
         if (environmentLink != NULL)
         {
             error = InPlaceConstructEnvironmentLink(environment->EnvironmentDefinition, environment->EnvironmentId, pairId, environmentLink);
@@ -233,7 +233,7 @@ void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR)
     error_assert(error, "Failed to construct the environment linking system.");
 }
 
-static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, buffer_t* restrict buffer)
+static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, Buffer_t* restrict buffer)
 {
     size_t bufferSize = 0;
 
@@ -246,13 +246,13 @@ static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, buffer_t* rest
     return ctor_Buffer(*buffer, bufferSize *sizeof(byte_t));
 }
 
-static env_state_t* PullEnvStateByInteraction(__SCONTEXT_PAR, env_state_t* restrict startEnvironment, const int32_t pairId)
+static EnvironmentState_t* PullEnvStateByInteraction(__SCONTEXT_PAR, EnvironmentState_t* restrict startEnvironment, const int32_t pairId)
 {
-    pair_def_t* pairDefinition = getEnvironmentPairDefById(startEnvironment, pairId);
+    PairDefinition_t* pairDefinition = getEnvironmentPairDefById(startEnvironment, pairId);
     return ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, startEnvironment);
 }
 
-static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, env_state_t* environment, buffer_t* restrict occupationBuffer)
+static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, EnvironmentState_t* environment, Buffer_t* restrict occupationBuffer)
 {
     for (int32_t i = 0; i < getEnvironmentPairDefCount(environment); i++)
     {
@@ -263,7 +263,7 @@ static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, env_state_t* environme
     return ERR_OK;
 }
 
-static void ResetEnvStateBuffersToZero(env_state_t* restrict environment)
+static void ResetEnvStateBuffersToZero(EnvironmentState_t* restrict environment)
 {
     cpp_foreach(energy, environment->EnergyStates)
     {
@@ -271,16 +271,16 @@ static void ResetEnvStateBuffersToZero(env_state_t* restrict environment)
     }
     cpp_foreach(cluster, environment->ClusterStates)
     {
-        *cluster = (clu_state_t) { 0, 0, 0ULL, 0ULL };
+        *cluster = (ClusterState_t) { 0, 0, 0ULL, 0ULL };
     }
 }
 
-static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, env_state_t* restrict environment, buffer_t* restrict occupationBuffer)
+static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     for (size_t i = 0; i < span_GetSize(environment->EnvironmentDefinition->PairDefinitions); i++)
     {
         int32_t tableId = span_Get(environment->EnvironmentDefinition->PairDefinitions, i).TableId;
-        const pair_table_t* pairTable = getPairEnergyTableById(SCONTEXT, tableId);
+        const PairTable_t* pairTable = getPairEnergyTableById(SCONTEXT, tableId);
 
         for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
         {
@@ -291,7 +291,7 @@ static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, env_state_t* restrict e
     } 
 }
 
-static error_t InitializeClusterStateStatus(__SCONTEXT_PAR, clu_state_t* restrict cluster, const clu_table_t* restrict clusterTable)
+static error_t InitializeClusterStateStatus(__SCONTEXT_PAR, ClusterState_t* restrict cluster, const ClusterTable_t* restrict clusterTable)
 {
     cluster->CodeId = SaveFindClusterCodeIdByLinearSearch(clusterTable, cluster->OccupationCode);
     return_if(cluster->CodeId == INVALID_INDEX, ERR_DATACONSISTENCY);
@@ -300,16 +300,16 @@ static error_t InitializeClusterStateStatus(__SCONTEXT_PAR, clu_state_t* restric
     return ERR_OK;
 }
 
-static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, env_state_t* restrict environment, buffer_t* restrict occupationBuffer)
+static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     return_if(span_GetSize(environment->ClusterStates) != span_GetSize(environment->EnvironmentDefinition->ClusterDefinitions), ERR_DATACONSISTENCY);
 
     error_t error;
-    clu_state_t * cluster = environment->ClusterStates.Begin;
+    ClusterState_t * cluster = environment->ClusterStates.Begin;
 
     cpp_foreach(clusterDefinition, environment->EnvironmentDefinition->ClusterDefinitions)
     {
-        const clu_table_t* clusterTable = getClusterEnergyTableById(SCONTEXT, clusterDefinition->TableId);
+        const ClusterTable_t* clusterTable = getClusterEnergyTableById(SCONTEXT, clusterDefinition->TableId);
         for (byte_t i = 0; clusterDefinition->EnvironmentPairIds[i] != POSITION_NULL; i++)
         {
             int32_t codeByteId = clusterDefinition->EnvironmentPairIds[i];
@@ -329,17 +329,17 @@ static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, env_state_t* rest
     return ERR_OK;
 }
 
-static error_t SetEnvStateEnergyByOccupation(__SCONTEXT_PAR, env_state_t* restrict environment, buffer_t* restrict occupationBuffer)
+static error_t SetEnvStateEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     ResetEnvStateBuffersToZero(environment);
     AddEnvPairEnergyByOccupation(SCONTEXT, environment, occupationBuffer);
     return AddEnvClusterEnergyByOccupation(SCONTEXT, environment, occupationBuffer);
 }
 
-static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t environmentId, buffer_t* restrict occupationBuffer)
+static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t environmentId, Buffer_t* restrict occupationBuffer)
 {
     error_t error;
-    env_state_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
+    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
 
     error = WriteEnvOccupationToBuffer(SCONTEXT, environment, occupationBuffer);
     return_if(error, error);
@@ -353,7 +353,7 @@ static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t envi
 void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
 {
     error_t error;
-    buffer_t occupationBuffer;
+    Buffer_t occupationBuffer;
 
     error = AllocateDynamicEnvOccupationBuffer(SCONTEXT, &occupationBuffer);
     error_assert(error, "Buffer creation for environment occupation lookup failed.");
@@ -369,7 +369,7 @@ void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
 
 void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId)
 {
-    env_state_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
+    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
 
     environment->ParticleId = particleId;
     environment->EnvironmentId = environmentId;
@@ -381,42 +381,42 @@ void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, con
 
 /* Simulation routines KMC and MMC */
 
-static inline void Set_ActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, env_link_t* restrict environmentLink)
+static inline void Set_ActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, EnvironmentLink_t* restrict environmentLink)
 {
     SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateById(SCONTEXT, environmentLink->EnvironmentId);
 }
 
-static inline void Set_ActiveWorkClusterByEnvAndId(__SCONTEXT_PAR, env_state_t* restrict environment, const byte_t clusterId)
+static inline void Set_ActiveWorkClusterByEnvAndId(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, const byte_t clusterId)
 {
     SCONTEXT->CycleState.WorkCluster = getEnvironmentCluStateById(environment, clusterId);
 }
 
-static inline void Set_ActiveWorkPairEnergyTable(__SCONTEXT_PAR, env_state_t* restrict environment, env_link_t* restrict environmentLink)
+static inline void Set_ActiveWorkPairEnergyTable(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, EnvironmentLink_t* restrict environmentLink)
 {
     SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableById(SCONTEXT, getEnvironmentPairDefById(environment, environmentLink->PairId)->TableId);
 }
 
-static inline void Set_ActiveWorkClusterEnergyTable(__SCONTEXT_PAR, env_state_t* restrict environment, clu_link_t* restrict clusterLink)
+static inline void Set_ActiveWorkClusterEnergyTable(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, ClusterLink_t* restrict clusterLink)
 {
     SCONTEXT->CycleState.WorkClusterTable = getClusterEnergyTableById(SCONTEXT, getEnvironmentCluDefById(environment, clusterLink->ClusterId)->TableId);
 }
 
-static inline int32_t FindClusterCodeIdInClusterTable(const clu_table_t* restrict clusterTable, const occode_t code)
+static inline int32_t FindClusterCodeIdInClusterTable(const ClusterTable_t* restrict clusterTable, const OccCode_t code)
 {
     return FindClusterCodeIdByLinearSearch(clusterTable, code);
 }
 
-static inline double CalcPairEnergyDelta(const pair_table_t* restrict pairTable, const byte_t mainId, const byte_t oldId, const byte_t newId)
+static inline double CalcPairEnergyDelta(const PairTable_t* restrict pairTable, const byte_t mainId, const byte_t oldId, const byte_t newId)
 {
     return getPairEnergyTableEntry(pairTable, mainId, oldId) - getPairEnergyTableEntry(pairTable, mainId, newId);
 }
 
-static inline double CalcClusterEnergyDelta(const clu_table_t* restrict clusterTable, const clu_state_t* restrict cluster, const byte_t particleId)
+static inline double CalcClusterEnergyDelta(const ClusterTable_t* restrict clusterTable, const ClusterState_t* restrict cluster, const byte_t particleId)
 {
     return getCluEnergyTableEntry(clusterTable, particleId, cluster->CodeId) - getCluEnergyTableEntry(clusterTable, particleId, cluster->CodeIdBackup);
 }
 
-static inline void UpdateClusterState(const clu_table_t* restrict clusterTable, const clu_link_t* restrict clusterLink, clu_state_t* restrict cluster, const byte_t newParticleId)
+static inline void UpdateClusterState(const ClusterTable_t* restrict clusterTable, const ClusterLink_t* restrict clusterLink, ClusterState_t* restrict cluster, const byte_t newParticleId)
 {
     SetCodeByteAt(&cluster->OccupationCode, clusterLink->CodeByteId, newParticleId);
     cluster->CodeId = FindClusterCodeIdInClusterTable(clusterTable, cluster->OccupationCode);
@@ -432,7 +432,7 @@ static inline void InvokeDeltaOfActiveCluster(__SCONTEXT_PAR, const byte_t updat
     *getActiveStateEnergyById(SCONTEXT, updateParticleId) += CalcClusterEnergyDelta(getActiveClusterTable(SCONTEXT), getActiveWorkCluster(SCONTEXT), updateParticleId);
 }
 
-static void InvokeEnvLinkCluUpdates(__SCONTEXT_PAR, const env_link_t* restrict environmentLink, const byte_t newParticleId)
+static void InvokeEnvLinkCluUpdates(__SCONTEXT_PAR, const EnvironmentLink_t* restrict environmentLink, const byte_t newParticleId)
 {
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
@@ -450,7 +450,7 @@ static void InvokeEnvLinkCluUpdates(__SCONTEXT_PAR, const env_link_t* restrict e
     }
 }
 
-static void InvokeAllEnvLinkUpdates(__SCONTEXT_PAR, const env_link_t* restrict environmentLink, const byte_t oldParticleId, const byte_t newParticleId)
+static void InvokeAllEnvLinkUpdates(__SCONTEXT_PAR, const EnvironmentLink_t* restrict environmentLink, const byte_t oldParticleId, const byte_t newParticleId)
 {
     for (byte_t i = 0; getActiveParticleUpdateIdAt(SCONTEXT, i) != PARTICLE_NULL; i++)
     {
@@ -464,7 +464,7 @@ static inline void InvokeActiveLocalPairDelta(__SCONTEXT_PAR, const byte_t updat
     InvokeDeltaOfActivePair(SCONTEXT, updateParticleId, oldParticleId, newParticleId);
 }
 
-static inline void InvokeLocalEnvLinkClusterDeltas(__SCONTEXT_PAR, const env_link_t* restrict environmentLink, const byte_t updateParticleId)
+static inline void InvokeLocalEnvLinkClusterDeltas(__SCONTEXT_PAR, const EnvironmentLink_t* restrict environmentLink, const byte_t updateParticleId)
 {
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
@@ -478,9 +478,9 @@ static inline void InvokeLocalEnvLinkClusterDeltas(__SCONTEXT_PAR, const env_lin
     }
 }
 
-static inline void PrepareJumpLinkClusterStateChanges(__SCONTEXT_PAR, const jump_link_t* restrict jumpLink)
+static inline void PrepareJumpLinkClusterStateChanges(__SCONTEXT_PAR, const JumpLink_t* restrict jumpLink)
 {
-    env_link_t* environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
+    EnvironmentLink_t* environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
     Set_ActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
 
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
@@ -491,9 +491,9 @@ static inline void PrepareJumpLinkClusterStateChanges(__SCONTEXT_PAR, const jump
     }
 }
 
-static void InvokeJumpLinkDeltas(__SCONTEXT_PAR, const jump_link_t* restrict jumpLink)
+static void InvokeJumpLinkDeltas(__SCONTEXT_PAR, const JumpLink_t* restrict jumpLink)
 {
-    env_link_t* environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
+    EnvironmentLink_t* environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
 
     Set_ActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
     Set_ActiveWorkPairEnergyTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
@@ -505,7 +505,7 @@ static void InvokeJumpLinkDeltas(__SCONTEXT_PAR, const jump_link_t* restrict jum
     InvokeLocalEnvLinkClusterDeltas(SCONTEXT, environmentLink, updateParticleId);
 }
 
-static void InvokeEnvUpdateDistribution(__SCONTEXT_PAR, env_state_t* restrict environment, const byte_t newParticleId)
+static void InvokeEnvUpdateDistribution(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, const byte_t newParticleId)
 {
     cpp_foreach(environmentLink, environment->EnvironmentLinks)
     {

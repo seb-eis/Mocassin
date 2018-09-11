@@ -19,11 +19,11 @@
 
 // Generic type macro for spans of memory enclosed by pointers to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
-#define Span_t(TYPE) struct { TYPE* Begin, * End; }
+#define Span_t(TYPE, NAMING...) struct NAMING { TYPE* Begin, * End; }
 
 // Type for enclosing an undefined buffer. Contains ptr to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(void) VoidSpan_t;
+typedef Span_t(void, VoidSpan) VoidSpan_t;
 
 VoidSpan_t AllocateSpan(size_t numOfElements, size_t sizeOfElement);
 
@@ -49,7 +49,7 @@ void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *
 
 // Type for enclosing a byte buffer. Contains ptr to begin and end in a cpp style
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(byte_t) buffer_t;
+typedef Span_t(byte_t, Buffer) Buffer_t;
 
 // Constructs the define buffer in place and returns an error when the request fails
 #define ctor_Buffer(BUFFER, SIZE) TryAllocateSpan((SIZE), 1, (VoidSpan_t*) &(BUFFER))
@@ -67,13 +67,13 @@ static inline void setBufferByteValues(void* restrict start, const size_t byteCo
 void CopyBuffer(byte_t const* source, byte_t* target, size_t size);
 
 // Copies the contents of the source buffer into the target buffer. Retruns buffer overflow error if target is smaller than source
-error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);
+error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
 
 // Moves the contents of the source buffer into the target buffer and frees the source buffer
-error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer);
+error_t SaveMoveBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
 
 // Compares if two buffers contain identical binary values (1) or not (0)
-bool_t HaveSameBufferContent(const buffer_t* lhs, const buffer_t* rhs);
+bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 
 
 /* Foreach macro definitions */
@@ -91,11 +91,11 @@ bool_t HaveSameBufferContent(const buffer_t* lhs, const buffer_t* rhs);
 
 // Generic type macro for 1d lists that are enclosed by pointers and support cpp style push_back/pop_back operations
 // Layout@ggc_x86_64 => 24@[8,8,8]
-#define List_t(TYPE) struct { TYPE* Begin, * End, * CapacityEnd; }
+#define List_t(TYPE, NAMING...) struct NAMING { TYPE* Begin, * End, * CapacityEnd; }
 
 // Defines the undefined list with void ptr to begin, end and end of capacity
 // Layout@ggc_x86_64 => 24@[8,8,8]
-typedef List_t(void) VoidList_t;
+typedef List_t(void, VoidList) VoidList_t;
 
 VoidList_t AllocateList(size_t capacity, size_t sizeOfElement);
 
@@ -121,7 +121,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 
 // Generic type macro for rectangular array access to a span of data supporting multiple index access
 // Layout@ggc_x86_64 => 24@[8,8,8]
-#define Array_t(TYPE, RANK) struct { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin, * End; }
+#define Array_t(TYPE, RANK, NAMING...) struct NAMING { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin, * End; }
 
 // Type for the undefined void array access
 // Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]

@@ -60,7 +60,7 @@ void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLin
     FILE* fileStream = fopen(STDERR_PATH, "w");
     fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
 
-    buffer_t buffer = {memStart, memEnd};
+    Buffer_t buffer = {memStart, memEnd};
     WriteBufferHexToStream(fileStream, &buffer, 24);
     fclose(fileStream);
     exit(errCode);

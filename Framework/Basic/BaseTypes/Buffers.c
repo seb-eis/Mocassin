@@ -107,7 +107,7 @@ void MakeArrayBlocks(const int32_t rank, const int32_t dimensions[rank], int32_t
     }
 }
 
-bool_t HaveSameBufferContent(const buffer_t* lhs, const buffer_t* rhs)
+bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs)
 {
     if (lhs->Begin == rhs->Begin && lhs->End == rhs->End)
     {
@@ -137,7 +137,7 @@ void CopyBuffer(byte_t const* source, byte_t* target, const size_t size)
     }
 }
 
-error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer)
+error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer)
 {
     size_t sourceSize = span_GetSize(*sourceBuffer);
 
@@ -150,7 +150,7 @@ error_t SaveCopyBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targe
     return ERR_OK;
 }
 
-error_t SaveMoveBuffer(buffer_t* restrict sourceBuffer, buffer_t* restrict targetBuffer)
+error_t SaveMoveBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer)
 {
     if (SaveCopyBuffer(sourceBuffer, targetBuffer) != ERR_OK)
     {

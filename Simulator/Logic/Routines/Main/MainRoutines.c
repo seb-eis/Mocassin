@@ -190,7 +190,7 @@ error_t FinishMmcCycleBlock(__SCONTEXT_PAR)
     return SIMERROR;
 }
 
-static inline bitmask_t GetTimeoutAbortEval(__SCONTEXT_PAR)
+static inline Bitmask_t GetTimeoutAbortEval(__SCONTEXT_PAR)
 {
     int64_t newClock = clock();
     int64_t lastClock = getRuntimeInformation(SCONTEXT)->LastClock;
@@ -342,7 +342,7 @@ void SetKmcJumpSelection(__SCONTEXT_PAR)
 
 void SetKmcJumpPathProperties(__SCONTEXT_PAR)
 {
-    vector4_t actVector;
+    Vector4_t actVector;
     byte_t index = 0;
 
     cpp_foreach(relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
@@ -355,7 +355,7 @@ void SetKmcJumpPathProperties(__SCONTEXT_PAR)
     }
 }
 
-static inline occode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
+static inline OccCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
 {
     return getActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StateCode0;
 }
@@ -408,7 +408,7 @@ void SetKmcJumpProperties(__SCONTEXT_PAR)
 
 void SetKmcJumpProbsDefault(__SCONTEXT_PAR)
 {
-    eng_info_t* energyInfo = getJumpEnergyInfo(SCONTEXT);
+    JumpEnergyInfo_t* energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     energyInfo->ConformationDelta = 0.5 * (energyInfo->Energy2 - energyInfo->Energy0);
     energyInfo->Probability0to2 = exp(energyInfo->Energy1 + energyInfo->ConformationDelta);
