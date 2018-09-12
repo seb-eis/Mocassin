@@ -129,5 +129,13 @@ namespace ICon.Symmetry.SpaceGroups
         /// <typeparam name="T1"></typeparam>
         /// <returns></returns>
         IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D;
+
+        /// <summary>
+        /// Shifts a seuqnce of fractional vectors in a manner that the first vector in the sequuence is in the (0,0,0) origin cell
+        /// </summary>
+        /// <param name="unshifted"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> ShiftFirstToOrigin(IEnumerable<Fractional3D> unshifted, double tolerance);
     }
 }

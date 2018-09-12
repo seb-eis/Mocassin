@@ -45,6 +45,9 @@ using ICon.Framework.Random;
 using System.Linq;
 using ICon.Model.DataManagement;
 using ICon.Model.Simulations;
+using ICon.Model.Translator;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace ICon.Framework.QuickTest
 {
@@ -52,28 +55,36 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var test0 = Guid.NewGuid().ToString();
-            var test1 = Guid.NewGuid().ToString();
+            var binArray0 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+            var binArray1 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+            var binArray2 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
+            var binArray3 = InteropBinaryArray<int>.FromArray(new int[1000, 100, 100]);
 
-            var rng0 = new PcgRandom32(test0.GetHashCode());
-            var rng1 = new PcgRandom32(test1.GetHashCode());
-
-            for (long i = 0;; i++)
+            var tasks = new Task[4];
+            var clock = Stopwatch.StartNew();
+            using (var provider = new MarshalProvider())
             {
-                if (rng0.Next() == rng1.Next())
-                {
-                    Console.WriteLine("Cycle till same value = {0}", i);
-                    break;
-                }
+                tasks[0] = Task.Run(() => binArray0.ChangeStateToBinary(provider));
+                tasks[1] = Task.Run(() => binArray1.ChangeStateToBinary(provider));
+                tasks[2] = Task.Run(() => binArray2.ChangeStateToBinary(provider));
+                tasks[3] = Task.Run(() => binArray3.ChangeStateToBinary(provider));
             }
+            Task.WaitAll(tasks);
+            using (var provider = new MarshalProvider())
+            {
+                tasks[0] = Task.Run(() => binArray0.ChangeStateToObject(provider));
+                tasks[1] = Task.Run(() => binArray1.ChangeStateToObject(provider));
+                tasks[2] = Task.Run(() => binArray2.ChangeStateToObject(provider));
+                tasks[3] = Task.Run(() => binArray3.ChangeStateToObject(provider));
+            }
+            Task.WaitAll(tasks);
 
-            //var package = ManagerFactory.DebugFactory.CreateFullManagementSystem();
-            //var inputter = ManagerFactory.DebugFactory.MakeCeriaDataInputter();
-            //inputter.AutoInputData(package.ProjectServices);
-            //var report = inputter.GetReportJson();         
+            Console.WriteLine("Time is {0}", clock.ElapsedMilliseconds);
 
+            //var context = new InteropDbContext("./interopTest.db", true);
             Console.ReadLine();
         }
+
 
         static void DisplayWatch(Stopwatch watch)
         {

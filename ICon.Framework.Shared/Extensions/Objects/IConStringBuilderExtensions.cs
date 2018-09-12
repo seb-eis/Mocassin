@@ -32,11 +32,12 @@ namespace ICon.Framework.Extensions
         /// <param name="builder"></param>
         /// <param name="values"></param>
         /// <param name="separator"></param>
-        public static void AppendSeparatedToString<T1>(this StringBuilder builder, IEnumerable<T1> values, string separator)
+        public static void AppendSeparatedToString<T1>(this StringBuilder builder, IEnumerable<T1> values, char separator)
         {
             foreach (var item in values)
             {
-                builder.Append(item.ToString() + separator);
+                builder.Append(item.ToString());
+                builder.Append(separator);
             }
             builder.PopBack(1);
         }
@@ -60,13 +61,13 @@ namespace ICon.Framework.Extensions
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="convertibles"></param>
-        public static void AppendSeparated(this StringBuilder builder, Char seperator, params IConvertible[] convertibles)
+        public static void AppendSeparated(this StringBuilder builder, char separator, IEnumerable<IConvertible> convertibles)
         {
             foreach (IConvertible item in convertibles)
             {
-                builder.Append(item.PrimitiveToString() + seperator);
+                builder.Append(item.PrimitiveToString() + separator);
             }
-            builder.Remove(builder.Length - 1, 1);
+            builder.PopBack(1);
         }
 
         /// <summary>
@@ -87,6 +88,10 @@ namespace ICon.Framework.Extensions
         /// <param name="count"></param>
         public static void PopBack(this StringBuilder builder, int count)
         {
+            if (builder.Length == 0)
+            {
+                return;
+            }
             builder.Remove(builder.Length - count, count);
         }
 

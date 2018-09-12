@@ -173,5 +173,24 @@ namespace ICon.Framework.Extensions
             }
             return target;
         }
+
+        /// <summary>
+        /// Determines the index skips for each dimension (except the last as it is always equal to 1) if the passed array would be accessed as one dimensional
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static int[] GetDimensionIndexSkips(this Array array)
+        {
+            var blocks = new int[array.Rank - 1];
+            for (int i = array.Rank - 2; i >= 0; i--)
+            {
+                blocks[i] = array.GetUpperBound(i+1) + 1;
+                if (i != blocks.Length - 1)
+                {
+                    blocks[i] *= blocks[i + 1];
+                }
+            }
+            return blocks;
+        }
     }
 }

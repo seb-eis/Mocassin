@@ -4,9 +4,23 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Folder Include="Data\Model\" />
-    <Folder Include="Data\Objects\" />
+    <Compile Remove="Data\Model\**" />
+    <EmbeddedResource Remove="Data\Model\**" />
+    <None Remove="Data\Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Entities\Job\DbSet\" />
+    <Folder Include="Data\InteropObjects\Transition\Net\" />
     <Folder Include="Translator\TranslatorSystem\" />
     <Folder Include="Translator\Components\Energies\" />
     <Folder Include="Translator\Components\" />
@@ -21,6 +35,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="1.1.11" />
     <PackageReference Include="System.Reactive" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\ICon.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\ICon.Framework.csproj" />
   </ItemGroup>
 
 </Project>

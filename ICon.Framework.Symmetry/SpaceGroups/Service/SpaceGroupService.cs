@@ -425,7 +425,7 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Translates an environment seqeunce onto each possible wyckoff 1 position and retunrs the results as a sorted dictionay for lookup
+        /// Translates an environment seqeunce onto each possible wyckoff 1 position and returns the results as a sorted dictionay for lookup
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>

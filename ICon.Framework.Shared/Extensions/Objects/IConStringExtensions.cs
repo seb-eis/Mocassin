@@ -29,5 +29,41 @@ namespace ICon.Framework.Extensions
             result = splitted;
             return true;
         }
+
+        /// <summary>
+        /// Parse a character seprarated string into the actual values using the provided converter delegate.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="separated"></param>
+        /// <param name="converter"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static List<T> ParseToValueList<T>(this string separated, Func<string, T> converter, char separator)
+        {
+            int index = 0, numOfValues = 1;
+            var workSpan = separated.AsSpan();            
+
+            for (int i = 0; i < workSpan.Length; i++)
+            {
+                if (workSpan[i] == separator)
+                {
+                    numOfValues++;
+                }
+            }
+            var results = new List<T>(numOfValues);
+
+            while (index != workSpan.Length + 1)
+            {
+                workSpan = workSpan.Slice(index, workSpan.Length - index);
+                index = workSpan.IndexOf(separator);
+                if (index == -1)
+                {
+                    index = workSpan.Length;
+                }
+                results.Add(converter(separated.Substring(separated.Length - workSpan.Length, index++)));
+
+            }
+            return results;
+        }
     }
 }

@@ -32,6 +32,7 @@
     <ProjectReference Include="..\ICon.Framework.Mathematics\ICon.Mathematics.csproj" />
     <ProjectReference Include="..\ICon.Framework.Shared\ICon.Framework.csproj" />
     <ProjectReference Include="..\ICon.Framework.Symmetry\ICon.Symmetry.csproj" />
+    <ProjectReference Include="..\ICon.Model.Translator\ICon.Model.Translator.csproj" />
     <ProjectReference Include="..\ICon.Model\ICon.Model.csproj" />
   </ItemGroup>
 

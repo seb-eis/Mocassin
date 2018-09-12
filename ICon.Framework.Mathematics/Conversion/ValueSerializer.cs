@@ -50,7 +50,7 @@ namespace ICon.Mathematics.Conversion
         public static string ConvertFromManyVector3D<T1>(IEnumerable<T1> vectors) where T1 : IVector3D
         {
             var builder = new StringBuilder(100);
-            builder.AppendSeparatedToString(vectors.Select(value => ConvertFromVector3D(value)), ";");
+            builder.AppendSeparatedToString(vectors.Select(value => ConvertFromVector3D(value)), ';');
             return builder.ToString();
         }
 
@@ -105,7 +105,7 @@ namespace ICon.Mathematics.Conversion
         public static string ConvertFromManyVector4D<T1>(IEnumerable<T1> vectors) where T1 : ILinearVector4D
         {
             var builder = new StringBuilder(100);
-            builder.AppendSeparatedToString(vectors.Select(value => ConvertFromVector4D(value)), ";");
+            builder.AppendSeparatedToString(vectors.Select(value => ConvertFromVector4D(value)), ';');
             return builder.ToString();
         }
 
@@ -137,7 +137,7 @@ namespace ICon.Mathematics.Conversion
                 throw new ArgumentException("Passed seqeunce is not of primitive type");
             }
             var builder = new StringBuilder(100);
-            builder.AppendSeparatedToString(sequence, separator.ToString());
+            builder.AppendSeparatedToString(sequence, separator);
             return builder.ToString();
         }
 

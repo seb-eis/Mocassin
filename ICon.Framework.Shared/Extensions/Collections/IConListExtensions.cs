@@ -285,11 +285,12 @@ namespace ICon.Framework.Extensions
         /// Populates a generic list with a default value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="TList"></typeparam>
         /// <param name="values"></param>
         /// <param name="value"></param>
         /// <param name="counts"></param>
         /// <returns></returns>
-        public static IList<T1> Populate<T1>(this IList<T1> values, T1 value, int counts)
+        public static TList Populate<TList,T1>(this TList values, T1 value, int counts) where TList : IList<T1>
         {
             values.Clear();
             for (int i = 0; i < counts; i++)
@@ -303,11 +304,12 @@ namespace ICon.Framework.Extensions
         /// Populates a generic list from a provider function to the specfified size
         /// </summary>
         /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="TList"></typeparam>
         /// <param name="list"></param>
         /// <param name="provider"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static IList<T1> Populate<T1>(this IList<T1> list, Func<T1> provider, int count)
+        public static TList Populate<TList,T1>(this TList list, Func<T1> provider, int count) where TList : IList<T1>
         {
             list.Clear();
             for (int i = 0; i < count; i++)
