@@ -9,4 +9,7 @@
 //////////////////////////////////////////
 
 #pragma once
-#include "Simulator/Data/Model/DbModel/DbModel.h"
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+
+void LoadSimulationModelFromDatabase(__SCONTEXT_PAR);
+

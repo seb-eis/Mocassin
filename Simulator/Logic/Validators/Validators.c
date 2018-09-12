@@ -40,9 +40,31 @@ error_t ValidateIsValidFilePath(char const * value)
     {
         return ERR_VALIDATION;
     }
-    if (CheckFileExistance(value) != ERR_OK)
+    if (IsAccessibleFile(value) != ERR_OK)
     {
         return ERR_VALIDATION;
     }
     return ERR_OK;
+}
+
+// Validates the database srtingf fromat to be [#Package].[#Parent].[#Job] e.g. "1.1.24"
+error_t ValidateDatabaseQueryString(char const* value)
+{
+    if (ValidateStringNotNullOrEmpty(value) != ERR_OK)
+    {
+        return ERR_VALIDATION;
+    }
+
+    int32_t package, parent, job;
+
+    if (sscanf(value, "%i.%i.%i", &package, &parent, &job) != 3)
+    {
+        return ERR_VALIDATION;
+    }
+
+    if ((package >= 0) && (parent >= 0) && (job >= 0))
+    {
+        return ERR_OK;
+    }
+    return ERR_VALIDATION;
 }

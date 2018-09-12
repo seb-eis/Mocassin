@@ -10,14 +10,17 @@
 
 #pragma once
 #include "Framework/Errors/McErrors.h"
-#include "Simulator/Data/Model/SimContext/SimContext.h"
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
 
-error_t ConstructEnvLattice(__SCONTEXT_PAR);
+/* Initializer routines */
 
-error_t PrepareEnvLattice(__SCONTEXT_PAR);
+void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR);
 
-error_t GetEnvReadyStatusEval(__SCONTEXT_PAR);
+void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR);
 
+void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId);
+
+/* Simulation routines KMC */
 
 void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR);
 
@@ -31,6 +34,7 @@ void SetState2EnergyKmc(__SCONTEXT_PAR);
 
 void AdvanceKmcSystemToState2(__SCONTEXT_PAR);
 
+/* Simulation routines MMC */
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR);
 

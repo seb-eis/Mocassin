@@ -4,15 +4,18 @@ project(ICon.Simulator VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+
 FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
 FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
-set(C_STANDARD 11)
-set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
-set(CMAKE_C_FLAGS_RELEASE "-O2")
+add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE} Framework/Basic/BaseTypes/Buffers.h Framework/Basic/BaseTypes/Buffers.c Framework/Basic/Macros/Macros.h)
 
-include_directories(./)
-add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE})
+include_directories(${PROJECT_SOURCE_DIR})
+
+set_property(TARGET ICon.Simulator PROPERTY C_STANDARD 11)
+set(CMAKE_C_FLAGS_DEBUG "-Wall -g -msse3")
+set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -msse3")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

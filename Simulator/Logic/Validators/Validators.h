@@ -12,9 +12,9 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 
-static inline error_t ValidateAlwaysTrue(void const * value)
+static inline error_t ValidateNothing(void const * value)
 {
-    return 0;
+    return ERR_OK;
 }
 
 error_t ValidateCmdKeyArgumentFormat(char const * value);
@@ -22,3 +22,5 @@ error_t ValidateCmdKeyArgumentFormat(char const * value);
 error_t ValidateStringNotNullOrEmpty(char const * value);
 
 error_t ValidateIsValidFilePath(char const * value);
+
+error_t ValidateDatabaseQueryString(char const* value);

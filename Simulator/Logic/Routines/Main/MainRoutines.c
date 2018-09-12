@@ -1,0 +1,514 @@
+//////////////////////////////////////////
+// Project: C Monte Carlo Simulator		//
+// File:	EnvRoutines.c        		//
+// Author:	Sebastian Eisele			//
+//			Workgroup Martin, IPC       //
+//			RWTH Aachen University      //
+//			© 2018 Sebastian Eisele     //
+// Short:   Main simulation routines    //
+//////////////////////////////////////////
+
+#include "Simulator/Logic/Routines/Main/MainRoutines.h"
+#include "Simulator/Logic/Constants/Constants.h"
+#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Framework/Basic/FileIO/FileIO.h"
+#include "Simulator/Logic/Objects/JumpSelection.h"
+#include "Simulator/Logic/Routines/Environment/EnvRoutines.h"
+#include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
+
+error_t PrepareForMainRoutine(__SCONTEXT_PAR)
+{
+    return ERR_NOTIMPLEMENTED;
+}
+
+error_t ResetContextAfterPrerun(__SCONTEXT_PAR)
+{
+    return ERR_NOTIMPLEMENTED;
+}
+
+error_t StartMainRoutine(__SCONTEXT_PAR)
+{
+    runtime_assertion(MainStateHasFlags(SCONTEXT, FLG_STATEERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
+
+    if (MainStateHasFlags(SCONTEXT, FLG_KMC))
+    {
+        if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
+        {
+            SIMERROR = StartMainKmcRoutine(SCONTEXT);
+            error_assert(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+
+            SIMERROR = FinishRoutinePrerun(SCONTEXT);
+            error_assert(SIMERROR, "Prerun finish of KMC main routine failed.")
+        }
+        
+        return StartMainKmcRoutine(SCONTEXT);
+    }
+
+    if (MainStateHasFlags(SCONTEXT, FLG_MMC))
+    {
+        if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
+        {
+            SIMERROR = StartMainMmcRoutine(SCONTEXT);
+            error_assert(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+
+            SIMERROR = FinishRoutinePrerun(SCONTEXT);
+            error_assert(SIMERROR, "Prerun finish of KMC main routine failed.")
+        }
+        
+        return StartMainKmcRoutine(SCONTEXT);
+    }
+
+    error_assert(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
+    return -1; // GCC [-Wall] expects return value, even with exit(..) statement
+}
+
+error_t FinishRoutinePrerun(__SCONTEXT_PAR)
+{
+    SIMERROR = SaveSimulationState(SCONTEXT);
+    error_assert(SIMERROR, "State save after prerun completion failed.");
+
+    SIMERROR = ResetContextAfterPrerun(SCONTEXT);
+    error_assert(SIMERROR, "Context reset after prerun completion failed.");
+
+    UnsetMainStateFlags(SCONTEXT, FLG_PRERUN);
+    return SIMERROR;
+}
+
+error_t StartMainKmcRoutine(__SCONTEXT_PAR)
+{
+    while (GetKmcAbortCondEval(SCONTEXT) == FLG_CONTINUE)
+    {
+        SIMERROR = DoNextKmcCycleBlock(SCONTEXT);
+        error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
+
+        SIMERROR = FinishKmcCycleBlock(SCONTEXT);
+        error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
+    }
+
+    return FinishMainRoutineKmc(SCONTEXT);
+}
+
+error_t StartMainMmcRoutine(__SCONTEXT_PAR)
+{
+    while (GetMmcAbortCondEval(SCONTEXT) == FLG_CONTINUE)
+    {
+        SIMERROR = DoNextMmcCycleBlock(SCONTEXT);
+        error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block execution.");
+
+        SIMERROR = FinishMmcCycleBlock(SCONTEXT);
+        error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
+    }
+
+    return FinishMainRoutineMmc(SCONTEXT);
+}
+
+static inline error_t CallOutputPlugin(__SCONTEXT_PAR)
+{
+    return_if(SCONTEXT->Plugins.OnDataOutput == NULL, ERR_OK);
+    SCONTEXT->Plugins.OnDataOutput(SCONTEXT);
+    return SIMERROR;
+}
+
+static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
+{
+    getMainCycleCounters(SCONTEXT)->StepGoalMcs += getMainCycleCounters(SCONTEXT)->McsPerBlock;
+}
+
+error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
+{
+    while (getMainCycleCounters(SCONTEXT)->Mcs < getMainCycleCounters(SCONTEXT)->StepGoalMcs)
+    {
+        for (size_t i = 0; i < getMainCycleCounters(SCONTEXT)->McsPerBlock; i++)
+        {
+            SetKmcJumpSelection(SCONTEXT);
+            SetKmcJumpPathProperties(SCONTEXT);
+
+            if (GetKmcJumpRuleEval(SCONTEXT))
+            {
+                SetKmcJumpProperties(SCONTEXT);
+                SetKmcJumpEvaluation(SCONTEXT);
+            }
+            else
+            {
+                SetKmcJumpEvalFail(SCONTEXT);
+            }
+        }
+    }
+    return SIMERROR;
+}
+
+static void SharedCycleBlockFinish(__SCONTEXT_PAR)
+{
+    UnsetMainStateFlags(SCONTEXT, FLG_FIRSTCYCLE);
+
+    SIMERROR = SyncSimulationState(SCONTEXT);
+    error_assert(SIMERROR, "Simulation aborted due to failed sycnhronization between dynamic model and state object.");
+
+    SIMERROR = SaveSimulationState(SCONTEXT);
+    error_assert(SIMERROR, "Simulation aborted due to error during serialization of the state object.");
+
+    SIMERROR = CallOutputPlugin(SCONTEXT);
+    error_assert(SIMERROR, "Simulation aborted due to error in the external output plugin.");
+}
+
+error_t FinishKmcCycleBlock(__SCONTEXT_PAR)
+{
+    AdvanceBlockCounters(SCONTEXT);
+    SharedCycleBlockFinish(SCONTEXT);
+
+    return SIMERROR;
+}
+
+error_t DoNextMmcCycleBlock(__SCONTEXT_PAR)
+{
+    while (getMainCycleCounters(SCONTEXT)->Mcs < getMainCycleCounters(SCONTEXT)->StepGoalMcs)
+    {
+        for (size_t i = 0; i < getMainCycleCounters(SCONTEXT)->McsPerBlock; i++)
+        {
+            SetMmcJumpSelection(SCONTEXT);
+            SetMmcJumpPathProperties(SCONTEXT);
+
+            if (GetMmcJumpRuleEval(SCONTEXT))
+            {
+                SetMmcJumpProperties(SCONTEXT);
+                SetMmcJumpEvaluation(SCONTEXT);
+            }
+            else
+            {
+                SetMmcJumpEvalFail(SCONTEXT);
+            }
+        }
+    }
+    return SIMERROR;
+}
+
+error_t FinishMmcCycleBlock(__SCONTEXT_PAR)
+{
+    AdvanceBlockCounters(SCONTEXT);
+    SharedCycleBlockFinish(SCONTEXT);
+
+    return SIMERROR;
+}
+
+static inline Bitmask_t GetTimeoutAbortEval(__SCONTEXT_PAR)
+{
+    int64_t newClock = clock();
+    int64_t lastClock = getRuntimeInformation(SCONTEXT)->LastClock;
+
+    getMainStateMetaData(SCONTEXT)->TimePerBlock = (newClock - lastClock) / CLOCKS_PER_SEC;
+    getMainStateMetaData(SCONTEXT)->ProgramRunTime += (newClock - lastClock) / CLOCKS_PER_SEC;
+    int64_t blockEta = getMainStateMetaData(SCONTEXT)->TimePerBlock + getMainStateMetaData(SCONTEXT)->ProgramRunTime;
+
+    bool_t isTimeout = (getMainStateMetaData(SCONTEXT)->ProgramRunTime >= getJobInformation(SCONTEXT)->TimeLimit) || (blockEta > getJobInformation(SCONTEXT)->TimeLimit);
+    return (isTimeout) ? FLG_TIMEOUT : FLG_CONTINUE;
+}
+
+static inline bool_t GetRateAbortEval(__SCONTEXT_PAR)
+{
+    getMainStateMetaData(SCONTEXT)->SuccessRate = getMainCycleCounters(SCONTEXT)->Mcs / getMainStateMetaData(SCONTEXT)->ProgramRunTime;
+    getMainStateMetaData(SCONTEXT)->CycleRate = getMainCycleCounters(SCONTEXT)->Cycles / getMainStateMetaData(SCONTEXT)->ProgramRunTime;
+
+    if (getMainStateMetaData(SCONTEXT)->CycleRate < getJobInformation(SCONTEXT)->MinimalSuccessRate)
+    {
+        return true;
+    }
+    return false;
+}
+
+static inline bool_t GetMcsTargetReachedEval(__SCONTEXT_PAR)
+{
+    if (getMainCycleCounters(SCONTEXT)->Mcs >= getMainCycleCounters(SCONTEXT)->TotalGoalMcs)
+    {
+        return true;
+    }
+    return false;
+}
+
+static error_t GetGeneralAbortCondEval(__SCONTEXT_PAR)
+{
+    if (MainStateHasFlags(SCONTEXT, FLG_FIRSTCYCLE))
+    {
+        return FLG_CONTINUE;
+    }
+    if (GetTimeoutAbortEval(SCONTEXT))
+    {
+        setMainStateFlags(SCONTEXT, FLG_TIMEOUT);
+        return FLG_TIMEOUT;
+    }
+    if (GetRateAbortEval(SCONTEXT))
+    {
+        setMainStateFlags(SCONTEXT, FLG_RATELIMIT);
+        return FLG_RATELIMIT;
+    }
+    if (GetMcsTargetReachedEval(SCONTEXT))
+    {
+        setMainStateFlags(SCONTEXT, FLG_COMPLETED);
+        return FLG_COMPLETED;
+    }
+
+    return FLG_CONTINUE;
+}
+
+error_t GetKmcAbortCondEval(__SCONTEXT_PAR)
+{
+    if (GetGeneralAbortCondEval(SCONTEXT) != FLG_CONTINUE)
+    {
+        return FLG_ABORTCONDITION;
+    }
+    return FLG_CONTINUE;
+}
+
+error_t GetMmcAbortCondEval(__SCONTEXT_PAR)
+{
+    if (GetGeneralAbortCondEval(SCONTEXT) != FLG_CONTINUE)
+    {
+        return FLG_ABORTCONDITION;
+    }
+    return FLG_CONTINUE;
+}
+
+error_t SyncSimulationState(__SCONTEXT_PAR)
+{
+    return ERR_OK;
+}
+
+error_t SaveSimulationState(__SCONTEXT_PAR)
+{
+    if (MainStateHasFlags(SCONTEXT, FLG_PRERUN))
+    {
+        SIMERROR = SaveWriteBufferToFile(FILE_PRERSTATE, FMODE_BINARY_W, getMainStateBuffer(SCONTEXT));
+    }
+    else
+    {
+        SIMERROR = SaveWriteBufferToFile(FILE_MAINSTATE, FMODE_BINARY_W, getMainStateBuffer(SCONTEXT));
+    }
+    return SIMERROR;
+}
+
+static error_t GeneralSimulationFinish(__SCONTEXT_PAR)
+{
+    setMainStateFlags(SCONTEXT, FLG_COMPLETED);
+    SIMERROR = SaveSimulationState(SCONTEXT);
+    return SIMERROR;
+}
+
+error_t FinishMainRoutineKmc(__SCONTEXT_PAR)
+{
+    SIMERROR = GeneralSimulationFinish(SCONTEXT);
+    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    return SIMERROR;
+}
+
+error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
+{
+    SIMERROR = GeneralSimulationFinish(SCONTEXT);
+    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    return SIMERROR;
+}
+
+static inline int32_t LookupActJumpId(__SCONTEXT_PAR)
+{
+    return array_Get(*getJumpIdToPositionsAssignmentTable(SCONTEXT), JUMPPATH[0]->PositionVector.d, JUMPPATH[0]->ParticleId, getJumpSelectionInfo(SCONTEXT)->RelativeId);
+}
+
+static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
+{
+    getJumpSelectionInfo(SCONTEXT)->JumpId = LookupActJumpId(SCONTEXT);
+    getCycleState(SCONTEXT)->ActiveJumpDirection = getJumpDirectionById(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->JumpId);
+    getCycleState(SCONTEXT)->ActiveJumpCollection = getJumpCollectionById(SCONTEXT, getActiveJumpDirection(SCONTEXT)->CollectionId);
+}
+
+static inline void SetActPathStartEnv(__SCONTEXT_PAR)
+{
+    JUMPPATH[0] = getEnvironmentStateById(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->EnvironmentId);
+    SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, 0, JUMPPATH[0]->ParticleId);
+    JUMPPATH[0]->PathId = 0;
+}
+
+static inline void SetActCounterCol(__SCONTEXT_PAR)
+{
+    getCycleState(SCONTEXT)->ActiveCounterCollection = getMainStateCounterById(SCONTEXT, JUMPPATH[0]->ParticleId);
+}
+
+void SetKmcJumpSelection(__SCONTEXT_PAR)
+{
+    RollNextKmcSelect(SCONTEXT);
+    getCycleState(SCONTEXT)->ActiveStateCode = 0ULL;
+
+    SetActCounterCol(SCONTEXT);
+    SetActPathStartEnv(SCONTEXT);
+    SetActJumpDirAndCol(SCONTEXT);
+}
+
+void SetKmcJumpPathProperties(__SCONTEXT_PAR)
+{
+    Vector4_t actVector;
+    byte_t index = 0;
+
+    cpp_foreach(relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
+    {
+        actVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, getLatticeSizeVector(SCONTEXT));
+        JUMPPATH[index] = getEnvironmentStateByVector4(SCONTEXT, &actVector);
+
+        SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, index, JUMPPATH[index]->ParticleId);
+        JUMPPATH[index]->PathId = index;
+    }
+}
+
+static inline OccCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
+{
+    return getActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StateCode0;
+}
+
+static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
+{
+    if (GetLastPossibleJumpCode(SCONTEXT) < getActiveStateCode(SCONTEXT))
+    {
+        getCycleState(SCONTEXT)->ActiveJumpRule = NULL;
+    }
+    else
+    {
+        getCycleState(SCONTEXT)->ActiveJumpRule = getActiveJumpCollection(SCONTEXT)->JumpRules.Begin;
+        while (getActiveJumpRule(SCONTEXT)->StateCode0 < getActiveStateCode(SCONTEXT))
+        {
+            getCycleState(SCONTEXT)->ActiveJumpRule++;
+        }
+        if (getActiveJumpRule(SCONTEXT)->StateCode0 != getActiveStateCode(SCONTEXT))
+        {
+            getCycleState(SCONTEXT)->ActiveJumpRule = NULL;
+        }
+    }
+}
+
+static inline void BinaryJumpRuleLookup(__SCONTEXT_PAR)
+{
+    // Possible implementation on optimization
+}
+
+static inline void LookupAndSetActJumpRule(__SCONTEXT_PAR)
+{
+    LinearJumpRuleLookup(SCONTEXT);
+}
+
+bool_t GetKmcJumpRuleEval(__SCONTEXT_PAR)
+{
+    LookupAndSetActJumpRule(SCONTEXT);
+    return getActiveJumpRule(SCONTEXT) == NULL;
+}
+
+void SetKmcJumpEvalFail(__SCONTEXT_PAR)
+{
+    getActiveCounters(SCONTEXT)->NumOfBlocks++;
+}
+
+void SetKmcJumpProperties(__SCONTEXT_PAR)
+{
+    SetAllStateEnergiesKmc(SCONTEXT);
+}
+
+void SetKmcJumpProbsDefault(__SCONTEXT_PAR)
+{
+    JumpEnergyInfo_t* energyInfo = getJumpEnergyInfo(SCONTEXT);
+
+    energyInfo->ConformationDelta = 0.5 * (energyInfo->Energy2 - energyInfo->Energy0);
+    energyInfo->Probability0to2 = exp(energyInfo->Energy1 + energyInfo->ConformationDelta);
+    energyInfo->Probability2to0 = (energyInfo->ConformationDelta > energyInfo->Energy1) ? INFINITY : 0.0;
+}
+
+void SetKmcJumpEvaluation(__SCONTEXT_PAR)
+{
+    SCONTEXT->Plugins.OnSetJumpProbabilities(SCONTEXT);
+
+    if (getJumpEnergyInfo(SCONTEXT)->Probability2to0 > MC_CONST_JUMPLIMIT_MAX)
+    {
+        getActiveCounters(SCONTEXT)->NumOfUnstableEnds++;
+        return;
+    }
+    if (getJumpEnergyInfo(SCONTEXT)->Probability0to2 > MC_CONST_JUMPLIMIT_MAX)
+    {
+        getActiveCounters(SCONTEXT)->NumOfUnstableStarts++;
+        return;
+    }
+    if (GetNextCompareDouble(SCONTEXT) < getJumpEnergyInfo(SCONTEXT)->Probability0to2)
+    {
+        getActiveCounters(SCONTEXT)->NumOfMcs++;
+        AdvanceKmcSystemToState2(SCONTEXT);
+        MakeJumpPoolUpdateKmc(SCONTEXT);
+        return;
+    }
+    else
+    {
+        getActiveCounters(SCONTEXT)->NumOfRejects++;
+    }
+}
+
+void SetMmcJumpSelection(__SCONTEXT_PAR)
+{
+    RollNextMmcSelect(SCONTEXT);
+
+    SetActCounterCol(SCONTEXT);
+    SetActPathStartEnv(SCONTEXT);
+    SetActJumpDirAndCol(SCONTEXT);
+}
+
+void SetMmcJumpPathProperties(__SCONTEXT_PAR)
+{
+    JUMPPATH[2] = getEnvironmentStateById(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->OffsetId);
+    JUMPPATH[1] = getEnvironmentStateById(SCONTEXT, 0);
+
+    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[0] * JUMPPATH[2]->PositionVector.a;
+    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[1] * JUMPPATH[2]->PositionVector.b;
+    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[2] * JUMPPATH[2]->PositionVector.c;
+    JUMPPATH[1] += JUMPPATH[0]->PositionVector.d;
+
+    SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, 1, JUMPPATH[1]->ParticleId);
+    JUMPPATH[1]->PathId = 1;
+}
+
+void SetMmcJumpEvalFail(__SCONTEXT_PAR)
+{
+    getActiveCounters(SCONTEXT)->NumOfBlocks++;
+}
+
+bool_t GetMmcJumpRuleEval(__SCONTEXT_PAR)
+{
+    LookupAndSetActJumpRule(SCONTEXT);
+    return getCycleState(SCONTEXT)->ActiveJumpRule == 0;
+}
+
+void SetMmcJumpProperties(__SCONTEXT_PAR)
+{
+    SetAllStateEnergiesMmc(SCONTEXT);
+}
+
+void SetMmcJumpProbsDefault(__SCONTEXT_PAR)
+{
+    getJumpEnergyInfo(SCONTEXT)->Probability0to2 = exp(getJumpEnergyInfo(SCONTEXT)->Energy2 - getJumpEnergyInfo(SCONTEXT)->Energy0);
+}
+
+void SetMmcJumpEvaluation(__SCONTEXT_PAR)
+{
+    SCONTEXT->Plugins.OnSetJumpProbabilities(SCONTEXT);
+
+    if (getJumpEnergyInfo(SCONTEXT)->Probability2to0 > MC_CONST_JUMPLIMIT_MAX)
+    {
+        getActiveCounters(SCONTEXT)->NumOfUnstableEnds++;
+        return;
+    }
+    if (getJumpEnergyInfo(SCONTEXT)->Probability0to2 > MC_CONST_JUMPLIMIT_MAX)
+    {
+        getActiveCounters(SCONTEXT)->NumOfUnstableStarts++;
+        return;
+    }
+    if (GetNextCompareDouble(SCONTEXT) < getJumpEnergyInfo(SCONTEXT)->Probability0to2)
+    {
+        getActiveCounters(SCONTEXT)->NumOfMcs++;
+        AdvanceMmcSystemToState2(SCONTEXT);
+        MakeJumpPoolUpdateMmc(SCONTEXT);
+        return;
+    }
+    else
+    {
+        getActiveCounters(SCONTEXT)->NumOfRejects++;
+    }
+}

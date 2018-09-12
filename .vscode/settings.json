@@ -2,7 +2,10 @@
     "files.associations": {
         "jumpselection.h": "c",
         "mainroutines.h": "c",
-        "pluginloading.h": "c"
+        "pluginloading.h": "c",
+        "contextinitializer.h": "c",
+        "basetypes.h": "c",
+        "contextaccess.h": "c"
     },
     "cmake.mingwSearchDirs": [
         "C:\\Program Files\\DevTools\\MinGw-w64"
@@ -12,5 +15,6 @@
         "Ninja",
         "Unix Makefiles"
     ],
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "C_Cpp.configurationWarnings": "Disabled"
 }

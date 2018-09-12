@@ -12,16 +12,16 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Errors/McErrors.h"
 
-#ifdef MC_USE_PLUGIN_SUPPORT
-    #ifdef _WIN32
+#if defined(MC_USE_PLUGIN_SUPPORT)
+    #if defined(_WIN32)
         #include <windows.h>
     #endif
         
-    #ifdef linux
+    #if defined(linux)
         #include <dlfcn.h>
     #endif
 
-    #ifndef _DEBUG
+    #if !defined(_DEBUG)
         #define IGNORE_INVALID_PLUGINS
     #endif
 #else

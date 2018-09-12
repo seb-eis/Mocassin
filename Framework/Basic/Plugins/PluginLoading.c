@@ -10,13 +10,13 @@
 
 #include "Framework/Basic/Plugins/PluginLoading.h"
 
-#ifndef MC_USE_PLUGIN_SUPPORT
+#if !defined(MC_USE_PLUGIN_SUPPORT)
     void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
     {
         return NULL;
     }
 #else
-    #ifdef _WIN32
+    #if defined(_WIN32)
         void LogApiError_WIN32(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "WIN32 API ERROR:\t0x%lx\n API CALL DETAIL:\t%s\n", GetLastError(), message);
@@ -44,7 +44,7 @@
         }
     #endif
 
-    #ifdef linux
+    #if defined(linux)
         void LogApiError_LINUX(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "LINUX API ERROR:\t%s\n API CALL DETAIL:\t%s\n", dlerror(), message);
