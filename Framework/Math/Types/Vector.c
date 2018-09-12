@@ -56,7 +56,7 @@ vector4_t AddVector4(const vector4_t * lhs, const vector4_t * rhs)
 	return (vector4_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c,lhs->d + rhs->d };
 }
 
-vector4_t SubstractVector4(const vector4_t * lhs, const vector4_t * rhs)
+vector4_t SubtractVector4(const vector4_t * lhs, const vector4_t * rhs)
 {
 	return (vector4_t) { lhs->a - rhs->a,lhs->b - rhs->b,lhs->c - rhs->c,lhs->d - rhs->d };
 }

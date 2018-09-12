@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2018.2.2\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\ICon.Simulator.dir/objects.a
+C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\ar.exe cr CMakeFiles\ICon.Simulator.dir/objects.a @CMakeFiles\ICon.Simulator.dir\objects1.rsp
+C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe -Wall -g   -Wl,--whole-archive CMakeFiles\ICon.Simulator.dir/objects.a -Wl,--no-whole-archive  -o ICon.Simulator.exe -Wl,--out-implib,libICon.Simulator.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\ICon.Simulator.dir\linklibs.rsp
