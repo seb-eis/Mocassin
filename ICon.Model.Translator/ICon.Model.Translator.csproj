@@ -21,12 +21,9 @@
   <ItemGroup>
     <Folder Include="Data\Entities\Job\DbSet\" />
     <Folder Include="Data\InteropObjects\Transition\Net\" />
-    <Folder Include="Translator\TranslatorSystem\" />
-    <Folder Include="Translator\Components\Energies\" />
-    <Folder Include="Translator\Components\" />
-    <Folder Include="Translator\Components\Settings\" />
-    <Folder Include="Translator\Components\Transitions\" />
-    <Folder Include="Translator\Components\Structural\" />
+    <Folder Include="Logic\Components\Energies\" />
+    <Folder Include="Logic\Components\Settings\" />
+    <Folder Include="Logic\Components\Transitions\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\ICon.Mathematics.csproj" />
     <ProjectReference Include="..\ICon.Framework.Shared\ICon.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Model\ICon.Model.csproj" />
   </ItemGroup>
 
 </Project>

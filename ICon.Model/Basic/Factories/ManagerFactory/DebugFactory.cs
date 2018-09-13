@@ -201,17 +201,17 @@ namespace ICon.Model.Basic
                     new MetropolisTransition()
                     {
                         Index = 0, AbstractTransition = abstractTransitions[1],
-                        CellPosition0 = unitCellPositions[0], CellPosition1 = unitCellPositions[0]
+                        FirstUnitCellPosition = unitCellPositions[0], SecondUnitCellPosition = unitCellPositions[0]
                     },
                     new MetropolisTransition()
                     {
                         Index = 1, AbstractTransition = abstractTransitions[2],
-                        CellPosition0 = unitCellPositions[1], CellPosition1 = unitCellPositions[1]
+                        FirstUnitCellPosition = unitCellPositions[1], SecondUnitCellPosition = unitCellPositions[1]
                     },
                     new MetropolisTransition()
                     {
                         Index = 2, AbstractTransition = abstractTransitions[3],
-                        CellPosition0 = unitCellPositions[0], CellPosition1 = unitCellPositions[0]
+                        FirstUnitCellPosition = unitCellPositions[0], SecondUnitCellPosition = unitCellPositions[0]
                     }
 };
                 var kineticTransitions = new KineticTransition[]

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using ICon.Symmetry.SpaceGroups;
 using ICon.Mathematics.ValueTypes;
 using ICon.Mathematics.Coordinates;
+using ICon.Model.Structures;
+using ICon.Symmetry.Analysis;
 
 namespace ICon.Model.Transitions
 {
     /// <summary>
     /// Quick kinetic transition mapper that uses a space group service interafce to create the kinetic mappings
     /// </summary>
-    public class KineticTransitionQuickMapper
+    public class KineticTransitionMapper
     {
         /// <summary>
         /// The space group service that provides the symmetry operations
@@ -23,14 +25,21 @@ namespace ICon.Model.Transitions
         protected UnitCellVectorEncoder VectorEncoder { get; }
 
         /// <summary>
-        /// Creates new kinetic transition quick mapper that uses the provided space group service and vector encoder
+        /// The list of existing unit cell positions
+        /// </summary>
+        protected IUnitCellProvider<IUnitCellPosition> UnitCellProvider { get; }
+
+        /// <summary>
+        /// Creates new kinetic transition quick mapper that uses the provided space group service, vector encoder and full unit cell provider
         /// </summary>
         /// <param name="spaceGroupService"></param>
         /// <param name="vectorEncoder"></param>
-        public KineticTransitionQuickMapper(ISpaceGroupService spaceGroupService, UnitCellVectorEncoder vectorEncoder)
+        /// <param name="unitCellProvider"></param>
+        public KineticTransitionMapper(ISpaceGroupService spaceGroupService, UnitCellVectorEncoder vectorEncoder, IUnitCellProvider<IUnitCellPosition> unitCellProvider)
         {
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
             VectorEncoder = vectorEncoder ?? throw new ArgumentNullException(nameof(vectorEncoder));
+            UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
         }
 
         /// <summary>
@@ -51,11 +60,15 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<KineticMapping> GetMappings(IEnumerable<Fractional3D> geometry, IKineticTransition transition)
         {
+            var start = UnitCellProvider.GetEntryValueAt(geometry.First());
+            var end = UnitCellProvider.GetEntryValueAt(geometry.Last());
+
+
             foreach (var fractionalSequence in SpaceGroupService.GetAllWyckoffOriginSequences(geometry))
             {
                 if (VectorEncoder.TryEncodeFractional(fractionalSequence, out List<CrystalVector4D> encodedSequence))
                 {
-                    yield return new KineticMapping(transition, encodedSequence.ToArray(), fractionalSequence);
+                    yield return new KineticMapping(transition, start, end, encodedSequence.ToArray(), fractionalSequence);
                 }
                 else
                 {

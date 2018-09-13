@@ -59,8 +59,8 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         protected IPermutationProvider<int> GetMappingPermuter(IMetropolisTransition transition, IList<SetList<CrystalVector4D>> encodedPositions)
         {
-            var first = encodedPositions[transition.CellPosition0.Index].Select(position => position.P).ToList();
-            var second = encodedPositions[transition.CellPosition1.Index].Select(position => position.P).ToList();
+            var first = encodedPositions[transition.FirstUnitCellPosition.Index].Select(position => position.P).ToList();
+            var second = encodedPositions[transition.SecondUnitCellPosition.Index].Select(position => position.P).ToList();
             return new SlotMachinePermuter<int>(first, second);
         }
 
@@ -80,11 +80,11 @@ namespace ICon.Model.Transitions
             {
                 throw new ArgumentNullException(nameof(encodedPositions));
             }
-            if (encodedPositions.Count <= Math.Max(transition.CellPosition0.Index, transition.CellPosition1.Index))
+            if (encodedPositions.Count <= Math.Max(transition.FirstUnitCellPosition.Index, transition.SecondUnitCellPosition.Index))
             {
                 return false;
             }
-            if (encodedPositions[transition.CellPosition0.Index].Count == 0 || encodedPositions[transition.CellPosition1.Index].Count == 0)
+            if (encodedPositions[transition.FirstUnitCellPosition.Index].Count == 0 || encodedPositions[transition.SecondUnitCellPosition.Index].Count == 0)
             {
                 return false;
             }

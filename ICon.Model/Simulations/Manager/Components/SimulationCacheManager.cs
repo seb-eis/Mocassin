@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using ICon.Model.Particles;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
 
@@ -20,6 +20,36 @@ namespace ICon.Model.Simulations
         public SimulationCacheManager(SimulationDataCache dataCache, IProjectServices projectServices) : base(dataCache, projectServices)
         {
 
+        }
+
+        /// <summary>
+        /// Get a list of the mobile particle infos for all kinetic simulations on all unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        public IList<IList<IParticleSet>> GetKineticMobileParticleSets()
+        {
+            return AccessCacheableDataEntry(CreateKineticMobileParticleSets);
+        }
+
+        /// <summary>
+        /// Get a list of the mobile particle infos for all kinetic simulations on all unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        public IList<IList<IParticleSet>> GetMetropolisMobileParticleSets()
+        {
+            return AccessCacheableDataEntry(CreateMetropolisMobileParticleSets);
+        }
+
+        [CacheableMethod]
+        protected IList<IList<IParticleSet>> CreateKineticMobileParticleSets()
+        {
+            return null;
+        }
+
+        [CacheableMethod]
+        protected IList<IList<IParticleSet>> CreateMetropolisMobileParticleSets()
+        {
+            return null;
         }
     }
 }

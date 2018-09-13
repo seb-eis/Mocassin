@@ -20,14 +20,14 @@ namespace ICon.Model.Transitions
         /// </summary>
         [DataMember]
         [LinkableByIndex]
-        public IUnitCellPosition CellPosition0 { get; set; }
+        public IUnitCellPosition FirstUnitCellPosition { get; set; }
 
         /// <summary>
         /// The unit cell position of the second sub-lattice
         /// </summary>
         [DataMember]
         [LinkableByIndex]
-        public IUnitCellPosition CellPosition1 { get; set; }
+        public IUnitCellPosition SecondUnitCellPosition { get; set; }
 
         /// <summary>
         /// The affiliated abstract transition
@@ -59,12 +59,12 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public bool Equals(IMetropolisTransition other)
         {
-            if (CellPosition0.Index == other.CellPosition0.Index && CellPosition1.Index == other.CellPosition1.Index)
+            if (FirstUnitCellPosition.Index == other.FirstUnitCellPosition.Index && SecondUnitCellPosition.Index == other.SecondUnitCellPosition.Index)
             {
                 return AbstractTransition == other.AbstractTransition;
             }
-            return CellPosition0.Index == other.CellPosition1.Index
-                && CellPosition1.Index == other.CellPosition0.Index
+            return FirstUnitCellPosition.Index == other.SecondUnitCellPosition.Index
+                && SecondUnitCellPosition.Index == other.FirstUnitCellPosition.Index
                 && AbstractTransition == other.AbstractTransition;
         }
 
@@ -86,8 +86,8 @@ namespace ICon.Model.Transitions
         {
             if (CastWithDepricatedCheck<IMetropolisTransition>(obj) is var transition)
             {
-                CellPosition0 = transition.CellPosition0;
-                CellPosition1 = transition.CellPosition1;
+                FirstUnitCellPosition = transition.FirstUnitCellPosition;
+                SecondUnitCellPosition = transition.SecondUnitCellPosition;
                 AbstractTransition = transition.AbstractTransition;
                 return this;
             }

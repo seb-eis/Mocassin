@@ -14,12 +14,12 @@ namespace ICon.Model.Translator
         private C_Vector4 relativeVector;
 
         [MarshalAs(UnmanagedType.I4)]
-        private int trackerId;
+        private int tableId;
 
         [MarshalAs(UnmanagedType.I8)]
         private readonly long longPadding;
 
-        public int TrackerId { get => trackerId; set => trackerId = value; }
+        public int TableId { get => tableId; set => tableId = value; }
 
         public C_Vector4 RelativeVector { get => relativeVector; set => relativeVector = value; }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Translator
 {
@@ -9,5 +10,6 @@ namespace ICon.Model.Translator
     /// </summary>
     public interface IStructureTranslator
     {
+        IList<StructureModel> CreateStructureModels(ITranslationContext translationContext);
     }
 }

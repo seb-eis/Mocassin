@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using ICon.Framework.Collections;
 using ICon.Model.Basic;
 
@@ -40,6 +40,15 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
+        /// Get the number of metropolis transitions that are not deprecated
+        /// </summary>
+        /// <returns></returns>
+        public int GetKineticTransitionCount()
+        {
+            return Data.KineticTransitions.Where(a => !a.IsDeprecated).Count();
+        }
+
+        /// <summary>
         /// Get a read only list of all kinetic transitions
         /// </summary>
         /// <returns></returns>
@@ -55,6 +64,15 @@ namespace ICon.Model.Transitions
         public ReadOnlyList<IMetropolisTransition> GetMetropolisTransitions()
         {
             return ReadOnlyList<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
+        }
+
+        /// <summary>
+        /// Get the number of metropolis transitions that are not deprecated
+        /// </summary>
+        /// <returns></returns>
+        public int GetMetropolisTransitonCount()
+        {
+            return Data.MetropolisTransitions.Where(a => !a.IsDeprecated).Count();
         }
 
         /// <summary>

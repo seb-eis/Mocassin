@@ -3,6 +3,7 @@
 using ICon.Mathematics.ValueTypes;
 using ICon.Framework.Collections;
 using ICon.Model.Basic;
+using ICon.Model.Structures;
 
 namespace ICon.Model.Transitions
 {
@@ -62,5 +63,17 @@ namespace ICon.Model.Transitions
         /// <param name="index"></param>
         /// <returns></returns>
         IList<KineticRule> GetKineticRuleList(int index);
+
+        /// <summary>
+        /// Get a dictionary that contains which kinetic transitions are possible on which unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary();
+
+        /// <summary>
+        /// Get a dictionary that contains which metropolis transitions are possible on which unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary();
     }
 }

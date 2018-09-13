@@ -102,6 +102,80 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
+        /// Get a dictionary that contains which kinetic transitions are possible on which unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        public IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary()
+        {
+            return AccessCacheableDataEntry(CreateKineticTransitionPositionDictionary);
+        }
+
+        /// <summary>
+        /// Get a dictionary that contains which metropolis transitions are possible on which unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        public IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary()
+        {
+            return AccessCacheableDataEntry(CreateMetropolisTransitionPositionDictionary);
+        }
+
+        /// <summary>
+        /// Creates a dictionary that assigns each unit cell position its possible list of metropolis transitions
+        /// </summary>
+        /// <returns></returns>
+        [CacheableMethod]
+        protected IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> CreateMetropolisTransitionPositionDictionary()
+        {
+            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
+            var result = new Dictionary<IUnitCellPosition, HashSet<IMetropolisTransition>>();
+
+            foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            {
+                result.Add(position, new HashSet<IMetropolisTransition>());
+            }
+
+            foreach (var transition in transitionManager.QueryPort.Query(port => port.GetMetropolisTransitions()))
+            {
+                if (!transition.IsDeprecated)
+                {
+                    result[transition.FirstUnitCellPosition].Add(transition);
+                    result[transition.SecondUnitCellPosition].Add(transition);
+                }
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a dictionary that assigns each unit cell position its possible list of kinetic transitions
+        /// </summary>
+        /// <returns></returns>
+        [CacheableMethod]
+        protected IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> CreateKineticTransitionPositionDictionary()
+        {
+            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var result = new Dictionary<IUnitCellPosition, HashSet<IKineticTransition>>();
+
+            foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            {
+                result.Add(position, new HashSet<IKineticTransition>());
+            }
+
+            foreach (var mappingList in GetAllKineticMappingLists())
+            {
+                if (mappingList.Count != 0)
+                {
+                    var mapping = mappingList[0];
+                    result[mapping.StartUnitCellPosition].Add(mapping.Transition);
+                    result[mapping.EndUnitCellPosition].Add(mapping.Transition);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Creates all metropolis transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
@@ -132,8 +206,10 @@ namespace ICon.Model.Transitions
         protected IList<IList<KineticMapping>> CreateAllKineticMappings()
         {
             var transitionManager = ProjectServices.GetManager<ITransitionManager>();
-            var encoder = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
-            var mapper = new KineticTransitionQuickMapper(ProjectServices.SpaceGroupService, encoder);
+            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var encoder = structureManager.QueryPort.Query(port => port.GetVectorEncoder());
+            var uniCellProvider = structureManager.QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var mapper = new KineticTransitionMapper(ProjectServices.SpaceGroupService, encoder, uniCellProvider);
 
             var result = new List<IList<KineticMapping>>();
             foreach (var transition in transitionManager.QueryPort.Query((ITransitionDataPort port) => port.GetKineticTransitions()))

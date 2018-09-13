@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace ICon.Model.Translator
 {
     /// <summary>
-    /// Interop database context for communication of data betwen the managed model system and the unmanaged simulator
+    /// Interop database context for communication with the unmanaged 'C' Simulator implementation 
     /// </summary>
-    public class InteropDbContext : DbContext
+    public class CInteropDbContext : DbContext, ITranslatorDbContext
     {
         /// <summary>
         /// List of actions performed on model building
@@ -21,26 +21,58 @@ namespace ICon.Model.Translator
         /// </summary>
         private string DbFilename { get; }
 
+        /// <summary>
+        /// Database set for translated simulation packages
+        /// </summary>
         public DbSet<SimulationPackage> SimulationPackages { get; set; }
 
+        /// <summary>
+        /// Database set for translated structure models
         public DbSet<StructureModel> StructureModels { get; set; }
 
+        /// <summary>
+        /// Database set for translated transition models
+        /// </summary>
         public DbSet<TransitionModel> TransitionModels { get; set; }
 
+        /// <summary>
+        /// Database set for translated energy models
+        /// </summary>
         public DbSet<EnergyModel> EnergyModels { get; set; }
 
+        /// <summary>
+        /// Database set for translated job models
+        /// </summary>
         public DbSet<JobModel> JobModels { get; set; }
 
+        /// <summary>
+        /// Database set for translated lattice models
+        /// </summary>
         public DbSet<LatticeModel> LatticeModels { get; set; }
 
+        /// <summary>
+        /// Database set for all environment definitions
+        /// </summary>
         public DbSet<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }
 
+        /// <summary>
+        /// Database set for all pair energy tables
+        /// </summary>
         public DbSet<PairEnergyTableEntity> PairEnergyTables { get; set; }
 
+        /// <summary>
+        /// Database set for all cluster energy tables
+        /// </summary>
         public DbSet<ClusterEnergyTableEntity> ClusterEnergyTables { get; set; }
 
+        /// <summary>
+        /// Database set for all jump collections
+        /// </summary>
         public DbSet<JumpCollectionEntity> JumpCollections { get; set; }
 
+        /// <summary>
+        /// Database set for alljump directions
+        /// </summary>
         public DbSet<JumpDirectionEntity> JumpDirections { get; set; }
 
         /// <summary>
@@ -48,16 +80,12 @@ namespace ICon.Model.Translator
         /// </summary>
         public DbSet<BlobEntityBase> Blobs { get; set; }
 
-        public DbSet<JumpAssignTableEntity> JumpAssignTables { get; set; }
-
-        public DbSet<JumpCountTableEntity> JumpCountTables { get; set; }
-
         /// <summary>
         /// Create new mccs database context using the provided filepath. Dop creates a new database if specfified
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="dropCreate"></param>
-        public InteropDbContext(string filename, bool dropCreate)
+        public CInteropDbContext(string filename, bool dropCreate)
         {
             DbFilename = filename;
             if (dropCreate)

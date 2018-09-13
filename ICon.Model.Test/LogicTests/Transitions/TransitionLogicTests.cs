@@ -24,13 +24,13 @@ namespace ICon.Model.Test
             var encoded = managers.StructureManager.QueryPort.Query(port => port.GetEncodedExtendedPositionLists());
             var transition0 = new MetropolisTransition()
             {
-                CellPosition0 = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(0)),
-                CellPosition1 = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(0))
+                FirstUnitCellPosition = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(0)),
+                SecondUnitCellPosition = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(0))
             };
             var transition1 = new MetropolisTransition()
             {
-                CellPosition0 = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(1)),
-                CellPosition1 = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(1))
+                FirstUnitCellPosition = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(1)),
+                SecondUnitCellPosition = managers.StructureManager.QueryPort.Query(port => port.GetUnitCellPosition(1))
             };
             var mappings = mapper.MapTransitions(new IMetropolisTransition[] { transition0, transition1 }, encoded).ToArray();
 
@@ -78,9 +78,11 @@ namespace ICon.Model.Test
         public void TestKineticQuickMapper()
         {
             var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var structureManager = managers.ProjectServices.GetManager<IStructureManager>();
+            var encoder = structureManager.QueryPort.Query(port => port.GetVectorEncoder());
+            var ucp = structureManager.QueryPort.Query(port => port.GetFullUnitCellProvider());
 
-            var encoder = managers.ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
-            var mapper = new KineticTransitionQuickMapper(managers.ProjectServices.SpaceGroupService, encoder);
+            var mapper = new KineticTransitionMapper(managers.ProjectServices.SpaceGroupService, encoder, ucp);
 
             var interGeoemtry = new List<DataVector3D>
             {

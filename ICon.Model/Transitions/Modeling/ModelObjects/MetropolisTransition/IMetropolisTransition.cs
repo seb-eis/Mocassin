@@ -14,12 +14,12 @@ namespace ICon.Model.Transitions
         /// <summary>
         /// The first unit cell position that describes the first sublattice
         /// </summary>
-        IUnitCellPosition CellPosition0 { get; }
+        IUnitCellPosition FirstUnitCellPosition { get; }
 
         /// <summary>
         /// The second unit cell position that describes the second sublattice
         /// </summary>
-        IUnitCellPosition CellPosition1 { get; }
+        IUnitCellPosition SecondUnitCellPosition { get; }
 
         /// <summary>
         /// The affiliated abstract transition describing the transition process

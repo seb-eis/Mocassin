@@ -43,7 +43,7 @@ namespace ICon.Model.Transitions
         IEnumerable<IParticle> GetFinalStateOccupation();
 
         /// <summary>
-        /// The particle indices for the unstable transition positions (Size is always path size - 1 )
+        /// The particle indices for the unstable transition positions
         /// </summary>
         IEnumerable<IParticle> GetTransitionStateOccupation();
 

@@ -58,5 +58,17 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <returns></returns>
         ReadOnlyList<IMetropolisTransition> GetMetropolisTransitions();
+
+        /// <summary>
+        /// Get the number of kinetic transitions
+        /// </summary>
+        /// <returns></returns>
+        int GetKineticTransitionCount();
+
+        /// <summary>
+        /// Get the number of metropolis transitions
+        /// </summary>
+        /// <returns></returns>
+        int GetMetropolisTransitonCount();
     }
 }

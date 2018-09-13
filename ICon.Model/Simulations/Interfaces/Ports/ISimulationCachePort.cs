@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using ICon.Model.Particles;
 using ICon.Model.Basic;
 
 namespace ICon.Model.Simulations
@@ -8,6 +10,16 @@ namespace ICon.Model.Simulations
     /// </summary>
     public interface ISimulationCachePort : IModelCachePort
     {
+        /// <summary>
+        /// Get a list of the mobile particle infos for all kinetic simulations on all unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        IList<IList<IParticleSet>> GetKineticMobileParticleSets();
 
+        /// <summary>
+        /// Get a list of the mobile particle infos for all kinetic simulations on all unit cell positions
+        /// </summary>
+        /// <returns></returns>
+        IList<IList<IParticleSet>> GetMetropolisMobileParticleSets();
     }
 }
