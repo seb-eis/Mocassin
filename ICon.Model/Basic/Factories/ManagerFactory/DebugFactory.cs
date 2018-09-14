@@ -225,6 +225,25 @@ namespace ICon.Model.Basic
                         }
                     }
                 };
+                var groupInteractions = new GroupInteraction[]
+                {
+                    new GroupInteraction()
+                    {
+                        CenterUnitCellPosition = unitCellPositions[1],
+                        GeometryVectors = new List<DataVector3D>()
+                        {
+                            new DataVector3D(0.75,0.75,0.75), new DataVector3D(-0.25,-0.25,-0.25)
+                        }
+                    },
+                    new GroupInteraction()
+                    {
+                        CenterUnitCellPosition = unitCellPositions[0],
+                        GeometryVectors = new List<DataVector3D>()
+                        {
+                            new DataVector3D(0.75,0.75,0.75), new DataVector3D(-0.75,-0.75,-0.75)
+                        }
+                    },
+                };
 
                 var inputter = new ManagerDataInputter();
                 inputter.AddMany(particles.Skip(1));
@@ -246,6 +265,7 @@ namespace ICon.Model.Basic
                     UnitCellPosition = unitCellPositions[2],
                     IgnoredPositions = new List<IUnitCellPosition>()
                 });
+                inputter.AddMany(groupInteractions);
                 return inputter;
             }
         }

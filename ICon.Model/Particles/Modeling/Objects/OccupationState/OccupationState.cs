@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Linq;
 using System.Collections;
+using ICon.Framework.Extensions;
 
 namespace ICon.Model.Particles
 {
@@ -37,8 +38,8 @@ namespace ICon.Model.Particles
         /// <returns></returns>
         public IParticle this[int index]
         {
-            get { return Particles[index]; }
-            set { Particles[index] = value; }
+            get => Particles[index];
+            set => Particles[index] = value;
         }
 
         /// <summary>
@@ -123,6 +124,17 @@ namespace ICon.Model.Particles
         public override int GetHashCode()
         {
             return Particles.Sum(value => value.GetHashCode());
+        }
+
+        /// <summary>
+        /// Compares to other occupation state
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(IOccupationState other)
+        {
+            var comparer = Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
+            return Particles.LexicographicCompare(other.Particles, comparer);
         }
     }
 }

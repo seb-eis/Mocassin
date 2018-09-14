@@ -33,5 +33,11 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <returns></returns>
         IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> GetEnergyDictionarySet();
+
+        /// <summary>
+        /// Get all existing energy entries in the group interaction
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<GroupEnergyEntry> GetEnergyEntries();
     }
 }

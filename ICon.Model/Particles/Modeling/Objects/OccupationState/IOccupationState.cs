@@ -7,7 +7,7 @@ namespace ICon.Model.Particles
     /// <summary>
     /// Represents an occupation state that fully describes the occupation of a set of positions as a set of particles
     /// </summary>
-    public interface IOccupationState : IEnumerable<IParticle>, IEquatable<IOccupationState>
+    public interface IOccupationState : IEnumerable<IParticle>, IComparable<IOccupationState>, IEquatable<IOccupationState>
     {
         /// <summary>
         /// The number of positions within the occupation state

@@ -56,7 +56,7 @@ namespace ICon.Model.Energies
             extGroup.SurroundingUnitCellPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
             extGroup.PointOperationGroup = SpaceGroupService.GetPointOperationGroup(extGroup.CenterPosition.Vector, groupInteraction.GetBaseGeometry());
             extGroup.UniqueOccupationStates = GetUniqueGroupOccupationStates(extGroup.PointOperationGroup, GetGroupStatePermuter(groupInteraction)).ToList();
-            extGroup.FullEnergyDictionary = MakeUniqueEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);
+            extGroup.UniqueEnergyDictionary = MakeFullEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);
             return extGroup;
         }
 
@@ -117,7 +117,7 @@ namespace ICon.Model.Energies
         /// <param name="occStates"></param>
         /// <param name="centerPosition"></param>
         /// <returns></returns>
-        protected Dictionary<IParticle, Dictionary<OccupationState, double>> MakeUniqueEnergyDictionary(IEnumerable<OccupationState> occStates, IUnitCellPosition centerPosition)
+        protected Dictionary<IParticle, Dictionary<OccupationState, double>> MakeFullEnergyDictionary(IEnumerable<OccupationState> occStates, IUnitCellPosition centerPosition)
         {
             var result = new Dictionary<IParticle, Dictionary<OccupationState, double>>(centerPosition.OccupationSet.ParticleCount);
             foreach (var centerParticle in centerPosition.OccupationSet.GetParticles())

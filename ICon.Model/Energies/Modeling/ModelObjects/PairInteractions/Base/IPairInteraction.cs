@@ -30,5 +30,11 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <returns></returns>
         Fractional3D GetSecondPositionVector();
+
+        /// <summary>
+        /// Get all possible pair occupations of the pair with the corresponding energy value
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<PairEnergyEntry> GetEnergyEntries();
     }
 }

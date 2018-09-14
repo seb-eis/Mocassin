@@ -34,6 +34,11 @@ namespace ICon.Model.Energies
         IPointOperationGroup PointOperationGroup { get; }
 
         /// <summary>
+        /// The list of unique occupation states described by the group
+        /// </summary>
+        IReadOnlyList<IOccupationState> UniqueOccupationStates { get; }
+
+        /// <summary>
         /// Get the full energy collection that assign each unqiue combination of center and surrounding occupation an energy value
         /// </summary>
         IReadOnlyList<GroupEnergyEntry> GetEnergyEntryList();

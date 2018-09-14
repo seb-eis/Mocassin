@@ -351,5 +351,35 @@ namespace ICon.Framework.Extensions
             list[lhs] = list[rhs];
             list[rhs] = tmp;
         }
+
+        /// <summary>
+        /// Selects entries from an indexable list interface in the order of a passed indexing
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="indices"></param>
+        /// <returns></returns>
+        public static IEnumerable<T1> SelectByIndexing<T1>(this IList<T1> list, IEnumerable<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                yield return list[index];
+            }
+        }
+
+        /// <summary>
+        /// Selects entries from an indexable list interface in the order of a passed indexing
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="indices"></param>
+        /// <returns></returns>
+        public static IEnumerable<T1> SelectByIndexing<T1>(this IReadOnlyList<T1> list, IEnumerable<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                yield return list[index];
+            }
+        }
     }
 }

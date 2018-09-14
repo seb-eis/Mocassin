@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
+using ICon.Framework.Extensions;
 using ICon.Model.Particles;
 
 namespace ICon.Model.Energies
@@ -9,7 +11,7 @@ namespace ICon.Model.Energies
     /// <summary>
     /// Represents a group energy entry that is fully described by center particle, a surrounding occupation state and an energy value
     /// </summary>
-    public readonly struct GroupEnergyEntry : IEquatable<GroupEnergyEntry>
+    public readonly struct GroupEnergyEntry : IEquatable<GroupEnergyEntry>, IComparable<GroupEnergyEntry>
     {
         /// <summary>
         /// The center particle of the group energy entry
@@ -66,6 +68,40 @@ namespace ICon.Model.Energies
         public bool Equals(GroupEnergyEntry other)
         {
             return CenterParticle.Equals(other.CenterParticle) && GroupOccupation.Equals(other.GroupOccupation);
+        }
+
+        /// <summary>
+        /// Compares to other energy entry in order of particle, than occupation
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(GroupEnergyEntry other)
+        {
+            int particleCompare = CenterParticle.CompareTo(other.CenterParticle);
+            if (particleCompare == 0)
+            {
+                return GroupOccupation.CompareTo(other.GroupOccupation);
+            }
+            return particleCompare;
+        }
+
+        /// <summary>
+        /// Creates a group energy entry with reordered state code
+        /// </summary>
+        /// <param name="newOrder"></param>
+        /// <returns></returns>
+        public GroupEnergyEntry CreateReordered(IList<int> newOrder)
+        {
+            if (newOrder.Count != GroupOccupation.StateLength)
+            {
+                throw new ArgumentException("Order instruction is of wrong size", nameof(newOrder));
+            }
+
+            var newOccupation = new OccupationState()
+            {
+                Particles = GroupOccupation.Particles.SelectByIndexing(newOrder).ToList()
+            };
+            return new GroupEnergyEntry(CenterParticle, newOccupation, Energy);
         }
     }
 }

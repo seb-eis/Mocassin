@@ -55,8 +55,11 @@ namespace ICon.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var interopDb = new CInteropDbContext("./InteropDb.db", true);
-
+            var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var provider = package.EnergyManager.QueryPort.Query(port => port.GetFullEnergySetterProvider());
+            var setters = provider.GetStablePairEnergySetters();
+            var groupSetters = provider.GetGroupEnergySetters();
+            var groupInfos = package.EnergyManager.QueryPort.Query(port => port.GetPositionGroupInfos());
 
             //var context = new InteropDbContext("./interopTest.db", true);
             Console.ReadLine();

@@ -14,6 +14,14 @@ namespace ICon.Framework.Collections
     public class SetList<T1> : AutoSortList<T1>
     {
         /// <summary>
+        /// Creates new set list that uses the default comparer
+        /// </summary>
+        public SetList() : base(Comparer<T1>.Default)
+        {
+
+        }
+
+        /// <summary>
         /// Creates a new setlist with the specified comparer
         /// </summary>
         /// <param name="comparer"></param>

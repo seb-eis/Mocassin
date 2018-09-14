@@ -22,13 +22,26 @@ namespace ICon.Model.Translator.ModelContext
         IPairInteraction PairInteraction { get; set; }
 
         /// <summary>
-        /// The enrgy dictionary that assigns each pair of particles an energy value
+        /// The list of existing energy entries in the pair energy model
         /// </summary>
-        IDictionary<(IParticle, IParticle), double> EnergyDictionary { get; set; }
+        IList<PairEnergyEntry> EnergyEntries { get; set; }
 
         /// <summary>
         /// The pair energy table that assignes each particle index pair an energy value
         /// </summary>
         double[,] EnergyTable { get; set; }
+
+        /// <summary>
+        /// Tries to get an energy value based upon a center particle and an interacting one
+        /// </summary>
+        /// <param name="centerParticle"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        bool TryGetEnergy(IParticle centerParticle, IParticle other, out double value);
+
+        /// <summary>
+        /// Get the last particle index in the pair interaction model
+        /// </summary>
+        int GetMaxParticleIndex();
     }
 }

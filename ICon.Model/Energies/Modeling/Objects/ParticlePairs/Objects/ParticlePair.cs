@@ -7,7 +7,7 @@ using ICon.Model.Particles;
 namespace ICon.Model.Energies
 {
     /// <summary>
-    /// Abstract base class for particle pair implementations taht describe a specific pair interaction occupation
+    /// Abstract base class for particle pair implementations taht describe a specific pair interaction occupation.
     /// </summary>
     [DataContract]
     public abstract class ParticlePair : IEquatable<ParticlePair>
@@ -25,7 +25,7 @@ namespace ICon.Model.Energies
         public IParticle Particle1 { get; set; }
 
         /// <summary>
-        /// Cchek for equality to other abstract particle pair
+        /// Check for equality to other particle pair. Default behavior is symmetric
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -38,6 +38,22 @@ namespace ICon.Model.Energies
         public override int GetHashCode()
         {
             return (1 << Particle0.Index) + (1 << Particle1.Index);
+        }
+
+        /// <summary>
+        /// Creates a new particle pair from center and interaction particle and the information if it should behave asymmetric
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="other"></param>
+        /// <param name="isAsymmetric"></param>
+        /// <returns></returns>
+        public static ParticlePair MakePair(IParticle center, IParticle other, bool isAsymmetric)
+        {
+            if (isAsymmetric)
+            {
+                return new AsymmetricParticlePair() { Particle0 = center, Particle1 = other };
+            }
+            return new SymmetricParticlePair() { Particle0 = center, Particle1 = other };
         }
     }
 }

@@ -81,7 +81,7 @@ namespace ICon.Model.Energies.ConflictHandling
                 var detail1 = $"Created a new zero intialized energ dictionary to replace the original one";
                 report.AddWarning(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
             }
-            group.EnergyDictionarySet = extGroup.FullEnergyDictionary;
+            group.EnergyDictionarySet = extGroup.UniqueEnergyDictionary;
         }
     }
 }

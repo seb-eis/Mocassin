@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICon.Model.Particles;
 using ICon.Model.Structures;
 using ICon.Symmetry.SpaceGroups;
 
@@ -32,6 +33,11 @@ namespace ICon.Model.Energies
         public IReadOnlyList<IUnitCellPosition> SurroundingPositions => ExtendedPositionGroup.SurroundingUnitCellPositions;
 
         /// <summary>
+        /// The list of unique occupation states described by the group
+        /// </summary>
+        public IReadOnlyList<IOccupationState> UniqueOccupationStates => ExtendedPositionGroup.UniqueOccupationStates;
+
+        /// <summary>
         /// The point operation group that fully describes geometry and symmetry information of the group
         /// </summary>
         public IPointOperationGroup PointOperationGroup => ExtendedPositionGroup.PointOperationGroup;
@@ -52,7 +58,7 @@ namespace ICon.Model.Energies
         public IReadOnlyList<GroupEnergyEntry> GetEnergyEntryList()
         {
             return ExtendedPositionGroup
-                .FullEnergyDictionary
+                .UniqueEnergyDictionary
                 .SelectMany(outer => outer.Value.Select(inner => new GroupEnergyEntry(outer.Key, inner.Key, inner.Value)))
                 .ToList();
         }

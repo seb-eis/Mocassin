@@ -40,8 +40,8 @@ namespace ICon.Model.Energies
         public List<OccupationState> UniqueOccupationStates { get; set; }
 
         /// <summary>
-        /// The full unique energy dictionary for each unqiue occupation state arround each unique center particle
+        /// The unique energy dictionary for each unique occupation state arround each unique center particle
         /// </summary>
-        public Dictionary<IParticle, Dictionary<OccupationState, double>> FullEnergyDictionary { get; set; }
+        public Dictionary<IParticle, Dictionary<OccupationState, double>> UniqueEnergyDictionary { get; set; }
     }
 }

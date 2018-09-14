@@ -22,9 +22,14 @@ namespace ICon.Model.Translator.ModelContext
         IList<IOccupationState> OccupationStates { get; set; }
 
         /// <summary>
-        /// Energy dictionary that assign each ceter particle a dictionary with the occupation state energy pairs
+        /// Energy entry list that contains all possible combinations of center and surrounding occupation with energy value
         /// </summary>
-        IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> EnergyDictionary { get; set; }
+        IList<GroupEnergyEntry> EnergyEntries { get; set; }
+
+        /// <summary>
+        /// The position group info that describes extended symmetry infromation
+        /// </summary>
+        IPositionGroupInfo PositionGroupInfo { get; set; }
 
         /// <summary>
         /// The sorted list of all existing group lookup codes
