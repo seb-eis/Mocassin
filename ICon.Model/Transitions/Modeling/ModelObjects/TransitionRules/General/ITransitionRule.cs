@@ -33,6 +33,11 @@ namespace ICon.Model.Transitions
         IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
+        /// The selectable particle the rule describes
+        /// </summary>
+        IParticle SelectableParticle { get; }
+
+        /// <summary>
         /// The particle indices of the transition path in the start state
         /// </summary>
         IEnumerable<IParticle> GetStartStateOccupation();

@@ -12,6 +12,11 @@ namespace ICon.Model.Translator.ModelContext
     public interface ITransitionRuleModel
     {
         /// <summary>
+        /// Boolean flag that indicates that this rule model describes in inverted version of its source rule and abstract transition
+        /// </summary>
+        bool IsSourceInversion { get; set; }
+
+        /// <summary>
         /// The abstract transition the rule model is based upon
         /// </summary>
         IAbstractTransition AbstractTransition { get; }
@@ -32,14 +37,9 @@ namespace ICon.Model.Translator.ModelContext
         IList<IParticle> FinalState { get; set; }
 
         /// <summary>
-        /// The movement description that describes the offset of particles in the end state compared to the start state
+        /// The indexing description that describes the offset of particles in the end state compared to the start state
         /// </summary>
-        IList<int> MovementDescription { get; set; }
-
-        /// <summary>
-        /// Determination matrix that describes the full determination reorder process of the rule
-        /// </summary>
-        int[,] RuleDeterminationMatrix { get; set; }
+        IList<int> EndIndexingDeltas { get; set; }
 
         /// <summary>
         /// Index encoded version of the start state occupation
@@ -55,5 +55,11 @@ namespace ICon.Model.Translator.ModelContext
         /// Index encoded final order of the involved dynamic trackers
         /// </summary>
         long FinalTrackerOrderCode { get; set; }
+
+        /// <summary>
+        /// Copies the data on this rule model as inverted info onto the passed rule model
+        /// </summary>
+        /// <param name="ruleModel"></param>
+        void CopyInversionDataToModel(ITransitionRuleModel ruleModel);
     }
 }

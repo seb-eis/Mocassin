@@ -1,35 +1,34 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ICon.Model.Structures;
+using ICon.Symmetry.SpaceGroups;
 
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents an environment model that fully describes the surroundings and dependencies of a unit cell position
+    /// Environment model implementation that carries all extended structure and interaction information for a single unit cell position
     /// </summary>
-    public interface IEnvironmentModel : IModelComponent
+    public class EnvironmentModel : ModelComponentBase, IEnvironmentModel
     {
         /// <summary>
         /// The unit cell position that the environment is based upon
         /// </summary>
-        IUnitCellPosition UnitCellPosition { get; set; }
+        public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
         /// The list of pair interaction models that belong to the environment
         /// </summary>
-        IList<IPairInteractionModel> PairInteractionModels { get; set; }
+        public IList<IPairInteractionModel> PairInteractionModels { get; set; }
 
         /// <summary>
         /// The list of group interaction models that belong to the environment
         /// </summary>
-        IList<IGroupInteractionModel> GroupInteractionModels { get; set; }
+        public IList<IGroupInteractionModel> GroupInteractionModels { get; set; }
 
         /// <summary>
         /// Wyckoff operation dictionary that contains all transform operations that reach equivalent center positions
         /// </summary>
-        IWyckoffOperationDictionary TransformOperations { get; set; }
+        public IWyckoffOperationDictionary TransformOperations { get; set; }
     }
 }

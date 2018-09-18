@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 using ICon.Model.Basic;
+using ICon.Model.Particles;
 
 namespace ICon.Model.Transitions
 {
@@ -30,6 +32,20 @@ namespace ICon.Model.Transitions
         /// </summary>
         [DataMember]
         public CellBoundaryFlags BoundaryFlags { get; set; }
+
+        /// <summary>
+        /// The list of dependent rules that are a direct result of this rule
+        /// </summary>
+        [DataMember]
+        public List<KineticRule> DependentRules { get; set; }
+
+        /// <summary>
+        /// Creates new kinetic rule with empty dependent rule list
+        /// </summary>
+        public KineticRule()
+        {
+            DependentRules = new List<KineticRule>(); 
+        }
 
         /// <summary>
         /// Get the model object name
@@ -73,6 +89,29 @@ namespace ICon.Model.Transitions
                 BoundaryFlags = rule.BoundaryFlags;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Get all dependent rules of this rule
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IKineticRule> GetDependentRules()
+        {
+            return DependentRules.AsEnumerable();
+        }
+
+        /// <summary>
+        /// Adds a dependent kinetic transition rule. Throw if the passed rule is not a kinetic rule
+        /// </summary>
+        /// <param name="rule"></param>
+        public override void AddDependentRule(TransitionRule rule)
+        {
+            if (rule is KineticRule kineticRule)
+            {
+                DependentRules.Add(kineticRule);
+                return;
+            }
+            throw new ArgumentException("Passed rule does not inherit from a kinetic rule", nameof(rule));
         }
     }
 }

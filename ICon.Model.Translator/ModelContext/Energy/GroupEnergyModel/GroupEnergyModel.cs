@@ -9,7 +9,7 @@ namespace ICon.Model.Translator.ModelContext
     /// <summary>
     /// Basic implementation of the group energy model. Stores the model data context of group interactions
     /// </summary>
-    public class GroupEnergyModel : ModelComponent, IGroupEnergyModel
+    public class GroupEnergyModel : ModelComponentBase, IGroupEnergyModel
     {
         /// <summary>
         /// The group interaction the interaction model is based upon

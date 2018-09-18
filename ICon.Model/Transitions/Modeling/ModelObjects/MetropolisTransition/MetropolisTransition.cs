@@ -93,5 +93,14 @@ namespace ICon.Model.Transitions
             }
             return null;
         }
+
+        /// <summary>
+        /// Retruns true if the transition mappings will contain their inversion
+        /// </summary>
+        /// <returns> Is the case if start and end unit cell position are identical </returns>
+        public bool MappingsContainInversion()
+        {
+            return FirstUnitCellPosition == SecondUnitCellPosition;
+        }
     }
 }

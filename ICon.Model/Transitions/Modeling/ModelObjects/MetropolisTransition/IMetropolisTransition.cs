@@ -31,5 +31,11 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <returns></returns>
         IEnumerable<IMetropolisRule> GetTransitionRules();
+
+        /// <summary>
+        /// Returns true if the mappings contain their own inverted version
+        /// </summary>
+        /// <returns></returns>
+        bool MappingsContainInversion();
     }
 }

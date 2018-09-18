@@ -144,7 +144,8 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Takes a list interface of transition rules and filters out both inverted and reversed duplicate rules
+        /// Takes a list interface of transition rules and filters out both inverted and reversed duplicate rules. The filtered rules are added
+        /// as dependent rules to a parent rule
         /// </summary>
         /// <remarks> Possibly requires changes in the future since correct definition of "meaningfull and duplicate" in all cases is tricky </remarks>
         /// <param name="rules"></param>
@@ -153,15 +154,17 @@ namespace ICon.Model.Transitions
             var analyzer = new TransitionAnalyzer();
             for (int i = 0; i < rules.Count - 1; i++)
             {
-                var currentRule = rules[i];
+                var parentRule = rules[i];
                 for (int j = i+1; j < rules.Count;)
                 {
-                    bool isRemovable = analyzer.IsSymmetricRulePair(currentRule, rules[j])
-                        || analyzer.IsBackjumpRulePair(currentRule, rules[j])
-                        || analyzer.IsTwistedRulePair(currentRule, rules[j]);
+                    var checkRule = rules[j];
+                    bool isRemovable = analyzer.IsSymmetricRulePair(parentRule, checkRule)
+                        || analyzer.IsBackjumpRulePair(parentRule, checkRule)
+                        || analyzer.IsTwistedRulePair(parentRule, checkRule);
 
                     if (isRemovable)
                     {
+                        parentRule.AddDependentRule(checkRule);
                         rules.RemoveAt(j);
                         continue;
                     }

@@ -48,6 +48,7 @@ using ICon.Model.Simulations;
 using ICon.Model.Translator;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
+using ICon.Model.Translator.ModelContext;
 
 namespace ICon.Framework.QuickTest
 {
@@ -56,12 +57,17 @@ namespace ICon.Framework.QuickTest
         static void Main(string[] args)
         {
             var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-            var provider = package.EnergyManager.QueryPort.Query(port => port.GetFullEnergySetterProvider());
-            var setters = provider.GetStablePairEnergySetters();
-            var groupSetters = provider.GetGroupEnergySetters();
-            var groupInfos = package.EnergyManager.QueryPort.Query(port => port.GetPositionGroupInfos());
 
+            var mMappings = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisMappingLists());
+            var mRules = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisRuleLists());
+
+            var kMappings = package.TransitionManager.QueryPort.Query(port => port.GetAllKineticMappingLists());
+            var kRules = package.TransitionManager.QueryPort.Query(port => port.GetAllKineticRuleLists());
+
+            var watch = Stopwatch.StartNew();
+          
             //var context = new InteropDbContext("./interopTest.db", true);
+            DisplayWatch(watch);
             Console.ReadLine();
         }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 using ICon.Model.Basic;
+using ICon.Model.Particles;
 
 namespace ICon.Model.Transitions
 {
@@ -18,6 +20,30 @@ namespace ICon.Model.Transitions
         [DataMember]
         [LinkableByIndex]
         public IMetropolisTransition Transition { get; set; }
+
+        /// <summary>
+        /// The list of dependent rules that are a direct result of this rule
+        /// </summary>
+        [DataMember]
+        public List<MetropolisRule> DependentRules { get; set; }
+
+
+        /// <summary>
+        /// Creates new kinetic rule with empty dependent rule list
+        /// </summary>
+        public MetropolisRule()
+        {
+            DependentRules = new List<MetropolisRule>();
+        }
+
+        /// <summary>
+        /// Get all dependent rules that are a direct result of this one
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IMetropolisRule> GetDependentRules()
+        {
+            return DependentRules.AsEnumerable();
+        }
 
         /// <summary>
         /// Get model object name
@@ -42,6 +68,20 @@ namespace ICon.Model.Transitions
                 return this;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Adds a dependent kinetic transition rule. Throw if the passed rule is not a kinetic rule
+        /// </summary>
+        /// <param name="rule"></param>
+        public override void AddDependentRule(TransitionRule rule)
+        {
+            if (rule is MetropolisRule metropolisRule)
+            {
+                DependentRules.Add(metropolisRule);
+                return;
+            }
+            throw new ArgumentException("Passed rule does not inherit from a metropolis rule", nameof(rule));
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using ICon.Model.Basic;
+using ICon.Model.Particles;
 
 namespace ICon.Model.Transitions
 {
@@ -37,5 +38,11 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="value"></param>
         void SetAttemptFrequency(double value);
+
+        /// <summary>
+        /// Get an enumerable of dependent rules that are a result of this one
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IKineticRule> GetDependentRules();
     }
 }

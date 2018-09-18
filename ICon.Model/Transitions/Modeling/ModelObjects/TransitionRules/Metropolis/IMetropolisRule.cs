@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using ICon.Model.Basic;
+using ICon.Model.Particles;
 
 namespace ICon.Model.Transitions
 {
@@ -15,5 +16,11 @@ namespace ICon.Model.Transitions
         /// Get the metropolis parent transition
         /// </summary>
         IMetropolisTransition Transition { get; }
+
+        /// <summary>
+        /// Get all dependent rules that are a direct result of this rule
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IMetropolisRule> GetDependentRules();
     }
 }

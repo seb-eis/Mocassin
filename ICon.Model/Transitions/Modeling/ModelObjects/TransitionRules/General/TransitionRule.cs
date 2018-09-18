@@ -94,6 +94,12 @@ namespace ICon.Model.Transitions
         public MovementCode MovementCode { get; set; }
 
         /// <summary>
+        /// The selectable particle the rule describes
+        /// </summary>
+        [IgnoreDataMember]
+        public IParticle SelectableParticle => StartState[0];
+
+        /// <summary>
         /// Create new empty transition rule
         /// </summary>
         protected TransitionRule()
@@ -213,5 +219,11 @@ namespace ICon.Model.Transitions
             }
             return null;
         }
+
+        /// <summary>
+        /// Adds a dependent rule to this rule
+        /// </summary>
+        /// <param name="rule"></param>
+        public abstract void AddDependentRule(TransitionRule rule); 
     }
 }

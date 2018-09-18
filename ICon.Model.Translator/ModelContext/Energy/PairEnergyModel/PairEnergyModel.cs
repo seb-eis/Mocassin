@@ -9,7 +9,7 @@ namespace ICon.Model.Translator.ModelContext
     /// <summary>
     /// PAir energy model implementation that provides the model data context for a single pair interaction
     /// </summary>
-    public class PairEnergyModel : ModelComponent, IPairEnergyModel
+    public class PairEnergyModel : ModelComponentBase, IPairEnergyModel
     {
         /// <summary>
         /// Boolean flag that indictes if the interaction behaves asymetrically

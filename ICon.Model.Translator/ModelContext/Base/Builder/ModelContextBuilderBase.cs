@@ -9,7 +9,7 @@ namespace ICon.Model.Translator.ModelContext
     /// <summary>
     /// Abstract base classs for model context builder implementations that expand the refernce data into the full context
     /// </summary>
-    public abstract class ModelContextBuilder<TContext> where TContext : class
+    public abstract class ModelContextBuilderBase<TContext> where TContext : class
     {
         /// <summary>
         /// The model context instance that is currently build
@@ -22,18 +22,24 @@ namespace ICon.Model.Translator.ModelContext
         public IProjectServices ProjectServices { get; set; }
 
         /// <summary>
-        /// Create new model context builder that uses the provided project access
+        /// The project model context builder for access to affiliated model context build processes
+        /// </summary>
+        public IProjectModelContextBuilder ProjectModelContextBuilder { get; set; }
+
+        /// <summary>
+        /// Create new model context builder that uses the provided project model context builder for data acess
         /// </summary>
         /// <param name="projectServices"></param>
-        protected ModelContextBuilder(IProjectServices projectServices)
+        protected ModelContextBuilderBase(IProjectModelContextBuilder projectModelContextBuilder)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ProjectModelContextBuilder = projectModelContextBuilder ?? throw new ArgumentNullException(nameof(projectModelContextBuilder));
+            ProjectServices = projectModelContextBuilder.ProjectModelContext.ProjectServices;
         }
 
         /// <summary>
         /// Builds the context of specififed type from the currently linked project reference data
         /// </summary>
-        public async Task<TContext> BuildNewContext<T1>() where T1 : TContext, new()
+        public async Task<TContext> CreateNewContext<T1>() where T1 : TContext, new()
         {
             ModelContext = new T1();
             await Task.Run(() => PopulateContext());

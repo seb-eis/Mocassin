@@ -14,13 +14,13 @@ namespace ICon.Model.Translator.ModelContext
     /// <summary>
     /// Builder for the energy model context. Expands the reference energy data to a full data context for simulation generation/evaluation
     /// </summary>
-    public class EnergyModelContextBuilder : ModelContextBuilder<IEnergyModelContext>
+    public class EnergyModelContextBuilder : ModelContextBuilderBase<IEnergyModelContext>
     {
         /// <summary>
-        /// Create new energy model context builder that uses the passed project access
+        /// Create new energy model context builder that is linked to the passed main context builder
         /// </summary>
         /// <param name="projectServices"></param>
-        public EnergyModelContextBuilder(IProjectServices projectServices) : base(projectServices)
+        public EnergyModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
         {
 
         }
@@ -146,15 +146,17 @@ namespace ICon.Model.Translator.ModelContext
             var positionGroupInfos = energyManager.QueryPort.Query(port => port.GetPositionGroupInfos());
             foreach (var interaction in groupInteractions)
             {
+                var groupInfo = positionGroupInfos.Single(a => a.GroupInteraction.Index == interaction.Index);
                 var energyModel = new GroupEnergyModel(interaction)
                 {
                     ModelId = groupEnergyModels.Count,
-                    PositionGroupInfo = positionGroupInfos[interaction.CenterUnitCellPosition.Index]
+                    PositionGroupInfo = groupInfo
                 };
 
                 CreateSymmetryExtendedEnergyInfoOnModel(energyModel);
                 CreateAllGroupLookupCodesOnModel(energyModel);
                 CreateGroupEnergyTableOnModel(energyModel);
+                groupEnergyModels.Add(energyModel);
             }
         }
 
@@ -219,9 +221,11 @@ namespace ICon.Model.Translator.ModelContext
                 for (; index < state.StateLength; index++)
                 {
                     buffer[index] = (byte)state.Particles[index].Index;
-                    long code = BitConverter.ToInt64(buffer, 0);
-                    codes.Add(code);
                 }
+
+                long code = BitConverter.ToInt64(buffer, 0);
+                codes.Add(code);
+
                 for (int i = 0; i < index; i++)
                 {
                     buffer[i] = 0;
@@ -236,7 +240,20 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="groupEnergyModel"></param>
         protected void CreateGroupEnergyTableOnModel(IGroupEnergyModel groupEnergyModel)
         {
-            
+            int rowCount = groupEnergyModel.CenterParticleIndexing.Count;
+            int colCount = groupEnergyModel.GroupLookupCodes.Count;
+            var energyTable = new double[rowCount, colCount];
+
+            int index = 0;
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    energyTable[row, col] = groupEnergyModel.EnergyEntries[index++].Energy;
+                }
+            }
+
+            groupEnergyModel.EnergyTable = energyTable;
         }
     }
 }

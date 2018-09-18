@@ -65,7 +65,7 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Checks if a refernce transition and the encoded position list result in at least 1 valid mapping
+        /// Checks if a reference transition and the encoded position list result in at least 1 valid mapping
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="encodedPositions"></param>

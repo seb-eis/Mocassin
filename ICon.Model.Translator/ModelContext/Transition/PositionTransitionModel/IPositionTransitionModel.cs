@@ -1,4 +1,5 @@
-﻿using ICon.Model.Structures;
+﻿using ICon.Mathematics.ValueTypes;
+using ICon.Model.Structures;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -6,28 +6,28 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a pair interaction model that combines geometry information with pair energy model information
+    /// Implementation of a pair interaction model that combines structure information and energy model of a single interacting atom pair
     /// </summary>
-    public interface IPairInteractionModel : IModelComponent
+    public class PairInteractionModel : ModelComponentBase, IPairInteractionModel
     {
         /// <summary>
         /// The pair energy model that belongs to the interaction
         /// </summary>
-        IPairEnergyModel PairEnergyModel { get; set; }
+        public IPairEnergyModel PairEnergyModel { get; set; }
 
         /// <summary>
         /// The environment model the interaction belongs to
         /// </summary>
-        IEnvironmentModel EnvironmentModel { get; set; }
+        public IEnvironmentModel EnvironmentModel { get; set; }
 
         /// <summary>
         /// The relative fractional 3D of the interaction
         /// </summary>
-        Fractional3D RelativeVector3D { get; set; }
+        public Fractional3D RelativeVector3D { get; set; }
 
         /// <summary>
         /// The relative encoded 4D vector of the interaction
         /// </summary>
-        CrystalVector4D RelativeVector4D { get; set; }
+        public CrystalVector4D RelativeVector4D { get; set; }
     }
 }

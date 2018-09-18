@@ -61,5 +61,19 @@ namespace ICon.Framework.Extensions
                 yield return selector(item);
             }
         }
+
+        /// <summary>
+        /// Adds multiple values to a generic collection
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="values"></param>
+        public static void AddMany<T1>(this ICollection<T1> collection, IEnumerable<T1> values)
+        {
+            foreach (var item in values)
+            {
+                collection.Add(item);
+            }
+        }
     }
 }

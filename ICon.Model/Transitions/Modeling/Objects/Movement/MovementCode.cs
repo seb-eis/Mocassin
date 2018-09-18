@@ -20,7 +20,7 @@ namespace ICon.Model.Transitions
         {
             for (int i = 0; i < CodeValues.Length - 2; i = i + 2)
             {
-                yield return (CodeValues[i], CodeValues[i + 2]);
+                yield return (CodeValues[i], CodeValues[i + 1]);
             }
         }
 
