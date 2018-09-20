@@ -9,82 +9,128 @@
 //////////////////////////////////////////
 
 #include "Vector.h"
+#include "Framework/Basic/Macros/Macros.h"
+#include "avxintrin.h"
 
-vector3_t AddVector3(const vector3_t * lhs, const vector3_t * rhs)
+Vector3_t AddVector3(const Vector3_t * lhs, const Vector3_t * rhs)
 {
-	return (vector3_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c };
+	return (Vector3_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c };
 }
 
-vector3_t SubstractVector3(const vector3_t * lhs, const vector3_t * rhs)
+Vector3_t SubstractVector3(const Vector3_t * lhs, const Vector3_t * rhs)
 {
-	return (vector3_t) { lhs->a - rhs->a,lhs->b - rhs->b,lhs->c - rhs->c };
+	return (Vector3_t) { lhs->a - rhs->a,lhs->b - rhs->b,lhs->c - rhs->c };
 }
 
-vector3_t ScalarMultVector3(const vector3_t * lhs, double rhs)
+Vector3_t ScalarMultVector3(const Vector3_t * lhs, double rhs)
 {
-	return (vector3_t) { lhs->a * rhs, lhs->b * rhs, lhs->c * rhs };
+	return (Vector3_t) { lhs->a * rhs, lhs->b * rhs, lhs->c * rhs };
 }
 
-vector3_t ScalarDivideVector3(const vector3_t * lhs, double rhs)
+Vector3_t ScalarDivideVector3(const Vector3_t * lhs, double rhs)
 {
-	return (vector3_t) { lhs->a / rhs, lhs->b / rhs, lhs->c / rhs };
+	return (Vector3_t) { lhs->a / rhs, lhs->b / rhs, lhs->c / rhs };
 }
 
-double CalcVector3DotProduct(const vector3_t * lhs, const vector3_t * rhs)
+double CalcVector3DotProduct(const Vector3_t * lhs, const Vector3_t * rhs)
 {
 	return lhs->a * rhs->a + lhs->b * rhs->b + lhs->c * rhs->c;
 }
 
-vector3_t CalcVector3CrossProduct(const vector3_t * lhs, const vector3_t * rhs)
+#if !defined(__SSE2__)
+Vector4_t AddVector4(const Vector4_t * lhs, const Vector4_t * rhs)
 {
-	return (vector3_t)
-	{
-			lhs->b * rhs->c - lhs->c * rhs->b,
-			lhs->c * rhs->a - lhs->a * rhs->c,
-			lhs->a * rhs->b - lhs->b * rhs->a
-	};
+	return (Vector4_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c,lhs->d + rhs->d };
 }
 
-double CalcVector3SpatProduct(const vector3_t * a, const vector3_t * b, const vector3_t * c)
+Vector4_t SubstractVector4(const Vector4_t * lhs, const Vector4_t * rhs)
 {
-	vector3_t cross_product = CalcVector3CrossProduct(b, c);
-	return CalcVector3DotProduct(a, &cross_product);
+	return (Vector4_t) { lhs->a - rhs->a,lhs->b - rhs->b,lhs->c - rhs->c,lhs->d - rhs->d };
 }
 
-vector4_t AddVector4(const vector4_t * lhs, const vector4_t * rhs)
+Vector4_t ScalarMultVector4(const Vector4_t * lhs, int32_t rhs)
 {
-	return (vector4_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c,lhs->d + rhs->d };
+	return (Vector4_t) { lhs->a * rhs,lhs->b * rhs,lhs->c * rhs,lhs->d * rhs };
 }
 
+<<<<<<< HEAD
 vector4_t SubtractVector4(const vector4_t * lhs, const vector4_t * rhs)
+=======
+Vector4_t ScalarDivideVector4(const Vector4_t * lhs, int32_t rhs)
+>>>>>>> master
 {
-	return (vector4_t) { lhs->a - rhs->a,lhs->b - rhs->b,lhs->c - rhs->c,lhs->d - rhs->d };
+	return (Vector4_t) { lhs->a / rhs,lhs->b / rhs,lhs->c / rhs,lhs->d / rhs };
 }
 
-vector4_t ScalarMultVector4(const vector4_t * lhs, int32_t rhs)
+int32_t Int32FromVector4(const Vector4_t * restrict value, const int32_t * restrict blockSizes)
 {
-	return (vector4_t) { lhs->a * rhs,lhs->b * rhs,lhs->c * rhs,lhs->d * rhs };
+	return (int32_t)(value->a*blockSizes[0] + value->b*blockSizes[1] + value->c*blockSizes[2] + value->d);
 }
 
-vector4_t ScalarDivideVector4(const vector4_t * lhs, int32_t rhs)
+int32_t Int32FromVector4Pair(const Vector4_t* restrict start, const Vector4_t* restrict offset, const int32_t* restrict blockSizes)
 {
-	return (vector4_t) { lhs->a / rhs,lhs->b / rhs,lhs->c / rhs,lhs->d / rhs };
+	Vector4_t target = AddVector4(start, offset);
+	return Int32FromVector4(&target, blockSizes);
 }
 
-int32_t Vector4ToInt32(const vector4_t * value, const vector4_t * blockSizes)
+Vector4_t Vector4FromInt32(int32_t value, const int32_t * restrict blockSizes)
 {
-	return (int32_t)(value->a*blockSizes->a + value->b*blockSizes->b + value->c*blockSizes->c + value->d*blockSizes->d);
-}
-
-vector4_t Int32ToVector4(size_t value, const vector4_t * blockSizes)
-{
-	vector4_t result;
-	result.a = (int32_t)(value / blockSizes->a);
-	value %= blockSizes->a;
-	result.b = (int32_t)(value / blockSizes->b);
-	value %= blockSizes->b;
-	result.c = (int32_t)(value / blockSizes->c);
-	value %= blockSizes->c;
-	result.d = (int32_t)(value);
+	Vector4_t result;
+	result.a = value / blockSizes[0];
+	value %= blockSizes[0];
+	result.b = value / blockSizes[1];
+	value %= blockSizes[1];
+	result.c = value / blockSizes[2];
+	value %= blockSizes[2];
+	result.d = value;
 	return result;
+}
+#else
+Vector4_t AddVector4(const Vector4_t * lhs, const Vector4_t * rhs)
+{
+    sse2v4i result = addressAs(sse2v4i, lhs) + addressAs(sse2v4i, rhs);
+	return addressAs(Vector4_t, &result);
+}
+
+Vector4_t SubstractVector4(const Vector4_t * lhs, const Vector4_t * rhs)
+{
+    sse2v4i result = addressAs(sse2v4i, lhs) - addressAs(sse2v4i, rhs);
+    return addressAs(Vector4_t, &result);
+}
+
+Vector4_t ScalarMultVector4(const Vector4_t * lhs, int32_t rhs)
+{
+    sse2v4i result = addressAs(sse2v4i, lhs) + rhs;
+    return addressAs(Vector4_t, &result);
+}
+
+Vector4_t ScalarDivideVector4(const Vector4_t * lhs, int32_t rhs)
+{
+    sse2v4i result = addressAs(sse2v4i, lhs) / rhs;
+    return addressAs(Vector4_t, &result);
+}
+#endif
+
+int32_t Int32FromVector4(const Vector4_t * restrict value, const int32_t * restrict blockSizes)
+{
+    return (int32_t)(value->a*blockSizes[0] + value->b*blockSizes[1] + value->c*blockSizes[2] + value->d);
+}
+
+int32_t Int32FromVector4Pair(const Vector4_t* restrict start, const Vector4_t* restrict offset, const int32_t* restrict blockSizes)
+{
+    Vector4_t target = AddVector4(start, offset);
+    return Int32FromVector4(&target, blockSizes);
+}
+
+Vector4_t Vector4FromInt32(int32_t value, const int32_t * restrict blockSizes)
+{
+    Vector4_t result;
+    result.a = value / blockSizes[0];
+    value %= blockSizes[0];
+    result.b = value / blockSizes[1];
+    value %= blockSizes[1];
+    result.c = value / blockSizes[2];
+    value %= blockSizes[2];
+    result.d = value;
+    return result;
 }

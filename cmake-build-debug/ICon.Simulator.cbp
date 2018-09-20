@@ -74,7 +74,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="C:/Users/john/Documents/ICon.Simulator/."/>
+					<Add directory="C:/Users/john/Documents/ICon.Simulator"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 ICon.Simulator"/>
@@ -90,7 +90,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="C:/Users/john/Documents/ICon.Simulator/."/>
+					<Add directory="C:/Users/john/Documents/ICon.Simulator"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 ICon.Simulator/fast"/>
@@ -130,16 +130,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/BaseTypes/BaseTypes.c">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/BaseTypes/Buffers.c">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/BaseTypes/BaseTypes.h">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/BaseTypes/Buffers.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/FileIO/FileIO.c">
 			<Option target="ICon.Simulator"/>
 		</Unit>
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/FileIO/FileIO.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/Macros/Macros.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/Plugins/PluginLoading.c">
@@ -160,19 +163,19 @@
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Math/Types/Vector.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Sqlite/SqliteReader.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Sqlite/SqliteReader.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Main/main.c">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/DbModel/ModelSqLite.c">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/Database/DbModelLoad.c">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/DbModel/ModelSqLite.h">
-			<Option target="ICon.Simulator"/>
-		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/State/StateLogic.c">
-			<Option target="ICon.Simulator"/>
-		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/State/StateLogic.h">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/Database/DbModelLoad.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Initializers/ContextInitializer.c">
@@ -187,16 +190,22 @@
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Objects/JumpSelection.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/EnvRoutines.c">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Environment/EnvRoutines.c">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/EnvRoutines.h">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Environment/EnvRoutines.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/MainRoutines.c">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Main/MainRoutines.c">
 			<Option target="ICon.Simulator"/>
 		</Unit>
-		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/MainRoutines.h">
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Main/MainRoutines.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Statistics/McStatistics.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Statistics/McStatistics.h">
 			<Option target="ICon.Simulator"/>
 		</Unit>
 		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Validators/Validators.c">

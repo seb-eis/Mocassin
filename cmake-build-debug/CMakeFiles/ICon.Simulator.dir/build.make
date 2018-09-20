@@ -70,19 +70,19 @@ CMakeFiles/ICon.Simulator.dir/Main/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Main/main.c.s"
 	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Main\main.c -o CMakeFiles\ICon.Simulator.dir\Main\main.c.s
 
-CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
-CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
-CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.obj: ../Framework/Basic/BaseTypes/BaseTypes.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.obj"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Framework\Basic\BaseTypes\BaseTypes.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Framework\Basic\BaseTypes\BaseTypes.c
+CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
+CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
+CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.obj: ../Framework/Basic/BaseTypes/Buffers.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.obj"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Framework\Basic\BaseTypes\Buffers.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Framework\Basic\BaseTypes\Buffers.c
 
-CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.i"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Framework\Basic\BaseTypes\BaseTypes.c > CMakeFiles\ICon.Simulator.dir\Framework\Basic\BaseTypes\BaseTypes.c.i
+CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.i"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Framework\Basic\BaseTypes\Buffers.c > CMakeFiles\ICon.Simulator.dir\Framework\Basic\BaseTypes\Buffers.c.i
 
-CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.s"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Framework\Basic\BaseTypes\BaseTypes.c -o CMakeFiles\ICon.Simulator.dir\Framework\Basic\BaseTypes\BaseTypes.c.s
+CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.s"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Framework\Basic\BaseTypes\Buffers.c -o CMakeFiles\ICon.Simulator.dir\Framework\Basic\BaseTypes\Buffers.c.s
 
 CMakeFiles/ICon.Simulator.dir/Framework/Basic/FileIO/FileIO.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
 CMakeFiles/ICon.Simulator.dir/Framework/Basic/FileIO/FileIO.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
@@ -140,33 +140,33 @@ CMakeFiles/ICon.Simulator.dir/Framework/Math/Types/Vector.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Framework/Math/Types/Vector.c.s"
 	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Framework\Math\Types\Vector.c -o CMakeFiles\ICon.Simulator.dir\Framework\Math\Types\Vector.c.s
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.obj: ../Simulator/Data/Model/DbModel/ModelSqLite.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.obj"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\DbModel\ModelSqLite.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\DbModel\ModelSqLite.c
+CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
+CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
+CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj: ../Framework/Sqlite/SqliteReader.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Framework\Sqlite\SqliteReader.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Framework\Sqlite\SqliteReader.c
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.i"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\DbModel\ModelSqLite.c > CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\DbModel\ModelSqLite.c.i
+CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.i"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Framework\Sqlite\SqliteReader.c > CMakeFiles\ICon.Simulator.dir\Framework\Sqlite\SqliteReader.c.i
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.s"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\DbModel\ModelSqLite.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\DbModel\ModelSqLite.c.s
+CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.s"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Framework\Sqlite\SqliteReader.c -o CMakeFiles\ICon.Simulator.dir\Framework\Sqlite\SqliteReader.c.s
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.obj: ../Simulator/Data/Model/State/StateLogic.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.obj"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\State\StateLogic.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\State\StateLogic.c
+CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
+CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
+CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj: ../Simulator/Data/Model/Database/DbModelLoad.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\Database\DbModelLoad.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\Database\DbModelLoad.c
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.i"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\State\StateLogic.c > CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\State\StateLogic.c.i
+CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.i"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\Database\DbModelLoad.c > CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\Database\DbModelLoad.c.i
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.s"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\State\StateLogic.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\State\StateLogic.c.s
+CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.s"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Data\Model\Database\DbModelLoad.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Data\Model\Database\DbModelLoad.c.s
 
 CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Initializers/ContextInitializer.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
 CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Initializers/ContextInitializer.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
@@ -196,38 +196,52 @@ CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Objects/JumpSelection.c.s: cmake_f
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Objects/JumpSelection.c.s"
 	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Objects\JumpSelection.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Objects\JumpSelection.c.s
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.obj: ../Simulator/Logic/Routines/EnvRoutines.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.obj"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\EnvRoutines.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\EnvRoutines.c
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.obj: ../Simulator/Logic/Routines/Environment/EnvRoutines.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.obj"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Environment\EnvRoutines.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Environment\EnvRoutines.c
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.i"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\EnvRoutines.c > CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\EnvRoutines.c.i
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.i"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Environment\EnvRoutines.c > CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Environment\EnvRoutines.c.i
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.s"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\EnvRoutines.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\EnvRoutines.c.s
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.s"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Environment\EnvRoutines.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Environment\EnvRoutines.c.s
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.obj: ../Simulator/Logic/Routines/MainRoutines.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.obj"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\MainRoutines.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\MainRoutines.c
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.obj: ../Simulator/Logic/Routines/Main/MainRoutines.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.obj"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Main\MainRoutines.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Main\MainRoutines.c
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.i"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\MainRoutines.c > CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\MainRoutines.c.i
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.i"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Main\MainRoutines.c > CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Main\MainRoutines.c.i
 
-CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.s"
-	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\MainRoutines.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\MainRoutines.c.s
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.s"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Main\MainRoutines.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Main\MainRoutines.c.s
+
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.obj: ../Simulator/Logic/Routines/Statistics/McStatistics.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.obj"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Statistics\McStatistics.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Statistics\McStatistics.c
+
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.i"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Statistics\McStatistics.c > CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Statistics\McStatistics.c.i
+
+CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.s"
+	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Routines\Statistics\McStatistics.c -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Routines\Statistics\McStatistics.c.s
 
 CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj: CMakeFiles/ICon.Simulator.dir/flags.make
 CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj: CMakeFiles/ICon.Simulator.dir/includes_C.rsp
 CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj: ../Simulator/Logic/Validators/Validators.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj"
 	C:\ProgramFiles\mingw-w64\x86_64-8.1.0-posix-sjlj-rt_v6-rev0\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ICon.Simulator.dir\Simulator\Logic\Validators\Validators.c.obj   -c C:\Users\john\Documents\ICon.Simulator\Simulator\Logic\Validators\Validators.c
 
 CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.i: cmake_force
@@ -241,40 +255,43 @@ CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.s: cmake_f
 # Object files for target ICon.Simulator
 ICon_Simulator_OBJECTS = \
 "CMakeFiles/ICon.Simulator.dir/Main/main.c.obj" \
-"CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.obj" \
+"CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Framework/Basic/FileIO/FileIO.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Framework/Basic/Plugins/PluginLoading.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Framework/Errors/McErrors.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Framework/Math/Types/Vector.c.obj" \
-"CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.obj" \
-"CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.obj" \
+"CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj" \
+"CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Initializers/ContextInitializer.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Objects/JumpSelection.c.obj" \
-"CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.obj" \
-"CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.obj" \
+"CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.obj" \
+"CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.obj" \
+"CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.obj" \
 "CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj"
 
 # External object files for target ICon.Simulator
 ICon_Simulator_EXTERNAL_OBJECTS =
 
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Main/main.c.obj
-ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/BaseTypes.c.obj
+ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Basic/BaseTypes/Buffers.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Basic/FileIO/FileIO.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Basic/Plugins/PluginLoading.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Errors/McErrors.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Math/Types/Vector.c.obj
-ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/DbModel/ModelSqLite.c.obj
-ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/State/StateLogic.c.obj
+ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj
+ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Initializers/ContextInitializer.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Objects/JumpSelection.c.obj
-ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/EnvRoutines.c.obj
-ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/MainRoutines.c.obj
+ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Environment/EnvRoutines.c.obj
+ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Main/MainRoutines.c.obj
+ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Routines/Statistics/McStatistics.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/Simulator/Logic/Validators/Validators.c.obj
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/build.make
+ICon.Simulator.exe: C:/ProgramFiles/sqlite3_64bit/sqlite3.dll
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/linklibs.rsp
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/objects1.rsp
 ICon.Simulator.exe: CMakeFiles/ICon.Simulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking C executable ICon.Simulator.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\john\Documents\ICon.Simulator\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking C executable ICon.Simulator.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\ICon.Simulator.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

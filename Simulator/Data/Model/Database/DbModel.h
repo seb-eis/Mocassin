@@ -46,7 +46,7 @@ typedef struct InteractionRange
 typedef struct DbBlob
 {
     void*       Buffer;
-    int32_t     Key; 
+    int32_t     Key;
     int32_t     HeaderSize;
     int32_t     BlobSize;
     int32_t     Padding:32;
