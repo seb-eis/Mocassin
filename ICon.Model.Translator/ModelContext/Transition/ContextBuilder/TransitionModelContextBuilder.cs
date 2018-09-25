@@ -9,30 +9,27 @@ using ICon.Mathematics.ValueTypes;
 using ICon.Model.Structures;
 using ICon.Mathematics.Coordinates;
 using ICon.Framework.Extensions;
+using ICon.Model.Particles;
+using ICon.Framework.Collections;
 
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Builder implementation for transition model context objects
+    /// Transition model context builder. Extends the reference transition model information into a full data context
     /// </summary>
     public class TransitionModelContextBuilder : ModelContextBuilderBase<ITransitionModelContext>
     {
-        /// <summary>
-        /// Create new context builder that is linked to the provided main context builder
-        /// </summary>
-        /// <param name="projectModelContextBuilder"></param>
+        /// <inheritdoc />
         public TransitionModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
         {
 
         }
 
-        /// <summary>
-        /// Populates the currently set context with the data from the project access
-        /// </summary>
+        /// <inheritdoc />
         protected override void PopulateContext()
         {
-            var kineticTask = Task.Run(() => BuildKineticTransitionModels());
-            var metropolisTask = Task.Run(() => BuildMetropolisTransitionModels());
+            var kineticTask = Task.Run(BuildKineticTransitionModels);
+            var metropolisTask = Task.Run(BuildMetropolisTransitionModels);
 
             ModelContext.KineticTransitionModels = kineticTask.Result;
             ModelContext.MetropolisTransitionModels = metropolisTask.Result;
@@ -41,12 +38,37 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates all kinetic transition models
+        /// Creates all kinetic transition models and inverse models where required
         /// </summary>
         /// <returns></returns>
         protected IList<IKineticTransitionModel> BuildKineticTransitionModels()
         {
-            return null;
+            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
+            var resultModels = new List<IKineticTransitionModel>();
+            var inverseModels = new List<IKineticTransitionModel>();
+
+            int index = 0;
+            foreach (var transition in transitionManager.QueryPort.Query(port => port.GetKineticTransitions()))
+            {
+                var model = CreateTransitionModel(transition);
+                model.ModelId = index++;
+                resultModels.Add(model);
+            }
+
+            foreach (var transitionModel in resultModels)
+            {
+                var inverseModel = CreateTransitionModelInversion(transitionModel);
+                if (transitionModel != inverseModel)
+                {
+                    inverseModel.ModelId = index++;
+                    inverseModels.Add(transitionModel.InverseTransitionModel);
+                }
+                transitionModel.InverseTransitionModel = inverseModel;
+            }
+
+            resultModels.AddRange(inverseModels);
+            resultModels.ForEach(a => a.MobileParticles = CreateMobileParticleSet(a.RuleModels));
+            return resultModels;
         }
 
         /// <summary>
@@ -73,12 +95,13 @@ namespace ICon.Model.Translator.ModelContext
                 if (transitionModel != inverseModel)
                 {
                     inverseModel.ModelId = index++;
-                    transitionModel.InverseTransitionModel = inverseModel;
                     inverseModels.Add(transitionModel.InverseTransitionModel);
                 }
+                transitionModel.InverseTransitionModel = inverseModel;
             }
 
             resultModels.AddRange(inverseModels);
+            resultModels.ForEach(a => a.MobileParticles = CreateMobileParticleSet(a.RuleModels));
             return resultModels;
         }
 
@@ -101,7 +124,18 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates an inverse metropolis transition model if required or if the mappings already contain the ineversion the original is returned
+        /// Creates a single kinetic transition model with rule models and mapping models
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <returns></returns>
+        protected IKineticTransitionModel CreateTransitionModel(IKineticTransition transition)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates an inverse metropolis transition model if required or if the mappings already contain
+        /// the inversion the original is returned
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <returns></returns>
@@ -125,7 +159,19 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates all mapping models for a metropolis transition model and links the mappings together if they contain their own inverions
+        /// Creates an inverse kinetic transition model if required or if the mappings already contain
+        /// the inversion the original is returned
+        /// </summary>
+        /// <param name="transitionModel"></param>
+        /// <returns></returns>
+        protected IKineticTransitionModel CreateTransitionModelInversion(IKineticTransitionModel transitionModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates all mapping models for a metropolis transition model and links the mappings together if they contain
+        /// their own inversions
         /// </summary>
         /// <param name="transitionModel"></param>
         protected void CreateAndAddMappingModels(IMetropolisTransitionModel transitionModel)
@@ -133,7 +179,7 @@ namespace ICon.Model.Translator.ModelContext
             var transitionManager = ProjectServices.GetManager<ITransitionManager>();
             var mappings = transitionManager.QueryPort.Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
 
-            transitionModel.MappingModels = mappings.Select(mapping => CreateMappingModel(mapping)).ToList();
+            transitionModel.MappingModels = mappings.Select(CreateMappingModel).ToList();
 
             if (transitionModel.Transition.MappingsContainInversion())
             {
@@ -158,11 +204,11 @@ namespace ICon.Model.Translator.ModelContext
             
             if (!vectorEncoder.TryDecode(mappingModel.StartVector4D, out Fractional3D startVector3D))
             {
-                throw new InvalidOperationException("Data inconsitency during model generation. 4D to 3D vector conversion failed");
+                throw new InvalidOperationException("Data inconsistency during model generation. 4D to 3D vector conversion failed");
             }
             if (!vectorEncoder.TryDecode(mappingModel.EndVector4D, out Fractional3D endVector3D))
             {
-                throw new InvalidOperationException("Data inconsitency during model generation. 4D to 3D vector conversion failed");
+                throw new InvalidOperationException("Data inconsistency during model generation. 4D to 3D vector conversion failed");
             }
 
             mappingModel.StartVector3D = startVector3D;
@@ -171,13 +217,14 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates inverted mappings models for the original transition models, links them to the originals and adds the inversions to the list of the inverse model
+        /// Creates inverted mappings models for the original transition models, links them to the originals
+        /// and adds the inversions to the list of the inverse model
         /// </summary>
         /// <param name="originalModel"></param>
         /// <param name="inverseModel"></param>
         protected void CreateAndAddMappingModelInversions(IMetropolisTransitionModel originalModel, IMetropolisTransitionModel inverseModel)
         {
-            var inverseMappings = originalModel.MappingModels.Select(model => CreateAndLinkInverseModel(model)).ToList();
+            var inverseMappings = originalModel.MappingModels.Select(CreateAndLinkInverseModel).ToList();
             inverseModel.MappingModels = inverseMappings;
         }
 
@@ -194,16 +241,17 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Links all metropolis mapping models contained in the list together with their inverted mapping model. For self contained transitons only!
+        /// Links all metropolis mapping models contained in the list together with their inverted mapping model.
+        /// For self contained transitions only!
         /// </summary>
         /// <param name="mappingModels"></param>
         protected void LinkMappingModelsToInversions(IList<IMetropolisMappingModel> mappingModels)
         {
-            for (int i = 0; i < mappingModels.Count; i++)
+            for (var i = 0; i < mappingModels.Count; i++)
             {
                 if (mappingModels[i].InverseIsSet) continue;
 
-                for (int j = i; j < mappingModels.Count; j++)
+                for (var j = i; j < mappingModels.Count; j++)
                 {
                     if (mappingModels[j].InverseIsSet) continue;
                     if (mappingModels[i].LinkIfInverseMatch(mappingModels[j])) break;
@@ -304,7 +352,7 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Translates the end idexing deltas into the final tracker 64 bit order code for the simulation
+        /// Translates the end indexing deltas into the final tracker 64 bit order code for the simulation
         /// </summary>
         /// <param name="endIndexingDeltas"></param>
         /// <param name="buffer"></param>
@@ -351,7 +399,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="inverseModel"></param>
         protected void CreateAndAddRuleModelInversions(IMetropolisTransitionModel originalModel, IMetropolisTransitionModel inverseModel)
         {
-            var inverseModels = originalModel.RuleModels.Select(model => CreateAndLinkInverseModel(model)).ToList();
+            var inverseModels = originalModel.RuleModels.Select(CreateAndLinkInverseModel).ToList();
             inverseModel.RuleModels = inverseModels;
         }
 
@@ -365,6 +413,17 @@ namespace ICon.Model.Translator.ModelContext
             var inverseModel = ruleModel.CreateInverse();
             ruleModel.InverseRuleModel = inverseModel;
             return inverseModel;
+        }
+
+        /// <summary>
+        /// Takes a set of rule models and creates the mobile particle set
+        /// </summary>
+        /// <param name="ruleModels"></param>
+        /// <returns></returns>
+        protected IParticleSet CreateMobileParticleSet(IEnumerable<ITransitionRuleModel> ruleModels)
+        {
+            var uniqueParticles = ruleModels.Select(a => a.SelectableParticle).ToSetList();
+            return new ParticleSet() { Index = -1, Particles = uniqueParticles.ToList() };
         }
 
         protected IList<IPositionTransitionModel> BuildPositionTransitionModels()

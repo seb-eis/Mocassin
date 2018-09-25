@@ -12,7 +12,7 @@ namespace ICon.Model.Translator.ModelContext
     public interface IPairEnergyModel : IModelComponent
     {
         /// <summary>
-        /// Boolean flag that indictes if the interaction behaves asymetrically
+        /// Boolean flag that indicates if the interaction behaves asymmetrically
         /// </summary>
         bool IsAsymmetric { get; }
 
@@ -27,7 +27,7 @@ namespace ICon.Model.Translator.ModelContext
         IList<PairEnergyEntry> EnergyEntries { get; set; }
 
         /// <summary>
-        /// The pair energy table that assignes each particle index pair an energy value
+        /// The pair energy table that assigns each particle index pair an energy value
         /// </summary>
         double[,] EnergyTable { get; set; }
 

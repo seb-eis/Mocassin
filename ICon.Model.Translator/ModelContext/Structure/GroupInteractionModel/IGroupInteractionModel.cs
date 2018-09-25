@@ -6,7 +6,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a group interaction model that comines group energy model with geometric information
+    /// Represents a group interaction model that combines group energy model with geometric information
     /// </summary>
     public interface IGroupInteractionModel : IModelComponent
     {

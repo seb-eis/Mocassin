@@ -6,7 +6,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Transition rule model for metropolis transitions that extends the basic transition rule model
+    /// Transition rule model for metropolis transitions. Extends the basic rule model by metropolis specific data context options
     /// </summary>
     public interface IMetropolisRuleModel : ITransitionRuleModel
     {
@@ -26,7 +26,7 @@ namespace ICon.Model.Translator.ModelContext
         IMetropolisRuleModel InverseRuleModel { get; set; }
 
         /// <summary>
-        /// Tries to link the passed rule model and this one as inverses. Returns flase if theiy do not describe inverse rule cases
+        /// Tries to link the passed rule model and this one as inverses. Returns false if they do not describe inverse rule cases
         /// </summary>
         /// <param name="ruleModel"></param>
         bool LinkIfInverseMatch(IMetropolisRuleModel ruleModel);

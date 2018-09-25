@@ -7,44 +7,28 @@ using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Implementation of a position model that fully describes the behavior of a single extended wyckoff position in the model context
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPositionModel"/>
     public class PositionModel : ModelComponentBase, IPositionModel
     {
-        /// <summary>
-        /// The unit cell position that is valid on this position
-        /// </summary>
+        /// <inheritdoc />
         public IUnitCellPosition UnitCellPosition { get; set; }
 
-        /// <summary>
-        /// The actual center vector of the position
-        /// </summary>
+        /// <inheritdoc />
         public Fractional3D CenterVector { get; set; }
 
-        /// <summary>
-        /// The environment model that belongs to the position model
-        /// </summary>
+        /// <inheritdoc />
         public IEnvironmentModel EnvironmentModel { get; set; }
 
-        /// <summary>
-        /// The position transition model that belongs to this position model
-        /// </summary>
+        /// <inheritdoc />
         public IPositionTransitionModel PositionTransitionModel { get; set; }
 
-        /// <summary>
-        /// The transform operation that was used to transfrom the surrounding from the original unit cell position
-        /// </summary>
+        /// <inheritdoc />
         public ISymmetryOperation TransformOperation { get; set; }
 
-        /// <summary>
-        /// The list of relative surrounding positions as 3D fractional vectors
-        /// </summary>
+        /// <inheritdoc />
         public IList<Fractional3D> RelativeSurroundingVectors3D { get; set; }
 
-        /// <summary>
-        /// The list of relative surrounding positions as 4D encoded vectors
-        /// </summary>
+        /// <inheritdoc />
         public IList<CrystalVector4D> RelativeSurroundingVectors4D { get; set; }
     }
 }

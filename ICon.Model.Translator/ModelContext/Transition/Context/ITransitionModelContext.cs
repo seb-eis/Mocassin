@@ -5,7 +5,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a transition model context that describes all all existing transiton models for a project
+    /// Represents a transition model context that describes all existing transition models for a project
     /// </summary>
     public interface ITransitionModelContext
     {

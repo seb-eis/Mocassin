@@ -6,29 +6,19 @@ using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// PAir energy model implementation that provides the model data context for a single pair interaction
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPairEnergyModel"/>
     public class PairEnergyModel : ModelComponentBase, IPairEnergyModel
     {
-        /// <summary>
-        /// Boolean flag that indictes if the interaction behaves asymetrically
-        /// </summary>
+        /// <inheritdoc />
         public bool IsAsymmetric => PairInteraction is IAsymmetricPairInteraction;
 
-        /// <summary>
-        /// The pair interaction the model is based upon
-        /// </summary>
+        /// <inheritdoc />
         public IPairInteraction PairInteraction { get; set; }
 
-        /// <summary>
-        /// The list of existing energy entries in the pair energy model
-        /// </summary>
+        /// <inheritdoc />
         public IList<PairEnergyEntry> EnergyEntries { get; set; }
 
-        /// <summary>
-        /// The pair energy table that assignes each particle index pair an energy value
-        /// </summary>
+        /// <inheritdoc />
         public double[,] EnergyTable { get; set; }
 
         /// <summary>
@@ -40,12 +30,7 @@ namespace ICon.Model.Translator.ModelContext
             PairInteraction = pairInteraction ?? throw new ArgumentNullException(nameof(pairInteraction));
         }
 
-        /// <summary>
-        /// Tries to get an energy value based upon center and interacting particle. Handles asymmetric/asymmetic discrimination
-        /// </summary>
-        /// <param name="centerParticle"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool TryGetEnergy(IParticle centerParticle, IParticle other, out double value)
         {
             if (GetMaxParticleIndex() > centerParticle.Index || GetMaxParticleIndex() > other.Index)
@@ -57,9 +42,7 @@ namespace ICon.Model.Translator.ModelContext
             return true;
         }
 
-        /// <summary>
-        /// Get the last particle index in the pair interaction model
-        /// </summary>
+        /// <inheritdoc />
         public int GetMaxParticleIndex()
         {
             return EnergyTable.GetUpperBound(0);

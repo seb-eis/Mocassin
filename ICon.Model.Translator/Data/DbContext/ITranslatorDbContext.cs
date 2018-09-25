@@ -31,6 +31,8 @@ namespace ICon.Model.Translator
 
         DbSet<TransitionModel> TransitionModels { get; set; }
 
+        DbSet<SqliteQueryEntity> SqliteQueries { get; set; }
+
         int SaveChanges();
     }
 }

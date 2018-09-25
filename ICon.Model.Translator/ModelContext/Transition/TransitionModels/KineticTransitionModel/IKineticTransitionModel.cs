@@ -7,7 +7,7 @@ using ICon.Model.Transitions;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a kinetic transition model that fully describes geometry and mobility information of a refernce transition
+    /// Represents a kinetic transition model that fully describes geometry and mobility information of a reference transition
     /// </summary>
     public interface IKineticTransitionModel : IModelComponent
     {

@@ -2,13 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -20,7 +29,8 @@
 
   <ItemGroup>
     <Folder Include="Data\Entities\Job\DbSet\" />
-    <Folder Include="Data\InteropObjects\Transition\Net\" />
+    <Folder Include="Data\InteropObjects\Energy\C\" />
+    <Folder Include="Data\InteropObjects\Energy\Net\" />
     <Folder Include="Logic\Components\Energies\" />
     <Folder Include="Logic\Components\Settings\" />
     <Folder Include="Logic\Components\Transitions\" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace ICon.Model.Translator
 {
@@ -12,6 +13,7 @@ namespace ICon.Model.Translator
         /// The database entity context key
         /// </summary>
         [Key]
+        [XmlIgnore]
         public int Id { get; set; }
     }
 }

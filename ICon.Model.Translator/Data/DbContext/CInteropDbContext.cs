@@ -81,6 +81,11 @@ namespace ICon.Model.Translator
         public DbSet<BlobEntityBase> Blobs { get; set; }
 
         /// <summary>
+        /// Database set for sqlite load queries. Describes how the simulator pulls data from the database
+        /// </summary>
+        public DbSet<SqliteQueryEntity> SqliteQueries { get; set; }
+
+        /// <summary>
         /// Create new mccs database context using the provided filepath. Dop creates a new database if specfified
         /// </summary>
         /// <param name="filename"></param>

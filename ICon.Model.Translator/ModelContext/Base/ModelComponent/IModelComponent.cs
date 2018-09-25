@@ -5,7 +5,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a model component in the exended model context that can be indexed
+    /// Represents a model component in the extended model context that can be indexed
     /// </summary>
     public interface IModelComponent
     {

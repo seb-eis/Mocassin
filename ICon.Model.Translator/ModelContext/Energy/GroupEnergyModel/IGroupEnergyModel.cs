@@ -7,7 +7,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Describes a single group energy model with an energy table and refernce geometry info
+    /// Describes a single group energy model with an energy table and reference geometry info
     /// </summary>
     public interface IGroupEnergyModel : IModelComponent
     {
@@ -27,7 +27,7 @@ namespace ICon.Model.Translator.ModelContext
         IList<GroupEnergyEntry> EnergyEntries { get; set; }
 
         /// <summary>
-        /// The position group info that describes extended symmetry infromation
+        /// The position group info that describes extended symmetry information
         /// </summary>
         IPositionGroupInfo PositionGroupInfo { get; set; }
 
@@ -42,7 +42,8 @@ namespace ICon.Model.Translator.ModelContext
         IDictionary<IParticle, int> CenterParticleIndexing { get; set; }
 
         /// <summary>
-        /// The energy table for the group interaction that enbales energy lookup by redirected center particle index and lookup code index
+        /// The energy table for the group interaction that enables energy lookup by redirected center particle
+        /// index and lookup code index
         /// </summary>
         /// <returns></returns>
         double[,] EnergyTable { get; set; }

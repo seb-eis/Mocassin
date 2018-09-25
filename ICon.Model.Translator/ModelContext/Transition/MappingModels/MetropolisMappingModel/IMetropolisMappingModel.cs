@@ -47,7 +47,7 @@ namespace ICon.Model.Translator.ModelContext
         CrystalVector4D StartVector4D { get; set; }
 
         /// <summary>
-        /// The encoded 4D coordinates of the end position (0,0,0,P) in te origin unit cell
+        /// The encoded 4D coordinates of the end position (0,0,0,P) in the origin unit cell
         /// </summary>
         CrystalVector4D EndVector4D { get; set; }
 

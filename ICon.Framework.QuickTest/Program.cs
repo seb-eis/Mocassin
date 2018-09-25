@@ -54,25 +54,21 @@ namespace ICon.Framework.QuickTest
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-
-            var mMappings = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisMappingLists());
-            var mRules = package.TransitionManager.QueryPort.Query(port => port.GetAllMetropolisRuleLists());
-
-            var kMappings = package.TransitionManager.QueryPort.Query(port => port.GetAllKineticMappingLists());
-            var kRules = package.TransitionManager.QueryPort.Query(port => port.GetAllKineticRuleLists());
-
+            var defaultPath = "C:/Users/hims-user/source/repos/ICon.Program/ICon.Framework.QuickTest";
             var watch = Stopwatch.StartNew();
-          
-            //var context = new InteropDbContext("./interopTest.db", true);
+            //var context = new CInteropDbContext("./mcsop.db", true);
+            var packages = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var mainContextBuilder = new ProjectModelContextBuilder(packages.ProjectServices);
+            var transitionContextBuilder = new TransitionModelContextBuilder(mainContextBuilder);
+            var result = await transitionContextBuilder.CreateNewContext<TransitionModelContext>();
             DisplayWatch(watch);
             Console.ReadLine();
         }
 
 
-        static void DisplayWatch(Stopwatch watch)
+        private static void DisplayWatch(Stopwatch watch)
         {
             watch.Stop();
             Console.WriteLine("Watch Dump: {0}", watch.Elapsed.ToString());

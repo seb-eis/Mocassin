@@ -22,7 +22,7 @@ namespace ICon.Model.Translator
         public MoveSequenceEntity LocalMoveSequence { get; set; }
 
         [NotMapped]
-        [OwnedBlobPropertyAttribute(nameof(GlobalMoveSequenceBinary))]
+        [OwnedBlobProperty(nameof(GlobalMoveSequenceBinary))]
         public MoveSequenceEntity GlobalMoveSequence { get; set; }
 
         [Column("JumpCollectionId")]

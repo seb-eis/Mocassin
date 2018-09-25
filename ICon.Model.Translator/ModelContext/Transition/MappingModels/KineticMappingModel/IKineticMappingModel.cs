@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ICon.Mathematics.ValueTypes;
+using ICon.Model.Particles;
 using ICon.Model.Transitions;
 
 namespace ICon.Model.Translator.ModelContext
@@ -32,13 +33,20 @@ namespace ICon.Model.Translator.ModelContext
         IList<Fractional3D> TransitionSequence3D { get; set; }
 
         /// <summary>
-        /// The effective transition vector from start to end
+        /// The step weighting vectors that describe the field weighting for (A,B,C) direction of each transition step
+        /// </summary>
+        IList<Fractional3D> StepWeightingVectors { get; set; }
+
+        /// <summary>
+        /// The effective transition vector from start to end. Used for global movement tracking
         /// </summary>
         Fractional3D EffectiveTransitionVector { get; set; }
 
         /// <summary>
-        /// The projection of the effective transition vector onto the lattice vectors
+        /// The position movement matrix. Describes how each involved position moves on transition in fractional coordinates
         /// </summary>
-        Fractional3D LatticeVectorProjections { get; set; }
+        Matrix2D PositionMovementMatrix { get; set; }
+
+        
     }
 }

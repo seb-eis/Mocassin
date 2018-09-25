@@ -6,7 +6,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents an energy model context that provides all refernce energy informations of the project 
+    /// Represents an energy model context that provides all reference energy information of the project 
     /// </summary>
     public interface IEnergyModelContext
     {

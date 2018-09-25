@@ -16,22 +16,18 @@ namespace ICon.Model.Translator.ModelContext
     /// </summary>
     public class EnergyModelContextBuilder : ModelContextBuilderBase<IEnergyModelContext>
     {
-        /// <summary>
-        /// Create new energy model context builder that is linked to the passed main context builder
-        /// </summary>
-        /// <param name="projectServices"></param>
-        public EnergyModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
+        /// <inheritdoc />
+        public EnergyModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
+            : base(projectModelContextBuilder)
         {
 
         }
 
-        /// <summary>
-        /// Populates the currently set energy context data
-        /// </summary>
+        /// <inheritdoc />
         protected override void PopulateContext()
         {
-            var pairBuild = Task.Run(() => BuildPairEnergyModels());
-            var groupBuild = Task.Run(() => BuildGroupEnergyModels());
+            var pairBuild = Task.Run(BuildPairEnergyModels);
+            var groupBuild = Task.Run(BuildGroupEnergyModels);
             ModelContext.PairEnergyModels = pairBuild.Result;
             ModelContext.GroupEnergyModels = groupBuild.Result;
         }
@@ -55,11 +51,12 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Create and add a set of pair inetraction models to the end of the model list
+        /// Create and add a set of pair interaction models to the end of the model list
         /// </summary>
         /// <param name="pairEnergyModels"></param>
         /// <param name="interactions"></param>
-        protected void AddPairInteractionsToModels(IList<IPairEnergyModel> pairEnergyModels, IEnumerable<IPairInteraction> interactions)
+        protected void AddPairInteractionsToModels(IList<IPairEnergyModel> pairEnergyModels,
+            IEnumerable<IPairInteraction> interactions)
         {
             foreach (var interaction in interactions)
             {
@@ -68,7 +65,7 @@ namespace ICon.Model.Translator.ModelContext
                     ModelId = pairEnergyModels.Count
                 };
 
-                int maxParticleIndex = CopyEnergyEntriesToModel(pairEnergyModel);
+                var maxParticleIndex = CopyEnergyEntriesToModel(pairEnergyModel);
                 pairEnergyModel.EnergyTable = BuildPairEnergyTable(pairEnergyModel.EnergyEntries, maxParticleIndex);
                 pairEnergyModels.Add(pairEnergyModel);
             }
@@ -81,12 +78,12 @@ namespace ICon.Model.Translator.ModelContext
         /// <returns></returns>
         protected int CopyEnergyEntriesToModel(IPairEnergyModel energyModel)
         {
-            int lastIndex = 0;
+            var lastIndex = 0;
             energyModel.EnergyEntries = new List<PairEnergyEntry>();
 
             foreach (var entry in energyModel.PairInteraction.GetEnergyEntries())
             {
-                int checkIndex = entry.ParticlePair.Particle0.Index;
+                var checkIndex = entry.ParticlePair.Particle0.Index;
                 lastIndex = (lastIndex > checkIndex) ? lastIndex : checkIndex;
                 energyModel.EnergyEntries.Add(entry);
             }
@@ -97,7 +94,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// Builds the energy table based upon the passed energy entry collection
         /// </summary>
-        /// <param name="energyDictionary"></param>
+        /// <param name="energyEntries"></param>
         /// <param name="largestIndex"></param>
         /// <returns></returns>
         protected double[,] BuildPairEnergyTable(IList<PairEnergyEntry> energyEntries, int largestIndex)
@@ -106,8 +103,8 @@ namespace ICon.Model.Translator.ModelContext
 
             foreach (var entry in energyEntries)
             {
-                int id0 = entry.ParticlePair.Particle0.Index;
-                int id1 = entry.ParticlePair.Particle1.Index;
+                var id0 = entry.ParticlePair.Particle0.Index;
+                var id1 = entry.ParticlePair.Particle1.Index;
                 table[id0, id1] = entry.Energy;
 
                 if (entry.ParticlePair is SymmetricParticlePair)
@@ -141,7 +138,8 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="groupEnergyModels"></param>
         /// <param name="groupInteractions"></param>
         /// <param name="energyManager"></param>
-        protected void AddGroupInteractionsToModels(IList<IGroupEnergyModel> groupEnergyModels, IEnumerable<IGroupInteraction> groupInteractions, IEnergyManager energyManager)
+        protected void AddGroupInteractionsToModels(IList<IGroupEnergyModel> groupEnergyModels,
+            IEnumerable<IGroupInteraction> groupInteractions, IEnergyManager energyManager)
         {
             var positionGroupInfos = energyManager.QueryPort.Query(port => port.GetPositionGroupInfos());
             foreach (var interaction in groupInteractions)
@@ -178,7 +176,7 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///  Restrores the full set of group energy entries and occupation states of a group energy model
+        ///  Restores the full set of group energy entries and occupation states of a group energy model
         /// </summary>
         /// <param name="groupEnergyModel"></param>
         /// <returns></returns>
@@ -208,7 +206,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// Creates the sorted list of group lookup codes
         /// </summary>
-        /// <param name="occupationStates"></param>
+        /// <param name="groupEnergyModel"></param>
         /// <returns></returns>
         protected void CreateAllGroupLookupCodesOnModel(IGroupEnergyModel groupEnergyModel)
         {
@@ -217,13 +215,13 @@ namespace ICon.Model.Translator.ModelContext
 
             foreach (var state in groupEnergyModel.OccupationStates)
             {
-                int index = 0;
+                var index = 0;
                 for (; index < state.StateLength; index++)
                 {
                     buffer[index] = (byte)state.Particles[index].Index;
                 }
 
-                long code = BitConverter.ToInt64(buffer, 0);
+                var code = BitConverter.ToInt64(buffer, 0);
                 codes.Add(code);
 
                 for (int i = 0; i < index; i++)
@@ -240,14 +238,14 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="groupEnergyModel"></param>
         protected void CreateGroupEnergyTableOnModel(IGroupEnergyModel groupEnergyModel)
         {
-            int rowCount = groupEnergyModel.CenterParticleIndexing.Count;
-            int colCount = groupEnergyModel.GroupLookupCodes.Count;
+            var rowCount = groupEnergyModel.CenterParticleIndexing.Count;
+            var colCount = groupEnergyModel.GroupLookupCodes.Count;
             var energyTable = new double[rowCount, colCount];
 
-            int index = 0;
-            for (int row = 0; row < rowCount; row++)
+            var index = 0;
+            for (var row = 0; row < rowCount; row++)
             {
-                for (int col = 0; col < colCount; col++)
+                for (var col = 0; col < colCount; col++)
                 {
                     energyTable[row, col] = groupEnergyModel.EnergyEntries[index++].Energy;
                 }

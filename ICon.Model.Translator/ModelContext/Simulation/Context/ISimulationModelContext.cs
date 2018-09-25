@@ -5,7 +5,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents asimulation model context that holds the relationship between simulations and affiliated model information
+    /// Represents a simulation model context that holds the relationship between simulations and affiliated model information
     /// </summary>
     public interface ISimulationModelContext
     {

@@ -7,22 +7,34 @@ using ICon.Framework.Extensions;
 
 namespace ICon.Model.Translator
 {
+    /// <inheritdoc cref="ICon.Model.Translator.IMarshalProvider"/>
     public class MarshalProvider : IDisposable, IMarshalProvider
     {
+        /// <summary>
+        /// Object to look the target pool
+        /// </summary>
         private object PoolLock { get; } = new object();
 
+        /// <summary>
+        /// Marshal target pool dictionary. Holds list of unmanaged marshal targets for each type
+        /// </summary>
         private Dictionary<Type, List<MarshalTarget>> MarshalTargetPool { get; }
 
+        /// <summary>
+        /// Create new default marshal provider
+        /// </summary>
         public MarshalProvider()
         {
             MarshalTargetPool = new Dictionary<Type, List<MarshalTarget>>();
         }
 
+        /// <inheritdoc/>
         public TStruct BytesToStructure<TStruct>(byte[] buffer, int offset) where TStruct : struct
         {
-            return (TStruct)BytesToStructure(buffer, offset, typeof(TStruct));
+            return (TStruct) BytesToStructure(buffer, offset, typeof(TStruct));
         }
 
+        /// <inheritdoc/>
         public object BytesToStructure(byte[] buffer, int offset, Type structType)
         {
             using (var target = GetMarshalTarget(structType))
@@ -32,7 +44,9 @@ namespace ICon.Model.Translator
             }
         }
 
-        public IEnumerable<TStruct> BytesToManyStructures<TStruct>(byte[] buffer, int offset, int upperBound) where TStruct : struct
+        /// <inheritdoc/>
+        public IEnumerable<TStruct> BytesToManyStructures<TStruct>(byte[] buffer, int offset, int upperBound)
+            where TStruct : struct
         {
             using (var target = GetMarshalTarget(typeof(TStruct)))
             {
@@ -44,6 +58,7 @@ namespace ICon.Model.Translator
             }
         }
 
+        /// <inheritdoc/>
         public void StructureToBytes<TStruct>(byte[] buffer, int offset, in TStruct structure) where TStruct : struct
         {
             using (var target = GetMarshalTarget(typeof(TStruct)))
@@ -53,7 +68,9 @@ namespace ICon.Model.Translator
             }
         }
 
-        public void ManyStructuresToBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures) where TStruct : struct
+        /// <inheritdoc/>
+        public void ManyStructuresToBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures)
+            where TStruct : struct
         {
             using (var target = GetMarshalTarget(typeof(TStruct)))
             {
@@ -67,6 +84,11 @@ namespace ICon.Model.Translator
             }
         }
 
+        /// <summary>
+        /// Gets a free marshal target for the provided type
+        /// </summary>
+        /// <param name="structType"></param>
+        /// <returns></returns>
         public LockedMarshalTarget GetMarshalTarget(Type structType)
         {
             var targets = GetMarshalTargetList(structType);
@@ -83,25 +105,35 @@ namespace ICon.Model.Translator
             }
         }
 
+        /// <summary>
+        /// Gets the marshal target list for the provided type
+        /// </summary>
+        /// <param name="structType"></param>
+        /// <returns></returns>
         protected List<MarshalTarget> GetMarshalTargetList(Type structType)
         {
             lock (PoolLock)
             {
-                if (!MarshalTargetPool.TryGetValue(structType, out var list))
-                {
-                    list = new List<MarshalTarget>(4).Populate(() => GetNewMarshalTarget(structType), 4);
-                    MarshalTargetPool.Add(structType, list);
-                }
+                if (MarshalTargetPool.TryGetValue(structType, out var list)) return list;
+
+                list = new List<MarshalTarget>(4).Populate(() => GetNewMarshalTarget(structType), 4);
+                MarshalTargetPool.Add(structType, list);
                 return list;
             }
         }
 
+        /// <summary>
+        /// Get a new marshal target for the provided type
+        /// </summary>
+        /// <param name="structType"></param>
+        /// <returns></returns>
         public MarshalTarget GetNewMarshalTarget(Type structType)
         {
-            int size = Marshal.SizeOf(structType);
+            var size = Marshal.SizeOf(structType);
             return new MarshalTarget(Marshal.AllocHGlobal(size), size);
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             foreach (var item in MarshalTargetPool)

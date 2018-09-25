@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ArrayOfSqliteQueryEntity>
+  <SqliteQueryEntity Id="jobload">
+	select * from JobModels where JobNumber is 10 and PackageId is 10
+  </SqliteQueryEntity>
+  <SqliteQueryEntity Id="packageload">
+	select * from SimulationPackages where Id is 2
+  </SqliteQueryEntity>
+</ArrayOfSqliteQueryEntity>

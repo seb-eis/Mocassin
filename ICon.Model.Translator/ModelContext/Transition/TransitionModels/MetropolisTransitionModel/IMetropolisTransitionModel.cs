@@ -7,7 +7,7 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a metropolis transition model that fully describes geometry and mobility information of a refernce transition
+    /// Represents a metropolis transition model that fully describes geometry and mobility information of a reference transition
     /// </summary>
     public interface IMetropolisTransitionModel : IModelComponent
     {

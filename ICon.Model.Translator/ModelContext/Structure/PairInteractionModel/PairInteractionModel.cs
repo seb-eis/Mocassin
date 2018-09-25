@@ -5,29 +5,19 @@ using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Implementation of a pair interaction model that combines structure information and energy model of a single interacting atom pair
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPairInteractionModel"/>
     public class PairInteractionModel : ModelComponentBase, IPairInteractionModel
     {
-        /// <summary>
-        /// The pair energy model that belongs to the interaction
-        /// </summary>
+        /// <inheritdoc />
         public IPairEnergyModel PairEnergyModel { get; set; }
 
-        /// <summary>
-        /// The environment model the interaction belongs to
-        /// </summary>
+        /// <inheritdoc />
         public IEnvironmentModel EnvironmentModel { get; set; }
 
-        /// <summary>
-        /// The relative fractional 3D of the interaction
-        /// </summary>
+        /// <inheritdoc />
         public Fractional3D RelativeVector3D { get; set; }
 
-        /// <summary>
-        /// The relative encoded 4D vector of the interaction
-        /// </summary>
+        /// <inheritdoc />
         public CrystalVector4D RelativeVector4D { get; set; }
     }
 }

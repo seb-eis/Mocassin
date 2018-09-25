@@ -34,7 +34,7 @@ namespace ICon.Model.Translator.ModelContext
         IPositionTransitionModel PositionTransitionModel { get; set; }
 
         /// <summary>
-        /// The transform operation that was used to transfrom the surrounding from the original unit cell position
+        /// The transform operation that was used to transform the surrounding from the original unit cell position
         /// </summary>
         ISymmetryOperation TransformOperation { get; set; }
 

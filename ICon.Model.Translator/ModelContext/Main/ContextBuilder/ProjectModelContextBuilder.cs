@@ -6,39 +6,25 @@ using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Context builder for the main project model context
-    /// </summary>
+    /// <inheritdoc />
     public class ProjectModelContextBuilder : IProjectModelContextBuilder
     {
-        /// <summary>
-        /// Data access to the project refernce data the builder uses
-        /// </summary>
+        /// <inheritdoc />
         public IProjectServices ProjectServices { get; set; }
 
-        /// <summary>
-        /// The project model context that is being build by this context builder
-        /// </summary>
+        /// <inheritdoc />
         public IProjectModelContext ProjectModelContext { get; set; }
 
-        /// <summary>
-        /// The build task of the energy model context component
-        /// </summary>
+        /// <inheritdoc />
         public Task<IEnergyModelContext> EnergyModelContext { get; set; }
 
-        /// <summary>
-        /// The build task of the structure model context component
-        /// </summary>
+        /// <inheritdoc />
         public Task<IStructureModelContext> StructureModelContext { get; set; }
 
-        /// <summary>
-        /// The build task of the transition model context component
-        /// </summary>
+        /// <inheritdoc />
         public Task<ITransitionModelContext> TransitionModelContext { get; set; }
 
-        /// <summary>
-        /// The build task of the simulation model context component
-        /// </summary>
+        /// <inheritdoc />
         public Task<ISimulationModelContext> SimulationModelContext { get; set; }
 
         /// <summary>
@@ -48,6 +34,7 @@ namespace ICon.Model.Translator.ModelContext
         public ProjectModelContextBuilder(IProjectServices projectServices)
         {
             ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ProjectModelContext = new ProjectModelContext() { ProjectServices = projectServices };
         }
 
         /// <summary>
@@ -55,7 +42,7 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <returns></returns>
-        public async Task<IProjectModelContext> CreatNewContextAsync<T1>() where T1 : IProjectModelContext
+        public async Task<IProjectModelContext> CreateNewContextAsync<T1>() where T1 : IProjectModelContext
         {
             ProjectModelContext = new ProjectModelContext()
             {
@@ -68,6 +55,10 @@ namespace ICon.Model.Translator.ModelContext
             return ProjectModelContext;
         }
 
+        /// <summary>
+        /// Creates all context components independently and awaits their completion
+        /// </summary>
+        /// <returns></returns>
         protected Task BuildContextComponents()
         {
             EnergyModelContext = new EnergyModelContextBuilder(this).CreateNewContext<EnergyModelContext>();

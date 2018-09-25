@@ -6,40 +6,25 @@ using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// The metropolis transition model that carries the full model context data of a single metropolis transition
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IMetropolisTransitionModel"/>
     public class MetropolisTransitionModel : ModelComponentBase, IMetropolisTransitionModel
     {
-        /// <summary>
-        /// Boolean flag that describes if this transition model has an inversion that is not itself
-        /// </summary>
+        /// <inheritdoc />
         public bool HasInversion => this != InverseTransitionModel;
 
-        /// <summary>
-        /// The transition the model is based upon
-        /// </summary>
+        /// <inheritdoc />
         public IMetropolisTransition Transition { get; set; }
 
-        /// <summary>
-        /// The inverse transition model that describes the neutralizing transition
-        /// </summary>
-        /// <remarks> Is equal to itself if start and end unit cell positions are identical </remarks>
+        /// <inheritdoc />
         public IMetropolisTransitionModel InverseTransitionModel { get; set; }
 
-        /// <summary>
-        /// The list of existing mapping models that describe all possible geometries this transition model can be applied to
-        /// </summary>
+        /// <inheritdoc />
         public IList<IMetropolisMappingModel> MappingModels { get; set; }
 
-        /// <summary>
-        /// The extended rule models that contain all possible rules for the transition
-        /// </summary>
+        /// <inheritdoc />
         public IList<IMetropolisRuleModel> RuleModels { get; set; }
 
-        /// <summary>
-        /// The particle set that describes which particles are mobile
-        /// </summary>
+        /// <inheritdoc />
         public IParticleSet MobileParticles { get; set; }
     }
 }

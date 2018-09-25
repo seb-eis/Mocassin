@@ -25,6 +25,9 @@ namespace ICon.Model.Translator
 
         public LatticeModel LatticeModel { get; set; }
 
+        [Column("JobNumber")]
+        public int JobNumber { get; set; }
+
         [Column("PackageId")]
         [ForeignKey(nameof(SimulationPackage))]
         public int SimulationPackageId { get; set; }

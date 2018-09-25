@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Translator.ModelContext
 {
@@ -10,6 +11,11 @@ namespace ICon.Model.Translator.ModelContext
     /// </summary>
     public interface IProjectModelContextBuilder
     {
+        /// <summary>
+        /// Data access to the project reference data the builder uses
+        /// </summary>
+        IProjectServices ProjectServices { get; set; }
+
         /// <summary>
         /// The project model context that is build by the builder
         /// </summary>

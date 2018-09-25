@@ -3,6 +3,7 @@ using ICon.Model.Transitions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ICon.Mathematics.ValueTypes;
 
 namespace ICon.Model.Translator.ModelContext
 {
@@ -35,5 +36,10 @@ namespace ICon.Model.Translator.ModelContext
         /// The effectively transported charge that the rule describes
         /// </summary>
         double EffectiveTransportCharge { get; set; }
+
+        /// <summary>
+        /// The charge transport 1xN matrix. Describes the transportable charge of each start occupation
+        /// </summary>
+        Matrix2D ChargeTransportMatrix { get; set; }
     }
 }

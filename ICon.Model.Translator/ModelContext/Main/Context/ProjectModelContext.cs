@@ -5,34 +5,22 @@ using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Implementation fo the full project model data context that carries all data for simulation generation/evaluation
-    /// </summary>
+    /// <inheritdoc />
     public class ProjectModelContext : IProjectModelContext
     {
-        /// <summary>
-        /// Access to the project services the model context was generated from
-        /// </summary>
+        /// <inheritdoc />
         public IProjectServices ProjectServices { get; set; }
 
-        /// <summary>
-        /// The structure model context of the linked project
-        /// </summary>
+        /// <inheritdoc />
         public IStructureModelContext StructureModelContext { get; set; }
 
-        /// <summary>
-        /// The transition model context of the linked project
-        /// </summary>
+        /// <inheritdoc />
         public ITransitionModelContext TransitionModelContext { get; set; }
 
-        /// <summary>
-        /// The energy model context of the linked project
-        /// </summary>
+        /// <inheritdoc />
         public IEnergyModelContext EnergyModelContext { get; set; }
 
-        /// <summary>
-        /// The simulation model context of the linked project
-        /// </summary>
+        /// <inheritdoc />
         public ISimulationModelContext SimulationModelContext { get; set; }
     }
 }

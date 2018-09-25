@@ -7,60 +7,37 @@ using System.Linq;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Base class for the transition rule model that contains the shared properties of kinetic and metropolis rules
-    /// </summary>
+    /// <inheritdoc />
     public abstract class TransitionRuleModel : ITransitionRuleModel
     {
-        /// <summary>
-        /// Boolean flag that indicates that this rule model describes in inverted version of its source rule and abstract transition
-        /// </summary>
+        /// <inheritdoc />
         public bool IsSourceInversion { get; set; }
 
-        /// <summary>
-        /// The abstract transition the rule model is based upon
-        /// </summary>
+        /// <inheritdoc />
         public abstract IAbstractTransition AbstractTransition { get; }
 
-        /// <summary>
-        /// The selectable particle the rule describes
-        /// </summary>
+        /// <inheritdoc />
         public abstract IParticle SelectableParticle { get; }
 
-        /// <summary>
-        /// The list of particles that describes the path occupation in the start state
-        /// </summary>
+        /// <inheritdoc />
         public IList<IParticle> StartState { get; set; }
 
-        /// <summary>
-        /// The list of particles that describes the path occupation in the final state
-        /// </summary>
+        /// <inheritdoc />
         public IList<IParticle> FinalState { get; set; }
 
-        /// <summary>
-        /// The movement description that describes the offset of particles in the end state compared to the start state
-        /// </summary>
+        /// <inheritdoc />
         public IList<int> EndIndexingDeltas { get; set; }
 
-        /// <summary>
-        /// Index encoded version of the start state occupation
-        /// </summary>
+        /// <inheritdoc />
         public long StartStateCode { get; set; }
 
-        /// <summary>
-        /// Index encoded version of the final state occupation
-        /// </summary>
+        /// <inheritdoc />
         public long FinalStateCode { get; set; }
 
-        /// <summary>
-        /// Index encoded final order of the involved dynamic trackers
-        /// </summary>
+        /// <inheritdoc />
         public long FinalTrackerOrderCode { get; set; }
 
-        /// <summary>
-        /// Copies the data on this rule model as inverted info onto the passed rule model
-        /// </summary>
-        /// <param name="ruleModel"></param>
+        /// <inheritdoc />
         public void CopyInversionDataToModel(ITransitionRuleModel ruleModel)
         {
             ruleModel.FinalState = StartState.ToList();
@@ -89,7 +66,7 @@ namespace ICon.Model.Translator.ModelContext
         {
             var bytes = BitConverter.GetBytes(FinalTrackerOrderCode);
 
-            for (int i = 0; i < invertedEndIndexingDeltas.Count; i++)
+            for (var i = 0; i < invertedEndIndexingDeltas.Count; i++)
             {
                 bytes[i] -= (byte) (EndIndexingDeltas[i] - invertedEndIndexingDeltas[i]);
             }

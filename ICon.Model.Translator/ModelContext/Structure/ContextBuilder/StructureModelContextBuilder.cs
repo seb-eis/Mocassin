@@ -7,21 +7,16 @@ using ICon.Model.Structures;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Implementation of a structure model context builder that extends the existing refernce structure data into a full model context object
+    /// Structure model context builder. Extends the reference structure data into the full structure data context
     /// </summary>
     public class StructureModelContextBuilder : ModelContextBuilderBase<IStructureModelContext>
     {
-        /// <summary>
-        /// Create new context builder that is linked to the provided main context builder
-        /// </summary>
-        /// <param name="projectServices"></param>
+        /// <inheritdoc />
         public StructureModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
         {
         }
 
-        /// <summary>
-        /// Popultes the currently active context
-        /// </summary>
+        /// <inheritdoc />
         protected override void PopulateContext()
         {
             throw new NotImplementedException();
@@ -35,7 +30,7 @@ namespace ICon.Model.Translator.ModelContext
         protected IEnvironmentModel BuildNewEnvironmentModel(IUnitCellPosition unitCellPosition)
         {
             var wyckoffDictionary = ProjectServices.SpaceGroupService.GetOperationDictionary(unitCellPosition.Vector);
-            var environmentModel = new EnvironmentModel()
+            var environmentModel = new EnvironmentModel
             {
                 UnitCellPosition = unitCellPosition,
                 TransformOperations = wyckoffDictionary

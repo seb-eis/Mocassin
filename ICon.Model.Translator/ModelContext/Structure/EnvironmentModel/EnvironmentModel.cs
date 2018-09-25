@@ -6,29 +6,19 @@ using ICon.Symmetry.SpaceGroups;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Environment model implementation that carries all extended structure and interaction information for a single unit cell position
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IEnvironmentModel"/>
     public class EnvironmentModel : ModelComponentBase, IEnvironmentModel
     {
-        /// <summary>
-        /// The unit cell position that the environment is based upon
-        /// </summary>
+        /// <inheritdoc />
         public IUnitCellPosition UnitCellPosition { get; set; }
 
-        /// <summary>
-        /// The list of pair interaction models that belong to the environment
-        /// </summary>
+        /// <inheritdoc />
         public IList<IPairInteractionModel> PairInteractionModels { get; set; }
 
-        /// <summary>
-        /// The list of group interaction models that belong to the environment
-        /// </summary>
+        /// <inheritdoc />
         public IList<IGroupInteractionModel> GroupInteractionModels { get; set; }
 
-        /// <summary>
-        /// Wyckoff operation dictionary that contains all transform operations that reach equivalent center positions
-        /// </summary>
+        /// <inheritdoc />
         public IWyckoffOperationDictionary TransformOperations { get; set; }
     }
 }

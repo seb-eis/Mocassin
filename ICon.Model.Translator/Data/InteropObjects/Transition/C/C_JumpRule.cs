@@ -8,7 +8,7 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Jump rule simulation object Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 48)]
+    [StructLayout(LayoutKind.Sequential, Size = 56)]
     public struct C_JumpRule
     {
         [MarshalAs(UnmanagedType.I8)]
@@ -46,7 +46,7 @@ namespace ICon.Model.Translator
             {
                 if ((value?.Length ?? throw new ArgumentNullException()) != 8)
                 {
-                    throw new ArgumentException("Aray has to be of size 8");
+                    throw new ArgumentException("Array has to be of size 8");
                 }
                 trackerOrder = value;
             }

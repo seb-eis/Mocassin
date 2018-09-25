@@ -7,12 +7,14 @@ using System.Text;
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Represents a transition rule model that describes the physics of the state manipulation of a specific transition path occupation
+    /// Represents a transition rule model that describes the physics of the state manipulation of a specific transition
+    /// path occupation
     /// </summary>
     public interface ITransitionRuleModel
     {
         /// <summary>
-        /// Boolean flag that indicates that this rule model describes in inverted version of its source rule and abstract transition
+        /// Boolean flag that indicates that this rule model describes in inverted version
+        /// of its source rule and abstract transition
         /// </summary>
         bool IsSourceInversion { get; set; }
 
