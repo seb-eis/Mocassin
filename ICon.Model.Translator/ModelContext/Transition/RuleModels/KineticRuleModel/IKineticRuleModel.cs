@@ -33,13 +33,14 @@ namespace ICon.Model.Translator.ModelContext
         long TransitionStateCode { get; set; }
 
         /// <summary>
-        /// The effectively transported charge that the rule describes
-        /// </summary>
-        double EffectiveTransportCharge { get; set; }
-
-        /// <summary>
         /// The charge transport 1xN matrix. Describes the transportable charge of each start occupation
         /// </summary>
         Matrix2D ChargeTransportMatrix { get; set; }
+
+        /// <summary>
+        /// Creates a raw inverted version of this rule model
+        /// </summary>
+        /// <returns></returns>
+        IKineticRuleModel CreateInverse();
     }
 }

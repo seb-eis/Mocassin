@@ -12,12 +12,12 @@ namespace ICon.Model.Transitions
     public interface IMetropolisTransition : IModelObject, IEquatable<IMetropolisTransition>
     {
         /// <summary>
-        /// The first unit cell position that describes the first sublattice
+        /// The first unit cell position that describes the first sub-lattice
         /// </summary>
         IUnitCellPosition FirstUnitCellPosition { get; }
 
         /// <summary>
-        /// The second unit cell position that describes the second sublattice
+        /// The second unit cell position that describes the second sub-lattice
         /// </summary>
         IUnitCellPosition SecondUnitCellPosition { get; }
 
@@ -31,6 +31,12 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <returns></returns>
         IEnumerable<IMetropolisRule> GetTransitionRules();
+
+        /// <summary>
+        /// Get the affiliated transition rules including the dependent rules
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IMetropolisRule> GetExtendedTransitionRules();
 
         /// <summary>
         /// Returns true if the mappings contain their own inverted version

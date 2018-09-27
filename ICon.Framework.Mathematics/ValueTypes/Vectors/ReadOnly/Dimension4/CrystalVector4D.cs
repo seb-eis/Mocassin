@@ -100,6 +100,14 @@ namespace ICon.Mathematics.ValueTypes
         }
 
         /// <summary>
+        /// Vector multiplication with scalar value
+        /// </summary>
+        public static CrystalVector4D operator *(CrystalVector4D lhs, int scalar)
+        {
+            return new CrystalVector4D(lhs.A * scalar, lhs.B * scalar, lhs.C * scalar, lhs.P * scalar);
+        }
+
+        /// <summary>
         /// Returns crystal vector as string representation
         /// </summary>
         /// <returns></returns>

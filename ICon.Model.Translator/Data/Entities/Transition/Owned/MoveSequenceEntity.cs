@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class MoveSequenceEntity : InteropBinaryList<C_MoveVector>
+    public class MoveSequenceEntity : InteropBinaryList<CMoveVector>
     {
 
     }

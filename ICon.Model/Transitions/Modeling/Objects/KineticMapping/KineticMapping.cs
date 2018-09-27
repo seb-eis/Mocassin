@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using ICon.Mathematics.ValueTypes;
@@ -87,6 +88,19 @@ namespace ICon.Model.Transitions
         public KineticMapping(IKineticTransition transition, CrystalVector4D[] encodedPath) : this(transition, null,null, encodedPath, null)
         {
 
+        }
+
+        /// <summary>
+        /// Creates an inverted kinetic mapping
+        /// </summary>
+        /// <returns></returns>
+        public KineticMapping CreateInverse()
+        {
+            var inverseEncodedPath = EncodedPath.Reverse().ToArray();
+            var inverseFractionalPath = FractionalPath.Reverse().ToArray();
+            return new KineticMapping(
+                Transition, EndUnitCellPosition, StartUnitCellPosition, inverseEncodedPath, inverseFractionalPath
+                );
         }
     }
 }

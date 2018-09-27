@@ -13,6 +13,11 @@ namespace ICon.Model.Translator.ModelContext
     public interface IKineticMappingModel
     {
         /// <summary>
+        /// Flag that indicates if the inverse mapping is already set
+        /// </summary>
+        bool InverseIsSet { get; }
+
+        /// <summary>
         /// The kinetic mapping object the model is based upon
         /// </summary>
         KineticMapping Mapping { get; set; }
@@ -21,6 +26,21 @@ namespace ICon.Model.Translator.ModelContext
         /// The inverse mapping model that describes the neutralizing transition
         /// </summary>
         IKineticMappingModel InverseMapping { get; set; }
+
+        /// <summary>
+        /// The encoded 4D position sequence in absolute coordinates
+        /// </summary>
+        IList<CrystalVector4D> PositionSequence4D { get; }
+
+        /// <summary>
+        /// The fractional 3D position sequence in absolute coordinates
+        /// </summary>
+        IList<Fractional3D> PositionSequence3D { get; }
+
+        /// <summary>
+        /// The effective transition vector from start to end. Used for global movement tracking
+        /// </summary>
+        Fractional3D EffectiveTransitionVector { get; }
 
         /// <summary>
         /// The encoded 4D transition sequence where each vector is relative to the start position
@@ -33,20 +53,21 @@ namespace ICon.Model.Translator.ModelContext
         IList<Fractional3D> TransitionSequence3D { get; set; }
 
         /// <summary>
-        /// The step weighting vectors that describe the field weighting for (A,B,C) direction of each transition step
-        /// </summary>
-        IList<Fractional3D> StepWeightingVectors { get; set; }
-
-        /// <summary>
-        /// The effective transition vector from start to end. Used for global movement tracking
-        /// </summary>
-        Fractional3D EffectiveTransitionVector { get; set; }
-
-        /// <summary>
         /// The position movement matrix. Describes how each involved position moves on transition in fractional coordinates
         /// </summary>
         Matrix2D PositionMovementMatrix { get; set; }
 
-        
+        /// <summary>
+        /// Links this model to the passed mapping model if it describes the inverse case. Returns false if no match
+        /// </summary>
+        /// <param name="inverseModel"></param>
+        /// <returns></returns>
+        bool LinkIfInverseMatch(IKineticMappingModel inverseModel);
+
+        /// <summary>
+        /// Creates the inverted version of the mapping model
+        /// </summary>
+        /// <returns></returns>
+        IKineticMappingModel CreateInverse();
     }
 }

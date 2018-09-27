@@ -9,13 +9,8 @@ namespace ICon.Model.Translator.ModelContext
     /// <summary>
     /// Represents a metropolis transition model that fully describes geometry and mobility information of a reference transition
     /// </summary>
-    public interface IMetropolisTransitionModel : IModelComponent
+    public interface IMetropolisTransitionModel : ITransitionModel
     {
-        /// <summary>
-        /// Boolean flag that describes if this transition model has an inversion that is not itself
-        /// </summary>
-        bool HasInversion { get; }
-
         /// <summary>
         /// The transition the model is based upon
         /// </summary>
@@ -38,8 +33,9 @@ namespace ICon.Model.Translator.ModelContext
         IList<IMetropolisRuleModel> RuleModels { get; set; }
 
         /// <summary>
-        /// The particle set that describes which particles are mobile
+        /// Creates an inverse transition model
         /// </summary>
-        IParticleSet MobileParticles { get; set; }
+        /// <returns></returns>
+        IMetropolisTransitionModel CreateInverse();
     }
 }

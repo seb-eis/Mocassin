@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ICon.Mathematics.ValueTypes;
 using ICon.Model.Particles;
 using ICon.Model.Transitions;
 
@@ -9,13 +10,8 @@ namespace ICon.Model.Translator.ModelContext
     /// <summary>
     /// Represents a kinetic transition model that fully describes geometry and mobility information of a reference transition
     /// </summary>
-    public interface IKineticTransitionModel : IModelComponent
+    public interface IKineticTransitionModel : ITransitionModel
     {
-        /// <summary>
-        /// Boolean flag that describes if this transition model describes an inverted transition
-        /// </summary>
-        bool IsInverted { get; }
-
         /// <summary>
         /// The transition the model is based upon
         /// </summary>
@@ -38,13 +34,25 @@ namespace ICon.Model.Translator.ModelContext
         IList<IKineticRuleModel> RuleModels { get; set; }
 
         /// <summary>
-        /// The particle set that describes which particles are mobile
-        /// </summary>
-        IParticleSet MobileParticles { get; set; }
-
-        /// <summary>
         /// Describes which effective particle describes the global tracking process
         /// </summary>
         IParticle EffectiveParticle { get; set; }
+
+        /// <summary>
+        /// Describes the general movement abstraction through integer offsets
+        /// </summary>
+        IList<int> AbstractMovement { get; set; }
+
+        /// <summary>
+        /// Creates an inverse kinetic transition model of the current
+        /// </summary>
+        /// <returns></returns>
+        IKineticTransitionModel CreateInverse();
+
+        /// <summary>
+        /// Check if the mapping set contains its own inversions
+        /// </summary>
+        /// <returns></returns>
+        bool MappingsContainInversion();
     }
 }

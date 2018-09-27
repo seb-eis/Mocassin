@@ -27,7 +27,7 @@ namespace ICon.Model.Translator.ModelContext
         public IProjectModelContextBuilder ProjectModelContextBuilder { get; set; }
 
         /// <summary>
-        /// Create new model context builder that uses the provided project model context builder for data access
+        /// Create new model context builder with the provided project access and default internally defined builders
         /// </summary>
         /// <param name="projectModelContextBuilder"></param>
         protected ModelContextBuilderBase(IProjectModelContextBuilder projectModelContextBuilder)

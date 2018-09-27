@@ -14,7 +14,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static Boolean GetBit(this UInt32 integer, Int32 index)
+        public static bool GetBit(this uint integer, int index)
         {
             return (integer & (1U << index)) != 0U;
         }
@@ -26,7 +26,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="index"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static UInt32 SetBit(this UInt32 integer, Int32 index)
+        public static uint SetBit(this uint integer, int index)
         {
             return integer | (1U << index);
         }
@@ -37,7 +37,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static UInt32 UnsetBit(this UInt32 integer, Int32 index)
+        public static uint UnsetBit(this uint integer, int index)
         {
             return integer - (integer & (1U << index));
         }
@@ -48,7 +48,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static UInt32 SetBits(this UInt32 integer, UInt32 flags)
+        public static uint SetBits(this uint integer, uint flags)
         {
             return integer + (~integer & flags);
         }
@@ -59,7 +59,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static UInt32 UnsetBits(this UInt32 integer, UInt32 flags)
+        public static uint UnsetBits(this uint integer, uint flags)
         {
             return integer - (integer & flags);
         }
@@ -70,7 +70,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static Boolean GetBit(this UInt64 integer, Int32 index)
+        public static bool GetBit(this ulong integer, int index)
         {
             return (integer & (1U << index)) != 0U;
         }
@@ -82,7 +82,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="index"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static UInt64 SetBit(this UInt64 integer, Int32 index)
+        public static ulong SetBit(this ulong integer, int index)
         {
             return integer | (1U << index);
         }
@@ -93,7 +93,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static UInt64 UnsetBit(this UInt64 integer, Int32 index)
+        public static ulong UnsetBit(this ulong integer, int index)
         {
             return integer - (integer & (1U << index));
         }
@@ -104,7 +104,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static UInt64 SetBits(this UInt64 integer, UInt64 flags)
+        public static ulong SetBits(this ulong integer, ulong flags)
         {
             return integer + (~integer & flags);
         }
@@ -115,7 +115,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="integer"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public static UInt64 UnsetBits(this UInt64 integer, UInt64 flags)
+        public static ulong UnsetBits(this ulong integer, ulong flags)
         {
             return integer - (integer & flags);
         }
@@ -125,11 +125,11 @@ namespace ICon.Mathematics.Extensions
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Int32 PopCount(this UInt64 value)
+        public static int PopCount(this ulong value)
         {
-            UInt64 result = value - ((value >> 1) & 0x5555555555555555UL);
+            var result = value - ((value >> 1) & 0x5555555555555555UL);
             result = (result & 0x3333333333333333UL) + ((result >> 2) & 0x3333333333333333UL);
-            return (Int32)(unchecked(((result + (result >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
+            return (int)(unchecked(((result + (result >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
         }
 
         /// <summary>
@@ -138,9 +138,26 @@ namespace ICon.Mathematics.Extensions
         /// <typeparam name="T1"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Int32 PopCount<T1>(this T1 value) where T1 : struct, IConvertible
+        public static int PopCount<T1>(this T1 value) where T1 : struct, IConvertible
         {
             return value.ToUInt64(CultureInfo.InvariantCulture).PopCount();
+        }
+
+        /// <summary>
+        /// Invert the byte order of a long value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static long InvertBytes(this long value)
+        {
+            return ((value & (0xffL << 0)) << 56)  |
+                   ((value & (0xffL << 8)) << 40)  |
+                   ((value & (0xffL << 16)) << 24) |
+                   ((value & (0xffL << 24)) << 8)  |
+                   ((value & (0xffL << 32)) >> 8)  |
+                   ((value & (0xffL << 40)) >> 24) |
+                   ((value & (0xffL << 48)) >> 40) |
+                   ((value & (0xffL << 56)) >> 56);
         }
     }
 }

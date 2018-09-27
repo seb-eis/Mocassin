@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// Simulation cluster definition object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 40)]
-    public struct C_ClusterDefinition
+    public struct CClusterDefinition
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         private int[] relativePositionIds;

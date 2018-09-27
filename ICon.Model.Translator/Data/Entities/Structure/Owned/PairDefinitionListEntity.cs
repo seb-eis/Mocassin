@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class PairDefinitionListEntity : InteropBinaryList<C_PairDefinition>
+    public class PairDefinitionListEntity : InteropBinaryList<CPairDefinition>
     {
     }
 }

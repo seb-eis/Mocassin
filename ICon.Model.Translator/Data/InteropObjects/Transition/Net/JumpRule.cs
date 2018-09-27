@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class JumpRule : InteropObject<C_JumpRule>
+    public class JumpRule : InteropObject<CJumpRule>
     {
         public JumpRule()
         {
         }
 
-        public JumpRule(C_JumpRule structure) : base(structure)
+        public JumpRule(CJumpRule structure) : base(structure)
         {
         }
     }

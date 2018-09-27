@@ -9,9 +9,9 @@ namespace ICon.Model.Translator
     /// Simulation lattice info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 72)]
-    public struct C_LatticeInfo
+    public struct CLatticeInfo
     {
-        private C_Vector4 sizeVector;
+        private CVector4 sizeVector;
 
         [MarshalAs(UnmanagedType.I4)]
         private int numberOfMobiles;
@@ -19,14 +19,14 @@ namespace ICon.Model.Translator
         [MarshalAs(UnmanagedType.I4)]
         private int numberOfSelectables;
 
-        private readonly C_MdaAccess latticeAccess;
+        private readonly CMdaAccess latticeAccess;
 
-        private readonly C_MdaAccess backgroundAccess;
+        private readonly CMdaAccess backgroundAccess;
 
         [MarshalAs(UnmanagedType.I8)]
         private readonly long paddingLong;
 
-        public C_Vector4 SizeVector { get => sizeVector; set => sizeVector = value; }
+        public CVector4 SizeVector { get => sizeVector; set => sizeVector = value; }
 
         public int NumberOfMobiles { get => numberOfMobiles; set => numberOfMobiles = value; }
 

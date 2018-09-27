@@ -13,6 +13,11 @@ namespace ICon.Model.Translator.ModelContext
     public interface ITransitionRuleModel
     {
         /// <summary>
+        /// Boolean flag if the inverse rule is already set
+        /// </summary>
+        bool InverseIsSet { get; }
+
+        /// <summary>
         /// Boolean flag that indicates that this rule model describes in inverted version
         /// of its source rule and abstract transition
         /// </summary>
@@ -63,5 +68,19 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         /// <param name="ruleModel"></param>
         void CopyInversionDataToModel(ITransitionRuleModel ruleModel);
+
+        /// <summary>
+        /// Links this and the passed rule model together if they are an inversion match
+        /// </summary>
+        /// <param name="ruleModel"></param>
+        /// <returns></returns>
+        bool LinkIfInverseMatch(ITransitionRuleModel ruleModel);
+
+        /// <summary>
+        /// Checks if the passed rule model is the inverse of this one
+        /// </summary>
+        /// <param name="ruleModel"></param>
+        /// <returns></returns>
+        bool IsInverse(ITransitionRuleModel ruleModel);
     }
 }

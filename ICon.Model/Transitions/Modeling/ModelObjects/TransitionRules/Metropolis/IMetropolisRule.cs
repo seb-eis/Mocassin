@@ -22,5 +22,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <returns></returns>
         IEnumerable<IMetropolisRule> GetDependentRules();
+
+
     }
 }

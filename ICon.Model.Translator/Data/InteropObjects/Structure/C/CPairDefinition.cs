@@ -9,9 +9,9 @@ namespace ICon.Model.Translator
     /// Simulation pair interaction definition. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 32)]
-    public struct C_PairDefinition
+    public struct CPairDefinition
     {
-        private C_Vector4 relativeVector;
+        private CVector4 relativeVector;
 
         [MarshalAs(UnmanagedType.I4)]
         private int tableId;
@@ -21,6 +21,6 @@ namespace ICon.Model.Translator
 
         public int TableId { get => tableId; set => tableId = value; }
 
-        public C_Vector4 RelativeVector { get => relativeVector; set => relativeVector = value; }
+        public CVector4 RelativeVector { get => relativeVector; set => relativeVector = value; }
     }
 }

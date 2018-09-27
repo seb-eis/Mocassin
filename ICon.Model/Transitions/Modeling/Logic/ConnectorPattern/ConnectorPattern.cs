@@ -79,7 +79,7 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get the connector pattern for the bais kinetic transitions (D-{D}_1+)
+        /// Get the connector pattern for the basic kinetic transitions (D-{D}_1+)
         /// </summary>
         /// <returns></returns>
         public static ConnectorPattern GetBasicKineticPattern()
@@ -105,10 +105,10 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get the connector pattern for a splitted vehicle mechansim with multiple transition positions (D-D{-S-D-D}_1+)
+        /// Get the connector pattern for a split vehicle mechanism with multiple transition positions (D-D{-S-D-D}_1+)
         /// </summary>
         /// <returns></returns>
-        public static ConnectorPattern GetSplittedVehiclePattern()
+        public static ConnectorPattern GetSplitVehiclePattern()
         {
             var head = $"{ConnectorType.Dynamic}{CodeSeparator}{ConnectorType.Dynamic}";
             var periodicBody = $"{CodeSeparator}{ConnectorType.Static}{CodeSeparator}{ConnectorType.Dynamic}{CodeSeparator}{ConnectorType.Dynamic}";
@@ -120,7 +120,7 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Get the connector pattern for a basic vehicle mechansim with one transition position ({D}_1+-S-S-{D}_1+))
+        /// Get the connector pattern for a basic vehicle mechanism with one transition position ({D}_1+-S-S-{D}_1+))
         /// </summary>
         /// <returns></returns>
         public static ConnectorPattern GetBasicVehiclePattern()
@@ -143,11 +143,11 @@ namespace ICon.Model.Transitions
             yield return GetMetropolisPattern();
             yield return GetBasicKineticPattern();
             yield return GetBasicVehiclePattern();
-            yield return GetSplittedVehiclePattern();
+            yield return GetSplitVehiclePattern();
         }
 
         /// <summary>
-        /// Determines the type of the pattern. If the pattern is not recognised the functions returns the undefined flag
+        /// Determines the type of the pattern. If the pattern is not recognized the functions returns the undefined flag
         /// </summary>
         /// <param name="connectors"></param>
         /// <returns></returns>

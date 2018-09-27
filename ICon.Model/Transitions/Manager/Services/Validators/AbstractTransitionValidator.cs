@@ -117,7 +117,7 @@ namespace ICon.Model.Transitions.Validators
                 ConnectorPattern.GetMetropolisPattern(),
                 ConnectorPattern.GetBasicKineticPattern(),
                 ConnectorPattern.GetBasicVehiclePattern(),
-                ConnectorPattern.GetSplittedVehiclePattern()
+                ConnectorPattern.GetSplitVehiclePattern()
             };
         }
     }

@@ -21,68 +21,43 @@ namespace ICon.Model.Translator
         /// </summary>
         private string DbFilename { get; }
 
-        /// <summary>
-        /// Database set for translated simulation packages
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<SimulationPackage> SimulationPackages { get; set; }
 
-        /// <summary>
-        /// Database set for translated structure models
+        /// <inheritdoc />
         public DbSet<StructureModel> StructureModels { get; set; }
 
-        /// <summary>
-        /// Database set for translated transition models
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<TransitionModel> TransitionModels { get; set; }
 
-        /// <summary>
-        /// Database set for translated energy models
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<EnergyModel> EnergyModels { get; set; }
 
-        /// <summary>
-        /// Database set for translated job models
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<JobModel> JobModels { get; set; }
 
-        /// <summary>
-        /// Database set for translated lattice models
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<LatticeModel> LatticeModels { get; set; }
 
-        /// <summary>
-        /// Database set for all environment definitions
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }
 
-        /// <summary>
-        /// Database set for all pair energy tables
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<PairEnergyTableEntity> PairEnergyTables { get; set; }
 
-        /// <summary>
-        /// Database set for all cluster energy tables
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<ClusterEnergyTableEntity> ClusterEnergyTables { get; set; }
 
-        /// <summary>
-        /// Database set for all jump collections
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<JumpCollectionEntity> JumpCollections { get; set; }
 
-        /// <summary>
-        /// Database set for alljump directions
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<JumpDirectionEntity> JumpDirections { get; set; }
 
-        /// <summary>
-        /// The database set for all entities that support storing as a blob
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<BlobEntityBase> Blobs { get; set; }
 
-        /// <summary>
-        /// Database set for sqlite load queries. Describes how the simulator pulls data from the database
-        /// </summary>
+        /// <inheritdoc />
         public DbSet<SqliteQueryEntity> SqliteQueries { get; set; }
 
         /// <summary>
@@ -100,41 +75,34 @@ namespace ICon.Model.Translator
             Database.EnsureCreated();
         }
 
-        /// <summary>
-        /// Saves the changes to the database in two steps. First the actual changes and then converts all blob stored entities to actual blobs
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc cref="ITranslatorDbContext.SaveChanges"/>
         public override int SaveChanges()
         {
             base.SaveChanges();
 
-            using (var marhshalProvider = new MarshalProvider())
+            using (var marshalProvider = new MarshalProvider())
             {
                 foreach (var item in Blobs)
                 {
-                    item.ChangeStateToBinary(marhshalProvider);
+                    item.ChangeStateToBinary(marshalProvider);
                 }
 
-                PerformActionOnAllInteropEntities(a => a.ChangePropertyStatesToBinaries(marhshalProvider));
+                PerformActionOnAllInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalProvider));
 
                 return base.SaveChanges();
             }
         }
 
-        /// <summary>
-        /// Configures the database to use sqlite and the provided databse filepath
-        /// </summary>
-        /// <param name="optionsBuilder"></param>
+
+        /// <inheritdoc />
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Filename={DbFilename}");
             base.OnConfiguring(optionsBuilder);
         }
 
-        /// <summary>
-        /// Specifies the model of the database to corretly store all blob properties
-        /// </summary>
-        /// <param name="modelBuilder"></param>
+
+        /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             RedirectBinaryObjects(modelBuilder);
@@ -183,12 +151,12 @@ namespace ICon.Model.Translator
         {
             foreach (var dbSetProperty in GetDbSetPropertyInfos())
             {
-                if (typeof(InteropEntityBase).IsAssignableFrom(dbSetProperty.PropertyType.GetGenericArguments()[0]))
+                if (!typeof(InteropEntityBase).IsAssignableFrom(dbSetProperty.PropertyType.GetGenericArguments()[0]))
+                    continue;
+
+                foreach (var item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this))
                 {
-                    foreach (var item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this))
-                    {
-                        action(item);
-                    }
+                    action(item);
                 }
             }
         }
@@ -199,13 +167,9 @@ namespace ICon.Model.Translator
         /// <returns></returns>
         protected IEnumerable<PropertyInfo> GetDbSetPropertyInfos()
         {
-            foreach (var item in GetType().GetProperties().Where(a => a.PropertyType.IsGenericType))
-            {
-                if (item.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
-                {
-                    yield return item;
-                }
-            }
+            return GetType().GetProperties()
+                .Where(a => a.PropertyType.IsGenericType)
+                .Where(item =>item.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// Simulation jump link object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 8)]
-    public struct C_JumpLink
+    public struct CJumpLink
     {
         [MarshalAs(UnmanagedType.I4)]
         private int jumpPathId;

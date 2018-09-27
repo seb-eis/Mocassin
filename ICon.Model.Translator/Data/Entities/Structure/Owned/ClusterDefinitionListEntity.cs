@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class ClusterDefinitionListEntity : InteropBinaryList<C_ClusterDefinition>
+    public class ClusterDefinitionListEntity : InteropBinaryList<CClusterDefinition>
     {
     }
 }

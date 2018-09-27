@@ -8,9 +8,9 @@ namespace ICon.Model.Translator
     /// <summary>
     /// Interop object wrapper for the vector 4 type used in the unmanaged simulation
     /// </summary>
-    public class Vector4 : InteropObject<C_Vector4>
+    public class Vector4 : InteropObject<CVector4>
     {
-        public Vector4(C_Vector4 structure) : base(structure)
+        public Vector4(CVector4 structure) : base(structure)
         {
 
         }

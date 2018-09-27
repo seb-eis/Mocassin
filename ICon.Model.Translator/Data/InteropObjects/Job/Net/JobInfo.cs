@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class JobInfo : InteropObject<C_JobInfo>
+    public class JobInfo : InteropObject<CJobInfo>
     {
         public JobInfo()
         {
         }
 
-        public JobInfo(C_JobInfo structure) : base(structure)
+        public JobInfo(CJobInfo structure) : base(structure)
         {
         }
     }

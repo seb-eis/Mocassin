@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class LatticeInfo : InteropObject<C_LatticeInfo>
+    public class LatticeInfo : InteropObject<CLatticeInfo>
     {
         public LatticeInfo()
         {
         }
 
-        public LatticeInfo(C_LatticeInfo structure) : base(structure)
+        public LatticeInfo(CLatticeInfo structure) : base(structure)
         {
         }
     }

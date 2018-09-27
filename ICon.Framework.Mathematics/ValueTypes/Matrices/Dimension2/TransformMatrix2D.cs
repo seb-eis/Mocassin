@@ -1,9 +1,9 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using ICon.Mathematics.Extensions;
 using ICon.Mathematics.Comparers;
 
-using ACoorTuple = ICon.Mathematics.ValueTypes.Coordinates<System.Double, System.Double, System.Double>;
+using ACoorTuple = ICon.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
 namespace ICon.Mathematics.ValueTypes
 {
@@ -17,19 +17,16 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="values"></param>
         /// <param name="comparer"></param>
-        public TransformMatrix2D(Double[,] values, DoubleComparer comparer) : base(values, comparer)
+        public TransformMatrix2D(double[,] values, IComparer<double> comparer) : base(values, comparer)
         {
-            if (Values.GetUpperBound(0) != 2 || Values.GetUpperBound(1) != 2)
-            {
-                throw new ArgumentException("Input array is not of size 3x3", nameof(values));
-            }
+            if (Values.GetUpperBound(0) != 2 || Values.GetUpperBound(1) != 2) throw new ArgumentException("Input array is not of size 3x3", nameof(values));
         }
 
         /// <summary>
         /// Creates new empty transformation matrix with the specified comparer
         /// </summary>
         /// <param name="comparer"></param>
-        public TransformMatrix2D(DoubleComparer comparer) : base(3, 3, comparer)
+        public TransformMatrix2D(IComparer<double> comparer) : base(3, 3, comparer)
         {
 
         }
@@ -42,7 +39,7 @@ namespace ICon.Mathematics.ValueTypes
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="c"></param>
-        private void SetRowEntries(Int32 row, Double a, Double b, Double c)
+        private void SetRowEntries(int row, double a, double b, double c)
         {
             this[row, 0] = a;
             this[row, 1] = b;

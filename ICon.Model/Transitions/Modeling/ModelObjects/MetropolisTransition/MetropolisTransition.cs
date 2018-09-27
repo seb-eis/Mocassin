@@ -8,80 +8,74 @@ using ICon.Model.Structures;
 
 namespace ICon.Model.Transitions
 {
-    /// <summary>
-    /// BAsic implementation of the metropolis transition (Simply defined by two exchanging sub-lattices)
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Transitions.IMetropolisTransition"/>
     [Serializable]
     [DataContract(Name ="MetropolisTransition")]
     public class MetropolisTransition : ModelObject, IMetropolisTransition
     {
-        /// <summary>
-        /// The unit cell position of the first sub-lattice
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [LinkableByIndex]
         public IUnitCellPosition FirstUnitCellPosition { get; set; }
 
-        /// <summary>
-        /// The unit cell position of the second sub-lattice
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [LinkableByIndex]
         public IUnitCellPosition SecondUnitCellPosition { get; set; }
 
-        /// <summary>
-        /// The affiliated abstract transition
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [LinkableByIndex]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
-        /// The list of affiliated metropolis transition rules (Automanaged by model system)
+        /// The list of affiliated metropolis transition rules (Auto-managed by model system)
         /// </summary>
         [DataMember]
         [LinkableByIndex]
         public List<MetropolisRule> TransitionRules { get; set; }
-       
-        /// <summary>
-        /// Get the affiliated transition rules as an enumerable sequence
-        /// </summary>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public IEnumerable<IMetropolisRule> GetTransitionRules()
         {
             return (TransitionRules ?? new List<MetropolisRule>()).AsEnumerable();
         }
 
-        /// <summary>
-        /// Checks for equality to another metropolis transition (Also checks inverted case)
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
+        public IEnumerable<IMetropolisRule> GetExtendedTransitionRules()
+        {
+            foreach (var transitionRule in GetTransitionRules())
+            {
+                yield return transitionRule;
+                foreach (var dependentRule in transitionRule.GetDependentRules())
+                {
+                    yield return dependentRule;
+                }
+            }
+        }
+
+
+        /// <inheritdoc />
         public bool Equals(IMetropolisTransition other)
         {
             if (FirstUnitCellPosition.Index == other.FirstUnitCellPosition.Index && SecondUnitCellPosition.Index == other.SecondUnitCellPosition.Index)
             {
                 return AbstractTransition == other.AbstractTransition;
             }
+
             return FirstUnitCellPosition.Index == other.SecondUnitCellPosition.Index
                 && SecondUnitCellPosition.Index == other.FirstUnitCellPosition.Index
                 && AbstractTransition == other.AbstractTransition;
         }
 
-        /// <summary>
-        /// Ge the type name of the model object
-        /// </summary>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public override string GetModelObjectName()
         {
             return "'Metropolis Transition'";
         }
 
-        /// <summary>
-        /// Tries to create new metropolis transition object from model object interface (Returns null if wrong type or deprecated)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastWithDepricatedCheck<IMetropolisTransition>(obj) is var transition)
@@ -94,10 +88,7 @@ namespace ICon.Model.Transitions
             return null;
         }
 
-        /// <summary>
-        /// Retruns true if the transition mappings will contain their inversion
-        /// </summary>
-        /// <returns> Is the case if start and end unit cell position are identical </returns>
+        /// <inheritdoc />
         public bool MappingsContainInversion()
         {
             return FirstUnitCellPosition == SecondUnitCellPosition;

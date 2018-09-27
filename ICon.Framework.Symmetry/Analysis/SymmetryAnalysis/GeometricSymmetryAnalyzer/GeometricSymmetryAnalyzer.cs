@@ -33,19 +33,13 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         public SymmetryIndicator GetSymmetryIndicator(MassPointGeomertyInfo info, IComparer<double> comparer)
         {
-            if (info == null)
-            {
-                throw new ArgumentNullException(nameof(info));
-            }
-            if (comparer == null)
-            {
-                throw new ArgumentNullException(nameof(comparer));
-            }
+            if (info == null) throw new ArgumentNullException(nameof(info));
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
-            double tensorLength = new InertiaTensorSolver().GetPrinipalTensorLength(info.MassCenterInertiaTensor.Values, comparer.ToEqualityComparer());
+            var tensorLength = new InertiaTensorSolver().GetPrinipalTensorLength(info.MassCenterInertiaTensor.Values, comparer);
 
-            double first = GetFirstHashValue(tensorLength, info.SumOfMassTimesDistance, comparer);
-            double second = GetSecondHashValue(info.TotalMass, info.PointCount, comparer);
+            var first = GetFirstHashValue(tensorLength, info.SumOfMassTimesDistance, comparer);
+            var second = GetSecondHashValue(info.TotalMass, info.PointCount, comparer);
             return new SymmetryIndicator(first, second);
         }
 
@@ -58,8 +52,8 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         protected double GetFirstHashValue(double tensorLength, double torsionalMoment, IComparer<double> comparer)
         {
-            double combined = tensorLength * torsionalMoment;
-            combined = (comparer.Compare(0.0, combined) == 0) ? 0.0 : combined;
+            var combined = tensorLength * torsionalMoment;
+            combined = comparer.Compare(0.0, combined) == 0 ? 0.0 : combined;
             return combined;
         }
 
@@ -72,8 +66,8 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         protected double GetSecondHashValue(double totalMass, double pointCount, IComparer<double> comparer)
         {
-            double combined = totalMass * pointCount;
-            combined = (comparer.Compare(0.0, combined) == 0) ? 0.0 : combined;
+            var combined = totalMass * pointCount;
+            combined = comparer.Compare(0.0, combined) == 0 ? 0.0 : combined;
             return combined;
         }
     }

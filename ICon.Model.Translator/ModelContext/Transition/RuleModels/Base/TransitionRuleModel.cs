@@ -11,6 +11,9 @@ namespace ICon.Model.Translator.ModelContext
     public abstract class TransitionRuleModel : ITransitionRuleModel
     {
         /// <inheritdoc />
+        public abstract bool InverseIsSet { get; }
+
+        /// <inheritdoc />
         public bool IsSourceInversion { get; set; }
 
         /// <inheritdoc />
@@ -47,7 +50,13 @@ namespace ICon.Model.Translator.ModelContext
             ruleModel.StartStateCode = FinalStateCode;
             ruleModel.FinalTrackerOrderCode = CreateInvertedTrackerOrderCode(ruleModel.EndIndexingDeltas);
         }
-        
+
+        /// <inheritdoc />
+        public abstract bool LinkIfInverseMatch(ITransitionRuleModel ruleModel);
+
+        /// <inheritdoc />
+        public abstract bool IsInverse(ITransitionRuleModel ruleModel);
+
         /// <summary>
         /// Creates the inverted version of end indexing deltas
         /// </summary>

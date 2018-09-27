@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections;
+using System.Collections.Generic;
 using ICon.Mathematics.Comparers;
 using ICon.Mathematics.Extensions;
 using ICon.Mathematics.Solver;
@@ -14,30 +15,29 @@ namespace ICon.Mathematics.ValueTypes
         /// <summary>
         /// The wrapped 2D array of double values
         /// </summary>
-        public Double[,] Values { get; protected set; }
+        public double[,] Values { get; protected set; }
 
         /// <summary>
         /// The internal double comparison object
         /// </summary>
-        public DoubleComparer Comparer { get; protected set; }
-
+        public IComparer<double> Comparer { get; protected set; }
 
         /// <summary>
         /// The number of rows
         /// </summary>
-        public Int32 Rows { get; protected set; }
+        public int Rows { get; protected set; }
 
         /// <summary>
         /// The number of cols
         /// </summary>
-        public Int32 Cols { get; protected set; }
+        public int Cols { get; protected set; }
 
         /// <summary>
         /// Construct new matrix from 2D array and double comparer
         /// </summary>
         /// <param name="comparer"></param>
         /// <param name="values"></param>
-        public Matrix2D(Double[,] values, DoubleComparer comparer)
+        public Matrix2D(double[,] values, IComparer<double> comparer)
         {
             Comparer = comparer ?? DoubleComparer.Default();
             Values = values ?? throw new ArgumentNullException(nameof(values));
@@ -51,21 +51,25 @@ namespace ICon.Mathematics.ValueTypes
         /// <param name="comparer"></param>
         /// <param name="rows"></param>
         /// <param name="cols"></param>
-        public Matrix2D(Int32 rows, Int32 cols, DoubleComparer comparer)
+        public Matrix2D(int rows, int cols, IComparer<double> comparer)
         {
             Comparer = comparer ?? DoubleComparer.Default();
             Rows = rows;
             Cols = cols;
-            Values = new Double[rows, cols];
+            Values = new double[rows, cols];
         }
 
         /// <summary>
-        /// Acces the matrix by indexer [row,col]
+        /// Access the matrix by indexer [row,col]
         /// </summary>
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        public Double this[Int32 row, Int32 col] { get { return Values[row, col]; } set { Values[row, col] = value; } }
+        public double this[int row, int col] 
+        { 
+            get => Values[row, col];
+            set => Values[row, col] = value;
+        }
 
         /// <summary>
         /// Fixes all almost zero entries to zero
@@ -79,23 +83,24 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Boolean Equals(Matrix2D other)
+        public bool Equals(Matrix2D other)
         {
             if (Rows != other.Rows || Cols != other.Cols)
             {
                 return false;
             }
 
-            for (Int32 row = 0; row < Rows; row++)
+            for (var row = 0; row < Rows; row++)
             {
-                for (Int32 col = 0; col < Cols; col++)
+                for (var col = 0; col < Cols; col++)
                 {
-                    if (Comparer.Equals(Values[row,col],other.Values[row,col]) == false)
+                    if (Comparer.Compare(Values[row,col], other.Values[row,col]) == 0)
                     {
                         return false;
                     }
                 }
             }
+
             return true;
         }
 
@@ -103,7 +108,7 @@ namespace ICon.Mathematics.ValueTypes
         /// Checks if the matrix is quadratic
         /// </summary>
         /// <returns></returns>
-        public Boolean IsQuadratic()
+        public bool IsQuadratic()
         {
             return Rows == Cols;
         }
@@ -112,7 +117,7 @@ namespace ICon.Mathematics.ValueTypes
         /// Checks if the matrix is symmetric
         /// </summary>
         /// <returns></returns>
-        public Boolean IsSymmetric()
+        public bool IsSymmetric()
         {
             return Values.IsSymmetric(Comparer);
         }
@@ -120,12 +125,13 @@ namespace ICon.Mathematics.ValueTypes
         /// <summary>
         /// Creates and entity matrix of the specified size
         /// </summary>
-        /// <param name="dimension"></param>
+        /// <param name="size"></param>
+        /// <param name="comparer"></param>
         /// <returns></returns>
-        public static Matrix2D GetEntity(Int32 size, DoubleComparer comparer = null)
+        public static Matrix2D GetEntity(int size, IComparer<double> comparer = null)
         {
-            Double[,] entity = new Double[size, size];
-            for (Int32 i = 0; i < size; i++)
+            var entity = new double[size, size];
+            for (var i = 0; i < size; i++)
             {
                 entity[i, i] = 1.0;
             }
@@ -142,7 +148,7 @@ namespace ICon.Mathematics.ValueTypes
             {
                 return null;
             }
-            var result = Matrix2D.GetEntity(Rows, Comparer);
+            var result = GetEntity(Rows, Comparer);
             var solver = new GaussJordanSolver();
             if (solver.TrySolve(Values, result.Values, Comparer) == false)
             {
@@ -152,15 +158,15 @@ namespace ICon.Mathematics.ValueTypes
         }
 
         /// <summary>
-        /// Returns the a new matrix that is the tranposed of the current
+        /// Returns the a new matrix that is the transposed of the current
         /// </summary>
         /// <returns></returns>
         public Matrix2D GetTransposed()
         {
-            Double[,] resultValues = new Double[Cols, Rows];
-            for (Int32 row = 0; row < Rows; row++)
+            var resultValues = new double[Cols, Rows];
+            for (var row = 0; row < Rows; row++)
             {
-                for (Int32 col = 0; col < Cols; col++)
+                for (var col = 0; col < Cols; col++)
                 {
                     resultValues[col, row] = Values[row, col];
                 }
@@ -169,17 +175,36 @@ namespace ICon.Mathematics.ValueTypes
         }
 
         /// <summary>
+        /// Get a matrix where each row is reversed
+        /// </summary>
+        /// <returns></returns>
+        public Matrix2D GetRowReversed()
+        {
+            var result = new Matrix2D(Rows, Cols, Comparer);
+
+            for (var row = 0; row < Rows; row++)
+            {
+                for (var col = 0; col < Cols; col++)
+                {
+                    result[row, col] = this[row, Cols - col - 1];
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Calculates the trace of the matrix, returns NaN if not possible
         /// </summary>
         /// <returns></returns>
-        public Double GetTrace()
+        public double GetTrace()
         {
             if (IsQuadratic() == false)
             {
-                return Double.NaN;
+                return double.NaN;
             }
-            Double result = 0.0;
-            for (Int32 i = 0; i < Rows; i++)
+            var result = 0.0;
+            for (var i = 0; i < Rows; i++)
             {
                 result += Values[i, i];
             }
@@ -201,9 +226,9 @@ namespace ICon.Mathematics.ValueTypes
             {
                 throw new ArgumentException(paramName: nameof(rhs), message: "Matrix for addition is of wrong size");
             }
-            for (Int32 row = 0; row < Rows; row++)
+            for (var row = 0; row < Rows; row++)
             {
-                for (Int32 col = 0; col < Cols; col++)
+                for (var col = 0; col < Cols; col++)
                 {
                     Values[row, col] += rhs.Values[row, col];
                 }
@@ -211,11 +236,11 @@ namespace ICon.Mathematics.ValueTypes
         }
 
         /// <summary>
-        /// Substracts the matrix from the current if possible
+        /// Subtracts the matrix from the current if possible
         /// </summary>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public void Substract(Matrix2D rhs)
+        public void Subtract(Matrix2D rhs)
         {
             if (rhs == null)
             {
@@ -223,11 +248,11 @@ namespace ICon.Mathematics.ValueTypes
             }
             if (Rows != rhs.Rows || Cols != rhs.Cols)
             {
-                throw new ArgumentException(paramName: nameof(rhs), message: "Matrix for substraction is of wrong size");
+                throw new ArgumentException(paramName: nameof(rhs), message: "Matrix for subtraction is of wrong size");
             }
-            for (Int32 row = 0; row < Rows; row++)
+            for (var row = 0; row < Rows; row++)
             {
-                for (Int32 col = 0; col < Cols; col++)
+                for (var col = 0; col < Cols; col++)
                 {
                     Values[row, col] -= rhs.Values[row, col];
                 }
@@ -239,11 +264,11 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public void ScalarMultiply(Double value)
+        public void ScalarMultiply(double value)
         {
-            for (Int32 row = 0; row < Rows; row++)
+            for (var row = 0; row < Rows; row++)
             {
-                for (Int32 col = 0; col < Cols; col++)
+                for (var col = 0; col < Cols; col++)
                 {
                     Values[row, col] *= value;
                 }
@@ -254,11 +279,11 @@ namespace ICon.Mathematics.ValueTypes
         /// Performs division by provide scalar value
         /// </summary>
         /// <param name="value"></param>
-        public void ScalarDivide(Double value)
+        public void ScalarDivide(double value)
         {
-            if (Comparer.Equals(value, 0.0))
+            if (Comparer.Compare(value, 0.0) == 0)
             {
-                throw new DivideByZeroException(message: "Matrix value division was passed an almost zero value");
+                throw new DivideByZeroException("Matrix value division was passed an almost zero value");
             }
             ScalarMultiply(1.0 / value);
         }

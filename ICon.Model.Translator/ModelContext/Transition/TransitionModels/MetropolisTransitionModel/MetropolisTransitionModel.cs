@@ -26,5 +26,15 @@ namespace ICon.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IParticleSet MobileParticles { get; set; }
+
+        /// <inheritdoc />
+        public IMetropolisTransitionModel CreateInverse()
+        {
+            return new MetropolisTransitionModel
+            {
+                InverseTransitionModel = this,
+                Transition = Transition
+            };
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// 64 entry byte buffer. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 64)]
-    public struct C_ByteBuffer64
+    public struct CByteBuffer64
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         private byte[] buffer;

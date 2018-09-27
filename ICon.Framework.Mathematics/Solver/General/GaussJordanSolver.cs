@@ -16,7 +16,7 @@ namespace ICon.Mathematics.Solver
         /// </summary>
         /// <param name="leftMatrix"></param>
         /// <param name="rightMatrix"></param>
-        public Boolean TrySolve(Double[,] leftMatrix, Double[,] rightMatrix, IEqualityComparer<Double> comparer)
+        public bool TrySolve(double[,] leftMatrix, double[,] rightMatrix, IComparer<double> comparer)
         {
             if (CheckStartConditionsAndFixZeros(leftMatrix, rightMatrix, comparer) == false)
             {
@@ -43,7 +43,7 @@ namespace ICon.Mathematics.Solver
         /// <param name="rightMatrix"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public Boolean TrySolve(Matrix2D leftMatrix, Matrix2D rightMatrix, IEqualityComparer<Double> comparer)
+        public bool TrySolve(Matrix2D leftMatrix, Matrix2D rightMatrix, IComparer<double> comparer)
         {
             return TrySolve(leftMatrix.Values, rightMatrix.Values, comparer);
         }
@@ -55,7 +55,7 @@ namespace ICon.Mathematics.Solver
         /// <param name="rightMatrix"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        private Boolean CheckStartConditionsAndFixZeros(Double[,] leftMatrix, Double[,] rightMatrix, IEqualityComparer<Double> comparer)
+        private bool CheckStartConditionsAndFixZeros(double[,] leftMatrix, double[,] rightMatrix, IComparer<double> comparer)
         {
             if (leftMatrix.IsQuadratic() == false)
             {
@@ -76,18 +76,18 @@ namespace ICon.Mathematics.Solver
         /// <param name="leftMatrix"></param>
         /// <param name="rightMatrix"></param>
         /// <param name="comparer"></param>
-        private Boolean TryTransformSystemToStartConditions(Double[,] leftMatrix, Double[,] rightMatrix, IEqualityComparer<Double> comparer)
+        private bool TryTransformSystemToStartConditions(double[,] leftMatrix, double[,] rightMatrix, IComparer<double> comparer)
         {
-            Int32 rowCount = leftMatrix.GetUpperBound(0) + 1;
-            for (Int32 leftRow = 0; leftRow < rowCount; leftRow++)
+            var rowCount = leftMatrix.GetUpperBound(0) + 1;
+            for (var leftRow = 0; leftRow < rowCount; leftRow++)
             {
-                if (comparer.Equals(leftMatrix[leftRow,leftRow], 0.0))
+                if (comparer.Compare(leftMatrix[leftRow,leftRow], 0.0) == 0)
                 {
-                    while (comparer.Equals(leftMatrix[leftRow, leftRow], 0.0))
+                    while (comparer.Compare(leftMatrix[leftRow, leftRow], 0.0) == 0)
                     {
-                        for (Int32 rightRow = 0; rightRow < rowCount; rightRow++)
+                        for (var rightRow = 0; rightRow < rowCount; rightRow++)
                         {
-                            if (comparer.Equals(leftMatrix[rightRow,leftRow], 0.0) == false)
+                            if (comparer.Compare(leftMatrix[rightRow,leftRow], 0.0) != 0)
                             {
                                 AddFirstRowToSecond(leftMatrix, rightRow, leftRow);
                                 AddFirstRowToSecond(rightMatrix, rightRow, leftRow);
@@ -113,19 +113,17 @@ namespace ICon.Mathematics.Solver
         /// <param name="rightMatrix"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        private Boolean TryApplyGaussJordan(Double[,] leftMatrix, Double[,] rightMatrix, IEqualityComparer<Double> comparer)
+        private bool TryApplyGaussJordan(double[,] leftMatrix, double[,] rightMatrix, IComparer<double> comparer)
         {
-            Double divisor = 0.0;
-            Int32 counter = 0;
-            Int32 leftRowCount = leftMatrix.GetUpperBound(0) + 1;
-            Int32 leftColCount = leftMatrix.GetUpperBound(1) + 1;
+            var leftRowCount = leftMatrix.GetUpperBound(0) + 1;
+            var leftColCount = leftMatrix.GetUpperBound(1) + 1;
 
-            for (Int32 row = 0; row < leftRowCount; row++)
+            for (var row = 0; row < leftRowCount; row++)
             {
-                for (Int32 col = 0; col < leftColCount; col++)
+                for (var col = 0; col < leftColCount; col++)
                 {
-                    counter = 0;
-                    while (comparer.Equals(leftMatrix[row, row], 0.0) && counter < (leftRowCount - row))
+                    var counter = 0;
+                    while (comparer.Compare(leftMatrix[row, row], 0.0) == 0 && counter < leftRowCount - row)
                     {
                         // Break if the end of rows is reached as the system is non-solvable if no non-zero entry is found
                         if (counter == leftRowCount - row - 1)
@@ -138,13 +136,15 @@ namespace ICon.Mathematics.Solver
                         counter++;
                     }
 
-                    divisor = leftMatrix[row, row];
-                    if (row != col && comparer.Equals(leftMatrix[col, row], 0.0) == false)
+                    var divisor = leftMatrix[row, row];
+                    if (row == col || comparer.Compare(leftMatrix[col, row], 0.0) == 0)
                     {
-                        divisor = leftMatrix[col, row] / divisor;
-                        AddFirstRowToSecond(leftMatrix, row, col, -divisor);
-                        AddFirstRowToSecond(rightMatrix, row, col, -divisor);
+                        continue;
                     }
+
+                    divisor = leftMatrix[col, row] / divisor;
+                    AddFirstRowToSecond(leftMatrix, row, col, -divisor);
+                    AddFirstRowToSecond(rightMatrix, row, col, -divisor);
                 }
             }
             return true;
@@ -156,11 +156,11 @@ namespace ICon.Mathematics.Solver
         /// <param name="leftMatrix"></param>
         /// <param name="rightMatrix"></param>
         /// <param name="comparer"></param>
-        private void NormalizeByLeftMatrix(Double[,] leftMatrix, Double[,] rightMatrix, IEqualityComparer<Double> comparer)
+        private void NormalizeByLeftMatrix(double[,] leftMatrix, double[,] rightMatrix, IComparer<double> comparer)
         {
-            for (Int32 row = 0; row < leftMatrix.GetUpperBound(0) + 1; row++)
+            for (var row = 0; row < leftMatrix.GetUpperBound(0) + 1; row++)
             {
-                Double divisor = 1.0 / leftMatrix[row, row];
+                var divisor = 1.0 / leftMatrix[row, row];
                 MultiplyRowWithFactor(leftMatrix, row, divisor);
                 MultiplyRowWithFactor(rightMatrix, row, divisor);
             }
@@ -173,9 +173,9 @@ namespace ICon.Mathematics.Solver
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="factor"></param>
-        private void AddFirstRowToSecond(Double[,] matrix, Int32 sourceRow, Int32 targetRow, Double factor = 1.0)
+        private void AddFirstRowToSecond(double[,] matrix, int sourceRow, int targetRow, double factor = 1.0)
         {
-            for (Int32 col = 0; col < matrix.GetUpperBound(1) + 1; col++)
+            for (var col = 0; col < matrix.GetUpperBound(1) + 1; col++)
             {
                 matrix[targetRow, col] += matrix[sourceRow, col] * factor;
             }
@@ -187,9 +187,9 @@ namespace ICon.Mathematics.Solver
         /// <param name="matrix"></param>
         /// <param name="row"></param>
         /// <param name="factor"></param>
-        private void MultiplyRowWithFactor(Double[,] matrix, Int32 row, Double factor)
+        private void MultiplyRowWithFactor(double[,] matrix, int row, double factor)
         {
-            for (Int32 col = 0; col < matrix.GetUpperBound(1) + 1; col++)
+            for (var col = 0; col < matrix.GetUpperBound(1) + 1; col++)
             {
                 matrix[row, col] *= factor;
             }

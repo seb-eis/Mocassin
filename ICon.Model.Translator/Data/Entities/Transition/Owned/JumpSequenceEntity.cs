@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class JumpSequenceEntity : InteropBinaryList<C_Vector4>
+    public class JumpSequenceEntity : InteropBinaryList<CVector4>
     {
 
     }

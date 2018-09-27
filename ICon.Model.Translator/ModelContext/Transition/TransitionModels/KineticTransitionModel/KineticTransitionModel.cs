@@ -2,6 +2,7 @@
 using ICon.Model.Transitions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
@@ -10,7 +11,7 @@ namespace ICon.Model.Translator.ModelContext
     public class KineticTransitionModel : ModelComponentBase, IKineticTransitionModel
     {
         /// <inheritdoc />
-        public bool IsInverted { get; set; }
+        public bool HasInversion { get; set; }
 
         /// <inheritdoc />
         public IKineticTransition Transition { get; set; }
@@ -29,5 +30,38 @@ namespace ICon.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IParticle EffectiveParticle { get; set; }
+
+        /// <inheritdoc />
+        public IList<int> AbstractMovement { get; set; }
+
+        /// <inheritdoc />
+        public IKineticTransitionModel CreateInverse()
+        {
+            return new KineticTransitionModel
+            {
+                Transition = Transition,
+                InverseTransitionModel = this,
+                AbstractMovement = GetInverseAbstractMovement(),
+                MobileParticles = MobileParticles,
+                EffectiveParticle = EffectiveParticle
+            };
+        }
+
+        /// <inheritdoc />
+        public bool MappingsContainInversion()
+        {
+            if (MappingModels.Count == 0) return false;
+            var checkMapping = MappingModels.First();
+            return checkMapping.Mapping.StartUnitCellPosition == checkMapping.Mapping.EndUnitCellPosition;
+        }
+
+        /// <summary>
+        /// Gets the inverted abstract movement description
+        /// </summary>
+        /// <returns></returns>
+        protected IList<int> GetInverseAbstractMovement()
+        {
+            return AbstractMovement.Select(a => -a).Reverse().ToList();
+        }
     }
 }

@@ -95,24 +95,18 @@ namespace ICon.Symmetry.SpaceGroups
         public bool TryLoadGroup(Predicate<ISpaceGroup> searchPredicate)
         {
             SpaceGroupEntity newGroup = null;
-            using (SpaceGroupContext context = ContextProvider.CreateContext())
+            using (var context = ContextProvider.CreateContext())
             {
                 newGroup = context.SpaceGroups
                     .Where(a => searchPredicate(a))
                     .Include(g => g.BaseSymmetryOperations)
                     .SingleOrDefault();
 
-                if (LoadedGroupEntity == null)
-                {
-                    LoadedGroupEntity = newGroup;
-                }
+                if (LoadedGroupEntity == null) LoadedGroupEntity = newGroup;
 
-                if (newGroup != null && !newGroup.GetGroupEntry().Equals(LoadedGroupEntity.GetGroupEntry()))
-                {
-                    LoadedGroupEntity = (!newGroup.GetGroupEntry().Equals(LoadedGroupEntity.GetGroupEntry())) ? newGroup : LoadedGroupEntity;
-                }
+                if (newGroup != null && !newGroup.GetGroupEntry().Equals(LoadedGroupEntity.GetGroupEntry())) LoadedGroupEntity = !newGroup.GetGroupEntry().Equals(LoadedGroupEntity.GetGroupEntry()) ? newGroup : LoadedGroupEntity;
             }
-            return (newGroup == null) ? false : true;
+            return newGroup != null;
         }
 
         /// <summary>
@@ -122,28 +116,19 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         public bool TryLoadGroup(SpaceGroupEntry groupEntry)
         {
-            if (groupEntry == null)
-            {
-                throw new ArgumentNullException(nameof(groupEntry));
-            }
-            if (LoadedGroupEntity != null && groupEntry.Equals(LoadedGroupEntity.GetGroupEntry()))
-            {
-                return true;
-            }
+            if (groupEntry == null) throw new ArgumentNullException(nameof(groupEntry));
+            if (LoadedGroupEntity != null && groupEntry.Equals(LoadedGroupEntity.GetGroupEntry())) return true;
             return TryLoadGroup(group => group.Index == groupEntry.Index && group.Specifier == groupEntry.Specifier);
         }
 
         /// <summary>
-        /// Creates a new cyrstal system matching the currently loaded group using a crystal system provider
+        /// Creates a new crystal system matching the currently loaded group using a crystal system provider
         /// </summary>
         /// <param name="provider"></param>
         /// <returns></returns>
         public CrystalSystem CreateCrystalSystem(ICrystalSystemProvider provider)
         {
-            if (LoadedGroupEntity == null)
-            {
-                throw new InvalidObjectStateException("There is currently no group loaded into the service, cannot create crytsal system");
-            }
+            if (LoadedGroupEntity == null) throw new InvalidObjectStateException("There is currently no group loaded into the service, cannot create crytsal system");
             return provider.Create(LoadedGroupEntity);
         }
 
@@ -154,12 +139,9 @@ namespace ICon.Symmetry.SpaceGroups
         public SetList<ISpaceGroup> GetFullGroupList()
         {
             var setList = new SetList<ISpaceGroup>(Comparer<ISpaceGroup>.Default, 274);
-            using (SpaceGroupContext context = ContextProvider.CreateContext())
+            using (var context = ContextProvider.CreateContext())
             {
-                foreach (var group in context.SpaceGroups)
-                {
-                    setList.Add(group);
-                }
+                foreach (var group in context.SpaceGroups) setList.Add(@group);
             }
             return setList;
         }
@@ -181,10 +163,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         public List<SetList<Fractional3D>> GetAllWyckoffPositions(IEnumerable<Fractional3D> refVectors)
         {
-            if (refVectors == null)
-            {
-                throw new ArgumentNullException(nameof(refVectors));
-            }
+            if (refVectors == null) throw new ArgumentNullException(nameof(refVectors));
             return refVectors.Select((vector) => GetAllWyckoffPositions(vector)).ToList();
         }
 
@@ -207,10 +186,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         public List<SetList<TSource>> GetAllWyckoffPositions<TSource>(IEnumerable<TSource> refVectors) where TSource : struct, IFractional3D<TSource>
         {
-            if (refVectors == null)
-            {
-                throw new ArgumentNullException(nameof(refVectors));
-            }
+            if (refVectors == null) throw new ArgumentNullException(nameof(refVectors));
             return refVectors.Select((vector) => GetAllWyckoffPositions(vector)).ToList();
         }
 
@@ -223,10 +199,7 @@ namespace ICon.Symmetry.SpaceGroups
         protected SetList<Fractional3D> CreatePositionSetList(Fractional3D vector)
         {
             var results = new SetList<Fractional3D>(VectorComparer, LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (SymmetryOperationEntity operation in LoadedGroupEntity.BaseSymmetryOperations)
-            {
-                results.Add(operation.ApplyWithTrim(vector));
-            }
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) results.Add(operation.ApplyWithTrim(vector));
             results.List.TrimExcess();
             return results;
         }
@@ -241,10 +214,7 @@ namespace ICon.Symmetry.SpaceGroups
         protected SetList<Fractional3D> CreatePositionSetList(double a, double b, double c)
         {
             var results = new SetList<Fractional3D>(VectorComparer, LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (SymmetryOperationEntity operation in LoadedGroupEntity.BaseSymmetryOperations)
-            {
-                results.Add(operation.ApplyWithTrim(a, b, c));
-            }
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) results.Add(operation.ApplyWithTrim(a, b, c));
             results.List.TrimExcess();
             return results;
         }
@@ -258,10 +228,7 @@ namespace ICon.Symmetry.SpaceGroups
         protected SetList<TSource> CreatePositionSetList<TSource>(TSource vector) where TSource : struct, IFractional3D<TSource>
         {
             var results = new SetList<TSource>(VectorComparer.MakeCompatibleComparer<TSource>(), LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (SymmetryOperationEntity operation in LoadedGroupEntity.BaseSymmetryOperations)
-            {
-                results.Add(operation.ApplyWithTrim(vector));
-            }
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) results.Add(operation.ApplyWithTrim(vector));
             results.List.TrimExcess();
             return results;
         }
@@ -275,9 +242,9 @@ namespace ICon.Symmetry.SpaceGroups
         {
             Fractional3D[] MoveStartToUnitCell(Fractional3D[] vectors)
             {
-                double coorA = vectors[0].A.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].A;
-                double coorB = vectors[0].B.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].B;
-                double coorC = vectors[0].C.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].C;
+                var coorA = vectors[0].A.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].A;
+                var coorB = vectors[0].B.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].B;
+                var coorC = vectors[0].C.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].C;
                 var shift = new Fractional3D(coorA, coorB, coorC);
                 return vectors.Select(a => a + shift).ToArray();
             }
@@ -285,10 +252,7 @@ namespace ICon.Symmetry.SpaceGroups
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
             var result = new SetList<Fractional3D[]>(comparer);
 
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
-            {
-                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray()));
-            }
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray()));
 
             return result;
         }
@@ -355,10 +319,7 @@ namespace ICon.Symmetry.SpaceGroups
             foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
             {
                 var vector = operation.ApplyWithTrim(sourceVector);
-                if (!dictionary.TryGetValue(vector, out var operationList))
-                {
-                    dictionary[vector] = new SetList<ISymmetryOperation>(operationComparer);
-                }
+                if (!dictionary.TryGetValue(vector, out var operationList)) dictionary[vector] = new SetList<ISymmetryOperation>(operationComparer);
                 dictionary[vector].Add(operation);
             }
             return new WyckoffOperationDictionary(sourceVector, LoadedGroupEntity, dictionary);
@@ -378,7 +339,7 @@ namespace ICon.Symmetry.SpaceGroups
                 var untrimmedVector = operation.ApplyUntrimmed(sourceVector);
                 if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) == 0)
                 {
-                    var shift = (shiftCorrection) ? sourceVector - untrimmedVector : Fractional3D.NullVector;
+                    var shift = shiftCorrection ? sourceVector - untrimmedVector : Fractional3D.NullVector;
                     var newOperation = GetTranslationShiftedOperation(operation, shift);
                     result.Add(newOperation);
                 }
@@ -404,20 +365,18 @@ namespace ICon.Symmetry.SpaceGroups
             };
 
             var multiplicityOperations = GetMultiplicityOperations(originPoint, true);
-            var resultSequences = multiplicityOperations.Select(operation => operation.ApplyUntrimmed(pointSequence).ToList()).ToList();
+            var resultSequences = multiplicityOperations
+                .Select(operation => operation.ApplyUntrimmed(pointSequence).ToList()).ToList();
 
             operationGroup.PointOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
 
             var equalityComparer = MakeVectorSequenceProjectionComparer();
+
             foreach (var index in resultSequences.IndexOfMany(value => equalityComparer.Equals(value, resultSequences.First())))
-            {
                 operationGroup.SelfProjectionOperations.Add((SymmetryOperation)multiplicityOperations[index]);
-            }
 
             foreach (var index in resultSequences.RemoveDuplicates(MakeVectorSequenceEquivalenceComparer()))
-            {
                 multiplicityOperations.RemoveAt(index);
-            }
 
             operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
             operationGroup.UniqueSelfProjectionOrders = MakeProjectionMatrix(pointSequence, operationGroup.SelfProjectionOperations);
@@ -425,7 +384,7 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Translates an environment seqeunce onto each possible wyckoff 1 position and returns the results as a sorted dictionay for lookup
+        /// Translates an environment sequence onto each possible wyckoff 1 position and returns the results as a sorted dictionay for lookup
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
@@ -476,13 +435,12 @@ namespace ICon.Symmetry.SpaceGroups
             var options = symmetryOperations.Select(operation => operation.ApplyUntrimmed(vectors).ToList()).ToList();
             var uniqueIndexings = new HashSet<List<int>>(new EqualityCompareAdapter<List<int>>((a,b) => a.SequenceEqual(b), a => a.Sum()));
 
-            for (int i = 0; i < options.Count; i++)
+            for (var i = 0; i < options.Count; i++)
             {
                 var currentIndexing = new List<int>(8);
-                for (int j = 0; j < options[i].Count; j++)
-                {
+                for (var j = 0; j < options[i].Count; j++)
                     currentIndexing.Add(options[0].FindIndex(0, value => VectorComparer.Equals(value, options[i][j])));
-                }
+
                 uniqueIndexings.Add(currentIndexing);
             }
             return uniqueIndexings.ToList();
@@ -509,7 +467,7 @@ namespace ICon.Symmetry.SpaceGroups
         {
             bool AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
             {
-                return (lhs.Count == rhs.Count) && lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value == true);
+                return lhs.Count == rhs.Count && lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value == true);
             }
             return new EqualityCompareAdapter<IList<Fractional3D>>(AreEquivalent);
         }

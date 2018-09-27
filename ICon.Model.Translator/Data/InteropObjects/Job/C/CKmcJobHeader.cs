@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 40)]
-    public struct C_KmcJobHeader
+    public struct CKmcJobHeader
     {
         [MarshalAs(UnmanagedType.I8)]
         private long jobFalgs;

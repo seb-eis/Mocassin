@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using ICon.Mathematics.Comparers;
 using ICon.Mathematics.Extensions;
 
@@ -10,11 +10,11 @@ namespace ICon.Mathematics.ValueTypes
     /// </summary>
     public class RotationMatrix2D : TransformMatrix2D
     {
-        public RotationMatrix2D(Double[,] values, DoubleComparer comparer = null) : base(values, comparer)
+        public RotationMatrix2D(double[,] values, IComparer<double> comparer = null) : base(values, comparer)
         {
         }
 
-        public RotationMatrix2D(DoubleComparer comparer) : base(comparer)
+        public RotationMatrix2D(IComparer<double> comparer) : base(comparer)
         {
         }
 
@@ -23,9 +23,9 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="radian"></param>
         /// <returns></returns>
-        public static TransformMatrix2D CreateForAxisX(Double radian, DoubleComparer comparer)
+        public static TransformMatrix2D CreateForAxisX(double radian, DoubleComparer comparer)
         {
-            var matrix = new TransformMatrix2D(new Double[3, 3] { { 1.0, 0.0, 0.0 }, { 0.0, Math.Cos(radian), -Math.Sin(radian) }, { 0, Math.Sin(radian), Math.Cos(radian) } }, comparer);
+            var matrix = new TransformMatrix2D(new double[3, 3] { { 1.0, 0.0, 0.0 }, { 0.0, Math.Cos(radian), -Math.Sin(radian) }, { 0, Math.Sin(radian), Math.Cos(radian) } }, comparer);
             matrix.CleanAlmostZeros();
             return matrix;
         }
@@ -35,9 +35,9 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="radian"></param>
         /// <returns></returns>
-        public static TransformMatrix2D CreateForAxisY(Double radian, DoubleComparer comparer)
+        public static TransformMatrix2D CreateForAxisY(double radian, IComparer<double> comparer)
         {
-            var matrix = new TransformMatrix2D(new Double[3, 3] { { Math.Cos(radian), 0.0, Math.Sin(radian) }, { 0.0, 1.0, 0.0 }, { -Math.Sin(radian), 0.0, Math.Cos(radian) } }, comparer);
+            var matrix = new TransformMatrix2D(new double[3, 3] { { Math.Cos(radian), 0.0, Math.Sin(radian) }, { 0.0, 1.0, 0.0 }, { -Math.Sin(radian), 0.0, Math.Cos(radian) } }, comparer);
             matrix.CleanAlmostZeros();
             return matrix;
         }
@@ -47,9 +47,9 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="radian"></param>
         /// <returns></returns>
-        public static TransformMatrix2D CreateForAxisZ(Double radian, DoubleComparer comparer)
+        public static TransformMatrix2D CreateForAxisZ(double radian, DoubleComparer comparer)
         {
-            var matrix = new TransformMatrix2D(new Double[3, 3] { { Math.Cos(radian), -Math.Sin(radian), 0.0 }, { Math.Sin(radian), Math.Cos(radian), 0.0 }, { 0.0, 0.0, 1.0 } }, comparer);
+            var matrix = new TransformMatrix2D(new double[3, 3] { { Math.Cos(radian), -Math.Sin(radian), 0.0 }, { Math.Sin(radian), Math.Cos(radian), 0.0 }, { 0.0, 0.0, 1.0 } }, comparer);
             matrix.CleanAlmostZeros();
             return matrix;
         }
@@ -59,15 +59,12 @@ namespace ICon.Mathematics.ValueTypes
         /// </summary>
         /// <param name="radian"></param>
         /// <returns></returns>
-        public static TransformMatrix2D CreateForArbitraryAxis<T1>(Double radian, T1 axis, DoubleComparer comparer) where T1 : struct, ICartesian3D<T1>
+        public static TransformMatrix2D CreateForArbitraryAxis<T1>(double radian, T1 axis, DoubleComparer comparer) where T1 : struct, ICartesian3D<T1>
         {
-            if (comparer.Compare(axis.GetLength(), 0.0) == 0)
-            {
-                throw new ArgumentException("Cannot created rotation axis around a zero vector", nameof(axis));
-            }
+            if (comparer.Compare(axis.GetLength(), 0.0) == 0) throw new ArgumentException("Cannot created rotation axis around a zero vector", nameof(axis));
             var matrix = new TransformMatrix2D(comparer);
-            T1 normAxis = axis.GetNormalized();
-            Double angleCosine = 1.0 - Math.Cos(radian);
+            var normAxis = axis.GetNormalized();
+            var angleCosine = 1.0 - Math.Cos(radian);
 
             matrix[0, 0] = normAxis.X * normAxis.X * angleCosine + Math.Cos(radian);
             matrix[0, 1] = normAxis.X * normAxis.Y * angleCosine - normAxis.Z * Math.Sin(radian);

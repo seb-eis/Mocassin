@@ -6,7 +6,7 @@ namespace ICon.Model.Translator
     /// Simulation Vector 3 object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 24)]
-    public struct C_Vector3
+    public struct CVector3
     {
         [MarshalAs(UnmanagedType.R8)]
         private double a;

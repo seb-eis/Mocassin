@@ -255,7 +255,7 @@ namespace ICon.Mathematics.Extensions
         /// <param name="matrix"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static Boolean IsSymmetric(this Double[,] matrix, IEqualityComparer<Double> comparer)
+        public static Boolean IsSymmetric(this Double[,] matrix, IComparer<Double> comparer)
         {
             if (matrix.GetUpperBound(0) != matrix.GetUpperBound(1))
             {
@@ -266,7 +266,7 @@ namespace ICon.Mathematics.Extensions
             {
                 for (Int32 col = row + 1; col < matrix.GetUpperBound(1) + 1; col++)
                 {
-                    if (comparer.Equals(matrix[row,col], matrix[col,row]) == false)
+                    if (comparer.Compare(matrix[row,col], matrix[col,row]) == 0)
                     {
                         return false;
                     }
@@ -291,13 +291,13 @@ namespace ICon.Mathematics.Extensions
         /// </summary>
         /// <param name="array"></param>
         /// <param name="comparer"></param>
-        public static void CleanAlmostZeroEntries(this Double[,] array, IEqualityComparer<Double> comparer)
+        public static void CleanAlmostZeroEntries(this Double[,] array, IComparer<Double> comparer)
         {
             for (Int32 row = 0; row < array.GetUpperBound(0) + 1; row++)
             {
                 for (Int32 col = 0; col < array.GetUpperBound(1) + 1; col++)
                 {
-                    if (comparer.Equals(array[row, col], 0.0))
+                    if (comparer.Compare(array[row, col], 0.0) == 0)
                     {
                         array[row, col] = 0.0;
                     }

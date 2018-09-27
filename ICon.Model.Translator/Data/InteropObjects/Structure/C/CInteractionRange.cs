@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// Simulation interaction range object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 16)]
-    public struct C_InteractionRange
+    public struct CInteractionRange
     {
         [MarshalAs(UnmanagedType.I4)]
         private int a;

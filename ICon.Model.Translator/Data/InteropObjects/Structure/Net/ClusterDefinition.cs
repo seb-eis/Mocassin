@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ICon.Model.Translator.Data
 {
-    public class ClusterDefinition : InteropObject<C_ClusterDefinition>
+    public class ClusterDefinition : InteropObject<CClusterDefinition>
     {
         public ClusterDefinition()
         {
         }
 
-        public ClusterDefinition(C_ClusterDefinition structure) : base(structure)
+        public ClusterDefinition(CClusterDefinition structure) : base(structure)
         {
         }
     }

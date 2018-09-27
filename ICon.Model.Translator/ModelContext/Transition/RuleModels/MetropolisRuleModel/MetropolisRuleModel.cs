@@ -3,11 +3,11 @@ using ICon.Model.Transitions;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IMetropolisRuleModel"/>
     public class MetropolisRuleModel : TransitionRuleModel, IMetropolisRuleModel
     {
         /// <inheritdoc />
-        public bool InverseIsSet => InverseRuleModel != null;
+        public override bool InverseIsSet => InverseRuleModel != null;
 
         /// <inheritdoc />
         public override IAbstractTransition AbstractTransition => MetropolisRule.AbstractTransition;
@@ -22,16 +22,21 @@ namespace ICon.Model.Translator.ModelContext
         public IMetropolisRuleModel InverseRuleModel { get; set; }
 
         /// <inheritdoc />
-        public bool LinkIfInverseMatch(IMetropolisRuleModel ruleModel)
+        public override bool LinkIfInverseMatch(ITransitionRuleModel ruleModel)
         {
-            if (StartStateCode != ruleModel.FinalStateCode || MetropolisRule != ruleModel.MetropolisRule)
-            {
-                return false;
-            }
+            if (!IsInverse(ruleModel)) return false;
 
-            InverseRuleModel = ruleModel;
-            ruleModel.InverseRuleModel = this;
+            var inverseRuleModel = (IMetropolisRuleModel) ruleModel;
+            InverseRuleModel = inverseRuleModel;
+            inverseRuleModel.InverseRuleModel = this;
             return true;
+        }
+
+        /// <inheritdoc />
+        public override bool IsInverse(ITransitionRuleModel ruleModel)
+        {
+            if (!(ruleModel is IMetropolisRuleModel inverseRuleModel)) return false;
+            return StartStateCode == inverseRuleModel.FinalStateCode && MetropolisRule == inverseRuleModel.MetropolisRule;
         }
 
         /// <inheritdoc />

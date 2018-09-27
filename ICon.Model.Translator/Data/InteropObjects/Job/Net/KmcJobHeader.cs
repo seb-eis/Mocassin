@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class KmcJobHeader : InteropObject<C_KmcJobHeader>
+    public class KmcJobHeader : InteropObject<CKmcJobHeader>
     {
         public KmcJobHeader()
         {
         }
 
-        public KmcJobHeader(C_KmcJobHeader structure) : base(structure)
+        public KmcJobHeader(CKmcJobHeader structure) : base(structure)
         {
         }
     }

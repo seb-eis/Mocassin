@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// Simulation Vector 3 object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 32)]
-    public struct C_MoveVector
+    public struct CMoveVector
     {
         [MarshalAs(UnmanagedType.I4)]
         private int trackerId;
@@ -17,9 +17,9 @@ namespace ICon.Model.Translator
         [MarshalAs(UnmanagedType.I4)]
         private readonly int paddingInt;
 
-        private readonly C_Vector3 vector;
+        private readonly CVector3 vector;
 
-        public C_Vector3 Vector => vector;
+        public CVector3 Vector => vector;
 
         public int TrackerId { get => trackerId; set => trackerId = value; }
     }

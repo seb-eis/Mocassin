@@ -9,10 +9,10 @@ namespace ICon.Model.Translator
     /// C array access object. Placeholder for array access structs with 4 byte count field
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 16)]
-    public readonly struct C_ArrayAccess
+    public readonly struct CArrayAccess
     {
-        private readonly C_LongPtr start;
+        private readonly CLongPtr start;
 
-        private readonly C_LongPtr end;
+        private readonly CLongPtr end;
     }
 }

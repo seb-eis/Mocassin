@@ -49,9 +49,7 @@ namespace ICon.Model.Translator.ModelContext
         public bool LinkIfInverseMatch(IMetropolisMappingModel mappingModel)
         {
             if (Mapping.Transition != mappingModel.Mapping.Transition || !StartVector4D.Equals(mappingModel.EndVector4D))
-            {
                 return false;
-            }
 
             InverseMapping = mappingModel;
             mappingModel.InverseMapping = this;

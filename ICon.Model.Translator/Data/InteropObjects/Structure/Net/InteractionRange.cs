@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ICon.Model.Translator
 {
-    public class InteractionRange : InteropObject<C_InteractionRange>
+    public class InteractionRange : InteropObject<CInteractionRange>
     {
         public InteractionRange()
         {
         }
 
-        public InteractionRange(C_InteractionRange structure) : base(structure)
+        public InteractionRange(CInteractionRange structure) : base(structure)
         {
         }
     }

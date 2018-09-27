@@ -9,7 +9,7 @@ namespace ICon.Model.Translator
     /// Jump rule simulation object Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 56)]
-    public struct C_JumpRule
+    public struct CJumpRule
     {
         [MarshalAs(UnmanagedType.I8)]
         private long stateCode0;

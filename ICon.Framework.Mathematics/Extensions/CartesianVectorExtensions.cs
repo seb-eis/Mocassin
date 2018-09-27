@@ -128,7 +128,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Substract the vector second vector from the current one, result is of source type
+        /// Subtract the vector second vector from the current one, result is of source type
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>

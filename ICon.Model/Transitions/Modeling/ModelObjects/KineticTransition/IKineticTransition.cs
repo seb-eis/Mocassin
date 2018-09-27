@@ -9,7 +9,7 @@ using ICon.Model.Structures;
 namespace ICon.Model.Transitions
 {
     /// <summary>
-    /// Represents an actual kinetic transition that includes a refernce geometry and abstract description
+    /// Represents an actual kinetic transition that includes a reference geometry and abstract description
     /// </summary>
     public interface IKineticTransition : IModelObject
     {
@@ -28,6 +28,12 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <returns></returns>
         IEnumerable<IKineticRule> GetTransitionRules();
+
+        /// <summary>
+        /// Get the affiliated transition rules of the transition including dependent rules
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IKineticRule> GetExtendedTransitionRules();
 
         /// <summary>
         /// Get the geometry of the transition as a sequence of 3D fractional vectors
