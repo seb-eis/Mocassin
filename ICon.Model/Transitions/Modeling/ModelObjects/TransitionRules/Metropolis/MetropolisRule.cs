@@ -18,7 +18,7 @@ namespace ICon.Model.Transitions
         /// The metropolis transition parent instance
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IMetropolisTransition Transition { get; set; }
 
         /// <summary>

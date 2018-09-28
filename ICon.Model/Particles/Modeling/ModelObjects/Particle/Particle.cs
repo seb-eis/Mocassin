@@ -7,39 +7,27 @@ using ICon.Model.Basic;
 
 namespace ICon.Model.Particles
 {
-    /// <summary>
-    /// Represents a single unique model particle
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Particles.IParticle"/>
     [DataContract]
     public class Particle : ModelObject, IParticle
     {
-        /// <summary>
-        /// The charge value in electron volts
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public double Charge { get; set; }
 
-        /// <summary>
-        /// The long name of th particle
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The short symbol definition of the particle
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public string Symbol { get; set; }
 
-        /// <summary>
-        /// Flag that marks the particle as capable of acting as a vacancy
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public bool IsVacancy { get; set; }
 
-        /// <summary>
-        /// Flag that marks the particle as a 'Null-Particle' that is not deprecated but does not exists in the current context
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public bool IsEmpty { get; set; }
 
@@ -48,28 +36,19 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Int32 CompareTo(IParticle other)
+        public int CompareTo(IParticle other)
         {
-            Int32 nameCompare = Name.CompareTo(other.Name);
-            if (nameCompare == 0)
-            {
-                Int32 symbolCompare = Symbol.CompareTo(other.Symbol);
-                if (symbolCompare == 0)
-                {
-                    return Charge.CompareTo(other.Charge);
-                }
-                return symbolCompare;
-            }
-            return nameCompare;
+            var nameCompare = Name.CompareTo(other.Name);
+            if (nameCompare != 0)
+                return nameCompare;
+
+            var symbolCompare = Symbol.CompareTo(other.Symbol);
+
+            return symbolCompare != 0 ? symbolCompare : Charge.CompareTo(other.Charge);
         }
 
-        /// <summary>
-        /// Compares particles for equality with a specific comparer for the charge value
-        /// </summary>
-        /// <param name="other"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public Boolean EqualsInModelProperties(IParticle other, IComparer<Double> comparer)
+        /// <inheritdoc />
+        public bool EqualsInModelProperties(IParticle other, IComparer<double> comparer)
         {
             return Name == other.Name && Symbol == other.Symbol && comparer.Compare(Charge, other.Charge) == 0;
         }
@@ -83,43 +62,30 @@ namespace ICon.Model.Particles
             return new Particle() { Name = "Void", Symbol = "Void", Charge = 0.0, Index = 0, IsEmpty = true };
         }
 
-        /// <summary>
-        /// Get a string that represents the name of the object type Particle
-        /// </summary>
-        /// <returns></returns>
-        public override String GetModelObjectName()
+        /// <inheritdoc />
+        public override string GetModelObjectName()
         {
             return "'Particle'";
         }
 
 
-        /// <summary>
-        /// Tries to create new particle object from the model object interface (Returns null for type mismatch or deprecated model object)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IParticle>(obj) is var particle)
-            {
-                if (particle.IsEmpty)
-                {
-                    throw new ArgumentException("Empty particle object interface reached consume function");
-                }
-                Name = particle.Name;
-                Symbol = particle.Symbol;
-                Charge = particle.Charge;
-                IsVacancy = particle.IsVacancy;
-                return this;
-            }
-            return null;
+            if (!(CastWithDepricatedCheck<IParticle>(obj) is IParticle particle))
+                return null;
+
+            if (particle.IsEmpty)
+                throw new ArgumentException("Empty particle object interface reached consume function");
+
+            Name = particle.Name;
+            Symbol = particle.Symbol;
+            Charge = particle.Charge;
+            IsVacancy = particle.IsVacancy;
+            return this;
         }
 
-        /// <summary>
-        /// Compares to other particle based upon the particle index
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool Equals(IParticle other)
         {
             return Index == other.Index;

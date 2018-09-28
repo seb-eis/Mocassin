@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ICon.Mathematics.ValueTypes;
 using ICon.Model.Particles;
+using ICon.Model.Structures;
 using ICon.Model.Transitions;
 
 namespace ICon.Model.Translator.ModelContext
@@ -54,5 +55,11 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         /// <returns></returns>
         bool MappingsContainInversion();
+
+        /// <summary>
+        /// Get the start unit cell position this transition model is valid for
+        /// </summary>
+        /// <returns></returns>
+        IUnitCellPosition GetStartUnitCellPosition();
     }
 }

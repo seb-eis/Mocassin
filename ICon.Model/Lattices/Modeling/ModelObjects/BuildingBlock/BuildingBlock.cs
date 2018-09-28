@@ -23,7 +23,7 @@ namespace ICon.Model.Lattices
         /// The list interface of unit cell entries
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public List<IParticle> CellEntries { get; set; }
 
         /// <summary>

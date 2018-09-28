@@ -56,7 +56,9 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool LinkIfInverseMatch(ITransitionRuleModel ruleModel)
         {
-            if (!IsInverse(ruleModel)) return false;
+            if (!IsInverse(ruleModel))
+                return false;
+
             var inverseRuleModel = (IKineticRuleModel) ruleModel;
             InverseRuleModel = inverseRuleModel;
             inverseRuleModel.InverseRuleModel = this;
@@ -69,7 +71,7 @@ namespace ICon.Model.Translator.ModelContext
             if (!(ruleModel is IKineticRuleModel inverseRuleModel)) 
                 return false;
 
-            if (inverseRuleModel.KineticRule != KineticRule) 
+            if (inverseRuleModel.AbstractTransition != AbstractTransition) 
                 return false;
 
             return StartState.LexicographicCompare(inverseRuleModel.FinalState) == 0 &&

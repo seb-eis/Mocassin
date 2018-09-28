@@ -12,7 +12,8 @@ namespace ICon.Model.Translator.ModelContext
     public class StructureModelContextBuilder : ModelContextBuilderBase<IStructureModelContext>
     {
         /// <inheritdoc />
-        public StructureModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
+        public StructureModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
+            : base(projectModelContextBuilder)
         {
         }
 
@@ -35,6 +36,7 @@ namespace ICon.Model.Translator.ModelContext
                 UnitCellPosition = unitCellPosition,
                 TransformOperations = wyckoffDictionary
             };
+
             return environmentModel;
         }
     }

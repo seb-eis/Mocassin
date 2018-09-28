@@ -13,27 +13,27 @@ namespace ICon.Model.Particles
         /// <summary>
         /// The charge value in electron volts
         /// </summary>
-        Double Charge { get; }
+        double Charge { get; }
 
         /// <summary>
         /// The name of the particle
         /// </summary>
-        String Name { get; }
+        string Name { get; }
 
         /// <summary>
         /// The short description symbol
         /// </summary>
-        String Symbol { get; }
+        string Symbol { get; }
 
         /// <summary>
         /// Flag that indicates that the particle supports usage as a vacancy
         /// </summary>
-        Boolean IsVacancy { get; }
+        bool IsVacancy { get; }
 
         /// <summary>
         /// Flag that marks the particle as the 'Null-Particle' (Particle exists but cannot be accessed, only relevant for disabled periodic boundaries)
         /// </summary>
-        Boolean IsEmpty { get; }
+        bool IsEmpty { get; }
 
         /// <summary>
         /// Compares to another particle interface for equality in model relevant properties using the provided double comparer for the charge values
@@ -41,6 +41,6 @@ namespace ICon.Model.Particles
         /// <param name="other"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        Boolean EqualsInModelProperties(IParticle other, IComparer<Double> comparer);
+        bool EqualsInModelProperties(IParticle other, IComparer<double> comparer);
     }
 }

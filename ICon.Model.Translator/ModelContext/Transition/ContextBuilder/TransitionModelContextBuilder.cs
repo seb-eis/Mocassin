@@ -30,11 +30,17 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         public IKineticTransitionModelBuilder KineticTransitionModelBuilder { get; set; }
 
+        /// <summary>
+        /// The model builder for the position transition model collection
+        /// </summary>
+        public  IPositionTransitionModelBuilder PositionTransitionModelBuilder { get; set; }
+
         /// <inheritdoc />
         public TransitionModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
         {
             MetropolisTransitionModelBuilder = new MetropolisTransitionModelBuilder(ProjectServices);
             KineticTransitionModelBuilder = new KineticTransitionModelBuilder(ProjectServices);
+            PositionTransitionModelBuilder = new PositionTransitionModelBuilder(ProjectServices);
         }
 
         /// <inheritdoc />
@@ -46,9 +52,12 @@ namespace ICon.Model.Translator.ModelContext
 
             var kineticTask = Task.Run(() => KineticTransitionModelBuilder.BuildModels(kineticTransitions));
             var metropolisTask = Task.Run(() => MetropolisTransitionModelBuilder.BuildModels(metropolisTransitions));
+            var awaitTask = Task.WhenAll(kineticTask, metropolisTask);
+            var positionTask = Task.Run(() => PositionTransitionModelBuilder.BuildModels(ModelContext, awaitTask));
 
             ModelContext.KineticTransitionModels = kineticTask.Result;
             ModelContext.MetropolisTransitionModels = metropolisTask.Result;
+            ModelContext.PositionTransitionModels = positionTask.Result;
         }
     }
 }

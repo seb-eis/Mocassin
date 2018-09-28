@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICon.Mathematics.ValueTypes;
+using ICon.Model.Particles;
 using ICon.Model.ProjectServices;
 using ICon.Model.Structures;
 using ICon.Model.Transitions;
@@ -43,7 +44,12 @@ namespace ICon.Model.Translator.ModelContext
             }
 
             resultModels.AddRange(inverseModels);
-            resultModels.ForEach(a => a.MobileParticles = CreateMobileParticleSet(a.RuleModels));
+            foreach (var transitionModel in resultModels)
+            {
+                transitionModel.MobileParticles = CreateMobileParticleSet(transitionModel.RuleModels);
+                transitionModel.EffectiveParticle = CreateEffectiveMobileParticle(transitionModel.MobileParticles);
+            }
+
             return resultModels;
         }
 
@@ -68,6 +74,52 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
+        /// Determines and creates an effective particle from the passed mobile particle set
+        /// </summary>
+        /// <param name="mobileParticles"></param>
+        /// <remarks> Particle is for calculation purposes only and not part of the actual model data </remarks>
+        protected IParticle CreateEffectiveMobileParticle(IParticleSet mobileParticles)
+        {
+            var comparer = ProjectServices.CommonNumerics.RangeComparer;
+            var first = mobileParticles.First();
+
+            var effectiveParticle = new Particle {Index = -1, Name = first.Name, Symbol = first.Symbol, Charge = first.Charge};
+
+            foreach (var particle in mobileParticles.Skip(1))
+            {
+                if (particle.IsEmpty)
+                    continue;
+
+                if (particle.IsVacancy && comparer.Compare(particle.Charge, 0.0) == 0)
+                    continue;
+
+                effectiveParticle.Charge += particle.Charge;
+                effectiveParticle.Symbol += $"-{particle.Symbol}";
+                effectiveParticle.Name += $"-{particle.Name}";
+            }
+
+            return SearchEffectiveParticleInModel(effectiveParticle, comparer) ?? effectiveParticle;
+        }
+
+        /// <summary>
+        /// Searches if the effective particle can be found in the model data. Returns null if none is found
+        /// </summary>
+        /// <param name="effectiveParticle"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        protected IParticle SearchEffectiveParticleInModel(IParticle effectiveParticle, IComparer<double> comparer)
+        {
+            var particles = ProjectServices.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
+            foreach (var particle in particles)
+            {
+                if (particle.EqualsInModelProperties(effectiveParticle, comparer))
+                    return particle;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Creates and adds the abstract movement information to the transition model
         /// </summary>
         /// <param name="transitionModel"></param>
@@ -81,7 +133,8 @@ namespace ICon.Model.Translator.ModelContext
                 .ToList();
 
             var connectors = transitionModel.Transition.AbstractTransition
-                .GetConnectorSequence().ToList();
+                .GetConnectorSequence()
+                .ToList();
 
             transitionModel.AbstractMovement = CalculateAbstractMovement(connectors, positions);
         }
@@ -93,17 +146,28 @@ namespace ICon.Model.Translator.ModelContext
         protected void CreateAndAddRuleModels(IKineticTransitionModel transitionModel)
         {
             var comparer = ProjectServices.CommonNumerics.RangeComparer;
-            var ruleModels = new List<IKineticRuleModel>();
+            var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
+                .Select(kineticRule => CreateRuleModel(kineticRule, comparer))
+                .ToList();
 
-            foreach (var transitionRule in transitionModel.Transition.GetExtendedTransitionRules())
-            {
-                var ruleModel = CreateRuleModelBasis<KineticRuleModel>(transitionRule);
-                ruleModel.KineticRule = transitionRule;
-                ruleModels.Add(ruleModel);
-            }
-
-            ruleModels.ForEach(a => a.ChargeTransportMatrix = CreateChargeTransportMatrix(a.StartState, comparer));
+            CreateCodesAndLinkInverseRuleModels(ruleModels);
+       
             transitionModel.RuleModels = ruleModels;
+        }
+
+        /// <summary>
+        /// Creates a new rule model from a transition rule ith the provided comparer
+        /// </summary>
+        /// <param name="kineticRule"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        protected IKineticRuleModel CreateRuleModel(IKineticRule kineticRule, IComparer<double> comparer)
+        {
+            var ruleModel = CreateRuleModelBasis<KineticRuleModel>(kineticRule);
+            ruleModel.ChargeTransportMatrix = CreateChargeTransportMatrix(ruleModel.StartState, comparer);
+            ruleModel.TransitionState = kineticRule.GetTransitionStateOccupation().ToList();
+            ruleModel.KineticRule = kineticRule;
+            return ruleModel;
         }
 
         /// <summary>
@@ -174,7 +238,7 @@ namespace ICon.Model.Translator.ModelContext
             for (var i = 0; i < matrix.Cols; i++)
             {
                 var moveIndex = abstractMovement[i];
-                var vector = mappingModel.PositionSequence3D[moveIndex] - mappingModel.PositionSequence3D[i];
+                var vector = mappingModel.PositionSequence3D[i + moveIndex] - mappingModel.PositionSequence3D[i];
 
                 matrix[i, 0] = vector.A;
                 matrix[i, 1] = vector.B;

@@ -49,7 +49,7 @@ namespace ICon.Model.Simulations
         /// The set of transitions attached to the simulation
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public List<IKineticTransition> Transitions { get; set; }
 
         /// <summary>

@@ -15,14 +15,14 @@ namespace ICon.Model.Transitions
         /// The particle index of the donor state
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IParticle DonorParticle { get; set; }
 
         /// <summary>
         /// The particle index of the acceptor state
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IParticle AcceptorParticle { get; set; }
 
         /// <summary>

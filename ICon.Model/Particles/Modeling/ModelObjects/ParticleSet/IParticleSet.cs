@@ -10,7 +10,7 @@ namespace ICon.Model.Particles
     /// <summary>
     /// Represents a set of model particles that describe multiple possible species for one position in a simulation project
     /// </summary>
-    public interface IParticleSet : IModelObject
+    public interface IParticleSet : IModelObject, IEnumerable<IParticle>
     {
         /// <summary>
         /// Get the number of particles in this particle set
@@ -23,7 +23,7 @@ namespace ICon.Model.Particles
         Bitmask64 GetEncoded();
 
         /// <summary>
-        /// Get the seqeunce of particles that belong to this particle set
+        /// Get the sequence of particles that belong to this particle set
         /// </summary>
         /// <returns></returns>
         IEnumerable<IParticle> GetParticles();

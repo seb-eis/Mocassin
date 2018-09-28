@@ -9,10 +9,12 @@ namespace ICon.Model.Translator
     /// </summary>
     public class ByteBuffer64 : InteropObject<CByteBuffer64>
     {
+        /// <inheritdoc />
         public ByteBuffer64()
         {
         }
 
+        /// <inheritdoc />
         public ByteBuffer64(CByteBuffer64 structure) : base(structure)
         {
         }

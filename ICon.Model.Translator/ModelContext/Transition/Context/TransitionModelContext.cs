@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ICon.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class TransitionModelContext : ITransitionModelContext
-    {
+    {   
         /// <inheritdoc />
         public IList<IKineticTransitionModel> KineticTransitionModels { get; set; }
 

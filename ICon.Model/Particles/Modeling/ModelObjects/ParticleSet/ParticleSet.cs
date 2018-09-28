@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -9,15 +10,11 @@ using ICon.Model.Basic;
 
 namespace ICon.Model.Particles
 {
-    /// <summary>
-    /// Basic particle set that uses a 64 bit bitmask to encode allowed and not allowed states of the particles
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Particles.IParticleSet"/>
     [DataContract(Name = "ParticleSet")]
     public class ParticleSet : ModelObject, IParticleSet
     {
-        /// <summary>
-        /// The number of particles in the set
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         public int ParticleCount => Particles.Count;
 
@@ -25,24 +22,17 @@ namespace ICon.Model.Particles
         /// The list of particles belonging to the particle set
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public List<IParticle> Particles { get; set; }
-        
-        /// <summary>
-        /// Get the sequence of particles for the particle set
-        /// </summary>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public IEnumerable<IParticle> GetParticles()
         {
             return (Particles ?? new List<IParticle>()).AsEnumerable();
         }
 
 
-        /// <summary>
-        /// Encodes the interal set of particles into a bitmask (Contains only particles that are not deprecated, empty particle with index 0 is always allowed)
-        /// </summary>
-        /// <param name="status"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public Bitmask64 GetEncoded()
         {
             ulong mask = 1;
@@ -69,51 +59,48 @@ namespace ICon.Model.Particles
             return new ParticleSet() { Particles = new List<IParticle>(), Index = 0 };
         }
 
-        /// <summary>
-        /// Checks if the particle set have the same bitmask representation
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool EqualsInModelProperties(IParticleSet other)
         {
             return GetEncoded().Equals(other.GetEncoded());
         }
 
-        /// <summary>
-        /// Get a string that represents the name of the object type Particle Set
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string GetModelObjectName()
         {
             return "'Particle Set'";
         }
 
-        /// <summary>
-        /// Creates new particle set from model object interface (Returns null for type mismatch or deprecated model object)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IParticleSet>(obj) is var particleSet)
-            {
-                if (particleSet.IsEmpty())
-                {
-                    throw new ArgumentException("Interface consume function called on empty particle set interface");
-                }
-                Particles = particleSet.GetParticles().ToList();
-                return this;
-            }
-            return null;
+            if (!(CastWithDepricatedCheck<IParticleSet>(obj) is IParticleSet particleSet))
+                return null;
+
+            if (particleSet.IsEmpty())
+                throw new ArgumentException("Interface consume function called on empty particle set interface");
+
+            Particles = particleSet.GetParticles().ToList();
+            return this;
         }
 
-        /// <summary>
-        /// Checks if the particle count is zero
-        /// </summary>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public bool IsEmpty()
         {
             return ParticleCount == 0;
+        }
+
+        /// <inheritdoc />
+        public IEnumerator<IParticle> GetEnumerator()
+        {
+            return Particles.GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

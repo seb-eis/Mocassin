@@ -25,7 +25,7 @@ namespace ICon.Model.Simulations
         /// The unspecififed base simulation affiliated with this series
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public ISimulationBase BaseSimulation { get; set; }
 
         /// <summary>

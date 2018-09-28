@@ -37,23 +37,23 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Builds the context of specififed type from the currently linked project reference data
+        /// Builds the context of specified type from the currently linked project reference data
         /// </summary>
         public async Task<TContext> CreateNewContext<T1>() where T1 : TContext, new()
         {
             ModelContext = new T1();
-            await Task.Run(() => PopulateContext());
+            await Task.Run(PopulateContext);
             return ModelContext;
         }
 
         /// <summary>
-        /// Thebuilds the passed model context instead of creating a new one
+        /// Rebuilds the passed model context instead of creating a new one
         /// </summary>
         /// <param name="context"></param>
         public virtual async Task RebuildContext(TContext context)
         {
             ModelContext = context ?? throw new ArgumentNullException(nameof(context));
-            await Task.Run(() => PopulateContext());
+            await Task.Run(PopulateContext);
         }
 
         /// <summary>

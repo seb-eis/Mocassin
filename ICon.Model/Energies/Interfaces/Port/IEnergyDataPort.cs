@@ -13,7 +13,7 @@ namespace ICon.Model.Energies
     public interface IEnergyDataPort : IModelDataPort
     {
         /// <summary>
-        /// Get the szabel environment info parameter
+        /// Get the stable environment info parameter
         /// </summary>
         /// <returns></returns>
         IStableEnvironmentInfo GetStableEnvironmentInfo();
@@ -38,7 +38,7 @@ namespace ICon.Model.Energies
         ReadOnlyList<IAsymmetricPairInteraction> GetUnstablePairInteractions();
 
         /// <summary>
-        /// Get the unstable pair interactions at the specififed index
+        /// Get the unstable pair interactions at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -51,7 +51,7 @@ namespace ICon.Model.Energies
         ReadOnlyList<IGroupInteraction> GetGroupInteractions();
 
         /// <summary>
-        /// Get the group interaction ath the specfified index
+        /// Get the group interaction ath the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -64,14 +64,14 @@ namespace ICon.Model.Energies
         ReadOnlyList<IUnstableEnvironment> GetUnstableEnvironments();
 
         /// <summary>
-        /// Get the unstable environmnet info at the specified index
+        /// Get the unstable environment info at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         IUnstableEnvironment GetUnstableEnvironment(int index);
 
         /// <summary>
-        /// Get a raw energy setter provider that enables creation of energy value setters for interaction objects. Value constraints ahve to be set by receiver
+        /// Get a raw energy setter provider that enables creation of energy value setters for interaction objects
         /// </summary>
         /// <returns></returns>
         IEnergySetterProvider GetEnergySetterProvider();

@@ -61,7 +61,7 @@ namespace ICon.Model.Simulations
         /// The metropolis transitions attached to this simulation
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public List<IMetropolisTransition> Transitions { get; set; }
 
         /// <summary>

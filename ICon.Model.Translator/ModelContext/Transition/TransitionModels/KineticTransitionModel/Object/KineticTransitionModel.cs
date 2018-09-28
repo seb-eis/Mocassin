@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ICon.Model.Structures;
 
 namespace ICon.Model.Translator.ModelContext
 {
@@ -53,6 +54,12 @@ namespace ICon.Model.Translator.ModelContext
             if (MappingModels.Count == 0) return false;
             var checkMapping = MappingModels.First();
             return checkMapping.Mapping.StartUnitCellPosition == checkMapping.Mapping.EndUnitCellPosition;
+        }
+
+        /// <inheritdoc />
+        public IUnitCellPosition GetStartUnitCellPosition()
+        {
+            return MappingModels.First().Mapping.StartUnitCellPosition;
         }
 
         /// <summary>

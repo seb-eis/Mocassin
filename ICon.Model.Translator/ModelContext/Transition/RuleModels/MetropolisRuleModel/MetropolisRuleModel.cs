@@ -24,7 +24,8 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool LinkIfInverseMatch(ITransitionRuleModel ruleModel)
         {
-            if (!IsInverse(ruleModel)) return false;
+            if (!IsInverse(ruleModel))
+                return false;
 
             var inverseRuleModel = (IMetropolisRuleModel) ruleModel;
             InverseRuleModel = inverseRuleModel;
@@ -35,8 +36,11 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool IsInverse(ITransitionRuleModel ruleModel)
         {
-            if (!(ruleModel is IMetropolisRuleModel inverseRuleModel)) return false;
-            return StartStateCode == inverseRuleModel.FinalStateCode && MetropolisRule == inverseRuleModel.MetropolisRule;
+            if (!(ruleModel is IMetropolisRuleModel inverseRuleModel))
+                return false;
+
+            return StartStateCode == inverseRuleModel.FinalStateCode &&
+                   AbstractTransition == inverseRuleModel.AbstractTransition;
         }
 
         /// <inheritdoc />

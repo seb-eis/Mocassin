@@ -143,14 +143,14 @@ namespace ICon.Model.DataManagement
             var linkers = new List<Action<object>>();
             foreach (var property in objectType.GetProperties(flags))
             {
-                if (property.GetCustomAttribute(typeof(LinkableByIndexAttribute)) is LinkableByIndexAttribute attribute)
+                if (property.GetCustomAttribute(typeof(IndexResolvedAttribute)) is IndexResolvedAttribute attribute)
                 {
-                    switch (attribute.LinkableType)
+                    switch (attribute.IndexResolveLevel)
                     {
-                        case LinkableType.Value:
+                        case IndexResolveLevel.Value:
                             linkers.Add(MakeLinkDelegate(property));
                             break;
-                        case LinkableType.Content:
+                        case IndexResolveLevel.Content:
                             HandleContentLinkableProperty(property);
                             break;
                         default:

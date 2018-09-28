@@ -184,18 +184,25 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddRuleModels(IMetropolisTransitionModel transitionModel)
         {
-            var ruleModels = new List<IMetropolisRuleModel>();
-
-            foreach (var rule in transitionModel.Transition.GetExtendedTransitionRules())
-            {
-                var ruleModel = CreateRuleModelBasis<MetropolisRuleModel>(rule);
-                ruleModel.MetropolisRule = rule;
-                ruleModels.Add(ruleModel);
-            }
+            var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
+                .Select(CreateRuleModel)
+                .ToList();
 
             CreateCodesAndLinkInverseRuleModels(ruleModels);
 
             transitionModel.RuleModels = ruleModels;
+        }
+
+        /// <summary>
+        /// Creates a rule model for the passed metropolis rule
+        /// </summary>
+        /// <param name="metropolisRule"></param>
+        /// <returns></returns>
+        protected IMetropolisRuleModel CreateRuleModel(IMetropolisRule metropolisRule)
+        {
+            var ruleModel = CreateRuleModelBasis<MetropolisRuleModel>(metropolisRule);
+            ruleModel.MetropolisRule = metropolisRule;
+            return ruleModel;
         }
 
         /// <summary>

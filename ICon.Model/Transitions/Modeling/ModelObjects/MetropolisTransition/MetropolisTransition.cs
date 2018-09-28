@@ -15,24 +15,24 @@ namespace ICon.Model.Transitions
     {
         /// <inheritdoc />
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IUnitCellPosition FirstUnitCellPosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IUnitCellPosition SecondUnitCellPosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
         /// The list of affiliated metropolis transition rules (Auto-managed by model system)
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public List<MetropolisRule> TransitionRules { get; set; }
 
         /// <inheritdoc />

@@ -60,14 +60,19 @@ namespace ICon.Model.Translator.ModelContext
         protected void CreateCodesAndLinkInverseRuleModels(IReadOnlyList<ITransitionRuleModel> ruleModels)
         {
             CreateAllCodesOnRuleModels(ruleModels);
+
             for (var i = 0; i < ruleModels.Count; i++)
             {
-                if (ruleModels[i].InverseIsSet) continue;
+                if (ruleModels[i].InverseIsSet)
+                    continue;
 
                 for (var j = i; j < ruleModels.Count; j++)
                 {
-                    if (ruleModels[j].InverseIsSet) continue;
-                    if (ruleModels[i].LinkIfInverseMatch(ruleModels[j])) break;
+                    if (ruleModels[j].InverseIsSet)
+                        continue;
+
+                    if (ruleModels[i].LinkIfInverseMatch(ruleModels[j]))
+                        break;
                 }
             }
         }

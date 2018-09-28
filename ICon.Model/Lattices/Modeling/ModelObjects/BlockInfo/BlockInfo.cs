@@ -17,7 +17,7 @@ namespace ICon.Model.Lattices
         /// BuildingBlock Index
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IBuildingBlock Block { get; set; }
 
         /// <summary>

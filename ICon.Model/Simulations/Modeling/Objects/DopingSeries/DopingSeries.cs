@@ -20,7 +20,7 @@ namespace ICon.Model.Simulations
         /// The abstract doping information for the series
         /// </summary>
         [DataMember]
-        [LinkableByIndex]
+        [IndexResolved]
         public IDoping Doping { get; set; }
 
         /// <summary>
