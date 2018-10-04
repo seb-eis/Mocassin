@@ -150,7 +150,7 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         public DoubleConstraint[] GetDefaultConstraints(CellEntry<T1>[] geometry)
         {
-            var cartesianGeometry = geometry.Select(entry => UnitCellProvider.VectorEncoder.Transformer.CartesianFromFractional(entry.AbsoluteVector)).ToArray();
+            var cartesianGeometry = geometry.Select(entry => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(entry.AbsoluteVector)).ToArray();
             var result = new DoubleConstraint[cartesianGeometry.Length - 1];
             for (int i = 0; i < cartesianGeometry.Length - 1;)
             {

@@ -4,22 +4,24 @@ using System.Text;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Builder for simulation model context objects
-    /// </summary>
-    public class SimulationModelContextBuilder : ModelContextBuilderBase<ISimulationModelContext>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.ISimulationModelContextBuilder"/>
+    public class SimulationModelContextBuilder : ModelContextBuilderBase<ISimulationModelContext>, ISimulationModelContextBuilder
     {
-        /// <summary>
-        /// Create nw context builder that is linked to the provided main context builder
-        /// </summary>
-        /// <param name="projectModelContextBuilder"></param>
+        /// <inheritdoc />
         public SimulationModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
         {
         }
 
-        protected override void PopulateContext()
+        /// <inheritdoc />
+        protected override ISimulationModelContext PopulateContext(ISimulationModelContext modelContext)
         {
-            throw new NotImplementedException();
+            return modelContext;
+        }
+
+        /// <inheritdoc />
+        protected override ISimulationModelContext GetEmptyDefaultContext()
+        {
+            return new SimulationModelContext();
         }
     }
 }

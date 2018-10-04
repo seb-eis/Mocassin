@@ -44,7 +44,7 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// The currently active vector encoder found in the unit cell provider
         /// </summary>
-        protected UnitCellVectorEncoder VectorEncoder { get; set; }
+        protected IUnitCellVectorEncoder VectorEncoder { get; set; }
 
         /// <summary>
         /// The vector comparer for cartesian objects that uses the same tolerance as the specififed double constraint
@@ -118,6 +118,7 @@ namespace ICon.Symmetry.Analysis
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="provider"></param>
+        /// <param name="start"></param>
         /// <param name="constraint"></param>
         /// <param name="predicate"></param>
         /// <param name="comparer"></param>
@@ -131,7 +132,7 @@ namespace ICon.Symmetry.Analysis
             SetBasicCalculationProperties(provider, constraint, start);
             var results = new MultisetList<CellEntry<T1>>(comparer, 500);
 
-            for (int offset = 0; ; offset++)
+            for (var offset = 0; ; offset++)
             {
                 SearchCellSet(results, provider, predicate, offset);
                 if (CheckAndUpdateBoundaryInfo(offset, constraint))
@@ -143,7 +144,7 @@ namespace ICon.Symmetry.Analysis
         }
 
         /// <summary>
-        /// Searches all unit cells with the specififed offset from the start cell for positions within the constraint range that match the prediacte
+        /// Searches all unit cells with the specified offset from the start cell for positions within the constraint range that match the prediacte
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="results"></param>
@@ -152,11 +153,11 @@ namespace ICon.Symmetry.Analysis
         /// <param name="offset"></param>
         protected void SearchCellSet<T1>(IList<CellEntry<T1>> results, IUnitCellProvider<T1> provider, Predicate<T1> predicate, int offset)
         {
-            for (int a = -offset; a <= offset; a++)
+            for (var a = -offset; a <= offset; a++)
             {
-                for (int b = -offset; b <= offset; b++)
+                for (var b = -offset; b <= offset; b++)
                 {
-                    for (int c = -offset; c <= offset; c++)
+                    for (var c = -offset; c <= offset; c++)
                     {
                         if (Math.Abs(a) != offset && Math.Abs(b) != offset && Math.Abs(c) != offset)
                         {
@@ -164,7 +165,7 @@ namespace ICon.Symmetry.Analysis
                         }
 
                         var cellOffsets = new Coordinates<int, int, int>(BaseOffset.A + a, BaseOffset.B + b, BaseOffset.C + c);
-                        var cellOffsetVector = VectorEncoder.Transformer.CartesianFromFractional(new Fractional3D(cellOffsets.A, cellOffsets.B, cellOffsets.C));
+                        var cellOffsetVector = VectorEncoder.Transformer.ToCartesian(new Fractional3D(cellOffsets.A, cellOffsets.B, cellOffsets.C));
                         var unitCell = provider.GetUnitCell(cellOffsets.A, cellOffsets.B, cellOffsets.C);
 
                         SearchUnitCell(results, unitCell, predicate, cellOffsetVector);
@@ -174,15 +175,16 @@ namespace ICon.Symmetry.Analysis
         }
 
         /// <summary>
-        /// Searches a single cell that starts at the specififed cartesian offset vector for entries matching the radial search
+        /// Searches a single cell that starts at the specified cartesian offset vector for entries matching the radial search
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="results"></param>
         /// <param name="unitCell"></param>
         /// <param name="predicate"></param>
+        /// <param name="cellOffsetVector"></param>
         protected void SearchUnitCell<T1>(IList<CellEntry<T1>> results, IUnitCell<T1> unitCell, Predicate<T1> predicate, in Cartesian3D cellOffsetVector)
         {
-            int index = 0;
+            var index = 0;
             foreach (var position in unitCell.GetAllEntries())
             {
                 if (predicate(position.Entry))
@@ -201,6 +203,7 @@ namespace ICon.Symmetry.Analysis
         /// Sets the properties required for calculations (Base offset, start vector and boundary distance info) and corrects the boundary distances to the active start cell
         /// </summary>
         /// <param name="provider"></param>
+        /// <param name="constraint"></param>
         /// <param name="start"></param>
         protected void SetBasicCalculationProperties<T1>(IUnitCellProvider<T1> provider, DoubleConstraint constraint, in Fractional3D start)
         {
@@ -213,7 +216,7 @@ namespace ICon.Symmetry.Analysis
             VectorComparer = new VectorComparer3D<Cartesian3D>(constraint.Comparer);
             Constraint = constraint ?? throw new ArgumentNullException(nameof(constraint));
             StartShift = new Fractional3D(0, 0, 0) - start;
-            StartVector = VectorEncoder.Transformer.CartesianFromFractional(start);
+            StartVector = VectorEncoder.Transformer.ToCartesian(start);
             BaseOffset = VectorEncoder.GetTargetCellOffset(start);
             BoundaryInfo = new SearchBoundaryProvider(StartVector, VectorEncoder.GetBaseVectors());
 
@@ -226,6 +229,7 @@ namespace ICon.Symmetry.Analysis
         /// Updates the boundaries by one step. Returns true if the boundary break condition (Search radius is smaller than current boundaries) is reached
         /// </summary>
         /// <param name="offset"></param>
+        /// <param name="constraint"></param>
         /// <returns></returns>
         protected bool CheckAndUpdateBoundaryInfo(int offset, DoubleConstraint constraint)
         {
@@ -248,14 +252,13 @@ namespace ICon.Symmetry.Analysis
         {
             int CompareLengthThanValue(CellEntry<T1> lhs, CellEntry<T1> rhs)
             {
-                double lhsLength = VectorEncoder.Transformer.CartesianFromFractional(lhs.AbsoluteVector - start).GetLength();
-                double rhsLength = VectorEncoder.Transformer.CartesianFromFractional(rhs.AbsoluteVector - start).GetLength();
-                int radialCompare = VectorEncoder.Transformer.FractionalSystem.Comparer.Compare(lhsLength, rhsLength);
-                if (radialCompare == 0)
-                {
-                    return entryComparer.Compare(lhs.Entry, rhs.Entry);
-                }
-                return radialCompare;
+                var lhsLength = VectorEncoder.Transformer.ToCartesian(lhs.AbsoluteVector - start).GetLength();
+                var rhsLength = VectorEncoder.Transformer.ToCartesian(rhs.AbsoluteVector - start).GetLength();
+                var radialCompare = VectorEncoder.Transformer.FractionalSystem.Comparer.Compare(lhsLength, rhsLength);
+                
+                return radialCompare == 0 
+                    ? entryComparer.Compare(lhs.Entry, rhs.Entry)
+                    : radialCompare;
             }
             return new CompareAdapter<CellEntry<T1>>(CompareLengthThanValue);
         }

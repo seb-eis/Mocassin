@@ -77,12 +77,12 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public bool IntermediatePositionsValid(KineticMapping mapping, IList<SetList<Fractional3D>> positionMap, double tolerance)
         {
-            if (!UnitCellProvider.VectorEncoder.TryDecode(mapping.EncodedPath, out List<Fractional3D> regularPositions))
+            if (!UnitCellProvider.VectorEncoder.TryDecode(mapping.EncodedPath.Cast<ICrystalVector4D>(), out var regularPositions))
             {
                 throw new ArgumentException("Passed mapping contains invalid 4D position information", nameof(mapping));
             }
 
-            for (int i = 0; i < regularPositions.Count - 1; i++)
+            for (var i = 0; i < regularPositions.Count - 1; i++)
             {
                 var interPosition = Fractional3D.GetMiddle(regularPositions[i + 1], regularPositions[i]).TrimToUnitCell(tolerance);
                 if (!positionMap[i].Contains(interPosition))
@@ -153,7 +153,7 @@ namespace ICon.Model.Transitions
         {
             foreach (var decoded in pathGeometry)
             {
-                if (!UnitCellProvider.VectorEncoder.TryEncodeFractional(decoded, out var encoded))
+                if (!UnitCellProvider.VectorEncoder.TryEncode(decoded, out var encoded))
                 {
                     throw new ArgumentException("Passed 3DD geometry sequence cannot be encoded with the internal vector encoded", nameof(pathGeometry));
                 }
@@ -169,7 +169,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         protected IEnumerable<CartesianMassPoint3D<T1>> GetMassPointPath<T1>(IEnumerable<CellEntry<T1>> sequence) where T1 : struct, IConvertible
         {
-            return sequence.Select(value => new CartesianMassPoint3D<T1>(value.Entry, UnitCellProvider.VectorEncoder.Transformer.CartesianFromFractional(value.AbsoluteVector)));
+            return sequence.Select(value => new CartesianMassPoint3D<T1>(value.Entry, UnitCellProvider.VectorEncoder.Transformer.ToCartesian(value.AbsoluteVector)));
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace ICon.Model.Transitions
         {
             foreach (var item in sequence)
             {
-                if (!UnitCellProvider.VectorEncoder.TryEncodeFractional(item.AbsoluteVector, out CrystalVector4D encoded))
+                if (!UnitCellProvider.VectorEncoder.TryEncode(item.AbsoluteVector, out CrystalVector4D encoded))
                 {
                     throw new ArgumentException("The provided sequnce contains fractional vectors that cannot be converted to 4D equivalents", nameof(sequence));
                 }

@@ -1,20 +1,20 @@
 ﻿using ICon.Model.ProjectServices;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using ICon.Framework.Async;
 
 namespace ICon.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Abstract base classs for model context builder implementations that expand the refernce data into the full context
+    /// Abstract base class for model context builder implementations that expand the reference data into the full context
     /// </summary>
-    public abstract class ModelContextBuilderBase<TContext> where TContext : class
+    public abstract class ModelContextBuilderBase<TContext> : IModelContextBuilder<TContext> where TContext : class
     {
-        /// <summary>
-        /// The model context instance that is currently build
-        /// </summary>
-        protected TContext ModelContext { get; set; }
+        /// <inheritdoc />
+        public Task<TContext> BuildTask { get; protected set; }
 
         /// <summary>
         /// The project service for access to the reference model data
@@ -33,32 +33,31 @@ namespace ICon.Model.Translator.ModelContext
         protected ModelContextBuilderBase(IProjectModelContextBuilder projectModelContextBuilder)
         {
             ProjectModelContextBuilder = projectModelContextBuilder ?? throw new ArgumentNullException(nameof(projectModelContextBuilder));
-            ProjectServices = projectModelContextBuilder.ProjectModelContext.ProjectServices;
+            ProjectServices = projectModelContextBuilder.ProjectServices;
         }
 
-        /// <summary>
-        /// Builds the context of specified type from the currently linked project reference data
-        /// </summary>
-        public async Task<TContext> CreateNewContext<T1>() where T1 : TContext, new()
+        /// <inheritdoc />
+        public virtual Task<TContext> BuildContext()
         {
-            ModelContext = new T1();
-            await Task.Run(PopulateContext);
-            return ModelContext;
+            return RebuildContext(GetEmptyDefaultContext());
         }
 
-        /// <summary>
-        /// Rebuilds the passed model context instead of creating a new one
-        /// </summary>
-        /// <param name="context"></param>
-        public virtual async Task RebuildContext(TContext context)
+        /// <inheritdoc />
+        public virtual Task<TContext> RebuildContext(TContext modelContext)
         {
-            ModelContext = context ?? throw new ArgumentNullException(nameof(context));
-            await Task.Run(PopulateContext);
+            BuildTask = Task.Run(() => PopulateContext(modelContext));
+            return BuildTask;
         }
 
         /// <summary>
-        /// Builds the object tree of the currently set energy model context context
+        /// Populates the passed context and returns the object on completion
         /// </summary>
-        protected abstract void PopulateContext();
+        protected abstract TContext PopulateContext(TContext modelContext);
+
+        /// <summary>
+        /// Creates a new empty context as defined in the implementing builder
+        /// </summary>
+        /// <returns></returns>
+        protected abstract TContext GetEmptyDefaultContext();
     }
 }

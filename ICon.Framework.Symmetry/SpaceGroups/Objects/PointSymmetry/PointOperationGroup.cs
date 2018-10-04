@@ -9,15 +9,11 @@ using ICon.Framework.Extensions;
 
 namespace ICon.Symmetry.SpaceGroups
 {
-    /// <summary>
-    /// Represents a point operation group for a geometric sequence of points. Collection deescribes multiple relevant sets of point symmetry operations
-    /// </summary>
+    /// <inheritdoc />
     [DataContract]
     public class PointOperationGroup :  IPointOperationGroup
     {
-        /// <summary>
-        /// The space group entry this operation collection is valid fro
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public SpaceGroupEntry SpaceGroupEntry { get; set; }
 
@@ -40,7 +36,7 @@ namespace ICon.Symmetry.SpaceGroups
         public List<SymmetryOperation> PointOperations { get; set; }
 
         /// <summary>
-        /// The filtered list of all operations that yield unique vector sequnces of the original point sequence
+        /// The filtered list of all operations that yield unique vector sequences of the original point sequence
         /// </summary>
         /// <remarks> Unique in the sense that two sequences are not identical cannot trivially matched by inverting one </remarks>
         [DataMember]
@@ -53,70 +49,56 @@ namespace ICon.Symmetry.SpaceGroups
         public List<SymmetryOperation> SelfProjectionOperations { get; set; }
 
         /// <summary>
-        /// Matrix that descibes all possible equivalent orders of the vector sequence when performing a self projection (For value permutations)
+        /// Matrix that describes all possible equivalent orders of the vector sequence when performing a self projection (For value permutations)
         /// </summary>
         [DataMember]
         public List<List<int>> UniqueSelfProjectionOrders { get; set; }
 
-        /// <summary>
-        /// Interface access to the readonly representation of the origin point
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         Fractional3D IPointOperationGroup.OriginPoint => OriginPoint.AsFractional();
 
-        /// <summary>
-        /// Enumerable interface access to the point operations
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
+        public IEnumerable<IEnumerable<Fractional3D>> GetUniquePointSequences()
+        {
+            var vectorSequence = GetPointSequence().ToList();
+            foreach (var operation in UniqueSequenceOperations)
+            {
+                yield return operation.ApplyUntrimmed(vectorSequence);
+            }
+        }
+
+        /// <inheritdoc />
         public IEnumerable<ISymmetryOperation> GetPointOperations()
         {
             return PointOperations.AsEnumerable();
         }
 
-        /// <summary>
-        /// Enumerable interface access to the point sequence
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<Fractional3D> GetPointSequence()
         {
             return PointSequence.Select(value => value.AsFractional());
         }
 
-        /// <summary>
-        /// Enumerable interface access to the unique sequence operations
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<ISymmetryOperation> GetUniqueSequenceOperations()
         {
             return UniqueSequenceOperations.AsEnumerable();
         }
 
-        /// <summary>
-        /// Enumerable interface access to the self projection operations
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<ISymmetryOperation> GetSelfProjectionOperations()
         {
             return SelfProjectionOperations.AsEnumerable();
         }
 
-        /// <summary>
-        /// Get all unqiue orders of the vector sequence when it is projected onto itself with the self projection operations
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<int[]> GetUniqueProjectionOrders()
         {
             return UniqueSelfProjectionOrders.Select(value => value.ToArray());
         }
 
-        /// <summary>
-        /// Generate all unique permutations of the point sequence found within the passed permutation provider
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="permProvider"></param>
-        /// <param name="comparer"></param>
-        /// <param name="selector"></param>
-        /// <returns> Value equality comparer and hash value selector are used for the internal hash set filetring </returns>
+        /// <inheritdoc />
         public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
         {
             if (permProvider.ResultLength != PointSequence.Count)
@@ -124,18 +106,12 @@ namespace ICon.Symmetry.SpaceGroups
                 throw new ArgumentException("Permutation provider does not match the point sequence");
             }
 
-            if (!HasPermutationMultiplicity())
-            {
-                return permProvider.AsEnumerable();
-            }
-            return new HashSet<T1[]>(permProvider, MakePermutationEqualityComparer(comparer, value => value.Sum(a => selector(a)))).AsEnumerable();
+            return !HasPermutationMultiplicity()
+                ? permProvider.AsEnumerable()
+                : new HashSet<T1[]>(permProvider, MakePermutationEqualityComparer(comparer, value => value.Sum(selector))).AsEnumerable();
         }
 
-        /// <summary>
-        /// Returns true if permuting the point squence with values can contain multiple equivalent sequences
-        /// </summary>
-        /// <remarks> This is the case if more than one unique order of the self projection exists </remarks>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool HasPermutationMultiplicity()
         {
             return UniqueSelfProjectionOrders.Count != 1;
@@ -149,27 +125,24 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         protected IEqualityComparer<T1[]> MakePermutationEqualityComparer<T1>(IEqualityComparer<T1> valueComparer, Func<T1[], int> hashFunction)
         {
-            bool compareEquality(T1[] lhs, T1[] rhs)
+            bool Equals(T1[] lhs, T1[] rhs)
             {
-                if (lhs.Length == rhs.Length)
+                if (lhs.Length != rhs.Length)
+                    return false;
+
+                foreach (var vectorOrder in UniqueSelfProjectionOrders)
                 {
-                    foreach (var vectorOrder in UniqueSelfProjectionOrders)
-                    {
-                        int index = -1;
-                        bool orderIsMatch = true;
-                        foreach (var orderIndex in vectorOrder)
-                        {
-                            orderIsMatch = orderIsMatch & valueComparer.Equals(lhs[++index], rhs[orderIndex]);
-                        }
-                        if (orderIsMatch == true)
-                        {
-                            return true;
-                        }
-                    }
+                    var index = -1;
+                    var orderIsMatch = true;
+                    foreach (var orderIndex in vectorOrder)
+                        orderIsMatch = orderIsMatch & valueComparer.Equals(lhs[++index], rhs[orderIndex]);
+
+                    if (orderIsMatch)
+                        return true;
                 }
                 return false;
             }
-            return new EqualityCompareAdapter<T1[]>(compareEquality, hashFunction);
+            return new EqualityCompareAdapter<T1[]>(Equals, hashFunction);
         }
     }
 }

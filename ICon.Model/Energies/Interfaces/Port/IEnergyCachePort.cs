@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ICon.Mathematics.Constraints;
 using ICon.Model.Basic;
+using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
@@ -16,7 +17,7 @@ namespace ICon.Model.Energies
         IPairInteractionFinder GetPairInteractionFinder();
 
         /// <summary>
-        /// Get the position group informations for all defined group interactions
+        /// Get the position group information for all defined group interactions
         /// </summary>
         /// <returns></returns>
         IReadOnlyList<IPositionGroupInfo> GetPositionGroupInfos();
@@ -27,6 +28,18 @@ namespace ICon.Model.Energies
         /// <param name="index"></param>
         /// <returns></returns>
         IPositionGroupInfo GetPositionGroupInfo(int index);
+
+        /// <summary>
+        /// Get a read only dictionary that assigns each unit cell position its set of defined pair interactions
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions();
+
+        /// <summary>
+        /// Get a read only dictionary that assigns each unit cell position its set of defined group interactions
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions();
 
         /// <summary>
         /// Get an energy setter provider that has the value constraints set to their porject settings defined values

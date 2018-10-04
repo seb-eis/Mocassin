@@ -22,7 +22,7 @@ namespace ICon.Model.Transitions
         /// <summary>
         /// The vector encoder to switch between fractional and 4D encoded coordinates
         /// </summary>
-        protected UnitCellVectorEncoder VectorEncoder { get; }
+        protected IUnitCellVectorEncoder VectorEncoder { get; }
 
         /// <summary>
         /// The list of existing unit cell positions
@@ -35,7 +35,7 @@ namespace ICon.Model.Transitions
         /// <param name="spaceGroupService"></param>
         /// <param name="vectorEncoder"></param>
         /// <param name="unitCellProvider"></param>
-        public KineticTransitionMapper(ISpaceGroupService spaceGroupService, UnitCellVectorEncoder vectorEncoder, IUnitCellProvider<IUnitCellPosition> unitCellProvider)
+        public KineticTransitionMapper(ISpaceGroupService spaceGroupService, IUnitCellVectorEncoder vectorEncoder, IUnitCellProvider<IUnitCellPosition> unitCellProvider)
         {
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
             VectorEncoder = vectorEncoder ?? throw new ArgumentNullException(nameof(vectorEncoder));
@@ -60,13 +60,16 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public IEnumerable<KineticMapping> GetMappings(IEnumerable<Fractional3D> geometry, IKineticTransition transition)
         {
-            var start = UnitCellProvider.GetEntryValueAt(geometry.First());
-            var end = UnitCellProvider.GetEntryValueAt(geometry.Last());
+            if (!(geometry is IList<Fractional3D> geometryList))
+                geometryList = geometry.ToList();
+
+            var start = UnitCellProvider.GetEntryValueAt(geometryList.First());
+            var end = UnitCellProvider.GetEntryValueAt(geometryList.Last());
 
 
-            foreach (var fractionalSequence in SpaceGroupService.GetAllWyckoffOriginSequences(geometry))
+            foreach (var fractionalSequence in SpaceGroupService.GetAllWyckoffOriginSequences(geometryList))
             {
-                if (VectorEncoder.TryEncodeFractional(fractionalSequence, out List<CrystalVector4D> encodedSequence))
+                if (VectorEncoder.TryEncode(fractionalSequence.Cast<IFractional3D>(), out var encodedSequence))
                 {
                     yield return new KineticMapping(transition, start, end, encodedSequence.ToArray(), fractionalSequence);
                 }

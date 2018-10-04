@@ -9,9 +9,7 @@ using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <summary>
-    /// Represents an asymmetric pair interaction used to describe pair interactions within unstable position environments
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Energies.IAsymmetricPairInteraction"/>
     [DataContract]
     public class AsymmetricPairInteraction : PairInteraction, IAsymmetricPairInteraction
     {
@@ -21,84 +19,60 @@ namespace ICon.Model.Energies
         [DataMember]
         public Dictionary<AsymmetricParticlePair, double> EnergyDictionary { get; set; }
 
-        /// <summary>
-        /// Default construction with null energy dictionary
-        /// </summary>
+        /// <inheritdoc />
         public AsymmetricPairInteraction()
         {
         }
 
-        /// <summary>
-        /// Creates new polar pair interaction from pair candidate and energy dictionary
-        /// </summary>
-        /// <param name="candidate"></param>
-        /// <param name="energyDictionary"></param>
+        /// <inheritdoc />
         public AsymmetricPairInteraction(in PairCandidate candidate, Dictionary<AsymmetricParticlePair, double> energyDictionary) :  base(candidate)
         {
             EnergyDictionary = energyDictionary ?? throw new ArgumentNullException(nameof(energyDictionary));
         }
 
-        /// <summary>
-        /// Get a read only access to the enrgy dictionary
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IReadOnlyDictionary<AsymmetricParticlePair, double> GetEnergyDictionary()
         {
             return EnergyDictionary ?? new Dictionary<AsymmetricParticlePair, double>();
         }
 
 
-        /// <summary>
-        /// Get the model object name
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string GetModelObjectName()
         {
             return "'Asymmetric Pair Interaction'";
         }
 
-        /// <summary>
-        /// Populates the object by a passed interface and retruns the object as a generic moel object (Returns null if failed)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IAsymmetricPairInteraction>(obj) is var interaction)
-            {
-                base.PopulateFrom(obj);
+            if (!(CastWithDepricatedCheck<IAsymmetricPairInteraction>(obj) is IAsymmetricPairInteraction interaction))
+                return null;
 
-                EnergyDictionary = new Dictionary<AsymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
-                foreach (var item in interaction.GetEnergyDictionary())
-                {
-                    EnergyDictionary.Add(item.Key, item.Value);
-                }
+            base.PopulateFrom(obj);
+
+            EnergyDictionary = new Dictionary<AsymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
+            foreach (var item in interaction.GetEnergyDictionary())
+            {
+                EnergyDictionary.Add(item.Key, item.Value);
             }
             return null;
         }
 
-        /// <summary>
-        /// Tries to set the passed energy entry in the enrgy dictionary. Returns false if the value cannot be set
-        /// </summary>
-        /// <param name="energyEntry"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override bool TrySetEnergyEntry(in PairEnergyEntry energyEntry)
         {
-            if (energyEntry.ParticlePair is AsymmetricParticlePair particlePair)
-            {
-                if (EnergyDictionary.ContainsKey(particlePair))
-                {
-                    EnergyDictionary[particlePair] = energyEntry.Energy;
-                    return true;
-                }
-            }
-            return false;
+            if (!(energyEntry.ParticlePair is AsymmetricParticlePair particlePair))
+                return false;
+
+            if (!EnergyDictionary.ContainsKey(particlePair))
+                return false;
+
+            EnergyDictionary[particlePair] = energyEntry.Energy;
+            return true;
         }
 
-        /// <summary>
-        /// Get an enumerable sequence that contains all energy entries of the pair interaction
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override IEnumerable<PairEnergyEntry> GetEnergyEntries()
         {
             foreach (var item in EnergyDictionary)

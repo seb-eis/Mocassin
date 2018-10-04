@@ -6,7 +6,7 @@ using ICon.Model.Structures;
 namespace ICon.Model.Energies
 {
     /// <summary>
-    /// Represents an unspecfified pair interaction that describes the interaction between two positions depending on the occupation
+    /// Represents an unspecified pair interaction that describes the interaction between two positions depending on the occupation
     /// </summary>
     public interface IPairInteraction : IModelObject
     {

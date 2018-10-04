@@ -11,19 +11,13 @@ using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Builder for the energy model context. Expands the reference energy data to a full data context for simulation generation/evaluation
-    /// </summary>
-    public class EnergyModelContextBuilder : ModelContextBuilderBase<IEnergyModelContext>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IEnergyModelContextBuilder"/>
+    public class EnergyModelContextBuilder : ModelContextBuilderBase<IEnergyModelContext>, IEnergyModelContextBuilder
     {
-        /// <summary>
-        /// The builder instance for group energy models
-        /// </summary>
+        /// <inheritdoc />
         public IGroupEnergyModelBuilder GroupEnergyModelBuilder { get; set; }
 
-        /// <summary>
-        /// The builder instance for pair energy models
-        /// </summary>
+        /// <inheritdoc />
         public IPairEnergyModelBuilder PairEnergyModelBuilder { get; set; }
 
         /// <inheritdoc />
@@ -35,7 +29,7 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        protected override void PopulateContext()
+        protected override IEnergyModelContext PopulateContext(IEnergyModelContext modelContext)
         {
             var manager = ProjectServices.GetManager<IEnergyManager>();
             var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
@@ -46,8 +40,15 @@ namespace ICon.Model.Translator.ModelContext
             var pairTask = Task.Run(() => PairEnergyModelBuilder.BuildModels(allPairs));
             var groupTask = Task.Run(() => GroupEnergyModelBuilder.BuildModels(groupInteractions));
 
-            ModelContext.PairEnergyModels = pairTask.Result;
-            ModelContext.GroupEnergyModels = groupTask.Result;
+            modelContext.PairEnergyModels = pairTask.Result;
+            modelContext.GroupEnergyModels = groupTask.Result;
+            return modelContext;
+        }
+
+        /// <inheritdoc />
+        protected override IEnergyModelContext GetEmptyDefaultContext()
+        {
+            return new EnergyModelContext();
         }
     }
 }

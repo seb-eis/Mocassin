@@ -17,31 +17,21 @@ namespace ICon.Model.Energies.Validators
     /// </summary>
     public class GroupInteractionValidator : DataValidator<IGroupInteraction, BasicEnergySettings, IEnergyDataPort>
     {
-        /// <summary>
-        /// Creates new validator with project services, settings object and data reader
-        /// </summary>
-        /// <param name="projectServices"></param>
-        /// <param name="settings"></param>
-        /// <param name="dataReader"></param>
+        /// <inheritdoc />
         public GroupInteractionValidator(IProjectServices projectServices, BasicEnergySettings settings, IDataReader<IEnergyDataPort> dataReader)
             : base(projectServices, settings, dataReader)
         {
 
         }
 
-        /// <summary>
-        /// Validates a group info object in terms of compatibility with existing data and basic constraints
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override IValidationReport Validate(IGroupInteraction group)
         {
             var report = new ValidationReport();
 
             if (!AddDefinedPositionValidation(group, report))
-            {
                 return report;
-            }
+
             AddContentRestrictionValidation(group, report);
             AddGeometricDuplicateValidation(group, report);
             AddEnvironmentConsistencyValidation(group, report);
@@ -80,14 +70,10 @@ namespace ICon.Model.Energies.Validators
         protected void AddContentRestrictionValidation(IGroupInteraction group, ValidationReport report)
         {
             if (Settings.AtomsPerGroup.ParseValue(group.GroupSize, out var warnings) != 0)
-            {
                 report.AddWarnings(warnings);
-            }
 
             if (Settings.PermutationsPerGroup.ParseValue(GetGroupPermutationCount(group), out warnings) != 0)
-            {
                 report.AddWarnings(warnings);
-            }
         }
 
         /// <summary>
@@ -105,14 +91,13 @@ namespace ICon.Model.Energies.Validators
             foreach (var (otherGroup, geometry) in currentData)
             {
                 Array.Sort(geometry, comparer);
-                if (geometry.LexicographicCompare(group.GetBaseGeometry(), comparer) == 0)
-                {
-                    var detail0 = $"Group interaction has identical geometry to interaction at index ({otherGroup.Index})";
-                    var detail1 = $"Double definition of the equivalent group is not supported as it does not provided any usefull modelling extension";
-                    report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail0, detail1));
+                if (geometry.LexicographicCompare(@group.GetBaseGeometry(), comparer) != 0)
+                    continue;
 
-                    return;
-                }
+                var detail0 = $"Group interaction has identical geometry to interaction at index ({otherGroup.Index})";
+                var detail1 = $"Double definition of the equivalent group is not supported as it does not provided any useful modeling extension";
+                report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail0, detail1));
+                return;
             }
         }
 
@@ -123,14 +108,15 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddEnvironmentConsistencyValidation(IGroupInteraction group, ValidationReport report)
         {
-            double groupRange = GetMaxGroupRange(group);
-            double envRange = GetGroupEnvironmentRange(group);
+            var groupRange = GetMaxGroupRange(group);
+            var envRange = GetGroupEnvironmentRange(group);
 
             if (ProjectServices.GeometryNumerics.RangeComparer.Compare(groupRange, envRange) > 0)
             {
                 var detail0 = $"The group max vector range is ({groupRange}) while the affiliated environment interaction range is ({envRange})";
-                report.AddWarning(ModelMessages.CreateWarningLimitReachedWarning(this, detail0));
+                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
             }
+
             if (GroupContainsNonEnvironmentPositions(group))
             {
                 var detail0 = $"The group contains positions that form ignored pair interactions with the center position";
@@ -160,14 +146,11 @@ namespace ICon.Model.Energies.Validators
         {
             var transformer = ProjectServices.CrystalSystemService.VectorTransformer;
             var start = group.CenterUnitCellPosition.AsPosition().Vector;
-            double maxDistance = 0.0;
 
-            foreach (var distance in group.GetBaseGeometry().Select(vector => transformer.CartesianFromFractional(vector - start).GetLength()))
-            {
-                maxDistance = (maxDistance < distance) ? distance : maxDistance;
-            }
-
-            return maxDistance;
+            return group.GetBaseGeometry()
+                .Select(vector => transformer.ToCartesian(vector - start).GetLength())
+                .Concat(new[] {0.0})
+                .Max();
         }
 
         /// <summary>
@@ -178,15 +161,15 @@ namespace ICon.Model.Energies.Validators
         protected double GetGroupEnvironmentRange(IGroupInteraction group)
         {
             var envDef = GetGroupAffiliatedEnvironment(group);
-            double envRange = 0.0;
+            double envRange;
 
             switch (envDef)
             {
-                case IStableEnvironmentInfo stable when stable != null:
+                case IStableEnvironmentInfo stable:
                     envRange = stable.MaxInteractionRange;
                     break;
 
-                case IUnstableEnvironment unstable when unstable != null:
+                case IUnstableEnvironment unstable:
                     envRange = unstable.MaxInteractionRange;
                     break;
 
@@ -205,15 +188,25 @@ namespace ICon.Model.Energies.Validators
         {
             var ucProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
             var analyzer = new GeometryGroupAnalyzer(ucProvider, ProjectServices.SpaceGroupService);
+
             switch(group.CenterUnitCellPosition.Status)
             {
                 case PositionStatus.Stable:
-                    var ignoredPairs = DataReader.Access.GetStableEnvironmentInfo().GetIgnoredPairs().ToArray();
+                    var ignoredPairs = DataReader.Access.GetStableEnvironmentInfo()
+                        .GetIgnoredPairs()
+                        .ToList();
+
                     return analyzer.GetAllGroupPairs(group).Any(value => ignoredPairs.Contains(value));
 
                 case PositionStatus.Unstable:
-                    var ignoredPos = DataReader.Access.GetUnstableEnvironment(group.CenterUnitCellPosition.Index).GetIgnoredPositions().ToArray();
+                    var ignoredPos = DataReader.Access.GetUnstableEnvironment(group.CenterUnitCellPosition.Index)
+                        .GetIgnoredPositions()
+                        .ToList();
+
                     return analyzer.GetGroupUnitCellPositions(group).Any(value => ignoredPos.Contains(value));
+
+                case PositionStatus.Undefined:
+                    throw new InvalidOperationException("Undefined position reached environment check");
 
                 default:
                     throw new InvalidOperationException("Undefined position reached environment check");
@@ -233,10 +226,12 @@ namespace ICon.Model.Energies.Validators
                     return DataReader.Access.GetStableEnvironmentInfo();
 
                 case PositionStatus.Unstable:
-                    return DataReader.Access.GetUnstableEnvironments()
-                        .Where(value => value.UnitCellPosition == group.CenterUnitCellPosition)
-                        .SingleOrDefault();
+                    return DataReader.Access
+                        .GetUnstableEnvironments()
+                        .SingleOrDefault(value => value.UnitCellPosition == group.CenterUnitCellPosition);
 
+                case PositionStatus.Undefined:
+                    return null;
                 default:
                     return null;
             }

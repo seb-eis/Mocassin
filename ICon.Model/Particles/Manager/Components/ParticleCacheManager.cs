@@ -32,14 +32,14 @@ namespace ICon.Model.Particles
         /// <returns></returns>
         public IEnumerable<PairCode> GetPossiblePairCodes()
         {
-            return AccessCacheableDataEntry(CalculatePossiblePairCodes).AsEnumerable();
+            return GetResultFromCache(CalculatePossiblePairCodes).AsEnumerable();
         }
 
         /// <summary>
         /// Creates a unqie sorted list of possible pair codes
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected SetList<PairCode> CalculatePossiblePairCodes()
         {
             var particles = ProjectServices.GetManager<IParticleManager>().QueryPort

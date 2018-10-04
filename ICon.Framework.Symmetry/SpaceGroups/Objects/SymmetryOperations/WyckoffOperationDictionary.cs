@@ -8,19 +8,13 @@ using System.Collections;
 
 namespace ICon.Symmetry.SpaceGroups
 {
-    /// <summary>
-    /// A wyckoff operation overlay that describes which operations belong to which symmetry equivalent position
-    /// </summary>
+    /// <inheritdoc />
     public class WyckoffOperationDictionary : IWyckoffOperationDictionary
     {
-        /// <summary>
-        /// The space group the operation dictionary belongs to
-        /// </summary>
+        /// <inheritdoc />
         public ISpaceGroup SpaceGroup { get; set; }
 
-        /// <summary>
-        /// The source position that was used to create the overlay
-        /// </summary>
+        /// <inheritdoc />
         public Fractional3D SourcePosition { get; set; }
 
         /// <summary>
@@ -28,32 +22,24 @@ namespace ICon.Symmetry.SpaceGroups
         /// </summary>
         public SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> OperationDictionary { get; set; }
 
-        /// <summary>
-        /// Get all dictionary keys
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<Fractional3D> Keys => OperationDictionary.Keys;
 
-        /// <summary>
-        /// Get all dictionary operation sequences
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<IEnumerable<ISymmetryOperation>> Values => OperationDictionary.Values;
 
-        /// <summary>
-        /// Get the number of dictionary entries
-        /// </summary>
+        /// <inheritdoc />
         public int Count => OperationDictionary.Count;
 
-        /// <summary>
-        /// Get the operations for the specfifed position
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public IEnumerable<ISymmetryOperation> this[Fractional3D key] => OperationDictionary[key].AsEnumerable();
 
         /// <summary>
         /// Creates new wyckoff operation dictionary with the passed source position and operation dictionary
         /// </summary>
         /// <param name="sourcePosition"></param>
+        /// <param name="spaceGroup"></param>
         /// <param name="operationDictionary"></param>
         public WyckoffOperationDictionary(Fractional3D sourcePosition, ISpaceGroup spaceGroup, SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> operationDictionary)
         {
@@ -62,22 +48,13 @@ namespace ICon.Symmetry.SpaceGroups
             OperationDictionary = operationDictionary ?? throw new ArgumentNullException(nameof(operationDictionary));
         }
 
-        /// <summary>
-        /// Checks if the key exists
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool ContainsKey(Fractional3D key)
         {
             return OperationDictionary.ContainsKey(key);
         }
 
-        /// <summary>
-        /// Tries to get the value with the specfified key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool TryGetValue(Fractional3D key, out IEnumerable<ISymmetryOperation> value)
         {
             if (OperationDictionary.TryGetValue(key, out var results))
@@ -89,10 +66,7 @@ namespace ICon.Symmetry.SpaceGroups
             return false;
         }
 
-        /// <summary>
-        /// Get the generic enumerator for the dictionary
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerator<KeyValuePair<Fractional3D, IEnumerable<ISymmetryOperation>>> GetEnumerator()
         {
             foreach (var item in OperationDictionary)
@@ -101,10 +75,7 @@ namespace ICon.Symmetry.SpaceGroups
             }
         }
 
-        /// <summary>
-        /// Returns the enumerator for the dictionary
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

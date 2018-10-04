@@ -1,0 +1,119 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ICon.Mathematics.Coordinates;
+using ICon.Mathematics.ValueTypes;
+using ICon.Model.ProjectServices;
+using ICon.Model.Structures;
+using ICon.Symmetry.SpaceGroups;
+
+namespace ICon.Model.Translator.ModelContext
+{
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPositionModelBuilder"/>
+    public class PositionModelBuilder : ModelBuilderBase, IPositionModelBuilder
+    {
+        /// <summary>
+        /// The vector encoder for vector transformation
+        /// </summary>
+        protected IUnitCellVectorEncoder VectorEncoder { get; set; }
+
+        /// <inheritdoc />
+        public PositionModelBuilder(IProjectServices projectServices)
+            : base(projectServices)
+        {
+        }
+
+        /// <inheritdoc />
+        public IList<IPositionModel> BuildModels(IList<IEnvironmentModel> environmentModels)
+        {
+            LoadBuildDataFromProject();
+            return environmentModels
+                .SelectMany(CreatePositionModels)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Loads all required reference build data from the current project
+        /// </summary>
+        protected void LoadBuildDataFromProject()
+        {
+            var manager = ProjectServices.GetManager<IStructureManager>();
+            VectorEncoder = manager.QueryPort.Query(port => port.GetVectorEncoder());
+        }
+
+        /// <summary>
+        /// Creates the set of position models that results from the passed environment model and the space group of the project
+        /// </summary>
+        /// <param name="environmentModel"></param>
+        /// <returns></returns>
+        protected IEnumerable<IPositionModel> CreatePositionModels(IEnvironmentModel environmentModel)
+        {
+            var sourceVector = environmentModel.UnitCellPosition.Vector;
+            var targetInfos = environmentModel.PairInteractionModels
+                .Select(a => a.TargetPositionInfo)
+                .ToList();
+
+            var targetVectors = ProjectServices.SpaceGroupService.GetAllWyckoffPositions(environmentModel.UnitCellPosition.Vector);
+            var positionModels = targetVectors
+                .Select(target => ProjectServices.SpaceGroupService.CreateOperationToTarget(sourceVector, target))
+                .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
+
+            return positionModels;
+        }
+
+        /// <summary>
+        /// Creates a position model from the passed environment model, pair interaction target info
+        /// and transform symmetry operation
+        /// </summary>
+        /// <param name="environmentModel"></param>
+        /// <param name="operation"></param>
+        /// <param name="targetInfos"></param>
+        /// <returns></returns>
+        protected IPositionModel CreatePositionModel(IEnvironmentModel environmentModel, ISymmetryOperation operation, IList<ITargetPositionInfo> targetInfos)
+        {
+            var positionModel = new PositionModel
+            {
+                UnitCellPosition = environmentModel.UnitCellPosition,
+                EnvironmentModel = environmentModel,
+                TransformOperation = operation,
+                CenterVector = operation.ApplyUntrimmed(environmentModel.UnitCellPosition.Vector)
+            };
+
+            positionModel.TargetPositionInfos = TransformTargetInfos(targetInfos, operation, positionModel.CenterVector);
+
+            return positionModel;
+        }
+
+        /// <summary>
+        /// Transforms the passed list of target infos to a new center using the provided symmetry operation
+        /// </summary>
+        /// <param name="targetInfos"></param>
+        /// <param name="operation"></param>
+        /// <param name="centerVector"></param>
+        /// <returns></returns>
+        protected IList<ITargetPositionInfo> TransformTargetInfos(IList<ITargetPositionInfo> targetInfos, ISymmetryOperation operation, in Fractional3D centerVector)
+        {
+            var result = new List<ITargetPositionInfo>(targetInfos.Count);
+            foreach (var positionInfo in targetInfos)
+            {
+                var targetInfo = new TargetPositionInfo
+                {
+                    UnitCellPosition = positionInfo.UnitCellPosition,
+                    Distance = positionInfo.Distance,
+                    AbsoluteFractional3D = operation.ApplyUntrimmed(positionInfo.AbsoluteFractional3D)
+                };
+
+                targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - centerVector;
+                targetInfo.AbsoluteCartesian3D = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional3D);
+
+                if (!VectorEncoder.TryEncodeAsRelative(centerVector, targetInfo.RelativeFractional3D, out var relative4D))
+                    throw new InvalidOperationException("Failed to encode target info into 4D relative vector");
+                
+                targetInfo.RelativeVector4D = relative4D;
+                result.Add(targetInfo);
+            }
+
+            return result;
+        }
+    }
+}

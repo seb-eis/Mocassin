@@ -31,7 +31,7 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// Get the vector encoded that contains the basic transformation and cell information
         /// </summary>
-        public UnitCellVectorEncoder VectorEncoder { get; protected set; }
+        public IUnitCellVectorEncoder VectorEncoder { get; protected set; }
 
         /// <summary>
         /// Get the entry count of the cell
@@ -55,7 +55,7 @@ namespace ICon.Symmetry.Analysis
         /// </summary>
         /// <param name="entries"></param>
         /// <param name="vectorEncoder"></param>
-        public UnitCellWrapper(IList<T1> entries, UnitCellVectorEncoder vectorEncoder)
+        public UnitCellWrapper(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder)
         {
             VectorEncoder = vectorEncoder ?? throw new ArgumentNullException(nameof(vectorEncoder));
             if (entries.Count != vectorEncoder.PositionCount)
@@ -72,7 +72,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="entries"></param>
         /// <param name="vectorEncoder"></param>
         /// <param name="offset"></param>
-        public UnitCellWrapper(IList<T1> entries, UnitCellVectorEncoder vectorEncoder, in Coordinates<int, int, int> offset) : this(entries, vectorEncoder)
+        public UnitCellWrapper(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder, in Coordinates<int, int, int> offset) : this(entries, vectorEncoder)
         {
             Offset = offset;
         }
@@ -171,7 +171,7 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         public T1 GetEntryValueAt(in Fractional3D vector)
         {
-            if (!VectorEncoder.TryEncodeFractional(vector, out var encoded))
+            if (!VectorEncoder.TryEncode(vector, out var encoded))
             {
                 return default;
             }

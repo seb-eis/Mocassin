@@ -28,14 +28,14 @@ namespace ICon.Model.Lattices
 
         public SupercellWrapper<IParticle> GetLattice()
         {
-            return AccessCacheableDataEntry(CreateLattice);
+            return GetResultFromCache(CreateLattice);
         }
 
         /// <summary>
         /// Generate Supercell
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         public SupercellWrapper<IParticle> CreateLattice()
         {
             var latticeManager = ProjectServices.GetManager<ILatticeManager>();

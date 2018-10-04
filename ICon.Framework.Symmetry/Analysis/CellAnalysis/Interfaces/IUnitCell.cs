@@ -19,7 +19,7 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// Get the unit cell vector encoder of the unit cell
         /// </summary>
-        UnitCellVectorEncoder VectorEncoder { get; }
+        IUnitCellVectorEncoder VectorEncoder { get; }
 
         /// <summary>
         /// Access the unit cell at the specififed position index

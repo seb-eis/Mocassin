@@ -28,7 +28,7 @@ namespace ICon.Model.Simulations
         /// <returns></returns>
         public IList<IList<IParticleSet>> GetKineticMobileParticleSets()
         {
-            return AccessCacheableDataEntry(CreateKineticMobileParticleSets);
+            return GetResultFromCache(CreateKineticMobileParticleSets);
         }
 
         /// <summary>
@@ -37,16 +37,16 @@ namespace ICon.Model.Simulations
         /// <returns></returns>
         public IList<IList<IParticleSet>> GetMetropolisMobileParticleSets()
         {
-            return AccessCacheableDataEntry(CreateMetropolisMobileParticleSets);
+            return GetResultFromCache(CreateMetropolisMobileParticleSets);
         }
 
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IList<IList<IParticleSet>> CreateKineticMobileParticleSets()
         {
             return null;
         }
 
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IList<IList<IParticleSet>> CreateMetropolisMobileParticleSets()
         {
             return null;

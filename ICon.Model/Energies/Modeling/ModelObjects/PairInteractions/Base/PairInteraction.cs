@@ -9,21 +9,15 @@ using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <summary>
-    /// Abstract base class for pair interaction model object implementations that describe a reference interaction that involves two positions
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Energies.IPairInteraction"/>
     [DataContract]
     public abstract class PairInteraction : ModelObject, IPairInteraction
     {
-        /// <summary>
-        /// The first unit cell position (The position vector is correct)
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public IUnitCellPosition Position0 { get; set; }
 
-        /// <summary>
-        /// The second unit cell position (The position vector is not correct)
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public IUnitCellPosition Position1 { get; set; }
 
@@ -33,9 +27,7 @@ namespace ICon.Model.Energies
         [DataMember]
         public DataVector3D SecondPositionVector { get; set; }
 
-        /// <summary>
-        /// The distance between the interacting positions in internal units
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public double Distance { get; set; }
 
@@ -58,31 +50,23 @@ namespace ICon.Model.Energies
             Distance = candidate.Distance;
         }
 
-        /// <summary>
-        /// Get the actual vector describing where the second unit cell position is located
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public Fractional3D GetSecondPositionVector()
         {
             return SecondPositionVector.AsFractional();
         }
 
-        /// <summary>
-        /// Populates the base class properties froma model object interafce and retruns this object (Returns null if population failed)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IPairInteraction>(obj) is var interaction)
-            {
-                Position0 = interaction.Position0;
-                Position1 = interaction.Position1;
-                SecondPositionVector = new DataVector3D(interaction.GetSecondPositionVector());
-                Distance = interaction.Distance;
-                return this;
-            }
-            return null;
+            if (!(CastWithDepricatedCheck<IPairInteraction>(obj) is IPairInteraction interaction))
+                return null;
+
+            Position0 = interaction.Position0;
+            Position1 = interaction.Position1;
+            SecondPositionVector = new DataVector3D(interaction.GetSecondPositionVector());
+            Distance = interaction.Distance;
+            return this;
         }
 
         /// <summary>
@@ -92,10 +76,7 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         public abstract bool TrySetEnergyEntry(in PairEnergyEntry energyEntry);
 
-        /// <summary>
-        /// Get an enumerable sequence that contains all energy entries of the pair interaction
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract IEnumerable<PairEnergyEntry> GetEnergyEntries();
     }
 }

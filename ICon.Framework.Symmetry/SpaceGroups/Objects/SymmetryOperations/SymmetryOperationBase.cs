@@ -25,13 +25,28 @@ namespace ICon.Symmetry.SpaceGroups
         public string Literal { get; set; }
 
         /// <summary>
-        /// Applies the symetry operation to an unspecified coordinate point and creates new coordinate information
+        /// Applies the symmetry operation to an unspecified coordinate point and creates new coordinate information
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
         public Fractional3D ApplyWithTrim(double orgA, double orgB, double orgC)
         {
-            return ApplyUntrimmed(orgA, orgB, orgC).TrimToUnitCell(1.0e-10);
+            return ApplyUntrimmed(orgA, orgB, orgC).TrimToUnitCell(TrimTolerance);
+        }
+
+        /// <summary>
+        /// Applies the symmetry operation to the passed vector, trims it into the unit cell and returns the applied shift
+        /// to create the trim
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="trimVector"></param>
+        /// <returns></returns>
+        public Fractional3D ApplyWithTrim(in Fractional3D vector, out Fractional3D trimVector)
+        {
+            var untrimmed = ApplyUntrimmed(vector);
+            var trimmed = untrimmed.TrimToUnitCell(TrimTolerance);
+            trimVector = trimmed - untrimmed;
+            return trimmed;
         }
 
         /// <summary>

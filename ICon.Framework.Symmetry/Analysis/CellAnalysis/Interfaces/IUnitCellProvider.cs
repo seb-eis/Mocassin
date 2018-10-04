@@ -20,7 +20,7 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// Access the geometric vector encoder that supplies the basic cell position info and conversions between the coordinate systems
         /// </summary>
-        UnitCellVectorEncoder VectorEncoder { get; }
+        IUnitCellVectorEncoder VectorEncoder { get; }
 
         /// <summary>
         /// Get the cell at arbitrary (a,b,c) position

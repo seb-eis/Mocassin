@@ -13,19 +13,23 @@ namespace ICon.Model.Translator.ModelContext
         public IProjectServices ProjectServices { get; set; }
 
         /// <inheritdoc />
-        public IProjectModelContext ProjectModelContext { get; set; }
+        public Task<IProjectModelContext> ProjectModelContextBuildTask { get; set; }
 
         /// <inheritdoc />
-        public Task<IEnergyModelContext> EnergyModelContext { get; set; }
+        public IProjectModelContextLinker ProjectModelContextLinker { get; set; }
 
         /// <inheritdoc />
-        public Task<IStructureModelContext> StructureModelContext { get; set; }
+        public IEnergyModelContextBuilder EnergyModelContextBuilder { get; set; }
 
         /// <inheritdoc />
-        public Task<ITransitionModelContext> TransitionModelContext { get; set; }
+        public IStructureModelContextBuilder StructureModelContextBuilder { get; set; }
 
         /// <inheritdoc />
-        public Task<ISimulationModelContext> SimulationModelContext { get; set; }
+        public ITransitionModelContextBuilder TransitionModelContextBuilder { get; set; }
+
+        /// <inheritdoc />
+        public ISimulationModelContextBuilder SimulationModelContextBuilder { get; set; }
+
 
         /// <summary>
         /// Build a new context builder that uses the provided project access as a reference data source
@@ -34,7 +38,6 @@ namespace ICon.Model.Translator.ModelContext
         public ProjectModelContextBuilder(IProjectServices projectServices)
         {
             ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
-            ProjectModelContext = new ProjectModelContext() { ProjectServices = projectServices };
         }
 
         /// <summary>
@@ -42,35 +45,48 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <returns></returns>
-        public async Task<IProjectModelContext> CreateNewContextAsync<T1>() where T1 : IProjectModelContext
+        public async Task<IProjectModelContext> BuildNewContext<T1>() where T1 : IProjectModelContext
         {
-            ProjectModelContext = new ProjectModelContext()
+            var projectModelContext = new ProjectModelContext()
             {
                 ProjectServices = ProjectServices
             };
 
-            await BuildContextComponents();
-            await LinkContextComponents();
+            StartComponentBuildProcess();
+            await ProjectModelContextLinker.LinkContextComponents(this);
 
-            return ProjectModelContext;
+            projectModelContext.EnergyModelContext = await EnergyModelContextBuilder.BuildTask;
+            projectModelContext.SimulationModelContext = await SimulationModelContextBuilder.BuildTask;
+            projectModelContext.TransitionModelContext = await TransitionModelContextBuilder.BuildTask;
+            projectModelContext.StructureModelContext = await StructureModelContextBuilder.BuildTask;
+
+            return projectModelContext;
         }
 
         /// <summary>
         /// Creates all context components independently and awaits their completion
         /// </summary>
         /// <returns></returns>
-        protected Task BuildContextComponents()
+        protected void StartComponentBuildProcess()
         {
-            EnergyModelContext = new EnergyModelContextBuilder(this).CreateNewContext<EnergyModelContext>();
-            StructureModelContext = new StructureModelContextBuilder(this).CreateNewContext<StructureModelContext>();
-            TransitionModelContext = new TransitionModelContextBuilder(this).CreateNewContext<TransitionModelContext>();
-            SimulationModelContext = new SimulationModelContextBuilder(this).CreateNewContext<SimulationModelContext>();
-            return Task.WhenAll(EnergyModelContext, StructureModelContext, TransitionModelContext, SimulationModelContext);
+            UseDefaultsForNullComponents();
+
+            EnergyModelContextBuilder.BuildContext();
+            StructureModelContextBuilder.BuildContext();
+            TransitionModelContextBuilder.BuildContext();
+            SimulationModelContextBuilder.BuildContext();
         }
 
-        protected async Task LinkContextComponents()
+        /// <summary>
+        /// Set all builder components that are null to a default build system
+        /// </summary>
+        protected void UseDefaultsForNullComponents()
         {
-
+            StructureModelContextBuilder = StructureModelContextBuilder ?? new StructureModelContextBuilder(this);
+            EnergyModelContextBuilder = EnergyModelContextBuilder ?? new EnergyModelContextBuilder(this);
+            TransitionModelContextBuilder = TransitionModelContextBuilder ?? new TransitionModelContextBuilder(this);
+            SimulationModelContextBuilder = SimulationModelContextBuilder ?? new SimulationModelContextBuilder(this);
+            ProjectModelContextLinker = ProjectModelContextLinker ?? new ProjectModelContextLinker();
         }
     }
 }

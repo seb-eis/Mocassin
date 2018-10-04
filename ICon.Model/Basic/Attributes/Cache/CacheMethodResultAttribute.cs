@@ -5,29 +5,29 @@ using System.Text;
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Attribute that marks a method as cacheable and defines the wrapper used for data chaning
+    /// Attribute to instruct a cache manager to ad a method to its caching system
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class CacheableMethodAttribute : Attribute
+    public class CacheMethodResultAttribute : Attribute
     {
         /// <summary>
         /// The type of the cached object wrapper
         /// </summary>
-        public Type GenericDataWrapperType { get; private set; }
+        public Type GenericDataWrapperType { get; }
 
         /// <summary>
         /// Creates the default version that uses the "AutoCachedData" wrapper for the data object
         /// </summary>
-        public CacheableMethodAttribute()
+        public CacheMethodResultAttribute()
         {
             GenericDataWrapperType = typeof(AutoCachedData<>);
         }
 
         /// <summary>
-        /// Creates new cacheable method attribute where the generic type of the caching wrapper is defined
+        /// Creates new attribute where the generic type of the caching wrapper is defined
         /// </summary>
         /// <param name="genericDataWrapperType"></param>
-        public CacheableMethodAttribute(Type genericDataWrapperType)
+        public CacheMethodResultAttribute(Type genericDataWrapperType)
         {
             if (genericDataWrapperType == null)
             {

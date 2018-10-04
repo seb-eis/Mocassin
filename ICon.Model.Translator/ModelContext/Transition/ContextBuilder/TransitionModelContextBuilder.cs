@@ -15,24 +15,16 @@ using ICon.Mathematics.Comparers;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Transition model context builder. Extends the reference transition model information into a full data context
-    /// </summary>
-    public class TransitionModelContextBuilder : ModelContextBuilderBase<ITransitionModelContext>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.ITransitionModelContextBuilder"/>
+    public class TransitionModelContextBuilder : ModelContextBuilderBase<ITransitionModelContext>, ITransitionModelContextBuilder
     {
-        /// <summary>
-        /// The model builder for the metropolis transition model collection
-        /// </summary>
+        /// <inheritdoc />
         public IMetropolisTransitionModelBuilder MetropolisTransitionModelBuilder { get; set; }
 
-        /// <summary>
-        /// The model builder for the kinetic transition model collection
-        /// </summary>
+        /// <inheritdoc />
         public IKineticTransitionModelBuilder KineticTransitionModelBuilder { get; set; }
 
-        /// <summary>
-        /// The model builder for the position transition model collection
-        /// </summary>
+        /// <inheritdoc />
         public  IPositionTransitionModelBuilder PositionTransitionModelBuilder { get; set; }
 
         /// <inheritdoc />
@@ -44,7 +36,7 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        protected override void PopulateContext()
+        protected override ITransitionModelContext PopulateContext(ITransitionModelContext modelContext)
         {
             var manager = ProjectServices.GetManager<ITransitionManager>();
             var metropolisTransitions = manager.QueryPort.Query(port => port.GetMetropolisTransitions());
@@ -53,11 +45,18 @@ namespace ICon.Model.Translator.ModelContext
             var kineticTask = Task.Run(() => KineticTransitionModelBuilder.BuildModels(kineticTransitions));
             var metropolisTask = Task.Run(() => MetropolisTransitionModelBuilder.BuildModels(metropolisTransitions));
             var awaitTask = Task.WhenAll(kineticTask, metropolisTask);
-            var positionTask = Task.Run(() => PositionTransitionModelBuilder.BuildModels(ModelContext, awaitTask));
+            var positionTask = Task.Run(() => PositionTransitionModelBuilder.BuildModels(modelContext, awaitTask));
 
-            ModelContext.KineticTransitionModels = kineticTask.Result;
-            ModelContext.MetropolisTransitionModels = metropolisTask.Result;
-            ModelContext.PositionTransitionModels = positionTask.Result;
+            modelContext.KineticTransitionModels = kineticTask.Result;
+            modelContext.MetropolisTransitionModels = metropolisTask.Result;
+            modelContext.PositionTransitionModels = positionTask.Result;
+            return modelContext;
+        }
+
+        /// <inheritdoc />
+        protected override ITransitionModelContext GetEmptyDefaultContext()
+        {
+            return new TransitionModelContext();
         }
     }
 }

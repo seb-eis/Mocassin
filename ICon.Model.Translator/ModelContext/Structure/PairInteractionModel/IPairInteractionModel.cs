@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ICon.Model.Structures;
 
 namespace ICon.Model.Translator.ModelContext
 {
@@ -11,23 +12,28 @@ namespace ICon.Model.Translator.ModelContext
     public interface IPairInteractionModel : IModelComponent
     {
         /// <summary>
+        /// Get the number of equivalent interaction models that exist
+        /// </summary>
+        int EquivalentModelCount { get; }
+
+        /// <summary>
         /// The pair energy model that belongs to the interaction
         /// </summary>
         IPairEnergyModel PairEnergyModel { get; set; }
 
         /// <summary>
-        /// The environment model the interaction belongs to
+        /// The environment model the interaction is assigned to
         /// </summary>
         IEnvironmentModel EnvironmentModel { get; set; }
 
         /// <summary>
-        /// The relative fractional 3D of the interaction
+        /// The list of equivalent pair interaction models
         /// </summary>
-        Fractional3D RelativeVector3D { get; set; }
+        IList<IPairInteractionModel> EquivalentModels { get; set; }
 
         /// <summary>
-        /// The relative encoded 4D vector of the interaction
+        /// The target position information
         /// </summary>
-        CrystalVector4D RelativeVector4D { get; set; }
+        ITargetPositionInfo TargetPositionInfo { get; set; }
     }
 }

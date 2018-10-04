@@ -58,12 +58,11 @@ namespace ICon.Framework.QuickTest
         {
             var defaultPath = "C:/Users/hims-user/source/repos/ICon.Program/ICon.Framework.QuickTest";
             //var context = new CInteropDbContext("./mcsop.db", true);
-            var watch = Stopwatch.StartNew();
             var packages = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
             var mainContextBuilder = new ProjectModelContextBuilder(packages.ProjectServices);
-            var transitionContextBuilder = new TransitionModelContextBuilder(mainContextBuilder);
-            var result = transitionContextBuilder.CreateNewContext<TransitionModelContext>().Result;
-            //DisplayWatch(watch);
+            var watch = Stopwatch.StartNew();
+            var result = mainContextBuilder.BuildNewContext<ProjectModelContext>().Result;
+            DisplayWatch(watch);
             Console.ReadLine();
         }
 

@@ -26,9 +26,6 @@ namespace ICon.Model.Translator.ModelContext
         public ISymmetryOperation TransformOperation { get; set; }
 
         /// <inheritdoc />
-        public IList<Fractional3D> RelativeSurroundingVectors3D { get; set; }
-
-        /// <inheritdoc />
-        public IList<CrystalVector4D> RelativeSurroundingVectors4D { get; set; }
+        public IList<ITargetPositionInfo> TargetPositionInfos { get; set; }
     }
 }

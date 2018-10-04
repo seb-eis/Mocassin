@@ -240,7 +240,7 @@ namespace ICon.Model.Basic
                         CenterUnitCellPosition = unitCellPositions[0],
                         GeometryVectors = new List<DataVector3D>()
                         {
-                            new DataVector3D(0.75,0.75,0.75), new DataVector3D(-0.75,-0.75,-0.75)
+                            new DataVector3D(0.25,0.25,0.25), new DataVector3D(-0.25,-0.25,-0.25)
                         }
                     },
                 };

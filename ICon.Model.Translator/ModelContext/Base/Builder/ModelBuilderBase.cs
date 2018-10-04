@@ -10,7 +10,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// The project instance used for model reference access
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IProjectServices ProjectServices { get; }
 
         /// <summary>
         /// Create new model builder base with the provided project access

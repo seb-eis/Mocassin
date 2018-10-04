@@ -17,28 +17,33 @@ namespace ICon.Model.Translator.ModelContext
         IProjectServices ProjectServices { get; set; }
 
         /// <summary>
-        /// The project model context that is build by the builder
+        /// The project model context build task that is currently running
         /// </summary>
-        IProjectModelContext ProjectModelContext { get; set; }
+        Task<IProjectModelContext> ProjectModelContextBuildTask { get; set; }
 
         /// <summary>
-        /// The build task of the energy model context component
+        /// The project context linker that creates component interconnections
         /// </summary>
-        Task<IEnergyModelContext> EnergyModelContext { get; set; }
+        IProjectModelContextLinker ProjectModelContextLinker { get; set; }
 
         /// <summary>
-        /// The build task of the structure model context component
+        /// Get or set the energy model context builder
         /// </summary>
-        Task<IStructureModelContext> StructureModelContext { get; set; }
+        IEnergyModelContextBuilder EnergyModelContextBuilder { get; set; }
 
         /// <summary>
-        /// The build task of the transition model context component
+        /// Get or set the structure model context builder
         /// </summary>
-        Task<ITransitionModelContext> TransitionModelContext { get; set; }
+        IStructureModelContextBuilder StructureModelContextBuilder { get; set; }
 
         /// <summary>
-        /// The build task of the simulation model context component
+        /// Get or set the transition model context builder
         /// </summary>
-        Task<ISimulationModelContext> SimulationModelContext { get; set; }
+        ITransitionModelContextBuilder TransitionModelContextBuilder { get; set; }
+
+        /// <summary>
+        /// Get or set the simulation model context builder
+        /// </summary>
+        ISimulationModelContextBuilder SimulationModelContextBuilder { get; set; }
     }
 }

@@ -115,7 +115,7 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         public IEnumerable<CartesianMassPoint3D<double>> GetCartesianSequence<T1>(IEnumerable<T1> source) where T1 : struct, IMassPoint3D<T1>
         {
-            return source.Zip(TransformerProvider.Get().ToCartesian(source), (org, vector) => new CartesianMassPoint3D<double>(org.GetMass(), vector));
+            return source.Zip(TransformerProvider.Get().ToCartesian((IEnumerable<IVector3D>)source), (org, vector) => new CartesianMassPoint3D<double>(org.GetMass(), vector));
         }
     }
 }

@@ -331,7 +331,7 @@ namespace ICon.Model.Energies
         {
             foreach (var position in positions)
             {
-                double distance = UnitCellProvider.VectorEncoder.Transformer.CartesianFromFractional(position.AbsoluteVector - start.Vector).GetLength();
+                double distance = UnitCellProvider.VectorEncoder.Transformer.ToCartesian(position.AbsoluteVector - start.Vector).GetLength();
                 yield return new PairCandidate(start, position.Entry, position.AbsoluteVector, distance);
             }
         }

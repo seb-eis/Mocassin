@@ -20,7 +20,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="entries"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static UnitCellWrapper<T1> CreateUnitCell<T1>(IList<T1> entries, UnitCellVectorEncoder vectorEncoder)
+        public static UnitCellWrapper<T1> CreateUnitCell<T1>(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder)
         {
             return new UnitCellWrapper<T1>(entries, vectorEncoder);
         }
@@ -32,7 +32,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="entryLattice"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static SupercellWrapper<T1> CreateSupercell<T1>(T1[,,][] entryLattice, UnitCellVectorEncoder vectorEncoder)
+        public static SupercellWrapper<T1> CreateSupercell<T1>(T1[,,][] entryLattice, IUnitCellVectorEncoder vectorEncoder)
         {
             return new SupercellWrapper<T1>(entryLattice, vectorEncoder);
         }
@@ -57,13 +57,13 @@ namespace ICon.Symmetry.Analysis
         /// <param name="size"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static SupercellWrapper<T1> CreateSupercell<T1>(IEnumerable<T1> cellEntry, in Coordinates<int,int,int> size, UnitCellVectorEncoder vectorEncoder)
+        public static SupercellWrapper<T1> CreateSupercell<T1>(IEnumerable<T1> cellEntry, in Coordinates<int,int,int> size, IUnitCellVectorEncoder vectorEncoder)
         {
             if (size.A < 1 || size.B < 1 || size.C < 1)
             {
                 throw new ArgumentException("Invalid size information", nameof(size));
             }
-            return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(() => cellEntry.ToArray()), vectorEncoder);
+            return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(cellEntry.ToArray), vectorEncoder);
         }
 
         /// <summary>

@@ -15,9 +15,7 @@ using ICon.Mathematics.Extensions;
 
 namespace ICon.Symmetry.SpaceGroups
 {
-    /// <summary>
-    /// ICon symmetry service that handles space group database access and creation of affiliated cyrstal systems
-    /// </summary>
+    /// <inheritdoc />
     public class SpaceGroupService : ISpaceGroupService
     {
         /// <summary>
@@ -30,9 +28,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// </summary>
         public SpaceGroupEntity LoadedGroupEntity { get; set; }
 
-        /// <summary>
-        /// Get the currently looded space group as a space group interface
-        /// </summary>
+        /// <inheritdoc />
         public ISpaceGroup LoadedGroup => LoadedGroupEntity;
 
         /// <summary>
@@ -40,9 +36,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// </summary>
         public VectorComparer3D<Fractional3D> VectorComparer { get; set; }
 
-        /// <summary>
-        /// The internal vector comparer as a comparer interface
-        /// </summary>
+        /// <inheritdoc />
         public IComparer<Fractional3D> Comparer => VectorComparer;
 
         /// <summary>
@@ -67,7 +61,7 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Creates a new space group service from the default databse path
+        /// Creates a new space group service from the default database path
         /// </summary>
         /// <param name="comparer"></param>
         public SpaceGroupService(IComparer<double> comparer)
@@ -87,14 +81,10 @@ namespace ICon.Symmetry.SpaceGroups
             VectorComparer = new VectorComparer3D<Fractional3D>(comparer);
         }
 
-        /// <summary>
-        ///  Tries to load a space group from database into the service that matches the provided predicate (Throws on ambiguous predicate)
-        /// </summary>
-        /// <param name="searchPredicate"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool TryLoadGroup(Predicate<ISpaceGroup> searchPredicate)
         {
-            SpaceGroupEntity newGroup = null;
+            SpaceGroupEntity newGroup;
             using (var context = ContextProvider.CreateContext())
             {
                 newGroup = context.SpaceGroups
@@ -109,97 +99,80 @@ namespace ICon.Symmetry.SpaceGroups
             return newGroup != null;
         }
 
-        /// <summary>
-        /// Loads a group utilizing the provided space group identifier (Returns false if not possible and true on successfull loading or if the group is already loaded)
-        /// </summary>
-        /// <param name="groupEntry"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool TryLoadGroup(SpaceGroupEntry groupEntry)
         {
-            if (groupEntry == null) throw new ArgumentNullException(nameof(groupEntry));
-            if (LoadedGroupEntity != null && groupEntry.Equals(LoadedGroupEntity.GetGroupEntry())) return true;
+            if (groupEntry == null)
+                throw new ArgumentNullException(nameof(groupEntry));
+
+            if (LoadedGroupEntity != null && groupEntry.Equals(LoadedGroupEntity.GetGroupEntry()))
+                return true;
+
             return TryLoadGroup(group => group.Index == groupEntry.Index && group.Specifier == groupEntry.Specifier);
         }
 
-        /// <summary>
-        /// Creates a new crystal system matching the currently loaded group using a crystal system provider
-        /// </summary>
-        /// <param name="provider"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public CrystalSystem CreateCrystalSystem(ICrystalSystemProvider provider)
         {
-            if (LoadedGroupEntity == null) throw new InvalidObjectStateException("There is currently no group loaded into the service, cannot create crytsal system");
+            if (LoadedGroupEntity == null)
+                throw new InvalidObjectStateException("No space group loaded, cannot create crystal system");
+
             return provider.Create(LoadedGroupEntity);
         }
 
-        /// <summary>
-        /// Creates a sorted set list of all possible space groups as read only interfaces
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public SetList<ISpaceGroup> GetFullGroupList()
         {
             var setList = new SetList<ISpaceGroup>(Comparer<ISpaceGroup>.Default, 274);
             using (var context = ContextProvider.CreateContext())
             {
-                foreach (var group in context.SpaceGroups) setList.Add(@group);
+                foreach (var group in context.SpaceGroups)
+                    setList.Add(@group);
             }
             return setList;
         }
 
-        /// <summary>
-        /// Returns an ordered unique set list that contains all wyckoff positions equivalent to the provided one
-        /// </summary>
-        /// <param name="refVector"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public SetList<Fractional3D> GetAllWyckoffPositions(Fractional3D refVector)
         {
             return CreatePositionSetList(refVector);
         }
 
-        /// <summary>
-        /// Returns the wyckoff extended sorted unique lists for multiple refernce vectors
-        /// </summary>
-        /// <param name="refVectors"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<SetList<Fractional3D>> GetAllWyckoffPositions(IEnumerable<Fractional3D> refVectors)
         {
-            if (refVectors == null) throw new ArgumentNullException(nameof(refVectors));
-            return refVectors.Select((vector) => GetAllWyckoffPositions(vector)).ToList();
+            if (refVectors == null)
+                throw new ArgumentNullException(nameof(refVectors));
+
+            return refVectors.Select(GetAllWyckoffPositions).ToList();
         }
 
-        /// <summary>
-        /// Returns an ordered unique set list that contains all wyckoff positions equivalent to the provided one (From generic vector)
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="refVector"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public SetList<TSource> GetAllWyckoffPositions<TSource>(TSource refVector) where TSource : struct, IFractional3D<TSource>
         {
             return CreatePositionSetList(refVector);
         }
 
-        /// <summary>
-        /// Returns an ordere list of ordered unique extended wyckoff position sets that are equivaelnt in vector type to the original one
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="refVectors"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<SetList<TSource>> GetAllWyckoffPositions<TSource>(IEnumerable<TSource> refVectors) where TSource : struct, IFractional3D<TSource>
         {
-            if (refVectors == null) throw new ArgumentNullException(nameof(refVectors));
-            return refVectors.Select((vector) => GetAllWyckoffPositions(vector)).ToList();
+            if (refVectors == null)
+                throw new ArgumentNullException(nameof(refVectors));
+
+            return refVectors.Select(GetAllWyckoffPositions).ToList();
         }
 
-
         /// <summary>
-        /// Creates a basic fractional position set list from a basic fractional vector
+        /// Creates the position set list of all equivalent vectors to the passed source
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         protected SetList<Fractional3D> CreatePositionSetList(Fractional3D vector)
         {
             var results = new SetList<Fractional3D>(VectorComparer, LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) results.Add(operation.ApplyWithTrim(vector));
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+                results.Add(operation.ApplyWithTrim(vector));
+
             results.List.TrimExcess();
             return results;
         }
@@ -234,13 +207,13 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Get all wyckoff sequences for the provided refernce seqeunce of fractional vectors
+        /// Get all wyckoff sequences for the provided reference sequence of fractional vectors
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
         public SetList<Fractional3D[]> GetWyckoffSequences(params Fractional3D[] refSequence)
         {
-            Fractional3D[] MoveStartToUnitCell(Fractional3D[] vectors)
+            Fractional3D[] MoveStartToUnitCell(IReadOnlyList<Fractional3D> vectors)
             {
                 var coorA = vectors[0].A.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].A;
                 var coorB = vectors[0].B.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].B;
@@ -252,26 +225,19 @@ namespace ICon.Symmetry.SpaceGroups
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
             var result = new SetList<Fractional3D[]>(comparer);
 
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray()));
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray()));
 
             return result;
         }
 
-        /// <summary>
-        /// Gets the unfiltered and untrimmed list of all wyckoff extended sequences symmetry equivalent to the input sequence
-        /// </summary>
-        /// <param name="refSequence"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<Fractional3D[]> GetAllWyckoffSequences(IEnumerable<Fractional3D> refSequence)
         {
             return LoadedGroupEntity.BaseSymmetryOperations.Select(operation => refSequence.Select(vector => operation.ApplyUntrimmed(vector)).ToArray()).ToList();
         }
 
-        /// <summary>
-        /// Gets the filtered and trimmed list of all wyckoff extended seqeunces that begin in the origin unit cell (0,0,0)
-        /// </summary>
-        /// <param name="refSequence"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public SetList<Fractional3D[]> GetAllWyckoffOriginSequences(IEnumerable<Fractional3D> refSequence)
         {
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
@@ -281,36 +247,49 @@ namespace ICon.Symmetry.SpaceGroups
             };
         }
 
-        /// <summary>
-        /// Shifts a seuqnce of fractional vectors in a manner that the first vector in the sequuence is in the (0,0,0) origin cell
-        /// </summary>
-        /// <param name="unshifted"></param>
-        /// <param name="tolerance"></param>
-        /// <returns></returns>
-        public IEnumerable<Fractional3D> ShiftFirstToOrigin(IEnumerable<Fractional3D> unshifted, double tolerance)
+        /// <inheritdoc />
+        public IEnumerable<Fractional3D> ShiftFirstToOrigin(IEnumerable<Fractional3D> source, double tolerance)
         {
-            var start = unshifted.ElementAt(0);
+            if (!(source is IList<Fractional3D> sourceList))
+                sourceList = source.ToList();
+
+            var start = sourceList.ElementAt(0);
             var shift = start.TrimToUnitCell(tolerance) - start;
-            return unshifted.Select(value => value + shift);
+            return sourceList.Select(value => value + shift);
+        }
+
+        /// <inheritdoc />
+        public ISymmetryOperation CreateOperationToTarget(in Fractional3D source, in Fractional3D target)
+        {
+            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            {
+                var vector = operation.ApplyWithTrim(source, out var trimVector);
+                if (Comparer.Compare(vector, target) == 0)
+                {
+                    return GetTranslationShiftedOperation(operation, trimVector);
+                }
+
+            }
+
+            return null;
         }
 
         /// <summary>
         /// Shifts all positions so that the resulting sequence first position is on the new position
         /// </summary>
-        /// <param name="unshifted"></param>
+        /// <param name="source"></param>
         /// <param name="newFirst"></param>
         /// <returns></returns>
-        public IEnumerable<Fractional3D> ShiftFirstToPosition(IEnumerable<Fractional3D> unshifted, in Fractional3D newFirst)
+        public IEnumerable<Fractional3D> ShiftFirstToPosition(IEnumerable<Fractional3D> source, in Fractional3D newFirst)
         {
-            var shift = newFirst - unshifted.ElementAt(0);
-            return unshifted.Select(value => value + shift);
+            if (!(source is IList<Fractional3D> sourceList))
+                sourceList = source.ToList();
+
+            var shift = newFirst - sourceList.ElementAt(0);
+            return sourceList.Select(value => value + shift);
         }
 
-        /// <summary>
-        /// Creates the wyckoff position dictionray for the provided source vector
-        /// </summary>
-        /// <param name="sourceVector"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IWyckoffOperationDictionary GetOperationDictionary(in Fractional3D sourceVector)
         {
             var operationComparer = Comparer<ISymmetryOperation>.Create((a, b) => a.Literal.CompareTo(b.Literal));
@@ -319,54 +298,49 @@ namespace ICon.Symmetry.SpaceGroups
             foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
             {
                 var vector = operation.ApplyWithTrim(sourceVector);
-                if (!dictionary.TryGetValue(vector, out var operationList)) dictionary[vector] = new SetList<ISymmetryOperation>(operationComparer);
+                if (!dictionary.ContainsKey(vector))
+                    dictionary[vector] = new SetList<ISymmetryOperation>(operationComparer);
+
                 dictionary[vector].Add(operation);
             }
             return new WyckoffOperationDictionary(sourceVector, LoadedGroupEntity, dictionary);
         }
 
-        /// <summary>
-        /// Get a list interface of all symmetry operations that do not change the input vector
-        /// </summary>
-        /// <param name="sourceVector"></param>
-        /// <param name="shiftCorrection"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection)
         {
             var result = new List<ISymmetryOperation>(LoadedGroupEntity.BaseSymmetryOperations.Count);
             foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
             {
                 var untrimmedVector = operation.ApplyUntrimmed(sourceVector);
-                if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) == 0)
-                {
-                    var shift = shiftCorrection ? sourceVector - untrimmedVector : Fractional3D.NullVector;
-                    var newOperation = GetTranslationShiftedOperation(operation, shift);
-                    result.Add(newOperation);
-                }
+                if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) != 0)
+                    continue;
+
+                var shift = shiftCorrection ? sourceVector - untrimmedVector : Fractional3D.NullVector;
+                var newOperation = GetTranslationShiftedOperation(operation, shift);
+                result.Add(newOperation);
             }
             result.TrimExcess();
             return result;
         }
 
-        /// <summary>
-        /// Get the point operation group for the provided origin point and point sequence based upon the currently loaded space group
-        /// </summary>
-        /// <param name="originPoint"></param>
-        /// <param name="pointSequence"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IPointOperationGroup GetPointOperationGroup(in Fractional3D originPoint, IEnumerable<Fractional3D> pointSequence)
         {
+            if (!(pointSequence is IList<Fractional3D> pointList))
+                pointList = pointSequence.ToList();
+
             var operationGroup = new PointOperationGroup()
             {
                 SpaceGroupEntry = LoadedGroup.GetGroupEntry(),
                 OriginPoint = new DataVector3D(originPoint),
-                PointSequence = pointSequence.Select(value => new DataVector3D(value)).ToList(),
+                PointSequence = pointList.Select(value => new DataVector3D(value)).ToList(),
                 SelfProjectionOperations = new List<SymmetryOperation>()
             };
 
             var multiplicityOperations = GetMultiplicityOperations(originPoint, true);
             var resultSequences = multiplicityOperations
-                .Select(operation => operation.ApplyUntrimmed(pointSequence).ToList()).ToList();
+                .Select(operation => operation.ApplyUntrimmed(pointList).ToList()).ToList();
 
             operationGroup.PointOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
 
@@ -379,24 +353,23 @@ namespace ICon.Symmetry.SpaceGroups
                 multiplicityOperations.RemoveAt(index);
 
             operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
-            operationGroup.UniqueSelfProjectionOrders = MakeProjectionMatrix(pointSequence, operationGroup.SelfProjectionOperations);
+            operationGroup.UniqueSelfProjectionOrders = MakeProjectionMatrix(pointList, operationGroup.SelfProjectionOperations);
             return operationGroup;
         }
 
-        /// <summary>
-        /// Translates an environment sequence onto each possible wyckoff 1 position and returns the results as a sorted dictionay for lookup
-        /// </summary>
-        /// <param name="refSequence"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public SortedDictionary<Fractional3D, List<Fractional3D>> CreateEnvironmentDictionary(IEnumerable<Fractional3D> refSequence)
         {
+            if (!(refSequence is IList<Fractional3D> refList))
+                refList = refSequence.ToList();
+
             var result = new SortedDictionary<Fractional3D, List<Fractional3D>>(VectorComparer);
-            var wyckoffDictionary = GetOperationDictionary(refSequence.ElementAt(0));
+            var wyckoffDictionary = GetOperationDictionary(refList[0]);
 
             foreach (var entry in wyckoffDictionary)
             {
                 var operation = entry.Value.ElementAt(0);
-                var sequence = ShiftFirstToPosition(refSequence.Select(value => operation.ApplyUntrimmed(value)), entry.Key);
+                var sequence = ShiftFirstToPosition(refList.Select(value => operation.ApplyUntrimmed(value)), entry.Key);
                 result.Add(entry.Key, sequence.ToList());
             }
 
@@ -428,8 +401,8 @@ namespace ICon.Symmetry.SpaceGroups
         /// Determines the unique possible projection orders of the positions within the passed vector sequence and operation set
         /// </summary>
         /// <param name="vectors"></param>
-        /// <param name="operations"></param>
-        /// <returns> Operations have to be self projection operations for this function to yield meaningfull results </returns>
+        /// <param name="symmetryOperations"></param>
+        /// <returns> Operations have to be self projection operations for this function to yield meaningful results </returns>
         protected List<List<int>> MakeProjectionMatrix(IEnumerable<Fractional3D> vectors, IEnumerable<ISymmetryOperation> symmetryOperations)
         {
             var options = symmetryOperations.Select(operation => operation.ApplyUntrimmed(vectors).ToList()).ToList();
@@ -447,7 +420,7 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Creates a geometry seqeunce comparer that returns true if two sequences are equivalent or reversing one sequence makes them equivalent
+        /// Creates a geometry sequence comparer that returns true if two sequences are equivalent or reversing one sequence makes them equivalent
         /// </summary>
         /// <returns></returns>
         protected IEqualityComparer<IList<Fractional3D>> MakeVectorSequenceEquivalenceComparer()
@@ -460,23 +433,19 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Creates a geoemtry sequence comparer that returns true if two sequences contain the same set of vectors in any order
+        /// Creates a geometry sequence comparer that returns true if two sequences contain the same set of vectors in any order
         /// </summary>
         /// <returns></returns>
         protected IEqualityComparer<IList<Fractional3D>> MakeVectorSequenceProjectionComparer()
         {
             bool AreEquivalent(IList<Fractional3D> lhs, IList<Fractional3D> rhs)
             {
-                return lhs.Count == rhs.Count && lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value == true);
+                return lhs.Count == rhs.Count && lhs.Select(value => rhs.Contains(value, VectorComparer)).All(value => value);
             }
             return new EqualityCompareAdapter<IList<Fractional3D>>(AreEquivalent);
         }
 
-        /// <summary>
-        /// Creates a vector comparer for a special type of 3D vector interface using the generic 3D vector interface
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D
         {
             return Comparer<T1>.Create((a, b) => ((IComparer<IVector3D>)VectorComparer).Compare(a, b));

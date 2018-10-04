@@ -42,13 +42,13 @@ namespace ICon.Framework.Extensions
         }
 
         /// <summary>
-        /// Perform an action on each elemnt of an enumerable sequence and returns the modofied value
+        /// Perform an action on each element of an enumerable sequence and returns the modified value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="values"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static IEnumerable<T1> Change<T1>(this IEnumerable<T1> values, Action<T1> action)
+        public static IEnumerable<T1> Action<T1>(this IEnumerable<T1> values, Action<T1> action)
         {
             foreach (var item in values)
             {

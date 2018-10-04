@@ -29,14 +29,14 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// Get the vector encoder that supplies the basic unit cell information geoemtry information and encoding functionalities
         /// </summary>
-        public UnitCellVectorEncoder VectorEncoder { get; protected set; }
+        public IUnitCellVectorEncoder VectorEncoder { get; protected set; }
 
         /// <summary>
         /// Create new supercell wrapper from cell entry array and unit cell vector encoder
         /// </summary>
         /// <param name="cellEntries"></param>
         /// <param name="vectorEncoder"></param>
-        public SupercellWrapper(T1[,,][] cellEntries, UnitCellVectorEncoder vectorEncoder)
+        public SupercellWrapper(T1[,,][] cellEntries, IUnitCellVectorEncoder vectorEncoder)
         {
             CellEntries = cellEntries;
             VectorEncoder = vectorEncoder;
@@ -166,7 +166,7 @@ namespace ICon.Symmetry.Analysis
         /// <returns></returns>
         public T1 GetEntryValueAt(in Fractional3D vector)
         {
-            if (!VectorEncoder.TryEncodeFractional(vector, out var encoded))
+            if (!VectorEncoder.TryEncode(vector, out var encoded))
             {
                 return default;
             }

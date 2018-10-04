@@ -35,7 +35,7 @@ namespace ICon.Model.Transitions.ConflictHandling
             var creator = new QuickRuleGenerator<KineticRule>(particles);
             return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
                 .SingleOrDefault()
-                .Change(rule => rule.Transition = transition);
+                .Action(rule => rule.Transition = transition);
         }
 
         /// <summary>

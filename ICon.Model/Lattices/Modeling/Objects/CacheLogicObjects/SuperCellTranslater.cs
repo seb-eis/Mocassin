@@ -19,7 +19,7 @@ namespace ICon.Model.Lattices
         /// <param name="workLattice"></param>
         /// <param name="encoder"></param>
         /// <returns></returns>
-        public SupercellWrapper<IParticle> Translate(WorkLattice workLattice, UnitCellVectorEncoder encoder)
+        public SupercellWrapper<IParticle> Translate(WorkLattice workLattice, IUnitCellVectorEncoder encoder)
         {
 
             IParticle[,,][] particles = new IParticle[workLattice.WorkCells.GetLength(0), workLattice.WorkCells.GetLength(1), workLattice.WorkCells.GetLength(2)][];

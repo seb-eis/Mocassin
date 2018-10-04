@@ -15,115 +15,77 @@ namespace ICon.Model.Transitions
     /// </summary>
     internal class TransitionCacheManager : ModelCacheManager<TransitionDataCache, ITransitionCachePort>, ITransitionCachePort
     {
-        /// <summary>
-        /// Create new transition cache manager for the provided data cache and project services
-        /// </summary>
-        /// <param name="dataCache"></param>
-        /// <param name="projectServices"></param>
+        /// <inheritdoc />
         public TransitionCacheManager(TransitionDataCache dataCache, IProjectServices projectServices) : base(dataCache, projectServices)
         {
 
         }
 
-        /// <summary>
-        /// Get a list interface for all kinetic mappings lists (Listss for deprecated entries are empty)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<IList<KineticMapping>> GetAllKineticMappingLists()
         {
-            return AccessCacheableDataEntry(CreateAllKineticMappings);
+            return GetResultFromCache(CreateAllKineticMappings);
         }
 
-        /// <summary>
-        /// Get a list interface for all kinetic transition rule lists (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<IList<KineticRule>> GetAllKineticRuleLists()
         {
-            return AccessCacheableDataEntry(CreateAllKineticRules);
+            return GetResultFromCache(CreateAllKineticRules);
         }
 
-        /// <summary>
-        /// Get a list interface for all metropolis mapping lists (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<IList<MetropolisMapping>> GetAllMetropolisMappingLists()
         {
-            return AccessCacheableDataEntry(CreateAllMetropolisMappings);
+            return GetResultFromCache(CreateAllMetropolisMappings);
         }
 
-        /// <summary>
-        /// Get a list interface for all metropolis rule lists (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<IList<MetropolisRule>> GetAllMetropolisRuleLists()
         {
-            return AccessCacheableDataEntry(CreateAllMetropolisRules);
+            return GetResultFromCache(CreateAllMetropolisRules);
         }
 
-        /// <summary>
-        /// Get a list interface for the kinetic mapping of the transition at the specfified index (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<KineticMapping> GetKineticMappingList(int index)
         {
             return GetAllKineticMappingLists()[index];
         }
 
-        /// <summary>
-        /// Get a list interface for the transition rules of the kinetic transition at the specified index (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<KineticRule> GetKineticRuleList(int index)
         {
             return GetAllKineticRuleLists()[index];
         }
 
-        /// <summary>
-        /// Get a list interface for the transition mapping of the metropolis transition at the specified index (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<MetropolisMapping> GetMetropolisMappingList(int index)
         {
             return GetAllMetropolisMappingLists()[index];
         }
 
-        /// <summary>
-        /// Get a list interface for the transition rules of the metropolis transition at the specified index (Lists for deprecated entries are empty)
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<MetropolisRule> GetMetropolisRuleList(int index)
         {
             return GetAllMetropolisRuleLists()[index];
         }
 
-        /// <summary>
-        /// Get a dictionary that contains which kinetic transitions are possible on which unit cell positions
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary()
         {
-            return AccessCacheableDataEntry(CreateKineticTransitionPositionDictionary);
+            return GetResultFromCache(CreateKineticTransitionPositionDictionary);
         }
 
-        /// <summary>
-        /// Get a dictionary that contains which metropolis transitions are possible on which unit cell positions
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary()
         {
-            return AccessCacheableDataEntry(CreateMetropolisTransitionPositionDictionary);
+            return GetResultFromCache(CreateMetropolisTransitionPositionDictionary);
         }
 
         /// <summary>
         /// Creates a dictionary that assigns each unit cell position its possible list of metropolis transitions
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> CreateMetropolisTransitionPositionDictionary()
         {
             var structureManager = ProjectServices.GetManager<IStructureManager>();
@@ -137,11 +99,11 @@ namespace ICon.Model.Transitions
 
             foreach (var transition in transitionManager.QueryPort.Query(port => port.GetMetropolisTransitions()))
             {
-                if (!transition.IsDeprecated)
-                {
-                    result[transition.FirstUnitCellPosition].Add(transition);
-                    result[transition.SecondUnitCellPosition].Add(transition);
-                }
+                if (transition.IsDeprecated)
+                    continue;
+
+                result[transition.FirstUnitCellPosition].Add(transition);
+                result[transition.SecondUnitCellPosition].Add(transition);
             }
             
             return result;
@@ -151,7 +113,7 @@ namespace ICon.Model.Transitions
         /// Creates a dictionary that assigns each unit cell position its possible list of kinetic transitions
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> CreateKineticTransitionPositionDictionary()
         {
             var structureManager = ProjectServices.GetManager<IStructureManager>();
@@ -179,14 +141,14 @@ namespace ICon.Model.Transitions
         /// Creates all metropolis transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IList<IList<MetropolisMapping>> CreateAllMetropolisMappings()
         {
             var mapper = new MetropolisTransitionMapper();
             var positionSets = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetEncodedExtendedPositionLists());
             var result = new List<IList<MetropolisMapping>>();
 
-            foreach (var transition in ProjectServices.GetManager<ITransitionManager>().QueryPort.Query((ITransitionDataPort port) => port.GetMetropolisTransitions()))
+            foreach (var transition in ProjectServices.GetManager<ITransitionManager>().QueryPort.Query(port => port.GetMetropolisTransitions()))
             {
                 if (transition.IsDeprecated)
                 {
@@ -202,7 +164,7 @@ namespace ICon.Model.Transitions
         /// Creates all kinetic transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IList<IList<KineticMapping>> CreateAllKineticMappings()
         {
             var transitionManager = ProjectServices.GetManager<ITransitionManager>();
@@ -212,7 +174,7 @@ namespace ICon.Model.Transitions
             var mapper = new KineticTransitionMapper(ProjectServices.SpaceGroupService, encoder, uniCellProvider);
 
             var result = new List<IList<KineticMapping>>();
-            foreach (var transition in transitionManager.QueryPort.Query((ITransitionDataPort port) => port.GetKineticTransitions()))
+            foreach (var transition in transitionManager.QueryPort.Query(port => port.GetKineticTransitions()))
             {
                 if (transition.IsDeprecated)
                 {
@@ -228,7 +190,7 @@ namespace ICon.Model.Transitions
         /// Creates all metropolis transition rules and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IList<IList<MetropolisRule>> CreateAllMetropolisRules()
         {
             var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
@@ -243,7 +205,7 @@ namespace ICon.Model.Transitions
                 .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
                 .Select(result =>
                 {
-                    ++index; return (IList<MetropolisRule>)result.Change(value => value.Transition = transitions[index]).ToList();
+                    ++index; return (IList<MetropolisRule>)result.Action(value => value.Transition = transitions[index]).ToList();
                 }).ToList();
         }
 
@@ -251,7 +213,7 @@ namespace ICon.Model.Transitions
         /// Creates all kinetic transition rules and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
-        [CacheableMethod]
+        [CacheMethodResult]
         protected IList<IList<KineticRule>> CreateAllKineticRules()
         {
             var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
@@ -266,7 +228,7 @@ namespace ICon.Model.Transitions
                 .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
                 .Select(result =>
                 {
-                    ++index; return (IList<KineticRule>)result.Change(value => value.Transition = transitions[index]).ToList();
+                    ++index; return (IList<KineticRule>)result.Action(value => value.Transition = transitions[index]).ToList();
                 }).ToList();
         }
     }

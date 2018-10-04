@@ -6,38 +6,40 @@ using ICon.Model.Structures;
 
 namespace ICon.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Structure model context builder. Extends the reference structure data into the full structure data context
-    /// </summary>
-    public class StructureModelContextBuilder : ModelContextBuilderBase<IStructureModelContext>
+    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IStructureModelContextBuilder#"/>
+    public class StructureModelContextBuilder : ModelContextBuilderBase<IStructureModelContext>, IStructureModelContextBuilder
     {
+        /// <inheritdoc />
+        public IEnvironmentModelBuilder EnvironmentModelBuilder { get; set; }
+
+        /// <inheritdoc />
+        public IPositionModelBuilder PositionModelBuilder { get; set; }
+
         /// <inheritdoc />
         public StructureModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
             : base(projectModelContextBuilder)
         {
+            EnvironmentModelBuilder = new EnvironmentModelBuilder(ProjectServices);
+            PositionModelBuilder = new PositionModelBuilder(ProjectServices);
         }
 
         /// <inheritdoc />
-        protected override void PopulateContext()
+        protected override IStructureModelContext PopulateContext(IStructureModelContext modelContext)
         {
-            throw new NotImplementedException();
+            var manager = ProjectServices.GetManager<IStructureManager>();
+            var unitCellPositions = manager.QueryPort.Query(port => port.GetUnitCellPositions());
+            var environmentModels = EnvironmentModelBuilder.BuildModels(unitCellPositions);
+            var positionModels = PositionModelBuilder.BuildModels(environmentModels);
+
+            modelContext.EnvironmentModels = environmentModels;
+            modelContext.PositionModels = positionModels;
+            return modelContext;
         }
 
-        /// <summary>
-        /// Build a new environment model for the passed unit cell position
-        /// </summary>
-        /// <param name="unitCellPosition"></param>
-        /// <returns></returns>
-        protected IEnvironmentModel BuildNewEnvironmentModel(IUnitCellPosition unitCellPosition)
+        /// <inheritdoc />
+        protected override IStructureModelContext GetEmptyDefaultContext()
         {
-            var wyckoffDictionary = ProjectServices.SpaceGroupService.GetOperationDictionary(unitCellPosition.Vector);
-            var environmentModel = new EnvironmentModel
-            {
-                UnitCellPosition = unitCellPosition,
-                TransformOperations = wyckoffDictionary
-            };
-
-            return environmentModel;
+            return new StructureModelContext();
         }
     }
 }

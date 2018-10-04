@@ -19,7 +19,7 @@ namespace ICon.Model.Structures
         /// Get the vector encoder that handles transformations between 3D coordinates and unit cell encoded 4D vectors
         /// </summary>
         /// <returns></returns>
-        UnitCellVectorEncoder GetVectorEncoder();
+        IUnitCellVectorEncoder GetVectorEncoder();
 
         /// <summary>
         /// Extends the unit cell position at specififed index into the full wyckoff one sorted list (Returns empty list if cell position is deprecated)

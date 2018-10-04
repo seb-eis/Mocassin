@@ -67,12 +67,12 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
-        /// Get the data that is created by the specififed creator delegate from the cache and returns the cast value
+        /// Get the data that is created by the specified creator delegate from the cache and returns the cast value
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="creatorMethod"></param>
         /// <returns></returns>
-        protected TResult AccessCacheableDataEntry<TResult>(Func<TResult> creatorMethod)
+        protected TResult GetResultFromCache<TResult>(Func<TResult> creatorMethod)
         {
             return (TResult)Cache.FindCacheEntry(creatorMethod).GetValue();
         }
@@ -147,7 +147,7 @@ namespace ICon.Model.Basic
         {
             foreach (var method in GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic))
             {
-                if (method.GetCustomAttribute(typeof(CacheableMethodAttribute)) is CacheableMethodAttribute attribute)
+                if (method.GetCustomAttribute(typeof(CacheMethodResultAttribute)) is CacheMethodResultAttribute attribute)
                 {
                     var delegateType = typeof(Func<>).MakeGenericType(method.ReturnType);
                     var wrapperType = attribute.GenericDataWrapperType.MakeGenericType(method.ReturnType);

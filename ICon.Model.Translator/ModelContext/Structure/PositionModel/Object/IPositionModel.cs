@@ -39,13 +39,8 @@ namespace ICon.Model.Translator.ModelContext
         ISymmetryOperation TransformOperation { get; set; }
 
         /// <summary>
-        /// The list of relative surrounding positions as 3D fractional vectors
+        /// The list of transformed target position infos of the environment in order of its pair interactions
         /// </summary>
-        IList<Fractional3D> RelativeSurroundingVectors3D { get; set; }
-
-        /// <summary>
-        /// The list of relative surrounding positions as 4D encoded vectors
-        /// </summary>
-        IList<CrystalVector4D> RelativeSurroundingVectors4D { get; set; }
+        IList<ITargetPositionInfo> TargetPositionInfos { get; set; }
     }
 }

@@ -26,14 +26,20 @@ namespace ICon.Symmetry.SpaceGroups
         IEnumerable<Fractional3D> GetPointSequence();
 
         /// <summary>
+        /// Get all existing unique point sequences of the group
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IEnumerable<Fractional3D>> GetUniquePointSequences();
+
+        /// <summary>
         /// Get the unfiltered list of all point symmetry operations of the origin point
         /// </summary>
         IEnumerable<ISymmetryOperation> GetPointOperations();
 
         /// <summary>
-        /// Get the filtered list of all operations that yield unique vector sequnces of the original point sequence
+        /// Get the filtered list of all operations that yield unique vector sequences of the original point sequence
         /// </summary>
-        /// <remarks> Unique in the sense that two sequences are not identical cannot trivially matched by inverting one </remarks>
+        /// <remarks> Unique in the sense that two sequences are not identical and cannot trivially matched by inverting one </remarks>
         IEnumerable<ISymmetryOperation> GetUniqueSequenceOperations();
 
         /// <summary>

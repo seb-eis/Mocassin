@@ -9,7 +9,10 @@ namespace ICon.Model.Translator.ModelContext
     public class StructureModelContext : IStructureModelContext
     {
         /// <inheritdoc />
-        public IUnitCellProvider<IPositionModel> PositionModels { get; set; }
+        public IUnitCellProvider<IPositionModel> PositionModelUnitCellProvider { get; set; }
+
+        /// <inheritdoc />
+        public IList<IPositionModel> PositionModels { get; set; }
 
         /// <inheritdoc />
         public IList<IEnvironmentModel> EnvironmentModels { get; set; }

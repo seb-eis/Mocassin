@@ -8,21 +8,15 @@ using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <summary>
-    /// An unstable environment info that describes the interaction parameters for a specific unstable unit cell position
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Energies.IUnstableEnvironment"/>
     [DataContract(Name = "UnstableEnvironmentInfo")]
     public class UnstableEnvironment : ModelObject, IUnstableEnvironment
     {
-        /// <summary>
-        /// The interaction range of the environment
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public double MaxInteractionRange { get; set; }
 
-        /// <summary>
-        /// The unit cell position the environment info belongs to (Can be null)
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [IndexResolved]
         public IUnitCellPosition UnitCellPosition { get; set; }
@@ -49,7 +43,7 @@ namespace ICon.Model.Energies
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
-        /// Create new unstable environemnt and sets all lists to empty
+        /// Create new unstable environment and sets all lists to empty
         /// </summary>
         public UnstableEnvironment()
         {
@@ -58,58 +52,41 @@ namespace ICon.Model.Energies
             GroupInteractions = new List<IGroupInteraction>();
         }
 
-        /// <summary>
-        /// Get all unit cell positions that are ignored during the environment search (Never null)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<IUnitCellPosition> GetIgnoredPositions()
         {
             return (IgnoredPositions ?? new List<IUnitCellPosition>()).AsEnumerable();
         }
 
-        /// <summary>
-        /// Get all pair interactions affiliated with this environment (Never null)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<IAsymmetricPairInteraction> GetPairInteractions()
         {
             return (PairInteractions ?? new List<IAsymmetricPairInteraction>()).AsEnumerable();
         }
 
-        /// <summary>
-        /// Get all group interactions affiliated wit this environment (Never null)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<IGroupInteraction> GetGroupInteractions()
         {
             return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
         }
 
-        /// <summary>
-        /// Get a string literal name for the model object
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string GetModelObjectName()
         {
             return "'Unstable Environment Info'";
         }
 
-        /// <summary>
-        /// Copies the values of a model object interface into this one and returns this object (Returns null if interfacc if of wrong type)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IUnstableEnvironment>(obj) is var info)
-            {
-                UnitCellPosition = info.UnitCellPosition;
-                MaxInteractionRange = info.MaxInteractionRange;
-                IgnoredPositions = info.GetIgnoredPositions().ToList();
-                GroupInteractions = info.GetGroupInteractions().ToList();
-                return this;
-            }
-            return null;
+            if (!(CastWithDepricatedCheck<IUnstableEnvironment>(obj) is IUnstableEnvironment info))
+                return null;
+
+            UnitCellPosition = info.UnitCellPosition;
+            MaxInteractionRange = info.MaxInteractionRange;
+            IgnoredPositions = info.GetIgnoredPositions().ToList();
+            GroupInteractions = info.GetGroupInteractions().ToList();
+            return this;
         }
     }
 }
