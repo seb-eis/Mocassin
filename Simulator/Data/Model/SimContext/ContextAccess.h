@@ -235,9 +235,9 @@ static inline void setActiveClusterTable(__SCONTEXT_PAR, ClusterTable_t* value)
 
 /* Database model getter/setter */
 
-static inline LatticeInfo_t* getLatticeInformation(__SCONTEXT_PAR)
+static inline LatticeModel_t* getLatticeInformation(__SCONTEXT_PAR)
 {
-    return &getDatabaseModel(SCONTEXT)->LattInfo;
+    return &getDatabaseModel(SCONTEXT)->Lattice;
 }
 
 static inline Lattice_t* getDatabaseModelLattice(__SCONTEXT_PAR)

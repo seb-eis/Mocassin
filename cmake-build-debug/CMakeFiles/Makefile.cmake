@@ -28,6 +28,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/DartConfiguration.tcl.in"
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/Windows-GNU-C-ABI.cmake"
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/Windows-GNU-C.cmake"
+  "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/Windows-GNU-CXX-ABI.cmake"
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/Windows-GNU-CXX.cmake"
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/Windows-GNU.cmake"
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/Windows-windres.cmake"
@@ -35,10 +36,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Modules/Platform/WindowsPaths.cmake"
   "C:/Program Files/JetBrains/CLion 2018.2.2/bin/cmake/win/share/cmake-3.12/Templates/CPackConfig.cmake.in"
   "../CMakeLists.txt"
-  "CMakeFiles/3.12.1/CMakeCCompiler.cmake"
-  "CMakeFiles/3.12.1/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.12.1/CMakeRCCompiler.cmake"
-  "CMakeFiles/3.12.1/CMakeSystem.cmake"
+  "CMakeFiles/3.12.2/CMakeCCompiler.cmake"
+  "CMakeFiles/3.12.2/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.12.2/CMakeRCCompiler.cmake"
+  "CMakeFiles/3.12.2/CMakeSystem.cmake"
   )
 
 # The corresponding makefile is:

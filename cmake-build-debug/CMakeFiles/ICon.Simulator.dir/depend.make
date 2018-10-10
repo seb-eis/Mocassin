@@ -40,6 +40,7 @@ CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj: ../Simulator/
 CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj: ../Framework/Sqlite/SqliteReader.c
 CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj: ../Framework/Sqlite/SqliteReader.h
 
+CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../ExternalLibraries/sqlite3.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Basic/BaseTypes/BaseTypes.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Basic/BaseTypes/Buffers.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Basic/FileIO/FileIO.h
@@ -47,6 +48,7 @@ CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Basic/Macros/Macros.
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Errors/McErrors.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Math/Random/PcgRandom.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Math/Types/Vector.h
+CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Framework/Sqlite/SqliteReader.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Data/Model/Database/DbModel.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Data/Model/Database/DbModelLoad.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Data/Model/SimContext/ContextAccess.h
@@ -58,6 +60,8 @@ CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Logic/Objects/JumpSe
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Logic/Routines/Helper/HelperRoutines.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Logic/Routines/Main/MainRoutines.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Simulator/Logic/Validators/Validators.h
+CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../UnitTesting/UnitTests.h
+CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../UnitTesting/MinimalUnitTest.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj: ../Main/main.c
 
 CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj: ../Framework/Basic/BaseTypes/BaseTypes.h

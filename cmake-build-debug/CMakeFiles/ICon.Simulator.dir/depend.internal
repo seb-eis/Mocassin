@@ -41,6 +41,7 @@ CMakeFiles/ICon.Simulator.dir/Framework/Sqlite/SqliteReader.c.obj
  C:/Users/john/Documents/ICon.Simulator/Framework/Sqlite/SqliteReader.c
  C:/Users/john/Documents/ICon.Simulator/Framework/Sqlite/SqliteReader.h
 CMakeFiles/ICon.Simulator.dir/Main/main.c.obj
+ ..//ExternalLibraries/sqlite3.h
  ..//Framework/Basic/BaseTypes/BaseTypes.h
  ..//Framework/Basic/BaseTypes/Buffers.h
  ..//Framework/Basic/FileIO/FileIO.h
@@ -48,6 +49,7 @@ CMakeFiles/ICon.Simulator.dir/Main/main.c.obj
  ..//Framework/Errors/McErrors.h
  ..//Framework/Math/Random/PcgRandom.h
  ..//Framework/Math/Types/Vector.h
+ ..//Framework/Sqlite/SqliteReader.h
  ..//Simulator/Data/Model/Database/DbModel.h
  ..//Simulator/Data/Model/Database/DbModelLoad.h
  ..//Simulator/Data/Model/SimContext/ContextAccess.h
@@ -59,6 +61,8 @@ CMakeFiles/ICon.Simulator.dir/Main/main.c.obj
  ..//Simulator/Logic/Routines/Helper/HelperRoutines.h
  ..//Simulator/Logic/Routines/Main/MainRoutines.h
  ..//Simulator/Logic/Validators/Validators.h
+ ..//UnitTesting/UnitTests.h
+ ../UnitTesting/MinimalUnitTest.h
  C:/Users/john/Documents/ICon.Simulator/Main/main.c
 CMakeFiles/ICon.Simulator.dir/Simulator/Data/Model/Database/DbModelLoad.c.obj
  ..//Framework/Basic/BaseTypes/BaseTypes.h

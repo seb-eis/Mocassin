@@ -260,6 +260,7 @@ typedef struct TransitionModel
     JumpCountTable_t    JumpCountTable;
     JumpAssignTable_t   JumpAssignTable;
 
+
 } TransitionModel_t;
 
 /* Job model */
@@ -321,7 +322,7 @@ typedef Array_t(double, 5, EnergyBackground) EnergyBackground_t;
 
 // Type for the lattice information (Supports 16 bit alignment)
 // Layout@ggc_x86_64 => 80@[16,4,4,24,24,{8}]
-typedef struct LatticeInfo
+typedef struct LatticeModel
 {
     Vector4_t           SizeVector;
     int32_t             NumOfMobiles;
@@ -331,7 +332,7 @@ typedef struct LatticeInfo
 
     int64_t             Padding:64;
 
-} LatticeInfo_t;
+} LatticeModel_t;
 
 /* Database model */
 
@@ -339,7 +340,7 @@ typedef struct LatticeInfo
 // Layout@ggc_x86_64 => 320@[80,72,56,32,80]
 typedef struct DbModel
 {
-    LatticeInfo_t       LattInfo;
+    LatticeModel_t      Lattice;
     JobInfo_t           JobInfo;
     StructureModel_t    Structure;
     EnergyModel_t       Energy;

@@ -16,6 +16,18 @@
 #include "Simulator/Data/Model/SimContext/ContextAccess.h"
 #include "Simulator/Logic/Initializers/ContextInitializer.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
+#include "UnitTesting/UnitTests.h"
+
+#define IsUnitTesting 1
+
+#if IsUnitTesting == 1
+
+int main(int argc, char **argv){
+    return startTesting(argc, argv);
+
+}
+
+#else
 
 #if !defined(MC_TESTBUILD)
 
@@ -57,5 +69,7 @@
 
         StartMainRoutine(&SCONTEXT);
     }
+
+#endif
 
 #endif
