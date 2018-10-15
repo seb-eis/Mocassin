@@ -33,7 +33,7 @@ namespace ICon.Model.Energies
         /// <param name="groupInfo"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStableGroupInfo(IGroupInteraction groupInfo, IDataReader<IEnergyDataPort> dataReader)
         {
             return new GroupInteractionValidator(ProjectServices, Settings, dataReader).Validate(groupInfo);
@@ -45,7 +45,7 @@ namespace ICon.Model.Energies
         /// <param name="envInfo"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateUnstableEnvironmentInfo(IUnstableEnvironment envInfo, IDataReader<IEnergyDataPort> dataReader)
         {
             return new UnstableEnvironmentValidator(ProjectServices, Settings, dataReader).Validate(envInfo);
@@ -57,7 +57,7 @@ namespace ICon.Model.Energies
         /// <param name="envInfo"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Parameter)]
+        [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateEnvironmentInfo(IStableEnvironmentInfo envInfo, IDataReader<IEnergyDataPort> dataReader)
         {
             return new StableEnvironmentInfoValidator(ProjectServices, Settings, dataReader).Validate(envInfo);

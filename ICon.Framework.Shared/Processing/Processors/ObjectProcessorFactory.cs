@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ICon.Framework.Processing
 {
     /// <summary>
-    /// Factory that provides functiony to create object handlers both sync and async
+    ///     Factory that provides functions to create object handlers both sync and async
     /// </summary>
     public static class ObjectProcessorFactory
     {
         /// <summary>
-        /// Creates new object handler from the provided delegate
+        ///     Creates new object handler from the provided delegate
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="TResult"></typeparam>
@@ -24,7 +22,7 @@ namespace ICon.Framework.Processing
         }
 
         /// <summary>
-        /// Creates new async object handler from the provided delegate
+        ///     Creates new async object handler from the provided delegate
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="TResult"></typeparam>
@@ -36,7 +34,7 @@ namespace ICon.Framework.Processing
         }
 
         /// <summary>
-        /// Creates new object handler for two value tuple from the provided delegate
+        ///     Creates new object handler for two value tuple from the provided delegate
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
@@ -49,7 +47,7 @@ namespace ICon.Framework.Processing
         }
 
         /// <summary>
-        /// Creates new async object handler for two value tuple from the provided delegate
+        ///     Creates new async object handler for two value tuple from the provided delegate
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
@@ -62,38 +60,35 @@ namespace ICon.Framework.Processing
         }
 
         /// <summary>
-        /// Checks a series of types for beeing of generic tuple or value tuple type (Does not check the base class in the tuple case!)
+        ///     Checks a series of types for being of generic tuple or value tuple type (Does not check the base class in the
+        ///     tuple case!)
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="types"></param>
         /// <returns></returns>
-        public static Boolean AnyIsTupleType(params Type[] types)
+        public static bool AnyIsTuple(params Type[] types)
         {
             foreach (var type in types)
             {
-                if (type == null)
-                {
-                    throw new ArgumentNullException(nameof(type));
-                }
+                if (type == null) throw new ArgumentNullException(nameof(type));
 
-                if (type.IsGenericType)
-                {
-                    var genType = type.GetGenericTypeDefinition();
-                    if (GetGenericTupleTypes().Contains(genType) || GetGenericValueTupleTypes().Contains(genType))
-                    {
-                        return true;
-                    }
-                }
+                if (!type.IsGenericType) 
+                    continue;
+
+                var genType = type.GetGenericTypeDefinition();
+                if (GetGenericTupleTypes().Contains(genType) || GetGenericValueTupleTypes().Contains(genType))
+                    return true;
             }
+
             return false;
         }
 
         /// <summary>
-        /// Returns full array of existing generic tuple types
+        ///     Returns full array of existing generic tuple types
         /// </summary>
         /// <returns></returns>
         public static Type[] GetGenericTupleTypes()
         {
-            return new Type[]
+            return new[]
             {
                 typeof(Tuple<>),
                 typeof(Tuple<,>),
@@ -107,12 +102,12 @@ namespace ICon.Framework.Processing
         }
 
         /// <summary>
-        /// Returns full array of existing generic alue tuple types
+        ///     Returns full array of existing generic value tuple types
         /// </summary>
         /// <returns></returns>
         public static Type[] GetGenericValueTupleTypes()
         {
-            return new Type[]
+            return new[]
             {
                 typeof(ValueTuple<>),
                 typeof(ValueTuple<,>),

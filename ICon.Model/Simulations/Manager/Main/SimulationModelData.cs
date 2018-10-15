@@ -57,5 +57,14 @@ namespace ICon.Model.Simulations
         {
             ResetAllIndexedData();
         }
+
+        /// <summary>
+        /// Creates a new default simulation model data object
+        /// </summary>
+        /// <returns></returns>
+        public static SimulationModelData CreateNew()
+        {
+            return CreateDefault<SimulationModelData>();
+        }
     }
 }

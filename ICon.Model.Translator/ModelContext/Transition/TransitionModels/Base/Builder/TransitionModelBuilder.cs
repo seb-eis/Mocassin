@@ -148,7 +148,7 @@ namespace ICon.Model.Translator.ModelContext
             var index = 0;
             var result = new List<int>(transitionRule.PathLength).Populate(() => index++, transitionRule.PathLength);
 
-            foreach (var (start, end) in transitionRule.GetMovementDescription().ConsecutivePairSelect((a,b) => (a,b)))
+            foreach (var (start, end) in transitionRule.GetMovementDescription().SelectConsecutivePairs((a,b) => (a,b)))
             {
                 result.Swap(start, end);
             }

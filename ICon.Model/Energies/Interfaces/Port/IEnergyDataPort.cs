@@ -22,7 +22,7 @@ namespace ICon.Model.Energies
         /// Get a read only list of all stable pair infos
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<ISymmetricPairInteraction> GetStablePairInteractions();
+        ReadOnlyListAdapter<ISymmetricPairInteraction> GetStablePairInteractions();
 
         /// <summary>
         /// Get the stable pair info at the specified index
@@ -35,7 +35,7 @@ namespace ICon.Model.Energies
         /// GEt a read only list of all unstable pair interactions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IAsymmetricPairInteraction> GetUnstablePairInteractions();
+        ReadOnlyListAdapter<IAsymmetricPairInteraction> GetUnstablePairInteractions();
 
         /// <summary>
         /// Get the unstable pair interactions at the specified index
@@ -48,7 +48,7 @@ namespace ICon.Model.Energies
         /// Get a read only list of all existing group interaction definitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IGroupInteraction> GetGroupInteractions();
+        ReadOnlyListAdapter<IGroupInteraction> GetGroupInteractions();
 
         /// <summary>
         /// Get the group interaction ath the specified index
@@ -61,7 +61,7 @@ namespace ICon.Model.Energies
         /// Get a read only list of all unstable environment infos
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IUnstableEnvironment> GetUnstableEnvironments();
+        ReadOnlyListAdapter<IUnstableEnvironment> GetUnstableEnvironments();
 
         /// <summary>
         /// Get the unstable environment info at the specified index

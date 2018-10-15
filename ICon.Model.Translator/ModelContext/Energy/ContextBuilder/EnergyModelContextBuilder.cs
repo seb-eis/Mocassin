@@ -24,8 +24,6 @@ namespace ICon.Model.Translator.ModelContext
         public EnergyModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
             : base(projectModelContextBuilder)
         {
-            GroupEnergyModelBuilder = new GroupEnergyModelBuilder(ProjectServices);
-            PairEnergyModelBuilder = new PairEnergyModelBuilder(ProjectServices);
         }
 
         /// <inheritdoc />
@@ -49,6 +47,13 @@ namespace ICon.Model.Translator.ModelContext
         protected override IEnergyModelContext GetEmptyDefaultContext()
         {
             return new EnergyModelContext();
+        }
+
+        /// <inheritdoc />
+        protected override void SetNullBuildersToDefault()
+        {
+            GroupEnergyModelBuilder = GroupEnergyModelBuilder ?? new GroupEnergyModelBuilder(ProjectServices);
+            PairEnergyModelBuilder = PairEnergyModelBuilder ?? new PairEnergyModelBuilder(ProjectServices);
         }
     }
 }

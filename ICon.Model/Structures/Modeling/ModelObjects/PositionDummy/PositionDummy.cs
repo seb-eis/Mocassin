@@ -29,7 +29,7 @@ namespace ICon.Model.Structures
         /// Get the model object name
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Dummy Position'";
         }
@@ -41,7 +41,7 @@ namespace ICon.Model.Structures
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IPositionDummy>(obj) is var dummy)
+            if (CastIfNotDeprecated<IPositionDummy>(obj) is var dummy)
             {
                 Vector = new DataVector3D(dummy.Vector);
                 return this;

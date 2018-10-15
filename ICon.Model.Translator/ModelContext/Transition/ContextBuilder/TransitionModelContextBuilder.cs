@@ -25,14 +25,12 @@ namespace ICon.Model.Translator.ModelContext
         public IKineticTransitionModelBuilder KineticTransitionModelBuilder { get; set; }
 
         /// <inheritdoc />
-        public  IPositionTransitionModelBuilder PositionTransitionModelBuilder { get; set; }
+        public IPositionTransitionModelBuilder PositionTransitionModelBuilder { get; set; }
 
         /// <inheritdoc />
-        public TransitionModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) : base(projectModelContextBuilder)
+        public TransitionModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) 
+            : base(projectModelContextBuilder)
         {
-            MetropolisTransitionModelBuilder = new MetropolisTransitionModelBuilder(ProjectServices);
-            KineticTransitionModelBuilder = new KineticTransitionModelBuilder(ProjectServices);
-            PositionTransitionModelBuilder = new PositionTransitionModelBuilder(ProjectServices);
         }
 
         /// <inheritdoc />
@@ -57,6 +55,14 @@ namespace ICon.Model.Translator.ModelContext
         protected override ITransitionModelContext GetEmptyDefaultContext()
         {
             return new TransitionModelContext();
+        }
+
+        /// <inheritdoc />
+        protected override void SetNullBuildersToDefault()
+        {
+            MetropolisTransitionModelBuilder = MetropolisTransitionModelBuilder ?? new MetropolisTransitionModelBuilder(ProjectServices);
+            KineticTransitionModelBuilder = KineticTransitionModelBuilder ?? new KineticTransitionModelBuilder(ProjectServices);
+            PositionTransitionModelBuilder = PositionTransitionModelBuilder ?? new PositionTransitionModelBuilder(ProjectServices);
         }
     }
 }

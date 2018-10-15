@@ -24,18 +24,18 @@ namespace ICon.Model.Particles
         /// Get all particles as a read ony list of particle interfaces
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IParticle> GetParticles()
+        public ReadOnlyListAdapter<IParticle> GetParticles()
         {
-            return ReadOnlyList<IParticle>.FromEnumerable(Data.Particles);
+            return ReadOnlyListAdapter<IParticle>.FromEnumerable(Data.Particles);
         }
 
         /// <summary>
         /// Get all particle sets a a read only list of particle set interfaces
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IParticleSet> GetParticleSets()
+        public ReadOnlyListAdapter<IParticleSet> GetParticleSets()
         {
-            return ReadOnlyList<IParticleSet>.FromEnumerable(Data.ParticleSets);
+            return ReadOnlyListAdapter<IParticleSet>.FromEnumerable(Data.ParticleSets);
         }
 
         /// <summary>

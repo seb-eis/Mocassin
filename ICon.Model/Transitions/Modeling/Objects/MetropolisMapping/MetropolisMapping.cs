@@ -44,7 +44,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public int CompareTo(MetropolisMapping other)
         {
-            int firstComp = PositionIndex0.CompareTo(other.PositionIndex0);
+            var firstComp = PositionIndex0.CompareTo(other.PositionIndex0);
             if (firstComp == 0)
             {
                 return PositionIndex1.CompareTo(other.PositionIndex1);

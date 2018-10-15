@@ -10,83 +10,66 @@ using ICon.Model.Basic;
 
 namespace ICon.Model.Simulations
 {
-    /// <summary>
-    /// Absttract base class for implementations of specialized simulation series model objects that define a set of simulations
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Simulations.ISimulationSeries"/>
+    /// <remarks> Abstract base class for implementations of simulation series objects </remarks>
     [DataContract]
-    public abstract class SimulationSeriesBase : ModelObject, ISimulationSeriesBase
+    public abstract class SimulationSeriesBase : ModelObject, ISimulationSeries
     {
-        /// <summary>
-        /// Get read only interface access to the energy background provider laod info list
-        /// </summary>
-        IReadOnlyList<IExternalLoadInfo> ISimulationSeriesBase.EnergyBackgroundLoadInfos => EnergyBackgroundLoadInfos;
+        /// <inheritdoc />
+        [IgnoreDataMember]
+        IReadOnlyList<IExternalLoadInfo> ISimulationSeries.EnergyBackgroundLoadInfos => EnergyBackgroundLoadInfos;
 
-        /// <summary>
-        /// The unspecififed base simulation affiliated with this series
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [IndexResolved]
-        public ISimulationBase BaseSimulation { get; set; }
+        public ISimulation BaseSimulation { get; set; }
 
-        /// <summary>
-        /// The user given series indetifier string
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The value series for the simulation temperature parameter
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public IValueSeries TemperatureSeries { get; set; }
 
-        /// <summary>
-        /// The value series for the simulation monte carlo steps per particle
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public IValueSeries McspSeries { get; set; }
 
         /// <summary>
-        /// The list of energy background load informations used to create energy background providers for the simulations
+        /// The list of energy background load information used to create energy background providers for the simulations
         /// </summary>
         [DataMember]
         public List<ExternalLoadInfo> EnergyBackgroundLoadInfos { get; set; }
 
-        /// <summary>
-        /// Populates the components of the base class from a model object interface and retunrs this object. Returns null if the population failed
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<ISimulationSeriesBase>(obj) is ISimulationSeriesBase series)
-            {
-                Name = series.Name;
-                TemperatureSeries = series.TemperatureSeries;
-                McspSeries = series.McspSeries;
-                EnergyBackgroundLoadInfos = series.EnergyBackgroundLoadInfos.Select(a => new ExternalLoadInfo(a)).ToList();
-                return this;
-            }
-            return null;
+            if (!(CastIfNotDeprecated<ISimulationSeries>(obj) is ISimulationSeries series))
+                return null;
+
+            Name = series.Name;
+            TemperatureSeries = series.TemperatureSeries;
+            McspSeries = series.McspSeries;
+            EnergyBackgroundLoadInfos = series.EnergyBackgroundLoadInfos.Select(a => new ExternalLoadInfo(a)).ToList();
+            return this;
         }
 
-        /// <summary>
-        /// Get the number of simulations described by this series
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public long GetSimulationCount()
         {
             long count = BaseSimulation.JobCount;
             var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var item in properties.Select(a => a.GetValue(this)).Where(value => value != null))
             {
-                if (item is IValueSeries series)
+                switch (item)
                 {
-                    count *= series.GetValueCount();
-                }
-                if (item is IList list)
-                {
-                    count *= list.Count;
+                    case IValueSeries series:
+                        count *= series.GetValueCount();
+                        break;
+
+                    case IList list:
+                        count *= list.Count;
+                        break;
                 }
             }
             return count;

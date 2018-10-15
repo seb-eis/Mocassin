@@ -20,45 +20,34 @@ namespace ICon.Framework.Collections
         [DataMember]
         public T1[] CodeValues { get; set; }
 
-        /// <summary>
-        /// The length of the code
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         public int Count => CodeValues.Length;
 
-        /// <summary>
-        /// Index access to the code
-        /// </summary>
-        /// <param name="indexer"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public T1 this[int indexer]
         {
-            get { return CodeValues[indexer]; }
-            set { CodeValues[indexer] = value; }
+            get => CodeValues[indexer];
+            set => CodeValues[indexer] = value;
         }
 
-        /// <summary>
-        /// Get the enumerator for the code sequence
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerator<T1> GetEnumerator()
         {
             return CodeValues.AsEnumerable().GetEnumerator();
         }
 
-        /// <summary>
-        /// Get the enumerator for the code sequence
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return CodeValues.GetEnumerator();
         }
 
         /// <summary>
-        /// Copies the code sequnce to another code seqeunce starting at the specified index
+        /// Copies the code sequence to another starting at the specified index
         /// </summary>
         /// <param name="other"></param>
+        /// <param name="index"></param>
         public void CopyTo(ArrayCode<T1> other, int index)
         {
             CodeValues.CopyTo(other.CodeValues, index);

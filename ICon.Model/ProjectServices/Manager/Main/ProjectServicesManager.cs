@@ -174,7 +174,7 @@ namespace ICon.Model.ProjectServices
         /// <returns></returns>
         public TManager GetManager<TManager>() where TManager : class, IModelManager
         {
-            foreach (IModelManager manager in ActiveManagers)
+            foreach (var manager in ActiveManagers)
             {
                 if (manager is TManager casted)
                 {
@@ -185,13 +185,13 @@ namespace ICon.Model.ProjectServices
         }
 
         /// <summary>
-        /// Get the registered manager that implements the specifified interface
+        /// Get the registered manager that implements the specified interface
         /// </summary>
         /// <param name="interfaceType"></param>
         /// <returns></returns>
         public IModelManager GetManager(Type interfaceType)
         {
-            return ActiveManagers.SingleOrDefault(value => interfaceType.IsAssignableFrom(value.GetType()));
+            return ActiveManagers.SingleOrDefault(interfaceType.IsInstanceOfType);
         }
 
         /// <summary>

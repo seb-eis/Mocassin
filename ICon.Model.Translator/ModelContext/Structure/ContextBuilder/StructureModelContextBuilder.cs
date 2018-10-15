@@ -19,8 +19,6 @@ namespace ICon.Model.Translator.ModelContext
         public StructureModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
             : base(projectModelContextBuilder)
         {
-            EnvironmentModelBuilder = new EnvironmentModelBuilder(ProjectServices);
-            PositionModelBuilder = new PositionModelBuilder(ProjectServices);
         }
 
         /// <inheritdoc />
@@ -40,6 +38,13 @@ namespace ICon.Model.Translator.ModelContext
         protected override IStructureModelContext GetEmptyDefaultContext()
         {
             return new StructureModelContext();
+        }
+
+        /// <inheritdoc />
+        protected override void SetNullBuildersToDefault()
+        {
+            EnvironmentModelBuilder = EnvironmentModelBuilder ?? new EnvironmentModelBuilder(ProjectServices);
+            PositionModelBuilder = PositionModelBuilder ?? new PositionModelBuilder(ProjectServices);
         }
     }
 }

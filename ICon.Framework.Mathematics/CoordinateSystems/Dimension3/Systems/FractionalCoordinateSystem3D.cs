@@ -41,7 +41,7 @@ namespace ICon.Mathematics.Coordinates
         public override (ACoorTuple A, ACoorTuple B, ACoorTuple C) ReferenceBaseVectors
         {
             get { return CartesianCoordinateSystem.BaseCoordinates; }
-            protected set { throw new InvalidObjectChangeException("Cartesian base or refernce vectors are constant and cannot be set"); }
+            protected set { throw new InvalidStateChangeException("Cartesian base or refernce vectors are constant and cannot be set"); }
         }
 
         /// <summary>

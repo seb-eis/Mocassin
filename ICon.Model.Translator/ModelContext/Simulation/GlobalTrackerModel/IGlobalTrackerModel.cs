@@ -11,11 +11,6 @@ namespace ICon.Model.Translator.ModelContext
     public interface IGlobalTrackerModel : IModelComponent
     {
         /// <summary>
-        /// The index of the tracker in the simulation state
-        /// </summary>
-        int TrackerId { get; set; }
-
-        /// <summary>
         /// The particle that is tracked by this global tracker model
         /// </summary>
         IParticle TrackedParticle { get; set; }

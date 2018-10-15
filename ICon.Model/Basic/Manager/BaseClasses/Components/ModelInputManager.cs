@@ -255,7 +255,7 @@ namespace ICon.Model.Basic
         {
             bool MethodSearch(MethodInfo methodInfo)
             {
-                if (methodInfo.GetCustomAttribute(typeof(OperationMethodAttribute)) is OperationMethodAttribute attribute)
+                if (methodInfo.GetCustomAttribute(typeof(DataOperationAttribute)) is DataOperationAttribute attribute)
                 {
                     return attribute.OperationType == operationType;
                 }
@@ -439,11 +439,11 @@ namespace ICon.Model.Basic
         {
             if (restricted.Contains(obj.Index))
             {
-                throw new ArgumentException($"The index {obj.Index} for {obj.GetModelObjectName()} is protected from deprecation");
+                throw new ArgumentException($"The index {obj.Index} for {obj.GetObjectName()} is protected from deprecation");
             }
             if (obj.Index >= objData.Count)
             {
-                throw new ArgumentOutOfRangeException($"{obj.GetModelObjectName()} index is out of range", nameof(obj.Index));
+                throw new ArgumentOutOfRangeException($"{obj.GetObjectName()} index is out of range", nameof(obj.Index));
             }
             bool changed = !objData[obj.Index].IsDeprecated;
             objData[obj.Index].Deprecate();
@@ -524,7 +524,7 @@ namespace ICon.Model.Basic
                 report.SetValidationReport(ProjectServices.ValidationServices.ValidateParameter(tmpObject, dataAccess.AsReader(DataReaderProvider)));
                 if (report.IsGood)
                 {
-                    report.CacheExpired = invalidatesCache;
+                    report.IsCacheExpired = invalidatesCache;
                     ReplaceModelParameter(orgObject, tmpObject);
 
                     // Send the newly populated original into the handling and not the temporary
@@ -557,7 +557,7 @@ namespace ICon.Model.Basic
         protected IOperationReport DefaultRegisterModelObject<T1, T2>(T1 obj, Func<DataAccessor<TData>, IList<T2>> dataAccessQuery) where T1 : IModelObject where T2 : ModelObject, T1, new()
         {
             // Build and link a new internal object of the replacemed type
-            T2 newInternal = ModelObject.BuildInternalObject<T2>(obj) ?? throw new ArgumentException("Could not build internal object from interface");
+            T2 newInternal = ModelObject.ToInternalObject<T2>(obj) ?? throw new ArgumentException("Could not build internal object from interface");
             ProjectServices.DataTracker.LinkModelObject(newInternal);
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
@@ -577,7 +577,7 @@ namespace ICon.Model.Basic
             {
                 EventManager.OnNewModelObjects.OnNext(ModelObjectEventArgs.Create((T1)newInternal));
             }
-            return InvokeDataOperation($"Add new {newInternal.GetModelObjectName()} to the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Add new {newInternal.GetObjectName()} to the manager", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -611,7 +611,7 @@ namespace ICon.Model.Basic
                     EventManager.OnRemovedModelObjects.OnNext(ModelObjectEventArgs.Create((T1)internalObj));
                 }
             }
-            return InvokeDataOperation($"Remove {internalObj.GetModelObjectName()} ({ internalObj.Index}) from manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Remove {internalObj.GetObjectName()} ({ internalObj.Index}) from manager", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -626,7 +626,7 @@ namespace ICon.Model.Basic
         protected IOperationReport DefaultReplaceModelObject<T1, T2>(T1 orgObj, T1 newObj, Func<DataAccessor<TData>, IList<T2>> dataAccessQuery) where T1 : IModelObject where T2 : ModelObject, T1, new()
         {
             // Build and link a temporary internal object with the replacement information
-            T2 tmpObject = ModelObject.BuildInternalObject<T2>(newObj) ?? throw new ArgumentException("Could not build internal object from interface");
+            T2 tmpObject = ModelObject.ToInternalObject<T2>(newObj) ?? throw new ArgumentException("Could not build internal object from interface");
             ProjectServices.DataTracker.LinkModelObject(tmpObject);
             tmpObject.Index = orgObj.Index;
 
@@ -654,7 +654,7 @@ namespace ICon.Model.Basic
                     EventManager.OnChangedModelObjects.OnNext(ModelObjectEventArgs.Create((T1)changedObject));
                 }
             }
-            return InvokeDataOperation($"Replace {tmpObject.GetModelObjectName()} ({ orgObj.Index}) in the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Replace {tmpObject.GetObjectName()} ({ orgObj.Index}) in the manager", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -705,7 +705,7 @@ namespace ICon.Model.Basic
         /// <returns></returns>
         protected IEnumerable<IList<ModelObject>> GetIndexedDataLists(IEnumerable<PropertyInfo> propertyInfo, DataAccessor<TData> accessor)
         {
-            return propertyInfo.Select(info => new ListInterfaceAdapter<ModelObject>((IList)info.GetValue(accessor.Query(data => data))));
+            return propertyInfo.Select(info => new GenericListAdapter<ModelObject>((IList)info.GetValue(accessor.Query(data => data))));
         }
 
         /// <summary>

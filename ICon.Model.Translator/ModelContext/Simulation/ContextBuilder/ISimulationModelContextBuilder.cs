@@ -5,6 +5,14 @@
     /// </summary>
     public interface ISimulationModelContextBuilder : IModelContextBuilder<ISimulationModelContext>
     {
-        
+        /// <summary>
+        /// Get or set the builder instance for metropolis simulation models
+        /// </summary>
+        IMetropolisSimulationModelBuilder MetropolisSimulationModelBuilder { get; set; }
+
+        /// <summary>
+        /// Get or set the builder instance for kinetic simulation models
+        /// </summary>
+        IKineticSimulationModelBuilder KineticSimulationModelBuilder {get; set; }
     }
 }

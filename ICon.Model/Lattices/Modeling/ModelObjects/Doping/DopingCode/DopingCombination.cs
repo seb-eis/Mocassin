@@ -41,7 +41,7 @@ namespace ICon.Model.Lattices
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'ElementSublatticeCode'";
         }
@@ -53,7 +53,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject modelObject)
         {
-            if (CastWithDepricatedCheck<IDopingCombination>(modelObject) is var casted)
+            if (CastIfNotDeprecated<IDopingCombination>(modelObject) is var casted)
             {
                 Dopant = casted.Dopant;
                 DopedParticle = casted.DopedParticle;

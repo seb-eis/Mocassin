@@ -51,9 +51,9 @@ namespace ICon.Model.Structures
         /// Get read only access to the unit cell position list
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IUnitCellPosition> GetUnitCellPositions()
+        public ReadOnlyListAdapter<IUnitCellPosition> GetUnitCellPositions()
         {
-            return ReadOnlyList<IUnitCellPosition>.FromEnumerable(Data.UnitCellPositions);
+            return ReadOnlyListAdapter<IUnitCellPosition>.FromEnumerable(Data.UnitCellPositions);
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace ICon.Model.Structures
         /// Get a aread only list of all position dummies
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IPositionDummy> GetPositionDummies()
+        public ReadOnlyListAdapter<IPositionDummy> GetPositionDummies()
         {
-            return ReadOnlyList<IPositionDummy>.FromEnumerable(Data.PositionDummies);
+            return ReadOnlyListAdapter<IPositionDummy>.FromEnumerable(Data.PositionDummies);
         }
 
         /// <summary>

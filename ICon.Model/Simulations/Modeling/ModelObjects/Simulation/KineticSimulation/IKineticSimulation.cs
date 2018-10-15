@@ -11,7 +11,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Represents a specialized custom simulation that describes the reference data for a kinetic monte carlo routine
     /// </summary>
-    public interface IKineticSimulation : ISimulationBase
+    public interface IKineticSimulation : ISimulation
     {
         /// <summary>
         /// The electric field direction as a read only fractional vector

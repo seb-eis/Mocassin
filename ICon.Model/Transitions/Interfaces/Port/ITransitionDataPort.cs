@@ -12,7 +12,7 @@ namespace ICon.Model.Transitions
         /// Get a read only list containing all state exchange pairs
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IStateExchangePair> GetStateExchangePairs();
+        ReadOnlyListAdapter<IStateExchangePair> GetStateExchangePairs();
 
         /// <summary>
         /// Get the state exchaage pair at the specified index
@@ -25,7 +25,7 @@ namespace ICon.Model.Transitions
         /// Get a read only list containing all state exchange groups groups
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IStateExchangeGroup> GetStateExchangeGroups();
+        ReadOnlyListAdapter<IStateExchangeGroup> GetStateExchangeGroups();
 
         /// <summary>
         /// Get the property group at the specififed index
@@ -38,7 +38,7 @@ namespace ICon.Model.Transitions
         /// Get a read only list containing all abstract transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IAbstractTransition> GetAbstractTransitions();
+        ReadOnlyListAdapter<IAbstractTransition> GetAbstractTransitions();
 
         /// <summary>
         /// Get the abstract transition with the provided index
@@ -51,13 +51,13 @@ namespace ICon.Model.Transitions
         /// Get a read only list containing all kinetic transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IKineticTransition> GetKineticTransitions();
+        ReadOnlyListAdapter<IKineticTransition> GetKineticTransitions();
 
         /// <summary>
         /// Get a read only list containing all metropolis transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IMetropolisTransition> GetMetropolisTransitions();
+        ReadOnlyListAdapter<IMetropolisTransition> GetMetropolisTransitions();
 
         /// <summary>
         /// Get the number of kinetic transitions

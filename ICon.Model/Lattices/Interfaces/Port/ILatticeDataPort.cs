@@ -25,25 +25,25 @@ namespace ICon.Model.Lattices
         /// Get read only list of used dopings
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IDoping> GetDopings();
+        ReadOnlyListAdapter<IDoping> GetDopings();
 
         /// <summary>
         /// Get read only list of DopingCombinations (dopant, doped element, unit cell entry)
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IDopingCombination> GetDopingCombinations();
+        ReadOnlyListAdapter<IDopingCombination> GetDopingCombinations();
 
         /// <summary>
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IBuildingBlock> GetBuildingBlocks();
+        ReadOnlyListAdapter<IBuildingBlock> GetBuildingBlocks();
 
         /// <summary>
         /// Get read only list of block infos
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IBlockInfo> GetBlockInfos();
+        ReadOnlyListAdapter<IBlockInfo> GetBlockInfos();
 
     }
 }

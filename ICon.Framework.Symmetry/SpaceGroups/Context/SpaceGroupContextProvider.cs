@@ -1,39 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
-using ICon.Framework.SQLiteCore;
+﻿using ICon.Framework.SQLiteCore;
 
 namespace ICon.Symmetry.SpaceGroups
 {
     /// <summary>
-    /// Provider for space group context
+    ///     Provider for the space group database context
     /// </summary>
-    public class SpaceGroupContextProvider : SQLiteContextProvider<SpaceGroupContext>
+    public class SpaceGroupContextProvider : SqLiteContextProvider<SpaceGroupContext>
     {
-        /// <summary>
-        ///  The default filepath to the space group database
-        /// </summary>
-        public static new String DefaultFilepath = "C:/Users/hims-user/source/repos/ICon.Project/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db";
+        /// <inheritdoc />
+        public override string DefaultFilepath { get; } =
+            "C:/Users/hims-user/source/repos/ICon.Project/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db";
 
         /// <summary>
-        /// New context provider utilizing the default filepath
+        ///     New context provider utilizing the default filepath
         /// </summary>
-        public SpaceGroupContextProvider() : base(DefaultFilepath)
+        public SpaceGroupContextProvider()
         {
         }
 
         /// <summary>
-        /// Creates a context provider with the specified filepath (Checks if filepath exists)
+        ///     Creates a context provider with the specified filepath (Checks if filepath exists)
         /// </summary>
         /// <param name="filepath"></param>
-        public SpaceGroupContextProvider(String filepath) : base(filepath)
+        public SpaceGroupContextProvider(string filepath)
+            : base(filepath)
         {
         }
 
         /// <summary>
-        /// Factory method to create a new space group context
+        ///     Factory method to create a new space group context
         /// </summary>
         /// <returns></returns>
         public SpaceGroupContext NewContext()

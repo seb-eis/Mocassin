@@ -21,6 +21,12 @@ namespace ICon.Model.Translator.ModelContext
         Task<TContext> BuildContext();
 
         /// <summary>
+        /// Builds all link dependent components on the context
+        /// </summary>
+        /// <returns></returns>
+        Task BuildLinkDependentComponents();
+
+        /// <summary>
         /// Rebuilds on the passed model context instead of creating a new one
         /// </summary>
         /// <param name="modelContext"></param>

@@ -23,20 +23,20 @@ namespace ICon.Model.Basic
         /// <summary>
         /// Event provider for the subject of locally changed values
         /// </summary>
-        protected EventProvider<Unit> OnValueChanged { get; set; }
+        protected ReactiveEvent<Unit> OnValueChanged { get; set; }
 
         /// <summary>
         /// Event provider for the subject of data pushes to the model
         /// </summary>
-        protected EventProvider<Unit> OnValuesPushed { get; set; }
+        protected ReactiveEvent<Unit> OnValuesPushed { get; set; }
 
         /// <summary>
         /// Create new value setter and initialize the event providers
         /// </summary>
         protected ValueSetter()
         {
-            OnValueChanged = new EventProvider<Unit>();
-            OnValuesPushed = new EventProvider<Unit>();
+            OnValueChanged = new ReactiveEvent<Unit>();
+            OnValuesPushed = new ReactiveEvent<Unit>();
         }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace ICon.Model.Transitions
         /// Get the type name of the model object
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Property Group'";
         }
@@ -57,7 +57,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IStateExchangeGroup>(obj) is var group)
+            if (CastIfNotDeprecated<IStateExchangeGroup>(obj) is var group)
             {
                 Index = group.Index;
                 VacancyGroup = group.VacancyGroup;

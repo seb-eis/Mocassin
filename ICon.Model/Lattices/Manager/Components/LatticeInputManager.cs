@@ -33,7 +33,7 @@ namespace ICon.Model.Lattices
         /// Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists. Distributes affiliated eventy on operation success
         /// </summary>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectCleaning)]
+        [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();
@@ -44,7 +44,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="latticeInfo"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ParameterChange)]
+        [DataOperation(DataOperationType.ParameterChange)]
         protected IOperationReport TrySetLatticeInfo(ILatticeInfo latticeInfo)
         {
             var result = DefaultSetModelParameter(latticeInfo, accessor => accessor.Query(data => data.LatticeInfo), true);
@@ -56,7 +56,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewBuildingBlock(IBuildingBlock buildingBlock)
         {
             var result = DefaultRegisterModelObject(buildingBlock, accessor => accessor.Query(data => data.BuildingBlocks));
@@ -68,7 +68,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveBuildingBlock(IBuildingBlock buildingBlock)
         {
             return DefaultRemoveModelObject(buildingBlock, accessor => accessor.Query(data => data.BuildingBlocks), 0);
@@ -80,7 +80,7 @@ namespace ICon.Model.Lattices
         /// <param name="orgBuildingBlock"></param>
         /// <param name="newBuildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceBuildingBlock(IBuildingBlock orgBuildingBlock, IBuildingBlock newBuildingBlock)
         {
             return DefaultReplaceModelObject(orgBuildingBlock, newBuildingBlock, accessor => accessor.Query(data => data.BuildingBlocks));
@@ -91,7 +91,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewBlockInfo(IBlockInfo blockInfo)
         {
             var result = DefaultRegisterModelObject(blockInfo, accessor => accessor.Query(data => data.BlockInfos));
@@ -103,7 +103,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveBlockInfo(IBlockInfo blockInfo)
         {
             return DefaultRemoveModelObject(blockInfo, accessor => accessor.Query(data => data.BlockInfos), 0);
@@ -115,7 +115,7 @@ namespace ICon.Model.Lattices
         /// <param name="orgBuildingBlock"></param>
         /// <param name="newBuildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceBlockInfo(IBlockInfo orgBlockInfo, IBlockInfo newBlockInfo)
         {
             return DefaultReplaceModelObject(orgBlockInfo, newBlockInfo, accessor => accessor.Query(data => data.BlockInfos));
@@ -126,7 +126,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewDopingCombination(IDopingCombination dopingCombination)
         {
             var result = DefaultRegisterModelObject(dopingCombination, accessor => accessor.Query(data => data.DopingCombinations));
@@ -138,7 +138,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveDopingCombination(IDopingCombination dopingCombination)
         {
             return DefaultRemoveModelObject(dopingCombination, accessor => accessor.Query(data => data.DopingCombinations), 0);
@@ -150,7 +150,7 @@ namespace ICon.Model.Lattices
         /// <param name="orgBuildingBlock"></param>
         /// <param name="newBuildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceDopingCombination(IDopingCombination orgDopingCombination, IDopingCombination newDopingCombination)
         {
             return DefaultReplaceModelObject(orgDopingCombination, newDopingCombination, accessor => accessor.Query(data => data.DopingCombinations));
@@ -161,7 +161,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewDoping(IDoping doping)
         {
             var result =  DefaultRegisterModelObject(doping, accessor => accessor.Query(data => data.Dopings));
@@ -173,7 +173,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="buildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveDoping(IDoping doping)
         {
             return DefaultRemoveModelObject(doping, accessor => accessor.Query(data => data.Dopings), 0);
@@ -185,7 +185,7 @@ namespace ICon.Model.Lattices
         /// <param name="orgBuildingBlock"></param>
         /// <param name="newBuildingBlock"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceDoping(IDoping orgDoping, IDoping newDoping)
         {
             return DefaultReplaceModelObject(orgDoping, newDoping, accessor => accessor.Query(data => data.Dopings));

@@ -11,69 +11,51 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// The simulation setting flag that defines basic settings that can be used with both metropolis and kinetic simulations
     /// </summary>
+    [Flags]
     public enum SimulationBaseFlags
     {
         UseDynamicBreak = 0b1, UseCheckpointSystem = 0b10, AutoDetectStuckSimulation = 0b100, CopyStdoutToFile = 0b1000,
         FullDebugStateDump = 0b10000
     }
 
-    /// <summary>
-    /// Abstract base class for single user defined simulations that carry all reference information to generate an encode simulation dataset
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Simulations.ISimulation"/>
+    /// <remarks> Abstract base class for simulation implementations </remarks>
     [DataContract]
-    public abstract class SimulationBase : ModelObject, ISimulationBase
+    public abstract class SimulationBase : ModelObject, ISimulation
     {
-        /// <summary>
-        /// The user defined identifier to mark the simulation
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The user defined custom random number generator seed for lattice creation
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public string CustomRngSeed { get; set; }
 
-        /// <summary>
-        /// The simulation temperature setting in [K]
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public double Temperature { get; set; }
 
-        /// <summary>
-        /// The target monte carlo steps per particle of the simulation
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public int TargetMcsp { get; set; }
 
-        /// <summary>
-        /// The number of write calls (Cechkpoints, data out, ...) during the simulation
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public int WriteOutCount { get; set; }
 
-        /// <summary>
-        /// The simulation settings flag that controles basic simulation behaviour
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public SimulationBaseFlags BaseFlags { get; set; }
 
-        /// <summary>
-        /// Defines the save run time for a simulation. After the time span has passed a simulation will automatically terminate to avoid forced shutdown during data out operations
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public TimeSpan SaveRunTimeLimit { get; set; }
 
-        /// <summary>
-        /// Defines the minimal success rate a simulation has to reach. Simulations that fall below this value will be automatically terminated
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public double LowerSuccessRateLimit { get; set; }
 
-        /// <summary>
-        /// Defines the number of equivalent jobs produced for this simulation (Each job has its RNG induced values recreated)
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public int JobCount { get; set; }
 
@@ -83,32 +65,27 @@ namespace ICon.Model.Simulations
         [DataMember]
         public ExternalLoadInfo EnergyBackgroundProviderInfo { get; set; }
 
-        /// <summary>
-        /// REad only interface access to the energy background provider load information
-        /// </summary>
-        IExternalLoadInfo ISimulationBase.EnergyBackgroundProviderInfo => EnergyBackgroundProviderInfo;
+        /// <inheritdoc />
+        [IgnoreDataMember]
+        IExternalLoadInfo ISimulation.EnergyBackgroundProviderInfo => EnergyBackgroundProviderInfo;
 
-        /// <summary>
-        /// Populate this object from a model object interface and retruns it as a generic model object. Returns null if the population failed
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<ISimulationBase>(obj) is ISimulationBase simulation)
-            {
-                Temperature = simulation.Temperature;
-                TargetMcsp = simulation.TargetMcsp;
-                WriteOutCount = simulation.WriteOutCount;
-                BaseFlags = simulation.BaseFlags;
-                SaveRunTimeLimit = simulation.SaveRunTimeLimit;
-                Name = simulation.Name;
-                CustomRngSeed = simulation.CustomRngSeed;
-                JobCount = simulation.JobCount;
-                EnergyBackgroundProviderInfo = new ExternalLoadInfo(simulation.EnergyBackgroundProviderInfo);
-                return this;
-            }
-            return null;
+            if (!(CastIfNotDeprecated<ISimulation>(obj) is ISimulation simulation))
+                return null;
+
+            Temperature = simulation.Temperature;
+            TargetMcsp = simulation.TargetMcsp;
+            WriteOutCount = simulation.WriteOutCount;
+            BaseFlags = simulation.BaseFlags;
+            SaveRunTimeLimit = simulation.SaveRunTimeLimit;
+            Name = simulation.Name;
+            CustomRngSeed = simulation.CustomRngSeed;
+            JobCount = simulation.JobCount;
+            LowerSuccessRateLimit = simulation.LowerSuccessRateLimit;
+            EnergyBackgroundProviderInfo = new ExternalLoadInfo(simulation.EnergyBackgroundProviderInfo);
+            return this;
         }
     }
 }

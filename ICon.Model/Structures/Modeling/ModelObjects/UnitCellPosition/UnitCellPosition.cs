@@ -51,7 +51,7 @@ namespace ICon.Model.Structures
         /// Get a string that represents the name of the object type
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Unit Cell Position'";
         }
@@ -63,7 +63,7 @@ namespace ICon.Model.Structures
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IUnitCellPosition>(obj) is var position)
+            if (CastIfNotDeprecated<IUnitCellPosition>(obj) is var position)
             {
                 Status = position.Status;
                 Vector = new DataVector3D(position.Vector);

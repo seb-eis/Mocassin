@@ -15,6 +15,12 @@ namespace ICon.Model.ProjectServices
     public class StringSetting
     {
         /// <summary>
+        /// Boolean flag that indicates if the value can be null
+        /// </summary>
+        [DataMember]
+        public bool CanBeNull { get; set; }
+
+        /// <summary>
         /// The regex pattern string used to create regex instances
         /// </summary>
         [DataMember]
@@ -34,19 +40,21 @@ namespace ICon.Model.ProjectServices
         }
 
         /// <summary>
-        /// Create pattern setting froma pattern string. Throws if the pattern is not a valid regex pattern or null
+        /// Create pattern setting from pattern string. Throws if the pattern is not a valid regex pattern or null
         /// </summary>
         /// <param name="displayName"></param>
         /// <param name="regexPattern"></param>
-        public StringSetting(string displayName, string regexPattern)
+        /// <param name="canBeNull"></param>
+        public StringSetting(string displayName, string regexPattern, bool canBeNull)
         {
-            Regex.IsMatch("", regexPattern);
+            CanBeNull = canBeNull;
             DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
             RegexPattern = regexPattern ?? throw new ArgumentNullException(nameof(regexPattern));
+            Regex.IsMatch("", regexPattern); // Enforce exception on invalid regex pattern that is not null!
         }
 
         /// <summary>
-        /// Parse a value and check if it matches the settings limitations. REtruns false on faild and sets the affiliated warnings to the out parameter
+        /// Parse a value and check if it matches the settings limitations. Returns false on failed and sets the affiliated warnings to the out parameter
         /// </summary>
         /// <param name="value"></param>
         /// <param name="warnings"></param>
@@ -54,18 +62,20 @@ namespace ICon.Model.ProjectServices
         public bool ParseValue(string value, out IEnumerable<WarningMessage> warnings)
         {
             warnings = null;
+            if (value is null && CanBeNull)
+                return true;
+
+            if (Regex.IsMatch(value, RegexPattern))
+                return true;
+
             var messages = new List<WarningMessage>(2);
-            if (!Regex.IsMatch(value, RegexPattern))
-            {
-                var detail0 = $"The defined string value ({value}) for [{DisplayName}] violates its allowed regex pattern ({RegexPattern})";
-                var detail1 = "Option 1: Change your string to match the regex pattern. This is recommended.";
-                var detail2 = "Option 2: Change the regex pattern in the settings. This is not recommended.";
-                var detail3 = "Important: Invalid pattern definitions in the settings may crash the application!";
-                messages.Add(ModelMessages.CreateNamingViolationWarning(this, detail0, detail1, detail2, detail3));
-                warnings = messages;
-                return false;
-            }
-            return true;
+            var detail0 = $"The defined string value ({value}) for [{DisplayName}] violates its allowed regex pattern ({RegexPattern})";
+            var detail1 = "Option 1: Change your string to match the regex pattern. This is recommended.";
+            var detail2 = "Option 2: Change the regex pattern in the settings. This is not recommended.";
+            var detail3 = "Important: Invalid pattern definitions in the settings may crash the application!";
+            messages.Add(ModelMessages.CreateNamingViolationWarning(this, detail0, detail1, detail2, detail3));
+            warnings = messages;
+            return false;
         }
     }
 }

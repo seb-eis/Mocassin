@@ -34,9 +34,9 @@ namespace ICon.Model.Transitions
         /// Get a read only list of all abstract transitions
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IAbstractTransition> GetAbstractTransitions()
+        public ReadOnlyListAdapter<IAbstractTransition> GetAbstractTransitions()
         {
-            return ReadOnlyList<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
+            return ReadOnlyListAdapter<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
         }
 
         /// <summary>
@@ -52,18 +52,18 @@ namespace ICon.Model.Transitions
         /// Get a read only list of all kinetic transitions
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IKineticTransition> GetKineticTransitions()
+        public ReadOnlyListAdapter<IKineticTransition> GetKineticTransitions()
         {
-            return ReadOnlyList<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
+            return ReadOnlyListAdapter<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
         }
 
         /// <summary>
         /// Get a read only list of all metropolis transitions
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IMetropolisTransition> GetMetropolisTransitions()
+        public ReadOnlyListAdapter<IMetropolisTransition> GetMetropolisTransitions()
         {
-            return ReadOnlyList<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
+            return ReadOnlyListAdapter<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
         }
 
         /// <summary>
@@ -89,18 +89,18 @@ namespace ICon.Model.Transitions
         /// Get a read only list of all state exchange groups
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IStateExchangeGroup> GetStateExchangeGroups()
+        public ReadOnlyListAdapter<IStateExchangeGroup> GetStateExchangeGroups()
         {
-            return ReadOnlyList<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
+            return ReadOnlyListAdapter<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
         }
 
         /// <summary>
         /// Get a read only list of all state exchange pairs
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IStateExchangePair> GetStateExchangePairs()
+        public ReadOnlyListAdapter<IStateExchangePair> GetStateExchangePairs()
         {
-            return ReadOnlyList<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
+            return ReadOnlyListAdapter<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
         }
 
         /// <summary>

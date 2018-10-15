@@ -73,7 +73,7 @@ namespace ICon.Model.Transitions
         /// Get the type name of the model object
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Abstract Transition'";
         }
@@ -85,7 +85,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IAbstractTransition>(obj) is var transition)
+            if (CastIfNotDeprecated<IAbstractTransition>(obj) is var transition)
             {
                 Name = transition.Name;
                 StateExchangeGroups = transition.GetStateExchangeGroups().ToList();

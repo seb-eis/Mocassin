@@ -14,7 +14,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The list of base simulations in order of translation
         /// </summary>
-        IReadOnlyList<ISimulationBase> BaseSimulations { get; }
+        IReadOnlyList<ISimulation> BaseSimulations { get; }
 
         /// <summary>
         /// Access to the MC project service that carries the NET model data structures
@@ -36,14 +36,14 @@ namespace ICon.Model.Translator
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="simulation"></param>
-        void AddSimulationToDatabase<T>(T simulation) where T : ISimulationBase;
+        void AddSimulationToDatabase<T>(T simulation) where T : ISimulation;
 
         /// <summary>
         /// Creates and adds/updates the job models that result from the passed simualtion series in/to the database
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="simulationSeries"></param>
-        void AddSimulationSeriesToDatabase<T>(T simulationSeries) where T : ISimulationSeriesBase;
+        void AddSimulationSeriesToDatabase<T>(T simulationSeries) where T : ISimulationSeries;
 
         /// <summary>
         /// Get the package context id of the passed simulation in the database context
@@ -51,6 +51,6 @@ namespace ICon.Model.Translator
         /// <typeparam name="T"></typeparam>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        int FindSimulationPackageContextId<T>(T simulation) where T : ISimulationBase;
+        int FindSimulationPackageContextId<T>(T simulation) where T : ISimulation;
     }
 }

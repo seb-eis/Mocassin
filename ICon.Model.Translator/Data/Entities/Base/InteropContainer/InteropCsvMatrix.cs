@@ -14,12 +14,12 @@ namespace ICon.Model.Translator
         /// <summary>
         /// The size list that describes the dimensions of the matrix
         /// </summary>
-        public CsvList<int> SizeList { get; set; }
+        public CsvSerializableList<int> SizeList { get; set; }
 
         /// <summary>
         /// The linearized version of the matrix
         /// </summary>
-        public CsvList<T> LinearMatrix { get; set; }
+        public CsvSerializableList<T> LinearMatrix { get; set; }
 
         /// <summary>
         /// Creates a csv style string representation of the encoded lattice
@@ -40,8 +40,8 @@ namespace ICon.Model.Translator
             var encoded = new InteropCsvMatrix<T>();
             var split = value.Split('@');
 
-            encoded.SizeList = CsvList<int>.Parse(split[0], a => int.Parse(a));
-            encoded.LinearMatrix = CsvList<T>.Parse(split[1], converter);
+            encoded.SizeList = CsvSerializableList<int>.Parse(split[0], a => int.Parse(a));
+            encoded.LinearMatrix = CsvSerializableList<T>.Parse(split[1], converter);
 
             return encoded;
         }

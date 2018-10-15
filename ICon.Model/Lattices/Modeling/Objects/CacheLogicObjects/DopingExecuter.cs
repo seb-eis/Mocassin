@@ -16,7 +16,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="lattice"></param>
         /// <param name="dopings"></param>
-        public void ExecuteMultible(WorkLattice lattice, ReadOnlyList<IDoping> dopings)
+        public void ExecuteMultible(WorkLattice lattice, ReadOnlyListAdapter<IDoping> dopings)
         {
             foreach (var doping in dopings)
             {

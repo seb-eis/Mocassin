@@ -48,7 +48,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        protected IEnumerable<PositionMobilityInfo> CreateUnitCellMobilityInfo<T1>(T1 simulation) where T1 : ISimulationBase
+        protected IEnumerable<PositionMobilityInfo> CreateUnitCellMobilityInfo<T1>(T1 simulation) where T1 : ISimulation
         {
             var manager = ProjectServices.GetManager<IStructureManager>();
             foreach (var cellPosition in manager.QueryPort.Query(data => data.GetUnitCellPositions()))

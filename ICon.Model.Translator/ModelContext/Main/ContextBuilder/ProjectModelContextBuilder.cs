@@ -43,9 +43,8 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// Async creation of a new project model context and all its components
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <returns></returns>
-        public async Task<IProjectModelContext> BuildNewContext<T1>() where T1 : IProjectModelContext
+        public async Task<IProjectModelContext> BuildNewContext()
         {
             var projectModelContext = new ProjectModelContext()
             {
@@ -53,12 +52,14 @@ namespace ICon.Model.Translator.ModelContext
             };
 
             StartComponentBuildProcess();
-            await ProjectModelContextLinker.LinkContextComponents(this);
 
             projectModelContext.EnergyModelContext = await EnergyModelContextBuilder.BuildTask;
             projectModelContext.SimulationModelContext = await SimulationModelContextBuilder.BuildTask;
             projectModelContext.TransitionModelContext = await TransitionModelContextBuilder.BuildTask;
             projectModelContext.StructureModelContext = await StructureModelContextBuilder.BuildTask;
+
+            await ProjectModelContextLinker.LinkContextComponents(this);
+            await BuildLinkDependentComponents();
 
             return projectModelContext;
         }
@@ -75,6 +76,21 @@ namespace ICon.Model.Translator.ModelContext
             StructureModelContextBuilder.BuildContext();
             TransitionModelContextBuilder.BuildContext();
             SimulationModelContextBuilder.BuildContext();
+        }
+
+        /// <summary>
+        /// Calls the link dependent build routines on all context builders
+        /// </summary>
+        protected Task BuildLinkDependentComponents()
+        {
+            var tasks = new[]
+            {
+                EnergyModelContextBuilder.BuildLinkDependentComponents(),
+                StructureModelContextBuilder.BuildLinkDependentComponents(),
+                TransitionModelContextBuilder.BuildLinkDependentComponents(),
+                SimulationModelContextBuilder.BuildLinkDependentComponents()
+            };
+            return Task.WhenAll(tasks);
         }
 
         /// <summary>

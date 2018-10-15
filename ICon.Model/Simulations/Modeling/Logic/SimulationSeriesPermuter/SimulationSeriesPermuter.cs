@@ -24,7 +24,7 @@ namespace ICon.Model.Simulations
         /// Initializes the base permutation sets of the unspecified simulation series
         /// </summary>
         /// <param name="baseSeries"></param>
-        protected void InitializeBaseInformation(ISimulationSeriesBase baseSeries)
+        protected void InitializeBaseInformation(ISimulationSeries baseSeries)
         {
 
         }

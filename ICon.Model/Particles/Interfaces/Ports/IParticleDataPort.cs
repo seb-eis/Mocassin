@@ -47,12 +47,12 @@ namespace ICon.Model.Particles
         /// <summary>
         /// Get a read only collection of the particle interfaces stored in the manager
         /// </summary>
-        ReadOnlyList<IParticle> GetParticles();
+        ReadOnlyListAdapter<IParticle> GetParticles();
 
         /// <summary>
         /// Get a read only collection of the particle set interfaces stored in the manager
         /// </summary>
-        ReadOnlyList<IParticleSet> GetParticleSets();
+        ReadOnlyListAdapter<IParticleSet> GetParticleSets();
 
         /// <summary>
         /// Get a clean indexing information for the particles that is equivalent to the reindexing info after a deprecated data cleanup

@@ -24,7 +24,7 @@ namespace ICon.Model.Simulations
         }
 
         /// <summary>
-        /// Validates a metropolis simulation in terms of its base simulation and specfific settings an returns a validation report containing the results
+        /// Validates a metropolis simulation in terms of its base simulation and specific settings an returns a validation report containing the results
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>

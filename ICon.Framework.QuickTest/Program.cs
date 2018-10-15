@@ -61,7 +61,7 @@ namespace ICon.Framework.QuickTest
             var packages = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
             var mainContextBuilder = new ProjectModelContextBuilder(packages.ProjectServices);
             var watch = Stopwatch.StartNew();
-            var result = mainContextBuilder.BuildNewContext<ProjectModelContext>().Result;
+            var result = mainContextBuilder.BuildNewContext().Result;
             DisplayWatch(watch);
             Console.ReadLine();
         }

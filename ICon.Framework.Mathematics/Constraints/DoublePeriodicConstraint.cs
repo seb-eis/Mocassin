@@ -14,15 +14,15 @@ namespace ICon.Mathematics.Constraints
         /// <summary>
         /// Creates new periodic double constraint with the specified components
         /// </summary>
-        /// <param name="minIncluded"></param>
+        /// <param name="minIsIncluded"></param>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
-        /// <param name="maxIncluded"></param>
+        /// <param name="maxIsIncluded"></param>
         /// <param name="comparator"></param>
-        public DoublePeriodicConstraint(Boolean minIncluded, Double minValue, Double maxValue, Boolean maxIncluded, DoubleComparer comparator) 
-            : base(minIncluded, minValue, maxValue, maxIncluded, comparator)
+        public DoublePeriodicConstraint(Boolean minIsIncluded, Double minValue, Double maxValue, Boolean maxIsIncluded, DoubleComparer comparator) 
+            : base(minIsIncluded, minValue, maxValue, maxIsIncluded, comparator)
         {
-            if (minIncluded == false && maxIncluded == false)
+            if (minIsIncluded == false && maxIsIncluded == false)
             {
                 throw new ArgumentException(message: "Periodic constraints require at least one included boundary value");
             }
@@ -66,12 +66,12 @@ namespace ICon.Mathematics.Constraints
         private Boolean TryParseToMinValue(Double sourceValue, out Double result)
         {
             Int32 maxCompare = Comparer.Compare(sourceValue, MaxValue);
-            if (maxCompare == 0 && MaxIncluded == true)
+            if (maxCompare == 0 && MaxIsIncluded == true)
             {
                 result = MaxValue;
                 return true;
             }
-            if (maxCompare == 0 && MaxIncluded == false)
+            if (maxCompare == 0 && MaxIsIncluded == false)
             {
                 result = MinValue;
                 return true;
@@ -89,12 +89,12 @@ namespace ICon.Mathematics.Constraints
         private Boolean TryParseToMaxValue(Double sourceValue, out Double result)
         {
             Int32 minCompare = Comparer.Compare(sourceValue, MinValue);
-            if (minCompare == 0 && MinIncluded == true)
+            if (minCompare == 0 && MinIsIncluded == true)
             {
                 result = MinValue;
                 return true;
             }
-            if (minCompare == 0 && MinIncluded == false)
+            if (minCompare == 0 && MinIsIncluded == false)
             {
                 result = MaxValue;
                 return true;

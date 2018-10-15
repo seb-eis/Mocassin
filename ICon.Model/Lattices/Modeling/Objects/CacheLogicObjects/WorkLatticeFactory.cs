@@ -23,7 +23,7 @@ namespace ICon.Model.Lattices
         /// <param name="sublatticeIDs"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public WorkLattice Fabricate(ReadOnlyList<IBuildingBlock> buildingBlocks, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntegralVector3D latticeSize)
+        public WorkLattice Fabricate(ReadOnlyListAdapter<IBuildingBlock> buildingBlocks, ReadOnlyListAdapter<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntegralVector3D latticeSize)
         {
             if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new DataIntegralVector3D(0,0,0)))
             {

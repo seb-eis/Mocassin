@@ -28,7 +28,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterUnitCellPosition(IUnitCellPosition position)
         {
             return DefaultRegisterModelObject(position, accessor => accessor.Query(data => data.UnitCellPositions));
@@ -39,7 +39,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveUnitCellPosition(IUnitCellPosition position)
         {
             return DefaultRemoveModelObject(position, accessor => accessor.Query(data => data.UnitCellPositions));
@@ -51,7 +51,7 @@ namespace ICon.Model.Structures
         /// <param name="orgPosition"></param>
         /// <param name="newPosition"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceUnitCellPosition(IUnitCellPosition orgPosition, IUnitCellPosition newPosition)
         {
             return DefaultReplaceModelObject(orgPosition, newPosition, accessor => accessor.Query(data => data.UnitCellPositions));
@@ -62,7 +62,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterPositionDummy(IPositionDummy position)
         {
             return DefaultRegisterModelObject(position, accessor => accessor.Query(data => data.PositionDummies));
@@ -73,7 +73,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemovePositionDummy(IPositionDummy position)
         {
             return DefaultRemoveModelObject(position, accessor => accessor.Query(data => data.PositionDummies));
@@ -85,7 +85,7 @@ namespace ICon.Model.Structures
         /// <param name="orgPosition"></param>
         /// <param name="newPosition"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplacePositionDummy(IPositionDummy orgPosition, IPositionDummy newPosition)
         {
             return DefaultReplaceModelObject(orgPosition, newPosition, accessor => accessor.Query(data => data.PositionDummies));
@@ -96,7 +96,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="cellParams"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ParameterChange)]
+        [DataOperation(DataOperationType.ParameterChange)]
         protected IOperationReport TrySetCellParameters(ICellParameters cellParams)
         {
             return DefaultSetModelParameter(cellParams, accessor => accessor.Query(data => data.CrystalParameters), true);
@@ -107,7 +107,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="groupInfo"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ParameterChange)]
+        [DataOperation(DataOperationType.ParameterChange)]
         protected IOperationReport TrySetSpaceGroup(ISpaceGroupInfo groupInfo)
         {
             return DefaultSetModelParameter(groupInfo, accessor => accessor.Query(data => data.SpaceGroupInfo), true);
@@ -118,7 +118,7 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ParameterChange)]
+        [DataOperation(DataOperationType.ParameterChange)]
         protected IOperationReport TrySetStructureInfo(IStructureInfo info)
         {
             return DefaultSetModelParameter(info, accessor => accessor.Query(data => data.StructureInfo), false);
@@ -128,7 +128,7 @@ namespace ICon.Model.Structures
         /// Tries to clean deprecated model objects from the manager (Distributes reindexing events on operation succes)
         /// </summary>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectCleaning)]
+        [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();

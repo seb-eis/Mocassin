@@ -34,7 +34,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// The group energy model that the interaction uses
         /// </summary>
-        IGroupEnergyModel EnergyModel { get; set; }
+        IGroupEnergyModel GroupEnergyModel { get; set; }
 
         /// <summary>
         /// The position group info that carries extended symmetry info for the group interaction

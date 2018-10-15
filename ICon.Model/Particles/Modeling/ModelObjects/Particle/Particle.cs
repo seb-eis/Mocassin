@@ -63,7 +63,7 @@ namespace ICon.Model.Particles
         }
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Particle'";
         }
@@ -72,7 +72,7 @@ namespace ICon.Model.Particles
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastWithDepricatedCheck<IParticle>(obj) is IParticle particle))
+            if (!(CastIfNotDeprecated<IParticle>(obj) is IParticle particle))
                 return null;
 
             if (particle.IsEmpty)

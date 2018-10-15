@@ -30,7 +30,7 @@ namespace ICon.Model.Lattices
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Building Block'";
         }

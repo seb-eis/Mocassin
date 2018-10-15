@@ -86,7 +86,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public StatePairGroup MergeGroups(IEnumerable<StatePairGroup> groups)
         {
-            IComparer<(int, int)> comparer = new TupleContentComparer<int, int>();
+            IComparer<(int, int)> comparer = new TupleComparer<int, int>();
             var result = ContainerFactory.CreateSetList(comparer, groups.SelectMany(group => group.StatePairs));
             return new StatePairGroup(result.ToArray());
         }

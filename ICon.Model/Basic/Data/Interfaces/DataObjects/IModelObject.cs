@@ -28,6 +28,6 @@ namespace ICon.Model.Basic
         /// Returns a string that represents the model object type name
         /// </summary>
         /// <returns></returns>
-        string GetModelObjectName();
+        string GetObjectName();
     }
 }

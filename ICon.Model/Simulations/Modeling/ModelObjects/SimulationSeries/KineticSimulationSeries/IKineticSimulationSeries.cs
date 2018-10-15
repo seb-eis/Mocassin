@@ -8,7 +8,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Represents a specialized simulation sereis for kinetic monte carlo simulations
     /// </summary>
-    public interface IKineticSimulationSeries : ISimulationSeriesBase
+    public interface IKineticSimulationSeries : ISimulationSeries
     {
         /// <summary>
         /// Get the kinetic base simulation of the series

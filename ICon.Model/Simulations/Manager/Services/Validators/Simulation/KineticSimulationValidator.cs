@@ -23,11 +23,7 @@ namespace ICon.Model.Simulations
         {
         }
 
-        /// <summary>
-        /// Validates a kinetic simulation in terms of its base definitions and specific kinetic settings and returns a validation report with the results
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IValidationReport Validate(IKineticSimulation obj)
         {
             var report = (ValidationReport)base.Validate(obj);
@@ -56,20 +52,19 @@ namespace ICon.Model.Simulations
         }
 
         /// <summary>
-        /// VAlidates the specific flags of the kinetic simulation and adds the results to the validation report
+        /// Validates the specific flags of the kinetic simulation and adds the results to the validation report
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
         protected void AddKineticFlagValidation(IKineticSimulation simulation, ValidationReport report)
         {
-            if (simulation.KineticFlags.HasFlag(KineticSimulationFlags.UseDynamicTrackers | KineticSimulationFlags.UseStaticTrackers))
-            {
-                var detail0 = "Both advanced tracking options are enabled. This significantly increases memory and storage space requirements";
-                var detail1 = "Option 1: Use static tracking for position bound flow information (e.g. flow integrals)";
-                var detail2 = "Option 2: Use dynamic tracking for particle bound movement information (e.g. mean square displacement)";
-                var detail3 = "Option 3: Use exchange group tracking (always enabled). Yields the global mean displacements of the exchange groups and particles";
-                report.AddWarning(ModelMessages.CreateNotRecommendedWarning(this, detail0, detail1, detail2, detail3));
-            }
+            if (!simulation.KineticFlags.HasFlag(KineticSimulationFlags.UseDynamicTrackers | KineticSimulationFlags.UseStaticTrackers)) 
+                return;
+            var detail0 = "Both advanced tracking options are enabled. This significantly increases memory and storage space requirements";
+            var detail1 = "Option 1: Use static tracking for position bound flow information (e.g. flow integrals)";
+            var detail2 = "Option 2: Use dynamic tracking for particle bound movement information (e.g. mean square displacement)";
+            var detail3 = "Option 3: Use exchange group tracking (always enabled). Yields the global mean displacements of the exchange groups and particles";
+            report.AddWarning(ModelMessages.CreateNotRecommendedWarning(this, detail0, detail1, detail2, detail3));
         }
 
         /// <summary>

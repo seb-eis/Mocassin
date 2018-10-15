@@ -11,11 +11,6 @@ namespace ICon.Model.Translator.ModelContext
     public interface IStructureModelContext
     {
         /// <summary>
-        /// The position model set as a unit cell provider system
-        /// </summary>
-        IUnitCellProvider<IPositionModel> PositionModelUnitCellProvider { get; set; }
-
-        /// <summary>
         /// Describes the position models for a single unit cell with extended wyckoff positions
         /// </summary>
         IList<IPositionModel> PositionModels { get; set; }

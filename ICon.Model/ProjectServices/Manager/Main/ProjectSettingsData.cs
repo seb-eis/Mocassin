@@ -115,15 +115,15 @@ namespace ICon.Model.ProjectServices
                     ParticleCharge = new ValueSetting<double>("Particle Charge", -1000, 1000),
                     ParticleCount = new ValueSetting<int>("Particle Count", 0, 64),
                     ParticleSetCount = new ValueSetting<int>("Particle Set Count", 0, 100),
-                    ParticleName = new StringSetting("Particle Name", "^[a-zA-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{1,100}$"),
-                    ParticleSymbol = new StringSetting("Particle Symbol", "^[A-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{0,4}$")
+                    ParticleName = new StringSetting("Particle Name", "^[a-zA-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{1,100}$", false),
+                    ParticleSymbol = new StringSetting("Particle Symbol", "^[A-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{0,4}$", false)
                 },
                 StructureSettings = new BasicStructureSettings()
                 {
                     BasePositionCount = new ValueSetting<int>("Base Position Count", 0, 1000),
                     TotalPositionCount = new ValueSetting<int>("Total Position Count", 0, 10000),
                     CellParameter = new ValueSetting<double>("Cell Parameter Length", 0.1, 1000),
-                    StructureName = new StringSetting("Structure Name", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$")
+                    StructureName = new StringSetting("Structure Name", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$", false)
                 },
                 SymmetrySettings = new BasicSymmetrySettings()
                 {
@@ -164,14 +164,14 @@ namespace ICon.Model.ProjectServices
                     Normalization = new ValueSetting<double>("Normalization", 0, 0, 0.1, 1.0),
                     SeriesPermutation = new ValueSetting<long>("Series Simulation Count", 0, 0, 1000, 5000),
                     SingleValuePermutation = new ValueSetting<int>("Value Series Count", 0, 0, 100, 5000),
-                    SupercellPositionCount = new ValueSetting<int>("Supercell Position Count", 1, 100, 100000, 500000),
+                    SupercellPositionCount = new ValueSetting<int>("Super-cell Position Count", 1, 100, 100000, 500000),
                     UnitCellsPerDirection = new ValueSetting<int>("Cells per Direction", 1, 1, 100, 256),
                     ForceTerminationTime = new ValueSetting<int>("Forced Termination Time", 0, 1, 48, 120),
-                    TerminationSuccessRate = new ValueSetting<double>("Lower Termintation Success Rate", 1, 10, int.MaxValue, int.MaxValue),
+                    TerminationSuccessRate = new ValueSetting<double>("Lower Termination Success Rate", 1, 10, int.MaxValue, int.MaxValue),
                     EnergySetCount = new ValueSetting<int>("Energy Set Count", 0, 0, 10, 100),
                     TransitionCount = new ValueSetting<int>("Transitions per Simulation", 0, 0, 10, 100),
-                    Naming = new StringSetting("Name String", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$"),
-                    Seeding = new StringSetting("Seed String", "^[a-zA-Z0-9\\+\\-\\(\\)]{0,100}$")
+                    Naming = new StringSetting("Name String", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$", false),
+                    Seeding = new StringSetting("Seed String", "^[a-zA-Z0-9\\+\\-\\(\\)]{0,100}$", true)
                 }
         };
         }

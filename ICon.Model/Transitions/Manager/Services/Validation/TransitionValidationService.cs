@@ -33,7 +33,7 @@ namespace ICon.Model.Transitions
         /// <param name="pair"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStateExchangePair(IStateExchangePair pair, IDataReader<ITransitionDataPort> dataReader)
         {
             return new PropertyStatePairValidator(ProjectServices, Settings, dataReader).Validate(pair);
@@ -45,7 +45,7 @@ namespace ICon.Model.Transitions
         /// <param name="group"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStateExchangeGroupp(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader)
         {
             return new PropertyGroupValidator(ProjectServices, Settings, dataReader).Validate(group);
@@ -57,7 +57,7 @@ namespace ICon.Model.Transitions
         /// <param name="transition"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateAbstractTransition(IAbstractTransition transition, IDataReader<ITransitionDataPort> dataReader)
         {
             return new AbstractTransitionValidator(ProjectServices, Settings, dataReader).Validate(transition);
@@ -69,7 +69,7 @@ namespace ICon.Model.Transitions
         /// <param name="transition"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateKineticTransition(IKineticTransition transition, IDataReader<ITransitionDataPort> dataReader)
         {
             return new KineticTransitionValidator(ProjectServices, Settings, dataReader).Validate(transition);
@@ -81,7 +81,7 @@ namespace ICon.Model.Transitions
         /// <param name="transition"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateMetropolisTransition(IMetropolisTransition transition, IDataReader<ITransitionDataPort> dataReader)
         {
             return new MetropolisTransitionValidator(ProjectServices, Settings, dataReader).Validate(transition);

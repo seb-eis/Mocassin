@@ -7,20 +7,13 @@ using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Simulations
 {
-    /// <summary>
-    /// Implementation of the simulation manager input manager that handles user induces change requests to the simulation model data
-    /// </summary>
+    /// <inheritdoc cref="ICon.Model.Simulations.ISimulationInputPort"/>
     internal class SimulationInputManager : ModelInputManager<SimulationModelData, ISimulationDataPort, SimulationEventManager>, ISimulationInputPort
     {
-        /// <summary>
-        /// Create new simulation input manager using the provided data object, event manager and project services
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="manager"></param>
-        /// <param name="services"></param>
-        public SimulationInputManager(SimulationModelData data, SimulationEventManager manager, IProjectServices services) : base(data, manager, services)
+        /// <inheritdoc />
+        public SimulationInputManager(SimulationModelData data, SimulationEventManager manager, IProjectServices services) 
+            : base(data, manager, services)
         {
-
         }
 
         /// <summary>
@@ -28,7 +21,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewObject(IKineticSimulation simulation)
         {
             return DefaultRegisterModelObject(simulation, accessor => accessor.Query(data => data.KineticSimulations));
@@ -39,7 +32,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveObject(IKineticSimulation simulation)
         {
             return DefaultRemoveModelObject(simulation, accessor => accessor.Query(data => data.KineticSimulations));
@@ -51,7 +44,7 @@ namespace ICon.Model.Simulations
         /// <param name="orgSimulation"></param>
         /// <param name="newSimulation"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceParticle(IKineticSimulation orgSimulation, IKineticSimulation newSimulation)
         {
             return DefaultReplaceModelObject(orgSimulation, newSimulation, accessor => accessor.Query(data => data.KineticSimulations));
@@ -62,7 +55,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewObject(IMetropolisSimulation simulation)
         {
             return DefaultRegisterModelObject(simulation, accessor => accessor.Query(data => data.MetropolisSimulations));
@@ -73,7 +66,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveObject(IMetropolisSimulation simulation)
         {
             return DefaultRemoveModelObject(simulation, accessor => accessor.Query(data => data.MetropolisSimulations));
@@ -85,7 +78,7 @@ namespace ICon.Model.Simulations
         /// <param name="orgSimulation"></param>
         /// <param name="newSimulation"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceParticle(IMetropolisSimulation orgSimulation, IMetropolisSimulation newSimulation)
         {
             return DefaultReplaceModelObject(orgSimulation, newSimulation, accessor => accessor.Query(data => data.MetropolisSimulations));
@@ -96,7 +89,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewObject(IKineticSimulationSeries series)
         {
             return DefaultRegisterModelObject(series, accessor => accessor.Query(data => data.KineticSeries));
@@ -107,7 +100,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveObject(IKineticSimulationSeries series)
         {
             return DefaultRemoveModelObject(series, accessor => accessor.Query(data => data.KineticSeries));
@@ -119,7 +112,7 @@ namespace ICon.Model.Simulations
         /// <param name="orgSeries"></param>
         /// <param name="newSeries"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceParticle(IKineticSimulationSeries orgSeries, IKineticSimulationSeries newSeries)
         {
             return DefaultReplaceModelObject(orgSeries, newSeries, accessor => accessor.Query(data => data.KineticSeries));
@@ -130,7 +123,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewObject(IMetropolisSimulationSeries series)
         {
             return DefaultRegisterModelObject(series, accessor => accessor.Query(data => data.MetropolisSeries));
@@ -141,7 +134,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveObject(IMetropolisSimulationSeries series)
         {
             return DefaultRemoveModelObject(series, accessor => accessor.Query(data => data.MetropolisSeries));
@@ -153,7 +146,7 @@ namespace ICon.Model.Simulations
         /// <param name="orgSeries"></param>
         /// <param name="newSeries"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceParticle(IMetropolisSimulationSeries orgSeries, IMetropolisSimulationSeries newSeries)
         {
             return DefaultReplaceModelObject(orgSeries, newSeries, accessor => accessor.Query(data => data.MetropolisSeries));
@@ -168,11 +161,8 @@ namespace ICon.Model.Simulations
             return new ConflictHandling.SimulationDataConflictHandlerProvider(ProjectServices);
         }
 
-        /// <summary>
-        /// Cleans all deprecated simulation model objects and distributes the chaganges throug the event manager
-        /// </summary>
-        /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectCleaning)]
+        /// <inheritdoc />
+        [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();

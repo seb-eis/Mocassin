@@ -8,7 +8,7 @@ namespace ICon.Framework.Exceptions
     /// <summary>
     /// Exception thrown if a method/property call fails due to its internal state rather than the passed parameters (e.g. unset fields or flags)
     /// </summary>
-    public class InvalidObjectStateException : IConCustomException
+    public class InvalidObjectStateException : CustomException
     {
         /// <summary>
         /// The name of the invalid property or field

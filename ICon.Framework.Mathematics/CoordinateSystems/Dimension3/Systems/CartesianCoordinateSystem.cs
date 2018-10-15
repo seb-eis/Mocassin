@@ -21,7 +21,7 @@ namespace ICon.Mathematics.Coordinates
         public override (ACoordinates A, ACoordinates B, ACoordinates C) BaseVectors
         {
             get { return BaseCoordinates; }
-            protected set { throw new InvalidObjectChangeException("Cartesian base or refernce vectors are constant and cannot be set"); }
+            protected set { throw new InvalidStateChangeException("Cartesian base or refernce vectors are constant and cannot be set"); }
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ICon.Mathematics.Coordinates
         public override (ACoordinates A, ACoordinates B, ACoordinates C) ReferenceBaseVectors
         {
             get { return BaseCoordinates; }
-            protected set { throw new InvalidObjectChangeException("Cartesian base or refernce vectors are constant and cannot be set"); }
+            protected set { throw new InvalidStateChangeException("Cartesian base or refernce vectors are constant and cannot be set"); }
         }
 
         /// <summary>

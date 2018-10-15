@@ -8,6 +8,7 @@ using ICon.Model.Structures;
 using ICon.Model.Transitions;
 using ICon.Model.Energies;
 using ICon.Model.Lattices;
+using ICon.Model.Simulations;
 
 namespace ICon.Model.Basic
 {
@@ -16,6 +17,11 @@ namespace ICon.Model.Basic
     /// </summary>
     public class ManagerPackage
     {
+        /// <summary>
+        /// Json input report by the automated data input system
+        /// </summary>
+        public string InputReportJson { get; set; }
+
         /// <summary>
         /// Shared project services
         /// </summary>
@@ -45,5 +51,10 @@ namespace ICon.Model.Basic
         /// The lattice manager
         /// </summary>
         public ILatticeManager LatticeManager { get; set; }
+
+        /// <summary>
+        /// The simulation manager
+        /// </summary>
+        public ISimulationManager SimulationManager { get; set; }
     }
 }

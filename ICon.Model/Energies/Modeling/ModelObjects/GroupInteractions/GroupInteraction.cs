@@ -59,7 +59,7 @@ namespace ICon.Model.Energies
         }
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Group Interaction'";
         }
@@ -67,7 +67,7 @@ namespace ICon.Model.Energies
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastWithDepricatedCheck<IGroupInteraction>(obj) is IGroupInteraction interaction))
+            if (!(CastIfNotDeprecated<IGroupInteraction>(obj) is IGroupInteraction interaction))
                 return null;
 
             CenterUnitCellPosition = interaction.CenterUnitCellPosition;

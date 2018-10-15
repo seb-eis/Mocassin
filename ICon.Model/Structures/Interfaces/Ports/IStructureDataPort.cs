@@ -34,7 +34,7 @@ namespace ICon.Model.Structures
         /// Get read only access to the unit cell position list
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IUnitCellPosition> GetUnitCellPositions();
+        ReadOnlyListAdapter<IUnitCellPosition> GetUnitCellPositions();
 
         /// <summary>
         /// Get a unit cell position by index
@@ -47,7 +47,7 @@ namespace ICon.Model.Structures
         /// Get a read only list of all position dummies
         /// </summary>
         /// <returns></returns>
-        ReadOnlyList<IPositionDummy> GetPositionDummies();
+        ReadOnlyListAdapter<IPositionDummy> GetPositionDummies();
 
         /// <summary>
         /// Get the position dummy at the specfified index

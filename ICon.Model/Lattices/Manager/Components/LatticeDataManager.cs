@@ -35,36 +35,36 @@ namespace ICon.Model.Lattices
         /// Get read only list of used dopings
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IDoping> GetDopings()
+        public ReadOnlyListAdapter<IDoping> GetDopings()
         {
-            return ReadOnlyList<IDoping>.FromEnumerable(Data.Dopings);
+            return ReadOnlyListAdapter<IDoping>.FromEnumerable(Data.Dopings);
         }
 
         /// <summary>
         /// Get read only list of block infos
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IBlockInfo> GetBlockInfos()
+        public ReadOnlyListAdapter<IBlockInfo> GetBlockInfos()
         {
-            return ReadOnlyList<IBlockInfo>.FromEnumerable(Data.BlockInfos);
+            return ReadOnlyListAdapter<IBlockInfo>.FromEnumerable(Data.BlockInfos);
         }
 
         /// <summary>
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IBuildingBlock> GetBuildingBlocks()
+        public ReadOnlyListAdapter<IBuildingBlock> GetBuildingBlocks()
         {
-            return ReadOnlyList<IBuildingBlock>.FromEnumerable(Data.BuildingBlocks);
+            return ReadOnlyListAdapter<IBuildingBlock>.FromEnumerable(Data.BuildingBlocks);
         }
 
         /// <summary>
         /// Get read only list of DopingCombinations
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IDopingCombination> GetDopingCombinations()
+        public ReadOnlyListAdapter<IDopingCombination> GetDopingCombinations()
         {
-            return ReadOnlyList<IDopingCombination>.FromEnumerable(Data.DopingCombinations);
+            return ReadOnlyListAdapter<IDopingCombination>.FromEnumerable(Data.DopingCombinations);
         }
     }
 }

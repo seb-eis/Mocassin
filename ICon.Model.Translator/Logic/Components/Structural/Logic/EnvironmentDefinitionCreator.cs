@@ -20,7 +20,7 @@ namespace ICon.Model.Translator
             ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
         }
 
-        public List<EnvironmentDefinitionEntity> CreateEnvironmentDefinitions(ISimulationBase simulationBase)
+        public List<EnvironmentDefinitionEntity> CreateEnvironmentDefinitions(ISimulation simulationBase)
         {
             EnvironmentDefinitions = new List<EnvironmentDefinitionEntity>();
 

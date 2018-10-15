@@ -6,34 +6,27 @@ using Newtonsoft.Json;
 
 namespace ICon.Model.Basic
 {
-    /// <summary>
-    /// Abstract base class for implementations of the IModelObject interface
-    /// </summary>
+    /// <inheritdoc />
+    /// <remarks> Abstract base class for model object implementations </remarks>
     [DataContract]
     public abstract class ModelObject : IModelObject
     {
-        /// <summary>
-        /// The index of the model object assigned by the affiliated manager
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public int Index { get; set; }
 
-        /// <summary>
-        /// Flag if the object is deprecated
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public bool IsDeprecated { get; set; }
 
-        /// <summary>
-        /// Base deprecation operation that only sets the deprecation flag to true
-        /// </summary>
+        /// <inheritdoc />
         public virtual void Deprecate()
         {
             IsDeprecated = true;
         }
 
         /// <summary>
-        /// Base restore operation that only sets the deprecation falg to false
+        /// Base restore operation that only sets the deprecation flag to false
         /// </summary>
         public virtual void Restore()
         {
@@ -46,24 +39,21 @@ namespace ICon.Model.Basic
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{GetModelObjectName()}\n{JsonConvert.SerializeObject(this, Formatting.Indented)}";
+            return $"{GetObjectName()}\n{JsonConvert.SerializeObject(this, Formatting.Indented)}";
         }
 
-        /// <summary>
-        /// Get the name of the model object as a string
-        /// </summary>
-        /// <returns></returns>
-        public abstract string GetModelObjectName();
+        /// <inheritdoc />
+        public abstract string GetObjectName();
 
         /// <summary>
-        /// Builds the specfified object and populates it by the passed interface
+        /// Builds the specified object and populates it by the passed interface
         /// </summary>
-        /// <typeparam name="TObject"></typeparam>
+        /// <typeparam name="T1"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static TObject BuildInternalObject<TObject>(IModelObject obj) where TObject : ModelObject, new()
+        public static T1 ToInternalObject<T1>(IModelObject obj) where T1 : ModelObject, new()
         {
-           return new TObject().PopulateFrom(obj) as TObject;
+           return new T1().PopulateFrom(obj) as T1;
         }
 
         /// <summary>
@@ -74,12 +64,12 @@ namespace ICon.Model.Basic
         public abstract ModelObject PopulateFrom(IModelObject obj);
 
         /// <summary>
-        /// Cast the passed model object inetrafec to the correct type (Retruns null if not possible or object ist dprectaed)
+        /// Cast the passed model object interface to the correct type (Returns null if not possible or object is marked as deprecated)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected T1 CastWithDepricatedCheck<T1>(IModelObject obj) where T1 : class, IModelObject
+        protected T1 CastIfNotDeprecated<T1>(IModelObject obj) where T1 : class, IModelObject
         {
             return (obj.IsDeprecated) ? null : obj as T1;
         }

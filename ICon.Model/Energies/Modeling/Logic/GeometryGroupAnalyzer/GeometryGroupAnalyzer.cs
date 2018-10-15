@@ -71,7 +71,7 @@ namespace ICon.Model.Energies
             {
                 return () => CreateExtendedPositionGroup(groupInteraction);
             }
-            return IConTaskingExtensions.RunAndGetResults(groupInteractions.Select(value => MakeCall(value)));
+            return MocassinTaskingExtensions.RunAndGetResults(groupInteractions.Select(value => MakeCall(value)));
         }
 
         /// <summary>

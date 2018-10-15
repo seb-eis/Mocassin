@@ -10,7 +10,7 @@ namespace ICon.Symmetry.SpaceGroups
     /// <summary>
     /// The space group SQLite EFCore database context
     /// </summary>
-    public class SpaceGroupContext : SQLiteContext<SpaceGroupContext>
+    public sealed class SpaceGroupContext : SqLiteContext<SpaceGroupContext>
     {
         /// <summary>
         /// Creates
@@ -25,6 +25,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// <param name="optionsBuilderParameterString"></param>
         public SpaceGroupContext(String optionsBuilderParameterString) : base(optionsBuilderParameterString)
         {
+            Database.EnsureCreated();
         }
 
         /// <summary>

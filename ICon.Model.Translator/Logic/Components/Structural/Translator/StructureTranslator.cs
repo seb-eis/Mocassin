@@ -35,7 +35,7 @@ namespace ICon.Model.Translator
             StructureModels = new List<StructureModel>(TranslationContext.BaseSimulations.Count);
         }
 
-        protected StructureModel CreateModelForSimulationBasis(ISimulationBase simulationBase)
+        protected StructureModel CreateModelForSimulationBasis(ISimulation simulationBase)
         {
             var structureModel = new StructureModel
             {

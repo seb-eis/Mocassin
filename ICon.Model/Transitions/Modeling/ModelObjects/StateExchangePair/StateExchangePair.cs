@@ -35,7 +35,7 @@ namespace ICon.Model.Transitions
         /// Get the type name of the model object
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Property State Pair'";
         }
@@ -47,7 +47,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IStateExchangePair>(obj) is var statePair)
+            if (CastIfNotDeprecated<IStateExchangePair>(obj) is var statePair)
             {
                 DonorParticle = statePair.DonorParticle;
                 AcceptorParticle = statePair.AcceptorParticle;

@@ -30,6 +30,16 @@ namespace ICon.Model.Translator.ModelContext
         IList<IProbabilityTrackerModel> ProbabilityTrackerModels { get; set; }
 
         /// <summary>
+        /// 2D Matrix that assigns each position index/particle index a static tracker index
+        /// </summary>
+        int[,] StaticTrackerMappingTable { get; set; }
+
+        /// <summary>
+        /// 2D Matrix that assigns each transition index /particle index combination a probability tracker index
+        /// </summary>
+        int[,] ProbabilityTrackerMappingTable { get; set; }
+
+        /// <summary>
         /// The number of required jump probability trackers
         /// </summary>
         int NumOfProbabilityTrackers { get; }
@@ -40,7 +50,7 @@ namespace ICon.Model.Translator.ModelContext
         int NumOfGlobalTrackers { get; }
 
         /// <summary>
-        /// The number of required static trackres per unit cell
+        /// The number of required static trackers per unit cell
         /// </summary>
         int NumOfStaticTrackersPerCell { get; }
     }

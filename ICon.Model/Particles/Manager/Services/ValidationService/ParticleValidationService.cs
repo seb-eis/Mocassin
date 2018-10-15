@@ -26,24 +26,24 @@ namespace ICon.Model.Particles
         }
 
         /// <summary>
-        /// Validates a particle interface and checks if the contents are not a dublicate using the provided data reader
+        /// Validates a particle interface and checks if the contents are not a duplicate using the provided data reader
         /// </summary>
         /// <param name="particle"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateParticle(IParticle particle, IDataReader<IParticleDataPort> dataReader)
         {
             return new ParticleValidator(ProjectServices, Settings, dataReader).Validate(particle);
         }
 
         /// <summary>
-        /// Validates a particle set interface and checks if the contents are not a dublicate using the provided data reader
+        /// Validates a particle set interface and checks if the contents are not a duplicate using the provided data reader
         /// </summary>
         /// <param name="particleSet"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateParticleSet(IParticleSet particleSet, IDataReader<IParticleDataPort> dataReader)
         {
             return new ParticleSetValidator(ProjectServices, Settings, dataReader).Validate(particleSet);

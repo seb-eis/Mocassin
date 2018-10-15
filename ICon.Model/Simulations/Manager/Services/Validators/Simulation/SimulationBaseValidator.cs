@@ -10,7 +10,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Abstract base validator for all non sepcified simulations bases.
     /// </summary>
-    public abstract class SimulationBaseValidator : DataValidator<ISimulationBase, BasicSimulationSettings, ISimulationDataPort>
+    public abstract class SimulationBaseValidator : DataValidator<ISimulation, BasicSimulationSettings, ISimulationDataPort>
     {
         /// <summary>
         /// Creates new simulation base validator with the provided project services, simulation settings and simulation data reader
@@ -29,7 +29,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override IValidationReport Validate(ISimulationBase obj)
+        public override IValidationReport Validate(ISimulation obj)
         {
             var report = new ValidationReport();
 
@@ -48,7 +48,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddStringValidations(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddStringValidations(ISimulation simulation, ValidationReport report)
         {          
             if (!Settings.Naming.ParseValue(simulation.Name, out var warnings))
             {
@@ -66,7 +66,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddCounterValidations(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddCounterValidations(ISimulation simulation, ValidationReport report)
         {
             if (Settings.JobCount.ParseValue(simulation.JobCount, out var warnings) != 0)
             {
@@ -89,7 +89,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddBaseFlagValidations(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddBaseFlagValidations(ISimulation simulation, ValidationReport report)
         {
             if (simulation.BaseFlags.HasFlag(SimulationBaseFlags.UseCheckpointSystem))
             {
@@ -111,7 +111,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddPhysicalValidations(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddPhysicalValidations(ISimulation simulation, ValidationReport report)
         {
             if (Settings.Temperature.ParseValue(simulation.Temperature, out var warnings) != 0)
             {
@@ -124,7 +124,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddTerminationLimitValidations(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddTerminationLimitValidations(ISimulation simulation, ValidationReport report)
         {
             if (Settings.TerminationSuccessRate.ParseValue(simulation.LowerSuccessRateLimit, out var warnings) != 0)
             {
@@ -137,9 +137,9 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddBackgroundProviderValidation(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddBackgroundProviderValidation(ISimulation simulation, ValidationReport report)
         {
-            if (simulation.EnergyBackgroundProviderInfo == null)
+            if (simulation.EnergyBackgroundProviderInfo.IsUndefined)
             {
                 return;
             }
@@ -157,7 +157,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="simulation"></param>
         /// <param name="report"></param>
-        protected virtual void AddLatticeLinkValidation(ISimulationBase simulation, ValidationReport report)
+        protected virtual void AddLatticeLinkValidation(ISimulation simulation, ValidationReport report)
         {
 
         }

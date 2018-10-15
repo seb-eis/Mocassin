@@ -9,7 +9,7 @@ namespace ICon.Model.Basic
     /// <summary>
     /// Exception thrown if a data locker cannot get a valid read or write lock within its specified await period
     /// </summary>
-    public class DataLockTimeoutException : IConCustomException
+    public class DataLockTimeoutException : CustomException
     {
         /// <summary>
         /// The data object that was used during the invalid access

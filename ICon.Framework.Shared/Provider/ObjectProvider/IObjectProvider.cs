@@ -8,7 +8,7 @@ namespace ICon.Framework.Provider
     /// Represents an object provider for a generic object and hides the origin of the object
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public interface IObjectProvider<T1>
+    public interface IObjectProvider<out T1>
     {
         /// <summary>
         /// Get the provided object

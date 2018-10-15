@@ -25,7 +25,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="newObject"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewStableGroupInfo(IGroupInteraction newObject)
         {
             return DefaultRegisterModelObject(newObject, accessor => accessor.Query(data => data.GroupInteractions));
@@ -37,7 +37,7 @@ namespace ICon.Model.Energies
         /// <param name="orgObject"></param>
         /// <param name="newObject"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceStableGroupInfo(IGroupInteraction orgObject, IGroupInteraction newObject)
         {
             return DefaultReplaceModelObject(orgObject, newObject, accessor => accessor.Query(data => data.GroupInteractions));
@@ -48,7 +48,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="orgObject"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveStableGroupInfo(IGroupInteraction orgObject)
         {
             return DefaultRemoveModelObject(orgObject, accessor => accessor.Query(data => data.GroupInteractions));
@@ -59,7 +59,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="newObject"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewUnstableEnvironmentInfo(IUnstableEnvironment newObject)
         {
             return DefaultRegisterModelObject(newObject, accessor => accessor.Query(data => data.UnstableEnvironmentInfos));
@@ -71,7 +71,7 @@ namespace ICon.Model.Energies
         /// <param name="orgObject"></param>
         /// <param name="newObject"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceUnstableEnvironmentInfo(IUnstableEnvironment orgObject, IUnstableEnvironment newObject)
         {
             return DefaultReplaceModelObject(orgObject, newObject, accessor => accessor.Query(data => data.UnstableEnvironmentInfos));
@@ -82,7 +82,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="orgObject"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveUnstableEnvironmentInfo(IUnstableEnvironment orgObject)
         {
             return DefaultRemoveModelObject(orgObject, accessor => accessor.Query(data => data.UnstableEnvironmentInfos));
@@ -93,7 +93,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="newParameter"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ParameterChange)]
+        [DataOperation(DataOperationType.ParameterChange)]
         protected IOperationReport TrySetEnvironmentInformation(IStableEnvironmentInfo newParameter)
         {
             return DefaultSetModelParameter(newParameter, accessor => accessor.Query(data => data.StableEnvironmentInfo), true);
@@ -113,7 +113,7 @@ namespace ICon.Model.Energies
         /// Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists. Distributes affiliated eventy on operation success
         /// </summary>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectCleaning)]
+        [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();

@@ -37,7 +37,7 @@ namespace ICon.Model.Transitions
         }
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Kinetic Rule'";
         }
@@ -57,7 +57,7 @@ namespace ICon.Model.Transitions
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastWithDepricatedCheck<IKineticRule>(obj) is IKineticRule rule))
+            if (!(CastIfNotDeprecated<IKineticRule>(obj) is IKineticRule rule))
                 return null;
 
             base.PopulateFrom(obj);

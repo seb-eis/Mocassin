@@ -12,7 +12,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Abstract base class for implementations of simulation series validators. This class provides the basic shared validation functions
     /// </summary>
-    public abstract class SimulationSeriesValidator : DataValidator<ISimulationSeriesBase, BasicSimulationSettings, ISimulationDataPort>
+    public abstract class SimulationSeriesValidator : DataValidator<ISimulationSeries, BasicSimulationSettings, ISimulationDataPort>
     {
         /// <summary>
         /// Create new simulation series base validator from project services, simulation settings and simulation model data reader
@@ -32,7 +32,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override IValidationReport Validate(ISimulationSeriesBase obj)
+        public override IValidationReport Validate(ISimulationSeries obj)
         {
             var report = new ValidationReport();
 
@@ -49,7 +49,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <param name="report"></param>
-        protected virtual void AddStringPropertyValidations(ISimulationSeriesBase series, ValidationReport report)
+        protected virtual void AddStringPropertyValidations(ISimulationSeries series, ValidationReport report)
         {
             if (!Settings.Naming.ParseValue(series.Name, out var warnings))
             {
@@ -62,7 +62,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <param name="report"></param>
-        protected virtual void AddValueSeriesValidations(ISimulationSeriesBase series, ValidationReport report)
+        protected virtual void AddValueSeriesValidations(ISimulationSeries series, ValidationReport report)
         {
             AddSingleSeriesValidation(series.TemperatureSeries, Settings.Temperature, report);
             AddSingleSeriesValidation(series.McspSeries, Settings.MonteCarloSteps, report);
@@ -73,7 +73,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <param name="report"></param>
-        protected virtual void AddDopingSeriesValidation(ISimulationSeriesBase series, ValidationReport report)
+        protected virtual void AddDopingSeriesValidation(ISimulationSeries series, ValidationReport report)
         {
 
         }
@@ -83,7 +83,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <param name="report"></param>
-        protected virtual void AddExternalDataSourceValidations(ISimulationSeriesBase series, ValidationReport report)
+        protected virtual void AddExternalDataSourceValidations(ISimulationSeries series, ValidationReport report)
         {
             foreach (var loadInfo in series.EnergyBackgroundLoadInfos)
             {
@@ -101,7 +101,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="series"></param>
         /// <param name="report"></param>
-        protected virtual void AddPermutationCountValidation(ISimulationSeriesBase series, ValidationReport report)
+        protected virtual void AddPermutationCountValidation(ISimulationSeries series, ValidationReport report)
         {
             if (Settings.SeriesPermutation.ParseValue(series.GetSimulationCount(), out var warnings) != 0)
             {

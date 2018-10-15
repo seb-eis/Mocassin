@@ -18,42 +18,42 @@ namespace ICon.Model.Basic
         /// <summary>
         /// Event provider for the subject of manager rests
         /// </summary>
-        internal EventProvider<Unit> OnManagerResets { get; }
+        internal ReactiveEvent<Unit> OnManagerResets { get; }
 
         /// <summary>
         /// Event provider for the subject of expired extended data cache
         /// </summary>
-        internal EventProvider<Unit> OnExtendedDataExpiration { get; }
+        internal ReactiveEvent<Unit> OnExtendedDataExpiration { get; }
 
         /// <summary>
         /// Event provider for the subject of manager disconnect requests
         /// </summary>
-        internal EventProvider<Unit> OnManagerDisconnectRequests { get; }
+        internal ReactiveEvent<Unit> OnManagerDisconnectRequests { get; }
 
         /// <summary>
         /// Event provider for the subject of new model objects in the manager
         /// </summary>
-        internal EventProvider<EventArgs> OnNewModelObjects { get; }
+        internal ReactiveEvent<EventArgs> OnNewModelObjects { get; }
 
         /// <summary>
         /// Event provider for the subject of removed model objects in the manager
         /// </summary>
-        internal EventProvider<EventArgs> OnRemovedModelObjects { get; }
+        internal ReactiveEvent<EventArgs> OnRemovedModelObjects { get; }
 
         /// <summary>
         /// Event provider for the subject of changed model objects in the manager
         /// </summary>
-        internal EventProvider<EventArgs> OnChangedModelObjects { get; }
+        internal ReactiveEvent<EventArgs> OnChangedModelObjects { get; }
 
         /// <summary>
         /// Event provider for the subject of changed model parameters in the manager
         /// </summary>
-        internal EventProvider<EventArgs> OnChangedModelParameters { get; }
+        internal ReactiveEvent<EventArgs> OnChangedModelParameters { get; }
 
         /// <summary>
         /// Event provider for the subject of changed model object indexing in the manager
         /// </summary>
-        internal EventProvider<EventArgs> OnChangedModelIndexing { get; }
+        internal ReactiveEvent<EventArgs> OnChangedModelIndexing { get; }
 
         /// <summary>
         /// Push notifier that informs about a complete clear of the manager
@@ -100,14 +100,14 @@ namespace ICon.Model.Basic
         /// </summary>
         protected ModelEventManager()
         {
-            OnManagerResets = new EventProvider<Unit>();
-            OnManagerDisconnectRequests = new EventProvider<Unit>();
-            OnExtendedDataExpiration = new EventProvider<Unit>();
-            OnNewModelObjects = new EventProvider<EventArgs>();
-            OnRemovedModelObjects = new EventProvider<EventArgs>();
-            OnChangedModelObjects = new EventProvider<EventArgs>();
-            OnChangedModelParameters = new EventProvider<EventArgs>();
-            OnChangedModelIndexing = new EventProvider<EventArgs>();
+            OnManagerResets = new ReactiveEvent<Unit>();
+            OnManagerDisconnectRequests = new ReactiveEvent<Unit>();
+            OnExtendedDataExpiration = new ReactiveEvent<Unit>();
+            OnNewModelObjects = new ReactiveEvent<EventArgs>();
+            OnRemovedModelObjects = new ReactiveEvent<EventArgs>();
+            OnChangedModelObjects = new ReactiveEvent<EventArgs>();
+            OnChangedModelParameters = new ReactiveEvent<EventArgs>();
+            OnChangedModelIndexing = new ReactiveEvent<EventArgs>();
         }
     }
 }

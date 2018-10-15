@@ -85,7 +85,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <returns></returns>
         public Dictionary<(Int32 SystemID, String VariationName), CrystalSystemSetting> CreateDictionary()
         {
-            var dictionary = new Dictionary<(Int32 SystemID, String VariationName), CrystalSystemSetting>(new TupleContentComparer<Int32, String>());
+            var dictionary = new Dictionary<(Int32 SystemID, String VariationName), CrystalSystemSetting>(new TupleComparer<Int32, String>());
 
             AddTriclinicSettings(dictionary);
             AddMonoclinicSettings(dictionary);

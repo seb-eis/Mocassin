@@ -49,7 +49,7 @@ namespace ICon.Model.Transitions
         /// Get model object name
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Metropolis Rule'";
         }
@@ -61,7 +61,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IMetropolisRule>(obj) is var rule)
+            if (CastIfNotDeprecated<IMetropolisRule>(obj) is var rule)
             {
                 base.PopulateFrom(obj);
                 Transition = rule.Transition;

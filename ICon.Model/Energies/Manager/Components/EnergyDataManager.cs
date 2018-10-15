@@ -42,9 +42,9 @@ namespace ICon.Model.Energies
         /// Get a read only list for all defined group interactions
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IGroupInteraction> GetGroupInteractions()
+        public ReadOnlyListAdapter<IGroupInteraction> GetGroupInteractions()
         {
-            return ReadOnlyList<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
+            return ReadOnlyListAdapter<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
         }
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace ICon.Model.Energies
         /// Get a read only list of all stable pair interactions
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<ISymmetricPairInteraction> GetStablePairInteractions()
+        public ReadOnlyListAdapter<ISymmetricPairInteraction> GetStablePairInteractions()
         {
-            return ReadOnlyList<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
+            return ReadOnlyListAdapter<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace ICon.Model.Energies
         /// Get a read only list of all environment infos
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IUnstableEnvironment> GetUnstableEnvironments()
+        public ReadOnlyListAdapter<IUnstableEnvironment> GetUnstableEnvironments()
         {
-            return ReadOnlyList<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironmentInfos);
+            return ReadOnlyListAdapter<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironmentInfos);
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace ICon.Model.Energies
         /// Get a read only list of all unstable pair infos
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyList<IAsymmetricPairInteraction> GetUnstablePairInteractions()
+        public ReadOnlyListAdapter<IAsymmetricPairInteraction> GetUnstablePairInteractions()
         {
-            return ReadOnlyList<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
+            return ReadOnlyListAdapter<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
         }
 
         /// <summary>

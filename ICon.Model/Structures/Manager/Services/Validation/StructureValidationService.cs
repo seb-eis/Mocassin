@@ -31,7 +31,7 @@ namespace ICon.Model.Structures
         /// <param name="position"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateUnitCellPosition(IUnitCellPosition position, IDataReader<IStructureDataPort> dataReader)
         {
             return new UnitCellPositionValidator(ProjectServices, Settings, dataReader).Validate(position);
@@ -43,7 +43,7 @@ namespace ICon.Model.Structures
         /// <param name="position"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Object)]
+        [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidatePositionDummy(IPositionDummy position, IDataReader<IStructureDataPort> dataReader)
         {
             return new PositionDummyValidator(ProjectServices, Settings, dataReader).Validate(position);
@@ -55,7 +55,7 @@ namespace ICon.Model.Structures
         /// <param name="info"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Parameter)]
+        [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateStructureInfo(IStructureInfo info, IDataReader<IStructureDataPort> dataReader)
         {
             return new StructureInfoValidator(ProjectServices, Settings, dataReader).Validate(info);
@@ -67,7 +67,7 @@ namespace ICon.Model.Structures
         /// <param name="parameters"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Parameter)]
+        [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateCellParameters(ICellParameters parameters, IDataReader<IStructureDataPort> dataReader)
         {
             return new UnitCellParameterValidator(ProjectServices, Settings, dataReader).Validate(parameters);
@@ -79,7 +79,7 @@ namespace ICon.Model.Structures
         /// <param name="groupInfo"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        [ValidationMethod(ValidationType.Parameter)]
+        [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateSpaceGroupInfo(ISpaceGroupInfo groupInfo, IDataReader<IStructureDataPort> dataReader)
         {
             return new SpaceGroupInfoValidator(ProjectServices, Settings, dataReader).Validate(groupInfo);

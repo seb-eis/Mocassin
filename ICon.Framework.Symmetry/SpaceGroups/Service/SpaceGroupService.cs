@@ -21,7 +21,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// <summary>
         /// The space group context provider
         /// </summary>
-        public SQLiteContextProvider<SpaceGroupContext> ContextProvider { get; set; }
+        public SqLiteContextProvider<SpaceGroupContext> ContextProvider { get; set; }
 
         /// <summary>
         /// The currently loaded space group object
@@ -75,7 +75,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="contextProvider"></param>
         /// <param name="comparer"></param>
-        public SpaceGroupService(SQLiteContextProvider<SpaceGroupContext> contextProvider, IComparer<double> comparer)
+        public SpaceGroupService(SqLiteContextProvider<SpaceGroupContext> contextProvider, IComparer<double> comparer)
         {
             ContextProvider = contextProvider ?? throw new ArgumentNullException(nameof(contextProvider));
             VectorComparer = new VectorComparer3D<Fractional3D>(comparer);
@@ -127,7 +127,7 @@ namespace ICon.Symmetry.SpaceGroups
             using (var context = ContextProvider.CreateContext())
             {
                 foreach (var group in context.SpaceGroups)
-                    setList.Add(@group);
+                    setList.Add(group);
             }
             return setList;
         }

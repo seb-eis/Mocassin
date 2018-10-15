@@ -70,7 +70,7 @@ namespace ICon.Model.Transitions
 
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Metropolis Transition'";
         }
@@ -78,7 +78,7 @@ namespace ICon.Model.Transitions
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IMetropolisTransition>(obj) is var transition)
+            if (CastIfNotDeprecated<IMetropolisTransition>(obj) is var transition)
             {
                 FirstUnitCellPosition = transition.FirstUnitCellPosition;
                 SecondUnitCellPosition = transition.SecondUnitCellPosition;

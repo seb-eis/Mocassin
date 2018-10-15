@@ -18,13 +18,9 @@ namespace ICon.Framework.Messaging
         /// <summary>
         /// Contains additional information and explanations why the warning occured
         /// </summary>
-        public List<string> Details { get; set; }
+        public IList<string> Details { get; set; }
 
-        /// <summary>
-        /// Creates new warning message with the minimal amount of information
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="shortInfo"></param>
+        /// <inheritdoc />
         public WarningMessage(object sender, string shortInfo) : base(sender, shortInfo)
         {
             Details = new List<string>();

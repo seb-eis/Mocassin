@@ -38,7 +38,7 @@ namespace ICon.Model.Lattices
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Doping'";
         }
@@ -49,7 +49,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{GetModelObjectName()} ({DopingInfo.ToString()}, {CounterDopingInfo.ToString()})";
+            return $"{GetObjectName()} ({DopingInfo.ToString()}, {CounterDopingInfo.ToString()})";
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IDoping>(obj) is var doping)
+            if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
                 Concentration = doping.Concentration;
                 DopingInfo = doping.DopingInfo;

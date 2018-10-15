@@ -21,7 +21,7 @@ namespace ICon.Model.Translator.ModelContext
         public IEnvironmentModel EnvironmentModel { get; set; }
 
         /// <inheritdoc />
-        public IGroupEnergyModel EnergyModel { get; set; }
+        public IGroupEnergyModel GroupEnergyModel { get; set; }
 
         /// <inheritdoc />
         public IPositionGroupInfo PositionGroupInfo { get; set; }

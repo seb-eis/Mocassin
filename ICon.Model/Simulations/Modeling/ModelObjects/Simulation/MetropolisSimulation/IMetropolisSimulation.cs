@@ -10,7 +10,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Represents a custom simulation that contains all reference data required to describe a metropolis simulation
     /// </summary>
-    public interface IMetropolisSimulation : ISimulationBase
+    public interface IMetropolisSimulation : ISimulation
     {
         /// <summary>
         /// The energy value tolerance used for pre-target-mcsp simulation breaks

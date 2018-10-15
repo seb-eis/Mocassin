@@ -77,7 +77,7 @@ namespace ICon.Model.Basic
             {
                 if (item.Equals(obj))
                 {
-                    var detail = $"The provided {obj.GetModelObjectName()} is a duplicate to the existing model object with index ({item.Index})";
+                    var detail = $"The provided {obj.GetObjectName()} is a duplicate to the existing model object with index ({item.Index})";
                     report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail));
                 }
             }

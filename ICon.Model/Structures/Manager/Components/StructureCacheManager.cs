@@ -116,7 +116,7 @@ namespace ICon.Model.Structures
         protected IList<SetList<Fractional3D>> CreateExtendedDummyPositionLists()
         {
             var positions = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetPositionDummies());
-            return IConTaskingExtensions
+            return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
                 .ToList();
@@ -130,7 +130,7 @@ namespace ICon.Model.Structures
         protected IList<SetList<FractionalPosition>> CreateExtendedPositionLists()
         {
             var positions = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetUnitCellPositions());
-            return IConTaskingExtensions
+            return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
                 .ToList(); 

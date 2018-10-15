@@ -38,7 +38,7 @@ namespace ICon.Model.Energies
 
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Asymmetric Pair Interaction'";
         }
@@ -46,7 +46,7 @@ namespace ICon.Model.Energies
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastWithDepricatedCheck<IAsymmetricPairInteraction>(obj) is IAsymmetricPairInteraction interaction))
+            if (!(CastIfNotDeprecated<IAsymmetricPairInteraction>(obj) is IAsymmetricPairInteraction interaction))
                 return null;
 
             base.PopulateFrom(obj);

@@ -30,7 +30,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewModelObject(IStateExchangePair newObj)
         {
             return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.StateExchangePairs));
@@ -41,7 +41,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewModelObject(IStateExchangeGroup newObj)
         {
             return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.StateExchangeGroups));
@@ -52,7 +52,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewModelObject(IAbstractTransition newObj)
         {
             return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.AbstractTransitions));
@@ -63,7 +63,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewModelObject(IKineticTransition newObj)
         {
             return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.KineticTransitions));
@@ -74,7 +74,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewModelObject(IMetropolisTransition newObj)
         {
             return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.MetropolisTransitions));
@@ -85,7 +85,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveModelObject(IStateExchangePair newObj)
         {
             return DefaultRegisterModelObject(newObj, accessor => accessor.Query(data => data.StateExchangePairs));
@@ -96,7 +96,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveModelObject(IStateExchangeGroup newObj)
         {
             return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.StateExchangeGroups));
@@ -107,7 +107,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveModelObject(IAbstractTransition newObj)
         {
             return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.AbstractTransitions));
@@ -118,7 +118,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveModelObject(IKineticTransition newObj)
         {
             return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.KineticTransitions));
@@ -129,7 +129,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveModelObject(IMetropolisTransition newObj)
         {
             return DefaultRemoveModelObject(newObj, accessor => accessor.Query(data => data.MetropolisTransitions));
@@ -140,7 +140,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceModelObject(IStateExchangePair orgObj, IStateExchangePair newObj)
         {
             return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.StateExchangePairs));
@@ -151,7 +151,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceModelObject(IStateExchangeGroup orgObj, IStateExchangeGroup newObj)
         {
             return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.StateExchangeGroups));
@@ -162,7 +162,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceModelObject(IAbstractTransition orgObj, IAbstractTransition newObj)
         {
             return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.AbstractTransitions));
@@ -173,7 +173,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceModelObject(IKineticTransition orgObj, IKineticTransition newObj)
         {
             return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.KineticTransitions));
@@ -184,7 +184,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceModelObject(IMetropolisTransition orgObj, IMetropolisTransition newObj)
         {
             return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.MetropolisTransitions));
@@ -194,7 +194,7 @@ namespace ICon.Model.Transitions
         /// Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists. Distributes affiliated eventy on operation success
         /// </summary>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectCleaning)]
+        [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();

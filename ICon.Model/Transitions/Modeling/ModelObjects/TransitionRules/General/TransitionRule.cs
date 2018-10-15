@@ -206,7 +206,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<ITransitionRule>(obj) is var rule)
+            if (CastIfNotDeprecated<ITransitionRule>(obj) is var rule)
             {
                 StartState = new OccupationState() { Particles = rule.GetStartStateOccupation().ToList() };
                 TransitionState = new OccupationState() { Particles = rule.GetTransitionStateOccupation().ToList() };

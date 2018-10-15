@@ -29,7 +29,7 @@ namespace ICon.Model.Simulations
         /// <typeparam name="T1"></typeparam>
         /// <param name="simulation"></param>
         /// <returns></returns>
-        public static PositionMobilityInfo CreateForSimulation<T1>(T1 simulation) where T1 : ISimulationBase
+        public static PositionMobilityInfo CreateForSimulation<T1>(T1 simulation) where T1 : ISimulation
         {
             if (simulation is IKineticSimulation kineticSimulation)
             {
@@ -46,7 +46,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// Describes the mobility information for a unit cell position that results in a specific simulation
     /// </summary>
-    public class PositionMobilityInfo<TSimulation, TTransition> : PositionMobilityInfo where TSimulation : ISimulationBase
+    public class PositionMobilityInfo<TSimulation, TTransition> : PositionMobilityInfo where TSimulation : ISimulation
     {
         /// <summary>
         /// The simulation the mobility info is valid for

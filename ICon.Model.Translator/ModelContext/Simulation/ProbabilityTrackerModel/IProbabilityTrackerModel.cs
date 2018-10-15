@@ -11,11 +11,6 @@ namespace ICon.Model.Translator.ModelContext
     public interface IProbabilityTrackerModel : IModelComponent
     {
         /// <summary>
-        /// The id of the probability tracker
-        /// </summary>
-        int TrackerId { get; set; }
-
-        /// <summary>
         /// The kinetic transition model the tracker belongs to
         /// </summary>
         IKineticTransitionModel KineticTransitionModel { get; set; }

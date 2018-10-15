@@ -3,7 +3,7 @@
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Represent a data validator for the specified type that offers a validation function which create a validation report
+    /// Represent a data validator for the specified type that offers a validation function which creates a validation report
     /// </summary>
     /// <typeparam name="TObject"></typeparam>
     public interface IDataValidator<TObject>

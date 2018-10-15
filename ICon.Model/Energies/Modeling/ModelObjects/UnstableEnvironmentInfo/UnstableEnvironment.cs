@@ -71,7 +71,7 @@ namespace ICon.Model.Energies
         }
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Unstable Environment Info'";
         }
@@ -79,7 +79,7 @@ namespace ICon.Model.Energies
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastWithDepricatedCheck<IUnstableEnvironment>(obj) is IUnstableEnvironment info))
+            if (!(CastIfNotDeprecated<IUnstableEnvironment>(obj) is IUnstableEnvironment info))
                 return null;
 
             UnitCellPosition = info.UnitCellPosition;

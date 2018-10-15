@@ -60,7 +60,7 @@ namespace ICon.Model.Transitions
         }
 
         /// <inheritdoc />
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Kinetic Transition Rule'";
         }
@@ -68,7 +68,7 @@ namespace ICon.Model.Transitions
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IKineticTransition>(obj) is var transition)
+            if (CastIfNotDeprecated<IKineticTransition>(obj) is var transition)
             {
                 PathGeometry = transition.GetGeometrySequence().Select(value => new DataVector3D(value)).ToList();
                 AbstractTransition = transition.AbstractTransition;

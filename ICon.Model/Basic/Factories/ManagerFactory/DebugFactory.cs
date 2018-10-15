@@ -11,6 +11,7 @@ using ICon.Model.Energies;
 using ICon.Model.Lattices;
 using ICon.Model.DataManagement;
 using ICon.Model.Basic.Debug;
+using ICon.Model.Simulations;
 
 namespace ICon.Model.Basic
 {
@@ -67,7 +68,7 @@ namespace ICon.Model.Basic
             }
 
             /// <summary>
-            /// Creates a mangement system that is capable of the modelling process until transition inputs
+            /// Creates a management system that is capable of the modeling process until transition inputs
             /// </summary>
             /// <returns></returns>
             public static ManagerPackage CreateTransitionManagementSystem()
@@ -78,27 +79,38 @@ namespace ICon.Model.Basic
             }
 
             /// <summary>
-            /// Creates a mangement system that is capable of the modelling process until energy inputs
+            /// Creates a management system that is capable of the modeling process until energy inputs
             /// </summary>
             /// <returns></returns>
             public static ManagerPackage CreateEnergyManagementSystem()
             {
                 var package = CreateTransitionManagementSystem();
-                package.EnergyManager = (Energies.IEnergyManager)package.ProjectServices.CreateAndRegister(new EnergyManagerFactory());
+                package.EnergyManager = (IEnergyManager)package.ProjectServices.CreateAndRegister(new EnergyManagerFactory());
                 return package;
             }
 
             /// <summary>
-            /// Creates the currently most develepped management system
+            /// Creates a management system that is capable of the modeling process until simulation inputs
+            /// </summary>
+            /// <returns></returns>
+            public static ManagerPackage CreateSimulationManagementPackage()
+            {
+                var package = CreateEnergyManagementSystem();
+                package.SimulationManager = (ISimulationManager) package.ProjectServices.CreateAndRegister(new SimulationManagerFactory());
+                return package;
+            }
+
+            /// <summary>
+            /// Creates the currently most developed management system
             /// </summary>
             /// <returns></returns>
             public static ManagerPackage CreateFullManagementSystem()
             {
-                return CreateEnergyManagementSystem();
+                return CreateSimulationManagementPackage();
             }
 
             /// <summary>
-            /// Cretes a new management system for testing purposes that contains particle and structure information of ceria
+            /// Creates a new management system for testing purposes that contains particle and structure information of ceria
             /// </summary>
             /// <returns></returns>
             public static ManagerPackage CreateManageSystemForCeria()
@@ -106,6 +118,7 @@ namespace ICon.Model.Basic
                 var package = CreateFullManagementSystem();
                 var inputter = MakeCeriaDataInputter();
                 inputter.AutoInputData(package.ProjectServices);
+                package.InputReportJson = inputter.GetReportJson();
                 return package;
             }
 
@@ -115,7 +128,7 @@ namespace ICon.Model.Basic
             /// <returns></returns>
             public static ManagerDataInputter MakeCeriaDataInputter()
             {
-                var particles = new Particle[]
+                var particles = new []
                 {
                     new Particle() { Index = 0 },
                     new Particle() { Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Index = 1 },
@@ -126,13 +139,13 @@ namespace ICon.Model.Basic
                     new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Index = 6 },
                     new Particle() { Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Index = 7 },
                 };
-                var particleSets = new ParticleSet[]
+                var particleSets = new []
                 {
                     new ParticleSet () { Particles = new List<IParticle> { particles[1], particles[2] }, Index = 1 },
                     new ParticleSet () { Particles = new List<IParticle> { particles[3], particles[4], particles[5], particles[6], particles[7] }, Index = 2 },
                     new ParticleSet () { Particles = new List<IParticle> { particles[0], particles[2] }, Index = 3 },
                 };
-                var unitCellPositions = new UnitCellPosition[]
+                var unitCellPositions = new []
                 {
                     new UnitCellPosition()
                     {
@@ -147,7 +160,7 @@ namespace ICon.Model.Basic
                         Vector = new DataVector3D(0.50, 0.25, 0.25), OccupationSet = particleSets[2], Status = PositionStatus.Unstable, Index = 2
                     }
                 };
-                var propertyPairs = new StateExchangePair[]
+                var propertyPairs = new []
                 {
                     new StateExchangePair() { DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0 },
                     new StateExchangePair() { DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1 },
@@ -159,7 +172,7 @@ namespace ICon.Model.Basic
                     new StateExchangePair() { DonorParticle = particles[3], AcceptorParticle = particles[6], IsVacancyPair = false, Index = 7},
                     new StateExchangePair() { DonorParticle = particles[5], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 8},
                 };
-                var propertyGroups = new StateExchangeGroup[]
+                var propertyGroups = new []
                 {
                     new StateExchangeGroup() { VacancyGroup = false, Index = 0, StateExchangePairs = new List<IStateExchangePair>{ propertyPairs[0]} },
                     new StateExchangeGroup() { VacancyGroup = true, Index = 1, StateExchangePairs = new List<IStateExchangePair>{ propertyPairs[1]} },
@@ -169,7 +182,7 @@ namespace ICon.Model.Basic
                         propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6], propertyPairs[7], propertyPairs[8]
                     } }
                 };
-                var abstractTransitions = new AbstractTransition[]
+                var abstractTransitions = new []
                 {
                     new AbstractTransition()
                     {
@@ -196,7 +209,7 @@ namespace ICon.Model.Basic
                         Connectors = new List<ConnectorType> { ConnectorType.Dynamic }
                     },
                 };
-                var metropolisTransitions = new MetropolisTransition[]
+                var metropolisTransitions = new []
 {
                     new MetropolisTransition()
                     {
@@ -214,7 +227,7 @@ namespace ICon.Model.Basic
                         FirstUnitCellPosition = unitCellPositions[0], SecondUnitCellPosition = unitCellPositions[0]
                     }
 };
-                var kineticTransitions = new KineticTransition[]
+                var kineticTransitions = new []
                 {
                     new KineticTransition()
                     {
@@ -225,7 +238,7 @@ namespace ICon.Model.Basic
                         }
                     }
                 };
-                var groupInteractions = new GroupInteraction[]
+                var groupInteractions = new []
                 {
                     new GroupInteraction()
                     {
@@ -243,6 +256,42 @@ namespace ICon.Model.Basic
                             new DataVector3D(0.25,0.25,0.25), new DataVector3D(-0.25,-0.25,-0.25)
                         }
                     },
+                };
+                var metropolisSimulations = new[]
+                {
+                    new MetropolisSimulation
+                    {
+                        BaseFlags = SimulationBaseFlags.UseCheckpointSystem,
+                        WriteOutCount = 100,
+                        Temperature = 1000,
+                        JobCount = 10,
+                        LowerSuccessRateLimit = 10,
+                        TargetMcsp = 200,
+                        Name = "Metropolis",
+                        RelativeBreakTolerance = 0.0001,
+                        BreakSampleIntervalMcs = 100,
+                        BreakSampleLength = 10000,
+                        ResultSampleMcs = 10000,
+                        Transitions = metropolisTransitions.Cast<IMetropolisTransition>().ToList()                      
+                    }
+                };
+                var kineticSimulations = new[]
+                {
+                    new KineticSimulation
+                    {
+                        WriteOutCount = 100,
+                        Name = "Kinetic",
+                        Temperature = 1000,
+                        JobCount = 10,
+                        LowerSuccessRateLimit = 10,
+                        TargetMcsp = 200,
+                        NormalizationProbability = 1.0,
+                        KineticFlags = KineticSimulationFlags.UseDynamicTrackers | KineticSimulationFlags.UseStaticTrackers,
+                        CustomRngSeed = Guid.NewGuid().ToString(),
+                        ElectricFieldMagnitude = 10000000.0,
+                        ElectricFieldVector = new DataVector3D(1,0,0),
+                        Transitions = kineticTransitions.Cast<IKineticTransition>().ToList()                       
+                    }
                 };
 
                 var inputter = new ManagerDataInputter();
@@ -266,6 +315,8 @@ namespace ICon.Model.Basic
                     IgnoredPositions = new List<IUnitCellPosition>()
                 });
                 inputter.AddMany(groupInteractions);
+                inputter.AddMany(metropolisSimulations);
+                inputter.AddMany(kineticSimulations);
                 return inputter;
             }
         }

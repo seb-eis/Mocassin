@@ -10,7 +10,7 @@ namespace ICon.Framework.Collections
     public static class ContainerFactory
     {
         /// <summary>
-        /// Creates a new set equivalent list that uses the specififed comparer (All entries are unique and sorted)
+        /// Creates a new set equivalent list that uses the specified comparer (All entries are unique and sorted)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="comparer"></param>
@@ -21,7 +21,7 @@ namespace ICon.Framework.Collections
         }
 
         /// <summary>
-        /// Creates new set list with the provided comparer that is filled with a sequnce of initial values
+        /// Creates new set list with the provided comparer that is filled with a sequence of initial values
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="comparer"></param>
@@ -37,7 +37,7 @@ namespace ICon.Framework.Collections
         }
 
         /// <summary>
-        /// Creates a new multiset equivalent list that uses the specififed comparer (All entries are sorted but not neccessarilly unique)
+        /// Creates a new multiset equivalent list that uses the specified comparer (All entries are sorted but not unique)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="comparer"></param>
@@ -48,7 +48,7 @@ namespace ICon.Framework.Collections
         }
 
         /// <summary>
-        /// Creates new multiset list with the provided comparer that is filled with a sequnce of initial values
+        /// Creates new multiset list with the provided comparer that is filled with a sequence of initial values
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="comparer"></param>

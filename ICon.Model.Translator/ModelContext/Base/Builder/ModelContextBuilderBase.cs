@@ -43,8 +43,15 @@ namespace ICon.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public virtual Task BuildLinkDependentComponents()
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
         public virtual Task<TContext> RebuildContext(TContext modelContext)
         {
+            SetNullBuildersToDefault();
             BuildTask = Task.Run(() => PopulateContext(modelContext));
             return BuildTask;
         }
@@ -59,5 +66,10 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         /// <returns></returns>
         protected abstract TContext GetEmptyDefaultContext();
+
+        /// <summary>
+        /// Sets all unset builder instances to the internally defined default builder system
+        /// </summary>
+        protected abstract void SetNullBuildersToDefault();
     }
 }

@@ -46,7 +46,7 @@ namespace ICon.Model.Transitions
         public bool ContainsRingTransition(IEnumerable<Fractional3D> positionGeometry, IComparer<Fractional3D> equalityComparer)
         {
             var current = new Fractional3D(0, 0, 0);
-            foreach (var vector in positionGeometry.ConsecutivePairSelect((a, b) => b - a))
+            foreach (var vector in positionGeometry.SelectConsecutivePairs((a, b) => b - a))
             {
                 current += vector;
                 if (equalityComparer.Compare(current, Fractional3D.NullVector) == 0)
@@ -66,7 +66,7 @@ namespace ICon.Model.Transitions
         public IList<SetList<Fractional3D>> GetEquivalentIntermediatePositions(IEnumerable<Fractional3D> geometry, ISpaceGroupService spaceGroupService)
         {
             var result = new List<SetList<Fractional3D>>();
-            foreach (var item in geometry.ConsecutivePairSelect((first, second) => Fractional3D.GetMiddle(second, first)))
+            foreach (var item in geometry.SelectConsecutivePairs((first, second) => Fractional3D.GetMiddle(second, first)))
             {
                 result.Add(spaceGroupService.GetAllWyckoffPositions(item));
             }

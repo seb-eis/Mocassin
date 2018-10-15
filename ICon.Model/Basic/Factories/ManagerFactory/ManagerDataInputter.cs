@@ -80,7 +80,7 @@ namespace ICon.Model.Basic.Debug
         }
 
         /// <summary>
-        /// Inpuits all data using the passed project service and returns all operation reports of the input
+        /// Inputs all data using the passed project service and returns all operation reports of the input
         /// </summary>
         /// <param name="projectServices"></param>
         public void AutoInputData(IProjectServices projectServices)
@@ -90,14 +90,14 @@ namespace ICon.Model.Basic.Debug
 
             InputReports = new List<IOperationReport>(callList.Count);
             var totalReport = new OperationReport("Invoke input list");
-            for (int i = 0; i < InputRequests.Count; i++)
+            for (var i = 0; i < InputRequests.Count; i++)
             {
                 InputReports.Add(InputRequests[i].CallAndAwait(callList[i]));
-                if (!InputReports[i].IsGood)
-                {
-                    totalReport.AddException(new InvalidOperationException($"Input failed for \n {InputReports[i].ToString()}"));
-                    break;
-                }
+                if (InputReports[i].IsGood)
+                    continue;
+
+                totalReport.AddException(new InvalidOperationException($"Stopped due to invalid input\n {InputReports[i].ToString()}"));
+                break;
             }
             InputReports.Add(totalReport);
         }
@@ -114,7 +114,9 @@ namespace ICon.Model.Basic.Debug
 
             foreach (var request in InputRequests)
             {
-                var manager = callLookup.First(keyValue => keyValue.Value.Any(objType => objType.IsAssignableFrom(request.InputObject.GetType()))).Key;
+                var manager = callLookup
+                    .First(keyValue => keyValue.Value
+                        .Any(objType => objType.IsInstanceOfType(request.InputObject))).Key;
                 callList.Add(manager);
             }
             return callList;
@@ -138,7 +140,6 @@ namespace ICon.Model.Basic.Debug
         /// <summary>
         /// Assigns all known input requests their input delegate
         /// </summary>
-        /// <param name="projectServices"></param>
         public void AutoAssignInputDelegates()
         {
             var objInput = GetObjectInputDelegate();
@@ -146,17 +147,19 @@ namespace ICon.Model.Basic.Debug
 
             foreach (var item in InputRequests)
             {
-                if (item.InputObject is IModelObject)
+                switch (item.InputObject)
                 {
-                    item.InputDelegate = objInput;
-                    continue;
+                    case IModelObject _:
+                        item.InputDelegate = objInput;
+                        continue;
+
+                    case IModelParameter _:
+                        item.InputDelegate = paramSet;
+                        continue;
+
+                    default:
+                        throw new NotSupportedException("Object type is not supported");
                 }
-                if (item.InputObject is IModelParameter)
-                {
-                    item.InputDelegate = paramSet;
-                    continue;
-                }
-                throw new NotSupportedException("Object type is not supported");
             }
         }
 
@@ -197,7 +200,7 @@ namespace ICon.Model.Basic.Debug
         }
 
         /// <summary>
-        /// Serialiaze to json with type handling and indentation
+        /// Serialize to json with type handling and indentation
         /// </summary>
         /// <returns></returns>
         public string JsonSerialize()
@@ -206,7 +209,7 @@ namespace ICon.Model.Basic.Debug
         }
 
         /// <summary>
-        /// Retruns a json formatted string of the current input report list
+        /// Returns a json formatted string of the current input report list
         /// </summary>
         /// <returns></returns>
         public string GetReportJson()

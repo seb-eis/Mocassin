@@ -12,8 +12,8 @@ namespace ICon.Model.Translator
     {
         ITranslationContext TranslationContext { get; set; }
 
-        JobModel Translate<TSimulation>(TSimulation simulation) where TSimulation : ISimulationBase;
+        JobModel Translate<TSimulation>(TSimulation simulation) where TSimulation : ISimulation;
 
-        IEnumerable<JobModel> TranslateSeries<TSeries>(TSeries simulationSeries) where TSeries : ISimulationSeriesBase;
+        IEnumerable<JobModel> TranslateSeries<TSeries>(TSeries simulationSeries) where TSeries : ISimulationSeries;
     }
 }

@@ -36,7 +36,7 @@ namespace ICon.Model.Lattices
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
             return "'Building Block Info'";
         }
@@ -48,7 +48,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IBlockInfo>(obj) is var blockInfo)
+            if (CastIfNotDeprecated<IBlockInfo>(obj) is var blockInfo)
             {
                 Origin = blockInfo.Origin;
                 Extent = blockInfo.Extent;

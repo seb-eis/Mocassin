@@ -59,7 +59,7 @@ namespace ICon.Model.Energies
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastWithDepricatedCheck<IPairInteraction>(obj) is IPairInteraction interaction))
+            if (!(CastIfNotDeprecated<IPairInteraction>(obj) is IPairInteraction interaction))
                 return null;
 
             Position0 = interaction.Position0;

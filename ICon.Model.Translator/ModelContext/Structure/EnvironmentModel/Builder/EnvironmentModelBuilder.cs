@@ -265,7 +265,7 @@ namespace ICon.Model.Translator.ModelContext
             var groupModel = new GroupInteractionModel
             {
                 EnvironmentModel = environmentModel,
-                EnergyModel = new GroupEnergyModel(groupInteraction),
+                GroupEnergyModel = new GroupEnergyModel(groupInteraction),
                 PositionGroupInfo = PositionGroupInfos.Single(a => a.GroupInteraction == groupInteraction)
             };
 
@@ -307,7 +307,7 @@ namespace ICon.Model.Translator.ModelContext
             {
                 EnvironmentModel = originalModel.EnvironmentModel,
                 PairInteractionModels = pairModels,
-                EnergyModel = originalModel.EnergyModel,
+                GroupEnergyModel = originalModel.GroupEnergyModel,
                 PositionGroupInfo = originalModel.PositionGroupInfo,
                 PairIndexCoding = CreatePairIndexCoding(pairModels)
             };

@@ -32,7 +32,7 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="particle"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewParticle(IParticle particle)
         {
             return DefaultRegisterModelObject(particle, accessor => accessor.Query(data => data.Particles));
@@ -43,7 +43,7 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="particleSet"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.NewObject)]
+        [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewParticleSet(IParticleSet particleSet)
         {
             return DefaultRegisterModelObject(particleSet, accessor => accessor.Query(data => data.ParticleSets));
@@ -54,7 +54,7 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="particle"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveParticle(IParticle particle)
         {
             return DefaultRemoveModelObject(particle, accessor => accessor.Query(data => data.Particles), 0);
@@ -65,7 +65,7 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="particleSet"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectRemoval)]
+        [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveParticleSet(IParticleSet particleSet)
         {
             return DefaultRemoveModelObject(particleSet, accessor => accessor.Query(data => data.ParticleSets), 0);
@@ -77,7 +77,7 @@ namespace ICon.Model.Particles
         /// <param name="orgParticle"></param>
         /// <param name="newParticle"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceParticle(IParticle orgParticle, IParticle newParticle)
         {
             return DefaultReplaceModelObject(orgParticle, newParticle, accessor => accessor.Query(data => data.Particles));
@@ -89,7 +89,7 @@ namespace ICon.Model.Particles
         /// <param name="orgSet"></param>
         /// <param name="newSet"></param>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectChange)]
+        [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceParticleSet(IParticleSet orgSet, IParticleSet newSet)
         {
             return DefaultReplaceModelObject(orgSet, newSet, accessor => accessor.Query(data => data.ParticleSets));
@@ -99,7 +99,7 @@ namespace ICon.Model.Particles
         /// Tries to clean deprecated data an creates new model object indexings (Awaits distribution of affiliated events in case of operation success)
         /// </summary>
         /// <returns></returns>
-        [OperationMethod(DataOperationType.ObjectCleaning)]
+        [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();

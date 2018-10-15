@@ -65,7 +65,7 @@ namespace ICon.Model.Structures.Validators
                 if (!item.IsDeprecated)
                 {
                     var extended = ProjectServices.SpaceGroupService.GetAllWyckoffPositions(item.Vector);
-                    if (extended.CppFindLowerBound(position.Vector) != extended.Count)
+                    if (extended.GetCppLowerBound(position.Vector) != extended.Count)
                     {
                         var detail = "Provided dummy position is already present or part of the wyckoff set of another existing dummy";
                         report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail));

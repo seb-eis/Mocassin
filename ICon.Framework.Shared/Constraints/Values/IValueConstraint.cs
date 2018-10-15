@@ -5,30 +5,30 @@ using System.Text;
 namespace ICon.Framework.Constraints
 {
     /// <summary>
-    /// General generic interface for all value contraints of an unrestricted source type struct to a restricted target type (target can be identical to source if no value object is used)
+    /// Generic value constraint of an unrestricted source type struct to a restricted target type (target can be identical to source if no value object is used)
     /// </summary>
-    public interface IValueConstraint<Source, Target> where Source : IComparable<Source>
+    public interface IValueConstraint<TSource, TTarget> where TSource : IComparable<TSource>
     {
 
         /// <summary>
         /// The upper boundary value of the source type
         /// </summary>
-        Source MaxValue { get; set; }
+        TSource MaxValue { get; set; }
 
         /// <summary>
         /// The lower boundary value of the source type
         /// </summary>
-        Source MinValue { get; set; }
+        TSource MinValue { get; set; }
 
         /// <summary>
-        /// Indicates if the maximum boudnary value is included or not
+        /// Indicates if the maximum boundary value is included or not
         /// </summary>
-        Boolean MinIncluded { get; set; }
+        bool MinIsIncluded { get; set; }
 
         /// <summary>
         /// Indicates if the minimal boundary value is included or not
         /// </summary>
-        Boolean MaxIncluded { get; set; }
+        bool MaxIsIncluded { get; set; }
 
         /// <summary>
         /// Parses source to target if the internal constraint is not violated (Returns false on violation)
@@ -36,13 +36,13 @@ namespace ICon.Framework.Constraints
         /// <param name="sourceValue"></param>
         /// <param name="targetValue"></param>
         /// <returns></returns>
-        Boolean TryParse(Source sourceValue, out Target targetValue);
+        bool TryParse(TSource sourceValue, out TTarget targetValue);
 
         /// <summary>
-        /// Validates if the given source object violates the internal contraint
+        /// Validates if the given source object violates the internal constraint
         /// </summary>
         /// <param name="sourceValue"></param>
         /// <returns></returns>
-        Boolean IsValid(Source sourceValue);
+        bool IsValid(TSource sourceValue);
     }
 }

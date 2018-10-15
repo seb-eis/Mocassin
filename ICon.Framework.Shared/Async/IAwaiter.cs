@@ -1,39 +1,38 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Runtime.CompilerServices;
 
 namespace ICon.Framework.Async
 {
     /// <summary>
-    /// Represents an Async/Await awaiter object that returns nothing and schedules async method continuations when it completes
+    ///     Represents an Async/Await awaiter object that returns nothing and schedules async method continuations when it
+    ///     completes
     /// </summary>
     public interface IAwaiter : INotifyCompletion
     {
         /// <summary>
-        /// Indicates if the awaitable operation is completed
+        ///     Indicates if the awaitable operation is completed
         /// </summary>
-        Boolean IsCompleted { get; }
+        bool IsCompleted { get; }
 
         /// <summary>
-        /// Returns the result
+        ///     Returns the result
         /// </summary>
         void GetResult();
     }
 
     /// <summary>
-    /// Represents an Async/Await awaiter object that returns a value and schedules async method continuations when it completes
+    ///     Represents an Async/Await awaiter object that returns a value and schedules async method continuations when it
+    ///     completes
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     public interface IAwaiter<out TResult> : INotifyCompletion
     {
         /// <summary>
-        /// Indicates if the awaitable operation is completed
+        ///     Indicates if the awaitable operation is completed
         /// </summary>
-        Boolean IsCompleted { get; }
+        bool IsCompleted { get; }
 
         /// <summary>
-        /// Returns the result
+        ///     Returns the result
         /// </summary>
         TResult GetResult();
     }
