@@ -46,9 +46,9 @@ namespace ICon.Model.Energies
         /// <param name="positions"></param>
         /// <param name="environmentInfo"></param>
         /// <returns></returns>
-        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions, IStableEnvironmentInfo environmentInfo, DoubleComparer comparer)
+        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions, IStableEnvironmentInfo environmentInfo, NumericComparer comparer)
         {
-            var radialConstraint = new DoubleConstraint(false, 0.0, environmentInfo.MaxInteractionRange, true, comparer);
+            var radialConstraint = new NumericConstraint(false, 0.0, environmentInfo.MaxInteractionRange, true, comparer);
             var filterPredicate = GetIgnoredFilterPredicate(environmentInfo);
             var unfilteredPositions = CreateUniqueSymmetricPairs(positions, radialConstraint, value => value.IsValidAndStable());
             return FilterAndReindex(unfilteredPositions, filterPredicate, 0).ToList();
@@ -62,7 +62,7 @@ namespace ICon.Model.Energies
         /// <param name="radialConstraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions, DoubleConstraint radialConstraint, Predicate<IUnitCellPosition> predicate)
+        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions, NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate)
         {
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, predicate, false);
             var values = CreateUniquePairs(candidateDictionary, CreateSymmetricPair);
@@ -76,11 +76,11 @@ namespace ICon.Model.Energies
         /// <param name="unstableEnvironments"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments, DoubleComparer comparer)
+        public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments, NumericComparer comparer)
         {
             foreach (var environment in unstableEnvironments)
             {
-                var radialConstraint = new DoubleConstraint(false, 0.0, environment.MaxInteractionRange, true, comparer);
+                var radialConstraint = new NumericConstraint(false, 0.0, environment.MaxInteractionRange, true, comparer);
                 var predicate = MakeAsymmetricFilteringPredicate(environment, position => position.IsValidAndStable());
                 var singleResult = CreateUniqueAsymmetricPairs(new IUnitCellPosition[] { environment.UnitCellPosition }, radialConstraint, predicate);
                 foreach (var item in singleResult)
@@ -98,7 +98,7 @@ namespace ICon.Model.Energies
         /// <param name="radialConstraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnitCellPosition> positions, DoubleConstraint radialConstraint, Predicate<IUnitCellPosition> predicate)
+        public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnitCellPosition> positions, NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate)
         {
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, predicate, true);
             var values = CreateUniquePairs(candidateDictionary, CreateAsymmetricPair);
@@ -132,9 +132,9 @@ namespace ICon.Model.Energies
         /// <param name="candidateDictionary"></param>
         /// <param name="pairMaker"></param>
         /// <returns></returns>
-        protected IEnumerable<PairInteraction> CreateUniquePairs(IDictionary<double, List<PairCandidate>> candidateDictionary, Func<PairCandidate, SlotMachinePermuter<IParticle>, PairInteraction> pairMaker)
+        protected IEnumerable<PairInteraction> CreateUniquePairs(IDictionary<double, List<PairCandidate>> candidateDictionary, Func<PairCandidate, PermutationSlotMachine<IParticle>, PairInteraction> pairMaker)
         {
-            var permuters = new Dictionary<(IUnitCellPosition, IUnitCellPosition), SlotMachinePermuter<IParticle>>();
+            var permuters = new Dictionary<(IUnitCellPosition, IUnitCellPosition), PermutationSlotMachine<IParticle>>();
             foreach (var candidate in candidateDictionary.Values.SelectMany(list => list))
             {
                 if (!permuters.TryGetValue((candidate.Position0, candidate.Position1), out var permuter))
@@ -150,12 +150,12 @@ namespace ICon.Model.Energies
         /// Creates new unpolar pair interaction from pair candidate and affiliated particle permuter
         /// </summary>
         /// <param name="candidate"></param>
-        /// <param name="particlePermuter"></param>
+        /// <param name="particle"></param>
         /// <returns></returns>
-        protected SymmetricPairInteraction CreateSymmetricPair(PairCandidate candidate, SlotMachinePermuter<IParticle> particlePermuter)
+        protected SymmetricPairInteraction CreateSymmetricPair(PairCandidate candidate, PermutationSlotMachine<IParticle> particle)
         {
-            var energyDictionary = new Dictionary<SymmetricParticlePair, double>((int)particlePermuter.PermutationCount / 2);
-            foreach (var key in particlePermuter.Select(value => new SymmetricParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
+            var energyDictionary = new Dictionary<SymmetricParticlePair, double>((int)particle.PermutationCount / 2);
+            foreach (var key in particle.Select(value => new SymmetricParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
             {
                 energyDictionary[key] = 0.0;
             }
@@ -166,12 +166,12 @@ namespace ICon.Model.Energies
         /// Creates new polar pair interaction from pair candidate and affiliated particle permuter
         /// </summary>
         /// <param name="candidate"></param>
-        /// <param name="particlePermuter"></param>
+        /// <param name="particle"></param>
         /// <returns></returns>
-        protected AsymmetricPairInteraction CreateAsymmetricPair(PairCandidate candidate, SlotMachinePermuter<IParticle> particlePermuter)
+        protected AsymmetricPairInteraction CreateAsymmetricPair(PairCandidate candidate, PermutationSlotMachine<IParticle> particle)
         {
-            var energyDictionary = new Dictionary<AsymmetricParticlePair, double>((int)particlePermuter.PermutationCount / 2);
-            foreach (var key in particlePermuter.Select(value => new AsymmetricParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
+            var energyDictionary = new Dictionary<AsymmetricParticlePair, double>((int)particle.PermutationCount / 2);
+            foreach (var key in particle.Select(value => new AsymmetricParticlePair() { Particle0 = value[0], Particle1 = value[1] }))
             {
                 energyDictionary[key] = 0.0;
             }
@@ -187,7 +187,7 @@ namespace ICon.Model.Energies
         /// <param name="predicate"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected IDictionary<double, List<PairCandidate>> CreateUniquePairCandidateDictionary(IEnumerable<IUnitCellPosition> positions, DoubleConstraint radialConstraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
+        protected IDictionary<double, List<PairCandidate>> CreateUniquePairCandidateDictionary(IEnumerable<IUnitCellPosition> positions, NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
         {
             var baseCandidateDictionary = CreateCandidateDictionary(positions, radialConstraint, predicate, skipInversionFiltering);
             var uniqueCandidateDictionary = CreateUniqueCandidateDictionary(baseCandidateDictionary, positions);
@@ -200,9 +200,9 @@ namespace ICon.Model.Energies
         /// <param name="position0"></param>
         /// <param name="position1"></param>
         /// <returns></returns>
-        public SlotMachinePermuter<IParticle> MakeParticlePermuter(IUnitCellPosition position0, IUnitCellPosition position1)
+        public PermutationSlotMachine<IParticle> MakeParticlePermuter(IUnitCellPosition position0, IUnitCellPosition position1)
         {
-            return new SlotMachinePermuter<IParticle>(position0.OccupationSet.GetParticles(), position1.OccupationSet.GetParticles());
+            return new PermutationSlotMachine<IParticle>(position0.OccupationSet.GetParticles(), position1.OccupationSet.GetParticles());
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace ICon.Model.Energies
         /// <param name="predicate"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected SortedDictionary<double, List<PairCandidate>> CreateCandidateDictionary(IEnumerable<IUnitCellPosition> positions, DoubleConstraint radialConstraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
+        protected SortedDictionary<double, List<PairCandidate>> CreateCandidateDictionary(IEnumerable<IUnitCellPosition> positions, NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
         {
             var resultDictionary = new SortedDictionary<double, List<PairCandidate>>(UnitCellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer);
             var searchQueries = GetSearchQueries(positions, predicate, radialConstraint, skipInversionFiltering);
@@ -345,7 +345,7 @@ namespace ICon.Model.Energies
         /// <param name="constraint"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected RadialSearchQuery<IUnitCellPosition>[] GetSearchQueries(IEnumerable<IUnitCellPosition> starts, Predicate<IUnitCellPosition> predicate, DoubleConstraint constraint, bool skipInversionFiltering)
+        protected RadialSearchQuery<IUnitCellPosition>[] GetSearchQueries(IEnumerable<IUnitCellPosition> starts, Predicate<IUnitCellPosition> predicate, NumericConstraint constraint, bool skipInversionFiltering)
         {
             var positionSet = starts.ToArray();
             var result = new RadialSearchQuery<IUnitCellPosition>[positionSet.Length];

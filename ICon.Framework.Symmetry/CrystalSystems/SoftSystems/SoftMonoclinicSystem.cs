@@ -50,15 +50,15 @@ namespace ICon.Symmetry.CrystalSystems
         {
             if (Variation == CrystalVariation.UniqueAxisA)
             {
-                return ExtMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
+                return MocassinMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
             }
             if (Variation == CrystalVariation.UniqueAxisB)
             {
-                return ExtMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
+                return MocassinMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
             }
             if (Variation == CrystalVariation.UniqueAxisC)
             {
-                return ExtMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
+                return MocassinMath.Radian90.CountMatches(BasicConstraint.Comparer, beta, gamma) == 2;
             }
             throw new InvalidObjectStateException("The monoclinic crystal system has an invalid crystal system variation flag");
         }
@@ -81,7 +81,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <returns></returns>
         public override CrystalParameterSet GetDefaultParameterSet()
         {
-            return new CrystalParameterSet(1.0, 1.0, 1.0, ExtMath.Radian90, ExtMath.Radian90, ExtMath.Radian90);
+            return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian90);
         }
     }
 }

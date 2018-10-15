@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-
 using ICon.Mathematics.ValueTypes;
 
 namespace ICon.Mathematics.Coordinates
@@ -17,7 +15,7 @@ namespace ICon.Mathematics.Coordinates
         public SphericalCoordinateSystem3D SphericalSystem { get; protected set; }
 
         /// <summary>
-        /// Creates new vector transformer with the provided coordinate systems
+        ///     Creates new vector transformer with the provided coordinate systems
         /// </summary>
         /// <param name="fractionalSystem"></param>
         /// <param name="sphericalSystem"></param>
@@ -66,7 +64,7 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Cartesian3D ToCartesian(ISpherical3D vector)
         {
-            return new Cartesian3D(SphericalSystem.TransformToReference(vector.Coordinates));
+            return new Cartesian3D(SphericalSystem.ToReferenceSystem(vector.Coordinates));
         }
 
         /// <inheritdoc />
@@ -78,7 +76,7 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Cartesian3D ToCartesian(IFractional3D vector)
         {
-            return new Cartesian3D(FractionalSystem.TransformToReference(vector.Coordinates));
+            return new Cartesian3D(FractionalSystem.ToReferenceSystem(vector.Coordinates));
         }
 
         /// <inheritdoc />
@@ -90,7 +88,7 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Fractional3D ToFractional(ICartesian3D vector)
         {
-            return new Fractional3D(FractionalSystem.TransformToSystem(vector.Coordinates));
+            return new Fractional3D(FractionalSystem.ToSystem(vector.Coordinates));
         }
 
         /// <inheritdoc />
@@ -102,7 +100,7 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Fractional3D ToFractional(ISpherical3D vector)
         {
-            return new Fractional3D(FractionalSystem.TransformToSystem(ToCartesian(vector).Coordinates));
+            return new Fractional3D(FractionalSystem.ToSystem(ToCartesian(vector).Coordinates));
         }
 
         /// <inheritdoc />
@@ -114,7 +112,7 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Spherical3D ToSpherical(ICartesian3D vector)
         {
-            return new Spherical3D(SphericalSystem.TransformToSystem(vector.Coordinates));
+            return new Spherical3D(SphericalSystem.ToSystem(vector.Coordinates));
         }
 
         /// <inheritdoc />
@@ -126,7 +124,7 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Spherical3D ToSpherical(IFractional3D vector)
         {
-            return new Spherical3D(SphericalSystem.TransformToSystem(ToCartesian(vector).Coordinates));
+            return new Spherical3D(SphericalSystem.ToSystem(ToCartesian(vector).Coordinates));
         }
 
         /// <inheritdoc />
@@ -136,7 +134,8 @@ namespace ICon.Mathematics.Coordinates
         }
 
         /// <summary>
-        /// Transforms any vector to the specified type suing the provided conversion delegates (Throws if interface is not supported)
+        ///     Transforms any vector to the specified type suing the provided conversion delegates (Throws if interface is not
+        ///     supported)
         /// </summary>
         /// <typeparam name="TVector"></typeparam>
         /// <param name="vector"></param>
@@ -144,7 +143,8 @@ namespace ICon.Mathematics.Coordinates
         /// <param name="onFractional"></param>
         /// <param name="onSpherical"></param>
         /// <returns></returns>
-        protected TVector TransformAny<TVector>(IVector3D vector, Func<ICartesian3D, TVector> onCartesian, Func<IFractional3D, TVector> onFractional, Func<ISpherical3D, TVector> onSpherical)
+        protected TVector TransformAny<TVector>(IVector3D vector, Func<ICartesian3D, TVector> onCartesian,
+            Func<IFractional3D, TVector> onFractional, Func<ISpherical3D, TVector> onSpherical)
         {
             switch (vector)
             {

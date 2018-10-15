@@ -86,7 +86,7 @@ namespace ICon.Model.Energies.Validators
                 .Count() - 1;
 
             double unitCellVolume = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder()).GetCellVolume();
-            return (long)Math.Ceiling(interactionPerUnitCell * ExtMath.GetSphereVolume(envInfo.MaxInteractionRange) / unitCellVolume);
+            return (long)Math.Ceiling(interactionPerUnitCell * MocassinMath.GetSphereVolume(envInfo.MaxInteractionRange) / unitCellVolume);
         }
     }
 }

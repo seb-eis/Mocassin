@@ -113,7 +113,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <returns></returns>
         public VectorTransformer CreateVectorTransformer()
         {
-            return new VectorTransformer(CrystalSystem.CreateCoordinateSystem(), SphericalCoordinateSystem3D.CreateISO(ToleranceRange));
+            return new VectorTransformer(CrystalSystem.CreateCoordinateSystem(), SphericalCoordinateSystem3D.CreateIsoSystem(ToleranceRange));
         }
 
         /// <summary>

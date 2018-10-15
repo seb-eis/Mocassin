@@ -43,7 +43,7 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddConstraintValidation(IUnitCellPosition position, ValidationReport report)
         {
-            var constraint = new DoubleConstraint(true, 0.0, 1.0, false, DoubleComparer.CreateRanged(ProjectServices.CommonNumerics.CompRange));
+            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ProjectServices.CommonNumerics.CompRange));
             if (!constraint.IsValid(position.Vector.A) || !constraint.IsValid(position.Vector.B) || !constraint.IsValid(position.Vector.C))
             {
                 var detail0 = $"The position violates the unit cell boundaries {constraint.ToString()}";

@@ -39,7 +39,7 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// The currently active constraint for the search
         /// </summary>
-        protected DoubleConstraint Constraint { get; set; }
+        protected NumericConstraint Constraint { get; set; }
 
         /// <summary>
         /// The currently active vector encoder found in the unit cell provider
@@ -60,7 +60,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="start"></param>
         /// <param name="constraint"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, DoubleConstraint constraint)
+        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint)
         {
             return Search(provider, start, constraint, (value) => true);
         }
@@ -75,7 +75,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="constraint"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, DoubleConstraint constraint, IComparer<CellEntry<T1>> comparer)
+        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint, IComparer<CellEntry<T1>> comparer)
         {
             return Search(provider, start, constraint, (value) => true, comparer);
         }
@@ -90,7 +90,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="constraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, DoubleConstraint constraint, Predicate<T1> predicate)
+        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint, Predicate<T1> predicate)
         {
             if (predicate == null)
             {
@@ -123,7 +123,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="predicate"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, DoubleConstraint constraint, Predicate<T1> predicate, IComparer<CellEntry<T1>> comparer)
+        public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint, Predicate<T1> predicate, IComparer<CellEntry<T1>> comparer)
         {
             if (predicate == null)
             {
@@ -205,7 +205,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="provider"></param>
         /// <param name="constraint"></param>
         /// <param name="start"></param>
-        protected void SetBasicCalculationProperties<T1>(IUnitCellProvider<T1> provider, DoubleConstraint constraint, in Fractional3D start)
+        protected void SetBasicCalculationProperties<T1>(IUnitCellProvider<T1> provider, NumericConstraint constraint, in Fractional3D start)
         {
             if (provider == null)
             {
@@ -231,7 +231,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="offset"></param>
         /// <param name="constraint"></param>
         /// <returns></returns>
-        protected bool CheckAndUpdateBoundaryInfo(int offset, DoubleConstraint constraint)
+        protected bool CheckAndUpdateBoundaryInfo(int offset, NumericConstraint constraint)
         {
             if (offset != 0)
             {

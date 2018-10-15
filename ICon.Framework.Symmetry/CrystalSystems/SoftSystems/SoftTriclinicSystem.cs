@@ -48,7 +48,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <returns></returns>
         public override CrystalParameterSet GetDefaultParameterSet()
         {
-            return new CrystalParameterSet(1.0, 1.0, 1.0, ExtMath.Radian90, ExtMath.Radian90, ExtMath.Radian90);
+            return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian90);
         }
     }
 }

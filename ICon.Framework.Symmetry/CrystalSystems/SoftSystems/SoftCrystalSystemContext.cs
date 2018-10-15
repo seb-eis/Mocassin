@@ -18,22 +18,22 @@ namespace ICon.Symmetry.CrystalSystems
         /// <summary>
         /// Default open angle (not fixed, from 0 to 2*PI)
         /// </summary>
-        public static (Boolean Fixed, Double Min, Double Max) OpenAngle = (false, 0.0, ExtMath.Radian360);
+        public static (Boolean Fixed, Double Min, Double Max) OpenAngle = (false, 0.0, MocassinMath.Radian360);
 
         /// <summary>
         /// Default closed angle that is dependent from another (fixed, from 0 to 2*PI)
         /// </summary>
-        public static (Boolean Fixed, Double Min, Double Max) DependentAngle = (true, 0.0, ExtMath.Radian360);
+        public static (Boolean Fixed, Double Min, Double Max) DependentAngle = (true, 0.0, MocassinMath.Radian360);
 
         /// <summary>
         /// Default fixed right or cubic angle (closed, fixed to 0.5*PI)
         /// </summary>
-        public static (Boolean Fixed, Double Min, Double Max) CubicAngle = (true, ExtMath.Radian90, ExtMath.Radian90);
+        public static (Boolean Fixed, Double Min, Double Max) CubicAngle = (true, MocassinMath.Radian90, MocassinMath.Radian90);
 
         /// <summary>
         /// Default fixed hexagonal angle (closed, fixed to 2/3*PI)
         /// </summary>
-        public static (Boolean Fixed, Double Min, Double Max) HexagonalAngle = (true, ExtMath.Radian120, ExtMath.Radian120);
+        public static (Boolean Fixed, Double Min, Double Max) HexagonalAngle = (true, MocassinMath.Radian120, MocassinMath.Radian120);
 
         /// <summary>
         /// The default parameter fixes (all open)

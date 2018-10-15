@@ -4,12 +4,12 @@ using System.Globalization;
 namespace ICon.Mathematics.Extensions
 {
     /// <summary>
-    /// ICon integer extension class
+    ///     ICon integer extension class
     /// </summary>
     public static class IntegerExtensions
     {
         /// <summary>
-        /// Get true/false of a single bit
+        ///     Get true/false of a single bit
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="index"></param>
@@ -20,11 +20,10 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Set a single bit within an integer to true
+        ///     Set a single bit within an integer to true
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="index"></param>
-        /// <param name="value"></param>
         /// <returns></returns>
         public static uint SetBit(this uint integer, int index)
         {
@@ -32,7 +31,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Set a single bit within an integer to false
+        ///     Set a single bit within an integer to false
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="index"></param>
@@ -43,7 +42,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Sets all true bits of secoond integer to true in the first
+        ///     Sets all true bits of secoond integer to true in the first
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="flags"></param>
@@ -54,7 +53,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Sets all true bits in the second integer to false in the first
+        ///     Sets all true bits in the second integer to false in the first
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="flags"></param>
@@ -65,7 +64,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Get true/false of a single bit
+        ///     Get true/false of a single bit
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="index"></param>
@@ -76,11 +75,10 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Set a single bit within an integer to true
+        ///     Set a single bit within an integer to true
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="index"></param>
-        /// <param name="value"></param>
         /// <returns></returns>
         public static ulong SetBit(this ulong integer, int index)
         {
@@ -88,7 +86,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Set a single bit within an integer to false
+        ///     Set a single bit within an integer to false
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="index"></param>
@@ -99,7 +97,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Sets all true bits of secoond integer to true in the first
+        ///     Sets all true bits of second integer to true in the first
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="flags"></param>
@@ -110,7 +108,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Sets all true bits in the second integer to false in the first
+        ///     Sets all true bits in the second integer to false in the first
         /// </summary>
         /// <param name="integer"></param>
         /// <param name="flags"></param>
@@ -121,7 +119,7 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Performs a population count on an 64 bit unsigned integer
+        ///     Performs a population count on an 64 bit unsigned integer
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -129,11 +127,12 @@ namespace ICon.Mathematics.Extensions
         {
             var result = value - ((value >> 1) & 0x5555555555555555UL);
             result = (result & 0x3333333333333333UL) + ((result >> 2) & 0x3333333333333333UL);
-            return (int)(unchecked(((result + (result >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
+            return (int) (unchecked(((result + (result >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
         }
 
         /// <summary>
-        /// Performs a population count on an IConvertible struct (Will always result in the population count of the conversion result to 64bit unsigned integer!)
+        ///     Performs a population count on an IConvertible struct (Will always result in the population count of the conversion
+        ///     result to 64bit unsigned integer!)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="value"></param>
@@ -144,17 +143,17 @@ namespace ICon.Mathematics.Extensions
         }
 
         /// <summary>
-        /// Invert the byte order of a long value
+        ///     Invert the byte order of a long value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static long InvertBytes(this long value)
         {
-            return ((value & (0xffL << 0)) << 56)  |
-                   ((value & (0xffL << 8)) << 40)  |
+            return ((value & (0xffL << 0)) << 56) |
+                   ((value & (0xffL << 8)) << 40) |
                    ((value & (0xffL << 16)) << 24) |
-                   ((value & (0xffL << 24)) << 8)  |
-                   ((value & (0xffL << 32)) >> 8)  |
+                   ((value & (0xffL << 24)) << 8) |
+                   ((value & (0xffL << 32)) >> 8) |
                    ((value & (0xffL << 40)) >> 24) |
                    ((value & (0xffL << 48)) >> 40) |
                    ((value & (0xffL << 56)) >> 56);

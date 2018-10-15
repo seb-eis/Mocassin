@@ -19,17 +19,17 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// Get the ulp comparer
         /// </summary>
-        public DoubleComparer UlpComparer { get; protected set; }
+        public NumericComparer UlpComparer { get; protected set; }
 
         /// <summary>
         /// Get the range comparer
         /// </summary>
-        public DoubleComparer RangeComparer { get; protected set; }
+        public NumericComparer RangeComparer { get; protected set; }
 
         /// <summary>
         /// Get the relative factor comparer
         /// </summary>
-        public DoubleComparer RelativeComparer { get; protected set; }
+        public NumericComparer RelativeComparer { get; protected set; }
 
         /// <summary>
         /// Comparison steps of the ULP comparer
@@ -53,9 +53,9 @@ namespace ICon.Model.ProjectServices
         public NumericService(BasicNumericSettings settings)
         {
             Settings = settings;
-            UlpComparer = DoubleComparer.CreateULP(settings.UlpValue);
-            RangeComparer = DoubleComparer.CreateRanged(settings.RangeValue);
-            RelativeComparer = DoubleComparer.CreateRelative(settings.FactorValue);
+            UlpComparer = NumericComparer.CreateUlp(settings.UlpValue);
+            RangeComparer = NumericComparer.CreateRanged(settings.RangeValue);
+            RelativeComparer = NumericComparer.CreateRelative(settings.FactorValue);
         }
 
     }

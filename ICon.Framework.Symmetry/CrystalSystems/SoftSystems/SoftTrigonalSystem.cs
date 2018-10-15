@@ -20,9 +20,9 @@ namespace ICon.Symmetry.CrystalSystems
             if (Variation == CrystalVariation.HexagonalAxes)
             {
                 paramSet.ParamB = paramSet.ParamA;
-                paramSet.Alpha = ExtMath.Radian90;
-                paramSet.Beta = ExtMath.Radian90;
-                paramSet.Gamma = ExtMath.Radian120;
+                paramSet.Alpha = MocassinMath.Radian90;
+                paramSet.Beta = MocassinMath.Radian90;
+                paramSet.Gamma = MocassinMath.Radian120;
                 return;
             }
             if (Variation == CrystalVariation.RhombohedralAxes)
@@ -48,9 +48,9 @@ namespace ICon.Symmetry.CrystalSystems
             Boolean isValid = true;
             if (Variation == CrystalVariation.HexagonalAxes)
             {
-                isValid &= BasicConstraint.Comparer.Equals(alpha, ExtMath.Radian90);
-                isValid &= BasicConstraint.Comparer.Equals(beta, ExtMath.Radian90);
-                isValid &= BasicConstraint.Comparer.Equals(gamma, ExtMath.Radian120);
+                isValid &= BasicConstraint.Comparer.Equals(alpha, MocassinMath.Radian90);
+                isValid &= BasicConstraint.Comparer.Equals(beta, MocassinMath.Radian90);
+                isValid &= BasicConstraint.Comparer.Equals(gamma, MocassinMath.Radian120);
                 return isValid;
             }
             if (Variation == CrystalVariation.RhombohedralAxes)
@@ -89,11 +89,11 @@ namespace ICon.Symmetry.CrystalSystems
         {
             if (Variation == CrystalVariation.HexagonalAxes)
             {
-                return new CrystalParameterSet(1.0, 1.0, 1.0, ExtMath.Radian90, ExtMath.Radian90, ExtMath.Radian120);
+                return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian120);
             }
             if (Variation == CrystalVariation.RhombohedralAxes)
             {
-                return new CrystalParameterSet(1.0, 1.0, 1.0, ExtMath.Radian90, ExtMath.Radian90, ExtMath.Radian90);
+                return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian90);
             }
             throw new InvalidObjectStateException("The trigonal crystal system has an invalid crystal system variation flag");
         }

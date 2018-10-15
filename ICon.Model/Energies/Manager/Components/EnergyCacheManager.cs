@@ -134,8 +134,8 @@ namespace ICon.Model.Energies
             var (pairMin, pairMax) = ProjectServices.SettingsData.EnergySettings.PairEnergies.GetMinMaxTuple();
             var (groupMin, groupMax) = ProjectServices.SettingsData.EnergySettings.GroupEnergies.GetMinMaxTuple();
 
-            provider.PairEnergyConstraint = new DoubleConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumerics.RangeComparer);
-            provider.GroupEnergyConstraint = new DoubleConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumerics.RangeComparer);
+            provider.PairEnergyConstraint = new NumericConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumerics.RangeComparer);
+            provider.GroupEnergyConstraint = new NumericConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumerics.RangeComparer);
             return provider;
         }
 

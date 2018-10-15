@@ -21,17 +21,17 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// The double comparer for the tolerance comparison of the distances
         /// </summary>
-        public DoubleComparer DoubleComparer { get; set; }
+        public NumericComparer NumericComparer { get; set; }
 
         /// <summary>
         /// Creates new chain cell searcher from a unit cell provider and double comparer for radial search with tolerance
         /// </summary>
         /// <param name="unitCellProvider"></param>
-        /// <param name="doubleComparer"></param>
-        public PositionChainSampler(IUnitCellProvider<T1> unitCellProvider, DoubleComparer doubleComparer)
+        /// <param name="numericComparer"></param>
+        public PositionChainSampler(IUnitCellProvider<T1> unitCellProvider, NumericComparer numericComparer)
         {
             UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
-            DoubleComparer = doubleComparer ?? throw new ArgumentNullException(nameof(doubleComparer));
+            NumericComparer = numericComparer ?? throw new ArgumentNullException(nameof(numericComparer));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="constraints"></param>
         /// <param name="predicates"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>[]> MakeSearchEnumerable(IEnumerable<CellEntry<T1>[]> startSequence, DoubleConstraint[] constraints, Predicate<T1>[] predicates)
+        protected IEnumerable<CellEntry<T1>[]> MakeSearchEnumerable(IEnumerable<CellEntry<T1>[]> startSequence, NumericConstraint[] constraints, Predicate<T1>[] predicates)
         {
             if (constraints.Length != predicates.Length)
             {
@@ -103,7 +103,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="constraint"></param>
         /// <param name="targetValue"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>> ShellSearch(Fractional3D start, DoubleConstraint constraint, Predicate<T1> predicate)
+        protected IEnumerable<CellEntry<T1>> ShellSearch(Fractional3D start, NumericConstraint constraint, Predicate<T1> predicate)
         {
             foreach (var item in new RadialPositionSampler().Search(UnitCellProvider, start, constraint, predicate))
             {
@@ -118,7 +118,7 @@ namespace ICon.Symmetry.Analysis
         /// <param name="radialConstraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>[]> ExtendSearchSequence(IEnumerable<CellEntry<T1>[]> sequences, DoubleConstraint radialConstraint, Predicate<T1> predicate)
+        protected IEnumerable<CellEntry<T1>[]> ExtendSearchSequence(IEnumerable<CellEntry<T1>[]> sequences, NumericConstraint radialConstraint, Predicate<T1> predicate)
         {
             foreach (var sequence in sequences)
             {
@@ -148,10 +148,10 @@ namespace ICon.Symmetry.Analysis
         /// </summary>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public DoubleConstraint[] GetDefaultConstraints(CellEntry<T1>[] geometry)
+        public NumericConstraint[] GetDefaultConstraints(CellEntry<T1>[] geometry)
         {
             var cartesianGeometry = geometry.Select(entry => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(entry.AbsoluteVector)).ToArray();
-            var result = new DoubleConstraint[cartesianGeometry.Length - 1];
+            var result = new NumericConstraint[cartesianGeometry.Length - 1];
             for (int i = 0; i < cartesianGeometry.Length - 1;)
             {
                 result[i] = GetSearchConstraint(cartesianGeometry[i], cartesianGeometry[++i]);
@@ -181,10 +181,10 @@ namespace ICon.Symmetry.Analysis
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        protected DoubleConstraint GetSearchConstraint(in Cartesian3D first, in Cartesian3D second)
+        protected NumericConstraint GetSearchConstraint(in Cartesian3D first, in Cartesian3D second)
         {
             double length = (second - first).GetLength();
-            return new DoubleConstraint(true, length, length, true, DoubleComparer);
+            return new NumericConstraint(true, length, length, true, NumericComparer);
         }
 
         /// <summary>

@@ -233,9 +233,9 @@ namespace ICon.Mathematics.Coordinates
         /// <inheritdoc />
         public Coordinates<int, int, int> GetTargetCellOffset(IFractional3D vector)
         {
-            var a = ExtMath.FloorToInt(vector.A, Transformer.FractionalSystem.Comparer);
-            var b = ExtMath.FloorToInt(vector.B, Transformer.FractionalSystem.Comparer);
-            var c = ExtMath.FloorToInt(vector.C, Transformer.FractionalSystem.Comparer);
+            var a = MocassinMath.FloorToInt(vector.A, Transformer.FractionalSystem.Comparer);
+            var b = MocassinMath.FloorToInt(vector.B, Transformer.FractionalSystem.Comparer);
+            var c = MocassinMath.FloorToInt(vector.C, Transformer.FractionalSystem.Comparer);
             return new Coordinates<int, int, int>(a, b, c);
         }
 

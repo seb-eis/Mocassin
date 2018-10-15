@@ -99,7 +99,7 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
+        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationSource<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
         {
             if (permProvider.ResultLength != PointSequence.Count)
             {

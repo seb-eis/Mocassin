@@ -82,7 +82,7 @@ namespace ICon.Model.Energies
         public IEnumerable<SymmetricParticlePair> GetAllGroupPairs(IGroupInteraction group)
         {
             var particles = new HashSet<IParticle>(GetGroupUnitCellPositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
-            var permuter = new SlotMachinePermuter<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
+            var permuter = new PermutationSlotMachine<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
             return new HashSet<SymmetricParticlePair>(permuter.Select(perm => new SymmetricParticlePair() { Particle0 = perm[0], Particle1 = perm[1] })).AsEnumerable();
         }
 
@@ -103,7 +103,7 @@ namespace ICon.Model.Energies
         /// <param name="operationGroup"></param>
         /// <param name="permProvider"></param>
         /// <returns></returns>
-        protected IEnumerable<OccupationState> GetUniqueGroupOccupationStates(IPointOperationGroup operationGroup, IPermutationProvider<IParticle> permProvider)
+        protected IEnumerable<OccupationState> GetUniqueGroupOccupationStates(IPointOperationGroup operationGroup, IPermutationSource<IParticle> permProvider)
         {
             var comparer = new EqualityCompareAdapter<IParticle>((a, b) => a.Index == b.Index);
             var rawPermutations = operationGroup.GetUniquePermutations(permProvider, comparer, a => 1 << a.Index);
@@ -137,7 +137,7 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public IPermutationProvider<IParticle> GetGroupStatePermuter(IGroupInteraction group)
+        public IPermutationSource<IParticle> GetGroupStatePermuter(IGroupInteraction group)
         {
             return GetGroupStatePermuter(group.GetBaseGeometry());
         }
@@ -147,9 +147,9 @@ namespace ICon.Model.Energies
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public IPermutationProvider<IParticle> GetGroupStatePermuter(IEnumerable<Fractional3D> group)
+        public IPermutationSource<IParticle> GetGroupStatePermuter(IEnumerable<Fractional3D> group)
         {
-            return new SlotMachinePermuter<IParticle>(group.Select(vector => UnitCellProvider.GetEntryValueAt(vector).OccupationSet.GetParticles()));
+            return new PermutationSlotMachine<IParticle>(group.Select(vector => UnitCellProvider.GetEntryValueAt(vector).OccupationSet.GetParticles()));
         }
     }
 }

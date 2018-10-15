@@ -29,7 +29,7 @@ namespace ICon.Symmetry.Analysis
         /// <summary>
         /// The radial search constraint
         /// </summary>
-        public DoubleConstraint RadialConstraint { get; set; }
+        public NumericConstraint RadialConstraint { get; set; }
 
         /// <summary>
         /// The acceptance prediacte for found entry values

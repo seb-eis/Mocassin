@@ -47,7 +47,7 @@ namespace ICon.Model.Particles
                 .Where(particle => !particle.IsDeprecated)
                 .Select(particle => particle.Index);
 
-            var permuter = new SlotMachinePermuter<int>(particles, particles);
+            var permuter = new PermutationSlotMachine<int>(particles, particles);
 
             return new SetList<PairCode>(Comparer<PairCode>.Default, 25)
             {

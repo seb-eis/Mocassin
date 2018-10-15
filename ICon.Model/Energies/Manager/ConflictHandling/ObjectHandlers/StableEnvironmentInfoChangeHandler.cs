@@ -59,7 +59,7 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="newPairs"></param>
         /// <param name="report"></param>
         /// <param name="comparer"></param>
-        protected void PullEnergyInfoFromOldModel(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs, ConflictReport report, DoubleComparer comparer)
+        protected void PullEnergyInfoFromOldModel(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs, ConflictReport report, NumericComparer comparer)
         {
             var vectorComparer = new VectorComparer3D<Fractional3D>(comparer);
             var warning = ModelMessages.CreateConflictHandlingWarning(this);

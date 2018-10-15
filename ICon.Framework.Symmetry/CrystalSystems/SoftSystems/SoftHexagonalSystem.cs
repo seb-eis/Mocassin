@@ -16,9 +16,9 @@ namespace ICon.Symmetry.CrystalSystems
         public override void ApplyParameterDependencies(CrystalParameterSet paramSet)
         {
             paramSet.ParamB = paramSet.ParamA;
-            paramSet.Alpha = ExtMath.Radian90;
-            paramSet.Beta = ExtMath.Radian90;
-            paramSet.Gamma = ExtMath.Radian120;
+            paramSet.Alpha = MocassinMath.Radian90;
+            paramSet.Beta = MocassinMath.Radian90;
+            paramSet.Gamma = MocassinMath.Radian120;
         }
 
         /// <summary>
@@ -31,9 +31,9 @@ namespace ICon.Symmetry.CrystalSystems
         public override Boolean ValidateSoftAngleCondition(Double alpha, Double beta, Double gamma)
         {
             Boolean isValid = true;
-            isValid &= BasicConstraint.Comparer.Equals(alpha, ExtMath.Radian90);
-            isValid &= BasicConstraint.Comparer.Equals(beta, ExtMath.Radian90);
-            isValid &= BasicConstraint.Comparer.Equals(gamma, ExtMath.Radian120);
+            isValid &= BasicConstraint.Comparer.Equals(alpha, MocassinMath.Radian90);
+            isValid &= BasicConstraint.Comparer.Equals(beta, MocassinMath.Radian90);
+            isValid &= BasicConstraint.Comparer.Equals(gamma, MocassinMath.Radian120);
             return isValid;
         }
 
@@ -55,7 +55,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <returns></returns>
         public override CrystalParameterSet GetDefaultParameterSet()
         {
-            return new CrystalParameterSet(1.0, 1.0, 1.0, ExtMath.Radian90, ExtMath.Radian90, ExtMath.Radian120);
+            return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian120);
         }
     }
 }

@@ -65,27 +65,27 @@ namespace ICon.Symmetry.CrystalSystems
         /// <summary>
         /// The constraint for the crystal parameters
         /// </summary>
-        public DoubleConstraint ParameterConstraint { get; internal set; }
+        public NumericConstraint ParameterConstraint { get; internal set; }
 
         /// <summary>
         /// The basic double constraint for vector lengths, vector entries, calculations and other not further specified potentially constraint double values in the crystal system
         /// </summary>
-        public DoubleConstraint BasicConstraint { get; internal set; }
+        public NumericConstraint BasicConstraint { get; internal set; }
 
         /// <summary>
         /// Constraint for the angle alpha
         /// </summary>
-        public DoubleConstraint AlphaConstraint { get; internal set; }
+        public NumericConstraint AlphaConstraint { get; internal set; }
 
         /// <summary>
         /// Constraint for the angle beta
         /// </summary>
-        public DoubleConstraint BetaConstraint { get; internal set; }
+        public NumericConstraint BetaConstraint { get; internal set; }
 
         /// <summary>
         /// Constraint for the angle gamma
         /// </summary>
-        public DoubleConstraint GammaConstraint { get; internal set; }
+        public NumericConstraint GammaConstraint { get; internal set; }
 
         /// <summary>
         /// Lattice parameter in A direction (Value and flag if value is fixed by crystal system)

@@ -55,7 +55,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="dbFilepath"></param>
         /// <param name="tolerance"></param>
-        public SpaceGroupService(string dbFilepath, double tolerance) : this(dbFilepath, DoubleComparer.CreateRanged(tolerance))
+        public SpaceGroupService(string dbFilepath, double tolerance) : this(dbFilepath, NumericComparer.CreateRanged(tolerance))
         {
             TryLoadGroup((group) => group.Index == 1);
         }
@@ -200,7 +200,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// <returns></returns>
         protected SetList<TSource> CreatePositionSetList<TSource>(TSource vector) where TSource : struct, IFractional3D<TSource>
         {
-            var results = new SetList<TSource>(VectorComparer.MakeCompatibleComparer<TSource>(), LoadedGroupEntity.BaseSymmetryOperations.Count);
+            var results = new SetList<TSource>(VectorComparer.ToCompatibleComparer<TSource>(), LoadedGroupEntity.BaseSymmetryOperations.Count);
             foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations) results.Add(operation.ApplyWithTrim(vector));
             results.List.TrimExcess();
             return results;

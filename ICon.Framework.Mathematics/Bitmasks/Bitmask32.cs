@@ -1,35 +1,32 @@
 ﻿using System;
-using System.Xml.Serialization;
-using System.Globalization;
-
+using System.Runtime.Serialization;
 using ICon.Mathematics.Extensions;
 
 namespace ICon.Mathematics.Bitmasks
 {
     /// <summary>
-    /// Wrapped 32 bit unsigned integer to be used as 32 entry bitmask (Waring: Mutable struct!)
+    ///     Wrapped 32 bit unsigned integer to be used as 32 entry bitmask (Waring: Mutable struct!)
     /// </summary>
-    [Serializable]
-    [XmlRoot("Mask")]
+    [DataContract]
     public struct Bitmask32 : IBitmask, IComparable<Bitmask32>, IEquatable<Bitmask32>
     {
         /// <summary>
-        /// The internal mask value
+        ///     The internal mask value
         /// </summary>
-        [XmlAttribute("Value")]
-        public UInt32 Mask { get; set; }
+        [DataMember]
+        public uint Mask { get; set; }
 
         /// <summary>
-        /// Creates new mask from unsiged integer
+        ///     Creates new mask from unsigned integer
         /// </summary>
         /// <param name="mask"></param>
-        public Bitmask32(UInt32 mask)
+        public Bitmask32(uint mask)
         {
             Mask = mask;
         }
 
         /// <summary>
-        /// Copy constructor
+        ///     Copy constructor
         /// </summary>
         /// <param name="bitmask"></param>
         public Bitmask32(Bitmask32 bitmask)
@@ -37,42 +34,36 @@ namespace ICon.Mathematics.Bitmasks
             Mask = bitmask.Mask;
         }
 
-        /// <summary>
-        /// Access the masks true/false entries by index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public Boolean this[Int32 index]
+        /// <inheritdoc />
+        public bool this[int index]
         {
-            get { return Mask.GetBit(index); }
-            set { Mask = (value) ? Mask.SetBit(index) : Mask.UnsetBit(index); }
+            get => Mask.GetBit(index);
+            set => Mask = value
+                ? Mask.SetBit(index)
+                : Mask.UnsetBit(index);
         }
 
         /// <summary>
-        /// Implicit conversion operator for unsigned 32 bit integer
+        ///     Implicit conversion operator for unsigned 32 bit integer
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator Bitmask32(UInt32 value)
+        public static implicit operator Bitmask32(uint value)
         {
             return new Bitmask32(value);
         }
 
         /// <summary>
-        /// Compares the wrapped integer
+        ///     Compares the wrapped integer
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public Int32 CompareTo(Bitmask32 other)
+        public int CompareTo(Bitmask32 other)
         {
             return Mask.CompareTo(other.Mask);
         }
 
-        /// <summary>
-        /// Compares the stored masks for bitwise equality
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public Boolean Equals(Bitmask32 other)
+        /// <inheritdoc />
+        public bool Equals(Bitmask32 other)
         {
             return Mask == other.Mask;
         }

@@ -29,16 +29,16 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// The ULP based double comparer, fastest but fails durng almost zero comparisons
         /// </summary>
-        DoubleComparer UlpComparer { get; }
+        NumericComparer UlpComparer { get; }
 
         /// <summary>
         /// The range based double comparer, relatively fast and able to compare to zero, but limited to a very specific value range
         /// </summary>
-        DoubleComparer RangeComparer { get; }
+        NumericComparer RangeComparer { get; }
 
         /// <summary>
         /// The factor based relative double comparer, slow and not able to compare to zero, but usually the most flexible one
         /// </summary>
-        DoubleComparer RelativeComparer { get; }
+        NumericComparer RelativeComparer { get; }
     }
 }

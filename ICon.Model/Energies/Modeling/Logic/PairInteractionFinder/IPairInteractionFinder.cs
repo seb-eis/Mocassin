@@ -34,7 +34,7 @@ namespace ICon.Model.Energies
         /// <param name="radialConstraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments, DoubleComparer comparer);
+        IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments, NumericComparer comparer);
 
         /// <summary>
         /// Searches all provided unit cell position start points for unique symmetric pair interactions that fit the definition within the stable environment info.
@@ -44,6 +44,6 @@ namespace ICon.Model.Energies
         /// <param name="environmentInfo"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions, IStableEnvironmentInfo environmentInfo, DoubleComparer comparer);
+        IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions, IStableEnvironmentInfo environmentInfo, NumericComparer comparer);
     }
 }

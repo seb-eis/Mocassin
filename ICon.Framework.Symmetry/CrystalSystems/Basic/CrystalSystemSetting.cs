@@ -97,12 +97,12 @@ namespace ICon.Symmetry.CrystalSystems
         /// <param name="subStrings"></param>
         protected void SetConstraints(CrystalSystem system, Double parameterMaxValue, Double toleranceValue)
         {
-            var comparer = DoubleComparer.CreateRanged(toleranceValue);
-            system.AlphaConstraint = new DoubleConstraint(true, Alpha.Min, Alpha.Max, true, comparer);
-            system.BetaConstraint = new DoubleConstraint(true, Beta.Min, Beta.Max, true, comparer);
-            system.GammaConstraint = new DoubleConstraint(true, Gamma.Min, Gamma.Max, true, comparer);
-            system.BasicConstraint = new DoubleConstraint(true, 0.0, Double.MaxValue, false, comparer);
-            system.ParameterConstraint = new DoubleConstraint(false, 0.0, parameterMaxValue, true, comparer);
+            var comparer = NumericComparer.CreateRanged(toleranceValue);
+            system.AlphaConstraint = new NumericConstraint(true, Alpha.Min, Alpha.Max, true, comparer);
+            system.BetaConstraint = new NumericConstraint(true, Beta.Min, Beta.Max, true, comparer);
+            system.GammaConstraint = new NumericConstraint(true, Gamma.Min, Gamma.Max, true, comparer);
+            system.BasicConstraint = new NumericConstraint(true, 0.0, Double.MaxValue, false, comparer);
+            system.ParameterConstraint = new NumericConstraint(false, 0.0, parameterMaxValue, true, comparer);
         }
     }
 }

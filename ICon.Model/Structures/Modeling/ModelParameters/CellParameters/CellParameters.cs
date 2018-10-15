@@ -62,19 +62,19 @@ namespace ICon.Model.Structures
         /// Angle alpha in degree
         /// </summary>
         [IgnoreDataMember]
-        public double AlphaDegree => ExtMath.RadianToDegree(Alpha);
+        public double AlphaDegree => MocassinMath.RadianToDegree(Alpha);
 
         /// <summary>
         /// Angle beta in degree
         /// </summary>
         [IgnoreDataMember]
-        public double BetaDegree => ExtMath.RadianToDegree(Beta);
+        public double BetaDegree => MocassinMath.RadianToDegree(Beta);
 
         /// <summary>
         /// Angle gamma in degree
         /// </summary>
         [IgnoreDataMember]
-        public double GammaDegree => ExtMath.RadianToDegree(Gamma);
+        public double GammaDegree => MocassinMath.RadianToDegree(Gamma);
 
         /// <summary>
         /// Implicit cast of crystal parameter set to the wrapper object
@@ -116,7 +116,7 @@ namespace ICon.Model.Structures
         /// <returns></returns>
         public override bool Equals(IModelParameter other)
         {
-            var comparer = DoubleComparer.CreateRanged(1.0e-10);
+            var comparer = NumericComparer.CreateRanged(1.0e-10);
             if (other is ICellParameters castOther)
             {
                 return comparer.Equals(ParamA, castOther.ParamA)

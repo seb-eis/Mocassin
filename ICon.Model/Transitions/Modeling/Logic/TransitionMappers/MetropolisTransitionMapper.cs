@@ -57,11 +57,11 @@ namespace ICon.Model.Transitions
         /// <param name="transition"></param>
         /// <param name="encodedPositions"></param>
         /// <returns></returns>
-        protected IPermutationProvider<int> GetMappingPermuter(IMetropolisTransition transition, IList<SetList<CrystalVector4D>> encodedPositions)
+        protected IPermutationSource<int> GetMappingPermuter(IMetropolisTransition transition, IList<SetList<CrystalVector4D>> encodedPositions)
         {
             var first = encodedPositions[transition.FirstUnitCellPosition.Index].Select(position => position.P).ToList();
             var second = encodedPositions[transition.SecondUnitCellPosition.Index].Select(position => position.P).ToList();
-            return new SlotMachinePermuter<int>(first, second);
+            return new PermutationSlotMachine<int>(first, second);
         }
 
         /// <summary>

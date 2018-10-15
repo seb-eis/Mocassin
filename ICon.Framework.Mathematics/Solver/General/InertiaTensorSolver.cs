@@ -7,7 +7,7 @@ using ICon.Mathematics.Extensions;
 namespace ICon.Mathematics.Solver
 {
     /// <summary>
-    /// Calculates the pricipal inertia tensor by the Oliver K. Smith trigonometric substitution
+    /// Calculates the principal inertia tensor by the Oliver K. Smith trigonometric substitution
     /// </summary>
     public class InertiaTensorSolver
     {
@@ -15,11 +15,15 @@ namespace ICon.Mathematics.Solver
         /// Solves eigenvalue problem of the generic inertia tensor and returns the diagonal entries of the principal inertia tensor
         /// </summary>
         /// <param name="tensor"></param>
+        /// <param name="comparer"></param>
         /// <returns></returns>
         public double[] GetPrincipalTensorEntries(double[,] tensor, IComparer<double> comparer)
         {
-            if (tensor.GetUpperBound(0) != 2 || tensor.GetUpperBound(1) != 2) throw new ArgumentException(paramName: nameof(tensor), message: "Input tensor is not of size 3x3");
-            if (tensor.IsSymmetric(comparer) == false) throw new ArgumentException(paramName: nameof(tensor), message: "Input tensor is not symmetric");
+            if (tensor.GetUpperBound(0) != 2 || tensor.GetUpperBound(1) != 2)
+                throw new ArgumentException("Input tensor is not of size 3x3", nameof(tensor));
+
+            if (!tensor.IsSymmetric(comparer))
+                throw new ArgumentException("Input tensor is not symmetric", nameof(tensor));
 
             return CalculateEigenvalues(tensor, comparer);
         }
@@ -30,21 +34,21 @@ namespace ICon.Mathematics.Solver
         /// <param name="tensor"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public double GetPrinipalTensorLength(double[,] tensor, IComparer<double> comparer)
+        public double GetPrincipalTensorLength(double[,] tensor, IComparer<double> comparer)
         {
             var entries = GetPrincipalTensorEntries(tensor, comparer);
             return Math.Sqrt(entries[0] * entries[0] + entries[1] * entries[1] + entries[2] * entries[2]);
         }
 
         /// <summary>
-        /// Uses trigonemetric substitution to solve 3x3 symmetric matrix eigenvalue problem
+        /// Uses trigonometric substitution to solve 3x3 symmetric matrix eigenvalue problem
         /// </summary>
         /// <param name="tensor"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        private double[] CalculateEigenvalues(double[,] tensor, IComparer<double> comparer)
+        private static double[] CalculateEigenvalues(double[,] tensor, IComparer<double> comparer)
         {
-            var intValues = new double[3] { tensor[0, 0], tensor[1, 1], tensor[2, 2] };
+            var intValues = new [] { tensor[0, 0], tensor[1, 1], tensor[2, 2] };
 
             var devQuad = Quad(tensor[0, 1]) + Quad(tensor[0, 2]) + Quad(tensor[1, 2]);
             if (comparer.Compare(devQuad, 0.0) == 0)
@@ -53,19 +57,19 @@ namespace ICon.Mathematics.Solver
                 return intValues;
             }
 
-            var devValues = new double[3] { 0.0, 0.0, 0.0 };
-            var intAngle = 0.0;
+            var devValues = new [] { 0.0, 0.0, 0.0 };
+            double intAngle;
             var intTrace = Trace(tensor) / 3.0;
             var intQuad = Quad(tensor[0, 0] - intTrace) + Quad(tensor[1, 1] - intTrace) + Quad(tensor[2, 2] - intTrace) + 2.0 * devQuad;
             var intQuadRoot = Math.Sqrt(intQuad / 6.0);
-            var intQuadRootInvese = 1.0 / intQuadRoot;
+            var intQuadRootInverse = 1.0 / intQuadRoot;
 
-            intValues[0] = (tensor[0, 0] - intTrace) * intQuadRootInvese;
-            intValues[1] = (tensor[1, 1] - intTrace) * intQuadRootInvese;
-            intValues[2] = (tensor[2, 2] - intTrace) * intQuadRootInvese;
-            devValues[0] = tensor[0, 1] * intQuadRootInvese;
-            devValues[1] = tensor[0, 2] * intQuadRootInvese;
-            devValues[2] = tensor[1, 2] * intQuadRootInvese;
+            intValues[0] = (tensor[0, 0] - intTrace) * intQuadRootInverse;
+            intValues[1] = (tensor[1, 1] - intTrace) * intQuadRootInverse;
+            intValues[2] = (tensor[2, 2] - intTrace) * intQuadRootInverse;
+            devValues[0] = tensor[0, 1] * intQuadRootInverse;
+            devValues[1] = tensor[0, 2] * intQuadRootInverse;
+            devValues[2] = tensor[1, 2] * intQuadRootInverse;
             var halfDeterminant = Determinant(intValues, devValues) / 2.0;
 
             if (halfDeterminant < -1.0 || comparer.Compare(halfDeterminant, -1.0) == 0)
@@ -83,23 +87,12 @@ namespace ICon.Mathematics.Solver
         }
 
         /// <summary>
-        /// Calculates the determinant of a 3x3 double array
-        /// </summary>
-        /// <param name="tensor"></param>
-        /// <returns></returns>
-        private double Determinant(double[,] tensor)
-        {
-            return tensor[0, 0] * (tensor[1, 1] * tensor[2, 2] - tensor[1, 2] * tensor[2, 1])
-                - tensor[0, 1] * (tensor[1, 0] * tensor[2, 2] - tensor[2, 0] * tensor[1, 2])
-                + tensor[0, 2] * (tensor[1, 0] * tensor[2, 1] - tensor[2, 0] * tensor[1, 1]);
-        }
-
-        /// <summary>
         /// Calculates the determinant of a 3x3 symmetric array from the diagonal entries and the outer values
         /// </summary>
-        /// <param name="tensor"></param>
+        /// <param name="diagonal"></param>
+        /// <param name="outer"></param>
         /// <returns></returns>
-        private double Determinant(double[] diagonal, double[] outer)
+        private static double Determinant(IReadOnlyList<double> diagonal, IReadOnlyList<double> outer)
         {
             return diagonal[0] * (diagonal[1] * diagonal[2] - outer[2] * outer[2])
                 - outer[0] * (outer[0] * diagonal[2] - outer[1] * outer[2])
@@ -111,7 +104,7 @@ namespace ICon.Mathematics.Solver
         /// </summary>
         /// <param name="tensor"></param>
         /// <returns></returns>
-        private double Trace(double[,] tensor)
+        private static double Trace(double[,] tensor)
         {
             return tensor[0, 0] + tensor[1, 1] + tensor[2, 2];
         }
@@ -121,7 +114,7 @@ namespace ICon.Mathematics.Solver
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private double Quad(double value)
+        private static double Quad(double value)
         {
             return value * value;
         }

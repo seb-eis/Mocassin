@@ -44,7 +44,7 @@ namespace ICon.Model.Test
         public void TestVectorEncoderUpdate()
         {
             var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-            var comparer = new VectorComparer3D<Cartesian3D>(DoubleComparer.CreateRanged(1.0e-6));
+            var comparer = new VectorComparer3D<Cartesian3D>(NumericComparer.CreateRanged(1.0e-6));
             for (int i = 1; i < 10; i++)
             {
                 var (refA, refB, refC) = (new Cartesian3D(i, 0, 0), new Cartesian3D(0, i, 0), new Cartesian3D(0, 0, i));

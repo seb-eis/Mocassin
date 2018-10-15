@@ -62,7 +62,7 @@ namespace ICon.Symmetry.SpaceGroups
         /// <param name="permProvider"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationProvider<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector);
+        IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationSource<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector);
 
         /// <summary>
         /// Returns true if permuting the point squence with values can show multiple equivalent values

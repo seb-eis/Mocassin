@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 using ICon.Mathematics.ValueTypes;
 
 namespace ICon.Mathematics.Extensions
 {
     /// <summary>
-    ///  Extension calss for the coordinate tuple that supplies generic comparsion methods and other convenience functions
+    ///     Extensions for the coordinate tuple that supplies generic comparison methods and other convenience functions
     /// </summary>
-    public static class CoordinateExtensions
+    public static class CoordinatesExtensions
     {
         /// <summary>
-        /// Compares a three entry coordinate tuple where all entries support the IComparable implementation
+        ///     Compares a three entry coordinate tuple where all entries support the IComparable implementation
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
@@ -25,21 +22,18 @@ namespace ICon.Mathematics.Extensions
             where T2 : struct, IComparable<T2>
             where T3 : struct, IComparable<T3>
         {
-            int compA = lhs.A.CompareTo(rhs.A);
-            if (compA == 0)
-            {
-                int compB = lhs.B.CompareTo(rhs.B);
-                if (compB == 0)
-                {
-                    return lhs.C.CompareTo(rhs.C);
-                }
-                return compB;
-            }
-            return compA;
+            var compA = lhs.A.CompareTo(rhs.A);
+            if (compA != 0) 
+                return compA;
+
+            var compB = lhs.B.CompareTo(rhs.B);
+            return compB == 0 
+                ? lhs.C.CompareTo(rhs.C) 
+                : compB;
         }
 
         /// <summary>
-        /// Compares a three entry coordinate tuple for equality where all entries support IEquatable
+        ///     Compares a three entry coordinate tuple for equality where all entries support IEquatable
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
@@ -55,46 +49,43 @@ namespace ICon.Mathematics.Extensions
             return lhs.A.Equals(rhs.A) && lhs.B.Equals(rhs.B) && lhs.C.Equals(rhs.B);
         }
 
-            /// <summary>
-            /// Compares a four entry coordinate tuple where all entries support the IComparable implementation
-            /// </summary>
-            /// <typeparam name="T1"></typeparam>
-            /// <typeparam name="T2"></typeparam>
-            /// <typeparam name="T3"></typeparam>
-            /// <typeparam name="T4"></typeparam>
-            /// <param name="lhs"></param>
-            /// <param name="rhs"></param>
-            /// <returns></returns>
-            public static int CompareCoordinates<T1, T2, T3, T4>(this Coordinates<T1, T2, T3, T4> lhs, in Coordinates<T1, T2, T3, T4> rhs)
-             where T1 : struct, IComparable<T1>
-             where T2 : struct, IComparable<T2>
-             where T3 : struct, IComparable<T3>
-             where T4 : struct, IComparable<T4>
-        {
-            int compA = lhs.A.CompareTo(rhs.A);
-            if (compA == 0)
-            {
-                int compB = lhs.B.CompareTo(rhs.B);
-                if (compB == 0)
-                {
-                    int compC = lhs.C.CompareTo(rhs.C);
-                    if (compC == 0)
-                    {
-                        return lhs.D.CompareTo(rhs.D);
-                    }
-                    return compC;
-                }
-                return compB;
-            }
-            return compA;
-        }
-
         /// <summary>
-        /// Compares a four entry coordinate tuple for equality where all entries support IEquatable
+        ///     Compares a four entry coordinate tuple where all entries support the IComparable implementation
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        public static int CompareCoordinates<T1, T2, T3, T4>(this Coordinates<T1, T2, T3, T4> lhs, in Coordinates<T1, T2, T3, T4> rhs)
+            where T1 : struct, IComparable<T1>
+            where T2 : struct, IComparable<T2>
+            where T3 : struct, IComparable<T3>
+            where T4 : struct, IComparable<T4>
+        {
+            var compA = lhs.A.CompareTo(rhs.A);
+            if (compA != 0) 
+                return compA;
+
+            var compB = lhs.B.CompareTo(rhs.B);
+            if (compB != 0)
+                return compB;
+
+            var compC = lhs.C.CompareTo(rhs.C);
+            return compC == 0 
+                ? lhs.D.CompareTo(rhs.D) 
+                : compC;
+        }
+
+        /// <summary>
+        ///     Compares a four entry coordinate tuple for equality where all entries support IEquatable
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>

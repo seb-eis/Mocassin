@@ -31,12 +31,12 @@ namespace ICon.Symmetry.Analysis
         /// <param name="info"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public SymmetryIndicator GetSymmetryIndicator(MassPointGeomertyInfo info, IComparer<double> comparer)
+        public SymmetryIndicator GetSymmetryIndicator(MassPointGeometryInfo info, IComparer<double> comparer)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
-            var tensorLength = new InertiaTensorSolver().GetPrinipalTensorLength(info.MassCenterInertiaTensor.Values, comparer);
+            var tensorLength = new InertiaTensorSolver().GetPrincipalTensorLength(info.MassCenterInertiaTensor.Values, comparer);
 
             var first = GetFirstHashValue(tensorLength, info.SumOfMassTimesDistance, comparer);
             var second = GetSecondHashValue(info.TotalMass, info.PointCount, comparer);

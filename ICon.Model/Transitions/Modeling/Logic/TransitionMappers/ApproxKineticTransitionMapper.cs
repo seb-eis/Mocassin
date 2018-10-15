@@ -44,7 +44,7 @@ namespace ICon.Model.Transitions
         /// <param name="startPoints"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<KineticMapping> QuickMapping(IKineticTransition transition, IEnumerable<Fractional3D> startPoints, DoubleComparer comparer)
+        public IEnumerable<KineticMapping> QuickMapping(IKineticTransition transition, IEnumerable<Fractional3D> startPoints, NumericComparer comparer)
         {
             var mainGeometry = GetGeometricPath(transition.GetGeometrySequence());
             var chainSearcher = new PositionChainSampler<int>(UnitCellProvider, comparer);
@@ -100,7 +100,7 @@ namespace ICon.Model.Transitions
         /// <param name="geometries"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<CellEntry<int>[]> QuickFilterPaths(IEnumerable<CellEntry<int>> reference, IEnumerable<CellEntry<int>[]> geometries, DoubleComparer comparer)
+        public IEnumerable<CellEntry<int>[]> QuickFilterPaths(IEnumerable<CellEntry<int>> reference, IEnumerable<CellEntry<int>[]> geometries, NumericComparer comparer)
         {
             var refIdentifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(reference));
             foreach (var geometry in GetUniquePaths(geometries, comparer))
@@ -118,7 +118,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="geometries"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<int>[]> GetUniquePaths(IEnumerable<CellEntry<int>[]> geometries, DoubleComparer comparer)
+        protected IEnumerable<CellEntry<int>[]> GetUniquePaths(IEnumerable<CellEntry<int>[]> geometries, NumericComparer comparer)
         {
             var sequenceComparer = MakeCellEntrySequenceComparer(new VectorComparer3D<Fractional3D>(comparer), Comparer<int>.Default);
             foreach (var item in ContainerFactory.CreateSetList(sequenceComparer, geometries))

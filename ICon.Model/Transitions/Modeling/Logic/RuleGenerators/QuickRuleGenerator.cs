@@ -91,13 +91,13 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="statePairGroups"></param>
         /// <returns></returns>
-        protected SlotMachinePermuter<StatePair> MakeStateSetPermuter(StatePairGroup[] statePairGroups)
+        protected PermutationSlotMachine<StatePair> MakeStateSetPermuter(StatePairGroup[] statePairGroups)
         {
             var permuterSet = statePairGroups
                 .Select(group => group.StatePairs.Select(value => StatePair.CreateForStatus(value.Donor, value.Acceptor, group.PositionStatus)))
                 .ToArray();
 
-            return new SlotMachinePermuter<StatePair>(permuterSet);
+            return new PermutationSlotMachine<StatePair>(permuterSet);
         }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="statePairs"></param>
         /// <returns></returns>
-        protected SlotMachinePermuter<int> MakePathStatePermuter(StatePair[] statePairs)
+        protected PermutationSlotMachine<int> MakePathStatePermuter(StatePair[] statePairs)
         {
-            return new SlotMachinePermuter<int>(statePairs.Select(pair => new List<int> { pair.DonorIndex, pair.AcceptorIndex }).ToArray());
+            return new PermutationSlotMachine<int>(statePairs.Select(pair => new List<int> { pair.DonorIndex, pair.AcceptorIndex }).ToArray());
         }
 
         /// <summary>
