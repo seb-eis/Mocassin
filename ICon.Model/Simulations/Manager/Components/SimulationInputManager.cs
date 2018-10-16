@@ -156,7 +156,7 @@ namespace ICon.Model.Simulations
         /// Get the conflict handler provider that supplies handlers for internal data conflicts due to user induced changes
         /// </summary>
         /// <returns></returns>
-        protected override IDataConflictHandlerProvider<SimulationModelData> MakeConflictHandlerProvider()
+        protected override IDataConflictHandlerProvider<SimulationModelData> CreateDataConflictHandlerProvider()
         {
             return new ConflictHandling.SimulationDataConflictHandlerProvider(ProjectServices);
         }

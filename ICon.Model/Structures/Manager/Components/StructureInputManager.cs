@@ -138,7 +138,7 @@ namespace ICon.Model.Structures
         /// Overrides the default empty conflict resolver by a custom resolver for internal structure conflicts
         /// </summary>
         /// <returns></returns>
-        protected override IDataConflictHandlerProvider<StructureModelData> MakeConflictHandlerProvider()
+        protected override IDataConflictHandlerProvider<StructureModelData> CreateDataConflictHandlerProvider()
         {
             return new ConflictHandling.StructureDataConflictHandlerProvider(ProjectServices);
         }

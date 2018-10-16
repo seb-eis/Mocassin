@@ -1,55 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using ICon.Mathematics.Comparers;
+﻿using ICon.Mathematics.Comparers;
 
 namespace ICon.Model.ProjectServices
 {
-    /// <summary>
-    /// Numeric service of the settings manager to provide uniform numeric comparators during the model process
-    /// </summary>
+    /// <inheritdoc />
     public class NumericService : INumericService
     {
         /// <summary>
-        /// The numeric settings object used to create the comparers
+        ///     The numeric settings object used to create the numeric comparer objects
         /// </summary>
         protected BasicNumericSettings Settings { get; set; }
 
-        /// <summary>
-        /// Get the ulp comparer
-        /// </summary>
+        /// <inheritdoc />
         public NumericComparer UlpComparer { get; protected set; }
 
-        /// <summary>
-        /// Get the range comparer
-        /// </summary>
+        /// <inheritdoc />
         public NumericComparer RangeComparer { get; protected set; }
 
-        /// <summary>
-        /// Get the relative factor comparer
-        /// </summary>
+        /// <inheritdoc />
         public NumericComparer RelativeComparer { get; protected set; }
 
-        /// <summary>
-        /// Comparison steps of the ULP comparer
-        /// </summary>
+        /// <inheritdoc />
         public int CompUlp => Settings.UlpValue;
 
-        /// <summary>
-        /// Comparison range of the range comparer
-        /// </summary>
+        /// <inheritdoc />
         public double CompRange => Settings.RangeValue;
 
-        /// <summary>
-        /// Comparisons factor of the relative comparer
-        /// </summary>
+        /// <inheritdoc />
         public double CompFactor => Settings.FactorValue;
 
         /// <summary>
-        /// Creates new service object from settings data
+        ///     Creates new service object from settings data
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="settings"></param>
         public NumericService(BasicNumericSettings settings)
         {
             Settings = settings;
@@ -57,6 +39,5 @@ namespace ICon.Model.ProjectServices
             RangeComparer = NumericComparer.CreateRanged(settings.RangeValue);
             RelativeComparer = NumericComparer.CreateRelative(settings.FactorValue);
         }
-
     }
 }

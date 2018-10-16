@@ -84,7 +84,7 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddGeometricDuplicateValidation(IGroupInteraction group, ValidationReport report)
         {
-            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumerics.RangeComparer);
+            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer);
             var currentData = DataReader.Access.GetGroupInteractions()
                 .Where(value => !value.IsDeprecated && value.CenterUnitCellPosition == group.CenterUnitCellPosition)
                 .Select(value => (value, value.GetBaseGeometry().ToArray()));
@@ -114,7 +114,7 @@ namespace ICon.Model.Energies.Validators
             var groupRange = GetMaxGroupRange(group);
             var envRange = GetGroupEnvironmentRange(group);
 
-            if (ProjectServices.GeometryNumerics.RangeComparer.Compare(groupRange, envRange) > 0)
+            if (ProjectServices.GeometryNumeric.RangeComparer.Compare(groupRange, envRange) > 0)
             {
                 var detail0 =
                     $"The group max vector range is ({groupRange}) while the affiliated environment interaction range is ({envRange})";

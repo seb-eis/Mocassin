@@ -158,7 +158,7 @@ namespace ICon.Model.Basic
         protected DataAccessSource<TData> DataAccessorSource { get; set; }
 
         /// <summary>
-        ///     Creates new update manager for the provided base data, extended data, event manager and project services
+        ///     Creates new update manager for the provided base data, event manager and project services
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="eventManager"></param>

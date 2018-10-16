@@ -317,7 +317,7 @@ namespace ICon.Model.Basic
             ProjectServices = services ?? throw new ArgumentNullException(nameof(services));
             DataAccessSource = DataAccessorSource.Create(data, services.AccessLockSource);
             DataReaderSource = Basic.DataReaderSource.Create(data, data.AsReadOnly(), services.AccessLockSource);
-            ConflictHandlerProvider = MakeConflictHandlerProvider();
+            ConflictHandlerProvider = CreateDataConflictHandlerProvider();
         }
 
         /// <inheritdoc />
@@ -705,7 +705,7 @@ namespace ICon.Model.Basic
         ///     that does not contain any handlers)
         /// </summary>
         /// <returns></returns>
-        protected abstract IDataConflictHandlerProvider<TData> MakeConflictHandlerProvider();
+        protected abstract IDataConflictHandlerProvider<TData> CreateDataConflictHandlerProvider();
 
         /// <summary>
         ///     Searches the data type for all properties that are marked as indexed object data lists

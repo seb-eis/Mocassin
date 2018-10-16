@@ -143,7 +143,7 @@ namespace ICon.Model.Structures
         [CacheMethodResult]
         protected IUnitCellVectorEncoder CreateVectorEncoder()
         {
-            var sortedList = new SetList<Fractional3D>(new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumerics.RangeComparer))
+            var sortedList = new SetList<Fractional3D>(new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer))
             {
                 GetLinearizedExtendedPositionList().Select(pos => new Fractional3D(pos.Coordinates))
             };
@@ -157,7 +157,7 @@ namespace ICon.Model.Structures
         [CacheMethodResult]
         protected SetList<FractionalPosition> CreateLinearizedExtendedPositionList()
         {
-            var result = new SetList<FractionalPosition>(new VectorComparer3D<FractionalPosition>(ProjectServices.GeometryNumerics.RangeComparer));
+            var result = new SetList<FractionalPosition>(new VectorComparer3D<FractionalPosition>(ProjectServices.GeometryNumeric.RangeComparer));
             foreach (var subList in GetExtendedPositionLists())
             {
                 result.Add(subList);

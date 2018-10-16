@@ -162,7 +162,7 @@ namespace ICon.Model.Translator.ModelContext
             var targetInfo = pairModel.TargetPositionInfo;
             var positionPair = new[] {pairInteraction.GetSecondPositionVector(), pairInteraction.Position0.Vector};
             var invertedPair = ProjectServices.SpaceGroupService
-                .ShiftFirstToOrigin(positionPair, ProjectServices.GeometryNumerics.CompRange)
+                .ShiftFirstToOrigin(positionPair, ProjectServices.GeometryNumeric.CompRange)
                 .ToList();
 
             var operation = ProjectServices.SpaceGroupService

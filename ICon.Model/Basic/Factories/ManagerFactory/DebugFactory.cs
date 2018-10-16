@@ -31,7 +31,7 @@ namespace ICon.Model.Basic
             {
                 return new ManagerPackage
                 {
-                    ProjectServices = ProjectServicesManager.Create(ProjectSettingsData.CreateDefault())
+                    ProjectServices = ProjectServices.ProjectServices.Create(ProjectSettingsData.CreateDefault())
                 };
             }
 

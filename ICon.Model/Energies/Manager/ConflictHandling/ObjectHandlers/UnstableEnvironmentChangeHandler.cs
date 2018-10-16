@@ -40,7 +40,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected void UpdatePairInteractions(UnstableEnvironment envInfo, ConflictReport report)
         {
             var newPairs = GetNewAsymmetricPairs(envInfo, ProjectServices).ToList();
-            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumerics.RangeComparer);
+            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer);
 
             var warning = ModelMessageSource.CreateConflictHandlingWarning(this);
             for (var i = 0; i < newPairs.Count; i++)
@@ -120,7 +120,7 @@ namespace ICon.Model.Energies.ConflictHandling
         {
             var unitCellProvider = projectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
             var finder = new PairInteractionFinder(unitCellProvider, projectServices.SpaceGroupService);
-            return finder.CreateUniqueAsymmetricPairs(envInfo.AsSingleton(), projectServices.GeometryNumerics.RangeComparer);
+            return finder.CreateUniqueAsymmetricPairs(envInfo.AsSingleton(), projectServices.GeometryNumeric.RangeComparer);
         }
 
         /// <summary>

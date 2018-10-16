@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-
-using ICon.Mathematics.Extensions;
 using ICon.Mathematics.Bitmasks;
 using ICon.Model.Basic;
 
 namespace ICon.Model.Particles
 {
-    /// <inheritdoc cref="ICon.Model.Particles.IParticleSet"/>
+    /// <inheritdoc cref="ICon.Model.Particles.IParticleSet" />
     [DataContract(Name = "ParticleSet")]
     public class ParticleSet : ModelObject, IParticleSet
     {
@@ -19,7 +17,7 @@ namespace ICon.Model.Particles
         public int ParticleCount => Particles.Count;
 
         /// <summary>
-        /// The list of particles belonging to the particle set
+        ///     The list of particles belonging to the particle set
         /// </summary>
         [DataMember]
         [IndexResolved]
@@ -38,25 +36,23 @@ namespace ICon.Model.Particles
             ulong mask = 1;
             foreach (var particle in Particles)
             {
-                if (particle.Index == 0)
-                {
+                if (particle.Index == 0) 
                     continue;
-                }
-                if (!particle.IsDeprecated)
-                {
-                    mask = mask + (1UL << (particle.Index));
-                }
+
+                if (!particle.IsDeprecated) 
+                    mask = mask + (1UL << particle.Index);
             }
+
             return new Bitmask64(mask);
         }
 
         /// <summary>
-        /// Creates new empty particle set that does not allow any occupants (Always has the index 0)
+        ///     Creates new empty particle set that does not allow any occupants (Always has the index 0)
         /// </summary>
         /// <returns></returns>
         public static ParticleSet CreateEmpty()
         {
-            return new ParticleSet() { Particles = new List<IParticle>(), Index = 0 };
+            return new ParticleSet {Particles = new List<IParticle>(), Index = 0};
         }
 
         /// <inheritdoc />

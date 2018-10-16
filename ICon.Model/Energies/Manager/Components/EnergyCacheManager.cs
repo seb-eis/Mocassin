@@ -131,10 +131,10 @@ namespace ICon.Model.Energies
             var (groupMin, groupMax) = ProjectServices.SettingsData.EnergySettings.GroupEnergies.GetMinMaxTuple();
 
             provider.PairEnergyConstraint =
-                new NumericConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumerics.RangeComparer);
+                new NumericConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumeric.RangeComparer);
 
             provider.GroupEnergyConstraint =
-                new NumericConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumerics.RangeComparer);
+                new NumericConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumeric.RangeComparer);
 
             return provider;
         }

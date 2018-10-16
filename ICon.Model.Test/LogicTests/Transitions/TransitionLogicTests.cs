@@ -43,7 +43,7 @@ namespace ICon.Model.Test
         {
             var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
 
-            var comparer = managers.ProjectServices.GeometryNumerics.RangeComparer;
+            var comparer = managers.ProjectServices.GeometryNumeric.RangeComparer;
             var ucProvider = managers.StructureManager.QueryPort.Query(port => port.GetOccupationUnitCellProvider());
             var startPoints = managers.StructureManager.QueryPort.Query(port => port.GetExtendedPositionList(1)).Select(value => value.Vector);
             var mapper = new ApproxKineticTransitionMapper(managers.ProjectServices.SymmetryAnalysisService, ucProvider);

@@ -204,7 +204,7 @@ namespace ICon.Model.Transitions
         /// Get the conflict resolver provider for the internal transition data conflict handling
         /// </summary>
         /// <returns></returns>
-        protected override IDataConflictHandlerProvider<TransitionModelData> MakeConflictHandlerProvider()
+        protected override IDataConflictHandlerProvider<TransitionModelData> CreateDataConflictHandlerProvider()
         {
             return new ConflictHandling.TransitionDataConflictHandlerProvider(ProjectServices);
         }

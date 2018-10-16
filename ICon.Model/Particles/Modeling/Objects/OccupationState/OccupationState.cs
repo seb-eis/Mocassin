@@ -1,41 +1,30 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Linq;
-using System.Collections;
+using System.Runtime.Serialization;
 using ICon.Framework.Extensions;
 
 namespace ICon.Model.Particles
 {
-    /// <summary>
-    /// Represents an occupation state for a sequnce of positions that are occupied by a series of particle objects
-    /// </summary>
+    /// <inheritdoc />
     [DataContract]
     public class OccupationState : IOccupationState
     {
-        /// <summary>
-        /// The length of the occupation state
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         public int StateLength => Particles.Count;
 
         /// <summary>
-        /// The particle array that describes the occupation state of a sequence of positions
+        ///     The particle array that describes the occupation state of a sequence of positions
         /// </summary>
         [DataMember]
         public List<IParticle> Particles { get; set; }
 
-        /// <summary>
-        /// Read only interface access to the set of particles
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         IReadOnlyList<IParticle> IOccupationState.Particles => Particles;
 
-        /// <summary>
-        /// Index based access on the particle array of the occupation state
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IParticle this[int index]
         {
             get => Particles[index];
@@ -43,14 +32,14 @@ namespace ICon.Model.Particles
         }
 
         /// <summary>
-        /// Default construct an empty occupation state
+        ///     Default construct an empty occupation state
         /// </summary>
         public OccupationState()
         {
         }
 
         /// <summary>
-        /// Construct a new occupation state from an occupation state interface
+        ///     Construct a new occupation state from an occupation state interface
         /// </summary>
         /// <param name="state"></param>
         public OccupationState(IOccupationState state)
@@ -59,66 +48,53 @@ namespace ICon.Model.Particles
         }
 
         /// <summary>
-        /// Creates an index occupation code from the particle seqeunce of the occupation state
+        ///     Creates an index occupation code from the particle sequence of the occupation state
         /// </summary>
         /// <returns></returns>
         public OccupationCode AsCode()
         {
-            return new OccupationCode() { CodeValues = Particles.Select(a => a.Index).ToArray() };
+            return new OccupationCode {CodeValues = Particles.Select(a => a.Index).ToArray()};
         }
 
         /// <summary>
-        /// Creates a deep copy of the occupation state
+        ///     Creates a deep copy of the occupation state
         /// </summary>
         /// <returns></returns>
         public OccupationState DeepCopy()
         {
-            var state = new OccupationState() { Particles = new List<IParticle>(Particles.Count) };
+            var state = new OccupationState {Particles = new List<IParticle>(Particles.Count)};
             state.Particles.AddRange(Particles);
             return state;
         }
 
-        /// <summary>
-        /// Get the enumerator for the particle array
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerator<IParticle> GetEnumerator()
         {
             return Particles.AsEnumerable().GetEnumerator();
         }
 
-        /// <summary>
-        /// Get the enumerator for the particle array
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        /// <summary>
-        /// Checks for exact equality to other occupation state
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool Equals(IOccupationState other)
         {
-            if (StateLength != other.StateLength)
-            {
+            if (other == null)
                 return false;
-            }
-            for (int i = 0; i < Particles.Count; i++)
-            {
-                if (!Particles[i].Equals(other.Particles[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
+
+            if (StateLength != other.StateLength) 
+                return false;
+
+            return !Particles
+                .Where((t, i) => !t.Equals(other.Particles[i]))
+                .Any();
         }
 
         /// <summary>
-        /// Get the hash code of the particle set
+        ///     Get the hash code of the particle set
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -127,7 +103,7 @@ namespace ICon.Model.Particles
         }
 
         /// <summary>
-        /// Compares to other occupation state
+        ///     Compares to other occupation state
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>

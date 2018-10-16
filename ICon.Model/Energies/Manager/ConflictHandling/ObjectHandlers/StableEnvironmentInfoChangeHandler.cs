@@ -39,7 +39,7 @@ namespace ICon.Model.Energies.ConflictHandling
             var newPairs = GetNewPairInteractions(info);
             var oldPairs = DataAccess.Query(data => data.StablePairInteractions);
 
-            PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ProjectServices.GeometryNumerics.RangeComparer);
+            PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ProjectServices.GeometryNumeric.RangeComparer);
             MoveNewPairsToModelList(oldPairs, newPairs, report);
         }
 
@@ -125,7 +125,7 @@ namespace ICon.Model.Energies.ConflictHandling
 
             var unitCellProvider = structureQueries.Query(port => port.GetFullUnitCellProvider());
             var positions = structureQueries.Query(port => port.GetUnitCellPositions().Where(value => value.IsValidAndStable()));
-            var comparer = ProjectServices.GeometryNumerics.RangeComparer;
+            var comparer = ProjectServices.GeometryNumeric.RangeComparer;
 
             var interactionFinder = new PairInteractionFinder(unitCellProvider, ProjectServices.SpaceGroupService);
             return interactionFinder.CreateUniqueSymmetricPairs(positions, info, comparer).ToList();

@@ -105,7 +105,7 @@ namespace ICon.Model.Energies
 
 
         /// <inheritdoc />
-        protected override IDataConflictHandlerProvider<EnergyModelData> MakeConflictHandlerProvider()
+        protected override IDataConflictHandlerProvider<EnergyModelData> CreateDataConflictHandlerProvider()
         {
             return new EnergyDataConflictHandlerProvider(ProjectServices);
         }

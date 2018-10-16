@@ -43,7 +43,7 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddConstraintValidation(IUnitCellPosition position, ValidationReport report)
         {
-            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ProjectServices.CommonNumerics.CompRange));
+            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ProjectServices.CommonNumeric.CompRange));
             if (!constraint.IsValid(position.Vector.A) || !constraint.IsValid(position.Vector.B) || !constraint.IsValid(position.Vector.C))
             {
                 var detail0 = $"The position violates the unit cell boundaries {constraint.ToString()}";
@@ -60,7 +60,7 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddObjectUniquenessValidation(IUnitCellPosition position, ValidationReport report)
         {
-            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumerics.RangeComparer);
+            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer);
             foreach (var item in DataReader.Access.GetUnitCellPositions())
             {
                 if (!item.IsDeprecated)

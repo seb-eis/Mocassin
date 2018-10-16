@@ -24,7 +24,7 @@ namespace ICon.Model.Lattices
         /// Get the lattice conflict resolver provider that provides conflicts resolvers for internal data conflicts in this manager
         /// </summary>
         /// <returns></returns>
-        protected override IDataConflictHandlerProvider<LatticeModelData> MakeConflictHandlerProvider()
+        protected override IDataConflictHandlerProvider<LatticeModelData> CreateDataConflictHandlerProvider()
         {
             return new LatticeDataConflictResolverProvider(ProjectServices);
         }

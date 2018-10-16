@@ -3,19 +3,15 @@
 namespace ICon.Model.Particles
 {
     /// <summary>
-    /// Basic particle query manager that provides concurrency safe queries and readers for the particle data
+    ///     Basic particle query manager that provides concurrency safe queries and readers for the particle data
     /// </summary>
-    internal class ParticleQueryManager : ModelQueryManager<ParticleModelData, IParticleDataPort, ParticleDataCache, IParticleCachePort>, IParticleQueryPort
+    internal class ParticleQueryManager : ModelQueryManager<ParticleModelData, IParticleDataPort, ParticleModelCache, IParticleCachePort>,
+        IParticleQueryPort
     {
-        /// <summary>
-        /// Creates new particle query manager for the provided base data and cache data using the passed data access locker
-        /// </summary>
-        /// <param name="baseData"></param>
-        /// <param name="cacheData"></param>
-        /// <param name="lockSource"></param>
-        public ParticleQueryManager(ParticleModelData baseData, ParticleDataCache cacheData, AccessLockSource lockSource) : base(baseData, cacheData, lockSource)
+        /// <inheritdoc />
+        public ParticleQueryManager(ParticleModelData baseData, ParticleModelCache cacheModel, AccessLockSource lockSource)
+            : base(baseData, cacheModel, lockSource)
         {
-
         }
     }
 }

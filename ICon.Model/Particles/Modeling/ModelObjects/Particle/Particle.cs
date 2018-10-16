@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.Serialization;
-
 using ICon.Model.Basic;
 
 namespace ICon.Model.Particles
 {
-    /// <inheritdoc cref="ICon.Model.Particles.IParticle"/>
+    /// <inheritdoc cref="ICon.Model.Particles.IParticle" />
     [DataContract]
     public class Particle : ModelObject, IParticle
     {
@@ -32,7 +30,7 @@ namespace ICon.Model.Particles
         public bool IsEmpty { get; set; }
 
         /// <summary>
-        /// Compares particle by name, symbol and then charge (Charge is not compared with tolerance)
+        ///     Compares particle by name, symbol and then charge (Charge is not compared with tolerance)
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -54,12 +52,13 @@ namespace ICon.Model.Particles
         }
 
         /// <summary>
-        /// Creates a void particle, this particle represents an active by context unavailable particle and should always have the index 0 in a particle manager
+        ///     Creates a void particle, this particle represents an active by context unavailable particle and should always have
+        ///     the index 0 in a particle manager
         /// </summary>
         /// <returns></returns>
         public static Particle CreateEmpty()
         {
-            return new Particle() { Name = "Void", Symbol = "Void", Charge = 0.0, Index = 0, IsEmpty = true };
+            return new Particle {Name = "Void", Symbol = "Void", Charge = 0.0, Index = 0, IsEmpty = true};
         }
 
         /// <inheritdoc />
@@ -88,11 +87,11 @@ namespace ICon.Model.Particles
         /// <inheritdoc />
         public bool Equals(IParticle other)
         {
-            return Index == other.Index;
+            return other != null && Index == other.Index;
         }
 
         /// <summary>
-        /// Get the hash code of the particle based upon the particle index
+        ///     Get the hash code of the particle based upon the particle index
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()

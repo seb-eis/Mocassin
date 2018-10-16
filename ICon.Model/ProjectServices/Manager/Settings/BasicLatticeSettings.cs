@@ -1,15 +1,12 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace ICon.Model.ProjectServices
 {
     /// <summary>
-    /// Settings data object for the energy managing modul
+    ///     Settings data object for the energy managing module
     /// </summary>
-    [Serializable]
     [DataContract]
     public class BasicLatticeSettings
     {
-
     }
 }

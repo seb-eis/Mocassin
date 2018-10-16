@@ -101,7 +101,7 @@ namespace ICon.Model.Transitions.Validators
         /// <param name="report"></param>
         protected void AddChargeConsistencyValidation(IKineticTransition transition, ValidationReport report)
         {
-            var swapChain = new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ProjectServices.CommonNumerics.RangeComparer);
+            var swapChain = new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ProjectServices.CommonNumeric.RangeComparer);
             if (swapChain.Any(value => value == double.NaN))
             {
                 var detail0 = $"The transition charge transport chain is ill defined. Please reconsider your abstract transition definition!";

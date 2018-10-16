@@ -80,7 +80,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <remarks> Particle is for calculation purposes only and not part of the actual model data </remarks>
         protected IParticle CreateEffectiveMobileParticle(IParticleSet mobileParticles)
         {
-            var comparer = ProjectServices.CommonNumerics.RangeComparer;
+            var comparer = ProjectServices.CommonNumeric.RangeComparer;
             var first = mobileParticles.First();
 
             var effectiveParticle = new Particle {Index = -1, Name = first.Name, Symbol = first.Symbol, Charge = first.Charge};
@@ -145,7 +145,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddRuleModels(IKineticTransitionModel transitionModel)
         {
-            var comparer = ProjectServices.CommonNumerics.RangeComparer;
+            var comparer = ProjectServices.CommonNumeric.RangeComparer;
             var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
                 .Select(kineticRule => CreateRuleModel(kineticRule, comparer))
                 .ToList();
@@ -234,7 +234,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="abstractMovement"></param>
         protected void AddMovementMatrix(IKineticMappingModel mappingModel, IList<int> abstractMovement)
         {
-            var matrix = new Matrix2D(3, mappingModel.Mapping.PathLength, ProjectServices.CommonNumerics.RangeComparer);
+            var matrix = new Matrix2D(3, mappingModel.Mapping.PathLength, ProjectServices.CommonNumeric.RangeComparer);
             for (var i = 0; i < matrix.Cols; i++)
             {
                 var moveIndex = abstractMovement[i];
