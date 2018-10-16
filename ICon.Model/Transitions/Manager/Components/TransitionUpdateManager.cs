@@ -20,13 +20,13 @@ namespace ICon.Model.Transitions
         /// Pipeline based event handler for changed model objects events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected ChangedStructureObjectsHandler ChangedStructureObjectsHandler { get; set; }
+        protected ObjectChangedStructureHandler ObjectChangedStructureHandler { get; set; }
 
         /// <summary>
         /// Pipeline based event handler for removed model objects events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected RemovedStructureObjectsHandler RemovedStructureObjectsHandler { get; set; }
+        protected ObjectRemovedStructureHandler ObjectRemovedStructureHandler { get; set; }
 
         /// <summary>
         /// Pipeline based event handler for model object list reindexing events in the connected structure manager
@@ -38,7 +38,7 @@ namespace ICon.Model.Transitions
         /// Pipeline based event handler for changed model parameter events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected ChangedStructureParametersHandler ChangedStructureParametersHandler { get; set; }
+        protected ParameterChangedStructureHandler ParameterChangedStructureHandler { get; set; }
 
         /// <summary>
         /// Creates new transition update manager for provided model data, event manager and project services

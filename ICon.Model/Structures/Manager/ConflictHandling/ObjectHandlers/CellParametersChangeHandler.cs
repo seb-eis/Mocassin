@@ -44,7 +44,7 @@ namespace ICon.Model.Structures.ConflictHandling
             {
                 parameters.ParameterSet = ProjectServices.CrystalSystemService.GetCurrentParameterSet();
                 var detail0 = $"The change in the {parameters.GetParameterName()} was passed to the crystal system provider system";
-                report.Warnings.Add(ModelMessages.CreateConflictHandlingWarning(this, detail0));
+                report.Warnings.Add(ModelMessageSource.CreateConflictHandlingWarning(this, detail0));
             }
             else
             {

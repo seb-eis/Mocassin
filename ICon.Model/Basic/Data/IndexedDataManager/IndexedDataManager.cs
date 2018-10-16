@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
 using ICon.Framework.Extensions;
 
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Manager for indexed data objects that handles add/remove/insert operations on a list with indexed objects
+    ///     Manager for indexed data objects that handles add/remove/insert operations on a list with indexed objects
     /// </summary>
-    public class IndexedDataManager<TObject> where  TObject : ModelObject, IModelObject
+    public class IndexedDataManager<TObject> where TObject : ModelObject, IModelObject
     {
         /// <summary>
-        /// Indexes the passed set of new model objects based upon the current end of the object list and adds them accordingly
+        ///     Indexes the passed set of new model objects based upon the current end of the object list and adds them accordingly
         /// </summary>
         /// <param name="currentObjects"></param>
         /// <param name="newObjects"></param>
         public void IndexAndAdd(IList<TObject> currentObjects, IEnumerable<TObject> newObjects)
         {
-            int index = currentObjects.Count - 1;
+            var index = currentObjects.Count - 1;
             foreach (var item in newObjects)
             {
                 item.Index = ++index;
@@ -27,20 +25,18 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
-        /// Indexes the passed set of ne model objects based upon either deprecated places or the end of the list and addss the accordingly
+        ///     Indexes the passed set of ne model objects based upon either deprecated places or the end of the list and adds the
+        ///     accordingly
         /// </summary>
         /// <param name="currentObjects"></param>
         /// <param name="newObjects"></param>
         public void IndexAndAddUseDeprecated(IList<TObject> currentObjects, IEnumerable<TObject> newObjects)
         {
-            foreach (var item in newObjects)
-            {
-                item.Index = currentObjects.ReplaceFirstOrAdd(value => value.IsDeprecated, item);
-            }
+            foreach (var item in newObjects) item.Index = currentObjects.ReplaceFirstOrAdd(value => value.IsDeprecated, item);
         }
 
         /// <summary>
-        /// Marks all model objects as deprecated that match the provided prediacte. Returns sequence of all deprecated objects
+        ///     Marks all model objects as deprecated that match the provided predicate. Returns sequence of all deprecated objects
         /// </summary>
         /// <param name="currentObjects"></param>
         /// <param name="predicate"></param>
@@ -50,14 +46,13 @@ namespace ICon.Model.Basic
             {
                 item.IsDeprecated = predicate(item);
                 if (item.IsDeprecated)
-                {
                     yield return item;
-                }
             }
         }
 
         /// <summary>
-        /// Remov all objects that match the provided predicate and reindex the remaining. Returns a reindexing list that describes the changes
+        ///     Remove all objects that match the provided predicate and reindex the remaining. Returns a reindexing list that
+        ///     describes the changes
         /// </summary>
         /// <param name="currentObjects"></param>
         /// <param name="predicate"></param>
@@ -65,7 +60,7 @@ namespace ICon.Model.Basic
         public ReindexingList RemoveAndReindex(IList<TObject> currentObjects, Predicate<TObject> predicate)
         {
             var reindexingList = new ReindexingList(currentObjects.Count);
-            int newIndex = -1;
+            var newIndex = -1;
             foreach (var item in currentObjects)
             {
                 if (predicate(item))
@@ -79,6 +74,7 @@ namespace ICon.Model.Basic
                     item.Index = newIndex;
                 }
             }
+
             currentObjects.RemoveAll(value => value.Index == -1);
             return reindexingList;
         }

@@ -12,8 +12,8 @@ namespace ICon.Model.Particles
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="cacheData"></param>
-        /// <param name="dataLocker"></param>
-        public ParticleQueryManager(ParticleModelData baseData, ParticleDataCache cacheData, DataAccessLocker dataLocker) : base(baseData, cacheData, dataLocker)
+        /// <param name="lockSource"></param>
+        public ParticleQueryManager(ParticleModelData baseData, ParticleDataCache cacheData, AccessLockSource lockSource) : base(baseData, cacheData, lockSource)
         {
 
         }

@@ -103,12 +103,12 @@ namespace ICon.Model.ProjectServices
                 var detail1 = "Option 1: Value is just unphysical or unusual. Simulation may yield unexpected or questionable results.";
                 var detail2 = "Option 2: Value is performance related. Performance hits and long computations times should be expected.";
                 var detail3 = "Option 3: Value is memory related. Memory related problems (Overflow, out-of-memory, ...) should be expected.";
-                warningList.Add(ModelMessages.CreateWarningLimitReachedWarning(this, detail0, detail1, detail2, detail3));
+                warningList.Add(ModelMessageSource.CreateWarningLimitReachedWarning(this, detail0, detail1, detail2, detail3));
             }
             if (Math.Abs(parseResult) == 2)
             {
                 var detail = $"The [{DisplayName}] value ({value}) is outside of the restriction boundaries [{LowerWarningLimit},{UpperWarningLimit}]";
-                warningList.Add(ModelMessages.CreateRestrictionViolationWarning(this, detail));
+                warningList.Add(ModelMessageSource.CreateRestrictionViolationWarning(this, detail));
             }
 
             warnings = warningList;

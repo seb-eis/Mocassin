@@ -3,26 +3,30 @@
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Enum for data operation types that can be applied to the model data
+    ///     Enum for data operation types that can be applied to the model data
     /// </summary>
-    public enum DataOperationType : int
+    public enum DataOperationType
     {
-        NewObject, ObjectChange, ObjectRemoval, ParameterChange, ObjectCleaning
+        NewObject,
+        ObjectChange,
+        ObjectRemoval,
+        ParameterChange,
+        ObjectCleaning
     }
 
     /// <summary>
-    /// Attribute to mark methods as data operations that add or manipulate the model data
+    ///     Attribute to mark methods as data operations that add or manipulate the model data
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class DataOperationAttribute : Attribute
     {
         /// <summary>
-        /// The type of the operation the marked method performs
+        ///     The type of the operation the marked method performs
         /// </summary>
         public DataOperationType OperationType { get; }
 
         /// <summary>
-        /// Creates new data operation method attribute with the type of operation that is performed by the marked operation
+        ///     Creates new data operation method attribute with the type of operation that is performed by the marked operation
         /// </summary>
         /// <param name="operationType"></param>
         public DataOperationAttribute(DataOperationType operationType)

@@ -64,7 +64,7 @@ namespace ICon.Model.Simulations
             var detail1 = "Option 1: Use static tracking for position bound flow information (e.g. flow integrals)";
             var detail2 = "Option 2: Use dynamic tracking for particle bound movement information (e.g. mean square displacement)";
             var detail3 = "Option 3: Use exchange group tracking (always enabled). Yields the global mean displacements of the exchange groups and particles";
-            report.AddWarning(ModelMessages.CreateNotRecommendedWarning(this, detail0, detail1, detail2, detail3));
+            report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, detail0, detail1, detail2, detail3));
         }
 
         /// <summary>

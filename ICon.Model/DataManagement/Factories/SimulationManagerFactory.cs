@@ -4,7 +4,9 @@ using ICon.Model.Simulations;
 
 namespace ICon.Model.DataManagement
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Factory for new simulation manager systems
+    /// </summary>
     public class SimulationManagerFactory : IModelManagerFactory
     {
         /// <inheritdoc />

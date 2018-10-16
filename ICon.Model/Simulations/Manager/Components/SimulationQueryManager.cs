@@ -16,9 +16,9 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="cacheData"></param>
-        /// <param name="dataLocker"></param>
-        public SimulationQueryManager(SimulationModelData baseData, SimulationDataCache cacheData, DataAccessLocker dataLocker)
-            : base(baseData, cacheData, dataLocker)
+        /// <param name="lockSource"></param>
+        public SimulationQueryManager(SimulationModelData baseData, SimulationDataCache cacheData, AccessLockSource lockSource)
+            : base(baseData, cacheData, lockSource)
         {
         }
     }

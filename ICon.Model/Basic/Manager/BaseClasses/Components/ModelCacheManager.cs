@@ -1,164 +1,142 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.IO;
 using System.Reflection;
-
+using System.Runtime.Serialization;
 using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Abstract base class for all manager implementations that handle 'on demand' extended model data and cache the results until deprecation
+    ///     Abstract base class for all manager implementations that handle 'on demand' extended model data and cache the
+    ///     results until deprecation
     /// </summary>
     internal abstract class ModelCacheManager : IModelCachePort
     {
-        /// <summary>
-        /// Get a deep data copy
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract object GetDataCopy();
 
-        /// <summary>
-        /// Json serialize the cached data
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract string JsonSerializeData();
 
-        /// <summary>
-        /// Write the data contract to a stream using the provided settings
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="settings"></param>
+        /// <inheritdoc />
         public abstract void WriteDataContract(Stream stream, DataContractSerializerSettings settings);
     }
 
     /// <summary>
-    /// Generic abstract base class for all model cache managers that support a specific extended data type through a specified cache data port
+    ///     Generic abstract base class for all model cache managers that support a specific extended data type through a
+    ///     specified cache data port
     /// </summary>
-    /// <typeparam name="TDataCache"></typeparam>
-    /// <typeparam name="TQueryPort"></typeparam>
-    /// <typeparam name="TCachePort"></typeparam>
-    internal abstract class ModelCacheManager<TDataCache, TCachePort> : ModelCacheManager
-        where TCachePort : IModelCachePort
-        where TDataCache : DynamicModelDataCache<TCachePort>
+    /// <typeparam name="TCache"></typeparam>
+    /// <typeparam name="TPort"></typeparam>
+    internal abstract class ModelCacheManager<TCache, TPort> : ModelCacheManager
+        where TPort : IModelCachePort
+        where TCache : ModelDataCache<TPort>
     {
         /// <summary>
-        /// The project services instance to access shared services and other managers
+        ///     The project services instance to access shared services and other managers
         /// </summary>
         protected IProjectServices ProjectServices { get; set; }
 
         /// <summary>
-        /// The extended data object that supports a caching system
+        ///     The extended data object that supports a caching system
         /// </summary>
-        protected TDataCache Cache { get; set; }
+        protected TCache Cache { get; set; }
 
         /// <summary>
-        /// Create a new model cache manager for the provided model data using the provided project services
+        ///     Create a new model cache manager for the provided model data using the provided project services
         /// </summary>
-        /// <param name="dataCache"></param>
-        /// <param name="dataManager"></param>
+        /// <param name="modelCache"></param>
         /// <param name="projectServices"></param>
-        protected ModelCacheManager(TDataCache dataCache, IProjectServices projectServices) : base()
+        protected ModelCacheManager(TCache modelCache, IProjectServices projectServices)
         {
-            Cache = dataCache ?? throw new ArgumentNullException(nameof(dataCache));
+            Cache = modelCache ?? throw new ArgumentNullException(nameof(modelCache));
             ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
             InitializeIfNotInitialized();
         }
 
         /// <summary>
-        /// Get the data that is created by the specified creator delegate from the cache and returns the cast value
+        ///     Get the data that is created by the specified creator delegate from the cache and returns the cast value
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="creatorMethod"></param>
         /// <returns></returns>
         protected TResult GetResultFromCache<TResult>(Func<TResult> creatorMethod)
         {
-            return (TResult)Cache.FindCacheEntry(creatorMethod).GetValue();
+            return (TResult) Cache.FindCacheEntry(creatorMethod).GetValue();
         }
 
         /// <summary>
-        /// Clears all cached data objects causing them to be recalculated on the next data access
+        ///     Clears all cached data objects causing them to be recalculated on the next data access
         /// </summary>
         public virtual void ClearCachedData()
         {
-            foreach (ICachedData data in Cache.DataCache)
-            {
+            foreach (var data in Cache.DataCache)
                 data?.Clear();
-            }
         }
 
         /// <summary>
-        /// Clears only deprecated cached data
+        ///     Clears only deprecated cached data
         /// </summary>
         public virtual void ClearDeprecatedCachedData()
         {
-            foreach (ICachedData data in Cache.DataCache)
-            {
+            foreach (var data in Cache.DataCache)
                 data?.ClearIfDeprecated();
-            }
         }
 
-        /// <summary>
-        /// Get a copy of the internal data object by json serialization (Not implemented)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override object GetDataCopy()
         {
             throw new NotImplementedException("Data copy of cached data currently not supported");
         }
 
-        /// <summary>
-        /// Json serialize the data object (Not implemented)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string JsonSerializeData()
         {
             throw new NotImplementedException("Json serialization for cached data currently not supported");
         }
 
-        /// <summary>
-        /// Use the data write to a stream of data contract serializer with the specified settings (Not implemented)
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="settings"></param>
+        /// <inheritdoc />
         public override void WriteDataContract(Stream stream, DataContractSerializerSettings settings)
         {
             throw new NotImplementedException("Data contract serialization for cached data currently not supported");
         }
 
         /// <summary>
-        /// Initializes the cache, this binds the first created instance of the cahe manager to the creation methods
+        ///     Initializes the cache, this binds the first created instance of the cache manager to the creation methods
         /// </summary>
         protected void InitializeIfNotInitialized()
         {
-            if (Cache.IsInitialized)
-            {
+            if (Cache.IsInitialized) 
                 return;
-            }
+
             Cache.Initialize(FindAndMakeCacheEntries());
         }
 
         /// <summary>
-        /// Searches the manager for all marked methods and creates the sequence of cahe objects
+        ///     Searches the manager for all marked methods and creates the sequence of cache objects
         /// </summary>
         /// <returns></returns>
-        protected IEnumerable<ICachedData> FindAndMakeCacheEntries()
+        protected IEnumerable<ICachedObjectSource> FindAndMakeCacheEntries()
         {
             foreach (var method in GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic))
             {
-                if (method.GetCustomAttribute(typeof(CacheMethodResultAttribute)) is CacheMethodResultAttribute attribute)
-                {
-                    var delegateType = typeof(Func<>).MakeGenericType(method.ReturnType);
-                    var wrapperType = attribute.GenericDataWrapperType.MakeGenericType(method.ReturnType);
+                if (!(method.GetCustomAttribute(typeof(CacheMethodResultAttribute)) is CacheMethodResultAttribute attribute)) 
+                    continue;
 
-                    var cachedData = (ICachedData)Activator.CreateInstance(wrapperType, method.CreateDelegate(delegateType, this));
-                    if (cachedData == null)
-                    {
-                        throw new InvalidOperationException("Instance creation of cached data interface by attribute properties failed");
-                    }
-                    yield return cachedData;
+                var delegateType = typeof(Func<>).MakeGenericType(method.ReturnType);
+                var wrapperType = attribute.GenericDataWrapperType.MakeGenericType(method.ReturnType);
+
+                ICachedObjectSource cachedData;
+                try
+                {
+                    cachedData = (ICachedObjectSource) Activator.CreateInstance(wrapperType, method.CreateDelegate(delegateType, this));
                 }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Instance creation of cached data interface by attribute properties failed");
+                }
+                yield return cachedData;
             }
         }
     }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-
 using ICon.Model.Basic;
 using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IUnstableEnvironment"/>
+    /// <inheritdoc cref="ICon.Model.Energies.IUnstableEnvironment" />
     [DataContract(Name = "UnstableEnvironmentInfo")]
     public class UnstableEnvironment : ModelObject, IUnstableEnvironment
     {
@@ -22,28 +20,29 @@ namespace ICon.Model.Energies
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
-        /// The set of unique ignored unit cell positions during environment sampling (Can be null)
+        ///     The set of unique ignored unit cell positions during environment sampling (Can be null)
         /// </summary>
         [DataMember]
         [IndexResolved]
         public List<IUnitCellPosition> IgnoredPositions { get; set; }
 
         /// <summary>
-        /// The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object population)
+        ///     The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object
+        ///     population)
         /// </summary>
         [DataMember]
         [IndexResolved]
         public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
 
         /// <summary>
-        /// The list of generated group interactions (Automatically linked by the model)
+        ///     The list of generated group interactions (Automatically linked by the model)
         /// </summary>
         [DataMember]
         [IndexResolved]
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
-        /// Create new unstable environment and sets all lists to empty
+        ///     Create new unstable environment and sets all lists to empty
         /// </summary>
         public UnstableEnvironment()
         {

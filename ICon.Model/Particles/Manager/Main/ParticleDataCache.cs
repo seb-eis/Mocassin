@@ -6,7 +6,7 @@ namespace ICon.Model.Particles
     /// <summary>
     /// Cache for extended structure data that stores 'on-demand' calculated dependent data for faster access until the data is no longer valid
     /// </summary>
-    internal class ParticleDataCache : DynamicModelDataCache<IParticleCachePort>
+    internal class ParticleDataCache : ModelDataCache<IParticleCachePort>
     {
         /// <summary>
         /// Creates new cached particle data object with empty cache list and registers to the basic event of the provided event port

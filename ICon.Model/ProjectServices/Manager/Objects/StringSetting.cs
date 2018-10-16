@@ -73,7 +73,7 @@ namespace ICon.Model.ProjectServices
             var detail1 = "Option 1: Change your string to match the regex pattern. This is recommended.";
             var detail2 = "Option 2: Change the regex pattern in the settings. This is not recommended.";
             var detail3 = "Important: Invalid pattern definitions in the settings may crash the application!";
-            messages.Add(ModelMessages.CreateNamingViolationWarning(this, detail0, detail1, detail2, detail3));
+            messages.Add(ModelMessageSource.CreateNamingViolationWarning(this, detail0, detail1, detail2, detail3));
             warnings = messages;
             return false;
         }

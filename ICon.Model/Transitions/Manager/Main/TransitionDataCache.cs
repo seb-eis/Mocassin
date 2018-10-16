@@ -10,7 +10,7 @@ namespace ICon.Model.Transitions
     /// <summary>
     /// Data cache for the extended on-demand transition model data
     /// </summary>
-    internal class TransitionDataCache : DynamicModelDataCache<ITransitionCachePort>
+    internal class TransitionDataCache : ModelDataCache<ITransitionCachePort>
     {
         /// <summary>
         /// Create a new data cache for extended transition data from model event port (Supplies expiration events) and project services

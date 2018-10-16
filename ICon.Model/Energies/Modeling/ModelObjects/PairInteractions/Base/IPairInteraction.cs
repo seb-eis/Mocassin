@@ -6,33 +6,35 @@ using ICon.Model.Structures;
 namespace ICon.Model.Energies
 {
     /// <summary>
-    /// Represents an unspecified pair interaction that describes the interaction between two positions depending on the occupation
+    ///     Represents an unspecified pair interaction that describes the interaction between two positions depending on the
+    ///     occupation
     /// </summary>
     public interface IPairInteraction : IModelObject
     {
         /// <summary>
-        /// The first reference unit cell position
+        ///     The first reference unit cell position
         /// </summary>
         IUnitCellPosition Position0 { get; }
 
         /// <summary>
-        /// The second reference unit cell position
+        ///     The second reference unit cell position
         /// </summary>
         IUnitCellPosition Position1 { get; }
 
         /// <summary>
-        /// The distance value between the positions in internal units
+        ///     The distance value between the positions in internal units
         /// </summary>
         double Distance { get; }
 
         /// <summary>
-        /// Get the actual position vector for the second unit cell position in order to describe the refernce geometry of the pair interaction
+        ///     Get the actual position vector for the second unit cell position in order to describe the refernce geometry of the
+        ///     pair interaction
         /// </summary>
         /// <returns></returns>
         Fractional3D GetSecondPositionVector();
 
         /// <summary>
-        /// Get all possible pair occupations of the pair with the corresponding energy value
+        ///     Get all possible pair occupations of the pair with the corresponding energy value
         /// </summary>
         /// <returns></returns>
         IEnumerable<PairEnergyEntry> GetEnergyEntries();

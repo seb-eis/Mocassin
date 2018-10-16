@@ -16,8 +16,8 @@ namespace ICon.Model.Structures
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="cacheData"></param>
-        /// <param name="dataLocker"></param>
-        public StructureQueryManager(StructureModelData baseData, StructureDataCache cacheData, DataAccessLocker dataLocker) : base(baseData, cacheData, dataLocker)
+        /// <param name="lockSource"></param>
+        public StructureQueryManager(StructureModelData baseData, StructureDataCache cacheData, AccessLockSource lockSource) : base(baseData, cacheData, lockSource)
         {
 
         }

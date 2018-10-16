@@ -47,7 +47,7 @@ namespace ICon.Model.Structures.Validators
             if (!constraint.IsValid(position.Vector.A) || !constraint.IsValid(position.Vector.B) || !constraint.IsValid(position.Vector.C))
             {
                 var detail0 = $"The position violates the unit cell boundaries {constraint.ToString()}";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail0));
             }
         }
 
@@ -69,7 +69,7 @@ namespace ICon.Model.Structures.Validators
                     if (extended.Contains(position.Vector))
                     {
                         var detail0 = $"Provided unit cell position is already defined by index ({item.Index})";
-                        report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail0));
+                        report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail0));
                         break;
                     }
                 }

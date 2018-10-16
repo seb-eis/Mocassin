@@ -42,7 +42,7 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// The basic data access locker that handles how long a data reader/writer is allowed to wait for a valid lock before throwing a timeout exception
         /// </summary>
-        public DataAccessLocker DataAccessLocker { get; protected set; }
+        public AccessLockSource AccessLockSource { get; protected set; }
 
         /// <summary>
         /// The project settings data object
@@ -139,13 +139,13 @@ namespace ICon.Model.ProjectServices
                     ActiveManagers[i].DisconnectManager();
                     ActiveManagers[i] = manager;
                     ShareAndConnectEventPorts(manager);
-                    ValidationServiceProvider.RegisterService(manager.MakeValidationService(SettingsData));
+                    ValidationServiceProvider.RegisterService(manager.CreateValidationService(SettingsData));
                     return;
                 }
             }
             ActiveManagers.Add(manager);
             ShareAndConnectEventPorts(manager);
-            ValidationServiceProvider.RegisterService(manager.MakeValidationService(SettingsData));
+            ValidationServiceProvider.RegisterService(manager.CreateValidationService(SettingsData));
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace ICon.Model.ProjectServices
             var crystalSystemProvider = CrystalSystemProvider.CreateSoft(data.StructureSettings.CellParameter.MaxValue, data.SymmetrySettings.ParameterTolerance);
             var crystalSystemService = new CrystalSystemService(crystalSystemProvider, data.CommonNumericSettings.RangeValue);
             var validationServices = new ValidationServiceProvider();
-            var dataAccessLocker = new DataAccessLocker(data.ConcurrencySettings.MaxAttempts, data.ConcurrencySettings.AttemptInterval);
+            var dataAccessLocker = new AccessLockSource(data.ConcurrencySettings.MaxAttempts, data.ConcurrencySettings.AttemptInterval);
             var messageSystem = new AsyncMessageSystem();
             var symmetryService = new SymmetryAnalysisService(SymmetryIndicator.MakeComparer(geometryNumerics.RelativeComparer), ObjectProvider.Create(() => crystalSystemService.VectorTransformer));
             var dataTracker = new ModelDataTracker();
@@ -231,7 +231,7 @@ namespace ICon.Model.ProjectServices
             projectService.GeometryNumerics = geometryNumerics;
             projectService.CommonNumerics = commonNumerics;
             projectService.ValidationServiceProvider = validationServices;
-            projectService.DataAccessLocker = dataAccessLocker;
+            projectService.AccessLockSource = dataAccessLocker;
             projectService.MessageSystem = messageSystem;
             projectService.SpaceGroupService = spaceGroupService;
             projectService.CrystalSystemService = crystalSystemService;

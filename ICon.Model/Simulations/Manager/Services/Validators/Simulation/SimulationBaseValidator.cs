@@ -96,13 +96,13 @@ namespace ICon.Model.Simulations
                 var detail0 = "Disabling the checkpoint system will prevent a simulation form saving its progress and resume after termination";
                 var detail1 = "Option 1: Disable if a huge number of very short simulations is performed to avoid later garbage cleanup";
                 var detail2 = "Option 2: Disable for testing purposes where resuming is not required";
-                report.AddWarning(ModelMessages.CreateNotRecommendedWarning(this, detail0, detail1, detail2));
+                report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, detail0, detail1, detail2));
             }
             if (simulation.BaseFlags.HasFlag(SimulationBaseFlags.FullDebugStateDump))
             {
                 var detail0 = "Full state dumping is a memory intensive debug feature that is not recommended for regular usage";
                 var detail1 = "Option 1: Write a custom simulation extension library that handles the required output data and formatting";
-                report.AddWarning(ModelMessages.CreateNotRecommendedWarning(this, detail0, detail1));
+                report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, detail0, detail1));
             }
         }
 
@@ -147,7 +147,7 @@ namespace ICon.Model.Simulations
             {
                 var detail0 = $"The defined assembly load information {(simulation.EnergyBackgroundProviderInfo)} for energy background provision is invalid";
                 var detail1 = $"Exception message:\n {exception.Message}";
-                report.AddWarning(ModelMessages.CreateUserInducedExceptionWarning(this, detail0, detail1));
+                report.AddWarning(ModelMessageSource.CreateUserInducedExceptionWarning(this, detail0, detail1));
             }
         }
 

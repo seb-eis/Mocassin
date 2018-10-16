@@ -9,16 +9,16 @@ namespace ICon.Model.Structures.Handler
     /// <summary>
     /// Event handler that manages the processing of object reindexing events that the structure manager receives from the particle manager event port
     /// </summary>
-    internal class ReindexedParticleObjectsHandler : NewObjectsEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
+    internal class ReindexedParticleObjectsHandler : ObjectAddedEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
     {
         /// <summary>
         /// Create new handler using the provided project services, data access provider and event manager
         /// </summary>
         /// <param name="projectServices"></param>
-        /// <param name="dataAccessorProvider"></param>
+        /// <param name="dataAccessorSource"></param>
         /// <param name="eventManager"></param>
-        public ReindexedParticleObjectsHandler(IProjectServices projectServices, DataAccessProvider<StructureModelData> dataAccessorProvider, StructureEventManager eventManager)
-            : base(projectServices, dataAccessorProvider, eventManager)
+        public ReindexedParticleObjectsHandler(IProjectServices projectServices, DataAccessSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
+            : base(projectServices, dataAccessorSource, eventManager)
         {
 
         }

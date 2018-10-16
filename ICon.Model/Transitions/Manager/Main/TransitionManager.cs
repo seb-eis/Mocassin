@@ -52,7 +52,7 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="settingsData"></param>
         /// <returns></returns>
-        public override IValidationService MakeValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
         {
             return new TransitionValidationService(settingsData.TransitionSettings, ProjectServices);
         }

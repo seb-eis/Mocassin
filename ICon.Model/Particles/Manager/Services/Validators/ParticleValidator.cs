@@ -102,19 +102,19 @@ namespace ICon.Model.Particles.Validators
                 if (particle.EqualsInModelProperties(item, ProjectServices.CommonNumerics.RangeComparer))
                 {
                     var detail0 = $"Particle compares equal in properties to existing particle with index ({item.Index})";
-                    report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail0));
+                    report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail0));
                     break;
                 }
                 if (item.Name == particle.Name)
                 {
                     var detail0 = $"Particle naming is identical to the particle with index ({item.Index})";
-                    report.AddWarning(ModelMessages.CreateRedundantContentWarning(this, detail0));
+                    report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, detail0));
                 }
                 if (item.Symbol == particle.Symbol)
                 {
                     var detail0 = $"Particle symbol is identical to the particle with index ({item.Index})";
                     var detail1 = $"Transition rule generation will auto enforce matter conservation for this symbol";
-                    report.AddWarning(ModelMessages.CreateImplicitDependencyWarning(this, detail0, detail1));
+                    report.AddWarning(ModelMessageSource.CreateImplicitDependencyWarning(this, detail0, detail1));
                 }
             }
         }

@@ -47,7 +47,7 @@ namespace ICon.Model.Transitions.ConflictHandling
             IndexAndAddToModelData(transition.TransitionRules);
 
             var detail0 = $"Automatically added number of new kinetic model rules is ({transition.TransitionRules.Count})";
-            report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0));
+            report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail0));
         }
     }
 }

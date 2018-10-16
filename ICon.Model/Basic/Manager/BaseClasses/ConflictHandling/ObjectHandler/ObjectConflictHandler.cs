@@ -5,24 +5,25 @@ using ICon.Model.ProjectServices;
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Abstract base class for disposable conflict resolver logic implementation that handle a specific object change
+    ///     Abstract base class for disposable conflict resolver logic implementation that handle a specific object change
     /// </summary>
     /// <typeparam name="TObject"></typeparam>
     /// <typeparam name="TDataObject"></typeparam>
-    public abstract class ObjectConflictHandler<TObject, TDataObject> : IDisposable where TDataObject : ModelData
+    public abstract class ObjectConflictHandler<TObject, TDataObject> : IDisposable 
+        where TDataObject : ModelData
     {
         /// <summary>
-        /// The data accessor prviding safe access to the model data object
+        ///     The data accessor providing safe access to the model data object
         /// </summary>
         protected IDataAccessor<TDataObject> DataAccess { get; set; }
 
         /// <summary>
-        /// The current project service instance to access all project functionalities and data
+        ///     The current project service instance to access all project functionality and data
         /// </summary>
         protected IProjectServices ProjectServices { get; set; }
 
         /// <summary>
-        /// Creates new object conflict handler that uses the provided data access and project services
+        ///     Creates new object conflict handler that uses the provided data access and project services
         /// </summary>
         /// <param name="dataAccess"></param>
         /// <param name="projectServices"></param>
@@ -33,17 +34,14 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
-        /// Determine required changes due to provided object in the given context and update the internal management model data system
+        ///     Determine required changes due to provided object in the given context and update the internal management model
+        ///     data system
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
         /// <returns></returns>
         public abstract ConflictReport HandleConflicts(TObject obj);
 
-        /// <summary>
-        /// Null out the data access and the project service reference
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             DataAccess = null;

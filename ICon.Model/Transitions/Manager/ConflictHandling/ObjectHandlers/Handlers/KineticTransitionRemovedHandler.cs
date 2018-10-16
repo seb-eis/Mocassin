@@ -49,7 +49,7 @@ namespace ICon.Model.Transitions.ConflictHandling
             builder.BuildCommaSeparatedValueString(indexManager.DeprecateAll(transition.TransitionRules, a => true).ToArray());
 
             var detail0 = $"Kinetic rules at indices ({builder.ToString()}) are no longer valid and where marked as deprecated";
-            report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0));
+            report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail0));
         }
     }
 }

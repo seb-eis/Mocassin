@@ -20,13 +20,13 @@ namespace ICon.Model.Structures
         /// Pipeline based handler for changed model objects in the connected particle manager
         /// </summary>
         [UpdateHandler(typeof(IParticleEventPort))]
-        protected ChangedParticleObjectsHandler ChangedParticleObjectsHandler { get; set; }
+        protected ObjectChangedParticleHandler ObjectChangedParticleHandler { get; set; }
 
         /// <summary>
         /// Pipeline based handler for removed model objects in the connected particle manager
         /// </summary>
         [UpdateHandler(typeof(IParticleEventPort))]
-        protected RemovedParticleObjectsHandler RemovedParticleObjectsHandler { get; set; }
+        protected ObjectRemovedParticleHandler ObjectRemovedParticleHandler { get; set; }
 
         /// <summary>
         /// Pipeline based handler for reindexed model object lists in the connected particle manager

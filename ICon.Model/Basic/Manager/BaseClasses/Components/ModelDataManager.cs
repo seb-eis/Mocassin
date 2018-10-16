@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Reflection;
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -9,75 +7,67 @@ using Newtonsoft.Json;
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Abstract base class for all model data manager implementations
+    ///     Abstract base class for all model data manager implementations
     /// </summary>
     public abstract class ModelDataManager : IModelDataPort
     {
-        /// <summary>
-        /// Serializes the data into the JSON format
-        /// </summary>
-        /// <returns></returns>
-        public abstract String JsonSerializeData();
+        /// <inheritdoc />
+        public abstract string JsonSerializeData();
 
-        /// <summary>
-        /// Serialize the data as a data contract with the specified settings to the provided stream
-        /// </summary>
-        /// <param name="stream"></param>
+        /// <inheritdoc />
         public abstract void WriteDataContract(Stream stream, DataContractSerializerSettings settings);
 
-        /// <summary>
-        /// Creates a copy of the internal data by json serialization and deserialization
-        /// </summary>
-        /// <returns></returns>
-        public abstract Object GetDataCopy();
+        /// <inheritdoc />
+        public abstract object GetDataCopy();
 
         /// <summary>
-        /// Generic reindexing function that creates a cleaned reindex info that results if deprecated model data is removed
+        ///     Generic reindexing function that creates a cleaned reindex info that results if deprecated model data is removed
         /// </summary>
         /// <param name="modelObjects"></param>
         /// <returns></returns>
-        protected ReindexingList CreateReindexing<TModelObject>(IEnumerable<TModelObject> modelObjects) where TModelObject : IModelObject
+        protected ReindexingList CreateReindexing<TModelObject>(IEnumerable<TModelObject> modelObjects)
+            where TModelObject : IModelObject
         {
             return CreateReindexing(modelObjects, 0);
         }
 
         /// <summary>
-        /// Generic reindexing function that creates a cleaned reindex info that results if deprecated model data is removed (With additional list initiation size)
+        ///     Generic reindexing function that creates a cleaned reindex info that results if deprecated model data is removed
+        ///     (With additional list initiation size)
         /// </summary>
-        /// <typeparam name="TModelObject"></typeparam>
+        /// <typeparam name="TObject"></typeparam>
         /// <param name="modelObjects"></param>
         /// <param name="listCount"></param>
         /// <returns></returns>
-        protected ReindexingList CreateReindexing<TModelObject>(IEnumerable<TModelObject> modelObjects, Int32 listCount) where TModelObject : IModelObject
+        protected ReindexingList CreateReindexing<TObject>(IEnumerable<TObject> modelObjects, int listCount)
+            where TObject : IModelObject
         {
             if (modelObjects == null)
-            {
                 throw new ArgumentNullException(nameof(modelObjects));
-            }
 
-            Int32 newIndex = -1;
+            var newIndex = -1;
             var result = new ReindexingList(listCount);
-            foreach (TModelObject obj in modelObjects)
-            {
-                result.Add((obj.Index, (obj.IsDeprecated) ? -1 : ++newIndex));
-            }
+            foreach (var obj in modelObjects)
+                result.Add((obj.Index, obj.IsDeprecated ? -1 : ++newIndex));
+
             return result;
         }
     }
 
     /// <summary>
-    /// Generic base class for model data manager implementations
+    ///     Generic base class for model data manager implementations
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public class ModelDataManager<TData> : ModelDataManager where TData : ModelData
+    public class ModelDataManager<TData> : ModelDataManager
+        where TData : ModelData
     {
         /// <summary>
-        /// The model data object
+        ///     The model data object
         /// </summary>
         protected TData Data { get; set; }
 
         /// <summary>
-        /// Creates new model data manager base with the provided data object
+        ///     Creates new model data manager base with the provided data object
         /// </summary>
         /// <param name="data"></param>
         public ModelDataManager(TData data)
@@ -85,39 +75,27 @@ namespace ICon.Model.Basic
             Data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
-        /// <summary>
-        /// Get a copy of the internal data object by json serialization
-        /// </summary>
-        /// <returns></returns>
-        public override Object GetDataCopy()
+        /// <inheritdoc />
+        public override object GetDataCopy()
         {
             return JsonConvert.DeserializeObject(JsonSerializeData(), typeof(TData));
         }
 
-        /// <summary>
-        /// Json serialize the data object
-        /// </summary>
-        /// <returns></returns>
-        public override String JsonSerializeData()
+        /// <inheritdoc />
+        public override string JsonSerializeData()
         {
             return JsonConvert.SerializeObject(Data);
         }
 
-        /// <summary>
-        /// Use the data write to a stream of data contract serializer with the specified settings
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="settings"></param>
+        /// <inheritdoc />
         public override void WriteDataContract(Stream stream, DataContractSerializerSettings settings)
         {
             if (stream == null)
-            {
                 throw new ArgumentNullException(nameof(stream));
-            }
-            if (settings == null)
-            {
+
+            if (settings == null) 
                 throw new ArgumentNullException(nameof(settings));
-            }
+
             new DataContractSerializer(typeof(TData), settings).WriteObject(stream, Data);
         }
     }

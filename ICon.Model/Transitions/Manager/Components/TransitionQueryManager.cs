@@ -16,9 +16,9 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="extendedData"></param>
-        /// <param name="dataLocker"></param>
-        public TransitionQueryManager(TransitionModelData baseData, TransitionDataCache extendedData, DataAccessLocker dataLocker)
-            : base(baseData, extendedData, dataLocker)
+        /// <param name="lockSource"></param>
+        public TransitionQueryManager(TransitionModelData baseData, TransitionDataCache extendedData, AccessLockSource lockSource)
+            : base(baseData, extendedData, lockSource)
         {
 
         }

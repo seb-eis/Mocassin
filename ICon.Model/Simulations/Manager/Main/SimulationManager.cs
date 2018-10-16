@@ -50,7 +50,7 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="settingsData"></param>
         /// <returns></returns>
-        public override IValidationService MakeValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
         {
             return new SimulationValidationService(settingsData.SimulationSettings, ProjectServices);
         }

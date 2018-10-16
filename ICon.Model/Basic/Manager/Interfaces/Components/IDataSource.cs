@@ -1,28 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Represents a generic data source that holds model objects and model parameters
+    ///     Represents a generic data source that holds model objects and model parameters
     /// </summary>
     public interface IDataSource
     {
         /// <summary>
-        /// Defines the manager interface type this data source is affiliated with
+        ///     Defines the manager interface type this data source is affiliated with
         /// </summary>
         Type SourceManagerType { get; set; }
 
         /// <summary>
-        /// Get the internal model object that matches the provided type at the specfified index (Returns null if not found)
+        ///     Get the internal model object that matches the provided type at the specified index (Returns null if not found)
         /// </summary>
-        /// <param name="modelObject"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         T1 GetModelObject<T1>(int index) where T1 : IModelObject;
 
         /// <summary>
-        /// Get the internal model parameter that matches the provided type (Retruns null if not found)
+        ///     Get the internal model parameter that matches the provided type (Returns null if not found)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <returns></returns>

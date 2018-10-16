@@ -48,7 +48,7 @@ namespace ICon.Model.Transitions.ConflictHandling
             DataAccess.Query(data => data.MetropolisRules.AddRange(transition.TransitionRules));
 
             var detail0 = $"Automatically added number of new metropolis model rules is ({transition.TransitionRules.Count})";
-            report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0));
+            report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail0));
         }
     }
 }

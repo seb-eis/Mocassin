@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
-using ICon.Mathematics.ValueTypes;
-using ICon.Mathematics.Comparers;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ICon.Framework.Operations;
+using ICon.Mathematics.Comparers;
+using ICon.Mathematics.ValueTypes;
 using ICon.Model.Basic;
 using ICon.Model.ProjectServices;
 using ICon.Model.Structures;
@@ -11,26 +10,17 @@ using ICon.Model.Structures;
 namespace ICon.Model.Energies.ConflictHandling
 {
     /// <summary>
-    /// Conflict resolver for a change in the stable environment info parameter within the energy manager
+    ///     Conflict resolver for a change in the stable environment info parameter within the energy manager
     /// </summary>
     public class StableEnvironmentInfoChangeHandler : ObjectConflictHandler<StableEnvironmentInfo, EnergyModelData>
     {
-        /// <summary>
-        /// Create new stable environment change handler with the provided data access and project services
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
+        /// <inheritdoc />
         public StableEnvironmentInfoChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
             : base(dataAccess, projectServices)
         {
-
         }
 
-        /// <summary>
-        /// Main resolver method that handles the changes induced due to the new stable environment information
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ConflictReport HandleConflicts(StableEnvironmentInfo obj)
         {
             var report = new ConflictReport();
@@ -40,8 +30,9 @@ namespace ICon.Model.Energies.ConflictHandling
         }
 
         /// <summary>
-        /// Updates the pair interaction model to the new set of pair interactions and inputs them into the model data object
+        ///     Updates the pair interaction model to the new set of pair interactions and inputs them into the model data object
         /// </summary>
+        /// <param name="info"></param>
         /// <param name="report"></param>
         protected void UpdatePairInteractionModel(IStableEnvironmentInfo info, ConflictReport report)
         {
@@ -53,81 +44,83 @@ namespace ICon.Model.Energies.ConflictHandling
         }
 
         /// <summary>
-        /// Finds all interactions that are equivalent in the new model and corrects the energy dictionaries to the ones of the old model list
+        ///     Finds all interactions that are equivalent in the new model and corrects the energy dictionaries to the ones of the
+        ///     old model list
         /// </summary>
         /// <param name="oldPairs"></param>
         /// <param name="newPairs"></param>
         /// <param name="report"></param>
         /// <param name="comparer"></param>
-        protected void PullEnergyInfoFromOldModel(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs, ConflictReport report, NumericComparer comparer)
+        protected void PullEnergyInfoFromOldModel(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs,
+            ConflictReport report, NumericComparer comparer)
         {
             var vectorComparer = new VectorComparer3D<Fractional3D>(comparer);
-            var warning = ModelMessages.CreateConflictHandlingWarning(this);
+            var warning = ModelMessageSource.CreateConflictHandlingWarning(this);
             foreach (var oldPair in oldPairs)
             {
                 switch (newPairs.FirstOrDefault(value => IsEquivalentInteraction(value, oldPair, vectorComparer)))
                 {
-                    case SymmetricPairInteraction newPair when newPair != null:
+                    case SymmetricPairInteraction newPair:
                         newPair.EnergyDictionary = oldPair.EnergyDictionary;
 
                         var detail = $"Reused energy definition from pair ({oldPair.Index}) in new pair ({newPair.Index})";
                         warning.AddDetails(detail);
                         break;
-
-                    default:
-                        break;
                 }
             }
-            if (warning.Details.Count != 0)
-            {
-                warning.AddDetails($"Recycled ({warning.Details.Count}) of ({newPairs.Count}) energy definitions");
-                report.AddWarning(warning);
-            }
+
+            if (warning.Details.Count == 0) 
+                return;
+
+            warning.AddDetails($"Recycled ({warning.Details.Count}) of ({newPairs.Count}) energy definitions");
+            report.AddWarning(warning);
         }
 
         /// <summary>
-        /// Deltes the old model list and inputs the new pairs into the old model list withou changing the actual list in the model object
+        ///     Deletes the old model list and inputs the new pairs into the old model list without changing the actual list in the
+        ///     model object
         /// </summary>
         /// <param name="oldPairs"></param>
         /// <param name="newPairs"></param>
-        protected void MoveNewPairsToModelList(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs, ConflictReport report)
+        /// <param name="report"></param>
+        protected void MoveNewPairsToModelList(IList<SymmetricPairInteraction> oldPairs, IList<SymmetricPairInteraction> newPairs,
+            ConflictReport report)
         {
             if (oldPairs.Count != newPairs.Count)
             {
                 var detail = $"The pair interaction set was updated ({oldPairs.Count}) to ({newPairs.Count}) interactions";
-                report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail));
             }
 
             oldPairs.Clear();
-            foreach (var item in newPairs)
-            {
-                oldPairs.Add(item);
-            }
+            foreach (var item in newPairs) oldPairs.Add(item);
         }
 
         /// <summary>
-        /// Checks if two pair interactions are equivalent in terms of symmetry. This function uses the fact that the radial search routine always results
-        /// in the same refernce pair interaction as long as the structure is not changed and only works as long as this statement is true
+        ///     Checks if two pair interactions are equivalent in terms of symmetry. This function uses the fact that the radial
+        ///     search routine always results
+        ///     in the same reference pair interaction as long as the structure is not changed and only works as long as this
+        ///     statement is true
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        protected bool IsEquivalentInteraction(SymmetricPairInteraction lhs, SymmetricPairInteraction rhs, VectorComparer3D<Fractional3D> comparer)
+        protected bool IsEquivalentInteraction(SymmetricPairInteraction lhs, SymmetricPairInteraction rhs,
+            VectorComparer3D<Fractional3D> comparer)
         {
             return lhs.Position0 == rhs.Position0
-                && lhs.Position1 == rhs.Position1
-                && comparer.Equals(lhs.GetSecondPositionVector(), rhs.GetSecondPositionVector());
+                   && lhs.Position1 == rhs.Position1
+                   && comparer.Equals(lhs.GetSecondPositionVector(), rhs.GetSecondPositionVector());
         }
 
         /// <summary>
-        /// Calculates the new set of pair interactions with the provided project services and new stable environment info
+        ///     Calculates the new set of pair interactions with the provided project services and new stable environment info
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
         protected IList<SymmetricPairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info)
         {
-            var energyQueries = ProjectServices.GetManager<IEnergyManager>().QueryPort;
             var structureQueries = ProjectServices.GetManager<IStructureManager>().QueryPort;
 
             var unitCellProvider = structureQueries.Query(port => port.GetFullUnitCellProvider());
@@ -139,28 +132,29 @@ namespace ICon.Model.Energies.ConflictHandling
         }
 
         /// <summary>
-        /// Updates possible conflicts with the group interaction definitions (Currently just sets all stable group definitions to deprecated)
+        ///     Updates possible conflicts with the group interaction definitions (Currently just sets all stable group definitions
+        ///     to deprecated)
         /// </summary>
         /// <param name="report"></param>
         /// <param name="info"></param>
         protected void UpdateGroupInteractions(IStableEnvironmentInfo info, ConflictReport report)
         {
-            int counter = 0;
+            var counter = 0;
             foreach (var item in DataAccess.Query(data => data.GroupInteractions))
             {
-                if (item.CenterUnitCellPosition.Status == PositionStatus.Stable)
-                {
-                    counter++;
-                    item.Deprecate();
-                }
+                if (item.CenterUnitCellPosition.Status != PositionStatus.Stable)
+                    continue;
+
+                counter++;
+                item.Deprecate();
             }
 
-            if (counter != 0)
-            {
-                var detail0 = $"Recovery of group interaction definitions on stable environment changes is currently not supported";
-                var detail1 = $"Deprecated all group interactions affiliated with the changed unstable environment to avoid conflicts";
-                report.AddWarning(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
-            }
+            if (counter == 0)
+                return;
+
+            const string detail0 = "Recovery of group interaction definitions on stable environment changes is currently not supported";
+            const string detail1 = "Deprecated all group interactions affiliated with the changed unstable environment to avoid conflicts";
+            report.AddWarning(ModelMessageSource.CreateContentResetWarning(this, detail0, detail1));
         }
     }
 }

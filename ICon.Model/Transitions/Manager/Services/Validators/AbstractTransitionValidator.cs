@@ -53,12 +53,12 @@ namespace ICon.Model.Transitions.Validators
             if (transition.ConnectorCount == 0)
             {
                 var detail = "The set of property groups does not contain any content and cannot describe a valid transition";
-                report.AddWarning(ModelMessages.CreateMissingOrEmptyContentWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateMissingOrEmptyContentWarning(this, detail));
             }
             if (transition.ConnectorCount == 0)
             {
                 var detail = "The set of position connectors does not contain any content and cannot describe a valid transition";
-                report.AddWarning(ModelMessages.CreateMissingOrEmptyContentWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateMissingOrEmptyContentWarning(this, detail));
             }
         }
 
@@ -77,12 +77,12 @@ namespace ICon.Model.Transitions.Validators
             {
                 var detail0 = $"The transition ({transition.StateCount}) base positions but ({transition.ConnectorCount}) connector steps";
                 var detail1 = $"The expected number of connector steps is ({transition.StateCount - 1})";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
+                report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
             if (!new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name))
             {
                 var detail = $"The abstract transition name ({transition.Name}) violates the contraining regular expression ({Settings.TransitionStringPattern})";
-                report.AddWarning(ModelMessages.CreateNamingViolationWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateNamingViolationWarning(this, detail));
             }
         }
 
@@ -103,7 +103,7 @@ namespace ICon.Model.Transitions.Validators
             }
             var detail0 = "The provided connector pattern does not result in a supported physical transition";
             var detail1 = validPatterns.Select(value => $"Valid type ('{value.PatternType}') pattern regex is ('{value.PatternRegex}')");
-            report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail1.Concat(detail0.AsSingleton()).ToArray()));
+            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail1.Concat(detail0.AsSingleton()).ToArray()));
         }
 
         /// <summary>

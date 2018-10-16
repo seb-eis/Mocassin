@@ -1,96 +1,66 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-
-using ICon.Framework.Collections;
+using ICon.Mathematics.Extensions;
 using ICon.Model.Basic;
 
 namespace ICon.Model.Energies
 {
-    /// <summary>
-    /// Environement info parameter that defines the basic restrictions and behavior for all stable position environments
-    /// </summary>
-    [DataContract(Name ="StableEnvironmentInfo")]
+    /// <inheritdoc cref="ICon.Model.Energies.IStableEnvironmentInfo"/>
+    [DataContract(Name = "StableEnvironmentInfo")]
     public class StableEnvironmentInfo : ModelParameter, IStableEnvironmentInfo
     {
-        /// <summary>
-        /// The maximum interaction range in internal unit
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
-        /// The list of ignored pair interactions during environment sampling
+        ///     The list of ignored pair interactions during environment sampling
         /// </summary>
         [DataMember]
         public List<SymmetricParticlePair> IgnoredPairInteractions { get; set; }
 
-        /// <summary>
-        /// Get the ignroed pair interactions as an enumerable
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerable<SymmetricParticlePair> GetIgnoredPairs()
         {
             return IgnoredPairInteractions.AsEnumerable();
         }
 
-        /// <summary>
-        /// Get the parameter literal name
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string GetParameterName()
         {
             return "'Stable Environment Info'";
         }
 
-        /// <summary>
-        /// Consumes a model parameter interface and returns this object on success. Returns null if the consume failed
-        /// </summary>
-        /// <param name="modelParameter"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)
         {
-            if (modelParameter is IStableEnvironmentInfo info)
-            {
-                MaxInteractionRange = info.MaxInteractionRange;
-                IgnoredPairInteractions = info.GetIgnoredPairs().ToList();
-                return this;
-            }
-            return null;
+            if (!(modelParameter is IStableEnvironmentInfo info)) 
+                return null;
+
+            MaxInteractionRange = info.MaxInteractionRange;
+            IgnoredPairInteractions = info.GetIgnoredPairs().ToList();
+            return this;
+
         }
 
-        /// <summary>
-        /// Checks parameter for content equility to another model parameter interface
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override bool Equals(IModelParameter other)
         {
-            if (other is IStableEnvironmentInfo info)
-            {
-                if (MaxInteractionRange == info.MaxInteractionRange)
-                {
-                    foreach (var pairCode in info.GetIgnoredPairs())
-                    {
-                        if (!IgnoredPairInteractions.Contains(pairCode))
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            }
-            return false;
+            if (!(other is IStableEnvironmentInfo info))
+                return false;
+
+            return MaxInteractionRange.IsAlmostEqualByRange(info.MaxInteractionRange, 1.0e-10) 
+                   && info.GetIgnoredPairs().All(pairCode => IgnoredPairInteractions.Contains(pairCode));
         }
 
         /// <summary>
-        /// Create a default environment info parameter (Range of one internal unit and no ignored interactions)
+        ///     Create a default environment info parameter (Range of one internal unit and no ignored interactions)
         /// </summary>
         /// <returns></returns>
         public static StableEnvironmentInfo CreateDefault()
         {
-            return new StableEnvironmentInfo() { IgnoredPairInteractions = new List<SymmetricParticlePair>(0), MaxInteractionRange = 1.0 };
+            return new StableEnvironmentInfo {IgnoredPairInteractions = new List<SymmetricParticlePair>(0), MaxInteractionRange = 1.0};
         }
     }
 }

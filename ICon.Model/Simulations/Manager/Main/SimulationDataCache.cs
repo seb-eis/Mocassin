@@ -10,7 +10,7 @@ namespace ICon.Model.Simulations
     /// <summary>
     /// The simulation manager data cache object that stores and supplies on-demand simulation data objects
     /// </summary>
-    public class SimulationDataCache : DynamicModelDataCache<ISimulationCachePort>
+    public class SimulationDataCache : ModelDataCache<ISimulationCachePort>
     {
         /// <summary>
         /// Create new simulation data cache that uses the provided event port and project services

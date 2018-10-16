@@ -60,7 +60,7 @@ namespace ICon.Model.Structures.ConflictHandling
 
                 var detail0 = "The original cell parameters are no longer compatible with the new space group";
                 var detail1 = "Conflict resolved by loading a default parameter set for the new crystal system";
-                report.Warnings.Add(ModelMessages.CreateContentResetWarning(this, detail0, detail1));
+                report.Warnings.Add(ModelMessageSource.CreateContentResetWarning(this, detail0, detail1));
             }
 
             oldParameters.ParameterSet = ProjectServices.CrystalSystemService.GetCurrentParameterSet();
@@ -89,7 +89,7 @@ namespace ICon.Model.Structures.ConflictHandling
 
                             var detail0 = $"The unit cell position at index ({j}) is now equivalent to position at index ({i})";
                             var detail1 = $"Conflict was resolved by marking position at index ({j}) as deprecated";
-                            report.Warnings.Add(ModelMessages.CreateConflictHandlingWarning(this, detail0, detail1));
+                            report.Warnings.Add(ModelMessageSource.CreateConflictHandlingWarning(this, detail0, detail1));
                         }
                     }
                 }

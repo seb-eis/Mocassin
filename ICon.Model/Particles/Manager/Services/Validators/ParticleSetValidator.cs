@@ -87,7 +87,7 @@ namespace ICon.Model.Particles.Validators
             if (encodedSet.Mask == 0)
             {
                 var detail = $"Custom definition of the empty particle set is not allowed as is always exists";
-                result.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail));
+                result.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail));
             }
             if ((encodedSet.Mask & DataReader.Access.GetValidParticlesAsSet().GetEncoded().Mask) - encodedSet.Mask != 0)
             {

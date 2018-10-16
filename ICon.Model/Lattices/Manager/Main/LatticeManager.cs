@@ -51,7 +51,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="settingsData"></param>
         /// <returns></returns>
-        public override IValidationService MakeValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
         {
             return new LatticeValidationService(ProjectServices, settingsData.LatticeSettings);
         }

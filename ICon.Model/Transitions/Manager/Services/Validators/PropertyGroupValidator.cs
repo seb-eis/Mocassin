@@ -51,7 +51,7 @@ namespace ICon.Model.Transitions.Validators
             if (group.StatePairCount == 0)
             {
                 var detail = "The provided property group does not contain any state pairs and does not describe a valid set of state changes";
-                report.AddWarning(ModelMessages.CreateMissingOrEmptyContentWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateMissingOrEmptyContentWarning(this, detail));
                 return false;
             }
             return true;

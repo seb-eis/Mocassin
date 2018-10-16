@@ -1,113 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ICon.Framework.Collections;
+﻿using ICon.Framework.Collections;
 using ICon.Model.Basic;
 
 namespace ICon.Model.Energies
 {
     /// <summary>
-    /// Energy data manager that provides safe read only access to the energy base model data
+    ///     Energy data manager that provides safe read only access to the energy base model data
     /// </summary>
     internal class EnergyDataManager : ModelDataManager<EnergyModelData>, IEnergyDataPort
     {
-        /// <summary>
-        /// Create new energy data manager for the provided data object
-        /// </summary>
-        /// <param name="data"></param>
-        public EnergyDataManager(EnergyModelData data) : base(data)
+        /// <inheritdoc />
+        public EnergyDataManager(EnergyModelData data)
+            : base(data)
         {
         }
-
-        /// <summary>
-        /// Get the stable environment info parameter
-        /// </summary>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public IStableEnvironmentInfo GetStableEnvironmentInfo()
         {
             return Data.StableEnvironmentInfo;
         }
-
-        /// <summary>
-        /// Get the group interaction at the specfifed index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public IGroupInteraction GetGroupInteraction(int index)
         {
             return Data.GroupInteractions[index];
         }
-
-        /// <summary>
-        /// Get a read only list for all defined group interactions
-        /// </summary>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IGroupInteraction> GetGroupInteractions()
         {
             return ReadOnlyListAdapter<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
         }
-
-        /// <summary>
-        /// Get the stable pair interaction at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public ISymmetricPairInteraction GetStablePairInteraction(int index)
         {
             return Data.StablePairInteractions[index];
         }
-
-        /// <summary>
-        /// Get a read only list of all stable pair interactions
-        /// </summary>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public ReadOnlyListAdapter<ISymmetricPairInteraction> GetStablePairInteractions()
         {
             return ReadOnlyListAdapter<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
         }
-
-        /// <summary>
-        /// Get the unstable environment info at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public IUnstableEnvironment GetUnstableEnvironment(int index)
         {
             return Data.UnstableEnvironmentInfos[index];
         }
-
-        /// <summary>
-        /// Get a read only list of all environment infos
-        /// </summary>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IUnstableEnvironment> GetUnstableEnvironments()
         {
             return ReadOnlyListAdapter<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironmentInfos);
         }
-
-        /// <summary>
-        /// Get the unstable pair interaction at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public IAsymmetricPairInteraction GetUnstablePairInteractions(int index)
         {
             return Data.UnstablePairInteractions[index];
         }
-
-        /// <summary>
-        /// Get a read only list of all unstable pair infos
-        /// </summary>
-        /// <returns></returns>
+        
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IAsymmetricPairInteraction> GetUnstablePairInteractions()
         {
             return ReadOnlyListAdapter<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
         }
 
-        /// <summary>
-        /// Get a raw energy setter provider that enables creation of energy value setters for interaction objects
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnergySetterProvider GetEnergySetterProvider()
         {
             return new EnergySetterProvider(Data);

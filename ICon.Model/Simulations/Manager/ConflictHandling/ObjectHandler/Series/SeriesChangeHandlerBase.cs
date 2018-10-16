@@ -73,7 +73,7 @@ namespace ICon.Model.Simulations.ConflictHandling
             {
                 setter(ValueSeries.MakeSingle(value));
                 var detail = $"Undefined series for [{displayName}] was replaced by single value of base simulation ({value})";
-                report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail));
             }
         }
     }

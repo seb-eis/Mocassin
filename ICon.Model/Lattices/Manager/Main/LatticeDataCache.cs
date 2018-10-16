@@ -13,7 +13,7 @@ namespace ICon.Model.Lattices
     /// <summary>
     /// Data cache for the extended on-demand lattice model data
     /// </summary>
-    internal class LatticeDataCache : DynamicModelDataCache<ILatticeCachePort>
+    internal class LatticeDataCache : ModelDataCache<ILatticeCachePort>
     {
         /// <summary>
         /// Creates new cached lattice data object with empty cache list and registers to the basic event of the provided event port

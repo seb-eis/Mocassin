@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.Linq;
-
 using ICon.Mathematics.Constraints;
 using ICon.Model.Basic;
-using ICon.Model.Structures;
 using ICon.Model.ProjectServices;
+using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IEnergyCachePort"/>
-    internal class EnergyCacheManager : ModelCacheManager<EnergyDataCache, IEnergyCachePort>, IEnergyCachePort
+    /// <inheritdoc cref="ICon.Model.Energies.IEnergyCachePort" />
+    internal class EnergyCacheManager : ModelCacheManager<EnergyModelCache, IEnergyCachePort>, IEnergyCachePort
     {
         /// <inheritdoc />
-        public EnergyCacheManager(EnergyDataCache dataCache, IProjectServices projectServices)
-            : base(dataCache, projectServices)
+        public EnergyCacheManager(EnergyModelCache modelCache, IProjectServices projectServices)
+            : base(modelCache, projectServices)
         {
-
         }
 
         /// <inheritdoc />
@@ -93,17 +89,17 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Pulls energy setter provider from data manager and creates all energy setters for stable pair interactions
+        ///     Pulls energy setter provider from data manager and creates all energy setters for stable pair interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
         protected IReadOnlyList<IPairEnergySetter> CreateStablePairEnergySetters()
         {
-            return GetFullEnergySetterProvider().GetStablePairEnergySetters(); 
+            return GetFullEnergySetterProvider().GetStablePairEnergySetters();
         }
 
         /// <summary>
-        /// Pulls energy setter provider from data manager and creates all energy setters for unstable pair interactions
+        ///     Pulls energy setter provider from data manager and creates all energy setters for unstable pair interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -113,7 +109,7 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Pulls energy setter provider from data manager and creates all energy setters for group interactions
+        ///     Pulls energy setter provider from data manager and creates all energy setters for group interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -123,7 +119,7 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Pulls energy setter provider from data and sets the valu constraints according to the project service settings
+        ///     Pulls energy setter provider from data and sets the value constraints according to the project service settings
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -134,13 +130,17 @@ namespace ICon.Model.Energies
             var (pairMin, pairMax) = ProjectServices.SettingsData.EnergySettings.PairEnergies.GetMinMaxTuple();
             var (groupMin, groupMax) = ProjectServices.SettingsData.EnergySettings.GroupEnergies.GetMinMaxTuple();
 
-            provider.PairEnergyConstraint = new NumericConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumerics.RangeComparer);
-            provider.GroupEnergyConstraint = new NumericConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumerics.RangeComparer);
+            provider.PairEnergyConstraint =
+                new NumericConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumerics.RangeComparer);
+
+            provider.GroupEnergyConstraint =
+                new NumericConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumerics.RangeComparer);
+
             return provider;
         }
 
         /// <summary>
-        /// Creates the pair interaction finder for the currently linked structure definition and space group service
+        ///     Creates the pair interaction finder for the currently linked structure definition and space group service
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -151,7 +151,8 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Creates the position group information for all group interactions that are not marked as deprecated. Deprecated ones are null
+        ///     Creates the position group information for all group interactions that are not marked as deprecated. Deprecated
+        ///     ones are null
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -166,7 +167,7 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Creates a dictionary that assigns each unit cell position its set of defined pair interactions
+        ///     Creates a dictionary that assigns each unit cell position its set of defined pair interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -184,10 +185,12 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Assigns a set of pair interactions to their unit cell positions. Asymmetric pairs are assigned to their first position only
+        ///     Assigns a set of pair interactions to their unit cell positions. Asymmetric pairs are assigned to their first
+        ///     position only
         /// </summary>
         /// <returns></returns>
-        protected IDictionary<IUnitCellPosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(IEnumerable<T> pairInteractions) where T : IPairInteraction
+        protected IDictionary<IUnitCellPosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(IEnumerable<T> pairInteractions) 
+            where T : IPairInteraction
         {
             var localResult = new Dictionary<IUnitCellPosition, List<IPairInteraction>>();
 
@@ -198,6 +201,7 @@ namespace ICon.Model.Energies
                     pairList0 = new List<IPairInteraction>();
                     localResult.Add(pairInteraction.Position0, pairList0);
                 }
+
                 pairList0.Add(pairInteraction);
 
                 if (pairInteraction is IAsymmetricPairInteraction || pairInteraction.Position0 == pairInteraction.Position1)
@@ -216,7 +220,7 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Creates a dictionary that assigns each unit cell position its set of defined group interactions
+        ///     Creates a dictionary that assigns each unit cell position its set of defined group interactions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -232,6 +236,7 @@ namespace ICon.Model.Energies
                     list = new List<IGroupInteraction>();
                     localResult.Add(groupInteraction.CenterUnitCellPosition, list);
                 }
+
                 list.Add(groupInteraction);
             }
 

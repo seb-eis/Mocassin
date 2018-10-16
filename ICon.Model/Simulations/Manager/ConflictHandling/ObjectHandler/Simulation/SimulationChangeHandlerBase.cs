@@ -48,7 +48,7 @@ namespace ICon.Model.Simulations.ConflictHandling
                 simulation.CustomRngSeed = Guid.NewGuid().ToString();
                 var detail0 = $"Empty random number generator seed replaced by a GUID value ({simulation.CustomRngSeed})";
                 var detail1 = $"Note: GUID values do not require to be random so multiple seed values could potentially be nearly identical";
-                report.AddWarning(ModelMessages.CreateConflictHandlingWarning(this, detail0, detail1));
+                report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail0, detail1));
             }
         }
     }

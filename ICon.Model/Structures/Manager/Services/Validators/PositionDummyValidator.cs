@@ -47,7 +47,7 @@ namespace ICon.Model.Structures.Validators
             if (!constraint.IsValid(position.Vector.A) || !constraint.IsValid(position.Vector.B) || !constraint.IsValid(position.Vector.C))
             {
                 var detail = $"The dummy violates the unit cell boundaries {constraint.ToString()}";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail));
             }
         }
 
@@ -68,7 +68,7 @@ namespace ICon.Model.Structures.Validators
                     if (extended.GetCppLowerBound(position.Vector) != extended.Count)
                     {
                         var detail = "Provided dummy position is already present or part of the wyckoff set of another existing dummy";
-                        report.AddWarning(ModelMessages.CreateModelDuplicateWarning(this, detail));
+                        report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail));
                         break;
                     }
                 }

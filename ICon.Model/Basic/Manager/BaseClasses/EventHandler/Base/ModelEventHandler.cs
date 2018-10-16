@@ -1,89 +1,89 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-
-using ICon.Framework.Reflection;
-using ICon.Framework.Processing;
+using System.Reflection;
 using ICon.Framework.Operations;
-
+using ICon.Framework.Processing;
+using ICon.Framework.Reflection;
 using ICon.Model.ProjectServices;
 
 namespace ICon.Model.Basic
 {
     /// <summary>
-    /// Abstract base class for all model data event handler that handle event based updating through processing pipelines
+    ///     Abstract base class for all model data event handler that handle event based updating through processing pipelines
     /// </summary>
-    internal abstract class ModelEventHandler<T1, T2, T3> where T1 : IModelEventPort where T2 : ModelData where T3 : ModelEventManager
+    internal abstract class ModelEventHandler<T1, T2, T3> 
+        where T1 : IModelEventPort 
+        where T2 : ModelData
+        where T3 : ModelEventManager
     {
         /// <summary>
-        /// Flag that indicates if the event handler is connected to a port
+        ///     Flag that indicates if the event handler is connected to a port
         /// </summary>
         public bool IsConnected => EventSubscription != null;
 
         /// <summary>
-        /// Disposable that contains the unsubscription information for the connected event
+        ///     Disposable that contains the unsubscription information for the connected event
         /// </summary>
         protected IDisposable EventSubscription { get; set; }
 
         /// <summary>
-        /// Pipeline that processes the event arguments and invokes afffiliated reactions. Returns resolver report about the handling
+        ///     Pipeline that processes the event arguments and invokes affiliated reactions. Returns resolver report about the
+        ///     handling
         /// </summary>
         public BreakPipeline<IConflictReport> HandlerPipeline { get; set; }
 
         /// <summary>
-        /// Contains the last report generated due to a pipeline invokation
+        ///     Contains the last report generated due to a pipeline invocation
         /// </summary>
         public IConflictReport LastReport { get; set; }
 
         /// <summary>
-        /// Access to the manager collections project services
+        ///     Access to the manager collections project services
         /// </summary>
         public IProjectServices ProjectServices { get; protected set; }
 
         /// <summary>
-        /// Accessor provider for the full data access
+        ///     Accessor provider for the full data access
         /// </summary>
-        protected DataAccessProvider<T2> DataAccessorProvider { get; set; }
+        protected DataAccessSource<T2> DataAccessorSource { get; set; }
 
         /// <summary>
-        /// Access to the event manager used for 
+        ///     Access to the event manager used for
         /// </summary>
         protected T3 EventManager { get; set; }
 
         /// <summary>
-        /// Creates new update event handler that uses the provided projects services data accessor provider and event manager
+        ///     Creates new update event handler that uses the provided projects services data accessor provider and event manager
         /// </summary>
         /// <param name="projectServices"></param>
-        /// <param name="dataAccessorProvider"></param>
+        /// <param name="dataAccessorSource"></param>
         /// <param name="eventManager"></param>
-        public ModelEventHandler(IProjectServices projectServices, DataAccessProvider<T2> dataAccessorProvider, T3 eventManager)
+        protected ModelEventHandler(IProjectServices projectServices, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
         {
             ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
-            DataAccessorProvider = dataAccessorProvider ?? throw new ArgumentNullException(nameof(dataAccessorProvider));
+            DataAccessorSource = dataAccessorSource ?? throw new ArgumentNullException(nameof(dataAccessorSource));
             EventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
             HandlerPipeline = CreatePipeline();
         }
 
         /// <summary>
-        /// Connects to a model event port and subscribes the updating functions the the appropriate events. Returns a disposable to terminate the connection
+        ///     Connects to a model event port and subscribes the updating functions the the appropriate events. Returns a
+        ///     disposable to terminate the connection
         /// </summary>
         /// <param name="eventPort"></param>
         /// <returns></returns>
         [EventPortConnector]
         public IDisposable Connect(T1 eventPort)
         {
-            if (IsConnected)
-            {
-                return null;
-            }
+            if (IsConnected) return null;
             EventSubscription = SubscribeToEvent(eventPort);
-            return Disposable.Create(() => Disconnect());
+            return Disposable.Create(Disconnect);
         }
 
         /// <summary>
-        /// Disconnects from the event port by disposing and nulling the subscription collection
+        ///     Disconnects from the event port by disposing and null-out the subscription collection
         /// </summary>
         public void Disconnect()
         {
@@ -92,14 +92,14 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
-        /// Abstract method that defines which event the handler piepline connects to and what should be done
+        ///     Abstract method that defines which event the handler pipeline connects to and what should be done
         /// </summary>
         /// <param name="eventPort"></param>
         /// <returns></returns>
         public abstract IDisposable SubscribeToEvent(T1 eventPort);
 
         /// <summary>
-        /// Defines the basic process event reaction that invokes the pipleine and collects the resolver report
+        ///     Defines the basic process event reaction that invokes the pipeline and collects the resolver report
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
@@ -109,7 +109,7 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
-        /// Builds the handler pipeline by searching the handler implementation for handling methods
+        ///     Builds the handler pipeline by searching the handler implementation for handling methods
         /// </summary>
         /// <returns></returns>
         protected BreakPipeline<IConflictReport> CreatePipeline()
@@ -118,7 +118,7 @@ namespace ICon.Model.Basic
         }
 
         /// <summary>
-        /// Get the object processor list by searching the handler for marked methods and creating a set of object processors
+        ///     Get the object processor list by searching the handler for marked methods and creating a set of object processors
         /// </summary>
         /// <returns></returns>
         protected IEnumerable<IObjectProcessor<IConflictReport>> GetObjectProcessors()
@@ -127,26 +127,28 @@ namespace ICon.Model.Basic
             {
                 return info.GetCustomAttribute(typeof(EventHandlingMethodAttribute)) != null;
             }
-            return new ObjectProcessorCreator().CreateProcessors<IConflictReport>(this, MethodSearch, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return new ObjectProcessorCreator().CreateProcessors<IConflictReport>(this, MethodSearch,
+                BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         /// <summary>
-        /// Get the on cannot process processor, this usually simply returns a no-resolving required report
+        ///     Get the on cannot process processor, this usually simply returns a no-resolving required report
         /// </summary>
         /// <returns></returns>
         protected virtual IObjectProcessor<IConflictReport> GetCannotProcessProcessor()
         {
-            return new ObjectProcessor<object, IConflictReport>(value => ConflictReport.CreateNoResolveRequiredReport(value));
+            return new ObjectProcessor<object, IConflictReport>(ConflictReport.CreateNoResolveRequiredReport);
         }
 
         /// <summary>
-        /// Placeholder debug dummy reaction that writes the passed inormation to console and returns an empry resolver report
+        ///     Placeholder debug dummy reaction that writes the passed information to console and returns an empty resolver report
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         protected virtual IConflictReport EventTestReaction(object obj)
         {
-            Console.WriteLine($"{obj.ToString()} received on {ToString()}");
+            Console.WriteLine($"{obj} received on {ToString()}");
             return new ConflictReport();
         }
     }

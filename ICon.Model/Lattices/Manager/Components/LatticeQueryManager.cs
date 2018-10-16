@@ -16,8 +16,8 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="extendedData"></param>
-        /// <param name="dataLocker"></param>
-        public LatticeQueryManager(LatticeModelData baseData, LatticeDataCache extendedData, DataAccessLocker dataLocker) : base(baseData, extendedData, dataLocker)
+        /// <param name="lockSource"></param>
+        public LatticeQueryManager(LatticeModelData baseData, LatticeDataCache extendedData, AccessLockSource lockSource) : base(baseData, extendedData, lockSource)
         {
         }
     }

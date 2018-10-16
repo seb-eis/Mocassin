@@ -46,7 +46,7 @@ namespace ICon.Model.Transitions.Validators
             if (statePair.DonorParticle == statePair.AcceptorParticle)
             {
                 var detail = $"Donor and acceptor states of the provided state pair are identical and cannot describe a valid state change";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail));
+                report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail));
             }
         }
     }

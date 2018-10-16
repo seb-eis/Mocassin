@@ -3,10 +3,9 @@
 namespace ICon.Model.Energies
 {
     /// <summary>
-    /// Represents an input port for model energies
+    ///     Represents an input port for model energies
     /// </summary>
     public interface IEnergyInputPort : IModelInputPort
     {
-
     }
 }

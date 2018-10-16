@@ -39,7 +39,7 @@ namespace ICon.Model.Particles
         /// Get the particle validation service
         /// </summary>
         /// <returns></returns>
-        public override IValidationService MakeValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
         {
             return new ParticleValidationService(settingsData.ParticleSettings, ProjectServices);
         }

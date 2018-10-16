@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-
-using ICon.Model.Basic;
 using ICon.Mathematics.ValueTypes;
+using ICon.Model.Basic;
 using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IPairInteraction"/>
+    /// <inheritdoc cref="ICon.Model.Energies.IPairInteraction" />
     [DataContract]
     public abstract class PairInteraction : ModelObject, IPairInteraction
     {
@@ -22,7 +19,7 @@ namespace ICon.Model.Energies
         public IUnitCellPosition Position1 { get; set; }
 
         /// <summary>
-        /// The actual position vector for the second unit cell position
+        ///     The actual position vector for the second unit cell position
         /// </summary>
         [DataMember]
         public DataVector3D SecondPositionVector { get; set; }
@@ -32,14 +29,14 @@ namespace ICon.Model.Energies
         public double Distance { get; set; }
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         protected PairInteraction()
         {
         }
 
         /// <summary>
-        /// Construct new pair interaction from pair candidate
+        ///     Construct new pair interaction from pair candidate
         /// </summary>
         protected PairInteraction(in PairCandidate candidate)
         {
@@ -70,7 +67,8 @@ namespace ICon.Model.Energies
         }
 
         /// <summary>
-        /// Tries to set the passed energy entry in the pair interaction energy dictionary. Returns false if value cannot be set
+        ///     Tries to set the passed energy entry in the pair interaction energy dictionary. Returns false if value cannot be
+        ///     set
         /// </summary>
         /// <param name="energyEntry"></param>
         /// <returns></returns>

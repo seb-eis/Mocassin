@@ -9,16 +9,16 @@ namespace ICon.Model.Transitions.Handler
     /// <summary>
     /// Event handler that manages the processing of object reindexing events that the transition manager receives from the structure manager event port
     /// </summary>
-    internal class ReindexedStructureObjectsHandler : NewObjectsEventHandler<IStructureEventPort, TransitionModelData, TransitionEventManager>
+    internal class ReindexedStructureObjectsHandler : ObjectAddedEventHandler<IStructureEventPort, TransitionModelData, TransitionEventManager>
     {
         /// <summary>
         /// Create new handler using the provided project services, data access provider and event manager
         /// </summary>
         /// <param name="projectServices"></param>
-        /// <param name="dataAccessorProvider"></param>
+        /// <param name="dataAccessorSource"></param>
         /// <param name="eventManager"></param>
-        public ReindexedStructureObjectsHandler(IProjectServices projectServices, DataAccessProvider<TransitionModelData> dataAccessorProvider, TransitionEventManager eventManager)
-            : base(projectServices, dataAccessorProvider, eventManager)
+        public ReindexedStructureObjectsHandler(IProjectServices projectServices, DataAccessSource<TransitionModelData> dataAccessorSource, TransitionEventManager eventManager)
+            : base(projectServices, dataAccessorSource, eventManager)
         {
 
         }

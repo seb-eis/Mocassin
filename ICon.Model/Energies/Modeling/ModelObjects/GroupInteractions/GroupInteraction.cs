@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-
-using ICon.Model.Basic;
 using ICon.Mathematics.ValueTypes;
-using ICon.Model.Transitions;
+using ICon.Model.Basic;
 using ICon.Model.Particles;
 using ICon.Model.Structures;
 
 namespace ICon.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IGroupInteraction"/>
+    /// <inheritdoc cref="ICon.Model.Energies.IGroupInteraction" />
     [DataContract(Name = "GroupInteraction")]
     public class GroupInteraction : ModelObject, IGroupInteraction
     {
@@ -26,13 +22,13 @@ namespace ICon.Model.Energies
         public IUnitCellPosition CenterUnitCellPosition { get; set; }
 
         /// <summary>
-        /// The list of 3D fractional vectors that describe the group geometry
+        ///     The list of 3D fractional vectors that describe the group geometry
         /// </summary>
         [DataMember]
         public List<DataVector3D> GeometryVectors { get; set; }
 
         /// <summary>
-        /// The energy dictionaries for each center particle and surrounding occupation state (Auto managed by model)
+        ///     The energy dictionaries for each center particle and surrounding occupation state (Auto managed by model)
         /// </summary>
         [DataMember]
         public Dictionary<IParticle, Dictionary<OccupationState, double>> EnergyDictionarySet { get; set; }
@@ -47,14 +43,12 @@ namespace ICon.Model.Energies
         public IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> GetEnergyDictionarySet()
         {
             var result = new Dictionary<IParticle, IReadOnlyDictionary<OccupationState, double>>();
-            if (EnergyDictionarySet == null)
-            {
+            if (EnergyDictionarySet == null) 
                 return result;
-            }
-            foreach (var item in EnergyDictionarySet)
-            {
+
+            foreach (var item in EnergyDictionarySet) 
                 result.Add(item.Key, item.Value);
-            }
+
             return result;
         }
 
@@ -73,19 +67,18 @@ namespace ICon.Model.Energies
             CenterUnitCellPosition = interaction.CenterUnitCellPosition;
             GeometryVectors = interaction.GetBaseGeometry().Select(vector => new DataVector3D(vector)).ToList();
             EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
+
             foreach (var item in interaction.GetEnergyDictionarySet())
             {
                 EnergyDictionarySet.Add(item.Key, new Dictionary<OccupationState, double>(item.Value.Count));
-                foreach (var inner in item.Value)
-                {
-                    EnergyDictionarySet[item.Key].Add(inner.Key, inner.Value);
-                }
+                foreach (var inner in item.Value) EnergyDictionarySet[item.Key].Add(inner.Key, inner.Value);
             }
+
             return this;
         }
 
         /// <summary>
-        /// Tries to set the passed energy entry in the energy dictionary. Returns false if the value cannot be set
+        ///     Tries to set the passed energy entry in the energy dictionary. Returns false if the value cannot be set
         /// </summary>
         /// <param name="energyEntry"></param>
         /// <returns></returns>
@@ -108,10 +101,8 @@ namespace ICon.Model.Energies
         {
             foreach (var outerItem in EnergyDictionarySet)
             {
-                foreach (var innerItem in outerItem.Value)
-                {
+                foreach (var innerItem in outerItem.Value) 
                     yield return new GroupEnergyEntry(outerItem.Key, innerItem.Key, innerItem.Value);
-                }
             }
         }
     }

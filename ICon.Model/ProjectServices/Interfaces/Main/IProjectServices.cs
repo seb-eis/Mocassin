@@ -26,7 +26,7 @@ namespace ICon.Model.ProjectServices
         /// <summary>
         /// The default data locker that species the timespan and attempts before reader/writer creation operations throw timeout exceptions
         /// </summary>
-        DataAccessLocker DataAccessLocker { get; }
+        AccessLockSource AccessLockSource { get; }
 
         /// <summary>
         /// Get the project settings data object that contains all project settings

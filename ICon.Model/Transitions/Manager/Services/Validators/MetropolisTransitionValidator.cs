@@ -48,7 +48,7 @@ namespace ICon.Model.Transitions.Validators
             {
                 var detail0 = $"The abstract transition does not describe a valid metropolis pattern";
                 var detail1 = $"Metropolis transition patterns follow the regular expression {metropolisPattern.PatternRegex.ToString()}";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0, detail1));
+                report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
         }
     }
