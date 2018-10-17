@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ICon.Framework.Reflection
+namespace Mocassin.Framework.Reflection
 {
     /// <summary>
     ///     Delegate creator class that use reflection to search for methods that fulfill specific conditions and creates

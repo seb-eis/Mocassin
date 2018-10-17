@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a state exchange group of state exchange pairs to describe state changes in transitions

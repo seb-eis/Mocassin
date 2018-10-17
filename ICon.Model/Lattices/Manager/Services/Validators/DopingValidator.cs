@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Lattices.Validators
+namespace Mocassin.Model.Lattices.Validators
 {
-    public class DopingValidator : DataValidator<IDoping, BasicLatticeSettings, ILatticeDataPort>
+    public class DopingValidator : DataValidator<IDoping, MocassinLatticeSettings, ILatticeDataPort>
     {
-        public DopingValidator(IProjectServices projectServices, BasicLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader) 
-            : base(projectServices, settings, dataReader)
+        public DopingValidator(IModelProject modelProject, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader) 
+            : base(modelProject, settings, dataReader)
         {
         }
 

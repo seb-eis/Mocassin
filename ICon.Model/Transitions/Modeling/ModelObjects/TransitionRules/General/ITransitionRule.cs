@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a transition rule of unspecified type that describes the state change during a transition and can be toggled on or off 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ICon.Framework.Exceptions
+namespace Mocassin.Framework.Exceptions
 {
     /// <summary>
     /// Exception thrown if a method/property access to an object tries to change an inherited field/property that is immutable in the implementing type

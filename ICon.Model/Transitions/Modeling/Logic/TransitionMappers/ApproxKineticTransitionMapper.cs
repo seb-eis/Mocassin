@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Symmetry.Analysis;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Mathematics.Comparers;
-using ICon.Symmetry.Analysis;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Approximated mapper for kinetic transitions that searches and creates all possible 4D encoded paths for refernce transitions (Uses radial chain search)
@@ -100,13 +99,13 @@ namespace ICon.Model.Transitions
         /// <param name="geometries"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<CellEntry<int>[]> QuickFilterPaths(IEnumerable<CellEntry<int>> reference, IEnumerable<CellEntry<int>[]> geometries, NumericComparer comparer)
+        public IEnumerable<IList<CellEntry<int>>> QuickFilterPaths(IEnumerable<CellEntry<int>> reference, IEnumerable<IList<CellEntry<int>>> geometries, NumericComparer comparer)
         {
             var refIdentifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(reference));
             foreach (var geometry in GetUniquePaths(geometries, comparer))
             {
-                var newIndetifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(geometry));
-                if (SymmetryService.IndicatorComparer.Compare(refIdentifier, newIndetifier) == 0)
+                var newIndentifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(geometry));
+                if (SymmetryService.IndicatorComparer.Compare(refIdentifier, newIndentifier) == 0)
                 {
                     yield return geometry;
                 }
@@ -118,12 +117,12 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="geometries"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<int>[]> GetUniquePaths(IEnumerable<CellEntry<int>[]> geometries, NumericComparer comparer)
+        protected IEnumerable<IList<CellEntry<int>>> GetUniquePaths(IEnumerable<IList<CellEntry<int>>> geometries, NumericComparer comparer)
         {
             var sequenceComparer = MakeCellEntrySequenceComparer(new VectorComparer3D<Fractional3D>(comparer), Comparer<int>.Default);
             foreach (var item in ContainerFactory.CreateSetList(sequenceComparer, geometries))
             {
-                yield return item.ToArray();
+                yield return item.ToList();
             }
         }
 

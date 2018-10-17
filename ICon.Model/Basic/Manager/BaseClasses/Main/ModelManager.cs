@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <inheritdoc />
     /// <remarks> Abstract base class for all model manager implementations </remarks>
@@ -17,7 +17,7 @@ namespace ICon.Model.Basic
         ///     Project services instance that is shared between all model managers of a simulation project and offers various
         ///     services e.g. validations, numeric comparer etc.
         /// </summary>
-        internal IProjectServices ProjectServices { get; set; }
+        internal IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     Internal access to update manager base class (Cast to actual manager only in generic/polymorphic usage scenarios!)
@@ -64,10 +64,10 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Creates new model manager that uses the provided project services and automatically registers to it
         /// </summary>
-        /// <param name="projectServices"></param>
-        protected ModelManager(IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected ModelManager(IModelProject modelProject)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         /// <inheritdoc />
@@ -78,7 +78,7 @@ namespace ICon.Model.Basic
         }
 
         /// <inheritdoc />
-        public abstract IValidationService CreateValidationService(ProjectSettingsData settingsData);
+        public abstract IValidationService CreateValidationService(ProjectSettings settings);
 
         /// <inheritdoc />
         public abstract Type GetManagerInterfaceType();
@@ -181,8 +181,8 @@ namespace ICon.Model.Basic
         internal override ModelData DataCacheBase => ModelCache;
 
         /// <inheritdoc />
-        protected ModelManager(IProjectServices projectServices, TData data)
-            : base(projectServices)
+        protected ModelManager(IModelProject modelProject, TData data)
+            : base(modelProject)
         {
             Initialize(data);
         }
@@ -198,13 +198,13 @@ namespace ICon.Model.Basic
                 throw new ArgumentNullException(nameof(baseData));
 
             var eventManager = (TEventMan) Activator.CreateInstance(typeof(TEventMan));
-            var cacheData = (TCache) Activator.CreateInstance(typeof(TCache), eventManager, ProjectServices);
+            var cacheData = (TCache) Activator.CreateInstance(typeof(TCache), eventManager, ModelProject);
             var queryManager =
-                (TQueryMan) Activator.CreateInstance(typeof(TQueryMan), baseData, cacheData, ProjectServices.AccessLockSource);
-            var inputManager = (TInputMan) Activator.CreateInstance(typeof(TInputMan), baseData, eventManager, ProjectServices);
+                (TQueryMan) Activator.CreateInstance(typeof(TQueryMan), baseData, cacheData, ModelProject.AccessLockSource);
+            var inputManager = (TInputMan) Activator.CreateInstance(typeof(TInputMan), baseData, eventManager, ModelProject);
             var dataManager = (TDataMan) Activator.CreateInstance(typeof(TDataMan), baseData);
-            var cacheManager = (TCacheMan) Activator.CreateInstance(typeof(TCacheMan), cacheData, ProjectServices);
-            var updateManager = (TUpdateMan) Activator.CreateInstance(typeof(TUpdateMan), baseData, eventManager, ProjectServices);
+            var cacheManager = (TCacheMan) Activator.CreateInstance(typeof(TCacheMan), cacheData, ModelProject);
+            var updateManager = (TUpdateMan) Activator.CreateInstance(typeof(TUpdateMan), baseData, eventManager, ModelProject);
 
             ModelData = baseData;
             ModelCache = cacheData;

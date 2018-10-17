@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Framework.Messaging;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Lattices.Validators
+namespace Mocassin.Model.Lattices.Validators
 {
     /// <summary>
     /// Validator for new BlockInfo model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>
-    public class BlockInfoValidator : DataValidator<IBlockInfo, BasicLatticeSettings, ILatticeDataPort>
+    public class BlockInfoValidator : DataValidator<IBlockInfo, MocassinLatticeSettings, ILatticeDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public BlockInfoValidator(IProjectServices projectServices, BasicLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public BlockInfoValidator(IModelProject modelProject, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

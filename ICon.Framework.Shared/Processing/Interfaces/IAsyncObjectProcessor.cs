@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ICon.Framework.Processing
+namespace Mocassin.Framework.Processing
 {
     /// <summary>
     ///     Represents a handler for objects that processes passed values in a new task and returns the processing task if the

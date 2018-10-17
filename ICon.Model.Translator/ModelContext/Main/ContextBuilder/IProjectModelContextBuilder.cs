@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a project model context builder that coordinates the building process of the model context components
@@ -14,7 +14,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// Data access to the project reference data the builder uses
         /// </summary>
-        IProjectServices ProjectServices { get; set; }
+        IModelProject ModelProject { get; set; }
 
         /// <summary>
         /// The project model context build task that is currently running

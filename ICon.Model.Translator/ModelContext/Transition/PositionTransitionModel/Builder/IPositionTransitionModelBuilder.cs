@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Builder for the transition position model that fully describes which transitions are possible on each unit cell position

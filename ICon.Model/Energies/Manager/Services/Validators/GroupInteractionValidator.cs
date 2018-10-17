@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Linq;
-using ICon.Framework.Extensions;
-using ICon.Framework.Operations;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies.Validators
+namespace Mocassin.Model.Energies.Validators
 {
     /// <summary>
     ///     Data validator for group interaction definitions in terms of conflicts with existing data or restriction violations
     /// </summary>
-    public class GroupInteractionValidator : DataValidator<IGroupInteraction, BasicEnergySettings, IEnergyDataPort>
+    public class GroupInteractionValidator : DataValidator<IGroupInteraction, MocassinEnergySettings, IEnergyDataPort>
     {
         /// <inheritdoc />
-        public GroupInteractionValidator(IProjectServices projectServices, BasicEnergySettings settings,
+        public GroupInteractionValidator(IModelProject modelProject, MocassinEnergySettings settings,
             IDataReader<IEnergyDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -84,7 +84,7 @@ namespace ICon.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddGeometricDuplicateValidation(IGroupInteraction group, ValidationReport report)
         {
-            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer);
+            var comparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             var currentData = DataReader.Access.GetGroupInteractions()
                 .Where(value => !value.IsDeprecated && value.CenterUnitCellPosition == group.CenterUnitCellPosition)
                 .Select(value => (value, value.GetBaseGeometry().ToArray()));
@@ -114,7 +114,7 @@ namespace ICon.Model.Energies.Validators
             var groupRange = GetMaxGroupRange(group);
             var envRange = GetGroupEnvironmentRange(group);
 
-            if (ProjectServices.GeometryNumeric.RangeComparer.Compare(groupRange, envRange) > 0)
+            if (ModelProject.GeometryNumeric.RangeComparer.Compare(groupRange, envRange) > 0)
             {
                 var detail0 =
                     $"The group max vector range is ({groupRange}) while the affiliated environment interaction range is ({envRange})";
@@ -137,8 +137,8 @@ namespace ICon.Model.Energies.Validators
         /// <returns></returns>
         protected long GetGroupPermutationCount(IGroupInteraction group)
         {
-            var unitCellProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var permutationSource = new GeometryGroupAnalyzer(unitCellProvider, ProjectServices.SpaceGroupService)
+            var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var permutationSource = new GeometryGroupAnalyzer(unitCellProvider, ModelProject.SpaceGroupService)
                 .GetGroupStatePermutationSource(group);
             return permutationSource.PermutationCount * group.CenterUnitCellPosition.OccupationSet.ParticleCount;
         }
@@ -150,7 +150,7 @@ namespace ICon.Model.Energies.Validators
         /// <returns></returns>
         protected double GetMaxGroupRange(IGroupInteraction group)
         {
-            var transformer = ProjectServices.CrystalSystemService.VectorTransformer;
+            var transformer = ModelProject.CrystalSystemService.VectorTransformer;
             var start = group.CenterUnitCellPosition.AsPosition().Vector;
 
             return group.GetBaseGeometry()
@@ -194,8 +194,8 @@ namespace ICon.Model.Energies.Validators
         /// <returns></returns>
         protected bool GroupContainsNonEnvironmentPositions(IGroupInteraction group)
         {
-            var ucProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var analyzer = new GeometryGroupAnalyzer(ucProvider, ProjectServices.SpaceGroupService);
+            var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
 
             switch (group.CenterUnitCellPosition.Status)
             {

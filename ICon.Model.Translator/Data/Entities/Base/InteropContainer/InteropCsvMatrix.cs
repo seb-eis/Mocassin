@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Framework.Collections;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Represents a linearized encoded matrix that supports csv style string conversion and parsing

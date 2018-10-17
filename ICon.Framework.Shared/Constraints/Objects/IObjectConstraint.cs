@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Framework.Constraints
+namespace Mocassin.Framework.Constraints
 {
     /// <summary>
     /// General generic interface for all object contraints of an unrestricted source type to a restricted target type (target can be identical to source if no value object is used)

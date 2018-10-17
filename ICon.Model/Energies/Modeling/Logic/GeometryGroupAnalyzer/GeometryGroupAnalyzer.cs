@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
-using ICon.Mathematics.Permutation;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Permutation;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Grouping analyzer that handles calculations and permutation generation for grouping definitions

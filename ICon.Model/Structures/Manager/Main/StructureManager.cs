@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic structure manager implementation that handles building of unit cells
@@ -31,8 +31,8 @@ namespace ICon.Model.Structures
         /// <summary>
         /// Creates new structure manager from project services and base data object
         /// </summary>
-        /// <param name="projectServices"></param>
-        public StructureManager(IProjectServices projectServices, StructureModelData data) : base(projectServices, data)
+        /// <param name="modelProject"></param>
+        public StructureManager(IModelProject modelProject, StructureModelData data) : base(modelProject, data)
         {
 
         }
@@ -40,11 +40,14 @@ namespace ICon.Model.Structures
         /// <summary>
         /// Creates new validation service for this manager
         /// </summary>
-        /// <param name="settingsData"></param>
+        /// <param name="settings"></param>
         /// <returns></returns>
-        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettings settings)
         {
-            return new StructureValidationService(settingsData.StructureSettings, ProjectServices);
+            if (!settings.TryGetModuleSettings(out MocassinStructureSettings moduleSettings))
+                throw new InvalidOperationException("Settings object for the structure module is missing");
+
+            return new StructureValidationService(moduleSettings, ModelProject);
         }
 
         /// <summary>

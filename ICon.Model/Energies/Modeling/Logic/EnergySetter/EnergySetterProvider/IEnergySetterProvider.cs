@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Framework.Constraints;
+using Mocassin.Framework.Constraints;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents an energy setter provider that supplies the setter adapters to savely manipulate interaction energies

@@ -1,11 +1,11 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Transition rule model for kinetic transitions that extends the basic transition rule model

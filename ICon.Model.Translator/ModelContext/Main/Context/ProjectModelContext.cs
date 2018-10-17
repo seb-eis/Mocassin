@@ -1,15 +1,15 @@
-﻿using ICon.Model.ProjectServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class ProjectModelContext : IProjectModelContext
     {
         /// <inheritdoc />
-        public IProjectServices ProjectServices { get; set; }
+        public IModelProject ModelProject { get; set; }
 
         /// <inheritdoc />
         public IStructureModelContext StructureModelContext { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace ICon.Framework.SQLiteCore
+﻿namespace Mocassin.Framework.SQLiteCore
 {
     /// <summary>
     ///     Generic context provider for an SQLite database context

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Framework.Collections;
-using ICon.Model.Basic;
-using ICon.Model.Structures;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents an access port for on-demand extended transition data that is automatically cached

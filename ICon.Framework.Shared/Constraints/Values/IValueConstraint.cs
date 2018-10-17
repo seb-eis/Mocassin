@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Framework.Constraints
+namespace Mocassin.Framework.Constraints
 {
     /// <summary>
     /// Generic value constraint of an unrestricted source type struct to a restricted target type (target can be identical to source if no value object is used)

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents an access port to the simulation manager model data that provides read only data access

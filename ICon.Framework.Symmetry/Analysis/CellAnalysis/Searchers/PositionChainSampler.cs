@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
+using Mocassin.Mathematics.ValueTypes;
 
-using ICon.Mathematics.Constraints;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.ValueTypes;
-
-namespace ICon.Symmetry.Analysis
+namespace Mocassin.Symmetry.Analysis
 {
     /// <summary>
-    /// Searches unit cell providers for cell entry chains that potentially match the input geometry. The class does not perform the actual symmetry comparsions
+    ///     Searches unit cell providers for cell entry chains that potentially match the input geometry. The class does not
+    ///     perform the actual symmetry comparison
     /// </summary>
     public class PositionChainSampler<T1>
     {
         /// <summary>
-        /// Unit cell provider that is searched
+        ///     Unit cell provider that is searched
         /// </summary>
         public IUnitCellProvider<T1> UnitCellProvider { get; set; }
 
         /// <summary>
-        /// The double comparer for the tolerance comparison of the distances
+        ///     The double comparer for the tolerance comparison of the distances
         /// </summary>
         public NumericComparer NumericComparer { get; set; }
 
         /// <summary>
-        /// Creates new chain cell searcher from a unit cell provider and double comparer for radial search with tolerance
+        ///     Creates new chain cell searcher from a unit cell provider and double comparer for radial search with tolerance
         /// </summary>
         /// <param name="unitCellProvider"></param>
         /// <param name="numericComparer"></param>
@@ -35,167 +36,176 @@ namespace ICon.Symmetry.Analysis
         }
 
         /// <summary>
-        /// Get an enumerbale that contains the chain searches around all provided start vectors for the specified refernce geoemtry
+        ///     Get an enumerable that contains the chain searches around all provided start vectors for the specified reference
+        ///     geometry
         /// </summary>
         /// <param name="vectors"></param>
-        /// <param name="refGeoemtry"></param>
+        /// <param name="refGeometry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<CellEntry<T1>[]> MultiPointSearch(IEnumerable<Fractional3D> vectors, IEnumerable<CellEntry<T1>> refGeoemtry, IEqualityComparer<T1> comparer)
+        public IEnumerable<IList<CellEntry<T1>>> MultiPointSearch(IEnumerable<Fractional3D> vectors, IEnumerable<CellEntry<T1>> refGeometry,
+            IEqualityComparer<T1> comparer)
         {
+            var refGeoCollection = refGeometry.ToCollection();
+
             foreach (var start in vectors)
             {
-                foreach (var item in PointSearch(start, refGeoemtry, comparer))
-                {
+                foreach (var item in PointSearch(start, refGeoCollection, comparer))
                     yield return item;
-                }
             }
         }
 
         /// <summary>
-        /// Get a default chain search enumerable from the provided start vector that contains all found geometry sequneces that potentially match the provided refernce
+        ///     Get a default chain search enumerable from the provided start vector that contains all found geometry sequences
+        ///     that potentially match the provided reference
         /// </summary>
         /// <param name="startVector"></param>
-        /// <param name="refGeoemtry"></param>
+        /// <param name="refGeometry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public IEnumerable<CellEntry<T1>[]> PointSearch(Fractional3D startVector, IEnumerable<CellEntry<T1>> refGeoemtry, IEqualityComparer<T1> comparer)
+        public IEnumerable<IList<CellEntry<T1>>> PointSearch(Fractional3D startVector, IEnumerable<CellEntry<T1>> refGeometry,
+            IEqualityComparer<T1> comparer)
         {
-            if (refGeoemtry == null)
-            {
-                throw new ArgumentNullException(nameof(refGeoemtry));
-            }
+            if (refGeometry == null)
+                throw new ArgumentNullException(nameof(refGeometry));
+
             if (comparer == null)
-            {
                 throw new ArgumentNullException(nameof(comparer));
-            }
-            var geoemtry = refGeoemtry.ToArray();
-            return MakeSearchEnumerable(GetStartSequence(geoemtry[0].Entry, startVector), GetDefaultConstraints(geoemtry), GetDefaultPredicates(geoemtry, comparer));
+
+            var geometry = refGeometry.ToList();
+            return MakeSearchEnumerable(GetStartSequence(geometry[0].Entry, startVector), GetDefaultConstraints(geometry),
+                GetDefaultPredicates(geometry, comparer));
         }
 
         /// <summary>
-        /// Gets a custom chain search enumerable for the provided start sequence. The search is limited by the provided set of radial range constraints and predicates 
+        ///     Gets a custom chain search enumerable for the provided start sequence. The search is limited by the provided set of
+        ///     radial range constraints and predicates
         /// </summary>
         /// <param name="startSequence"></param>
         /// <param name="constraints"></param>
         /// <param name="predicates"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>[]> MakeSearchEnumerable(IEnumerable<CellEntry<T1>[]> startSequence, NumericConstraint[] constraints, Predicate<T1>[] predicates)
+        protected IEnumerable<IList<CellEntry<T1>>> MakeSearchEnumerable(IEnumerable<IList<CellEntry<T1>>> startSequence,
+            IList<NumericConstraint> constraints, IList<Predicate<T1>> predicates)
         {
-            if (constraints.Length != predicates.Length)
-            {
-                throw new ArgumentException("Incompatible size of the predicate array", nameof(predicates));
-            }
-            for (int i = 0; i < constraints.Length; i++)
-            {
+            if (constraints.Count != predicates.Count)
+                throw new ArgumentException("Incompatible size of the predicate list", nameof(predicates));
+
+            for (var i = 0; i < constraints.Count; i++)
                 startSequence = ExtendSearchSequence(startSequence, constraints[i], predicates[i]);
-            }
+
             foreach (var item in startSequence)
-            {
                 yield return item;
-            }
         }
 
         /// <summary>
-        /// Get an enumerable for all cell entries around a specififed start that fulfill the requrements of the distant constraint and provided prediacte
+        ///     Get an enumerable for all cell entries around a specified start that fulfill the requirements of the distant
+        ///     constraint and provided predicate
         /// </summary>
         /// <param name="start"></param>
         /// <param name="constraint"></param>
-        /// <param name="targetValue"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
         protected IEnumerable<CellEntry<T1>> ShellSearch(Fractional3D start, NumericConstraint constraint, Predicate<T1> predicate)
         {
-            foreach (var item in new RadialPositionSampler().Search(UnitCellProvider, start, constraint, predicate))
-            {
-                yield return item;
-            }
+            return new RadialPositionSampler().Search(UnitCellProvider, start, constraint, predicate);
         }
 
         /// <summary>
-        /// Extends the chain search enumerable by the next cell search iterator
+        ///     Extends the chain search enumerable by the next cell search iterator
         /// </summary>
         /// <param name="sequences"></param>
         /// <param name="radialConstraint"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>[]> ExtendSearchSequence(IEnumerable<CellEntry<T1>[]> sequences, NumericConstraint radialConstraint, Predicate<T1> predicate)
+        protected IEnumerable<IList<CellEntry<T1>>> ExtendSearchSequence(IEnumerable<IList<CellEntry<T1>>> sequences,
+            NumericConstraint radialConstraint, Predicate<T1> predicate)
         {
             foreach (var sequence in sequences)
             {
-                foreach (var item in ShellSearch(sequence[sequence.Length - 1].AbsoluteVector, radialConstraint, predicate))
+                foreach (var item in ShellSearch(sequence[sequence.Count - 1].AbsoluteVector, radialConstraint, predicate))
                 {
-                    var extended = new CellEntry<T1>[sequence.Length + 1];
-                    extended[sequence.Length] = item;
-                    sequence.CopyTo(extended, 0);
+                    var extended = new List<CellEntry<T1>>(sequence.Count + 1);
+                    extended.AddRange(sequence);
+                    extended.Add(item);
                     yield return extended;
                 }
             }
         }
 
         /// <summary>
-        /// Creates the search starting sequence from a single cell entry information
+        ///     Creates the search starting sequence from a single cell entry information
         /// </summary>
         /// <param name="entry"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        protected IEnumerable<CellEntry<T1>[]> GetStartSequence(T1 entry, in Fractional3D vector)
+        protected IEnumerable<IList<CellEntry<T1>>> GetStartSequence(T1 entry, in Fractional3D vector)
         {
-            return new List<CellEntry<T1>[]> { new CellEntry<T1>[] { new CellEntry<T1>(vector, entry) } };
+            return new List<List<CellEntry<T1>>>
+            {
+                new List<CellEntry<T1>>
+                {
+                    new CellEntry<T1>(vector, entry)
+                }
+            };
         }
 
         /// <summary>
-        /// Takes a refernce geometry and creates a sequence of radial search constraints to lookup possible symmetry equivalents. Length is geoemtry -1
+        ///     Takes a reference geometry and creates a sequence of radial search constraints to lookup possible symmetry
+        ///     equivalents. Length is geometry -1
         /// </summary>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public NumericConstraint[] GetDefaultConstraints(CellEntry<T1>[] geometry)
+        public IList<NumericConstraint> GetDefaultConstraints(List<CellEntry<T1>> geometry)
         {
-            var cartesianGeometry = geometry.Select(entry => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(entry.AbsoluteVector)).ToArray();
-            var result = new NumericConstraint[cartesianGeometry.Length - 1];
-            for (int i = 0; i < cartesianGeometry.Length - 1;)
-            {
-                result[i] = GetSearchConstraint(cartesianGeometry[i], cartesianGeometry[++i]);
-            }
+            var cartesianGeometry = geometry
+                .Select(entry => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(entry.AbsoluteVector))
+                .ToList();
+
+            var result = new List<NumericConstraint>(cartesianGeometry.Count - 1);
+            for (var i = 0; i < cartesianGeometry.Count - 1;)
+                result.Add(GetSearchConstraint(cartesianGeometry[i], cartesianGeometry[++i]));
+
             return result;
         }
 
         /// <summary>
-        /// Creates the default search predicates that compare the cell entries for equality using the provided comparer. Length is geometry - 1
+        ///     Creates the default search predicates that compare the cell entries for equality using the provided comparer.
+        ///     Length is geometry - 1
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public Predicate<T1>[] GetDefaultPredicates(CellEntry<T1>[] geometry, IEqualityComparer<T1> comparer)
+        public IList<Predicate<T1>> GetDefaultPredicates(IList<CellEntry<T1>> geometry, IEqualityComparer<T1> comparer)
         {
-            var result = new Predicate<T1>[geometry.Length - 1];
-            for (int i = 0; i < geometry.Length - 1; i++)
-            {
-                result[i] = GetDefaultEntryPredicate(geometry[i+1].Entry, comparer);
-            }
+            var result = new List<Predicate<T1>>(geometry.Count - 1);
+            for (var i = 0; i < geometry.Count - 1; i++)
+                result.Add(GetDefaultEntryPredicate(geometry[i + 1].Entry, comparer));
+
             return result;
         }
 
         /// <summary>
-        /// Takes two cartesian vectors and creates a radial search constraint for the distance between the vector points
+        ///     Takes two cartesian vectors and creates a radial search constraint for the distance between the vector points
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
         protected NumericConstraint GetSearchConstraint(in Cartesian3D first, in Cartesian3D second)
         {
-            double length = (second - first).GetLength();
+            var length = (second - first).GetLength();
             return new NumericConstraint(true, length, length, true, NumericComparer);
         }
 
         /// <summary>
-        /// Creates the default entry comparer predicate that compares the occuring entries to the spceififed expected one
+        ///     Creates the default entry comparer predicate that compares the occuring entries to the specified expected one
         /// </summary>
         /// <param name="expectedEntry"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
         protected Predicate<T1> GetDefaultEntryPredicate(T1 expectedEntry, IEqualityComparer<T1> comparer)
         {
-            return (T1 value) => comparer.Equals(expectedEntry, value);
+            return value => comparer.Equals(expectedEntry, value);
         }
     }
 }

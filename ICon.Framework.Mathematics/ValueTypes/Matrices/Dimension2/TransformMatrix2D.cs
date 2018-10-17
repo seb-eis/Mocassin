@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.Extensions;
-using ACoordinates = ICon.Mathematics.ValueTypes.Coordinates<double, double, double>;
+using Mocassin.Mathematics.Extensions;
+using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Transformation matrix for three dimensional vector systems, matrix is always 3x3

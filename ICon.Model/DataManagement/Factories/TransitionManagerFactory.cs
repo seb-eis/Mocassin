@@ -1,8 +1,8 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Transitions;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.DataManagement
+namespace Mocassin.Model.DataManagement
 {
     /// <summary>
     ///     Factory for new transition manager systems
@@ -10,11 +10,11 @@ namespace ICon.Model.DataManagement
     public class TransitionManagerFactory : IModelManagerFactory
     {
         /// <inheritdoc />
-        public IModelManager CreateNew(IProjectServices projectServices, out object dataObject)
+        public IModelManager CreateNew(IModelProject modelProject, out object dataObject)
         {
             var data = TransitionModelData.CreateNew();
             dataObject = data;
-            return new TransitionManager(projectServices, data);
+            return new TransitionManager(modelProject, data);
         }
     }
 }

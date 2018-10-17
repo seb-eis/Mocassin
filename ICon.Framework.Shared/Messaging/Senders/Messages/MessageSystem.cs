@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
+using Mocassin.Framework.Async;
 
-using ICon.Framework.Async;
-
-namespace ICon.Framework.Messaging
+namespace Mocassin.Framework.Messaging
 {
     /// <summary>
     /// Synchronous reactive push messaging system to distribute messages through subscriptions to IObservables

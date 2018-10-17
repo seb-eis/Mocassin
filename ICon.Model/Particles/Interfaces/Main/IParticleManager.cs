@@ -1,6 +1,6 @@
-﻿using ICon.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Represents a particle manager that handles input, output and distribution of model particles/species inside a

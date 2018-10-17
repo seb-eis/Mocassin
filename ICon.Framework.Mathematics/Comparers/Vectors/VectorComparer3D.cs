@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparers
 {
     /// <summary>
     ///     Generic comparator object for structs that implement IVector3D, automatically provides generic comparisons for any

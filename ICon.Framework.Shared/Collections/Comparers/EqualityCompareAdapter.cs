@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ICon.Framework.Collections
+namespace Mocassin.Framework.Collections
 {
     /// <summary>
     ///     Equality compare adapter that encapsulates an equality comparer from compare and hash delegate

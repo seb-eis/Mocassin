@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Simulation pair interaction definition. Layout marshals to its binary unmanaged 'C' representation

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
-    /// <inheritdoc cref="ICon.Model.Particles.IParticle" />
+    /// <inheritdoc cref="IParticle" />
     [DataContract]
     public class Particle : ModelObject, IParticle
     {

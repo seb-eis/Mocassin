@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Particles;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Implementation of the simulation cache manager that handles creation and supply of on-demand simulation data objects
@@ -16,8 +16,8 @@ namespace ICon.Model.Simulations
         /// Crate new simulation cache manager using the provided data cache and project services
         /// </summary>
         /// <param name="dataCache"></param>
-        /// <param name="projectServices"></param>
-        public SimulationCacheManager(SimulationDataCache dataCache, IProjectServices projectServices) : base(dataCache, projectServices)
+        /// <param name="modelProject"></param>
+        public SimulationCacheManager(SimulationDataCache dataCache, IModelProject modelProject) : base(dataCache, modelProject)
         {
 
         }

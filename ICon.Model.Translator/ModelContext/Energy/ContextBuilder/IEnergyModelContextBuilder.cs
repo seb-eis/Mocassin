@@ -1,5 +1,5 @@
 ﻿
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Energy model context builder. Extends the energy reference information of a project into a full data context

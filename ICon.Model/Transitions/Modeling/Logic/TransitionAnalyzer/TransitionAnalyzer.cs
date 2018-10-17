@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Operations;
+using Mocassin.Framework.Extensions;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Framework.Operations;
-using ICon.Framework.Collections;
-using ICon.Symmetry.SpaceGroups;
-using ICon.Framework.Extensions;
+using Mocassin.Model.Basic;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Symmetry.SpaceGroups;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Bundles analysis functions for both kinetic and metropolis transitions

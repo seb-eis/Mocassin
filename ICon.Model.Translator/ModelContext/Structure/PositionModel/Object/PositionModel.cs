@@ -1,13 +1,13 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPositionModel"/>
+    /// <inheritdoc cref="IPositionModel"/>
     public class PositionModel : ModelComponentBase, IPositionModel
     {
         /// <inheritdoc />

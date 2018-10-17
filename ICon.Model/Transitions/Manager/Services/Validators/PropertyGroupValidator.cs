@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Model.Particles;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Particles;
-
-namespace ICon.Model.Transitions.Validators
+namespace Mocassin.Model.Transitions.Validators
 {
     /// <summary>
     /// Validator for new state exchange groups that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class PropertyGroupValidator : DataValidator<IStateExchangeGroup, BasicTransitionSettings, ITransitionDataPort>
+    public class PropertyGroupValidator : DataValidator<IStateExchangeGroup, MocassinTransitionSettings, ITransitionDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public PropertyGroupValidator(IProjectServices projectServices, BasicTransitionSettings settings, IDataReader<ITransitionDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public PropertyGroupValidator(IModelProject modelProject, MocassinTransitionSettings settings, IDataReader<ITransitionDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

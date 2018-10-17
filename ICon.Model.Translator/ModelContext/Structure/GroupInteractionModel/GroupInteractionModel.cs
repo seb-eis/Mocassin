@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Energies;
+using Mocassin.Model.Energies;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IGroupInteractionModel"/>
+    /// <inheritdoc cref="IGroupInteractionModel"/>
     public class GroupInteractionModel : ModelComponentBase, IGroupInteractionModel
     {
         /// <inheritdoc />

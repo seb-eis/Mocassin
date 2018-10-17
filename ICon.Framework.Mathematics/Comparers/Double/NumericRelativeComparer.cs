@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Mathematics.Extensions;
+using Mocassin.Mathematics.Extensions;
 
-namespace ICon.Mathematics.Comparers
+namespace Mocassin.Mathematics.Comparers
 {
     /// <summary>
     ///     Double relative comparer class that performs almost equal comparisons with a relative factor (Not zero safe)

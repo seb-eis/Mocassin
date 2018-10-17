@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ICon.Framework.Operations;
-using ICon.Framework.Processing;
-using ICon.Framework.Reflection;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Reflection;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract generic base class for data conflict resolver implementations that support automated pipeline generation
@@ -20,7 +20,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Access to the current project service instance
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     The conflict resolver break pipeline that processes the resolve requests
@@ -30,10 +30,10 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Creates new data conflict resolver that uses the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        protected DataConflictHandler(IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected DataConflictHandler(IModelProject modelProject)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             ResolverPipeline = new BreakPipeline<IConflictReport>(CreateOnCannotProcessProcessor(), CreateResolverProcessors().ToList());
         }
 

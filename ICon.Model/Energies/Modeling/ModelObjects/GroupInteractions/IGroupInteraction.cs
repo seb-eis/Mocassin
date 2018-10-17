@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents a group interaction to describe a more complex (No pair interaction) reference grouping around a position

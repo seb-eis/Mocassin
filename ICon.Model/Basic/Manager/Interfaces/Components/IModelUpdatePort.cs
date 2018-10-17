@@ -1,4 +1,4 @@
-﻿namespace ICon.Model.Basic
+﻿namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Common interface for all model update ports

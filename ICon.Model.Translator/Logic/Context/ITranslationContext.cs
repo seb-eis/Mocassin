@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.ProjectServices;
-using ICon.Model.Simulations;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Represents a simulation translation context for handling of simulation translation data
@@ -19,7 +19,7 @@ namespace ICon.Model.Translator
         /// <summary>
         /// Access to the MC project service that carries the NET model data structures
         /// </summary>
-        IProjectServices ProjectServices { get; set; }
+        IModelProject ModelProject { get; set; }
 
         /// <summary>
         /// Translator database context for storage of the translated interop information

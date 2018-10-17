@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations.ConflictHandling
+namespace Mocassin.Model.Simulations.ConflictHandling
 {
     /// <summary>
     /// Simulation object change hanlder that handles inernal data conflict in the simulation manager when a model object is changed
@@ -15,8 +15,8 @@ namespace ICon.Model.Simulations.ConflictHandling
         /// <summary>
         /// Create new simulation object changed hadler that uses the provide project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        public SimulationObjectChangedHandler(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public SimulationObjectChangedHandler(IModelProject modelProject) : base(modelProject)
         {
         }
 

@@ -1,10 +1,10 @@
-﻿using ICon.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Energies;
+using Mocassin.Model.Energies;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a group interaction model that combines group energy model with geometric information

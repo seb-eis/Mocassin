@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 
-using ICon.Mathematics.Extensions;
-using ICon.Mathematics.ValueTypes;
-using ICon.Mathematics.Comparers;
-using ICon.Framework.Collections;
-
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <inheritdoc />
     public class UnitCellVectorEncoder : IUnitCellVectorEncoder

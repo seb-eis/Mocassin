@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
-using ICon.Framework.Operations;
-using ICon.Framework.Processing;
-using ICon.Framework.Reflection;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Framework.Operations;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Reflection;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all model input manager implementations
@@ -298,7 +298,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Access to the project service that offers messaging service, numeric services and input validations
         /// </summary>
-        protected IProjectServices ProjectServices { get; }
+        protected IModelProject ModelProject { get; }
 
         /// <summary>
         ///     Conflict resolver provider interface that provides conflict resolving solutions for model objects and parameters
@@ -311,10 +311,10 @@ namespace ICon.Model.Basic
         /// <param name="data"></param>
         /// <param name="manager"></param>
         /// <param name="services"></param>
-        protected ModelInputManager(TData data, TEventManager manager, IProjectServices services)
+        protected ModelInputManager(TData data, TEventManager manager, IModelProject services)
         {
             EventManager = manager ?? throw new ArgumentNullException(nameof(manager));
-            ProjectServices = services ?? throw new ArgumentNullException(nameof(services));
+            ModelProject = services ?? throw new ArgumentNullException(nameof(services));
             DataAccessSource = DataAccessorSource.Create(data, services.AccessLockSource);
             DataReaderSource = Basic.DataReaderSource.Create(data, data.AsReadOnly(), services.AccessLockSource);
             ConflictHandlerProvider = CreateDataConflictHandlerProvider();
@@ -347,7 +347,7 @@ namespace ICon.Model.Basic
         protected IOperationReport InvokeDataOperation<TResult>(string name, DataOperation<TResult> accessQuery, Action<TResult> onSuccess)
         {
             var operationResult = new OperationReport(name);
-            if (!ProjectServices.TryGetInputLock(out var projectLock))
+            if (!ModelProject.TryGetInputLock(out var projectLock))
                 return operationResult.AsBusySignal();
 
             using (projectLock)
@@ -382,7 +382,7 @@ namespace ICon.Model.Basic
         protected IOperationReport InvokeDataOperation(string name, DataOperation accessQuery, Action onSuccess)
         {
             var operationResult = new OperationReport(name);
-            if (!ProjectServices.TryGetInputLock(out var projectLock))
+            if (!ModelProject.TryGetInputLock(out var projectLock))
                 return operationResult.AsBusySignal();
 
             using (projectLock)
@@ -520,7 +520,7 @@ namespace ICon.Model.Basic
             {
                 var orgObject = paramAccessQuery(dataAccess);
                 report.SetValidationReport(
-                    ProjectServices.ValidationServices.ValidateParameter(tmpObject, dataAccess.AsReader(DataReaderSource)));
+                    ModelProject.ValidationServices.ValidateParameter(tmpObject, dataAccess.AsReader(DataReaderSource)));
 
                 if (!report.IsGood) 
                     return orgObject;
@@ -563,12 +563,12 @@ namespace ICon.Model.Basic
 
             var newInternal = ModelObject.ToInternalObject<T2>(obj) ??
                               throw new ArgumentException("Could not build internal object from interface");
-            ProjectServices.DataTracker.LinkModelObject(newInternal);
+            ModelProject.DataTracker.LinkModelObject(newInternal);
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
             {
                 report.SetValidationReport(
-                    ProjectServices.ValidationServices.ValidateObject(newInternal, accessor.AsReader(DataReaderSource)));
+                    ModelProject.ValidationServices.ValidateObject(newInternal, accessor.AsReader(DataReaderSource)));
 
                 if (!report.IsGood) 
                     return false;
@@ -604,7 +604,7 @@ namespace ICon.Model.Basic
             where T2 : ModelObject, T1, new()
         {
             // Lookup the actual internal object interface and cast it to the internal data type
-            var internalObj = (T2) ProjectServices.DataTracker.FindObjectInterfaceByIndex<T1>(obj.Index);
+            var internalObj = (T2) ModelProject.DataTracker.FindObjectInterfaceByIndex<T1>(obj.Index);
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
             {
@@ -646,7 +646,7 @@ namespace ICon.Model.Basic
             // Build and link a temporary internal object with the replacement information
             var tmpObject = ModelObject.ToInternalObject<T2>(newObj) ??
                             throw new ArgumentException("Could not build internal object from interface");
-            ProjectServices.DataTracker.LinkModelObject(tmpObject);
+            ModelProject.DataTracker.LinkModelObject(tmpObject);
             tmpObject.Index = orgObj.Index;
 
             T2 Operation(DataAccessor<TData> accessor, OperationReport report)
@@ -655,7 +655,7 @@ namespace ICon.Model.Basic
                 orgInternal.Deprecate();
 
                 report.SetValidationReport(
-                    ProjectServices.ValidationServices.ValidateObject(tmpObject, accessor.AsReader(DataReaderSource)));
+                    ModelProject.ValidationServices.ValidateObject(tmpObject, accessor.AsReader(DataReaderSource)));
                 RepopulateOrRestoreOriginal(orgInternal, tmpObject, report.IsGood);
 
                 if (!report.IsGood) 

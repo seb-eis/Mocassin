@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparers;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace ICon.Mathematics.Extensions
+namespace Mocassin.Mathematics.Extensions
 {
     /// <summary>
     ///     ICon floating point extension class that provides almost equal comparisons for FLP32 and FLP64 types

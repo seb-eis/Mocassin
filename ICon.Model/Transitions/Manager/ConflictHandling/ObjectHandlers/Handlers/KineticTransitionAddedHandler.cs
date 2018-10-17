@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Object handler that handles internal data changes of the transition manager system required after a new kinetic transition input
@@ -16,9 +16,9 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// Create new kinetic transition added handler with the provided project services and data accessor
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        public KineticTransitionAddedHandler(IDataAccessor<TransitionModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        public KineticTransitionAddedHandler(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 

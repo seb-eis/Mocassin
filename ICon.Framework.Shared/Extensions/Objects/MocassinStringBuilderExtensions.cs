@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ICon.Framework.Extensions
+namespace Mocassin.Framework.Extensions
 {
     /// <summary>
     /// ICon string builder extension class that provides specific enumerator converters for compatibility with the C++ XMLNode

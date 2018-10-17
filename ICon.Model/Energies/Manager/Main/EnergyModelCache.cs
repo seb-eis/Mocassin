@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     /// Data cache for the extended on-demand energy model data
@@ -12,15 +12,15 @@ namespace ICon.Model.Energies
     internal class EnergyModelCache : ModelDataCache<IEnergyCachePort>
     {
         /// <inheritdoc />
-        public EnergyModelCache(IModelEventPort eventPort, IProjectServices projectServices)
-            : base(eventPort, projectServices)
+        public EnergyModelCache(IModelEventPort eventPort, IModelProject modelProject)
+            : base(eventPort, modelProject)
         {
         }
 
         /// <inheritdoc />
         public override IEnergyCachePort AsReadOnly()
         {
-            return CachePort ?? (CachePort = new EnergyCacheManager(this, ProjectServices));
+            return CachePort ?? (CachePort = new EnergyCacheManager(this, ModelProject));
         }
     }
 }

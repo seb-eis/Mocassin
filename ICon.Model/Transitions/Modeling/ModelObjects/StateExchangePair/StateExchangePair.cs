@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// State exchange pair that contains the donor and acceptor state of a position state change

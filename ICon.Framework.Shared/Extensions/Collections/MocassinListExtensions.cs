@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections;
 
-using ICon.Framework.Collections;
-
-namespace ICon.Framework.Extensions
+namespace Mocassin.Framework.Extensions
 {
     /// <summary>
     /// Extension class for objects that implement the generic IList interface, provides e.g. extended C++ style search functionality

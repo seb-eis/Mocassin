@@ -1,11 +1,11 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
+﻿using Mocassin.Model.Particles;
+using Mocassin.Symmetry.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Produces WorkCells for the WorkLattice

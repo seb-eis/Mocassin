@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Symmetry.Analysis;
 
-using ICon.Mathematics.Coordinates;
-using ICon.Symmetry.Analysis;
-using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Represents a data port for extended structure manager data that is calculated and updated on a 'on-demand' basis

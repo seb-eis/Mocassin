@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class EnergyModelContext : IEnergyModelContext

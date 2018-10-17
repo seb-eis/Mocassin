@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a kinetic transition model that fully describes geometry and mobility information of a reference transition

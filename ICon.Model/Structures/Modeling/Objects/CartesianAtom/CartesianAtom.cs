@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
 
-using ICon.Mathematics.ValueTypes;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Represents a position with specified occupation that carries cartesian coordinates and a particle index

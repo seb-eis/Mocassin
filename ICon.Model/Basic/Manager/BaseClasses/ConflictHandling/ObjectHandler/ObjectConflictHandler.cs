@@ -1,8 +1,8 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for disposable conflict resolver logic implementation that handle a specific object change
@@ -20,17 +20,17 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     The current project service instance to access all project functionality and data
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     Creates new object conflict handler that uses the provided data access and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        protected ObjectConflictHandler(IDataAccessor<TDataObject> dataAccess, IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected ObjectConflictHandler(IDataAccessor<TDataObject> dataAccess, IModelProject modelProject)
         {
             DataAccess = dataAccess ?? throw new ArgumentNullException(nameof(dataAccess));
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ICon.Model.Basic
         public void Dispose()
         {
             DataAccess = null;
-            ProjectServices = null;
+            ModelProject = null;
         }
     }
 }

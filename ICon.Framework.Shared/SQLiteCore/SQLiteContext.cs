@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ICon.Framework.SQLiteCore
+namespace Mocassin.Framework.SQLiteCore
 {
     /// <summary>
     ///     An abstract SQLite EFCore context class that supports the ICon context provider system and ensures that the

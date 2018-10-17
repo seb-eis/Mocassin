@@ -1,14 +1,14 @@
-﻿using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
+﻿using Mocassin.Model.Particles;
+using Mocassin.Symmetry.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Produces WorkLattices for supercell creation

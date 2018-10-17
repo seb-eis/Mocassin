@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Attribute to mark a method as a data event handler method of a specific type

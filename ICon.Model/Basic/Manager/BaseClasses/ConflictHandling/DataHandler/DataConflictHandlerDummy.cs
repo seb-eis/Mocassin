@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Framework.Operations;
+using Mocassin.Framework.Operations;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Represents a dummy conflict resolver that does nothing except returning an empty resolver report

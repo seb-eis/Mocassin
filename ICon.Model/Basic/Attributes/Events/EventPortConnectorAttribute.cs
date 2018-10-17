@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Attribute that marks a method as an event port connector method

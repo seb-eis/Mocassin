@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all model data reader providers that create safe data readers for read only model data

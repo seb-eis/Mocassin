@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Pair code struct that defines a pair interaction between two particles. The first index is always defined to be

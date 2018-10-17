@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 
-namespace ICon.Framework.Extensions
+namespace Mocassin.Framework.Extensions
 {
     /// <summary>
     /// Defines extension methods for the IObservable interface of the reactive extensions

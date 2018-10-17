@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Model.Energies;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Energies;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPairEnergyModelBuilder"/>
+    /// <inheritdoc cref="IPairEnergyModelBuilder"/>
     public class PairEnergyModelBuilder : ModelBuilderBase, IPairEnergyModelBuilder
     {
         /// <inheritdoc />
-        public PairEnergyModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public PairEnergyModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 

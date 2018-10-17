@@ -1,8 +1,9 @@
 ﻿using System;
-using ICon.Framework.Exceptions;
-using ACoordinates = ICon.Mathematics.ValueTypes.Coordinates<double, double, double>;
+using Mocassin.Framework.Exceptions;
+using Mocassin.Mathematics.ValueTypes;
+using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Double precision cartesian coordinate system

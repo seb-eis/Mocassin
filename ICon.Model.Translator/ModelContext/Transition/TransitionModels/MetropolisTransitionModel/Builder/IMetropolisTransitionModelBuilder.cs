@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Transitions;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a builder for metropolis transition models and affiliated data types

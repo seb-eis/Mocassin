@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Structures;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPositionTransitionModel"/>
+    /// <inheritdoc cref="IPositionTransitionModel"/>
     public class PositionTransitionModel : ModelComponentBase, IPositionTransitionModel
     {
         /// <inheritdoc />

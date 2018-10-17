@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Framework.Operations;
-using ICon.Framework.Processing;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Basic implementation of the transition input manager that handles validated adding, removal and replacement of transition base data by an outside source
@@ -20,7 +20,7 @@ namespace ICon.Model.Transitions
         /// <param name="data"></param>
         /// <param name="manager"></param>
         /// <param name="services"></param>
-        public TransitionInputManager(TransitionModelData data, TransitionEventManager manager, IProjectServices services) : base(data, manager, services)
+        public TransitionInputManager(TransitionModelData data, TransitionEventManager manager, IModelProject services) : base(data, manager, services)
         {
 
         }
@@ -206,7 +206,7 @@ namespace ICon.Model.Transitions
         /// <returns></returns>
         protected override IDataConflictHandlerProvider<TransitionModelData> CreateDataConflictHandlerProvider()
         {
-            return new ConflictHandling.TransitionDataConflictHandlerProvider(ProjectServices);
+            return new ConflictHandling.TransitionDataConflictHandlerProvider(ModelProject);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using ICon.Framework.Collections;
-using ICon.Model.Basic;
+﻿using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Energy data manager that provides safe read only access to the energy base model data

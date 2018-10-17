@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
+using Mocassin.Symmetry.SpaceGroups;
 
-using ICon.Model.Basic;
-using ICon.Symmetry.SpaceGroups;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Space group info class (Simple warpper for the space group entry class to qualify as both a model parameter and a space group entry)

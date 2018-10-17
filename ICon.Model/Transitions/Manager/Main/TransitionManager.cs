@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// BAsic implementation of a model transition manager that handles transitions and affiliated rules
@@ -31,9 +31,9 @@ namespace ICon.Model.Transitions
         /// <summary>
         /// Creates new transition manager with the provided project services and model data object
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="data"></param>
-        public TransitionManager(IProjectServices projectServices, TransitionModelData data) : base(projectServices, data)
+        public TransitionManager(IModelProject modelProject, TransitionModelData data) : base(modelProject, data)
         {
 
         }
@@ -48,13 +48,16 @@ namespace ICon.Model.Transitions
         }
 
         /// <summary>
-        /// Cerate a validation service for transition data using the provided settings information
+        /// Create a validation service for transition data using the provided settings information
         /// </summary>
-        /// <param name="settingsData"></param>
+        /// <param name="settings"></param>
         /// <returns></returns>
-        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettings settings)
         {
-            return new TransitionValidationService(settingsData.TransitionSettings, ProjectServices);
+            if (!settings.TryGetModuleSettings(out MocassinTransitionSettings moduleSettings))
+                throw new InvalidOperationException("Settings object for the transition module is missing");
+
+            return new TransitionValidationService(moduleSettings, ModelProject);
         }
     }
 }

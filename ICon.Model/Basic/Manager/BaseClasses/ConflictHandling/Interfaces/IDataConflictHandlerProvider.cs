@@ -1,4 +1,4 @@
-﻿namespace ICon.Model.Basic
+﻿namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Represents a conflict resolver provider that offers resolvers for manager intern data updating induced by changes

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ICon.Framework.Extensions;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Object handler that handles internal data changes of the transition manager system required after a kinetic transition is removed/deprecated
@@ -18,9 +18,9 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// Create new metropolis transition removed handler with the provided data accessor and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        public MetropolisTransitionRemovedHandler(IDataAccessor<TransitionModelData> dataAccess, IProjectServices projectServices) 
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        public MetropolisTransitionRemovedHandler(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject) 
+            : base(dataAccess, modelProject)
         {
         }
 

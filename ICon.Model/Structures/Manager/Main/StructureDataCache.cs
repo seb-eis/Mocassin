@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Cache for extended structure data that stores 'on-demand' calculated dependent data for faster access until the data is no longer valid
@@ -15,7 +14,7 @@ namespace ICon.Model.Structures
         /// <summary>
         /// Creates new cached structure data object with empty cache list and registers to the basic event of the provided event port
         /// </summary>
-        public StructureDataCache(IModelEventPort eventPort, IProjectServices projectServices) : base(eventPort, projectServices)
+        public StructureDataCache(IModelEventPort eventPort, IModelProject modelProject) : base(eventPort, modelProject)
         {
 
         }
@@ -28,7 +27,7 @@ namespace ICon.Model.Structures
         {
             if (CachePort == null)
             {
-                CachePort = new StructureCacheManager(this, ProjectServices);
+                CachePort = new StructureCacheManager(this, ModelProject);
             }
             return CachePort;
         }

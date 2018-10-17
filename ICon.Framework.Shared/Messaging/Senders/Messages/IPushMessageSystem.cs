@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Framework.Async;
+using Mocassin.Framework.Async;
 
-namespace ICon.Framework.Messaging
+namespace Mocassin.Framework.Messaging
 {
     /// <summary>
     /// Interface for all push message systems that distribute messages through observable subscriptions (Can be Sync or Async)

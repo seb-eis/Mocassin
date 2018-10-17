@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// State exchange group that defines a set of possible state changes for a position during a transition

@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
-using ICon.Framework.Operations;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies.ConflictHandling
+namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
     ///     Unstable environment change handler that updates the mismatching information if an unstable environment is changed
@@ -17,8 +17,8 @@ namespace ICon.Model.Energies.ConflictHandling
     public class UnstableEnvironmentChangeHandler : ObjectConflictHandler<UnstableEnvironment, EnergyModelData>
     {
         /// <inheritdoc />
-        public UnstableEnvironmentChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        public UnstableEnvironmentChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 
@@ -39,8 +39,8 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="report"></param>
         protected void UpdatePairInteractions(UnstableEnvironment envInfo, ConflictReport report)
         {
-            var newPairs = GetNewAsymmetricPairs(envInfo, ProjectServices).ToList();
-            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer);
+            var newPairs = GetNewAsymmetricPairs(envInfo, ModelProject).ToList();
+            var comparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
 
             var warning = ModelMessageSource.CreateConflictHandlingWarning(this);
             for (var i = 0; i < newPairs.Count; i++)
@@ -113,14 +113,14 @@ namespace ICon.Model.Energies.ConflictHandling
         ///     Get the new asymmetric pair interactions that result from the passed unstable environment
         /// </summary>
         /// <param name="envInfo"></param>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <returns></returns>
         protected IEnumerable<AsymmetricPairInteraction> GetNewAsymmetricPairs(IUnstableEnvironment envInfo,
-            IProjectServices projectServices)
+            IModelProject modelProject)
         {
-            var unitCellProvider = projectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var finder = new PairInteractionFinder(unitCellProvider, projectServices.SpaceGroupService);
-            return finder.CreateUniqueAsymmetricPairs(envInfo.AsSingleton(), projectServices.GeometryNumeric.RangeComparer);
+            var unitCellProvider = modelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var finder = new PairInteractionFinder(unitCellProvider, modelProject.SpaceGroupService);
+            return finder.CreateUniqueAsymmetricPairs(envInfo.AsSingleton(), modelProject.GeometryNumeric.RangeComparer);
         }
 
         /// <summary>

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using ICon.Framework.Extensions;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Transitions;
+using Mocassin.Framework.Extensions;
 using System;
 using System.Linq;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Abstract base class for transition model builder implementations
@@ -15,8 +15,8 @@ namespace ICon.Model.Translator.ModelContext
     public abstract class TransitionModelBuilder : ModelBuilderBase
     {
         /// <inheritdoc />
-        protected TransitionModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        protected TransitionModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 

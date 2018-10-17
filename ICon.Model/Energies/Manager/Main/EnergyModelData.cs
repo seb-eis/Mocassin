@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     The reference model data object for the energy manager

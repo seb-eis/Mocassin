@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all model data manager implementations

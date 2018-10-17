@@ -1,6 +1,6 @@
-﻿using ICon.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Represent a data validator for the specified type that offers a validation function which creates a validation

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all implementations of extended data containers that supply calculated data on a
@@ -14,7 +14,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     The project services instance that is used to create read only wrappers for the cache
         /// </summary>
-        protected IProjectServices ProjectServices { get; }
+        protected IModelProject ModelProject { get; }
 
         /// <summary>
         ///     The subscription the the relevant update events
@@ -40,14 +40,14 @@ namespace ICon.Model.Basic
         ///     Creates new extended data object with empty cache list and registers to the provided event port events to register
         ///     notifications about expired cached data
         /// </summary>
-        protected ModelDataCache(IModelEventPort eventPort, IProjectServices projectServices)
+        protected ModelDataCache(IModelEventPort eventPort, IModelProject modelProject)
         {
             if (eventPort == null) 
                 throw new ArgumentNullException(nameof(eventPort));
 
             SubscribeToEventPort(eventPort);
             DataCache = new List<ICachedObjectSource>();
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         /// <summary>

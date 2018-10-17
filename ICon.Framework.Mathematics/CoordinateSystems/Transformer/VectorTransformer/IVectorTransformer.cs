@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Transformer between the fractional, cartesian and spherical vector system that supports coordinate systems

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Validator for the metropolis simulation model objects that extendes the base simulation validator with metropolis specific methods
@@ -15,11 +15,11 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// Create new metropolis simulation validator from project services, simulation settings and simulation model data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public MetropolisSimulationValidator(IProjectServices projectServices, BasicSimulationSettings settings, IDataReader<ISimulationDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public MetropolisSimulationValidator(IModelProject modelProject, MocassinSimulationSettings settings, IDataReader<ISimulationDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

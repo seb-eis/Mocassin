@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Extensions
+namespace Mocassin.Mathematics.Extensions
 {
     /// <summary>
     ///     Extension class to provide generic mathematical operations for objects that implement the cartesian vector

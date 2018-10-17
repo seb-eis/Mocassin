@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents an update port for a simulation manager that handles subscriptions and reactions to other management event ports

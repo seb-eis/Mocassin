@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class ProjectModelContextBuilder : IProjectModelContextBuilder
     {
         /// <inheritdoc />
-        public IProjectServices ProjectServices { get; set; }
+        public IModelProject ModelProject { get; set; }
 
         /// <inheritdoc />
         public Task<IProjectModelContext> ProjectModelContextBuildTask { get; set; }
@@ -34,10 +34,10 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// Build a new context builder that uses the provided project access as a reference data source
         /// </summary>
-        /// <param name="projectServices"></param>
-        public ProjectModelContextBuilder(IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        public ProjectModelContextBuilder(IModelProject modelProject)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ICon.Model.Translator.ModelContext
         {
             var projectModelContext = new ProjectModelContext()
             {
-                ProjectServices = ProjectServices
+                ModelProject = ModelProject
             };
 
             StartComponentBuildProcess();

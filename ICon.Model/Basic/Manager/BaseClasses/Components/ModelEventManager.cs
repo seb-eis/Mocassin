@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using ICon.Framework.Events;
+using Mocassin.Framework.Events;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for implementations of model event managers that provide data change push notifications

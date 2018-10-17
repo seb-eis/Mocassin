@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
-namespace ICon.Framework.Extensions
+namespace Mocassin.Framework.Extensions
 {
     /// <summary>
     /// Contains linq style extension methods for the IEnumerable interface
@@ -34,6 +34,20 @@ namespace ICon.Framework.Extensions
                 foreach (var item in sequence.Reverse())
                     yield return item;
             }
+        }
+
+        /// <summary>
+        /// Casts the enumerable to a generic collection if possible or creates a new collection from the enumerable
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <returns></returns>
+        public static ICollection<T1> ToCollection<T1>(this IEnumerable<T1> enumerable)
+        {
+            if (!(enumerable is ICollection<T1> collection))
+                collection = enumerable.ToList();
+
+            return collection;
         }
 
         /// <summary>

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic implementation of the structure query manager that handles safe data queries and service requests to the structure manager from outside sources

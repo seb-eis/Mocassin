@@ -1,6 +1,6 @@
-﻿using ICon.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Represents an angular coordinate system of the specified type which does not have fixed base vectors

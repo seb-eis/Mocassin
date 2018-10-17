@@ -1,4 +1,4 @@
-﻿namespace ICon.Framework.Operations
+﻿namespace Mocassin.Framework.Operations
 {
     /// <summary>
     ///     Represents a report about a subject that could fail or be a success an contains information

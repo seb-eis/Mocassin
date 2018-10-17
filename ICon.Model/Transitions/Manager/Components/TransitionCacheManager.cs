@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ICon.Framework.Extensions;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Model.Particles;
+using Mocassin.Framework.Extensions;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Basic implementation of the transition cache manager that provides read only access to the extended 'on demand' transition data
@@ -16,7 +16,7 @@ namespace ICon.Model.Transitions
     internal class TransitionCacheManager : ModelCacheManager<TransitionDataCache, ITransitionCachePort>, ITransitionCachePort
     {
         /// <inheritdoc />
-        public TransitionCacheManager(TransitionDataCache dataCache, IProjectServices projectServices) : base(dataCache, projectServices)
+        public TransitionCacheManager(TransitionDataCache dataCache, IModelProject modelProject) : base(dataCache, modelProject)
         {
 
         }
@@ -88,8 +88,8 @@ namespace ICon.Model.Transitions
         [CacheMethodResult]
         protected IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> CreateMetropolisTransitionPositionDictionary()
         {
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
-            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
+            var transitionManager = ModelProject.GetManager<ITransitionManager>();
             var result = new Dictionary<IUnitCellPosition, HashSet<IMetropolisTransition>>();
 
             foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
@@ -116,7 +116,7 @@ namespace ICon.Model.Transitions
         [CacheMethodResult]
         protected IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> CreateKineticTransitionPositionDictionary()
         {
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
             var result = new Dictionary<IUnitCellPosition, HashSet<IKineticTransition>>();
 
             foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
@@ -145,10 +145,10 @@ namespace ICon.Model.Transitions
         protected IList<IList<MetropolisMapping>> CreateAllMetropolisMappings()
         {
             var mapper = new MetropolisTransitionMapper();
-            var positionSets = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetEncodedExtendedPositionLists());
+            var positionSets = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetEncodedExtendedPositionLists());
             var result = new List<IList<MetropolisMapping>>();
 
-            foreach (var transition in ProjectServices.GetManager<ITransitionManager>().QueryPort.Query(port => port.GetMetropolisTransitions()))
+            foreach (var transition in ModelProject.GetManager<ITransitionManager>().QueryPort.Query(port => port.GetMetropolisTransitions()))
             {
                 if (transition.IsDeprecated)
                 {
@@ -167,11 +167,11 @@ namespace ICon.Model.Transitions
         [CacheMethodResult]
         protected IList<IList<KineticMapping>> CreateAllKineticMappings()
         {
-            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var transitionManager = ModelProject.GetManager<ITransitionManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
             var encoder = structureManager.QueryPort.Query(port => port.GetVectorEncoder());
             var uniCellProvider = structureManager.QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var mapper = new KineticTransitionMapper(ProjectServices.SpaceGroupService, encoder, uniCellProvider);
+            var mapper = new KineticTransitionMapper(ModelProject.SpaceGroupService, encoder, uniCellProvider);
 
             var result = new List<IList<KineticMapping>>();
             foreach (var transition in transitionManager.QueryPort.Query(port => port.GetKineticTransitions()))
@@ -193,8 +193,8 @@ namespace ICon.Model.Transitions
         [CacheMethodResult]
         protected IList<IList<MetropolisRule>> CreateAllMetropolisRules()
         {
-            var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
-            var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
+            var particlePort = ModelProject.GetManager<IParticleManager>().QueryPort;
+            var transitionPort = ModelProject.GetManager<ITransitionManager>().QueryPort;
 
             var particles = particlePort.Query(port => port.GetParticles().ToArray());
             var transitions = transitionPort.Query(port => port.GetMetropolisTransitions().ToArray());
@@ -216,8 +216,8 @@ namespace ICon.Model.Transitions
         [CacheMethodResult]
         protected IList<IList<KineticRule>> CreateAllKineticRules()
         {
-            var particlePort = ProjectServices.GetManager<IParticleManager>().QueryPort;
-            var transitionPort = ProjectServices.GetManager<ITransitionManager>().QueryPort;
+            var particlePort = ModelProject.GetManager<IParticleManager>().QueryPort;
+            var transitionPort = ModelProject.GetManager<ITransitionManager>().QueryPort;
 
             var particles = particlePort.Query(port => port.GetParticles().ToArray());
             var transitions = transitionPort.Query(port => port.GetKineticTransitions().ToArray());

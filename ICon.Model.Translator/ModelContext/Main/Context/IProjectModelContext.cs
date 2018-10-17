@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a full project data context that contains all data described within the model managers 
@@ -13,7 +13,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// Access to the project services the model context was generated from
         /// </summary>
-        IProjectServices ProjectServices { get; set; }
+        IModelProject ModelProject { get; set; }
 
         /// <summary>
         /// The structure model context of the linked project

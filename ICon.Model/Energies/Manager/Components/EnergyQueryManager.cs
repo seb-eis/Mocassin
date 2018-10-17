@@ -1,6 +1,6 @@
-﻿using ICon.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Basic implementation of the energy query manager that handles safe data queries and service requests to the energy

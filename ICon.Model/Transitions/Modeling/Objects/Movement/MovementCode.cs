@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Mocassin.Framework.Collections;
 
-using ICon.Framework.Collections;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Describes a physical movement during a transition as a set of integer values

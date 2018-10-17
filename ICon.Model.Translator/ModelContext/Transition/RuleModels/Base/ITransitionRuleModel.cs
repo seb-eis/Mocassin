@@ -1,10 +1,10 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a transition rule model that describes the physics of the state manipulation of a specific transition

@@ -4,9 +4,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Enum for the connectors ()

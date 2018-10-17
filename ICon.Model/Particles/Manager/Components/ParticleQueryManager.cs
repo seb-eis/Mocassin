@@ -1,6 +1,6 @@
-﻿using ICon.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic particle query manager that provides concurrency safe queries and readers for the particle data

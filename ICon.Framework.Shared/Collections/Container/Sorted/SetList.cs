@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 
-namespace ICon.Framework.Collections
+namespace Mocassin.Framework.Collections
 {
     /// <summary>
     /// Wrapped list that is always sorted utilizing the provided comparer and does not allow multiple entries that compare equal to each other

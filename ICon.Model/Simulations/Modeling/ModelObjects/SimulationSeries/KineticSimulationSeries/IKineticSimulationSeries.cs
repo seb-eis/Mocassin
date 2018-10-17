@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Constraints;
+using Mocassin.Framework.Constraints;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a specialized simulation sereis for kinetic monte carlo simulations

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Framework.Constraints;
-using ICon.Model.Basic;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="ICon.Model.Simulations.IMetropolisSimulationSeries"/>
+    /// <inheritdoc cref="IMetropolisSimulationSeries"/>
     [DataContract]
     public class MetropolisSimulationSeries : SimulationSeriesBase, IMetropolisSimulationSeries
     {

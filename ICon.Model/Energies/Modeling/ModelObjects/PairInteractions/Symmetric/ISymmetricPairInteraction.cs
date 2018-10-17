@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Access interface for the symmetric pair interaction that allows for manipulation of the energy dictionary

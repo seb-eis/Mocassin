@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Basic interface for all model parameters that are always unique and do not require deprecation or indexing

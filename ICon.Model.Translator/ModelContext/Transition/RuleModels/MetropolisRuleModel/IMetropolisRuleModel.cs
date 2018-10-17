@@ -1,9 +1,9 @@
-﻿using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Transition rule model for metropolis transitions. Extends the basic rule model by metropolis specific data context options

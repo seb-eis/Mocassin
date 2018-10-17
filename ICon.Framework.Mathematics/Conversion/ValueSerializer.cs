@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ICon.Framework.Extensions;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Conversion
+namespace Mocassin.Mathematics.Conversion
 {
     /// <summary>
     ///     String value converter that handles the conversion of mathematical value types into separated strings

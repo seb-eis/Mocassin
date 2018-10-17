@@ -1,6 +1,6 @@
-﻿using ICon.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a query port for query based access to the reference and extended transition data

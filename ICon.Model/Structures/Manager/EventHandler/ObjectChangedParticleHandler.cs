@@ -1,10 +1,10 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures.Handler
+namespace Mocassin.Model.Structures.Handler
 {
     /// <summary>
     /// Event handler that manages the processing of object change events that the structure manager receives from the particle manager event port
@@ -14,11 +14,11 @@ namespace ICon.Model.Structures.Handler
         /// <summary>
         /// Create new handler using the provided project services, data access provider and event manager
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="dataAccessorSource"></param>
         /// <param name="eventManager"></param>
-        public ObjectChangedParticleHandler(IProjectServices projectServices, DataAccessSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
-            : base(projectServices, dataAccessorSource, eventManager)
+        public ObjectChangedParticleHandler(IModelProject modelProject, DataAccessSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
+            : base(modelProject, dataAccessorSource, eventManager)
         {
 
         }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// The simulation manager data cache object that stores and supplies on-demand simulation data objects
@@ -16,8 +15,8 @@ namespace ICon.Model.Simulations
         /// Create new simulation data cache that uses the provided event port and project services
         /// </summary>
         /// <param name="eventPort"></param>
-        /// <param name="projectServices"></param>
-        public SimulationDataCache(IModelEventPort eventPort, IProjectServices projectServices) : base(eventPort, projectServices)
+        /// <param name="modelProject"></param>
+        public SimulationDataCache(IModelEventPort eventPort, IModelProject modelProject) : base(eventPort, modelProject)
         {
         }
 
@@ -29,7 +28,7 @@ namespace ICon.Model.Simulations
         {
             if (CachePort == null)
             {
-                CachePort = new SimulationCacheManager(this, ProjectServices);
+                CachePort = new SimulationCacheManager(this, ModelProject);
             }
             return CachePort;
         }

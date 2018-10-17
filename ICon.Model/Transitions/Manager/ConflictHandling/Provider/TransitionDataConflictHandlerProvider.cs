@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Resolver provider for all transition conflict resolvers that handle internal data conflicts of the particle manager
@@ -16,8 +16,8 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <summary>
         /// Creates new transition data conflict resolver provider with access to the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        public TransitionDataConflictHandlerProvider(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public TransitionDataConflictHandlerProvider(IModelProject modelProject) : base(modelProject)
         {
 
         }
@@ -29,7 +29,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         [HandlerFactoryMethod(DataOperationType.NewObject)]
         protected object CreateObjectAddedHandler()
         {
-            return new TransitionObjectAddedHandler(ProjectServices);
+            return new TransitionObjectAddedHandler(ModelProject);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         [HandlerFactoryMethod(DataOperationType.ObjectChange)]
         protected object CreateObjectChangedHandler()
         {
-            return new TransitionObjectChangedHandler(ProjectServices);
+            return new TransitionObjectChangedHandler(ModelProject);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         [HandlerFactoryMethod(DataOperationType.ObjectRemoval)]
         protected object CreateObjectRemovedHandler()
         {
-            return new TransitionObjectRemovedHandler(ProjectServices);
+            return new TransitionObjectRemovedHandler(ModelProject);
         }
     }
 }

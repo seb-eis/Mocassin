@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Model.Basic;
-using ICon.Model.Transitions;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a custom simulation that contains all reference data required to describe a metropolis simulation

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Non generic base class for all wrapped interop objects that can switch between objet and binary unmanaged representation

@@ -1,10 +1,10 @@
-using ICon.Model.Basic;
-using ICon.Model.Particles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using ICon.Mathematics.Bitmasks;
+using Mocassin.Mathematics.Bitmasks;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class ParticleManagerTest : ManagementModuleTestsBasis

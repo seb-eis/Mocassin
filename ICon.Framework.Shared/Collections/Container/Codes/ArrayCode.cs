@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Collections;
 using Newtonsoft.Json;
 
-namespace ICon.Framework.Collections
+namespace Mocassin.Framework.Collections
 {
     /// <summary>
     /// Defines an abstract base class wrapper for implementations of arrays that describe an encoding

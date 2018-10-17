@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Represents an occupation state that fully describes the occupation of a set of positions as a set of particles

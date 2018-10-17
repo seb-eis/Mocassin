@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Internal conflict handler for the removal of model objects within the transition managment system
@@ -16,8 +15,8 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <summary>
         /// Create new transition object removed handler using the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        public TransitionObjectRemovedHandler(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public TransitionObjectRemovedHandler(IModelProject modelProject) : base(modelProject)
         {
         }
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.ValueTypes;
-using ACoordinates = ICon.Mathematics.ValueTypes.Coordinates<double, double, double>;
+using Mocassin.Mathematics.ValueTypes;
+using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
-namespace ICon.Mathematics.Extensions
+namespace Mocassin.Mathematics.Extensions
 {
     /// <summary>
     ///     ICon vector math extensions that are shared between all kinds of 3D vectors

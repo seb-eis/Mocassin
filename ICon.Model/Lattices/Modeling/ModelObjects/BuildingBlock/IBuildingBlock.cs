@@ -1,12 +1,12 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Symmetry.Analysis;
+﻿using Mocassin.Symmetry.Analysis;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Building Block for the lattice. Each building block has the size of the unit cell.

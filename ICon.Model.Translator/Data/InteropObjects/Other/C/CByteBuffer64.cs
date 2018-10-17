@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// 64 entry byte buffer. Layout marshals to its binary unmanaged 'C' representation

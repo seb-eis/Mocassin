@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Implementation of the simulation manager that handles the creation and packaging of simulation sets for simulation encoding
@@ -30,9 +29,9 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// Create new simulation manager with the provided project services and manages the provided simulation data object
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="data"></param>
-        public SimulationManager(IProjectServices projectServices, SimulationModelData data) : base(projectServices, data)
+        public SimulationManager(IModelProject modelProject, SimulationModelData data) : base(modelProject, data)
         {
         }
 
@@ -48,11 +47,14 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// Get the validation service for simulation manager related parameters and objects
         /// </summary>
-        /// <param name="settingsData"></param>
+        /// <param name="settings"></param>
         /// <returns></returns>
-        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettings settings)
         {
-            return new SimulationValidationService(settingsData.SimulationSettings, ProjectServices);
+            if (!settings.TryGetModuleSettings(out MocassinSimulationSettings moduleSettings))
+                throw new InvalidOperationException("Settings object for the simulation module is missing");
+
+            return new SimulationValidationService(moduleSettings, ModelProject);
         }
     }
 }

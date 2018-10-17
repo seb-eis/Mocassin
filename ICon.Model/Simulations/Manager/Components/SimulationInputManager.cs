@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="ICon.Model.Simulations.ISimulationInputPort"/>
+    /// <inheritdoc cref="ISimulationInputPort"/>
     internal class SimulationInputManager : ModelInputManager<SimulationModelData, ISimulationDataPort, SimulationEventManager>, ISimulationInputPort
     {
         /// <inheritdoc />
-        public SimulationInputManager(SimulationModelData data, SimulationEventManager manager, IProjectServices services) 
+        public SimulationInputManager(SimulationModelData data, SimulationEventManager manager, IModelProject services) 
             : base(data, manager, services)
         {
         }
@@ -158,7 +158,7 @@ namespace ICon.Model.Simulations
         /// <returns></returns>
         protected override IDataConflictHandlerProvider<SimulationModelData> CreateDataConflictHandlerProvider()
         {
-            return new ConflictHandling.SimulationDataConflictHandlerProvider(ProjectServices);
+            return new ConflictHandling.SimulationDataConflictHandlerProvider(ModelProject);
         }
 
         /// <inheritdoc />

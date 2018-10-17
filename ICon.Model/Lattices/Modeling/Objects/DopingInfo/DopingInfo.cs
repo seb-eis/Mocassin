@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Represents an actual doping that consists of an abstract doping description and a concentration value

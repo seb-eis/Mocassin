@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
-using ICon.Model.Basic;
-using ICon.Model.Structures;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a metropolis transition that is simply defined by two exchanging sub-lattices

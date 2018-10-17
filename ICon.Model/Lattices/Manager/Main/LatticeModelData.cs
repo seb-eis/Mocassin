@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
-using ICon.Symmetry.Analysis;
-using ICon.Model.Particles;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// The reference model data object for the lattice manager

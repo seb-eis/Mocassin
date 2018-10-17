@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Attribute to instruct a cache manager to ad a method to its caching system

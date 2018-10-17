@@ -1,7 +1,7 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
+﻿using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Raw pair interaction candidate struct that is used to compare and assign the indexing to the rwa pair interactions

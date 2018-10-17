@@ -1,8 +1,7 @@
 ﻿using System;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     /// Abstract base class for event handlers that handle object list reindex operations provided by the specified event port
@@ -14,8 +13,8 @@ namespace ICon.Model.Basic
         where T3 : ModelEventManager
     {
         /// <inheritdoc />
-        protected ObjectIndexingChangedEventHandler(IProjectServices projectServices, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
-            : base(projectServices, dataAccessorSource, eventManager)
+        protected ObjectIndexingChangedEventHandler(IModelProject modelProject, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
+            : base(modelProject, dataAccessorSource, eventManager)
         {
 
         }

@@ -1,4 +1,4 @@
-﻿namespace ICon.Model.Basic
+﻿namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Generic interface for all reader providers that supply safe disposable data readers for model data objects

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparers;
 
-namespace ICon.Mathematics.Extensions
+namespace Mocassin.Mathematics.Extensions
 {
     /// <summary>
     ///     Extends the System.Math implementation with additional functionality and constants in radian

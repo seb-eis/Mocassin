@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Mathematics.Extensions;
-using ICon.Model.Basic;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IStableEnvironmentInfo"/>
+    /// <inheritdoc cref="IStableEnvironmentInfo"/>
     [DataContract(Name = "StableEnvironmentInfo")]
     public class StableEnvironmentInfo : ModelParameter, IStableEnvironmentInfo
     {

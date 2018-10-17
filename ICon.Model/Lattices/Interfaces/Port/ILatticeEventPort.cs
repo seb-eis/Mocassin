@@ -1,6 +1,6 @@
-﻿using ICon.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Represents an event port for lattice manager related push based notification events

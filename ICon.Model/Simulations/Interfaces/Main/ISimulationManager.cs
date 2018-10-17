@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a simulation manager that handles definition and packaging of simulation sets for simulator encoding

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     /// General interface for all 64 bit encoded linear 4D informations

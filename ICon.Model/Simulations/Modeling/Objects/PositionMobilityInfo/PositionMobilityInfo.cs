@@ -1,12 +1,12 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Untyped position mobility info that describes which species are mobile on a position

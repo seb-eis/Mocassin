@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Model.Transitions;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Describes the full model information for a single extended wyckoff position in the unit cell

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Framework.Messaging;
+using Mocassin.Framework.Messaging;
 using Newtonsoft.Json;
 
-namespace ICon.Framework.Operations
+namespace Mocassin.Framework.Operations
 {
     /// <inheritdoc />
     public class ConflictReport : IConflictReport

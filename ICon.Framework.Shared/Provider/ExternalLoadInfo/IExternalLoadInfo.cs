@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Framework.Provider
+namespace Mocassin.Framework.Provider
 {
     /// <summary>
     ///     Represents a load information for externally defined data provider functions

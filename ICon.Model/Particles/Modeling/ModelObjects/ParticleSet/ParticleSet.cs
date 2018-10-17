@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Mathematics.Bitmasks;
-using ICon.Model.Basic;
+using Mocassin.Mathematics.Bitmasks;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
-    /// <inheritdoc cref="ICon.Model.Particles.IParticleSet" />
+    /// <inheritdoc cref="IParticleSet" />
     [DataContract(Name = "ParticleSet")]
     public class ParticleSet : ModelObject, IParticleSet
     {

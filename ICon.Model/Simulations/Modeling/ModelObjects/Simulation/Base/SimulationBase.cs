@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using ICon.Framework.Provider;
+using Mocassin.Framework.Provider;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// The simulation setting flag that defines basic settings that can be used with both metropolis and kinetic simulations
@@ -18,7 +17,7 @@ namespace ICon.Model.Simulations
         FullDebugStateDump = 0b10000
     }
 
-    /// <inheritdoc cref="ICon.Model.Simulations.ISimulation"/>
+    /// <inheritdoc cref="ISimulation"/>
     /// <remarks> Abstract base class for simulation implementations </remarks>
     [DataContract]
     public abstract class SimulationBase : ModelObject, ISimulation

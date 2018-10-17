@@ -1,8 +1,8 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Simulations;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.DataManagement
+namespace Mocassin.Model.DataManagement
 {
     /// <summary>
     ///     Factory for new simulation manager systems
@@ -10,11 +10,11 @@ namespace ICon.Model.DataManagement
     public class SimulationManagerFactory : IModelManagerFactory
     {
         /// <inheritdoc />
-        public IModelManager CreateNew(IProjectServices projectServices, out object dataObject)
+        public IModelManager CreateNew(IModelProject modelProject, out object dataObject)
         {
             var data = SimulationModelData.CreateNew();
             dataObject = data;
-            return new SimulationManager(projectServices, data);
+            return new SimulationManager(modelProject, data);
         }
     }
 }

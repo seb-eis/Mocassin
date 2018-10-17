@@ -1,9 +1,9 @@
-﻿using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+﻿using Mocassin.Mathematics.Coordinates;
+using Mocassin.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Carries information about a target position

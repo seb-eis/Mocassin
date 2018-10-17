@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Implementation of the validation service for simulation manager related model objects and parameters
@@ -15,11 +15,11 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// The simulation settings used in the validation methods
         /// </summary>
-        protected BasicSimulationSettings Settings { get; }
+        protected MocassinSimulationSettings Settings { get; }
 
         /// <inheritdoc />
-        public SimulationValidationService(BasicSimulationSettings settings, IProjectServices projectServices)
-            : base(projectServices)
+        public SimulationValidationService(MocassinSimulationSettings settings, IModelProject modelProject)
+            : base(modelProject)
         {
             Settings = settings;
         }
@@ -33,7 +33,7 @@ namespace ICon.Model.Simulations
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport Validate(IKineticSimulation simulation, IDataReader<ISimulationDataPort> dataReader)
         {
-            return new KineticSimulationValidator(ProjectServices, Settings, dataReader).Validate(simulation);
+            return new KineticSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ICon.Model.Simulations
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport Validate(IMetropolisSimulation simulation, IDataReader<ISimulationDataPort> dataReader)
         {
-            return new MetropolisSimulationValidator(ProjectServices, Settings, dataReader).Validate(simulation);
+            return new MetropolisSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ICon.Model.Simulations
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport Validate(IKineticSimulationSeries series, IDataReader<ISimulationDataPort> dataReader)
         {
-            return new KineticSeriesValidator(ProjectServices, Settings, dataReader).Validate(series);
+            return new KineticSeriesValidator(ModelProject, Settings, dataReader).Validate(series);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace ICon.Model.Simulations
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport Validate(IMetropolisSimulationSeries series, IDataReader<ISimulationDataPort> dataReader)
         {
-            return new MetropolisSeriesValidator(ProjectServices, Settings, dataReader).Validate(series);
+            return new MetropolisSeriesValidator(ModelProject, Settings, dataReader).Validate(series);
         }
     }
 }

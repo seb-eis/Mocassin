@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ICon.Framework.Exceptions
+namespace Mocassin.Framework.Exceptions
 {
     /// <summary>
     /// Exception thrown if a method/property call fails due to its internal state rather than the passed parameters (e.g. unset fields or flags)

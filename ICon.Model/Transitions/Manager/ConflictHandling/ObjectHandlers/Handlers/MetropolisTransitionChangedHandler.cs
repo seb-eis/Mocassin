@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Object handler that handles internal data changes of the transition manager system required after a metropolis transition data change
@@ -16,9 +16,9 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// Create new metropolis transition changed handler with the provided data accessor and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        public MetropolisTransitionChangedHandler(IDataAccessor<TransitionModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        public MetropolisTransitionChangedHandler(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 

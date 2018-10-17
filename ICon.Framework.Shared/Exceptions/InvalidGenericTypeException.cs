@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ICon.Framework.Exceptions
+namespace Mocassin.Framework.Exceptions
 {
     /// <summary>
     /// Exception thrown if generic components or methods do not support the specified type

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Represents a unit cell position that carries fractional position information and occupation as an index

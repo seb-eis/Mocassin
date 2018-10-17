@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPositionModelBuilder"/>
+    /// <inheritdoc cref="IPositionModelBuilder"/>
     public class PositionModelBuilder : ModelBuilderBase, IPositionModelBuilder
     {
         /// <summary>
@@ -18,8 +18,8 @@ namespace ICon.Model.Translator.ModelContext
         protected IUnitCellVectorEncoder VectorEncoder { get; set; }
 
         /// <inheritdoc />
-        public PositionModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public PositionModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -37,7 +37,7 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         protected void LoadBuildDataFromProject()
         {
-            var manager = ProjectServices.GetManager<IStructureManager>();
+            var manager = ModelProject.GetManager<IStructureManager>();
             VectorEncoder = manager.QueryPort.Query(port => port.GetVectorEncoder());
         }
 
@@ -53,9 +53,9 @@ namespace ICon.Model.Translator.ModelContext
                 .Select(a => a.TargetPositionInfo)
                 .ToList();
 
-            var targetVectors = ProjectServices.SpaceGroupService.GetAllWyckoffPositions(environmentModel.UnitCellPosition.Vector);
+            var targetVectors = ModelProject.SpaceGroupService.GetAllWyckoffPositions(environmentModel.UnitCellPosition.Vector);
             var positionModels = targetVectors
-                .Select(target => ProjectServices.SpaceGroupService.CreateOperationToTarget(sourceVector, target))
+                .Select(target => ModelProject.SpaceGroupService.CreateOperationToTarget(sourceVector, target))
                 .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
 
             return positionModels;

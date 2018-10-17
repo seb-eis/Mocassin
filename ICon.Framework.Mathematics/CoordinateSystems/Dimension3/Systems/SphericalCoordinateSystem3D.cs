@@ -1,10 +1,11 @@
 ﻿using System;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Constraints;
-using ICon.Mathematics.Extensions;
-using ACoordinates = ICon.Mathematics.ValueTypes.Coordinates<double, double, double>;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
+using Mocassin.Mathematics.ValueTypes;
+using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Defines double precision spherical coordinate system which follows the iso standard limitations (Theta: true, 0°,

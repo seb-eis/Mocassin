@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Model.Basic;
-using ICon.Model.Particles;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a kinetic transition rule that describes a dynamic state change process and allows for setting of boundary flags and attempt frequency

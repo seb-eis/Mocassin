@@ -1,6 +1,6 @@
-﻿using ICon.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic particle notification manager that provides push based notifications about changes in the particle manager

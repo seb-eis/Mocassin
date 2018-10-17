@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Model.Energies;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IGroupEnergyModelBuilder"/>
+    /// <inheritdoc cref="IGroupEnergyModelBuilder"/>
     public class GroupEnergyModelBuilder : ModelBuilderBase, IGroupEnergyModelBuilder
     {
         /// <inheritdoc />
-        public GroupEnergyModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public GroupEnergyModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
         /// <inheritdoc />
         public IList<IGroupEnergyModel> BuildModels(IList<IGroupInteraction> groupInteractions)
         {
-            var manager = ProjectServices.GetManager<IEnergyManager>();
+            var manager = ModelProject.GetManager<IEnergyManager>();
             var positionGroupInfos = manager.QueryPort.Query(port => port.GetPositionGroupInfos());
             var index = 0;
             var groupEnergyModels = groupInteractions

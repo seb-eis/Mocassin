@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Constraints;
-using ICon.Mathematics.Permutation;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
+using Mocassin.Mathematics.Permutation;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <inheritdoc />
     public class PairInteractionFinder : IPairInteractionFinder

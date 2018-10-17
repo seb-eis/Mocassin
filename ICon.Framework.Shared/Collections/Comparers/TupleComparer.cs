@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ICon.Framework.Collections
+namespace Mocassin.Framework.Collections
 {
     /// <summary>
     ///     Generic value tuple comparer for tuples with 2 comparable components that compares the actual content in tuple

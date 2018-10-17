@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Provider;
-using ICon.Model.Basic;
+using Mocassin.Framework.Provider;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a custom simulation of undefined type that carries all reference data to generate an encoded simulation dataset

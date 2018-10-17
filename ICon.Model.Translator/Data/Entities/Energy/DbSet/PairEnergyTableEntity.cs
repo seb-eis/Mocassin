@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     public class PairEnergyTableEntity : EnergyModelComponentBase
     {
@@ -13,7 +13,7 @@ namespace ICon.Model.Translator
         [Column("EnergyTable")]
         public byte[] EnergyTableBinary { get; set; }
 
-        [OwnedBlobPropertyAttribute(nameof(EnergyTableBinary))]
+        [OwnedBlobProperty(nameof(EnergyTableBinary))]
         EnergyTableEntity EnergyTable { get; set; }
     }
 }

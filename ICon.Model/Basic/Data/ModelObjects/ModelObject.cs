@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <inheritdoc />
     /// <remarks> Abstract base class for model object implementations </remarks>

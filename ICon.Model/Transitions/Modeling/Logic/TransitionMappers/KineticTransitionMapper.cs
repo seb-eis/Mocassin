@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Symmetry.SpaceGroups;
-using ICon.Mathematics.ValueTypes;
-using ICon.Mathematics.Coordinates;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Quick kinetic transition mapper that uses a space group service interafce to create the kinetic mappings

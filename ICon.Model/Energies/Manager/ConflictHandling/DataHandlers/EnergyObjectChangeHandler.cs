@@ -1,9 +1,9 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies.ConflictHandling
+namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
     ///     Energy object change handler that handles data changes and conflict resolving for changed energy model objects
@@ -11,8 +11,8 @@ namespace ICon.Model.Energies.ConflictHandling
     public class EnergyObjectChangeHandler : DataConflictHandler<EnergyModelData, ModelObject>
     {
         /// <inheritdoc />
-        public EnergyObjectChangeHandler(IProjectServices projectServices)
-            : base(projectServices)
+        public EnergyObjectChangeHandler(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -27,7 +27,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected IConflictReport HandleObjectChange(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(UnstableEnvironmentChangeHandler)} was called for {envInfo.GetType()}");
-            return new UnstableEnvironmentChangeHandler(dataAccess, ProjectServices).HandleConflicts(envInfo);
+            return new UnstableEnvironmentChangeHandler(dataAccess, ModelProject).HandleConflicts(envInfo);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected IConflictReport HandleObjectChange(GroupInteraction groupInteraction, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(GroupInteractionChangeHandler)} was called for {groupInteraction.GetType()}");
-            return new GroupInteractionChangeHandler(dataAccess, ProjectServices).HandleConflicts(groupInteraction);
+            return new GroupInteractionChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInteraction);
         }
     }
 }

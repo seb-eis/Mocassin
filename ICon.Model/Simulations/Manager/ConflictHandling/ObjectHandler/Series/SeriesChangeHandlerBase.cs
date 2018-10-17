@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Constraints;
-using ICon.Framework.Provider;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Operations;
+using Mocassin.Framework.Provider;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations.ConflictHandling
+namespace Mocassin.Model.Simulations.ConflictHandling
 {
     /// <summary>
     /// Base class for all simulation series change handlers that hanldes the base series definition induced conflicts
@@ -19,9 +19,9 @@ namespace ICon.Model.Simulations.ConflictHandling
         /// Create new series change hanlder base class with the provided data accessor and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        protected SeriesChangeHandlerBase(IDataAccessor<SimulationModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        protected SeriesChangeHandlerBase(IDataAccessor<SimulationModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
 
         }

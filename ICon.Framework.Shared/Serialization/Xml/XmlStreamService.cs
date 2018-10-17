@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace ICon.Framework.Xml
+namespace Mocassin.Framework.Xml
 {
     /// <summary>
     ///     Abstract base class for implementations of the XmlStreamService

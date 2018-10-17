@@ -1,26 +1,26 @@
 ﻿using System;
-using ICon.Framework.Messaging;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles.Validators
+namespace Mocassin.Model.Particles.Validators
 {
     /// <summary>
     ///     Validator for new particle set model objects that checks for compatibility with existing data and general object
     ///     constraints
     /// </summary>
-    public class ParticleSetValidator : DataValidator<IParticleSet, BasicParticleSettings, IParticleDataPort>
+    public class ParticleSetValidator : DataValidator<IParticleSet, MocassinParticleSettings, IParticleDataPort>
     {
         /// <summary>
         ///     Creates new validator t´hat uses the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public ParticleSetValidator(IProjectServices projectServices, BasicParticleSettings settings,
+        public ParticleSetValidator(IModelProject modelProject, MocassinParticleSettings settings,
             IDataReader<IParticleDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

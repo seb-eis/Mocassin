@@ -1,49 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Mocassin.Framework.SQLiteCore;
 
-using ICon.Framework.SQLiteCore;
-
-namespace ICon.Symmetry.SpaceGroups
+namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <summary>
-    /// The space group SQLite EFCore database context
+    ///     The space group SQLite EFCore database context
     /// </summary>
     public sealed class SpaceGroupContext : SqLiteContext<SpaceGroupContext>
     {
-        /// <summary>
-        /// Creates
-        /// </summary>
+        /// <inheritdoc />
         public SpaceGroupContext()
         {
         }
 
-        /// <summary>
-        /// Creates a new space group context with the provided options builder parameter string
-        /// </summary>
-        /// <param name="optionsBuilderParameterString"></param>
-        public SpaceGroupContext(String optionsBuilderParameterString) : base(optionsBuilderParameterString)
+        /// <inheritdoc />
+        public SpaceGroupContext(string optionsBuilderParameterString)
+            : base(optionsBuilderParameterString)
         {
             Database.EnsureCreated();
         }
 
         /// <summary>
-        /// Space group database sets
+        ///     Space group database sets
         /// </summary>
         public DbSet<SpaceGroupEntity> SpaceGroups { get; set; }
 
         /// <summary>
-        /// Symmetry operation database sets
+        ///     Symmetry operation database sets
         /// </summary>
         public DbSet<SymmetryOperationEntity> SymmetryOperations { get; set; }
 
-        /// <summary>
-        /// Creates a new space group context with the provided options builder parameter string
-        /// </summary>
-        /// <param name="optionsBuilderParameterString"></param>
-        /// <returns></returns>
-        public override SpaceGroupContext CreateNewContext(String optionsBuilderParameterString)
+        /// <inheritdoc />
+        public override SpaceGroupContext CreateNewContext(string optionsBuilderParameterString)
         {
             return new SpaceGroupContext(optionsBuilderParameterString);
         }

@@ -1,7 +1,7 @@
-﻿using ICon.Framework.Collections;
-using ICon.Model.Basic;
+﻿using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Represents a read only data port for the particle manager that allows data access on the particle manager base data

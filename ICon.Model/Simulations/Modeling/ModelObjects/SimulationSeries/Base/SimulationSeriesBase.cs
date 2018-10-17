@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Reflection;
-using ICon.Framework.Constraints;
-using ICon.Framework.Provider;
-using ICon.Model.Basic;
+using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Provider;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="ICon.Model.Simulations.ISimulationSeries"/>
+    /// <inheritdoc cref="ISimulationSeries"/>
     /// <remarks> Abstract base class for implementations of simulation series objects </remarks>
     [DataContract]
     public abstract class SimulationSeriesBase : ModelObject, ISimulationSeries

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 
-using ICon.Framework.Exceptions;
+using Mocassin.Framework.Exceptions;
 
-namespace ICon.Framework.Extensions
+namespace Mocassin.Framework.Extensions
 {
     /// <summary>
     /// Provides base type value conversions as extension methods for types implementing IConvertible (Only compatible with primitive types)

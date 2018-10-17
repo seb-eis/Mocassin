@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <inheritdoc />
     public class VectorTransformer : IVectorTransformer

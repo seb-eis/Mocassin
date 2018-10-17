@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class KineticTrackingModel : IKineticTrackingModel

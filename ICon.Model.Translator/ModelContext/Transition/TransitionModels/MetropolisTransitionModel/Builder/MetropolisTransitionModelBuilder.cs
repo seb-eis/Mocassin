@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IMetropolisTransitionModelBuilder"/>
+    /// <inheritdoc cref="IMetropolisTransitionModelBuilder"/>
     public class MetropolisTransitionModelBuilder : TransitionModelBuilder, IMetropolisTransitionModelBuilder
     {
         /// <inheritdoc />
-        public MetropolisTransitionModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public MetropolisTransitionModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -93,7 +93,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddMappingModels(IMetropolisTransitionModel transitionModel)
         {
-            var transitionManager = ProjectServices.GetManager<ITransitionManager>();
+            var transitionManager = ModelProject.GetManager<ITransitionManager>();
             var mappings = transitionManager.QueryPort.Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
 
             transitionModel.MappingModels = mappings.Select(CreateMappingModel).ToList();
@@ -111,7 +111,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <returns></returns>
         protected IMetropolisMappingModel CreateMappingModel(MetropolisMapping mapping)
         {
-            var vectorEncoder = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+            var vectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
             var mappingModel = new MetropolisMappingModel()
             {
                 Mapping = mapping,

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IGroupInteraction" />
+    /// <inheritdoc cref="IGroupInteraction" />
     [DataContract(Name = "GroupInteraction")]
     public class GroupInteraction : ModelObject, IGroupInteraction
     {

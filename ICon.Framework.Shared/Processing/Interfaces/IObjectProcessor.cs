@@ -1,4 +1,4 @@
-﻿namespace ICon.Framework.Processing
+﻿namespace Mocassin.Framework.Processing
 {
     /// <summary>
     ///     Represents an handler for objects that processes passed values and returns the result if the object could be

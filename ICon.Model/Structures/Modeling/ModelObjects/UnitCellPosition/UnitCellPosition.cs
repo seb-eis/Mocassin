@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Enum to describe the unit cell position status (Stable, unstable,...)

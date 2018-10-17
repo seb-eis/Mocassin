@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Messaging;
+using Mocassin.Framework.Messaging;
 using Newtonsoft.Json;
 
-namespace ICon.Framework.Operations
+namespace Mocassin.Framework.Operations
 {
     /// <inheritdoc />
     public class ValidationReport : IValidationReport

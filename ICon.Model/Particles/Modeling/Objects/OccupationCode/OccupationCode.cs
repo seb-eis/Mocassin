@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Collections;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Represents a particle occupation code that describes the actual occupation of a grouping through a set of particle

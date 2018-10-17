@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations.ConflictHandling
+namespace Mocassin.Model.Simulations.ConflictHandling
 {
     /// <summary>
     /// Base class for simulation object change handlers. Handles base data conflicts of simulation objects with internal simulation data or
@@ -17,9 +17,9 @@ namespace ICon.Model.Simulations.ConflictHandling
         /// Create new simulation object change hanlder that uses the provided data accessor and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        protected SimulationChangeHandlerBase(IDataAccessor<SimulationModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        protected SimulationChangeHandlerBase(IDataAccessor<SimulationModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
 
         }

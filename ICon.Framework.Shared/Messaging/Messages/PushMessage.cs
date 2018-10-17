@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace ICon.Framework.Messaging
+namespace Mocassin.Framework.Messaging
 {
     /// <summary>
     /// Abstract push notification message base class for all messages within ICon that are designed to be distributed and handled through the callback messaging system

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using ICon.Framework.Reflection;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Reflection;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for the implementation of specific data conflict resolvers
@@ -16,7 +16,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Interface access to the project services
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <inheritdoc />
         [ConflictHandler(DataOperationType.NewObject)]
@@ -41,10 +41,10 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Create new data conflict resolver provider with access to the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        protected DataConflictHandlerProvider(IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected DataConflictHandlerProvider(IModelProject modelProject)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             InitializeConflictResolvers();
         }
 

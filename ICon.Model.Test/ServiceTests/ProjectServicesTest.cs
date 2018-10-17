@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class ProjectServicesTest

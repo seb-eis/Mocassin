@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="ICon.Model.Transitions.IKineticRule"/>
+    /// <inheritdoc cref="IKineticRule"/>
     [DataContract]
     public class KineticRule : TransitionRule, IKineticRule
     {

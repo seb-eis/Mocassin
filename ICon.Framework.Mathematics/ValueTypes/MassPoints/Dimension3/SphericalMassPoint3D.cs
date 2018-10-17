@@ -1,8 +1,8 @@
 ﻿using System;
-using ICon.Framework.Exceptions;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Exceptions;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Generic basic spherical mass point that specifies a 3D spherical vector with additional information

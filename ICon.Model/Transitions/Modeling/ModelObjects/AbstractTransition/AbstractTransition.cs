@@ -3,10 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Abstract base description for a transitions that specififes involved position occupations and

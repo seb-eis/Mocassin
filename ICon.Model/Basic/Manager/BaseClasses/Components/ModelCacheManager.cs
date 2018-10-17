@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all manager implementations that handle 'on demand' extended model data and cache the
@@ -36,7 +36,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     The project services instance to access shared services and other managers
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     The extended data object that supports a caching system
@@ -47,11 +47,11 @@ namespace ICon.Model.Basic
         ///     Create a new model cache manager for the provided model data using the provided project services
         /// </summary>
         /// <param name="modelCache"></param>
-        /// <param name="projectServices"></param>
-        protected ModelCacheManager(TCache modelCache, IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected ModelCacheManager(TCache modelCache, IModelProject modelProject)
         {
             Cache = modelCache ?? throw new ArgumentNullException(nameof(modelCache));
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             InitializeIfNotInitialized();
         }
 

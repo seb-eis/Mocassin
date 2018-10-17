@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Extensions;
-using ICon.Model.Particles;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Framework.Operations;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Base class for shared functionality of all conflict handlers that deal with the metropolis transition objects
@@ -18,9 +18,9 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// Create new metropolis transition handler base with the provided project services and data accessor
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        protected MetropolisTransitionHandlerBase(IDataAccessor<TransitionModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        protected MetropolisTransitionHandlerBase(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 
@@ -31,7 +31,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <returns></returns>
         protected IEnumerable<MetropolisRule> CreateTransitionRules(MetropolisTransition transition)
         {
-            var particles = ProjectServices.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
+            var particles = ModelProject.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
             var creator = new QuickRuleGenerator<MetropolisRule>(particles);
             return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
                 .SingleOrDefault()

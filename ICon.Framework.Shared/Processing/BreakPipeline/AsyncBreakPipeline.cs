@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ICon.Framework.Processing
+namespace Mocassin.Framework.Processing
 {
     /// <summary>
     ///     Async version of the break pipeline that processes an object with the first accepting handler and returns a new

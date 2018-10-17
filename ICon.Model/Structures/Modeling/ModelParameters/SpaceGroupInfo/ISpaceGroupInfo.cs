@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Symmetry.SpaceGroups;
 
-using ICon.Symmetry.SpaceGroups;
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic interface for all space group informations that contain group index, 

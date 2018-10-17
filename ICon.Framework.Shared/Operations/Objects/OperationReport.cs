@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Exceptions;
+using Mocassin.Framework.Exceptions;
 using Newtonsoft.Json;
 
-namespace ICon.Framework.Operations
+namespace Mocassin.Framework.Operations
 {
     /// <inheritdoc />
     public class OperationReport : IOperationReport

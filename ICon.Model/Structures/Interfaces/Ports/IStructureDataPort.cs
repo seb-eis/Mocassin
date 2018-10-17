@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-using ICon.Framework.Collections;
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Represents a read only data port for the structre manager that allows data access on the structure manager base data through interfaces

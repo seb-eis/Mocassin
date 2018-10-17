@@ -1,9 +1,9 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
+﻿using Mocassin.Model.Particles;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IMetropolisRuleModel"/>
+    /// <inheritdoc cref="IMetropolisRuleModel"/>
     public class MetropolisRuleModel : TransitionRuleModel, IMetropolisRuleModel
     {
         /// <inheritdoc />

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Symmetry.CrystalSystems;
 
-using ICon.Symmetry.CrystalSystems;
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Represents a set of cell parameters (a,b,c) and angles (alpha, beta, gamma)

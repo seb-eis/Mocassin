@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Framework.Constraints;
-using ICon.Model.Basic;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IGroupEnergySetter"/>
+    /// <inheritdoc cref="IGroupEnergySetter"/>
     public class GroupEnergySetter : ValueSetter, IGroupEnergySetter
     {
         /// <inheritdoc />

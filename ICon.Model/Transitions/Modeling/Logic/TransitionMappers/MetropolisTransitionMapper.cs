@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.Permutation;
-using ICon.Mathematics.ValueTypes;
-using ICon.Framework.Collections;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Permutation;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Mapper for metropolis transitions that searches and creates all possible 4D encoded exchanges for reference transitions

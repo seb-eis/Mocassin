@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Model context linker that creates interconnection between raw build context elements

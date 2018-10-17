@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Mathematics.Extensions;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Solver
+namespace Mocassin.Mathematics.Solver
 {
     /// <summary>
     ///     Classical Gauss-Jordan solver implementation for multiple linear equation systems

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Basic implementation of the lattice query manager that handles safe data queries and service requests to the Lattice manager from outside sources

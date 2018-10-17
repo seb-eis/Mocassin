@@ -1,11 +1,10 @@
 ﻿using System;
-using ICon.Framework.Operations;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Lattices.Validators;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.ProjectServices;
-using ICon.Model.Basic;
-using ICon.Model.Lattices.Validators;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Validation service for lattice related model objects that checks new lattice related model object inputs
@@ -15,14 +14,14 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// The basic Lattice settings object that defines all data constraints
         /// </summary>
-        protected BasicLatticeSettings Settings { get; set; }
+        protected MocassinLatticeSettings Settings { get; set; }
 
         /// <summary>
         /// Create new Lattice validation service that uses the provided project service and settings object
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
-        public LatticeValidationService(IProjectServices projectServices, BasicLatticeSettings settings) : base(projectServices)
+        public LatticeValidationService(IModelProject modelProject, MocassinLatticeSettings settings) : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
@@ -36,7 +35,7 @@ namespace ICon.Model.Lattices
         [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateStructureInfo(ILatticeInfo info, IDataReader<ILatticeDataPort> dataReader)
         {
-            return new LatticeInfoValidator(ProjectServices, Settings, dataReader).Validate(info);
+            return new LatticeInfoValidator(ModelProject, Settings, dataReader).Validate(info);
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace ICon.Model.Lattices
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateBuildingBlock(IBuildingBlock buildingBlock, IDataReader<ILatticeDataPort> dataReader)
         {
-            return new BuildingBlockValidator(ProjectServices, Settings, dataReader).Validate(buildingBlock);
+            return new BuildingBlockValidator(ModelProject, Settings, dataReader).Validate(buildingBlock);
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace ICon.Model.Lattices
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateBlockInfo(IBlockInfo blockInfo, IDataReader<ILatticeDataPort> dataReader)
         {
-            return new BlockInfoValidator(ProjectServices, Settings, dataReader).Validate(blockInfo);
+            return new BlockInfoValidator(ModelProject, Settings, dataReader).Validate(blockInfo);
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace ICon.Model.Lattices
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateDopingCombination(IDopingCombination dopingCombination, IDataReader<ILatticeDataPort> dataReader)
         {
-            return new DopingCombinationValidator(ProjectServices, Settings, dataReader).Validate(dopingCombination);
+            return new DopingCombinationValidator(ModelProject, Settings, dataReader).Validate(dopingCombination);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace ICon.Model.Lattices
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateDoping(IDoping doping, IDataReader<ILatticeDataPort> dataReader)
         {
-            return new DopingValidator(ProjectServices, Settings, dataReader).Validate(doping);
+            return new DopingValidator(ModelProject, Settings, dataReader).Validate(doping);
         }
     }
 }

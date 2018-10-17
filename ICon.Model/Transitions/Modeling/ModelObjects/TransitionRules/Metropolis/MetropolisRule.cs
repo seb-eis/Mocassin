@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Metropolis rule implementation that extends the basic transition rule by the metropolis properties and functionalities

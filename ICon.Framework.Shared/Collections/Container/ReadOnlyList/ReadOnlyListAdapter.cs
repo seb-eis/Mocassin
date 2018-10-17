@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ICon.Framework.Collections
+namespace Mocassin.Framework.Collections
 {
     /// <summary>
     /// Emulates a read only behavior of a list while providing the generic IList interface

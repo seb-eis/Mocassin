@@ -1,8 +1,8 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Symmetry.Analysis;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Symmetry.Analysis;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Represents an access port for on-demand extended lattice data that is automatically cached
@@ -13,7 +13,7 @@ namespace ICon.Model.Lattices
         /// Create Supercellwrapper
         /// </summary>
         /// <returns></returns>
-        SupercellWrapper<IParticle> CreateLattice();
+        SupercellAdapter<IParticle> CreateLattice();
 
         /// <summary>
         /// Create WorkLattice (only for testing)

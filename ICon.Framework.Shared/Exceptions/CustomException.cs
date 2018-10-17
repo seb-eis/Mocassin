@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ICon.Framework.Exceptions
+namespace Mocassin.Framework.Exceptions
 {
     /// <inheritdoc />
     /// <remarks> Abstract base class for all custom errors. Do not use to encapsulate basic .NET exceptions </remarks>

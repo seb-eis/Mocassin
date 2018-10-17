@@ -1,9 +1,9 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Energies.Handler;
-using ICon.Model.ProjectServices;
-using ICon.Model.Transitions;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.Energies.Handler;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Basic update manager for the energy module that handles pushed information on data changes in required modules
@@ -35,8 +35,8 @@ namespace ICon.Model.Energies
         protected TransitionIndexingChangedHandler TransitionIndexingChangedHandler { get; set; }
 
         /// <inheritdoc />
-        public EnergyUpdateManager(EnergyModelData baseData, EnergyEventManager eventManager, IProjectServices projectServices)
-            : base(baseData, eventManager, projectServices)
+        public EnergyUpdateManager(EnergyModelData baseData, EnergyEventManager eventManager, IModelProject modelProject)
+            : base(baseData, eventManager, modelProject)
         {
         }
     }

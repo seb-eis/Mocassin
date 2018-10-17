@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Symmetry.Analysis;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Represents a read only data access port for the lattice reference data

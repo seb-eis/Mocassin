@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 
-namespace ICon.Framework.Extensions
+namespace Mocassin.Framework.Extensions
 {
     /// <summary>
     /// ICon extension class for strings

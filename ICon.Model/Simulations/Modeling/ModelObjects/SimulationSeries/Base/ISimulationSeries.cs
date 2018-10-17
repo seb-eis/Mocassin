@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Provider;
+using Mocassin.Model.Basic;
 
-using ICon.Framework.Constraints;
-using ICon.Framework.Provider;
-using ICon.Model.Basic;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a series description of monte carlo simulations of the same type with varrying parameters

@@ -1,16 +1,16 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ICon.Framework.Extensions;
-using ICon.Mathematics.Extensions;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IKineticRuleModel"/>
+    /// <inheritdoc cref="IKineticRuleModel"/>
     public class KineticRuleModel : TransitionRuleModel, IKineticRuleModel
     {
         /// <inheritdoc />

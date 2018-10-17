@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Symmetry.SpaceGroups;
-using ICon.Model.ProjectServices;
-using ICon.Model.Energies;
-using ICon.Model.Structures;
-using ICon.Model.Simulations;
+using Mocassin.Symmetry.SpaceGroups;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Structures;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     public class EnvironmentDefinitionCreator
     {
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         protected List<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }
 
-        public EnvironmentDefinitionCreator(IProjectServices projectServices)
+        public EnvironmentDefinitionCreator(IModelProject modelProject)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         public List<EnvironmentDefinitionEntity> CreateEnvironmentDefinitions(ISimulation simulationBase)

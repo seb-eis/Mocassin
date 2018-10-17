@@ -1,9 +1,9 @@
-﻿using ICon.Model.Simulations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a kinetic simulation model that holds the relationship information between transitions and simulation definitions

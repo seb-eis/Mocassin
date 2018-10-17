@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ICon.Mathematics.Permutation
+namespace Mocassin.Mathematics.Permutation
 {
     /// <summary>
     ///     Single periodic permutation machine slot that lexicographically and periodically goes through all entries of a list

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Framework.Provider
+namespace Mocassin.Framework.Provider
 {
     /// <summary>
     ///     Abstract base class for object providers that supplies factory functions

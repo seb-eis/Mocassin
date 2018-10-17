@@ -1,7 +1,7 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Transitions;
+﻿using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class MetropolisMappingModel : IMetropolisMappingModel

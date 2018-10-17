@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Extensions;
-using ICon.Model.ProjectServices;
-using ICon.Model.Simulations;
+using Mocassin.Framework.Extensions;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IKineticSimulationModelBuilder"/>
+    /// <inheritdoc cref="IKineticSimulationModelBuilder"/>
     public class KineticSimulationModelBuilder : ModelBuilderBase, IKineticSimulationModelBuilder
     {
         /// <inheritdoc />
-        public KineticSimulationModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public KineticSimulationModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 

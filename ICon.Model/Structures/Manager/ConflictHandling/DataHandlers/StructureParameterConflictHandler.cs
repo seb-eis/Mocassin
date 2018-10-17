@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Structures.ConflictHandling
+namespace Mocassin.Model.Structures.ConflictHandling
 {
     /// <summary>
     /// Conflict resolver for parameter induced conflicts within the structure manager
@@ -16,8 +15,8 @@ namespace ICon.Model.Structures.ConflictHandling
         /// <summary>
         /// Construct new structure parameter conflict resolver that uses the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        public StructureParameterConflictHandler(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public StructureParameterConflictHandler(IModelProject modelProject) : base(modelProject)
         {
 
         }
@@ -32,7 +31,7 @@ namespace ICon.Model.Structures.ConflictHandling
         protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(SpaceGroupChangeHandler)} was called for {groupInfo.GetType().ToString()}");
-            return new SpaceGroupChangeHandler(dataAccess, ProjectServices).HandleConflicts(groupInfo);
+            return new SpaceGroupChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInfo);
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace ICon.Model.Structures.ConflictHandling
         protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(CellParametersChangeHandler)} was called for {parameters.GetType().ToString()}");
-            return new CellParametersChangeHandler(dataAccess, ProjectServices).HandleConflicts(parameters);
+            return new CellParametersChangeHandler(dataAccess, ModelProject).HandleConflicts(parameters);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ICon.Framework.Operations
+namespace Mocassin.Framework.Operations
 {
     /// <summary>
     ///     Represents an information object about success or failure of a model change attempt by an outside source

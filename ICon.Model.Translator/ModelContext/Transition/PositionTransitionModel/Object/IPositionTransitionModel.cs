@@ -1,10 +1,10 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
+﻿using Mocassin.Mathematics.ValueTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a position transition model that describes which transitions are possible on a unit cell position

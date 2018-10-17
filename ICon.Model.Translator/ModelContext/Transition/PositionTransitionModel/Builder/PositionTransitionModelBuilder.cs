@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPositionTransitionModelBuilder"/>
+    /// <inheritdoc cref="IPositionTransitionModelBuilder"/>
     public class PositionTransitionModelBuilder : ModelBuilderBase, IPositionTransitionModelBuilder
     {
         /// <inheritdoc />
-        public PositionTransitionModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public PositionTransitionModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -19,7 +19,7 @@ namespace ICon.Model.Translator.ModelContext
         public IList<IPositionTransitionModel> BuildModels(ITransitionModelContext modelContext, Task transitionBuildTask)
         {
             transitionBuildTask.Wait();
-            var unitCellPositions = ProjectServices
+            var unitCellPositions = ModelProject
                 .GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetUnitCellPositions());
 

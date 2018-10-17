@@ -1,6 +1,6 @@
-﻿using ICon.Model.Particles;
+﻿using Mocassin.Model.Particles;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents an unspecified transition model that fully describes a simulation transition

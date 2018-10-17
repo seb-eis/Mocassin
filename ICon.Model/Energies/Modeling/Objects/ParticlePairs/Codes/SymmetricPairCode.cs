@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using ICon.Model.Particles;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents a pair code of two particle indices that are used to identify a pair interaction. Order of indices is

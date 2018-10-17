@@ -1,10 +1,10 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Structures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Temporary Object for lattice creation

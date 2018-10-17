@@ -1,10 +1,10 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.ProjectServices;
-using ICon.Model.Basic;
-using ICon.Model.Structures.Validators;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures.Validators;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Validation service for structure related model objects, uses space group service to validate potential duplicate conflicts
@@ -14,13 +14,13 @@ namespace ICon.Model.Structures
         /// <summary>
         /// The basic structure settings object
         /// </summary>
-        private BasicStructureSettings Settings { get; set; }
+        private MocassinStructureSettings Settings { get; set; }
 
         /// <summary>
         /// Create new structure validation service for the provided basic settings and space group service
         /// </summary>
         /// <param name="settings"></param>
-        public StructureValidationService(BasicStructureSettings settings, IProjectServices projectServices) : base(projectServices)
+        public StructureValidationService(MocassinStructureSettings settings, IModelProject modelProject) : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
@@ -34,7 +34,7 @@ namespace ICon.Model.Structures
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateUnitCellPosition(IUnitCellPosition position, IDataReader<IStructureDataPort> dataReader)
         {
-            return new UnitCellPositionValidator(ProjectServices, Settings, dataReader).Validate(position);
+            return new UnitCellPositionValidator(ModelProject, Settings, dataReader).Validate(position);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ICon.Model.Structures
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidatePositionDummy(IPositionDummy position, IDataReader<IStructureDataPort> dataReader)
         {
-            return new PositionDummyValidator(ProjectServices, Settings, dataReader).Validate(position);
+            return new PositionDummyValidator(ModelProject, Settings, dataReader).Validate(position);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ICon.Model.Structures
         [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateStructureInfo(IStructureInfo info, IDataReader<IStructureDataPort> dataReader)
         {
-            return new StructureInfoValidator(ProjectServices, Settings, dataReader).Validate(info);
+            return new StructureInfoValidator(ModelProject, Settings, dataReader).Validate(info);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ICon.Model.Structures
         [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateCellParameters(ICellParameters parameters, IDataReader<IStructureDataPort> dataReader)
         {
-            return new UnitCellParameterValidator(ProjectServices, Settings, dataReader).Validate(parameters);
+            return new UnitCellParameterValidator(ModelProject, Settings, dataReader).Validate(parameters);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace ICon.Model.Structures
         [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateSpaceGroupInfo(ISpaceGroupInfo groupInfo, IDataReader<IStructureDataPort> dataReader)
         {
-            return new SpaceGroupInfoValidator(ProjectServices, Settings, dataReader).Validate(groupInfo);
+            return new SpaceGroupInfoValidator(ModelProject, Settings, dataReader).Validate(groupInfo);
         }
     }
 }

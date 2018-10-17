@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Lattices;
 
-using ICon.Framework.Constraints;
-using ICon.Model.Lattices;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a doping series providing an abstract doping information and a value series of actual concentrations

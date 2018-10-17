@@ -1,25 +1,25 @@
-﻿using ICon.Mathematics.Constraints;
-using ICon.Mathematics.Comparers;
-using ICon.Framework.Operations;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures.Validators
+namespace Mocassin.Model.Structures.Validators
 {
     /// <summary>
     /// Validator for new unit cell position model objects that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class UnitCellPositionValidator : DataValidator<IUnitCellPosition, BasicStructureSettings, IStructureDataPort>
+    public class UnitCellPositionValidator : DataValidator<IUnitCellPosition, MocassinStructureSettings, IStructureDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public UnitCellPositionValidator(IProjectServices projectServices, BasicStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public UnitCellPositionValidator(IModelProject modelProject, MocassinStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -43,7 +43,7 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddConstraintValidation(IUnitCellPosition position, ValidationReport report)
         {
-            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ProjectServices.CommonNumeric.CompRange));
+            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ModelProject.CommonNumeric.ComparisonRange));
             if (!constraint.IsValid(position.Vector.A) || !constraint.IsValid(position.Vector.B) || !constraint.IsValid(position.Vector.C))
             {
                 var detail0 = $"The position violates the unit cell boundaries {constraint.ToString()}";
@@ -60,12 +60,12 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddObjectUniquenessValidation(IUnitCellPosition position, ValidationReport report)
         {
-            var comparer = new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer);
+            var comparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
             foreach (var item in DataReader.Access.GetUnitCellPositions())
             {
                 if (!item.IsDeprecated)
                 {
-                    var extended = ProjectServices.SpaceGroupService.GetAllWyckoffPositions(item.Vector);
+                    var extended = ModelProject.SpaceGroupService.GetAllWyckoffPositions(item.Vector);
                     if (extended.Contains(position.Vector))
                     {
                         var detail0 = $"Provided unit cell position is already defined by index ({item.Index})";

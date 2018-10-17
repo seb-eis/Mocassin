@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
-using ICon.Model.Energies;
-using ICon.Model.Particles;
-using ICon.Model.Simulations;
-using ICon.Model.Lattices;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Lattices;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Simulations;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Base class for all translator components
@@ -33,27 +33,27 @@ namespace ICon.Model.Translator
         {
             TranslationContext = translationContext ?? throw new ArgumentNullException(nameof(translationContext));
 
-            if ((ParticleManager = TranslationContext.ProjectServices.GetManager<IParticleManager>()) == null)
+            if ((ParticleManager = TranslationContext.ModelProject.GetManager<IParticleManager>()) == null)
             {
                 throw new InvalidOperationException("Required particle model context does not exist");
             }
 
-            if ((StructureManager = TranslationContext.ProjectServices.GetManager<IStructureManager>()) == null)
+            if ((StructureManager = TranslationContext.ModelProject.GetManager<IStructureManager>()) == null)
             {
                 throw new InvalidOperationException("Required structure model context does not exist");
             }
 
-            if ((TransitionManager = TranslationContext.ProjectServices.GetManager<ITransitionManager>()) == null)
+            if ((TransitionManager = TranslationContext.ModelProject.GetManager<ITransitionManager>()) == null)
             {
                 throw new InvalidOperationException("Required transition model context does not exist");
             }
 
-            if ((EnergyManager = TranslationContext.ProjectServices.GetManager<IEnergyManager>()) == null)
+            if ((EnergyManager = TranslationContext.ModelProject.GetManager<IEnergyManager>()) == null)
             {
                 throw new InvalidOperationException("Required energy model context does not exist");
             }
 
-            if ((SimulationManager = TranslationContext.ProjectServices.GetManager<ISimulationManager>()) == null)
+            if ((SimulationManager = TranslationContext.ModelProject.GetManager<ISimulationManager>()) == null)
             {
                 throw new InvalidOperationException("Required energy model context does not exist");
             }

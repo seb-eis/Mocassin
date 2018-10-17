@@ -1,25 +1,25 @@
-﻿using ICon.Mathematics.Constraints;
-using ICon.Mathematics.Comparers;
-using ICon.Framework.Operations;
-using ICon.Framework.Messaging;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures.Validators
+namespace Mocassin.Model.Structures.Validators
 {
     /// <summary>
     /// Validator for new unit cell position model objects that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class PositionDummyValidator : DataValidator<IPositionDummy, BasicStructureSettings, IStructureDataPort>
+    public class PositionDummyValidator : DataValidator<IPositionDummy, MocassinStructureSettings, IStructureDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public PositionDummyValidator(IProjectServices projectServices, BasicStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public PositionDummyValidator(IModelProject modelProject, MocassinStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -43,7 +43,7 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddConstraintValidation(IPositionDummy position, ValidationReport report)
         {
-            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ProjectServices.CommonNumeric.CompRange));
+            var constraint = new NumericConstraint(true, 0.0, 1.0, false, NumericComparer.CreateRanged(ModelProject.CommonNumeric.ComparisonRange));
             if (!constraint.IsValid(position.Vector.A) || !constraint.IsValid(position.Vector.B) || !constraint.IsValid(position.Vector.C))
             {
                 var detail = $"The dummy violates the unit cell boundaries {constraint.ToString()}";
@@ -64,7 +64,7 @@ namespace ICon.Model.Structures.Validators
             {
                 if (!item.IsDeprecated)
                 {
-                    var extended = ProjectServices.SpaceGroupService.GetAllWyckoffPositions(item.Vector);
+                    var extended = ModelProject.SpaceGroupService.GetAllWyckoffPositions(item.Vector);
                     if (extended.GetCppLowerBound(position.Vector) != extended.Count)
                     {
                         var detail = "Provided dummy position is already present or part of the wyckoff set of another existing dummy";

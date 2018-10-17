@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace ICon.Framework.Provider
+namespace Mocassin.Framework.Provider
 {
     /// <inheritdoc />
     [DataContract]

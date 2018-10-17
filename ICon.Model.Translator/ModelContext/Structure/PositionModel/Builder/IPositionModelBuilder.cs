@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Symmetry.Analysis;
+using Mocassin.Symmetry.Analysis;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Builder for position models that fully described an extended position environment and properties

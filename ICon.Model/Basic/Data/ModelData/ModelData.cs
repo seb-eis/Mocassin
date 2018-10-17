@@ -2,7 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reflection;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Base class for all model data objects that contain potentially critical data and support thread safe read/write

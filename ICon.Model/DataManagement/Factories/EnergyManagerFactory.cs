@@ -1,8 +1,8 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Energies;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.Energies;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.DataManagement
+namespace Mocassin.Model.DataManagement
 {
     /// <summary>
     ///     Factory for new energy manager systems
@@ -10,11 +10,11 @@ namespace ICon.Model.DataManagement
     public class EnergyManagerFactory : IModelManagerFactory
     {
         /// <inheritdoc />
-        public IModelManager CreateNew(IProjectServices projectServices, out object dataObject)
+        public IModelManager CreateNew(IModelProject modelProject, out object dataObject)
         {
             var data = EnergyModelData.CreateNew();
             dataObject = data;
-            return new EnergyManager(projectServices, data);
+            return new EnergyManager(modelProject, data);
         }
     }
 }

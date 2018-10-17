@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Model.Structures;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a state pair of a donor and acceptor particle index

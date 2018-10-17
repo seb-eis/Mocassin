@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using ICon.Mathematics.ValueTypes;
-using ICon.Framework.Collections;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Symmetry.SpaceGroups
+namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <inheritdoc />
     public class WyckoffOperationDictionary : IWyckoffOperationDictionary
@@ -18,7 +17,7 @@ namespace ICon.Symmetry.SpaceGroups
         public Fractional3D SourcePosition { get; set; }
 
         /// <summary>
-        /// Sorted position dictionary that holds a list of operations for each of the wyckoff 1 positions
+        ///     Sorted position dictionary that holds a list of operations for each of the wyckoff 1 positions
         /// </summary>
         public SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> OperationDictionary { get; set; }
 
@@ -36,12 +35,13 @@ namespace ICon.Symmetry.SpaceGroups
         public IEnumerable<ISymmetryOperation> this[Fractional3D key] => OperationDictionary[key].AsEnumerable();
 
         /// <summary>
-        /// Creates new wyckoff operation dictionary with the passed source position and operation dictionary
+        ///     Creates new wyckoff operation dictionary with the passed source position and operation dictionary
         /// </summary>
         /// <param name="sourcePosition"></param>
         /// <param name="spaceGroup"></param>
         /// <param name="operationDictionary"></param>
-        public WyckoffOperationDictionary(Fractional3D sourcePosition, ISpaceGroup spaceGroup, SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> operationDictionary)
+        public WyckoffOperationDictionary(Fractional3D sourcePosition, ISpaceGroup spaceGroup,
+            SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> operationDictionary)
         {
             SourcePosition = sourcePosition;
             SpaceGroup = spaceGroup ?? throw new ArgumentNullException(nameof(spaceGroup));
@@ -62,6 +62,7 @@ namespace ICon.Symmetry.SpaceGroups
                 value = results.AsEnumerable();
                 return true;
             }
+
             value = default;
             return false;
         }
@@ -70,9 +71,7 @@ namespace ICon.Symmetry.SpaceGroups
         public IEnumerator<KeyValuePair<Fractional3D, IEnumerable<ISymmetryOperation>>> GetEnumerator()
         {
             foreach (var item in OperationDictionary)
-            {
                 yield return new KeyValuePair<Fractional3D, IEnumerable<ISymmetryOperation>>(item.Key, item.Value.AsEnumerable());
-            }
         }
 
         /// <inheritdoc />

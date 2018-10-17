@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Framework.Constraints
+namespace Mocassin.Framework.Constraints
 {
     /// <summary>
     /// Generic value constraint for cases where source and target type of the constraint are identical

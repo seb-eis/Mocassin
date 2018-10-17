@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
-using ICon.Model.Structures;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IUnstableEnvironment" />
+    /// <inheritdoc cref="IUnstableEnvironment" />
     [DataContract(Name = "UnstableEnvironmentInfo")]
     public class UnstableEnvironment : ModelObject, IUnstableEnvironment
     {

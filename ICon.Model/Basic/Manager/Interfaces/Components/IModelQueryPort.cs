@@ -2,7 +2,7 @@
 using System.Reactive;
 using System.Threading.Tasks;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Base interface for all model query ports

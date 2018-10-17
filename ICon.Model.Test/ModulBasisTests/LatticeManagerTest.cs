@@ -1,21 +1,19 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-
-using ICon.Model.Basic;
-using ICon.Model.Lattices;
+using Mocassin.Model.Lattices;
 using System.Collections.Generic;
-using ICon.Model.Particles;
-using ICon.Framework.Collections;
+using Mocassin.Framework.Collections;
 using System.Collections.Immutable;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.Comparers;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.Comparers;
 using System.Linq;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class LatticeManagerTest : ManagementModuleTestsBasis
@@ -91,7 +89,7 @@ namespace ICon.Model.Test
             //    particleA
             //});
 
-            //UnitCellWrapper<IParticle> unitCellWrapper1 = new UnitCellWrapper<IParticle>
+            //UnitCellAdapter<IParticle> unitCellWrapper1 = new UnitCellAdapter<IParticle>
             //   (
             //       particles,
             //       new UnitCellVectorEncoder
@@ -112,7 +110,7 @@ namespace ICon.Model.Test
             //           )
             //       ));
 
-            //UnitCellWrapper<IParticle> unitCellWrapper2 = new UnitCellWrapper<IParticle>
+            //UnitCellAdapter<IParticle> unitCellWrapper2 = new UnitCellAdapter<IParticle>
             //   (
             //       particlesCustom,
             //       new UnitCellVectorEncoder
@@ -133,7 +131,7 @@ namespace ICon.Model.Test
             //           )
             //       ));
 
-            //ReadOnlyList<IUnitCell<IParticle>> unitCells = ReadOnlyList<IUnitCell<IParticle>>.FromEnumerable(new UnitCellWrapper<IParticle>[] { unitCellWrapper1, unitCellWrapper2 });
+            //ReadOnlyList<IUnitCell<IParticle>> unitCells = ReadOnlyList<IUnitCell<IParticle>>.FromEnumerable(new UnitCellAdapter<IParticle>[] { unitCellWrapper1, unitCellWrapper2 });
 
             //ReadOnlyList <IBlockInfo> blockInfos = ReadOnlyList<IBlockInfo>.FromEnumerable(new BlockInfo[] 
             //{

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Model.Structures;
 
-using ICon.Model.Structures;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a decode version of a property group which is completly describes by particle indices

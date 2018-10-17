@@ -1,8 +1,8 @@
 ﻿using System;
-using ICon.Framework.Exceptions;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Exceptions;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Generic cartesian 3D mass point (Only supports primitive type masses that support System.Convert)

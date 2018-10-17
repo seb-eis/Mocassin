@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace ICon.Framework.Async
+namespace Mocassin.Framework.Async
 {
     /// <summary>
     ///     Represents an Async/Await awaiter object that returns nothing and schedules async method continuations when it

@@ -1,9 +1,9 @@
-﻿using ICon.Model.Particles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a static tracker model that describes a statically tracked movement property of the simulation

@@ -1,23 +1,23 @@
-﻿using ICon.Framework.Operations;
-using ICon.Framework.Messaging;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures.Validators
+namespace Mocassin.Model.Structures.Validators
 {
     /// <summary>
     /// Validator for new unit cell parameter model parameter that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class UnitCellParameterValidator : DataValidator<ICellParameters, BasicStructureSettings, IStructureDataPort>
+    public class UnitCellParameterValidator : DataValidator<ICellParameters, MocassinStructureSettings, IStructureDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public UnitCellParameterValidator(IProjectServices projectServices, BasicStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public UnitCellParameterValidator(IModelProject modelProject, MocassinStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -41,7 +41,7 @@ namespace ICon.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddCrystalSystemCompatibiliyValidation(ICellParameters parameters, ValidationReport report)
         {
-            var crystalSystem = ProjectServices.CrystalSystemService.CrystalSystem;
+            var crystalSystem = ModelProject.CrystalSystemService.CrystalSystem;
             if (crystalSystem.ValidateAngleConditions(parameters.Alpha, parameters.Beta, parameters.Gamma) == false)
             {
                 var message = new WarningMessage(this, "Cell angle validation failure");

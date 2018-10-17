@@ -1,35 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Mocassin.Mathematics.Coordinates;
 
-using ICon.Mathematics.Coordinates;
-
-namespace ICon.Symmetry.Analysis
+namespace Mocassin.Symmetry.Analysis
 {
     /// <summary>
-    /// Represents a generic unit cell at arbitrary (a,b,c) offset that supplies a limited set of sorted unit cell entries of specififed type
+    ///     Represents a generic unit cell at arbitrary (a,b,c) offset that supplies a limited set of sorted unit cell entries
+    ///     of specified type
     /// </summary>
     public interface IUnitCell<T1>
     {
         /// <summary>
-        /// Get the number of entries in the cell
+        ///     Get the number of entries in the cell
         /// </summary>
         int EntryCount { get; }
 
         /// <summary>
-        /// Get the unit cell vector encoder of the unit cell
+        ///     Get the unit cell vector encoder of the unit cell
         /// </summary>
         IUnitCellVectorEncoder VectorEncoder { get; }
 
         /// <summary>
-        /// Access the unit cell at the specififed position index
+        ///     Access the unit cell at the specified position index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         CellEntry<T1> this[int index] { get; }
 
         /// <summary>
-        /// Get all unit cell entries as en enumerable
+        ///     Get all unit cell entries as en enumerable
         /// </summary>
         /// <returns></returns>
         IEnumerable<CellEntry<T1>> GetAllEntries();

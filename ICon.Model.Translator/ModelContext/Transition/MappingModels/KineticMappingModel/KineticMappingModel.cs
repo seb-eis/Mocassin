@@ -1,12 +1,12 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class KineticMappingModel : IKineticMappingModel

@@ -1,9 +1,9 @@
-﻿using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.ModelProject;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents an energy model context that provides all reference energy information of the project 

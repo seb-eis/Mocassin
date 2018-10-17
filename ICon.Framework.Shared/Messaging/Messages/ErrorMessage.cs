@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Framework.Messaging
+namespace Mocassin.Framework.Messaging
 {
     /// <summary>
     /// Exception message class that carries error information including the thrown exceptions (Only to be used when program errors occure)

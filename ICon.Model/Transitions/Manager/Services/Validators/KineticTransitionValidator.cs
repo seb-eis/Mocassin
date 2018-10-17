@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Linq;
+using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Framework.Operations;
-using ICon.Framework.Messaging;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Transitions.Validators
+namespace Mocassin.Model.Transitions.Validators
 {
     /// <summary>
     /// Validator for new kinetic transitions that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class KineticTransitionValidator : DataValidator<IKineticTransition, BasicTransitionSettings, ITransitionDataPort>
+    public class KineticTransitionValidator : DataValidator<IKineticTransition, MocassinTransitionSettings, ITransitionDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public KineticTransitionValidator(IProjectServices projectServices, BasicTransitionSettings settings, IDataReader<ITransitionDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public KineticTransitionValidator(IModelProject modelProject, MocassinTransitionSettings settings, IDataReader<ITransitionDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -68,7 +67,7 @@ namespace ICon.Model.Transitions.Validators
                 var detail1 = $"Abstract transition defines ({groupCount}) positions while the geoemtry set defines ({transition.GeometryStepCount}) positions";
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
-            if (new TransitionAnalyzer().ContainsRingTransition(transition.GetGeometrySequence(), ProjectServices.SpaceGroupService.Comparer))
+            if (new TransitionAnalyzer().ContainsRingTransition(transition.GetGeometrySequence(), ModelProject.SpaceGroupService.Comparer))
             {
                 var detail = "The transition geometry contains a ring transition where one position is contained multiple times";
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail));
@@ -101,7 +100,7 @@ namespace ICon.Model.Transitions.Validators
         /// <param name="report"></param>
         protected void AddChargeConsistencyValidation(IKineticTransition transition, ValidationReport report)
         {
-            var swapChain = new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ProjectServices.CommonNumeric.RangeComparer);
+            var swapChain = new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ModelProject.CommonNumeric.RangeComparer);
             if (swapChain.Any(value => value == double.NaN))
             {
                 var detail0 = $"The transition charge transport chain is ill defined. Please reconsider your abstract transition definition!";

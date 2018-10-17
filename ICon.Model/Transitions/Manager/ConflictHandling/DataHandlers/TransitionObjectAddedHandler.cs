@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Transitions.ConflictHandling
+namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
     /// Internal conflict handler for the addition of model objects to the transition managment system
@@ -16,8 +15,8 @@ namespace ICon.Model.Transitions.ConflictHandling
         /// <summary>
         /// Create new transition object added handler using the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        public TransitionObjectAddedHandler(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public TransitionObjectAddedHandler(IModelProject modelProject) : base(modelProject)
         {
         }
         
@@ -30,7 +29,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport HandleNewKineticTransition(KineticTransition transition, IDataAccessor<TransitionModelData> dataAccess)
         {
-            return new KineticTransitionAddedHandler(dataAccess, ProjectServices).HandleConflicts(transition);
+            return new KineticTransitionAddedHandler(dataAccess, ModelProject).HandleConflicts(transition);
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace ICon.Model.Transitions.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport HandleNewMetropolisTransition(MetropolisTransition transition, IDataAccessor<TransitionModelData> dataAccess)
         {
-            return new MetropolisTransitionAddedHandler(dataAccess, ProjectServices).HandleConflicts(transition);
+            return new MetropolisTransitionAddedHandler(dataAccess, ModelProject).HandleConflicts(transition);
         }
     }
 }

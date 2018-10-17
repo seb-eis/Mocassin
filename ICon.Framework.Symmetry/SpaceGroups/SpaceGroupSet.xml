@@ -1,41 +1,41 @@
 <SpaceGroupSet>
 	<Groups>
-		<Group GroupID="1" Literal="P1" Specifier="" SpecifierID="0" SystemID="0" SystemName="Triclinic">
+		<Group GroupID="1" Literal="P1" Specifier="" SpecifierID="0" SystemId="0" SystemName="Triclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="2" Literal="P-1" Specifier="" SpecifierID="0" SystemID="0" SystemName="Triclinic">
+		<Group GroupID="2" Literal="P-1" Specifier="" SpecifierID="0" SystemId="0" SystemName="Triclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="3" Literal="P2" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="3" Literal="P2" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="3" Literal="P2" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="3" Literal="P2" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="4" Literal="P2_1" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="4" Literal="P2_1" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y + 1/2, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="4" Literal="P2_1" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="4" Literal="P2_1" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="5" Literal="C2" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="5" Literal="C2" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
@@ -43,7 +43,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, -z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="5" Literal="C2" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="5" Literal="C2" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -51,31 +51,31 @@
 				<Operation Literal="-x, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="6" Literal="Pm" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="6" Literal="Pm" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x, -y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="6" Literal="Pm" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="6" Literal="Pm" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x, y, -z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="7" Literal="Pc" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="7" Literal="Pc" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x, -y, z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="7" Literal="Pc" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="7" Literal="Pc" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x + 1/2, y, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="8" Literal="Cm" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="8" Literal="Cm" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x, -y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -83,7 +83,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="8" Literal="Cm" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="8" Literal="Cm" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x, y, -z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
@@ -91,7 +91,7 @@
 				<Operation Literal="x, y + 1/2, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="9" Literal="Cc" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="9" Literal="Cc" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x, -y, z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -99,7 +99,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, z + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="9" Literal="Cc" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="9" Literal="Cc" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="x + 1/2, y, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
@@ -107,7 +107,7 @@
 				<Operation Literal="x + 1/2, y + 1/2, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="10" Literal="P2/m" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="10" Literal="P2/m" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
@@ -115,7 +115,7 @@
 				<Operation Literal="x, -y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="10" Literal="P2/m" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="10" Literal="P2/m" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -123,7 +123,7 @@
 				<Operation Literal="x, y, -z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="11" Literal="P2_1/m" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="11" Literal="P2_1/m" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y + 1/2, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
@@ -131,7 +131,7 @@
 				<Operation Literal="x, -y + 1/2, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="11" Literal="P2_1/m" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="11" Literal="P2_1/m" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -139,7 +139,7 @@
 				<Operation Literal="x, y, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="12" Literal="C2/m" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="12" Literal="C2/m" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y, -z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
@@ -151,7 +151,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="12" Literal="C2/m" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="12" Literal="C2/m" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -163,7 +163,7 @@
 				<Operation Literal="x, y + 1/2, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="13" Literal="P2/c" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="13" Literal="P2/c" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y, -z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
@@ -171,7 +171,7 @@
 				<Operation Literal="x, -y, z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="13" Literal="P2/c" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="13" Literal="P2/c" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -179,7 +179,7 @@
 				<Operation Literal="x + 1/2, y, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="14" Literal="P2_1/c" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="14" Literal="P2_1/c" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y + 1/2, -z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
@@ -187,7 +187,7 @@
 				<Operation Literal="x, -y + 1/2, z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="14" Literal="P2_1/c" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="14" Literal="P2_1/c" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -195,7 +195,7 @@
 				<Operation Literal="x + 1/2, y, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="15" Literal="C2/c" Specifier="Unique Axis B" SpecifierID="0" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="15" Literal="C2/c" Specifier="Unique Axis B" SpecifierID="0" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, y, -z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
@@ -207,7 +207,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, z + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="15" Literal="C2/c" Specifier="Unique Axis C" SpecifierID="1" SystemID="1" SystemName="Monoclinic">
+		<Group GroupID="15" Literal="C2/c" Specifier="Unique Axis C" SpecifierID="1" SystemId="1" SystemName="Monoclinic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -219,7 +219,7 @@
 				<Operation Literal="x + 1/2, y + 1/2, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="16" Literal="P222" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="16" Literal="P222" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -227,7 +227,7 @@
 				<Operation Literal="x, -y, -z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="17" Literal="P222_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="17" Literal="P222_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -235,7 +235,7 @@
 				<Operation Literal="x, -y, -z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="18" Literal="P2_12_12" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="18" Literal="P2_12_12" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -243,7 +243,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="19" Literal="P2_12_12_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="19" Literal="P2_12_12_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -251,7 +251,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="20" Literal="C222_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="20" Literal="C222_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -263,7 +263,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="21" Literal="C222" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="21" Literal="C222" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -275,7 +275,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="22" Literal="F222" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="22" Literal="F222" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -295,7 +295,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, -z" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="23" Literal="I222" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="23" Literal="I222" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -307,7 +307,7 @@
 				<Operation Literal="x + 1/2, -y + 1/2, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="24" Literal="I2_12_12_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="24" Literal="I2_12_12_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -319,7 +319,7 @@
 				<Operation Literal="x + 1, -y + 1, -z + 1/2" Operation="1.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="25" Literal="Pmm2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="25" Literal="Pmm2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -327,7 +327,7 @@
 				<Operation Literal="-x, y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="26" Literal="Pmc2_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="26" Literal="Pmc2_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -335,7 +335,7 @@
 				<Operation Literal="-x, y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="27" Literal="Pcc2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="27" Literal="Pcc2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -343,7 +343,7 @@
 				<Operation Literal="-x, y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="28" Literal="Pma2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="28" Literal="Pma2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -351,7 +351,7 @@
 				<Operation Literal="-x + 1/2, y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="29" Literal="Pca2_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="29" Literal="Pca2_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -359,7 +359,7 @@
 				<Operation Literal="-x + 1/2, y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="30" Literal="Pnc2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="30" Literal="Pnc2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -367,7 +367,7 @@
 				<Operation Literal="-x, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="31" Literal="Pmn2_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="31" Literal="Pmn2_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -375,7 +375,7 @@
 				<Operation Literal="-x, y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="32" Literal="Pba2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="32" Literal="Pba2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -383,7 +383,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="33" Literal="Pna2_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="33" Literal="Pna2_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -391,7 +391,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="34" Literal="Pnn2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="34" Literal="Pnn2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -399,7 +399,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="35" Literal="Cmm2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="35" Literal="Cmm2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -411,7 +411,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="36" Literal="Cmc2_1" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="36" Literal="Cmc2_1" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -423,7 +423,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="37" Literal="Ccc2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="37" Literal="Ccc2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -435,7 +435,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="38" Literal="Amm2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="38" Literal="Amm2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -447,7 +447,7 @@
 				<Operation Literal="-x, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="39" Literal="Aem2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="39" Literal="Aem2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -459,7 +459,7 @@
 				<Operation Literal="-x, y + 1, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="40" Literal="Ama2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="40" Literal="Ama2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -471,7 +471,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="41" Literal="Aea2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="41" Literal="Aea2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -483,7 +483,7 @@
 				<Operation Literal="-x + 1/2, y + 1, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="42" Literal="Fmm2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="42" Literal="Fmm2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -503,7 +503,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="43" Literal="Fdd2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="43" Literal="Fdd2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -523,7 +523,7 @@
 				<Operation Literal="-x + 3/4, y + 3/4, z + 1/4" Operation="-1.0, 0.0, 0.0, 0.75, 0.0, 1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="44" Literal="Imm2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="44" Literal="Imm2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -535,7 +535,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="45" Literal="Iba2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="45" Literal="Iba2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -547,7 +547,7 @@
 				<Operation Literal="-x + 1, y + 1, z + 1/2" Operation="-1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="46" Literal="Ima2" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="46" Literal="Ima2" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -559,7 +559,7 @@
 				<Operation Literal="-x + 1, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="47" Literal="Pmmm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="47" Literal="Pmmm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5" />
 				<Operation Literal="-x, -y, 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5" />
@@ -567,7 +567,7 @@
 				<Operation Literal="x, -y, 1/2" Operation="1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="48" Literal="Pnnn" Specifier="Origin Choice 1" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="48" Literal="Pnnn" Specifier="Origin Choice 1" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -579,7 +579,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="48" Literal="Pnnn" Specifier="Origin Choice 2" SpecifierID="1" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="48" Literal="Pnnn" Specifier="Origin Choice 2" SpecifierID="1" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -591,7 +591,7 @@
 				<Operation Literal="-x, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="49" Literal="Pccm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="49" Literal="Pccm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -603,7 +603,7 @@
 				<Operation Literal="-x, y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="50" Literal="Pban" Specifier="Origin Choice 1" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="50" Literal="Pban" Specifier="Origin Choice 1" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -615,7 +615,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="50" Literal="Pban" Specifier="Origin Choice 2" SpecifierID="1" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="50" Literal="Pban" Specifier="Origin Choice 2" SpecifierID="1" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -627,7 +627,7 @@
 				<Operation Literal="-x, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="51" Literal="Pmma" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="51" Literal="Pmma" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -639,7 +639,7 @@
 				<Operation Literal="-x + 1/2, y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="52" Literal="Pnna" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="52" Literal="Pnna" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -651,7 +651,7 @@
 				<Operation Literal="-x, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="53" Literal="Pmna" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="53" Literal="Pmna" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -663,7 +663,7 @@
 				<Operation Literal="-x, y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="54" Literal="Pcca" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="54" Literal="Pcca" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -675,7 +675,7 @@
 				<Operation Literal="-x + 1/2, y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="55" Literal="Pbam" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="55" Literal="Pbam" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -687,7 +687,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="56" Literal="Pccn" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="56" Literal="Pccn" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -699,7 +699,7 @@
 				<Operation Literal="-x + 1/2, y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="57" Literal="Pbcm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="57" Literal="Pbcm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -711,7 +711,7 @@
 				<Operation Literal="-x, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="58" Literal="Pnnm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="58" Literal="Pnnm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -723,7 +723,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="59" Literal="Pmmn" Specifier="Origin Choice 1" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="59" Literal="Pmmn" Specifier="Origin Choice 1" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -735,7 +735,7 @@
 				<Operation Literal="-x, y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="59" Literal="Pmmn" Specifier="Origin Choice 2" SpecifierID="1" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="59" Literal="Pmmn" Specifier="Origin Choice 2" SpecifierID="1" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -747,7 +747,7 @@
 				<Operation Literal="-x + 1/2, y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="60" Literal="Pbcn" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="60" Literal="Pbcn" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -759,7 +759,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="61" Literal="Pbca" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="61" Literal="Pbca" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -771,7 +771,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="62" Literal="Pnma" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="62" Literal="Pnma" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -783,7 +783,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="63" Literal="Cmcm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="63" Literal="Cmcm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -803,7 +803,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="64" Literal="Cmce" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="64" Literal="Cmce" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -823,7 +823,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="65" Literal="Cmmm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="65" Literal="Cmmm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -843,7 +843,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="66" Literal="Cccm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="66" Literal="Cccm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -863,7 +863,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="67" Literal="Cmme" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="67" Literal="Cmme" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -883,7 +883,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="68" Literal="Ccce" Specifier="Origin Choice 1" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="68" Literal="Ccce" Specifier="Origin Choice 1" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -903,7 +903,7 @@
 				<Operation Literal="-x + 1, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="68" Literal="Ccce" Specifier="Origin Choice 2" SpecifierID="1" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="68" Literal="Ccce" Specifier="Origin Choice 2" SpecifierID="1" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -923,7 +923,7 @@
 				<Operation Literal="-x + 1, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="69" Literal="Fmmm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="69" Literal="Fmmm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -959,7 +959,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="70" Literal="Fddd" Specifier="Origin Choice 1" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="70" Literal="Fddd" Specifier="Origin Choice 1" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -995,7 +995,7 @@
 				<Operation Literal="-x + 3/4, y + 3/4, z + 1/4" Operation="-1.0, 0.0, 0.0, 0.75, 0.0, 1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="70" Literal="Fddd" Specifier="Origin Choice 2" SpecifierID="1" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="70" Literal="Fddd" Specifier="Origin Choice 2" SpecifierID="1" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 3/4, -y + 3/4, z" Operation="-1.0, 0.0, 0.0, 0.75, 0.0, -1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.0" />
@@ -1031,7 +1031,7 @@
 				<Operation Literal="-x + 1/2, y + 3/4, z + 1/4" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="71" Literal="Immm" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="71" Literal="Immm" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1051,7 +1051,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="72" Literal="Ibam" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="72" Literal="Ibam" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1071,7 +1071,7 @@
 				<Operation Literal="-x + 1, y + 1, z + 1/2" Operation="-1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="73" Literal="Ibca" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="73" Literal="Ibca" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1091,7 +1091,7 @@
 				<Operation Literal="-x + 1, y + 1, z + 1/2" Operation="-1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="74" Literal="Imma" Specifier="" SpecifierID="0" SystemID="2" SystemName="Orthorhombic">
+		<Group GroupID="74" Literal="Imma" Specifier="" SpecifierID="0" SystemId="2" SystemName="Orthorhombic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -1111,7 +1111,7 @@
 				<Operation Literal="-x + 1/2, y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="75" Literal="P4" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="75" Literal="P4" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1119,7 +1119,7 @@
 				<Operation Literal="y, -x, z" Operation="0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="76" Literal="P4_1" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="76" Literal="P4_1" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1127,7 +1127,7 @@
 				<Operation Literal="y, -x, z + 3/4" Operation="0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="77" Literal="P4_2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="77" Literal="P4_2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1135,7 +1135,7 @@
 				<Operation Literal="y, -x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="78" Literal="P4_3" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="78" Literal="P4_3" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1143,7 +1143,7 @@
 				<Operation Literal="y, -x, z + 1/4" Operation="0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="79" Literal="I4" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="79" Literal="I4" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1155,7 +1155,7 @@
 				<Operation Literal="y + 1/2, -x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="80" Literal="I4_1" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="80" Literal="I4_1" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -1167,7 +1167,7 @@
 				<Operation Literal="y + 1, -x + 1/2, z + 5/4" Operation="0.0, 1.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="81" Literal="P-4" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="81" Literal="P-4" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1175,7 +1175,7 @@
 				<Operation Literal="-y, x, -z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="82" Literal="I-4" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="82" Literal="I-4" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1187,7 +1187,7 @@
 				<Operation Literal="-y + 1/2, x + 1/2, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="83" Literal="P4/m" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="83" Literal="P4/m" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1199,7 +1199,7 @@
 				<Operation Literal="-y, x, -z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="84" Literal="P4_2/m" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="84" Literal="P4_2/m" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1211,7 +1211,7 @@
 				<Operation Literal="-y, x, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="85" Literal="P4/n" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="85" Literal="P4/n" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1223,7 +1223,7 @@
 				<Operation Literal="-y, x, -z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="85" Literal="P4/n" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="85" Literal="P4/n" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -1235,7 +1235,7 @@
 				<Operation Literal="-y, x + 1/2, -z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="86" Literal="P4_2/n" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="86" Literal="P4_2/n" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1247,7 +1247,7 @@
 				<Operation Literal="-y, x, -z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="86" Literal="P4_2/n" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="86" Literal="P4_2/n" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -1259,7 +1259,7 @@
 				<Operation Literal="-y + 1/2, x, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="87" Literal="I4/m" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="87" Literal="I4/m" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1279,7 +1279,7 @@
 				<Operation Literal="-y + 1/2, x + 1/2, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="88" Literal="I4_1/a" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="88" Literal="I4_1/a" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -1299,7 +1299,7 @@
 				<Operation Literal="-y + 1, x + 1, -z + 1" Operation="0.0, -1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 1.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="88" Literal="I4_1/a" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="88" Literal="I4_1/a" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1319,7 +1319,7 @@
 				<Operation Literal="-y + 3/4, x + 3/4, -z + 3/4" Operation="0.0, -1.0, 0.0, 0.75, 1.0, 0.0, 0.0, 0.75, 0.0, 0.0, -1.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="89" Literal="P422" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="89" Literal="P422" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1331,7 +1331,7 @@
 				<Operation Literal="-y, -x, -z" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="90" Literal="P42_12" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="90" Literal="P42_12" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1343,7 +1343,7 @@
 				<Operation Literal="-y, -x, -z" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="91" Literal="P4_122" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="91" Literal="P4_122" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1355,7 +1355,7 @@
 				<Operation Literal="-y, -x, -z + 1/4" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="92" Literal="P4_12_12" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="92" Literal="P4_12_12" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1367,7 +1367,7 @@
 				<Operation Literal="-y, -x, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="93" Literal="P4_222" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="93" Literal="P4_222" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1379,7 +1379,7 @@
 				<Operation Literal="-y, -x, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="94" Literal="P4_22_12" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="94" Literal="P4_22_12" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1391,7 +1391,7 @@
 				<Operation Literal="-y, -x, -z" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="95" Literal="P4_322" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="95" Literal="P4_322" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1403,7 +1403,7 @@
 				<Operation Literal="-y, -x, -z + 3/4" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="96" Literal="P4_32_12" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="96" Literal="P4_32_12" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -1415,7 +1415,7 @@
 				<Operation Literal="-y, -x, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="97" Literal="I422" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="97" Literal="I422" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1435,7 +1435,7 @@
 				<Operation Literal="-y + 1/2, -x + 1/2, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="98" Literal="I4_122" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="98" Literal="I4_122" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -1455,7 +1455,7 @@
 				<Operation Literal="-y + 1/2, -x + 1/2, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="99" Literal="P4mm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="99" Literal="P4mm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1467,7 +1467,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="100" Literal="P4bm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="100" Literal="P4bm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1479,7 +1479,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="101" Literal="P4_2cm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="101" Literal="P4_2cm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1491,7 +1491,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="102" Literal="P4_2nm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="102" Literal="P4_2nm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1503,7 +1503,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="103" Literal="P4cc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="103" Literal="P4cc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1515,7 +1515,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="104" Literal="P4nc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="104" Literal="P4nc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1527,7 +1527,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="105" Literal="P4_2mc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="105" Literal="P4_2mc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1539,7 +1539,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="106" Literal="P4_2bc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="106" Literal="P4_2bc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1551,7 +1551,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="107" Literal="I4mm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="107" Literal="I4mm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1571,7 +1571,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="108" Literal="I4cm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="108" Literal="I4cm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1591,7 +1591,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="109" Literal="I4_1md" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="109" Literal="I4_1md" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -1611,7 +1611,7 @@
 				<Operation Literal="y + 1, x + 1/2, z + 5/4" Operation="0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="110" Literal="I4_1cd" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="110" Literal="I4_1cd" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -1631,7 +1631,7 @@
 				<Operation Literal="y + 1, x + 1/2, z + 3/4" Operation="0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="111" Literal="P-42m" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="111" Literal="P-42m" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1643,7 +1643,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="112" Literal="P-42c" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="112" Literal="P-42c" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1655,7 +1655,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="113" Literal="P-42_1m" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="113" Literal="P-42_1m" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1667,7 +1667,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="114" Literal="P-42_1c" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="114" Literal="P-42_1c" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1679,7 +1679,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="115" Literal="P-4m2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="115" Literal="P-4m2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1691,7 +1691,7 @@
 				<Operation Literal="-y, -x, -z" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="116" Literal="P-4c2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="116" Literal="P-4c2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1703,7 +1703,7 @@
 				<Operation Literal="-y, -x, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="117" Literal="P-4b2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="117" Literal="P-4b2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1715,7 +1715,7 @@
 				<Operation Literal="-y + 1/2, -x + 1/2, -z" Operation="0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="118" Literal="P-4n2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="118" Literal="P-4n2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1727,7 +1727,7 @@
 				<Operation Literal="-y + 1/2, -x + 1/2, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="119" Literal="I-4m2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="119" Literal="I-4m2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1747,7 +1747,7 @@
 				<Operation Literal="-y + 1/2, -x + 1/2, -z + 1/2" Operation="0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="120" Literal="I-4c2" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="120" Literal="I-4c2" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1767,7 +1767,7 @@
 				<Operation Literal="-y + 1/2, -x + 1/2, -z + 1" Operation="0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5, 0.0, 0.0, -1.0, 1.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="121" Literal="I-42m" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="121" Literal="I-42m" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1787,7 +1787,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="122" Literal="I-42d" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="122" Literal="I-42d" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1807,7 +1807,7 @@
 				<Operation Literal="y + 1, x + 1/2, z + 5/4" Operation="0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="123" Literal="P4/mmm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="123" Literal="P4/mmm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1827,7 +1827,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="124" Literal="P4/mcc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="124" Literal="P4/mcc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1847,7 +1847,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="125" Literal="P4/nbm" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="125" Literal="P4/nbm" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1867,7 +1867,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="125" Literal="P4/nbm" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="125" Literal="P4/nbm" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -1887,7 +1887,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="126" Literal="P4/nnc" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="126" Literal="P4/nnc" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1907,7 +1907,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="126" Literal="P4/nnc" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="126" Literal="P4/nnc" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -1927,7 +1927,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="127" Literal="P4/mbm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="127" Literal="P4/mbm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1947,7 +1947,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="128" Literal="P4/mnc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="128" Literal="P4/mnc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1967,7 +1967,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="129" Literal="P4/nmm" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="129" Literal="P4/nmm" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -1987,7 +1987,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="129" Literal="P4/nmm" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="129" Literal="P4/nmm" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -2007,7 +2007,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="130" Literal="P4/ncc" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="130" Literal="P4/ncc" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2027,7 +2027,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="130" Literal="P4/ncc" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="130" Literal="P4/ncc" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -2047,7 +2047,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="131" Literal="P4_2/mmc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="131" Literal="P4_2/mmc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2067,7 +2067,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="132" Literal="P4_2/mcm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="132" Literal="P4_2/mcm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2087,7 +2087,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="133" Literal="P4_2/nbc" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="133" Literal="P4_2/nbc" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2107,7 +2107,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="133" Literal="P4_2/nbc" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="133" Literal="P4_2/nbc" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -2127,7 +2127,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="134" Literal="P4_2/nnm" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="134" Literal="P4_2/nnm" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2147,7 +2147,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="134" Literal="P4_2/nnm" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="134" Literal="P4_2/nnm" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -2167,7 +2167,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="135" Literal="P4_2/mbc" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="135" Literal="P4_2/mbc" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2187,7 +2187,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="136" Literal="P4_2/mnm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="136" Literal="P4_2/mnm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2207,7 +2207,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="137" Literal="P4_2/nmc" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="137" Literal="P4_2/nmc" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2227,7 +2227,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="137" Literal="P4_2/nmc" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="137" Literal="P4_2/nmc" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -2247,7 +2247,7 @@
 				<Operation Literal="y, x, z + 1/2" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="138" Literal="P4_2/ncm" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="138" Literal="P4_2/ncm" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2267,7 +2267,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="138" Literal="P4_2/ncm" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="138" Literal="P4_2/ncm" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -2287,7 +2287,7 @@
 				<Operation Literal="y, x, z" Operation="0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="139" Literal="I4/mmm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="139" Literal="I4/mmm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2323,7 +2323,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="140" Literal="I4/mcm" Specifier="" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="140" Literal="I4/mcm" Specifier="" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2359,7 +2359,7 @@
 				<Operation Literal="y + 1/2, x + 1/2, z + 1" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="141" Literal="I4_1/amd" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="141" Literal="I4_1/amd" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -2395,7 +2395,7 @@
 				<Operation Literal="y + 1/2, x + 1, z + 3/4" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="141" Literal="I4_1/amd" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="141" Literal="I4_1/amd" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -2431,7 +2431,7 @@
 				<Operation Literal="y + 5/4, x + 5/4, z + 3/4" Operation="0.0, 1.0, 0.0, 1.25, 1.0, 0.0, 0.0, 1.25, 0.0, 0.0, 1.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="142" Literal="I4_1/acd" Specifier="Origin Choice 1" SpecifierID="0" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="142" Literal="I4_1/acd" Specifier="Origin Choice 1" SpecifierID="0" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -2467,7 +2467,7 @@
 				<Operation Literal="y + 1/2, x + 1, z + 5/4" Operation="0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="142" Literal="I4_1/acd" Specifier="Origin Choice 2" SpecifierID="1" SystemID="3" SystemName="Tetragonal">
+		<Group GroupID="142" Literal="I4_1/acd" Specifier="Origin Choice 2" SpecifierID="1" SystemId="3" SystemName="Tetragonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -2503,28 +2503,28 @@
 				<Operation Literal="y + 5/4, x + 5/4, z + 5/4" Operation="0.0, 1.0, 0.0, 1.25, 1.0, 0.0, 0.0, 1.25, 0.0, 0.0, 1.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="143" Literal="P3" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="143" Literal="P3" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + y, -x, z" Operation="-1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="144" Literal="P3_1" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="144" Literal="P3_1" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
 				<Operation Literal="-x + y, -x, z + 2/3" Operation="-1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="145" Literal="P3_2" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="145" Literal="P3_2" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
 				<Operation Literal="-x + y, -x, z + 1/3" Operation="-1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
 			</Operations>
 		</Group>
-		<Group GroupID="146" Literal="R3" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="146" Literal="R3" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2537,14 +2537,14 @@
 				<Operation Literal="-x + y + 1/3, -x + 2/3, z + 2/3" Operation="-1.0, 1.0, 0.0, 0.3333333333333333, -1.0, 0.0, 0.0, 0.6666666666666666, 0.0, 0.0, 1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="146" Literal="R3" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="146" Literal="R3" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
 				<Operation Literal="y, z, x" Operation="0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="147" Literal="P-3" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="147" Literal="P-3" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2554,7 +2554,7 @@
 				<Operation Literal="x - y, x, -z" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="148" Literal="R-3" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="148" Literal="R-3" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2576,7 +2576,7 @@
 				<Operation Literal="x - y + 1/3, x + 2/3, -z + 2/3" Operation="1.0, -1.0, 0.0, 0.3333333333333333, 1.0, 0.0, 0.0, 0.6666666666666666, 0.0, 0.0, -1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="148" Literal="R-3" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="148" Literal="R-3" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
@@ -2586,7 +2586,7 @@
 				<Operation Literal="-y, -z, -x" Operation="0.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="149" Literal="P312" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="149" Literal="P312" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2596,7 +2596,7 @@
 				<Operation Literal="x, x - y, -z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="150" Literal="P321" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="150" Literal="P321" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2606,7 +2606,7 @@
 				<Operation Literal="-x, -x + y, -z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="151" Literal="P3_112" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="151" Literal="P3_112" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
@@ -2616,7 +2616,7 @@
 				<Operation Literal="x, x - y, -z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="152" Literal="P3_121" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="152" Literal="P3_121" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
@@ -2626,7 +2626,7 @@
 				<Operation Literal="-x, -x + y, -z + 1/3" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.3333333333333333" />
 			</Operations>
 		</Group>
-		<Group GroupID="153" Literal="P3_212" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="153" Literal="P3_212" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
@@ -2636,7 +2636,7 @@
 				<Operation Literal="x, x - y, -z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="154" Literal="P3_221" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="154" Literal="P3_221" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
@@ -2646,7 +2646,7 @@
 				<Operation Literal="-x, -x + y, -z + 2/3" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="155" Literal="R32" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="155" Literal="R32" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2668,7 +2668,7 @@
 				<Operation Literal="-x + 1/3, -x + y + 2/3, -z + 2/3" Operation="-1.0, 0.0, 0.0, 0.3333333333333333, -1.0, 1.0, 0.0, 0.6666666666666666, 0.0, 0.0, -1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="155" Literal="R32" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="155" Literal="R32" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
@@ -2678,7 +2678,7 @@
 				<Operation Literal="-x, -z, -y" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="156" Literal="P3m1" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="156" Literal="P3m1" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2688,7 +2688,7 @@
 				<Operation Literal="x, x - y, z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="157" Literal="P31m" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="157" Literal="P31m" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2698,7 +2698,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="158" Literal="P3c1" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="158" Literal="P3c1" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2708,7 +2708,7 @@
 				<Operation Literal="x, x - y, z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="159" Literal="P31c" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="159" Literal="P31c" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2718,7 +2718,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="160" Literal="R3m" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="160" Literal="R3m" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2740,7 +2740,7 @@
 				<Operation Literal="x + 1/3, x - y + 2/3, z + 2/3" Operation="1.0, 0.0, 0.0, 0.3333333333333333, 1.0, -1.0, 0.0, 0.6666666666666666, 0.0, 0.0, 1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="160" Literal="R3m" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="160" Literal="R3m" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
@@ -2750,7 +2750,7 @@
 				<Operation Literal="x, z, y" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="161" Literal="R3c" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="161" Literal="R3c" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2772,7 +2772,7 @@
 				<Operation Literal="x + 1/3, x - y + 2/3, z + 7/6" Operation="1.0, 0.0, 0.0, 0.3333333333333333, 1.0, -1.0, 0.0, 0.6666666666666666, 0.0, 0.0, 1.0, 1.1666666666666667" />
 			</Operations>
 		</Group>
-		<Group GroupID="161" Literal="R3c" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="161" Literal="R3c" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
@@ -2782,7 +2782,7 @@
 				<Operation Literal="x + 1/2, z + 1/2, y + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="162" Literal="P-31m" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="162" Literal="P-31m" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2798,7 +2798,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="163" Literal="P-31c" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="163" Literal="P-31c" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2814,7 +2814,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="164" Literal="P-3m1" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="164" Literal="P-3m1" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2830,7 +2830,7 @@
 				<Operation Literal="x, x - y, z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="165" Literal="P-3c1" Specifier="" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="165" Literal="P-3c1" Specifier="" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2846,7 +2846,7 @@
 				<Operation Literal="x, x - y, z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="166" Literal="R-3m" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="166" Literal="R-3m" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2886,7 +2886,7 @@
 				<Operation Literal="x + 1/3, x - y + 2/3, z + 2/3" Operation="1.0, 0.0, 0.0, 0.3333333333333333, 1.0, -1.0, 0.0, 0.6666666666666666, 0.0, 0.0, 1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="166" Literal="R-3m" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="166" Literal="R-3m" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
@@ -2902,7 +2902,7 @@
 				<Operation Literal="x, z, y" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="167" Literal="R-3c" Specifier="Hexagonal Axes" SpecifierID="0" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="167" Literal="R-3c" Specifier="Hexagonal Axes" SpecifierID="0" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2942,7 +2942,7 @@
 				<Operation Literal="x + 1/3, x - y + 2/3, z + 7/6" Operation="1.0, 0.0, 0.0, 0.3333333333333333, 1.0, -1.0, 0.0, 0.6666666666666666, 0.0, 0.0, 1.0, 1.1666666666666667" />
 			</Operations>
 		</Group>
-		<Group GroupID="167" Literal="R-3c" Specifier="Rhombohedral Axes" SpecifierID="1" SystemID="4" SystemName="Trigonal">
+		<Group GroupID="167" Literal="R-3c" Specifier="Rhombohedral Axes" SpecifierID="1" SystemId="4" SystemName="Trigonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="z, x, y" Operation="0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0" />
@@ -2958,7 +2958,7 @@
 				<Operation Literal="x + 1/2, z + 1/2, y + 1/2" Operation="1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="168" Literal="P6" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="168" Literal="P6" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -2968,7 +2968,7 @@
 				<Operation Literal="x - y, x, z" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="169" Literal="P6_1" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="169" Literal="P6_1" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
@@ -2978,7 +2978,7 @@
 				<Operation Literal="x - y, x, z + 1/6" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.16666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="170" Literal="P6_5" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="170" Literal="P6_5" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
@@ -2988,7 +2988,7 @@
 				<Operation Literal="x - y, x, z + 5/6" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.8333333333333334" />
 			</Operations>
 		</Group>
-		<Group GroupID="171" Literal="P6_2" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="171" Literal="P6_2" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
@@ -2998,7 +2998,7 @@
 				<Operation Literal="x - y, x, z + 1/3" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
 			</Operations>
 		</Group>
-		<Group GroupID="172" Literal="P6_4" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="172" Literal="P6_4" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
@@ -3008,7 +3008,7 @@
 				<Operation Literal="x - y, x, z + 2/3" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="173" Literal="P6_3" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="173" Literal="P6_3" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3018,7 +3018,7 @@
 				<Operation Literal="x - y, x, z + 1/2" Operation="1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="174" Literal="P-6" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="174" Literal="P-6" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3028,7 +3028,7 @@
 				<Operation Literal="-x + y, -x, -z" Operation="-1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="175" Literal="P6/m" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="175" Literal="P6/m" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3044,7 +3044,7 @@
 				<Operation Literal="-x + y, -x, -z" Operation="-1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="176" Literal="P6_3/m" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="176" Literal="P6_3/m" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3060,7 +3060,7 @@
 				<Operation Literal="-x + y, -x, -z + 1/2" Operation="-1.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="177" Literal="P622" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="177" Literal="P622" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3076,7 +3076,7 @@
 				<Operation Literal="x, x - y, -z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="178" Literal="P6_122" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="178" Literal="P6_122" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
@@ -3092,7 +3092,7 @@
 				<Operation Literal="x, x - y, -z + 1/6" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.16666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="179" Literal="P6_522" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="179" Literal="P6_522" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
@@ -3108,7 +3108,7 @@
 				<Operation Literal="x, x - y, -z + 5/6" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.8333333333333334" />
 			</Operations>
 		</Group>
-		<Group GroupID="180" Literal="P6_222" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="180" Literal="P6_222" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 2/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.6666666666666666" />
@@ -3124,7 +3124,7 @@
 				<Operation Literal="x, x - y, -z + 1/3" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.3333333333333333" />
 			</Operations>
 		</Group>
-		<Group GroupID="181" Literal="P6_422" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="181" Literal="P6_422" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z + 1/3" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.3333333333333333" />
@@ -3140,7 +3140,7 @@
 				<Operation Literal="x, x - y, -z + 2/3" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.6666666666666666" />
 			</Operations>
 		</Group>
-		<Group GroupID="182" Literal="P6_322" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="182" Literal="P6_322" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3156,7 +3156,7 @@
 				<Operation Literal="x, x - y, -z + 1/2" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="183" Literal="P6mm" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="183" Literal="P6mm" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3172,7 +3172,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="184" Literal="P6cc" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="184" Literal="P6cc" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3188,7 +3188,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="185" Literal="P6_3cm" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="185" Literal="P6_3cm" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3204,7 +3204,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="186" Literal="P6_3mc" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="186" Literal="P6_3mc" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3220,7 +3220,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="187" Literal="P-6m2" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="187" Literal="P-6m2" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3236,7 +3236,7 @@
 				<Operation Literal="x, x - y, -z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="188" Literal="P-6c2" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="188" Literal="P-6c2" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3252,7 +3252,7 @@
 				<Operation Literal="x, x - y, -z" Operation="1.0, 0.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="189" Literal="P-62m" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="189" Literal="P-62m" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3268,7 +3268,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="190" Literal="P-62c" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="190" Literal="P-62c" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3284,7 +3284,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="191" Literal="P6/mmm" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="191" Literal="P6/mmm" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3312,7 +3312,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="192" Literal="P6/mcc" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="192" Literal="P6/mcc" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3340,7 +3340,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="193" Literal="P6_3/mcm" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="193" Literal="P6_3/mcm" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3368,7 +3368,7 @@
 				<Operation Literal="-x, -x + y, z" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="194" Literal="P6_3/mmc" Specifier="" SpecifierID="0" SystemID="5" SystemName="Hexagonal">
+		<Group GroupID="194" Literal="P6_3/mmc" Specifier="" SpecifierID="0" SystemId="5" SystemName="Hexagonal">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-y, x - y, z" Operation="0.0, -1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3396,7 +3396,7 @@
 				<Operation Literal="-x, -x + y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="195" Literal="P23" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="195" Literal="P23" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3412,7 +3412,7 @@
 				<Operation Literal="-y, -z, x" Operation="0.0, -1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="196" Literal="F23" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="196" Literal="F23" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3464,7 +3464,7 @@
 				<Operation Literal="-y + 1/2, -z + 1/2, x" Operation="0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="197" Literal="I23" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="197" Literal="I23" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3492,7 +3492,7 @@
 				<Operation Literal="-y + 1/2, -z + 1/2, x + 1/2" Operation="0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="198" Literal="P2_13" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="198" Literal="P2_13" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -3508,7 +3508,7 @@
 				<Operation Literal="-y + 1/2, -z, x + 1/2" Operation="0.0, -1.0, 0.0, 0.5, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="199" Literal="I2_13" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="199" Literal="I2_13" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -3536,7 +3536,7 @@
 				<Operation Literal="-y + 1, -z + 1/2, x + 1" Operation="0.0, -1.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.5, 1.0, 0.0, 0.0, 1.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="200" Literal="Pm-3" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="200" Literal="Pm-3" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3564,7 +3564,7 @@
 				<Operation Literal="y, z, -x" Operation="0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="201" Literal="Pn-3" Specifier="Origin Choice 1" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="201" Literal="Pn-3" Specifier="Origin Choice 1" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3592,7 +3592,7 @@
 				<Operation Literal="y + 1/2, z + 1/2, -x + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5, -1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="201" Literal="Pn-3" Specifier="Origin Choice 2" SpecifierID="1" SystemID="6" SystemName="Cubic">
+		<Group GroupID="201" Literal="Pn-3" Specifier="Origin Choice 2" SpecifierID="1" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -3620,7 +3620,7 @@
 				<Operation Literal="y + 1/2, z + 1/2, -x" Operation="0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="202" Literal="Fm-3" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="202" Literal="Fm-3" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3720,7 +3720,7 @@
 				<Operation Literal="y + 1/2, z + 1/2, -x" Operation="0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="203" Literal="Fd-3" Specifier="Origin Choice 1" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="203" Literal="Fd-3" Specifier="Origin Choice 1" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3820,7 +3820,7 @@
 				<Operation Literal="y + 3/4, z + 3/4, -x + 1/4" Operation="0.0, 1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.75, -1.0, 0.0, 0.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="203" Literal="Fd-3" Specifier="Origin Choice 2" SpecifierID="1" SystemID="6" SystemName="Cubic">
+		<Group GroupID="203" Literal="Fd-3" Specifier="Origin Choice 2" SpecifierID="1" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 3/4, -y + 3/4, z" Operation="-1.0, 0.0, 0.0, 0.75, 0.0, -1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.0" />
@@ -3920,7 +3920,7 @@
 				<Operation Literal="y + 3/4, z + 3/4, -x" Operation="0.0, 1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.75, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="204" Literal="Im-3" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="204" Literal="Im-3" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -3972,7 +3972,7 @@
 				<Operation Literal="y + 1/2, z + 1/2, -x + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5, -1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="205" Literal="Pa-3" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="205" Literal="Pa-3" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -4000,7 +4000,7 @@
 				<Operation Literal="y + 1/2, z, -x + 1/2" Operation="0.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="206" Literal="Ia-3" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="206" Literal="Ia-3" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -4052,7 +4052,7 @@
 				<Operation Literal="y + 1, z + 1/2, -x + 1" Operation="0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.5, -1.0, 0.0, 0.0, 1.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="207" Literal="P432" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="207" Literal="P432" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4080,7 +4080,7 @@
 				<Operation Literal="-z, -y, -x" Operation="0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="208" Literal="P4_232" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="208" Literal="P4_232" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4108,7 +4108,7 @@
 				<Operation Literal="-z + 1/2, -y + 1/2, -x + 1/2" Operation="0.0, 0.0, -1.0, 0.5, 0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="209" Literal="F432" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="209" Literal="F432" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4208,7 +4208,7 @@
 				<Operation Literal="-z + 1/2, -y + 1/2, -x" Operation="0.0, 0.0, -1.0, 0.5, 0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="210" Literal="F4_132" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="210" Literal="F4_132" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -4308,7 +4308,7 @@
 				<Operation Literal="-z + 3/4, -y + 3/4, -x + 1/4" Operation="0.0, 0.0, -1.0, 0.75, 0.0, -1.0, 0.0, 0.75, -1.0, 0.0, 0.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="211" Literal="I432" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="211" Literal="I432" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4360,7 +4360,7 @@
 				<Operation Literal="-z + 1/2, -y + 1/2, -x + 1/2" Operation="0.0, 0.0, -1.0, 0.5, 0.0, -1.0, 0.0, 0.5, -1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="212" Literal="P4_332" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="212" Literal="P4_332" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -4388,7 +4388,7 @@
 				<Operation Literal="-z + 1/4, -y + 1/4, -x + 1/4" Operation="0.0, 0.0, -1.0, 0.25, 0.0, -1.0, 0.0, 0.25, -1.0, 0.0, 0.0, 0.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="213" Literal="P4_132" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="213" Literal="P4_132" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -4416,7 +4416,7 @@
 				<Operation Literal="-z + 3/4, -y + 3/4, -x + 3/4" Operation="0.0, 0.0, -1.0, 0.75, 0.0, -1.0, 0.0, 0.75, -1.0, 0.0, 0.0, 0.75" />
 			</Operations>
 		</Group>
-		<Group GroupID="214" Literal="I4_132" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="214" Literal="I4_132" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -4468,7 +4468,7 @@
 				<Operation Literal="-z + 5/4, -y + 5/4, -x + 5/4" Operation="0.0, 0.0, -1.0, 1.25, 0.0, -1.0, 0.0, 1.25, -1.0, 0.0, 0.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="215" Literal="P-43m" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="215" Literal="P-43m" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4496,7 +4496,7 @@
 				<Operation Literal="-z, -y, x" Operation="0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="216" Literal="F-43m" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="216" Literal="F-43m" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4596,7 +4596,7 @@
 				<Operation Literal="-z + 1/2, -y + 1/2, x" Operation="0.0, 0.0, -1.0, 0.5, 0.0, -1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="217" Literal="I-43m" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="217" Literal="I-43m" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4648,7 +4648,7 @@
 				<Operation Literal="-z + 1/2, -y + 1/2, x + 1/2" Operation="0.0, 0.0, -1.0, 0.5, 0.0, -1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="218" Literal="P-43n" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="218" Literal="P-43n" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4676,7 +4676,7 @@
 				<Operation Literal="-z + 1/2, -y + 1/2, x + 1/2" Operation="0.0, 0.0, -1.0, 0.5, 0.0, -1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="219" Literal="F-43c" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="219" Literal="F-43c" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4776,7 +4776,7 @@
 				<Operation Literal="-z + 1, -y + 1, x + 1/2" Operation="0.0, 0.0, -1.0, 1.0, 0.0, -1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="220" Literal="I-43d" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="220" Literal="I-43d" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />
@@ -4828,7 +4828,7 @@
 				<Operation Literal="-z + 3/4, -y + 5/4, x + 5/4" Operation="0.0, 0.0, -1.0, 0.75, 0.0, -1.0, 0.0, 1.25, 1.0, 0.0, 0.0, 1.25" />
 			</Operations>
 		</Group>
-		<Group GroupID="221" Literal="Pm-3m" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="221" Literal="Pm-3m" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4880,7 +4880,7 @@
 				<Operation Literal="z, y, x" Operation="0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="222" Literal="Pn-3n" Specifier="Origin Choice 1" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="222" Literal="Pn-3n" Specifier="Origin Choice 1" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -4932,7 +4932,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x + 1/2" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="222" Literal="Pn-3n" Specifier="Origin Choice 2" SpecifierID="1" SystemID="6" SystemName="Cubic">
+		<Group GroupID="222" Literal="Pn-3n" Specifier="Origin Choice 2" SpecifierID="1" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -4984,7 +4984,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x + 1/2" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="223" Literal="Pm-3n" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="223" Literal="Pm-3n" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -5036,7 +5036,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x + 1/2" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="224" Literal="Pn-3m" Specifier="Origin Choice 1" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="224" Literal="Pn-3m" Specifier="Origin Choice 1" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -5088,7 +5088,7 @@
 				<Operation Literal="z, y, x" Operation="0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="224" Literal="Pn-3m" Specifier="Origin Choice 2" SpecifierID="1" SystemID="6" SystemName="Cubic">
+		<Group GroupID="224" Literal="Pn-3m" Specifier="Origin Choice 2" SpecifierID="1" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y + 1/2, z" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0" />
@@ -5140,7 +5140,7 @@
 				<Operation Literal="z, y, x" Operation="0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="225" Literal="Fm-3m" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="225" Literal="Fm-3m" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -5336,7 +5336,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="226" Literal="Fm-3c" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="226" Literal="Fm-3c" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -5532,7 +5532,7 @@
 				<Operation Literal="z + 1, y + 1, x + 1/2" Operation="0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="227" Literal="Fd-3m" Specifier="Origin Choice 1" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="227" Literal="Fd-3m" Specifier="Origin Choice 1" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -5728,7 +5728,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="227" Literal="Fd-3m" Specifier="Origin Choice 2" SpecifierID="1" SystemID="6" SystemName="Cubic">
+		<Group GroupID="227" Literal="Fd-3m" Specifier="Origin Choice 2" SpecifierID="1" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 3/4, -y + 1/4, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.75, 0.0, -1.0, 0.0, 0.25, 0.0, 0.0, 1.0, 0.5" />
@@ -5924,7 +5924,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0" />
 			</Operations>
 		</Group>
-		<Group GroupID="228" Literal="Fd-3c" Specifier="Origin Choice 1" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="228" Literal="Fd-3c" Specifier="Origin Choice 1" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y + 1/2, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.5" />
@@ -6120,7 +6120,7 @@
 				<Operation Literal="z + 1, y + 1, x + 1/2" Operation="0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="228" Literal="Fd-3c" Specifier="Origin Choice 2" SpecifierID="1" SystemID="6" SystemName="Cubic">
+		<Group GroupID="228" Literal="Fd-3c" Specifier="Origin Choice 2" SpecifierID="1" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/4, -y + 3/4, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.25, 0.0, -1.0, 0.0, 0.75, 0.0, 0.0, 1.0, 0.5" />
@@ -6316,7 +6316,7 @@
 				<Operation Literal="z + 1, y + 1, x + 1/2" Operation="0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="229" Literal="Im-3m" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="229" Literal="Im-3m" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x, -y, z" Operation="-1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
@@ -6416,7 +6416,7 @@
 				<Operation Literal="z + 1/2, y + 1/2, x + 1/2" Operation="0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5" />
 			</Operations>
 		</Group>
-		<Group GroupID="230" Literal="Ia-3d" Specifier="" SpecifierID="0" SystemID="6" SystemName="Cubic">
+		<Group GroupID="230" Literal="Ia-3d" Specifier="" SpecifierID="0" SystemId="6" SystemName="Cubic">
 			<Operations>
 				<Operation Literal="x, y, z" Operation="1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0" />
 				<Operation Literal="-x + 1/2, -y, z + 1/2" Operation="-1.0, 0.0, 0.0, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5" />

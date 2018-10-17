@@ -1,9 +1,9 @@
-﻿using ICon.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 using System.Collections.Generic;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IPairInteractionModel"/>
+    /// <inheritdoc cref="IPairInteractionModel"/>
     public class PairInteractionModel : ModelComponentBase, IPairInteractionModel
     {
         /// <inheritdoc />

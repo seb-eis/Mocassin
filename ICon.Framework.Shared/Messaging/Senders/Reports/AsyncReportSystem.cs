@@ -1,8 +1,8 @@
 ﻿using System;
-using ICon.Framework.Events;
-using ICon.Framework.Operations;
+using Mocassin.Framework.Events;
+using Mocassin.Framework.Operations;
 
-namespace ICon.Framework.Messaging
+namespace Mocassin.Framework.Messaging
 {
     /// <summary>
     ///     Async reporting system to distribute reports to subscribers from a running operation thread

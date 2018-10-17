@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ICon.Mathematics.Comparers;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents a pair interaction finder that can search a specific system of space group service and unit cell

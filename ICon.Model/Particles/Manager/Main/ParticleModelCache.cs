@@ -1,7 +1,7 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Cache for extended structure data that stores 'on-demand' calculated dependent data for faster access until the
@@ -10,15 +10,15 @@ namespace ICon.Model.Particles
     internal class ParticleModelCache : ModelDataCache<IParticleCachePort>
     {
         /// <inheritdoc />
-        public ParticleModelCache(IModelEventPort eventPort, IProjectServices projectServices)
-            : base(eventPort, projectServices)
+        public ParticleModelCache(IModelEventPort eventPort, IModelProject modelProject)
+            : base(eventPort, modelProject)
         {
         }
 
         /// <inheritdoc />
         public override IParticleCachePort AsReadOnly()
         {
-            return CachePort ?? (CachePort = new ParticleCacheManager(this, ProjectServices));
+            return CachePort ?? (CachePort = new ParticleCacheManager(this, ModelProject));
         }
     }
 }

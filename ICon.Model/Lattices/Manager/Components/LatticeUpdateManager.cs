@@ -1,9 +1,9 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Energies.Handler;
-using ICon.Model.Transitions;
+﻿using Mocassin.Model.Energies.Handler;
+using Mocassin.Model.Transitions;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Basic update manager for the lattice module that handles pushed information on data changes in required modules
@@ -15,9 +15,9 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="eventManager"></param>
-        /// <param name="projectServices"></param>
-        public LatticeUpdateManager(LatticeModelData baseData, LatticeEventManager eventManager, IProjectServices projectServices)
-            : base(baseData, eventManager, projectServices)
+        /// <param name="modelProject"></param>
+        public LatticeUpdateManager(LatticeModelData baseData, LatticeEventManager eventManager, IModelProject modelProject)
+            : base(baseData, eventManager, modelProject)
         {
 
         }

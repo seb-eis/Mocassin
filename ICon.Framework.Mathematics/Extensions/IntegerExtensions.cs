@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace ICon.Mathematics.Extensions
+namespace Mocassin.Mathematics.Extensions
 {
     /// <summary>
     ///     ICon integer extension class

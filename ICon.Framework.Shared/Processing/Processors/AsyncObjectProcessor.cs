@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ICon.Framework.Processing
+namespace Mocassin.Framework.Processing
 {
     /// <summary>
     ///     Generic async object handler class that handles one argument of specific type in a new task (Cannot be used for

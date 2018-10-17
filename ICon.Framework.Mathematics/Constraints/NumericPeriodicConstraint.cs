@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Mathematics.Comparers;
+using Mocassin.Mathematics.Comparers;
 
-namespace ICon.Mathematics.Constraints
+namespace Mocassin.Mathematics.Constraints
 {
     /// <summary>
     ///     Periodic numeric constraint that allows periodic parsing into the constraint range

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Mathematics.Bitmasks;
-using ICon.Model.Basic;
+using Mocassin.Mathematics.Bitmasks;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Represents a set of model particles that describe multiple possible species for one position in a simulation

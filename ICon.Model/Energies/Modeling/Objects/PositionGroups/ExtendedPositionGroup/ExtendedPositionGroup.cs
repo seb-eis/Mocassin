@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents an extended position group that carries all information to fully describe the properties of a group

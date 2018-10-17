@@ -1,11 +1,11 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public abstract class TransitionRuleModel : ITransitionRuleModel

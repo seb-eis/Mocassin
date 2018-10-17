@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Basic;
-using ICon.Model.Structures;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents an unstable environment description with pair interactions and groups that belongs to a specific unit

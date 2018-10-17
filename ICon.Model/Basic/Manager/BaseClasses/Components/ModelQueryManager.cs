@@ -2,7 +2,7 @@
 using System.Reactive;
 using System.Threading.Tasks;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for implementations of query managers

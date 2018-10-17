@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents an input port for a simulation manager that handles data queries for adding, removing and changeing simulation model objects

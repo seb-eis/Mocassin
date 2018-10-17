@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Extensions;
-using ICon.Mathematics.Solver;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Solver;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Double precision two dimensional matrix of arbitrary size, wraps double[,] to restrict access and provide matrix

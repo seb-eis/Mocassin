@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Model.Basic;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic particle read only data manager that provides read only access to the particle manager base data

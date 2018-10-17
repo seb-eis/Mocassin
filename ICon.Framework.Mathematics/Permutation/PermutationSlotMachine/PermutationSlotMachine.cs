@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ICon.Mathematics.Permutation
+namespace Mocassin.Mathematics.Permutation
 {
     /// <summary>
     ///     A generic permutation class that counter lexicographically and periodically generates the permutations of a two

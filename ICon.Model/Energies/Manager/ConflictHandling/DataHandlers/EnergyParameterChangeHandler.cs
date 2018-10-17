@@ -1,9 +1,9 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies.ConflictHandling
+namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
     ///     Conflict handler for parameter change induced conflicts within the energy manager
@@ -11,8 +11,8 @@ namespace ICon.Model.Energies.ConflictHandling
     public class EnergyParameterChangeHandler : DataConflictHandler<EnergyModelData, ModelParameter>
     {
         /// <inheritdoc />
-        public EnergyParameterChangeHandler(IProjectServices projectServices)
-            : base(projectServices)
+        public EnergyParameterChangeHandler(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -26,7 +26,7 @@ namespace ICon.Model.Energies.ConflictHandling
         protected IConflictReport HandleParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
         {
             Console.WriteLine($"Resolver {typeof(StableEnvironmentInfoChangeHandler)} was called for {info.GetType()}");
-            return new StableEnvironmentInfoChangeHandler(dataAccess, ProjectServices).HandleConflicts(info);
+            return new StableEnvironmentInfoChangeHandler(dataAccess, ModelProject).HandleConflicts(info);
         }
     }
 }

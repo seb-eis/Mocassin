@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Operations;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies.ConflictHandling
+namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
     ///     Conflict resolver for a change in the stable environment info parameter within the energy manager
@@ -15,8 +15,8 @@ namespace ICon.Model.Energies.ConflictHandling
     public class StableEnvironmentInfoChangeHandler : ObjectConflictHandler<StableEnvironmentInfo, EnergyModelData>
     {
         /// <inheritdoc />
-        public StableEnvironmentInfoChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        public StableEnvironmentInfoChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 
@@ -39,7 +39,7 @@ namespace ICon.Model.Energies.ConflictHandling
             var newPairs = GetNewPairInteractions(info);
             var oldPairs = DataAccess.Query(data => data.StablePairInteractions);
 
-            PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ProjectServices.GeometryNumeric.RangeComparer);
+            PullEnergyInfoFromOldModel(oldPairs, newPairs, report, ModelProject.GeometryNumeric.RangeComparer);
             MoveNewPairsToModelList(oldPairs, newPairs, report);
         }
 
@@ -121,13 +121,13 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <returns></returns>
         protected IList<SymmetricPairInteraction> GetNewPairInteractions(IStableEnvironmentInfo info)
         {
-            var structureQueries = ProjectServices.GetManager<IStructureManager>().QueryPort;
+            var structureQueries = ModelProject.GetManager<IStructureManager>().QueryPort;
 
             var unitCellProvider = structureQueries.Query(port => port.GetFullUnitCellProvider());
             var positions = structureQueries.Query(port => port.GetUnitCellPositions().Where(value => value.IsValidAndStable()));
-            var comparer = ProjectServices.GeometryNumeric.RangeComparer;
+            var comparer = ModelProject.GeometryNumeric.RangeComparer;
 
-            var interactionFinder = new PairInteractionFinder(unitCellProvider, ProjectServices.SpaceGroupService);
+            var interactionFinder = new PairInteractionFinder(unitCellProvider, ModelProject.SpaceGroupService);
             return interactionFinder.CreateUniqueSymmetricPairs(positions, info, comparer).ToList();
         }
 

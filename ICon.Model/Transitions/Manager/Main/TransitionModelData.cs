@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// The reference model data object for the transition manager

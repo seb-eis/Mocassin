@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// The simulation model data object that stores model objects and parameters affiliated with simulation package building

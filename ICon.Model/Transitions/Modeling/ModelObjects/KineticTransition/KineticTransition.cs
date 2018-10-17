@@ -2,12 +2,12 @@
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="ICon.Model.Transitions.IKineticTransition"/>
+    /// <inheritdoc cref="IKineticTransition"/>
     [Serializable]
     [DataContract(Name ="KineticTransition")]
     public class KineticTransition : ModelObject, IKineticTransition

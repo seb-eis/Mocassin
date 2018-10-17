@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Text;
-using ICon.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Model.Particles;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-using ICon.Mathematics.ValueTypes;
-using ICon.Symmetry.Analysis;
-using ICon.Model.Particles;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Lattice data manager that provides safe read only access to the Lattice base model data

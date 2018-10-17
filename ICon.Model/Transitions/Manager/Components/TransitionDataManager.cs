@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Model.Basic;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Transition data manager that provides safe read only access to the transition base data

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Doping information that describes the element, concentration, sublattice which is substituted. 

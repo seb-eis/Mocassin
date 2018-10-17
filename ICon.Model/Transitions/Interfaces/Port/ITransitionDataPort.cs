@@ -1,7 +1,7 @@
-﻿using ICon.Framework.Collections;
-using ICon.Model.Basic;
+﻿using Mocassin.Framework.Collections;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a read only data access port for the transition reference data

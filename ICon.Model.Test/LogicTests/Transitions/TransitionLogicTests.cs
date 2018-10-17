@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System.Linq;
-using ICon.Model.Basic;
-using ICon.Model.Transitions;
-using ICon.Model.Structures;
-using ICon.Model.Particles;
-using ICon.Mathematics.ValueTypes;
-using ICon.Framework.Collections;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class TransitionLogicTests
@@ -43,10 +43,10 @@ namespace ICon.Model.Test
         {
             var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
 
-            var comparer = managers.ProjectServices.GeometryNumeric.RangeComparer;
+            var comparer = managers.ModelProject.GeometryNumeric.RangeComparer;
             var ucProvider = managers.StructureManager.QueryPort.Query(port => port.GetOccupationUnitCellProvider());
             var startPoints = managers.StructureManager.QueryPort.Query(port => port.GetExtendedPositionList(1)).Select(value => value.Vector);
-            var mapper = new ApproxKineticTransitionMapper(managers.ProjectServices.SymmetryAnalysisService, ucProvider);
+            var mapper = new ApproxKineticTransitionMapper(managers.ModelProject.SymmetryAnalysisService, ucProvider);
 
             var interGeoemtry = new List<DataVector3D>
             {
@@ -78,11 +78,11 @@ namespace ICon.Model.Test
         public void TestKineticQuickMapper()
         {
             var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-            var structureManager = managers.ProjectServices.GetManager<IStructureManager>();
+            var structureManager = managers.ModelProject.GetManager<IStructureManager>();
             var encoder = structureManager.QueryPort.Query(port => port.GetVectorEncoder());
             var ucp = structureManager.QueryPort.Query(port => port.GetFullUnitCellProvider());
 
-            var mapper = new KineticTransitionMapper(managers.ProjectServices.SpaceGroupService, encoder, ucp);
+            var mapper = new KineticTransitionMapper(managers.ModelProject.SpaceGroupService, encoder, ucp);
 
             var interGeoemtry = new List<DataVector3D>
             {

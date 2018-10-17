@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using ICon.Framework.Constraints;
-using ICon.Model.Basic;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="ICon.Model.Simulations.IKineticSimulationSeries"/>
+    /// <inheritdoc cref="IKineticSimulationSeries"/>
     [DataContract]
     public class KineticSimulationSeries : SimulationSeriesBase, IKineticSimulationSeries
     {

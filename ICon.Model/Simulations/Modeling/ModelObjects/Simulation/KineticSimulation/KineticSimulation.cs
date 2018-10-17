@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Transitions;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Transitions;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Enum for the specific kinetic simulation flags that extend the simulation base flags
@@ -18,7 +17,7 @@ namespace ICon.Model.Simulations
         UseStaticTrackers = 0b1, UseDynamicTrackers = 0b10
     }
 
-    /// <inheritdoc cref="ICon.Model.Simulations.IKineticSimulation"/>
+    /// <inheritdoc cref="IKineticSimulation"/>
     [DataContract]
     public class KineticSimulation : SimulationBase, IKineticSimulation
     {

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Extensions;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Simulations;
-using ICon.Model.Transitions;
+using Mocassin.Framework.Extensions;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IMetropolisSimulationModelBuilder"/>
+    /// <inheritdoc cref="IMetropolisSimulationModelBuilder"/>
     public class MetropolisSimulationModelBuilder : ModelBuilderBase, IMetropolisSimulationModelBuilder
     {
         /// <inheritdoc />
-        public MetropolisSimulationModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public MetropolisSimulationModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 

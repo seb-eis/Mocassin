@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Framework.Messaging;
+using Mocassin.Framework.Messaging;
 
-namespace ICon.Framework.Operations
+namespace Mocassin.Framework.Operations
 {
     /// <summary>
     ///     Represents an information object on data conflict occurence and potential resolving actions by a data conflict

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Geometric information for a mass point set. Contains multiple values to characterize the mechanic properties of the

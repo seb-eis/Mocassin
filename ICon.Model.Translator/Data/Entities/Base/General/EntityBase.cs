@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Abstract base class for all database entities thta have at least a key

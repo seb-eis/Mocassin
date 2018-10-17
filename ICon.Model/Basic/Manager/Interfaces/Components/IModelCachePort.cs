@@ -1,4 +1,4 @@
-﻿namespace ICon.Model.Basic
+﻿namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     General base interface for all model data cache port interfaces

@@ -6,10 +6,10 @@ using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using System.Text;
 
-using ICon.Framework.Events;
-using ICon.Model.Basic;
+using Mocassin.Framework.Events;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Basic lattice notification manager that handles distribution of push based update notifications about changes in the lattice manager base data

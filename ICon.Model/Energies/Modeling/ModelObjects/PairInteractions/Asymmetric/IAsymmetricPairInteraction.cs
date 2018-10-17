@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents an asymmetric pair interaction (directional) that carries an energy dictionary for its permutations

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Represents a particle cache port that provides extended model data for the particles

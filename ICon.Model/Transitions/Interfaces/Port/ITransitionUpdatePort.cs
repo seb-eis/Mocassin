@@ -1,7 +1,7 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Structures;
+﻿using Mocassin.Model.Structures;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents and update port for registering of dependent event ports

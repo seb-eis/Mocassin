@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Framework.Async
+namespace Mocassin.Framework.Async
 {
     /// <summary>
     ///     Abstract base class for asynchronous awaiter that get notified for completion through an IObservable source and

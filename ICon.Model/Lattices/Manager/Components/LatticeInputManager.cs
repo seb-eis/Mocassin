@@ -1,8 +1,8 @@
-﻿using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Basic implementation of the lattice input manager that handles validated adding, removal and replacement of lattice base data by an outside source
@@ -15,7 +15,7 @@ namespace ICon.Model.Lattices
         /// <param name="data"></param>
         /// <param name="manager"></param>
         /// <param name="services"></param>
-        public LatticeInputManager(LatticeModelData data, LatticeEventManager manager, IProjectServices services) : base(data, manager, services)
+        public LatticeInputManager(LatticeModelData data, LatticeEventManager manager, IModelProject services) : base(data, manager, services)
         {
 
         }
@@ -26,7 +26,7 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         protected override IDataConflictHandlerProvider<LatticeModelData> CreateDataConflictHandlerProvider()
         {
-            return new LatticeDataConflictResolverProvider(ProjectServices);
+            return new LatticeDataConflictResolverProvider(ModelProject);
         }
 
         /// <summary>

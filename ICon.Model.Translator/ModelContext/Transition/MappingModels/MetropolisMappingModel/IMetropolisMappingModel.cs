@@ -1,10 +1,10 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a metropolis mapping model that fully describes a transitions geometric properties on a specific position

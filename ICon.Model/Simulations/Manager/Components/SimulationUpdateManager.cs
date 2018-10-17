@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Implementation of the simulation update manager that handles subscriptions and reactions to events on other managers
@@ -17,9 +16,9 @@ namespace ICon.Model.Simulations
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="eventManager"></param>
-        /// <param name="projectServices"></param>
-        public SimulationUpdateManager(SimulationModelData baseData, SimulationEventManager eventManager, IProjectServices projectServices)
-            : base(baseData, eventManager, projectServices)
+        /// <param name="modelProject"></param>
+        public SimulationUpdateManager(SimulationModelData baseData, SimulationEventManager eventManager, IModelProject modelProject)
+            : base(baseData, eventManager, modelProject)
         {
 
         }

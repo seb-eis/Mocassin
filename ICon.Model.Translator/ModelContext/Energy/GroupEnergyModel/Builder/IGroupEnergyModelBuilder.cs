@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Energies;
+using Mocassin.Model.Energies;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Builder for group energy models that fully describe the energetic properties of a simulation position group

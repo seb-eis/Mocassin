@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Extensions;
-using ICon.Model.Particles;
+using Mocassin.Framework.Extensions;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents a group energy entry that is fully described by center particle, a surrounding occupation state and an

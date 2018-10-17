@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-
-using ICon.Model.Basic;
-using ICon.Framework.Constraints;
-using ICon.Model.Lattices;
 using System.Collections;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Lattices;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Describes a doping series by abstract doping information and a value series

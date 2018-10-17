@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Model.Simulations;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.ISimulationModelContextBuilder"/>
+    /// <inheritdoc cref="ISimulationModelContextBuilder"/>
     public class SimulationModelContextBuilder : ModelContextBuilderBase<ISimulationModelContext>, ISimulationModelContextBuilder
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override ISimulationModelContext PopulateContext(ISimulationModelContext modelContext)
         {
-            var manager = ProjectServices.GetManager<ISimulationManager>();
+            var manager = ModelProject.GetManager<ISimulationManager>();
             var metropolisSimulations = manager.QueryPort.Query(port => port.GetMetropolisSimulations());
             var kineticSimulations = manager.QueryPort.Query(port => port.GetKineticSimulations());
 
@@ -43,8 +43,8 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            MetropolisSimulationModelBuilder = MetropolisSimulationModelBuilder ?? new MetropolisSimulationModelBuilder(ProjectServices);
-            KineticSimulationModelBuilder = KineticSimulationModelBuilder ?? new KineticSimulationModelBuilder(ProjectServices);
+            MetropolisSimulationModelBuilder = MetropolisSimulationModelBuilder ?? new MetropolisSimulationModelBuilder(ModelProject);
+            KineticSimulationModelBuilder = KineticSimulationModelBuilder ?? new KineticSimulationModelBuilder(ModelProject);
         }
 
         /// <inheritdoc />

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Simulations;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Kinetic simulation model builder. Extends kinetic simulation reference objects into a full data context

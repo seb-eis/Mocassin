@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Solver
+namespace Mocassin.Mathematics.Solver
 {
     /// <summary>
     ///     Supplies solvers to handle group of mass points (e.g. mass center shifting) based upon read only mass point structs

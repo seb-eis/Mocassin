@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic.Debug;
-using ICon.Model.DataManagement;
-using ICon.Model.Energies;
-using ICon.Model.Lattices;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Simulations;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
-using ICon.Symmetry.CrystalSystems;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic.Debug;
+using Mocassin.Model.DataManagement;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Lattices;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
+using Mocassin.Symmetry.CrystalSystems;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     public static class ManagerFactory
     {
@@ -31,7 +31,7 @@ namespace ICon.Model.Basic
             {
                 return new ManagerPackage
                 {
-                    ProjectServices = ProjectServices.ProjectServices.Create(ProjectSettingsData.CreateDefault())
+                    ModelProject = ModelProject.ModelProject.Create(ProjectSettings.CreateDefault())
                 };
             }
 
@@ -42,7 +42,7 @@ namespace ICon.Model.Basic
             public static ManagerPackage CreateParticleManagementSystem()
             {
                 var package = CreateProjectServicesSystem();
-                package.ParticleManager = (IParticleManager) package.ProjectServices.CreateAndRegister(new ParticleManagerFactory());
+                package.ParticleManager = (IParticleManager) package.ModelProject.CreateAndRegister(new ParticleManagerFactory());
                 return package;
             }
 
@@ -53,7 +53,7 @@ namespace ICon.Model.Basic
             public static ManagerPackage CreateStructureManagementSystem()
             {
                 var package = CreateParticleManagementSystem();
-                package.StructureManager = (IStructureManager) package.ProjectServices.CreateAndRegister(new StructureManagerFactory());
+                package.StructureManager = (IStructureManager) package.ModelProject.CreateAndRegister(new StructureManagerFactory());
                 return package;
             }
 
@@ -64,7 +64,7 @@ namespace ICon.Model.Basic
             public static ManagerPackage CreateLatticeManagementSystem()
             {
                 var package = CreateProjectServicesSystem();
-                package.LatticeManager = (ILatticeManager) package.ProjectServices.CreateAndRegister(new LatticeManagerFactory());
+                package.LatticeManager = (ILatticeManager) package.ModelProject.CreateAndRegister(new LatticeManagerFactory());
                 return package;
             }
 
@@ -75,7 +75,7 @@ namespace ICon.Model.Basic
             public static ManagerPackage CreateTransitionManagementSystem()
             {
                 var package = CreateStructureManagementSystem();
-                package.TransitionManager = (ITransitionManager) package.ProjectServices.CreateAndRegister(new TransitionManagerFactory());
+                package.TransitionManager = (ITransitionManager) package.ModelProject.CreateAndRegister(new TransitionManagerFactory());
                 return package;
             }
 
@@ -86,7 +86,7 @@ namespace ICon.Model.Basic
             public static ManagerPackage CreateEnergyManagementSystem()
             {
                 var package = CreateTransitionManagementSystem();
-                package.EnergyManager = (IEnergyManager) package.ProjectServices.CreateAndRegister(new EnergyManagerFactory());
+                package.EnergyManager = (IEnergyManager) package.ModelProject.CreateAndRegister(new EnergyManagerFactory());
                 return package;
             }
 
@@ -97,7 +97,7 @@ namespace ICon.Model.Basic
             public static ManagerPackage CreateSimulationManagementPackage()
             {
                 var package = CreateEnergyManagementSystem();
-                package.SimulationManager = (ISimulationManager) package.ProjectServices.CreateAndRegister(new SimulationManagerFactory());
+                package.SimulationManager = (ISimulationManager) package.ModelProject.CreateAndRegister(new SimulationManagerFactory());
                 return package;
             }
 
@@ -118,7 +118,7 @@ namespace ICon.Model.Basic
             {
                 var package = CreateFullManagementSystem();
                 var inputSystem = MakeCeriaInputSystem();
-                inputSystem.AutoInputData(package.ProjectServices);
+                inputSystem.AutoInputData(package.ModelProject);
                 package.InputReportJson = inputSystem.GetReportJson();
                 return package;
             }

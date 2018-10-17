@@ -1,8 +1,8 @@
 ﻿using System;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Basic implementation of the energy manager that manages and supplies objects and parameters related to the
@@ -21,8 +21,8 @@ namespace ICon.Model.Energies
         public new IEnergyEventPort EventPort => EventManager;
 
         /// <inheritdoc />
-        public EnergyManager(IProjectServices projectServices, EnergyModelData data)
-            : base(projectServices, data)
+        public EnergyManager(IModelProject modelProject, EnergyModelData data)
+            : base(modelProject, data)
         {
         }
 
@@ -33,9 +33,12 @@ namespace ICon.Model.Energies
         }
 
         /// <inheritdoc />
-        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettings settings)
         {
-            return new EnergyValidationService(ProjectServices, settingsData.EnergySettings);
+            if (!settings.TryGetModuleSettings(out MocassinEnergySettings moduleSettings))
+                throw new InvalidOperationException("Settings object for the energy module is missing");
+
+            return new EnergyValidationService(ModelProject, moduleSettings);
         }
     }
 }

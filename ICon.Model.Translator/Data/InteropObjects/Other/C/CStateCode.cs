@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// C state code object. Layout marshals to its unmanaged 'C' counterpart

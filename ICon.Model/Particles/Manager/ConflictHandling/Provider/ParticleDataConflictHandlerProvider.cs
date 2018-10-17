@@ -1,7 +1,7 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles.ConflictHandling
+namespace Mocassin.Model.Particles.ConflictHandling
 {
     /// <summary>
     ///     Resolver provider for all particle conflict resolvers that handle internal data conflicts of the particle manager
@@ -9,8 +9,8 @@ namespace ICon.Model.Particles.ConflictHandling
     public class ParticleDataConflictHandlerProvider : DataConflictHandlerProvider<ParticleModelData>
     {
         /// <inheritdoc />
-        public ParticleDataConflictHandlerProvider(IProjectServices projectServices)
-            : base(projectServices)
+        public ParticleDataConflictHandlerProvider(IModelProject modelProject)
+            : base(modelProject)
         {
         }
     }

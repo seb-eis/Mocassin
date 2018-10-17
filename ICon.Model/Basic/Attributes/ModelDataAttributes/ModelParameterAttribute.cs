@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Attribute to mark a property as a model parameter which supports a specific model parameter interface

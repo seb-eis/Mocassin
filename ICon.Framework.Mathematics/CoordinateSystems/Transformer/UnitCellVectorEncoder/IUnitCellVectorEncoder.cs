@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     /// Encoder system that handles the transformations between 3D (spherical, fractional, cartesian) and 4D encoded super-cell coordinates

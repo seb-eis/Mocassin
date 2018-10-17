@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Framework.Exceptions;
+using Mocassin.Framework.Exceptions;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Exception thrown if a data lock source cannot get a valid read or write lock within its specified await period

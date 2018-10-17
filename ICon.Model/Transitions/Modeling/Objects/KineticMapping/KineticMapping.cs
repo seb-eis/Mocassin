@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Mapping for a kinetic transition that describes a 4D encoded transition path belonging to a specific kinetic reference transition

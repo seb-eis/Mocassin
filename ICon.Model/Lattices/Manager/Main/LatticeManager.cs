@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Basic implementation of the lattice manager that manages and supplies objects and parameters related to the lattice modelling process
@@ -30,9 +29,9 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Creates new lattice manager with the provided project services and base data object
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name=""></param>
-        public LatticeManager(IProjectServices projectServices, LatticeModelData data) : base(projectServices, data)
+        public LatticeManager(IModelProject modelProject, LatticeModelData data) : base(modelProject, data)
         {
 
         }
@@ -49,11 +48,14 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Get a new validation service for this manager that uses the settings from the provided project settings and handles Lattice object validations
         /// </summary>
-        /// <param name="settingsData"></param>
+        /// <param name="settings"></param>
         /// <returns></returns>
-        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettings settings)
         {
-            return new LatticeValidationService(ProjectServices, settingsData.LatticeSettings);
+            if (!settings.TryGetModuleSettings(out MocassinLatticeSettings moduleSettings))
+                throw new InvalidOperationException("Settings object for the lattice module is missing");
+
+            return new LatticeValidationService(ModelProject, moduleSettings);
         }
     }
 }

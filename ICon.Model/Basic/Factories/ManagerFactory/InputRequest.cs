@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ICon.Framework.Operations;
+using Mocassin.Framework.Operations;
 using Newtonsoft.Json;
 
-namespace ICon.Model.Basic.Debug
+namespace Mocassin.Model.Basic.Debug
 {
     /// <summary>
     /// Represents an input operation described by an object and an operation type

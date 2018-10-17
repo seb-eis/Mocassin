@@ -1,25 +1,25 @@
-﻿using ICon.Mathematics.Coordinates;
-using ICon.Model.Particles;
-using ICon.Symmetry.Analysis;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Model.Particles;
+using Mocassin.Symmetry.Analysis;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
-    /// Translates the WorkLattice to a SupercellWrapper
+    /// Translates the WorkLattice to a SupercellAdapter
     /// </summary>
     public class SupercellTranslater
     {
         /// <summary>
-        /// Translates the WorkLattice to a SupercellWrapper
+        /// Translates the WorkLattice to a SupercellAdapter
         /// </summary>
         /// <param name="workLattice"></param>
         /// <param name="encoder"></param>
         /// <returns></returns>
-        public SupercellWrapper<IParticle> Translate(WorkLattice workLattice, IUnitCellVectorEncoder encoder)
+        public SupercellAdapter<IParticle> Translate(WorkLattice workLattice, IUnitCellVectorEncoder encoder)
         {
 
             IParticle[,,][] particles = new IParticle[workLattice.WorkCells.GetLength(0), workLattice.WorkCells.GetLength(1), workLattice.WorkCells.GetLength(2)][];
@@ -40,7 +40,7 @@ namespace ICon.Model.Lattices
                 }
             }
 
-            return new SupercellWrapper<IParticle>(particles, encoder);
+            return new SupercellAdapter<IParticle>(particles, encoder);
         }
 
     }

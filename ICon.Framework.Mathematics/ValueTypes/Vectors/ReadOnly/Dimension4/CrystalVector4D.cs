@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-using ICon.Framework.Xml;
-using ICon.Mathematics.Extensions;
+using Mocassin.Framework.Xml;
+using Mocassin.Mathematics.Extensions;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     /// Four dimensional 128 bit encoded linear supercell crystal position information

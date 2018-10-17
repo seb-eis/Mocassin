@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Transitions;
+using Mocassin.Model.Particles;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a kinetic mapping model that fully describes a transitions geometric properties on a specific position

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Framework.Collections;
-using ICon.Mathematics.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Extensions;
 
-namespace ICon.Symmetry.Analysis
+namespace Mocassin.Symmetry.Analysis
 {
     /// <summary>
     /// Geometry hash object that is used to do an approximated symmetry comparisons between groups of mass points based on hash values

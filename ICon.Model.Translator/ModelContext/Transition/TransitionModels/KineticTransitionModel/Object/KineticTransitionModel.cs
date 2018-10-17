@@ -1,14 +1,14 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ICon.Model.Structures;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IKineticTransitionModel"/>
+    /// <inheritdoc cref="IKineticTransitionModel"/>
     public class KineticTransitionModel : ModelComponentBase, IKineticTransitionModel
     {
         /// <inheritdoc />

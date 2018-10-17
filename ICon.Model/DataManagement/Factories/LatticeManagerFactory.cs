@@ -1,8 +1,8 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Lattices;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.Lattices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.DataManagement
+namespace Mocassin.Model.DataManagement
 {
     /// <summary>
     ///     Factory for new lattice manager systems
@@ -10,11 +10,11 @@ namespace ICon.Model.DataManagement
     public class LatticeManagerFactory : IModelManagerFactory
     {
         /// <inheritdoc />
-        public IModelManager CreateNew(IProjectServices projectServices, out object dataObject)
+        public IModelManager CreateNew(IModelProject modelProject, out object dataObject)
         {
             var data = LatticeModelData.CreateNew();
             dataObject = data;
-            return new LatticeManager(projectServices, data);
+            return new LatticeManager(modelProject, data);
         }
     }
 }

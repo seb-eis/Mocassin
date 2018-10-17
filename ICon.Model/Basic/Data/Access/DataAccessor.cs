@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <inheritdoc />
     public class DataAccessor<TData> : IDataAccessor<TData> where TData : ModelData

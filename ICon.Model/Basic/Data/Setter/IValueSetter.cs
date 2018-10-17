@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Represents a value setter adapter that enables save manipulation of model data that does not require validation

@@ -1,19 +1,19 @@
-﻿using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles.Validators
+namespace Mocassin.Model.Particles.Validators
 {
     /// <summary>
     ///     Validator for new particle model objects that checks for compatibility with existing data and general object
     ///     constraints
     /// </summary>
-    public class ParticleValidator : DataValidator<IParticle, BasicParticleSettings, IParticleDataPort>
+    public class ParticleValidator : DataValidator<IParticle, MocassinParticleSettings, IParticleDataPort>
     {
         /// <inheritdoc />
-        public ParticleValidator(IProjectServices projectServices, BasicParticleSettings settings,
+        public ParticleValidator(IModelProject modelProject, MocassinParticleSettings settings,
             IDataReader<IParticleDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -76,7 +76,7 @@ namespace ICon.Model.Particles.Validators
                 if (item.IsDeprecated) 
                     continue;
 
-                if (particle.EqualsInModelProperties(item, ProjectServices.CommonNumeric.RangeComparer))
+                if (particle.EqualsInModelProperties(item, ModelProject.CommonNumeric.RangeComparer))
                 {
                     var detail0 = $"Particle compares equal in properties to existing particle with index ({item.Index})";
                     report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail0));

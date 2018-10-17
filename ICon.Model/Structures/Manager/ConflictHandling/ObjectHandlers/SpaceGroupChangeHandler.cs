@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 
-using ICon.Framework.Extensions;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures.ConflictHandling
+namespace Mocassin.Model.Structures.ConflictHandling
 {
     /// <summary>
     /// Resolves a change in the space group information and corrects the dependent internal data of the structure object
@@ -17,9 +17,9 @@ namespace ICon.Model.Structures.ConflictHandling
         /// Create new space group change handler with the provided data access and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        public SpaceGroupChangeHandler(IDataAccessor<StructureModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        public SpaceGroupChangeHandler(IDataAccessor<StructureModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 
@@ -32,7 +32,7 @@ namespace ICon.Model.Structures.ConflictHandling
         /// <returns></returns>
         public override ConflictReport HandleConflicts(SpaceGroupInfo groupInfo)
         {
-            if (ProjectServices.SpaceGroupService.TryLoadGroup(groupInfo.GroupEntry) == false)
+            if (ModelProject.SpaceGroupService.TryLoadGroup(groupInfo.GroupEntry) == false)
             {
                 throw new InvalidOperationException("Space group loading to service failed");
             }
@@ -49,21 +49,21 @@ namespace ICon.Model.Structures.ConflictHandling
         protected void MatchCrystalSystemAndCellParameters(ConflictReport report)
         {
             var oldParameters = DataAccess.Query(data => data.CrystalParameters);
-            if (ProjectServices.CrystalSystemService.LoadNewSystem(ProjectServices.SpaceGroupService.LoadedGroup) == false)
+            if (ModelProject.CrystalSystemService.LoadNewSystem(ModelProject.SpaceGroupService.LoadedGroup) == false)
             {
                 return;
             }
 
-            if (ProjectServices.CrystalSystemService.TrySetParameters(oldParameters.ParameterSet) == false)
+            if (ModelProject.CrystalSystemService.TrySetParameters(oldParameters.ParameterSet) == false)
             {
-                OverwriteCellParameters(ProjectServices.CrystalSystemService.CrystalSystem.GetDefaultParameterSet());
+                OverwriteCellParameters(ModelProject.CrystalSystemService.CrystalSystem.GetDefaultParameterSet());
 
                 var detail0 = "The original cell parameters are no longer compatible with the new space group";
                 var detail1 = "Conflict resolved by loading a default parameter set for the new crystal system";
                 report.Warnings.Add(ModelMessageSource.CreateContentResetWarning(this, detail0, detail1));
             }
 
-            oldParameters.ParameterSet = ProjectServices.CrystalSystemService.GetCurrentParameterSet();
+            oldParameters.ParameterSet = ModelProject.CrystalSystemService.GetCurrentParameterSet();
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace ICon.Model.Structures.ConflictHandling
         protected void MatchUnitCellPositionsToSpaceGroup(ConflictReport report)
         {
             var currentPositions = DataAccess.Query(data => data.UnitCellPositions.Select((position) => position.Vector.AsFractional()));
-            var extendedPositions = ProjectServices.SpaceGroupService.GetAllWyckoffPositions(currentPositions);
+            var extendedPositions = ModelProject.SpaceGroupService.GetAllWyckoffPositions(currentPositions);
 
-            var comparer = ProjectServices.SpaceGroupService.Comparer.ToEqualityComparer();
+            var comparer = ModelProject.SpaceGroupService.Comparer.ToEqualityComparer();
 
             for (int i = 0; i < extendedPositions.Count; i++)
             {
@@ -102,7 +102,7 @@ namespace ICon.Model.Structures.ConflictHandling
         /// <param name="parameters"></param>
         protected void OverwriteCellParameters(CellParameters parameters)
         {
-            if (ProjectServices.CrystalSystemService.TrySetParameters(parameters.ParameterSet) == false)
+            if (ModelProject.CrystalSystemService.TrySetParameters(parameters.ParameterSet) == false)
             {
                 throw new InvalidOperationException("Function was called with an invalid parameter set");
             }

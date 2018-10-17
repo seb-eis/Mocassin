@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Symmetry.Analysis;
 
-using ICon.Framework.Collections;
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.ValueTypes;
-using ICon.Symmetry.Analysis;
-using ICon.Model.Basic;
-using ICon.Framework.Extensions;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic implementation of the structure cache manager that provides read only access to the extended 'on demand' structure data
@@ -19,7 +18,7 @@ namespace ICon.Model.Structures
     internal class StructureCacheManager : ModelCacheManager<StructureDataCache, IStructureCachePort>, IStructureCachePort
     {
         /// <inheritdoc />
-        public StructureCacheManager(StructureDataCache cache, IProjectServices projectServices) : base(cache, projectServices)
+        public StructureCacheManager(StructureDataCache cache, IModelProject modelProject) : base(cache, modelProject)
         {
 
         }
@@ -115,7 +114,7 @@ namespace ICon.Model.Structures
         [CacheMethodResult]
         protected IList<SetList<Fractional3D>> CreateExtendedDummyPositionLists()
         {
-            var positions = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetPositionDummies());
+            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetPositionDummies());
             return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
@@ -129,7 +128,7 @@ namespace ICon.Model.Structures
         [CacheMethodResult]
         protected IList<SetList<FractionalPosition>> CreateExtendedPositionLists()
         {
-            var positions = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetUnitCellPositions());
+            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetUnitCellPositions());
             return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
@@ -143,11 +142,11 @@ namespace ICon.Model.Structures
         [CacheMethodResult]
         protected IUnitCellVectorEncoder CreateVectorEncoder()
         {
-            var sortedList = new SetList<Fractional3D>(new VectorComparer3D<Fractional3D>(ProjectServices.GeometryNumeric.RangeComparer))
+            var sortedList = new SetList<Fractional3D>(new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer))
             {
                 GetLinearizedExtendedPositionList().Select(pos => new Fractional3D(pos.Coordinates))
             };
-            return new UnitCellVectorEncoder(sortedList, ProjectServices.CrystalSystemService.VectorTransformer);
+            return new UnitCellVectorEncoder(sortedList, ModelProject.CrystalSystemService.VectorTransformer);
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace ICon.Model.Structures
         [CacheMethodResult]
         protected SetList<FractionalPosition> CreateLinearizedExtendedPositionList()
         {
-            var result = new SetList<FractionalPosition>(new VectorComparer3D<FractionalPosition>(ProjectServices.GeometryNumeric.RangeComparer));
+            var result = new SetList<FractionalPosition>(new VectorComparer3D<FractionalPosition>(ModelProject.GeometryNumeric.RangeComparer));
             foreach (var subList in GetExtendedPositionLists())
             {
                 result.Add(subList);
@@ -198,7 +197,7 @@ namespace ICon.Model.Structures
         protected SortedDictionary<int, IUnitCellPosition> CreateExtendedIndexToPositionDictionary()
         {
             var result = new SortedDictionary<int, IUnitCellPosition>();
-            var ucpList = ProjectServices
+            var ucpList = ModelProject
                 .GetManager<IStructureManager>()
                 .QueryPort
                 .Query(port => port.GetUnitCellPositions());
@@ -256,8 +255,8 @@ namespace ICon.Model.Structures
             SetList<Fractional3D> Create()
             {
                 return isDeprecated 
-                    ? new SetList<Fractional3D>(ProjectServices.SpaceGroupService.Comparer)
-                    : ProjectServices.SpaceGroupService.GetAllWyckoffPositions(vector);
+                    ? new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer)
+                    : ModelProject.SpaceGroupService.GetAllWyckoffPositions(vector);
             }
 
             return Create;
@@ -274,8 +273,8 @@ namespace ICon.Model.Structures
             SetList<FractionalPosition> Create()
             {
                 return isDeprecated 
-                    ? new SetList<FractionalPosition>(ProjectServices.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>())
-                    : ProjectServices.SpaceGroupService.GetAllWyckoffPositions(position);
+                    ? new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>())
+                    : ModelProject.SpaceGroupService.GetAllWyckoffPositions(position);
             }
 
             return Create;

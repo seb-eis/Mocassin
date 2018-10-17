@@ -3,12 +3,12 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Basic;
-using ICon.Model.Energies;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class EnergyManagerTest : ManagementModuleTestsBasis

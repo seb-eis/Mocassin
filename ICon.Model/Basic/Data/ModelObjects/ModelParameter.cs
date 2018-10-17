@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract model parameter class for implementations of unique model properties that do not support indexing

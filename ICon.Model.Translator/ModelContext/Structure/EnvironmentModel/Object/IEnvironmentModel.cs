@@ -1,11 +1,11 @@
-﻿using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+﻿using Mocassin.Mathematics.ValueTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents an environment model that fully describes the surroundings and dependencies of a unit cell position

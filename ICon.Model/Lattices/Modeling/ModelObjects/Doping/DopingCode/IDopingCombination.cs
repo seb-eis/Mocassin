@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Set of element indexes and sublattice index for doping information

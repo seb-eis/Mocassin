@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive;
-using ICon.Framework.Events;
+using Mocassin.Framework.Events;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <inheritdoc />
     public abstract class ValueSetter : IValueSetter

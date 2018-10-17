@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
-using ICon.Framework.Extensions;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
+using Mocassin.Framework.Extensions;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Enum for properties of transition rules (Inverted: Corss exchanged strat and end state, Reverted: stard and end state are themselves inverted)

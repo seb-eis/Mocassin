@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Model\**" />
+    <EmbeddedResource Remove="Data\Model\**" />
+    <None Remove="Data\Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Entities\Job\DbSet\" />
+    <Folder Include="Data\InteropObjects\Energy\C\" />
+    <Folder Include="Data\InteropObjects\Energy\Net\" />
+    <Folder Include="Logic\Components\Energies\" />
+    <Folder Include="Logic\Components\Settings\" />
+    <Folder Include="Logic\Components\Transitions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="1.1.11" />
+    <PackageReference Include="System.Reactive" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
+  </ItemGroup>
+
+</Project>

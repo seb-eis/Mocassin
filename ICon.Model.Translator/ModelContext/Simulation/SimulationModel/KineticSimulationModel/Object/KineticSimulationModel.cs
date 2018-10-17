@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Simulations;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IKineticSimulationModel"/>
+    /// <inheritdoc cref="IKineticSimulationModel"/>
     public class KineticSimulationModel : ModelComponentBase, IKineticSimulationModel
     {
         /// <inheritdoc />

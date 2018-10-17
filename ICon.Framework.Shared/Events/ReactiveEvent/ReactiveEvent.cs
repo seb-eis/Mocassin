@@ -6,7 +6,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
-namespace ICon.Framework.Events
+namespace Mocassin.Framework.Events
 {
     /// <summary>
     /// Reactive event that wraps a System.Reactive subject for generic push based asynchronous event system implementations

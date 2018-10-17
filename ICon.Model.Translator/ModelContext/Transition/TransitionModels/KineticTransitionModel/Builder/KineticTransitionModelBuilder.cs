@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IKineticTransitionModelBuilder"/>
+    /// <inheritdoc cref="IKineticTransitionModelBuilder"/>
     public class KineticTransitionModelBuilder : TransitionModelBuilder, IKineticTransitionModelBuilder
     {
         /// <inheritdoc />
-        public KineticTransitionModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public KineticTransitionModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -80,7 +80,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <remarks> Particle is for calculation purposes only and not part of the actual model data </remarks>
         protected IParticle CreateEffectiveMobileParticle(IParticleSet mobileParticles)
         {
-            var comparer = ProjectServices.CommonNumeric.RangeComparer;
+            var comparer = ModelProject.CommonNumeric.RangeComparer;
             var first = mobileParticles.First();
 
             var effectiveParticle = new Particle {Index = -1, Name = first.Name, Symbol = first.Symbol, Charge = first.Charge};
@@ -109,7 +109,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <returns></returns>
         protected IParticle SearchEffectiveParticleInModel(IParticle effectiveParticle, IComparer<double> comparer)
         {
-            var particles = ProjectServices.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
+            var particles = ModelProject.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
             foreach (var particle in particles)
             {
                 if (particle.EqualsInModelProperties(effectiveParticle, comparer))
@@ -125,7 +125,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddAbstractMovement(IKineticTransitionModel transitionModel)
         {
-            var unitCellProvider = ProjectServices.GetManager<IStructureManager>()
+            var unitCellProvider = ModelProject.GetManager<IStructureManager>()
                 .QueryPort.Query(port => port.GetFullUnitCellProvider());
 
             var positions = transitionModel.Transition.GetGeometrySequence()
@@ -145,7 +145,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddRuleModels(IKineticTransitionModel transitionModel)
         {
-            var comparer = ProjectServices.CommonNumeric.RangeComparer;
+            var comparer = ModelProject.CommonNumeric.RangeComparer;
             var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
                 .Select(kineticRule => CreateRuleModel(kineticRule, comparer))
                 .ToList();
@@ -176,7 +176,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void CreateAndAddMappingModels(IKineticTransitionModel transitionModel)
         {
-            var manager = ProjectServices.GetManager<ITransitionManager>();
+            var manager = ModelProject.GetManager<ITransitionManager>();
 
             // Avoid implicit captured 'this' through local variable
             var index = transitionModel.Transition.Index;
@@ -234,7 +234,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <param name="abstractMovement"></param>
         protected void AddMovementMatrix(IKineticMappingModel mappingModel, IList<int> abstractMovement)
         {
-            var matrix = new Matrix2D(3, mappingModel.Mapping.PathLength, ProjectServices.CommonNumeric.RangeComparer);
+            var matrix = new Matrix2D(3, mappingModel.Mapping.PathLength, ModelProject.CommonNumeric.RangeComparer);
             for (var i = 0; i < matrix.Cols; i++)
             {
                 var moveIndex = abstractMovement[i];

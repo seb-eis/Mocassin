@@ -3,13 +3,13 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using ICon.Symmetry.SpaceGroups;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
+using Mocassin.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class TransitionManagerTest : ManagementModuleTestsBasis

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Framework.Exceptions;
+using Mocassin.Framework.Exceptions;
 
-namespace ICon.Framework.Exceptions
+namespace Mocassin.Framework.Exceptions
 {
     /// <summary>
     /// Exception thrown if a processing pipeline receives a non-processable type and no default handle case exists

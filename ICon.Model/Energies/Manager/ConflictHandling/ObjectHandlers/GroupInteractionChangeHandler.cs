@@ -1,9 +1,9 @@
-﻿using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies.ConflictHandling
+namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
     /// Object conflict handler for changes in group interaction objects
@@ -11,8 +11,8 @@ namespace ICon.Model.Energies.ConflictHandling
     public class GroupInteractionChangeHandler : ObjectConflictHandler<GroupInteraction, EnergyModelData>
     {
         /// <inheritdoc />
-        public GroupInteractionChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        public GroupInteractionChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 
@@ -33,8 +33,8 @@ namespace ICon.Model.Energies.ConflictHandling
         /// <param name="report"></param>
         protected void UpdateGroupEnergyDictionary(GroupInteraction group, ConflictReport report)
         {
-            var ucProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var analyzer = new GeometryGroupAnalyzer(ucProvider, ProjectServices.SpaceGroupService);
+            var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
             var extGroup = analyzer.CreateExtendedPositionGroup(group);
             SalvageAndUpdateEnergyDictionarySet(group, extGroup, report);
         }

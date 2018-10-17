@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations.ConflictHandling
+namespace Mocassin.Model.Simulations.ConflictHandling
 {
     /// <summary>
     /// Conflict handler provider for the simulation manager related model objects and parameters
@@ -14,8 +14,8 @@ namespace ICon.Model.Simulations.ConflictHandling
         /// <summary>
         /// Create new simulation conflict handler provider that uses the provided project services instance
         /// </summary>
-        /// <param name="projectServices"></param>
-        public SimulationDataConflictHandlerProvider(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public SimulationDataConflictHandlerProvider(IModelProject modelProject) : base(modelProject)
         {
 
         }

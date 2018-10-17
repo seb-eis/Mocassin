@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ICon.Framework.Processing;
+using Mocassin.Framework.Processing;
 
-namespace ICon.Framework.Reflection
+namespace Mocassin.Framework.Reflection
 {
     /// <summary>
     ///     Supplies automatic analysis of class instances to create sets of object processors for pipeline constructs

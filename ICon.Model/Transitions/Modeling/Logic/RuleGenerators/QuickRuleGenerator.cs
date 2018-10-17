@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ICon.Framework.Extensions;
-using ICon.Framework.Collections;
-using ICon.Mathematics.Permutation;
-using ICon.Model.Particles;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Permutation;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Generic rule generator to create tha basic information of new transition rules

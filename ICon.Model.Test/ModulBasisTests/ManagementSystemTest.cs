@@ -3,13 +3,13 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Energies;
-using ICon.Model.Lattices;
-using ICon.Model.ProjectServices;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Lattices;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Test
+namespace Mocassin.Model.Test
 {
     [TestClass]
     public class ManagemntSystemTest

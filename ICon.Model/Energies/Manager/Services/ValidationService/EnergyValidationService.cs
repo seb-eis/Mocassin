@@ -1,10 +1,10 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.Energies.Validators;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Energies.Validators;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Validation service for energy related model objects that checks new energy related model object inputs
@@ -14,11 +14,11 @@ namespace ICon.Model.Energies
         /// <summary>
         ///     The basic energy settings object that defines all data constraints
         /// </summary>
-        protected BasicEnergySettings Settings { get; set; }
+        protected MocassinEnergySettings Settings { get; set; }
 
         /// <inheritdoc />
-        public EnergyValidationService(IProjectServices projectServices, BasicEnergySettings settings)
-            : base(projectServices)
+        public EnergyValidationService(IModelProject modelProject, MocassinEnergySettings settings)
+            : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
@@ -33,7 +33,7 @@ namespace ICon.Model.Energies
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStableGroupInfo(IGroupInteraction groupInfo, IDataReader<IEnergyDataPort> dataReader)
         {
-            return new GroupInteractionValidator(ProjectServices, Settings, dataReader).Validate(groupInfo);
+            return new GroupInteractionValidator(ModelProject, Settings, dataReader).Validate(groupInfo);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ICon.Model.Energies
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateUnstableEnvironmentInfo(IUnstableEnvironment envInfo, IDataReader<IEnergyDataPort> dataReader)
         {
-            return new UnstableEnvironmentValidator(ProjectServices, Settings, dataReader).Validate(envInfo);
+            return new UnstableEnvironmentValidator(ModelProject, Settings, dataReader).Validate(envInfo);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ICon.Model.Energies
         [ValidationOperation(ValidationType.Parameter)]
         protected IValidationReport ValidateEnvironmentInfo(IStableEnvironmentInfo envInfo, IDataReader<IEnergyDataPort> dataReader)
         {
-            return new StableEnvironmentInfoValidator(ProjectServices, Settings, dataReader).Validate(envInfo);
+            return new StableEnvironmentInfoValidator(ModelProject, Settings, dataReader).Validate(envInfo);
         }
     }
 }

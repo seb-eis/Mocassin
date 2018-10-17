@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Building Block for the lattice. Each building block has the size of the unit cell.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Framework.Provider
+namespace Mocassin.Framework.Provider
 {
     /// <summary>
     ///     Non generic external provider that

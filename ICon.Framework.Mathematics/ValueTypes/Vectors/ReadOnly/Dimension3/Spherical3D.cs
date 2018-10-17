@@ -2,9 +2,9 @@
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 
-using ICon.Framework.Xml;
+using Mocassin.Framework.Xml;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     /// Basic fractional vector that carries fractional affine coordinate system information (A,B,C)

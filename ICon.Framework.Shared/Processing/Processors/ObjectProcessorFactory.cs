@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ICon.Framework.Processing
+namespace Mocassin.Framework.Processing
 {
     /// <summary>
     ///     Factory that provides functions to create object handlers both sync and async

@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Abstract class that defines a coordinate system in N dimensional space

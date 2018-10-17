@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Simulations;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Model.ProjectServices;
-using ICon.Model.Transitions;
+using Mocassin.Model.Simulations;
 using System.Linq;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Analyzer for simulations that provides basic information about its behavior
     /// </summary>
     public class SimulationAnalyzer
     {
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
-        public SimulationAnalyzer(IProjectServices projectServices)
+        public SimulationAnalyzer(IModelProject modelProject)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ICon.Model.Simulations
         /// <returns></returns>
         protected IEnumerable<PositionMobilityInfo> CreateUnitCellMobilityInfo<T1>(T1 simulation) where T1 : ISimulation
         {
-            var manager = ProjectServices.GetManager<IStructureManager>();
+            var manager = ModelProject.GetManager<IStructureManager>();
             foreach (var cellPosition in manager.QueryPort.Query(data => data.GetUnitCellPositions()))
             {
                 var mobilityInfo = PositionMobilityInfo.CreateForSimulation(simulation);

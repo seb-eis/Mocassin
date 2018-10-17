@@ -1,6 +1,6 @@
-﻿using ICon.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Defines an affine coordinate system of the specified coordinate tuple type

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Framework.Operations;
-using ICon.Framework.Processing;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic implementation of the structure input manager that handles validated adding, removal and replacement of structure base data by an outside source
@@ -18,7 +18,7 @@ namespace ICon.Model.Structures
         /// <param name="data"></param>
         /// <param name="events"></param>
         /// <param name="services"></param>
-        public StructureInputManager(StructureModelData data, StructureEventManager events, IProjectServices services) : base(data, events, services)
+        public StructureInputManager(StructureModelData data, StructureEventManager events, IModelProject services) : base(data, events, services)
         {
 
         }
@@ -140,7 +140,7 @@ namespace ICon.Model.Structures
         /// <returns></returns>
         protected override IDataConflictHandlerProvider<StructureModelData> CreateDataConflictHandlerProvider()
         {
-            return new ConflictHandling.StructureDataConflictHandlerProvider(ProjectServices);
+            return new ConflictHandling.StructureDataConflictHandlerProvider(ModelProject);
         }
     }
 }

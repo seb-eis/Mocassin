@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 using System.Threading.Tasks;
-using ICon.Framework.Collections;
-using ICon.Model.Energies;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Collections;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Energies;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IEnergyModelContextBuilder"/>
+    /// <inheritdoc cref="IEnergyModelContextBuilder"/>
     public class EnergyModelContextBuilder : ModelContextBuilderBase<IEnergyModelContext>, IEnergyModelContextBuilder
     {
         /// <inheritdoc />
@@ -29,7 +29,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override IEnergyModelContext PopulateContext(IEnergyModelContext modelContext)
         {
-            var manager = ProjectServices.GetManager<IEnergyManager>();
+            var manager = ModelProject.GetManager<IEnergyManager>();
             var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
             var asymmetricPairs = manager.QueryPort.Query(port => port.GetUnstablePairInteractions());
             var groupInteractions = manager.QueryPort.Query(port => port.GetGroupInteractions());
@@ -52,8 +52,8 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            GroupEnergyModelBuilder = GroupEnergyModelBuilder ?? new GroupEnergyModelBuilder(ProjectServices);
-            PairEnergyModelBuilder = PairEnergyModelBuilder ?? new PairEnergyModelBuilder(ProjectServices);
+            GroupEnergyModelBuilder = GroupEnergyModelBuilder ?? new GroupEnergyModelBuilder(ModelProject);
+            PairEnergyModelBuilder = PairEnergyModelBuilder ?? new PairEnergyModelBuilder(ModelProject);
         }
     }
 }

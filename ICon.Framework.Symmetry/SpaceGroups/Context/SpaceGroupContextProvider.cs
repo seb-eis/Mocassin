@@ -1,6 +1,6 @@
-﻿using ICon.Framework.SQLiteCore;
+﻿using Mocassin.Framework.SQLiteCore;
 
-namespace ICon.Symmetry.SpaceGroups
+namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <summary>
     ///     Provider for the space group database context
@@ -11,17 +11,12 @@ namespace ICon.Symmetry.SpaceGroups
         public override string DefaultFilepath { get; } =
             "C:/Users/hims-user/source/repos/ICon.Project/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db";
 
-        /// <summary>
-        ///     New context provider utilizing the default filepath
-        /// </summary>
+        /// <inheritdoc />
         public SpaceGroupContextProvider()
         {
         }
 
-        /// <summary>
-        ///     Creates a context provider with the specified filepath (Checks if filepath exists)
-        /// </summary>
-        /// <param name="filepath"></param>
+        /// <inheritdoc />
         public SpaceGroupContextProvider(string filepath)
             : base(filepath)
         {

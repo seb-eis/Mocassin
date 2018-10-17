@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a 5D simulation energy background that assigns each particle on each possible position an energetic offset value

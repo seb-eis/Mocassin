@@ -1,9 +1,9 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures.Handler;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures.Handler;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic update manager for the structure module that handles pushed information on data changes in required modules
@@ -40,9 +40,9 @@ namespace ICon.Model.Structures
         /// <param name="baseData"></param>
         /// <param name="extendedData"></param>
         /// <param name="eventManager"></param>
-        /// <param name="projectServices"></param>
-        public StructureUpdateManager(StructureModelData baseData, StructureEventManager eventManager, IProjectServices projectServices)
-            : base(baseData, eventManager, projectServices)
+        /// <param name="modelProject"></param>
+        public StructureUpdateManager(StructureModelData baseData, StructureEventManager eventManager, IModelProject modelProject)
+            : base(baseData, eventManager, modelProject)
         {
 
         }

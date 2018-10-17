@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic position dummy that is used only for visual purposes in the model and is not actually part of the extended position list

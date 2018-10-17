@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-using ICon.Mathematics.ValueTypes;
-
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Lattice information, such as the extent of the super cell

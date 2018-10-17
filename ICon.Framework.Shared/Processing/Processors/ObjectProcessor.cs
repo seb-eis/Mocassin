@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Framework.Exceptions;
+using Mocassin.Framework.Exceptions;
 
-namespace ICon.Framework.Processing
+namespace Mocassin.Framework.Processing
 {
     /// <summary>
     ///     Generic object handler class for functions that accept one argument (Do not use for tuple systems!)

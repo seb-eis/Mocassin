@@ -1,136 +1,113 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ICon.Mathematics.Coordinates;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Symmetry.CrystalSystems
+namespace Mocassin.Symmetry.CrystalSystems
 {
     public class CrystalSystemService : ICrystalSystemService
     {
         /// <summary>
-        /// The crystal system provide for loading
+        ///     The crystal system provide for loading
         /// </summary>
-        private ICrystalSystemProvider CrystalSystemProvider { get; set; }
+        private ICrystalSystemSource CrystalSystemSource { get; }
 
-        /// <summary>
-        /// Access to the currently loaded crystal system
-        /// </summary>
+        /// <inheritdoc />
         public CrystalSystem CrystalSystem { get; protected set; }
 
-        /// <summary>
-        /// Get the vector transformer that hanldes coordinate system transformations with the tolerance of the crytsal system
-        /// </summary>
-        public VectorTransformer VectorTransformer { get; protected set; }
+        /// <inheritdoc />
+        public IVectorTransformer VectorTransformer { get; protected set; }
 
         /// <summary>
-        /// Defines the tolerance range used for equality comparisons in the spherical coordinate transformations
+        ///     Defines the tolerance range used for equality comparisons in the spherical coordinate transformations
         /// </summary>
         public double ToleranceRange { get; protected set; }
 
         /// <summary>
-        /// Create new crystal system service from the crystal system provider and vector transformer
+        ///     Create new crystal system service from the crystal system provider and vector transformer
         /// </summary>
-        /// <param name="crystalSystemProvider"></param>
-        public CrystalSystemService(ICrystalSystemProvider crystalSystemProvider, double toleranceRange)
+        /// <param name="crystalSystemSource"></param>
+        /// <param name="toleranceRange"></param>
+        public CrystalSystemService(ICrystalSystemSource crystalSystemSource, double toleranceRange)
         {
-            CrystalSystemProvider = crystalSystemProvider ?? throw new ArgumentNullException(nameof(crystalSystemProvider));
+            CrystalSystemSource = crystalSystemSource ?? throw new ArgumentNullException(nameof(crystalSystemSource));
             ToleranceRange = toleranceRange;
             CrystalSystem = GetDefaultSystem();
         }
 
-        /// <summary>
-        /// Tries to the set parameter set, if successful the vector encoder is updated
-        /// </summary>
-        /// <param name="parameterSet"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool TrySetParameters(CrystalParameterSet parameterSet)
         {
-            if (CrystalSystem.TrySetParameters(parameterSet))
-            {
-                UpdateVectorTransformer();
-                return true;
-            }
-            return false;
+            if (!CrystalSystem.TrySetParameters(parameterSet)) 
+                return false;
+
+            UpdateVectorTransformer();
+            return true;
+
         }
 
         /// <summary>
-        /// Get the default crystal system (Triclinic)
+        ///     Get the default crystal system (Triclinic)
         /// </summary>
         /// <returns></returns>
         public CrystalSystem GetDefaultSystem()
         {
-            return CrystalSystemProvider.Create(0, "None");
+            return CrystalSystemSource.Create(0, "None");
         }
 
-        /// <summary>
-        /// Load a new crystal system from the provided that matches the provided space group (Returns false if already loaded)
-        /// </summary>
-        /// <param name="group"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool LoadNewSystem(ISpaceGroup group)
         {
-            if (group == null)
-            {
+            if (group == null) 
                 throw new ArgumentNullException(nameof(group));
-            }
-            return LoadIfDifferentSystem(CrystalSystemProvider.Create(group));
+
+            return LoadIfDifferentSystem(CrystalSystemSource.Create(group));
         }
 
-        /// <summary>
-        /// Load a new crystal system from the provided that matches the system index and variation name
-        /// </summary>
-        /// <param name="SystemIndex"></param>
-        /// <param name="VariationName"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool LoadNewSystem(int systemIndex, string variationName)
         {
-            if (variationName == null)
-            {
+            if (variationName == null) 
                 throw new ArgumentNullException(nameof(variationName));
-            }
-            return LoadIfDifferentSystem(CrystalSystemProvider.Create(systemIndex, variationName));
+
+            return LoadIfDifferentSystem(CrystalSystemSource.Create(systemIndex, variationName));
         }
 
         /// <summary>
-        /// Sets a new crystal system if it is not equal to the currently set one
+        ///     Sets a new crystal system if it is not equal to the currently set one
         /// </summary>
         /// <param name="newSystem"></param>
         /// <returns></returns>
         protected bool LoadIfDifferentSystem(CrystalSystem newSystem)
         {
-            if (newSystem.SystemID == CrystalSystem.SystemID && newSystem.Variation == CrystalSystem.Variation)
-            {
+            if (newSystem.SystemId == CrystalSystem.SystemId && newSystem.Variation == CrystalSystem.Variation)
                 return false;
-            }
+
             CrystalSystem = newSystem;
             return true;
         }
 
         /// <summary>
-        /// Creates the vector transformer using the currently loaded crystal system
+        ///     Creates the vector transformer using the currently loaded crystal system
         /// </summary>
         /// <returns></returns>
-        public VectorTransformer CreateVectorTransformer()
+        public IVectorTransformer CreateVectorTransformer()
         {
-            return new VectorTransformer(CrystalSystem.CreateCoordinateSystem(), SphericalCoordinateSystem3D.CreateIsoSystem(ToleranceRange));
+            return new VectorTransformer(CrystalSystem.CreateCoordinateSystem(),
+                SphericalCoordinateSystem3D.CreateIsoSystem(ToleranceRange));
         }
 
         /// <summary>
-        /// Triggers an update of the vector transfromer
+        ///     Triggers an update of the vector transformer
         /// </summary>
         public void UpdateVectorTransformer()
         {
             VectorTransformer = CreateVectorTransformer();
         }
 
-        /// <summary>
-        /// Get a copy of the currently active parameter set
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public CrystalParameterSet GetCurrentParameterSet()
         {
-            return new CrystalParameterSet()
+            return new CrystalParameterSet
             {
                 ParamA = CrystalSystem.ParamA.Value,
                 ParamB = CrystalSystem.ParamB.Value,

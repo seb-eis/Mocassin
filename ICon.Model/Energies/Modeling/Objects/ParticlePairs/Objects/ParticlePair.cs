@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using ICon.Model.Particles;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Abstract base class for particle pair implementations that describe a specific pair interaction occupation.

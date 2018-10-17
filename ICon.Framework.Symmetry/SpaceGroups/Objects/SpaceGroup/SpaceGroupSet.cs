@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace ICon.Symmetry.SpaceGroups
+namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <summary>
     /// XML Serializable container for space groups
     /// </summary>
-    [Serializable]
+    [XmlRoot]
     public class SpaceGroupSet
     {
+        /// <summary>
+        /// Create new space group set
+        /// </summary>
         public SpaceGroupSet()
         {
-            SpaceGroupList = new List<SpaceGroupEntity>();
+            SpaceGroups = new List<SpaceGroupEntity>();
         }
 
+        /// <summary>
+        /// The space group list
+        /// </summary>
         [XmlArray("Groups")]
         [XmlArrayItem("Group")]
-        public List<SpaceGroupEntity> SpaceGroupList { get; set; }
+        public List<SpaceGroupEntity> SpaceGroups { get; set; }
     }
 }

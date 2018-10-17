@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Represents a mocassin model manager that handles a specific part of the model process
@@ -22,7 +22,7 @@ namespace ICon.Model.Basic
         ///     Makes a new validation service for this manager from the project settings data
         /// </summary>
         /// <returns></returns>
-        IValidationService CreateValidationService(ProjectSettingsData settingsData);
+        IValidationService CreateValidationService(ProjectSettings settings);
 
         /// <summary>
         ///     Disconnects the manager from all linked manager ports to prepare for deletion or move operation

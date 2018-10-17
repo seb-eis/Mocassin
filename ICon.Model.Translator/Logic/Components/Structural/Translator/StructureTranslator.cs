@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
-using ICon.Model.Energies;
-using ICon.Model.Particles;
-using ICon.Model.Simulations;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Simulations;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Translates the .NET level structure model data into the simulation data context format

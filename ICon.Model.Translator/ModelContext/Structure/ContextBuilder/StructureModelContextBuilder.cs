@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IStructureModelContextBuilder#"/>
+    /// <inheritdoc cref="IStructureModelContextBuilder"/>
     public class StructureModelContextBuilder : ModelContextBuilderBase<IStructureModelContext>, IStructureModelContextBuilder
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override IStructureModelContext PopulateContext(IStructureModelContext modelContext)
         {
-            var manager = ProjectServices.GetManager<IStructureManager>();
+            var manager = ModelProject.GetManager<IStructureManager>();
             var unitCellPositions = manager.QueryPort.Query(port => port.GetUnitCellPositions());
             var environmentModels = EnvironmentModelBuilder.BuildModels(unitCellPositions);
             var positionModels = PositionModelBuilder.BuildModels(environmentModels);
@@ -43,8 +43,8 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            EnvironmentModelBuilder = EnvironmentModelBuilder ?? new EnvironmentModelBuilder(ProjectServices);
-            PositionModelBuilder = PositionModelBuilder ?? new PositionModelBuilder(ProjectServices);
+            EnvironmentModelBuilder = EnvironmentModelBuilder ?? new EnvironmentModelBuilder(ModelProject);
+            PositionModelBuilder = PositionModelBuilder ?? new PositionModelBuilder(ModelProject);
         }
     }
 }

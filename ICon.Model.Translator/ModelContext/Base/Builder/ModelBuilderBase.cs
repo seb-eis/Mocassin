@@ -1,6 +1,6 @@
-﻿using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Abstract base class for model component builders
@@ -10,15 +10,15 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// The project instance used for model reference access
         /// </summary>
-        protected IProjectServices ProjectServices { get; }
+        protected IModelProject ModelProject { get; }
 
         /// <summary>
         /// Create new model builder base with the provided project access
         /// </summary>
-        /// <param name="projectServices"></param>
-        protected ModelBuilderBase(IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected ModelBuilderBase(IModelProject modelProject)
         {
-            ProjectServices = projectServices;
+            ModelProject = modelProject;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Pair energy entry that carries a particle pair and an affiliated energy value

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Basic implementation of the lattice cache manager that provides read only access to the extended 'on demand' lattice data
@@ -21,12 +21,12 @@ namespace ICon.Model.Lattices
         /// Create new lattice cache manager for the provided data cache and project services
         /// </summary>
         /// <param name="dataCache"></param>
-        /// <param name="projectServices"></param>
-        public LatticeCacheManager(LatticeDataCache dataCache, IProjectServices projectServices) : base(dataCache, projectServices)
+        /// <param name="modelProject"></param>
+        public LatticeCacheManager(LatticeDataCache dataCache, IModelProject modelProject) : base(dataCache, modelProject)
         {
         }
 
-        public SupercellWrapper<IParticle> GetLattice()
+        public SupercellAdapter<IParticle> GetLattice()
         {
             return GetResultFromCache(CreateLattice);
         }
@@ -36,10 +36,10 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        public SupercellWrapper<IParticle> CreateLattice()
+        public SupercellAdapter<IParticle> CreateLattice()
         {
-            var latticeManager = ProjectServices.GetManager<ILatticeManager>();
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var latticeManager = ModelProject.GetManager<ILatticeManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
 
             var buildingBlocks = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBuildingBlocks());
             var blockInfos = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBlockInfos());
@@ -63,8 +63,8 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public WorkLattice CreateWorkLattice()
         {
-            var latticeManager = ProjectServices.GetManager<ILatticeManager>();
-            var structureManager = ProjectServices.GetManager<IStructureManager>();
+            var latticeManager = ModelProject.GetManager<ILatticeManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
 
             var buildingBlocks = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBuildingBlocks());
             var blockInfos = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBlockInfos());

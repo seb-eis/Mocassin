@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Interface that identifies a struct as a coordinate tuple

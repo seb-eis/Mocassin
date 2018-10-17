@@ -1,12 +1,12 @@
 ﻿using System;
-using ICon.Framework.Exceptions;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Extensions;
-using ICon.Mathematics.Solver;
-using ICon.Mathematics.ValueTypes;
-using ACoordinates = ICon.Mathematics.ValueTypes.Coordinates<double, double, double>;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Framework.Exceptions;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Solver;
+using Mocassin.Mathematics.ValueTypes;
+using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
-namespace ICon.Mathematics.Coordinates
+namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Basic fractional coordinate system in 3D that supports the 7 crystal systems and fractional coordinates

@@ -1,12 +1,12 @@
-﻿using ICon.Model.ProjectServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using ICon.Framework.Async;
+using Mocassin.Framework.Async;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Abstract base class for model context builder implementations that expand the reference data into the full context
@@ -19,7 +19,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <summary>
         /// The project service for access to the reference model data
         /// </summary>
-        public IProjectServices ProjectServices { get; set; }
+        public IModelProject ModelProject { get; set; }
 
         /// <summary>
         /// The project model context builder for access to affiliated model context build processes
@@ -33,7 +33,7 @@ namespace ICon.Model.Translator.ModelContext
         protected ModelContextBuilderBase(IProjectModelContextBuilder projectModelContextBuilder)
         {
             ProjectModelContextBuilder = projectModelContextBuilder ?? throw new ArgumentNullException(nameof(projectModelContextBuilder));
-            ProjectServices = projectModelContextBuilder.ProjectServices;
+            ModelProject = projectModelContextBuilder.ModelProject;
         }
 
         /// <inheritdoc />

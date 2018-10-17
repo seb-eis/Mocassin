@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Collections;
-using ICon.Mathematics.Permutation;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Permutation;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic implementation of the particle data cache manager that provides access to on-demand extended model data
@@ -13,8 +13,8 @@ namespace ICon.Model.Particles
     internal class ParticleCacheManager : ModelCacheManager<ParticleModelCache, IParticleCachePort>, IParticleCachePort
     {
         /// <inheritdoc />
-        public ParticleCacheManager(ParticleModelCache modelCache, IProjectServices projectServices)
-            : base(modelCache, projectServices)
+        public ParticleCacheManager(ParticleModelCache modelCache, IModelProject modelProject)
+            : base(modelCache, modelProject)
         {
         }
 
@@ -31,7 +31,7 @@ namespace ICon.Model.Particles
         [CacheMethodResult]
         protected SetList<PairCode> CalculatePossiblePairCodes()
         {
-            var particles = ProjectServices.GetManager<IParticleManager>().QueryPort
+            var particles = ModelProject.GetManager<IParticleManager>().QueryPort
                 .Query(port => port.GetParticles())
                 .Where(particle => !particle.IsDeprecated)
                 .Select(particle => particle.Index)

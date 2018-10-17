@@ -1,10 +1,10 @@
-﻿using ICon.Model.Structures;
+﻿using Mocassin.Model.Structures;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class TransitionModelContext : ITransitionModelContext

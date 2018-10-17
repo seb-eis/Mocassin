@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Model.Basic;
-using ICon.Model.Structures;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents an access port for on-demand extended energy data that is automatically cached

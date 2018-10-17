@@ -1,10 +1,10 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.Particles.Validators;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles.Validators;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Particle validation service that provide validations for new particle related data
@@ -14,11 +14,11 @@ namespace ICon.Model.Particles
         /// <summary>
         ///     The particle settings used for validations
         /// </summary>
-        protected BasicParticleSettings Settings { get; }
+        protected MocassinParticleSettings Settings { get; }
 
         /// <inheritdoc />
-        public ParticleValidationService(BasicParticleSettings particleSettings, IProjectServices projectServices)
-            : base(projectServices)
+        public ParticleValidationService(MocassinParticleSettings particleSettings, IModelProject modelProject)
+            : base(modelProject)
         {
             Settings = particleSettings ?? throw new ArgumentNullException(nameof(particleSettings));
         }
@@ -32,7 +32,7 @@ namespace ICon.Model.Particles
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateParticle(IParticle particle, IDataReader<IParticleDataPort> dataReader)
         {
-            return new ParticleValidator(ProjectServices, Settings, dataReader).Validate(particle);
+            return new ParticleValidator(ModelProject, Settings, dataReader).Validate(particle);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ICon.Model.Particles
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateParticleSet(IParticleSet particleSet, IDataReader<IParticleDataPort> dataReader)
         {
-            return new ParticleSetValidator(ProjectServices, Settings, dataReader).Validate(particleSet);
+            return new ParticleSetValidator(ModelProject, Settings, dataReader).Validate(particleSet);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     General base interface for all model notification port interfaces that provide at least a notification when a

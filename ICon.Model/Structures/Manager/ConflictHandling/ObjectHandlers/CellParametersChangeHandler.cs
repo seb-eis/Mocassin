@@ -1,9 +1,9 @@
 ﻿using System;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Structures.ConflictHandling
+namespace Mocassin.Model.Structures.ConflictHandling
 {
     /// <summary>
     /// Resolves conflichts that are affiliated with the change of the unit cell parameters
@@ -14,9 +14,9 @@ namespace ICon.Model.Structures.ConflictHandling
         /// Create new cell parameter changed handler with the provided data acessor and project services
         /// </summary>
         /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        public CellParametersChangeHandler(IDataAccessor<StructureModelData> dataAccess, IProjectServices projectServices)
-            : base(dataAccess, projectServices)
+        /// <param name="modelProject"></param>
+        public CellParametersChangeHandler(IDataAccessor<StructureModelData> dataAccess, IModelProject modelProject)
+            : base(dataAccess, modelProject)
         {
         }
 
@@ -40,9 +40,9 @@ namespace ICon.Model.Structures.ConflictHandling
         /// <param name="report"></param>
         protected void MatchParameterSetsWithCrystalSystem(CellParameters parameters, ConflictReport report)
         {
-            if (ProjectServices.CrystalSystemService.TrySetParameters(parameters.AsParameterSet()))
+            if (ModelProject.CrystalSystemService.TrySetParameters(parameters.AsParameterSet()))
             {
-                parameters.ParameterSet = ProjectServices.CrystalSystemService.GetCurrentParameterSet();
+                parameters.ParameterSet = ModelProject.CrystalSystemService.GetCurrentParameterSet();
                 var detail0 = $"The change in the {parameters.GetParameterName()} was passed to the crystal system provider system";
                 report.Warnings.Add(ModelMessageSource.CreateConflictHandlingWarning(this, detail0));
             }

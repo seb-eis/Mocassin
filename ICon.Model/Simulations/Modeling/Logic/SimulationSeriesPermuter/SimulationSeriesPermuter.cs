@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Mathematics.Permutation;
+using Mocassin.Mathematics.Permutation;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Abstract base permuter for simulation series that permutes the parameters and procudes translatable simulation objects

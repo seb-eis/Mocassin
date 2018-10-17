@@ -1,7 +1,7 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic implementation of the particle update manager that handles event subscriptions and reactions to external
@@ -10,8 +10,8 @@ namespace ICon.Model.Particles
     internal class ParticleUpdateManager : ModelUpdateManager<ParticleModelData, ParticleEventManager>
     {
         /// <inheritdoc />
-        public ParticleUpdateManager(ParticleModelData baseData, ParticleEventManager eventManager, IProjectServices projectServices)
-            : base(baseData, eventManager, projectServices)
+        public ParticleUpdateManager(ParticleModelData baseData, ParticleEventManager eventManager, IModelProject modelProject)
+            : base(baseData, eventManager, modelProject)
         {
         }
     }

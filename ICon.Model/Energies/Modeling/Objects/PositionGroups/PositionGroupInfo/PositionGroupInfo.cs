@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <inheritdoc />
     public class PositionGroupInfo : IPositionGroupInfo

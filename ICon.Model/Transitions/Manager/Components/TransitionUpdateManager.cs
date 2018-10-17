@@ -1,9 +1,9 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Model.Transitions.Handler;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions.Handler;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Basic update manager for the transition module that handles pushed information on data changes in required modules
@@ -45,9 +45,9 @@ namespace ICon.Model.Transitions
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="eventManager"></param>
-        /// <param name="projectServices"></param>
-        public TransitionUpdateManager(TransitionModelData baseData, TransitionEventManager eventManager, IProjectServices projectServices)
-            : base(baseData, eventManager, projectServices)
+        /// <param name="modelProject"></param>
+        public TransitionUpdateManager(TransitionModelData baseData, TransitionEventManager eventManager, IModelProject modelProject)
+            : base(baseData, eventManager, modelProject)
         {
 
         }

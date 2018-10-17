@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 
-namespace ICon.Framework.Collections
+namespace Mocassin.Framework.Collections
 {
     /// <summary>
     /// Generic string convertible list wrapper that supplies serializing and deserializing the list into a string in a csv style

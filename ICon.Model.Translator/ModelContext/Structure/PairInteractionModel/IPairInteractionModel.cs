@@ -1,10 +1,10 @@
-﻿using ICon.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Structures;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a pair interaction model that combines geometry information with pair energy model information

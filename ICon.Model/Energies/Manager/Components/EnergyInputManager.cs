@@ -1,9 +1,9 @@
-﻿using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.Energies.ConflictHandling;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Energies.ConflictHandling;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Basic implementation of the energy input manager that handles validated adding, removal and replacement of energy
@@ -12,7 +12,7 @@ namespace ICon.Model.Energies
     internal class EnergyInputManager : ModelInputManager<EnergyModelData, IEnergyDataPort, EnergyEventManager>, IEnergyInputPort
     {
         /// <inheritdoc />
-        public EnergyInputManager(EnergyModelData data, EnergyEventManager manager, IProjectServices services)
+        public EnergyInputManager(EnergyModelData data, EnergyEventManager manager, IModelProject services)
             : base(data, manager, services)
         {
         }
@@ -107,7 +107,7 @@ namespace ICon.Model.Energies
         /// <inheritdoc />
         protected override IDataConflictHandlerProvider<EnergyModelData> CreateDataConflictHandlerProvider()
         {
-            return new EnergyDataConflictHandlerProvider(ProjectServices);
+            return new EnergyDataConflictHandlerProvider(ModelProject);
         }
 
         /// <inheritdoc />

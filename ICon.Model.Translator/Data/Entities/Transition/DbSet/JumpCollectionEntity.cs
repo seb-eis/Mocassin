@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     public class JumpCollectionEntity : TransitionModelComponentBase
     {
         public List<JumpDirectionEntity> JumpDirections { get; set; }
 
         [NotMapped]
-        [OwnedBlobPropertyAttribute(nameof(JumpRuleListBinary))]
+        [OwnedBlobProperty(nameof(JumpRuleListBinary))]
         public JumpRuleListEntity JumpRuleList { get; set; }
 
         [Column("ObjectId")]

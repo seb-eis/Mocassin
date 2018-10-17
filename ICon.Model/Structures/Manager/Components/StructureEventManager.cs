@@ -1,9 +1,9 @@
 ﻿using System;
 
-using ICon.Framework.Events;
-using ICon.Model.Basic;
+using Mocassin.Framework.Events;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic structure notification manager that handles distribution of push based update notifications about changes in the structure manager base data

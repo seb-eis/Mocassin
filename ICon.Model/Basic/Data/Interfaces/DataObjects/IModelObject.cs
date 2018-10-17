@@ -1,4 +1,4 @@
-﻿namespace ICon.Model.Basic
+﻿namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Base interface for all model objects or structs that support deprecation operations and are always indexed by a

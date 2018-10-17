@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Framework.Messaging;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Abstract base validator for all non sepcified simulations bases.
     /// </summary>
-    public abstract class SimulationBaseValidator : DataValidator<ISimulation, BasicSimulationSettings, ISimulationDataPort>
+    public abstract class SimulationBaseValidator : DataValidator<ISimulation, MocassinSimulationSettings, ISimulationDataPort>
     {
         /// <summary>
         /// Creates new simulation base validator with the provided project services, simulation settings and simulation data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        protected SimulationBaseValidator(IProjectServices projectServices, BasicSimulationSettings settings, IDataReader<ISimulationDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        protected SimulationBaseValidator(IModelProject modelProject, MocassinSimulationSettings settings, IDataReader<ISimulationDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
 
         }

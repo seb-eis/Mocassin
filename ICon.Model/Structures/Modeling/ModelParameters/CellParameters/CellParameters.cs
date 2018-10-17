@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Model.Basic;
+using Mocassin.Symmetry.CrystalSystems;
 
-using ICon.Model.Basic;
-using ICon.Symmetry.CrystalSystems;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Extensions;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Cell parameters class (Simple wrapper for the crystal parameter set class to qualify as both model parameter and crystal parameter set)

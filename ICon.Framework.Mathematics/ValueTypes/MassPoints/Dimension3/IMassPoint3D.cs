@@ -1,4 +1,4 @@
-﻿namespace ICon.Mathematics.ValueTypes
+﻿namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     General interface for all 3D mass points that support a double convertible mass object

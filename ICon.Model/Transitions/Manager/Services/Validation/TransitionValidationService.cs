@@ -1,11 +1,10 @@
 ﻿using System;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions.Validators;
 
-using ICon.Framework.Operations;
-using ICon.Model.ProjectServices;
-using ICon.Model.Basic;
-using ICon.Model.Transitions.Validators;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Validation service for transition related model objects that checks new transition related model object inputs
@@ -15,14 +14,14 @@ namespace ICon.Model.Transitions
         /// <summary>
         /// The settings object for the transitions
         /// </summary>
-        protected BasicTransitionSettings Settings { get; set; }
+        protected MocassinTransitionSettings Settings { get; set; }
 
         /// <summary>
         /// Create new transition validation service with the specififed project services and transition settings
         /// </summary>
         /// <param name="settings"></param>
-        /// <param name="projectServices"></param>
-        public TransitionValidationService(BasicTransitionSettings settings, IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public TransitionValidationService(MocassinTransitionSettings settings, IModelProject modelProject) : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
@@ -36,7 +35,7 @@ namespace ICon.Model.Transitions
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStateExchangePair(IStateExchangePair pair, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new PropertyStatePairValidator(ProjectServices, Settings, dataReader).Validate(pair);
+            return new PropertyStatePairValidator(ModelProject, Settings, dataReader).Validate(pair);
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace ICon.Model.Transitions
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateStateExchangeGroupp(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new PropertyGroupValidator(ProjectServices, Settings, dataReader).Validate(group);
+            return new PropertyGroupValidator(ModelProject, Settings, dataReader).Validate(group);
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace ICon.Model.Transitions
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateAbstractTransition(IAbstractTransition transition, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new AbstractTransitionValidator(ProjectServices, Settings, dataReader).Validate(transition);
+            return new AbstractTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace ICon.Model.Transitions
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateKineticTransition(IKineticTransition transition, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new KineticTransitionValidator(ProjectServices, Settings, dataReader).Validate(transition);
+            return new KineticTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace ICon.Model.Transitions
         [ValidationOperation(ValidationType.Object)]
         protected IValidationReport ValidateMetropolisTransition(IMetropolisTransition transition, IDataReader<ITransitionDataPort> dataReader)
         {
-            return new MetropolisTransitionValidator(ProjectServices, Settings, dataReader).Validate(transition);
+            return new MetropolisTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
         }
     }
 }

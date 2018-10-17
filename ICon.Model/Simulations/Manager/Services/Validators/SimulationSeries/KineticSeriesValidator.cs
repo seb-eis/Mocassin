@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Simulation series validator for the specific case of kinetic simulation series. Extends the base series validator functionality
@@ -15,11 +15,11 @@ namespace ICon.Model.Simulations
         /// <summary>
         /// Create new kinetic series validator from project services, simulation settings and simulation model data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public KineticSeriesValidator(IProjectServices projectServices, BasicSimulationSettings settings, IDataReader<ISimulationDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public KineticSeriesValidator(IModelProject modelProject, MocassinSimulationSettings settings, IDataReader<ISimulationDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

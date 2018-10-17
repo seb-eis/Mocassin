@@ -4,10 +4,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 using System.Collections;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Linearized binray interop array to provide multidimensional arrays of structs to unmanaged code

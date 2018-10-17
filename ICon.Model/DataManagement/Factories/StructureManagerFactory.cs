@@ -1,8 +1,8 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.DataManagement
+namespace Mocassin.Model.DataManagement
 {
     /// <summary>
     ///     Factory for new structure manager systems
@@ -10,11 +10,11 @@ namespace ICon.Model.DataManagement
     public class StructureManagerFactory : IModelManagerFactory
     {
         /// <inheritdoc />
-        public IModelManager CreateNew(IProjectServices projectServices, out object dataObject)
+        public IModelManager CreateNew(IModelProject modelProject, out object dataObject)
         {
             var data = StructureModelData.CreateNew();
             dataObject = data;
-            return new StructureManager(projectServices, data);
+            return new StructureManager(modelProject, data);
         }
     }
 }

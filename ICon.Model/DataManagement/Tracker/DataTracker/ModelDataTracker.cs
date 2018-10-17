@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.DataManagement
+namespace Mocassin.Model.DataManagement
 {
     /// <inheritdoc />
     [DataContract]
@@ -43,12 +43,12 @@ namespace ICon.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public IModelManager CreateAndRegister(IProjectServices projectServices, IModelManagerFactory managerFactory)
+        public IModelManager CreateAndRegister(IModelProject modelProject, IModelManagerFactory managerFactory)
         {
-            if (!(managerFactory.CreateNew(projectServices, out var dataObject) is IModelManager manager))
+            if (!(managerFactory.CreateNew(modelProject, out var dataObject) is IModelManager manager))
                 return null;
 
-            projectServices.RegisterManager(manager);
+            modelProject.RegisterManager(manager);
             DataObjectDictionary[manager.GetManagerInterfaceType()] = dataObject;
             UpdateObjectLookupDictionary(dataObject);
             return manager;

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Constraints;
-using ICon.Model.Basic;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <inheritdoc />
     public class EnergySetterProvider : IEnergySetterProvider

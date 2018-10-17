@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ICon.Mathematics.Permutation
+namespace Mocassin.Mathematics.Permutation
 {
     /// <summary>
     ///     Represents a permutation source for a specific type set

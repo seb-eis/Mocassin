@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ICon.Framework.SQLiteCore
+namespace Mocassin.Framework.SQLiteCore
 {
     /// <inheritdoc />
     public abstract class SqLiteContextProvider<T1> : ISqLiteContextProvider<T1> where T1 : SqLiteContext<T1>, new()

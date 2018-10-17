@@ -1,25 +1,24 @@
 ﻿using System.Text.RegularExpressions;
+using Mocassin.Framework.Messaging;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Framework.Operations;
-using ICon.Framework.Messaging;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Structures.Validators
+namespace Mocassin.Model.Structures.Validators
 {
     /// <summary>
     /// Validator for new space group info model parametr that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class SpaceGroupInfoValidator : DataValidator<ISpaceGroupInfo, BasicStructureSettings, IStructureDataPort>
+    public class SpaceGroupInfoValidator : DataValidator<ISpaceGroupInfo, MocassinStructureSettings, IStructureDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public SpaceGroupInfoValidator(IProjectServices projectServices, BasicStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public SpaceGroupInfoValidator(IModelProject modelProject, MocassinStructureSettings settings, IDataReader<IStructureDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

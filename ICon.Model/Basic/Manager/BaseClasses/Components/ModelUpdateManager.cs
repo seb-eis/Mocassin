@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ICon.Framework.Processing;
-using ICon.Framework.Reflection;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Reflection;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all update managers that handle updates through event port subscriptions
@@ -145,7 +145,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Shared project services interface
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     Structure event manager instances to notify dependent modules of critical changes due to the update process
@@ -162,15 +162,15 @@ namespace ICon.Model.Basic
         /// </summary>
         /// <param name="baseData"></param>
         /// <param name="eventManager"></param>
-        /// <param name="projectServices"></param>
-        protected ModelUpdateManager(TData baseData, TEventManager eventManager, IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        protected ModelUpdateManager(TData baseData, TEventManager eventManager, IModelProject modelProject)
         {
             if (baseData == null) 
                 throw new ArgumentNullException(nameof(baseData));
 
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             EventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
-            DataAccessorSource = Basic.DataAccessorSource.Create(baseData, projectServices.AccessLockSource);
+            DataAccessorSource = Basic.DataAccessorSource.Create(baseData, modelProject.AccessLockSource);
             InitializeEventHandlingSystem();
         }
 
@@ -183,7 +183,7 @@ namespace ICon.Model.Basic
             foreach (var propertyInfo in GetType().GetProperties(flags)
                 .Where(info => info.GetCustomAttribute(typeof(UpdateHandlerAttribute)) != null))
             {
-                var handler = Activator.CreateInstance(propertyInfo.PropertyType, ProjectServices, DataAccessorSource, EventManager);
+                var handler = Activator.CreateInstance(propertyInfo.PropertyType, ModelProject, DataAccessorSource, EventManager);
                 propertyInfo.SetValue(this, handler);
             }
         }

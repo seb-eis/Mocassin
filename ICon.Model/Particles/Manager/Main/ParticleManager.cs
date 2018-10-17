@@ -1,10 +1,10 @@
 ﻿using System;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
-    /// <inheritdoc cref="ICon.Model.Particles.IParticleManager"/>
+    /// <inheritdoc cref="IParticleManager"/>
     internal class ParticleManager : ModelManager<ParticleModelData, ParticleModelCache, ParticleDataManager, ParticleCacheManager,
         ParticleInputManager, ParticleQueryManager, ParticleEventManager, ParticleUpdateManager>, IParticleManager
     {
@@ -20,15 +20,18 @@ namespace ICon.Model.Particles
         public new IParticleEventPort EventPort => EventManager;
 
         /// <inheritdoc />
-        public ParticleManager(IProjectServices projectServices, ParticleModelData data)
-            : base(projectServices, data)
+        public ParticleManager(IModelProject modelProject, ParticleModelData data)
+            : base(modelProject, data)
         {
         }
 
         /// <inheritdoc />
-        public override IValidationService CreateValidationService(ProjectSettingsData settingsData)
+        public override IValidationService CreateValidationService(ProjectSettings settings)
         {
-            return new ParticleValidationService(settingsData.ParticleSettings, ProjectServices);
+            if (!settings.TryGetModuleSettings(out MocassinParticleSettings moduleSettings))
+                throw new InvalidOperationException("Settings object for the particle module is missing");
+
+            return new ParticleValidationService(moduleSettings, ModelProject);
         }
 
         /// <inheritdoc />

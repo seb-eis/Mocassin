@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Model.Particles;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents an access port to the simulation manager data cache that handles supply of cacheable on-demand data

@@ -1,7 +1,7 @@
-﻿using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Energies.ConflictHandling
+namespace Mocassin.Model.Energies.ConflictHandling
 {
     /// <summary>
     ///     Resolver provider for all energy conflict resolvers that handle internal data conflicts of the particle manager.
@@ -9,8 +9,8 @@ namespace ICon.Model.Energies.ConflictHandling
     public class EnergyDataConflictHandlerProvider : DataConflictHandlerProvider<EnergyModelData>
     {
         /// <inheritdoc />
-        public EnergyDataConflictHandlerProvider(IProjectServices projectServices)
-            : base(projectServices)
+        public EnergyDataConflictHandlerProvider(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -21,7 +21,7 @@ namespace ICon.Model.Energies.ConflictHandling
         [HandlerFactoryMethod(DataOperationType.ParameterChange)]
         protected object CreateParameterHandler()
         {
-            return new EnergyParameterChangeHandler(ProjectServices);
+            return new EnergyParameterChangeHandler(ModelProject);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ICon.Model.Energies.ConflictHandling
         [HandlerFactoryMethod(DataOperationType.ObjectChange)]
         protected object CreateObjectChangeHandler()
         {
-            return new EnergyObjectChangeHandler(ProjectServices);
+            return new EnergyObjectChangeHandler(ModelProject);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ICon.Model.Energies.ConflictHandling
         [HandlerFactoryMethod(DataOperationType.NewObject)]
         protected object CreateInputChangeHandler()
         {
-            return new EnergyObjectAddedHandler(ProjectServices);
+            return new EnergyObjectAddedHandler(ModelProject);
         }
     }
 }

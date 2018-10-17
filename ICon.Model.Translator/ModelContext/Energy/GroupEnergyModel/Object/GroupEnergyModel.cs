@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Energies;
-using ICon.Model.Particles;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IGroupEnergyModel"/>
+    /// <inheritdoc cref="IGroupEnergyModel"/>
     public class GroupEnergyModel : ModelComponentBase, IGroupEnergyModel
     {
         /// <inheritdoc />

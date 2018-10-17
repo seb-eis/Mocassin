@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Framework.Constraints
+namespace Mocassin.Framework.Constraints
 {
     /// <summary>
     /// Represents a double precision series of flp values ranging from a lower limit to an upper limit in internally defined steps

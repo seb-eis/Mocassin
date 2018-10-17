@@ -1,10 +1,10 @@
-﻿using ICon.Model.Energies;
-using ICon.Model.Particles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Energies;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Describes a single pair energy model with energy table and reference geometry information

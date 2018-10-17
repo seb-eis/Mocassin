@@ -1,0 +1,135 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+
+namespace Mocassin.Symmetry.Analysis
+{
+    /// <summary>
+    ///     Basic generic (1,1,1) unit cell wrapper that wraps a set of additional position information and a vector encoder
+    ///     into unit cell provider
+    /// </summary>
+    public class UnitCellAdapter<T1> : IUnitCell<T1>, IUnitCellProvider<T1>
+    {
+        /// <summary>
+        ///     The unit cell size info (1,1,1,#Entries)
+        /// </summary>
+        protected Coordinates<int, int, int, int> SizeInfo;
+
+        /// <summary>
+        ///     The list interface of unit cell entries without the vector information
+        /// </summary>
+        protected IList<T1> CellEntries { get; set; }
+
+        /// <summary>
+        ///     The current offset of the cell
+        /// </summary>
+        protected Coordinates<int, int, int> Offset { get; set; }
+
+        /// <inheritdoc cref="IUnitCellProvider{T1}.VectorEncoder"/>
+        public IUnitCellVectorEncoder VectorEncoder { get; protected set; }
+
+        /// <inheritdoc />
+        public int EntryCount => CellEntries.Count;
+
+        /// <inheritdoc />
+        public ref Coordinates<int, int, int, int> CellSizeInfo => ref SizeInfo;
+
+        /// <inheritdoc />
+        public CellEntry<T1> this[int index] => GetCellEntry(Offset, index);
+
+        /// <summary>
+        ///     Creates new unit cell wrapper for entry list and vector encoder
+        /// </summary>
+        /// <param name="entries"></param>
+        /// <param name="vectorEncoder"></param>
+        public UnitCellAdapter(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder)
+        {
+            VectorEncoder = vectorEncoder ?? throw new ArgumentNullException(nameof(vectorEncoder));
+            if (entries.Count != vectorEncoder.PositionCount)
+                throw new ArgumentException("Entry count does not match vector encoder position count", nameof(entries));
+
+            SizeInfo = new Coordinates<int, int, int, int>(1, 1, 1, entries.Count);
+            CellEntries = entries;
+        }
+
+        /// <summary>
+        ///     Creates new unit cell wrapper for entry list and vector encoder with an additional initial offset
+        /// </summary>
+        /// <param name="entries"></param>
+        /// <param name="vectorEncoder"></param>
+        /// <param name="offset"></param>
+        public UnitCellAdapter(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder, in Coordinates<int, int, int> offset)
+            : this(entries, vectorEncoder)
+        {
+            Offset = offset;
+        }
+
+        /// <summary>
+        ///     Protected generation of an empty cell wrapper for shifting this unit cell
+        /// </summary>
+        protected UnitCellAdapter()
+        {
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<CellEntry<T1>> GetAllEntries()
+        {
+            var index = -1;
+            return CellEntries.Select(entry => GetCellEntry(Offset, ++index));
+        }
+
+        /// <inheritdoc />
+        public CellEntry<T1> GetCellEntry(int a, int b, int c, int p)
+        {
+            return new CellEntry<T1>(new Fractional3D(a, b, c) + VectorEncoder.PositionList[p], CellEntries[p]);
+        }
+
+        /// <inheritdoc />
+        public CellEntry<T1> GetCellEntry(in Coordinates<int, int, int> offset, int p)
+        {
+            return new CellEntry<T1>(new Fractional3D(offset.A, offset.B, offset.C) + VectorEncoder.PositionList[p], CellEntries[p]);
+        }
+
+        /// <inheritdoc />
+        public IUnitCell<T1> GetUnitCell(int a, int b, int c)
+        {
+            var result = new UnitCellAdapter<T1>
+            {
+                CellEntries = CellEntries,
+                Offset = new Coordinates<int, int, int>(a, b, c),
+                SizeInfo = SizeInfo,
+                VectorEncoder = VectorEncoder
+            };
+            return result;
+        }
+
+        /// <inheritdoc />
+        public IUnitCell<T1> GetUnitCell(in Coordinates<int, int, int> offset)
+        {
+            var result = new UnitCellAdapter<T1>
+            {
+                CellEntries = CellEntries,
+                Offset = offset,
+                SizeInfo = SizeInfo,
+                VectorEncoder = VectorEncoder
+            };
+            return result;
+        }
+
+        /// <inheritdoc />
+        public CellEntry<T1> GetCellEntry(in CrystalVector4D vector)
+        {
+            return GetCellEntry(vector.A, vector.B, vector.C, vector.P);
+        }
+
+        /// <inheritdoc />
+        public T1 GetEntryValueAt(in Fractional3D vector)
+        {
+            return !VectorEncoder.TryEncode(vector, out var encoded) 
+                ? default 
+                : CellEntries[encoded.P];
+        }
+    }
+}

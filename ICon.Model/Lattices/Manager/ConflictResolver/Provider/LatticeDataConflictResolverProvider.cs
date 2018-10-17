@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Resolver provider for all lattice conflict resolvers
@@ -16,8 +16,8 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Creates new Lattice data conflict resolver provider with access to the provided project services
         /// </summary>
-        /// <param name="projectServices"></param>
-        public LatticeDataConflictResolverProvider(IProjectServices projectServices) : base(projectServices)
+        /// <param name="modelProject"></param>
+        public LatticeDataConflictResolverProvider(IModelProject modelProject) : base(modelProject)
         {
 
         }

@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
-using ICon.Model.Basic;
-using ICon.Model.Structures;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="ICon.Model.Transitions.IMetropolisTransition"/>
+    /// <inheritdoc cref="IMetropolisTransition"/>
     [Serializable]
     [DataContract(Name ="MetropolisTransition")]
     public class MetropolisTransition : ModelObject, IMetropolisTransition

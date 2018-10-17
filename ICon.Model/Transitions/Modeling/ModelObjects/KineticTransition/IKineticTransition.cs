@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Structures;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Structures;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents an actual kinetic transition that includes a reference geometry and abstract description

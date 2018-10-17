@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Extensions;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Extensions;
 
-namespace ICon.Mathematics.Solver
+namespace Mocassin.Mathematics.Solver
 {
     /// <summary>
     /// Calculates the principal inertia tensor by the Oliver K. Smith trigonometric substitution

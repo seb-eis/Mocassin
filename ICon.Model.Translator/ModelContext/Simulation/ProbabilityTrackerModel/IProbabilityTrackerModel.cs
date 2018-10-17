@@ -1,9 +1,9 @@
-﻿using ICon.Model.Particles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a probability tracker model for kinetic siumlations that describes a treacked jump probability

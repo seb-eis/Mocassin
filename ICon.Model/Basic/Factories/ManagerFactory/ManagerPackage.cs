@@ -1,12 +1,12 @@
-﻿using ICon.Model.Energies;
-using ICon.Model.Lattices;
-using ICon.Model.Particles;
-using ICon.Model.ProjectServices;
-using ICon.Model.Simulations;
-using ICon.Model.Structures;
-using ICon.Model.Transitions;
+﻿using Mocassin.Model.Energies;
+using Mocassin.Model.Lattices;
+using Mocassin.Model.Particles;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Manager package class that bundles a set of managers
@@ -21,7 +21,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Shared project services
         /// </summary>
-        public IProjectServices ProjectServices { get; set; }
+        public IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     The particle manager

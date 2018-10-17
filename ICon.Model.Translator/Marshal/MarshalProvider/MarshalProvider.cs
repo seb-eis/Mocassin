@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Runtime.InteropServices;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
-    /// <inheritdoc cref="ICon.Model.Translator.IMarshalProvider"/>
+    /// <inheritdoc cref="IMarshalProvider"/>
     public class MarshalProvider : IDisposable, IMarshalProvider
     {
         /// <summary>

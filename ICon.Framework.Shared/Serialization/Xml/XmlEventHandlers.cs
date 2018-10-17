@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace ICon.Framework.Xml
+namespace Mocassin.Framework.Xml
 {
     /// <summary>
     ///     Class to store multiple event handlers for all types of Xml deserialization events

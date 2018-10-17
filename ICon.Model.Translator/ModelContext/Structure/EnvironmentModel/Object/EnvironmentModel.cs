@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IEnvironmentModel"/>
+    /// <inheritdoc cref="IEnvironmentModel"/>
     public class EnvironmentModel : ModelComponentBase, IEnvironmentModel
     {
         /// <inheritdoc />

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Model.Basic;
-using ICon.Model.Particles;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles;
 
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Represents a metropolis transition rule that describes a static state exchange

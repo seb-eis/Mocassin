@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Interop list of structs to exchange linear lists of values between managed and unmanaged code

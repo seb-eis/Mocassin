@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using ICon.Model.ProjectServices;
-using ICon.Model.Transitions;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Structures;
-using ICon.Mathematics.Coordinates;
-using ICon.Framework.Extensions;
-using ICon.Model.Particles;
-using ICon.Framework.Collections;
-using ICon.Mathematics.Comparers;
+using Mocassin.Model.ModelProject;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Structures;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Framework.Extensions;
+using Mocassin.Model.Particles;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.ITransitionModelContextBuilder"/>
+    /// <inheritdoc cref="ITransitionModelContextBuilder"/>
     public class TransitionModelContextBuilder : ModelContextBuilderBase<ITransitionModelContext>, ITransitionModelContextBuilder
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override ITransitionModelContext PopulateContext(ITransitionModelContext modelContext)
         {
-            var manager = ProjectServices.GetManager<ITransitionManager>();
+            var manager = ModelProject.GetManager<ITransitionManager>();
             var metropolisTransitions = manager.QueryPort.Query(port => port.GetMetropolisTransitions());
             var kineticTransitions = manager.QueryPort.Query(port => port.GetKineticTransitions());
 
@@ -60,9 +60,9 @@ namespace ICon.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            MetropolisTransitionModelBuilder = MetropolisTransitionModelBuilder ?? new MetropolisTransitionModelBuilder(ProjectServices);
-            KineticTransitionModelBuilder = KineticTransitionModelBuilder ?? new KineticTransitionModelBuilder(ProjectServices);
-            PositionTransitionModelBuilder = PositionTransitionModelBuilder ?? new PositionTransitionModelBuilder(ProjectServices);
+            MetropolisTransitionModelBuilder = MetropolisTransitionModelBuilder ?? new MetropolisTransitionModelBuilder(ModelProject);
+            KineticTransitionModelBuilder = KineticTransitionModelBuilder ?? new KineticTransitionModelBuilder(ModelProject);
+            PositionTransitionModelBuilder = PositionTransitionModelBuilder ?? new PositionTransitionModelBuilder(ModelProject);
         }
     }
 }

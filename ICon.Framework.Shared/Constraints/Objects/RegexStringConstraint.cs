@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace ICon.Framework.Constraints
+namespace Mocassin.Framework.Constraints
 {
     /// <summary>
     /// A regular expression based string constraint that limits characters, length and formatting of a string

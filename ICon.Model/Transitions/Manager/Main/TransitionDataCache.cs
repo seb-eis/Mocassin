@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-
-namespace ICon.Model.Transitions
+namespace Mocassin.Model.Transitions
 {
     /// <summary>
     /// Data cache for the extended on-demand transition model data
@@ -16,8 +15,8 @@ namespace ICon.Model.Transitions
         /// Create a new data cache for extended transition data from model event port (Supplies expiration events) and project services
         /// </summary>
         /// <param name="eventPort"></param>
-        /// <param name="projectServices"></param>
-        public TransitionDataCache(IModelEventPort eventPort, IProjectServices projectServices) : base(eventPort, projectServices)
+        /// <param name="modelProject"></param>
+        public TransitionDataCache(IModelEventPort eventPort, IModelProject modelProject) : base(eventPort, modelProject)
         {
 
         }
@@ -30,7 +29,7 @@ namespace ICon.Model.Transitions
         {
             if (CachePort == null)
             {
-                CachePort = new TransitionCacheManager(this, ProjectServices);
+                CachePort = new TransitionCacheManager(this, ModelProject);
             }
             return CachePort;
         }

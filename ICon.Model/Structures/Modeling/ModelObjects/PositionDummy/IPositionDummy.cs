@@ -1,7 +1,7 @@
-﻿using ICon.Model.Basic;
-using ICon.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Represents a purely visual unit cell position object that cannot be used for model purposes

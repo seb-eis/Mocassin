@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Transitions;
 
-using ICon.Model.Basic;
-using ICon.Model.Transitions;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Enum for the metropolis specific simulation flags
@@ -17,7 +16,7 @@ namespace ICon.Model.Simulations
         
     }
 
-    /// <inheritdoc cref="ICon.Model.Simulations.IMetropolisSimulation"/>
+    /// <inheritdoc cref="IMetropolisSimulation"/>
     [DataContract]
     public class MetropolisSimulation : SimulationBase, IMetropolisSimulation
     {

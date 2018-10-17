@@ -1,7 +1,7 @@
-﻿using ICon.Framework.Constraints;
-using ICon.Mathematics.Comparers;
+﻿using Mocassin.Framework.Constraints;
+using Mocassin.Mathematics.Comparers;
 
-namespace ICon.Mathematics.Constraints
+namespace Mocassin.Mathematics.Constraints
 {
     /// <summary>
     ///     Numeric constraint class that restricts the definition range of a double value through a numeric comparer

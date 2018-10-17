@@ -1,61 +1,60 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Mocassin.Mathematics.Extensions;
 using Newtonsoft.Json;
-using ICon.Mathematics.Extensions;
 
-namespace ICon.Symmetry.CrystalSystems
+namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
-    /// Full set of lattice parameters a, b, c and angles alph, beta, gamma that is serializable
+    ///     Full set of lattice parameters a, b, c and angles alpha, beta, gamma that is serializable
     /// </summary>
-    [DataContract(Name ="CrystalParamSet")]
+    [DataContract(Name = "CrystalParamSet")]
     public class CrystalParameterSet
     {
         /// <summary>
-        /// The parameter A
+        ///     The parameter A
         /// </summary>
-        [DataMember(Name ="A")]
+        [DataMember(Name = "A")]
         public double ParamA { get; set; }
 
         /// <summary>
-        /// The parameter B
+        ///     The parameter B
         /// </summary>
-        [DataMember(Name ="B")]
+        [DataMember(Name = "B")]
         public double ParamB { get; set; }
 
         /// <summary>
-        /// The parameter C
+        ///     The parameter C
         /// </summary>
-        [DataMember(Name ="C")]
+        [DataMember(Name = "C")]
         public double ParamC { get; set; }
 
         /// <summary>
-        /// Angle alpha in radian
+        ///     Angle alpha in radian
         /// </summary>
-        [DataMember(Name ="Alpha")]
+        [DataMember(Name = "Alpha")]
         public double Alpha { get; set; }
 
         /// <summary>
-        /// Angle beta in radian
+        ///     Angle beta in radian
         /// </summary>
-        [DataMember(Name ="Beta")]
+        [DataMember(Name = "Beta")]
         public double Beta { get; set; }
 
         /// <summary>
-        /// Angle gamma in radian
+        ///     Angle gamma in radian
         /// </summary>
-        [DataMember(Name ="Gamma")]
+        [DataMember(Name = "Gamma")]
         public double Gamma { get; set; }
 
         /// <summary>
-        /// Create new crystal parameter set with default values
+        ///     Create new crystal parameter set with default values
         /// </summary>
         public CrystalParameterSet()
         {
         }
 
         /// <summary>
-        /// Creates a new crystal parameter set
+        ///     Creates a new crystal parameter set
         /// </summary>
         /// <param name="paramA"></param>
         /// <param name="paramB"></param>
@@ -63,7 +62,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <param name="alpha"></param>
         /// <param name="beta"></param>
         /// <param name="gamma"></param>
-        public CrystalParameterSet(Double paramA, Double paramB, Double paramC, Double alpha, Double beta, Double gamma)
+        public CrystalParameterSet(double paramA, double paramB, double paramC, double alpha, double beta, double gamma)
         {
             ParamA = paramA;
             ParamB = paramB;
@@ -74,7 +73,7 @@ namespace ICon.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        /// Retruns a json representation of the object
+        ///     Returns a json representation of the object
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -83,7 +82,7 @@ namespace ICon.Symmetry.CrystalSystems
         }
 
         /// <summary>
-        /// Creates default crystal parameter set (All params 1.0, all angles 90° in radian)
+        ///     Creates default crystal parameter set (All params 1.0, all angles 90° in radian)
         /// </summary>
         /// <returns></returns>
         public static CrystalParameterSet CreateDefault()

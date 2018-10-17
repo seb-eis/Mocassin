@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ICon.Framework.Operations;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.ModelProject;
 using Newtonsoft.Json;
 
-namespace ICon.Model.Basic.Debug
+namespace Mocassin.Model.Basic.Debug
 {
     /// <summary>
     ///     Class for generic data input for the model system
@@ -51,11 +51,11 @@ namespace ICon.Model.Basic.Debug
         /// <summary>
         ///     Inputs all data using the passed project service and returns all operation reports of the input
         /// </summary>
-        /// <param name="projectServices"></param>
-        public void AutoInputData(IProjectServices projectServices)
+        /// <param name="modelProject"></param>
+        public void AutoInputData(IModelProject modelProject)
         {
             AutoAssignInputDelegates();
-            var callList = MakeCallList(projectServices);
+            var callList = MakeCallList(modelProject);
 
             InputReports = new List<IOperationReport>(callList.Count);
             var totalReport = new OperationReport("Invoke input list");
@@ -75,12 +75,12 @@ namespace ICon.Model.Basic.Debug
         /// <summary>
         ///     Generates the list which managers have to be called for the input
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <returns></returns>
-        public List<IModelManager> MakeCallList(IProjectServices projectServices)
+        public List<IModelManager> MakeCallList(IModelProject modelProject)
         {
             var callList = new List<IModelManager>(InputRequests.Count);
-            var callLookup = GetCallDictionary(projectServices);
+            var callLookup = GetCallDictionary(modelProject);
 
             foreach (var request in InputRequests)
             {
@@ -96,12 +96,12 @@ namespace ICon.Model.Basic.Debug
         /// <summary>
         ///     Makes a call dictionary that assigns each managers its set of supported input objects
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <returns></returns>
-        public Dictionary<IModelManager, IEnumerable<Type>> GetCallDictionary(IProjectServices projectServices)
+        public Dictionary<IModelManager, IEnumerable<Type>> GetCallDictionary(IModelProject modelProject)
         {
             var result = new Dictionary<IModelManager, IEnumerable<Type>>(10);
-            foreach (var manager in projectServices.GetAllManagers())
+            foreach (var manager in modelProject.GetAllManagers())
                 result[manager] = manager.InputPort.GetSupportedModelTypes();
 
             return result;

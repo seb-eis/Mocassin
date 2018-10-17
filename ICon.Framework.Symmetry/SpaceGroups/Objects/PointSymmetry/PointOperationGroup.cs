@@ -2,54 +2,54 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Mathematics.Permutation;
-using ICon.Mathematics.ValueTypes;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Permutation;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Symmetry.SpaceGroups
+namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <inheritdoc />
     [DataContract]
-    public class PointOperationGroup :  IPointOperationGroup
+    public class PointOperationGroup : IPointOperationGroup
     {
         /// <inheritdoc />
         [DataMember]
         public SpaceGroupEntry SpaceGroupEntry { get; set; }
 
         /// <summary>
-        /// The origin point for the operation collection
+        ///     The origin point for the operation collection
         /// </summary>
         [DataMember]
         public DataVector3D OriginPoint { get; set; }
 
         /// <summary>
-        /// The point sequence the collection is valid for
+        ///     The point sequence the collection is valid for
         /// </summary>
         [DataMember]
         public List<DataVector3D> PointSequence { get; set; }
 
         /// <summary>
-        /// The unfiltered list of all point symmetry operations of the origin point
+        ///     The unfiltered list of all point symmetry operations of the origin point
         /// </summary>
         [DataMember]
         public List<SymmetryOperation> PointOperations { get; set; }
 
         /// <summary>
-        /// The filtered list of all operations that yield unique vector sequences of the original point sequence
+        ///     The filtered list of all operations that yield unique vector sequences of the original point sequence
         /// </summary>
         /// <remarks> Unique in the sense that two sequences are not identical cannot trivially matched by inverting one </remarks>
         [DataMember]
         public List<SymmetryOperation> UniqueSequenceOperations { get; set; }
 
         /// <summary>
-        /// Get all operations that project the original point sequence onto itself
+        ///     Get all operations that project the original point sequence onto itself
         /// </summary>
         [DataMember]
         public List<SymmetryOperation> SelfProjectionOperations { get; set; }
 
         /// <summary>
-        /// Matrix that describes all possible equivalent orders of the vector sequence when performing a self projection (For value permutations)
+        ///     Matrix that describes all possible equivalent orders of the vector sequence when performing a self projection (For
+        ///     value permutations)
         /// </summary>
         [DataMember]
         public List<List<int>> UniqueSelfProjectionOrders { get; set; }
@@ -63,9 +63,7 @@ namespace ICon.Symmetry.SpaceGroups
         {
             var vectorSequence = GetPointSequence().ToList();
             foreach (var operation in UniqueSequenceOperations)
-            {
                 yield return operation.ApplyUntrimmed(vectorSequence);
-            }
         }
 
         /// <inheritdoc />
@@ -99,16 +97,16 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationSource<T1> permProvider, IEqualityComparer<T1> comparer, Func<T1, int> selector)
+        public IEnumerable<T1[]> GetUniquePermutations<T1>(IPermutationSource<T1> permProvider, IEqualityComparer<T1> comparer,
+            Func<T1, int> selector)
         {
             if (permProvider.ResultLength != PointSequence.Count)
-            {
                 throw new ArgumentException("Permutation provider does not match the point sequence");
-            }
 
             return !HasPermutationMultiplicity()
                 ? permProvider.AsEnumerable()
-                : new HashSet<T1[]>(permProvider, MakePermutationEqualityComparer(comparer, value => value.Sum(selector))).AsEnumerable();
+                : new HashSet<T1[]>(permProvider, MakePermutationEqualityComparer(comparer, value => value.Sum(selector)))
+                    .AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -118,12 +116,15 @@ namespace ICon.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        /// Checks if two permutations sets are directly identical or a equivalent within one of the existing equivalent self projection orders
+        ///     Checks if two permutations sets are directly identical or a equivalent within one of the existing equivalent self
+        ///     projection orders
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="valueComparer"></param>
+        /// <param name="hashFunction"></param>
         /// <returns></returns>
-        protected IEqualityComparer<T1[]> MakePermutationEqualityComparer<T1>(IEqualityComparer<T1> valueComparer, Func<T1[], int> hashFunction)
+        protected IEqualityComparer<T1[]> MakePermutationEqualityComparer<T1>(IEqualityComparer<T1> valueComparer,
+            Func<T1[], int> hashFunction)
         {
             bool Equals(T1[] lhs, T1[] rhs)
             {
@@ -140,8 +141,10 @@ namespace ICon.Symmetry.SpaceGroups
                     if (orderIsMatch)
                         return true;
                 }
+
                 return false;
             }
+
             return new EqualityCompareAdapter<T1[]>(Equals, hashFunction);
         }
     }

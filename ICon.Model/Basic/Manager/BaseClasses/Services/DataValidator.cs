@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Framework.Operations;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Generic abstract base class for implementations of validators for a specific data type that need access to project
@@ -18,7 +18,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Access to the project services
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     Access to the settings object for basic constraints
@@ -33,12 +33,12 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Creates new data validator that used the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        protected DataValidator(IProjectServices projectServices, TSetting settings, IDataReader<TDataPort> dataReader)
+        protected DataValidator(IModelProject modelProject, TSetting settings, IDataReader<TDataPort> dataReader)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             Settings = settings;
             DataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader));
         }

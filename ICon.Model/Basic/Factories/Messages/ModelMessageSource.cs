@@ -1,6 +1,6 @@
-﻿using ICon.Framework.Messaging;
+﻿using Mocassin.Framework.Messaging;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Factory class for basic message objects that are required throughout the model process

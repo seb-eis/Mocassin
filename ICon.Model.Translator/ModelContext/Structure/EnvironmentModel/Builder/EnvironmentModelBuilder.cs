@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ICon.Framework.Collections;
-using ICon.Framework.Extensions;
-using ICon.Mathematics.Coordinates;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Energies;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-using ICon.Symmetry.SpaceGroups;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Energies;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.SpaceGroups;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.IEnvironmentModelBuilder"/>
+    /// <inheritdoc cref="IEnvironmentModelBuilder"/>
     public class EnvironmentModelBuilder : ModelBuilderBase, IEnvironmentModelBuilder
     {
         /// <summary>
@@ -39,8 +39,8 @@ namespace ICon.Model.Translator.ModelContext
         protected IUnitCellVectorEncoder VectorEncoder { get; set; }
 
         /// <inheritdoc />
-        public EnvironmentModelBuilder(IProjectServices projectServices)
-            : base(projectServices)
+        public EnvironmentModelBuilder(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
@@ -60,8 +60,8 @@ namespace ICon.Model.Translator.ModelContext
         /// </summary>
         protected void LoadBuildDataFromProject()
         {
-            var manager = ProjectServices.GetManager<IEnergyManager>();
-            VectorEncoder = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+            var manager = ModelProject.GetManager<IEnergyManager>();
+            VectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
             PositionPairInteractions = manager.QueryPort.Query(port => port.GetPositionPairInteractions());
             PositionGroupInteractions = manager.QueryPort.Query(port => port.GetPositionGroupInteractions());
             PositionGroupInfos = manager.QueryPort.Query(port => port.GetPositionGroupInfos());
@@ -77,7 +77,7 @@ namespace ICon.Model.Translator.ModelContext
             var environmentModel = new EnvironmentModel
             {
                 UnitCellPosition = unitCellPosition,
-                TransformOperations = ProjectServices.SpaceGroupService.GetOperationDictionary(unitCellPosition.Vector)
+                TransformOperations = ModelProject.SpaceGroupService.GetOperationDictionary(unitCellPosition.Vector)
             };
 
             AddPairInteractionModels(environmentModel);
@@ -94,7 +94,7 @@ namespace ICon.Model.Translator.ModelContext
             if (!PositionPairInteractions.TryGetValue(environmentModel.UnitCellPosition, out var interactions))
                 throw new InvalidOperationException("Cannot resolve pair interactions for the environment model");
 
-            var multiplicityOperations = ProjectServices.SpaceGroupService
+            var multiplicityOperations = ModelProject.SpaceGroupService
                 .GetMultiplicityOperations(environmentModel.UnitCellPosition.Vector, true);
 
             var index = 0;
@@ -161,11 +161,11 @@ namespace ICon.Model.Translator.ModelContext
         {
             var targetInfo = pairModel.TargetPositionInfo;
             var positionPair = new[] {pairInteraction.GetSecondPositionVector(), pairInteraction.Position0.Vector};
-            var invertedPair = ProjectServices.SpaceGroupService
-                .ShiftFirstToOrigin(positionPair, ProjectServices.GeometryNumeric.CompRange)
+            var invertedPair = ModelProject.SpaceGroupService
+                .ShiftFirstToOrigin(positionPair, ModelProject.GeometryNumeric.ComparisonRange)
                 .ToList();
 
-            var operation = ProjectServices.SpaceGroupService
+            var operation = ModelProject.SpaceGroupService
                 .CreateOperationToTarget(invertedPair[0], pairInteraction.Position1.Vector);
 
             targetInfo.Distance = pairInteraction.Distance;
@@ -190,7 +190,7 @@ namespace ICon.Model.Translator.ModelContext
         protected IEnumerable<IPairInteractionModel> ExtendPairInteractionModel(IPairInteractionModel pairInteractionModel,
             IList<ISymmetryOperation> multiplicityOperations)
         {
-            var absoluteVectors = new SetList<Fractional3D>(ProjectServices.SpaceGroupService.Comparer, multiplicityOperations.Count);
+            var absoluteVectors = new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer, multiplicityOperations.Count);
             foreach (var operation in multiplicityOperations)
             {
                 var vector = operation.ApplyUntrimmed(pairInteractionModel.TargetPositionInfo.AbsoluteFractional3D);
@@ -280,7 +280,7 @@ namespace ICon.Model.Translator.ModelContext
         /// <returns></returns>
         protected IEnumerable<IGroupInteractionModel> ExtendGroupInteractionModel(IGroupInteractionModel groupModel)
         {
-            var comparer = ProjectServices.SpaceGroupService.Comparer;
+            var comparer = ModelProject.SpaceGroupService.Comparer;
             var groupVectors = groupModel.PositionGroupInfo.PointOperationGroup.GetUniquePointSequences();
 
             var pairInteractions = groupVectors

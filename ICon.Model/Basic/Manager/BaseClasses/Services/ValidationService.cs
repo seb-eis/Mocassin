@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ICon.Framework.Operations;
-using ICon.Framework.Processing;
-using ICon.Framework.Reflection;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Reflection;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all implementations of services that perform validations for a specific data port based
@@ -23,7 +23,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Link to parent project services
         /// </summary>
-        protected IProjectServices ProjectServices { get; set; }
+        protected IModelProject ModelProject { get; set; }
 
         /// <summary>
         ///     The synchronous validation pipeline for model parameters that cannot
@@ -39,11 +39,11 @@ namespace ICon.Model.Basic
         ///     Creates new validation service, initializes the validation pipeline with the handlers defined in the implementing
         ///     class
         /// </summary>
-        protected ValidationService(IProjectServices projectServices)
+        protected ValidationService(IModelProject modelProject)
         {
             ParameterPipeline = new BreakPipeline<IValidationReport>(MakeCannotValidateProcessor(), MakeParameterValidationProcessors());
             ObjectPipeline = new BreakPipeline<IValidationReport>(MakeCannotValidateProcessor(), MakeObjectValidationProcessors());
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
         /// <inheritdoc />

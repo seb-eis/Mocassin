@@ -1,8 +1,7 @@
 ﻿using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 
-using ICon.Model.Basic;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Contains structure informations defined by a user that do not hold any model relevance other that misc information

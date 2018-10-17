@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.ISymmetricPairInteraction" />
+    /// <inheritdoc cref="ISymmetricPairInteraction" />
     [DataContract]
     public class SymmetricPairInteraction : PairInteraction, ISymmetricPairInteraction
     {

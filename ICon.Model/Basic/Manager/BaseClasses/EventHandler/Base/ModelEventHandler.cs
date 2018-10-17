@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
-using ICon.Framework.Operations;
-using ICon.Framework.Processing;
-using ICon.Framework.Reflection;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Operations;
+using Mocassin.Framework.Processing;
+using Mocassin.Framework.Reflection;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Abstract base class for all model data event handler that handle event based updating through processing pipelines
@@ -42,7 +42,7 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Access to the manager collections project services
         /// </summary>
-        public IProjectServices ProjectServices { get; protected set; }
+        public IModelProject ModelProject { get; protected set; }
 
         /// <summary>
         ///     Accessor provider for the full data access
@@ -57,12 +57,12 @@ namespace ICon.Model.Basic
         /// <summary>
         ///     Creates new update event handler that uses the provided projects services data accessor provider and event manager
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="dataAccessorSource"></param>
         /// <param name="eventManager"></param>
-        protected ModelEventHandler(IProjectServices projectServices, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
+        protected ModelEventHandler(IModelProject modelProject, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
         {
-            ProjectServices = projectServices ?? throw new ArgumentNullException(nameof(projectServices));
+            ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             DataAccessorSource = dataAccessorSource ?? throw new ArgumentNullException(nameof(dataAccessorSource));
             EventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
             HandlerPipeline = CreatePipeline();

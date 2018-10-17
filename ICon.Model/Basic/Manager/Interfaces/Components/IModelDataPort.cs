@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     General base interface for all model data port interfaces

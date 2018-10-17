@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICon.Framework.Operations;
-using ICon.Mathematics.Extensions;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies.Validators
+namespace Mocassin.Model.Energies.Validators
 {
     /// <summary>
     ///     Data validator for stable environment info parameters that checks for potential conflicts with constraints and
     ///     existing data
     /// </summary>
-    public class StableEnvironmentInfoValidator : DataValidator<IStableEnvironmentInfo, BasicEnergySettings, IEnergyDataPort>
+    public class StableEnvironmentInfoValidator : DataValidator<IStableEnvironmentInfo, MocassinEnergySettings, IEnergyDataPort>
     {
         /// <inheritdoc />
-        public StableEnvironmentInfoValidator(IProjectServices projectServices, BasicEnergySettings settings,
+        public StableEnvironmentInfoValidator(IModelProject modelProject, MocassinEnergySettings settings,
             IDataReader<IEnergyDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 
@@ -68,11 +68,11 @@ namespace ICon.Model.Energies.Validators
         /// <returns></returns>
         protected long ApproximateMaxInteractionsInInfluenceSphere(IStableEnvironmentInfo envInfo)
         {
-            long interactionPerUnitCell = ProjectServices.GetManager<IStructureManager>().QueryPort
+            long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
                                               .Query(port => port.GetLinearizedExtendedPositionList())
                                               .Count(position => position.Status == PositionStatus.Stable) - 1;
 
-            var unitCellVolume = ProjectServices.GetManager<IStructureManager>().QueryPort
+            var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetVectorEncoder())
                 .GetCellVolume();
 

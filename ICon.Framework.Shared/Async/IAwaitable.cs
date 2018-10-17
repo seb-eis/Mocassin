@@ -1,4 +1,4 @@
-﻿namespace ICon.Framework.Async
+﻿namespace Mocassin.Framework.Async
 {
     /// <summary>
     ///     Represent an asynchronous awaitable sequence or object that supports the compiler 'await' statement and supplies

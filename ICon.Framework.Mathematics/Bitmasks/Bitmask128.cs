@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using ICon.Mathematics.Extensions;
+using Mocassin.Mathematics.Extensions;
 
-namespace ICon.Mathematics.Bitmasks
+namespace Mocassin.Mathematics.Bitmasks
 {
     /// <summary>
     ///     Two wrapped 64 bit unsigned integer to be used as 128 entry bitmask (Waring: Mutable struct!)

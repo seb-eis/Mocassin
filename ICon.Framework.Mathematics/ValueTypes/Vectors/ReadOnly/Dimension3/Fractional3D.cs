@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using ICon.Mathematics.Extensions;
+using Mocassin.Mathematics.Extensions;
 
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     /// Basic fractional vector that carries fractional affine coordinate system information (A,B,C)

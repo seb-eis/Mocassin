@@ -1,9 +1,9 @@
-﻿using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.Particles.ConflictHandling;
-using ICon.Model.ProjectServices;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Particles.ConflictHandling;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic particle input manager that handles the controlled access to the particle manager
@@ -11,7 +11,7 @@ namespace ICon.Model.Particles
     internal class ParticleInputManager : ModelInputManager<ParticleModelData, IParticleDataPort, ParticleEventManager>, IParticleInputPort
     {
         /// <inheritdoc />
-        public ParticleInputManager(ParticleModelData data, ParticleEventManager manager, IProjectServices services)
+        public ParticleInputManager(ParticleModelData data, ParticleEventManager manager, IModelProject services)
             : base(data, manager, services)
         {
         }
@@ -100,7 +100,7 @@ namespace ICon.Model.Particles
         /// <inheritdoc />
         protected override IDataConflictHandlerProvider<ParticleModelData> CreateDataConflictHandlerProvider()
         {
-            return new ParticleDataConflictHandlerProvider(ProjectServices);
+            return new ParticleDataConflictHandlerProvider(ModelProject);
         }
     }
 }

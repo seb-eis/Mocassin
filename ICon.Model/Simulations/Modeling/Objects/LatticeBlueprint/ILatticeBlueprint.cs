@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Lattices;
 
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Lattices;
-
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a lattice blueprint that is used to create a custom lattice based upon a simple set of instructions

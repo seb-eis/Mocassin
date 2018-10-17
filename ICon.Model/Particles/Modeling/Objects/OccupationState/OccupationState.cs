@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ICon.Framework.Extensions;
+using Mocassin.Framework.Extensions;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <inheritdoc />
     [DataContract]

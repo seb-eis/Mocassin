@@ -1,4 +1,4 @@
-﻿namespace ICon.Model.Translator.ModelContext
+﻿namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Transition model context builder. Extends transition reference information of a project into a full data context

@@ -1,9 +1,9 @@
-﻿using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Transitions;
+﻿using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Energies.Handler
+namespace Mocassin.Model.Energies.Handler
 {
     /// <summary>
     ///     Event handler that manages the processing of object removal events that the energy manager receives from the
@@ -12,9 +12,9 @@ namespace ICon.Model.Energies.Handler
     internal class TransitionRemovedEventHandler : ObjectRemovedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
     {
         /// <inheritdoc />
-        public TransitionRemovedEventHandler(IProjectServices projectServices, DataAccessSource<EnergyModelData> dataAccessorSource,
+        public TransitionRemovedEventHandler(IModelProject modelProject, DataAccessSource<EnergyModelData> dataAccessorSource,
             EnergyEventManager eventManager)
-            : base(projectServices, dataAccessorSource, eventManager)
+            : base(modelProject, dataAccessorSource, eventManager)
         {
         }
 

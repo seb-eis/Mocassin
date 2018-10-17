@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ICon.Framework.Constraints;
-using ICon.Model.Basic;
+using Mocassin.Framework.Constraints;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents a energy setter for pair interactions that enables save manipulation of the pair interaction energy

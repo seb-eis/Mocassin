@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 // Licensed under Apache License 2.0 (NO WARRANTY, etc. see website)
 
 
-namespace ICon.Framework.Random
+namespace Mocassin.Framework.Random
 {
     /// <summary>
     ///     Implementation of the PCG family 32 bit minimal random number generator

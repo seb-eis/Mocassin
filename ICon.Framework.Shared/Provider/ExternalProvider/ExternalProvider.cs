@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ICon.Framework.Provider
+namespace Mocassin.Framework.Provider
 {
     /// <summary>
     ///     Provider class for provider systems defined in external DLLs that handles assembly loading and provider delegate

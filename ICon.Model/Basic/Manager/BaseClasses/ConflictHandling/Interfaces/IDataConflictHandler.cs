@@ -1,6 +1,6 @@
-﻿using ICon.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Represents a data conflict resolver that handles internal data conflicts within a manager that are induces by

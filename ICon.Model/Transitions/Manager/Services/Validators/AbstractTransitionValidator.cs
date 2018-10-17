@@ -1,27 +1,27 @@
 ﻿using System.Text.RegularExpressions;
 using System.Linq;
 
-using ICon.Framework.Extensions;
-using ICon.Framework.Operations;
-using ICon.Framework.Constraints;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
+using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Operations;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Transitions.Validators
+namespace Mocassin.Model.Transitions.Validators
 {
     /// <summary>
     /// Validator for new sbtract transitions that checks for compatibility with existing data and general object constraints
     /// </summary>
-    public class AbstractTransitionValidator : DataValidator<IAbstractTransition, BasicTransitionSettings, ITransitionDataPort>
+    public class AbstractTransitionValidator : DataValidator<IAbstractTransition, MocassinTransitionSettings, ITransitionDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public AbstractTransitionValidator(IProjectServices projectServices, BasicTransitionSettings settings, IDataReader<ITransitionDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
+        public AbstractTransitionValidator(IModelProject modelProject, MocassinTransitionSettings settings, IDataReader<ITransitionDataPort> dataReader)
+            : base(modelProject, settings, dataReader)
         {
         }
 

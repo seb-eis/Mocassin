@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Model.Translator.Data
+namespace Mocassin.Model.Translator.Data
 {
     public class ClusterDefinition : InteropObject<CClusterDefinition>
     {

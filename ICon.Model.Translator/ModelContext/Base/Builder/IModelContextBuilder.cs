@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ICon.Framework.Async;
+using Mocassin.Framework.Async;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Generic awaitable model context builder for asynchronous creation of extended model data context objects

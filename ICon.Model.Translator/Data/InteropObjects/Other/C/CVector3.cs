@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ICon.Model.Translator
+namespace Mocassin.Model.Translator
 {
     /// <summary>
     /// Simulation Vector 3 object. Layout marshals to its binary unmanaged 'C' representation

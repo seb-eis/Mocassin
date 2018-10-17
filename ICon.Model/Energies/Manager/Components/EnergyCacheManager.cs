@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ICon.Mathematics.Constraints;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
+using Mocassin.Mathematics.Constraints;
+using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
-namespace ICon.Model.Energies
+namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="ICon.Model.Energies.IEnergyCachePort" />
+    /// <inheritdoc cref="IEnergyCachePort" />
     internal class EnergyCacheManager : ModelCacheManager<EnergyModelCache, IEnergyCachePort>, IEnergyCachePort
     {
         /// <inheritdoc />
-        public EnergyCacheManager(EnergyModelCache modelCache, IProjectServices projectServices)
-            : base(modelCache, projectServices)
+        public EnergyCacheManager(EnergyModelCache modelCache, IModelProject modelProject)
+            : base(modelCache, modelProject)
         {
         }
 
@@ -124,17 +124,18 @@ namespace ICon.Model.Energies
         /// <returns></returns>
         [CacheMethodResult]
         protected IEnergySetterProvider CreateEnergySetterProvider()
-        {
-            var provider = ProjectServices.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetEnergySetterProvider());
+        {         
+            var provider = ModelProject.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetEnergySetterProvider());
+            var settings = ModelProject.Settings.GetModuleSettings<MocassinEnergySettings>();
 
-            var (pairMin, pairMax) = ProjectServices.SettingsData.EnergySettings.PairEnergies.GetMinMaxTuple();
-            var (groupMin, groupMax) = ProjectServices.SettingsData.EnergySettings.GroupEnergies.GetMinMaxTuple();
+            var (pairMin, pairMax) = settings.PairEnergies.GetMinMaxTuple();
+            var (groupMin, groupMax) = settings.GroupEnergies.GetMinMaxTuple();
 
             provider.PairEnergyConstraint =
-                new NumericConstraint(true, pairMin, pairMax, true, ProjectServices.CommonNumeric.RangeComparer);
+                new NumericConstraint(true, pairMin, pairMax, true, ModelProject.CommonNumeric.RangeComparer);
 
             provider.GroupEnergyConstraint =
-                new NumericConstraint(true, groupMin, groupMax, true, ProjectServices.CommonNumeric.RangeComparer);
+                new NumericConstraint(true, groupMin, groupMax, true, ModelProject.CommonNumeric.RangeComparer);
 
             return provider;
         }
@@ -146,8 +147,8 @@ namespace ICon.Model.Energies
         [CacheMethodResult]
         protected IPairInteractionFinder CreatePairInteractionFinder()
         {
-            var unitCellProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            return new PairInteractionFinder(unitCellProvider, ProjectServices.SpaceGroupService);
+            var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            return new PairInteractionFinder(unitCellProvider, ModelProject.SpaceGroupService);
         }
 
         /// <summary>
@@ -158,9 +159,9 @@ namespace ICon.Model.Energies
         [CacheMethodResult]
         protected List<IPositionGroupInfo> CreateAllPositionGroupInfos()
         {
-            var ucProvider = ProjectServices.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var analyzer = new GeometryGroupAnalyzer(ucProvider, ProjectServices.SpaceGroupService);
-            var interactions = ProjectServices.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetGroupInteractions());
+            var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
+            var interactions = ModelProject.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetGroupInteractions());
 
             return analyzer.CreateExtendedPositionGroups(interactions)
                 .Select(value => (IPositionGroupInfo) new PositionGroupInfo(value)).ToList();
@@ -173,7 +174,7 @@ namespace ICon.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
         {
-            var manager = ProjectServices.GetManager<IEnergyManager>();
+            var manager = ModelProject.GetManager<IEnergyManager>();
             var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
             var asymmetricPairs = manager.QueryPort.Query(port => port.GetUnstablePairInteractions());
             var symmetricResult = AssignPairInteractionsToPosition(symmetricPairs);
@@ -226,7 +227,7 @@ namespace ICon.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> CreatePositionGroupInteractions()
         {
-            var manager = ProjectServices.GetManager<IEnergyManager>();
+            var manager = ModelProject.GetManager<IEnergyManager>();
             var groupInteractions = manager.QueryPort.Query(port => port.GetGroupInteractions());
             var localResult = new Dictionary<IUnitCellPosition, List<IGroupInteraction>>();
             foreach (var groupInteraction in groupInteractions)

@@ -1,9 +1,8 @@
 ﻿using System;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
 
-using ICon.Mathematics.Constraints;
-using ICon.Mathematics.Comparers;
-
-namespace ICon.Symmetry.CrystalSystems
+namespace Mocassin.Symmetry.CrystalSystems
 {
     /// <summary>
     /// Defines a crystal system setting containing information which parameters can be set as well as the range constraints
@@ -30,7 +29,7 @@ namespace ICon.Symmetry.CrystalSystems
         /// <summary>
         /// The basic crystal sytem ID (0 to 6)
         /// </summary>
-        public CrystalSystemID SystemID { get; set; }
+        public CrystalSystemId SystemID { get; set; }
 
         /// <summary>
         /// The cyrstal system literal name
@@ -79,7 +78,7 @@ namespace ICon.Symmetry.CrystalSystems
         protected void SetParameterAndAngles(CrystalSystem system)
         {
             system.SystemName = SystemName;
-            system.SystemID = SystemID;
+            system.SystemId = SystemID;
             system.Variation = Variation;
             system.Alpha = (Alpha.Min, Alpha.Fixed);
             system.Beta = (Beta.Min, Beta.Fixed);

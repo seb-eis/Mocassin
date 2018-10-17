@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using ICon.Model.Basic;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Particles
+namespace Mocassin.Model.Particles
 {
     /// <summary>
     ///     Basic particle manager reference data that represents the base data required for load/save actions and caluclation

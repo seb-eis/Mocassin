@@ -1,10 +1,10 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Transitions;
+﻿using Mocassin.Model.Particles;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Model.Transitions;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     /// Represents a metropolis transition model that fully describes geometry and mobility information of a reference transition

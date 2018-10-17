@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     /// Serializable version of the 4D 128bit Int-Vector that does not specify its coordinate system type. Intended for data storage and serialization

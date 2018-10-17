@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     /// Interface for all double precision three dimensional vectors of unspecified type

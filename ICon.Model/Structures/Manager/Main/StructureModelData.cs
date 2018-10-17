@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
+using Mocassin.Symmetry.CrystalSystems;
+using Mocassin.Symmetry.SpaceGroups;
 
-using ICon.Model.Basic;
-using ICon.Symmetry.SpaceGroups;
-using ICon.Symmetry.CrystalSystems;
-
-namespace ICon.Model.Structures
+namespace Mocassin.Model.Structures
 {
     /// <summary>
     /// Basic structure manager reference data that represents the base data required for load/save actions and caluclation of all dependent data

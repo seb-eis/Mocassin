@@ -1,8 +1,8 @@
-﻿using ICon.Model.Particles;
+﻿using Mocassin.Model.Particles;
 
-namespace ICon.Model.Translator.ModelContext
+namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ICon.Model.Translator.ModelContext.ITransitionModel"/>
+    /// <inheritdoc cref="ITransitionModel"/>
     public abstract class TransitionModel : ModelComponentBase, ITransitionModel
     {
         /// <inheritdoc />

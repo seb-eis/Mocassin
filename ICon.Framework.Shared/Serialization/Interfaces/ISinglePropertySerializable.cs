@@ -1,4 +1,4 @@
-﻿namespace ICon.Framework.Xml
+﻿namespace Mocassin.Framework.Xml
 {
     /// <summary>
     ///     Interface that specifies that the class or struct uses serialization/deserialization through a single splittable

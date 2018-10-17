@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICon.Mathematics.Comparers;
-using ICon.Mathematics.Extensions;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.Comparers;
 
-namespace ICon.Mathematics.ValueTypes
+namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Rotation matrix for 3D vectors, contains factories for common cartesian operations

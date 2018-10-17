@@ -1,7 +1,7 @@
 ﻿using System;
-using ICon.Mathematics.ValueTypes;
+using Mocassin.Mathematics.ValueTypes;
 
-namespace ICon.Mathematics.Extensions
+namespace Mocassin.Mathematics.Extensions
 {
     /// <summary>
     ///     Extensions for the coordinate tuple that supplies generic comparison methods and other convenience functions

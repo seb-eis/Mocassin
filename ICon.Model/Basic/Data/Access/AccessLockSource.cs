@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace ICon.Model.Basic
+namespace Mocassin.Model.Basic
 {
     /// <summary>
     ///     Access lock source for model data that tries to access the data a specified number of times within certain

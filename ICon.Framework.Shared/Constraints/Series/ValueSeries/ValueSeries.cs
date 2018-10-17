@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Collections;
 
-namespace ICon.Framework.Constraints
+namespace Mocassin.Framework.Constraints
 {
     /// <summary>
     /// Simple double precision value series that defines lower bound, upper bound and an increment step

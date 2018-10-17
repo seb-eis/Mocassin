@@ -1,10 +1,10 @@
-﻿using ICon.Framework.Collections;
-using ICon.Model.Particles;
+﻿using Mocassin.Model.Particles;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Framework.Collections;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Executes dopings on the Worklattice
