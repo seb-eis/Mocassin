@@ -1,37 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Framework.Constraints;
+﻿using Mocassin.Framework.Constraints;
 
 namespace Mocassin.Model.Simulations
 {
     /// <summary>
-    /// Represents a specialized simulation series for metropolis monte carlo simulations
+    ///     Represents a specialized simulation series for metropolis monte carlo simulations
     /// </summary>
     public interface IMetropolisSimulationSeries : ISimulationSeries
     {
         /// <summary>
-        /// Get the metropolis base simulation this series is based upon
+        ///     Get the metropolis base simulation this series is based upon
         /// </summary>
         new IMetropolisSimulation BaseSimulation { get; }
 
         /// <summary>
-        /// Get the series for the break tolerance values
+        ///     Get the series for the break tolerance values
         /// </summary>
         IValueSeries BreakToleranceSeries { get; }
 
         /// <summary>
-        /// Get the value series for the break sample length
+        ///     Get the value series for the break sample length
         /// </summary>
         IValueSeries BreakSampleLengthSeries { get; }
 
         /// <summary>
-        /// Get the value series for the break sample interval
+        ///     Get the value series for the break sample interval
         /// </summary>
         IValueSeries BreakSampleIntervalSeries { get; }
 
         /// <summary>
-        /// Get the value series for the results sample length
+        ///     Get the value series for the results sample length
         /// </summary>
         IValueSeries ResultSampleLengthSeries { get; }
     }

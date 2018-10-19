@@ -10,32 +10,34 @@ using Mocassin.Symmetry.SpaceGroups;
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Quick kinetic transition mapper that uses a space group service interafce to create the kinetic mappings
+    ///     Quick kinetic transition mapper that uses a space group service interface to create the kinetic mappings
     /// </summary>
     public class KineticTransitionMapper
     {
         /// <summary>
-        /// The space group service that provides the symmetry operations
+        ///     The space group service that provides the symmetry operations
         /// </summary>
         protected ISpaceGroupService SpaceGroupService { get; }
 
         /// <summary>
-        /// The vector encoder to switch between fractional and 4D encoded coordinates
+        ///     The vector encoder to switch between fractional and 4D encoded coordinates
         /// </summary>
         protected IUnitCellVectorEncoder VectorEncoder { get; }
 
         /// <summary>
-        /// The list of existing unit cell positions
+        ///     The list of existing unit cell positions
         /// </summary>
         protected IUnitCellProvider<IUnitCellPosition> UnitCellProvider { get; }
 
         /// <summary>
-        /// Creates new kinetic transition quick mapper that uses the provided space group service, vector encoder and full unit cell provider
+        ///     Creates new kinetic transition quick mapper that uses the provided space group service, vector encoder and full
+        ///     unit cell provider
         /// </summary>
         /// <param name="spaceGroupService"></param>
         /// <param name="vectorEncoder"></param>
         /// <param name="unitCellProvider"></param>
-        public KineticTransitionMapper(ISpaceGroupService spaceGroupService, IUnitCellVectorEncoder vectorEncoder, IUnitCellProvider<IUnitCellPosition> unitCellProvider)
+        public KineticTransitionMapper(ISpaceGroupService spaceGroupService, IUnitCellVectorEncoder vectorEncoder,
+            IUnitCellProvider<IUnitCellPosition> unitCellProvider)
         {
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
             VectorEncoder = vectorEncoder ?? throw new ArgumentNullException(nameof(vectorEncoder));
@@ -43,7 +45,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Creates all kinetic transition mappings for the provided transition interface
+        ///     Creates all kinetic transition mappings for the provided transition interface
         /// </summary>
         /// <param name="transition"></param>
         /// <returns></returns>
@@ -53,7 +55,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Takes the provided reference geometry of a transition in fractional position information and creates all symmetry equivalent mappings
+        ///     Takes the provided reference geometry of a transition in fractional position information and creates all symmetry
+        ///     equivalent mappings
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="transition"></param>
@@ -70,13 +73,10 @@ namespace Mocassin.Model.Transitions
             foreach (var fractionalSequence in SpaceGroupService.GetAllWyckoffOriginSequences(geometryList))
             {
                 if (VectorEncoder.TryEncode(fractionalSequence.Cast<IFractional3D>(), out var encodedSequence))
-                {
                     yield return new KineticMapping(transition, start, end, encodedSequence.ToArray(), fractionalSequence);
-                }
                 else
-                {
-                    throw new InvalidOperationException("Mapping encoding from 3D to 4D failed. Vector encoder and space group service are not synchronized!");
-                }
+                    throw new InvalidOperationException(
+                        "Mapping encoding from 3D to 4D failed. Vector encoder and space group service are not synchronized!");
             }
         }
     }

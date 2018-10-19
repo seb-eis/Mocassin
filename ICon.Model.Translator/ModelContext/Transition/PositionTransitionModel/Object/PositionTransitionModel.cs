@@ -3,7 +3,7 @@ using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IPositionTransitionModel"/>
+    /// <inheritdoc cref="IPositionTransitionModel" />
     public class PositionTransitionModel : ModelComponentBase, IPositionTransitionModel
     {
         /// <inheritdoc />

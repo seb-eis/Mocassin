@@ -2,7 +2,7 @@
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ITransitionModel"/>
+    /// <inheritdoc cref="ITransitionModel" />
     public abstract class TransitionModel : ModelComponentBase, ITransitionModel
     {
         /// <inheritdoc />

@@ -7,26 +7,25 @@ using Mocassin.Model.Structures.Validators;
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Validation service for structure related model objects, uses space group service to validate potential duplicate conflicts
+    ///     Validation service for structure related model objects, uses space group service to validate potential duplicate
+    ///     conflicts
     /// </summary>
     public class StructureValidationService : ValidationService<IStructureDataPort>
     {
         /// <summary>
-        /// The basic structure settings object
+        ///     The basic structure settings object
         /// </summary>
-        private MocassinStructureSettings Settings { get; set; }
+        private MocassinStructureSettings Settings { get; }
 
-        /// <summary>
-        /// Create new structure validation service for the provided basic settings and space group service
-        /// </summary>
-        /// <param name="settings"></param>
-        public StructureValidationService(MocassinStructureSettings settings, IModelProject modelProject) : base(modelProject)
+        /// <inheritdoc />
+        public StructureValidationService(MocassinStructureSettings settings, IModelProject modelProject)
+            : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         /// <summary>
-        /// Validates a new unit cell position in terms of conflicts with basic limitations and existing data
+        ///     Validates a new unit cell position in terms of conflicts with basic limitations and existing data
         /// </summary>
         /// <param name="position"></param>
         /// <param name="dataReader"></param>
@@ -38,7 +37,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Validates a position dummy in terms of conflicts with basic limitations
+        ///     Validates a position dummy in terms of conflicts with basic limitations
         /// </summary>
         /// <param name="position"></param>
         /// <param name="dataReader"></param>
@@ -50,7 +49,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Validate a structure info in terms of conflicts with basic limitations
+        ///     Validate a structure info in terms of conflicts with basic limitations
         /// </summary>
         /// <param name="info"></param>
         /// <param name="dataReader"></param>
@@ -62,7 +61,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Validates a set of cell parameters in terms of conflicts with basic limitations and the currently active space group
+        ///     Validates a set of cell parameters in terms of conflicts with basic limitations and the currently active space
+        ///     group
         /// </summary>
         /// <param name="parameters"></param>
         /// <param name="dataReader"></param>
@@ -74,7 +74,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Validates a space group info in terms of conflicts with basic limitations (Does not load group into the service!)
+        ///     Validates a space group info in terms of conflicts with basic limitations (Does not load group into the service!)
         /// </summary>
         /// <param name="groupInfo"></param>
         /// <param name="dataReader"></param>

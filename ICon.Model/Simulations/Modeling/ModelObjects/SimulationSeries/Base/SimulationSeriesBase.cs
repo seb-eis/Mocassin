@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Reflection;
+using System.Runtime.Serialization;
 using Mocassin.Framework.Constraints;
 using Mocassin.Framework.Provider;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="ISimulationSeries"/>
+    /// <inheritdoc cref="ISimulationSeries" />
     /// <remarks> Abstract base class for implementations of simulation series objects </remarks>
     [DataContract]
     public abstract class SimulationSeriesBase : ModelObject, ISimulationSeries
@@ -37,7 +36,7 @@ namespace Mocassin.Model.Simulations
         public IValueSeries McspSeries { get; set; }
 
         /// <summary>
-        /// The list of energy background load information used to create energy background providers for the simulations
+        ///     The list of energy background load information used to create energy background providers for the simulations
         /// </summary>
         [DataMember]
         public List<ExternalLoadInfo> EnergyBackgroundLoadInfos { get; set; }
@@ -72,6 +71,7 @@ namespace Mocassin.Model.Simulations
                         break;
                 }
             }
+
             return count;
         }
     }

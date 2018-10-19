@@ -1,59 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
+    ///     Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 72)]
     public struct CJobInfo
     {
-        [MarshalAs(UnmanagedType.I8)]
-        private long jobFlags;
-
-        [MarshalAs(UnmanagedType.I8)]
-        private long statusFlags;
-
-        [MarshalAs(UnmanagedType.I8)]
-        private long stateSize;
-
-        [MarshalAs(UnmanagedType.I8)]
-        private long targetMcsp;
-
-        [MarshalAs(UnmanagedType.I8)]
-        private long timeLimit;
-
-        [MarshalAs(UnmanagedType.R8)]
-        private double temperature;
-
-        [MarshalAs(UnmanagedType.R8)]
-        private double minimalSuccessRate;
-
         private readonly CLongPtr jobHeaderPtr;
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int objectId;
-
-        [MarshalAs(UnmanagedType.I4)]
+        [MarshalAs(UnmanagedType.I4)] 
         private readonly int paddingInt;
 
-        public int ObjectId { get => objectId; set => objectId = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int ObjectId { get; set; }
 
-        public long JobFlags { get => jobFlags; set => jobFlags = value; }
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long JobFlags { get; set; }
 
-        public long StatusFlags { get => statusFlags; set => statusFlags = value; }
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long StatusFlags { get; set; }
 
-        public long StateSize { get => stateSize; set => stateSize = value; }
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long StateSize { get; set; }
 
-        public long TargetMcsp { get => targetMcsp; set => targetMcsp = value; }
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long TargetMcsp { get; set; }
 
-        public long TimeLimit { get => timeLimit; set => timeLimit = value; }
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long TimeLimit { get; set; }
 
-        public double Temperature { get => temperature; set => temperature = value; }
+        [field: MarshalAs(UnmanagedType.R8)]
+        public double Temperature { get; set; }
 
-        public double MinimalSuccessRate { get => minimalSuccessRate; set => minimalSuccessRate = value; }
+        [field: MarshalAs(UnmanagedType.R8)]
+        public double MinimalSuccessRate { get; set; }
     }
 }

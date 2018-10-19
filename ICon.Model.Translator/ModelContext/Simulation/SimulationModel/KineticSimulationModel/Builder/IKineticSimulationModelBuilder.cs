@@ -4,12 +4,12 @@ using Mocassin.Model.Simulations;
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Kinetic simulation model builder. Extends kinetic simulation reference objects into a full data context
+    ///     Kinetic simulation model builder. Extends kinetic simulation reference objects into a full data context
     /// </summary>
     public interface IKineticSimulationModelBuilder
     {
         /// <summary>
-        /// Creates the list of kinetic simulation models for the passed set of kinetic simulation objects
+        ///     Creates the list of kinetic simulation models for the passed set of kinetic simulation objects
         /// </summary>
         /// <param name="kineticSimulations"></param>
         /// <returns></returns>

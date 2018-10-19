@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     The energy table entity alias class. Stores 2D energy lookup tables for the simulation database
+    /// </summary>
     public class EnergyTableEntity : InteropBinaryArray<double>
     {
-
+        /// <inheritdoc />
+        public override string BlobTypeName => "ENT";
     }
 }

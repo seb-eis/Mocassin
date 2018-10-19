@@ -13,10 +13,10 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Create new lattice query manager from data, cache object and data access locker
         /// </summary>
-        /// <param name="baseData"></param>
+        /// <param name="modelData"></param>
         /// <param name="extendedData"></param>
         /// <param name="lockSource"></param>
-        public LatticeQueryManager(LatticeModelData baseData, LatticeDataCache extendedData, AccessLockSource lockSource) : base(baseData, extendedData, lockSource)
+        public LatticeQueryManager(LatticeModelData modelData, LatticeDataCache extendedData, AccessLockSource lockSource) : base(modelData, extendedData, lockSource)
         {
         }
     }

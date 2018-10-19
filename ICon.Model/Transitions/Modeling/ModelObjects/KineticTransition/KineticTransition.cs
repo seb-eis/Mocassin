@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="IKineticTransition"/>
+    /// <inheritdoc cref="IKineticTransition" />
     [Serializable]
-    [DataContract(Name ="KineticTransition")]
+    [DataContract(Name = "KineticTransition")]
     public class KineticTransition : ModelObject, IKineticTransition
     {
         /// <inheritdoc />
@@ -18,13 +18,13 @@ namespace Mocassin.Model.Transitions
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
-        /// The geometry of the transition as 3D fractional coordinates
+        ///     The geometry of the transition as 3D fractional coordinates
         /// </summary>
         [DataMember]
         public List<DataVector3D> PathGeometry { get; set; }
 
         /// <summary>
-        /// The list of affiliated kinetic transition rules (auto-managed by the model)
+        ///     The list of affiliated kinetic transition rules (auto-managed by the model)
         /// </summary>
         [DataMember]
         [IndexResolved]
@@ -40,10 +40,9 @@ namespace Mocassin.Model.Transitions
             foreach (var rule in GetTransitionRules())
             {
                 yield return rule;
+
                 foreach (var dependentRule in rule.GetDependentRules())
-                {
                     yield return dependentRule;
-                }
             }
         }
 
@@ -68,13 +67,13 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastIfNotDeprecated<IKineticTransition>(obj) is var transition)
-            {
-                PathGeometry = transition.GetGeometrySequence().Select(value => new DataVector3D(value)).ToList();
-                AbstractTransition = transition.AbstractTransition;
-                return this;
-            }
-            return null;
+            if (!(CastIfNotDeprecated<IKineticTransition>(obj) is IKineticTransition transition))
+                return null;
+
+            PathGeometry = transition.GetGeometrySequence().Select(value => new DataVector3D(value)).ToList();
+            AbstractTransition = transition.AbstractTransition;
+            return this;
+
         }
     }
 }

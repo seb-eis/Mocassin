@@ -1,48 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq;
-
 using Mocassin.Framework.Extensions;
 
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Enum for the connectors ()
+    ///     Enum for the connectors ()
     /// </summary>
     public enum ConnectorType : byte
     {
-        Dynamic, Static
+        Dynamic,
+        Static
     }
 
-    public enum ConnectorPatternType : int
+    public enum ConnectorPatternType
     {
-        Undefined, BasicKinetic, Metropolis, SingleVehicle, SplittedVehicle
+        Undefined,
+        BasicKinetic,
+        Metropolis,
+        SingleVehicle,
+        SplitVehicle
     }
 
     /// <summary>
-    /// Defines a pattern for the way transition connectors can be connected into transition sequences
+    ///     Defines a pattern for the way transition connectors can be connected into transition sequences
     /// </summary>
     public class ConnectorPattern
     {
         /// <summary>
-        /// The separator for connector enums during code generation
+        ///     The separator for connector enums during code generation
         /// </summary>
         public static string CodeSeparator { get; } = "-";
 
         /// <summary>
-        /// The regex that describes the patttern of the connector sequence that is allowed
+        ///     The regex that describes the pattern of the connector sequence that is allowed
         /// </summary>
         public Regex PatternRegex { get; set; }
 
         /// <summary>
-        /// The name of the connector pattern
+        ///     The name of the connector pattern
         /// </summary>
         public ConnectorPatternType PatternType { get; set; }
 
         /// <summary>
-        /// Checks if a sequence of connectors is valid in terms of the connector pattern
+        ///     Checks if a sequence of connectors is valid in terms of the connector pattern
         /// </summary>
         /// <param name="connectors"></param>
         /// <returns></returns>
@@ -52,7 +56,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Get a literal name of a connector enum
+        ///     Get a literal name of a connector enum
         /// </summary>
         /// <param name="connector"></param>
         /// <returns></returns>
@@ -62,7 +66,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Creates a string code froma sequence of connectors that can be used for pattern matching
+        ///     Creates a string code from a sequence of connectors that can be used for pattern matching
         /// </summary>
         /// <param name="connectors"></param>
         /// <returns></returns>
@@ -70,21 +74,20 @@ namespace Mocassin.Model.Transitions
         {
             var builder = new StringBuilder(10);
             foreach (var item in connectors)
-            {
                 builder.Append($"{item}{CodeSeparator}");
-            }
+
             builder.PopBack(1);
 
             return builder.ToString();
         }
 
         /// <summary>
-        /// Get the connector pattern for the basic kinetic transitions (D-{D}_1+)
+        ///     Get the connector pattern for the basic kinetic transitions (D-{D}_1+)
         /// </summary>
         /// <returns></returns>
         public static ConnectorPattern GetBasicKineticPattern()
         {
-            return new ConnectorPattern()
+            return new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({ConnectorType.Dynamic}){{1}}({CodeSeparator}{ConnectorType.Dynamic}){{1,}}$"),
                 PatternType = ConnectorPatternType.BasicKinetic
@@ -92,12 +95,12 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Get the connector pattern for a metropolis transition (D)
+        ///     Get the connector pattern for a metropolis transition (D)
         /// </summary>
         /// <returns></returns>
         public static ConnectorPattern GetMetropolisPattern()
         {
-            return new ConnectorPattern()
+            return new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({ConnectorType.Dynamic}){{1}}$"),
                 PatternType = ConnectorPatternType.Metropolis
@@ -105,29 +108,30 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Get the connector pattern for a split vehicle mechanism with multiple transition positions (D-D{-S-D-D}_1+)
+        ///     Get the connector pattern for a split vehicle mechanism with multiple transition positions (D-D{-S-D-D}_1+)
         /// </summary>
         /// <returns></returns>
         public static ConnectorPattern GetSplitVehiclePattern()
         {
             var head = $"{ConnectorType.Dynamic}{CodeSeparator}{ConnectorType.Dynamic}";
-            var periodicBody = $"{CodeSeparator}{ConnectorType.Static}{CodeSeparator}{ConnectorType.Dynamic}{CodeSeparator}{ConnectorType.Dynamic}";
-            return new ConnectorPattern()
+            var periodicBody =
+                $"{CodeSeparator}{ConnectorType.Static}{CodeSeparator}{ConnectorType.Dynamic}{CodeSeparator}{ConnectorType.Dynamic}";
+            return new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({head}){{1}}({periodicBody}){{1,}}$"),
-                PatternType = ConnectorPatternType.SplittedVehicle
+                PatternType = ConnectorPatternType.SplitVehicle
             };
         }
 
         /// <summary>
-        /// Get the connector pattern for a basic vehicle mechanism with one transition position ({D}_1+-S-S-{D}_1+))
+        ///     Get the connector pattern for a basic vehicle mechanism with one transition position ({D}_1+-S-S-{D}_1+))
         /// </summary>
         /// <returns></returns>
         public static ConnectorPattern GetBasicVehiclePattern()
         {
-            var headOrTail = ConnectorType.Dynamic;
+            const ConnectorType headOrTail = ConnectorType.Dynamic;
             var body = $"{ConnectorType.Static}{CodeSeparator}{ConnectorType.Static}";
-            return new ConnectorPattern()
+            return new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({headOrTail}{CodeSeparator}){{1,}}({body}){{1}}({CodeSeparator}{headOrTail}){{1,}}$"),
                 PatternType = ConnectorPatternType.SingleVehicle
@@ -135,7 +139,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///  Get all curently supported transition connector patterns
+        ///     Get all currently supported transition connector patterns
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<ConnectorPattern> GetAllSupportedPatterns()
@@ -147,21 +151,16 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Determines the type of the pattern. If the pattern is not recognized the functions returns the undefined flag
+        ///     Determines the type of the pattern. If the pattern is not recognized the functions returns the undefined flag
         /// </summary>
         /// <param name="connectors"></param>
         /// <returns></returns>
         public static ConnectorPatternType DeterminePatternType(IEnumerable<ConnectorType> connectors)
         {
             var code = MakeConnectorCode(connectors);
-            foreach (var pattern in GetAllSupportedPatterns())
-            {
-                if (pattern.PatternRegex.IsMatch(code))
-                {
-                    return pattern.PatternType;
-                }
-            }
-            return ConnectorPatternType.Undefined;
+            return (from pattern in GetAllSupportedPatterns() 
+                where pattern.PatternRegex.IsMatch(code) 
+                select pattern.PatternType).FirstOrDefault();
         }
     }
 }

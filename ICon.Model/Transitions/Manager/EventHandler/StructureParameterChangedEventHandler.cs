@@ -9,15 +9,10 @@ namespace Mocassin.Model.Transitions.Handler
     /// <summary>
     /// Event handler that manages the processing of parameter change events that the transition manager receives from the structure manager event port
     /// </summary>
-    internal class ParameterChangedStructureHandler : ParameterChangedEventHandler<IStructureEventPort, TransitionModelData, TransitionEventManager>
+    internal class StructureParameterChangedEventHandler : ParameterChangedEventHandler<IStructureEventPort, TransitionModelData, TransitionEventManager>
     {
-        /// <summary>
-        /// Create new handler using the provided project services, data access provider and event manager
-        /// </summary>
-        /// <param name="modelProject"></param>
-        /// <param name="dataAccessorSource"></param>
-        /// <param name="eventManager"></param>
-        public ParameterChangedStructureHandler(IModelProject modelProject, DataAccessSource<TransitionModelData> dataAccessorSource, TransitionEventManager eventManager)
+        /// <inheritdoc />
+        public StructureParameterChangedEventHandler(IModelProject modelProject, DataAccessorSource<TransitionModelData> dataAccessorSource, TransitionEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
 
@@ -31,7 +26,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleChangedCellParameters(IModelParameterEventArgs<ICellParameters> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
+            Console.WriteLine($"{eventArgs} received on {ToString()}");
             return new ConflictReport();
         }
 
@@ -43,7 +38,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleChangedSpaceGroupInfo(IModelParameterEventArgs<ISpaceGroupInfo> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
+            Console.WriteLine($"{eventArgs} received on {ToString()}");
             return new ConflictReport();
         }
 
@@ -55,7 +50,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleStructureInfoChange(IModelParameterEventArgs<IStructureInfo> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
+            Console.WriteLine($"{eventArgs} received on {ToString()}");
             return new ConflictReport();
         }
     }

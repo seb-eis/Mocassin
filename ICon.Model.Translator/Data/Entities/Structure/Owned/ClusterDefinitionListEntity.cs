@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Cluster definition list alias class. Stores cluster definitions for the simulation as a linear list
+    /// </summary>
     public class ClusterDefinitionListEntity : InteropBinaryList<CClusterDefinition>
     {
     }
 }
-

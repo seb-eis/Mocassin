@@ -11,8 +11,8 @@ namespace Mocassin.Model.Particles
     internal class ParticleDataManager : ModelDataManager<ParticleModelData>, IParticleDataPort
     {
         /// <inheritdoc />
-        public ParticleDataManager(ParticleModelData data)
-            : base(data)
+        public ParticleDataManager(ParticleModelData modelData)
+            : base(modelData)
         {
         }
 

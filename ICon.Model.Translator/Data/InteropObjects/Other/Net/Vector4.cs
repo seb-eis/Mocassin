@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Interop object wrapper for the vector 4 type used in the unmanaged simulation
+    ///     4D crystal vector interop object. Boxes a marshal struct into a .NET object
     /// </summary>
     public class Vector4 : InteropObject<CVector4>
     {
-        public Vector4(CVector4 structure) : base(structure)
+        /// <inheritdoc />
+        public Vector4(CVector4 structure)
+            : base(structure)
         {
-
         }
 
+        /// <inheritdoc />
         protected Vector4()
         {
         }

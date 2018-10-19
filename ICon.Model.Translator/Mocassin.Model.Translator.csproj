@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Entities\Job\DbSet\" />
     <Folder Include="Data\InteropObjects\Energy\C\" />
     <Folder Include="Data\InteropObjects\Energy\Net\" />
     <Folder Include="Logic\Components\Energies\" />

@@ -1,10 +1,9 @@
-﻿using Mocassin.Model.Structures;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Represents and update port for registering of dependent event ports
+    ///     Represents and update port for registering of dependent event ports
     /// </summary>
     public interface ITransitionUpdatePort : IModelUpdatePort
     {

@@ -47,7 +47,7 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Accessor provider for the full data access
         /// </summary>
-        protected DataAccessSource<T2> DataAccessorSource { get; set; }
+        protected DataAccessorSource<T2> DataAccessorSource { get; set; }
 
         /// <summary>
         ///     Access to the event manager used for
@@ -60,7 +60,7 @@ namespace Mocassin.Model.Basic
         /// <param name="modelProject"></param>
         /// <param name="dataAccessorSource"></param>
         /// <param name="eventManager"></param>
-        protected ModelEventHandler(IModelProject modelProject, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
+        protected ModelEventHandler(IModelProject modelProject, DataAccessorSource<T2> dataAccessorSource, T3 eventManager)
         {
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             DataAccessorSource = dataAccessorSource ?? throw new ArgumentNullException(nameof(dataAccessorSource));

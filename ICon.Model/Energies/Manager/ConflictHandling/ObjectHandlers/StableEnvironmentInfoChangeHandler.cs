@@ -15,8 +15,8 @@ namespace Mocassin.Model.Energies.ConflictHandling
     public class StableEnvironmentInfoChangeHandler : ObjectConflictHandler<StableEnvironmentInfo, EnergyModelData>
     {
         /// <inheritdoc />
-        public StableEnvironmentInfoChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        public StableEnvironmentInfoChangeHandler(IDataAccessor<EnergyModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 

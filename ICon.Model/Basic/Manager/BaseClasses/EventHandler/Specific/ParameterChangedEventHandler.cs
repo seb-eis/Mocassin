@@ -15,7 +15,7 @@ namespace Mocassin.Model.Basic
         where T3 : ModelEventManager
     {
         /// <inheritdoc />
-        protected ParameterChangedEventHandler(IModelProject modelProject, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
+        protected ParameterChangedEventHandler(IModelProject modelProject, DataAccessorSource<T2> dataAccessorSource, T3 eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
         }

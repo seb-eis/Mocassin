@@ -283,7 +283,7 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Provider for safe accessors to the data object
         /// </summary>
-        protected DataAccessSource<TData> DataAccessSource { get; }
+        protected DataAccessorSource<TData> DataAccessorSource { get; }
 
         /// <summary>
         ///     Provider for read only accessors to the data object that use the read only specified data port
@@ -308,15 +308,15 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Creates a new model input manager from data object, event manager and project services
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="manager"></param>
-        /// <param name="services"></param>
-        protected ModelInputManager(TData data, TEventManager manager, IModelProject services)
+        /// <param name="modelData"></param>
+        /// <param name="eventManager"></param>
+        /// <param name="project"></param>
+        protected ModelInputManager(TData modelData, TEventManager eventManager, IModelProject project)
         {
-            EventManager = manager ?? throw new ArgumentNullException(nameof(manager));
-            ModelProject = services ?? throw new ArgumentNullException(nameof(services));
-            DataAccessSource = DataAccessorSource.Create(data, services.AccessLockSource);
-            DataReaderSource = Basic.DataReaderSource.Create(data, data.AsReadOnly(), services.AccessLockSource);
+            EventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
+            ModelProject = project ?? throw new ArgumentNullException(nameof(project));
+            DataAccessorSource = Basic.DataAccessorSource.Create(modelData, project.AccessLockSource);
+            DataReaderSource = Basic.DataReaderSource.Create(modelData, modelData.AsReadOnly(), project.AccessLockSource);
             ConflictHandlerProvider = CreateDataConflictHandlerProvider();
         }
 
@@ -355,7 +355,7 @@ namespace Mocassin.Model.Basic
                 try
                 {
                     TResult queryResult;
-                    using (var dataAccess = DataAccessSource.Create())
+                    using (var dataAccess = DataAccessorSource.Create())
                     {
                         queryResult = accessQuery(dataAccess, operationResult);
                     }
@@ -389,7 +389,7 @@ namespace Mocassin.Model.Basic
             {
                 try
                 {
-                    using (var dataAccess = DataAccessSource.Create())
+                    using (var dataAccess = DataAccessorSource.Create())
                     {
                         accessQuery(dataAccess, operationResult);
                     }

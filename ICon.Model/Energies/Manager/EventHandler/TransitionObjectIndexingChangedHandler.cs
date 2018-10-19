@@ -6,14 +6,14 @@ using Mocassin.Model.Transitions;
 namespace Mocassin.Model.Energies.Handler
 {
     /// <summary>
-    ///     Event handler that manages the processing of object removal events that the energy manager receives from the
+    ///     Event handler that manages the processing of object reindexing events that the energy manager receives from the
     ///     transition manager event port
     /// </summary>
-    internal class TransitionRemovedEventHandler : ObjectRemovedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
+    internal class TransitionObjectIndexingChangedHandler : ObjectIndexingChangedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
     {
         /// <inheritdoc />
-        public TransitionRemovedEventHandler(IModelProject modelProject, DataAccessSource<EnergyModelData> dataAccessorSource,
-            EnergyEventManager eventManager)
+        public TransitionObjectIndexingChangedHandler(IModelProject modelProject,
+            DataAccessorSource<EnergyModelData> dataAccessorSource, EnergyEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
         }
@@ -63,7 +63,7 @@ namespace Mocassin.Model.Energies.Handler
         }
 
         /// <summary>
-        ///     Event reaction to a removal of one of the state exchange groups
+        ///     Event reaction to a change in one of the state exchange groups
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>

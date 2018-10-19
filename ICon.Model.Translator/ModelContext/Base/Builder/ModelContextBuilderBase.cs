@@ -1,33 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using Mocassin.Framework.Async;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <summary>
-    /// Abstract base class for model context builder implementations that expand the reference data into the full context
-    /// </summary>
-    public abstract class ModelContextBuilderBase<TContext> : IModelContextBuilder<TContext> where TContext : class
+    /// <inheritdoc />
+    public abstract class ModelContextBuilderBase<TContext> : IModelContextBuilder<TContext>
+        where TContext : class
     {
         /// <inheritdoc />
         public Task<TContext> BuildTask { get; protected set; }
 
         /// <summary>
-        /// The project service for access to the reference model data
+        ///     The project service for access to the reference model data
         /// </summary>
         public IModelProject ModelProject { get; set; }
 
         /// <summary>
-        /// The project model context builder for access to affiliated model context build processes
+        ///     The project model context builder for access to affiliated model context build processes
         /// </summary>
         public IProjectModelContextBuilder ProjectModelContextBuilder { get; set; }
 
         /// <summary>
-        /// Create new model context builder with the provided project access and default internally defined builders
+        ///     Create new model context builder with the provided project access and default internally defined builders
         /// </summary>
         /// <param name="projectModelContextBuilder"></param>
         protected ModelContextBuilderBase(IProjectModelContextBuilder projectModelContextBuilder)
@@ -57,18 +52,18 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Populates the passed context and returns the object on completion
+        ///     Populates the passed context and returns the object on completion
         /// </summary>
         protected abstract TContext PopulateContext(TContext modelContext);
 
         /// <summary>
-        /// Creates a new empty context as defined in the implementing builder
+        ///     Creates a new empty context as defined in the implementing builder
         /// </summary>
         /// <returns></returns>
         protected abstract TContext GetEmptyDefaultContext();
 
         /// <summary>
-        /// Sets all unset builder instances to the internally defined default builder system
+        ///     Sets all unset builder instances to the internally defined default builder system
         /// </summary>
         protected abstract void SetNullBuildersToDefault();
     }

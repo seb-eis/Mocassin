@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IGroupEnergyModel"/>
+    /// <inheritdoc cref="IGroupEnergyModel" />
     public class GroupEnergyModel : ModelComponentBase, IGroupEnergyModel
     {
         /// <inheritdoc />
@@ -31,7 +30,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public double[,] EnergyTable { get; set; }
 
         /// <summary>
-        /// Create new group energy model for the passed group interaction
+        ///     Create new group energy model for the passed group interaction
         /// </summary>
         /// <param name="groupInteraction"></param>
         public GroupEnergyModel(IGroupInteraction groupInteraction)

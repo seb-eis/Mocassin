@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using Mocassin.Framework.Extensions;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Abstract base class for transition model builder implementations
+    ///     Abstract base class for transition model builder implementations
     /// </summary>
     public abstract class TransitionModelBuilder : ModelBuilderBase
     {
@@ -21,7 +21,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the charge transport matrix 1xN for a set of start state particles
+        ///     Creates the charge transport matrix 1xN for a set of start state particles
         /// </summary>
         /// <param name="startState"></param>
         /// <param name="comparer"></param>
@@ -30,14 +30,12 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var result = new Matrix2D(1, startState.Count, comparer);
             for (var i = 0; i < startState.Count; i++)
-            {
                 result[0, i] = startState[i].Charge;
-            }
             return null;
         }
 
         /// <summary>
-        /// Creates the rule model of the specified type and sets the basis information
+        ///     Creates the rule model of the specified type and sets the basis information
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="transitionRule"></param>
@@ -48,13 +46,13 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 StartState = transitionRule.GetStartStateOccupation().ToList(),
                 FinalState = transitionRule.GetFinalStateOccupation().ToList(),
-                EndIndexingDeltas = CreateEndIndexingDeltas(transitionRule),
+                EndIndexingDeltas = CreateEndIndexingDeltas(transitionRule)
             };
             return ruleModel;
         }
 
         /// <summary>
-        /// Creates all inversion links and simulation codes for a prepared list of rule models
+        ///     Creates all inversion links and simulation codes for a prepared list of rule models
         /// </summary>
         /// <param name="ruleModels"></param>
         protected void CreateCodesAndLinkInverseRuleModels(IReadOnlyList<ITransitionRuleModel> ruleModels)
@@ -78,7 +76,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates all codes on a sequence of rule models
+        ///     Creates all codes on a sequence of rule models
         /// </summary>
         /// <param name="ruleModels"></param>
         protected void CreateAllCodesOnRuleModels(IEnumerable<ITransitionRuleModel> ruleModels)
@@ -99,29 +97,24 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a 64 long code for the simulation from the passed set of int values
+        ///     Creates a 64 long code for the simulation from the passed set of int values
         /// </summary>
         /// <param name="values"></param>
         /// <param name="buffer"></param>
         /// <returns></returns>
         protected long Create64BitIndexCode(IEnumerable<int> values, byte[] buffer)
         {
-            int index = -1;
-            foreach (var item in values)
-            {
-                buffer[++index] = (byte) item;
-            }
+            var index = -1;
+            foreach (var item in values) buffer[++index] = (byte) item;
 
-            long code = BitConverter.ToInt64(buffer, 0);
+            var code = BitConverter.ToInt64(buffer, 0);
             for (; index >= 0; index--)
-            {
                 buffer[index] = 0;
-            }
             return code;
         }
 
         /// <summary>
-        /// Translates the end indexing deltas into the final tracker 64 bit order code for the simulation
+        ///     Translates the end indexing deltas into the final tracker 64 bit order code for the simulation
         /// </summary>
         /// <param name="endIndexingDeltas"></param>
         /// <param name="buffer"></param>
@@ -130,16 +123,14 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var orderIndexing = new List<int>(endIndexingDeltas.Count);
 
-            for (int i = 0; i < orderIndexing.Count; i++)
-            {
+            for (var i = 0; i < orderIndexing.Count; i++)
                 orderIndexing.Add(i + endIndexingDeltas[i]);
-            }
 
             return Create64BitIndexCode(orderIndexing, buffer);
         }
 
         /// <summary>
-        /// Converts the movement description of a transition rule into the end indexing delta value list
+        ///     Converts the movement description of a transition rule into the end indexing delta value list
         /// </summary>
         /// <param name="transitionRule"></param>
         /// <returns></returns>
@@ -148,28 +139,23 @@ namespace Mocassin.Model.Translator.ModelContext
             var index = 0;
             var result = new List<int>(transitionRule.PathLength).Populate(() => index++, transitionRule.PathLength);
 
-            foreach (var (start, end) in transitionRule.GetMovementDescription().SelectConsecutivePairs((a,b) => (a,b)))
-            {
+            foreach (var (start, end) in transitionRule.GetMovementDescription().SelectConsecutivePairs((a, b) => (a, b)))
                 result.Swap(start, end);
-            }
 
-            for (int i = 0; i < result.Count; i++)
-            {
-                result[i] -= i;
-            }
+            for (var i = 0; i < result.Count; i++) result[i] -= i;
 
             return result;
         }
 
         /// <summary>
-        /// Takes a set of rule models and creates the mobile particle set
+        ///     Takes a set of rule models and creates the mobile particle set
         /// </summary>
         /// <param name="ruleModels"></param>
         /// <returns></returns>
         protected IParticleSet CreateMobileParticleSet(IEnumerable<ITransitionRuleModel> ruleModels)
         {
             var uniqueParticles = ruleModels.Select(a => a.SelectableParticle).ToSetList();
-            return new ParticleSet() { Index = -1, Particles = uniqueParticles.ToList() };
+            return new ParticleSet {Index = -1, Particles = uniqueParticles.ToList()};
         }
     }
 }

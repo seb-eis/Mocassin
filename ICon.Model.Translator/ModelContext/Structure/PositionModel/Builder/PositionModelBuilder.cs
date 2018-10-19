@@ -9,11 +9,11 @@ using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IPositionModelBuilder"/>
+    /// <inheritdoc cref="IPositionModelBuilder" />
     public class PositionModelBuilder : ModelBuilderBase, IPositionModelBuilder
     {
         /// <summary>
-        /// The vector encoder for vector transformation
+        ///     The vector encoder for vector transformation
         /// </summary>
         protected IUnitCellVectorEncoder VectorEncoder { get; set; }
 
@@ -33,7 +33,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Loads all required reference build data from the current project
+        ///     Loads all required reference build data from the current project
         /// </summary>
         protected void LoadBuildDataFromProject()
         {
@@ -42,7 +42,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the set of position models that results from the passed environment model and the space group of the project
+        ///     Creates the set of position models that results from the passed environment model and the space group of the
+        ///     project
         /// </summary>
         /// <param name="environmentModel"></param>
         /// <returns></returns>
@@ -62,14 +63,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a position model from the passed environment model, pair interaction target info
-        /// and transform symmetry operation
+        ///     Creates a position model from the passed environment model, pair interaction target info
+        ///     and transform symmetry operation
         /// </summary>
         /// <param name="environmentModel"></param>
         /// <param name="operation"></param>
         /// <param name="targetInfos"></param>
         /// <returns></returns>
-        protected IPositionModel CreatePositionModel(IEnvironmentModel environmentModel, ISymmetryOperation operation, IList<ITargetPositionInfo> targetInfos)
+        protected IPositionModel CreatePositionModel(IEnvironmentModel environmentModel, ISymmetryOperation operation,
+            IList<ITargetPositionInfo> targetInfos)
         {
             var positionModel = new PositionModel
             {
@@ -85,13 +87,14 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Transforms the passed list of target infos to a new center using the provided symmetry operation
+        ///     Transforms the passed list of target infos to a new center using the provided symmetry operation
         /// </summary>
         /// <param name="targetInfos"></param>
         /// <param name="operation"></param>
         /// <param name="centerVector"></param>
         /// <returns></returns>
-        protected IList<ITargetPositionInfo> TransformTargetInfos(IList<ITargetPositionInfo> targetInfos, ISymmetryOperation operation, in Fractional3D centerVector)
+        protected IList<ITargetPositionInfo> TransformTargetInfos(IList<ITargetPositionInfo> targetInfos, ISymmetryOperation operation,
+            in Fractional3D centerVector)
         {
             var result = new List<ITargetPositionInfo>(targetInfos.Count);
             foreach (var positionInfo in targetInfos)
@@ -108,7 +111,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
                 if (!VectorEncoder.TryEncodeAsRelative(centerVector, targetInfo.RelativeFractional3D, out var relative4D))
                     throw new InvalidOperationException("Failed to encode target info into 4D relative vector");
-                
+
                 targetInfo.RelativeVector4D = relative4D;
                 result.Add(targetInfo);
             }

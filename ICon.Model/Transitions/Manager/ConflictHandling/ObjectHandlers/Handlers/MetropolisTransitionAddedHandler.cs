@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
@@ -8,41 +6,32 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
-    /// Object handler that handles internal data changes of the transition manager system required after a new metropolis transition input
+    ///     Object handler that handles internal data changes of the transition manager system required after a new metropolis
+    ///     transition input
     /// </summary>
     public class MetropolisTransitionAddedHandler : MetropolisTransitionHandlerBase
     {
-
-        /// <summary>
-        /// Create new metropolis transition added handler with the provided data accessor and project services
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="modelProject"></param>
-        public MetropolisTransitionAddedHandler(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        /// <inheritdoc />
+        public MetropolisTransitionAddedHandler(IDataAccessor<TransitionModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 
-        /// <summary>
-        /// Determine the conflicts induced by the new metropolis transition and update the transition model data structure with the changes
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ConflictReport HandleConflicts(MetropolisTransition obj)
         {
             var report = new ConflictReport();
-            CreateNewRulesandUpdateModelData(obj, report);
+            CreateNewRulesAndUpdateModelData(obj, report);
             return report;
         }
 
         /// <summary>
-        /// Creates new rule set and links them to the kinetic parent transition. Additionally adds the new rule set to the model data object with a new indexing
+        ///     Creates new rule set and links them to the kinetic parent transition. Additionally adds the new rule set to the
+        ///     model data object with a new indexing
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="report"></param>
-        protected void CreateNewRulesandUpdateModelData(MetropolisTransition transition, ConflictReport report)
+        protected void CreateNewRulesAndUpdateModelData(MetropolisTransition transition, ConflictReport report)
         {
             transition.TransitionRules = CreateTransitionRules(transition).ToList();
             DataAccess.Query(data => data.MetropolisRules.AddRange(transition.TransitionRules));

@@ -3,7 +3,7 @@ using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IMetropolisSimulationModel"/>
+    /// <inheritdoc cref="IMetropolisSimulationModel" />
     public class MetropolisSimulationModel : ModelComponentBase, IMetropolisSimulationModel
     {
         /// <inheritdoc />

@@ -25,11 +25,11 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Creates new object conflict handler that uses the provided data access and project services
         /// </summary>
-        /// <param name="dataAccess"></param>
+        /// <param name="dataAccessor"></param>
         /// <param name="modelProject"></param>
-        protected ObjectConflictHandler(IDataAccessor<TDataObject> dataAccess, IModelProject modelProject)
+        protected ObjectConflictHandler(IDataAccessor<TDataObject> dataAccessor, IModelProject modelProject)
         {
-            DataAccess = dataAccess ?? throw new ArgumentNullException(nameof(dataAccess));
+            DataAccess = dataAccessor ?? throw new ArgumentNullException(nameof(dataAccessor));
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 

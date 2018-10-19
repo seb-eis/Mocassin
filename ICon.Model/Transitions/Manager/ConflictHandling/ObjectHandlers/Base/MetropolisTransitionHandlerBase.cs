@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
-using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
-    /// Base class for shared functionality of all conflict handlers that deal with the metropolis transition objects
+    ///     Base class for shared functionality of all conflict handlers that deal with the metropolis transition objects
     /// </summary>
     public abstract class MetropolisTransitionHandlerBase : ObjectConflictHandler<MetropolisTransition, TransitionModelData>
     {
-        /// <summary>
-        /// Create new metropolis transition handler base with the provided project services and data accessor
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="modelProject"></param>
-        protected MetropolisTransitionHandlerBase(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        /// <inheritdoc />
+        protected MetropolisTransitionHandlerBase(IDataAccessor<TransitionModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 
         /// <summary>
-        /// Create all transition rules for the provided metropolis transition
+        ///     Create all transition rules for the provided metropolis transition
         /// </summary>
         /// <param name="transition"></param>
         /// <returns></returns>
@@ -39,7 +33,8 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         }
 
         /// <summary>
-        /// Adds new kinetic rules to the model data at old deprecated places or the end of the list. Indexes objects accordingly
+        ///     Adds new kinetic rules to the model data at old deprecated places or the end of the list. Indexes objects
+        ///     accordingly
         /// </summary>
         /// <param name="rules"></param>
         protected void IndexAndAddToModelData(IEnumerable<MetropolisRule> rules)

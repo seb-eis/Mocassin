@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Model.ModelProject;
-using Mocassin.Model.Structures;
+﻿using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IStructureModelContextBuilder"/>
+    /// <inheritdoc cref="IStructureModelContextBuilder" />
     public class StructureModelContextBuilder : ModelContextBuilderBase<IStructureModelContext>, IStructureModelContextBuilder
     {
         /// <inheritdoc />

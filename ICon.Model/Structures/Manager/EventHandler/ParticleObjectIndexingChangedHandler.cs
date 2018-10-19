@@ -9,22 +9,17 @@ namespace Mocassin.Model.Structures.Handler
     /// <summary>
     /// Event handler that manages the processing of object reindexing events that the structure manager receives from the particle manager event port
     /// </summary>
-    internal class ReindexedParticleObjectsHandler : ObjectAddedEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
+    internal class ParticleObjectIndexingChangedHandler : ObjectIndexingChangedEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
     {
-        /// <summary>
-        /// Create new handler using the provided project services, data access provider and event manager
-        /// </summary>
-        /// <param name="modelProject"></param>
-        /// <param name="dataAccessorSource"></param>
-        /// <param name="eventManager"></param>
-        public ReindexedParticleObjectsHandler(IModelProject modelProject, DataAccessSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
+        /// <inheritdoc />
+        public ParticleObjectIndexingChangedHandler(IModelProject modelProject, DataAccessorSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
 
         }
 
         /// <summary>
-        /// Event reaction to a reindexed particle list in the particle manager
+        /// Event reaction to a changed particle list indexing in the particle manager
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
@@ -36,7 +31,7 @@ namespace Mocassin.Model.Structures.Handler
         }
 
         /// <summary>
-        /// Event reaction to a reindexed particle set list in the particle manager
+        /// Event reaction to a changed particle set list indexing in the particle manager
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>

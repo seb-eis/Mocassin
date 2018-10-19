@@ -7,9 +7,9 @@ using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="IMetropolisTransition"/>
+    /// <inheritdoc cref="IMetropolisTransition" />
     [Serializable]
-    [DataContract(Name ="MetropolisTransition")]
+    [DataContract(Name = "MetropolisTransition")]
     public class MetropolisTransition : ModelObject, IMetropolisTransition
     {
         /// <inheritdoc />
@@ -28,7 +28,7 @@ namespace Mocassin.Model.Transitions
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
-        /// The list of affiliated metropolis transition rules (Auto-managed by model system)
+        ///     The list of affiliated metropolis transition rules (Auto-managed by model system)
         /// </summary>
         [DataMember]
         [IndexResolved]
@@ -46,10 +46,9 @@ namespace Mocassin.Model.Transitions
             foreach (var transitionRule in GetTransitionRules())
             {
                 yield return transitionRule;
+
                 foreach (var dependentRule in transitionRule.GetDependentRules())
-                {
                     yield return dependentRule;
-                }
             }
         }
 
@@ -57,14 +56,15 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public bool Equals(IMetropolisTransition other)
         {
-            if (FirstUnitCellPosition.Index == other.FirstUnitCellPosition.Index && SecondUnitCellPosition.Index == other.SecondUnitCellPosition.Index)
-            {
+            if (other != null 
+                && FirstUnitCellPosition.Index == other.FirstUnitCellPosition.Index 
+                && SecondUnitCellPosition.Index == other.SecondUnitCellPosition.Index)
                 return AbstractTransition == other.AbstractTransition;
-            }
 
-            return FirstUnitCellPosition.Index == other.SecondUnitCellPosition.Index
-                && SecondUnitCellPosition.Index == other.FirstUnitCellPosition.Index
-                && AbstractTransition == other.AbstractTransition;
+            return other != null 
+                   && FirstUnitCellPosition.Index == other.SecondUnitCellPosition.Index 
+                   && SecondUnitCellPosition.Index == other.FirstUnitCellPosition.Index 
+                   && AbstractTransition == other.AbstractTransition;
         }
 
 
@@ -77,14 +77,14 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastIfNotDeprecated<IMetropolisTransition>(obj) is var transition)
-            {
-                FirstUnitCellPosition = transition.FirstUnitCellPosition;
-                SecondUnitCellPosition = transition.SecondUnitCellPosition;
-                AbstractTransition = transition.AbstractTransition;
-                return this;
-            }
-            return null;
+            if (!(CastIfNotDeprecated<IMetropolisTransition>(obj) is IMetropolisTransition transition)) 
+                return null;
+
+            FirstUnitCellPosition = transition.FirstUnitCellPosition;
+            SecondUnitCellPosition = transition.SecondUnitCellPosition;
+            AbstractTransition = transition.AbstractTransition;
+            return this;
+
         }
 
         /// <inheritdoc />

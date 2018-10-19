@@ -10,8 +10,8 @@ namespace Mocassin.Model.Particles
     internal class ParticleUpdateManager : ModelUpdateManager<ParticleModelData, ParticleEventManager>
     {
         /// <inheritdoc />
-        public ParticleUpdateManager(ParticleModelData baseData, ParticleEventManager eventManager, IModelProject modelProject)
-            : base(baseData, eventManager, modelProject)
+        public ParticleUpdateManager(ParticleModelData modelData, ParticleEventManager eventManager, IModelProject modelProject)
+            : base(modelData, eventManager, modelProject)
         {
         }
     }

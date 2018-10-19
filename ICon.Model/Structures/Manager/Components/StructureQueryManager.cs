@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Basic implementation of the structure query manager that handles safe data queries and service requests to the structure manager from outside sources
+    ///     Basic implementation of the structure query manager that handles safe data queries and service requests to the
+    ///     structure manager from outside sources
     /// </summary>
-    internal class StructureQueryManager : ModelQueryManager<StructureModelData, IStructureDataPort, StructureDataCache, IStructureCachePort>, IStructureQueryPort
+    internal class StructureQueryManager :
+        ModelQueryManager<StructureModelData, IStructureDataPort, StructureModelCache, IStructureCachePort>, IStructureQueryPort
     {
-        /// <summary>
-        /// Creates new query manager for the provided structure data objects using the defined data access locker
-        /// </summary>
-        /// <param name="baseData"></param>
-        /// <param name="cacheData"></param>
-        /// <param name="lockSource"></param>
-        public StructureQueryManager(StructureModelData baseData, StructureDataCache cacheData, AccessLockSource lockSource) : base(baseData, cacheData, lockSource)
+        /// <inheritdoc />
+        public StructureQueryManager(StructureModelData modelData, StructureModelCache modelCache, AccessLockSource lockSource)
+            : base(modelData, modelCache, lockSource)
         {
-
         }
     }
 }

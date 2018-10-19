@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IKineticTransitionModelBuilder"/>
+    /// <inheritdoc cref="IKineticTransitionModelBuilder" />
     public class KineticTransitionModelBuilder : TransitionModelBuilder, IKineticTransitionModelBuilder
     {
         /// <inheritdoc />
@@ -40,6 +39,7 @@ namespace Mocassin.Model.Translator.ModelContext
                     inverseModel.ModelId = index++;
                     inverseModels.Add(transitionModel.InverseTransitionModel);
                 }
+
                 transitionModel.InverseTransitionModel = inverseModel;
             }
 
@@ -53,15 +53,15 @@ namespace Mocassin.Model.Translator.ModelContext
             return resultModels;
         }
 
-        
+
         /// <summary>
-        /// Creates a single kinetic transition model with rule models and mapping models
+        ///     Creates a single kinetic transition model with rule models and mapping models
         /// </summary>
         /// <param name="transition"></param>
         /// <returns></returns>
         protected IKineticTransitionModel CreateTransitionModel(IKineticTransition transition)
         {
-            var transitionModel = new KineticTransitionModel()
+            var transitionModel = new KineticTransitionModel
             {
                 Transition = transition
             };
@@ -74,7 +74,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Determines and creates an effective particle from the passed mobile particle set
+        ///     Determines and creates an effective particle from the passed mobile particle set
         /// </summary>
         /// <param name="mobileParticles"></param>
         /// <remarks> Particle is for calculation purposes only and not part of the actual model data </remarks>
@@ -102,7 +102,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Searches if the effective particle can be found in the model data. Returns null if none is found
+        ///     Searches if the effective particle can be found in the model data. Returns null if none is found
         /// </summary>
         /// <param name="effectiveParticle"></param>
         /// <param name="comparer"></param>
@@ -120,7 +120,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates and adds the abstract movement information to the transition model
+        ///     Creates and adds the abstract movement information to the transition model
         /// </summary>
         /// <param name="transitionModel"></param>
         protected void CreateAndAddAbstractMovement(IKineticTransitionModel transitionModel)
@@ -140,7 +140,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates and adds the rule models and affiliated inversions to a kinetic transition model
+        ///     Creates and adds the rule models and affiliated inversions to a kinetic transition model
         /// </summary>
         /// <param name="transitionModel"></param>
         protected void CreateAndAddRuleModels(IKineticTransitionModel transitionModel)
@@ -151,12 +151,12 @@ namespace Mocassin.Model.Translator.ModelContext
                 .ToList();
 
             CreateCodesAndLinkInverseRuleModels(ruleModels);
-       
+
             transitionModel.RuleModels = ruleModels;
         }
 
         /// <summary>
-        /// Creates a new rule model from a transition rule ith the provided comparer
+        ///     Creates a new rule model from a transition rule ith the provided comparer
         /// </summary>
         /// <param name="kineticRule"></param>
         /// <param name="comparer"></param>
@@ -171,7 +171,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Create all contained kinetic transition mapping models an adds them to the transition model
+        ///     Create all contained kinetic transition mapping models an adds them to the transition model
         /// </summary>
         /// <param name="transitionModel"></param>
         protected void CreateAndAddMappingModels(IKineticTransitionModel transitionModel)
@@ -193,7 +193,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the mapping model for the passed kinetic mapping using the provided abstract movement info
+        ///     Creates the mapping model for the passed kinetic mapping using the provided abstract movement info
         /// </summary>
         /// <param name="kineticMapping"></param>
         /// <param name="abstractMovement"></param>
@@ -209,7 +209,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Adds the 3D and 4D transition sequences to the passed mapping model
+        ///     Adds the 3D and 4D transition sequences to the passed mapping model
         /// </summary>
         /// <param name="mappingModel"></param>
         protected void AddTransitionSequences(IKineticMappingModel mappingModel)
@@ -228,7 +228,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Adds the movement matrix to the passed mapping model using the provided abstract movement description
+        ///     Adds the movement matrix to the passed mapping model using the provided abstract movement description
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <param name="abstractMovement"></param>
@@ -249,7 +249,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Calculates the abstract movement from a list of connector types and the list of affiliated unit cell positions
+        ///     Calculates the abstract movement from a list of connector types and the list of affiliated unit cell positions
         /// </summary>
         /// <param name="connectorTypes"></param>
         /// <param name="positions"></param>
@@ -261,11 +261,12 @@ namespace Mocassin.Model.Translator.ModelContext
             for (var i = 0; i < connectorTypes.Count;)
             {
                 var currentSum = 0;
-                while (i++ < connectorTypes.Count && connectorTypes[i-1] == ConnectorType.Dynamic)
+                while (i++ < connectorTypes.Count && connectorTypes[i - 1] == ConnectorType.Dynamic)
                 {
                     currentSum++;
                     result.Add(1);
                 }
+
                 result.Add(-currentSum);
             }
 
@@ -282,19 +283,19 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Links a self consistent set of mapping models (Mappings that contain their own inversions)
+        ///     Links a self consistent set of mapping models (Mappings that contain their own inversions)
         /// </summary>
         /// <param name="mappingModels"></param>
         protected void LinkSelfConsistentMappingModels(IList<IKineticMappingModel> mappingModels)
         {
             for (var i = 0; i < mappingModels.Count; i++)
             {
-                if (mappingModels[i].InverseIsSet) 
+                if (mappingModels[i].InverseIsSet)
                     continue;
 
                 for (var j = i; j < mappingModels.Count; j++)
                 {
-                    if (mappingModels[j].InverseIsSet) 
+                    if (mappingModels[j].InverseIsSet)
                         continue;
 
                     if (mappingModels[i].LinkIfInverseMatch(mappingModels[j]))
@@ -304,19 +305,16 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates an inverse kinetic transition model if required or if the mappings already contain
-        /// the inversion the original is returned
+        ///     Creates an inverse kinetic transition model if required or if the mappings already contain
+        ///     the inversion the original is returned
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <returns></returns>
         protected IKineticTransitionModel CreateTransitionModelInversion(IKineticTransitionModel transitionModel)
         {
-            if (transitionModel.MappingsContainInversion())
-            {
-                return transitionModel;
-            }
+            if (transitionModel.MappingsContainInversion()) return transitionModel;
 
-            var inverseModel = transitionModel.CreateInverse();        
+            var inverseModel = transitionModel.CreateInverse();
             CreateAndAddMappingModelInversions(transitionModel, inverseModel);
             CreateAndAddRuleModelInversions(transitionModel, inverseModel);
 
@@ -324,7 +322,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Create and add the inverted rules from the source model to the inverted target model
+        ///     Create and add the inverted rules from the source model to the inverted target model
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="inverseModel"></param>
@@ -335,7 +333,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Create and add the inverted rules from the source model to the inverted target model
+        ///     Create and add the inverted rules from the source model to the inverted target model
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="inverseModel"></param>
@@ -346,7 +344,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the inverse kinetic transition rule model and links it to the source model
+        ///     Creates the inverse kinetic transition rule model and links it to the source model
         /// </summary>
         /// <param name="ruleModel"></param>
         /// <returns></returns>
@@ -358,7 +356,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates and the inverse kinetic transition mapping and links it to the source model
+        ///     Creates and the inverse kinetic transition mapping and links it to the source model
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <returns></returns>

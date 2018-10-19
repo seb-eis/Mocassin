@@ -1,92 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Transition data manager that provides safe read only access to the transition base data
+    ///     Transition data manager that provides safe read only access to the transition base data
     /// </summary>
     internal class TransitionDataManager : ModelDataManager<TransitionModelData>, ITransitionDataPort
     {
-        /// <summary>
-        /// Create new transition data manage for the provided data object
-        /// </summary>
-        /// <param name="data"></param>
-        public TransitionDataManager(TransitionModelData data) : base(data)
+        /// <inheritdoc />
+        public TransitionDataManager(TransitionModelData modelData)
+            : base(modelData)
         {
-
         }
 
-        /// <summary>
-        /// Get the abstract transition with the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IAbstractTransition GetAbstractTransition(int index)
         {
             return Data.AbstractTransitions[index];
         }
 
-        /// <summary>
-        /// Get a read only list of all abstract transitions
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IAbstractTransition> GetAbstractTransitions()
         {
             return ReadOnlyListAdapter<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
         }
 
-        /// <summary>
-        /// Get the number of metropolis transitions that are not deprecated
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public int GetKineticTransitionCount()
         {
-            return Data.KineticTransitions.Where(a => !a.IsDeprecated).Count();
+            return Data.KineticTransitions.Count(a => !a.IsDeprecated);
         }
 
-        /// <summary>
-        /// Get a read only list of all kinetic transitions
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IKineticTransition> GetKineticTransitions()
         {
             return ReadOnlyListAdapter<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
         }
 
-        /// <summary>
-        /// Get a read only list of all metropolis transitions
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IMetropolisTransition> GetMetropolisTransitions()
         {
             return ReadOnlyListAdapter<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
         }
 
-        /// <summary>
-        /// Get the number of metropolis transitions that are not deprecated
-        /// </summary>
-        /// <returns></returns>
-        public int GetMetropolisTransitonCount()
+        /// <inheritdoc />
+        public int GetMetropolisTransitionCount()
         {
-            return Data.MetropolisTransitions.Where(a => !a.IsDeprecated).Count();
+            return Data.MetropolisTransitions.Count(a => !a.IsDeprecated);
         }
 
-        /// <summary>
-        /// Get the state exchange group at the specififed index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IStateExchangeGroup GetStateExchangeGroup(int index)
         {
             return Data.StateExchangeGroups[index];
         }
 
         /// <summary>
-        /// Get a read only list of all state exchange groups
+        ///     Get a read only list of all state exchange groups
         /// </summary>
         /// <returns></returns>
         public ReadOnlyListAdapter<IStateExchangeGroup> GetStateExchangeGroups()
@@ -94,21 +66,14 @@ namespace Mocassin.Model.Transitions
             return ReadOnlyListAdapter<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
         }
 
-        /// <summary>
-        /// Get a read only list of all state exchange pairs
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public ReadOnlyListAdapter<IStateExchangePair> GetStateExchangePairs()
         {
             return ReadOnlyListAdapter<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
         }
 
-        /// <summary>
-        /// Get the state exchange pair at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public IStateExchangePair GetStateExchnagePair(int index)
+        /// <inheritdoc />
+        public IStateExchangePair GetStateExchangePair(int index)
         {
             return Data.StateExchangePairs[index];
         }

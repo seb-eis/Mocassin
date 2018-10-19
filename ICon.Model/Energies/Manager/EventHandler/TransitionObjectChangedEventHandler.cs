@@ -9,10 +9,10 @@ namespace Mocassin.Model.Energies.Handler
     ///     Event handler that manages the processing of object change events that the energy manager receives from the
     ///     transition manager event port
     /// </summary>
-    internal class TransitionChangedEventHandler : ObjectChangedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
+    internal class TransitionObjectChangedEventHandler : ObjectChangedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
     {
         /// <inheritdoc />
-        public TransitionChangedEventHandler(IModelProject modelProject, DataAccessSource<EnergyModelData> dataAccessorSource,
+        public TransitionObjectChangedEventHandler(IModelProject modelProject, DataAccessorSource<EnergyModelData> dataAccessorSource,
             EnergyEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {

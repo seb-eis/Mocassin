@@ -3,29 +3,21 @@
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Simulation Vector 4 object. Layout marshals to its binary unmanaged 'C' representation
+    ///     Simulation Vector 4 object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct CVector4
     {
-        [MarshalAs(UnmanagedType.I4)]
-        private int a;
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int A { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int b;
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int B { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int c;
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int C { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int d;
-
-        public int A { get => a; set => a = value; }
-
-        public int B { get => b; set => b = value; }
-
-        public int C { get => c; set => c = value; }
-
-        public int D { get => d; set => d = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int D { get; set; }
     }
 }

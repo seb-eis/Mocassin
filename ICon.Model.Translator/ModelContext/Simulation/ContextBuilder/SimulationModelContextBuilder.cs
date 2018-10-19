@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ISimulationModelContextBuilder"/>
+    /// <inheritdoc cref="ISimulationModelContextBuilder" />
     public class SimulationModelContextBuilder : ModelContextBuilderBase<ISimulationModelContext>, ISimulationModelContextBuilder
     {
         /// <inheritdoc />
@@ -31,7 +28,6 @@ namespace Mocassin.Model.Translator.ModelContext
             modelContext.MetropolisSimulationModels = MetropolisSimulationModelBuilder.BuildModels(metropolisSimulations);
             modelContext.KineticSimulationModels = KineticSimulationModelBuilder.BuildModels(kineticSimulations);
             return modelContext;
-
         }
 
         /// <inheritdoc />

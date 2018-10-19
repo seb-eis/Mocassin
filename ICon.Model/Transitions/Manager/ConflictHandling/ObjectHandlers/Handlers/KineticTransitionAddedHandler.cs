@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
@@ -8,27 +6,18 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Transitions.ConflictHandling
 {
     /// <summary>
-    /// Object handler that handles internal data changes of the transition manager system required after a new kinetic transition input
+    ///     Object handler that handles internal data changes of the transition manager system required after a new kinetic
+    ///     transition input
     /// </summary>
     public class KineticTransitionAddedHandler : KineticTransitionHandlerBase
     {
-        /// <summary>
-        /// Create new kinetic transition added handler with the provided project services and data accessor
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="modelProject"></param>
-        public KineticTransitionAddedHandler(IDataAccessor<TransitionModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        /// <inheritdoc />
+        public KineticTransitionAddedHandler(IDataAccessor<TransitionModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 
-        /// <summary>
-        /// Determine the conflicts induced by the new kinetic transition and update the transition model data structure with the changes
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="dataAccess"></param>
-        /// <param name="projectServices"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ConflictReport HandleConflicts(KineticTransition obj)
         {
             var report = new ConflictReport();
@@ -37,7 +26,8 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         }
 
         /// <summary>
-        /// Creates new rule set and links them to the kinetic parent transition. Additionally adds the new rule set to the model data object with a new indexing
+        ///     Creates new rule set and links them to the kinetic parent transition. Additionally adds the new rule set to the
+        ///     model data object with a new indexing
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="report"></param>

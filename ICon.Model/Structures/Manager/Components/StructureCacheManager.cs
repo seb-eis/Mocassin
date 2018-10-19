@@ -13,14 +13,15 @@ using Mocassin.Symmetry.Analysis;
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Basic implementation of the structure cache manager that provides read only access to the extended 'on demand' structure data
+    ///     Basic implementation of the structure cache manager that provides read only access to the extended 'on demand'
+    ///     structure data
     /// </summary>
-    internal class StructureCacheManager : ModelCacheManager<StructureDataCache, IStructureCachePort>, IStructureCachePort
+    internal class StructureCacheManager : ModelCacheManager<StructureModelCache, IStructureCachePort>, IStructureCachePort
     {
         /// <inheritdoc />
-        public StructureCacheManager(StructureDataCache cache, IModelProject modelProject) : base(cache, modelProject)
+        public StructureCacheManager(StructureModelCache cache, IModelProject modelProject)
+            : base(cache, modelProject)
         {
-
         }
 
         /// <inheritdoc />
@@ -81,9 +82,8 @@ namespace Mocassin.Model.Structures
         public SetList<FractionalPosition> GetExtendedPositionList(in CrystalVector4D vector)
         {
             if (!GetVectorEncoder().TryDecode(vector, out Fractional3D decoded))
-            {
                 throw new ArgumentException("4D vector cannot be decoded into a valid 3D equivalent", nameof(vector));
-            }
+
             return GetExtendedPositionLists()
                 .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStatus.Undefined)))
                 .First();
@@ -108,7 +108,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Creates the extended wyckoff position lists for all dummy positions. Deprecated dummies produce an empty list
+        ///     Creates the extended wyckoff position lists for all dummy positions. Deprecated dummies produce an empty list
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -122,7 +122,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Creates the wyckoff extended position lists for all unit cell positions
+        ///     Creates the wyckoff extended position lists for all unit cell positions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -132,11 +132,11 @@ namespace Mocassin.Model.Structures
             return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
-                .ToList(); 
+                .ToList();
         }
 
         /// <summary>
-        /// Creates the vector encoder for transformations between 3D and 4D systems
+        ///     Creates the vector encoder for transformations between 3D and 4D systems
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -150,22 +150,23 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Creates the linearized version of the extended position list
+        ///     Creates the linearized version of the extended position list
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
         protected SetList<FractionalPosition> CreateLinearizedExtendedPositionList()
         {
-            var result = new SetList<FractionalPosition>(new VectorComparer3D<FractionalPosition>(ModelProject.GeometryNumeric.RangeComparer));
-            foreach (var subList in GetExtendedPositionLists())
-            {
+            var result = new SetList<FractionalPosition>(
+                new VectorComparer3D<FractionalPosition>(ModelProject.GeometryNumeric.RangeComparer));
+
+            foreach (var subList in GetExtendedPositionLists()) 
                 result.Add(subList);
-            }
+
             return result;
         }
 
         /// <summary>
-        /// Creates all encoded versions of the extended position lists
+        ///     Creates all encoded versions of the extended position lists
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -179,18 +180,19 @@ namespace Mocassin.Model.Structures
                 foreach (var position in positionSet)
                 {
                     if (!encoder.TryEncode(position, out var encoded))
-                    {
                         throw new InvalidOperationException("Encoding of basic unit cell vectors did not yield a valid 4D position");
-                    }
+
                     list.Add(encoded);
                 }
+
                 result.Add(list);
             }
+
             return result;
         }
 
         /// <summary>
-        /// Creates a sorted dictionary that assigns each extended position index the unit cell position that belongs to it
+        ///     Creates a sorted dictionary that assigns each extended position index the unit cell position that belongs to it
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -198,24 +200,23 @@ namespace Mocassin.Model.Structures
         {
             var result = new SortedDictionary<int, IUnitCellPosition>();
             var ucpList = ModelProject
-                .GetManager<IStructureManager>()
-                .QueryPort
+                .GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetUnitCellPositions());
 
-            int index = 0;
+            var index = 0;
             foreach (var extendedList in GetEncodedExtendedPositionLists())
             {
                 foreach (var vector in extendedList)
-                {
                     result.Add(vector.P, ucpList[index]);
-                }
+
                 index++;
             }
+
             return result;
         }
 
         /// <summary>
-        /// Creates the unit cell provider for the extended unit cell
+        ///     Creates the unit cell provider for the extended unit cell
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -225,7 +226,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Creates the full unit cell provider
+        ///     Creates the full unit cell provider
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -235,17 +236,19 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Creates a unit cell provider that carries only occupations as entries
+        ///     Creates a unit cell provider that carries only occupations as entries
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
         protected IUnitCellProvider<int> CreateOccupationUnitCellProvider()
         {
-            return CellWrapperFactory.CreateUnitCell(GetLinearizedExtendedPositionList().Select(value => value.OccupationIndex).ToList(), GetVectorEncoder());
+            return CellWrapperFactory.CreateUnitCell(GetLinearizedExtendedPositionList().Select(value => value.OccupationIndex).ToList(),
+                GetVectorEncoder());
         }
 
         /// <summary>
-        /// Creates a call delegate to create the extended position list of the provided vector or an empty set if the deprecated flag is passed
+        ///     Creates a call delegate to create the extended position list of the provided vector or an empty set if the
+        ///     deprecated flag is passed
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="isDeprecated"></param>
@@ -254,7 +257,7 @@ namespace Mocassin.Model.Structures
         {
             SetList<Fractional3D> Create()
             {
-                return isDeprecated 
+                return isDeprecated
                     ? new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer)
                     : ModelProject.SpaceGroupService.GetAllWyckoffPositions(vector);
             }
@@ -263,7 +266,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Creates a call delegate to create the extended position list of the provided fractional position or an empty set if the depreacted flag is passed
+        ///     Creates a call delegate to create the extended position list of the provided fractional position or an empty set if
+        ///     the deprecated flag is passed
         /// </summary>
         /// <param name="position"></param>
         /// <param name="isDeprecated"></param>
@@ -272,7 +276,7 @@ namespace Mocassin.Model.Structures
         {
             SetList<FractionalPosition> Create()
             {
-                return isDeprecated 
+                return isDeprecated
                     ? new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>())
                     : ModelProject.SpaceGroupService.GetAllWyckoffPositions(position);
             }

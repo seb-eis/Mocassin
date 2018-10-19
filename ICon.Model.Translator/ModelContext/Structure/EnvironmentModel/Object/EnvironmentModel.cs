@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Mocassin.Model.Structures;
 using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IEnvironmentModel"/>
+    /// <inheritdoc cref="IEnvironmentModel" />
     public class EnvironmentModel : ModelComponentBase, IEnvironmentModel
     {
         /// <inheritdoc />

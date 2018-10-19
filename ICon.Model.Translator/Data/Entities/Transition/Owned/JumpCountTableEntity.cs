@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Jump count table entity alias class. Defines a 2D jump count lookup table for the simulation database
+    /// </summary>
     public class JumpCountTableEntity : InteropBinaryArray<int>
     {
-
     }
 }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Long pointer object. Placeholder for 8 byte pointers on unmanaged objects
+    ///     Long pointer object. Placeholder for 8 byte pointers on unmanaged objects
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size =8)]
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
     public readonly struct CLongPtr
     {
-        [MarshalAs(UnmanagedType.I8)]
+        [MarshalAs(UnmanagedType.I8)] 
         private readonly long value;
     }
 }

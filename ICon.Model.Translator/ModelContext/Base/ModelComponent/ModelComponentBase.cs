@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator.ModelContext
+﻿namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    /// Abstract base class for model component implementations that form the model data context
+    ///     Abstract base class for model component implementations that form the model data context
     /// </summary>
     public abstract class ModelComponentBase : IModelComponent
     {

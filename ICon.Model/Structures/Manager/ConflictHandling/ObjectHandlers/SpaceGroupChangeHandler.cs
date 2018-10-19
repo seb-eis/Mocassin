@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
@@ -9,33 +8,22 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Structures.ConflictHandling
 {
     /// <summary>
-    /// Resolves a change in the space group information and corrects the dependent internal data of the structure object
+    ///     Resolves a change in the space group information and corrects the dependent internal data of the structure object
     /// </summary>
     public class SpaceGroupChangeHandler : ObjectConflictHandler<SpaceGroupInfo, StructureModelData>
     {
-        /// <summary>
-        /// Create new space group change handler with the provided data access and project services
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="modelProject"></param>
-        public SpaceGroupChangeHandler(IDataAccessor<StructureModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        /// <inheritdoc />
+        public SpaceGroupChangeHandler(IDataAccessor<StructureModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 
-
-        /// <summary>
-        /// Resolves the conflicts that are the direct result of a change in the space group model parameter (Loads new space group into space group service if not already done)
-        /// </summary>
-        /// <param name="groupInfo"></param>
-        /// <param name="dataAccess"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ConflictReport HandleConflicts(SpaceGroupInfo groupInfo)
         {
-            if (ModelProject.SpaceGroupService.TryLoadGroup(groupInfo.GroupEntry) == false)
-            {
+            if (!ModelProject.SpaceGroupService.TryLoadGroup(groupInfo.GroupEntry))
                 throw new InvalidOperationException("Space group loading to service failed");
-            }
+
             var report = new ConflictReport();
             MatchCrystalSystemAndCellParameters(report);
             MatchUnitCellPositionsToSpaceGroup(report);
@@ -43,23 +31,22 @@ namespace Mocassin.Model.Structures.ConflictHandling
         }
 
         /// <summary>
-        /// Matches the crystal system to the space group and checks if the current cell parameters can be applied (Loads default values of the new system if not possible)
+        ///     Matches the crystal system to the space group and checks if the current cell parameters can be applied (Loads
+        ///     default values of the new system if not possible)
         /// </summary>
         /// <param name="report"></param>
         protected void MatchCrystalSystemAndCellParameters(ConflictReport report)
         {
             var oldParameters = DataAccess.Query(data => data.CrystalParameters);
-            if (ModelProject.CrystalSystemService.LoadNewSystem(ModelProject.SpaceGroupService.LoadedGroup) == false)
-            {
+            if (!ModelProject.CrystalSystemService.LoadNewSystem(ModelProject.SpaceGroupService.LoadedGroup))
                 return;
-            }
 
-            if (ModelProject.CrystalSystemService.TrySetParameters(oldParameters.ParameterSet) == false)
+            if (!ModelProject.CrystalSystemService.TrySetParameters(oldParameters.ParameterSet))
             {
                 OverwriteCellParameters(ModelProject.CrystalSystemService.CrystalSystem.GetDefaultParameterSet());
 
-                var detail0 = "The original cell parameters are no longer compatible with the new space group";
-                var detail1 = "Conflict resolved by loading a default parameter set for the new crystal system";
+                const string detail0 = "The original cell parameters are no longer compatible with the new space group";
+                const string detail1 = "Conflict resolved by loading a default parameter set for the new crystal system";
                 report.Warnings.Add(ModelMessageSource.CreateContentResetWarning(this, detail0, detail1));
             }
 
@@ -67,45 +54,47 @@ namespace Mocassin.Model.Structures.ConflictHandling
         }
 
         /// <summary>
-        /// Checks the unit cell position list from first to last and marks later duplicates as deprecated if they produce equal sequence of wyckoffs to former positions
+        ///     Checks the unit cell position list from first to last and marks later duplicates as deprecated if they produce
+        ///     equal sequence of wyckoffs to former positions
         /// </summary>
         /// <param name="report"></param>
         protected void MatchUnitCellPositionsToSpaceGroup(ConflictReport report)
         {
-            var currentPositions = DataAccess.Query(data => data.UnitCellPositions.Select((position) => position.Vector.AsFractional()));
+            var currentPositions = DataAccess.Query(data => data.UnitCellPositions.Select(position => position.Vector.AsFractional()));
             var extendedPositions = ModelProject.SpaceGroupService.GetAllWyckoffPositions(currentPositions);
 
             var comparer = ModelProject.SpaceGroupService.Comparer.ToEqualityComparer();
 
-            for (int i = 0; i < extendedPositions.Count; i++)
+            for (var i = 0; i < extendedPositions.Count; i++)
             {
-                if (DataAccess.Query(data => data.UnitCellPositions[i].IsDeprecated == false))
+                var i1 = i;
+                if (!DataAccess.Query(data => data.UnitCellPositions[i1].IsDeprecated))
                 {
-                    for (int j = i + 1; j < extendedPositions.Count; j++)
+                    for (var j = i + 1; j < extendedPositions.Count; j++)
                     {
-                        if (extendedPositions[i].SequenceEqual(extendedPositions[j], comparer) == true)
-                        {
-                            DataAccess.Query(data => data.UnitCellPositions[j].Deprecate());
+                        if (!extendedPositions[i].SequenceEqual(extendedPositions[j], comparer))
+                            continue;
 
-                            var detail0 = $"The unit cell position at index ({j}) is now equivalent to position at index ({i})";
-                            var detail1 = $"Conflict was resolved by marking position at index ({j}) as deprecated";
-                            report.Warnings.Add(ModelMessageSource.CreateConflictHandlingWarning(this, detail0, detail1));
-                        }
+                        var j1 = j;
+                        DataAccess.Query(data => data.UnitCellPositions[j1].Deprecate());
+
+                        var detail0 = $"The unit cell position at index ({j}) is now equivalent to position at index ({i})";
+                        var detail1 = $"Conflict was resolved by marking position at index ({j}) as deprecated";
+                        report.Warnings.Add(ModelMessageSource.CreateConflictHandlingWarning(this, detail0, detail1));
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Overwrites the existing cell parameters by a new set both in the data and project services
+        ///     Overwrites the existing cell parameters by a new set both in the data and project services
         /// </summary>
         /// <param name="parameters"></param>
         protected void OverwriteCellParameters(CellParameters parameters)
         {
-            if (ModelProject.CrystalSystemService.TrySetParameters(parameters.ParameterSet) == false)
-            {
+            if (!ModelProject.CrystalSystemService.TrySetParameters(parameters.ParameterSet))
                 throw new InvalidOperationException("Function was called with an invalid parameter set");
-            }
+
             DataAccess.Query(data => data.CrystalParameters = parameters);
         }
     }

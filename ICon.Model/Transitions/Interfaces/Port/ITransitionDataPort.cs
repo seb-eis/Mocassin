@@ -4,71 +4,71 @@ using Mocassin.Model.Basic;
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Represents a read only data access port for the transition reference data
+    ///     Represents a read only data access port for the transition reference data
     /// </summary>
     public interface ITransitionDataPort : IModelDataPort
     {
         /// <summary>
-        /// Get a read only list containing all state exchange pairs
+        ///     Get a read only list containing all state exchange pairs
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IStateExchangePair> GetStateExchangePairs();
 
         /// <summary>
-        /// Get the state exchaage pair at the specified index
+        ///     Get the state exchange pair at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IStateExchangePair GetStateExchnagePair(int index);
+        IStateExchangePair GetStateExchangePair(int index);
 
         /// <summary>
-        /// Get a read only list containing all state exchange groups groups
+        ///     Get a read only list containing all state exchange groups groups
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IStateExchangeGroup> GetStateExchangeGroups();
 
         /// <summary>
-        /// Get the property group at the specififed index
+        ///     Get the property group at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         IStateExchangeGroup GetStateExchangeGroup(int index);
 
         /// <summary>
-        /// Get a read only list containing all abstract transitions
+        ///     Get a read only list containing all abstract transitions
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IAbstractTransition> GetAbstractTransitions();
 
         /// <summary>
-        /// Get the abstract transition with the provided index
+        ///     Get the abstract transition with the provided index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         IAbstractTransition GetAbstractTransition(int index);
 
         /// <summary>
-        /// Get a read only list containing all kinetic transitions
+        ///     Get a read only list containing all kinetic transitions
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IKineticTransition> GetKineticTransitions();
 
         /// <summary>
-        /// Get a read only list containing all metropolis transitions
+        ///     Get a read only list containing all metropolis transitions
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IMetropolisTransition> GetMetropolisTransitions();
 
         /// <summary>
-        /// Get the number of kinetic transitions
+        ///     Get the number of kinetic transitions
         /// </summary>
         /// <returns></returns>
         int GetKineticTransitionCount();
 
         /// <summary>
-        /// Get the number of metropolis transitions
+        ///     Get the number of metropolis transitions
         /// </summary>
         /// <returns></returns>
-        int GetMetropolisTransitonCount();
+        int GetMetropolisTransitionCount();
     }
 }

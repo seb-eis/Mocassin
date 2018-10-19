@@ -17,8 +17,8 @@ namespace Mocassin.Model.Energies.ConflictHandling
     public class UnstableEnvironmentChangeHandler : ObjectConflictHandler<UnstableEnvironment, EnergyModelData>
     {
         /// <inheritdoc />
-        public UnstableEnvironmentChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        public UnstableEnvironmentChangeHandler(IDataAccessor<EnergyModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 

@@ -15,7 +15,7 @@ namespace Mocassin.Model.Basic
         where T3 : ModelEventManager
     {
         /// <inheritdoc />
-        protected ObjectAddedEventHandler(IModelProject modelProject, DataAccessSource<T2> dataAccessorSource, T3 eventManager)
+        protected ObjectAddedEventHandler(IModelProject modelProject, DataAccessorSource<T2> dataAccessorSource, T3 eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
         }

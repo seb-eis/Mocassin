@@ -9,7 +9,7 @@ namespace Mocassin.Model.Simulations
     /// <summary>
     /// Implementation of the simulation manager that handles the creation and packaging of simulation sets for simulation encoding
     /// </summary>
-    internal class SimulationManager : ModelManager<SimulationModelData, SimulationDataCache, SimulationDataManager, SimulationCacheManager, SimulationInputManager, SimulationQueryManager, SimulationEventManager, SimulationUpdateManager>, ISimulationManager
+    internal class SimulationManager : ModelManager<SimulationModelData, SimulationModelCache, SimulationDataManager, SimulationCacheManager, SimulationInputManager, SimulationQueryManager, SimulationEventManager, SimulationUpdateManager>, ISimulationManager
     {
         /// <summary>
         /// Get access to the simulation manager query port

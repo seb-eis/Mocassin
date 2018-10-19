@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Lattice info interop object. Boxes a marshal struct into a .NET object
+    /// </summary>
     public class LatticeInfo : InteropObject<CLatticeInfo>
     {
+        /// <inheritdoc />
         public LatticeInfo()
         {
         }
 
-        public LatticeInfo(CLatticeInfo structure) : base(structure)
+        /// <inheritdoc />
+        public LatticeInfo(CLatticeInfo structure)
+            : base(structure)
         {
         }
     }

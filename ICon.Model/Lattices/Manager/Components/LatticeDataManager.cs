@@ -16,8 +16,8 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Create new lattice data manager for the provided data object
         /// </summary>
-        /// <param name="data"></param>
-        public LatticeDataManager(LatticeModelData data) : base(data)
+        /// <param name="modelData"></param>
+        public LatticeDataManager(LatticeModelData modelData) : base(modelData)
         {
         }
 

@@ -1,52 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Structures
 {
-    /// <summary>
-    /// Basic position dummy that is used only for visual purposes in the model and is not actually part of the extended position list
-    /// </summary>
-    [DataContract(Name ="DummyPosition")]
+    /// <inheritdoc cref="Mocassin.Model.Structures.IPositionDummy"/>
+    [DataContract(Name = "DummyPosition")]
     public class PositionDummy : ModelObject, IPositionDummy
     {
         /// <summary>
-        /// The fractional position 3D vector data
+        ///     The fractional position 3D vector data
         /// </summary>
         [DataMember]
         public DataVector3D Vector { get; set; }
 
-        /// <summary>
-        /// Interface access to the fractional position vector as a struct
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         Fractional3D IPositionDummy.Vector => Vector.AsFractional();
 
-        /// <summary>
-        /// Get the model object name
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string GetObjectName()
         {
             return "'Dummy Position'";
         }
 
-        /// <summary>
-        /// Copies values in the consumed interface and returns the object as a model object (Returns null if the consume failed due to wrong interface type)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastIfNotDeprecated<IPositionDummy>(obj) is var dummy)
-            {
-                Vector = new DataVector3D(dummy.Vector);
-                return this;
-            }
-            return null;
+            if (!(CastIfNotDeprecated<IPositionDummy>(obj) is IPositionDummy dummy))
+                return null;
+
+            Vector = new DataVector3D(dummy.Vector);
+            return this;
+
         }
     }
 }

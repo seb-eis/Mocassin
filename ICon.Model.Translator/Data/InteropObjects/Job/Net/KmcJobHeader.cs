@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Kmc job header interop object. Boxes a marshal struct into a .NET object
+    /// </summary>
     public class KmcJobHeader : InteropObject<CKmcJobHeader>
     {
+        /// <inheritdoc />
         public KmcJobHeader()
         {
         }
 
-        public KmcJobHeader(CKmcJobHeader structure) : base(structure)
+        /// <inheritdoc />
+        public KmcJobHeader(CKmcJobHeader structure)
+            : base(structure)
         {
         }
     }

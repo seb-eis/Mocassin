@@ -6,20 +6,20 @@ using Mocassin.Model.Transitions;
 namespace Mocassin.Model.Energies.Handler
 {
     /// <summary>
-    ///     Event handler that manages the processing of object reindexing events that the energy manager receives from the
+    ///     Event handler that manages the processing of object added events that the energy manager receives from the
     ///     transition manager event port
     /// </summary>
-    internal class TransitionIndexingChangedHandler : ObjectIndexingChangedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
+    internal class TransitionObjectAddedEventHandler : ObjectAddedEventHandler<ITransitionEventPort, EnergyModelData, EnergyEventManager>
     {
         /// <inheritdoc />
-        public TransitionIndexingChangedHandler(IModelProject modelProject,
-            DataAccessSource<EnergyModelData> dataAccessorSource, EnergyEventManager eventManager)
+        public TransitionObjectAddedEventHandler(IModelProject modelProject, DataAccessorSource<EnergyModelData> dataAccessorSource,
+            EnergyEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
         }
 
         /// <summary>
-        ///     Event reaction to a change in one of the abstract transition objects
+        ///     Event reaction to a change in on of the abstract transition objects
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>

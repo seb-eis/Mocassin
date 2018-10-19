@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
@@ -10,7 +8,7 @@ using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IKineticRuleModel"/>
+    /// <inheritdoc cref="IKineticRuleModel" />
     public class KineticRuleModel : TransitionRuleModel, IKineticRuleModel
     {
         /// <inheritdoc />
@@ -68,10 +66,10 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override bool IsInverse(ITransitionRuleModel ruleModel)
         {
-            if (!(ruleModel is IKineticRuleModel inverseRuleModel)) 
+            if (!(ruleModel is IKineticRuleModel inverseRuleModel))
                 return false;
 
-            if (inverseRuleModel.AbstractTransition != AbstractTransition) 
+            if (inverseRuleModel.AbstractTransition != AbstractTransition)
                 return false;
 
             return StartState.LexicographicCompare(inverseRuleModel.FinalState) == 0 &&
@@ -79,17 +77,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Inverts the charge transport matrix
+        ///     Inverts the charge transport matrix
         /// </summary>
         /// <returns></returns>
         protected Matrix2D GetInvertedTransportMatrix()
         {
             var result = new Matrix2D(ChargeTransportMatrix.Rows, ChargeTransportMatrix.Cols, ChargeTransportMatrix.Comparer);
 
-            for (var i = 0; i < result.Cols; i++)
-            {
+            for (var i = 0; i < result.Cols; i++) 
                 result[0, i] = ChargeTransportMatrix[0, result.Cols - i - 1];
-            }
 
             return result;
         }

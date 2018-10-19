@@ -9,15 +9,10 @@ namespace Mocassin.Model.Structures.Handler
     /// <summary>
     /// Event handler that manages the processing of object added events that the structure manager receives from the particle manager event port
     /// </summary>
-    internal class NewParticleObjectsHandler : ObjectAddedEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
+    internal class ParticleObjectAddedEventHandler : ObjectAddedEventHandler<IParticleEventPort, StructureModelData, StructureEventManager>
     {
-        /// <summary>
-        /// Create new handler using the provided project services, data access provider and event manager
-        /// </summary>
-        /// <param name="modelProject"></param>
-        /// <param name="dataAccessorSource"></param>
-        /// <param name="eventManager"></param>
-        public NewParticleObjectsHandler(IModelProject modelProject, DataAccessSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
+        /// <inheritdoc />
+        public ParticleObjectAddedEventHandler(IModelProject modelProject, DataAccessorSource<StructureModelData> dataAccessorSource, StructureEventManager eventManager)
             : base(modelProject, dataAccessorSource, eventManager)
         {
 

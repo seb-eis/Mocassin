@@ -28,11 +28,11 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Creates a new query manager from the provided data object and data locker
         /// </summary>
-        /// <param name="baseData"></param>
+        /// <param name="modelData"></param>
         /// <param name="lockSource"></param>
-        public ModelQueryManager(TData baseData, AccessLockSource lockSource)
+        public ModelQueryManager(TData modelData, AccessLockSource lockSource)
         {
-            DataReaderSource = Basic.DataReaderSource.Create(baseData, baseData.AsReadOnly(), lockSource);
+            DataReaderSource = Basic.DataReaderSource.Create(modelData, modelData.AsReadOnly(), lockSource);
         }
 
         /// <inheritdoc />
@@ -93,13 +93,13 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Creates a new query manager from the provided data objects and data locker
         /// </summary>
-        /// <param name="baseData"></param>
-        /// <param name="cacheModel"></param>
+        /// <param name="modelData"></param>
+        /// <param name="modelCacheModel"></param>
         /// <param name="lockSource"></param>
-        public ModelQueryManager(TData baseData, TDataCache cacheModel, AccessLockSource lockSource)
-            : base(baseData, lockSource)
+        public ModelQueryManager(TData modelData, TDataCache modelCacheModel, AccessLockSource lockSource)
+            : base(modelData, lockSource)
         {
-            CacheReaderSource = Basic.DataReaderSource.Create(cacheModel, cacheModel.AsReadOnly(), lockSource);
+            CacheReaderSource = Basic.DataReaderSource.Create(modelCacheModel, modelCacheModel.AsReadOnly(), lockSource);
         }
 
         /// <inheritdoc />

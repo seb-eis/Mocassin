@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.Serialization;
 using Mocassin.Framework.Provider;
 using Mocassin.Model.Basic;
@@ -8,16 +6,20 @@ using Mocassin.Model.Basic;
 namespace Mocassin.Model.Simulations
 {
     /// <summary>
-    /// The simulation setting flag that defines basic settings that can be used with both metropolis and kinetic simulations
+    ///     The simulation setting flag that defines basic settings that can be used with both metropolis and kinetic
+    ///     simulations
     /// </summary>
     [Flags]
     public enum SimulationBaseFlags
     {
-        UseDynamicBreak = 0b1, UseCheckpointSystem = 0b10, AutoDetectStuckSimulation = 0b100, CopyStdoutToFile = 0b1000,
+        UseDynamicBreak = 0b1,
+        UseCheckpointSystem = 0b10,
+        AutoDetectStuckSimulation = 0b100,
+        CopyStdoutToFile = 0b1000,
         FullDebugStateDump = 0b10000
     }
 
-    /// <inheritdoc cref="ISimulation"/>
+    /// <inheritdoc cref="ISimulation" />
     /// <remarks> Abstract base class for simulation implementations </remarks>
     [DataContract]
     public abstract class SimulationBase : ModelObject, ISimulation
@@ -59,7 +61,8 @@ namespace Mocassin.Model.Simulations
         public int JobCount { get; set; }
 
         /// <summary>
-        /// Load information for an external background provider source that is used to create an energy background for the simulation
+        ///     Load information for an external background provider source that is used to create an energy background for the
+        ///     simulation
         /// </summary>
         [DataMember]
         public ExternalLoadInfo EnergyBackgroundProviderInfo { get; set; }

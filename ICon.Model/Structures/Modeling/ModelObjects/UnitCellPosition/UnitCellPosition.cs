@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
@@ -8,92 +6,70 @@ using Mocassin.Model.Particles;
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Enum to describe the unit cell position status (Stable, unstable,...)
+    ///     Enum to describe the unit cell position status (Stable, unstable,...)
     /// </summary>
-    public enum PositionStatus : int
+    public enum PositionStatus
     {
-        Undefined, Stable, Unstable
+        Undefined,
+        Stable,
+        Unstable
     }
 
-    /// <summary>
-    /// Unit cell position that is describes occupation and fractional coordinates of a unit cell entry
-    /// </summary>
+    /// <inheritdoc cref="Mocassin.Model.Structures.IUnitCellPosition"/>
     [DataContract]
     public class UnitCellPosition : ModelObject, IUnitCellPosition
     {
-        /// <summary>
-        /// Interface access to the fractional vector as a value type
-        /// </summary>
+        /// <inheritdoc />
         [IgnoreDataMember]
         Fractional3D IUnitCellPosition.Vector => Vector.AsFractional();
 
         /// <summary>
-        /// The fractional position vector of the unit cell position
+        ///     The fractional position vector of the unit cell position
         /// </summary>
         [DataMember]
         public DataVector3D Vector { get; set; }
 
-        /// <summary>
-        /// The particle set that describes the occupation
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [IndexResolved]
         public IParticleSet OccupationSet { get; set; }
 
-        /// <summary>
-        /// The status flag of the position
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public PositionStatus Status { get; set; }
 
-        /// <summary>
-        /// Get a string that represents the name of the object type
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override string GetObjectName()
         {
             return "'Unit Cell Position'";
         }
 
-        /// <summary>
-        /// Consumes the passed model interface and returns this object as model object (Retruns null if the consume failed)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastIfNotDeprecated<IUnitCellPosition>(obj) is var position)
-            {
-                Status = position.Status;
-                Vector = new DataVector3D(position.Vector);
-                OccupationSet = position.OccupationSet;
-                return this;
-            }
-            return null;
+            if (!(CastIfNotDeprecated<IUnitCellPosition>(obj) is IUnitCellPosition position))
+                return null;
+
+            Status = position.Status;
+            Vector = new DataVector3D(position.Vector);
+            OccupationSet = position.OccupationSet;
+            return this;
+
         }
 
-        /// <summary>
-        /// Creates a fractional position struct from the unit cell position information
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public FractionalPosition AsPosition()
         {
             return new FractionalPosition(Vector.AsFractional(), OccupationSet.Index, Status);
         }
 
-        /// <summary>
-        /// Checks if the position is stable and not deprecated
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool IsValidAndStable()
         {
             return !IsDeprecated && Status == PositionStatus.Stable;
         }
 
-        /// <summary>
-        /// Cehcks if the position is unstable and not deprecated
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool IsValidAndUnstable()
         {
             return !IsDeprecated && Status == PositionStatus.Unstable;

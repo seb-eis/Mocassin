@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using Mocassin.Framework.Processing;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures.ConflictHandling;
 
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Basic implementation of the structure input manager that handles validated adding, removal and replacement of structure base data by an outside source
+    ///     Basic implementation of the structure input manager that handles validated adding, removal and replacement of
+    ///     structure base data by an outside source
     /// </summary>
-    internal class StructureInputManager : ModelInputManager<StructureModelData, IStructureDataPort, StructureEventManager>, IStructureInputPort
+    internal class StructureInputManager : ModelInputManager<StructureModelData, IStructureDataPort, StructureEventManager>,
+        IStructureInputPort
     {
-        /// <summary>
-        /// Creates new structre input manager for the provided data object, event manager and project services
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="events"></param>
-        /// <param name="services"></param>
-        public StructureInputManager(StructureModelData data, StructureEventManager events, IModelProject services) : base(data, events, services)
+        /// <inheritdoc />
+        public StructureInputManager(StructureModelData modelData, StructureEventManager eventManager, IModelProject project)
+            : base(modelData, eventManager, project)
         {
-
         }
 
         /// <summary>
-        /// Tries to register a new unit cell position in the manager if it passes validation (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register a new unit cell position in the manager if it passes validation (Awaits distribution of
+        ///     affiliated events on operation success)
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
@@ -35,7 +31,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to remove a unit cell position from the manager by deprecation (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove a unit cell position from the manager by deprecation (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
@@ -46,7 +43,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to replace a unit cell position from the manager if it passes validation (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace a unit cell position from the manager if it passes validation (Awaits distribution of affiliated
+        ///     events on operation success)
         /// </summary>
         /// <param name="orgPosition"></param>
         /// <param name="newPosition"></param>
@@ -58,7 +56,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to register a new unit cell position in the manager if it passes validation (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register a new unit cell position in the manager if it passes validation (Awaits distribution of
+        ///     affiliated events on operation success)
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
@@ -69,7 +68,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to remove a unit cell position from the manager by deprecation (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove a unit cell position from the manager by deprecation (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
@@ -80,7 +80,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to replace a unit cell position from the manager if it passes validation (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace a unit cell position from the manager if it passes validation (Awaits distribution of affiliated
+        ///     events on operation success)
         /// </summary>
         /// <param name="orgPosition"></param>
         /// <param name="newPosition"></param>
@@ -92,7 +93,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// tries to set new cell parameters if they pass validation (Awaits distribution of affiliated events on operation success)
+        ///     tries to set new cell parameters if they pass validation (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="cellParams"></param>
         /// <returns></returns>
@@ -103,7 +105,8 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to set a new space group info if it passes validation and resolves potential conflicts (Distributes affiliated events on operation success)
+        ///     Tries to set a new space group info if it passes validation and resolves potential conflicts (Distributes
+        ///     affiliated events on operation success)
         /// </summary>
         /// <param name="groupInfo"></param>
         /// <returns></returns>
@@ -114,7 +117,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <summary>
-        /// Tries to set a new structure info if it passes validation (Distributes affiliated events on operation success)
+        ///     Tries to set a new structure info if it passes validation (Distributes affiliated events on operation success)
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
@@ -124,23 +127,17 @@ namespace Mocassin.Model.Structures
             return DefaultSetModelParameter(info, accessor => accessor.Query(data => data.StructureInfo), false);
         }
 
-        /// <summary>
-        /// Tries to clean deprecated model objects from the manager (Distributes reindexing events on operation succes)
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();
         }
 
-        /// <summary>
-        /// Overrides the default empty conflict resolver by a custom resolver for internal structure conflicts
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override IDataConflictHandlerProvider<StructureModelData> CreateDataConflictHandlerProvider()
         {
-            return new ConflictHandling.StructureDataConflictHandlerProvider(ModelProject);
+            return new StructureDataConflictHandlerProvider(ModelProject);
         }
     }
 }

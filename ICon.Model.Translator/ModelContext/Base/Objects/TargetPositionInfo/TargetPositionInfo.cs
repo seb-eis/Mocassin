@@ -1,6 +1,4 @@
-﻿using Mocassin.Mathematics.Coordinates;
-using Mocassin.Symmetry.SpaceGroups;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext

@@ -155,22 +155,22 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Provider for safe data accessors to the reference data object
         /// </summary>
-        protected DataAccessSource<TData> DataAccessorSource { get; set; }
+        protected DataAccessorSource<TData> DataAccessorSource { get; set; }
 
         /// <summary>
         ///     Creates new update manager for the provided base data, event manager and project services
         /// </summary>
-        /// <param name="baseData"></param>
+        /// <param name="modelData"></param>
         /// <param name="eventManager"></param>
         /// <param name="modelProject"></param>
-        protected ModelUpdateManager(TData baseData, TEventManager eventManager, IModelProject modelProject)
+        protected ModelUpdateManager(TData modelData, TEventManager eventManager, IModelProject modelProject)
         {
-            if (baseData == null) 
-                throw new ArgumentNullException(nameof(baseData));
+            if (modelData == null) 
+                throw new ArgumentNullException(nameof(modelData));
 
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
             EventManager = eventManager ?? throw new ArgumentNullException(nameof(eventManager));
-            DataAccessorSource = Basic.DataAccessorSource.Create(baseData, modelProject.AccessLockSource);
+            DataAccessorSource = Basic.DataAccessorSource.Create(modelData, modelProject.AccessLockSource);
             InitializeEventHandlingSystem();
         }
 

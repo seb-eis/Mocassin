@@ -1,7 +1,4 @@
-﻿using Mocassin.Symmetry.Analysis;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mocassin.Model.Translator.ModelContext
 {

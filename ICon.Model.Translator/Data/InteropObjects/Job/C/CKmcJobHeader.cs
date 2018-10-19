@@ -1,42 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
+    ///     Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 40)]
     public struct CKmcJobHeader
     {
-        [MarshalAs(UnmanagedType.I8)]
-        private long jobFalgs;
-
-        [MarshalAs(UnmanagedType.R8)]
-        double fieldMagnitude;
-
-        [MarshalAs(UnmanagedType.R8)]
-        double baseFrequency;
-
-        [MarshalAs(UnmanagedType.R8)]
-        double fixedNormFactor;
-
-        [MarshalAs(UnmanagedType.I4)]
-        private int dynamicTrackerCount;
-
-        [MarshalAs(UnmanagedType.I4)]
+        [MarshalAs(UnmanagedType.I4)] 
         private readonly int paddingInt;
 
-        public long JobFalgs { get => jobFalgs; set => jobFalgs = value; }
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long JobFlags { get; set; }
 
-        public int DynamicTrackerCount { get => dynamicTrackerCount; set => dynamicTrackerCount = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int DynamicTrackerCount { get; set; }
 
-        public double FieldMagnitude { get => fieldMagnitude; set => fieldMagnitude = value; }
+        [field: MarshalAs(UnmanagedType.R8)]
+        public double FieldMagnitude { get; set; }
 
-        public double BaseFrequency { get => baseFrequency; set => baseFrequency = value; }
+        [field: MarshalAs(UnmanagedType.R8)]
+        public double BaseFrequency { get; set; }
 
-        public double FixedNormFactor { get => fixedNormFactor; set => fixedNormFactor = value; }
+        [field: MarshalAs(UnmanagedType.R8)]
+        public double FixedNormFactor { get; set; }
     }
 }

@@ -8,15 +8,14 @@ using Mocassin.Model.Transitions;
 namespace Mocassin.Model.Simulations
 {
     /// <summary>
-    /// Enum for the metropolis specific simulation flags
+    ///     Enum for the metropolis specific simulation flags
     /// </summary>
     [Flags]
     public enum MetropolisSimulationFlags
     {
-        
     }
 
-    /// <inheritdoc cref="IMetropolisSimulation"/>
+    /// <inheritdoc cref="IMetropolisSimulation" />
     [DataContract]
     public class MetropolisSimulation : SimulationBase, IMetropolisSimulation
     {
@@ -45,7 +44,7 @@ namespace Mocassin.Model.Simulations
         public MetropolisSimulationFlags MetropolisFlags { get; set; }
 
         /// <summary>
-        /// The metropolis transitions attached to this simulation
+        ///     The metropolis transitions attached to this simulation
         /// </summary>
         [DataMember]
         [IndexResolved]

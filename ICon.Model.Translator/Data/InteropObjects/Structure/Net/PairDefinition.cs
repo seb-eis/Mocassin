@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Interop object wrapper for the pair definition type used in the unmanaged simulation
+    ///     Pair definition interop object. Boxes a marshal struct into a .NET object
     /// </summary>
     public class PairDefinition : InteropObject<CPairDefinition>
     {
+        /// <inheritdoc />
         public PairDefinition()
         {
         }
 
-        public PairDefinition(CPairDefinition structure) : base(structure)
+        /// <inheritdoc />
+        public PairDefinition(CPairDefinition structure)
+            : base(structure)
         {
         }
     }

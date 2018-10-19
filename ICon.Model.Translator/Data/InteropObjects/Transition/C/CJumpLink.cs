@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Simulation jump link object. Layout marshals to its binary unmanaged 'C' representation
+    ///     Simulation jump link object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 8)]
     public struct CJumpLink
     {
-        [MarshalAs(UnmanagedType.I4)]
-        private int jumpPathId;
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int JumpPathId { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int linkId;
-
-        public int JumpPathId { get => jumpPathId; set => jumpPathId = value; }
-
-        public int LinkId { get => linkId; set => linkId = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int LinkId { get; set; }
     }
 }

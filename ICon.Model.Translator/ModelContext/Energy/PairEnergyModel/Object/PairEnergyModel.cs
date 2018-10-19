@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IPairEnergyModel"/>
+    /// <inheritdoc cref="IPairEnergyModel" />
     public class PairEnergyModel : ModelComponentBase, IPairEnergyModel
     {
         /// <inheritdoc />
@@ -22,7 +21,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public double[,] EnergyTable { get; set; }
 
         /// <summary>
-        /// Create new pair energy model for the provided pair interaction
+        ///     Create new pair energy model for the provided pair interaction
         /// </summary>
         /// <param name="pairInteraction"></param>
         public PairEnergyModel(IPairInteraction pairInteraction)
@@ -38,6 +37,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 value = default;
                 return false;
             }
+
             value = EnergyTable[centerParticle.Index, other.Index];
             return true;
         }

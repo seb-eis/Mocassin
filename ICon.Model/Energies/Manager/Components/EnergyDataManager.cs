@@ -9,8 +9,8 @@ namespace Mocassin.Model.Energies
     internal class EnergyDataManager : ModelDataManager<EnergyModelData>, IEnergyDataPort
     {
         /// <inheritdoc />
-        public EnergyDataManager(EnergyModelData data)
-            : base(data)
+        public EnergyDataManager(EnergyModelData modelData)
+            : base(modelData)
         {
         }
         

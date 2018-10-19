@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Mocassin.Framework.Processing;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions.ConflictHandling;
 
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Basic implementation of the transition input manager that handles validated adding, removal and replacement of transition base data by an outside source
+    ///     Basic implementation of the transition input manager that handles validated adding, removal and replacement of
+    ///     transition base data by an outside source
     /// </summary>
-    internal class TransitionInputManager : ModelInputManager<TransitionModelData, ITransitionDataPort, TransitionEventManager>, ITransitionInputPort
+    internal class TransitionInputManager : ModelInputManager<TransitionModelData, ITransitionDataPort, TransitionEventManager>,
+        ITransitionInputPort
     {
-        /// <summary>
-        /// Create a new transition input manager from data object, event manager and project services
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="manager"></param>
-        /// <param name="services"></param>
-        public TransitionInputManager(TransitionModelData data, TransitionEventManager manager, IModelProject services) : base(data, manager, services)
+        /// <inheritdoc />
+        public TransitionInputManager(TransitionModelData modelData, TransitionEventManager eventManager, IModelProject project)
+            : base(modelData, eventManager, project)
         {
-
         }
 
         /// <summary>
-        /// Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -37,7 +31,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -48,7 +43,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -59,7 +55,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -70,7 +67,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to register the passed model object with the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -81,7 +79,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -92,7 +91,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -103,7 +103,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -114,7 +115,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -125,7 +127,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation success)
+        ///     Tries to remove the passed model object from the manager (Awaits distribution of affiliated events on operation
+        ///     success)
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
@@ -136,8 +139,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
+        /// <param name="orgObj"></param>
         /// <param name="newObj"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
@@ -147,8 +152,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
+        /// <param name="orgObj"></param>
         /// <param name="newObj"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
@@ -158,8 +165,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
+        /// <param name="orgObj"></param>
         /// <param name="newObj"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
@@ -169,8 +178,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
+        /// <param name="orgObj"></param>
         /// <param name="newObj"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
@@ -180,8 +191,10 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on operation success)
+        ///     Tries to replace an existing model object in the manager by a new one (Awaits distribution of affiliated events on
+        ///     operation success)
         /// </summary>
+        /// <param name="orgObj"></param>
         /// <param name="newObj"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
@@ -190,23 +203,17 @@ namespace Mocassin.Model.Transitions
             return DefaultReplaceModelObject(orgObj, newObj, accessor => accessor.Query(data => data.MetropolisTransitions));
         }
 
-        /// <summary>
-        /// Tries to clean deprecated data by removing deprecated model objects and reindexing the model object lists. Distributes affiliated eventy on operation success
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         [DataOperation(DataOperationType.ObjectCleaning)]
         protected override IOperationReport TryCleanDeprecatedData()
         {
             return DefaultCleanDeprecatedData();
         }
 
-        /// <summary>
-        /// Get the conflict resolver provider for the internal transition data conflict handling
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override IDataConflictHandlerProvider<TransitionModelData> CreateDataConflictHandlerProvider()
         {
-            return new ConflictHandling.TransitionDataConflictHandlerProvider(ModelProject);
+            return new TransitionDataConflictHandlerProvider(ModelProject);
         }
     }
 }

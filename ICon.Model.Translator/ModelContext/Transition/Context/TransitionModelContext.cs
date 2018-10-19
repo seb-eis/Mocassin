@@ -1,14 +1,10 @@
-﻿using Mocassin.Model.Structures;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
     public class TransitionModelContext : ITransitionModelContext
-    {   
+    {
         /// <inheritdoc />
         public IList<IKineticTransitionModel> KineticTransitionModels { get; set; }
 

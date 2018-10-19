@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Mocassin.Model.Particles;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="IKineticRule"/>
+    /// <inheritdoc cref="IKineticRule" />
     [DataContract]
     public class KineticRule : TransitionRule, IKineticRule
     {
@@ -20,12 +19,8 @@ namespace Mocassin.Model.Transitions
         [DataMember]
         public double AttemptFrequency { get; set; }
 
-        /// <inheritdoc />
-        [DataMember]
-        public CellBoundaryFlags BoundaryFlags { get; set; }
-
         /// <summary>
-        /// The list of dependent rules that are a direct result of this rule
+        ///     The list of dependent rules that are a direct result of this rule
         /// </summary>
         [DataMember]
         public List<KineticRule> DependentRules { get; set; }
@@ -49,12 +44,6 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public void SetCellBoundaryFlags(CellBoundaryFlags flags)
-        {
-            BoundaryFlags = flags;
-        }
-
-        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IKineticRule>(obj) is IKineticRule rule))
@@ -63,7 +52,6 @@ namespace Mocassin.Model.Transitions
             base.PopulateFrom(obj);
             Transition = rule.Transition;
             AttemptFrequency = rule.AttemptFrequency;
-            BoundaryFlags = rule.BoundaryFlags;
 
             return null;
         }

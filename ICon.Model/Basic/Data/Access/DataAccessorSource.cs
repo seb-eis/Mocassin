@@ -28,11 +28,11 @@ namespace Mocassin.Model.Basic
         /// <param name="data"></param>
         /// <param name="lockSource"></param>
         /// <returns></returns>
-        public static DataAccessSource<TData> Create<TData>(TData data, AccessLockSource lockSource)
+        public static DataAccessorSource<TData> Create<TData>(TData data, AccessLockSource lockSource)
             where TData : ModelData
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
-            return new DataAccessSource<TData>(data, lockSource);
+            return new DataAccessorSource<TData>(data, lockSource);
         }
     }
 
@@ -40,7 +40,7 @@ namespace Mocassin.Model.Basic
     ///     Generic provider for data accessors for model data objects
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public class DataAccessSource<TData> : DataAccessorSource, IDataAccessorSource<TData>
+    public class DataAccessorSource<TData> : DataAccessorSource, IDataAccessorSource<TData>
         where TData : ModelData
     {
         /// <summary>
@@ -53,7 +53,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <param name="dataObject"></param>
         /// <param name="lockSource"></param>
-        public DataAccessSource(TData dataObject, AccessLockSource lockSource)
+        public DataAccessorSource(TData dataObject, AccessLockSource lockSource)
             : base(lockSource)
         {
             DataObject = dataObject ?? throw new ArgumentNullException(nameof(dataObject));

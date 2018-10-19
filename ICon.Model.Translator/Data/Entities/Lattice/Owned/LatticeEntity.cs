@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Lattice entity alias class. Stores the 4D simulation lattice as a linear byte array for the simulation database
+    /// </summary>
     public class LatticeEntity : InteropBinaryArray<byte>
     {
-
+        /// <inheritdoc />
+        public override string BlobTypeName => "LAT";
     }
 }

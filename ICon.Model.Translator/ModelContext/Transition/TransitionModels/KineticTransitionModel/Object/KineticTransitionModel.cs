@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IKineticTransitionModel"/>
+    /// <inheritdoc cref="IKineticTransitionModel" />
     public class KineticTransitionModel : ModelComponentBase, IKineticTransitionModel
     {
         /// <inheritdoc />
@@ -63,7 +61,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Gets the inverted abstract movement description
+        ///     Gets the inverted abstract movement description
         /// </summary>
         /// <returns></returns>
         protected IList<int> GetInverseAbstractMovement()

@@ -11,8 +11,8 @@ namespace Mocassin.Model.Particles
     internal class ParticleInputManager : ModelInputManager<ParticleModelData, IParticleDataPort, ParticleEventManager>, IParticleInputPort
     {
         /// <inheritdoc />
-        public ParticleInputManager(ParticleModelData data, ParticleEventManager manager, IModelProject services)
-            : base(data, manager, services)
+        public ParticleInputManager(ParticleModelData modelData, ParticleEventManager eventManager, IModelProject project)
+            : base(modelData, eventManager, project)
         {
         }
 

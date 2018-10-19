@@ -6,50 +6,44 @@ using Mocassin.Model.Transitions.Handler;
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Basic update manager for the transition module that handles pushed information on data changes in required modules
+    ///     Basic update manager for the transition module that handles pushed information on data changes in required modules
     /// </summary>
     internal class TransitionUpdateManager : ModelUpdateManager<TransitionModelData, TransitionEventManager>, ITransitionUpdatePort
     {
         /// <summary>
-        /// Pipeline based event handler for added model objects events in the connected structure manager
+        ///     Pipeline based event handler for added model objects events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected NewStructureObjectsHandler NewStructureObjectsHandler { get; set; }
+        protected StructureObjectAddedEventHandler StructureObjectAddedEventHandler { get; set; }
 
         /// <summary>
-        /// Pipeline based event handler for changed model objects events in the connected structure manager
+        ///     Pipeline based event handler for changed model objects events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected ObjectChangedStructureHandler ObjectChangedStructureHandler { get; set; }
+        protected StructureObjectChangedEventHandler StructureObjectChangedEventHandler { get; set; }
 
         /// <summary>
-        /// Pipeline based event handler for removed model objects events in the connected structure manager
+        ///     Pipeline based event handler for removed model objects events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected ObjectRemovedStructureHandler ObjectRemovedStructureHandler { get; set; }
+        protected StructureObjectRemovedEventHandler StructureObjectRemovedEventHandler { get; set; }
 
         /// <summary>
-        /// Pipeline based event handler for model object list reindexing events in the connected structure manager
+        ///     Pipeline based event handler for model object list reindexing events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected ReindexedStructureObjectsHandler ReindexedStructureObjectsHandler { get; set; }
+        protected StructureObjectIndexingChangedEventHandler StructureObjectIndexingChangedEventHandler { get; set; }
 
         /// <summary>
-        /// Pipeline based event handler for changed model parameter events in the connected structure manager
+        ///     Pipeline based event handler for changed model parameter events in the connected structure manager
         /// </summary>
         [UpdateHandler(typeof(IStructureEventPort))]
-        protected ParameterChangedStructureHandler ParameterChangedStructureHandler { get; set; }
+        protected StructureParameterChangedEventHandler StructureParameterChangedEventHandler { get; set; }
 
-        /// <summary>
-        /// Creates new transition update manager for provided model data, event manager and project services
-        /// </summary>
-        /// <param name="baseData"></param>
-        /// <param name="eventManager"></param>
-        /// <param name="modelProject"></param>
-        public TransitionUpdateManager(TransitionModelData baseData, TransitionEventManager eventManager, IModelProject modelProject)
-            : base(baseData, eventManager, modelProject)
+        /// <inheritdoc />
+        public TransitionUpdateManager(TransitionModelData modelData, TransitionEventManager eventManager, IModelProject modelProject)
+            : base(modelData, eventManager, modelProject)
         {
-
         }
     }
 }

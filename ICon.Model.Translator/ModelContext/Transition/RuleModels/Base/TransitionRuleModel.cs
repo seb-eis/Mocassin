@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
@@ -58,7 +57,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public abstract bool IsInverse(ITransitionRuleModel ruleModel);
 
         /// <summary>
-        /// Creates the inverted version of end indexing deltas
+        ///     Creates the inverted version of end indexing deltas
         /// </summary>
         /// <returns></returns>
         protected IList<int> GetEndIndexingDeltaInversion()
@@ -67,7 +66,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the inverted order code by code arithmetic (TARGET_ORDER = SOURCE_ORDER - SOURCE_EIDX + TARGET_EIDX)
+        ///     Creates the inverted order code by code arithmetic (TARGET_ORDER = SOURCE_ORDER - SOURCE_EIDX + TARGET_EIDX)
         /// </summary>
         /// <param name="invertedEndIndexingDeltas"></param>
         /// <returns></returns>
@@ -76,9 +75,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var bytes = BitConverter.GetBytes(FinalTrackerOrderCode);
 
             for (var i = 0; i < invertedEndIndexingDeltas.Count; i++)
-            {
                 bytes[i] -= (byte) (EndIndexingDeltas[i] - invertedEndIndexingDeltas[i]);
-            }
 
             return BitConverter.ToInt64(bytes, 0);
         }

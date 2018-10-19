@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mocassin.Model.Translator
 {
-    /// <summary>
-    /// Interop database context for communication with the unmanaged 'C' Simulator implementation 
-    /// </summary>
-    public class CInteropDbContext : DbContext, ITranslatorDbContext
+    /// <inheritdoc cref="Mocassin.Model.Translator.ISimulationDbContext"/>
+    public sealed class SimulationDbContext : DbContext, ISimulationDbContext
     {
         /// <summary>
         /// List of actions performed on model building
@@ -61,11 +59,11 @@ namespace Mocassin.Model.Translator
         public DbSet<SqliteQueryEntity> SqliteQueries { get; set; }
 
         /// <summary>
-        /// Create new mccs database context using the provided filepath. Dop creates a new database if specfified
+        /// Create new database context using the provided filepath. Dop creates a new database if specified
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="dropCreate"></param>
-        public CInteropDbContext(string filename, bool dropCreate)
+        public SimulationDbContext(string filename, bool dropCreate)
         {
             DbFilename = filename;
             if (dropCreate)
@@ -75,7 +73,7 @@ namespace Mocassin.Model.Translator
             Database.EnsureCreated();
         }
 
-        /// <inheritdoc cref="ITranslatorDbContext.SaveChanges"/>
+        /// <inheritdoc cref="ISimulationDbContext.SaveChanges"/>
         public override int SaveChanges()
         {
             base.SaveChanges();
@@ -113,7 +111,7 @@ namespace Mocassin.Model.Translator
         /// Detects and redirects all blob entities on model creation to the blobs database set
         /// </summary>
         /// <param name="modelBuilder"></param>
-        protected void RedirectBinaryObjects(ModelBuilder modelBuilder)
+        private void RedirectBinaryObjects(ModelBuilder modelBuilder)
         {
             if (ModelBuildActions == null)
             {
@@ -131,7 +129,7 @@ namespace Mocassin.Model.Translator
         /// Searches all db set for inheritance from interop binary object and creates redirects to the binary object table
         /// </summary>
         /// <returns></returns>
-        protected List<Action<ModelBuilder>> CreateRedirectionDelegates()
+        private List<Action<ModelBuilder>> CreateRedirectionDelegates()
         {
             var list = new List<Action<ModelBuilder>>();
             foreach (var dbSetProperty in GetDbSetPropertyInfos())
@@ -147,7 +145,7 @@ namespace Mocassin.Model.Translator
             return list;
         }
 
-        protected void PerformActionOnAllInteropEntities(Action<InteropEntityBase> action)
+        private void PerformActionOnAllInteropEntities(Action<InteropEntityBase> action)
         {
             foreach (var dbSetProperty in GetDbSetPropertyInfos())
             {
@@ -165,7 +163,7 @@ namespace Mocassin.Model.Translator
         /// Gets all database sets property info of the context by reflection
         /// </summary>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GetDbSetPropertyInfos()
+        private IEnumerable<PropertyInfo> GetDbSetPropertyInfos()
         {
             return GetType().GetProperties()
                 .Where(a => a.PropertyType.IsGenericType)

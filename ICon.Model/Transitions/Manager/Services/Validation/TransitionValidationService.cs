@@ -7,27 +7,24 @@ using Mocassin.Model.Transitions.Validators;
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Validation service for transition related model objects that checks new transition related model object inputs
+    ///     Validation service for transition related model objects that checks new transition related model object inputs
     /// </summary>
     public class TransitionValidationService : ValidationService<ITransitionDataPort>
     {
         /// <summary>
-        /// The settings object for the transitions
+        ///     The settings object for the transitions
         /// </summary>
         protected MocassinTransitionSettings Settings { get; set; }
 
-        /// <summary>
-        /// Create new transition validation service with the specififed project services and transition settings
-        /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="modelProject"></param>
-        public TransitionValidationService(MocassinTransitionSettings settings, IModelProject modelProject) : base(modelProject)
+        /// <inheritdoc />
+        public TransitionValidationService(MocassinTransitionSettings settings, IModelProject modelProject)
+            : base(modelProject)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         /// <summary>
-        /// Validates a new state exchange pair in terms of content and potentail conflicts with existing data
+        ///     Validates a new state exchange pair in terms of content and potential conflicts with existing data
         /// </summary>
         /// <param name="pair"></param>
         /// <param name="dataReader"></param>
@@ -39,19 +36,19 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Validates a new state exchange group in terms of content and potential conflicts with existing data
+        ///     Validates a new state exchange group in terms of content and potential conflicts with existing data
         /// </summary>
         /// <param name="group"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateStateExchangeGroupp(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader)
+        protected IValidationReport ValidateStateExchangeGroup(IStateExchangeGroup group, IDataReader<ITransitionDataPort> dataReader)
         {
             return new PropertyGroupValidator(ModelProject, Settings, dataReader).Validate(group);
         }
 
         /// <summary>
-        /// Validates a new abstract transition in terms of content and potential conflicts with existing data
+        ///     Validates a new abstract transition in terms of content and potential conflicts with existing data
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="dataReader"></param>
@@ -63,7 +60,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Validates a new model transition in terms of content and potential conflicts with existing data
+        ///     Validates a new model transition in terms of content and potential conflicts with existing data
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="dataReader"></param>
@@ -75,13 +72,14 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Validates a new metropolis transition in terms of content and potential conflicts with existing data
+        ///     Validates a new metropolis transition in terms of content and potential conflicts with existing data
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateMetropolisTransition(IMetropolisTransition transition, IDataReader<ITransitionDataPort> dataReader)
+        protected IValidationReport ValidateMetropolisTransition(IMetropolisTransition transition,
+            IDataReader<ITransitionDataPort> dataReader)
         {
             return new MetropolisTransitionValidator(ModelProject, Settings, dataReader).Validate(transition);
         }

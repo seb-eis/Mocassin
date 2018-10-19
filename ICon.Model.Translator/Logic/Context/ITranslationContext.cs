@@ -24,7 +24,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         /// Translator database context for storage of the translated interop information
         /// </summary>
-        ITranslatorDbContext DbContext { get; set; }
+        ISimulationDbContext DbContext { get; set; }
 
         /// <summary>
         /// Translates the basic structure, transition and energy model of the current project service and adds them to the database

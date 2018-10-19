@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IMetropolisSimulationModelBuilder"/>
+    /// <inheritdoc cref="IMetropolisSimulationModelBuilder" />
     public class MetropolisSimulationModelBuilder : ModelBuilderBase, IMetropolisSimulationModelBuilder
     {
         /// <inheritdoc />
@@ -32,13 +31,11 @@ namespace Mocassin.Model.Translator.ModelContext
         public void BuildLinkingDependentComponents(IEnumerable<IMetropolisSimulationModel> simulationModels)
         {
             foreach (var simulationModel in simulationModels)
-            {
                 simulationModel.MappingAssignMatrix = CreateMappingAssignMatrix(simulationModel.TransitionModels);
-            }
         }
 
         /// <summary>
-        /// Takes a sequence of metropolis transitions and creates placeholder transition models for the later linking process
+        ///     Takes a sequence of metropolis transitions and creates placeholder transition models for the later linking process
         /// </summary>
         /// <param name="transitions"></param>
         /// <returns></returns>
@@ -51,7 +48,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the mapping assign matrix for the passed list of metropolis transition models
+        ///     Creates the mapping assign matrix for the passed list of metropolis transition models
         /// </summary>
         /// <param name="transitionModels"></param>
         /// <returns></returns>
@@ -62,16 +59,14 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var transitionModel in transitionModels)
             {
                 foreach (var particle in transitionModel.MobileParticles)
-                {
                     InsertMappingModelsIntoRawMatrix(listResult, transitionModel.MappingModels, particle);
-                }
             }
 
             return ConvertRawAssignListsToMatrix(listResult);
         }
 
         /// <summary>
-        /// Inserts the passed list of mapping models into the list based raw mapping matrix
+        ///     Inserts the passed list of mapping models into the list based raw mapping matrix
         /// </summary>
         /// <param name="rawMatrix"></param>
         /// <param name="mappingModels"></param>
@@ -86,21 +81,15 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var list in rawMatrix.Where(a => a.Count <= particle.Index))
             {
                 while (list.Count <= particle.Index)
-                {
                     list.Add(new List<IMetropolisMappingModel>());
-                }
             }
 
-            foreach (var mappingModel in mappingModels)
-            {
-                rawMatrix[mappingModel.StartVector4D.P][particle.Index].Add(mappingModel);
-            }
-            
+            foreach (var mappingModel in mappingModels) rawMatrix[mappingModel.StartVector4D.P][particle.Index].Add(mappingModel);
         }
 
         /// <summary>
-        /// Converts the raw list based mapping assign matrix into a fixed size 3D array and fills the placeholder spots with
-        /// an invalid mapping
+        ///     Converts the raw list based mapping assign matrix into a fixed size 3D array and fills the placeholder spots with
+        ///     an invalid mapping
         /// </summary>
         /// <param name="rawMatrix"></param>
         /// <returns></returns>
@@ -114,9 +103,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 for (var b = 0; b < rawMatrix[a].Count; b++)
                 {
                     for (var c = 0; c < rawMatrix[a][b].Count; c++)
-                    {
                         matrix[a, b, c] = rawMatrix[a][b][c];
-                    }
                 }
             }
 
@@ -124,7 +111,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Get the size information in three dimensions for the list based mapping assign matrix
+        ///     Get the size information in three dimensions for the list based mapping assign matrix
         /// </summary>
         /// <param name="rawMatrix"></param>
         /// <returns></returns>

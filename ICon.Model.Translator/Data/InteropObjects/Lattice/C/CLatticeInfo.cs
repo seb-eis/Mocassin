@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Simulation lattice info object. Layout marshals to its binary unmanaged 'C' representation
+    ///     Simulation lattice info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 72)]
     public struct CLatticeInfo
     {
-        private CVector4 sizeVector;
-
-        [MarshalAs(UnmanagedType.I4)]
-        private int numberOfMobiles;
-
-        [MarshalAs(UnmanagedType.I4)]
-        private int numberOfSelectables;
-
         private readonly CMdaAccess latticeAccess;
 
         private readonly CMdaAccess backgroundAccess;
@@ -26,10 +15,12 @@ namespace Mocassin.Model.Translator
         [MarshalAs(UnmanagedType.I8)]
         private readonly long paddingLong;
 
-        public CVector4 SizeVector { get => sizeVector; set => sizeVector = value; }
+        public CVector4 SizeVector { get; set; }
 
-        public int NumberOfMobiles { get => numberOfMobiles; set => numberOfMobiles = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int NumberOfMobiles { get; set; }
 
-        public int NumberOfSelectables { get => numberOfSelectables; set => numberOfSelectables = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int NumberOfSelectAtoms { get; set; }
     }
 }

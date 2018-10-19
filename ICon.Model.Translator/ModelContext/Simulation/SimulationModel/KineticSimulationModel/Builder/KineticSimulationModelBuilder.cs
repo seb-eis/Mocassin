@@ -6,7 +6,7 @@ using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IKineticSimulationModelBuilder"/>
+    /// <inheritdoc cref="IKineticSimulationModelBuilder" />
     public class KineticSimulationModelBuilder : ModelBuilderBase, IKineticSimulationModelBuilder
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Builds a single kinetic simulation model for the passed kinetic simulation
+        ///     Builds a single kinetic simulation model for the passed kinetic simulation
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
@@ -46,30 +46,24 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Indexes the passed simulation model using the passed indexing set reference
+        ///     Indexes the passed simulation model using the passed indexing set reference
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <param name="indexing"></param>
         protected void IndexTrackerModels(IKineticSimulationModel simulationModel, ref (int Global, int Static, int Probability) indexing)
         {
             foreach (var globalTrackerModel in simulationModel.KineticTrackingModel.GlobalTrackerModels)
-            {
                 globalTrackerModel.ModelId = indexing.Global++;
-            }
 
             foreach (var staticTrackerModel in simulationModel.KineticTrackingModel.StaticTrackerModels)
-            {
                 staticTrackerModel.ModelId = indexing.Static++;
-            }
 
             foreach (var probabilityTrackerModel in simulationModel.KineticTrackingModel.ProbabilityTrackerModels)
-            {
                 probabilityTrackerModel.ModelId = indexing.Probability++;
-            }
         }
 
         /// <summary>
-        /// Builds and adds the kinetic tracking model for the passed simulation model
+        ///     Builds and adds the kinetic tracking model for the passed simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
         protected void AddKineticTrackingModel(IKineticSimulationModel simulationModel)
@@ -86,7 +80,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the list of raw global tracker models for a kinetic simulation object
+        ///     Creates the list of raw global tracker models for a kinetic simulation object
         /// </summary>
         /// <param name="simulation"></param>
         /// <remarks> Created values contain placeholder transition models and require post-creation linking  </remarks>
@@ -97,7 +91,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the list of static tracker models for a kinetic simulation object
+        ///     Creates the list of static tracker models for a kinetic simulation object
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
@@ -107,7 +101,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the list of raw probability tracker models for a kinetic simulation
+        ///     Creates the list of raw probability tracker models for a kinetic simulation
         /// </summary>
         /// <param name="simulation"></param>
         /// <remarks> Created values contain placeholder transition models and require post-creation linking </remarks>

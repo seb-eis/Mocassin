@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Model.Energies;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IGroupEnergyModelBuilder"/>
+    /// <inheritdoc cref="IGroupEnergyModelBuilder" />
     public class GroupEnergyModelBuilder : ModelBuilderBase, IGroupEnergyModelBuilder
     {
         /// <inheritdoc />
@@ -31,12 +31,13 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Builds a group energy model from the passed group interaction, position group infos and index counter
+        ///     Builds a group energy model from the passed group interaction, position group infos and index counter
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <param name="positionGroupInfos"></param>
         /// <param name="index"></param>
-        protected IGroupEnergyModel CreateEnergyModel(IGroupInteraction groupInteraction, IReadOnlyList<IPositionGroupInfo> positionGroupInfos, ref int index)
+        protected IGroupEnergyModel CreateEnergyModel(IGroupInteraction groupInteraction,
+            IReadOnlyList<IPositionGroupInfo> positionGroupInfos, ref int index)
         {
             var groupInfo = positionGroupInfos.Single(a => a.GroupInteraction.Index == groupInteraction.Index);
             var energyModel = new GroupEnergyModel(groupInteraction)
@@ -53,7 +54,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// CBuilds an copies all symmetry extended energy and occupation information on the passed model
+        ///     CBuilds an copies all symmetry extended energy and occupation information on the passed model
         /// </summary>
         /// <param name="energyModel"></param>
         protected void CreateSymmetryExtendedEnergyInfoOnModel(IGroupEnergyModel energyModel)
@@ -68,7 +69,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///  Restores the full set of group energy entries and occupation states of a group energy model
+        ///     Restores the full set of group energy entries and occupation states of a group energy model
         /// </summary>
         /// <param name="groupEnergyModel"></param>
         /// <returns></returns>
@@ -96,7 +97,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the sorted list of group lookup codes
+        ///     Creates the sorted list of group lookup codes
         /// </summary>
         /// <param name="groupEnergyModel"></param>
         /// <returns></returns>
@@ -110,18 +111,19 @@ namespace Mocassin.Model.Translator.ModelContext
                 var index = 0;
 
                 for (; index < state.StateLength; index++)
-                    buffer[index] = (byte)state.Particles[index].Index;
+                    buffer[index] = (byte) state.Particles[index].Index;
 
                 var code = BitConverter.ToInt64(buffer, 0);
                 codes.Add(code);
 
                 for (var i = 0; i < index; i++) buffer[i] = 0;
             }
+
             groupEnergyModel.GroupLookupCodes = codes;
         }
 
         /// <summary>
-        /// Creates the energy table of the group an adds it to the group energy model
+        ///     Creates the energy table of the group an adds it to the group energy model
         /// </summary>
         /// <param name="groupEnergyModel"></param>
         protected void CreateGroupEnergyTableOnModel(IGroupEnergyModel groupEnergyModel)
@@ -139,6 +141,5 @@ namespace Mocassin.Model.Translator.ModelContext
 
             groupEnergyModel.EnergyTable = energyTable;
         }
-
     }
 }

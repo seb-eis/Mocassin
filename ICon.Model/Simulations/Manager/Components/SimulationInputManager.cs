@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Simulations.ConflictHandling;
 
 namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="ISimulationInputPort"/>
-    internal class SimulationInputManager : ModelInputManager<SimulationModelData, ISimulationDataPort, SimulationEventManager>, ISimulationInputPort
+    /// <inheritdoc cref="ISimulationInputPort" />
+    internal class SimulationInputManager : ModelInputManager<SimulationModelData, ISimulationDataPort, SimulationEventManager>,
+        ISimulationInputPort
     {
         /// <inheritdoc />
-        public SimulationInputManager(SimulationModelData data, SimulationEventManager manager, IModelProject services) 
-            : base(data, manager, services)
+        public SimulationInputManager(SimulationModelData modelData, SimulationEventManager eventManager, IModelProject project)
+            : base(modelData, eventManager, project)
         {
         }
 
         /// <summary>
-        /// Registers a new kinetic simulation to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new kinetic simulation to the manager if it passes validation (Awaits distribution of affiliated events
+        ///     in case of operation success)
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
@@ -28,7 +28,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Removes a kinetic simulation from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a kinetic simulation from the manager by deprecation if possible (Awaits distribution of affiliated events
+        ///     in case of operation success)
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
@@ -39,7 +40,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Replaces a kinetic simulation in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a kinetic simulation in the manager by another if the new one passes validation (Awaits distribution of
+        ///     affiliated events in case of operation success)
         /// </summary>
         /// <param name="orgSimulation"></param>
         /// <param name="newSimulation"></param>
@@ -51,7 +53,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Registers a new metropolis simulation to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new metropolis simulation to the manager if it passes validation (Awaits distribution of affiliated
+        ///     events in case of operation success)
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
@@ -62,7 +65,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Removes a metropolis simulation from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a metropolis simulation from the manager by deprecation if possible (Awaits distribution of affiliated
+        ///     events in case of operation success)
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns></returns>
@@ -73,7 +77,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Replaces a metropolis simulation in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a metropolis simulation in the manager by another if the new one passes validation (Awaits distribution of
+        ///     affiliated events in case of operation success)
         /// </summary>
         /// <param name="orgSimulation"></param>
         /// <param name="newSimulation"></param>
@@ -85,7 +90,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Registers a new kinetic simulation series to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new kinetic simulation series to the manager if it passes validation (Awaits distribution of affiliated
+        ///     events in case of operation success)
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
@@ -96,7 +102,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Removes a kinetic simulation series from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a kinetic simulation series from the manager by deprecation if possible (Awaits distribution of affiliated
+        ///     events in case of operation success)
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
@@ -107,7 +114,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Replaces a kinetic simulation series in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a kinetic simulation series in the manager by another if the new one passes validation (Awaits
+        ///     distribution of affiliated events in case of operation success)
         /// </summary>
         /// <param name="orgSeries"></param>
         /// <param name="newSeries"></param>
@@ -119,7 +127,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Registers a new metropolis simulation series to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Registers a new metropolis simulation series to the manager if it passes validation (Awaits distribution of
+        ///     affiliated events in case of operation success)
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
@@ -130,7 +139,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Removes a metropolis simulation series from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
+        ///     Removes a metropolis simulation series from the manager by deprecation if possible (Awaits distribution of
+        ///     affiliated events in case of operation success)
         /// </summary>
         /// <param name="series"></param>
         /// <returns></returns>
@@ -141,7 +151,8 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Replaces a metropolis simulation series in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
+        ///     Replaces a metropolis simulation series in the manager by another if the new one passes validation (Awaits
+        ///     distribution of affiliated events in case of operation success)
         /// </summary>
         /// <param name="orgSeries"></param>
         /// <param name="newSeries"></param>
@@ -153,12 +164,12 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        /// Get the conflict handler provider that supplies handlers for internal data conflicts due to user induced changes
+        ///     Get the conflict handler provider that supplies handlers for internal data conflicts due to user induced changes
         /// </summary>
         /// <returns></returns>
         protected override IDataConflictHandlerProvider<SimulationModelData> CreateDataConflictHandlerProvider()
         {
-            return new ConflictHandling.SimulationDataConflictHandlerProvider(ModelProject);
+            return new SimulationDataConflictHandlerProvider(ModelProject);
         }
 
         /// <inheritdoc />

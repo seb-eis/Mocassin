@@ -3,7 +3,7 @@ using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IMetropolisRuleModel"/>
+    /// <inheritdoc cref="IMetropolisRuleModel" />
     public class MetropolisRuleModel : TransitionRuleModel, IMetropolisRuleModel
     {
         /// <inheritdoc />

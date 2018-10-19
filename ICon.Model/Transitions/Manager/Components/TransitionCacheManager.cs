@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Particles;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Basic implementation of the transition cache manager that provides read only access to the extended 'on demand' transition data
+    ///     Basic implementation of the transition cache manager that provides read only access to the extended 'on demand'
+    ///     transition data
     /// </summary>
-    internal class TransitionCacheManager : ModelCacheManager<TransitionDataCache, ITransitionCachePort>, ITransitionCachePort
+    internal class TransitionCacheManager : ModelCacheManager<TransitionModelCache, ITransitionCachePort>, ITransitionCachePort
     {
         /// <inheritdoc />
-        public TransitionCacheManager(TransitionDataCache dataCache, IModelProject modelProject) : base(dataCache, modelProject)
+        public TransitionCacheManager(TransitionModelCache modelCache, IModelProject modelProject)
+            : base(modelCache, modelProject)
         {
-
         }
 
         /// <inheritdoc />
@@ -82,7 +81,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Creates a dictionary that assigns each unit cell position its possible list of metropolis transitions
+        ///     Creates a dictionary that assigns each unit cell position its possible list of metropolis transitions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -93,9 +92,7 @@ namespace Mocassin.Model.Transitions
             var result = new Dictionary<IUnitCellPosition, HashSet<IMetropolisTransition>>();
 
             foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
-            {
                 result.Add(position, new HashSet<IMetropolisTransition>());
-            }
 
             foreach (var transition in transitionManager.QueryPort.Query(port => port.GetMetropolisTransitions()))
             {
@@ -105,12 +102,12 @@ namespace Mocassin.Model.Transitions
                 result[transition.FirstUnitCellPosition].Add(transition);
                 result[transition.SecondUnitCellPosition].Add(transition);
             }
-            
+
             return result;
         }
 
         /// <summary>
-        /// Creates a dictionary that assigns each unit cell position its possible list of kinetic transitions
+        ///     Creates a dictionary that assigns each unit cell position its possible list of kinetic transitions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -120,25 +117,23 @@ namespace Mocassin.Model.Transitions
             var result = new Dictionary<IUnitCellPosition, HashSet<IKineticTransition>>();
 
             foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
-            {
                 result.Add(position, new HashSet<IKineticTransition>());
-            }
 
             foreach (var mappingList in GetAllKineticMappingLists())
             {
-                if (mappingList.Count != 0)
-                {
-                    var mapping = mappingList[0];
-                    result[mapping.StartUnitCellPosition].Add(mapping.Transition);
-                    result[mapping.EndUnitCellPosition].Add(mapping.Transition);
-                }
+                if (mappingList.Count == 0)
+                    continue;
+
+                var mapping = mappingList[0];
+                result[mapping.StartUnitCellPosition].Add(mapping.Transition);
+                result[mapping.EndUnitCellPosition].Add(mapping.Transition);
             }
 
             return result;
         }
 
         /// <summary>
-        /// Creates all metropolis transition mappings and supplies it as a 2D list interface system
+        ///     Creates all metropolis transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -148,20 +143,23 @@ namespace Mocassin.Model.Transitions
             var positionSets = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetEncodedExtendedPositionLists());
             var result = new List<IList<MetropolisMapping>>();
 
-            foreach (var transition in ModelProject.GetManager<ITransitionManager>().QueryPort.Query(port => port.GetMetropolisTransitions()))
+            foreach (var transition in ModelProject.GetManager<ITransitionManager>().QueryPort
+                .Query(port => port.GetMetropolisTransitions()))
             {
                 if (transition.IsDeprecated)
                 {
                     result.Add(new List<MetropolisMapping>());
                     continue;
                 }
+
                 result.Add(mapper.MapTransition(transition, positionSets).ToList());
             }
+
             return result;
         }
 
         /// <summary>
-        /// Creates all kinetic transition mappings and supplies it as a 2D list interface system
+        ///     Creates all kinetic transition mappings and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -181,13 +179,15 @@ namespace Mocassin.Model.Transitions
                     result.Add(new List<KineticMapping>());
                     continue;
                 }
+
                 result.Add(mapper.GetMappings(transition).ToList());
             }
+
             return result;
         }
 
         /// <summary>
-        /// Creates all metropolis transition rules and supplies it as a 2D list interface system
+        ///     Creates all metropolis transition rules and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -200,17 +200,18 @@ namespace Mocassin.Model.Transitions
             var transitions = transitionPort.Query(port => port.GetMetropolisTransitions().ToArray());
             var ruleGenerator = new QuickRuleGenerator<MetropolisRule>(particles);
 
-            int index = -1;
+            var index = -1;
             return ruleGenerator
                 .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
                 .Select(result =>
                 {
-                    ++index; return (IList<MetropolisRule>)result.Action(value => value.Transition = transitions[index]).ToList();
+                    ++index;
+                    return (IList<MetropolisRule>) result.Action(value => value.Transition = transitions[index]).ToList();
                 }).ToList();
         }
 
         /// <summary>
-        /// Creates all kinetic transition rules and supplies it as a 2D list interface system
+        ///     Creates all kinetic transition rules and supplies it as a 2D list interface system
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -223,12 +224,13 @@ namespace Mocassin.Model.Transitions
             var transitions = transitionPort.Query(port => port.GetKineticTransitions().ToArray());
             var ruleGenerator = new QuickRuleGenerator<KineticRule>(particles);
 
-            int index = -1;
+            var index = -1;
             return ruleGenerator
                 .MakeUniqueRules(transitions.Select(a => a.AbstractTransition), true)
                 .Select(result =>
                 {
-                    ++index; return (IList<KineticRule>)result.Action(value => value.Transition = transitions[index]).ToList();
+                    ++index;
+                    return (IList<KineticRule>) result.Action(value => value.Transition = transitions[index]).ToList();
                 }).ToList();
         }
     }

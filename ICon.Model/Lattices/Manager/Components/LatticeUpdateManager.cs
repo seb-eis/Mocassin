@@ -13,11 +13,11 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Create new Lattice update manager for the provided data object, event manager and project services
         /// </summary>
-        /// <param name="baseData"></param>
+        /// <param name="modelData"></param>
         /// <param name="eventManager"></param>
         /// <param name="modelProject"></param>
-        public LatticeUpdateManager(LatticeModelData baseData, LatticeEventManager eventManager, IModelProject modelProject)
-            : base(baseData, eventManager, modelProject)
+        public LatticeUpdateManager(LatticeModelData modelData, LatticeEventManager eventManager, IModelProject modelProject)
+            : base(modelData, eventManager, modelProject)
         {
 
         }

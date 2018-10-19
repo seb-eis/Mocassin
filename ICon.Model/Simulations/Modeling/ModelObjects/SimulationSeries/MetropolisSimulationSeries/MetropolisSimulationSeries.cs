@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Mocassin.Framework.Constraints;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Simulations
 {
-    /// <inheritdoc cref="IMetropolisSimulationSeries"/>
+    /// <inheritdoc cref="IMetropolisSimulationSeries" />
     [DataContract]
     public class MetropolisSimulationSeries : SimulationSeriesBase, IMetropolisSimulationSeries
     {

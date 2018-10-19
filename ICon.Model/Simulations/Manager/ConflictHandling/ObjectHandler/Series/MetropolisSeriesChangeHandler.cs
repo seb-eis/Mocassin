@@ -1,32 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Framework.Operations;
+﻿using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Simulations.ConflictHandling
 {
     /// <summary>
-    /// Object change handler that handles internal simulation data conflicts on changed metropolis series objects
+    ///     Object change handler that handles internal simulation data conflicts on changed metropolis series objects
     /// </summary>
     public class MetropolisSeriesChangeHandler : SeriesChangeHandlerBase<MetropolisSimulationSeries>
     {
-        /// <summary>
-        /// Create new metropolis simulation series change handler with the provided data accessor and project services
-        /// </summary>
-        /// <param name="dataAccess"></param>
-        /// <param name="modelProject"></param>
-        public MetropolisSeriesChangeHandler(IDataAccessor<SimulationModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        /// <inheritdoc />
+        public MetropolisSeriesChangeHandler(IDataAccessor<SimulationModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 
-        /// <summary>
-        /// Hanldes the internal data conflicts in the simulation induced by the passed model object as well as resolvable conflicts within the object itself
-        /// </summary>
-        /// <param name="series"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override ConflictReport HandleConflicts(MetropolisSimulationSeries series)
         {
             var report = base.HandleConflicts(series);
@@ -35,8 +24,9 @@ namespace Mocassin.Model.Simulations.ConflictHandling
         }
 
         /// <summary>
-        /// Correct all null value series properties of the metropolis information to a 'single value series' that matches the base simulation value and
-        /// replaces null collections by empty collections
+        ///     Correct all null value series properties of the metropolis information to a 'single value series' that matches the
+        ///     base simulation value and
+        ///     replaces null collections by empty collections
         /// </summary>
         /// <param name="series"></param>
         /// <param name="report"></param>

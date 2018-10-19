@@ -10,8 +10,8 @@ namespace Mocassin.Model.Energies
         IEnergyQueryPort
     {
         /// <inheritdoc />
-        public EnergyQueryManager(EnergyModelData baseData, EnergyModelCache extendedModel, AccessLockSource lockSource)
-            : base(baseData, extendedModel, lockSource)
+        public EnergyQueryManager(EnergyModelData modelData, EnergyModelCache extendedModel, AccessLockSource lockSource)
+            : base(modelData, extendedModel, lockSource)
         {
         }
     }

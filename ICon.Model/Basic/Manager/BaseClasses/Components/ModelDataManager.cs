@@ -69,10 +69,10 @@ namespace Mocassin.Model.Basic
         /// <summary>
         ///     Creates new model data manager base with the provided data object
         /// </summary>
-        /// <param name="data"></param>
-        public ModelDataManager(TData data)
+        /// <param name="modelData"></param>
+        public ModelDataManager(TData modelData)
         {
-            Data = data ?? throw new ArgumentNullException(nameof(data));
+            Data = modelData ?? throw new ArgumentNullException(nameof(modelData));
         }
 
         /// <inheritdoc />

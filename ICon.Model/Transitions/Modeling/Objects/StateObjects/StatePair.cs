@@ -4,32 +4,33 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    /// Represents a state pair of a donor and acceptor particle index
+    ///     Represents a state pair of a donor and acceptor particle index
     /// </summary>
     public readonly struct StatePair : IComparable<StatePair>
     {
         /// <summary>
-        /// The status of the position the state pair belongs to
+        ///     The status of the position the state pair belongs to
         /// </summary>
         public PositionStatus PositionStatus { get; }
 
         /// <summary>
-        /// The acceptor particle index
+        ///     The acceptor particle index
         /// </summary>
         public int DonorIndex { get; }
 
         /// <summary>
-        /// The donor particle index
+        ///     The donor particle index
         /// </summary>
         public int AcceptorIndex { get; }
 
         /// <summary>
-        /// Creates new state pair from donor and acceptor particle index and a position status
+        ///     Creates new state pair from donor and acceptor particle index and a position status
         /// </summary>
         /// <param name="donorIndex"></param>
         /// <param name="acceptorIndex"></param>
         /// <param name="positionStatus"></param>
-        public StatePair(int donorIndex, int acceptorIndex, PositionStatus positionStatus) : this()
+        public StatePair(int donorIndex, int acceptorIndex, PositionStatus positionStatus)
+            : this()
         {
             DonorIndex = donorIndex;
             AcceptorIndex = acceptorIndex;
@@ -37,7 +38,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Get a state pair for an unstable position that is always 0 for the acceptor state
+        ///     Get a state pair for an unstable position that is always 0 for the acceptor state
         /// </summary>
         /// <param name="donorIndex"></param>
         /// <returns></returns>
@@ -47,7 +48,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Creates for the correct position status, i.e. the acceptor state of unstables will be corrected to 0
+        ///     Creates for the correct position status, i.e. the acceptor state of non-stables will be corrected to 0
         /// </summary>
         /// <param name="donorIndex"></param>
         /// <param name="acceptorIndex"></param>
@@ -55,22 +56,22 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public static StatePair CreateForStatus(int donorIndex, int acceptorIndex, PositionStatus positionStatus)
         {
-            return (positionStatus == PositionStatus.Unstable) ? MakeUnstable(donorIndex) : new StatePair(donorIndex, acceptorIndex, positionStatus);
+            return positionStatus == PositionStatus.Unstable
+                ? MakeUnstable(donorIndex)
+                : new StatePair(donorIndex, acceptorIndex, positionStatus);
         }
 
         /// <summary>
-        /// Compares donor index than acceptor index
+        ///     Compares donor index than acceptor index
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public int CompareTo(StatePair other)
         {
             var donorComp = DonorIndex.CompareTo(other.DonorIndex);
-            if (donorComp == 0)
-            {
-                return AcceptorIndex.CompareTo(other.AcceptorIndex);
-            }
-            return donorComp;
+            return donorComp == 0 
+                ? AcceptorIndex.CompareTo(other.AcceptorIndex) 
+                : donorComp;
         }
     }
 }

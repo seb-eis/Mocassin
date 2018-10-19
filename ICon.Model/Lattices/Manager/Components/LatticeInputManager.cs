@@ -12,10 +12,10 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Create new lattice input manager from data object, event manager and project services
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="manager"></param>
-        /// <param name="services"></param>
-        public LatticeInputManager(LatticeModelData data, LatticeEventManager manager, IModelProject services) : base(data, manager, services)
+        /// <param name="modelData"></param>
+        /// <param name="eventManager"></param>
+        /// <param name="project"></param>
+        public LatticeInputManager(LatticeModelData modelData, LatticeEventManager eventManager, IModelProject project) : base(modelData, eventManager, project)
         {
 
         }

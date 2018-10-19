@@ -6,7 +6,7 @@ using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IPositionTransitionModelBuilder"/>
+    /// <inheritdoc cref="IPositionTransitionModelBuilder" />
     public class PositionTransitionModelBuilder : ModelBuilderBase, IPositionTransitionModelBuilder
     {
         /// <inheritdoc />
@@ -29,7 +29,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the position transition model for the passed transition model
+        ///     Creates the position transition model for the passed transition model
         /// </summary>
         /// <param name="unitCellPosition"></param>
         /// <param name="modelContext"></param>
@@ -48,7 +48,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Searches a list of kinetic transition models for entries that are possible on the passed unit cell position
+        ///     Searches a list of kinetic transition models for entries that are possible on the passed unit cell position
         /// </summary>
         /// <param name="unitCellPosition"></param>
         /// <param name="transitionModels"></param>
@@ -62,7 +62,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Searches a list of metropolis transition models for entries that are possible on the passed unit cell position
+        ///     Searches a list of metropolis transition models for entries that are possible on the passed unit cell position
         /// </summary>
         /// <param name="unitCellPosition"></param>
         /// <param name="transitionModels"></param>

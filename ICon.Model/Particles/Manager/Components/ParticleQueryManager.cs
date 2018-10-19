@@ -9,8 +9,8 @@ namespace Mocassin.Model.Particles
         IParticleQueryPort
     {
         /// <inheritdoc />
-        public ParticleQueryManager(ParticleModelData baseData, ParticleModelCache cacheModel, AccessLockSource lockSource)
-            : base(baseData, cacheModel, lockSource)
+        public ParticleQueryManager(ParticleModelData modelData, ParticleModelCache modelCacheModel, AccessLockSource lockSource)
+            : base(modelData, modelCacheModel, lockSource)
         {
         }
     }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Mocassin.Framework.Constraints;
 using Mocassin.Framework.Provider;
 using Mocassin.Model.Basic;
@@ -8,39 +6,39 @@ using Mocassin.Model.Basic;
 namespace Mocassin.Model.Simulations
 {
     /// <summary>
-    /// Represents a series description of monte carlo simulations of the same type with varrying parameters
+    ///     Represents a series description of monte carlo simulations of the same type with varying parameters
     /// </summary>
     public interface ISimulationSeries : IModelObject
     {
         /// <summary>
-        /// The base simulation for this series that defines the default values and affiliated transitions
+        ///     The base simulation for this series that defines the default values and affiliated transitions
         /// </summary>
         ISimulation BaseSimulation { get; }
 
         /// <summary>
-        /// User defined identification string for this series
+        ///     User defined identification string for this series
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Get the series of temperature values
+        ///     Get the series of temperature values
         /// </summary>
-        IValueSeries TemperatureSeries { get; } 
+        IValueSeries TemperatureSeries { get; }
 
         /// <summary>
-        /// Get the series of monte carlo steps per particle
+        ///     Get the series of monte carlo steps per particle
         /// </summary>
         IValueSeries McspSeries { get; }
 
         /// <summary>
-        /// Get a read only list of all defined energy background load information used to provide energetic backgrounds
+        ///     Get a read only list of all defined energy background load information used to provide energetic backgrounds
         /// </summary>
         IReadOnlyList<IExternalLoadInfo> EnergyBackgroundLoadInfos { get; }
 
         /// <summary>
-        /// Get the number of simulations described by this series
+        ///     Get the number of simulations described by this series
         /// </summary>
         /// <returns></returns>
-        long GetSimulationCount(); 
+        long GetSimulationCount();
     }
 }

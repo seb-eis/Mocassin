@@ -54,6 +54,7 @@
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
+    <Folder Include="Simulations\Modeling\Logic\" />
     <Folder Include="Simulations\Modeling\ModelParameters\" />
     <Folder Include="Structures\Modeling\Logic\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />

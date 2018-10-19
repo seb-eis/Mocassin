@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Interop object wrapper for the 64 bytes buffer type used in the unmanaged simulation
+    ///    Fixed 64 byte buffer interop object. Boxes a marshal struct into a .NET object
     /// </summary>
     public class ByteBuffer64 : InteropObject<CByteBuffer64>
     {
@@ -15,7 +11,8 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public ByteBuffer64(CByteBuffer64 structure) : base(structure)
+        public ByteBuffer64(CByteBuffer64 structure)
+            : base(structure)
         {
         }
     }

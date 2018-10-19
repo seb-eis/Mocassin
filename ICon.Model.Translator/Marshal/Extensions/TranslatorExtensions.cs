@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Extension methods for the translator and data context related functionality
+    /// </summary>
     public static class TranslatorExtensions
     {
+        /// <summary>
+        ///     Marshals a sequence of structs into the provided buffer byte array starting at the given index
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="target"></param>
+        /// <param name="startByte"></param>
         public static void UnmanagedToByteArray<T>(this IEnumerable<T> values, byte[] target, int startByte) where T : struct
         {
-            int itemSize = Marshal.SizeOf<T>();
-            int index = 0;
+            var itemSize = Marshal.SizeOf<T>();
+            var index = 0;
 
             var ptr = Marshal.AllocHGlobal(itemSize);
             foreach (var item in values)
@@ -19,32 +28,44 @@ namespace Mocassin.Model.Translator
                 Marshal.Copy(ptr, target, startByte + index * itemSize, itemSize);
                 index++;
             }
+
             Marshal.FreeHGlobal(ptr);
         }
 
+        /// <summary>
+        ///     Marshals a binary array into a sequence of structs beginning at the provided index
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="startByte"></param>
+        /// <returns></returns>
         public static IEnumerable<T> ByteArrayToUnmanaged<T>(this byte[] array, int startByte) where T : struct
         {
-            int itemSize = Marshal.SizeOf<T>();
-            int itemCount = (array.Length - startByte) / itemSize;
+            var itemSize = Marshal.SizeOf<T>();
+            var itemCount = (array.Length - startByte) / itemSize;
 
             var ptr = Marshal.AllocHGlobal(itemSize);
-            for (int i = 0; i < itemCount; i++)
+            for (var i = 0; i < itemCount; i++)
             {
                 Marshal.Copy(array, startByte + i * itemSize, ptr, itemSize);
-                yield return (T)Marshal.PtrToStructure(ptr, typeof(T));
+                yield return (T) Marshal.PtrToStructure(ptr, typeof(T));
             }
 
             Marshal.FreeHGlobal(ptr);
         }
 
+        /// <summary>
+        ///     Marshals a byte array into a single struct
+        /// </summary>
+        /// <typeparam name="TUnmanaged"></typeparam>
+        /// <param name="binary"></param>
+        /// <returns></returns>
         public static TUnmanaged ByteArrayToStruct<TUnmanaged>(this byte[] binary) where TUnmanaged : struct
         {
-            int size = Marshal.SizeOf<TUnmanaged>();
+            var size = Marshal.SizeOf<TUnmanaged>();
 
-            if (size != binary.Length)
-            {
+            if (size != binary.Length) 
                 throw new ArgumentException("Array has wrong size", nameof(binary));
-            }
 
             var ptr = Marshal.AllocHGlobal(size);
             Marshal.Copy(binary, 0, ptr, size);

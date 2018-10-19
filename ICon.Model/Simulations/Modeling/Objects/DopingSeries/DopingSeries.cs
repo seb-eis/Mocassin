@@ -1,46 +1,32 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.Serialization;
-using System.Collections;
 using Mocassin.Framework.Constraints;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Lattices;
 
 namespace Mocassin.Model.Simulations
 {
-    /// <summary>
-    /// Describes a doping series by abstract doping information and a value series
-    /// </summary>
+    /// <inheritdoc />
     [DataContract]
     public class DopingSeries : IDopingSeries
     {
-        /// <summary>
-        /// The abstract doping information for the series
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         [IndexResolved]
         public IDoping Doping { get; set; }
 
-        /// <summary>
-        /// The actual concentration values of the series
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public IValueSeries ValueSeries { get; set; }
 
-        /// <summary>
-        /// Get the generic enumerator for the value series
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IEnumerator<double> GetEnumerator()
         {
             return ValueSeries.GetEnumerator();
         }
 
-        /// <summary>
-        /// Get the non-generic enumerator for the value series
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ValueSeries.GetEnumerator();

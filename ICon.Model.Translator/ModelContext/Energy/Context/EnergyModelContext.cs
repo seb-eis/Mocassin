@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Model.ModelProject;
+﻿using System.Collections.Generic;
 
 namespace Mocassin.Model.Translator.ModelContext
 {

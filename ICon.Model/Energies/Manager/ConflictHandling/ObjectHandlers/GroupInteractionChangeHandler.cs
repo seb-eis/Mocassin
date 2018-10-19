@@ -11,8 +11,8 @@ namespace Mocassin.Model.Energies.ConflictHandling
     public class GroupInteractionChangeHandler : ObjectConflictHandler<GroupInteraction, EnergyModelData>
     {
         /// <inheritdoc />
-        public GroupInteractionChangeHandler(IDataAccessor<EnergyModelData> dataAccess, IModelProject modelProject)
-            : base(dataAccess, modelProject)
+        public GroupInteractionChangeHandler(IDataAccessor<EnergyModelData> dataAccessor, IModelProject modelProject)
+            : base(dataAccessor, modelProject)
         {
         }
 

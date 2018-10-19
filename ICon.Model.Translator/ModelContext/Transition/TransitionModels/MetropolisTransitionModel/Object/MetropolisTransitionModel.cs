@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IMetropolisTransitionModel"/>
+    /// <inheritdoc cref="IMetropolisTransitionModel" />
     public class MetropolisTransitionModel : ModelComponentBase, IMetropolisTransitionModel
     {
         /// <inheritdoc />

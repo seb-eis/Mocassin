@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Threading;
-using System.Reactive.Disposables;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Carries marshal target info. Size info of struct and a pointer to unmanaged memory of correct size
+    ///     Carries marshal target info. Size info of struct and a pointer to unmanaged memory of correct size
     /// </summary>
     public class MarshalTarget
     {
         /// <summary>
-        /// The lock object to mark that the target is in use
+        ///     The lock object to mark that the target is in use
         /// </summary>
         public object LockObj { get; } = new object();
 
@@ -24,30 +20,28 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        /// Pointer to unmanaged memory
+        ///     Pointer to unmanaged memory
         /// </summary>
         public IntPtr Pointer { get; }
 
         /// <summary>
-        ///  Size of the unmnagaed memory
+        ///     Size of the unmanaged memory
         /// </summary>
         public int TypeSize { get; }
 
         /// <summary>
-        /// Triesto get an exlusiv loc on the target
+        ///     Tries to get an exclusive lock on the target
         /// </summary>
         /// <returns></returns>
         public LockedMarshalTarget GetLocked()
         {
-            if (Monitor.TryEnter(LockObj))
-            {
-                return new LockedMarshalTarget(this);
-            }
-            return null;
+            return Monitor.TryEnter(LockObj) 
+                ? new LockedMarshalTarget(this)
+                : null;
         }
 
         /// <summary>
-        /// Unlocks the target
+        ///     Unlocks the target
         /// </summary>
         public void Unlock()
         {
@@ -56,7 +50,7 @@ namespace Mocassin.Model.Translator
     }
 
     /// <summary>
-    /// Locked marshal target that unlocks on dispose
+    ///     Locked marshal target that unlocks on dispose
     /// </summary>
     public class LockedMarshalTarget : IDisposable
     {
@@ -66,23 +60,21 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        /// The locked marshal target
+        ///     The locked marshal target
         /// </summary>
         private MarshalTarget Target { get; }
 
         /// <summary>
-        /// Get the unmanaged memory pointer
+        ///     Get the unmanaged memory pointer
         /// </summary>
         public IntPtr Pointer => Target.Pointer;
 
         /// <summary>
-        /// Get the size of the structure
+        ///     Get the size of the structure
         /// </summary>
         public int TypeSize => Target.TypeSize;
 
-        /// <summary>
-        /// Unlocks the wrapped masrhal target
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             Target.Unlock();

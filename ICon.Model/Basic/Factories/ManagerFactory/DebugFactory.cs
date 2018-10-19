@@ -179,14 +179,14 @@ namespace Mocassin.Model.Basic
                 var propertyGroups = new[]
                 {
                     new StateExchangeGroup
-                        {VacancyGroup = false, Index = 0, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[0]}},
+                        {IsVacancyGroup = false, Index = 0, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[0]}},
                     new StateExchangeGroup
-                        {VacancyGroup = true, Index = 1, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[1]}},
+                        {IsVacancyGroup = true, Index = 1, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[1]}},
                     new StateExchangeGroup
-                        {VacancyGroup = false, Index = 2, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[2]}},
+                        {IsVacancyGroup = false, Index = 2, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[2]}},
                     new StateExchangeGroup
                     {
-                        VacancyGroup = false, Index = 3, StateExchangePairs = new List<IStateExchangePair>
+                        IsVacancyGroup = false, Index = 3, StateExchangePairs = new List<IStateExchangePair>
                         {
                             propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6], propertyPairs[7], propertyPairs[8]
                         }

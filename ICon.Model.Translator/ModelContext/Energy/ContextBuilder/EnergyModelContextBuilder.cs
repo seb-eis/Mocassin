@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Mocassin.Framework.Extensions;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Mocassin.Framework.Collections;
-using Mocassin.Model.Particles;
-using Mocassin.Model.ModelProject;
 using Mocassin.Model.Energies;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IEnergyModelContextBuilder"/>
+    /// <inheritdoc cref="IEnergyModelContextBuilder" />
     public class EnergyModelContextBuilder : ModelContextBuilderBase<IEnergyModelContext>, IEnergyModelContextBuilder
     {
         /// <inheritdoc />

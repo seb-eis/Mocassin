@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using Mocassin.Model.ModelProject;
-using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Structures;
-using Mocassin.Mathematics.Coordinates;
-using Mocassin.Framework.Extensions;
-using Mocassin.Model.Particles;
-using Mocassin.Framework.Collections;
-using Mocassin.Mathematics.Comparers;
+﻿using System.Threading.Tasks;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="ITransitionModelContextBuilder"/>
+    /// <inheritdoc cref="ITransitionModelContextBuilder" />
     public class TransitionModelContextBuilder : ModelContextBuilderBase<ITransitionModelContext>, ITransitionModelContextBuilder
     {
         /// <inheritdoc />
@@ -28,7 +16,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IPositionTransitionModelBuilder PositionTransitionModelBuilder { get; set; }
 
         /// <inheritdoc />
-        public TransitionModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder) 
+        public TransitionModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
             : base(projectModelContextBuilder)
         {
         }

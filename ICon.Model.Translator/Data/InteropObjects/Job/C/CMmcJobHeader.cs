@@ -1,42 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
+    ///     Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 32)]
     public struct CMmcJobHeader
     {
-        [MarshalAs(UnmanagedType.I8)]
-        private long jobFlags;
+        [MarshalAs(UnmanagedType.I4)] private readonly int paddingInt;
 
-        [MarshalAs(UnmanagedType.R8)]
-        private double abortTolerance;
+        [field: MarshalAs(UnmanagedType.I8)]
+        public long JobFlags { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int abortSequenceLength;
+        [field: MarshalAs(UnmanagedType.R8)]
+        public double AbortTolerance { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int abortSampleLEngth;
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int AbortSequenceLength { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private int abortSampleInterval;
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int AbortSampleLength { get; set; }
 
-        [MarshalAs(UnmanagedType.I4)]
-        private readonly int paddingInt;
-
-        public long JobFlags { get => jobFlags; set => jobFlags = value; }
-
-        public double AbortTolerance { get => abortTolerance; set => abortTolerance = value; }
-
-        public int AbortSequenceLength { get => abortSequenceLength; set => abortSequenceLength = value; }
-
-        public int AbortSampleLEngth { get => abortSampleLEngth; set => abortSampleLEngth = value; }
-
-        public int AbortSampleInterval { get => abortSampleInterval; set => abortSampleInterval = value; }
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int AbortSampleInterval { get; set; }
     }
 }

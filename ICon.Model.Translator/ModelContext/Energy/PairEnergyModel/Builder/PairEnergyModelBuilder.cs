@@ -5,7 +5,7 @@ using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IPairEnergyModelBuilder"/>
+    /// <inheritdoc cref="IPairEnergyModelBuilder" />
     public class PairEnergyModelBuilder : ModelBuilderBase, IPairEnergyModelBuilder
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a pair energy model from a pair interaction
+        ///     Creates a pair energy model from a pair interaction
         /// </summary>
         /// <param name="pairInteraction"></param>
         /// <param name="index"></param>
@@ -44,7 +44,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Copies all energy entries of the set interaction into the energy model list an returns the largest found particle index
+        ///     Copies all energy entries of the set interaction into the energy model list an returns the largest found particle
+        ///     index
         /// </summary>
         /// <param name="energyModel"></param>
         /// <returns></returns>
@@ -64,14 +65,14 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Builds the energy table based upon the passed energy entry collection
+        ///     Builds the energy table based upon the passed energy entry collection
         /// </summary>
         /// <param name="energyEntries"></param>
         /// <param name="largestIndex"></param>
         /// <returns></returns>
         protected double[,] CreateEnergyTable(IList<PairEnergyEntry> energyEntries, int largestIndex)
         {
-            var table = new double[largestIndex+1, largestIndex+1];
+            var table = new double[largestIndex + 1, largestIndex + 1];
 
             foreach (var entry in energyEntries)
             {

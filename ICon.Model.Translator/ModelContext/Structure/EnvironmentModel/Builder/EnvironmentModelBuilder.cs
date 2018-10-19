@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Energies;
@@ -13,28 +12,28 @@ using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
-    /// <inheritdoc cref="IEnvironmentModelBuilder"/>
+    /// <inheritdoc cref="IEnvironmentModelBuilder" />
     public class EnvironmentModelBuilder : ModelBuilderBase, IEnvironmentModelBuilder
     {
         /// <summary>
-        /// Get or set the position pair interaction dictionary
-        /// that assigns each unit cell position its existing pair interactions
+        ///     Get or set the position pair interaction dictionary
+        ///     that assigns each unit cell position its existing pair interactions
         /// </summary>
         protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> PositionPairInteractions { get; set; }
 
         /// <summary>
-        /// Get or set the position group interaction dictionary
-        /// that assigns each unit cell position its existing group interactions
+        ///     Get or set the position group interaction dictionary
+        ///     that assigns each unit cell position its existing group interactions
         /// </summary>
         protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> PositionGroupInteractions { get; set; }
 
         /// <summary>
-        /// The position group infos for all existing group interactions
+        ///     The position group infos for all existing group interactions
         /// </summary>
         protected IReadOnlyList<IPositionGroupInfo> PositionGroupInfos { get; set; }
 
         /// <summary>
-        /// The unit cell vector encoder to transform cell vectors
+        ///     The unit cell vector encoder to transform cell vectors
         /// </summary>
         protected IUnitCellVectorEncoder VectorEncoder { get; set; }
 
@@ -56,7 +55,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Loads the required shared build data from the reference project managers
+        ///     Loads the required shared build data from the reference project managers
         /// </summary>
         protected void LoadBuildDataFromProject()
         {
@@ -68,7 +67,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Builds a single environment model
+        ///     Builds a single environment model
         /// </summary>
         /// <param name="unitCellPosition"></param>
         /// <returns></returns>
@@ -86,7 +85,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates and adds all existing pair interaction models to the environment model
+        ///     Creates and adds all existing pair interaction models to the environment model
         /// </summary>
         /// <param name="environmentModel"></param>
         protected void AddPairInteractionModels(IEnvironmentModel environmentModel)
@@ -108,7 +107,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a single pair interaction model from the passed interaction and the environment model it belongs to
+        ///     Creates a single pair interaction model from the passed interaction and the environment model it belongs to
         /// </summary>
         /// <param name="pairInteraction"></param>
         /// <param name="environmentModel"></param>
@@ -132,7 +131,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Sets the pair interaction model info in normal forward cases from the passed pair interaction
+        ///     Sets the pair interaction model info in normal forward cases from the passed pair interaction
         /// </summary>
         /// <param name="pairModel"></param>
         /// <param name="pairInteraction"></param>
@@ -148,12 +147,13 @@ namespace Mocassin.Model.Translator.ModelContext
 
             if (!VectorEncoder.TryEncodeAsRelative(pairInteraction.Position0.Vector, targetInfo.RelativeFractional3D, out var relative4D))
                 throw new InvalidOperationException("Could not create valid relative 4D interaction target");
-                
+
             targetInfo.RelativeVector4D = relative4D;
         }
 
         /// <summary>
-        /// Sets the pair interaction model info in inverted cases where the interaction was created from the target cell position
+        ///     Sets the pair interaction model info in inverted cases where the interaction was created from the target cell
+        ///     position
         /// </summary>
         /// <param name="pairModel"></param>
         /// <param name="pairInteraction"></param>
@@ -176,13 +176,13 @@ namespace Mocassin.Model.Translator.ModelContext
 
             if (!VectorEncoder.TryEncodeAsRelative(pairInteraction.Position1.Vector, targetInfo.RelativeFractional3D, out var relative4D))
                 throw new InvalidOperationException("Could not create valid relative 4D interaction target");
-                
+
             targetInfo.RelativeVector4D = relative4D;
         }
 
         /// <summary>
-        /// Takes a single reference pair interaction model an creates the extended set of all equivalent interaction models
-        /// including the original using the provided multiplicity operations
+        ///     Takes a single reference pair interaction model an creates the extended set of all equivalent interaction models
+        ///     including the original using the provided multiplicity operations
         /// </summary>
         /// <param name="pairInteractionModel"></param>
         /// <param name="multiplicityOperations"></param>
@@ -205,7 +205,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a new pair interaction model from an original pair interaction model and a new absolute 3D target vector
+        ///     Creates a new pair interaction model from an original pair interaction model and a new absolute 3D target vector
         /// </summary>
         /// <param name="originalModel"></param>
         /// <param name="absoluteVector"></param>
@@ -236,7 +236,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates and adds all existing group interaction models to the environment model
+        ///     Creates and adds all existing group interaction models to the environment model
         /// </summary>
         /// <param name="environmentModel"></param>
         protected void AddGroupInteractionModels(IEnvironmentModel environmentModel)
@@ -255,7 +255,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a group interaction model for the passed group interaction that is linked to its parent environment model
+        ///     Creates a group interaction model for the passed group interaction that is linked to its parent environment model
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <param name="environmentModel"></param>
@@ -273,8 +273,9 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Extend the passed group interaction model into its set of symmetry equivalents and looks up the required pair interaction
-        /// information
+        ///     Extend the passed group interaction model into its set of symmetry equivalents and looks up the required pair
+        ///     interaction
+        ///     information
         /// </summary>
         /// <param name="groupModel"></param>
         /// <returns></returns>
@@ -295,7 +296,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates an extended group interaction model from the original model and the passed list of pair interaction models
+        ///     Creates an extended group interaction model from the original model and the passed list of pair interaction models
         /// </summary>
         /// <param name="originalModel"></param>
         /// <param name="pairModels"></param>
@@ -315,7 +316,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates a pair index coding for a group interaction model
+        ///     Creates a pair index coding for a group interaction model
         /// </summary>
         /// <param name="pairModels"></param>
         /// <returns></returns>

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Transitions;
 
@@ -63,7 +60,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Gets an inverted version of the fractional transition sequence
+        ///     Gets an inverted version of the fractional transition sequence
         /// </summary>
         /// <returns></returns>
         protected IList<Fractional3D> GetInverseTransitionSequence3D()
@@ -72,7 +69,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Gets an inverted version of the encoded transition sequence
+        ///     Gets an inverted version of the encoded transition sequence
         /// </summary>
         /// <returns></returns>
         protected IList<CrystalVector4D> GetInverseTransitionSequence4D()
@@ -81,7 +78,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Get an inverted version of the movement matrix
+        ///     Get an inverted version of the movement matrix
         /// </summary>
         /// <returns></returns>
         protected Matrix2D GetInverseMovementMatrix()

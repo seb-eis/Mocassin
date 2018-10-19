@@ -1,24 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Base class for all simulation energy model components stored in the interop database
+    /// </summary>
     public class EnergyModelComponentBase : InteropEntityBase
     {
-        private static IList<InteropStateChangeAction> stateChangeDelegates;
+        /// <summary>
+        ///     Static backing field for the state change actions of energy model components
+        /// </summary>
+        private static IList<StateChangeAction> _stateChangeDelegates;
 
-        protected override IList<InteropStateChangeAction> StateChangeActions
+        /// <inheritdoc />
+        protected override IList<StateChangeAction> StateChangeActions
         {
-            get => stateChangeDelegates;
-            set => stateChangeDelegates = value;
+            get => _stateChangeDelegates;
+            set => _stateChangeDelegates = value;
         }
 
+        /// <summary>
+        ///     The energy model context key
+        /// </summary>
         [ForeignKey(nameof(EnergyModel))]
         public int EnergyModelId { get; set; }
 
+        /// <summary>
+        ///     The energy model navigation property
+        /// </summary>
         public EnergyModel EnergyModel { get; set; }
     }
 }
-

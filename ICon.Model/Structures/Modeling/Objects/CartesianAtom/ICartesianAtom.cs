@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Represents an actual atom position with cartesian coordinates and a particle index to specify the occupation
+    ///     Represents an actual atom position with cartesian coordinates and a particle index to specify the occupation
     /// </summary>
     public interface ICartesianAtom : ICartesian3D
     {
         /// <summary>
-        /// The particle index
+        ///     The particle index
         /// </summary>
-        Int32 ParticleIndex { get; }
+        int ParticleIndex { get; }
     }
 }

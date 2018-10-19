@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    /// Non generic base class for all wrapped interop objects that can switch between objet and binary unmanaged representation
+    ///     Non generic base class for all wrapped interop objects that can switch between object and binary unmanaged
+    ///     representation
     /// </summary>
     public abstract class InteropObject
     {
         /// <summary>
-        /// Get the size of the binary state of the object
+        ///     Get the size of the binary state of the object
         /// </summary>
-        public abstract int BinarySize { get; }
+        public abstract int ByteCount { get; }
 
         /// <summary>
-        /// Write the internal object information to its unmanaged representation using the provided target buffer
+        ///     Write the internal object information to its unmanaged representation using the provided target buffer
         /// </summary>
         /// <param name="targetBuffer"></param>
         /// <param name="offset"></param>
@@ -25,7 +23,7 @@ namespace Mocassin.Model.Translator
         public abstract void ToBinary(byte[] targetBuffer, int offset, IMarshalProvider marshalProvider);
 
         /// <summary>
-        /// Read the internal object information from its unmanaged representation using the provided source buffer
+        ///     Read the internal object information from its unmanaged representation using the provided source buffer
         /// </summary>
         /// <param name="sourceBuffer"></param>
         /// <param name="offset"></param>
@@ -34,24 +32,24 @@ namespace Mocassin.Model.Translator
     }
 
     /// <summary>
-    /// Generic base class for wrapping interop structures into a net object. Supports marshalling of teh wrapped structure
+    ///     Generic base class for wrapping interop structures into a net object. Supports marshalling of teh wrapped structure
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NotMapped]
     public class InteropObject<T> : InteropObject where T : struct
     {
         /// <summary>
-        /// The wrapped structure
+        ///     The wrapped structure
         /// </summary>
-        private T structure;
+        private T _structure;
 
         /// <summary>
-        /// Create new interop object base wrapping the passed structure
+        ///     Create new interop object base wrapping the passed structure
         /// </summary>
         /// <param name="structure"></param>
         public InteropObject(T structure)
         {
-            this.structure = structure;
+            _structure = structure;
         }
 
         public InteropObject()
@@ -59,35 +57,23 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        /// Refernce access to the wrapped structure
+        ///     Reference access to the wrapped structure
         /// </summary>
-        public ref T Structure => ref structure;
+        public ref T Structure => ref _structure;
 
-        /// <summary>
-        /// Get the binary size of the umnanaged structure
-        /// </summary>
-        public override int BinarySize => Marshal.SizeOf(typeof(T));
+        /// <inheritdoc />
+        public override int ByteCount => Marshal.SizeOf(typeof(T));
 
-        /// <summary>
-        /// Writes the byte representation of the wrapped struct to the target buffer at specififed offset
-        /// </summary>
-        /// <param name="targetBuffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="marshalProvider"></param>
+        /// <inheritdoc />
         public override void ToBinary(byte[] targetBuffer, int offset, IMarshalProvider marshalProvider)
         {
-            marshalProvider.StructureToBytes(targetBuffer, offset, structure);
+            marshalProvider.StructureToBytes(targetBuffer, offset, _structure);
         }
 
-        /// <summary>
-        /// Loads the wrapped structure from the source buffer starting at the specififed offset
-        /// </summary>
-        /// <param name="sourceBuffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="marshalProvider"></param>
+        /// <inheritdoc />
         public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalProvider marshalProvider)
         {
-            structure = marshalProvider.BytesToStructure<T>(sourceBuffer, offset);
+            _structure = marshalProvider.BytesToStructure<T>(sourceBuffer, offset);
         }
     }
 }

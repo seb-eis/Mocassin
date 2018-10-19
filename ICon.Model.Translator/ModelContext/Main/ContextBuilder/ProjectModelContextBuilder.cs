@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Mocassin.Model.ModelProject;
 
@@ -32,7 +30,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
 
         /// <summary>
-        /// Build a new context builder that uses the provided project access as a reference data source
+        ///     Build a new context builder that uses the provided project access as a reference data source
         /// </summary>
         /// <param name="modelProject"></param>
         public ProjectModelContextBuilder(IModelProject modelProject)
@@ -41,12 +39,12 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Async creation of a new project model context and all its components
+        ///     Async creation of a new project model context and all its components
         /// </summary>
         /// <returns></returns>
         public async Task<IProjectModelContext> BuildNewContext()
         {
-            var projectModelContext = new ProjectModelContext()
+            var projectModelContext = new ProjectModelContext
             {
                 ModelProject = ModelProject
             };
@@ -65,7 +63,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates all context components independently and awaits their completion
+        ///     Creates all context components independently and awaits their completion
         /// </summary>
         /// <returns></returns>
         protected void StartComponentBuildProcess()
@@ -79,7 +77,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Calls the link dependent build routines on all context builders
+        ///     Calls the link dependent build routines on all context builders
         /// </summary>
         protected Task BuildLinkDependentComponents()
         {
@@ -94,7 +92,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Set all builder components that are null to a default build system
+        ///     Set all builder components that are null to a default build system
         /// </summary>
         protected void UseDefaultsForNullComponents()
         {

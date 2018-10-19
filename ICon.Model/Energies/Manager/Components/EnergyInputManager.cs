@@ -12,8 +12,8 @@ namespace Mocassin.Model.Energies
     internal class EnergyInputManager : ModelInputManager<EnergyModelData, IEnergyDataPort, EnergyEventManager>, IEnergyInputPort
     {
         /// <inheritdoc />
-        public EnergyInputManager(EnergyModelData data, EnergyEventManager manager, IModelProject services)
-            : base(data, manager, services)
+        public EnergyInputManager(EnergyModelData modelData, EnergyEventManager eventManager, IModelProject project)
+            : base(modelData, eventManager, project)
         {
         }
 

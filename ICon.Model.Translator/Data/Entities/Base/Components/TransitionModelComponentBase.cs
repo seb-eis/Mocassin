@@ -1,23 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Mocassin.Model.Translator
 {
+    /// <summary>
+    ///     Base class for all simulation transition model components stored in the interop database
+    /// </summary>
     public class TransitionModelComponentBase : InteropEntityBase
     {
-        private static IList<InteropStateChangeAction> stateChangeDelegates;
+        /// <summary>
+        ///     Static backing field for the transition model state change actions
+        /// </summary>
+        private static IList<StateChangeAction> _stateChangeDelegates;
 
-        protected override IList<InteropStateChangeAction> StateChangeActions
+        /// <inheritdoc />
+        protected override IList<StateChangeAction> StateChangeActions
         {
-            get => stateChangeDelegates;
-            set => stateChangeDelegates = value;
+            get => _stateChangeDelegates;
+            set => _stateChangeDelegates = value;
         }
 
+        /// <summary>
+        ///     The transition model context key
+        /// </summary>
         [ForeignKey(nameof(TransitionModel))]
         public int TransitionModelId { get; set; }
 
+        /// <summary>
+        ///     The transition model navigation property
+        /// </summary>
         public TransitionModel TransitionModel { get; set; }
     }
 }

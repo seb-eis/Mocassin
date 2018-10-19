@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
@@ -8,26 +6,37 @@ using Mocassin.Model.ModelProject;
 namespace Mocassin.Model.Simulations.ConflictHandling
 {
     /// <summary>
-    /// Simulation object change hanlder that handles inernal data conflict in the simulation manager when a model object is changed
+    ///     Simulation object change handler that handles internal data conflict in the simulation manager when a model object
+    ///     is changed
     /// </summary>
     public class SimulationObjectChangedHandler : DataConflictHandler<SimulationModelData, ModelObject>
     {
-        /// <summary>
-        /// Create new simulation object changed hadler that uses the provide project services
-        /// </summary>
-        /// <param name="modelProject"></param>
-        public SimulationObjectChangedHandler(IModelProject modelProject) : base(modelProject)
+        /// <inheritdoc />
+        public SimulationObjectChangedHandler(IModelProject modelProject)
+            : base(modelProject)
         {
         }
 
+        /// <summary>
+        /// Handles a metropolis simulation series object change
+        /// </summary>
+        /// <param name="series"></param>
+        /// <param name="accessor"></param>
+        /// <returns></returns>
         [ConflictHandlingMethod]
-        IConflictReport HandleObjectChange(MetropolisSimulationSeries series, IDataAccessor<SimulationModelData> accessor)
+        private IConflictReport HandleObjectChange(MetropolisSimulationSeries series, IDataAccessor<SimulationModelData> accessor)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Handles a kinetic simulation series object change
+        /// </summary>
+        /// <param name="series"></param>
+        /// <param name="accessor"></param>
+        /// <returns></returns>
         [ConflictHandlingMethod]
-        IConflictReport HandleObjectChange(KineticSimulationSeries series, IDataAccessor<SimulationModelData> accessor)
+        private IConflictReport HandleObjectChange(KineticSimulationSeries series, IDataAccessor<SimulationModelData> accessor)
         {
             throw new NotImplementedException();
         }

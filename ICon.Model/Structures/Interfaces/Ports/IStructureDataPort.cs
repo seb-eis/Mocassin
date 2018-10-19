@@ -1,62 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mocassin.Framework.Collections;
+﻿using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Structures
 {
     /// <summary>
-    /// Represents a read only data port for the structre manager that allows data access on the structure manager base data through interfaces
+    ///     Represents a read only data port for the structure manager that allows data access on the structure manager base
+    ///     data through interfaces
     /// </summary>
     public interface IStructureDataPort : IModelDataPort
     {
         /// <summary>
-        /// Get the current space group information
+        ///     Get the current space group information
         /// </summary>
         /// <returns></returns>
         ISpaceGroupInfo GetSpaceGroupInfo();
 
         /// <summary>
-        /// Get the unit cell parameters
+        ///     Get the unit cell parameters
         /// </summary>
         /// <returns></returns>
         ICellParameters GetCellParameters();
 
         /// <summary>
-        /// Get the structure miscellaneous info
+        ///     Get the structure miscellaneous info
         /// </summary>
         /// <returns></returns>
         IStructureInfo GetStructureInfo();
 
         /// <summary>
-        /// Get read only access to the unit cell position list
+        ///     Get read only access to the unit cell position list
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IUnitCellPosition> GetUnitCellPositions();
 
         /// <summary>
-        /// Get a unit cell position by index
+        ///     Get a unit cell position by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         IUnitCellPosition GetUnitCellPosition(int index);
 
         /// <summary>
-        /// Get a read only list of all position dummies
+        ///     Get a read only list of all position dummies
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IPositionDummy> GetPositionDummies();
 
         /// <summary>
-        /// Get the position dummy at the specfified index
+        ///     Get the position dummy at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         IPositionDummy GetPositionDummy(int index);
 
         /// <summary>
-        /// Get a cleaned indexing for the unit cell positions (Where deprecated data is removed)
+        ///     Get a cleaned indexing for the unit cell positions (Where deprecated data is removed)
         /// </summary>
         /// <returns></returns>
         ReindexingList GetCleanUnitCellPositionIndexing();
