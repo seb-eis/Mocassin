@@ -36,11 +36,11 @@ namespace Mocassin.Model.Particles
         /// <returns></returns>
         public int CompareTo(IParticle other)
         {
-            var nameCompare = Name.CompareTo(other.Name);
+            var nameCompare = string.Compare(Name, other.Name, StringComparison.Ordinal);
             if (nameCompare != 0)
                 return nameCompare;
 
-            var symbolCompare = Symbol.CompareTo(other.Symbol);
+            var symbolCompare = string.Compare(Symbol, other.Symbol, StringComparison.Ordinal);
 
             return symbolCompare != 0 ? symbolCompare : Charge.CompareTo(other.Charge);
         }

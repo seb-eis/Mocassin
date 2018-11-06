@@ -1,39 +1,37 @@
-﻿using System;
-
-namespace Mocassin.Mathematics.ValueTypes
+﻿namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
-    /// General interface for all four dimensional 128 bit encoded linear supercell crystal position information
+    ///     General interface for all four dimensional 128 bit encoded linear supercell crystal position information
     /// </summary>
     public interface ICrystalVector4D : ILinearVector4D
     {
         /// <summary>
-        /// Offset in A direction
+        ///     Offset in A direction
         /// </summary>
-        Int32 A { get; }
+        int A { get; }
 
         /// <summary>
-        /// Offset in B direction
+        ///     Offset in B direction
         /// </summary>
-        Int32 B { get; }
+        int B { get; }
 
         /// <summary>
-        /// Offset in C direction
+        ///     Offset in C direction
         /// </summary>
-        Int32 C { get; }
+        int C { get; }
 
         /// <summary>
-        /// The position ID within the unit cell
+        ///     The position ID within the unit cell
         /// </summary>
-        Int32 P { get; }
+        int P { get; }
     }
 
     /// <summary>
-    /// Generic interface for all four dimensional 128 bit encoded linear supercell crystal position information of specific type
+    ///     Generic interface for all four dimensional 128 bit encoded linear supercell crystal position information of
+    ///     specific type
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public interface ICrystalVector4D<T1> : ICrystalVector4D, ILinearVector4D<T1> where T1 : struct, ICrystalVector4D<T1>
+    public interface ICrystalVector4D<out T1> : ICrystalVector4D, ILinearVector4D<T1> where T1 : struct, ICrystalVector4D<T1>
     {
-
     }
 }

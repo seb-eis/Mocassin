@@ -8,7 +8,7 @@ namespace Mocassin.Model.Basic
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
-    public interface IDataConflictHandler<T1, in T2> where T1 : ModelData
+    public interface IDataConflictHandler<in T1, in T2> where T1 : ModelData
     {
         /// <summary>
         ///     Takes the source of a potential conflict as an object and a data accessor instance to the data to resolve potential

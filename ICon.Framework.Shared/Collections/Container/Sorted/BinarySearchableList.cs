@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mocassin.Framework.Collections
 {
     /// <summary>
-    /// Generic abstract base class for sorted lists that support binary search operations
+    ///     Generic abstract base class for sorted lists that support binary search operations
     /// </summary>
     public abstract class BinarySearchableList<T1> : IList<T1>
     {
         /// <summary>
-        /// The internally wrapped list of type T1
+        ///     The internally wrapped list of type T1
         /// </summary>
         public List<T1> List { get; protected set; }
 
         /// <summary>
-        /// The used comparer of type T1 to sort the entries
+        ///     The used comparer of type T1 to sort the entries
         /// </summary>
         public IComparer<T1> Comparer { get; protected set; }
 
@@ -28,13 +27,13 @@ namespace Mocassin.Framework.Collections
 
         /// <inheritdoc />
         public T1 this[int index]
-        { 
+        {
             get => List[index];
             set => List[index] = value;
         }
 
         /// <summary>
-        /// Creates a new binary searchable list with the specified comparer
+        ///     Creates a new binary searchable list with the specified comparer
         /// </summary>
         /// <param name="comparer"></param>
         protected BinarySearchableList(IComparer<T1> comparer)
@@ -44,7 +43,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Creates a new binary searchable list with the specified comparer and capacity
+        ///     Creates a new binary searchable list with the specified comparer and capacity
         /// </summary>
         /// <param name="comparer"></param>
         /// <param name="capacity"></param>
@@ -91,7 +90,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Calls excess trim on the internal list object
+        ///     Calls excess trim on the internal list object
         /// </summary>
         public void TrimExcess()
         {
@@ -111,9 +110,10 @@ namespace Mocassin.Framework.Collections
         public abstract bool Remove(T1 item);
 
         /// <summary>
-        /// C++ Style lower bound binary search for sorted (provided comparer) collections: O log(n) complexity search of first entry that does not compare less than value
+        ///     C++ Style lower bound binary search for sorted (provided comparer) collections: O log(n) complexity search of first
+        ///     entry that does not compare less than value
         /// </summary>
-        public int GetCppLowerBound(T1 item) 
+        public int GetCppLowerBound(T1 item)
         {
             var (currentIndex, firstIndex, lastIndex, step, counter) = (0, 0, List.Count, 0, List.Count);
             while (counter > 0)
@@ -128,11 +128,13 @@ namespace Mocassin.Framework.Collections
                 else
                     counter = step;
             }
+
             return firstIndex;
         }
 
         /// <summary>
-        /// C++ Style upper bound binary search for sorted (provided comparer) collections: O log(n) complexity search of first entry that does not compare less than value
+        ///     C++ Style upper bound binary search for sorted (provided comparer) collections: O log(n) complexity search of first
+        ///     entry that does not compare less than value
         /// </summary>
         public int GetCppUpperBound(T1 item)
         {
@@ -149,11 +151,13 @@ namespace Mocassin.Framework.Collections
                 else
                     counter = step;
             }
+
             return firstIndex;
         }
 
         /// <summary>
-        /// C++ style lower and upper bound binary range search for sorted (provided comparer) collections: 2* O log(n) search for first entry not lesser and first entry greater than value
+        ///     C++ style lower and upper bound binary range search for sorted (provided comparer) collections: 2* O log(n) search
+        ///     for first entry not lesser and first entry greater than value
         /// </summary>
         public (int Start, int End) GetCppEnclosingBounds(T1 item)
         {
@@ -161,7 +165,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Adds multiple new entries from a sequence
+        ///     Adds multiple new entries from a sequence
         /// </summary>
         /// <param name="source"></param>
         public void Add(IEnumerable<T1> source)
@@ -170,12 +174,12 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Add multiple entries from a params set
+        ///     Add multiple entries from a params set
         /// </summary>
         /// <param name="source"></param>
         public void Add(params T1[] source)
         {
-            Add((IEnumerable<T1>)source);
+            Add((IEnumerable<T1>) source);
         }
     }
 }

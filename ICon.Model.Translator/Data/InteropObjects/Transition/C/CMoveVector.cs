@@ -11,7 +11,7 @@ namespace Mocassin.Model.Translator
         [MarshalAs(UnmanagedType.I4)] 
         private readonly int paddingInt;
 
-        public CVector3 Vector { get; }
+        public CVector3 Vector { get; set; }
 
         [field: MarshalAs(UnmanagedType.I4)]
         public int TrackerId { get; set; }

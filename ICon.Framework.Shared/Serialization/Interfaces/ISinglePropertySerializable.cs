@@ -4,7 +4,7 @@
     ///     Interface that specifies that the class or struct uses serialization/deserialization through a single splittable
     ///     attribute string
     /// </summary>
-    public interface ISinglePropertySerializable<T1>
+    public interface ISinglePropertySerializable<out T1>
     {
         /// <summary>
         ///     Get or set the class by attribute string

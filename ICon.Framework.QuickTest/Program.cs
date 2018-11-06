@@ -56,7 +56,7 @@ namespace Mocassin.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            var defaultPath = "C:/Users/hims-user/source/repos/ICon.Program/ICon.Framework.QuickTest";
+            //var defaultPath = "C:/Users/hims-user/source/repos/ICon.Program/ICon.Framework.QuickTest";
             //var context = new CInteropDbContext("./mcsop.db", true);
             var packages = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
             var mainContextBuilder = new ProjectModelContextBuilder(packages.ModelProject);

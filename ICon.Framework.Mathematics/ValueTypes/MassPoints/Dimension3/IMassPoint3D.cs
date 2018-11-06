@@ -15,7 +15,7 @@
     ///     Generic mass point interface that specializes the mass point type and affiliated factory methods
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public interface IMassPoint3D<T1> : IMassPoint3D 
+    public interface IMassPoint3D<out T1> : IMassPoint3D 
         where T1 : struct, IMassPoint3D<T1>
     {
         /// <summary>

@@ -7,7 +7,8 @@ namespace Mocassin.Model.Basic
     ///     readers/writers from accessing the object
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public interface IDataAccessor<TData> : IDisposable where TData : ModelData
+    public interface IDataAccessor<out TData> : IDisposable
+        where TData : ModelData
     {
         /// <summary>
         ///     Perform an exclusive access operation that returns nothing
@@ -28,7 +29,8 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <typeparam name="TPort"></typeparam>
         /// <returns></returns>
-        IDataReader<TPort> AsReader<TPort>() where TPort : class, IModelDataPort;
+        IDataReader<TPort> AsReader<TPort>()
+            where TPort : class, IModelDataPort;
 
         /// <summary>
         ///     Makes interface reader that matches the data port of the passed reader provider
@@ -36,6 +38,7 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="TPort"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        IDataReader<TPort> AsReader<TPort>(IDataReaderSource<TPort> source) where TPort : class, IModelDataPort;
+        IDataReader<TPort> AsReader<TPort>(IDataReaderSource<TPort> source)
+            where TPort : class, IModelDataPort;
     }
 }

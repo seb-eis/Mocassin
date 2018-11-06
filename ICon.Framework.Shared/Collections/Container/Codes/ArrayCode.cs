@@ -1,21 +1,20 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Collections;
 using Newtonsoft.Json;
 
 namespace Mocassin.Framework.Collections
 {
     /// <summary>
-    /// Defines an abstract base class wrapper for implementations of arrays that describe an encoding
+    ///     Defines an abstract base class wrapper for implementations of arrays that describe an encoding
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     [DataContract]
     public abstract class ArrayCode<T1> : IReadOnlyList<T1>
     {
         /// <summary>
-        /// The code array seqeunce
+        ///     The code array sequence
         /// </summary>
         [DataMember]
         public T1[] CodeValues { get; set; }
@@ -44,7 +43,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Copies the code sequence to another starting at the specified index
+        ///     Copies the code sequence to another starting at the specified index
         /// </summary>
         /// <param name="other"></param>
         /// <param name="index"></param>
@@ -54,13 +53,13 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        /// Get the type name of the array code
+        ///     Get the type name of the array code
         /// </summary>
         /// <returns></returns>
         public abstract string GetTypeName();
 
         /// <summary>
-        /// Get a JSON representation of the object
+        ///     Get a JSON representation of the object
         /// </summary>
         /// <returns></returns>
         public override string ToString()

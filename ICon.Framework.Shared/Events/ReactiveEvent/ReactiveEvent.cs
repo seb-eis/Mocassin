@@ -18,7 +18,7 @@ namespace Mocassin.Framework.Events
         /// <summary>
         /// The subject of the event to enable subscriptions and distribution of push notifications
         /// </summary>
-        private Subject<TSubject> Subject { get; set; }
+        private Subject<TSubject> Subject { get; }
 
         /// <summary>
         /// Creates a new event provider
