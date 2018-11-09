@@ -94,7 +94,9 @@ namespace Mocassin.Model.Translator.ModelContext
             var transitionManager = ModelProject.GetManager<ITransitionManager>();
             var mappings = transitionManager.QueryPort.Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
 
-            transitionModel.MappingModels = mappings.Select(CreateMappingModel).ToList();
+            transitionModel.MappingModels = mappings
+                .Select(mapping => CreateMappingModel(mapping, transitionModel))
+                .ToList();
 
             if (!transitionModel.Transition.MappingsContainInversion())
                 return;
@@ -103,16 +105,18 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a single mapping model for a metropolis transition mapping object
+        ///     Creates a single mapping model for a metropolis transition mapping object and links it to the passed transition model
         /// </summary>
         /// <param name="mapping"></param>
+        /// <param name="transitionModel"></param>
         /// <returns></returns>
-        protected IMetropolisMappingModel CreateMappingModel(MetropolisMapping mapping)
+        protected IMetropolisMappingModel CreateMappingModel(MetropolisMapping mapping, IMetropolisTransitionModel transitionModel)
         {
             var vectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
             var mappingModel = new MetropolisMappingModel
             {
                 Mapping = mapping,
+                TransitionModel = transitionModel,
                 StartVector4D = new CrystalVector4D(0, 0, 0, mapping.PositionIndex0),
                 EndVector4D = new CrystalVector4D(0, 0, 0, mapping.PositionIndex1)
             };

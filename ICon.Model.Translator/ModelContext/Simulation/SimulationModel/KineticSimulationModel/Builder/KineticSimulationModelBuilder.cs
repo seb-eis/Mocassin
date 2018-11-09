@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
@@ -25,6 +26,12 @@ namespace Mocassin.Model.Translator.ModelContext
                 .ToList();
         }
 
+        /// <inheritdoc />
+        public void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels)
+        {
+            throw new NotImplementedException();
+        }
+        
         /// <summary>
         ///     Builds a single kinetic simulation model for the passed kinetic simulation
         /// </summary>
@@ -71,8 +78,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var trackingModel = new KineticTrackingModel
             {
                 SimulationModel = simulationModel,
-                GlobalTrackerModels = CreateGlobalTrackerModels(simulationModel.Simulation),
-                StaticTrackerModels = CreateStaticTrackerModels(simulationModel.Simulation),
+                GlobalTrackerModels = CreateGlobalMovementTrackerModels(simulationModel.Simulation),
+                StaticTrackerModels = CreateStaticMovementTrackerModels(simulationModel.Simulation),
                 ProbabilityTrackerModels = CreateProbabilityTrackerModels(simulationModel.Simulation)
             };
 
@@ -85,19 +92,24 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="simulation"></param>
         /// <remarks> Created values contain placeholder transition models and require post-creation linking  </remarks>
         /// <returns></returns>
-        protected IList<IGlobalTrackerModel> CreateGlobalTrackerModels(IKineticSimulation simulation)
+        protected IList<IMovementTrackerModel> CreateGlobalMovementTrackerModels(IKineticSimulation simulation)
         {
-            return null;
+            return simulation.Transitions
+                .Select(transition => new KineticTransitionModel {Transition = transition})
+                .Select(transitionModel => new MovementTrackerModel {KineticTransitionModel = transitionModel})
+                .Cast<IMovementTrackerModel>()
+                .ToList();
         }
 
         /// <summary>
         ///     Creates the list of static tracker models for a kinetic simulation object
         /// </summary>
         /// <param name="simulation"></param>
+        /// <remarks> Created values contain placeholder transition models and require post-creation linking </remarks>
         /// <returns></returns>
-        protected IList<IStaticTrackerModel> CreateStaticTrackerModels(IKineticSimulation simulation)
+        protected IList<IMovementTrackerModel> CreateStaticMovementTrackerModels(IKineticSimulation simulation)
         {
-            return null;
+            return new List<IMovementTrackerModel>();
         }
 
         /// <summary>
@@ -108,7 +120,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IList<IProbabilityTrackerModel> CreateProbabilityTrackerModels(IKineticSimulation simulation)
         {
-            return null;
+            return new List<IProbabilityTrackerModel>();
         }
     }
 }

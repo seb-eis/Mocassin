@@ -25,9 +25,16 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticTrackingModel KineticTrackingModel { get; set; }
 
         /// <summary>
-        ///     Kinetic mapping assign matrix that assigns each particle index position index combination its valid kinetic mapping
+        ///     Kinetic mapping assign matrix that assigns each position index/particle index combination its valid kinetic mapping
         ///     models
         /// </summary>
+        /// <remarks> Order on C side is [PositionId,ParticleId,ObjId] </remarks>
         IKineticMappingModel[,,] MappingAssignMatrix { get; set; }
+
+        /// <summary>
+        ///     Jump model matrix that assigns each position index/particle index its set of possible simulation jump behaviors
+        /// </summary>
+        /// <remarks> Order on C side is [PositionId,ParticleId,ObjId] </remarks>
+        IKineticLocalJumpModel[,,] JumpModelMatrix { get; set; }
     }
 }

@@ -17,5 +17,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IKineticMappingModel[,,] MappingAssignMatrix { get; set; }
+
+        /// <inheritdoc />
+        public IKineticLocalJumpModel[,,] JumpModelMatrix { get; set; }
     }
 }

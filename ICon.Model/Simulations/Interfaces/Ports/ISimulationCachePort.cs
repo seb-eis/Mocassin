@@ -13,12 +13,12 @@ namespace Mocassin.Model.Simulations
         ///     Get a list of the mobile particle infos for all kinetic simulations on all unit cell positions
         /// </summary>
         /// <returns></returns>
-        IList<IList<IParticleSet>> GetKineticMobileParticleSets();
+        IList<IList<IParticleSet>> GetPositionBoundKineticMobileParticles();
 
         /// <summary>
         ///     Get a list of the mobile particle infos for all kinetic simulations on all unit cell positions
         /// </summary>
         /// <returns></returns>
-        IList<IList<IParticleSet>> GetMetropolisMobileParticleSets();
+        IList<IList<IParticleSet>> GetPositionBoundMetropolisMobileParticles();
     }
 }

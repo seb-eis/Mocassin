@@ -31,7 +31,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var result = new Matrix2D(1, startState.Count, comparer);
             for (var i = 0; i < startState.Count; i++)
                 result[0, i] = startState[i].Charge;
-            return null;
+
+            return result;
         }
 
         /// <summary>
@@ -105,7 +106,8 @@ namespace Mocassin.Model.Translator.ModelContext
         protected long Create64BitIndexCode(IEnumerable<int> values, byte[] buffer)
         {
             var index = -1;
-            foreach (var item in values) buffer[++index] = (byte) item;
+            foreach (var item in values) 
+                buffer[++index] = (byte) item;
 
             var code = BitConverter.ToInt64(buffer, 0);
             for (; index >= 0; index--)
@@ -122,11 +124,9 @@ namespace Mocassin.Model.Translator.ModelContext
         protected long CreateFinalTrackerOrderCode(IList<int> endIndexingDeltas, byte[] buffer)
         {
             var orderIndexing = new List<int>(endIndexingDeltas.Count);
-
-            for (var i = 0; i < orderIndexing.Count; i++)
-                orderIndexing.Add(i + endIndexingDeltas[i]);
-
-            return Create64BitIndexCode(orderIndexing, buffer);
+            orderIndexing.AddRange(endIndexingDeltas.Select((element, index) => index + element));
+            var result = Create64BitIndexCode(orderIndexing, buffer);
+            return result;
         }
 
         /// <summary>
@@ -142,7 +142,8 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var (start, end) in transitionRule.GetMovementDescription().SelectConsecutivePairs((a, b) => (a, b)))
                 result.Swap(start, end);
 
-            for (var i = 0; i < result.Count; i++) result[i] -= i;
+            for (var i = 0; i < result.Count; i++) 
+                result[i] -= i;
 
             return result;
         }

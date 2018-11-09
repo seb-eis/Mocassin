@@ -91,7 +91,7 @@ namespace Mocassin.Model.Transitions.Validators
         }
 
         /// <summary>
-        ///     Validates that the charge exchange between each consecutive dynamically linked
+        ///     Validates that the charge exchange between each consecutive dynamically linked is physically valid
         /// </summary>
         /// <param name="transition"></param>
         /// <param name="report"></param>
@@ -99,6 +99,7 @@ namespace Mocassin.Model.Transitions.Validators
         {
             var swapChain =
                 new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ModelProject.CommonNumeric.RangeComparer);
+
             if (!swapChain.Any(double.IsNaN)) 
                 return;
 

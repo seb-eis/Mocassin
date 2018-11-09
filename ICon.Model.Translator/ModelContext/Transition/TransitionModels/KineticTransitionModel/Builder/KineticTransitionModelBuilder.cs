@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -148,6 +150,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var comparer = ModelProject.CommonNumeric.RangeComparer;
             var ruleModels = transitionModel.Transition.GetExtendedTransitionRules()
                 .Select(kineticRule => CreateRuleModel(kineticRule, comparer))
+                .Action(ruleModel => ruleModel.TransitionModel = transitionModel)
                 .ToList();
 
             CreateCodesAndLinkInverseRuleModels(ruleModels);
@@ -183,7 +186,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var mappings = manager.QueryPort.Query(port => port.GetKineticMappingList(index));
 
             transitionModel.MappingModels = mappings
-                .Select(a => CreateMappingModel(a, transitionModel.AbstractMovement))
+                .Select(a => CreateMappingModel(a, transitionModel))
                 .ToList();
 
             if (!transitionModel.MappingsContainInversion())
@@ -193,17 +196,21 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates the mapping model for the passed kinetic mapping using the provided abstract movement info
+        ///     Creates the mapping model for the passed kinetic mapping and kinetic transition model
         /// </summary>
         /// <param name="kineticMapping"></param>
-        /// <param name="abstractMovement"></param>
+        /// <param name="transitionModel"></param>
         /// <returns></returns>
-        protected IKineticMappingModel CreateMappingModel(KineticMapping kineticMapping, IList<int> abstractMovement)
+        protected IKineticMappingModel CreateMappingModel(KineticMapping kineticMapping, IKineticTransitionModel transitionModel)
         {
-            var mappingModel = new KineticMappingModel {Mapping = kineticMapping};
+            var mappingModel = new KineticMappingModel
+            {
+                Mapping = kineticMapping,
+                TransitionModel = transitionModel
+            };
 
             AddTransitionSequences(mappingModel);
-            AddMovementMatrix(mappingModel, abstractMovement);
+            AddMovementMatrix(mappingModel, transitionModel.AbstractMovement);
 
             return mappingModel;
         }

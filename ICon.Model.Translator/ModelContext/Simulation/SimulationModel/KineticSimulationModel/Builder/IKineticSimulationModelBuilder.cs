@@ -14,5 +14,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="kineticSimulations"></param>
         /// <returns></returns>
         IList<IKineticSimulationModel> BuildModels(IEnumerable<IKineticSimulation> kineticSimulations);
+
+        /// <summary>
+        ///     Builds the components on the kinetic simulation models that require completed linking
+        /// </summary>
+        /// <param name="simulationModels"></param>
+        void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels);
     }
 }

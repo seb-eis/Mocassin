@@ -22,10 +22,10 @@ namespace Mocassin.Model.Translator
         public long StateCode2 { get; set; }
 
         [field: MarshalAs(UnmanagedType.R8)]
-        public double FrequencyFactor { get; set; }
+        public double AttemptFrequencyFraction { get; set; }
 
         [field: MarshalAs(UnmanagedType.R8)]
-        public double FieldFactor { get; set; }
+        public double AbsoluteChargeTransport { get; set; }
 
         public byte[] TrackerOrder
         {

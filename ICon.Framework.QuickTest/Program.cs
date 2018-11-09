@@ -49,6 +49,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Translator.ModelContext;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Mocassin.Framework.QuickTest
 {

@@ -10,6 +10,11 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IMetropolisMappingModel
     {
         /// <summary>
+        /// The transition model this mapping model belongs to
+        /// </summary>
+        IMetropolisTransitionModel TransitionModel { get; set; }
+
+        /// <summary>
         ///     Boolean flag if the inverse mapping model is set
         /// </summary>
         bool InverseIsSet { get; }

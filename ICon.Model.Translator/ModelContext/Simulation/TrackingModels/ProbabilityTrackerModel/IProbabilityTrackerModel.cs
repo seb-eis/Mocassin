@@ -8,12 +8,12 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IProbabilityTrackerModel : IModelComponent
     {
         /// <summary>
-        ///     The kinetic transition model the tracker belongs to
+        ///     The kinetic transition model the tracker belongs to the tracker model
         /// </summary>
         IKineticTransitionModel KineticTransitionModel { get; set; }
 
         /// <summary>
-        ///     The particle that is tracked
+        ///     The particle that is tracked by the model
         /// </summary>
         IParticle TrackedParticle { get; set; }
     }

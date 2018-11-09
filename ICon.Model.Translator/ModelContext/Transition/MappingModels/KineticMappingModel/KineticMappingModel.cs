@@ -9,6 +9,9 @@ namespace Mocassin.Model.Translator.ModelContext
     public class KineticMappingModel : IKineticMappingModel
     {
         /// <inheritdoc />
+        public IKineticTransitionModel TransitionModel { get; set; }
+
+        /// <inheritdoc />
         public bool InverseIsSet => InverseMapping != null;
 
         /// <inheritdoc />
@@ -51,6 +54,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             return new KineticMappingModel
             {
+                TransitionModel = TransitionModel,
                 Mapping = Mapping.CreateInverse(),
                 InverseMapping = this,
                 TransitionSequence3D = GetInverseTransitionSequence3D(),

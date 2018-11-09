@@ -21,6 +21,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public override IAbstractTransition AbstractTransition => KineticRule.AbstractTransition;
 
         /// <inheritdoc />
+        public IKineticTransitionModel TransitionModel { get; set; }
+
+        /// <inheritdoc />
         public IKineticRule KineticRule { get; set; }
 
         /// <inheritdoc />
@@ -42,6 +45,7 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 IsSourceInversion = true,
                 InverseRuleModel = this,
+                TransitionModel = TransitionModel,
                 TransitionState = TransitionState.Reverse().ToList(),
                 TransitionStateCode = TransitionStateCode.InvertBytes(),
                 ChargeTransportMatrix = GetInvertedTransportMatrix(),

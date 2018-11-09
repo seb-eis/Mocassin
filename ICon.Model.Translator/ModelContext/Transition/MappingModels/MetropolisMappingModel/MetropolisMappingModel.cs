@@ -28,6 +28,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public CrystalVector4D EndVector4D { get; set; }
 
         /// <inheritdoc />
+        public IMetropolisTransitionModel TransitionModel { get; set; }
+
+        /// <inheritdoc />
         public bool InverseIsSet => InverseMapping != null;
 
         /// <inheritdoc />
@@ -35,6 +38,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             return new MetropolisMappingModel
             {
+                TransitionModel = TransitionModel,
                 IsSourceInversion = true,
                 Mapping = Mapping,
                 InverseMapping = this,

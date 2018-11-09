@@ -11,6 +11,11 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IKineticRuleModel : ITransitionRuleModel
     {
         /// <summary>
+        ///     The kinetic transition model the rule model belongs to
+        /// </summary>
+        IKineticTransitionModel TransitionModel { get; set; }
+
+        /// <summary>
         ///     The kinetic transition rule this model is based upon
         /// </summary>
         IKineticRule KineticRule { get; set; }
@@ -31,7 +36,7 @@ namespace Mocassin.Model.Translator.ModelContext
         long TransitionStateCode { get; set; }
 
         /// <summary>
-        ///     The charge transport 1xN matrix. Describes the transportable charge of each start occupation
+        ///     The 1xN charge transport matrix that describes the transport charge for each start occupation
         /// </summary>
         Matrix2D ChargeTransportMatrix { get; set; }
 

@@ -3,12 +3,12 @@
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    ///     Represents a global tracker model that describes and indexes a globally tracked movement property of the simulation
+    ///     Represents a movement tracker model that describes and indexes a tracked physical movement property of the simulation
     /// </summary>
-    public interface IGlobalTrackerModel : IModelComponent
+    public interface IMovementTrackerModel : IModelComponent
     {
         /// <summary>
-        ///     The particle that is tracked by this global tracker model
+        ///     The particle that is tracked by this tracker model
         /// </summary>
         IParticle TrackedParticle { get; set; }
 

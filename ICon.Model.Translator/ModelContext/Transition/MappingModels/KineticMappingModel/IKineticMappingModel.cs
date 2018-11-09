@@ -10,6 +10,11 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IKineticMappingModel
     {
         /// <summary>
+        ///     The kinetic transition model affiliated with the mapping model
+        /// </summary>
+        IKineticTransitionModel TransitionModel { get; set; }
+
+        /// <summary>
         ///     Flag that indicates if the inverse mapping is already set
         /// </summary>
         bool InverseIsSet { get; }

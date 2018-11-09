@@ -18,13 +18,13 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <inheritdoc />
-        public IList<IList<IParticleSet>> GetKineticMobileParticleSets()
+        public IList<IList<IParticleSet>> GetPositionBoundKineticMobileParticles()
         {
             return GetResultFromCache(CreateKineticMobileParticleSets);
         }
 
         /// <inheritdoc />
-        public IList<IList<IParticleSet>> GetMetropolisMobileParticleSets()
+        public IList<IList<IParticleSet>> GetPositionBoundMetropolisMobileParticles()
         {
             return GetResultFromCache(CreateMetropolisMobileParticleSets);
         }
