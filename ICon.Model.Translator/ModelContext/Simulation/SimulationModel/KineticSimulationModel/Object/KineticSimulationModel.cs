@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -10,6 +11,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticSimulation Simulation { get; set; }
 
         /// <inheritdoc />
+        public Cartesian3D NormalizedElectricFieldVector { get; set; }
+
+        /// <inheritdoc />
         public IList<IKineticTransitionModel> TransitionModels { get; set; }
 
         /// <inheritdoc />
@@ -19,6 +23,6 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticMappingModel[,,] MappingAssignMatrix { get; set; }
 
         /// <inheritdoc />
-        public IKineticLocalJumpModel[,,] JumpModelMatrix { get; set; }
+        public IList<IKineticLocalJumpModel> LocalJumpModels { get; set; }
     }
 }

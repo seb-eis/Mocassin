@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc cref="IKineticSimulationModelBuilder" />
-    public class KineticSimulationModelBuilder : ModelBuilderBase, IKineticSimulationModelBuilder
+    public class KineticSimulationModelBuilder : SimulationModelBuilderBase, IKineticSimulationModelBuilder
     {
         /// <inheritdoc />
         public KineticSimulationModelBuilder(IModelProject modelProject)
@@ -29,7 +33,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels)
         {
-            throw new NotImplementedException();
+            foreach (var simulationModel in simulationModels)
+            {
+                simulationModel.MappingAssignMatrix = CreateMappingAssignMatrix<IKineticMappingModel, IKineticTransitionModel>(simulationModel.TransitionModels);
+                AddLocalJumpModels(simulationModel);
+            }
         }
         
         /// <summary>
@@ -48,6 +56,7 @@ namespace Mocassin.Model.Translator.ModelContext
                     .ToList()
             };
 
+            AddNormalizedElectricFieldVector(simulationModel);
             AddKineticTrackingModel(simulationModel);
             return simulationModel;
         }
@@ -67,6 +76,87 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var probabilityTrackerModel in simulationModel.KineticTrackingModel.ProbabilityTrackerModels)
                 probabilityTrackerModel.ModelId = indexing.Probability++;
+        }
+
+        /// <summary>
+        /// Calculates and adds the normalized cartesian electric field vector to the passed kinetic simulation model
+        /// </summary>
+        /// <param name="simulationModel"></param>
+        protected void AddNormalizedElectricFieldVector(IKineticSimulationModel simulationModel)
+        {
+            var encoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+            var fieldVector = encoder.Transformer.ToCartesian(simulationModel.Simulation.ElectricFieldVector);
+            simulationModel.NormalizedElectricFieldVector = fieldVector.GetNormalized();
+        }
+
+        /// <summary>
+        ///     Creates and adds the list of kinetic local simulation models to the passed kinetic simulation model
+        /// </summary>
+        /// <param name="simulationModel"></param>
+        protected void AddLocalJumpModels(IKineticSimulationModel simulationModel)
+        {
+            var jumpModels = new List<IKineticLocalJumpModel>();
+            foreach (var mappingModel in simulationModel.MappingAssignMatrix)
+            {
+                if (mappingModel == null)
+                    continue;
+
+                foreach (var ruleModel in mappingModel.TransitionModel.RuleModels)
+                {
+                    var jumpModel = CreateLocalJumpModel(mappingModel, ruleModel, simulationModel);
+                    jumpModels.Add(jumpModel);
+                }
+            }
+            simulationModel.LocalJumpModels = jumpModels;
+        }
+
+        /// <summary>
+        ///     Creates the local jump model for the provided combination of kinetic rule model and mapping model in the context of
+        ///     the defined kinetic simulation model
+        /// </summary>
+        /// <param name="mappingModel"></param>
+        /// <param name="ruleModel"></param>
+        /// <param name="simulationModel"></param>
+        /// <returns></returns>
+        protected IKineticLocalJumpModel CreateLocalJumpModel(IKineticMappingModel mappingModel, IKineticRuleModel ruleModel,
+            IKineticSimulationModel simulationModel)
+        {
+            var jumpModel = new KineticLocalJumpModel
+            {
+                MappingModel = mappingModel,
+                RuleModel = ruleModel,
+                ChargeTransportVector = GetChargeTransportVector(mappingModel, ruleModel)
+            };
+
+            jumpModel.NormalizedElectricFieldInfluence =
+                GetNormalizedElectricInfluence(jumpModel.ChargeTransportVector, simulationModel.NormalizedElectricFieldVector);
+
+            return jumpModel;
+        }
+
+        /// <summary>
+        /// Get the charge transport vector [charge*movement] for the passed combination of kinetic mapping model and kinetic rule model
+        /// </summary>
+        /// <param name="mappingModel"></param>
+        /// <param name="ruleModel"></param>
+        /// <returns></returns>
+        protected Cartesian3D GetChargeTransportVector(IKineticMappingModel mappingModel, IKineticRuleModel ruleModel)
+        {
+            var transportMatrix = mappingModel.PositionMovementMatrix * ruleModel.ChargeTransportMatrix.GetTransposed();
+            var transportVector = new Cartesian3D(transportMatrix[0, 0], transportMatrix[0, 1], transportMatrix[0, 2]);
+            return transportVector;
+        }
+
+        /// <summary>
+        /// Get the normalized electric field influence that results from a charge transport vector and the normalized
+        /// electric field vector
+        /// </summary>
+        /// <param name="chargeTransportVector"></param>
+        /// <param name="normalizedFieldVector"></param>
+        /// <returns></returns>
+        protected double GetNormalizedElectricInfluence(in Cartesian3D chargeTransportVector, in Cartesian3D normalizedFieldVector)
+        {
+            return chargeTransportVector * normalizedFieldVector;
         }
 
         /// <summary>

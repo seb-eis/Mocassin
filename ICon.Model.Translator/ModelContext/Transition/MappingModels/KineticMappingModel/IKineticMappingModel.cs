@@ -7,7 +7,7 @@ namespace Mocassin.Model.Translator.ModelContext
     /// <summary>
     ///     Represents a kinetic mapping model that fully describes a transitions geometric properties on a specific position
     /// </summary>
-    public interface IKineticMappingModel
+    public interface IKineticMappingModel : ITransitionMappingModel
     {
         /// <summary>
         ///     The kinetic transition model affiliated with the mapping model
@@ -38,11 +38,6 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The fractional 3D position sequence in absolute coordinates
         /// </summary>
         IList<Fractional3D> PositionSequence3D { get; }
-
-        /// <summary>
-        ///     The effective transition vector from start to end. Used for global movement tracking
-        /// </summary>
-        Fractional3D EffectiveTransitionVector { get; }
 
         /// <summary>
         ///     The encoded 4D transition sequence where each vector is relative to the start position

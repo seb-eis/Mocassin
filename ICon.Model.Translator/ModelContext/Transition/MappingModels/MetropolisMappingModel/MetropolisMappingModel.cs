@@ -22,6 +22,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public Fractional3D EndVector3D { get; set; }
 
         /// <inheritdoc />
+        /// <remarks> Coordinates (0,0,0,P) are always in the original unit cell </remarks>
         public CrystalVector4D StartVector4D { get; set; }
 
         /// <inheritdoc />

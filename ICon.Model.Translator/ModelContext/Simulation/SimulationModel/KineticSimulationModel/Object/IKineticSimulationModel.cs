@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -13,6 +14,11 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The kinetic simulation this model is based upon
         /// </summary>
         IKineticSimulation Simulation { get; set; }
+
+        /// <summary>
+        ///     The normalized electric field vector in cartesian coordinates. Describes a field strength of 1 [V/Ang]
+        /// </summary>
+        Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <summary>
         ///     The list of transition models that are valid in this simulation model
@@ -32,9 +38,8 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticMappingModel[,,] MappingAssignMatrix { get; set; }
 
         /// <summary>
-        ///     Jump model matrix that assigns each position index/particle index its set of possible simulation jump behaviors
+        ///     The list of all existing jump models in the kinetic simulation model that finalized the actual transition behaviour in the simulation
         /// </summary>
-        /// <remarks> Order on C side is [PositionId,ParticleId,ObjId] </remarks>
-        IKineticLocalJumpModel[,,] JumpModelMatrix { get; set; }
+        IList<IKineticLocalJumpModel> LocalJumpModels { get; set; }
     }
 }

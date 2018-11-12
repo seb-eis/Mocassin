@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
@@ -24,6 +25,12 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IParticleSet MobileParticles { get; set; }
+
+        /// <inheritdoc />
+        public IEnumerable<ITransitionMappingModel> GetMappingModels()
+        {
+            return MappingModels.AsEnumerable();
+        }
 
         /// <inheritdoc />
         public IMetropolisTransitionModel CreateInverse()

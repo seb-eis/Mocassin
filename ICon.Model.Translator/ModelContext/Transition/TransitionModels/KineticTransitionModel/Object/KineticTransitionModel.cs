@@ -34,6 +34,12 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<int> AbstractMovement { get; set; }
 
         /// <inheritdoc />
+        public IEnumerable<ITransitionMappingModel> GetMappingModels()
+        {
+            return MappingModels.AsEnumerable();
+        }
+
+        /// <inheritdoc />
         public IKineticTransitionModel CreateInverse()
         {
             return new KineticTransitionModel

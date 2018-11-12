@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Transitions;
@@ -21,9 +22,6 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticMappingModel InverseMapping { get; set; }
 
         /// <inheritdoc />
-        public Fractional3D EffectiveTransitionVector => TransitionSequence3D.Last();
-
-        /// <inheritdoc />
         public IList<CrystalVector4D> PositionSequence4D => Mapping.EncodedPath;
 
         /// <inheritdoc />
@@ -37,6 +35,14 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public Matrix2D PositionMovementMatrix { get; set; }
+
+        /// <inheritdoc />
+        /// <remarks> This value cannot be set for a kinetic transition </remarks>
+        public CrystalVector4D StartVector4D
+        {
+            get => TransitionSequence4D[0];
+            set => throw new NotSupportedException("Cannot manipulate start vector on kinetic mapping");
+        }
 
         /// <inheritdoc />
         public bool LinkIfInverseMatch(IKineticMappingModel inverseModel)

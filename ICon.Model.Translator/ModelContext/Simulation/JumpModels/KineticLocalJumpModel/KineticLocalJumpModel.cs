@@ -12,12 +12,15 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticRuleModel RuleModel { get; set; }
 
         /// <inheritdoc />
-        public Fractional3D ElectricFieldProjectionVector { get; set; }
+        public double NormalizedElectricFieldInfluence { get; set; }
 
         /// <inheritdoc />
-        public double ElectricFieldInfluenceFraction { get; set; }
+        public double ElectricFieldRuleFactor => NormalizedElectricFieldInfluence / ElectricFieldMappingFactor;
 
         /// <inheritdoc />
-        public double TransportCharge { get; set; }
+        public double ElectricFieldMappingFactor => System.Math.Abs(NormalizedElectricFieldInfluence);
+
+        /// <inheritdoc />
+        public Cartesian3D ChargeTransportVector { get; set; }
     }
 }

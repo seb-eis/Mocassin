@@ -18,18 +18,26 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticRuleModel RuleModel { get; set; }
 
         /// <summary>
-        ///     The electric field projection vector of the local jump model
+        /// Defines the fraction of the electric normalized influence the jump model sees during simulation
         /// </summary>
-        Fractional3D ElectricFieldProjectionVector { get; set; }
+        /// <remarks> Normalized influence is always defined as an influence of 1eV (1C*1Ang*1V/Ang) in the simulation field direction </remarks>
+        double NormalizedElectricFieldInfluence { get; set; }
 
         /// <summary>
-        ///     The fraction [0.0,1.0] of the absolute field magnitude applied by this jump model
+        /// The electric field influence factor that is bound to the transition rule on simulation database creation
         /// </summary>
-        double ElectricFieldInfluenceFraction { get; set; }
+        /// <remarks> Describes the direction of the charge movement as a factor of [-1] or [1] </remarks>
+        double ElectricFieldRuleFactor { get; }
 
         /// <summary>
-        ///     The effective transport charge described by the local jump model
+        /// The electric field influence factor that is bound to the kinetic transition mapping on simulation database creation
         /// </summary>
-        double TransportCharge { get; set; }
+        /// <remarks> Has to be the absolute value of the electric normalized influence fraction </remarks>
+        double ElectricFieldMappingFactor { get; }
+
+        /// <summary>
+        /// The cartesian charge transport vector of the local jump model that describes [charge*movement] in units of [C*Ang]
+        /// </summary>
+        Cartesian3D ChargeTransportVector { get; set; }
     }
 }

@@ -72,5 +72,18 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <returns></returns>
         IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary();
+
+        /// <summary>
+        /// Get the abstract charge transport chain of the abstract movement with the provided index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        IList<double> GetAbstractChargeTransportChain(int index);
+
+        /// <summary>
+        /// Get the abstract charge transport chains for all abstract transitions
+        /// </summary>
+        /// <returns></returns>
+        IList<IList<double>> GetAbstractChargeTransportChains();
     }
 }

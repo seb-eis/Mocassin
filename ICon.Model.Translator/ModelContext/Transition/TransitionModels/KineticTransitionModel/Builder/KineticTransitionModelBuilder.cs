@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
@@ -319,7 +318,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IKineticTransitionModel CreateTransitionModelInversion(IKineticTransitionModel transitionModel)
         {
-            if (transitionModel.MappingsContainInversion()) return transitionModel;
+            if (transitionModel.MappingsContainInversion())
+                return transitionModel;
 
             var inverseModel = transitionModel.CreateInverse();
             CreateAndAddMappingModelInversions(transitionModel, inverseModel);

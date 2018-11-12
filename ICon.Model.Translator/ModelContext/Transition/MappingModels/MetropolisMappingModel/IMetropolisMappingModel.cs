@@ -7,7 +7,7 @@ namespace Mocassin.Model.Translator.ModelContext
     ///     Represents a metropolis mapping model that fully describes a transitions geometric properties on a specific
     ///     position
     /// </summary>
-    public interface IMetropolisMappingModel
+    public interface IMetropolisMappingModel : ITransitionMappingModel
     {
         /// <summary>
         /// The transition model this mapping model belongs to
@@ -43,11 +43,6 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The fractional 3D coordinates of the end point in the origin unit cell
         /// </summary>
         Fractional3D EndVector3D { get; set; }
-
-        /// <summary>
-        ///     The encoded 4D coordinates of the start point (0,0,0,P) in the origin unit cell
-        /// </summary>
-        CrystalVector4D StartVector4D { get; set; }
 
         /// <summary>
         ///     The encoded 4D coordinates of the end position (0,0,0,P) in the origin unit cell

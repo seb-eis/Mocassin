@@ -1,4 +1,5 @@
-﻿using Mocassin.Model.Particles;
+﻿using System.Collections.Generic;
+using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -10,5 +11,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IParticleSet MobileParticles { get; set; }
+
+        /// <inheritdoc />
+        public abstract IEnumerable<ITransitionMappingModel> GetMappingModels();
     }
 }
