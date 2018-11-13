@@ -362,7 +362,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             foreach (var index in resultSequences.IndexOfMany(value => equalityComparer.Equals(value, resultSequences.First())))
                 operationGroup.SelfProjectionOperations.Add((SymmetryOperation) multiplicityOperations[index]);
 
-            foreach (var index in resultSequences.RemoveDuplicates(MakeVectorSequenceEquivalenceComparer()))
+            foreach (var index in resultSequences.RemoveDuplicatesAndGetRemovedIndices(MakeVectorSequenceEquivalenceComparer()))
                 multiplicityOperations.RemoveAt(index);
 
             operationGroup.UniqueSequenceOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();

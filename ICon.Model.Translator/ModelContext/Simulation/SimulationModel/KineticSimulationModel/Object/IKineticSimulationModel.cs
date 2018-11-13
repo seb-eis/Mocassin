@@ -38,7 +38,8 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticMappingModel[,,] MappingAssignMatrix { get; set; }
 
         /// <summary>
-        ///     The list of all existing jump models in the kinetic simulation model that finalized the actual transition behaviour in the simulation
+        ///     The list of all existing jump models in the kinetic simulation model that finalized the actual transition behaviour
+        ///     in the simulation
         /// </summary>
         IList<IKineticLocalJumpModel> LocalJumpModels { get; set; }
     }

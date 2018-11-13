@@ -270,7 +270,7 @@ namespace Mocassin.Framework.Extensions
         /// <typeparam name="T1"></typeparam>
         /// <param name="list"></param>
         /// <param name="comparer"></param>
-        public static IEnumerable<int> RemoveDuplicates<T1>(this IList<T1> list, IEqualityComparer<T1> comparer)
+        public static IEnumerable<int> RemoveDuplicatesAndGetRemovedIndices<T1>(this IList<T1> list, IEqualityComparer<T1> comparer)
         {
             for (var i = 0; i < list.Count - 1; i++)
             {
@@ -281,6 +281,26 @@ namespace Mocassin.Framework.Extensions
 
                     list.RemoveAt(j);
                     yield return j;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the duplicates from a list based upon the passed equality comparer
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="comparer"></param>
+        public static void RemoveDuplicates<T1>(this IList<T1> list, IEqualityComparer<T1> comparer)
+        {
+            for (var i = 0; i < list.Count - 1; i++)
+            {
+                for (var j = list.Count - 1; j > i; j--)
+                {
+                    if (!comparer.Equals(list[i], list[j]))
+                        continue;
+
+                    list.RemoveAt(j);
                 }
             }
         }

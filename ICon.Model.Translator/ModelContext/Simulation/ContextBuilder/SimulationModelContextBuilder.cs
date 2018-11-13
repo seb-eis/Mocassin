@@ -49,7 +49,9 @@ namespace Mocassin.Model.Translator.ModelContext
             var tasks = new[]
             {
                 Task.Run(
-                    () => MetropolisSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.MetropolisSimulationModels))
+                    () => MetropolisSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.MetropolisSimulationModels)),
+                Task.Run(
+                    () => KineticSimulationModelBuilder.BuildLinkingDependentComponents(BuildTask.Result.KineticSimulationModels))
             };
             return Task.WhenAll(tasks);
         }

@@ -22,17 +22,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Model\**" />
-    <EmbeddedResource Remove="Data\Model\**" />
-    <None Remove="Data\Model\**" />
+    <Compile Remove="Interop\Model\**" />
+    <EmbeddedResource Remove="Interop\Model\**" />
+    <None Remove="Interop\Model\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\InteropObjects\Energy\C\" />
-    <Folder Include="Data\InteropObjects\Energy\Net\" />
-    <Folder Include="Logic\Components\Energies\" />
-    <Folder Include="Logic\Components\Settings\" />
-    <Folder Include="Logic\Components\Transitions\" />
+    <Folder Include="ContextConverter\DbToModel\" />
+    <Folder Include="ContextConverter\ModelToDb\" />
+    <Folder Include="Interop\InteropObjects\Energy\C\" />
+    <Folder Include="Interop\InteropObjects\Energy\Net\" />
   </ItemGroup>
 
   <ItemGroup>

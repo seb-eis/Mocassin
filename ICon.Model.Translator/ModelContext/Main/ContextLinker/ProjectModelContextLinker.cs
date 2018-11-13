@@ -89,6 +89,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void LinkSimulationComponents()
         {
             LinkTransitionsIntoMetropolisModel();
+            LinkTransitionsIntoKineticModel();
         }
 
         /// <summary>

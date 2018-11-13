@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
-using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
 
@@ -23,23 +21,25 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public IList<IKineticSimulationModel> BuildModels(IEnumerable<IKineticSimulation> kineticSimulations)
         {
-            var indexing = (0, 0, 0);
             return kineticSimulations
                 .Select(BuildSimulationModel)
-                .Action(model => IndexTrackerModels(model, ref indexing))
                 .ToList();
         }
 
         /// <inheritdoc />
         public void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels)
         {
+            var indexing = (0, 0, 0);
             foreach (var simulationModel in simulationModels)
             {
-                simulationModel.MappingAssignMatrix = CreateMappingAssignMatrix<IKineticMappingModel, IKineticTransitionModel>(simulationModel.TransitionModels);
+                simulationModel.MappingAssignMatrix =
+                    CreateMappingAssignMatrix<IKineticMappingModel, IKineticTransitionModel>(simulationModel.TransitionModels);
                 AddLocalJumpModels(simulationModel);
+                AddKineticTrackingModel(simulationModel);
+                IndexTrackerModels(simulationModel, ref indexing);
             }
         }
-        
+
         /// <summary>
         ///     Builds a single kinetic simulation model for the passed kinetic simulation
         /// </summary>
@@ -57,7 +57,6 @@ namespace Mocassin.Model.Translator.ModelContext
             };
 
             AddNormalizedElectricFieldVector(simulationModel);
-            AddKineticTrackingModel(simulationModel);
             return simulationModel;
         }
 
@@ -79,7 +78,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Calculates and adds the normalized cartesian electric field vector to the passed kinetic simulation model
+        ///     Calculates and adds the normalized cartesian electric field vector to the passed kinetic simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
         protected void AddNormalizedElectricFieldVector(IKineticSimulationModel simulationModel)
@@ -96,18 +95,29 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void AddLocalJumpModels(IKineticSimulationModel simulationModel)
         {
             var jumpModels = new List<IKineticLocalJumpModel>();
-            foreach (var mappingModel in simulationModel.MappingAssignMatrix)
+            var modelId = 0;
+            for (var positionId = 0; positionId < simulationModel.MappingAssignMatrix.GetLength(0); positionId++)
             {
-                if (mappingModel == null)
-                    continue;
-
-                foreach (var ruleModel in mappingModel.TransitionModel.RuleModels)
+                for (var particleId = 0; particleId < simulationModel.MappingAssignMatrix.GetLength(1); particleId++)
                 {
-                    var jumpModel = CreateLocalJumpModel(mappingModel, ruleModel, simulationModel);
-                    jumpModels.Add(jumpModel);
+                    for (var objId = 0; objId < simulationModel.MappingAssignMatrix.GetLength(2); objId++)
+                    {
+                        var mappingModel = simulationModel.MappingAssignMatrix[positionId, particleId, objId];
+                        if (mappingModel == null)
+                            break;
+
+                        foreach (var ruleModel in mappingModel.TransitionModel.RuleModels.Where(rule =>
+                            rule.SelectableParticle.Index == particleId))
+                        {
+                            var jumpModel = CreateLocalJumpModel(mappingModel, ruleModel, simulationModel, ref modelId);
+                            jumpModels.Add(jumpModel);
+                        }
+                    }
                 }
             }
-            simulationModel.LocalJumpModels = jumpModels;
+
+            jumpModels.RemoveDuplicates(EqualityComparer<IKineticLocalJumpModel>.Default);
+            simulationModel.LocalJumpModels = jumpModels.ToList();
         }
 
         /// <summary>
@@ -117,12 +127,14 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="mappingModel"></param>
         /// <param name="ruleModel"></param>
         /// <param name="simulationModel"></param>
+        /// <param name="modelId"></param>
         /// <returns></returns>
         protected IKineticLocalJumpModel CreateLocalJumpModel(IKineticMappingModel mappingModel, IKineticRuleModel ruleModel,
-            IKineticSimulationModel simulationModel)
+            IKineticSimulationModel simulationModel, ref int modelId)
         {
             var jumpModel = new KineticLocalJumpModel
             {
+                ModelId = modelId++,
                 MappingModel = mappingModel,
                 RuleModel = ruleModel,
                 ChargeTransportVector = GetChargeTransportVector(mappingModel, ruleModel)
@@ -135,7 +147,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Get the charge transport vector [charge*movement] for the passed combination of kinetic mapping model and kinetic rule model
+        ///     Get the charge transport vector [charge*movement] for the passed combination of kinetic mapping model and kinetic
+        ///     rule model
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <param name="ruleModel"></param>
@@ -143,13 +156,13 @@ namespace Mocassin.Model.Translator.ModelContext
         protected Cartesian3D GetChargeTransportVector(IKineticMappingModel mappingModel, IKineticRuleModel ruleModel)
         {
             var transportMatrix = mappingModel.PositionMovementMatrix * ruleModel.ChargeTransportMatrix.GetTransposed();
-            var transportVector = new Cartesian3D(transportMatrix[0, 0], transportMatrix[0, 1], transportMatrix[0, 2]);
+            var transportVector = new Cartesian3D(transportMatrix[0, 0], transportMatrix[1, 0], transportMatrix[2, 0]);
             return transportVector;
         }
 
         /// <summary>
-        /// Get the normalized electric field influence that results from a charge transport vector and the normalized
-        /// electric field vector
+        ///     Get the normalized electric field influence that results from a charge transport vector and the normalized
+        ///     electric field vector
         /// </summary>
         /// <param name="chargeTransportVector"></param>
         /// <param name="normalizedFieldVector"></param>
@@ -168,8 +181,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var trackingModel = new KineticTrackingModel
             {
                 SimulationModel = simulationModel,
+                StaticTrackerModels = CreateStaticMovementTrackerModels(simulationModel.Simulation),              
                 GlobalTrackerModels = CreateGlobalMovementTrackerModels(simulationModel.Simulation),
-                StaticTrackerModels = CreateStaticMovementTrackerModels(simulationModel.Simulation),
                 ProbabilityTrackerModels = CreateProbabilityTrackerModels(simulationModel.Simulation)
             };
 
@@ -180,7 +193,7 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates the list of raw global tracker models for a kinetic simulation object
         /// </summary>
         /// <param name="simulation"></param>
-        /// <remarks> Created values contain placeholder transition models and require post-creation linking  </remarks>
+        /// <remarks> Requires finished linking of the passed simulation </remarks>
         /// <returns></returns>
         protected IList<IMovementTrackerModel> CreateGlobalMovementTrackerModels(IKineticSimulation simulation)
         {
@@ -195,22 +208,26 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates the list of static tracker models for a kinetic simulation object
         /// </summary>
         /// <param name="simulation"></param>
-        /// <remarks> Created values contain placeholder transition models and require post-creation linking </remarks>
+        /// <remarks> Requires finished linking of the passed simulation </remarks>
         /// <returns></returns>
-        protected IList<IMovementTrackerModel> CreateStaticMovementTrackerModels(IKineticSimulation simulation)
+        protected IList<IStaticMovementTrackerModel> CreateStaticMovementTrackerModels(IKineticSimulation simulation)
         {
-            return new List<IMovementTrackerModel>();
+            var result = new List<IStaticMovementTrackerModel>();
+
+            return result;
         }
 
         /// <summary>
         ///     Creates the list of raw probability tracker models for a kinetic simulation
         /// </summary>
         /// <param name="simulation"></param>
-        /// <remarks> Created values contain placeholder transition models and require post-creation linking </remarks>
+        /// <remarks> Requires finished linking of the passed simulation </remarks>
         /// <returns></returns>
         protected IList<IProbabilityTrackerModel> CreateProbabilityTrackerModels(IKineticSimulation simulation)
         {
-            return new List<IProbabilityTrackerModel>();
+            var result = new List<IProbabilityTrackerModel>();
+
+            return result;
         }
     }
 }

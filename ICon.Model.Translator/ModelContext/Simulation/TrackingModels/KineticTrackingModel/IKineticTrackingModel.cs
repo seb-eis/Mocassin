@@ -20,7 +20,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The list of static movement tracker models required for the simulation
         /// </summary>
-        IList<IMovementTrackerModel> StaticTrackerModels { get; set; }
+        IList<IStaticMovementTrackerModel> StaticTrackerModels { get; set; }
 
         /// <summary>
         ///     The list of jump probability tracker models for the simulation

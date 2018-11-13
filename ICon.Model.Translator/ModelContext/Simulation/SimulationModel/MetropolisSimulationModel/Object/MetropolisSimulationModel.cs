@@ -16,6 +16,6 @@ namespace Mocassin.Model.Translator.ModelContext
         public IMetropolisMappingModel[,,] MappingAssignMatrix { get; set; }
 
         /// <inheritdoc />
-        public IMetropolisLocalJumpModel[,,] JumpModelMatrix { get; set; }
+        public IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
     }
 }

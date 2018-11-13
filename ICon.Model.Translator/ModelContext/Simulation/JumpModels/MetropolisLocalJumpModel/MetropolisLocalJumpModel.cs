@@ -8,5 +8,13 @@
 
         /// <inheritdoc />
         public IMetropolisRuleModel RuleModel { get; set; }
+
+        /// <inheritdoc />
+        public bool Equals(IMetropolisLocalJumpModel other)
+        {
+            return other != null 
+                   && MappingModel.Equals(other.MappingModel) 
+                   && RuleModel.Equals(other.RuleModel);
+        }
     }
 }

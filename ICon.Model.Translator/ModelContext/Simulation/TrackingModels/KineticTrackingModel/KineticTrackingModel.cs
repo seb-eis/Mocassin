@@ -15,7 +15,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IMovementTrackerModel> GlobalTrackerModels { get; set; }
 
         /// <inheritdoc />
-        public IList<IMovementTrackerModel> StaticTrackerModels { get; set; }
+        public IList<IStaticMovementTrackerModel> StaticTrackerModels { get; set; }
 
         /// <inheritdoc />
         public IList<IProbabilityTrackerModel> ProbabilityTrackerModels { get; set; }

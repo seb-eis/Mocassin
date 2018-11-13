@@ -2,7 +2,6 @@
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
-using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Transitions;
 
@@ -32,8 +31,9 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             foreach (var simulationModel in simulationModels)
             {
-                simulationModel.MappingAssignMatrix = CreateMappingAssignMatrix<IMetropolisMappingModel, IMetropolisTransitionModel>(simulationModel.TransitionModels);
-                simulationModel.JumpModelMatrix = CreateJumpModelMatrix(simulationModel);
+                simulationModel.MappingAssignMatrix =
+                    CreateMappingAssignMatrix<IMetropolisMappingModel, IMetropolisTransitionModel>(simulationModel.TransitionModels);
+                AddLocalJumpModels(simulationModel);
             }
         }
 
@@ -51,56 +51,62 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the jump matrix for the passed metropolis simulation model
+        ///     Creates and adds the list of metropolis local simulation models to the passed kinetic simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
-        /// <returns></returns>
-        protected IMetropolisLocalJumpModel[,,] CreateJumpModelMatrix(IMetropolisSimulationModel simulationModel)
+        protected void AddLocalJumpModels(IMetropolisSimulationModel simulationModel)
         {
+            var jumpModels = new List<IMetropolisLocalJumpModel>();
             var modelId = 0;
-            var result = CreateRawJumpModelMatrix(simulationModel);
-            for (var positionId = 0; positionId < result.GetLength(0); positionId++)
+            for (var positionId = 0; positionId < simulationModel.MappingAssignMatrix.GetLength(0); positionId++)
             {
-                for (var particleId = 0; particleId < result.GetLength(1); particleId++)
+                for (var particleId = 0; particleId < simulationModel.MappingAssignMatrix.GetLength(1); particleId++)
                 {
-                    var targetIndex = 0;
                     for (var objId = 0; objId < simulationModel.MappingAssignMatrix.GetLength(2); objId++)
                     {
                         var mappingModel = simulationModel.MappingAssignMatrix[positionId, particleId, objId];
                         if (mappingModel == null)
                             break;
 
-                        foreach (var ruleModel in mappingModel.TransitionModel.RuleModels.Where(a => a.SelectableParticle.Index == particleId))
+                        foreach (var ruleModel in mappingModel.TransitionModel.RuleModels.Where(rule =>
+                            rule.SelectableParticle.Index == particleId))
                         {
-                            var jumpModel = new MetropolisLocalJumpModel
-                            {
-                                ModelId = modelId++,
-                                RuleModel = ruleModel,
-                                MappingModel = mappingModel
-                            };
-                            result[positionId, particleId, targetIndex++] = jumpModel;
+                            var jumpModel = CreateLocalJumpModel(mappingModel, ruleModel, simulationModel, ref modelId);
+                            jumpModels.Add(jumpModel);
                         }
                     }
                 }
             }
-            return result;
+
+            jumpModels.RemoveDuplicates(EqualityComparer<IMetropolisLocalJumpModel>.Default);
+            simulationModel.LocalJumpModels = jumpModels;
         }
 
         /// <summary>
-        /// Determines the required size and creates the raw and empty jump model matrix
+        ///     Creates the local jump model for the provided combination of metropolis rule model and mapping model in the context
+        ///     of
+        ///     the defined metropolis simulation model
         /// </summary>
+        /// <param name="mappingModel"></param>
+        /// <param name="ruleModel"></param>
         /// <param name="simulationModel"></param>
+        /// <param name="modelId"></param>
         /// <returns></returns>
-        protected IMetropolisLocalJumpModel[,,] CreateRawJumpModelMatrix(IMetropolisSimulationModel simulationModel)
+        protected IMetropolisLocalJumpModel CreateLocalJumpModel(IMetropolisMappingModel mappingModel, IMetropolisRuleModel ruleModel,
+            IMetropolisSimulationModel simulationModel, ref int modelId)
         {
-            var dimension0 = simulationModel.MappingAssignMatrix.GetLength(0);
-            var dimension1 = simulationModel.MappingAssignMatrix.GetLength(1);
-            var dimension2 = GetMaxJumpOptionsCount(simulationModel);
-            return new IMetropolisLocalJumpModel[dimension0, dimension1, dimension2];
+            var jumpModel = new MetropolisLocalJumpModel
+            {
+                ModelId = modelId++,
+                MappingModel = mappingModel,
+                RuleModel = ruleModel
+            };
+
+            return jumpModel;
         }
 
         /// <summary>
-        /// Determines the maximum count of jump model options on a single position in the passed metropolis simulation model
+        ///     Determines the maximum count of jump model options on a single position in the passed metropolis simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <returns></returns>
@@ -123,8 +129,9 @@ namespace Mocassin.Model.Translator.ModelContext
                     }
 
                     result = result > count ? result : count;
-                }   
+                }
             }
+
             return result;
         }
     }

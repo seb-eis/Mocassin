@@ -27,9 +27,9 @@ namespace Mocassin.Model.Translator.ModelContext
         IMetropolisMappingModel[,,] MappingAssignMatrix { get; set; }
 
         /// <summary>
-        ///     The jump model matrix that assigns each position index/particle index combination a set of possibly jump behaviors
+        ///     The list of all existing jump models in the metropolis simulation model that finalized the actual transition
+        ///     behaviour in the simulation
         /// </summary>
-        /// <remarks> Order on C side is [PositionId,ParticleId,ObjId] </remarks>
-        IMetropolisLocalJumpModel[,,] JumpModelMatrix { get; set; }
+        IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
     }
 }

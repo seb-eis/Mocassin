@@ -246,9 +246,9 @@ namespace Mocassin.Model.Translator.ModelContext
                 var moveIndex = abstractMovement[i];
                 var vector = mappingModel.PositionSequence3D[i + moveIndex] - mappingModel.PositionSequence3D[i];
 
-                matrix[i, 0] = vector.A;
-                matrix[i, 1] = vector.B;
-                matrix[i, 2] = vector.C;
+                matrix[0, i] = vector.A;
+                matrix[1, i] = vector.B;
+                matrix[2, i] = vector.C;
             }
 
             mappingModel.PositionMovementMatrix = matrix;

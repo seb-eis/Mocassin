@@ -40,7 +40,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <remarks> This value cannot be set for a kinetic transition </remarks>
         public CrystalVector4D StartVector4D
         {
-            get => TransitionSequence4D[0];
+            get => PositionSequence4D[0];
             set => throw new NotSupportedException("Cannot manipulate start vector on kinetic mapping");
         }
 
