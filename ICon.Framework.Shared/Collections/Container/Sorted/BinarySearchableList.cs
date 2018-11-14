@@ -33,7 +33,7 @@ namespace Mocassin.Framework.Collections
         }
 
         /// <summary>
-        ///     Creates a new binary searchable list with the specified comparer
+        ///     Creates a new binary searchable list with the specified comparer. Uses default comparer if none is specified
         /// </summary>
         /// <param name="comparer"></param>
         protected BinarySearchableList(IComparer<T1> comparer)

@@ -97,5 +97,11 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         IList<SetList<Fractional3D>> GetExtendedDummyPositionLists();
+
+        /// <summary>
+        ///     Get the number of existing positions if all unit cell positions are extended by the currently set space group
+        /// </summary>
+        /// <returns></returns>
+        int GetLinearizedExtendedPositionCount();
     }
 }

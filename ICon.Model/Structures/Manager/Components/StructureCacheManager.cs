@@ -107,6 +107,12 @@ namespace Mocassin.Model.Structures
             return GetResultFromCache(CreateExtendedDummyPositionLists);
         }
 
+        /// <inheritdoc />
+        public int GetLinearizedExtendedPositionCount()
+        {
+            return GetLinearizedExtendedPositionList()?.Count ?? 0;
+        }
+
         /// <summary>
         ///     Creates the extended wyckoff position lists for all dummy positions. Deprecated dummies produce an empty list
         /// </summary>

@@ -10,6 +10,16 @@ namespace Mocassin.Model.Particles
     public interface IParticleDataPort : IModelDataPort
     {
         /// <summary>
+        ///     Get the number of defined particles (valid and deprecated) in the data object
+        /// </summary>
+        int ParticleCount { get; }
+
+        /// <summary>
+        ///     Get the number of defined particle sets (valid and deprecated) in the data object
+        /// </summary>
+        int ParticleSetCount { get; }
+
+        /// <summary>
         ///     Get the current number of valid particles (Deprecated ones are excluded)
         /// </summary>
         /// <returns></returns>

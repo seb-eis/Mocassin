@@ -29,6 +29,12 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
+        public int ParticleCount => Data.Particles?.Count ?? 0;
+
+        /// <inheritdoc />
+        public int ParticleSetCount => Data.ParticleSets?.Count ?? 0;
+
+        /// <inheritdoc />
         public int GetValidParticleCount()
         {
             var count = 0;

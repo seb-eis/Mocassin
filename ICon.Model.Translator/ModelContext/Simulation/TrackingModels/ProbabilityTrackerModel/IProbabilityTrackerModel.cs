@@ -8,7 +8,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IProbabilityTrackerModel : IModelComponent
     {
         /// <summary>
-        ///     The kinetic transition model the tracker belongs to the tracker model
+        ///     The kinetic transition model the tracker belongs to
         /// </summary>
         IKineticTransitionModel KineticTransitionModel { get; set; }
 

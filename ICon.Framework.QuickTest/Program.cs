@@ -62,10 +62,6 @@ namespace Mocassin.Framework.QuickTest
             var mainContextBuilder = new ProjectModelContextBuilder(packages.ModelProject);
             var watch = Stopwatch.StartNew();
             var result = mainContextBuilder.BuildNewContext().Result;
-            var count = (from IKineticMappingModel mappingModel in result.SimulationModelContext.KineticSimulationModels
-                    .First().MappingAssignMatrix
-                where mappingModel != null
-                select mappingModel).Count();
             DisplayWatch(watch);
             Console.ReadLine();
         }
