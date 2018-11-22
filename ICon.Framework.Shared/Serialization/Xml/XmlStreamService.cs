@@ -109,10 +109,8 @@ namespace Mocassin.Framework.Xml
         /// </summary>
         /// <typeparam name="TSerializable"></typeparam>
         /// <returns></returns>
-        public static XmlStreamService<TSerializable> Create<TSerializable>(TSerializable obj)
+        public static XmlStreamService<TSerializable> CreateFor<TSerializable>(TSerializable obj)
         {
-            if (obj.GetType().IsSerializable == false)
-                throw new ArgumentException("Object is not serializable, cannot create stream service", nameof(obj));
             return new XmlStreamService<TSerializable>();
         }
 
@@ -146,8 +144,15 @@ namespace Mocassin.Framework.Xml
         {
             using (var writer = NewDefaultWriter(stream))
             {
-                var serializer = new XmlSerializer(typeof(T1));
-                serializer.Serialize(writer, obj, GetDefaultNamespaces());
+                try
+                {
+                    var serializer = new XmlSerializer(typeof(T1));
+                    serializer.Serialize(writer, obj, GetDefaultNamespaces());
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
             }
 
             return true;

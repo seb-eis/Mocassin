@@ -32,10 +32,12 @@ namespace Mocassin.Model.Simulations
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("FixedNormalization", ImportSettings = "Normalization")]
         public double NormalizationProbability { get; set; }
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("ElectricField", ImportSettings = "ElectricField")]
         public double ElectricFieldMagnitude { get; set; }
 
         /// <summary>

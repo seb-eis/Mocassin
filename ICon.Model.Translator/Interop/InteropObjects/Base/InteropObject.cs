@@ -32,7 +32,7 @@ namespace Mocassin.Model.Translator
     }
 
     /// <summary>
-    ///     Generic base class for wrapping interop structures into a net object. Supports marshalling of teh wrapped structure
+    ///     Generic base class for wrapping interop structures into a net object. Supports marshalling of the wrapped structure
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NotMapped]

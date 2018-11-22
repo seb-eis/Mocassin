@@ -51,7 +51,7 @@ namespace Mocassin.Model.Simulations
         protected virtual void AddValueSeriesValidations(ISimulationSeries series, ValidationReport report)
         {
             AddSingleSeriesValidation(series.TemperatureSeries, Settings.Temperature, report);
-            AddSingleSeriesValidation(series.McspSeries, Settings.MonteCarloSteps, report);
+            AddSingleSeriesValidation(series.McspSeries, Settings.MonteCarloStepsPerParticle, report);
         }
 
         /// <summary>

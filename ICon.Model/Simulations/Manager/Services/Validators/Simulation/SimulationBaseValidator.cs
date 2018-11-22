@@ -56,7 +56,7 @@ namespace Mocassin.Model.Simulations
             if (Settings.JobCount.ParseValue(simulation.JobCount, out var warnings) != 0) 
                 report.AddWarnings(warnings);
 
-            if (Settings.MonteCarloSteps.ParseValue(simulation.TargetMcsp, out warnings) != 0)
+            if (Settings.MonteCarloStepsPerParticle.ParseValue(simulation.TargetMcsp, out warnings) != 0)
                 report.AddWarnings(warnings);
 
             if (Settings.WriteCallCount.ParseValue(simulation.WriteOutCount, out warnings) != 0) 

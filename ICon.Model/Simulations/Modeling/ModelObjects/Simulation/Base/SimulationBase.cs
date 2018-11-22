@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using Mocassin.Framework.Provider;
 using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Simulations
 {
@@ -30,14 +31,17 @@ namespace Mocassin.Model.Simulations
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("Seed", ImportSettings = "Seeding")]
         public string CustomRngSeed { get; set; }
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("Temperature", ImportSettings = "Temperature")]
         public double Temperature { get; set; }
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("Mcsp", ImportSettings = "MonteCarloStepsPerParticle")]
         public int TargetMcsp { get; set; }
 
         /// <inheritdoc />
@@ -50,14 +54,17 @@ namespace Mocassin.Model.Simulations
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("SaveRunTimeLimit", ImportSettings = "ForceTerminationTime")]
         public TimeSpan SaveRunTimeLimit { get; set; }
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("LowerSuccessRateLimit", ImportSettings = "TerminationSuccessRate")]
         public double LowerSuccessRateLimit { get; set; }
 
         /// <inheritdoc />
         [DataMember]
+        [JobProperty("JobCount", ImportSettings = "JobCount")]
         public int JobCount { get; set; }
 
         /// <summary>

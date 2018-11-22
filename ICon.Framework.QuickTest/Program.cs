@@ -48,6 +48,7 @@ using Mocassin.Model.Translator;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using Mocassin.Model.Basic;
+using Mocassin.Model.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 
 namespace Mocassin.Framework.QuickTest
@@ -56,13 +57,37 @@ namespace Mocassin.Framework.QuickTest
     {
         static void Main(string[] args)
         {
-            //var defaultPath = "C:/Users/hims-user/source/repos/ICon.Program/ICon.Framework.QuickTest";
-            //var context = new CInteropDbContext("./mcsop.db", true);
-            var packages = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-            var mainContextBuilder = new ProjectModelContextBuilder(packages.ModelProject);
-            var watch = Stopwatch.StartNew();
-            var result = mainContextBuilder.BuildNewContext().Result;
-            DisplayWatch(watch);
+            var package = new JobPackage
+            {
+                SimulationId = "OxygenMigration",
+                GlobalJobProperties = new HashSet<JobProperty>
+                {
+                    new JobProperty("Temperature", "500"), new JobProperty("Mcsp", "100")
+                },
+                JobSpecifications = new List<JobSpecification>
+                {
+                    new JobSpecification
+                    { 
+                        JobProperties = new HashSet<JobProperty>()
+                        {
+                            new JobProperty("Temperature", "200"),
+                            new JobProperty("Mcsp", "50")
+                        }
+                    },
+                    new JobSpecification
+                    {
+                        JobProperties = new HashSet<JobProperty>()
+                        {
+                            new JobProperty("Temperature", "200"),
+                            new JobProperty("Mcsp", "50"),
+                            new JobProperty("JobCount","25")
+                        }
+                    }
+                }
+            };
+            var service = XmlStreamService.CreateFor(package);
+            service.TrySerialize(Console.OpenStandardOutput(), package);
+            var fs = File.OpenRead("C:\\Users\\hims-user\\Documents\\Gitlab\\TestFiles\\job.xml");
             Console.ReadLine();
         }
 

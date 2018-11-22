@@ -12,9 +12,6 @@ namespace Mocassin.Model.Translator
 
         private readonly CMdaAccess backgroundAccess;
 
-        [MarshalAs(UnmanagedType.I8)]
-        private readonly long paddingLong;
-
         public CVector4 SizeVector { get; set; }
 
         [field: MarshalAs(UnmanagedType.I4)]
