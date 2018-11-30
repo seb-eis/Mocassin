@@ -23,7 +23,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The simulation package navigation property
         /// </summary>
-        public SimulationPackage SimulationPackage { get; set; }
+        public JobPackageModel JobPackageModel { get; set; }
 
         /// <summary>
         ///     The list of affiliated jump collection entities
@@ -39,7 +39,7 @@ namespace Mocassin.Model.Translator
         ///     The simulation package context key
         /// </summary>
         [Column("PackageId")]
-        [ForeignKey(nameof(SimulationPackage))]
+        [ForeignKey(nameof(JobPackageModel))]
         public int SimulationPackageId { get; set; }
 
         /// <summary>

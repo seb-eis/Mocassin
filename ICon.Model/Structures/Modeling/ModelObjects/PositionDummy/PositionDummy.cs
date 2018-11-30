@@ -21,7 +21,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Dummy Position'";
+            return "Dummy Position";
         }
 
         /// <inheritdoc />

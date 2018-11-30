@@ -42,7 +42,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override string GetObjectName()
         {
-            return "'ElementSublatticeCode'";
+            return "ElementSublatticeCode";
         }
 
          /// <summary>

@@ -31,7 +31,7 @@ namespace Mocassin.Model.Simulations
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Metropolis Simulation Series'";
+            return "Metropolis Simulation Series";
         }
 
         /// <inheritdoc />

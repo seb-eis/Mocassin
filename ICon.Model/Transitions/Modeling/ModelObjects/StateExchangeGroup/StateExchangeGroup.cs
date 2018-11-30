@@ -33,7 +33,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Property Group'";
+            return "Property Group";
         }
 
         /// <inheritdoc />

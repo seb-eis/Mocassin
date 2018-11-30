@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mocassin.Framework.Messaging;
 using Newtonsoft.Json;
 
@@ -31,9 +32,16 @@ namespace Mocassin.Framework.Operations
         }
 
         /// <inheritdoc />
-        public IEnumerator<WarningMessage> GetWarningEnumerator()
+        public IEnumerable<WarningMessage> GetWarnings()
         {
-            return Warnings.GetEnumerator();
+            return Warnings.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public void Merge(IConflictReport other)
+        {
+            if (other != null)
+                InnerReports.Add(other);
         }
 
         /// <summary>

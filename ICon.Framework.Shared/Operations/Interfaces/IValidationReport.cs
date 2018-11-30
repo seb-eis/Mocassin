@@ -13,5 +13,11 @@ namespace Mocassin.Framework.Operations
         /// </summary>
         /// <returns></returns>
         IEnumerable<WarningMessage> GetWarnings();
+
+        /// <summary>
+        ///     Merges the data from another validation report into this one
+        /// </summary>
+        /// <param name="other"></param>
+        void Merge(IValidationReport other);
     }
 }

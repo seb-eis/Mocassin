@@ -34,7 +34,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Kinetic Rule'";
+            return "Kinetic Rule";
         }
 
         /// <inheritdoc />

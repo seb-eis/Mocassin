@@ -10,7 +10,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Database set for translated simulation packages
         /// </summary>
-        DbSet<SimulationPackage> SimulationPackages { get; set; }
+        DbSet<JobPackageModel> SimulationPackages { get; set; }
 
         /// <summary>
         ///     Database set for translated structure models

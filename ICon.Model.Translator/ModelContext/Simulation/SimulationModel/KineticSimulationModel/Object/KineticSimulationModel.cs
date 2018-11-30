@@ -20,6 +20,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticTrackingModel KineticTrackingModel { get; set; }
 
         /// <inheritdoc />
+        public IKineticIndexingModel KineticIndexingModel { get; set; }
+
+        /// <inheritdoc />
         public IKineticMappingModel[,,] MappingAssignMatrix { get; set; }
 
         /// <inheritdoc />

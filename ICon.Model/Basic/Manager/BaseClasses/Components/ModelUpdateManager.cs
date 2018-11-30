@@ -111,7 +111,7 @@ namespace Mocassin.Model.Basic
             var delegates = propertyInfos
                 .Select(property => property.GetValue(this))
                 .Select(value =>
-                    creator.CreateDelegates(value, info => info.GetCustomAttribute(typeof(EventPortConnectorAttribute)) != null)
+                    creator.CreateWhere(value, info => info.GetCustomAttribute(typeof(EventPortConnectorAttribute)) != null)
                         .SingleOrDefault());
 
             var bundleSubscriber = Activator.CreateInstance(typeof(EventPortSubscriber<>).MakeGenericType(eventSourceType), delegates);

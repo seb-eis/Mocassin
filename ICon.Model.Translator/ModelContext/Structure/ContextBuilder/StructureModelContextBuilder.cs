@@ -12,6 +12,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IPositionModelBuilder PositionModelBuilder { get; set; }
 
         /// <inheritdoc />
+        public IInteractionRangeModelBuilder InteractionRangeModelBuilder { get; set; }
+
+        /// <inheritdoc />
         public StructureModelContextBuilder(IProjectModelContextBuilder projectModelContextBuilder)
             : base(projectModelContextBuilder)
         {
@@ -24,9 +27,11 @@ namespace Mocassin.Model.Translator.ModelContext
             var unitCellPositions = manager.QueryPort.Query(port => port.GetUnitCellPositions());
             var environmentModels = EnvironmentModelBuilder.BuildModels(unitCellPositions);
             var positionModels = PositionModelBuilder.BuildModels(environmentModels);
+            var rangeModel = InteractionRangeModelBuilder.BuildModel(ModelProject);
 
             modelContext.EnvironmentModels = environmentModels;
             modelContext.PositionModels = positionModels;
+            modelContext.InteractionRangeModel = rangeModel;
             return modelContext;
         }
 
@@ -41,6 +46,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             EnvironmentModelBuilder = EnvironmentModelBuilder ?? new EnvironmentModelBuilder(ModelProject);
             PositionModelBuilder = PositionModelBuilder ?? new PositionModelBuilder(ModelProject);
+            InteractionRangeModelBuilder = InteractionRangeModelBuilder ?? new InteractionRangeModelBuilder();
         }
     }
 }

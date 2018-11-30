@@ -23,7 +23,8 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     2D energy table that stores energy values for each position id and particle id
         /// </summary>
+        [NotMapped]
         [OwnedBlobProperty(nameof(EnergyTableBinary))]
-        private EnergyTableEntity EnergyTable { get; set; }
+        public EnergyTableEntity EnergyTable { get; set; }
     }
 }

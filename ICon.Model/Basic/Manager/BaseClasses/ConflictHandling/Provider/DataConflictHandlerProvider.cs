@@ -110,7 +110,7 @@ namespace Mocassin.Model.Basic
             }
 
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-            if (!(new DelegateCreator().CreateDelegates(this, SourceDelegateSearchPredicate, flags).SingleOrDefault() is Delegate @delegate)
+            if (!(new DelegateCreator().CreateWhere(this, SourceDelegateSearchPredicate, flags).SingleOrDefault() is Delegate @delegate)
             ) return null;
 
             if (@delegate.Method.ReturnParameter != null && @delegate.Method.ReturnParameter.ParameterType != typeof(object))

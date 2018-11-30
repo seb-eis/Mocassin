@@ -55,7 +55,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Group Interaction'";
+            return "Group Interaction";
         }
 
         /// <inheritdoc />

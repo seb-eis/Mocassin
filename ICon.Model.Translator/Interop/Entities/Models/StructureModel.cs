@@ -23,13 +23,13 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The simulation package navigation property
         /// </summary>
-        public SimulationPackage SimulationPackage { get; set; }
+        public JobPackageModel JobPackageModel { get; set; }
 
         /// <summary>
         ///     The simulation package context key
         /// </summary>
         [Column("PackageId")]
-        [ForeignKey(nameof(SimulationPackage))]
+        [ForeignKey(nameof(JobPackageModel))]
         public int SimulationPackageId { get; set; }
 
         /// <summary>
@@ -45,10 +45,10 @@ namespace Mocassin.Model.Translator
         public int NumOfGlobalTrackers { get; set; }
 
         /// <summary>
-        ///     Position cell tracker indexing blob conversion backing property
+        ///     The number of probability trackers
         /// </summary>
-        [Column("CellTrackerIndexing")]
-        public byte[] PositionCellTrackerIndexingBinary { get; set; }
+        [Column("NumOfProbabilityTrackers")]
+        public int NumOfProbabilityTrackers { get; set; }
 
         /// <summary>
         ///     Interaction range blob conversion backing property
@@ -60,13 +60,6 @@ namespace Mocassin.Model.Translator
         ///     The list of affiliated environment definition entities
         /// </summary>
         public List<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }
-
-        /// <summary>
-        ///     The position cell tracker indexing
-        /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(PositionCellTrackerIndexingBinary))]
-        public IndexRedirectionListEntity PositionCellTrackerIndexing { get; set; }
 
         /// <summary>
         ///     The interaction range object for regular environment objects

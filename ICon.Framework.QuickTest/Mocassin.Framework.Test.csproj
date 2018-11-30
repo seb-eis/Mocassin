@@ -34,7 +34,7 @@
     <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
     <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
     <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
-    <ProjectReference Include="..\Mocassin.Model.Jobs\Mocassin.Model.Jobs.csproj" />
+    <ProjectReference Include="..\Mocassin.Model.Jobs\Mocassin.Model.Mml.csproj" />
   </ItemGroup>
 
 </Project>

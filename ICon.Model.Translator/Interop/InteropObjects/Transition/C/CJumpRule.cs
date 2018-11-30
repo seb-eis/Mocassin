@@ -25,7 +25,7 @@ namespace Mocassin.Model.Translator
         public double AttemptFrequencyFraction { get; set; }
 
         [field: MarshalAs(UnmanagedType.R8)]
-        public double AbsoluteChargeTransport { get; set; }
+        public double ElectricFieldFactor { get; set; }
 
         public byte[] TrackerOrder
         {

@@ -25,7 +25,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Property State Pair'";
+            return "Property State Pair";
         }
 
         /// <inheritdoc />

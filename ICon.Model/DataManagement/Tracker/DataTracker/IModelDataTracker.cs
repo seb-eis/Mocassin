@@ -9,7 +9,7 @@ namespace Mocassin.Model.DataManagement
     public interface IModelDataTracker
     {
         /// <summary>
-        ///     Performs  manager creation defined the passed factory, registers the manager with the project service and tracks
+        ///     Performs  manager creation defined the passed factory, registers the manager with the model project and tracks
         ///     the generated model data object
         /// </summary>
         /// <param name="modelProject"></param>
@@ -23,18 +23,26 @@ namespace Mocassin.Model.DataManagement
         void LinkModelObject(object obj);
 
         /// <summary>
-        ///     Tries to replace all marked foreign data references in the passed model data object by the ones known by the tracker
+        ///     Tries to replace all marked foreign data references in the passed model data object by the ones known by the
+        ///     tracker
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         bool TryLinkModelObject(object obj);
 
         /// <summary>
-        ///     Lookup the internal data object of the specified interface type that belongs to the given index, returns null if
-        ///     non exists
+        ///     Lookup the internal model object that can be assigned to the specified type that has the given index
         /// </summary>
         /// <param name="index"></param>
-        /// <returns></returns>
-        TInterface FindObjectInterfaceByIndex<TInterface>(int index);
+        /// <returns>The found model object or null if none was found</returns>
+        TObject FindObjectByIndex<TObject>(int index) where TObject : IModelObject;
+
+        /// <summary>
+        ///     Lookup the internal model object that can be assigned to the specified type that has the given alias
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <param name="alias"></param>
+        /// <returns>The found model object or null if none was found</returns>
+        TObject FindObjectByAlias<TObject>(string alias) where TObject : IModelObject;
     }
 }

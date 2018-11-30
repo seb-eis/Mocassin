@@ -64,7 +64,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Particle Set'";
+            return "Particle Set";
         }
 
         /// <inheritdoc />

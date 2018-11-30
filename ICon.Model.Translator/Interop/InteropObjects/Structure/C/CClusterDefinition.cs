@@ -11,12 +11,12 @@ namespace Mocassin.Model.Translator
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         private int[] relativePositionIds;
-
-        [MarshalAs(UnmanagedType.I4)] 
-        private readonly int paddingInt;
       
         [field: MarshalAs(UnmanagedType.I4)]
         public int TableId { get; set; }
+
+        [MarshalAs(UnmanagedType.I4)] 
+        private readonly int paddingInt;
 
         public int[] RelativePositionIds
         {

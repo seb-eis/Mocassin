@@ -32,7 +32,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override string GetObjectName()
         {
-            return "'Building Block'";
+            return "Building Block";
         }
 
         /// <summary>

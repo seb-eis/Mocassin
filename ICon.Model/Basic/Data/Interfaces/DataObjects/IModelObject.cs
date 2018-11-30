@@ -17,6 +17,11 @@
         int Index { get; }
 
         /// <summary>
+        ///     Get the alias of the model object
+        /// </summary>
+        string Alias { get; }
+
+        /// <summary>
         ///     Deprecates object
         /// </summary>
         void Deprecate();

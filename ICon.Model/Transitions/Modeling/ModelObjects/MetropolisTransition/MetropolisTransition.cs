@@ -71,7 +71,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Metropolis Transition'";
+            return "Metropolis Transition";
         }
 
         /// <inheritdoc />

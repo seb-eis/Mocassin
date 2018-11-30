@@ -41,7 +41,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Unit Cell Position'";
+            return "Unit Cell Position";
         }
 
         /// <inheritdoc />

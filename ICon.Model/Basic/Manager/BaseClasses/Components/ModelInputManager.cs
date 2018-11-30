@@ -154,7 +154,7 @@ namespace Mocassin.Model.Basic
         ///     Identify all non public functions that are marked as data operation methods of new object inputs and create the
         ///     processor list for the pipeline
         /// </summary>
-        protected virtual List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncObjectInputProcessors()
+        protected List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncObjectInputProcessors()
         {
             var processors = MakeAsyncDataOperationProcessors(DataOperationType.NewObject).ToList();
             if (processors.Count != GetSupportedModelObjects().Length)
@@ -170,7 +170,7 @@ namespace Mocassin.Model.Basic
         ///     Identify all non public functions that are marked as data operation methods of model object replacements and create
         ///     the processor list for the pipeline
         /// </summary>
-        protected virtual List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncObjectReplacementProcessors()
+        protected List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncObjectReplacementProcessors()
         {
             var processors = MakeAsyncDataOperationProcessors(DataOperationType.ObjectChange).ToList();
             if (processors.Count != GetSupportedModelObjects().Length)
@@ -186,7 +186,7 @@ namespace Mocassin.Model.Basic
         ///     Identify all non public functions that are marked as data operation methods of new object inputs and create the
         ///     processor list for pipeline
         /// </summary>
-        protected virtual List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncObjectRemovalProcessors()
+        protected List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncObjectRemovalProcessors()
         {
             var processors = MakeAsyncDataOperationProcessors(DataOperationType.ObjectRemoval).ToList();
             if (processors.Count != GetSupportedModelObjects().Length)
@@ -203,7 +203,7 @@ namespace Mocassin.Model.Basic
         ///     processor list for pipeline
         /// </summary>
         /// <returns></returns>
-        protected virtual List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncParameterChangeProcessors()
+        protected List<IAsyncObjectProcessor<IOperationReport>> MakeAsyncParameterChangeProcessors()
         {
             var processors = MakeAsyncDataOperationProcessors(DataOperationType.ParameterChange).ToList();
             if (processors.Count != GetSupportedModelParameters().Length)
@@ -604,7 +604,7 @@ namespace Mocassin.Model.Basic
             where T2 : ModelObject, T1, new()
         {
             // Lookup the actual internal object interface and cast it to the internal data type
-            var internalObj = (T2) ModelProject.DataTracker.FindObjectInterfaceByIndex<T1>(obj.Index);
+            var internalObj = (T2) ModelProject.DataTracker.FindObjectByIndex<T1>(obj.Index);
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
             {
@@ -676,7 +676,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        ///     Exectutes the default reflection based clean deprecated data operation for indexed model data (Lookup data, remove
+        ///     Executes the default reflection based clean deprecated data operation for indexed model data (Lookup data, remove
         ///     deprecated and distribute reindexing lists)
         /// </summary>
         /// <returns></returns>

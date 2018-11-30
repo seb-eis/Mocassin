@@ -72,7 +72,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Unstable Environment Info'";
+            return "Unstable Environment Info";
         }
 
         /// <inheritdoc />

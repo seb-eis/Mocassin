@@ -10,5 +10,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IList<IEnvironmentModel> EnvironmentModels { get; set; }
+
+        /// <inheritdoc />
+        public IInteractionRangeModel InteractionRangeModel { get; set; }
     }
 }

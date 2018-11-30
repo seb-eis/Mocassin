@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Translator
 {
@@ -8,6 +9,20 @@ namespace Mocassin.Model.Translator
     [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct CVector4
     {
+        public CVector4(int a, int b, int c, int d)
+            : this()
+        {
+            A = a;
+            B = b;
+            C = c;
+            D = d;
+        }
+
+        public CVector4(in CrystalVector4D vector4D)
+            : this(vector4D.A, vector4D.B, vector4D.C, vector4D.P)
+        {
+        }
+
         [field: MarshalAs(UnmanagedType.I4)]
         public int A { get; set; }
 

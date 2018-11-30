@@ -20,13 +20,6 @@ namespace Mocassin.Model.Translator
         public JumpSequenceEntity JumpSequence { get; set; }
 
         /// <summary>
-        ///     The jump link sequence that describes the required update call targets
-        /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(JumpLinkSequenceBinary))]
-        public JumpLinkSequenceEntity JumpLinkSequence { get; set; }
-
-        /// <summary>
         ///     The local movement sequence that describes the data for the dynamic tracking system
         /// </summary>
         [NotMapped]
@@ -82,12 +75,6 @@ namespace Mocassin.Model.Translator
         /// </summary>
         [Column("JumpSequence")]
         public byte[] JumpSequenceBinary { get; set; }
-
-        /// <summary>
-        ///     The jump link sequence blob conversion backing property
-        /// </summary>
-        [Column("JumpLinkSequence")]
-        public byte[] JumpLinkSequenceBinary { get; set; }
 
         /// <summary>
         ///     The local movement sequence blob conversion backing property

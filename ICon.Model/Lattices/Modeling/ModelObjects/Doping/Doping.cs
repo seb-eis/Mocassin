@@ -39,7 +39,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override string GetObjectName()
         {
-            return "'Doping'";
+            return "Doping";
         }
 
         /// <summary>

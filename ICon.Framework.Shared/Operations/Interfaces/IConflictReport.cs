@@ -10,9 +10,15 @@ namespace Mocassin.Framework.Operations
     public interface IConflictReport : IReport
     {
         /// <summary>
-        ///     Get the enumerator for contained warnings messages
+        ///     Get the warning sequence
         /// </summary>
         /// <returns></returns>
-        IEnumerator<WarningMessage> GetWarningEnumerator();
+        IEnumerable<WarningMessage> GetWarnings();
+
+        /// <summary>
+        ///     Merges the data from the other conflict report into this one
+        /// </summary>
+        /// <param name="other"></param>
+        void Merge(IConflictReport other);
     }
 }

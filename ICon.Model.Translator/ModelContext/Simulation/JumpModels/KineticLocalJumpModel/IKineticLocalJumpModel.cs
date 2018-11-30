@@ -40,5 +40,13 @@ namespace Mocassin.Model.Translator.ModelContext
         /// The cartesian charge transport vector of the local jump model that describes [charge*movement] in units of [C*Ang]
         /// </summary>
         Cartesian3D ChargeTransportVector { get; set; }
+
+        /// <summary>
+        /// Check if the passed position id + particle id combination is mobile in the context of the jump model
+        /// </summary>
+        /// <param name="positionId"></param>
+        /// <param name="particleId"></param>
+        /// <returns></returns>
+        bool MakesElementOnPositionMobile(int positionId, int particleId);
     }
 }

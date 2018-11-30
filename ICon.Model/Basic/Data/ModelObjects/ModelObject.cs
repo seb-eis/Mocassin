@@ -17,6 +17,10 @@ namespace Mocassin.Model.Basic
         public bool IsDeprecated { get; set; }
 
         /// <inheritdoc />
+        [DataMember]
+        public string Alias { get; set; }
+
+        /// <inheritdoc />
         public virtual void Deprecate()
         {
             IsDeprecated = true;

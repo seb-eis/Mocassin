@@ -24,7 +24,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<long> GroupLookupCodes { get; set; }
 
         /// <inheritdoc />
-        public IDictionary<IParticle, int> CenterParticleIndexing { get; set; }
+        public IDictionary<IParticle, int> ParticleIndexToTableMapping { get; set; }
 
         /// <inheritdoc />
         public double[,] EnergyTable { get; set; }

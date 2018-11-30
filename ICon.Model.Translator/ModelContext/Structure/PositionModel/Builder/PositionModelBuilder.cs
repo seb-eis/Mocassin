@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
@@ -96,7 +97,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected IList<ITargetPositionInfo> TransformTargetInfos(IList<ITargetPositionInfo> targetInfos, ISymmetryOperation operation,
             in Fractional3D centerVector)
         {
-            var result = new List<ITargetPositionInfo>(targetInfos.Count);
+            var result = CreateNewTargetInfoList(targetInfos.Count);
             foreach (var positionInfo in targetInfos)
             {
                 var targetInfo = new TargetPositionInfo
@@ -117,6 +118,22 @@ namespace Mocassin.Model.Translator.ModelContext
             }
 
             return result;
+        }
+
+        /// <summary>
+        ///     Creates a new target info list that ensures the correct sorting of the target position infos by the relative 4D
+        ///     vector
+        /// </summary>
+        /// <param name="capacity"></param>
+        /// <returns></returns>
+        protected SetList<ITargetPositionInfo> CreateNewTargetInfoList(int capacity)
+        {
+            int Compare(ITargetPositionInfo lhs, ITargetPositionInfo rhs)
+            {
+                return lhs.RelativeVector4D.CompareTo(rhs.RelativeVector4D);
+            }
+
+            return new SetList<ITargetPositionInfo>(Comparer<ITargetPositionInfo>.Create(Compare), capacity);
         }
     }
 }

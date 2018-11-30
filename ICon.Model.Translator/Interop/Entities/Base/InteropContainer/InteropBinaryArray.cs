@@ -12,6 +12,22 @@ namespace Mocassin.Model.Translator
     public class InteropBinaryArray<T> : BlobEntityBase where T : struct
     {
         /// <summary>
+        ///     Creates new empty interop binary array
+        /// </summary>
+        public InteropBinaryArray()
+        {
+        }
+
+        /// <summary>
+        ///     Creates new interop binary array from an array object
+        /// </summary>
+        /// <param name="array"></param>
+        public InteropBinaryArray(Array array)
+        {
+            PopulateFrom(array);
+        }
+
+        /// <summary>
         ///     The value array of the matrix entity
         /// </summary>
         [NotMapped]
@@ -127,25 +143,37 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Creates a new matrix entity from an arbitrary array and flattens out the values within the array into a linear list
+        ///     Populates the interop binary array from an arbitrary array with correct element type
         /// </summary>
         /// <param name="array"></param>
-        /// <returns></returns>
-        public static InteropBinaryArray<T> FromArray(Array array)
+        /// <exception cref="ArgumentException">
+        ///     If the element type of the array cannot be assigned to the type of the interop
+        ///     array
+        /// </exception>
+        public void PopulateFrom(Array array)
         {
             if (!typeof(T).IsAssignableFrom(array.GetType().GetElementType()))
                 throw new ArgumentException($"Passed array element type cannot be assigned to type {typeof(T)}", nameof(array));
 
-            var interopArray = new InteropBinaryArray<T>
-            {
-                IndexSkips = array.GetDimensionIndexSkips()
-            };
-            interopArray.HeaderSize = interopArray.GetHeaderSize();
+            IndexSkips = array.GetDimensionIndexSkips();
+            HeaderSize = GetHeaderSize();
 
-            interopArray.Values = new T[array.Length];
+            Values = new T[array.Length];
             var index = 0;
-            foreach (T item in array) interopArray.Values[index++] = item;
-            return interopArray;
+            foreach (T item in array)
+                Values[index++] = item;
+        }
+
+        /// <summary>
+        ///     Creates a new interop array from an arbitrary array and flattens out the values within the array into a linear list
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static TArray FromArray<TArray>(Array array) where TArray : InteropBinaryArray<T>, new()
+        {
+            var result = new TArray();
+            result.PopulateFrom(array);
+            return result;
         }
     }
 }

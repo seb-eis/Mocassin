@@ -38,7 +38,7 @@ namespace Mocassin.Framework.Reflection
         /// <param name="predicate"></param>
         /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        public IEnumerable<Delegate> CreateDelegates(object instance, Predicate<MethodInfo> predicate, BindingFlags bindingFlags)
+        public IEnumerable<Delegate> CreateWhere(object instance, Predicate<MethodInfo> predicate, BindingFlags bindingFlags)
         {
             var methods = FindMethods(instance.GetType(), predicate, bindingFlags).ToList();
             var delegateTypes = MakeDelegateTypes(methods);
@@ -52,9 +52,9 @@ namespace Mocassin.Framework.Reflection
         /// <param name="instance"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<Delegate> CreateDelegates(object instance, Predicate<MethodInfo> predicate)
+        public IEnumerable<Delegate> CreateWhere(object instance, Predicate<MethodInfo> predicate)
         {
-            return CreateDelegates(instance, predicate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return CreateWhere(instance, predicate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         }
 
         /// <summary>

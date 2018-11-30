@@ -10,7 +10,7 @@ namespace Mocassin.Framework.Operations
     public class OperationReport : IOperationReport
     {
         /// <inheritdoc />
-        public string OperationDescription { get; protected set; }
+        public string OperationDescription { get; set; }
 
         /// <inheritdoc />
         public bool IsGood { get; protected set; }
@@ -26,16 +26,14 @@ namespace Mocassin.Framework.Operations
         /// <inheritdoc />
         public bool IsBusySignal { get; protected set; }
 
-        /// <summary>
-        ///     Contains potentially occured exception
-        /// </summary>
-        public List<Exception> Exceptions { get; protected set; }
+        /// <inheritdoc />
+        public IList<Exception> Exceptions { get; set; }
 
         /// <inheritdoc />
-        public IValidationReport ValidationReport { get; protected set; }
+        public IValidationReport ValidationReport { get; set; }
 
         /// <inheritdoc />
-        public IConflictReport ConflictReport { get; protected set; }
+        public IConflictReport ConflictReport { get; set; }
 
         /// <summary>
         ///     Creates new unnamed operation result that is by default a success until set otherwise
@@ -98,6 +96,20 @@ namespace Mocassin.Framework.Operations
             IsError = true;
         }
 
+        /// <inheritdoc />
+        public void Merge(IOperationReport other)
+        {
+            foreach (var exception in other.Exceptions)
+            {
+                AddException(exception);
+            }
+
+            ConflictReport.Merge(other.ConflictReport);
+            ValidationReport.Merge(other.ValidationReport);
+
+            IsGood = IsGood && ValidationReport.IsGood && ConflictReport.IsGood;
+        }
+
         /// <summary>
         ///     Marks the operation result as a busy signal without changing already existing content
         /// </summary>
@@ -131,12 +143,6 @@ namespace Mocassin.Framework.Operations
 
             result.AddException(new InvalidPipelineInputException(builder.ToString(), unexpectedType));
             return result;
-        }
-
-        /// <inheritdoc />
-        public IEnumerator<Exception> GetExceptionsEnumerator()
-        {
-            return Exceptions.GetEnumerator();
         }
 
         /// <summary>

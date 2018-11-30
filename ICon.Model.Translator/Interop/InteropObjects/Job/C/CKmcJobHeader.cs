@@ -8,14 +8,8 @@ namespace Mocassin.Model.Translator
     [StructLayout(LayoutKind.Sequential, Size = 40)]
     public struct CKmcJobHeader
     {
-        [MarshalAs(UnmanagedType.I4)] 
-        private readonly int paddingInt;
-
         [field: MarshalAs(UnmanagedType.I8)]
         public long JobFlags { get; set; }
-
-        [field: MarshalAs(UnmanagedType.I4)]
-        public int DynamicTrackerCount { get; set; }
 
         [field: MarshalAs(UnmanagedType.R8)]
         public double FieldMagnitude { get; set; }
@@ -25,5 +19,11 @@ namespace Mocassin.Model.Translator
 
         [field: MarshalAs(UnmanagedType.R8)]
         public double FixedNormFactor { get; set; }
+
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int DynamicTrackerCount { get; set; }
+
+        [MarshalAs(UnmanagedType.I4)] 
+        private readonly int paddingInt;
     }
 }

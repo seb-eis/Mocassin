@@ -39,7 +39,7 @@ namespace Mocassin.Framework.Reflection
         public IEnumerable<IObjectProcessor<TResult>> CreateProcessors<TResult>(object instance, Predicate<MethodInfo> predicate,
             BindingFlags bindingFlags)
         {
-            return new DelegateCreator().CreateDelegates(instance, predicate, bindingFlags)
+            return new DelegateCreator().CreateWhere(instance, predicate, bindingFlags)
                 .Select(@delegate => (IObjectProcessor<TResult>) CreateProcessor(@delegate));
         }
 
@@ -55,7 +55,7 @@ namespace Mocassin.Framework.Reflection
         public IEnumerable<IAsyncObjectProcessor<TResult>> CreateAsyncProcessors<TResult>(object instance, Predicate<MethodInfo> predicate,
             BindingFlags bindingFlags)
         {
-            return new DelegateCreator().CreateDelegates(instance, predicate, bindingFlags)
+            return new DelegateCreator().CreateWhere(instance, predicate, bindingFlags)
                 .Select(@delegate => (IAsyncObjectProcessor<TResult>) CreateAsyncProcessor(@delegate));
         }
 

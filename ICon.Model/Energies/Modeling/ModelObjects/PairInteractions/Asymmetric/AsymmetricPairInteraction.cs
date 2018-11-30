@@ -37,7 +37,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Asymmetric Pair Interaction'";
+            return "Asymmetric Pair Interaction";
         }
 
         /// <inheritdoc />

@@ -5,13 +5,9 @@ namespace Mocassin.Model.Translator
     /// <summary>
     ///     Simulation lattice info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 72)]
+    [StructLayout(LayoutKind.Sequential, Size = 80)]
     public struct CLatticeInfo
     {
-        private readonly CMdaAccess latticeAccess;
-
-        private readonly CMdaAccess backgroundAccess;
-
         public CVector4 SizeVector { get; set; }
 
         [field: MarshalAs(UnmanagedType.I4)]
@@ -19,5 +15,11 @@ namespace Mocassin.Model.Translator
 
         [field: MarshalAs(UnmanagedType.I4)]
         public int NumberOfSelectAtoms { get; set; }
+        
+        private readonly CMdaAccess latticeAccess;
+
+        private readonly CMdaAccess backgroundAccess;
+
+        private readonly long padding;
     }
 }

@@ -16,5 +16,10 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The list of existing environment models. Each for one unit cell position
         /// </summary>
         IList<IEnvironmentModel> EnvironmentModels { get; set; }
+
+        /// <summary>
+        ///     The range model that defines the interaction cutoff
+        /// </summary>
+        IInteractionRangeModel InteractionRangeModel { get; set; }
     }
 }

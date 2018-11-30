@@ -13,7 +13,7 @@ using Mocassin.Symmetry.SpaceGroups;
 namespace Mocassin.Model.ModelProject
 {
     /// <inheritdoc />
-    internal class ModelProject : IModelProject
+    public class ModelProject : IModelProject
     {
         /// <summary>
         ///     List of active registered model managers
@@ -165,31 +165,31 @@ namespace Mocassin.Model.ModelProject
         /// <summary>
         ///     Factory to create new project services interface from data object
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="settings"></param>
         /// <returns></returns>
-        public static ModelProject Create(ProjectSettings data)
+        public static ModelProject Create(ProjectSettings settings)
         {
-            if (data == null) 
-                throw new ArgumentNullException(nameof(data));
+            if (settings == null) 
+                throw new ArgumentNullException(nameof(settings));
 
-            var structureSettings = data.GetModuleSettings<MocassinStructureSettings>();
+            var structureSettings = settings.GetModuleSettings<MocassinStructureSettings>();
 
             var projectService = new ModelProject();
-            var geometryNumeric = new NumericService(data.GeometryNumericSettings);
-            var commonNumeric = new NumericService(data.CommonNumericSettings);
-            var spaceGroupService = new SpaceGroupService(data.SymmetrySettings.SpaceGroupDbPath, data.SymmetrySettings.VectorTolerance);
+            var geometryNumeric = new NumericService(settings.GeometryNumericSettings);
+            var commonNumeric = new NumericService(settings.CommonNumericSettings);
+            var spaceGroupService = new SpaceGroupService(settings.SymmetrySettings.SpaceGroupDbPath, settings.SymmetrySettings.VectorTolerance);
             var crystalSystemProvider = CrystalSystemSource.CreateSoft(structureSettings.CellParameter.MaxValue,
-                data.SymmetrySettings.ParameterTolerance);
-            var crystalSystemService = new CrystalSystemService(crystalSystemProvider, data.CommonNumericSettings.RangeValue);
+                settings.SymmetrySettings.ParameterTolerance);
+            var crystalSystemService = new CrystalSystemService(crystalSystemProvider, settings.CommonNumericSettings.RangeValue);
             var validationServices = new ValidationServiceProvider();
-            var dataAccessLocker = new AccessLockSource(data.ConcurrencySettings.MaxAttempts, data.ConcurrencySettings.AttemptInterval);
+            var dataAccessLocker = new AccessLockSource(settings.ConcurrencySettings.MaxAttempts, settings.ConcurrencySettings.AttemptInterval);
             var messageSystem = new AsyncMessageSystem();
             var symmetryService = new SymmetryAnalysisService(SymmetryIndicator.MakeComparer(geometryNumeric.RelativeComparer),
                 ObjectProvider.Create(() => crystalSystemService.VectorTransformer));
             var dataTracker = new ModelDataTracker();
 
             projectService.SymmetryAnalysisService = symmetryService;
-            projectService.Settings = data;
+            projectService.Settings = settings;
             projectService.GeometryNumeric = geometryNumeric;
             projectService.CommonNumeric = commonNumeric;
             projectService.ValidationServiceProvider = validationServices;

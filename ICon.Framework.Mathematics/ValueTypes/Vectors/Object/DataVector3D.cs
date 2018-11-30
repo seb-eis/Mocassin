@@ -28,7 +28,7 @@ namespace Mocassin.Mathematics.ValueTypes
         public double C { get; set; }
 
         /// <summary>
-        /// Deafult construct (0,0,0) vector
+        /// Default construct (0,0,0) vector
         /// </summary>
         public DataVector3D()
         {

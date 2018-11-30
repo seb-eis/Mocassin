@@ -21,21 +21,33 @@ namespace Mocassin.Framework.Operations
         /// <summary>
         ///     String that represents a short description of the operation
         /// </summary>
-        string OperationDescription { get; }
+        string OperationDescription { get; set; }
 
         /// <summary>
-        ///     Contains the exceptions responsible for the error flag (Null if no error occured)
+        ///     Contains potentially occured exception
         /// </summary>
-        IEnumerator<Exception> GetExceptionsEnumerator();
+        IList<Exception> Exceptions { get; set; }
 
         /// <summary>
         ///     Access to the validation information produced during the model change attempt
         /// </summary>
-        IValidationReport ValidationReport { get; }
+        IValidationReport ValidationReport { get; set; }
 
         /// <summary>
         ///     Access to the resolver report if an operation called the conflict resolver
         /// </summary>
-        IConflictReport ConflictReport { get; }
+        IConflictReport ConflictReport { get; set; }
+
+        /// <summary>
+        ///     Adds an exception to the operation report
+        /// </summary>
+        /// <param name="exception"></param>
+        void AddException(Exception exception);
+
+        /// <summary>
+        ///     Collects all information from the passed operation report and merges the data into this report
+        /// </summary>
+        /// <param name="other"></param>
+        void Merge(IOperationReport other);
     }
 }

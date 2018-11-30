@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 namespace Mocassin.Model.Translator
 {
@@ -59,6 +60,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Reference access to the wrapped structure
         /// </summary>
+        [JsonIgnore]
         public ref T Structure => ref _structure;
 
         /// <inheritdoc />

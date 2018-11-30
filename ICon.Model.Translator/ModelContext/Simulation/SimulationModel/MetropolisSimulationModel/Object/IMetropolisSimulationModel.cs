@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext

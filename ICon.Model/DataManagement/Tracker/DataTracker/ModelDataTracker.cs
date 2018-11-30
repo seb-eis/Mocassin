@@ -16,14 +16,13 @@ namespace Mocassin.Model.DataManagement
         /// <summary>
         ///     The object liker dictionary that contains cached linking delegates for known model data objects
         /// </summary>
-        [IgnoreDataMember]
-        public Dictionary<Type, Action<object>> ObjectLinkerDictionary { get; set; }
+        [IgnoreDataMember] private readonly Dictionary<Type, Action<object>> _objectLinkerDictionary;
 
         /// <summary>
         ///     The data object dictionary that stores the data object reference and affiliated manager as key value pairs
         /// </summary>
         [DataMember]
-        public Dictionary<Type, object> DataObjectDictionary { get; set; }
+        public Dictionary<Type, object> ModelDataDictionary { get; set; }
 
         /// <summary>
         ///     Lookup dictionary for model objects that assigns each type of model manager a dictionary of read only collections
@@ -38,8 +37,8 @@ namespace Mocassin.Model.DataManagement
         public ModelDataTracker()
         {
             ModelObjectDictionary = new Dictionary<Type, IList>();
-            ObjectLinkerDictionary = new Dictionary<Type, Action<object>>();
-            DataObjectDictionary = new Dictionary<Type, object>();
+            _objectLinkerDictionary = new Dictionary<Type, Action<object>>();
+            ModelDataDictionary = new Dictionary<Type, object>();
         }
 
         /// <inheritdoc />
@@ -49,18 +48,36 @@ namespace Mocassin.Model.DataManagement
                 return null;
 
             modelProject.RegisterManager(manager);
-            DataObjectDictionary[manager.GetManagerInterfaceType()] = dataObject;
+            ModelDataDictionary[manager.GetManagerInterfaceType()] = dataObject;
             UpdateObjectLookupDictionary(dataObject);
             return manager;
-
         }
 
         /// <inheritdoc />
-        public TInterface FindObjectInterfaceByIndex<TInterface>(int index)
+        public TObject FindObjectByIndex<TObject>(int index) where TObject : IModelObject
         {
-            var lookup = ModelObjectDictionary[typeof(TInterface)];
-            if (lookup.Count > index) 
-                return (TInterface) lookup[index];
+            if (typeof(TObject) == typeof(IModelObject))
+                throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
+
+            var lookup = FindObjectList(typeof(TObject));
+            if (lookup.Count > index)
+                return (TObject) lookup[index];
+
+            return default;
+        }
+
+        /// <inheritdoc />
+        public TObject FindObjectByAlias<TObject>(string alias) where TObject : IModelObject
+        {
+            if (typeof(TObject) == typeof(IModelObject))
+                throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
+
+            var lookup = FindObjectList(typeof(TObject));
+            foreach (TObject item in lookup)
+            {
+                if (item.Alias == alias)
+                    return item;
+            }
 
             return default;
         }
@@ -68,12 +85,12 @@ namespace Mocassin.Model.DataManagement
         /// <inheritdoc />
         public void LinkModelObject(object obj)
         {
-            if (ObjectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))
+            if (_objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))
                 linker(obj);
             else
             {
                 linker = MakeLinker(obj.GetType(), obj);
-                ObjectLinkerDictionary[obj.GetType()] = linker;
+                _objectLinkerDictionary[obj.GetType()] = linker;
                 linker(obj);
             }
         }
@@ -90,6 +107,21 @@ namespace Mocassin.Model.DataManagement
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        ///     Finds the object lookup list that belongs to or if no direct match is found the list with objects directly
+        ///     assignable from the passed type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>The matching list or if none is found an empty container</returns>
+        protected IList FindObjectList(Type type)
+        {
+            if (ModelObjectDictionary.TryGetValue(type, out var result))
+                return result;
+
+            result = ModelObjectDictionary.SingleOrDefault(x => x.Key.IsAssignableFrom(type)).Value;
+            return result ?? new IModelObject[0];
         }
 
         /// <summary>
@@ -136,7 +168,7 @@ namespace Mocassin.Model.DataManagement
 
             void LinkAll(object value)
             {
-                foreach (var item in linkers) 
+                foreach (var item in linkers)
                     item(value);
             }
 
@@ -150,9 +182,9 @@ namespace Mocassin.Model.DataManagement
         /// <param name="propertyValue"></param>
         protected void HandleContentLinkableProperty(object propertyValue)
         {
-            if (propertyValue is IList linkables)
+            if (propertyValue is IList list)
             {
-                foreach (var item in linkables) 
+                foreach (var item in list)
                     LinkModelObject(item);
             }
             else
@@ -183,7 +215,6 @@ namespace Mocassin.Model.DataManagement
 
             providerDelegate = MakeObjectProviderDelegate(info.PropertyType.GetGenericArguments()[0]);
             return MakeListLinkerDelegate(info, providerDelegate);
-
         }
 
         /// <summary>
@@ -212,7 +243,7 @@ namespace Mocassin.Model.DataManagement
         {
             void CorrectLinks(object obj)
             {
-                if (!(info.GetValue(obj) is IList list)) 
+                if (!(info.GetValue(obj) is IList list))
                     return;
 
                 for (var i = 0; i < list.Count; i++)
@@ -246,7 +277,7 @@ namespace Mocassin.Model.DataManagement
         [OnDeserialized]
         protected void RecreateLookupDictionary(StreamingContext streamingContext)
         {
-            foreach (var entry in DataObjectDictionary) 
+            foreach (var entry in ModelDataDictionary)
                 UpdateObjectLookupDictionary(entry.Value);
         }
     }

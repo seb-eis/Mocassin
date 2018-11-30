@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
@@ -36,11 +37,78 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 simulationModel.MappingAssignMatrix =
                     CreateMappingAssignMatrix<IKineticMappingModel, IKineticTransitionModel>(simulationModel.TransitionModels);
+
                 AddLocalJumpModels(simulationModel);
                 AddKineticTrackingModel(simulationModel);
                 IndexTrackerModels(simulationModel, ref indexing);
                 AddTrackingModelMappingTables(simulationModel.KineticTrackingModel);
+                AddKineticIndexingModel(simulationModel);
             }
+        }
+
+        /// <summary>
+        ///     Creates and adds the kinetic indexing model for the passed and fully created simulation model
+        /// </summary>
+        /// <param name="simulationModel"></param>
+        private void AddKineticIndexingModel(IKineticSimulationModel simulationModel)
+        {
+            var indexingModel = new KineticIndexingModel
+            {
+                SimulationModel = simulationModel,
+                TransitionModelToJumpCollectionId = GetTransitionModelIndexing(simulationModel.TransitionModels),
+                TransitionMappingToJumpDirectionId = GetTransitionMappingIndexing(simulationModel.TransitionModels),
+                JumpCountTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels)
+            };
+
+            AddJumpIndexAssignTable(indexingModel);
+            simulationModel.KineticIndexingModel = indexingModel;
+        }
+
+        private void AddJumpIndexAssignTable(IKineticIndexingModel indexingModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///     Translates a 3D kinetic mapping assign matrix into the 2D jump count table and checks if position id + particle id
+        ///     without jumps have a passive involvement in jumps
+        /// </summary>
+        /// <param name="kineticMappingModels"></param>
+        /// <param name="jumpModels"></param>
+        /// <returns></returns>
+        private int[,] GetJumpCountTable(IKineticMappingModel[,,] kineticMappingModels, IList<IKineticLocalJumpModel> jumpModels)
+        {
+            var (rows, cols) = (kineticMappingModels.GetLength(0), kineticMappingModels.GetLength(1));
+            var jumpCountTable = new int[rows, cols];
+
+            for (var positionId = 0; positionId < rows; positionId++)
+            {
+                for (var particleId = 0; particleId < cols; particleId++)
+                {
+                    for (var i = 0; i < kineticMappingModels.GetLength(2); i++)
+                    {
+                        if (kineticMappingModels[positionId, particleId, i] != null)
+                            jumpCountTable[positionId, particleId]++;
+                        else
+                            jumpCountTable[positionId, particleId] =
+                                jumpModels.Any(x => x.MakesElementOnPositionMobile(positionId, particleId))
+                                    ? 0
+                                    : -1;
+                    }
+                }
+            }
+
+            return jumpCountTable;
+        }
+
+        private IDictionary<IKineticMappingModel, int> GetTransitionMappingIndexing(IEnumerable<IKineticTransitionModel> transitionModels)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IDictionary<IKineticTransitionModel, int> GetTransitionModelIndexing(IEnumerable<IKineticTransitionModel> transitionModels)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

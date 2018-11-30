@@ -28,10 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ContextConverter\DbToModel\" />
-    <Folder Include="ContextConverter\ModelToDb\" />
+    <Folder Include="DbBuilder\SimulationDbBuilder\" />
     <Folder Include="Interop\InteropObjects\Energy\C\" />
     <Folder Include="Interop\InteropObjects\Energy\Net\" />
+    <Folder Include="Jobs\" />
   </ItemGroup>
 
   <ItemGroup>

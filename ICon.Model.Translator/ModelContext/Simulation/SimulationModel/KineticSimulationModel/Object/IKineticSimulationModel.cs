@@ -31,6 +31,11 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticTrackingModel KineticTrackingModel { get; set; }
 
         /// <summary>
+        ///     The kinetic indexing model that describes the required indexing sets for the simulation on the unmanaged side
+        /// </summary>
+        IKineticIndexingModel KineticIndexingModel { get; set; }
+
+        /// <summary>
         ///     Kinetic mapping assign matrix that assigns each position index/particle index combination its valid kinetic mapping
         ///     models
         /// </summary>

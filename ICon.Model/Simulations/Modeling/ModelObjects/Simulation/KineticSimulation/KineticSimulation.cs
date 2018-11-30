@@ -60,7 +60,7 @@ namespace Mocassin.Model.Simulations
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "'Kinetic Simulation'";
+            return "Kinetic Simulation";
         }
 
         /// <inheritdoc />

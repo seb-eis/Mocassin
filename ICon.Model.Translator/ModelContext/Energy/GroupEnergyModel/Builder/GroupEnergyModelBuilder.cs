@@ -62,10 +62,10 @@ namespace Mocassin.Model.Translator.ModelContext
             RestoreSymmetryReducedInformation(energyModel);
 
             var index = 0;
-            energyModel.CenterParticleIndexing = new Dictionary<IParticle, int>();
+            energyModel.ParticleIndexToTableMapping = new Dictionary<IParticle, int>();
 
             foreach (var entry in energyModel.GroupInteraction.CenterUnitCellPosition.OccupationSet.GetParticles())
-                energyModel.CenterParticleIndexing.Add(entry, index++);
+                energyModel.ParticleIndexToTableMapping.Add(entry, index++);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="groupEnergyModel"></param>
         protected void CreateGroupEnergyTableOnModel(IGroupEnergyModel groupEnergyModel)
         {
-            var rowCount = groupEnergyModel.CenterParticleIndexing.Count;
+            var rowCount = groupEnergyModel.ParticleIndexToTableMapping.Count;
             var colCount = groupEnergyModel.GroupLookupCodes.Count;
             var energyTable = new double[rowCount, colCount];
 

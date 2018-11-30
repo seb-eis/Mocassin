@@ -192,7 +192,7 @@ namespace Mocassin.Model.Basic
         ///     initialization)
         /// </summary>
         /// <param name="baseData"></param>
-        public virtual void Initialize(TData baseData)
+        public void Initialize(TData baseData)
         {
             if (baseData == null)
                 throw new ArgumentNullException(nameof(baseData));

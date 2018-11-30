@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Messaging;
 using Newtonsoft.Json;
@@ -64,6 +65,12 @@ namespace Mocassin.Framework.Operations
         public IEnumerable<WarningMessage> GetWarnings()
         {
             return Warnings.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public void Merge(IValidationReport other)
+        {
+            AddWarnings(other.GetWarnings());
         }
 
         /// <summary>

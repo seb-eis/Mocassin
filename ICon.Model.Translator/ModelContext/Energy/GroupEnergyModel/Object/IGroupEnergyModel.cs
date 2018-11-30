@@ -37,7 +37,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Dictionary that assigns each possible center particle a redirection index to reduce the table size
         /// </summary>
-        IDictionary<IParticle, int> CenterParticleIndexing { get; set; }
+        IDictionary<IParticle, int> ParticleIndexToTableMapping { get; set; }
 
         /// <summary>
         ///     The energy table for the group interaction that enables energy lookup by redirected center particle

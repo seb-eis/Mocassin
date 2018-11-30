@@ -8,12 +8,12 @@ namespace Mocassin.Model.Translator
     [StructLayout(LayoutKind.Sequential, Size = 32)]
     public struct CPairDefinition
     {
-        [MarshalAs(UnmanagedType.I8)]
-        private readonly long longPadding;
+        public CVector4 RelativeVector { get; set; }
 
         [field: MarshalAs(UnmanagedType.I4)]
         public int TableId { get; set; }
 
-        public CVector4 RelativeVector { get; set; }
+        [MarshalAs(UnmanagedType.I8)]
+        private readonly long longPadding;
     }
 }

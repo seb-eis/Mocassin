@@ -63,6 +63,6 @@ namespace Mocassin.Model.Translator
         /// </summary>
         [NotMapped]
         [OwnedBlobProperty(nameof(ClusterDefinitionListBinary))]
-        public ClusterDefinitionListEntity GetClusterDefinitionList { get; set; }
+        public ClusterDefinitionListEntity ClusterDefinitionList { get; set; }
     }
 }

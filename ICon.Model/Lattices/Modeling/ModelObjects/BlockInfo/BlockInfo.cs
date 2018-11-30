@@ -38,7 +38,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override string GetObjectName()
         {
-            return "'Building Block Info'";
+            return "Building Block Info";
         }
 
         /// <summary>
