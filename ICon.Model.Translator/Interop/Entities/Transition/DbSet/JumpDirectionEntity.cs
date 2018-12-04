@@ -13,25 +13,18 @@ namespace Mocassin.Model.Translator
         public JumpCollectionEntity JumpCollection { get; set; }
 
         /// <summary>
-        ///     The jump sequence that describes the jump geometry
+        ///     The jump sequence that describes the jump geometry relative to the origin point
         /// </summary>
         [NotMapped]
         [OwnedBlobProperty(nameof(JumpSequenceBinary))]
         public JumpSequenceEntity JumpSequence { get; set; }
 
         /// <summary>
-        ///     The local movement sequence that describes the data for the dynamic tracking system
+        ///     The movement sequence that describes the data for the movement tracking system
         /// </summary>
         [NotMapped]
-        [OwnedBlobProperty(nameof(LocalMoveSequenceBinary))]
-        public MoveSequenceEntity LocalMoveSequence { get; set; }
-
-        /// <summary>
-        ///     The global movement sequence that describes the data for the global tracking
-        /// </summary>
-        [NotMapped]
-        [OwnedBlobProperty(nameof(GlobalMoveSequenceBinary))]
-        public MoveSequenceEntity GlobalMoveSequence { get; set; }
+        [OwnedBlobProperty(nameof(MovementSequenceBinary))]
+        public MoveSequenceEntity MovementSequence { get; set; }
 
         /// <summary>
         ///     The jump collection context key
@@ -77,15 +70,9 @@ namespace Mocassin.Model.Translator
         public byte[] JumpSequenceBinary { get; set; }
 
         /// <summary>
-        ///     The local movement sequence blob conversion backing property
+        ///     The movement sequence blob conversion backing property
         /// </summary>
         [Column("LocalMoveSequence")]
-        public byte[] LocalMoveSequenceBinary { get; set; }
-
-        /// <summary>
-        ///     The global movement sequence blob conversion backing property
-        /// </summary>
-        [Column("GlobalMoveSequence")]
-        public byte[] GlobalMoveSequenceBinary { get; set; }
+        public byte[] MovementSequenceBinary { get; set; }
     }
 }

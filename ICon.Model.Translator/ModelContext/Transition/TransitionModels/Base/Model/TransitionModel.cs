@@ -10,9 +10,15 @@ namespace Mocassin.Model.Translator.ModelContext
         public abstract bool HasInversion { get; }
 
         /// <inheritdoc />
-        public IParticleSet MobileParticles { get; set; }
+        public IParticleSet SelectableParticles { get; set; }
+
+        /// <inheritdoc />
+        public long SelectableParticleMask { get; set; }
 
         /// <inheritdoc />
         public abstract IEnumerable<ITransitionMappingModel> GetMappingModels();
+
+        /// <inheritdoc />
+        public abstract IEnumerable<ITransitionRuleModel> GetRuleModels();
     }
 }

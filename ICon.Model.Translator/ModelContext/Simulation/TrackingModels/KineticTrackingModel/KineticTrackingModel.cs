@@ -12,22 +12,19 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticSimulationModel SimulationModel { get; set; }
 
         /// <inheritdoc />
-        public IList<IMovementTrackerModel> GlobalTrackerModels { get; set; }
-
-        /// <inheritdoc />
         public IList<IStaticMovementTrackerModel> StaticTrackerModels { get; set; }
 
         /// <inheritdoc />
-        public IList<IProbabilityTrackerModel> ProbabilityTrackerModels { get; set; }
+        public IList<IGlobalTrackerModel> GlobalTrackerModels { get; set; }
 
         /// <inheritdoc />
         public int[,] StaticTrackerMappingTable { get; set; }
 
         /// <inheritdoc />
-        public int[,] ProbabilityTrackerMappingTable { get; set; }
+        public int[,] GlobalTrackerMappingTable { get; set; }
 
         /// <inheritdoc />
-        public int ProbabilityTrackerCount => ProbabilityTrackerModels.Count;
+        public int ProbabilityTrackerCount => GlobalTrackerModels.Count;
 
         /// <inheritdoc />
         public int GlobalTrackerCount => GlobalTrackerModels.Count;

@@ -149,14 +149,26 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Takes a set of rule models and creates the mobile particle set
+        ///     Takes a set of rule models and creates the selectable particle set
         /// </summary>
         /// <param name="ruleModels"></param>
         /// <returns></returns>
-        protected IParticleSet CreateMobileParticleSet(IEnumerable<ITransitionRuleModel> ruleModels)
+        protected IParticleSet CreateSelectableParticleSet(IEnumerable<ITransitionRuleModel> ruleModels)
         {
-            var uniqueParticles = ruleModels.Select(a => a.SelectableParticle).ToSetList();
+            var comparer = Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
+            var uniqueParticles = ruleModels.Select(a => a.SelectableParticle).ToSetList(comparer);
             return new ParticleSet {Index = -1, Particles = uniqueParticles.ToList()};
+        }
+
+        /// <summary>
+        /// Adds the mobility information (selectable particle set, particle mask ...) to the passed transition model
+        /// </summary>
+        /// <param name="transitionModel"></param>
+        protected void AddBasicMobilityInformation(ITransitionModel transitionModel)
+        {
+            var buffer = new byte[8];
+            transitionModel.SelectableParticles = CreateSelectableParticleSet(transitionModel.GetRuleModels());
+            transitionModel.SelectableParticleMask = Create64BitIndexCode(transitionModel.SelectableParticles.Select(a => a.Index), buffer);
         }
     }
 }

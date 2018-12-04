@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.Solver;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -47,8 +49,8 @@ namespace Mocassin.Model.Translator.ModelContext
             resultModels.AddRange(inverseModels);
             foreach (var transitionModel in resultModels)
             {
-                transitionModel.MobileParticles = CreateMobileParticleSet(transitionModel.RuleModels);
-                transitionModel.EffectiveParticle = CreateEffectiveMobileParticle(transitionModel.MobileParticles);
+                AddBasicMobilityInformation(transitionModel);
+                transitionModel.EffectiveParticle = CreateEffectiveMobileParticle(transitionModel.SelectableParticles);
             }
 
             return resultModels;
@@ -153,8 +155,63 @@ namespace Mocassin.Model.Translator.ModelContext
                 .ToList();
 
             CreateCodesAndLinkInverseRuleModels(ruleModels);
-
+            AddRuleDirectionInformation(ruleModels);
             transitionModel.RuleModels = ruleModels;
+        }
+
+        /// <summary>
+        ///     Determine and add the rule model direction information to the passed rule models in the context of their set
+        ///     transition model
+        /// </summary>
+        /// <param name="ruleModels"></param>
+        protected void AddRuleDirectionInformation(IEnumerable<IKineticRuleModel> ruleModels)
+        {
+            var solver = new PointMechanicsSolver();
+            var comparer = ModelProject.GeometryNumeric.RangeComparer;
+            var vectorEncoder = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+
+            // @ToDo: Use a more stable way of determining the rule direction, can currently fail on chained transitions
+            foreach (var ruleModel in ruleModels)
+            {
+                var distanceShift = GetChargeFocalPointDistanceShift(ruleModel, solver, vectorEncoder.Transformer);
+
+                if (distanceShift > 0)
+                    ruleModel.RuleDirectionValue = SimulationConstants.PositiveRuleDirectionFactor;
+
+                if (distanceShift < 0)
+                    ruleModel.RuleDirectionValue = SimulationConstants.NegativeRuleDirectionFactor;
+
+                if (comparer.Compare(distanceShift, 0.0) == 0)
+                    ruleModel.RuleDirectionValue = SimulationConstants.UndefinableRuleDirectionFactor;
+            }
+        }
+
+        /// <summary>
+        ///     Determines the absolute distance shift of the charge focal point from the transition origin in the context of the
+        ///     given transition rule model
+        /// </summary>
+        /// <param name="ruleModel"></param>
+        /// <param name="solver"></param>
+        /// <param name="transformer"></param>
+        /// <returns></returns>
+        protected double GetChargeFocalPointDistanceShift(IKineticRuleModel ruleModel, PointMechanicsSolver solver,
+            IVectorTransformer transformer)
+        {
+            var geometry = transformer.ToCartesian(ruleModel.TransitionModel.Transition.GetGeometrySequence().Cast<IFractional3D>())
+                .ToList();
+
+            var origin = geometry.First();
+
+            var startChargeMassPoints = geometry
+                .Zip(ruleModel.StartState.Select(x => x.Index), (vector, mass) => new CartesianMassPoint3D<double>(mass, vector));
+
+            var finalChargeMassPoints = geometry
+                .Zip(ruleModel.FinalState.Select(x => x.Index), (vector, mass) => new CartesianMassPoint3D<double>(mass, vector));
+
+            var startFocalPoint = solver.GetMassCenter(startChargeMassPoints, ModelProject.GeometryNumeric.RangeComparer);
+            var endFocalPoint = solver.GetMassCenter(finalChargeMassPoints, ModelProject.GeometryNumeric.RangeComparer);
+
+            return (endFocalPoint - origin).GetLength() - (startFocalPoint - origin).GetLength();
         }
 
         /// <summary>

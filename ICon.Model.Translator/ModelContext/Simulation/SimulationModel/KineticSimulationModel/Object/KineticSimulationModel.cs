@@ -11,6 +11,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticSimulation Simulation { get; set; }
 
         /// <inheritdoc />
+        public double MaxAttemptFrequency { get; set; }
+
+        /// <inheritdoc />
         public Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <inheritdoc />
@@ -20,7 +23,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IKineticTrackingModel KineticTrackingModel { get; set; }
 
         /// <inheritdoc />
-        public IKineticIndexingModel KineticIndexingModel { get; set; }
+        public ISimulationEncodingModel SimulationEncodingModel { get; set; }
 
         /// <inheritdoc />
         public IKineticMappingModel[,,] MappingAssignMatrix { get; set; }

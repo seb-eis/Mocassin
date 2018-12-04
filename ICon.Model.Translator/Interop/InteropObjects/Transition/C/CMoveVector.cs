@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Translator
 {
@@ -10,10 +11,13 @@ namespace Mocassin.Model.Translator
     {
         public CVector3 Vector { get; set; }
 
-        [field: MarshalAs(UnmanagedType.I4)]
-        public int TrackerId { get; set; }
+        [MarshalAs(UnmanagedType.R8)]
+        private readonly double paddingDouble;
 
-        [MarshalAs(UnmanagedType.I4)] 
-        private readonly int paddingInt;
+        public CMoveVector(IVector3D vector)
+            : this()
+        {
+            Vector = new CVector3(vector);
+        }
     }
 }

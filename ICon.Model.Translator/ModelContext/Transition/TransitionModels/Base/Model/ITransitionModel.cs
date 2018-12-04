@@ -14,14 +14,25 @@ namespace Mocassin.Model.Translator.ModelContext
         bool HasInversion { get; }
 
         /// <summary>
-        ///     The particle set of all mobiles on the transition
+        ///     The particle set of all selectable particles on the transition
         /// </summary>
-        IParticleSet MobileParticles { get; set; }
+        IParticleSet SelectableParticles { get; set; }
+
+        /// <summary>
+        ///     The selectable particle set long bitmask
+        /// </summary>
+        long SelectableParticleMask { get; set; }
 
         /// <summary>
         ///     Get all unspecified mapping models of the transition model
         /// </summary>
         /// <returns></returns>
         IEnumerable<ITransitionMappingModel> GetMappingModels();
+
+        /// <summary>
+        ///     Get all unspecified rule models of the transition
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ITransitionRuleModel> GetRuleModels();
     }
 }

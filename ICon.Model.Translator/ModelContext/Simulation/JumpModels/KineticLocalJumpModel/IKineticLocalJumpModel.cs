@@ -6,7 +6,7 @@ namespace Mocassin.Model.Translator.ModelContext
     /// <summary>
     ///     Fully describes the behaviour of a transition mapping model in the context of a kinetic simulation model
     /// </summary>
-    public interface IKineticLocalJumpModel : IModelComponent, IEquatable<IKineticLocalJumpModel>
+    public interface IKineticLocalJumpModel : ILocalJumpModel, IEquatable<IKineticLocalJumpModel>
     {
         /// <summary>
         ///     The kinetic mapping model that describes the geometry of the local jump model
@@ -25,28 +25,8 @@ namespace Mocassin.Model.Translator.ModelContext
         double NormalizedElectricFieldInfluence { get; set; }
 
         /// <summary>
-        /// The electric field influence factor that is bound to the transition rule on simulation database creation
-        /// </summary>
-        /// <remarks> Describes the direction of the charge movement as a factor of [-1] or [1] </remarks>
-        double ElectricFieldRuleFactor { get; }
-
-        /// <summary>
-        /// The electric field influence factor that is bound to the kinetic transition mapping on simulation database creation
-        /// </summary>
-        /// <remarks> Has to be the absolute value of the electric normalized influence fraction </remarks>
-        double ElectricFieldMappingFactor { get; }
-
-        /// <summary>
         /// The cartesian charge transport vector of the local jump model that describes [charge*movement] in units of [C*Ang]
         /// </summary>
         Cartesian3D ChargeTransportVector { get; set; }
-
-        /// <summary>
-        /// Check if the passed position id + particle id combination is mobile in the context of the jump model
-        /// </summary>
-        /// <param name="positionId"></param>
-        /// <param name="particleId"></param>
-        /// <returns></returns>
-        bool MakesElementOnPositionMobile(int positionId, int particleId);
     }
 }

@@ -13,11 +13,6 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticSimulationModel SimulationModel { get; set; }
 
         /// <summary>
-        ///     The list of global movement tracker models required for the simulation
-        /// </summary>
-        IList<IMovementTrackerModel> GlobalTrackerModels { get; set; }
-
-        /// <summary>
         ///     The list of static movement tracker models required for the simulation
         /// </summary>
         IList<IStaticMovementTrackerModel> StaticTrackerModels { get; set; }
@@ -25,7 +20,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The list of jump probability tracker models for the simulation
         /// </summary>
-        IList<IProbabilityTrackerModel> ProbabilityTrackerModels { get; set; }
+        IList<IGlobalTrackerModel> GlobalTrackerModels { get; set; }
 
         /// <summary>
         ///     2D Matrix that assigns each position index/particle index a static tracker index
@@ -33,9 +28,9 @@ namespace Mocassin.Model.Translator.ModelContext
         int[,] StaticTrackerMappingTable { get; set; }
 
         /// <summary>
-        ///     2D Matrix that assigns each transition index/particle index combination a probability tracker index
+        ///     2D Matrix that assigns each transition index/particle index combination a global tracker index (for global movement and probability tracking)
         /// </summary>
-        int[,] ProbabilityTrackerMappingTable { get; set; }
+        int[,] GlobalTrackerMappingTable { get; set; }
 
         /// <summary>
         ///     The number of required jump probability trackers

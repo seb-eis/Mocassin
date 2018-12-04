@@ -24,12 +24,21 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IMetropolisRuleModel> RuleModels { get; set; }
 
         /// <inheritdoc />
-        public IParticleSet MobileParticles { get; set; }
+        public IParticleSet SelectableParticles { get; set; }
+
+        /// <inheritdoc />
+        public long SelectableParticleMask { get; set; }
 
         /// <inheritdoc />
         public IEnumerable<ITransitionMappingModel> GetMappingModels()
         {
             return MappingModels.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<ITransitionRuleModel> GetRuleModels()
+        {
+            return RuleModels.AsEnumerable();
         }
 
         /// <inheritdoc />

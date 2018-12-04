@@ -14,11 +14,15 @@ namespace Mocassin.Framework.QuickTest
         {
             var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
             var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
+
+            var watch = Stopwatch.StartNew();
             var context = contextBuilder.BuildNewContext().Result;
+            DisplayWatch(watch);
 
             var dbStructureBuilder = new StructureDbModelBuilder(context);
-            //var dbEnergyBuilder = new EnergyDbModelBuilder(context);
-            var kmcDbModel = dbStructureBuilder.BuildModel(context.SimulationModelContext.KineticSimulationModels.First());
+            var dbEnergyBuilder = new EnergyDbModelBuilder(context);
+            var dbTransitionBuilder = new TransitionDbModelBuilder(context);
+            var kmcDbModel = dbTransitionBuilder.BuildModel(context.SimulationModelContext.KineticSimulationModels.First());
             //var mmcDbModel = dbStructureBuilder.BuildModel(context.SimulationModelContext.MetropolisSimulationModels.First());
 
             Console.ReadLine();

@@ -11,6 +11,11 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IKineticRuleModel : ITransitionRuleModel
     {
         /// <summary>
+        /// The rule direction value [-1;0;1] that describes the transport direction encoded in the rule
+        /// </summary>
+        int RuleDirectionValue { get; set; }
+
+        /// <summary>
         ///     The kinetic transition model the rule model belongs to
         /// </summary>
         IKineticTransitionModel TransitionModel { get; set; }

@@ -17,5 +17,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
+
+        /// <inheritdoc />
+        public ISimulationEncodingModel SimulationEncodingModel { get; set; }
     }
 }

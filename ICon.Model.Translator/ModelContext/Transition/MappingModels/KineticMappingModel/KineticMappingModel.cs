@@ -69,6 +69,19 @@ namespace Mocassin.Model.Translator.ModelContext
             };
         }
 
+        /// <inheritdoc />
+        public IEnumerable<Fractional3D> GetMovementSequence()
+        {
+            if (PositionMovementMatrix == null)
+                yield break;
+
+            for (var col = 0; col < PositionMovementMatrix.Cols; col++)
+            {
+                yield return new Fractional3D(PositionMovementMatrix[0, col], PositionMovementMatrix[1, col],
+                    PositionMovementMatrix[2, col]);
+            }
+        }
+
         /// <summary>
         ///     Gets an inverted version of the fractional transition sequence
         /// </summary>

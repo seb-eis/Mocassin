@@ -21,6 +21,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public override IAbstractTransition AbstractTransition => KineticRule.AbstractTransition;
 
         /// <inheritdoc />
+        public int RuleDirectionValue { get; set; }
+
+        /// <inheritdoc />
         public IKineticTransitionModel TransitionModel { get; set; }
 
         /// <inheritdoc />
@@ -43,6 +46,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var inverseModel = new KineticRuleModel
             {
+                RuleDirectionValue = -RuleDirectionValue,
                 IsSourceInversion = true,
                 InverseRuleModel = this,
                 TransitionModel = TransitionModel,

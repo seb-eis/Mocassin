@@ -33,8 +33,28 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 simulationModel.MappingAssignMatrix =
                     CreateMappingAssignMatrix<IMetropolisMappingModel, IMetropolisTransitionModel>(simulationModel.TransitionModels);
+
                 AddLocalJumpModels(simulationModel);
+                AddEncodingModel(simulationModel);
             }
+        }
+
+        /// <summary>
+        ///     Creates and adds the kinetic indexing model for the passed and fully created simulation model
+        /// </summary>
+        /// <param name="simulationModel"></param>
+        private void AddEncodingModel(IMetropolisSimulationModel simulationModel)
+        {
+            var encodingModel = new SimulationEncodingModel
+            {
+                TransitionModelToJumpCollectionId = GetTransitionModelIndexing(simulationModel.TransitionModels),
+                TransitionMappingToJumpDirectionId = GetTransitionMappingIndexing(simulationModel.TransitionModels),
+                JumpCountTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels)
+            };
+
+            AddElectricFieldInfluenceMappings(encodingModel, simulationModel.LocalJumpModels);
+            AddJumpIndexAssignTable(encodingModel, simulationModel.MappingAssignMatrix);
+            simulationModel.SimulationEncodingModel = encodingModel;
         }
 
         /// <summary>
@@ -84,8 +104,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <summary>
         ///     Creates the local jump model for the provided combination of metropolis rule model and mapping model in the context
-        ///     of
-        ///     the defined metropolis simulation model
+        ///     of the defined metropolis simulation model
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <param name="ruleModel"></param>

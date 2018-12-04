@@ -6,7 +6,7 @@ namespace Mocassin.Model.Translator.ModelContext
     /// <summary>
     /// Fully describes the behaviour of a transition mapping model in the context of a metropolis simulation model
     /// </summary>
-    public interface IMetropolisLocalJumpModel : IModelComponent, IEquatable<IMetropolisLocalJumpModel>
+    public interface IMetropolisLocalJumpModel : ILocalJumpModel, IEquatable<IMetropolisLocalJumpModel>
     {
         /// <summary>
         /// The metropolis mapping model that describes the geometry of the local jump model

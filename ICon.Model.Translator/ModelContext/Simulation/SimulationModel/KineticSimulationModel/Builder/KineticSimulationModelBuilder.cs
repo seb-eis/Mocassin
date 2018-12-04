@@ -32,17 +32,18 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels)
         {
-            var indexing = (0, 0, 0);
+            var indexing = (0, 0);
             foreach (var simulationModel in simulationModels)
             {
                 simulationModel.MappingAssignMatrix =
                     CreateMappingAssignMatrix<IKineticMappingModel, IKineticTransitionModel>(simulationModel.TransitionModels);
 
+                AddAttemptFrequencyInformation(simulationModel);
                 AddLocalJumpModels(simulationModel);
                 AddKineticTrackingModel(simulationModel);
                 IndexTrackerModels(simulationModel, ref indexing);
                 AddTrackingModelMappingTables(simulationModel.KineticTrackingModel);
-                AddKineticIndexingModel(simulationModel);
+                AddEncodingModel(simulationModel);
             }
         }
 
@@ -50,65 +51,18 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates and adds the kinetic indexing model for the passed and fully created simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
-        private void AddKineticIndexingModel(IKineticSimulationModel simulationModel)
+        private void AddEncodingModel(IKineticSimulationModel simulationModel)
         {
-            var indexingModel = new KineticIndexingModel
+            var encodingModel = new SimulationEncodingModel
             {
-                SimulationModel = simulationModel,
                 TransitionModelToJumpCollectionId = GetTransitionModelIndexing(simulationModel.TransitionModels),
                 TransitionMappingToJumpDirectionId = GetTransitionMappingIndexing(simulationModel.TransitionModels),
                 JumpCountTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels)
             };
 
-            AddJumpIndexAssignTable(indexingModel);
-            simulationModel.KineticIndexingModel = indexingModel;
-        }
-
-        private void AddJumpIndexAssignTable(IKineticIndexingModel indexingModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        ///     Translates a 3D kinetic mapping assign matrix into the 2D jump count table and checks if position id + particle id
-        ///     without jumps have a passive involvement in jumps
-        /// </summary>
-        /// <param name="kineticMappingModels"></param>
-        /// <param name="jumpModels"></param>
-        /// <returns></returns>
-        private int[,] GetJumpCountTable(IKineticMappingModel[,,] kineticMappingModels, IList<IKineticLocalJumpModel> jumpModels)
-        {
-            var (rows, cols) = (kineticMappingModels.GetLength(0), kineticMappingModels.GetLength(1));
-            var jumpCountTable = new int[rows, cols];
-
-            for (var positionId = 0; positionId < rows; positionId++)
-            {
-                for (var particleId = 0; particleId < cols; particleId++)
-                {
-                    for (var i = 0; i < kineticMappingModels.GetLength(2); i++)
-                    {
-                        if (kineticMappingModels[positionId, particleId, i] != null)
-                            jumpCountTable[positionId, particleId]++;
-                        else
-                            jumpCountTable[positionId, particleId] =
-                                jumpModels.Any(x => x.MakesElementOnPositionMobile(positionId, particleId))
-                                    ? 0
-                                    : -1;
-                    }
-                }
-            }
-
-            return jumpCountTable;
-        }
-
-        private IDictionary<IKineticMappingModel, int> GetTransitionMappingIndexing(IEnumerable<IKineticTransitionModel> transitionModels)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IDictionary<IKineticTransitionModel, int> GetTransitionModelIndexing(IEnumerable<IKineticTransitionModel> transitionModels)
-        {
-            throw new NotImplementedException();
+            AddElectricFieldInfluenceMappings(encodingModel, simulationModel.LocalJumpModels);
+            AddJumpIndexAssignTable(encodingModel, simulationModel.MappingAssignMatrix);
+            simulationModel.SimulationEncodingModel = encodingModel;
         }
 
         /// <summary>
@@ -132,20 +86,28 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
+        ///     Determines and adds the attempt frequency information to the passed kinetic simulation model
+        /// </summary>
+        /// <param name="simulationModel"></param>
+        protected void AddAttemptFrequencyInformation(IKineticSimulationModel simulationModel)
+        {
+            simulationModel.MaxAttemptFrequency = simulationModel.TransitionModels
+                .SelectMany(x => x.RuleModels)
+                .Max(x => x.KineticRule.AttemptFrequency);
+        }
+
+        /// <summary>
         ///     Indexes the passed simulation model using the passed indexing set reference
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <param name="indexing"></param>
-        protected void IndexTrackerModels(IKineticSimulationModel simulationModel, ref (int Global, int Static, int Probability) indexing)
+        protected void IndexTrackerModels(IKineticSimulationModel simulationModel, ref (int Static, int Global) indexing)
         {
-            foreach (var globalTrackerModel in simulationModel.KineticTrackingModel.GlobalTrackerModels)
-                globalTrackerModel.ModelId = indexing.Global++;
-
             foreach (var staticTrackerModel in simulationModel.KineticTrackingModel.StaticTrackerModels)
                 staticTrackerModel.ModelId = indexing.Static++;
 
-            foreach (var probabilityTrackerModel in simulationModel.KineticTrackingModel.ProbabilityTrackerModels)
-                probabilityTrackerModel.ModelId = indexing.Probability++;
+            foreach (var globalTrackerModel in simulationModel.KineticTrackingModel.GlobalTrackerModels)
+                globalTrackerModel.ModelId = indexing.Global++;
         }
 
         /// <summary>
@@ -156,13 +118,11 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void AddTrackingModelMappingTables(IKineticTrackingModel trackingModel)
         {
             trackingModel.StaticTrackerMappingTable = CreateStaticTrackerMappingTable(trackingModel.StaticTrackerModels);
-            trackingModel.ProbabilityTrackerMappingTable = CreateProbabilityTrackerMappingTable(trackingModel.ProbabilityTrackerModels);
+            trackingModel.GlobalTrackerMappingTable = CreateGlobalTrackerMappingTable(trackingModel.GlobalTrackerModels);
         }
 
         /// <summary>
-        ///     Creates a 2D index mapping table that assigns each positionId/particleId combination its basic static movement
-        ///     tracker index
-        ///     for the simulation
+        ///     Creates a 2D index mapping table that assigns each positionId/particleId combination its basic static movement tracker index for the simulation
         /// </summary>
         /// <param name="trackerModels"></param>
         /// <returns></returns>
@@ -171,10 +131,11 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var maxPositionId = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetLinearizedExtendedPositionCount());
+
             var maxParticleId = ModelProject.GetManager<IParticleManager>().QueryPort
                 .Query(port => port.ParticleCount);
 
-            var result = new int[maxPositionId + 1, maxParticleId + 1].Populate(() => -1);
+            var result = new int[maxPositionId, maxParticleId].Populate(() => -1);
 
             foreach (var trackerModel in trackerModels)
                 result[trackerModel.TrackedPositionIndex, trackerModel.TrackedParticleIndex] = trackerModel.ModelId;
@@ -183,19 +144,19 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a 2D index mapping table that assigns each transitionId/particleId its probability tracker index for the
+        ///     Creates a 2D index mapping table that assigns each transitionId/particleId its global tracker index for the
         ///     simulation
         /// </summary>
         /// <param name="trackerModels"></param>
         /// <returns></returns>
         /// <remarks> Assigns each combination that does not support tracking the value -1 </remarks>
-        protected int[,] CreateProbabilityTrackerMappingTable(IList<IProbabilityTrackerModel> trackerModels)
+        protected int[,] CreateGlobalTrackerMappingTable(IList<IGlobalTrackerModel> trackerModels)
         {
-            var maxTransitionId = trackerModels.Select(a => a.KineticTransitionModel.ModelId).Max();
+            var maxTransitionId = 1 + trackerModels.Select(a => a.KineticTransitionModel.ModelId).Max();
             var maxParticleId = ModelProject.GetManager<IParticleManager>().QueryPort
                 .Query(port => port.ParticleCount);
 
-            var result = new int[maxTransitionId + 1, maxParticleId + 1].Populate(() => -1);
+            var result = new int[maxTransitionId, maxParticleId].Populate(() => -1);
 
             foreach (var trackerModel in trackerModels)
                 result[trackerModel.KineticTransitionModel.ModelId, trackerModel.TrackedParticle.Index] = trackerModel.ModelId;
@@ -265,11 +226,28 @@ namespace Mocassin.Model.Translator.ModelContext
                 RuleModel = ruleModel,
                 ChargeTransportVector = GetChargeTransportVector(mappingModel, ruleModel)
             };
+            AddElectricFieldInfluenceFactors(jumpModel, simulationModel);
 
+            return jumpModel;
+        }
+
+        /// <summary>
+        ///     Determines the electric influence factors of the jump model in the context of the passed simulation model
+        /// </summary>
+        /// <param name="jumpModel"></param>
+        /// <param name="simulationModel"></param>
+        protected void AddElectricFieldInfluenceFactors(IKineticLocalJumpModel jumpModel, IKineticSimulationModel simulationModel)
+        {
             jumpModel.NormalizedElectricFieldInfluence =
                 GetNormalizedElectricInfluence(jumpModel.ChargeTransportVector, simulationModel.NormalizedElectricFieldVector);
 
-            return jumpModel;
+            jumpModel.ElectricFieldMappingFactor = jumpModel.NormalizedElectricFieldInfluence;
+
+            if (jumpModel.NormalizedElectricFieldInfluence < 0 && jumpModel.ElectricFieldRuleInfluence < 0)
+                jumpModel.ElectricFieldMappingFactor *= -1.0;
+
+            if (jumpModel.NormalizedElectricFieldInfluence > 0 && jumpModel.ElectricFieldRuleInfluence < 0)
+                jumpModel.ElectricFieldMappingFactor *= -1.0;
         }
 
         /// <summary>
@@ -308,26 +286,10 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 SimulationModel = simulationModel,
                 StaticTrackerModels = CreateStaticMovementTrackerModels(simulationModel),
-                GlobalTrackerModels = CreateGlobalMovementTrackerModels(simulationModel),
-                ProbabilityTrackerModels = CreateProbabilityTrackerModels(simulationModel)
+                GlobalTrackerModels = CreateGlobalTrackerModels(simulationModel)
             };
 
             simulationModel.KineticTrackingModel = trackingModel;
-        }
-
-        /// <summary>
-        ///     Creates the list of raw global tracker models for a kinetic simulation model
-        /// </summary>
-        /// <param name="simulationModel"></param>
-        /// <remarks> Requires finished linking of the passed simulation </remarks>
-        /// <returns></returns>
-        protected IList<IMovementTrackerModel> CreateGlobalMovementTrackerModels(IKineticSimulationModel simulationModel)
-        {
-            return simulationModel.TransitionModels
-                .Select(transitionModel => new MovementTrackerModel
-                    {KineticTransitionModel = transitionModel, TrackedParticle = transitionModel.EffectiveParticle})
-                .Cast<IMovementTrackerModel>()
-                .ToList();
         }
 
         /// <summary>
@@ -395,20 +357,20 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates the list of raw probability tracker models for a kinetic simulation model
+        ///     Creates the list of raw global tracker models for a kinetic simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <remarks> Requires finished linking of the passed simulation </remarks>
         /// <returns></returns>
-        protected IList<IProbabilityTrackerModel> CreateProbabilityTrackerModels(IKineticSimulationModel simulationModel)
+        protected IList<IGlobalTrackerModel> CreateGlobalTrackerModels(IKineticSimulationModel simulationModel)
         {
-            var result = new List<IProbabilityTrackerModel>();
+            var result = new List<IGlobalTrackerModel>();
 
             foreach (var transitionModel in simulationModel.TransitionModels)
             {
                 foreach (var particle in transitionModel.RuleModels.Select(model => model.SelectableParticle))
                 {
-                    var trackerModel = CreateProbabilityTrackerModel(transitionModel, particle);
+                    var trackerModel = CreateGlobalTrackerModel(transitionModel, particle);
                     result.Add(trackerModel);
                 }
             }
@@ -422,9 +384,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         /// <param name="trackedParticle"></param>
         /// <returns></returns>
-        protected IProbabilityTrackerModel CreateProbabilityTrackerModel(IKineticTransitionModel transitionModel, IParticle trackedParticle)
+        protected IGlobalTrackerModel CreateGlobalTrackerModel(IKineticTransitionModel transitionModel, IParticle trackedParticle)
         {
-            var trackerModel = new ProbabilityTrackerModel
+            var trackerModel = new GlobalTrackerModel
             {
                 KineticTransitionModel = transitionModel,
                 TrackedParticle = trackedParticle

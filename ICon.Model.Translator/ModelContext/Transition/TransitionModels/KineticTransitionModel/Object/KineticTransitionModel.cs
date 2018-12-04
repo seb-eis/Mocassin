@@ -25,7 +25,10 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IKineticRuleModel> RuleModels { get; set; }
 
         /// <inheritdoc />
-        public IParticleSet MobileParticles { get; set; }
+        public IParticleSet SelectableParticles { get; set; }
+
+        /// <inheritdoc />
+        public long SelectableParticleMask { get; set; }
 
         /// <inheritdoc />
         public IParticle EffectiveParticle { get; set; }
@@ -40,6 +43,12 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public IEnumerable<ITransitionRuleModel> GetRuleModels()
+        {
+            return RuleModels.AsEnumerable();
+        }
+
+        /// <inheritdoc />
         public IKineticTransitionModel CreateInverse()
         {
             return new KineticTransitionModel
@@ -47,7 +56,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 Transition = Transition,
                 InverseTransitionModel = this,
                 AbstractMovement = GetInverseAbstractMovement(),
-                MobileParticles = MobileParticles,
+                SelectableParticles = SelectableParticles,
                 EffectiveParticle = EffectiveParticle
             };
         }

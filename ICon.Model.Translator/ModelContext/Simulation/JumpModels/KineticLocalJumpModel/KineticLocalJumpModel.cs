@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -16,12 +17,16 @@ namespace Mocassin.Model.Translator.ModelContext
         public double NormalizedElectricFieldInfluence { get; set; }
 
         /// <inheritdoc />
-        public double ElectricFieldRuleFactor => Math.Abs(NormalizedElectricFieldInfluence) > 1.0e-10
-            ? NormalizedElectricFieldInfluence / ElectricFieldMappingFactor
-            : 0;
+        public ITransitionRuleModel RuleModelBase => RuleModel;
 
         /// <inheritdoc />
-        public double ElectricFieldMappingFactor => Math.Abs(NormalizedElectricFieldInfluence);
+        public ITransitionMappingModel MappingModelBase => MappingModel;
+
+        /// <inheritdoc />
+        public double ElectricFieldRuleInfluence => RuleModel.RuleDirectionValue;
+
+        /// <inheritdoc />
+        public double ElectricFieldMappingFactor { get; set; }
 
         /// <inheritdoc />
         public Cartesian3D ChargeTransportVector { get; set; }

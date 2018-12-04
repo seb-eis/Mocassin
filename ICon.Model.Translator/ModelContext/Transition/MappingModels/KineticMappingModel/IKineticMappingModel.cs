@@ -66,5 +66,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <returns></returns>
         IKineticMappingModel CreateInverse();
+
+        /// <summary>
+        ///     Get the movement sequence of the mapping in a set of fractional vectors
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> GetMovementSequence();
     }
 }

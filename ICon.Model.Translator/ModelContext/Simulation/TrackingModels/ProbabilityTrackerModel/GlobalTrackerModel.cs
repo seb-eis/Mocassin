@@ -3,7 +3,7 @@
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc />
-    public class ProbabilityTrackerModel : IProbabilityTrackerModel
+    public class GlobalTrackerModel : IGlobalTrackerModel
     {
         /// <inheritdoc />
         public int ModelId { get; set; }

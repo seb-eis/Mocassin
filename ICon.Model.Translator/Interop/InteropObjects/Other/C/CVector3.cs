@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Translator
 {
@@ -16,5 +17,19 @@ namespace Mocassin.Model.Translator
 
         [field: MarshalAs(UnmanagedType.R8)]
         public double C { get; set; }
+
+
+        public CVector3(IVector3D vector)
+            : this(vector.Coordinates.A, vector.Coordinates.B, vector.Coordinates.C)
+        {
+        }
+
+        public CVector3(double a, double b, double c)
+            : this()
+        {
+            A = a;
+            B = b;
+            C = c;
+        }
     }
 }

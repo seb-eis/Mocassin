@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -32,5 +31,10 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     behaviour in the simulation
         /// </summary>
         IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
+
+        /// <summary>
+        ///     The encoding model for the metropolis simulation model
+        /// </summary>
+        ISimulationEncodingModel SimulationEncodingModel { get; set; }
     }
 }

@@ -16,6 +16,11 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticSimulation Simulation { get; set; }
 
         /// <summary>
+        /// Get or set the maximum attempt frequency relevant to the simulation
+        /// </summary>
+        double MaxAttemptFrequency { get; set; }
+
+        /// <summary>
         ///     The normalized electric field vector in cartesian coordinates. Describes a field strength of 1 [V/Ang]
         /// </summary>
         Cartesian3D NormalizedElectricFieldVector { get; set; }
@@ -33,7 +38,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The kinetic indexing model that describes the required indexing sets for the simulation on the unmanaged side
         /// </summary>
-        IKineticIndexingModel KineticIndexingModel { get; set; }
+        ISimulationEncodingModel SimulationEncodingModel { get; set; }
 
         /// <summary>
         ///     Kinetic mapping assign matrix that assigns each position index/particle index combination its valid kinetic mapping

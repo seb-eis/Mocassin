@@ -44,7 +44,7 @@ namespace Mocassin.Model.Translator.ModelContext
             }
 
             resultModels.AddRange(inverseModels);
-            resultModels.ForEach(a => a.MobileParticles = CreateMobileParticleSet(a.RuleModels));
+            resultModels.ForEach(AddBasicMobilityInformation);
             return resultModels;
         }
 

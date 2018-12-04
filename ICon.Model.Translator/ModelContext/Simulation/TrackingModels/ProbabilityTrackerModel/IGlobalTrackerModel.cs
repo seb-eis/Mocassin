@@ -3,9 +3,10 @@
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    ///     Represents a probability tracker model for kinetic simulations that describes a tracked jump probability
+    ///     Represents a global tracker model for kinetic simulations that describes jump probability and global movement of a
+    ///     tracked particle and transition model combination
     /// </summary>
-    public interface IProbabilityTrackerModel : IModelComponent
+    public interface IGlobalTrackerModel : IModelComponent
     {
         /// <summary>
         ///     The kinetic transition model the tracker belongs to
