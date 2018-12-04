@@ -16,29 +16,5 @@ namespace Mocassin.Model.Simulations.ConflictHandling
             : base(modelProject)
         {
         }
-
-        /// <summary>
-        /// Handles a metropolis simulation series object change
-        /// </summary>
-        /// <param name="series"></param>
-        /// <param name="accessor"></param>
-        /// <returns></returns>
-        [ConflictHandlingMethod]
-        private IConflictReport HandleObjectChange(MetropolisSimulationSeries series, IDataAccessor<SimulationModelData> accessor)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Handles a kinetic simulation series object change
-        /// </summary>
-        /// <param name="series"></param>
-        /// <param name="accessor"></param>
-        /// <returns></returns>
-        [ConflictHandlingMethod]
-        private IConflictReport HandleObjectChange(KineticSimulationSeries series, IDataAccessor<SimulationModelData> accessor)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

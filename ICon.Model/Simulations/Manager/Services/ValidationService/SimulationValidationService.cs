@@ -44,29 +44,5 @@ namespace Mocassin.Model.Simulations
         {
             return new MetropolisSimulationValidator(ModelProject, Settings, dataReader).Validate(simulation);
         }
-
-        /// <summary>
-        ///     Validates the passed kinetic simulation series and returns the validation report
-        /// </summary>
-        /// <param name="series"></param>
-        /// <param name="dataReader"></param>
-        /// <returns></returns>
-        [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport Validate(IKineticSimulationSeries series, IDataReader<ISimulationDataPort> dataReader)
-        {
-            return new KineticSeriesValidator(ModelProject, Settings, dataReader).Validate(series);
-        }
-
-        /// <summary>
-        ///     Validates the passed metropolis simulation series and returns the validation report
-        /// </summary>
-        /// <param name="series"></param>
-        /// <param name="dataReader"></param>
-        /// <returns></returns>
-        [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport Validate(IMetropolisSimulationSeries series, IDataReader<ISimulationDataPort> dataReader)
-        {
-            return new MetropolisSeriesValidator(ModelProject, Settings, dataReader).Validate(series);
-        }
     }
 }

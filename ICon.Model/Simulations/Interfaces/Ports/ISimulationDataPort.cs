@@ -33,31 +33,5 @@ namespace Mocassin.Model.Simulations
         /// </summary>
         /// <returns></returns>
         IReadOnlyList<IMetropolisSimulation> GetMetropolisSimulations();
-
-        /// <summary>
-        ///     Get the kinetic simulation series at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        IKineticSimulationSeries GetKineticSeries(int index);
-
-        /// <summary>
-        ///     Get a read only list of all defined kinetic simulation series
-        /// </summary>
-        /// <returns></returns>
-        IReadOnlyList<IKineticSimulationSeries> GetKineticSeriesList();
-
-        /// <summary>
-        ///     Get the metropolis simulation series at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        IMetropolisSimulationSeries GetMetropolisSeries(int index);
-
-        /// <summary>
-        ///     Get a read only list of all defined metropolis simulation series
-        /// </summary>
-        /// <returns></returns>
-        IReadOnlyList<IMetropolisSimulationSeries> GetMetropolisSeriesList();
     }
 }

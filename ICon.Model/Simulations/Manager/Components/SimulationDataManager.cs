@@ -37,29 +37,5 @@ namespace Mocassin.Model.Simulations
         {
             return Data.MetropolisSimulations;
         }
-
-        /// <inheritdoc />
-        public IKineticSimulationSeries GetKineticSeries(int index)
-        {
-            return Data.KineticSeries[index];
-        }
-
-        /// <inheritdoc />
-        public IReadOnlyList<IKineticSimulationSeries> GetKineticSeriesList()
-        {
-            return Data.KineticSeries;
-        }
-
-        /// <inheritdoc />
-        public IMetropolisSimulationSeries GetMetropolisSeries(int index)
-        {
-            return Data.MetropolisSeries[index];
-        }
-
-        /// <inheritdoc />
-        public IReadOnlyList<IMetropolisSimulationSeries> GetMetropolisSeriesList()
-        {
-            return Data.MetropolisSeries;
-        }
     }
 }

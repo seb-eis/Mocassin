@@ -16,37 +16,5 @@ namespace Mocassin.Model.Simulations
             : base(modelCache, modelProject)
         {
         }
-
-        /// <inheritdoc />
-        public IList<IList<IParticleSet>> GetPositionBoundKineticMobileParticles()
-        {
-            return GetResultFromCache(CreateKineticMobileParticleSets);
-        }
-
-        /// <inheritdoc />
-        public IList<IList<IParticleSet>> GetPositionBoundMetropolisMobileParticles()
-        {
-            return GetResultFromCache(CreateMetropolisMobileParticleSets);
-        }
-
-        /// <summary>
-        /// Creates the 2D list interface with the kinetic mobile particle set for each transition and unit cell position combination
-        /// </summary>
-        /// <returns></returns>
-        [CacheMethodResult]
-        protected IList<IList<IParticleSet>> CreateKineticMobileParticleSets()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Creates the 2D list interface with the metropolis mobile particle set for each transition and unit cell position combination
-        /// </summary>
-        /// <returns></returns>
-        [CacheMethodResult]
-        protected IList<IList<IParticleSet>> CreateMetropolisMobileParticleSets()
-        {
-            return null;
-        }
     }
 }

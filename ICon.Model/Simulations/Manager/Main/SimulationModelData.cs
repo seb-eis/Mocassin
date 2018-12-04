@@ -25,20 +25,6 @@ namespace Mocassin.Model.Simulations
         [IndexedModelData(typeof(IMetropolisSimulation))]
         public List<MetropolisSimulation> MetropolisSimulations { get; set; }
 
-        /// <summary>
-        ///     List of all indexed kinetic simulation series model objects
-        /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IKineticSimulationSeries))]
-        public List<KineticSimulationSeries> KineticSeries { get; set; }
-
-        /// <summary>
-        ///     List of all indexed metropolis simulation series model objects
-        /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IMetropolisSimulationSeries))]
-        public List<MetropolisSimulationSeries> MetropolisSeries { get; set; }
-
         /// <inheritdoc />
         public override ISimulationDataPort AsReadOnly()
         {

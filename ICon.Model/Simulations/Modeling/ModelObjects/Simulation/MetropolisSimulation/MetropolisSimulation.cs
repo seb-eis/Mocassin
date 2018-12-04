@@ -25,22 +25,18 @@ namespace Mocassin.Model.Simulations
 
         /// <inheritdoc />
         [DataMember]
-        [JobProperty("BreakTolerance", ImportSettings = "BreakTolerance")]
         public double RelativeBreakTolerance { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [JobProperty("BreakSampleLength", ImportSettings = "BreakSampleLength")]
         public int BreakSampleLength { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [JobProperty("BreakSampleInterval", ImportSettings = "BreakSampleInterval")]
         public int BreakSampleIntervalMcs { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [JobProperty("ResultSampleLength", ImportSettings = "ResultSampleLength")]
         public int ResultSampleMcs { get; set; }
 
         /// <inheritdoc />
