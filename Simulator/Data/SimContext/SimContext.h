@@ -13,14 +13,17 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Framework/Math/Random/PcgRandom.h"
-#include "Simulator/Data/Model/Database/DbModel.h"
-#include "Simulator/Data/Model/State/StateModel.h"
+#include "Simulator/Data/Database/DbModel.h"
+#include "Simulator/Data/State/StateModel.h"
 
 // Type for cluster links
 // Layout@ggc_x86_64 => 2@[1,1]
 typedef struct ClusterLink
 {
+    // The id of the cluster. 256 clusters per environment are supported
     byte_t ClusterId;
+
+    // The id of the code byte that has to be changed
     byte_t CodeByteId;
     
 } ClusterLink_t;
@@ -60,7 +63,7 @@ typedef Span_t(ClusterState_t, ClusterStates) ClusterStates_t;
 
 // Type for lists of energy states
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(double, EnergyStates) EnergyStates;
+typedef Span_t(double, EnergyStates) EnergyStates_t;
 
 // Type for a full environment state definition (Supports 16 bit alignment)
 // Layout@ggc_x86_64 => 96@[1,1,1,1,4,4,4,16,16,16,24,8]
@@ -74,7 +77,7 @@ typedef struct EnvironmentState
     int32_t                     PoolId;
     int32_t                     PoolPositionId;
     Vector4_t                   PositionVector;
-    EnergyStates                EnergyStates;
+    EnergyStates_t              EnergyStates;
     ClusterStates_t             ClusterStates;
     EnvironmentLinks_t          EnvironmentLinks;
     EnvironmentDefinition_t*    EnvironmentDefinition;
@@ -83,7 +86,7 @@ typedef struct EnvironmentState
 
 // Type for the 4d rectangular environment state lattice access
 // Layout@ggc_x86_64 => 24@[8,8,8]
-typedef Array_t(EnvironmentState_t, 4, EnvironmentLattice) EnvironmentLattice;
+typedef Array_t(EnvironmentState_t, 4, EnvironmentLattice) EnvironmentLattice_t;
 
 // Type for the jump selection index information
 // Layout@ggc_x86_64 => 16@[4,4,4,4]
@@ -97,12 +100,13 @@ typedef struct JumpSelectionInfo
 } JumpSelectionInfo_t;
 
 // Type for the transition energy information
-// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct JumpEnergyInfo
 {
     double Energy0;
     double Energy1;
     double Energy2;
+    double FieldInfluence;
     double ConformationDelta;
     double Probability0to2;
     double Probability2to0;
@@ -227,15 +231,56 @@ typedef struct Flp64Buffer
     
 } Flp64Buffer_t;
 
+// Type for jump links
+// Layout@ggc_x86_64 => 8@[4,4]
+typedef struct JumpLink
+{
+    // The path id te jump link is valid for
+    int32_t     PathId;
+
+    // The id of the corresponding environment link
+    int32_t     LinkId;
+
+} JumpLink_t;
+
+// Type for jump link lists
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(JumpLink_t, JumpLinks) JumpLinks_t;
+
+// Type for the jump status that holds the runtime information of a single jump
+// Layout@ggc_x86_64 => 16@[16]
+typedef struct JumpStatus
+{
+    // The jump links of the jump status
+    JumpLinks_t JumpLinks;
+
+} JumpStatus_t;
+
+// Type for a 4D array of jump status objects access by [A,B,C,JumpDirId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(JumpStatus_t, 4, JumpStatusArray) JumpStatusArray_t;
+
 // Type for the simulation dynamic model
-// Layout@ggc_x86_64 => 152@[56,24,32,16,24]
+// Layout@ggc_x86_64 => 168@[56,24,32,16,24,16]
 typedef struct DynamicModel
 {
+    // The simulation file information
     FileInfo_t          FileInfo;
+
+    // The simulation physical factor collection
     PhysicalInfo_t      PhysicalFactors;
+
+    // The lattice energy buffer
     Flp64Buffer_t       LatticeEnergyBuffer;
+
+    // The simulation runtime information
     SimulationRunInfo_t RuntimeInfo;
-    EnvironmentLattice  EnvironmentLattice;
+
+    // The simulation environment lattice
+    EnvironmentLattice_t  EnvironmentLattice;
+
+    // The jump status array
+    JumpStatusArray_t   JumpStatusArray;
 
 } DynamicModel_t;
 
@@ -245,8 +290,11 @@ typedef void (*FPlugin_t)(void* restrict);
 // Type for storing multiple plugin function pointers
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef struct SimulationPlugins
-{ 
+{
+    // The callback plugin function on data outputs
     FPlugin_t OnDataOutput;
+
+    // The callback plugin function on set jump probabilities
     FPlugin_t OnSetJumpProbabilities;
     
 } SimulationPlugins_t;
@@ -255,9 +303,13 @@ typedef struct SimulationPlugins
 // Layout@ggc_x86_64 => 16@[8,4,{4}]
 typedef struct CmdArguments
 {
+    // The command line arguments passed to the program
     char const* const*  Values;
+
+    // The number of passed command line arguments
     int32_t             Count;
 
+    // Padding integer
     int32_t             Padding:32;
 
 } CmdArguments_t;
@@ -266,14 +318,31 @@ typedef struct CmdArguments
 // Layout@ggc_x86_64 => 32@[4,]
 typedef struct SimulationContext
 {
+    // The main simulation state. Stores the result collections
     SimulationState_t   MainState;
+
+    // The dynamic simulation cycle state. Stores the current cycle information
     CycleState_t        CycleState;
+
+    // The simulation database model. Loaded from the managed model system
     DbModel_t           DbModel;
+
+    // The simulation dynamic model. Stores dynamically created simulation objects
     DynamicModel_t      DynamicModel;
+
+    // The jump selection pool. Manages the statistical selection of jumps
     JumpSelectionPool_t SelectionPool;
-    Pcg32_t      RandomNumberGenerator;
+
+    // The main random number generator
+    Pcg32_t             Rng;
+
+    // The simulation plugin collection. Stores the loaded plugin information
     SimulationPlugins_t Plugins;
+
+    // The command line argument collection. Stores all passed command line information
     CmdArguments_t      CommandArguments;
+
+    // Current main error code of the simulation
     error_t             ErrorCode;
     
 } SimulationContext_t;

@@ -12,6 +12,8 @@
 #include "Framework/Basic/Macros/Macros.h"
 #include "avxintrin.h"
 
+#if !defined(__SSE2__)
+
 Vector3_t AddVector3(const Vector3_t * lhs, const Vector3_t * rhs)
 {
 	return (Vector3_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c };
@@ -37,7 +39,6 @@ double CalcVector3DotProduct(const Vector3_t * lhs, const Vector3_t * rhs)
 	return lhs->a * rhs->a + lhs->b * rhs->b + lhs->c * rhs->c;
 }
 
-#if !defined(__SSE2__)
 Vector4_t AddVector4(const Vector4_t * lhs, const Vector4_t * rhs)
 {
 	return (Vector4_t) { lhs->a + rhs->a,lhs->b + rhs->b,lhs->c + rhs->c,lhs->d + rhs->d };
@@ -82,27 +83,57 @@ Vector4_t Vector4FromInt32(int32_t value, const int32_t * restrict blockSizes)
 	return result;
 }
 #else
+
+Vector3_t AddVector3(const Vector3_t * lhs, const Vector3_t * rhs)
+{
+    __sse4d result = addressAs(__sse4d, lhs) + addressAs(__sse4d, rhs);
+    return addressAs(Vector3_t, &result);
+}
+
+Vector3_t SubstractVector3(const Vector3_t * lhs, const Vector3_t * rhs)
+{
+    __sse4d result = addressAs(__sse4d, lhs) - addressAs(__sse4d, rhs);
+    return addressAs(Vector3_t, &result);
+}
+
+Vector3_t ScalarMultVector3(const Vector3_t * lhs, double rhs)
+{
+    __sse4d result = addressAs(__sse4d, lhs) * rhs;
+    return addressAs(Vector3_t, &result);
+}
+
+Vector3_t ScalarDivideVector3(const Vector3_t * lhs, double rhs)
+{
+    __sse4d result = addressAs(__sse4d, lhs) / rhs;
+    return addressAs(Vector3_t, &result);
+}
+
+double CalcVector3DotProduct(const Vector3_t * lhs, const Vector3_t * rhs)
+{
+    return lhs->a * rhs->a + lhs->b * rhs->b + lhs->c * rhs->c;
+}
+
 Vector4_t AddVector4(const Vector4_t * lhs, const Vector4_t * rhs)
 {
-    sse2v4i result = addressAs(sse2v4i, lhs) + addressAs(sse2v4i, rhs);
+    __sse4s result = addressAs(__sse4s, lhs) + addressAs(__sse4s, rhs);
 	return addressAs(Vector4_t, &result);
 }
 
 Vector4_t SubstractVector4(const Vector4_t * lhs, const Vector4_t * rhs)
 {
-    sse2v4i result = addressAs(sse2v4i, lhs) - addressAs(sse2v4i, rhs);
+    __sse4s result = addressAs(__sse4s, lhs) - addressAs(__sse4s, rhs);
     return addressAs(Vector4_t, &result);
 }
 
 Vector4_t ScalarMultVector4(const Vector4_t * lhs, int32_t rhs)
 {
-    sse2v4i result = addressAs(sse2v4i, lhs) + rhs;
+    __sse4s result = addressAs(__sse4s, lhs) + rhs;
     return addressAs(Vector4_t, &result);
 }
 
 Vector4_t ScalarDivideVector4(const Vector4_t * lhs, int32_t rhs)
 {
-    sse2v4i result = addressAs(sse2v4i, lhs) / rhs;
+    __sse4s result = addressAs(__sse4s, lhs) / rhs;
     return addressAs(Vector4_t, &result);
 }
 #endif

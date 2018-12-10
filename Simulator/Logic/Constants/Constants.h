@@ -29,6 +29,21 @@
 #define FLG_ABORT           0x40000000
 #define FLG_STATEERROR      0x80000000
 
+/* Jump constants */
+
+// Defines the minimal jump length that is valid
+#define JUMPS_JUMPLENGTH_MIN 2
+
+// Defines the longest jump length that is valid
+#define JUMPS_JUMPLENGTH_MAX 8
+
+// Defines the jump length for MMC
+#define JUMPS_JUMPLENGTH_MMC 2
+
+// Defines the maximum number of jumplinks per single set
+#define JUMPS_JUMPLINK_LIMIT 64
+
+
 /* Monte Carlo constants */
 
 #define MC_CONST_JUMPTRACK_MIN 1.0e-05
@@ -66,21 +81,6 @@
 #define PARTICLE_NULL       255
 #define POSITION_NULL       -1
 #define INVALID_INDEX       -1
-
-/* Job related flag values */
-
-#define FLG_KMC             0x1
-#define FLG_MMC             0x2
-#define FLG_PRERUN          0x4
-#define FLG_CONTINUE        0x8
-#define FLG_COMPLETED       0x10
-#define FLG_TIMEOUT         0x20
-#define FLG_ABORTCONDITION  0x40
-#define FLG_RATELIMIT       0x80
-#define FLG_FIRSTCYCLE      0x100
-#define FLG_INITIALIZED     0x20000000
-#define FLG_ABORT           0x40000000
-#define FLG_STATEERROR      0x80000000
 
 /* File and writemode definitions */
 

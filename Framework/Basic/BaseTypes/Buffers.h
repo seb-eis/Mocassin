@@ -41,6 +41,7 @@ void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *
 
 #define span_Split(SPAN, NEWBEGIN, NEWEND) { (void*) ((SPAN).Begin + (NEWBEGIN)), (void*) ((SPAN).Begin + (NEWEND)) }
 
+// Access span by index. Works for getting and setting the value
 #define span_Get(SPAN, INDEX) (SPAN).Begin[(INDEX)]
 
 #define span_AsVoid(SPAN) { (void*) (SPAN).Begin, (void*) (SPAN).End }

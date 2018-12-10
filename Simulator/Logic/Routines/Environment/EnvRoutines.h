@@ -10,7 +10,7 @@
 
 #pragma once
 #include "Framework/Errors/McErrors.h"
-#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Simulator/Data/SimContext/ContextAccess.h"
 
 /* Initializer routines */
 
@@ -18,7 +18,7 @@ void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR);
 
 void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR);
 
-void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId);
+void SetEnvStateStatusToDefault(__SCONTEXT_PAR, int32_t environmentId, byte_t particleId);
 
 /* Simulation routines KMC */
 

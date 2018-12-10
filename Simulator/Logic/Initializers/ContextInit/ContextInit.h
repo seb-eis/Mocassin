@@ -1,15 +1,15 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	ModelSqLite.h      	        //
+// File:	ContextInitializer.h   		//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
 //			© 2018 Sebastian Eisele     //
-// Short:   SQL functions for db model  //
+// Short:   Context initializer logic   //
 //////////////////////////////////////////
 
 #pragma once
-#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Simulator/Data/SimContext/ContextAccess.h"
 
-void LoadSimulationModelFromDatabase(__SCONTEXT_PAR);
-
+// Prepares the simulation context for the simulation
+void PrepareContextForSimulation(__SCONTEXT_PAR);

@@ -9,10 +9,12 @@
 //////////////////////////////////////////
 
 #pragma once
+
+#include <stdint.h>
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
-#include "Simulator/Data/Model/SimContext/SimContext.h"
+#include "SimContext.h"
 
 /* Context access defines */
 
@@ -23,87 +25,132 @@
 
 /* Context getter/setter */
 
+// Get the main simulation state from the context
 static inline SimulationState_t* getSimulationState(__SCONTEXT_PAR)
 {
     return &SCONTEXT->MainState;
 }
 
+// Get the database model from the context
 static inline DbModel_t* getDatabaseModel(__SCONTEXT_PAR)
 {
     return &SCONTEXT->DbModel;
 }
 
+// Get the dynamic simulation model from the context
 static inline DynamicModel_t* getDynamicModel(__SCONTEXT_PAR)
 {
     return &SCONTEXT->DynamicModel;
 }
 
+// Get the jump selection pool from the context
 static inline JumpSelectionPool_t* getJumpSelectionPool(__SCONTEXT_PAR)
 {
     return &SCONTEXT->SelectionPool;
 }
 
+// Get the cycle state from the context
 static inline CycleState_t* getCycleState(__SCONTEXT_PAR)
 {
     return &SCONTEXT->CycleState;
 }
 
+// Get the random number generator from the context
 static inline Pcg32_t* getRandomNumberGen(__SCONTEXT_PAR)
 {
-    return &SCONTEXT->RandomNumberGenerator;
+    return &SCONTEXT->Rng;
 }
 
+// Get the simulation plugins from the context
 static inline SimulationPlugins_t* getPluginCollection(__SCONTEXT_PAR)
 {
     return &SCONTEXT->Plugins;
 }
 
+// Get the jump status array that contains information of all existing jumps in the lattice
+static inline JumpStatusArray_t* getJumpStatusArray(__SCONTEXT_PAR)
+{
+    return &getDynamicModel(SCONTEXT)->JumpStatusArray;
+}
+
+// Get a jump status from the context by a 4D vector [A,B,C,JumpDirId]
+static inline JumpStatus_t* getJumpStatusByVector4(__SCONTEXT_PAR, const Vector4_t*restrict vector)
+{
+    return &array_Get(*getJumpStatusArray(SCONTEXT), vector->a,vector->b,vector->c,vector->d);
+}
+
 /* Simulation model getter/setter */
 
+// Get the file information from the context
 static inline FileInfo_t* getFileInformation(__SCONTEXT_PAR)
 {
     return &getDynamicModel(SCONTEXT)->FileInfo;
 }
 
+// Get the physical factor collection from the context
 static inline PhysicalInfo_t* getPhysicalFactors(__SCONTEXT_PAR)
 {
     return &getDynamicModel(SCONTEXT)->PhysicalFactors;
 }
 
+// Get the lattice energy buffer from the context
 static inline Flp64Buffer_t* getLatticeEnergyBuffer(__SCONTEXT_PAR)
 {
     return &getDynamicModel(SCONTEXT)->LatticeEnergyBuffer;
 }
 
+// Get the simulation runtime information from the context
 static inline SimulationRunInfo_t* getRuntimeInformation(__SCONTEXT_PAR)
 {
     return &getDynamicModel(SCONTEXT)->RuntimeInfo;
 }
 
-static inline EnvironmentLattice* getEnvironmentLattice(__SCONTEXT_PAR)
+// Get the environment lattice from the context
+static inline EnvironmentLattice_t* getEnvironmentLattice(__SCONTEXT_PAR)
 {
     return &getDynamicModel(SCONTEXT)->EnvironmentLattice;
 }
 
-static inline void setEnvironmentLattice(__SCONTEXT_PAR, EnvironmentLattice value)
+// Set the environment lattice on the context
+static inline void setEnvironmentLattice(__SCONTEXT_PAR, EnvironmentLattice_t value)
 {
     *getEnvironmentLattice(SCONTEXT) = value;
 }
 
+// Get an environment state by its linearized id from the context
 static inline EnvironmentState_t* getEnvironmentStateById(__SCONTEXT_PAR, const int32_t id)
 {
     return &getEnvironmentLattice(SCONTEXT)->Begin[id];
 }
 
-static inline EnvironmentState_t* getEnvironmentStateByVector4(__SCONTEXT_PAR, const Vector4_t* restrict vector)
+// Get an environment state by (A,B,C,D) coordinate access from the context
+static inline EnvironmentState_t* getEnvironmentStateByIds(__SCONTEXT_PAR, const int32_t a, const int32_t b, const int32_t c, const int32_t d)
 {
-    EnvironmentLattice* envLattice = getEnvironmentLattice(SCONTEXT);
-    return &array_Get(*envLattice, vector->a, vector->b, vector->c, vector->d);
+    return &array_Get(*getEnvironmentLattice(SCONTEXT), a, b, c, d);
 }
 
+// Get an environment state by a 4D vector access from the context
+static inline EnvironmentState_t* getEnvironmentStateByVector4(__SCONTEXT_PAR, const Vector4_t* restrict vector)
+{
+    return getEnvironmentStateByIds(SCONTEXT, vector->a, vector->b, vector->c, vector->d);
+}
+
+// Get the lattice block sizes from the context
 static inline int32_t* getLatticeBlockSizes(__SCONTEXT_PAR)
 {
     return getEnvironmentLattice(SCONTEXT)->Header->Blocks;
+}
+
+// Get the static tracker mapping table from the context
+static inline TrackerMappingTable_t* getStaticTrackerMappingTable(__SCONTEXT_PAR)
+{
+    return &getDatabaseModel(SCONTEXT)->TransitionModel.StaticTrackerAssignTable;
+}
+
+// Get the global tracker mapping table from the context
+static inline TrackerMappingTable_t* getGlobalTrackerMappingTable(__SCONTEXT_PAR)
+{
+    return &getDatabaseModel(SCONTEXT)->TransitionModel.GlobalTrackerAssignTable;
 }
 
 /* Cycle state getter/setter */
@@ -235,9 +282,9 @@ static inline void setActiveClusterTable(__SCONTEXT_PAR, ClusterTable_t* value)
 
 /* Database model getter/setter */
 
-static inline LatticeInfo_t* getLatticeInformation(__SCONTEXT_PAR)
+static inline LatticeModel_t* getLatticeInformation(__SCONTEXT_PAR)
 {
-    return &getDatabaseModel(SCONTEXT)->LattInfo;
+    return &getDatabaseModel(SCONTEXT)->LatticeModel;
 }
 
 static inline Lattice_t* getDatabaseModelLattice(__SCONTEXT_PAR)
@@ -247,7 +294,7 @@ static inline Lattice_t* getDatabaseModelLattice(__SCONTEXT_PAR)
 
 static inline JobInfo_t* getJobInformation(__SCONTEXT_PAR)
 {
-    return &getDatabaseModel(SCONTEXT)->JobInfo;
+    return &getDatabaseModel(SCONTEXT)->JobModel.JobInfo;
 }
 
 static inline KmcHeader_t* getJobHeaderAsKmc(__SCONTEXT_PAR)
@@ -262,17 +309,17 @@ static inline MmcHeader_t* getJobHeaderAsMmc(__SCONTEXT_PAR)
 
 static inline StructureModel_t* getStructureModel(__SCONTEXT_PAR)
 {
-    return &getDatabaseModel(SCONTEXT)->Structure;
+    return &getDatabaseModel(SCONTEXT)->StructureModel;
 }
 
 static inline EnergyModel_t* getEnergyModel(__SCONTEXT_PAR)
 {
-    return &getDatabaseModel(SCONTEXT)->Energy;
+    return &getDatabaseModel(SCONTEXT)->EnergyModel;
 }
 
 static inline TransitionModel_t* getTransitionModel(__SCONTEXT_PAR)
 {
-    return &getDatabaseModel(SCONTEXT)->Transition;
+    return &getDatabaseModel(SCONTEXT)->TransitionModel;
 }
 
 static inline EnvironmentDefinitions_t* getEnvironmentModels(__SCONTEXT_PAR)
@@ -301,7 +348,7 @@ static inline int32_t getJumpCountByPositionStatus(__SCONTEXT_PAR, const int32_t
     return array_Get(*table, posId, parId);
 }
 
-static inline JumpAssignTable_t* getJumpIdToPositionsAssignmentTable(__SCONTEXT_PAR)
+static inline JumpMappingTable_t* getJumpIdToPositionsAssignmentTable(__SCONTEXT_PAR)
 {
     return &getTransitionModel(SCONTEXT)->JumpAssignTable;
 }
@@ -416,6 +463,16 @@ static inline IndexingState_t* getMobileTrackerIndexing(__SCONTEXT_PAR)
 static inline ProbabilityCountMap_t* getJumpProbabilityMap(__SCONTEXT_PAR)
 {
     return &getSimulationState(SCONTEXT)->ProbabilityTrackMap;
+}
+
+static inline int32_t getStaticTrackerIdByIds(__SCONTEXT_PAR, const int32_t posId, const int32_t particleId)
+{
+    return array_Get(*getStaticTrackerMappingTable(SCONTEXT), posId, particleId);
+}
+
+static inline int32_t getProbabilityTrackerIdByIds(__SCONTEXT_PAR, const int32_t jumpCollectionId, const int32_t particleId)
+{
+    return array_Get(*getGlobalTrackerMappingTable(SCONTEXT), jumpCollectionId, particleId);
 }
 
 /* Jump selection pool getter/setter */
@@ -596,27 +653,42 @@ static inline ClusterState_t* getEnvironmentCluStateById(EnvironmentState_t* res
 
 /* Active delta object getter/setter */
 
+// Get the active state energy by an offset id
 static inline double* getActiveStateEnergyById(__SCONTEXT_PAR, const byte_t id)
 {
     return &getActiveWorkEnvironment(SCONTEXT)->EnergyStates.Begin[id];
 }
 
+// Get the active particle update id by an offset id
 static inline byte_t getActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id)
 {
     return getActiveWorkEnvironment(SCONTEXT)->EnvironmentDefinition->UpdateParticleIds[id];
 }
 
+// Get an environment link by a jump link pointer
 static inline EnvironmentLink_t* getEnvLinkByJumpLink(__SCONTEXT_PAR, const JumpLink_t* restrict link)
 {
     return &JUMPPATH[link->PathId]->EnvironmentLinks.Begin[link->LinkId];
 }
 
+// Gte a path state energy pointer by path id and particle id
 static inline double* getPathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathId, const byte_t parId)
 {
     return &JUMPPATH[pathId]->EnergyStates.Begin[parId];
 }
 
+// Get the environment state energy backup pointer by a path id
 static inline double* getEnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t pathId)
 {
     return &getCycleState(SCONTEXT)->ActiveEnvironmentBackup.PathEnergies[pathId];
+}
+
+// Get the jump links that are currently required for delta generation
+static inline JumpLinks_t* getActiveLocalJumpLinks(__SCONTEXT_PAR)
+{
+    return &array_Get(*getJumpStatusArray(SCONTEXT),
+            JUMPPATH[0]->PositionVector.a,
+            JUMPPATH[0]->PositionVector.b,
+            JUMPPATH[0]->PositionVector.c,
+            getActiveJumpDirection(SCONTEXT)->ObjectId).JumpLinks;
 }

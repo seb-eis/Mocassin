@@ -11,22 +11,25 @@
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Simulator/Logic/Objects/JumpSelection.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Simulator/Data/SimContext/ContextAccess.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 
 /* Local helper routines */
 
+// Translates the passed environment state into the index of the required environment pool
 static inline int32_t LookupEnvironmentPoolId(JumpSelectionPool_t* restrict selectionPool, const JumpCountTable_t* restrict jumpCountTable, const EnvironmentState_t* restrict environment)
 {
     int32_t idRedirect = array_Get(*jumpCountTable, environment->PositionVector.d, environment->ParticleId);
     return span_Get(selectionPool->NumOfDirectionsToPoolId, idRedirect);
 }
 
+// Adds the passed id to the enf of the passed direction pool
 static inline void PushBackEnvIdToDirectionPool(DirectionPool_t *restrict directionPool, const int32_t entry)
 {
     list_PushBack(directionPool->EnvironmentPool, entry);
 }
 
+// Tries to push back the passed if to the direction pool. Returns flase if failed
 static inline bool_t TryPushBackEnvIdToDirectionPool(DirectionPool_t* restrict directionPool, const int32_t entry)
 {
     if (!list_CanPushBack(directionPool->EnvironmentPool))
@@ -37,11 +40,13 @@ static inline bool_t TryPushBackEnvIdToDirectionPool(DirectionPool_t* restrict d
     return true;
 }
 
+// Removes the last entry of the passed direction pool
 static inline int32_t PopBackDirectionEnvPool(DirectionPool_t *restrict directionPool)
 {
     return list_PopBack(directionPool->EnvironmentPool);
 }
 
+// Updates the selection status of the passed environment to the passed information
 static inline void UpdateEnvStateSelectionStatus(EnvironmentState_t* restrict environment, const int32_t poolId, const int32_t poolPositionId)
 {
     environment->PoolId = poolId;
@@ -100,7 +105,7 @@ error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environment
 
 static inline void RollPosAndDirFromPool(__SCONTEXT_PAR)
 {
-    int32_t randomNumber = MakeNextCeiledRnd(SCONTEXT, SCONTEXT->SelectionPool.NumOfSelectableJumps);
+    int32_t randomNumber = GetNextCeiledRandom(SCONTEXT, SCONTEXT->SelectionPool.NumOfSelectableJumps);
 
     cpp_foreach(directionPool, SCONTEXT->SelectionPool.DirectionPools)
     {
@@ -121,7 +126,8 @@ static inline void RollPosAndDirFromPool(__SCONTEXT_PAR)
 
 static inline void RollMmcOffsetEnvId(__SCONTEXT_PAR)
 {
-    getJumpSelectionInfo(SCONTEXT)->OffsetId = MakeNextCeiledRnd(SCONTEXT, getEnvironmentLattice(SCONTEXT)->Header->Size);
+    getJumpSelectionInfo(SCONTEXT)->OffsetId = GetNextCeiledRandom(SCONTEXT,
+                                                                   getEnvironmentLattice(SCONTEXT)->Header->Size);
 }
 
 void RollNextKmcSelect(__SCONTEXT_PAR)

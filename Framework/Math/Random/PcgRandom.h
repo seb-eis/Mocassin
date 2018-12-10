@@ -18,8 +18,8 @@
 #define PCG32_STATE_INT	0x853c49e6748fea9bULL
 #define PCG32_INC_INT 	0xda3e39cb94b95bdbULL
 
-// TYpedef of the pcg32 random number generator
-typedef struct { uint64_t State;  uint64_t Inc; } Pcg32_t;
+// Typedef of the pcg32 random number generator
+typedef struct Pcg32 { uint64_t State;  uint64_t Inc; } Pcg32_t;
 
 // Get next random unsigned integer from the passed pcg32 rng
 static inline uint32_t Pcg32Next(Pcg32_t* restrict rng)

@@ -1,6 +1,6 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	ModelSqLite.c      	        //
+// File:	ModelSqLite.h      	        //
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
@@ -8,9 +8,8 @@
 // Short:   SQL functions for db model  //
 //////////////////////////////////////////
 
-#include "Simulator/Data/Model/Database/DbModelLoad.h"
+#pragma once
+#include "Simulator/Data/SimContext/ContextAccess.h"
 
-void LoadSimulationModelFromDatabase(__SCONTEXT_PAR)
-{
+void LoadSimulationModelFromDatabase(__SCONTEXT_PAR);
 
-}

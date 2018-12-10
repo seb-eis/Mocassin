@@ -11,7 +11,7 @@
 #include "McErrors.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 
-char* ConvErrorToString(error_t errCode)
+char* ErrorCodeToString(error_t errCode)
 {
     // Redirect all non-critical errors to FATAL FAILURE since they should never cause an error string lookup
     errCode = (errCode <= 0) ? 0 : errCode;
@@ -35,22 +35,23 @@ char* ConvErrorToString(error_t errCode)
         "Argument missing or invalid\n\t(Expected reason: Database filepath or database load instruction is missing or not defined)",
         "Validation failure.\n\t(Expected reason: Invalid cmd argument string)",
         "Function is not implemented.\n\t(Expected reason: Currently not supported feature)",
-        "Function argument is null.\n\t(Expected reason: Implementation error/Corrupted model data)"
+        "Function argument is null.\n\t(Expected reason: Implementation error/corrupted model data)"
+        "Function argument is invalid.\n\t(Expected reason: Implementation error)"
     };
 
     return (errCode > (sizeof(errTable) / sizeof(char*))) ? "[???]" : errTable[errCode];
 }
 
-void DisplayErrorAndAwait(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
+void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
-    fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
-    fprintf(stdout, "\nAwait...\n");
+    fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    return;
 }
 
 void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
     FILE* fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
     fclose(fileStream);
     exit(errCode);
 }
@@ -58,7 +59,7 @@ void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const ch
 void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
     FILE* fileStream = fopen(STDERR_PATH, "w");
-    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ConvErrorToString(errCode), errMsg);
+    fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
 
     Buffer_t buffer = {memStart, memEnd};
     WriteBufferHexToStream(fileStream, &buffer, 24);

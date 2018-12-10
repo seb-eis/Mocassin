@@ -13,10 +13,13 @@
 #include <immintrin.h>
 
 // Defines 4 component int32_t sse2 vector type with 4x4 bytes
-typedef int32_t sse2v4i __attribute__((vector_size(16)));
+typedef int32_t __sse4s __attribute__((vector_size(16)));
 
-// Defines the 192 bit 3D double vector struct and the affiliated type (Does not directly support 16 bit alignment)
-typedef struct Vector3 { double a, b, c; } Vector3_t;
+// Defines 4 component double sse2 vector type with 4x8 bytes
+typedef double __sse4d __attribute__((vector_size(32)));
+
+// Defines the 256 bit 3D double vector struct and the affiliated type (Support 16 bit alignment by 8 byte padding)
+typedef struct Vector3 { double a, b, c, padding; } Vector3_t;
 
 // Defines the 128 bit 4D int vector struct and the affiliated type (Supports 16 bit alignment)
 typedef struct Vector4 { int32_t a, b, c, d; } Vector4_t;
