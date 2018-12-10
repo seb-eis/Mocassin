@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Bitmasks;
 using Mocassin.Model.Basic;
 
@@ -97,6 +99,21 @@ namespace Mocassin.Model.Particles
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Takes a sequence of particles objects and creates a new sorted particle set that contains only the unique ones
+        ///     using the provided comparer or a default particle comparer
+        /// </summary>
+        /// <param name="particles"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static IParticleSet ToSortedSet(IEnumerable<IParticle> particles, IComparer<IParticle> comparer = null)
+        {
+            comparer = comparer ?? Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
+            var setList = new SetList<IParticle>(comparer);
+            setList.AddMany(particles);
+            return new ParticleSet {Particles = setList.ToList()};
         }
     }
 }

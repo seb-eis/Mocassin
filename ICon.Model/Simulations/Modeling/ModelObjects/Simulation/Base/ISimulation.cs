@@ -56,11 +56,5 @@ namespace Mocassin.Model.Simulations
         ///     automatically terminated
         /// </summary>
         double LowerSuccessRateLimit { get; set; }
-
-        /// <summary>
-        ///     Defines the external provider load information that is used to generate an energy background for the simulation
-        ///     (Null if none is used)
-        /// </summary>
-        IExternalLoadInfo EnergyBackgroundProviderInfo { get; }
     }
 }

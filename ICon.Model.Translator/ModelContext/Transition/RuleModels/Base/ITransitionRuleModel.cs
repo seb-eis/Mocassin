@@ -47,9 +47,19 @@ namespace Mocassin.Model.Translator.ModelContext
         IList<int> EndIndexingDeltas { get; set; }
 
         /// <summary>
+        ///     Get or set the attempt frequency of the rule model
+        /// </summary>
+        double AttemptFrequency { get; set; }
+
+        /// <summary>
         ///     Index encoded version of the start state occupation
         /// </summary>
         long StartStateCode { get; set; }
+
+        /// <summary>
+        ///     Index encoded version of the transition state occupation
+        /// </summary>
+        long TransitionStateCode { get; set; }
 
         /// <summary>
         ///     Index encoded version of the final state occupation
@@ -80,5 +90,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="ruleModel"></param>
         /// <returns></returns>
         bool IsInverse(ITransitionRuleModel ruleModel);
+
+        /// <summary>
+        ///     Get a particle set that contains all particles that are not immobile in the context of the rule
+        /// </summary>
+        /// <returns></returns>
+        IParticleSet GetMobileParticles();
     }
 }

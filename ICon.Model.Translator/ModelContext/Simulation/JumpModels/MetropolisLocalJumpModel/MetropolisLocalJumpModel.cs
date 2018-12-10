@@ -36,17 +36,20 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public bool MakesElementOnPositionMobile(int positionId, int particleId)
+        public MobilityType GetMobilityType(int positionId, int particleId)
         {
 
             if (RuleModel.StartState[0].Index == particleId &&
                 RuleModel.FinalState[0].Index != particleId &&
                 MappingModel.StartVector4D.P == positionId)
-                return true;
+                return MobilityType.Selectable;
 
-            return RuleModel.StartState[1].Index == particleId &&
-                   RuleModel.FinalState[1].Index != particleId &&
-                   MappingModel.EndVector4D.P == positionId;
+            if (RuleModel.StartState[1].Index == particleId &&
+                RuleModel.FinalState[1].Index == particleId &&
+                MappingModel.EndVector4D.P == positionId)
+                return MobilityType.Mobile;
+
+            return MobilityType.Immobile;
         }
     }
 }

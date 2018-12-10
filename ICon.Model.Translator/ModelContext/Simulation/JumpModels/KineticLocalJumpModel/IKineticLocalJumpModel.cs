@@ -19,9 +19,9 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticRuleModel RuleModel { get; set; }
 
         /// <summary>
-        /// Defines the fraction of the electric normalized influence the jump model sees during simulation
+        /// Defines the electric normalized influence the jump model sees during simulation 
         /// </summary>
-        /// <remarks> Normalized influence is always defined as an influence of 1eV (1C*1Ang*1V/Ang) in the simulation field direction </remarks>
+        /// <remarks> Is defined in [eV Ang / V] in field direction, so multiplication with the field magnitude yields the field influence </remarks>
         double NormalizedElectricFieldInfluence { get; set; }
 
         /// <summary>

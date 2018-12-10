@@ -20,22 +20,22 @@ namespace Mocassin.Model.Translator
         private string DbFilename { get; }
 
         /// <inheritdoc />
-        public DbSet<JobPackageModel> SimulationPackages { get; set; }
+        public DbSet<SimulationJobPackageModel> SimulationPackages { get; set; }
 
         /// <inheritdoc />
-        public DbSet<StructureModel> StructureModels { get; set; }
+        public DbSet<SimulationStructureModel> StructureModels { get; set; }
 
         /// <inheritdoc />
-        public DbSet<TransitionModel> TransitionModels { get; set; }
+        public DbSet<SimulationTransitionModel> TransitionModels { get; set; }
 
         /// <inheritdoc />
-        public DbSet<EnergyModel> EnergyModels { get; set; }
+        public DbSet<SimulationEnergyModel> EnergyModels { get; set; }
 
         /// <inheritdoc />
-        public DbSet<JobModel> JobModels { get; set; }
+        public DbSet<SimulationJobModel> JobModels { get; set; }
 
         /// <inheritdoc />
-        public DbSet<LatticeModel> LatticeModels { get; set; }
+        public DbSet<SimulationLatticeModel> LatticeModels { get; set; }
 
         /// <inheritdoc />
         public DbSet<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }

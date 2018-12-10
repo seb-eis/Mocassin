@@ -42,14 +42,14 @@ namespace Mocassin.Model.Translator
         /// </summary>
         [NotMapped]
         [InteropProperty(nameof(PositionParticleIdsBinary))]
-        public ByteBuffer64 PositionParticleIds { get; set; }
+        public InteropObject<CByteBuffer64> PositionParticleIds { get; set; }
 
         /// <summary>
         ///     Fixed 64 byte buffer for particle ids that require delta update processes
         /// </summary>
         [NotMapped]
         [InteropProperty(nameof(UpdateParticleIdsBinary))]
-        public ByteBuffer64 UpdateParticleIds { get; set; }
+        public InteropObject<CByteBuffer64> UpdateParticleIds { get; set; }
 
         /// <summary>
         ///     The list of pair definition entities affiliated with the environment

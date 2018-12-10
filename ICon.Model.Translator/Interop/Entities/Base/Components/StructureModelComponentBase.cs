@@ -23,12 +23,12 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The structure model context key
         /// </summary>
-        [ForeignKey(nameof(StructureModel))]
+        [ForeignKey(nameof(SimulationStructureModel))]
         public int StructureModelId { get; set; }
 
         /// <summary>
         ///     The structure model navigation property
         /// </summary>
-        public StructureModel StructureModel { get; set; }
+        public SimulationStructureModel SimulationStructureModel { get; set; }
     }
 }

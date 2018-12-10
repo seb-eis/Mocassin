@@ -42,7 +42,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 AddLocalJumpModels(simulationModel);
                 AddKineticTrackingModel(simulationModel);
                 IndexTrackerModels(simulationModel, ref indexing);
-                AddTrackingModelMappingTables(simulationModel.KineticTrackingModel);
+                AddTrackingModelMappingTables(simulationModel.SimulationTrackingModel);
                 AddEncodingModel(simulationModel);
             }
         }
@@ -51,13 +51,14 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates and adds the kinetic indexing model for the passed and fully created simulation model
         /// </summary>
         /// <param name="simulationModel"></param>
-        private void AddEncodingModel(IKineticSimulationModel simulationModel)
+        protected void AddEncodingModel(IKineticSimulationModel simulationModel)
         {
             var encodingModel = new SimulationEncodingModel
             {
                 TransitionModelToJumpCollectionId = GetTransitionModelIndexing(simulationModel.TransitionModels),
                 TransitionMappingToJumpDirectionId = GetTransitionMappingIndexing(simulationModel.TransitionModels),
-                JumpCountTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels)
+                JumpCountTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels),
+                PositionIndexToMobilityTypesSet = GetPositionIndexToMobilitySetMapping(simulationModel.LocalJumpModels)
             };
 
             AddElectricFieldInfluenceMappings(encodingModel, simulationModel.LocalJumpModels);
@@ -103,10 +104,10 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="indexing"></param>
         protected void IndexTrackerModels(IKineticSimulationModel simulationModel, ref (int Static, int Global) indexing)
         {
-            foreach (var staticTrackerModel in simulationModel.KineticTrackingModel.StaticTrackerModels)
+            foreach (var staticTrackerModel in simulationModel.SimulationTrackingModel.StaticTrackerModels)
                 staticTrackerModel.ModelId = indexing.Static++;
 
-            foreach (var globalTrackerModel in simulationModel.KineticTrackingModel.GlobalTrackerModels)
+            foreach (var globalTrackerModel in simulationModel.SimulationTrackingModel.GlobalTrackerModels)
                 globalTrackerModel.ModelId = indexing.Global++;
         }
 
@@ -115,7 +116,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="trackingModel"></param>
         /// <remarks> For a valid mapping to be created the indexing of the tracking model has to be final </remarks>
-        protected void AddTrackingModelMappingTables(IKineticTrackingModel trackingModel)
+        protected void AddTrackingModelMappingTables(ISimulationTrackingModel trackingModel)
         {
             trackingModel.StaticTrackerMappingTable = CreateStaticTrackerMappingTable(trackingModel.StaticTrackerModels);
             trackingModel.GlobalTrackerMappingTable = CreateGlobalTrackerMappingTable(trackingModel.GlobalTrackerModels);
@@ -282,14 +283,14 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="simulationModel"></param>
         protected void AddKineticTrackingModel(IKineticSimulationModel simulationModel)
         {
-            var trackingModel = new KineticTrackingModel
+            var trackingModel = new SimulationTrackingModel
             {
                 SimulationModel = simulationModel,
                 StaticTrackerModels = CreateStaticMovementTrackerModels(simulationModel),
                 GlobalTrackerModels = CreateGlobalTrackerModels(simulationModel)
             };
 
-            simulationModel.KineticTrackingModel = trackingModel;
+            simulationModel.SimulationTrackingModel = trackingModel;
         }
 
         /// <summary>
@@ -368,7 +369,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var transitionModel in simulationModel.TransitionModels)
             {
-                foreach (var particle in transitionModel.RuleModels.Select(model => model.SelectableParticle))
+                foreach (var particle in transitionModel.GetMobileParticles())
                 {
                     var trackerModel = CreateGlobalTrackerModel(transitionModel, particle);
                     result.Add(trackerModel);

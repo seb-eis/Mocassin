@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Mocassin.Model.Translator
+﻿namespace Mocassin.Model.Translator
 {
     /// <summary>
     ///     Jump count table entity alias class. Defines a 2D jump count lookup table for the simulation database
     /// </summary>
-    public class JumpCountTableEntity : InteropBinaryArray<int>
+    public class JumpCountTableEntity : InteropArray<int>
     {
         /// <inheritdoc />
         public JumpCountTableEntity()
@@ -13,7 +11,7 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public JumpCountTableEntity(Array array)
+        public JumpCountTableEntity(int[,] array)
             : base(array)
         {
         }

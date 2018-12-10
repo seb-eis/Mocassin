@@ -10,32 +10,32 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Database set for translated simulation packages
         /// </summary>
-        DbSet<JobPackageModel> SimulationPackages { get; set; }
+        DbSet<SimulationJobPackageModel> SimulationPackages { get; set; }
 
         /// <summary>
         ///     Database set for translated structure models
         /// </summary>
-        DbSet<StructureModel> StructureModels { get; set; }
+        DbSet<SimulationStructureModel> StructureModels { get; set; }
 
         /// <summary>
         ///     Database set for translated transition models
         /// </summary>
-        DbSet<TransitionModel> TransitionModels { get; set; }
+        DbSet<SimulationTransitionModel> TransitionModels { get; set; }
 
         /// <summary>
         ///     Database set for translated energy models
         /// </summary>
-        DbSet<EnergyModel> EnergyModels { get; set; }
+        DbSet<SimulationEnergyModel> EnergyModels { get; set; }
 
         /// <summary>
         ///     Database set for translated job models
         /// </summary>
-        DbSet<JobModel> JobModels { get; set; }
+        DbSet<SimulationJobModel> JobModels { get; set; }
 
         /// <summary>
         ///     Database set for translated lattice models
         /// </summary>
-        DbSet<LatticeModel> LatticeModels { get; set; }
+        DbSet<SimulationLatticeModel> LatticeModels { get; set; }
 
         /// <summary>
         ///     Database set for all environment definitions

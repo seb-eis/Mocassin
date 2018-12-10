@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Collections;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
@@ -31,7 +32,13 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<int> EndIndexingDeltas { get; set; }
 
         /// <inheritdoc />
+        public abstract double AttemptFrequency { get; set; }
+
+        /// <inheritdoc />
         public long StartStateCode { get; set; }
+
+        /// <inheritdoc />
+        public abstract long TransitionStateCode { get; set; }
 
         /// <inheritdoc />
         public long FinalStateCode { get; set; }
@@ -55,6 +62,24 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public abstract bool IsInverse(ITransitionRuleModel ruleModel);
+
+        /// <inheritdoc />
+        public IParticleSet GetMobileParticles()
+        {
+            var comparer = Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
+            var setList = new SetList<IParticle>(comparer);
+
+            for (var pathId = 0; pathId < StartState.Count; pathId++)
+            {
+                if (StartState[pathId].Index == FinalState[pathId].Index)
+                    continue;
+
+                setList.Add(StartState[pathId]);
+                setList.Add(FinalState[pathId]);
+            }
+
+            return new ParticleSet {Particles = setList.ToList()};
+        }
 
         /// <summary>
         ///     Creates the inverted version of end indexing deltas

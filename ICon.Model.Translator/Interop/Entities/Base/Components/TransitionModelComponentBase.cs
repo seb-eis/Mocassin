@@ -23,12 +23,12 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The transition model context key
         /// </summary>
-        [ForeignKey(nameof(TransitionModel))]
+        [ForeignKey(nameof(SimulationTransitionModel))]
         public int TransitionModelId { get; set; }
 
         /// <summary>
         ///     The transition model navigation property
         /// </summary>
-        public TransitionModel TransitionModel { get; set; }
+        public SimulationTransitionModel SimulationTransitionModel { get; set; }
     }
 }

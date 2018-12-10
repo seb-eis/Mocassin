@@ -1,4 +1,5 @@
-﻿using Mocassin.Mathematics.ValueTypes;
+﻿using System.Collections.Generic;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -22,8 +23,29 @@ namespace Mocassin.Model.Translator.ModelContext
         public Fractional3D EndVector3D { get; set; }
 
         /// <inheritdoc />
+        public int PathLength => 2;
+
+        /// <inheritdoc />
         /// <remarks> Coordinates (0,0,0,P) are always in the original unit cell </remarks>
         public CrystalVector4D StartVector4D { get; set; }
+
+        /// <inheritdoc />
+        public IEnumerable<Fractional3D> GetMovementSequence()
+        {
+            yield break;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<CrystalVector4D> GetTransitionSequence()
+        {
+            yield return new CrystalVector4D(0, 0, 0, Mapping.PositionIndex1);
+        }
+
+        /// <inheritdoc />
+        public ITransitionModel GetTransitionModel()
+        {
+            return TransitionModel;
+        }
 
         /// <inheritdoc />
         public CrystalVector4D EndVector4D { get; set; }

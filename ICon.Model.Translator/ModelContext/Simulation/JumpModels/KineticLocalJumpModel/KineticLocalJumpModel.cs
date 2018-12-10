@@ -32,17 +32,17 @@ namespace Mocassin.Model.Translator.ModelContext
         public Cartesian3D ChargeTransportVector { get; set; }
 
         /// <inheritdoc />
-        public bool MakesElementOnPositionMobile(int positionId, int particleId)
+        public MobilityType GetMobilityType(int positionId, int particleId)
         {
             for (var pathId = 0; pathId < MappingModel.Mapping.PathLength; pathId++)
             {
                 if (RuleModel.StartState[pathId].Index == particleId &&
                     RuleModel.FinalState[pathId].Index != particleId &&
                     MappingModel.PositionSequence4D[pathId].P == positionId)
-                    return true;
+                    return pathId == 0 ? MobilityType.Selectable : MobilityType.Mobile;
             }
 
-            return false;
+            return MobilityType.Immobile;
         }
 
         /// <inheritdoc />

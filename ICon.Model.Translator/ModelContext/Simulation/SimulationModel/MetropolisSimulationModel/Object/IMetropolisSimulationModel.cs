@@ -7,7 +7,7 @@ namespace Mocassin.Model.Translator.ModelContext
     ///     Represents a metropolis simulation model that holds the relationship information between transitions and simulation
     ///     definitions
     /// </summary>
-    public interface IMetropolisSimulationModel : IModelComponent
+    public interface IMetropolisSimulationModel : ISimulationModel
     {
         /// <summary>
         ///     The metropolis simulation this model is based upon
@@ -31,10 +31,5 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     behaviour in the simulation
         /// </summary>
         IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
-
-        /// <summary>
-        ///     The encoding model for the metropolis simulation model
-        /// </summary>
-        ISimulationEncodingModel SimulationEncodingModel { get; set; }
     }
 }

@@ -9,11 +9,6 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface ITransitionModel : IModelComponent
     {
         /// <summary>
-        ///     Flag that indicates if this model has an inversion that is not itself
-        /// </summary>
-        bool HasInversion { get; }
-
-        /// <summary>
         ///     The particle set of all selectable particles on the transition
         /// </summary>
         IParticleSet SelectableParticles { get; set; }
@@ -21,7 +16,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The selectable particle set long bitmask
         /// </summary>
-        long SelectableParticleMask { get; set; }
+        long SelectableParticlesMask { get; set; }
 
         /// <summary>
         ///     Get all unspecified mapping models of the transition model
@@ -34,5 +29,11 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <returns></returns>
         IEnumerable<ITransitionRuleModel> GetRuleModels();
+
+        /// <summary>
+        ///     Get a particle set that describes all particles that are made mobile by the transition model
+        /// </summary>
+        /// <returns></returns>
+        IParticleSet GetMobileParticles();
     }
 }

@@ -6,11 +6,8 @@ using Mocassin.Model.Transitions;
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc cref="IMetropolisTransitionModel" />
-    public class MetropolisTransitionModel : ModelComponentBase, IMetropolisTransitionModel
+    public class MetropolisTransitionModel : TransitionModel, IMetropolisTransitionModel
     {
-        /// <inheritdoc />
-        public bool HasInversion => this != InverseTransitionModel;
-
         /// <inheritdoc />
         public IMetropolisTransition Transition { get; set; }
 
@@ -24,19 +21,13 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IMetropolisRuleModel> RuleModels { get; set; }
 
         /// <inheritdoc />
-        public IParticleSet SelectableParticles { get; set; }
-
-        /// <inheritdoc />
-        public long SelectableParticleMask { get; set; }
-
-        /// <inheritdoc />
-        public IEnumerable<ITransitionMappingModel> GetMappingModels()
+        public override IEnumerable<ITransitionMappingModel> GetMappingModels()
         {
             return MappingModels.AsEnumerable();
         }
 
         /// <inheritdoc />
-        public IEnumerable<ITransitionRuleModel> GetRuleModels()
+        public override IEnumerable<ITransitionRuleModel> GetRuleModels()
         {
             return RuleModels.AsEnumerable();
         }

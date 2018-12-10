@@ -15,6 +15,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IDictionary<ITransitionRuleModel, double> TransitionRuleToElectricFieldFactors { get; set; }
 
         /// <inheritdoc />
+        public IDictionary<int, MobilityType[]> PositionIndexToMobilityTypesSet { get; set; }
+
+        /// <inheritdoc />
         public IDictionary<ITransitionMappingModel, double> TransitionMappingToElectricFieldFactors { get; set; }
 
         /// <inheritdoc />

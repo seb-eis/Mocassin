@@ -30,11 +30,11 @@ namespace Mocassin.Model.Translator.ModelContext
         double ElectricFieldMappingFactor { get; set; }
 
         /// <summary>
-        ///     Check if the passed position id + particle id combination is mobile in the context of the jump model
+        ///     Get the mobility type that the local jump will produce for the passed position id + particle id combination
         /// </summary>
         /// <param name="positionId"></param>
         /// <param name="particleId"></param>
         /// <returns></returns>
-        bool MakesElementOnPositionMobile(int positionId, int particleId);
+        MobilityType GetMobilityType(int positionId, int particleId);
     }
 }

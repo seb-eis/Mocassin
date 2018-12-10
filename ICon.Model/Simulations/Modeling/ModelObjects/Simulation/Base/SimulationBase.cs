@@ -61,17 +61,6 @@ namespace Mocassin.Model.Simulations
         [DataMember]
         public int JobCount { get; set; }
 
-        /// <summary>
-        ///     Load information for an external background provider source that is used to create an energy background for the
-        ///     simulation
-        /// </summary>
-        [DataMember]
-        public ExternalLoadInfo EnergyBackgroundProviderInfo { get; set; }
-
-        /// <inheritdoc />
-        [IgnoreDataMember]
-        IExternalLoadInfo ISimulation.EnergyBackgroundProviderInfo => EnergyBackgroundProviderInfo;
-
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
@@ -87,7 +76,6 @@ namespace Mocassin.Model.Simulations
             CustomRngSeed = simulation.CustomRngSeed;
             JobCount = simulation.JobCount;
             LowerSuccessRateLimit = simulation.LowerSuccessRateLimit;
-            EnergyBackgroundProviderInfo = new ExternalLoadInfo(simulation.EnergyBackgroundProviderInfo);
             return this;
         }
     }

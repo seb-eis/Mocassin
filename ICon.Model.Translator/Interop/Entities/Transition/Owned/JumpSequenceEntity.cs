@@ -5,7 +5,7 @@
     ///     the
     ///     simulation database
     /// </summary>
-    public class JumpSequenceEntity : InteropBinaryList<CVector4>
+    public class JumpSequenceEntity : InteropList<CVector4>
     {
     }
 }

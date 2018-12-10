@@ -7,11 +7,8 @@ using Mocassin.Model.Transitions;
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc cref="IKineticTransitionModel" />
-    public class KineticTransitionModel : ModelComponentBase, IKineticTransitionModel
+    public class KineticTransitionModel : TransitionModel, IKineticTransitionModel
     {
-        /// <inheritdoc />
-        public bool HasInversion { get; set; }
-
         /// <inheritdoc />
         public IKineticTransition Transition { get; set; }
 
@@ -25,25 +22,19 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IKineticRuleModel> RuleModels { get; set; }
 
         /// <inheritdoc />
-        public IParticleSet SelectableParticles { get; set; }
-
-        /// <inheritdoc />
-        public long SelectableParticleMask { get; set; }
-
-        /// <inheritdoc />
         public IParticle EffectiveParticle { get; set; }
 
         /// <inheritdoc />
         public IList<int> AbstractMovement { get; set; }
 
         /// <inheritdoc />
-        public IEnumerable<ITransitionMappingModel> GetMappingModels()
+        public override IEnumerable<ITransitionMappingModel> GetMappingModels()
         {
             return MappingModels.AsEnumerable();
         }
 
         /// <inheritdoc />
-        public IEnumerable<ITransitionRuleModel> GetRuleModels()
+        public override IEnumerable<ITransitionRuleModel> GetRuleModels()
         {
             return RuleModels.AsEnumerable();
         }

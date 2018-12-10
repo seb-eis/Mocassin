@@ -168,7 +168,7 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var buffer = new byte[8];
             transitionModel.SelectableParticles = CreateSelectableParticleSet(transitionModel.GetRuleModels());
-            transitionModel.SelectableParticleMask = Create64BitIndexCode(transitionModel.SelectableParticles.Select(a => a.Index), buffer);
+            transitionModel.SelectableParticlesMask = Create64BitIndexCode(transitionModel.SelectableParticles.Select(a => a.Index), buffer);
         }
     }
 }

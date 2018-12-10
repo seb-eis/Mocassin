@@ -3,6 +3,16 @@
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
+    ///     Mobility type enum that encodes different kinds of possible mobility behaviors
+    /// </summary>
+    public enum MobilityType
+    {
+        Immobile,
+        Mobile,
+        Selectable
+    }
+
+    /// <summary>
     ///     Simulation encoding model for the simulation that contains mappings and encoding objects required by the simulator
     ///     application
     /// </summary>
@@ -22,6 +32,12 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Dictionary that maps the transition rule models onto their affiliated rule-related electric field factor values
         /// </summary>
         IDictionary<ITransitionRuleModel, double> TransitionRuleToElectricFieldFactors { get; set; }
+
+        /// <summary>
+        ///     Dictionary that maps the position index to a mobility type set that contains the kind of mobility for each particle
+        ///     index
+        /// </summary>
+        IDictionary<int, MobilityType[]> PositionIndexToMobilityTypesSet { get; set; }
 
         /// <summary>
         ///     Dictionary that maps the transition mapping models onto their affiliated direction-related electric field factor

@@ -27,10 +27,10 @@ namespace Mocassin.Model.Translator
         public int ObjectId { get; set; }
 
         /// <summary>
-        ///     The particle mask that describes all possible mobile particles
+        ///     The particle mask that describes all possible selectable particles
         /// </summary>
-        [Column("ParticleMask")]
-        public long ParticleMask { get; set; }
+        [Column("SelectableParticlesMask")]
+        public long SelectableParticlesMask { get; set; }
 
         /// <summary>
         ///     Jump rule list blob conversion backing property

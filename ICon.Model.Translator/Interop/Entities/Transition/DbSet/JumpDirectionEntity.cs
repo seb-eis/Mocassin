@@ -55,7 +55,7 @@ namespace Mocassin.Model.Translator
         ///     The number of positions in the jump direction
         /// </summary>
         [Column("JumpLength")]
-        public int JumpLength { get; set; }
+        public int PathLength { get; set; }
 
         /// <summary>
         ///     The electric field projection factor of the jump

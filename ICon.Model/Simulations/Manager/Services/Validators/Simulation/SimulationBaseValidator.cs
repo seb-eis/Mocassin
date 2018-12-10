@@ -25,7 +25,6 @@ namespace Mocassin.Model.Simulations
             AddCounterValidations(obj, report);
             AddPhysicalValidations(obj, report);
             AddTerminationLimitValidations(obj, report);
-            AddBackgroundProviderValidation(obj, report);
             AddLatticeLinkValidation(obj, report);
 
             return report;
@@ -107,24 +106,6 @@ namespace Mocassin.Model.Simulations
             if (Settings.TerminationSuccessRate.ParseValue(simulation.LowerSuccessRateLimit, out var warnings) != 0)
                 report.AddWarnings(warnings);
         }
-
-        /// <summary>
-        ///     Validates the energy background provider info of the simulation and adds the results to the validation report
-        /// </summary>
-        /// <param name="simulation"></param>
-        /// <param name="report"></param>
-        protected virtual void AddBackgroundProviderValidation(ISimulation simulation, ValidationReport report)
-        {
-            if (simulation.EnergyBackgroundProviderInfo.IsUndefined) return;
-            if (simulation.EnergyBackgroundProviderInfo.IsValidProviderFor(typeof(object), typeof(IEnergyBackground), out var exception)
-            ) return;
-
-            var detail0 =
-                $"The defined assembly load information {simulation.EnergyBackgroundProviderInfo} for energy background provision is invalid";
-            var detail1 = $"Exception message:\n {exception.Message}";
-            report.AddWarning(ModelMessageSource.CreateUserInducedExceptionWarning(this, detail0, detail1));
-        }
-
 
         /// <summary>
         ///     Validates the lattice linking of the simulation and adds the results to the validation report

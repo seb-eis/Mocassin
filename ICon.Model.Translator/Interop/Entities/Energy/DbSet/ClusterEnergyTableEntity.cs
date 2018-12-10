@@ -12,7 +12,7 @@ namespace Mocassin.Model.Translator
         /// </summary>
         [NotMapped]
         [InteropProperty(nameof(ParticleToTableIdsBinary))]
-        public ByteBuffer64 ParticleToTableIds { get; set; }
+        public InteropObject<CByteBuffer64> ParticleToTableIds { get; set; }
 
         /// <summary>
         ///     The 2D energy table entity that stores the energy values mapped by table id and cluster code id

@@ -37,6 +37,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public Matrix2D PositionMovementMatrix { get; set; }
 
         /// <inheritdoc />
+        public int PathLength => Mapping.PathLength;
+
+        /// <inheritdoc />
         /// <remarks> This value cannot be set for a kinetic transition </remarks>
         public CrystalVector4D StartVector4D
         {
@@ -80,6 +83,18 @@ namespace Mocassin.Model.Translator.ModelContext
                 yield return new Fractional3D(PositionMovementMatrix[0, col], PositionMovementMatrix[1, col],
                     PositionMovementMatrix[2, col]);
             }
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<CrystalVector4D> GetTransitionSequence()
+        {
+            return TransitionSequence4D.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public ITransitionModel GetTransitionModel()
+        {
+            return TransitionModel;
         }
 
         /// <summary>

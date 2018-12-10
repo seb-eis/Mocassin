@@ -53,15 +53,22 @@ namespace Mocassin.Framework.Random
             Seed(BitConverter.ToUInt64(buffer, 0), BitConverter.ToUInt64(buffer, 8));
         }
 
-        /// <summary>
-        ///     Initializes the generator with a single integer seed value (Inherited from system random)
-        /// </summary>
-        /// <param name="seed"></param>
+        /// <inheritdoc />
         public PcgRandom32(int seed)
         {
             Increment = (DefaultIncrement ^ (((ulong) seed << 32) + (ulong) seed)) | 1;
             State += (ulong) (seed ^ NextUnsigned()) + (ulong) ((seed ^ NextUnsigned()) << 32);
             Seed(Increment, State);
+        }
+
+        /// <summary>
+        /// Initializes the generator from a single string value
+        /// </summary>
+        /// <param name="seed"></param>
+        public PcgRandom32(string seed) 
+            : this(seed.GetHashCode())
+        {
+
         }
 
         /// <summary>

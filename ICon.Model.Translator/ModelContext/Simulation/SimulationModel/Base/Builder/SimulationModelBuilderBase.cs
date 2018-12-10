@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -155,7 +155,7 @@ namespace Mocassin.Model.Translator.ModelContext
                         if (jumpCountTable[positionId, particleId] == 0)
                         {
                             jumpCountTable[positionId, particleId] =
-                                jumpModels.Any(x => x.MakesElementOnPositionMobile(positionId, particleId))
+                                jumpModels.Any(x => x.GetMobilityType(positionId, particleId) != MobilityType.Immobile)
                                     ? SimulationConstants.JumpCountIfPassivelyMobile
                                     : SimulationConstants.JumpCountIfNotMobile;
                         }
@@ -199,7 +199,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Adds the filed influence mappings from the passed set of local jump models to the simulation encoding model
+        ///     Adds the filed influence mappings from the passed set of local jump models to the simulation encoding model
         /// </summary>
         /// <param name="encodingModel"></param>
         /// <param name="jumpModels"></param>
@@ -216,11 +216,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Filters the passed set of local jump models for the unique jump direction field influences and returns them as a dictionary
+        ///     Filters the passed set of local jump models for the unique jump direction field influences and returns them as a
+        ///     dictionary
         /// </summary>
         /// <param name="jumpModels"></param>
         /// <returns></returns>
-        /// <remarks>Ensures that the model context building system did not produce any inconsistent jump field influence information</remarks>
+        /// <remarks>
+        ///     Ensures that the model context building system did not produce any inconsistent jump field influence
+        ///     information
+        /// </remarks>
         protected IDictionary<ITransitionMappingModel, double> GetUniqueDirectionFieldFactors(IEnumerable<ILocalJumpModel> jumpModels)
         {
             var comparer = ModelProject.CommonNumeric.RangeComparer;
@@ -233,7 +237,7 @@ namespace Mocassin.Model.Translator.ModelContext
                     result.Add(jumpModel.MappingModelBase, jumpModel.ElectricFieldMappingFactor);
                     continue;
                 }
-                
+
                 var currentIsZero = comparer.Compare(currentValue, 0.0) == 0;
                 var otherIsZero = comparer.Compare(jumpModel.ElectricFieldMappingFactor, 0.0) == 0;
 
@@ -251,11 +255,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Filters the passed set of local jump models for the unique jump rule field influences and returns them as a dictionary
+        ///     Filters the passed set of local jump models for the unique jump rule field influences and returns them as a
+        ///     dictionary
         /// </summary>
         /// <param name="jumpModels"></param>
         /// <returns></returns>
-        /// <remarks>Ensures that the model context building system did not produce any inconsistent jump field influence information</remarks>
+        /// <remarks>
+        ///     Ensures that the model context building system did not produce any inconsistent jump field influence
+        ///     information
+        /// </remarks>
         protected IDictionary<ITransitionRuleModel, double> GetUniqueRuleFieldFactors(IEnumerable<ILocalJumpModel> jumpModels)
         {
             var comparer = ModelProject.CommonNumeric.RangeComparer;
@@ -277,9 +285,46 @@ namespace Mocassin.Model.Translator.ModelContext
                     result[jumpModel.RuleModelBase] = jumpModel.ElectricFieldRuleInfluence;
                     continue;
                 }
-       
+
                 if (!currentIsZero && !otherIsZero && comparer.Compare(currentValue, jumpModel.ElectricFieldRuleInfluence) != 0)
                     throw new InvalidOperationException("The jump model set contains inconsistent rule field influence factors");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates the mapping dictionary that assigns each possible position index its set of mobility information
+        /// </summary>
+        /// <param name="jumpModels"></param>
+        /// <returns></returns>
+        protected IDictionary<int, MobilityType[]> GetPositionIndexToMobilitySetMapping(IEnumerable<ILocalJumpModel> jumpModels)
+        {
+            var result = new Dictionary<int, MobilityType[]>();
+
+            var particleCount = ModelProject.GetManager<IParticleManager>().QueryPort
+                .Query(port => port.GetParticles().Count);
+
+            var positionCount = ModelProject.GetManager<IStructureManager>().QueryPort
+                .Query(port => port.GetLinearizedExtendedPositionCount());
+
+            for (var i = 0; i < positionCount; i++)
+            {
+                result.Add(i, new MobilityType[particleCount]);
+            }
+
+            foreach (var jumpModel in jumpModels)
+            {
+                for (var positionId = 0; positionId < positionCount; positionId++)
+                {
+                    var mobilitySet = result[positionId];
+                    for (var particleId = 0; particleId < particleCount; particleId++)
+                    {
+                        var mobilityType = jumpModel.GetMobilityType(positionId, particleId);
+                        if (mobilityType > mobilitySet[particleId])
+                            mobilitySet[particleId] = mobilityType;
+                    }
+                }
             }
 
             return result;

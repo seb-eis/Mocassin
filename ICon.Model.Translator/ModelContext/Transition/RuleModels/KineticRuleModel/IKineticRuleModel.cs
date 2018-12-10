@@ -11,7 +11,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface IKineticRuleModel : ITransitionRuleModel
     {
         /// <summary>
-        /// The rule direction value [-1;0;1] that describes the transport direction encoded in the rule
+        ///     The rule direction value [-1;0;1] that describes the transport direction encoded in the rule
         /// </summary>
         int RuleDirectionValue { get; set; }
 
@@ -34,11 +34,6 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The list of particles that describes the path occupation in the transition state
         /// </summary>
         IList<IParticle> TransitionState { get; set; }
-
-        /// <summary>
-        ///     Index encoded version of the transition state occupation
-        /// </summary>
-        long TransitionStateCode { get; set; }
 
         /// <summary>
         ///     The 1xN charge transport matrix that describes the transport charge for each start occupation

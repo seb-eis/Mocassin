@@ -13,12 +13,12 @@
         /// <summary>
         ///     The total number of bytes for the blob containing the data and header bytes
         /// </summary>
-        public virtual int BlobSize { get; protected set; }
+        public virtual int BlobByteCount { get; protected set; }
 
         /// <summary>
         ///     The number of bytes of the blobs that are header information and not actual data
         /// </summary>
-        public virtual int HeaderSize { get; protected set; }
+        public virtual int HeaderByteCount { get; protected set; }
 
         /// <summary>
         ///     The binary data of the entity. Property is for EF data storage only

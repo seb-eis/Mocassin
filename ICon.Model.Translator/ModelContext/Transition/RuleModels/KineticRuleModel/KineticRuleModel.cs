@@ -36,7 +36,10 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IParticle> TransitionState { get; set; }
 
         /// <inheritdoc />
-        public long TransitionStateCode { get; set; }
+        public override double AttemptFrequency { get; set; }
+
+        /// <inheritdoc />
+        public override long TransitionStateCode { get; set; }
 
         /// <inheritdoc />
         public Matrix2D ChargeTransportMatrix { get; set; }

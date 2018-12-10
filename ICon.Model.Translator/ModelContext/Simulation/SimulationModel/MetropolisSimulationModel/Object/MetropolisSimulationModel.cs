@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <inheritdoc cref="IMetropolisSimulationModel" />
-    public class MetropolisSimulationModel : ModelComponentBase, IMetropolisSimulationModel
+    public class MetropolisSimulationModel : SimulationModel, IMetropolisSimulationModel
     {
         /// <inheritdoc />
         public IMetropolisSimulation Simulation { get; set; }
@@ -18,7 +20,27 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public IList<IMetropolisLocalJumpModel> LocalJumpModels { get; set; }
 
+        /// <summary>
+        ///     Create new metropolis simulation model with empty tracking model
+        /// </summary>
+        public MetropolisSimulationModel()
+        {
+            SimulationTrackingModel = ModelContext.SimulationTrackingModel.GetEmpty();
+        }
+
         /// <inheritdoc />
-        public ISimulationEncodingModel SimulationEncodingModel { get; set; }
+        public override double MaxAttemptFrequency { get; set; }
+
+        /// <inheritdoc />
+        public override IEnumerable<ITransitionModel> GetTransitionModels()
+        {
+            return TransitionModels.AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public override IEnumerable<ILocalJumpModel> GetLocalJumpModels()
+        {
+            return LocalJumpModels.AsEnumerable();
+        }
     }
 }

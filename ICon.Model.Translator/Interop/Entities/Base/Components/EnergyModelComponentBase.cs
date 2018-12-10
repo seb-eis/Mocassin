@@ -23,12 +23,12 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The energy model context key
         /// </summary>
-        [ForeignKey(nameof(EnergyModel))]
+        [ForeignKey(nameof(SimulationEnergyModel))]
         public int EnergyModelId { get; set; }
 
         /// <summary>
         ///     The energy model navigation property
         /// </summary>
-        public EnergyModel EnergyModel { get; set; }
+        public SimulationEnergyModel SimulationEnergyModel { get; set; }
     }
 }

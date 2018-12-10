@@ -3,7 +3,7 @@
     /// <summary>
     ///     Pair definition alias class. Stores pair definitions for the simulation as a linear list
     /// </summary>
-    public class PairDefinitionListEntity : InteropBinaryList<CPairDefinition>
+    public class PairDefinitionListEntity : InteropList<CPairDefinition>
     {
     }
 }

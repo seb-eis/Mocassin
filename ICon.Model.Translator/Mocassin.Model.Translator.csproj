@@ -28,10 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DbBuilder\SimulationDbBuilder\" />
-    <Folder Include="Interop\InteropObjects\Energy\C\" />
-    <Folder Include="Interop\InteropObjects\Energy\Net\" />
-    <Folder Include="Jobs\" />
+    <Folder Include="Interop\InteropEntities\Energy\C\" />
+    <Folder Include="Jobs\DataBuilder\JobModelDataBuilders\Kmc\" />
+    <Folder Include="Jobs\DataBuilder\JobModelDataBuilders\Mmc\" />
   </ItemGroup>
 
   <ItemGroup>
