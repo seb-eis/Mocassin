@@ -63,29 +63,6 @@ namespace Mocassin.Model.Simulations
         }
 
         /// <summary>
-        ///     Validates the base flags of the simulation and adds the results to the validation report
-        /// </summary>
-        /// <param name="simulation"></param>
-        /// <param name="report"></param>
-        protected virtual void AddBaseFlagValidations(ISimulation simulation, ValidationReport report)
-        {
-            if (simulation.BaseFlags.HasFlag(SimulationBaseFlags.UseCheckpointSystem))
-            {
-                const string detail0 = "Disabling the checkpoint system will prevent a simulation form saving its progress and resume after termination";
-                const string detail1 = "Option 1: Disable if a huge number of very short simulations is performed to avoid later garbage cleanup";
-                const string detail2 = "Option 2: Disable for testing purposes where resuming is not required";
-                report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, detail0, detail1, detail2));
-            }
-
-            if (simulation.BaseFlags.HasFlag(SimulationBaseFlags.FullDebugStateDump))
-            {
-                const string detail0 = "Full state dumping is a memory intensive debug feature that is not recommended for regular usage";
-                const string detail1 = "Option 1: Write a custom simulation extension library that handles the required output data and formatting";
-                report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, detail0, detail1));
-            }
-        }
-
-        /// <summary>
         ///     Validates all physical properties of the simulation and adds the results to the validation report
         /// </summary>
         /// <param name="simulation"></param>

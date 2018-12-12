@@ -42,5 +42,11 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Get or set the simulation model context builder
         /// </summary>
         ISimulationModelContextBuilder SimulationModelContextBuilder { get; set; }
+
+        /// <summary>
+        ///     Builds a new project model context from the current model project
+        /// </summary>
+        /// <returns></returns>
+        Task<IProjectModelContext> BuildNewContext();
     }
 }

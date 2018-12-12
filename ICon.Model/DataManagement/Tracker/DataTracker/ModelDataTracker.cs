@@ -16,7 +16,8 @@ namespace Mocassin.Model.DataManagement
         /// <summary>
         ///     The object liker dictionary that contains cached linking delegates for known model data objects
         /// </summary>
-        [IgnoreDataMember] private readonly Dictionary<Type, Action<object>> _objectLinkerDictionary;
+        [IgnoreDataMember] 
+        private readonly Dictionary<Type, Action<object>> _objectLinkerDictionary;
 
         /// <summary>
         ///     The data object dictionary that stores the data object reference and affiliated manager as key value pairs
@@ -69,6 +70,9 @@ namespace Mocassin.Model.DataManagement
         /// <inheritdoc />
         public TObject FindObjectByAlias<TObject>(string alias) where TObject : IModelObject
         {
+            if (string.IsNullOrWhiteSpace(alias))
+                return default;
+
             if (typeof(TObject) == typeof(IModelObject))
                 throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
 
@@ -193,14 +197,13 @@ namespace Mocassin.Model.DataManagement
 
         /// <summary>
         ///     Determines the type of the linkable property based upon the info is a collection type or single type. Only works if
-        ///     the collection implements only one
-        ///     indexed parameter
+        ///     the collection implements only one indexed parameter
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
         protected Action<object> MakeLinkDelegate(PropertyInfo info)
         {
-            Func<int, IModelObject> providerDelegate;
+            Func<IModelObject, IModelObject> providerDelegate;
             if (typeof(IModelObject).IsAssignableFrom(info.PropertyType))
             {
                 providerDelegate = MakeObjectProviderDelegate(info.PropertyType);
@@ -218,15 +221,16 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <summary>
-        ///     Creates a delegate to find a model object of a specific type by index
+        ///     Creates a delegate to find a model object of a specific type by its index or alias
         /// </summary>
         /// <param name="objectType"></param>
         /// <returns></returns>
-        protected Func<int, IModelObject> MakeObjectProviderDelegate(Type objectType)
+        protected Func<IModelObject, IModelObject> MakeObjectProviderDelegate(Type objectType)
         {
-            IModelObject GetObject(int index)
+            IModelObject GetObject(IModelObject obj)
             {
-                return ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Index == index);
+                var modelObject = ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Index == obj.Index);
+                return modelObject ?? ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Alias == obj.Alias);
             }
 
             return GetObject;
@@ -239,7 +243,7 @@ namespace Mocassin.Model.DataManagement
         /// <param name="info"></param>
         /// <param name="objectProviderFunction"></param>
         /// <returns></returns>
-        protected Action<object> MakeListLinkerDelegate(PropertyInfo info, Func<int, object> objectProviderFunction)
+        protected Action<object> MakeListLinkerDelegate(PropertyInfo info, Func<IModelObject, object> objectProviderFunction)
         {
             void CorrectLinks(object obj)
             {
@@ -247,7 +251,7 @@ namespace Mocassin.Model.DataManagement
                     return;
 
                 for (var i = 0; i < list.Count; i++)
-                    list[i] = objectProviderFunction(((IModelObject) list[i]).Index);
+                    list[i] = objectProviderFunction((IModelObject) list[i]);
             }
 
             return CorrectLinks;
@@ -259,12 +263,12 @@ namespace Mocassin.Model.DataManagement
         /// <param name="info"></param>
         /// <param name="objectProviderFunction"></param>
         /// <returns></returns>
-        protected Action<object> MakeLinkDelegate(PropertyInfo info, Func<int, object> objectProviderFunction)
+        protected Action<object> MakeLinkDelegate(PropertyInfo info, Func<IModelObject, object> objectProviderFunction)
         {
             void Link(object obj)
             {
                 var orgObj = (IModelObject) info.GetValue(obj);
-                info.SetValue(obj, objectProviderFunction(orgObj.Index));
+                info.SetValue(obj, objectProviderFunction(orgObj));
             }
 
             return Link;

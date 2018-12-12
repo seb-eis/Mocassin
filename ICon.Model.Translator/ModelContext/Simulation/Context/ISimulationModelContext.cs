@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -17,5 +18,12 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The list of metropolis simulation models that exist in the project context
         /// </summary>
         IList<IMetropolisSimulationModel> MetropolisSimulationModels { get; set; }
+
+        /// <summary>
+        ///     Finds the simulation model that belongs to the passed simulation
+        /// </summary>
+        /// <param name="simulation"></param>
+        /// <returns></returns>
+        ISimulationModel FindSimulationModel(ISimulation simulation);
     }
 }

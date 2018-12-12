@@ -104,6 +104,20 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
+        ///     Creates a new warning message for cases where a model content alias violation is detected during validation (With
+        ///     arbitrary number of details)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="details"></param>
+        /// <returns></returns>
+        public static WarningMessage CreateAliasViolationWarning(object sender, params string[] details)
+        {
+            var message = WarningMessage.CreateCritical(sender, "Alias Violation");
+            message.AddDetails(details);
+            return message;
+        }
+
+        /// <summary>
         ///     Creates a new warning message for cases where a model object duplicate is detected during validation (With
         ///     arbitrary number of details)
         /// </summary>

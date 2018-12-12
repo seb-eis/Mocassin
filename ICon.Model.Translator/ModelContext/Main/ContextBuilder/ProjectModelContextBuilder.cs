@@ -38,10 +38,7 @@ namespace Mocassin.Model.Translator.ModelContext
             ModelProject = modelProject ?? throw new ArgumentNullException(nameof(modelProject));
         }
 
-        /// <summary>
-        ///     Async creation of a new project model context and all its components
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<IProjectModelContext> BuildNewContext()
         {
             var projectModelContext = new ProjectModelContext

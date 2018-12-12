@@ -25,11 +25,6 @@ namespace Mocassin.Model.Simulations
         double NormalizationProbability { get; }
 
         /// <summary>
-        ///     The kinetic simulation flags that define on/off settings of this simulation
-        /// </summary>
-        KineticSimulationFlags KineticFlags { get; }
-
-        /// <summary>
         ///     Get the list of kinetic transitions affiliated with the simulation
         /// </summary>
         /// <returns></returns>

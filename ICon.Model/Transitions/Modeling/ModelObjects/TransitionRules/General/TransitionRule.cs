@@ -14,9 +14,8 @@ namespace Mocassin.Model.Transitions
     [Flags]
     public enum RuleFlags
     {
-        IsActive = 0b1,
-        IsCustomTransitionState = 0b10,
-        IsPhysicallyInvalid = 0b100
+        IsCustomTransitionState = 0b1,
+        IsPhysicallyInvalid = 0b10
     }
 
     /// <summary>
@@ -144,18 +143,6 @@ namespace Mocassin.Model.Transitions
         public IEnumerable<int> GetMovementDescription()
         {
             return (MovementCode ?? new MovementCode()).AsEnumerable();
-        }
-
-        /// <inheritdoc />
-        public void SetActivationStatus(bool activate)
-        {
-            if (!RuleFlags.HasFlag(RuleFlags.IsActive) && activate)
-            {
-                RuleFlags &= RuleFlags.IsActive;
-                return;
-            }
-
-            if (RuleFlags.HasFlag(RuleFlags.IsActive) && !activate) RuleFlags -= RuleFlags.IsActive;
         }
 
         /// <inheritdoc />

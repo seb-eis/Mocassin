@@ -59,7 +59,27 @@ namespace Mocassin.Model.Basic
             if (obj.IsDeprecated) 
                 throw new ArgumentException("Model object passed to validation is deprecated", nameof(obj));
 
-            return ObjectPipeline.Process(obj, dataReader);
+            return ValidateAlias(obj) ?? ObjectPipeline.Process(obj, dataReader);
+        }
+
+        /// <summary>
+        /// Validates the alias of the passed model object for uniqueness and 
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected IValidationReport ValidateAlias<TObject>(TObject obj)
+            where TObject : IModelObject
+        {
+            if (ModelProject.DataTracker.FindObjectByAlias<TObject>(obj.Alias) == null) 
+                return null;
+
+            var detail0 = $"The object [{obj.GetObjectName()}] with alias [{obj.Alias}] is already present.";
+            const string detail1 = "Define another alias for the object or use an empty one";
+            var report = new ValidationReport();
+            report.AddWarning(ModelMessageSource.CreateAliasViolationWarning(this, detail0, detail1));
+            return report;
+
         }
 
         /// <inheritdoc />
@@ -73,7 +93,7 @@ namespace Mocassin.Model.Basic
         ///     Get the handler for cases where the processing pipeline is passed a model object it cannot handle
         /// </summary>
         /// <returns></returns>
-        protected virtual IObjectProcessor<IValidationReport> MakeCannotValidateProcessor()
+        protected IObjectProcessor<IValidationReport> MakeCannotValidateProcessor()
         {
             return ObjectProcessorFactory.Create<object, IValidationReport>(obj =>
                 throw new InvalidOperationException("Invalid object was passed to validation pipeline"));
@@ -122,7 +142,7 @@ namespace Mocassin.Model.Basic
         ///     Get the list of validation handlers for model objects defined by the implementing validation service
         /// </summary>
         /// <returns></returns>
-        protected virtual List<IObjectProcessor<IValidationReport>> MakeObjectValidationProcessors()
+        protected List<IObjectProcessor<IValidationReport>> MakeObjectValidationProcessors()
         {
             return MakeValidationProcessors(ValidationType.Object).ToList();
         }
@@ -131,7 +151,7 @@ namespace Mocassin.Model.Basic
         ///     Get the list of validation handlers for model parameters defined by the implementing validation service
         /// </summary>
         /// <returns></returns>
-        protected virtual List<IObjectProcessor<IValidationReport>> MakeParameterValidationProcessors()
+        protected List<IObjectProcessor<IValidationReport>> MakeParameterValidationProcessors()
         {
             return MakeValidationProcessors(ValidationType.Parameter).ToList();
         }

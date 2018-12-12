@@ -8,16 +8,6 @@ using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Simulations
 {
-    /// <summary>
-    ///     Enum for the specific kinetic simulation flags that extend the simulation base flags
-    /// </summary>
-    [Flags]
-    public enum KineticSimulationFlags
-    {
-        UseStaticTrackers = 0b1,
-        UseDynamicTrackers = 0b10
-    }
-
     /// <inheritdoc cref="IKineticSimulation" />
     [DataContract]
     public class KineticSimulation : SimulationBase, IKineticSimulation
@@ -45,10 +35,6 @@ namespace Mocassin.Model.Simulations
         [IndexResolved]
         public List<IKineticTransition> Transitions { get; set; }
 
-        /// <inheritdoc />
-        [DataMember]
-        public KineticSimulationFlags KineticFlags { get; set; }
-
         /// <summary>
         ///     The electric field vector in fractional coordinates
         /// </summary>
@@ -70,7 +56,6 @@ namespace Mocassin.Model.Simulations
             base.PopulateFrom(obj);
             NormalizationProbability = simulation.NormalizationProbability;
             ElectricFieldVector = new DataVector3D(simulation.ElectricFieldVector);
-            KineticFlags = simulation.KineticFlags;
             Transitions = (simulation.Transitions ?? new List<IKineticTransition>()).ToList();
             return this;
         }

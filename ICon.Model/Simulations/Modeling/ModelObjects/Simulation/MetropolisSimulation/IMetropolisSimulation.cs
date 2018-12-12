@@ -30,11 +30,6 @@ namespace Mocassin.Model.Simulations
         int ResultSampleMcs { get; }
 
         /// <summary>
-        ///     Get the metropolis specific simulation flags
-        /// </summary>
-        MetropolisSimulationFlags MetropolisFlags { get; }
-
-        /// <summary>
         ///     Get a read only list of the linked metropolis transitions
         /// </summary>
         IReadOnlyList<IMetropolisTransition> Transitions { get; }

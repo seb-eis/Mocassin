@@ -8,7 +8,12 @@
         /// <summary>
         ///     The index value that is generally used for an invalid index on simulation side
         /// </summary>
-        public const int InvalidIndex = -1;
+        public const int InvalidId = -1;
+
+        /// <summary>
+        ///     The index of invalid particles in the simulation
+        /// </summary>
+        public const byte InvalidParticleId = byte.MaxValue;
 
         /// <summary>
         ///     The jump count value if a species is completely immobile
@@ -21,17 +26,17 @@
         public const int JumpCountIfPassivelyMobile = 0;
 
         /// <summary>
-        /// The jump direction influence factor for the positive rule direction
+        ///     The jump direction influence factor for the positive rule direction
         /// </summary>
         public const int PositiveRuleDirectionFactor = 1;
 
         /// <summary>
-        /// The jump direction influence factor for the negative rule direction
+        ///     The jump direction influence factor for the negative rule direction
         /// </summary>
         public const int NegativeRuleDirectionFactor = -1;
 
         /// <summary>
-        /// The jump direction influence factor for the undefinable rule direction (e.g. metropolis case)
+        ///     The jump direction influence factor for the undefinable rule direction (e.g. metropolis case)
         /// </summary>
         public const int UndefinableRuleDirectionFactor = 0;
     }

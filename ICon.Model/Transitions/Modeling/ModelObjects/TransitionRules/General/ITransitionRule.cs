@@ -55,11 +55,5 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <returns></returns>
         IEnumerable<int> GetMovementDescription();
-
-        /// <summary>
-        ///     Set the activation status of the rule (Automatically passed to linked rules)
-        /// </summary>
-        /// <param name="active"></param>
-        void SetActivationStatus(bool active);
     }
 }

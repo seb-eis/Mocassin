@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -36,6 +37,14 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             for (var pathId = 0; pathId < MappingModel.Mapping.PathLength; pathId++)
             {
+                // Handle the transition position case
+                if (RuleModel.StartState[pathId].Index == Particle.VoidIndex &&
+                    RuleModel.FinalState[pathId].Index == Particle.VoidIndex &&
+                    RuleModel.TransitionState[pathId].Index == particleId &&
+                    MappingModel.PositionSequence4D[pathId].P == positionId)
+                    return MobilityType.Mobile;
+
+                // Handle the normal stable position case
                 if (RuleModel.StartState[pathId].Index == particleId &&
                     RuleModel.FinalState[pathId].Index != particleId &&
                     MappingModel.PositionSequence4D[pathId].P == positionId)

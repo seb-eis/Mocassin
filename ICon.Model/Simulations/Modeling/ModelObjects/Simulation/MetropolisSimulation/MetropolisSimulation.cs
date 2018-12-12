@@ -7,14 +7,6 @@ using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Simulations
 {
-    /// <summary>
-    ///     Enum for the metropolis specific simulation flags
-    /// </summary>
-    [Flags]
-    public enum MetropolisSimulationFlags
-    {
-    }
-
     /// <inheritdoc cref="IMetropolisSimulation" />
     [DataContract]
     public class MetropolisSimulation : SimulationBase, IMetropolisSimulation
@@ -38,10 +30,6 @@ namespace Mocassin.Model.Simulations
         /// <inheritdoc />
         [DataMember]
         public int ResultSampleMcs { get; set; }
-
-        /// <inheritdoc />
-        [DataMember]
-        public MetropolisSimulationFlags MetropolisFlags { get; set; }
 
         /// <summary>
         ///     The metropolis transitions attached to this simulation
@@ -68,7 +56,6 @@ namespace Mocassin.Model.Simulations
             BreakSampleLength = simulation.BreakSampleLength;
             BreakSampleIntervalMcs = simulation.BreakSampleIntervalMcs;
             ResultSampleMcs = simulation.ResultSampleMcs;
-            MetropolisFlags = simulation.MetropolisFlags;
             return this;
         }
     }

@@ -132,13 +132,13 @@ namespace Mocassin.Model.Basic
                 var particles = new[]
                 {
                     new Particle {Index = 0},
-                    new Particle {Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Index = 1},
-                    new Particle {Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Index = 2},
-                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Index = 3},
-                    new Particle {Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Index = 4},
-                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Index = 5},
-                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Index = 6},
-                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Index = 7}
+                    new Particle {Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Alias = "Particle.Vc"},
+                    new Particle {Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Alias = "Particle.O"},
+                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Alias = "Particle.Ce4"},
+                    new Particle {Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Alias = "Particle.Y"},
+                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Alias = "Particle.Ce3"},
+                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Alias = "Particle.Zr4"},
+                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Alias = "Particle.Zr3"}
                 };
                 var particleSets = new[]
                 {
@@ -270,7 +270,6 @@ namespace Mocassin.Model.Basic
                 {
                     new MetropolisSimulation
                     {
-                        BaseFlags = SimulationBaseFlags.UseCheckpointSystem,
                         WriteOutCount = 100,
                         Temperature = 1000,
                         JobCount = 10,
@@ -295,7 +294,6 @@ namespace Mocassin.Model.Basic
                         LowerSuccessRateLimit = 10,
                         TargetMcsp = 200,
                         NormalizationProbability = 1.0,
-                        KineticFlags = KineticSimulationFlags.UseDynamicTrackers | KineticSimulationFlags.UseStaticTrackers,
                         CustomRngSeed = Guid.NewGuid().ToString(),
                         ElectricFieldMagnitude = 10000000.0,
                         ElectricFieldVector = new DataVector3D(1, 0, 0),

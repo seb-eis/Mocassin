@@ -38,12 +38,6 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public void SetAttemptFrequency(double value)
-        {
-            AttemptFrequency = value;
-        }
-
-        /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IKineticRule>(obj) is IKineticRule rule))

@@ -28,9 +28,12 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IPositionModel> BuildModels(IList<IEnvironmentModel> environmentModels)
         {
             LoadBuildDataFromProject();
-            return environmentModels
+            var positionModels = environmentModels
                 .SelectMany(CreatePositionModels)
                 .ToList();
+
+            IndexPositionModels(positionModels);
+            return positionModels;
         }
 
         /// <summary>
@@ -40,6 +43,18 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var manager = ModelProject.GetManager<IStructureManager>();
             VectorEncoder = manager.QueryPort.Query(port => port.GetVectorEncoder());
+        }
+
+        /// <summary>
+        /// Synchronizes the position model indexing with the extended wyckoff position list sorting
+        /// </summary>
+        /// <param name="positionModels"></param>
+        protected void IndexPositionModels(IEnumerable<IPositionModel> positionModels)
+        {
+            foreach (var positionModel in positionModels)
+            {
+                positionModel.ModelId = VectorEncoder.PositionList.IndexOf(positionModel.CenterVector);
+            }
         }
 
         /// <summary>

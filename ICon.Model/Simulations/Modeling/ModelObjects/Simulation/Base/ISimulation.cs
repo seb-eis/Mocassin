@@ -41,11 +41,6 @@ namespace Mocassin.Model.Simulations
         int JobCount { get; }
 
         /// <summary>
-        ///     The simulation settings flag that describes basic simulation settings
-        /// </summary>
-        SimulationBaseFlags BaseFlags { get; }
-
-        /// <summary>
         ///     Defines the save run time for a simulation. After the time span has passed a simulation will automatically
         ///     terminate to avoid forced shutdown during data out operations
         /// </summary>

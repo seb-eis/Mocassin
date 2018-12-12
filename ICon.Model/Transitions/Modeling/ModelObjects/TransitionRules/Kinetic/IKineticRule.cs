@@ -19,12 +19,6 @@ namespace Mocassin.Model.Transitions
         double AttemptFrequency { get; }
 
         /// <summary>
-        ///     Set the attempt frequency of the rule
-        /// </summary>
-        /// <param name="value"></param>
-        void SetAttemptFrequency(double value);
-
-        /// <summary>
         ///     Get an enumerable of dependent rules that are a result of this one
         /// </summary>
         /// <returns></returns>

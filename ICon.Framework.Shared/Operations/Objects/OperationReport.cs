@@ -104,6 +104,9 @@ namespace Mocassin.Framework.Operations
                 AddException(exception);
             }
 
+            ConflictReport = ConflictReport ?? new ConflictReport();
+            ValidationReport = ValidationReport ?? new ValidationReport();
+
             ConflictReport.Merge(other.ConflictReport);
             ValidationReport.Merge(other.ValidationReport);
 

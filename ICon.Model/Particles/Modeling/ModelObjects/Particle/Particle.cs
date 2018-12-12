@@ -9,6 +9,11 @@ namespace Mocassin.Model.Particles
     [DataContract]
     public class Particle : ModelObject, IParticle
     {
+        /// <summary>
+        ///     The const index that identifies the void particle
+        /// </summary>
+        public const int VoidIndex = 0;
+
         /// <inheritdoc />
         [DataMember]
         public double Charge { get; set; }
@@ -58,7 +63,7 @@ namespace Mocassin.Model.Particles
         /// <returns></returns>
         public static Particle CreateEmpty()
         {
-            return new Particle {Name = "Void", Symbol = "Void", Charge = 0.0, Index = 0, IsEmpty = true};
+            return new Particle {Name = "Void", Symbol = "Void", Alias = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsEmpty = true};
         }
 
         /// <inheritdoc />

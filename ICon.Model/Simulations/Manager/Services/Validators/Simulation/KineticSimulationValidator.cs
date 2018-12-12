@@ -22,7 +22,6 @@ namespace Mocassin.Model.Simulations
         {
             var report = (ValidationReport) base.Validate(obj);
             AddPhysicalParameterValidations(obj, report);
-            AddKineticFlagValidation(obj, report);
             AddTransitionsValidation(obj, report);
             return report;
         }
@@ -39,22 +38,6 @@ namespace Mocassin.Model.Simulations
 
             if (Settings.ElectricField.ParseValue(simulation.ElectricFieldMagnitude, out warnings) != 0)
                 report.AddWarnings(warnings);
-        }
-
-        /// <summary>
-        ///     Validates the specific flags of the kinetic simulation and adds the results to the validation report
-        /// </summary>
-        /// <param name="simulation"></param>
-        /// <param name="report"></param>
-        protected void AddKineticFlagValidation(IKineticSimulation simulation, ValidationReport report)
-        {
-            if (!simulation.KineticFlags.HasFlag(KineticSimulationFlags.UseDynamicTrackers | KineticSimulationFlags.UseStaticTrackers))
-                return;
-            const string detail0 = "Both advanced tracking options are enabled. This significantly increases memory and storage space requirements";
-            const string detail1 = "Option 1: Use static tracking for position bound flow information (e.g. flow integrals)";
-            const string detail2 = "Option 2: Use dynamic tracking for particle bound movement information (e.g. mean square displacement)";
-            const string detail3 = "Option 3: Use exchange group tracking (always enabled). Yields the global mean displacements of the exchange groups and particles";
-            report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, detail0, detail1, detail2, detail3));
         }
 
         /// <summary>

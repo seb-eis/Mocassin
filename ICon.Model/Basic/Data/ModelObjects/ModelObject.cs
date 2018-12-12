@@ -20,6 +20,14 @@ namespace Mocassin.Model.Basic
         [DataMember]
         public string Alias { get; set; }
 
+        /// <summary>
+        /// Construct new model object that has an invalid index
+        /// </summary>
+        protected ModelObject()
+        {
+            Index = -1;
+        }
+
         /// <inheritdoc />
         public virtual void Deprecate()
         {
@@ -54,7 +62,13 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public static T1 ToInternalObject<T1>(IModelObject obj) where T1 : ModelObject, new()
         {
-            return new T1().PopulateFrom(obj) as T1;
+            var internalObj = new T1().PopulateFrom(obj) as T1;
+            if (internalObj != null)
+            {
+                internalObj.Alias = obj.Alias;
+            }
+
+            return internalObj;
         }
 
         /// <summary>

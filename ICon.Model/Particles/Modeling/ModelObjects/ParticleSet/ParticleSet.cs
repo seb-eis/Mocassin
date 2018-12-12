@@ -54,7 +54,7 @@ namespace Mocassin.Model.Particles
         /// <returns></returns>
         public static ParticleSet CreateEmpty()
         {
-            return new ParticleSet {Particles = new List<IParticle>(), Index = 0};
+            return new ParticleSet {Particles = new List<IParticle>(), Index = 0, Alias = "ParticleSet.Void"};
         }
 
         /// <inheritdoc />

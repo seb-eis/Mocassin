@@ -22,15 +22,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Interop\Model\**" />
-    <EmbeddedResource Remove="Interop\Model\**" />
-    <None Remove="Interop\Model\**" />
+    <Compile Remove="Database\Model\**" />
+    <EmbeddedResource Remove="Database\Model\**" />
+    <None Remove="Database\Model\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interop\InteropEntities\Energy\C\" />
-    <Folder Include="Jobs\DataBuilder\JobModelDataBuilders\Kmc\" />
-    <Folder Include="Jobs\DataBuilder\JobModelDataBuilders\Mmc\" />
+    <Folder Include="Database\InteropEntities\Energy\C\" />
   </ItemGroup>
 
   <ItemGroup>

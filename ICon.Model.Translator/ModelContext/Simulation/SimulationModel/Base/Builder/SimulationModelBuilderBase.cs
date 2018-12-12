@@ -188,7 +188,7 @@ namespace Mocassin.Model.Translator.ModelContext
                     {
                         var mappingModel = mappingAssignMatrix[positionId, particleId, i];
                         if (mappingModel == null)
-                            result[positionId, particleId, i] = SimulationConstants.InvalidIndex;
+                            result[positionId, particleId, i] = SimulationConstants.InvalidId;
                         else
                             result[positionId, particleId, i] = encodingModel.TransitionMappingToJumpDirectionId[mappingModel];
                     }
