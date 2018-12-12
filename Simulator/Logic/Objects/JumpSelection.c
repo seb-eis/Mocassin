@@ -79,6 +79,7 @@ error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environment
 {
     EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
     int32_t numOfJumps = getJumpCountByPositionStatus(SCONTEXT, environment->PositionVector.d, environment->ParticleId);
+    int64_t selectionMask = environment->EnvironmentDefinition->SelectionParticleMask;
     
     if (!environment->IsStable || (numOfJumps <= JPOOL_DIRCOUNT_STATIC))
     {
@@ -95,7 +96,13 @@ error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environment
     if (numOfJumps > JPOOL_DIRCOUNT_PASSIVE)
     {
         environment->IsMobile = true;
-        return AddEnvStateToSelectionPool(SCONTEXT, environment, numOfJumps);
+        if (flagsAreTrue(selectionMask, 1LL << environment->ParticleId))
+        {
+            return AddEnvStateToSelectionPool(SCONTEXT, environment, numOfJumps);
+        }
+
+        UpdateEnvStateSelectionStatus(environment, JPOOL_NOT_SELECTABLE, JPOOL_NOT_SELECTABLE);
+        return ERR_OK;
     }
 
     return ERR_UNKNOWN;

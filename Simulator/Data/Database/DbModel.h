@@ -55,7 +55,7 @@ typedef struct DbBlob
 /* Structure model */
 
 // Type for pair interaction definitions (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 32@[20,4,{8}]
+// Layout@ggc_x86_64 => 32@[16,4,{4},{8}]
 typedef struct PairDefinition
 {
     // The relative 4D vector that points to the target
@@ -65,7 +65,10 @@ typedef struct PairDefinition
     int32_t     EnergyTableId;
 
     // Padding
-    int64_t     Padding:64;
+    int32_t     Padding0:32;
+
+    // Padding
+    int64_t     Padding1:64;
 
 } PairDefinition_t;
 
@@ -93,7 +96,7 @@ typedef Span_t(PairDefinition_t, PairDefinitions) PairDefinitions_t;
 typedef Span_t(ClusterDefinition_t, ClusterDefinitions) ClusterDefinitions_t;
 
 // Type for full environment definitions
-// Layout@ggc_x86_64 => 168@[4,{4},16,16,64,64]
+// Layout@ggc_x86_64 => 176@[4,{4},8,16,16,64,64]
 typedef struct EnvironmentDefinition
 {
     // The object id of the environment. Is equal to the position id
@@ -101,6 +104,9 @@ typedef struct EnvironmentDefinition
 
     // Padding
     int32_t                 Padding:32;
+
+    // The particle mask of center positions that should be put into the selection pool
+    Bitmask_t               SelectionParticleMask;
 
     // The pair definition collection
     PairDefinitions_t       PairDefinitions;
