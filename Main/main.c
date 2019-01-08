@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <math.h>
-#include "Simulator/Data/Model/Database/DbModelLoad.h"
+#include "Simulator/Data/Database/DbModelLoad.h"
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
@@ -13,21 +13,10 @@
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Validators/Validators.h"
-#include "Simulator/Data/Model/SimContext/ContextAccess.h"
-#include "Simulator/Logic/Initializers/ContextInitializer.h"
+#include "Simulator/Data/SimContext/ContextAccess.h"
+#include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
-#include "UnitTesting/UnitTests.h"
-
-#define IsUnitTesting 1
-
-#if IsUnitTesting == 1
-
-int main(int argc, char **argv){
-    return startTesting(argc, argv);
-
-}
-
-#else
+#include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 
 #if !defined(MC_TESTBUILD)
 
@@ -69,7 +58,5 @@ int main(int argc, char **argv){
 
         StartMainRoutine(&SCONTEXT);
     }
-
-#endif
 
 #endif

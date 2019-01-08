@@ -12,11 +12,11 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
-#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Simulator/Data/SimContext/ContextAccess.h"
 
 /* Initializer routines*/
 
-error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environmentId);
+error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, int32_t environmentId);
 
 /* Simulation routines */
 

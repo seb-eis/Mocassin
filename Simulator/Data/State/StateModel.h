@@ -71,16 +71,18 @@ typedef struct StateCounterCollection
 typedef Span_t(StateCounterCollection_t, CountersState) CountersState_t;
 
 // Type for the state meta information
-// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8]
 typedef struct StateMetaData
 {
-    double  SimulatedTime;
-    double  JumpNormalization;
-    double  MaxJumpProbability;
-    int64_t ProgramRunTime;
-    int64_t CycleRate;
-    int64_t SuccessRate;
-    int64_t TimePerBlock;
+    double      SimulatedTime;
+    double      JumpNormalization;
+    double      MaxJumpProbability;
+    int64_t     ProgramRunTime;
+    int64_t     CycleRate;
+    int64_t     SuccessRate;
+    int64_t     TimePerBlock;
+    uint64_t    RngState;
+    uint64_t    RngIncrease;
     
 } StateMetaData_t;
 

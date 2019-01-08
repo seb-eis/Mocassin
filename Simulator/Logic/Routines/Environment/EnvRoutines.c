@@ -12,10 +12,11 @@
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Simulator/Logic/Routines/Environment/EnvRoutines.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
-#include "Simulator/Data/Model/SimContext/ContextAccess.h"
+#include "Simulator/Data/SimContext/ContextAccess.h"
 
 /* Local helper routines */
 
+// Finds a cluster code id by linear searching the passed occupation code (Safe search, returns an invalid index if the code cannot be found)
 static inline int32_t SaveFindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
 {
     int32_t index = 0;
@@ -27,6 +28,7 @@ static inline int32_t SaveFindClusterCodeIdByLinearSearch(const ClusterTable_t* 
     return (index < numOfCodes) ? index : INVALID_INDEX;
 }
 
+// Finds a cluster code id by linear searching the passed occupation code (Unsafe search, infinite loop if code does not exist)
 static inline int32_t FindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
 {
     int32_t index = 0;
@@ -40,12 +42,14 @@ static inline int32_t FindClusterCodeIdByLinearSearch(const ClusterTable_t* rest
 //    return -1;
 //}
 
+// Set the cluster state backup on the passed cluster state to the current value fields
 static inline void SetCluStateBackup(ClusterState_t* restrict cluster)
 {
     cluster->CodeIdBackup = cluster->CodeId;
     cluster->OccupationCodeBackup = cluster->OccupationCode;
 }
 
+// Loads the cluster state backup on the passed cluster state into the current value fields
 static inline void LoadCluStateBackup(ClusterState_t* restrict cluster)
 {
     cluster->CodeId = cluster->CodeIdBackup;
@@ -54,16 +58,18 @@ static inline void LoadCluStateBackup(ClusterState_t* restrict cluster)
 
 /* Initializer routines */
 
+// Compares two cluster links by cluster id and code byte id
 static int32_t CompareClusterLinks(const ClusterLink_t* lhs, const ClusterLink_t* rhs)
 {
     int32_t value = get_compare(lhs->ClusterId, rhs->ClusterId);
-    if (value)
+    if (value == 0)
     {
         return get_compare(lhs->CodeByteId, rhs->CodeByteId);
     }
     return value;
 }
 
+// Sorts all cluster links in the link buffer, creates the cluster link span and sets the access struct to the span
 static error_t SortAndBuildClusterLinks(ClusterLink_t* restrict linkBuffer, const size_t count, ClusterLinks_t* restrict clusterLinks)
 {
     error_t error;
@@ -80,6 +86,7 @@ static error_t SortAndBuildClusterLinks(ClusterLink_t* restrict linkBuffer, cons
     return ERR_OK;
 }
 
+// Builds a cluster linking for the provided pair interaction id in the context of the passed environment definition
 static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* environmentDefinition, const int32_t pairId, ClusterLinks_t* restrict clusterLinks)
 {
     ClusterLink_t tmpLinkBuffer[sizeof(ClusterLink_t) * 256]; // There are a max of 256 clusters a single pair could belong to
@@ -103,6 +110,7 @@ static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* enviro
     return SortAndBuildClusterLinks(tmpLinkBuffer, linkCount, clusterLinks);
 }
 
+// Constructs an environment link with its set of cluster links at the provided target pointer
 static error_t InPlaceConstructEnvironmentLink(const EnvironmentDefinition_t* restrict environmentDefinition, const int32_t environmentId, const int32_t pairId, EnvironmentLink_t* restrict environmentLink)
 {
     error_t error;
@@ -114,9 +122,10 @@ static error_t InPlaceConstructEnvironmentLink(const EnvironmentDefinition_t* re
     return error;
 }
 
+// Get the next environment link pointer from the target environment for in place construction of the link
 static EnvironmentLink_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const PairDefinition_t* restrict pairDefinition, EnvironmentState_t* restrict environment)
 {
-    EnvironmentState_t* targetEnvironment = ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, environment);
+    EnvironmentState_t* targetEnvironment = GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
     // Immobility OPT Part 2 - Providing outgoing updates through immobiles is not required, the link will not be triggered during the mc routine
     // Sideffects:  None at this point (ref. to OPT part 1)
@@ -128,9 +137,10 @@ static EnvironmentLink_t* GetNextLinkFromTargetEnv(__SCONTEXT_PAR, const PairDef
     #endif
 }
 
+// Resolves the target environment of a pair interaction and counts the link counter up by one
 static void ResolvePairTargetAndIncreaseLinkCounter(__SCONTEXT_PAR, const EnvironmentState_t* restrict environment, const PairDefinition_t* restrict pairDefinition)
 {
-    EnvironmentState_t* targetEnvironment = ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, environment);
+    EnvironmentState_t* targetEnvironment = GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
     // Immobility OPT Part 1 and 2 - No incoming or outgoing updates for immobiles are required
     #if defined(OPT_LINK_ONLY_MOBILES)
@@ -141,6 +151,7 @@ static void ResolvePairTargetAndIncreaseLinkCounter(__SCONTEXT_PAR, const Enviro
     targetEnvironment->EnvironmentLinks.End++;
 }
 
+// Sets all link counters of the environment state lattice to the required number of linkers
 static error_t SetAllLinkListCountersToRequiredSize(__SCONTEXT_PAR)
 {
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
@@ -153,6 +164,7 @@ static error_t SetAllLinkListCountersToRequiredSize(__SCONTEXT_PAR)
     return ERR_OK;
 }
 
+// Allocates the environment linker lists to the size defined by their previously set counter status
 static error_t AllocateEnvLinkListBuffersByPresetCounters(__SCONTEXT_PAR)
 {
     error_t error;
@@ -172,6 +184,7 @@ static error_t AllocateEnvLinkListBuffersByPresetCounters(__SCONTEXT_PAR)
 }
 
 
+// Prepares the linking system construction by counting and allocation the required space for the system
 static error_t PrepareLinkingSystemConstruction(__SCONTEXT_PAR)
 {
     error_t error;
@@ -184,6 +197,7 @@ static error_t PrepareLinkingSystemConstruction(__SCONTEXT_PAR)
     return error;
 }
 
+// Links an environment to its surroundings by sending a link to each one that requires one
 static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, EnvironmentState_t* restrict environment)
 {
     error_t error;
@@ -203,6 +217,22 @@ static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, EnvironmentState_t*
     return ERR_OK;
 }
 
+// Compares two environment links by their affiliated pair id
+static inline int32_t CompareEnvironmentLink(const EnvironmentLink_t* restrict lhs, const EnvironmentLink_t* restrict rhs)
+{
+    return get_compare(lhs->PairId, rhs->PairId);
+}
+
+// Sort the linking system of an environment state to the unit cell independent order
+static void SortEnvironmentLinkingSystem(__SCONTEXT_PAR, EnvironmentState_t* environment)
+{
+    void* sortBase = environment->EnvironmentLinks.Begin;
+    size_t numOfElements = span_GetSize(environment->EnvironmentLinks);
+
+    qsort(sortBase, numOfElements, sizeof(EnvironmentLink_t), (FComparer_t) CompareEnvironmentLink);
+}
+
+// Constructs the prepared linking system by linking all environments and sorting the linkers to the required order
 static error_t ConstructPreparedLinkingSystem(__SCONTEXT_PAR)
 {
     error_t error;
@@ -219,9 +249,15 @@ static error_t ConstructPreparedLinkingSystem(__SCONTEXT_PAR)
         return_if(error, error);
     }
 
+    cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
+    {
+        SortEnvironmentLinkingSystem(SCONTEXT, environment);
+    }
+
     return ERR_OK;
 }
 
+// Builds the environment linking system of the environment state lattice
 void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR)
 {
     error_t error;
@@ -233,6 +269,7 @@ void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR)
     error_assert(error, "Failed to construct the environment linking system.");
 }
 
+// Allocates the dynamic environment occupation buffer for dynamic lookup of environment occupations (Size fits the largets environment definition)
 static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, Buffer_t* restrict buffer)
 {
     size_t bufferSize = 0;
@@ -246,12 +283,14 @@ static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, Buffer_t* rest
     return ctor_Buffer(*buffer, bufferSize *sizeof(byte_t));
 }
 
+// Find an environment state by resolving the passed pair id in the context of the start environment state
 static EnvironmentState_t* PullEnvStateByInteraction(__SCONTEXT_PAR, EnvironmentState_t* restrict startEnvironment, const int32_t pairId)
 {
     PairDefinition_t* pairDefinition = getEnvironmentPairDefById(startEnvironment, pairId);
-    return ResolvePairDefTargetEnvironment(SCONTEXT, pairDefinition, startEnvironment);
+    return GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, startEnvironment);
 }
 
+// Writes the current environment occupation of the passed environment state to the passed occupation buffer
 static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, EnvironmentState_t* environment, Buffer_t* restrict occupationBuffer)
 {
     for (int32_t i = 0; i < getEnvironmentPairDefCount(environment); i++)
@@ -263,6 +302,7 @@ static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, EnvironmentState_t* en
     return ERR_OK;
 }
 
+// Resets all environment state buffers entries to a value of zero
 static void ResetEnvStateBuffersToZero(EnvironmentState_t* restrict environment)
 {
     cpp_foreach(energy, environment->EnergyStates)
@@ -275,11 +315,12 @@ static void ResetEnvStateBuffersToZero(EnvironmentState_t* restrict environment)
     }
 }
 
+// Adds all environment pair energies of the passed environment state to its internal energy buffers using the passed occupation buffer as the occupation source
 static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     for (size_t i = 0; i < span_GetSize(environment->EnvironmentDefinition->PairDefinitions); i++)
     {
-        int32_t tableId = span_Get(environment->EnvironmentDefinition->PairDefinitions, i).TableId;
+        int32_t tableId = span_Get(environment->EnvironmentDefinition->PairDefinitions, i).EnergyTableId;
         const PairTable_t* pairTable = getPairEnergyTableById(SCONTEXT, tableId);
 
         for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
@@ -291,6 +332,7 @@ static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* res
     } 
 }
 
+// Initializes the passed cluster state status (code id) and sets the backups to the current values
 static error_t InitializeClusterStateStatus(__SCONTEXT_PAR, ClusterState_t* restrict cluster, const ClusterTable_t* restrict clusterTable)
 {
     cluster->CodeId = SaveFindClusterCodeIdByLinearSearch(clusterTable, cluster->OccupationCode);
@@ -300,6 +342,7 @@ static error_t InitializeClusterStateStatus(__SCONTEXT_PAR, ClusterState_t* rest
     return ERR_OK;
 }
 
+// Synchronizes the all cluster states of the passed environment state and adds the resulting energies to the environment state energy buffer
 static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     return_if(span_GetSize(environment->ClusterStates) != span_GetSize(environment->EnvironmentDefinition->ClusterDefinitions), ERR_DATACONSISTENCY);
@@ -309,7 +352,7 @@ static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_
 
     cpp_foreach(clusterDefinition, environment->EnvironmentDefinition->ClusterDefinitions)
     {
-        const ClusterTable_t* clusterTable = getClusterEnergyTableById(SCONTEXT, clusterDefinition->TableId);
+        const ClusterTable_t* clusterTable = getClusterEnergyTableById(SCONTEXT, clusterDefinition->EnergyTableId);
         for (byte_t i = 0; clusterDefinition->EnvironmentPairIds[i] != POSITION_NULL; i++)
         {
             int32_t codeByteId = clusterDefinition->EnvironmentPairIds[i];
@@ -329,6 +372,7 @@ static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_
     return ERR_OK;
 }
 
+// Sets the environment state energy buffers to the value that results from the passed occupation buffer entries
 static error_t SetEnvStateEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     ResetEnvStateBuffersToZero(environment);
@@ -336,6 +380,7 @@ static error_t SetEnvStateEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t*
     return AddEnvClusterEnergyByOccupation(SCONTEXT, environment, occupationBuffer);
 }
 
+// Dynamically calculates the environment status (energies and cluster states) of the passed environment id using the provided occupation buffer
 static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t environmentId, Buffer_t* restrict occupationBuffer)
 {
     error_t error;
@@ -350,6 +395,8 @@ static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t envi
     return ERR_OK;
 }
 
+// Dynamically synchronizes the environment lattice energy status to the current status (Cluster states and energy states)
+// Resynchronizes potential lattice energy status errors caused by linking system optimization
 void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
 {
     error_t error;
@@ -367,6 +414,7 @@ void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
     delete_Span(occupationBuffer);
 }
 
+// Sets the status of the environment state with the passed id to the default status using the passed occupation particle id
 void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId)
 {
     EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
@@ -381,7 +429,8 @@ void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, con
 
 /* Simulation routines KMC and MMC */
 
-static inline void Set_ActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, EnvironmentLink_t* restrict environmentLink)
+// Sets the active work environment by evaluation of the provided environment link
+static inline void SetActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, EnvironmentLink_t *restrict environmentLink)
 {
     SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateById(SCONTEXT, environmentLink->EnvironmentId);
 }
@@ -391,14 +440,15 @@ static inline void Set_ActiveWorkClusterByEnvAndId(__SCONTEXT_PAR, EnvironmentSt
     SCONTEXT->CycleState.WorkCluster = getEnvironmentCluStateById(environment, clusterId);
 }
 
-static inline void Set_ActiveWorkPairEnergyTable(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, EnvironmentLink_t* restrict environmentLink)
+static inline void SetActiveWorkPairEnergyTable(__SCONTEXT_PAR, EnvironmentState_t *restrict environment,
+                                                EnvironmentLink_t *restrict environmentLink)
 {
-    SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableById(SCONTEXT, getEnvironmentPairDefById(environment, environmentLink->PairId)->TableId);
+    SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableById(SCONTEXT, getEnvironmentPairDefById(environment, environmentLink->PairId)->EnergyTableId);
 }
 
 static inline void Set_ActiveWorkClusterEnergyTable(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, ClusterLink_t* restrict clusterLink)
 {
-    SCONTEXT->CycleState.WorkClusterTable = getClusterEnergyTableById(SCONTEXT, getEnvironmentCluDefById(environment, clusterLink->ClusterId)->TableId);
+    SCONTEXT->CycleState.WorkClusterTable = getClusterEnergyTableById(SCONTEXT, getEnvironmentCluDefById(environment, clusterLink->ClusterId)->EnergyTableId);
 }
 
 static inline int32_t FindClusterCodeIdInClusterTable(const ClusterTable_t* restrict clusterTable, const OccCode_t code)
@@ -481,7 +531,7 @@ static inline void InvokeLocalEnvLinkClusterDeltas(__SCONTEXT_PAR, const Environ
 static inline void PrepareJumpLinkClusterStateChanges(__SCONTEXT_PAR, const JumpLink_t* restrict jumpLink)
 {
     EnvironmentLink_t* environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
-    Set_ActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
+    SetActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
 
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
@@ -495,8 +545,8 @@ static void InvokeJumpLinkDeltas(__SCONTEXT_PAR, const JumpLink_t* restrict jump
 {
     EnvironmentLink_t* environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
 
-    Set_ActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
-    Set_ActiveWorkPairEnergyTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
+    SetActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
+    SetActiveWorkPairEnergyTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
 
     byte_t newId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, jumpLink->PathId);
     byte_t updateParticleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, getActiveWorkEnvironment(SCONTEXT)->PathId);
@@ -509,20 +559,20 @@ static void InvokeEnvUpdateDistribution(__SCONTEXT_PAR, EnvironmentState_t* rest
 {
     cpp_foreach(environmentLink, environment->EnvironmentLinks)
     {
-        Set_ActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
-        Set_ActiveWorkPairEnergyTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
+        SetActiveWorkEnvironmentByEnvLink(SCONTEXT, environmentLink);
+        SetActiveWorkPairEnergyTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
         InvokeAllEnvLinkUpdates(SCONTEXT, environmentLink, environment->ParticleId, newParticleId);
     }
 }
 
 void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR)
 {
-    cpp_foreach(jumpLink, getActiveJumpDirection(SCONTEXT)->JumpLinkSequence)
+    cpp_foreach(jumpLink, *getActiveLocalJumpLinks(SCONTEXT))
     {
         PrepareJumpLinkClusterStateChanges(SCONTEXT, jumpLink);
     }
 
-    cpp_foreach(jumpLink, getActiveJumpDirection(SCONTEXT)->JumpLinkSequence)
+    cpp_foreach(jumpLink, *getActiveLocalJumpLinks(SCONTEXT))
     {
         InvokeJumpLinkDeltas(SCONTEXT, jumpLink);
     }

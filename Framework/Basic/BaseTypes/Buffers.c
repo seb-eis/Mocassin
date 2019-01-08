@@ -14,7 +14,7 @@ VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {
     size_t numOfBytes = numOfElements*sizeOfElement;
     void* ptr = malloc(numOfBytes);
-    return (VoidSpan_t) { ptr, ptr +  numOfBytes };
+    return (VoidSpan_t) { .Begin = ptr, .End = ptr +  numOfBytes };
 }
 
 error_t TryAllocateSpan(const size_t numOfElements, const size_t sizeOfElement, VoidSpan_t*restrict outSpan)
@@ -33,7 +33,7 @@ void* ConstructVoidSpan(const size_t numOfElements, const size_t sizeOfElement, 
 VoidList_t AllocateList(const size_t capacity, const size_t sizeOfElement)
 {
     VoidSpan_t span = AllocateSpan(capacity, sizeOfElement);
-    return  (VoidList_t) { span.Begin, span.Begin, span.End };
+    return  (VoidList_t) { .Begin = span.Begin, .End = span.Begin, .CapacityEnd = span.End };
 }
 
 error_t TryAllocateList(const size_t capacity, const size_t sizeOfElement, VoidList_t*restrict outList)
@@ -61,7 +61,7 @@ VoidArray_t AllocateArray(const int32_t rank, const size_t sizeOfElement, const 
 
     int32_t totalNumOfBytes = numOfHeaderBytes + numOfDataBytes;
     void* ptr = malloc(totalNumOfBytes);
-    return (VoidArray_t) { ptr, ptr + numOfHeaderBytes, ptr + totalNumOfBytes };
+    return (VoidArray_t) { .Header = ptr, .Begin = ptr + numOfHeaderBytes, .End = ptr + totalNumOfBytes };
 }
 
 error_t TryAllocateArray(const int32_t rank, const size_t sizeOfElement, const int32_t dimensions[rank], VoidArray_t*restrict outArray)

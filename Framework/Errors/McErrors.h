@@ -14,7 +14,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#define MC_TESTBUILD
+// Defines the MC test build macro
+#define MC_TESTBUILD
+
+// Defines the debug assert all macro
+#define DEBUG_ASSERT_ALL
+
+// Defines debug assertion macro expansion based upon the debug assert flag
+#if defined(DEBUG_ASSERT_ALL)
+    #define break_on_debug(cond) if (cond) { ErrorToStdout(ERR_UNKNOWN, __FUNCTION__, __LINE__, #cond); }
+#else
+    #define break_on_debug(cond)
+#endif
+
+// Macro for throwing an error information to the console on debugging
 
 #if defined(MC_TESTBUILD)
     // Defines the default exception handling for debug builds
@@ -99,8 +112,11 @@ typedef int64_t cerror_t;
 // Defines error for cases where a nullpointer is an invalid result or argument
 #define ERR_NULLPOINTER 17
 
+// Defines error for cases where a function argument is invalid
+#define ERR_ARGUMENT 18
+
 // Defines the default error display with code and message
-#define error_display(__CODE, __MSG) DisplayErrorAndAwait(__CODE, __FUNCTION__, __LINE__, __MSG);
+#define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG);
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
 #define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG);
@@ -127,10 +143,10 @@ typedef int64_t cerror_t;
 #define break_if(cond) if (cond) break
 
 // Get an error description string for the passed error Code
-char* ConvErrorToString(error_t errCode);
+char* ErrorCodeToString(error_t errCode);
 
-// Error handling call for debugging that dumps the information the stdout and awaits a button press without exiting the program
-void DisplayErrorAndAwait(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg);
+// Error handling call for debugging that dumps the information the stdout
+void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg);
 
 // Dumps the passed error information to stderr and exists the program with the provided code. 
 void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg);
