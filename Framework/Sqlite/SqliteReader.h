@@ -16,13 +16,13 @@
 
 /*
  * How to use the SqliteReader:
- * Use the "AssignDatabaseModel" to assign your DatabaseModel object. You need to provide the Database location
+ * Use the "AssignDatabaseModel" to assign your DatabaseModel object. You need to provide the database location
  * and the project ID. Every other function is only for internal usage. If an error occurs at any instance the
- * operation stopps and a SQLITE3 error number (always positiv) or a custom error number (always negative) is returned.
+ * operation stops and a SQLITE3 error number (always positive) or a custom error number (always negative) is returned.
  *
  * How the SqliteReader works internally:
  * When the "AssignDatabaseModel" function is called, the provided database is accessed and the required data is
- * fetched from the database by provided Project ID. This is accomplished in three steps:
+ * fetched from the database by the provided Project ID. This is accomplished in three steps:
  * 1) The IDs of the parent objects are fetched from the database. The Parent objects are the member variables within
  *    the database object, e.g. the Structure object.
  * 2) The member variables of the parent objects are assigned in case of simple types of BLOBs. These can be easily read
@@ -32,10 +32,10 @@
  *
  * For a new parent or child objects the macros below have to be updated. The _KEYWORD macro needs to specify the
  * keyword by which the sql query is fetched from the database. This sql query is then used to access the needed data.
- * The _OPERATION macro needs to hold the function by which the data is assigned to the object. Mind that the function
+ * The *_OPERATION macros need to hold the function by which the data is assigned to the object. Mind that the function
  * arguments have to be (DbModel_t*, sqlite3*, const struct ProjectIds*).
  * The sql queries to get the data from the database are also stored within the database and accessed via the keywords
- * provided here as macros. The _OBJECTS macro defines the actual object which is assigned during the method.
+ * provided here as macros. The *_OBJECTS macros define the actual object which are assigned during the method.
  * PLEASE MIND: These macros have to be in the same order.
  *
  * The functions AssignParentObjects and AssignChildObjects automatically assign the objects with the described macros.
