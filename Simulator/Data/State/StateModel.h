@@ -12,6 +12,7 @@
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Simulator/Logic/Constants/Constants.h"
 
 // Type for 3d movement tracking without tracker id (Does currently not support 16 bit alignment!)
 // Layout@ggc_x86_64 => 32@[24]
@@ -63,6 +64,7 @@ typedef struct StateHeaderData
 // Layout@ggc_x86_64 => 8@[8]
 typedef struct StateHeader
 {
+    // The state header data pointer
     StateHeaderData_t* Data;
 
 } StateHeader_t;
@@ -149,10 +151,42 @@ typedef struct StateMetaInfo
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(int32_t, IndexingState) IndexingState_t;
 
+// Type for the jump histogram type that stores a energy value occurrence statistic
+// Layout@ggc_x86_64 => 32+STATE_JUMPSTAT_SIZE@[8,8,8,8,{STATE_JUMPSTAT_SIZE}]
+typedef struct JumpHistogram
+{
+    // The minimal energy value of the histogram
+    double MinValue;
+
+    // The maximum energy value of the histogram
+    double MaxValue;
+
+    // The counter for occurred cases above the max energy value
+    int64_t OverflowCount;
+
+    // The counter for occurred cases below the min energy value
+    int64_t UnderflowCount;
+
+    // The histogram buffer to count the number of specific occurrences
+    int64_t CountBuffer[STATE_JUMPSTAT_SIZE];
+
+} JumpHistogram_t;
+
 // Type to track the jump statistics of a particle index and jump collection combination
-// Layout@ggc_x86_64 =>
+// Layout@ggc_x86_64 => 4x@{?,?,?,?}
 typedef struct JumpStatistic
 {
+    // Histogram for edge energy occurrences
+    JumpHistogram_t EdgeEnergyHistogram;
+
+    // Histogram for positive conformation energy occurrences
+    JumpHistogram_t PosConfEnergyHistogram;
+
+    // Histogram for negative conformation energy occurrences
+    JumpHistogram_t NegConfEnergyHistogram;
+
+    // Histogram for total energy occurrences
+    JumpHistogram_t TotalEnergyHistogram;
 
 } JumpStatistic_t;
 

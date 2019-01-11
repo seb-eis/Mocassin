@@ -14,6 +14,12 @@
 
 #define OPT_LINK_ONLY_MOBILES
 
+/* State buffer constants */
+
+#define STATE_JUMPSTAT_SIZE 1000
+#define STATE_JUMPSTAT_EMIN 0
+#define STATE_JUMPSTAT_EMAX 10.0
+
 /* Flag values */
 
 #define FLG_KMC             0x1

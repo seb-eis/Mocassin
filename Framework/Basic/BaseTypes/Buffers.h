@@ -67,7 +67,7 @@ static inline void setBufferByteValues(void* restrict start, const size_t byteCo
 // Copies the passed number of bytes from ten source buffer to the target buffer. Does not check for potential buffer overflow
 void CopyBuffer(byte_t const* source, byte_t* target, size_t size);
 
-// Copies the contents of the source buffer into the target buffer. Retruns buffer overflow error if target is smaller than source
+// Copies the contents of the source buffer into the target buffer. Returns buffer overflow error if target is smaller than source
 error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
 
 // Moves the contents of the source buffer into the target buffer and frees the source buffer
