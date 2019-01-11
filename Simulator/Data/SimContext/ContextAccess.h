@@ -460,9 +460,9 @@ static inline IndexingState_t* getMobileTrackerIndexing(__SCONTEXT_PAR)
     return &getSimulationState(SCONTEXT)->MobileTrackerIndexing;
 }
 
-static inline ProbabilityCountMap_t* getJumpProbabilityMap(__SCONTEXT_PAR)
+static inline JumpStatisticsState_t* getJumpStatistics(__SCONTEXT_PAR)
 {
-    return &getSimulationState(SCONTEXT)->ProbabilityTrackMap;
+    return &getSimulationState(SCONTEXT)->JumpStatistics;
 }
 
 static inline int32_t getStaticTrackerIdByIds(__SCONTEXT_PAR, const int32_t posId, const int32_t particleId)

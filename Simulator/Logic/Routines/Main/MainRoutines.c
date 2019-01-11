@@ -123,14 +123,14 @@ static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
 // Action for cases where the MMC jump selection leads to an unstable end state
 static inline void OnKmcJumpToUnstableState(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfUnstableEnds++;
+    getActiveCounters(SCONTEXT)->UnstableEndCount++;
     AdvanceSimulatedTime(SCONTEXT);
 }
 
 // Action for cases where the jump selection enables to leave a currently unstable state
 static inline void OnKmcJumpFromUnstableState(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfUnstableStarts++;
+    getActiveCounters(SCONTEXT)->UnstableStartCount++;
 
     AdvanceKmcSystemToState2(SCONTEXT);
     if (MakeJumpPoolUpdateKmc(SCONTEXT))
@@ -142,7 +142,7 @@ static inline void OnKmcJumpFromUnstableState(__SCONTEXT_PAR)
 // Action for cases where the jump selection has been statistically accepted
 static inline void OnKmcJumpAccepted(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfMcs++;
+    getActiveCounters(SCONTEXT)->McsCount++;
 
     AdvanceSimulatedTime(SCONTEXT);
     AdvanceKmcSystemToState2(SCONTEXT);
@@ -156,14 +156,14 @@ static inline void OnKmcJumpAccepted(__SCONTEXT_PAR)
 // Action for cases where the jump selection has been statistically rejected
 static inline void OnKmcJumpRejected(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfRejects++;
+    getActiveCounters(SCONTEXT)->RejectionCount++;
     AdvanceSimulatedTime(SCONTEXT);
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
 static inline void OnKmcJumpSiteBlocked(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfBlocks++;
+    getActiveCounters(SCONTEXT)->SiteBlockingCount++;
 }
 
 error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
@@ -214,19 +214,19 @@ error_t FinishKmcCycleBlock(__SCONTEXT_PAR)
 // Action for cases where the MMC jump selection leads to an unstable end state
 static inline void OnMmcJumpToUnstableState(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfUnstableEnds++;
+    getActiveCounters(SCONTEXT)->UnstableEndCount++;
 }
 
 // Action for cases where the jump selection enables to leave a currently unstable state
 static inline void OnMmcJumpFromUnstableState(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfUnstableStarts++;
+    getActiveCounters(SCONTEXT)->UnstableStartCount++;
 }
 
 // Action for cases where the jump selection has been statistically accepted
 static inline void OnMmcJumpAccepted(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfMcs++;
+    getActiveCounters(SCONTEXT)->McsCount++;
     AdvanceMmcSystemToState2(SCONTEXT);
     MakeJumpPoolUpdateMmc(SCONTEXT);
 }
@@ -234,13 +234,13 @@ static inline void OnMmcJumpAccepted(__SCONTEXT_PAR)
 // Action for cases where the jump selection has been statistically rejected
 static inline void OnMmcJumpRejected(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfRejects++;
+    getActiveCounters(SCONTEXT)->RejectionCount++;
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
 static inline void OnMmcJumpSiteBlocked(__SCONTEXT_PAR)
 {
-    getActiveCounters(SCONTEXT)->NumOfBlocks++;
+    getActiveCounters(SCONTEXT)->SiteBlockingCount++;
 }
 
 error_t DoNextMmcCycleBlock(__SCONTEXT_PAR)
@@ -512,6 +512,7 @@ void SetKmcJumpEvaluationResults(__SCONTEXT_PAR)
         OnKmcJumpFromUnstableState(SCONTEXT);
         return;
     }
+    
     // Successful jump: Advance system, update counters and simulated time, do pool update
     if (GetNextRandomDouble(SCONTEXT) < getJumpEnergyInfo(SCONTEXT)->Probability0to2)
     {

@@ -337,13 +337,13 @@ typedef struct TransitionModel
     JumpCountTable_t        JumpCountTable;
 
     // The jump assign table, assigns each [PositionId,ParticleId,RelativeJumpId] the affiliated jump direction id
-    JumpMappingTable_t       JumpAssignTable;
+    JumpMappingTable_t      JumpAssignTable;
 
     // The static tracker assign table, assigns each [PositionId,ParticleId] a static tracker index offset
-    TrackerMappingTable_t    StaticTrackerAssignTable;
+    TrackerMappingTable_t   StaticTrackerAssignTable;
 
     // The global tracker assign table, assigns each [JumpCollectionId,ParticleId] a global tracker index
-    TrackerMappingTable_t    GlobalTrackerAssignTable;
+    TrackerMappingTable_t   GlobalTrackerAssignTable;
 
 } TransitionModel_t;
 

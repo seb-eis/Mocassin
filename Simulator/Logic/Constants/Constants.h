@@ -29,21 +29,6 @@
 #define FLG_ABORT           0x40000000
 #define FLG_STATEERROR      0x80000000
 
-/* Jump constants */
-
-// Defines the minimal jump length that is valid
-#define JUMPS_JUMPLENGTH_MIN 2
-
-// Defines the longest jump length that is valid
-#define JUMPS_JUMPLENGTH_MAX 8
-
-// Defines the jump length for MMC
-#define JUMPS_JUMPLENGTH_MMC 2
-
-// Defines the maximum number of jumplinks per single set
-#define JUMPS_JUMPLINK_LIMIT 64
-
-
 /* Monte Carlo constants */
 
 #define MC_CONST_JUMPTRACK_MIN 1.0e-05
@@ -68,6 +53,12 @@
 #define CYCLE_BLOCKCOUNT    100LL
 #define CYCLE_BLOCKSIZE_MIN 1000
 #define CYCLE_BLOCKSIZE_MAX 10000000
+
+/* Jump constants */
+
+#define JUMPS_JUMPLENGTH_MIN 2
+#define JUMPS_JUMPLENGTH_MAX 8
+#define JUMPS_JUMPLINK_LIMIT (JUMPS_JUMPLENGTH_MAX * (JUMPS_JUMPLENGTH_MAX - 1))
 
 /* Jump pool constants */
 

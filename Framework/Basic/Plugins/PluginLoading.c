@@ -17,7 +17,7 @@
     }
 #else
     #if defined(_WIN32)
-        void LogApiError_WIN32(FILE* restrict stream, const char* restrict message)
+        static void LogOsApiError(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "WIN32 API ERROR:\t0x%lx\n API CALL DETAIL:\t%s\n", GetLastError(), message);
         }
@@ -29,14 +29,14 @@
 
             if ((module = LoadLibrary(libraryPath)) == NULL)
             {
-                LogApiError_WIN32(stderr, "Call to 'LoadLibrary(<FILENAME>)' returned NULL. Could not load library.");
+                LogOsApiError(stderr, "Call to 'LoadLibrary(<FILENAME>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
                 return NULL;
             }
 
             if ((function = GetProcAddress(module, exportName)) == NULL)
             {
-                LogApiError_WIN32(stderr, "Call to 'GetProcAddress(<HMODULE>, <FUNCNAME>)' returned NULL. Could not load function.");
+                LogOsApiError(stderr, "Call to 'GetProcAddress(<HMODULE>, <FUNCNAME>)' returned NULL. Could not load function.");
                 *error = ERR_FUNCTIONIMPORT;
                 return NULL;
             }
@@ -45,7 +45,7 @@
     #endif
 
     #if defined(linux)
-        void LogApiError_LINUX(FILE* restrict stream, const char* restrict message)
+        static void LogOsApiError(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "LINUX API ERROR:\t%s\n API CALL DETAIL:\t%s\n", dlerror(), message);
         }
@@ -56,14 +56,14 @@
             
             if ((dlHandle = dlopen(libraryPath, RTLD_LAZY)) == NULL)
             {
-                LogApiError_LINUX(stderr, "Call to 'dlopen(<FILENAME>, <FLAGS>)' returned NULL. Could not load library.");
+                LogOsApiError(stderr, "Call to 'dlopen(<FILENAME>, <FLAGS>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
                 return NULL;
             }
 
             if ((function = dlsym(dlHandle, exportName)) == NULL)
             {
-                LogApiError_LINUX(stderr, "Call to 'dlsym(<HANDLE>, <SYMBOL>)' returned NULL. Could not load function.");
+                LogOsApiError(stderr, "Call to 'dlsym(<HANDLE>, <SYMBOL>)' returned NULL. Could not load function.");
                 *error = ERR_FUNCTIONIMPORT;
                 return NULL;
             }

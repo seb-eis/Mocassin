@@ -152,6 +152,7 @@ void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restr
 
 #define array_SkipBlock_5(ARRAY, RANK, VAL, ...) ((ARRAY).Header->Blocks[RANK-5] * (VAL) + array_SkipBlock_4((ARRAY), RANK, __VA_ARGS__))
 
+// Access a multidimensional rectangular array by a set of index values
 #define array_Get(ARRAY, ...)\
     __EVAL(\
       span_Get, (ARRAY),__EVAL(\
