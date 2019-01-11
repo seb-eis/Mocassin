@@ -41,7 +41,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <summary>
         ///     Dictionary that maps the transition mapping models onto their affiliated direction-related electric field factor
-        ///     values
+        ///     values in [eV m / V]
         /// </summary>
         IDictionary<ITransitionMappingModel, double> TransitionMappingToElectricFieldFactors { get; set; }
 

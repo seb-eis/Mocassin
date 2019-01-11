@@ -253,16 +253,17 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <summary>
         ///     Get the charge transport vector [charge*movement] for the passed combination of kinetic mapping model and kinetic
-        ///     rule model
+        ///     rule model in [eV * m / V]
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <param name="ruleModel"></param>
         /// <returns></returns>
         protected Cartesian3D GetChargeTransportVector(IKineticMappingModel mappingModel, IKineticRuleModel ruleModel)
         {
+            var transformer = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetVectorEncoder()).Transformer;
             var transportMatrix = mappingModel.PositionMovementMatrix * ruleModel.ChargeTransportMatrix.GetTransposed();
-            var transportVector = new Cartesian3D(transportMatrix[0, 0], transportMatrix[1, 0], transportMatrix[2, 0]);
-            return transportVector;
+            var transportVector = new Fractional3D(transportMatrix[0, 0], transportMatrix[1, 0], transportMatrix[2, 0]);
+            return transformer.ToCartesian(transportVector) * 1.0e-10;
         }
 
         /// <summary>

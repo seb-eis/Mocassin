@@ -21,7 +21,7 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
 
@@ -35,12 +35,12 @@ namespace Mocassin.Framework.QuickTest
 
                 dbJobBuilder.AddPostBuildOptimizer(new JumpSelectionOptimizer());
 
-                var jobCollection = GetKmcTestCollection(package.ModelProject);
+                var jobCollection = GetKmcTestCollection(package.ModelProject, 5);
                 var watch = Stopwatch.StartNew();
 
                 var result = dbJobBuilder.BuildJobPackageModel(jobCollection);
                 DisplayWatch(watch);
-                var dbContext = new SimulationDbContext("C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\InteropTest.db", true);
+                var dbContext = new SimulationDbContext("C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\InteropTestJohn.db", true);
                 dbContext.Add(result);
                 dbContext.SaveChangesAsync().Wait();
                 dbContext.Dispose();
@@ -60,7 +60,7 @@ namespace Mocassin.Framework.QuickTest
             watch.Start();
         }
 
-        private static IJobCollection GetKmcTestCollection(IModelProject project)
+        private static IJobCollection GetKmcTestCollection(IModelProject project, int jobCount)
         {
             var random = new PcgRandom32("AkMartin12345");
             var baseJob = new KmcJobConfiguration
@@ -76,8 +76,8 @@ namespace Mocassin.Framework.QuickTest
                 JobFlags = default,
                 JobId = 0,
                 KmcJobFlags = default,
-                RngIncreaseSeed = 0,
-                RngStateSeed = 0,
+                RngIncreaseSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.State), 0),
+                RngStateSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.Increment), 0),
                 TargetMcsp = 200,
                 TimeLimit = (long) TimeSpan.FromHours(24).TotalSeconds,
                 StatusFlags = default,
@@ -88,10 +88,10 @@ namespace Mocassin.Framework.QuickTest
             var collection = new KmcJobCollection
             {
                 Simulation = project.GetManager<ISimulationManager>().QueryPort.Query(port => port.GetKineticSimulation(0)),
-                JobConfigurations = new List<KmcJobConfiguration>(1000)
+                JobConfigurations = new List<KmcJobConfiguration>(jobCount)
             };
 
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i < jobCount; i++)
             {
                 var job = new KmcJobConfiguration();
                 baseJob.CopyTo(job);
