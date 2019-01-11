@@ -9,9 +9,10 @@ using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Translator;
-using Mocassin.Model.Translator.DbBuilder;
+using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
+using Mocassin.Model.Translator.Optimization;
 using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest
@@ -20,28 +21,33 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-
-            
-            var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
-            var modelContext = contextBuilder.BuildNewContext().Result;
-            var dbLatticeBuilder = new CeriaLatticeDbBuilder(modelContext);
-            var dbJobBuilder = new JobDbModelBuilder(modelContext)
+            for (int i = 0; i < 2; i++)
             {
-                LatticeDbModelBuilder = dbLatticeBuilder
-            };
+                var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
 
-            var jobCollection = GetKmcTestCollection(package.ModelProject);
-            var watch = Stopwatch.StartNew();
-           
-            var result = dbJobBuilder.BuildJobPackageModel(jobCollection);
-            DisplayWatch(watch);
-            var dbContext = new SimulationDbContext("C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\InteropTest.db", true);
-            dbContext.Add(result);
-            dbContext.SaveChangesAsync().Wait();
-            dbContext.Dispose();
+                var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
+                var modelContext = contextBuilder.BuildNewContext().Result;
+                var dbLatticeBuilder = new CeriaLatticeDbBuilder(modelContext);
+                var dbJobBuilder = new JobDbEntityBuilder(modelContext)
+                {
+                    LatticeDbEntityBuilder = dbLatticeBuilder
+                };
 
-            DisplayWatch(watch);
+                dbJobBuilder.AddPostBuildOptimizer(new JumpSelectionOptimizer());
+
+                var jobCollection = GetKmcTestCollection(package.ModelProject);
+                var watch = Stopwatch.StartNew();
+
+                var result = dbJobBuilder.BuildJobPackageModel(jobCollection);
+                DisplayWatch(watch);
+                var dbContext = new SimulationDbContext("C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\InteropTest.db", true);
+                dbContext.Add(result);
+                dbContext.SaveChangesAsync().Wait();
+                dbContext.Dispose();
+
+                DisplayWatch(watch);
+            }
+
             Console.ReadLine();
         }
 

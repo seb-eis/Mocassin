@@ -5,13 +5,13 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
-    /// <inheritdoc cref="Mocassin.Model.Translator.DbBuilder.IStructureDbModelBuilder" />
-    public class StructureDbModelBuilder : DbModelBuilder, IStructureDbModelBuilder
+    /// <inheritdoc cref="IStructureDbEntityBuilder" />
+    public class StructureDbEntityBuilder : DbEntityBuilder, IStructureDbEntityBuilder
     {
         /// <inheritdoc />
-        public StructureDbModelBuilder(IProjectModelContext modelContext)
+        public StructureDbEntityBuilder(IProjectModelContext modelContext)
             : base(modelContext)
         {
         }

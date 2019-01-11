@@ -3,44 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mocassin.Framework.Extensions;
+using Mocassin.Model.Translator.Optimization;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
     /// <inheritdoc />
-    public class JobDbModelBuilder : IJobDbModelBuilder
+    public class JobDbEntityBuilder : IJobDbEntityBuilder
     {
+        /// <summary>
+        ///     Readonly set of post build data optimizers for after build data optimization
+        /// </summary>
+        private readonly HashSet<IPostBuildOptimizer> _postBuildOptimizers;
+
         /// <inheritdoc />
         public IProjectModelContext ProjectModelContext { get; set; }
 
         /// <summary>
         ///     Get or set the energy db model builder
         /// </summary>
-        public IEnergyDbModelBuilder EnergyDbModelBuilder { get; set; }
+        public IEnergyDbEntityBuilder EnergyDbEntityBuilder { get; set; }
 
         /// <summary>
         ///     Get or set the structure db model builder
         /// </summary>
-        public IStructureDbModelBuilder StructureDbModelBuilder { get; set; }
+        public IStructureDbEntityBuilder StructureDbEntityBuilder { get; set; }
 
         /// <summary>
         ///     Get or set the transition db model builder
         /// </summary>
-        public ITransitionDbModelBuilder TransitionDbModelBuilder { get; set; }
+        public ITransitionDbEntityBuilder TransitionDbEntityBuilder { get; set; }
 
         /// <summary>
         ///     Get or set the lattice db model builder
         /// </summary>
-        public ILatticeDbModelBuilder LatticeDbModelBuilder { get; set; }
+        public ILatticeDbEntityBuilder LatticeDbEntityBuilder { get; set; }
 
         /// <summary>
         ///     Create new db model builder that uses the passed model context
         /// </summary>
         /// <param name="projectModelContext"></param>
-        public JobDbModelBuilder(IProjectModelContext projectModelContext)
+        public JobDbEntityBuilder(IProjectModelContext projectModelContext)
         {
             ProjectModelContext = projectModelContext ?? throw new ArgumentNullException(nameof(projectModelContext));
+            _postBuildOptimizers = new HashSet<IPostBuildOptimizer>();
         }
 
         /// <inheritdoc />
@@ -57,7 +64,10 @@ namespace Mocassin.Model.Translator.DbBuilder
             Task.WhenAll(jobModelTasks).Wait();
 
             packageModel.JobModels = jobModelTasks.Select(x => x.Result).ToList();
+
             LinkPackageModel(packageModel);
+            RunPostBuildOptimizers(packageModel);
+
             return packageModel;
         }
 
@@ -65,6 +75,12 @@ namespace Mocassin.Model.Translator.DbBuilder
         public Task<SimulationJobPackageModel> BuildJobPackageModelAsync(IJobCollection jobCollection)
         {
             return Task.Run(() => BuildJobPackageModel(jobCollection));
+        }
+
+        /// <inheritdoc />
+        public void AddPostBuildOptimizer(IPostBuildOptimizer postBuildOptimizer)
+        {
+            _postBuildOptimizers.Add(postBuildOptimizer);
         }
 
         /// <summary>
@@ -121,7 +137,7 @@ namespace Mocassin.Model.Translator.DbBuilder
             {
                 JobInfo = jobConfiguration.GetInteropJobInfo(),
                 JobHeader = jobConfiguration.GetInteropJobHeader(),
-                SimulationLatticeModel = LatticeDbModelBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
+                SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
             return result;
@@ -135,9 +151,9 @@ namespace Mocassin.Model.Translator.DbBuilder
         {
             var model = new SimulationJobPackageModel
             {
-                SimulationEnergyModel = EnergyDbModelBuilder.BuildModel(simulationModel),
-                SimulationStructureModel = StructureDbModelBuilder.BuildModel(simulationModel),
-                SimulationTransitionModel = TransitionDbModelBuilder.BuildModel(simulationModel)
+                SimulationEnergyModel = EnergyDbEntityBuilder.BuildModel(simulationModel),
+                SimulationStructureModel = StructureDbEntityBuilder.BuildModel(simulationModel),
+                SimulationTransitionModel = TransitionDbEntityBuilder.BuildModel(simulationModel)
             };
             return model;
         }
@@ -163,13 +179,23 @@ namespace Mocassin.Model.Translator.DbBuilder
         }
 
         /// <summary>
+        ///     Calls all attached post build optimizers for the passed simulation job package
+        /// </summary>
+        /// <param name="packageModel"></param>
+        protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel)
+        {
+            foreach (var optimizer in _postBuildOptimizers) 
+                optimizer.Run(ProjectModelContext, packageModel);
+        }
+
+        /// <summary>
         ///     Sets all null db builder components to use the default build system
         /// </summary>
         protected virtual void PrepareBuildComponents()
         {
-            EnergyDbModelBuilder = EnergyDbModelBuilder ?? new EnergyDbModelBuilder(ProjectModelContext);
-            StructureDbModelBuilder = StructureDbModelBuilder ?? new StructureDbModelBuilder(ProjectModelContext);
-            TransitionDbModelBuilder = TransitionDbModelBuilder ?? new TransitionDbModelBuilder(ProjectModelContext);
+            EnergyDbEntityBuilder = EnergyDbEntityBuilder ?? new EnergyDbEntityBuilder(ProjectModelContext);
+            StructureDbEntityBuilder = StructureDbEntityBuilder ?? new StructureDbEntityBuilder(ProjectModelContext);
+            TransitionDbEntityBuilder = TransitionDbEntityBuilder ?? new TransitionDbEntityBuilder(ProjectModelContext);
         }
     }
 }

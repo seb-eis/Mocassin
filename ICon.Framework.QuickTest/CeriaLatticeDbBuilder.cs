@@ -2,7 +2,7 @@
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Translator;
-using Mocassin.Model.Translator.DbBuilder;
+using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 
@@ -11,7 +11,7 @@ namespace Mocassin.Framework.QuickTest
     /// <summary>
     ///     Mock lattice builder for data creation and testing of doped ceria lattices
     /// </summary>
-    public class CeriaLatticeDbBuilder : DbModelBuilder, ILatticeDbModelBuilder
+    public class CeriaLatticeDbBuilder : DbEntityBuilder, ILatticeDbEntityBuilder
     {
         /// <inheritdoc />
         public CeriaLatticeDbBuilder(IProjectModelContext modelContext)

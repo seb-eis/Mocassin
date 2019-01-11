@@ -1,12 +1,12 @@
 ﻿using System;
 using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
     /// <summary>
-    ///     Abstract base class for implementations of database model builders
+    ///     Abstract base class for implementations of simulation db entity builders
     /// </summary>
-    public abstract class DbModelBuilder
+    public abstract class DbEntityBuilder
     {
         /// <summary>
         ///     The project model context that the builder uses
@@ -14,10 +14,10 @@ namespace Mocassin.Model.Translator.DbBuilder
         protected IProjectModelContext ModelContext { get; }
 
         /// <summary>
-        ///     Creates new database model builder for the provided model context
+        ///     Creates new database entity builder for the provided model context
         /// </summary>
         /// <param name="modelContext"></param>
-        protected DbModelBuilder(IProjectModelContext modelContext)
+        protected DbEntityBuilder(IProjectModelContext modelContext)
         {
             ModelContext = modelContext ?? throw new ArgumentNullException(nameof(modelContext));
         }

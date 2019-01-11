@@ -1,13 +1,13 @@
 ﻿using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
     /// <summary>
-    ///     Database model builder that converts simulation model definitions from the model context into the required
+    ///     Database entity builder that converts simulation model definitions from the model context into the required
     ///     lattice database model objects using a configuration information
     /// </summary>
-    public interface ILatticeDbModelBuilder
+    public interface ILatticeDbEntityBuilder
     {
         /// <summary>
         ///     Builds a new simulation lattice model for the passed simulation model using the provided configuration information

@@ -92,13 +92,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public long AsLong()
         {
-            var result = 0L;
-            foreach (var particle in Particles)
-            {
-                result |= 1L << particle.Index;
-            }
-
-            return result;
+            return Particles.Where(x => !x.IsEmpty).Aggregate(0L, (current, particle) => current | 1L << particle.Index);
         }
 
         /// <inheritdoc />

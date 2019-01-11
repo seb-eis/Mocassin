@@ -4,13 +4,13 @@ using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
-    /// <inheritdoc cref="Mocassin.Model.Translator.DbBuilder.IEnergyDbModelBuilder" />
-    public class EnergyDbModelBuilder : DbModelBuilder, IEnergyDbModelBuilder
+    /// <inheritdoc cref="IEnergyDbEntityBuilder" />
+    public class EnergyDbEntityBuilder : DbEntityBuilder, IEnergyDbEntityBuilder
     {
         /// <inheritdoc />
-        public EnergyDbModelBuilder(IProjectModelContext modelContext)
+        public EnergyDbEntityBuilder(IProjectModelContext modelContext)
             : base(modelContext)
         {
         }

@@ -5,13 +5,13 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
-    /// <inheritdoc cref="Mocassin.Model.Translator.DbBuilder.ITransitionDbModelBuilder" />
-    public class TransitionDbModelBuilder : DbModelBuilder, ITransitionDbModelBuilder
+    /// <inheritdoc cref="ITransitionDbEntityBuilder" />
+    public class TransitionDbEntityBuilder : DbEntityBuilder, ITransitionDbEntityBuilder
     {
         /// <inheritdoc />
-        public TransitionDbModelBuilder(IProjectModelContext modelContext)
+        public TransitionDbEntityBuilder(IProjectModelContext modelContext)
             : base(modelContext)
         {
         }

@@ -1,12 +1,12 @@
 ﻿using Mocassin.Model.Translator.ModelContext;
 
-namespace Mocassin.Model.Translator.DbBuilder
+namespace Mocassin.Model.Translator.EntityBuilder
 {
     /// <summary>
-    ///     Database model builder that converts simulation model definitions from the model context into the required
+    ///     Database entity builder that converts simulation model definitions from the model context into the required
     ///     energy database model objects
     /// </summary>
-    public interface IEnergyDbModelBuilder
+    public interface IEnergyDbEntityBuilder
     {
         /// <summary>
         ///     Builds a new energy database model for the passed simulation model
