@@ -1,5 +1,4 @@
-﻿using Mocassin.Framework.Operations;
-using Mocassin.Model.ModelProject;
+﻿using System.Threading.Tasks;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 
@@ -11,9 +10,9 @@ namespace Mocassin.Model.Translator.DbBuilder
     public interface IJobDbModelBuilder
     {
         /// <summary>
-        ///     Get or seth the used project model context builder
+        ///     Get or seth the used project model context for translation
         /// </summary>
-        IProjectModelContextBuilder ProjectModelContextBuilder { get; set; }
+        IProjectModelContext ProjectModelContext { get; set; }
 
         /// <summary>
         ///     Builds the simulation package model for the passed simulation job collection
@@ -21,5 +20,12 @@ namespace Mocassin.Model.Translator.DbBuilder
         /// <param name="jobCollection"></param>
         /// <returns></returns>
         SimulationJobPackageModel BuildJobPackageModel(IJobCollection jobCollection);
+
+        /// <summary>
+        ///     Builds the simulation package model for the passed simulation job collection asynchronously
+        /// </summary>
+        /// <param name="jobCollection"></param>
+        /// <returns></returns>
+        Task<SimulationJobPackageModel> BuildJobPackageModelAsync(IJobCollection jobCollection);
     }
 }

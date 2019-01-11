@@ -90,6 +90,18 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
+        public long AsLong()
+        {
+            var result = 0L;
+            foreach (var particle in Particles)
+            {
+                result |= 1L << particle.Index;
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
         public IEnumerator<IParticle> GetEnumerator()
         {
             return Particles.GetEnumerator();

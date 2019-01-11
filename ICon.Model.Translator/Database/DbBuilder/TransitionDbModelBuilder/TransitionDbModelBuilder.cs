@@ -19,9 +19,9 @@ namespace Mocassin.Model.Translator.DbBuilder
         /// <inheritdoc />
         public SimulationTransitionModel BuildModel(ISimulationModel simulationModel)
         {
-            var transitionModel = CreateNewModel(simulationModel.SimulationEncodingModel);
-            
-            transitionModel.JumpCollections = GetJumpCollectionEntities(simulationModel);    
+            var transitionModel = CreateNewModel(simulationModel);
+
+            transitionModel.JumpCollections = GetJumpCollectionEntities(simulationModel);
             LinkModel(transitionModel);
 
             return transitionModel;
@@ -42,25 +42,43 @@ namespace Mocassin.Model.Translator.DbBuilder
         }
 
         /// <summary>
-        /// Get the jump count table database entity that can be extracted from the passed simulation encoding model
+        ///     Get the jump count table database entity that can be extracted from the passed simulation encoding model
         /// </summary>
         /// <param name="encodingModel"></param>
         /// <returns></returns>
         protected JumpCountTableEntity GetJumpCountTableEntity(ISimulationEncodingModel encodingModel)
         {
-            var entity = new JumpCountTableEntity(encodingModel.JumpCountTable);
-            return entity;
+            return new JumpCountTableEntity(encodingModel.JumpCountTable);
         }
 
         /// <summary>
-        /// Get the jump assign table database entity that can be extracted from the passed simulation encoding model
+        ///     Get the jump assign table database entity that can be extracted from the passed simulation encoding model
         /// </summary>
         /// <param name="encodingModel"></param>
         /// <returns></returns>
         protected JumpAssignTableEntity GetJumpAssignTableEntity(ISimulationEncodingModel encodingModel)
         {
-            var entity = new JumpAssignTableEntity(encodingModel.JumpIndexAssignTable);
-            return entity;
+            return new JumpAssignTableEntity(encodingModel.JumpIndexAssignTable);
+        }
+
+        /// <summary>
+        ///     Get the static tracker assign table database entity that can be extracted from the passed simulation tracking model
+        /// </summary>
+        /// <param name="trackingModel"></param>
+        /// <returns></returns>
+        protected TrackerAssignTableEntity GetStaticTrackerAssignTableEntity(ISimulationTrackingModel trackingModel)
+        {
+            return new TrackerAssignTableEntity(trackingModel.StaticTrackerMappingTable);
+        }
+
+        /// <summary>
+        ///     Get the global tracker assign table database entity that can be extracted from the passed simulation tracking model
+        /// </summary>
+        /// <param name="trackingModel"></param>
+        /// <returns></returns>
+        protected TrackerAssignTableEntity GetGlobalTrackerAssignTableEntity(ISimulationTrackingModel trackingModel)
+        {
+            return new TrackerAssignTableEntity(trackingModel.GlobalTrackerMappingTable);
         }
 
         /// <summary>
@@ -76,7 +94,8 @@ namespace Mocassin.Model.Translator.DbBuilder
         }
 
         /// <summary>
-        ///     Creates a jump collection database entity for the passed transition model in the context of the passed simulation model
+        ///     Creates a jump collection database entity for the passed transition model in the context of the passed simulation
+        ///     model
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="simulationModel"></param>
@@ -159,7 +178,8 @@ namespace Mocassin.Model.Translator.DbBuilder
         }
 
         /// <summary>
-        ///     Get the jump rule list database entity that results for the passed transition model in the context of the passed simulation model
+        ///     Get the jump rule list database entity that results for the passed transition model in the context of the passed
+        ///     simulation model
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="simulationModel"></param>
@@ -197,16 +217,18 @@ namespace Mocassin.Model.Translator.DbBuilder
         }
 
         /// <summary>
-        ///     Creates a default constructed transition database model that conforms to te passed simulation encoding model
+        ///     Creates a default constructed transition database model that conforms to te passed simulation model
         /// </summary>
-        /// <param name="encodingModel"></param>
+        /// <param name="simulationModel"></param>
         /// <returns></returns>
-        protected SimulationTransitionModel CreateNewModel(ISimulationEncodingModel encodingModel)
+        protected SimulationTransitionModel CreateNewModel(ISimulationModel simulationModel)
         {
             var model = new SimulationTransitionModel
             {
-                JumpCountTable = GetJumpCountTableEntity(encodingModel),
-                JumpAssignTable = GetJumpAssignTableEntity(encodingModel)
+                JumpCountTable = GetJumpCountTableEntity(simulationModel.SimulationEncodingModel),
+                JumpAssignTable = GetJumpAssignTableEntity(simulationModel.SimulationEncodingModel),
+                GlobalTrackerAssignTable = GetGlobalTrackerAssignTableEntity(simulationModel.SimulationTrackingModel),
+                StaticTrackerAssignTable = GetStaticTrackerAssignTableEntity(simulationModel.SimulationTrackingModel)
             };
 
             return model;

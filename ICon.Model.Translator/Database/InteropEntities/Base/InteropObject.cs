@@ -19,16 +19,16 @@ namespace Mocassin.Model.Translator
         /// </summary>
         /// <param name="targetBuffer"></param>
         /// <param name="offset"></param>
-        /// <param name="marshalProvider"></param>
-        public abstract void ToBinary(byte[] targetBuffer, int offset, IMarshalProvider marshalProvider);
+        /// <param name="marshalService"></param>
+        public abstract void ToBinary(byte[] targetBuffer, int offset, IMarshalService marshalService);
 
         /// <summary>
         ///     Read the internal object information from its unmanaged representation using the provided source buffer
         /// </summary>
         /// <param name="sourceBuffer"></param>
         /// <param name="offset"></param>
-        /// <param name="marshalProvider"></param>
-        public abstract void FromBinary(byte[] sourceBuffer, int offset, IMarshalProvider marshalProvider);
+        /// <param name="marshalService"></param>
+        public abstract void FromBinary(byte[] sourceBuffer, int offset, IMarshalService marshalService);
 
         /// <summary>
         ///     Factory method that creates an interop object wrapper for the passed structure
@@ -76,15 +76,15 @@ namespace Mocassin.Model.Translator
         public override int ByteCount => Marshal.SizeOf(typeof(T));
 
         /// <inheritdoc />
-        public override void ToBinary(byte[] targetBuffer, int offset, IMarshalProvider marshalProvider)
+        public override void ToBinary(byte[] targetBuffer, int offset, IMarshalService marshalService)
         {
-            marshalProvider.StructureToBytes(targetBuffer, offset, _structure);
+            marshalService.GetBytes(targetBuffer, offset, _structure);
         }
 
         /// <inheritdoc />
-        public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalProvider marshalProvider)
+        public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalService marshalService)
         {
-            _structure = marshalProvider.BytesToStructure<T>(sourceBuffer, offset);
+            _structure = marshalService.GetStructure<T>(sourceBuffer, offset);
         }
     }
 }

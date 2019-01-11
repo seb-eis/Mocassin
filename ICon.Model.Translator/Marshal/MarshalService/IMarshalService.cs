@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Represents a marshal provider that handles conversion between structures and byte array representations
+    ///     Represents a marshal service provider that handles conversion between structures and byte array representations
     /// </summary>
-    public interface IMarshalProvider
+    public interface IMarshalService
     {
         /// <summary>
         ///     Translates the bytes starting at the provided buffer offset to the defined structure
@@ -15,7 +15,7 @@ namespace Mocassin.Model.Translator
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        TStruct BytesToStructure<TStruct>(byte[] buffer, int offset) 
+        TStruct GetStructure<TStruct>(byte[] buffer, int offset)
             where TStruct : struct;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Mocassin.Model.Translator
         /// <param name="offset"></param>
         /// <param name="structType"></param>
         /// <returns></returns>
-        object BytesToStructure(byte[] buffer, int offset, Type structType);
+        object GetStructure(byte[] buffer, int offset, Type structType);
 
         /// <summary>
         ///     Translates the provided structure to its byte representation into the provided buffer starting at an offset
@@ -34,7 +34,7 @@ namespace Mocassin.Model.Translator
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="structure"></param>
-        void StructureToBytes<TStruct>(byte[] buffer, int offset, in TStruct structure) 
+        void GetBytes<TStruct>(byte[] buffer, int offset, in TStruct structure)
             where TStruct : struct;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Mocassin.Model.Translator
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="structures"></param>
-        void ManyStructuresToBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures) 
+        void GetBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures)
             where TStruct : struct;
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Mocassin.Model.Translator
         /// <param name="offset"></param>
         /// <param name="upperBound"></param>
         /// <returns></returns>
-        IEnumerable<TStruct> BytesToManyStructures<TStruct>(byte[] buffer, int offset, int upperBound) 
+        IEnumerable<TStruct> GetStructures<TStruct>(byte[] buffer, int offset, int upperBound)
             where TStruct : struct;
     }
 }

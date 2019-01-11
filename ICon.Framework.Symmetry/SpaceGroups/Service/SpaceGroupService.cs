@@ -279,7 +279,8 @@ namespace Mocassin.Symmetry.SpaceGroups
             foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
             {
                 var vector = operation.ApplyWithTrim(source, out var trimVector);
-                if (Comparer.Compare(vector, target) == 0) return GetTranslationShiftedOperation(operation, trimVector);
+                if (Comparer.Compare(vector, target) == 0) 
+                    return GetTranslationShiftedOperation(operation, trimVector);
             }
 
             return null;

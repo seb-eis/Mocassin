@@ -20,7 +20,7 @@ namespace Mocassin.Model.Energies
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
-        ///     The set of unique ignored unit cell positions during environment sampling (Can be null)
+        ///     The set of unique ignored unit cell positions during environment sampling (Can be empty)
         /// </summary>
         [DataMember]
         [IndexResolved]

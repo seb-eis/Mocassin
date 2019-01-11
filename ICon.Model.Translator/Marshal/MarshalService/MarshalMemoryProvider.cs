@@ -1,19 +1,25 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Carries marshal target info. Size info of struct and a pointer to unmanaged memory of correct size
+    ///     Provides thread safe access to unmanaged memory for marshal operations of structs
     /// </summary>
-    public class MarshalTarget
+    public class MarshalMemoryProvider : IDisposable
     {
         /// <summary>
         ///     The lock object to mark that the target is in use
         /// </summary>
         public object LockObj { get; } = new object();
 
-        public MarshalTarget(IntPtr pointer, int typeSize)
+        /// <summary>
+        ///     Creates new marshal memory provider
+        /// </summary>
+        /// <param name="pointer"></param>
+        /// <param name="typeSize"></param>
+        public MarshalMemoryProvider(IntPtr pointer, int typeSize)
         {
             Pointer = pointer;
             TypeSize = typeSize;
@@ -33,10 +39,10 @@ namespace Mocassin.Model.Translator
         ///     Tries to get an exclusive lock on the target
         /// </summary>
         /// <returns></returns>
-        public LockedMarshalTarget GetLocked()
+        public LockedMarshalMemory GetLocked()
         {
-            return Monitor.TryEnter(LockObj) 
-                ? new LockedMarshalTarget(this)
+            return Monitor.TryEnter(LockObj)
+                ? new LockedMarshalMemory(this)
                 : null;
         }
 
@@ -47,37 +53,43 @@ namespace Mocassin.Model.Translator
         {
             Monitor.Exit(LockObj);
         }
-    }
-
-    /// <summary>
-    ///     Locked marshal target that unlocks on dispose
-    /// </summary>
-    public class LockedMarshalTarget : IDisposable
-    {
-        public LockedMarshalTarget(MarshalTarget target)
-        {
-            Target = target ?? throw new ArgumentNullException(nameof(target));
-        }
-
-        /// <summary>
-        ///     The locked marshal target
-        /// </summary>
-        private MarshalTarget Target { get; }
-
-        /// <summary>
-        ///     Get the unmanaged memory pointer
-        /// </summary>
-        public IntPtr Pointer => Target.Pointer;
-
-        /// <summary>
-        ///     Get the size of the structure
-        /// </summary>
-        public int TypeSize => Target.TypeSize;
 
         /// <inheritdoc />
         public void Dispose()
         {
-            Target.Unlock();
+            Marshal.FreeHGlobal(Pointer);
+        }
+    }
+
+    /// <summary>
+    ///     Locked marshal memory that encapsulates a marshal memory provider and unlocks it on dispose
+    /// </summary>
+    public class LockedMarshalMemory : IDisposable
+    {
+        public LockedMarshalMemory(MarshalMemoryProvider memoryProvider)
+        {
+            MemoryProvider = memoryProvider ?? throw new ArgumentNullException(nameof(memoryProvider));
+        }
+
+        /// <summary>
+        ///     The locked marshal memory provider
+        /// </summary>
+        private MarshalMemoryProvider MemoryProvider { get; }
+
+        /// <summary>
+        ///     Get the unmanaged memory pointer
+        /// </summary>
+        public IntPtr Pointer => MemoryProvider.Pointer;
+
+        /// <summary>
+        ///     Get the size of the structure
+        /// </summary>
+        public int TypeSize => MemoryProvider.TypeSize;
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            MemoryProvider.Unlock();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Abstract base class for objects that are stored as interop blob entities within their own table of the database.
+    ///     Abstract base class for objects that use marshalling to a binary state for storage in the database
     /// </summary>
     public abstract class BlobEntityBase : EntityBase
     {
@@ -28,11 +28,11 @@
         /// <summary>
         ///     Parses the blob entity object into the binary data and header properties
         /// </summary>
-        public abstract void ChangeStateToBinary(IMarshalProvider marshalProvider);
+        public abstract void ChangeStateToBinary(IMarshalService marshalService);
 
         /// <summary>
         ///     Parses the binary data and header properties and populates the object
         /// </summary>
-        public abstract void ChangeStateToObject(IMarshalProvider marshalProvider);
+        public abstract void ChangeStateToObject(IMarshalService marshalService);
     }
 }

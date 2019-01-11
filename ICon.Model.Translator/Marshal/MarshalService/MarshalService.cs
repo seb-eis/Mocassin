@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Mocassin.Framework.Extensions;
 
 namespace Mocassin.Model.Translator
 {
-    /// <inheritdoc cref="IMarshalProvider" />
-    public class MarshalProvider : IDisposable, IMarshalProvider
+    /// <inheritdoc cref="Mocassin.Model.Translator.IMarshalService" />
+    public class MarshalService : IDisposable, IMarshalService
     {
         /// <summary>
         ///     Object to look the target pool
@@ -14,28 +15,28 @@ namespace Mocassin.Model.Translator
         private object PoolLock { get; } = new object();
 
         /// <summary>
-        ///     Marshal target pool dictionary. Holds list of unmanaged marshal targets for each type
+        ///     Marshal target pool dictionary. Holds list of unmanaged marshal memory providers for each type
         /// </summary>
-        private Dictionary<Type, List<MarshalTarget>> MarshalTargetPool { get; }
+        private Dictionary<Type, List<MarshalMemoryProvider>> MarshalTargetPool { get; }
 
         /// <summary>
         ///     Create new default marshal provider
         /// </summary>
-        public MarshalProvider()
+        public MarshalService()
         {
-            MarshalTargetPool = new Dictionary<Type, List<MarshalTarget>>();
+            MarshalTargetPool = new Dictionary<Type, List<MarshalMemoryProvider>>();
         }
 
         /// <inheritdoc />
-        public TStruct BytesToStructure<TStruct>(byte[] buffer, int offset) where TStruct : struct
+        public TStruct GetStructure<TStruct>(byte[] buffer, int offset) where TStruct : struct
         {
-            return (TStruct) BytesToStructure(buffer, offset, typeof(TStruct));
+            return (TStruct) GetStructure(buffer, offset, typeof(TStruct));
         }
 
         /// <inheritdoc />
-        public object BytesToStructure(byte[] buffer, int offset, Type structType)
+        public object GetStructure(byte[] buffer, int offset, Type structType)
         {
-            using (var target = GetMarshalTarget(structType))
+            using (var target = GetMemoryProvider(structType))
             {
                 Marshal.Copy(buffer, offset, target.Pointer, target.TypeSize);
                 return Marshal.PtrToStructure(target.Pointer, structType);
@@ -43,10 +44,10 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public IEnumerable<TStruct> BytesToManyStructures<TStruct>(byte[] buffer, int offset, int upperBound)
+        public IEnumerable<TStruct> GetStructures<TStruct>(byte[] buffer, int offset, int upperBound)
             where TStruct : struct
         {
-            using (var target = GetMarshalTarget(typeof(TStruct)))
+            using (var target = GetMemoryProvider(typeof(TStruct)))
             {
                 for (var i = offset; i < upperBound; i += target.TypeSize)
                 {
@@ -57,9 +58,9 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public void StructureToBytes<TStruct>(byte[] buffer, int offset, in TStruct structure) where TStruct : struct
+        public void GetBytes<TStruct>(byte[] buffer, int offset, in TStruct structure) where TStruct : struct
         {
-            using (var target = GetMarshalTarget(typeof(TStruct)))
+            using (var target = GetMemoryProvider(typeof(TStruct)))
             {
                 Marshal.StructureToPtr(structure, target.Pointer, true);
                 Marshal.Copy(target.Pointer, buffer, offset, target.TypeSize);
@@ -67,10 +68,10 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public void ManyStructuresToBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures)
+        public void GetBytes<TStruct>(byte[] buffer, int offset, IEnumerable<TStruct> structures)
             where TStruct : struct
         {
-            using (var target = GetMarshalTarget(typeof(TStruct)))
+            using (var target = GetMemoryProvider(typeof(TStruct)))
             {
                 var index = offset;
                 foreach (var item in structures)
@@ -83,19 +84,21 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Gets a free marshal target for the provided type
+        ///     Gets a free marshal memory provider for the provided type
         /// </summary>
         /// <param name="structType"></param>
         /// <returns></returns>
-        public LockedMarshalTarget GetMarshalTarget(Type structType)
+        public LockedMarshalMemory GetMemoryProvider(Type structType)
         {
-            var targets = GetMarshalTargetList(structType);
+            // ToDo: Change to a system that can be canceled on request 
+            var targets = GetMemoryProviderList(structType);
             while (true)
             {
                 foreach (var item in targets)
                 {
                     var target = item.GetLocked();
-                    if (target != null) return target;
+                    if (target != null) 
+                        return target;
                 }
             }
         }
@@ -105,28 +108,28 @@ namespace Mocassin.Model.Translator
         /// </summary>
         /// <param name="structType"></param>
         /// <returns></returns>
-        protected List<MarshalTarget> GetMarshalTargetList(Type structType)
+        protected List<MarshalMemoryProvider> GetMemoryProviderList(Type structType)
         {
             lock (PoolLock)
             {
                 if (MarshalTargetPool.TryGetValue(structType, out var list))
                     return list;
 
-                list = new List<MarshalTarget>(4).Populate(() => GetNewMarshalTarget(structType), 4);
+                list = new List<MarshalMemoryProvider>(4).Populate(() => GetNewMarshalMemoryProvider(structType), 4);
                 MarshalTargetPool.Add(structType, list);
                 return list;
             }
         }
 
         /// <summary>
-        ///     Get a new marshal target for the provided type
+        ///     Get a new marshal memory provider for the provided type
         /// </summary>
         /// <param name="structType"></param>
         /// <returns></returns>
-        public MarshalTarget GetNewMarshalTarget(Type structType)
+        public MarshalMemoryProvider GetNewMarshalMemoryProvider(Type structType)
         {
             var size = Marshal.SizeOf(structType);
-            return new MarshalTarget(Marshal.AllocHGlobal(size), size);
+            return new MarshalMemoryProvider(Marshal.AllocHGlobal(size), size);
         }
 
         /// <inheritdoc />
@@ -135,7 +138,7 @@ namespace Mocassin.Model.Translator
             foreach (var item in MarshalTargetPool)
             {
                 foreach (var target in item.Value)
-                    Marshal.FreeHGlobal(target.Pointer);
+                    target.Dispose();
             }
         }
     }

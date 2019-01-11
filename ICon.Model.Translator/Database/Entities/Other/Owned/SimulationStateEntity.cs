@@ -6,13 +6,13 @@
     public class SimulationStateEntity : BlobEntityBase
     {
         /// <inheritdoc />
-        public override void ChangeStateToBinary(IMarshalProvider marshalProvider)
+        public override void ChangeStateToBinary(IMarshalService marshalService)
         {
             throw new System.NotImplementedException();
         }
 
         /// <inheritdoc />
-        public override void ChangeStateToObject(IMarshalProvider marshalProvider)
+        public override void ChangeStateToObject(IMarshalService marshalService)
         {
             throw new System.NotImplementedException();
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Bitmasks;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Translator.ModelContext;
 
@@ -48,7 +47,7 @@ namespace Mocassin.Model.Translator.DbBuilder
         }
 
         /// <summary>
-        /// Creates the particle selection mask for the passed position id in the context of a simulation encoding model
+        ///     Creates the particle selection mask for the passed position id in the context of a simulation encoding model
         /// </summary>
         /// <param name="positionId"></param>
         /// <param name="encodingModel"></param>

@@ -41,7 +41,7 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     The particle mask that describes all possible selectable particles
         /// </summary>
-        [Column("SelectableParticlesMask")]
+        [Column("SelectionMask")]
         public long SelectableParticlesMask { get; set; }
 
         /// <summary>
