@@ -21,7 +21,7 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 100; i++)
             {
                 var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
 
@@ -44,7 +44,7 @@ namespace Mocassin.Framework.QuickTest
                 dbContext.Add(result);
                 dbContext.SaveChangesAsync().Wait();
                 dbContext.Dispose();
-
+                
                 DisplayWatch(watch);
             }
 

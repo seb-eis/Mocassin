@@ -25,7 +25,6 @@ namespace Mocassin.Model.Structures.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport ResolveSpaceGroupChange(SpaceGroupInfo groupInfo, IDataAccessor<StructureModelData> dataAccess)
         {
-            Console.WriteLine($"Resolver {typeof(SpaceGroupChangeHandler)} was called for {groupInfo.GetType()}");
             return new SpaceGroupChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInfo);
         }
 
@@ -38,7 +37,6 @@ namespace Mocassin.Model.Structures.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport ResolveCellParametersChange(CellParameters parameters, IDataAccessor<StructureModelData> dataAccess)
         {
-            Console.WriteLine($"Resolver {typeof(CellParametersChangeHandler)} was called for {parameters.GetType()}");
             return new CellParametersChangeHandler(dataAccess, ModelProject).HandleConflicts(parameters);
         }
     }

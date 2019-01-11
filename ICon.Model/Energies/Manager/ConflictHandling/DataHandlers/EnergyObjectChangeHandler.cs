@@ -26,7 +26,6 @@ namespace Mocassin.Model.Energies.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport HandleObjectChange(UnstableEnvironment envInfo, IDataAccessor<EnergyModelData> dataAccess)
         {
-            Console.WriteLine($"Resolver {typeof(UnstableEnvironmentChangeHandler)} was called for {envInfo.GetType()}");
             return new UnstableEnvironmentChangeHandler(dataAccess, ModelProject).HandleConflicts(envInfo);
         }
 
@@ -40,7 +39,6 @@ namespace Mocassin.Model.Energies.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport HandleObjectChange(GroupInteraction groupInteraction, IDataAccessor<EnergyModelData> dataAccess)
         {
-            Console.WriteLine($"Resolver {typeof(GroupInteractionChangeHandler)} was called for {groupInteraction.GetType()}");
             return new GroupInteractionChangeHandler(dataAccess, ModelProject).HandleConflicts(groupInteraction);
         }
     }

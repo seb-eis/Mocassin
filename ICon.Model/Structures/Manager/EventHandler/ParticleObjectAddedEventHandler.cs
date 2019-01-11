@@ -26,7 +26,6 @@ namespace Mocassin.Model.Structures.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleNewParticle(IModelObjectEventArgs<IParticle> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
             return new ConflictReport();
         }
 
@@ -38,7 +37,6 @@ namespace Mocassin.Model.Structures.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleNewParticleSet(IModelObjectEventArgs<IParticleSet> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
             return new ConflictReport();
         }
     }

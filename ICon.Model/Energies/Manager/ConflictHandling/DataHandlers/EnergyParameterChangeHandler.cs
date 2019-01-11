@@ -25,7 +25,6 @@ namespace Mocassin.Model.Energies.ConflictHandling
         [ConflictHandlingMethod]
         protected IConflictReport HandleParameterChange(StableEnvironmentInfo info, IDataAccessor<EnergyModelData> dataAccess)
         {
-            Console.WriteLine($"Resolver {typeof(StableEnvironmentInfoChangeHandler)} was called for {info.GetType()}");
             return new StableEnvironmentInfoChangeHandler(dataAccess, ModelProject).HandleConflicts(info);
         }
     }
