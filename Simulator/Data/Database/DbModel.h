@@ -470,11 +470,12 @@ typedef struct JobModel
 typedef Array_t(byte_t, 4, Lattice) Lattice_t;
 
 // Type for the double 5D rectangular energy background access
+// Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Array_t(double, 5, EnergyBackground) EnergyBackground_t;
 
-// Type for the lattice model (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 80@[16,4,4,24,24,{8}]
-typedef struct LatticeModel
+// Type for the lattice meta information
+// Layout@ggc_x86_64 => 24@[16,4,4]
+typedef struct LatticeInfo
 {
     // The size information for the lattice as a 4d vector
     Vector4_t           SizeVector;
@@ -484,6 +485,15 @@ typedef struct LatticeModel
 
     // The number of selectables in the lattice
     int32_t             NumOfSelectables;
+
+} LatticeInfo_t;
+
+// Type for the lattice model (Supports 16 bit alignment)
+// Layout@ggc_x86_64 => 80@[24,24,24,{8}]
+typedef struct LatticeModel
+{
+    // The lattice info. Contains lattice model meta data
+    LatticeInfo_t       LatticeInfo;
 
     // The 4D simulation lattice start state
     // Access by [A,B,C,D]

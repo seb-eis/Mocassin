@@ -13,4 +13,5 @@
 #include <stdint.h>
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
-void
+// Updates the tracking system on the simulation state after a successful KMC transition
+void UpdateJumpTrackingSystem(__SCONTEXT_PAR);

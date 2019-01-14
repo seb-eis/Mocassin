@@ -92,9 +92,16 @@ typedef Array_t(EnvironmentState_t, 4, EnvironmentLattice) EnvironmentLattice_t;
 // Layout@ggc_x86_64 => 16@[4,4,4,4]
 typedef struct JumpSelectionInfo
 {
+    // The selected environment id
     int32_t EnvironmentId;
+
+    // The selected jump direction id
     int32_t JumpId;
+
+    // The selected relative jump id
     int32_t RelativeId;
+
+    // The selected offset id for an MMC transition
     int32_t OffsetId;
     
 } JumpSelectionInfo_t;

@@ -107,7 +107,7 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 
     Buffer_t tmpBuffer;
     size_t poolCount = span_GetSize(*getDirectionPools(SCONTEXT));
-    int32_t poolSize = getDbLatticeModel(SCONTEXT)->NumOfSelectables;
+    int32_t poolSize = getNumberOfSelectables(SCONTEXT);
 
     error = ctor_Buffer(tmpBuffer, poolCount * sizeof(DirectionPool_t));
     return_if(error, error);
@@ -237,7 +237,7 @@ static inline int32_t GetStateMobileTrackerDataSize(__SCONTEXT_PAR)
 {
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getDbLatticeModel(SCONTEXT)->NumOfMobiles * sizeof(Tracker_t);
+        return getNumberOfMobiles(SCONTEXT) * sizeof(Tracker_t);
     }
     return 0;
 }
@@ -253,7 +253,7 @@ static int32_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const int32_t used
         TrackersState_t* configObject = getMobileMovementTrackers(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + getDbLatticeModel(SCONTEXT)->NumOfMobiles;
+        configObject->End = configObject->Begin + getNumberOfMobiles(SCONTEXT);
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -292,7 +292,7 @@ static inline int32_t GetStateMobileTrackerMappingDataSize(__SCONTEXT_PAR)
 {
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getDbLatticeModel(SCONTEXT)->NumOfMobiles * sizeof(int32_t);
+        return getNumberOfMobiles(SCONTEXT) * sizeof(int32_t);
     }
     return 0;
 }
@@ -308,7 +308,7 @@ static int32_t ConfigStateMobileTrackerMappingAccess(__SCONTEXT_PAR, const int32
         MobileTrackerMapping_t* configObject = getMobileTrackerMapping(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + getDbLatticeModel(SCONTEXT)->NumOfMobiles;
+        configObject->End = configObject->Begin + getNumberOfMobiles(SCONTEXT);
     }
 
     return usedBufferBytes + cfgBufferBytes;

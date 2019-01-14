@@ -310,6 +310,12 @@ static inline LatticeModel_t* getDbLatticeModel(__SCONTEXT_PAR)
     return &getDatabaseModel(SCONTEXT)->LatticeModel;
 }
 
+// Get the lattice model meta info from the database model
+static inline LatticeInfo_t* getDbLatticeInfo(__SCONTEXT_PAR)
+{
+    return &getDbLatticeModel(SCONTEXT)->LatticeInfo;
+}
+
 // Get the particle lattice from the database model data
 static inline Lattice_t* getDbModelLattice(__SCONTEXT_PAR)
 {
@@ -368,7 +374,19 @@ static inline EnvironmentDefinition_t* getEnvironmentModelAt(__SCONTEXT_PAR, con
 // Get the lattice size vector from the database model data
 static inline Vector4_t* getLatticeSizeVector(__SCONTEXT_PAR)
 {
-    return &getDbLatticeModel(SCONTEXT)->SizeVector;
+    return &getDbLatticeInfo(SCONTEXT)->SizeVector;
+}
+
+// Get the number of mobiles from the db lattice meta info
+static inline int32_t getNumberOfMobiles(__SCONTEXT_PAR)
+{
+    return getDbLatticeInfo(SCONTEXT)->NumOfMobiles;
+}
+
+// Get the number of selectable particles from the db lattice meta info
+static inline int32_t getNumberOfSelectables(__SCONTEXT_PAR)
+{
+    return getDbLatticeInfo(SCONTEXT)->NumOfMobiles;
 }
 
 // Get the jump count mapping that assigns each [positionId][particleId] combination its jump count
@@ -516,6 +534,13 @@ static inline TrackersState_t* getStaticMovementTrackers(__SCONTEXT_PAR)
 static inline TrackersState_t* getMobileMovementTrackers(__SCONTEXT_PAR)
 {
     return &getSimulationState(SCONTEXT)->MobileTrackers;
+}
+
+// Get the mobile tracker at the specified [trackerId] from the simulation state
+static inline Tracker_t* getMobileTrackerAt(__SCONTEXT_PAR, const int32_t trackerId)
+{
+    debug_assert(!span_IndexIsOutOfRange(*getMobileMovementTrackers(SCONTEXT), trackerId));
+    return &span_Get(*getMobileMovementTrackers(SCONTEXT), trackerId);
 }
 
 // Get the mobile tracker mapping that assigns each existing tracker its current host [globalPosId]
