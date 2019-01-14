@@ -20,20 +20,25 @@
 #define STATE_JUMPSTAT_EMIN 0
 #define STATE_JUMPSTAT_EMAX 10.0
 
-/* Flag values */
+/* Job info flag values */
 
-#define FLG_KMC             0x1
-#define FLG_MMC             0x2
-#define FLG_PRERUN          0x4
-#define FLG_CONTINUE        0x8
-#define FLG_COMPLETED       0x10
-#define FLG_TIMEOUT         0x20
-#define FLG_ABORTCONDITION  0x40
-#define FLG_RATELIMIT       0x80
-#define FLG_FIRSTCYCLE      0x100
-#define FLG_INITIALIZED     0x20000000
-#define FLG_ABORT           0x40000000
-#define FLG_STATEERROR      0x80000000
+#define INFO_FLG_KMC        1
+#define INFO_FLG_MMC        1 << 1
+#define INFO_FLG_USEPRERUN  1 << 2
+
+/* Main state flag values */
+
+#define STATE_FLG_PRERUN        1
+#define STATE_FLG_CONTINUE      1 << 1
+#define STATE_FLG_COMPLETED     1 << 2
+#define STATE_FLG_TIMEOUT       1 << 3
+#define STATE_FLG_SIMABORT      1 << 4
+#define STATE_FLG_CONDABORT     1 << 5
+#define STATE_FLG_RATEABORT     1 << 6
+#define STATE_FLG_FIRSTCYCLE    1 << 7
+#define STATE_FLG_INITIALIZED   1 << 8
+#define STATE_FLG_SIMERROR      1 << 9
+#define STATE_FLG_PRERUN_RESET  1 << 10
 
 /* Monte Carlo constants */
 
@@ -76,8 +81,10 @@
 
 #define PARTICLE_VOID       0
 #define PARTICLE_NULL       255
+#define PARTICLE_IDLIMIT    64
 #define POSITION_NULL       -1
 #define INVALID_INDEX       -1
+#define INVALID_COUNT       -1
 
 /* File and writemode definitions */
 

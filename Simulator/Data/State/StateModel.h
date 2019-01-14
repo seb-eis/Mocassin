@@ -147,10 +147,6 @@ typedef struct StateMetaInfo
     
 } StateMetaInfo_t;
 
-// Type for the storage of the dynamic tracker indexing
-// Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(int32_t, IndexingState) IndexingState_t;
-
 // Type for the jump histogram type that stores a energy value occurrence statistic
 // Layout@ggc_x86_64 => 32+STATE_JUMPSTAT_SIZE@[8,8,8,8,{STATE_JUMPSTAT_SIZE}]
 typedef struct JumpHistogram
@@ -194,6 +190,10 @@ typedef struct JumpStatistic
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(JumpStatistic_t, JumpStatisticsState) JumpStatisticsState_t;
 
+// Type for the storage of the dynamic tracker mapping
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(int32_t, IndexingState) MobileTrackerMapping_t;
+
 // Type for the simulation state
 // Layout@ggc_x86_64 => 148@[16,8,8,16,16,16,16,16,16,24]
 typedef struct SimulationState
@@ -222,8 +222,8 @@ typedef struct SimulationState
     // The simulation state static tracker data access
     TrackersState_t         StaticTrackers;
 
-    // The simulation state mobile tracker indexing data access
-    IndexingState_t         MobileTrackerIndexing;
+    // The simulation state mobile tracker mapping data access
+    MobileTrackerMapping_t  MobileTrackerMapping;
 
     // The simulation state jump statistics data access
     JumpStatisticsState_t   JumpStatistics;

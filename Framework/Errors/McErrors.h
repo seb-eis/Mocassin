@@ -20,11 +20,12 @@
 // Defines the debug assert all macro
 #define DEBUG_ASSERT_ALL
 
-// Defines debug assertion macro expansion based upon the debug assert flag
 #if defined(DEBUG_ASSERT_ALL)
-    #define break_on_debug(cond) if (cond) { ErrorToStdout(ERR_UNKNOWN, __FUNCTION__, __LINE__, #cond); }
+    // Active debug assertion macro. Asserts that the condition is true during runtime
+    #define debug_assert(cond) if (!(cond)) { ErrorToStdout(ERR_DEBUGASSERT, __FUNCTION__, __LINE__, #cond); }
 #else
-    #define break_on_debug(cond)
+    // Deactivated assertion macro. Expands to nothing
+    #define debug_assert(cond)
 #endif
 
 // Macro for throwing an error information to the console on debugging
@@ -115,6 +116,9 @@ typedef int64_t cerror_t;
 // Defines error for cases where a function argument is invalid
 #define ERR_ARGUMENT 18
 
+// Defines error for cases where a debug assertion fails
+#define ERR_DEBUGASSERT 19
+
 // Defines the default error display with code and message
 #define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG);
 
@@ -143,7 +147,7 @@ typedef int64_t cerror_t;
 #define break_if(cond) if (cond) break
 
 // Get an error description string for the passed error Code
-char* ErrorCodeToString(error_t errCode);
+const char* ErrorCodeToString(error_t errCode);
 
 // Error handling call for debugging that dumps the information the stdout
 void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg);

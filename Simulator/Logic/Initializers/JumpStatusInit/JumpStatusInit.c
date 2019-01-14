@@ -52,7 +52,7 @@ static bool_t TryGetEnvironmentLinkId(const EnvironmentLinks_t*restrict environm
 }
 
 // Determines the jump links that the current jump-path has until the provided jump length and writes the result to the passed buffer and counter
-static error_t BufferJumpLinksOfJumppath(__SCONTEXT_PAR, const int32_t jumpLength, int32_t* restrict outCount, JumpLink_t*restrict outBuffer)
+static error_t BufferJumpLinksOfJumpPath(__SCONTEXT_PAR, const int32_t jumpLength, int32_t *restrict outCount, JumpLink_t *restrict outBuffer)
 {
     return_if((jumpLength < JUMPS_JUMPLENGTH_MIN)||(jumpLength > JUMPS_JUMPLENGTH_MAX), ERR_ARGUMENT);
 
@@ -95,12 +95,12 @@ static error_t BuildJumpStatusByStatusVector(__SCONTEXT_PAR, const Vector4_t *re
     error_t error;
     int32_t numOfLinks = 0;
     JumpStatus_t* jumpStatus = getJumpStatusByVector4(SCONTEXT, jumpStatusVector);
-    JumpDirection_t* jumpDirection = getJumpDirectionById(SCONTEXT, jumpStatusVector->d);
+    JumpDirection_t* jumpDirection = getJumpDirectionAt(SCONTEXT, jumpStatusVector->d);
 
     error = PrepareJumpPathForLinkSearch(SCONTEXT, jumpStatusVector, jumpDirection);
     return_if(error != ERR_OK, error);
 
-    error = BufferJumpLinksOfJumppath(SCONTEXT, jumpDirection->JumpLength, &numOfLinks, linkBuffer);
+    error = BufferJumpLinksOfJumpPath(SCONTEXT, jumpDirection->JumpLength, &numOfLinks, linkBuffer);
     return_if(error != ERR_OK, error);
 
     error = ConstructJumpStatusFromLinkBuffer(jumpStatus, numOfLinks, linkBuffer);

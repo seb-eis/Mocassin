@@ -20,7 +20,7 @@ error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, CycleCounterState_t* count
     }
 
     setBufferByteValues(counters, sizeof(CycleCounterState_t), 0);
-    counters->TotalGoalMcs = getJobInformation(SCONTEXT)->TargetMcsp * getLatticeInformation(SCONTEXT)->NumOfMobiles;
+    counters->TotalGoalMcs = getDbModelJobInfo(SCONTEXT)->TargetMcsp * getDbLatticeModel(SCONTEXT)->NumOfMobiles;
 
     int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
     if (rem != 0)
@@ -48,7 +48,7 @@ error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, PhysicalInfo_t* factors)
     }
     else
     {
-        factors->TotalNormalizationFactor = getJobHeaderAsKmc(SCONTEXT)->FixedNormFactor;
+        factors->TotalNormalizationFactor = getDbModelJobHeaderAsKMC(SCONTEXT)->FixedNormFactor;
     }
 
     return ERR_OK;

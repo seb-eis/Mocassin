@@ -180,9 +180,9 @@ typedef Span_t(DirectionPool_t, DirectionPools) DirectionPools_t;
 // Layout@ggc_x86_64 => 64@[4,4,16,40]
 typedef struct JumpSelectionPool
 {
-    int32_t             NumOfSelectableJumps;
-    int32_t             NumOfDirectionPools;
-    IdRedirection_t     NumOfDirectionsToPoolId;
+    int32_t             SelectableJumpCount;
+    int32_t             DirectionPoolCount;
+    IdRedirection_t     DirectionPoolMapping;
     DirectionPools_t    DirectionPools;
     
 } JumpSelectionPool_t;

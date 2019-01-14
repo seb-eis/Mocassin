@@ -186,9 +186,9 @@ typedef struct ClusterTable
     // The object id
     int32_t         ObjectId;
 
-    // The particle to table id mapping.
+    // The particle table mapping. Assigns each particle id its valid sub table in the cluster table
     // Access by [ParticleId]
-    byte_t          ParticleToTableId[64];
+    byte_t          ParticleTableMapping[64];
 
     // Padding
     int32_t         Padding:32;
@@ -334,16 +334,16 @@ typedef struct TransitionModel
     JumpDirections_t        JumpDirections;
 
     // The jump count table, assigns each [PositionId,ParticleId] the number of selectable jumps
-    JumpCountTable_t        JumpCountTable;
+    JumpCountTable_t        JumpCountMappingTable;
 
     // The jump assign table, assigns each [PositionId,ParticleId,RelativeJumpId] the affiliated jump direction id
-    JumpMappingTable_t      JumpAssignTable;
+    JumpMappingTable_t      JumpDirectionMappingTable;
 
     // The static tracker assign table, assigns each [PositionId,ParticleId] a static tracker index offset
-    TrackerMappingTable_t   StaticTrackerAssignTable;
+    TrackerMappingTable_t   StaticTrackerMappingTable;
 
     // The global tracker assign table, assigns each [JumpCollectionId,ParticleId] a global tracker index
-    TrackerMappingTable_t   GlobalTrackerAssignTable;
+    TrackerMappingTable_t   GlobalTrackerMappingTable;
 
 } TransitionModel_t;
 
@@ -353,7 +353,7 @@ typedef struct TransitionModel
 // Layout@ggc_x86_64 => 32@[8,8,4,4,4,{4}]
 typedef struct MmcHeader
 {
-    // Bitmask fro MMC specific job flags
+    // Bitmask for MMC specific job flags
     Bitmask_t   JobFlags;
 
     // The relative energy abort tolerance

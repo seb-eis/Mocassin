@@ -11,6 +11,7 @@
 #pragma once
 #include <stdint.h>
 #include <immintrin.h>
+#include "Framework/Basic/BaseTypes/BaseTypes.h"
 
 // Defines 4 component int32_t sse2 vector type with 4x4 bytes
 typedef int32_t __sse4s __attribute__((vector_size(16)));
@@ -66,6 +67,16 @@ int32_t Int32FromVector4Pair(const Vector4_t* restrict start, const Vector4_t* r
 
 // Performs a conversion of a size_t value into a 4d int vector with the provided 4d size information (4D coordinate encoding by block sizes)
 Vector4_t Vector4FromInt32(int32_t value, const int32_t* restrict blockSizes);
+
+// Checks if the passed 4D vector is out of bounds of the passed reference size 4D vector
+static inline bool_t Vector4IsOutOfBounds(const Vector4_t* restrict value, const Vector4_t* restrict refSize)
+{
+    return_if(value->a >= refSize->a || value ->a < 0, true);
+    return_if(value->b >= refSize->b || value ->b < 0, true);
+    return_if(value->c >= refSize->c || value ->c < 0, true);
+    return_if(value->d >= refSize->d || value ->d < 0, true);
+    return false;
+}
 
 // Performs a periodic trim of a 4d integer vector with the provided sizes (Loop based, faster than modulo due to rare occurence of actual required trim)
 static inline void PeriodicTrimVector4(Vector4_t* restrict vector, const Vector4_t* restrict sizes)

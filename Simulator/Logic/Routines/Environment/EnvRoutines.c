@@ -239,8 +239,8 @@ static error_t ConstructPreparedLinkingSystem(__SCONTEXT_PAR)
 
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
     {
-        // Immobility OPT Part 1 -> Incomming updates are not required, the state energy of immobiles is not used during mc routine
-        // Sideffect:   Causes all immobiles to remain at their initial energy state during simulation (can be resynchronized by dynamic lookup)
+        // Immobility OPT Part 1 -> Incoming updates are not required, the state energy of immobile particles is not used during mc routine
+        // Effect:    Causes all immobile particles to remain at their initial energy state during simulation (can be resynchronized by dynamic lookup)
         #if defined(OPT_LINK_ONLY_MOBILES)
             continue_if(!environment->IsMobile);
         #endif
@@ -286,14 +286,14 @@ static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, Buffer_t* rest
 // Find an environment state by resolving the passed pair id in the context of the start environment state
 static EnvironmentState_t* PullEnvStateByInteraction(__SCONTEXT_PAR, EnvironmentState_t* restrict startEnvironment, const int32_t pairId)
 {
-    PairDefinition_t* pairDefinition = getEnvironmentPairDefById(startEnvironment, pairId);
+    PairDefinition_t* pairDefinition = getEnvironmentPairDefinitionAt(startEnvironment, pairId);
     return GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, startEnvironment);
 }
 
 // Writes the current environment occupation of the passed environment state to the passed occupation buffer
 static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, EnvironmentState_t* environment, Buffer_t* restrict occupationBuffer)
 {
-    for (int32_t i = 0; i < getEnvironmentPairDefCount(environment); i++)
+    for (int32_t i = 0; i < getEnvironmentPairDefinitionCount(environment); i++)
     {
         span_Get(*occupationBuffer, i) = PullEnvStateByInteraction(SCONTEXT, environment, i)->ParticleId;
         return_if(span_Get(*occupationBuffer,i) == PARTICLE_VOID, ERR_DATACONSISTENCY);
@@ -309,6 +309,7 @@ static void ResetEnvStateBuffersToZero(EnvironmentState_t* restrict environment)
     {
         *energy = 0;
     }
+
     cpp_foreach(cluster, environment->ClusterStates)
     {
         *cluster = (ClusterState_t) { 0, 0, 0ULL, 0ULL };
@@ -321,13 +322,14 @@ static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* res
     for (size_t i = 0; i < span_GetSize(environment->EnvironmentDefinition->PairDefinitions); i++)
     {
         int32_t tableId = span_Get(environment->EnvironmentDefinition->PairDefinitions, i).EnergyTableId;
-        const PairTable_t* pairTable = getPairEnergyTableById(SCONTEXT, tableId);
+        const PairTable_t* pairTable = getPairEnergyTableAt(SCONTEXT, tableId);
 
         for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
         {
             byte_t positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
             byte_t partnerParticleId = span_Get(*occupationBuffer, i);
-            span_Get(environment->EnergyStates, positionParticleId) += getPairEnergyTableEntry(pairTable, positionParticleId, partnerParticleId);
+            span_Get(environment->EnergyStates, positionParticleId) += getPairEnergyAt(pairTable, positionParticleId,
+                                                                                       partnerParticleId);
         }
     } 
 }
@@ -352,7 +354,7 @@ static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_
 
     cpp_foreach(clusterDefinition, environment->EnvironmentDefinition->ClusterDefinitions)
     {
-        const ClusterTable_t* clusterTable = getClusterEnergyTableById(SCONTEXT, clusterDefinition->EnergyTableId);
+        const ClusterTable_t* clusterTable = getClusterEnergyTableAt(SCONTEXT, clusterDefinition->EnergyTableId);
         for (byte_t i = 0; clusterDefinition->EnvironmentPairIds[i] != POSITION_NULL; i++)
         {
             int32_t codeByteId = clusterDefinition->EnvironmentPairIds[i];
@@ -365,7 +367,7 @@ static error_t AddEnvClusterEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_
         for (int32_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
         {
             byte_t positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
-            span_Get(environment->EnergyStates, positionParticleId) += getCluEnergyTableEntry(clusterTable, positionParticleId, cluster->CodeId);
+            span_Get(environment->EnergyStates, positionParticleId) += getClusterEnergyAt(clusterTable, positionParticleId, cluster->CodeId);
         }
     }
 
@@ -424,7 +426,7 @@ void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, con
     environment->IsMobile = false;
     environment->IsStable = (particleId == PARTICLE_VOID) ? false : true;
     environment->PositionVector = Vector4FromInt32(environmentId, getLatticeBlockSizes(SCONTEXT));
-    environment->EnvironmentDefinition = getEnvironmentModelById(SCONTEXT, environment->PositionVector.d);
+    environment->EnvironmentDefinition = getEnvironmentModelAt(SCONTEXT, environment->PositionVector.d);
 }
 
 /* Simulation routines KMC and MMC */
@@ -437,18 +439,21 @@ static inline void SetActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, Environment
 
 static inline void Set_ActiveWorkClusterByEnvAndId(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, const byte_t clusterId)
 {
-    SCONTEXT->CycleState.WorkCluster = getEnvironmentCluStateById(environment, clusterId);
+    SCONTEXT->CycleState.WorkCluster = getEnvironmentClusterStateAt(environment, clusterId);
 }
 
 static inline void SetActiveWorkPairEnergyTable(__SCONTEXT_PAR, EnvironmentState_t *restrict environment,
                                                 EnvironmentLink_t *restrict environmentLink)
 {
-    SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableById(SCONTEXT, getEnvironmentPairDefById(environment, environmentLink->PairId)->EnergyTableId);
+    SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableAt(SCONTEXT, getEnvironmentPairDefinitionAt(environment,
+                                                                                                       environmentLink->PairId)->EnergyTableId);
 }
 
 static inline void Set_ActiveWorkClusterEnergyTable(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, ClusterLink_t* restrict clusterLink)
 {
-    SCONTEXT->CycleState.WorkClusterTable = getClusterEnergyTableById(SCONTEXT, getEnvironmentCluDefById(environment, clusterLink->ClusterId)->EnergyTableId);
+    SCONTEXT->CycleState.WorkClusterTable = getClusterEnergyTableAt(SCONTEXT,
+                                                                    getEnvironmentClusterDefinitionAt(environment,
+                                                                                                      clusterLink->ClusterId)->EnergyTableId);
 }
 
 static inline int32_t FindClusterCodeIdInClusterTable(const ClusterTable_t* restrict clusterTable, const OccCode_t code)
@@ -458,12 +463,13 @@ static inline int32_t FindClusterCodeIdInClusterTable(const ClusterTable_t* rest
 
 static inline double CalcPairEnergyDelta(const PairTable_t* restrict pairTable, const byte_t mainId, const byte_t oldId, const byte_t newId)
 {
-    return getPairEnergyTableEntry(pairTable, mainId, oldId) - getPairEnergyTableEntry(pairTable, mainId, newId);
+    return getPairEnergyAt(pairTable, mainId, oldId) - getPairEnergyAt(pairTable, mainId, newId);
 }
 
 static inline double CalcClusterEnergyDelta(const ClusterTable_t* restrict clusterTable, const ClusterState_t* restrict cluster, const byte_t particleId)
 {
-    return getCluEnergyTableEntry(clusterTable, particleId, cluster->CodeId) - getCluEnergyTableEntry(clusterTable, particleId, cluster->CodeIdBackup);
+    return getClusterEnergyAt(clusterTable, particleId, cluster->CodeId) -
+            getClusterEnergyAt(clusterTable, particleId, cluster->CodeIdBackup);
 }
 
 static inline void UpdateClusterState(const ClusterTable_t* restrict clusterTable, const ClusterLink_t* restrict clusterLink, ClusterState_t* restrict cluster, const byte_t newParticleId)
@@ -474,12 +480,12 @@ static inline void UpdateClusterState(const ClusterTable_t* restrict clusterTabl
 
 static inline void InvokeDeltaOfActivePair(__SCONTEXT_PAR, const byte_t updateParticleId, const byte_t oldParticleId, const byte_t newParticleId)
 {
-    *getActiveStateEnergyById(SCONTEXT, updateParticleId) += CalcPairEnergyDelta(getActivePairTable(SCONTEXT), updateParticleId, oldParticleId, newParticleId);
+    *getActiveStateEnergyAt(SCONTEXT, updateParticleId) += CalcPairEnergyDelta(getActivePairTable(SCONTEXT), updateParticleId, oldParticleId, newParticleId);
 }
 
 static inline void InvokeDeltaOfActiveCluster(__SCONTEXT_PAR, const byte_t updateParticleId)
 {
-    *getActiveStateEnergyById(SCONTEXT, updateParticleId) += CalcClusterEnergyDelta(getActiveClusterTable(SCONTEXT), getActiveWorkCluster(SCONTEXT), updateParticleId);
+    *getActiveStateEnergyAt(SCONTEXT, updateParticleId) += CalcClusterEnergyDelta(getActiveClusterTable(SCONTEXT), getActiveWorkCluster(SCONTEXT), updateParticleId);
 }
 
 static void InvokeEnvLinkCluUpdates(__SCONTEXT_PAR, const EnvironmentLink_t* restrict environmentLink, const byte_t newParticleId)

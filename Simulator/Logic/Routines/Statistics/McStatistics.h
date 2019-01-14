@@ -18,8 +18,8 @@
 // Calculates the current time step per jump
 static inline double CalcTimeStepPerJump(__SCONTEXT_PAR)
 {
-    return 1.0 / (getJobHeaderAsKmc(SCONTEXT)->AttemptFrequencyModulus
-        * (double) getJumpSelectionPool(SCONTEXT)->NumOfSelectableJumps);
+    return 1.0 / (getDbModelJobHeaderAsKMC(SCONTEXT)->AttemptFrequencyModulus
+        * (double) getJumpSelectionPool(SCONTEXT)->SelectableJumpCount);
 }
 
 // Calculates the basic normalization factor from the max jump probability
@@ -31,19 +31,19 @@ static inline double CalcBasicJumpNormalization(__SCONTEXT_PAR)
 // Calculates the total jump normalization
 static inline double CalcTotalJumpNormalization(__SCONTEXT_PAR)
 {
-    return CalcBasicJumpNormalization(SCONTEXT) * getJobHeaderAsKmc(SCONTEXT)->FixedNormFactor;
+    return CalcBasicJumpNormalization(SCONTEXT) * getDbModelJobHeaderAsKMC(SCONTEXT)->FixedNormFactor;
 }
 
 // Calculates the energy conversion factor
 static inline double CalcEnergyConversionFactor(__SCONTEXT_PAR)
 {
-    return 1.0 / (getJobInformation(SCONTEXT)->Temperature * NATCONST_BLOTZMANN);
+    return 1.0 / (getDbModelJobInfo(SCONTEXT)->Temperature * NATCONST_BLOTZMANN);
 }
 
 // Calculates the current electric field influence
 static inline double CalcElectricFieldInfluence(__SCONTEXT_PAR)
 {
-    return getJobHeaderAsKmc(SCONTEXT)->ElectricFieldModulus
+    return getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus
         * getActiveJumpDirection(SCONTEXT)->ElectricFieldFactor
         * getActiveJumpRule(SCONTEXT)->ElectricFieldFactor;
 }

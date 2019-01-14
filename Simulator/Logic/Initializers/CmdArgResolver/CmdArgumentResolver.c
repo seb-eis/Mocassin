@@ -53,11 +53,9 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
 // Searches for a command line argument in the passed resolver table and calls validator and callback if a handler is found
 static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const CmdArgLookup_t* restrict resolverTable, const int32_t argId)
 {
-    break_on_debug(resolverTable == NULL);
-
     error_t error;
-    char const * keyArgument = getCommandArgumentStringById(SCONTEXT, argId);
-    char const * valArgument = getCommandArgumentStringById(SCONTEXT, argId + 1);
+    char const * keyArgument = getCommandArgumentStringAt(SCONTEXT, argId);
+    char const * valArgument = getCommandArgumentStringAt(SCONTEXT, argId + 1);
 
     error = ValidateCmdKeyArgumentFormat(keyArgument);
     return_if(error, ERR_CONTINUE);
@@ -73,6 +71,7 @@ static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const CmdArgLookup_t*
             return ERR_OK;
         }
     }
+    
     return ERR_CMDARGUMENT;
 }
 
@@ -124,7 +123,7 @@ void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char co
     error_t error;
 
     setCommandArguments(SCONTEXT, argCount, argValues);
-    setProgramRunPath(SCONTEXT, getCommandArgumentStringById(SCONTEXT, 0));
+    setProgramRunPath(SCONTEXT, getCommandArgumentStringAt(SCONTEXT, 0));
 
     error = ResolveAndSetEssentialCmdArguments(SCONTEXT);
     error_assert(error, "Failed to resolve essential command line arguments.");

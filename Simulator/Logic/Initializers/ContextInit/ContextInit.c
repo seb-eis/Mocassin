@@ -46,7 +46,7 @@ static void AllocateEnvironmentLattice(__SCONTEXT_PAR)
 
     for (int32_t i = 0; i < lattice.Header->Size; i++)
     {
-        AllocateEnvironmentBuffers(getEnvironmentStateById(SCONTEXT, i), getEnvironmentModelById(SCONTEXT, i));
+        AllocateEnvironmentBuffers(getEnvironmentStateById(SCONTEXT, i), getEnvironmentModelAt(SCONTEXT, i));
     }
 }
 
@@ -60,9 +60,9 @@ static void AllocateLatticeEnergyBuffer(Flp64Buffer_t *restrict bufferAccess, Mm
 // Allocates the abort condition buffers if they are required
 static void AllocateAbortConditionBuffers(__SCONTEXT_PAR)
 {
-    if (JobInfoHasFlgs(SCONTEXT, FLG_MMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC))
     {
-        AllocateLatticeEnergyBuffer(getLatticeEnergyBuffer(SCONTEXT), getJobInformation(SCONTEXT)->JobHeader);
+        AllocateLatticeEnergyBuffer(getLatticeEnergyBuffer(SCONTEXT), getDbModelJobInfo(SCONTEXT)->JobHeader);
     }
 }
 
@@ -79,16 +79,16 @@ static error_t ConstructSelectionPoolIndexRedirection(__SCONTEXT_PAR)
     error_t error;
 
     Buffer_t tmpBuffer;
-    int32_t poolCount = 1 + FindMaxJumpDirectionCount(&getTransitionModel(SCONTEXT)->JumpCountTable);
+    int32_t poolCount = 1 + FindMaxJumpDirectionCount(&getDbTransitionModel(SCONTEXT)->JumpCountMappingTable);
     int32_t poolIndex = 1;
 
     error = ctor_Buffer(tmpBuffer, poolCount * sizeof(int32_t));
     return_if(error, error);
 
     setBufferByteValues(tmpBuffer.Begin, span_GetSize(tmpBuffer), 0);
-    setDirectionPoolIndexing(SCONTEXT, (IdRedirection_t) span_AsVoid(tmpBuffer));
+    setDirectionPoolMapping(SCONTEXT, (IdRedirection_t) span_AsVoid(tmpBuffer));
 
-    cpp_foreach(dirCount, getTransitionModel(SCONTEXT)->JumpCountTable)
+    cpp_foreach(dirCount, getDbTransitionModel(SCONTEXT)->JumpCountMappingTable)
     {
         if ((*dirCount != 0) && (getDirectionPoolIdByJumpCount(SCONTEXT, *dirCount) != 0))
         {
@@ -107,7 +107,7 @@ static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 
     Buffer_t tmpBuffer;
     size_t poolCount = span_GetSize(*getDirectionPools(SCONTEXT));
-    int32_t poolSize = getLatticeInformation(SCONTEXT)->NumOfSelectables;
+    int32_t poolSize = getDbLatticeModel(SCONTEXT)->NumOfSelectables;
 
     error = ctor_Buffer(tmpBuffer, poolCount * sizeof(DirectionPool_t));
     return_if(error, error);
@@ -170,7 +170,7 @@ static int32_t ConfigStateMetaAccess(__SCONTEXT_PAR, const int32_t usedBufferByt
 // Get the number of bytes the state lattice data requires
 static inline int32_t GetStateLatticeDataSize(__SCONTEXT_PAR)
 {
-    return getLatticeInformation(SCONTEXT)->Lattice.Header->Size;
+    return getDbLatticeModel(SCONTEXT)->Lattice.Header->Size;
 }
 
 // Configure the state lattice access address and return the new number of used buffer bytes
@@ -189,7 +189,7 @@ static int32_t ConfigStateLatticeAccess(__SCONTEXT_PAR, const int32_t usedBuffer
 // Get the number of bytes the state counters data requires
 static inline int32_t GetStateCountersDataSize(__SCONTEXT_PAR)
 {
-    return sizeof(StateCounterCollection_t) * (int32_t) (GetMaxParId(SCONTEXT) + 1);
+    return sizeof(StateCounterCollection_t) * (int32_t) (GetMaxParticleId(SCONTEXT) + 1);
 }
 
 // Configure the state counter access address and return the new number of used buffer bytes
@@ -208,9 +208,9 @@ static int32_t ConfigStateCountersAccess(__SCONTEXT_PAR, const int32_t usedBuffe
 // Get the number of bytes the state global tracker data requires
 static inline int32_t GetStateGlobalTrackerDataSize(__SCONTEXT_PAR)
 {
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getStructureModel(SCONTEXT)->NumOfGlobalTrackers * sizeof(Tracker_t);
+        return getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers * sizeof(Tracker_t);
     }
     return 0;
 }
@@ -219,14 +219,14 @@ static inline int32_t GetStateGlobalTrackerDataSize(__SCONTEXT_PAR)
 static int32_t ConfigStateGlobalTrackerAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
     int32_t cfgBufferBytes = GetStateGlobalTrackerDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->GlobalTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    getMainStateHeader(SCONTEXT)->Data->GlobalTrackerStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
 
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobHeaderFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        TrackersState_t* configObject = getAbstractMovementTrackers(SCONTEXT);
+        TrackersState_t* configObject = getGlobalMovementTrackers(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + getStructureModel(SCONTEXT)->NumOfGlobalTrackers;
+        configObject->End = configObject->Begin + getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers;
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -235,9 +235,9 @@ static int32_t ConfigStateGlobalTrackerAccess(__SCONTEXT_PAR, const int32_t used
 // Get the number of bytes the state mobile tracker data requires
 static inline int32_t GetStateMobileTrackerDataSize(__SCONTEXT_PAR)
 {
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getLatticeInformation(SCONTEXT)->NumOfMobiles * sizeof(Tracker_t);
+        return getDbLatticeModel(SCONTEXT)->NumOfMobiles * sizeof(Tracker_t);
     }
     return 0;
 }
@@ -246,14 +246,14 @@ static inline int32_t GetStateMobileTrackerDataSize(__SCONTEXT_PAR)
 static int32_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
     int32_t cfgBufferBytes = GetStateMobileTrackerDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->MobileTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    getMainStateHeader(SCONTEXT)->Data->MobileTrackerStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
 
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
         TrackersState_t* configObject = getMobileMovementTrackers(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + getLatticeInformation(SCONTEXT)->NumOfMobiles;
+        configObject->End = configObject->Begin + getDbLatticeModel(SCONTEXT)->NumOfMobiles;
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -262,9 +262,9 @@ static int32_t ConfigStateMobileTrackerAccess(__SCONTEXT_PAR, const int32_t used
 // Get the number of bytes the state static tracker data requires
 static inline int32_t GetStateStaticTrackerDataSize(__SCONTEXT_PAR)
 {
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetNumberOfUnitCells(SCONTEXT) * sizeof(Tracker_t);
+        return getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetUnitCellCount(SCONTEXT) * sizeof(Tracker_t);
     }
     return 0;
 }
@@ -273,41 +273,42 @@ static inline int32_t GetStateStaticTrackerDataSize(__SCONTEXT_PAR)
 static int32_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
     int32_t cfgBufferBytes = GetStateStaticTrackerDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->StaticTrackerStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    getMainStateHeader(SCONTEXT)->Data->StaticTrackerStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
 
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
         TrackersState_t* configObject = getStaticMovementTrackers(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + (getStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetNumberOfUnitCells(SCONTEXT));
+        configObject->End = configObject->Begin + (getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell *
+                GetUnitCellCount(SCONTEXT));
     }
 
     return usedBufferBytes + cfgBufferBytes;
 }
 
-// Get the number of bytes the state mobile tracker indexing data requires
-static inline int32_t GetStateMobileTrcIdxDataSize(__SCONTEXT_PAR)
+// Get the number of bytes the state mobile tracker mapping data requires
+static inline int32_t GetStateMobileTrackerMappingDataSize(__SCONTEXT_PAR)
 {
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getLatticeInformation(SCONTEXT)->NumOfMobiles * sizeof(int32_t);
+        return getDbLatticeModel(SCONTEXT)->NumOfMobiles * sizeof(int32_t);
     }
     return 0;
 }
 
-// Configure the state mobile tracking indexing access address and return the new number of used buffer bytes
-static int32_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
+// Configure the state mobile tracking mapping access address and return the new number of used buffer bytes
+static int32_t ConfigStateMobileTrackerMappingAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
-    int32_t cfgBufferBytes = GetStateMobileTrcIdxDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->MobileTrackerIdxStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    int32_t cfgBufferBytes = GetStateMobileTrackerMappingDataSize(SCONTEXT);
+    getMainStateHeader(SCONTEXT)->Data->MobileTrackerIdxStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
 
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        IndexingState_t* configObject = getMobileTrackerIndexing(SCONTEXT);
+        MobileTrackerMapping_t* configObject = getMobileTrackerMapping(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + getLatticeInformation(SCONTEXT)->NumOfMobiles;
+        configObject->End = configObject->Begin + getDbLatticeModel(SCONTEXT)->NumOfMobiles;
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -316,9 +317,9 @@ static int32_t ConfigStateMobileTrcIdxAccess(__SCONTEXT_PAR, const int32_t usedB
 // Get the number of bytes the state jump statistics data requires
 static inline int32_t GetStateJumpStatisticsDataSize(__SCONTEXT_PAR)
 {
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
-        return getStructureModel(SCONTEXT)->NumOfGlobalTrackers * sizeof(JumpStatistic_t);
+        return getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers * sizeof(JumpStatistic_t);
     }
     return 0;
 }
@@ -327,14 +328,14 @@ static inline int32_t GetStateJumpStatisticsDataSize(__SCONTEXT_PAR)
 static int32_t ConfigStateJumpStatisticsAccess(__SCONTEXT_PAR, const int32_t usedBufferBytes)
 {
     int32_t cfgBufferBytes = GetStateJumpStatisticsDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->JumpStatisticsStartByte = JobHeaderHasFlgs(SCONTEXT, FLG_KMC) ? usedBufferBytes : -1;
+    getMainStateHeader(SCONTEXT)->Data->JumpStatisticsStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
 
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
         JumpStatisticsState_t* configObject = getJumpStatistics(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + getStructureModel(SCONTEXT)->NumOfGlobalTrackers;
+        configObject->End = configObject->Begin + getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers;
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -352,7 +353,7 @@ static error_t ConstructMainStateBufferAccessors(__SCONTEXT_PAR)
     usedBufferBytes = ConfigStateGlobalTrackerAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateMobileTrackerAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateStaticTrackerAccess(SCONTEXT, usedBufferBytes);
-    usedBufferBytes = ConfigStateMobileTrcIdxAccess(SCONTEXT, usedBufferBytes);
+    usedBufferBytes = ConfigStateMobileTrackerMappingAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateJumpStatisticsAccess(SCONTEXT, usedBufferBytes);
 
     return (usedBufferBytes == span_GetSize(*getMainStateBuffer(SCONTEXT)));
@@ -370,7 +371,7 @@ static int32_t CalculateMainStateBufferSize(__SCONTEXT_PAR)
     size += GetStateGlobalTrackerDataSize(SCONTEXT);
     size += GetStateMobileTrackerDataSize(SCONTEXT);
     size += GetStateStaticTrackerDataSize(SCONTEXT);
-    size += GetStateMobileTrcIdxDataSize(SCONTEXT);
+    size += GetStateMobileTrackerMappingDataSize(SCONTEXT);
     size += GetStateJumpStatisticsDataSize(SCONTEXT);
 
     return size;
@@ -383,8 +384,8 @@ static void ConstructMainState(__SCONTEXT_PAR)
 
     setBufferByteValues(getSimulationState(SCONTEXT), sizeof(SimulationState_t), 0);
 
-    getJobInformation(SCONTEXT)->StateSize = CalculateMainStateBufferSize(SCONTEXT);
-    size_t stateSize = (size_t) getJobInformation(SCONTEXT)->StateSize;
+    getDbModelJobInfo(SCONTEXT)->StateSize = CalculateMainStateBufferSize(SCONTEXT);
+    size_t stateSize = (size_t) getDbModelJobInfo(SCONTEXT)->StateSize;
 
     error = ctor_Buffer(*getMainStateBuffer(SCONTEXT), stateSize);
     error_assert(error, "Failed to construct main state.");
@@ -454,7 +455,7 @@ static error_t TryLoadEnergyPlugin(__SCONTEXT_PAR)
 // Sets the energy plugin function to the internal default function
 static inline void SetEnergyPluginFunctionToDefault(__SCONTEXT_PAR)
 {
-    if (JobHeaderHasFlgs(SCONTEXT, FLG_KMC))
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
         getPluginCollection(SCONTEXT)->OnSetJumpProbabilities = (FPlugin_t) SetKmcJumpProbabilities;
     }
@@ -515,14 +516,14 @@ static error_t TryLoadSimulationState(__SCONTEXT_PAR)
 // Copies the database random number generator seed information to the main simulation state
 static void CopyDbRngInfoToMainState(__SCONTEXT_PAR)
 {
-    getMainStateMetaData(SCONTEXT)->RngState = getJobInformation(SCONTEXT)->RngStateSeed;
-    getMainStateMetaData(SCONTEXT)->RngIncrease = getJobInformation(SCONTEXT)->RngIncSeed;
+    getMainStateMetaData(SCONTEXT)->RngState = getDbModelJobInfo(SCONTEXT)->RngStateSeed;
+    getMainStateMetaData(SCONTEXT)->RngIncrease = getDbModelJobInfo(SCONTEXT)->RngIncSeed;
 }
 
 // Copies the database lattice information to the simulation main state
 static error_t CopyDbLatticeToMainState(__SCONTEXT_PAR)
 {
-    Lattice_t * dbLattice = getDatabaseModelLattice(SCONTEXT);
+    Lattice_t * dbLattice = getDbModelLattice(SCONTEXT);
     LatticeState_t * stLattice = getMainStateLattice(SCONTEXT);
 
     size_t latticeSize = span_GetSize(*stLattice);
@@ -554,7 +555,7 @@ static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
 
     for (int32_t i = 0; i < latticeSize; i++)
     {
-        SetEnvStateStatusToDefault(SCONTEXT, i, getStateLatticeEntryById(SCONTEXT, i));
+        SetEnvStateStatusToDefault(SCONTEXT, i, getStateLatticeEntryAt(SCONTEXT, i));
     }
 
     return ERR_OK;
