@@ -55,7 +55,7 @@
                     AbortSampleLength = AbortSampleLength,
                     AbortSequenceLength = AbortSequenceLength,
                     AbortTolerance = AbortTolerance,
-                    JobFlags = (long) JobFlags
+                    JobFlags = (long) JobInfoFlags
                 }
             };
         }

@@ -39,6 +39,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 .SelectMany(collection => collection.JumpDirections)
                 .Action(direction => direction.SimulationTransitionModel = simulationTransitionModel)
                 .ToList();
+
+            simulationTransitionModel.NumOfJumpCollections = simulationTransitionModel.JumpCollections.Count;
+            simulationTransitionModel.NumOfJumpDirections = simulationTransitionModel.JumpDirections.Count;
         }
 
         /// <summary>

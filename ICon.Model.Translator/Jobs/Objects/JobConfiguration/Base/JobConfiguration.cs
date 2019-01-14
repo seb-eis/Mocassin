@@ -8,12 +8,12 @@
         /// <summary>
         ///     Get or set the simulation job flags
         /// </summary>
-        public SimulationJobFlags JobFlags { get; set; }
+        public SimulationJobInfoFlags JobInfoFlags { get; set; }
 
         /// <summary>
         ///     Get or set the simulation status flags
         /// </summary>
-        public SimulationStatusFlags StatusFlags { get; set; }
+        public SimulationStateFlags StateFlags { get; set; }
 
         /// <summary>
         ///     Get or set the simulation state size
@@ -69,13 +69,13 @@
             jobConfiguration.LatticeConfiguration = jobConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
             LatticeConfiguration.CopyTo(jobConfiguration.LatticeConfiguration);
-            jobConfiguration.JobFlags = JobFlags;
+            jobConfiguration.JobInfoFlags = JobInfoFlags;
             jobConfiguration.JobId = JobId;
             jobConfiguration.MinimalSuccessRate = MinimalSuccessRate;
             jobConfiguration.RngIncreaseSeed = RngIncreaseSeed;
             jobConfiguration.RngStateSeed = RngStateSeed;
             jobConfiguration.StateSize = StateSize;
-            jobConfiguration.StatusFlags = StatusFlags;
+            jobConfiguration.StateFlags = StateFlags;
             jobConfiguration.TargetMcsp = TargetMcsp;
             jobConfiguration.Temperature = Temperature;
             jobConfiguration.TimeLimit = TimeLimit;
@@ -91,13 +91,13 @@
             {
                 Structure = new CJobInfo
                 {
-                    JobFlags = (long) JobFlags,
+                    JobFlags = (long) JobInfoFlags,
                     MinimalSuccessRate = MinimalSuccessRate,
                     ObjectId = JobId,
                     RngIncreaseSeed = RngIncreaseSeed,
                     RngStateSeed = RngStateSeed,
                     StateSize = StateSize,
-                    StatusFlags = (long) StatusFlags,
+                    StatusFlags = (long) StateFlags,
                     TargetMcsp = TargetMcsp,
                     Temperature = Temperature,
                     TimeLimit = TimeLimit

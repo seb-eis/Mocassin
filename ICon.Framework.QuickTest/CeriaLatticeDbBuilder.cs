@@ -57,13 +57,23 @@ namespace Mocassin.Framework.QuickTest
                 .Query(port => port.GetParticles())
                 .Single(x => x.Name == "Vacancy");
 
+            var oxygenParticle =ModelContext.ModelProject
+                .GetManager<IParticleManager>().QueryPort
+                .Query(port => port.GetParticles())
+                .Single(x => x.Name == "Oxygen");
+
             foreach (var value in latticeEntity.Values)
             {
-                if (value != vacancyParticle.Index)
-                    continue;
+                if (value == vacancyParticle.Index)
+                {
+                    cLatticeInfo.NumberOfSelectAtoms++;
+                    cLatticeInfo.NumberOfMobiles++;
+                }
 
-                cLatticeInfo.NumberOfMobiles++;
-                cLatticeInfo.NumberOfSelectAtoms++;
+                if (value == oxygenParticle.Index)
+                {
+                    cLatticeInfo.NumberOfMobiles++;
+                }
             }
 
             return InteropObject.Create(cLatticeInfo);

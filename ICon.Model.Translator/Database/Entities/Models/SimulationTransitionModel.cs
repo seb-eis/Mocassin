@@ -31,6 +31,18 @@ namespace Mocassin.Model.Translator
         public List<JumpDirectionEntity> JumpDirections { get; set; }
 
         /// <summary>
+        ///     Get or set the number of jump collections of the transition model
+        /// </summary>
+        [Column("NumOfCollections")]
+        public int NumOfJumpCollections { get; set; }
+
+        /// <summary>
+        ///     Get or set the number of jump directions of the transition model
+        /// </summary>
+        [Column("NumOfDirections")]
+        public int NumOfJumpDirections { get; set; }
+
+        /// <summary>
         ///     Jump count table blob conversion backing property
         /// </summary>
         [Column("JumpCountTable")]

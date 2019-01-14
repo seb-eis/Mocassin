@@ -73,14 +73,14 @@ namespace Mocassin.Framework.QuickTest
                 {
                     SizeA = 10, SizeB = 10, SizeC = 10
                 },
-                JobFlags = default,
+                JobInfoFlags = default,
                 JobId = 0,
                 KmcJobFlags = default,
                 RngIncreaseSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.State), 0),
                 RngStateSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.Increment), 0),
                 TargetMcsp = 200,
                 TimeLimit = (long) TimeSpan.FromHours(24).TotalSeconds,
-                StatusFlags = default,
+                StateFlags = default,
                 StateSize = 0,
                 Temperature = 1000
             };

@@ -256,11 +256,14 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected SimulationStructureModel CreateNewModel()
         {
-            return new SimulationStructureModel
+            var model = new SimulationStructureModel
             {
                 InteractionRange = GetInteractionRange(),
                 EnvironmentDefinitions = GetEnvironmentDefinitions()
             };
+
+            model.NumOfEnvironmentDefinitions = model.EnvironmentDefinitions.Count;
+            return model;
         }
 
         /// <summary>
