@@ -12,6 +12,7 @@
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Simulator/Logic/Constants/Constants.h"
 
 // Type for 3d movement tracking without tracker id (Does currently not support 16 bit alignment!)
 // Layout@ggc_x86_64 => 32@[24]
@@ -21,18 +22,40 @@ typedef Vector3_t Tracker_t;
 // Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]
 typedef struct StateHeaderData
 {
+    // The number of successful steps
     int64_t Mcs;
-    int64_t Cycles;
-    int32_t Flags;
-    int32_t MetaStartByte;
-    int32_t LatticeStartByte;
-    int32_t CountersStartByte;
-    int32_t GlobalTrackerStartByte;
-    int32_t MobileTrackerStartByte;
-    int32_t StaticTrackerStartByte;
-    int32_t MobileTrackerIdxStartByte;
-    int32_t ProbabilityMapStartByte;
 
+    // The number of simulation cycles
+    int64_t Cycles;
+
+    // The simulation runtime flags
+    int32_t Flags;
+
+    // The start byte number of the state meta data
+    int32_t MetaStartByte;
+
+    // The start byte number of the state lattice data
+    int32_t LatticeStartByte;
+
+    // The start byte number of the state counter data
+    int32_t CountersStartByte;
+
+    // The start byte number of the state global tracker data
+    int32_t GlobalTrackerStartByte;
+
+    // The start byte number of the state mobile tracker data
+    int32_t MobileTrackerStartByte;
+
+    // The start byte number of the state static tracker data
+    int32_t StaticTrackerStartByte;
+
+    // The start byte number of the state mobile tracker indexing data
+    int32_t MobileTrackerIdxStartByte;
+
+    // The start byte number of the state jump statistics data
+    int32_t JumpStatisticsStartByte;
+
+    // Explicit Padding
     int32_t Padding:32;
 
 } StateHeaderData_t;
@@ -41,6 +64,7 @@ typedef struct StateHeaderData
 // Layout@ggc_x86_64 => 8@[8]
 typedef struct StateHeader
 {
+    // The state header data pointer
     StateHeaderData_t* Data;
 
 } StateHeader_t;
@@ -57,12 +81,23 @@ typedef Span_t(Tracker_t, TrackerState) TrackersState_t;
 // Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct StateCounterCollection
 {
-    int64_t NumOfCyles;
-    int64_t NumOfMcs;
-    int64_t NumOfRejects;
-    int64_t NumOfBlocks;
-    int64_t NumOfUnstableStarts;
-    int64_t NumOfUnstableEnds;
+    // Counter for simulation cycles
+    int64_t CycleCount;
+
+    // Counter for successful cycles
+    int64_t McsCount;
+
+    // Counter for rejected cycles
+    int64_t RejectionCount;
+
+    // Counter for site blocking cycles
+    int64_t SiteBlockingCount;
+
+    // Counter for unstable start cycles
+    int64_t UnstableStartCount;
+
+    // Counter for unstable end cycles
+    int64_t UnstableEndCount;
     
 } StateCounterCollection_t;
 
@@ -74,14 +109,31 @@ typedef Span_t(StateCounterCollection_t, CountersState) CountersState_t;
 // Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8]
 typedef struct StateMetaData
 {
+    // The simulated time span of the system [seconds]
     double      SimulatedTime;
+
+    // The current jump normalization value
     double      JumpNormalization;
+
+    // The highest jump probability that has occurred
     double      MaxJumpProbability;
+
+    // The runtime of the program in [seconds]
     int64_t     ProgramRunTime;
+
+    // The cycle rate of the simulation in [Hz]
     int64_t     CycleRate;
+
+    // The success rate of the simulation in [Hz]
     int64_t     SuccessRate;
+
+    // The number of seconds for a block completion
     int64_t     TimePerBlock;
+
+    // The random number generator state value
     uint64_t    RngState;
+
+    // The random number generator increase value
     uint64_t    RngIncrease;
     
 } StateMetaData_t;
@@ -90,31 +142,90 @@ typedef struct StateMetaData
 // Layout@ggc_x86_64 => 8@[8]
 typedef struct StateMetaInfo
 {
+    // Pointer to the state meta data
     StateMetaData_t* Data;
     
 } StateMetaInfo_t;
 
-// Type for the storage of the dynmaic tracker indexing
-// Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(int32_t, IndexingState) IndexingState_t;
+// Type for the jump histogram type that stores a energy value occurrence statistic
+// Layout@ggc_x86_64 => 32+STATE_JUMPSTAT_SIZE@[8,8,8,8,{STATE_JUMPSTAT_SIZE}]
+typedef struct JumpHistogram
+{
+    // The minimal energy value of the histogram
+    double MinValue;
 
-// Type for the 2d rectangular probability count map
-// Layout@ggc_x86_64 => 24@[8,8,4,4,4,4,4,4,4,4,4,{4}]
-typedef Array_t(int64_t, 2, ProbabilityCountMap) ProbabilityCountMap_t;
+    // The maximum energy value of the histogram
+    double MaxValue;
+
+    // The counter for occurred cases above the max energy value
+    int64_t OverflowCount;
+
+    // The counter for occurred cases below the min energy value
+    int64_t UnderflowCount;
+
+    // The histogram buffer to count the number of specific occurrences
+    int64_t CountBuffer[STATE_JUMPSTAT_SIZE];
+
+} JumpHistogram_t;
+
+// Type to track the jump statistics of a particle index and jump collection combination
+// Layout@ggc_x86_64 => 4x@{?,?,?,?}
+typedef struct JumpStatistic
+{
+    // Histogram for edge energy occurrences
+    JumpHistogram_t EdgeEnergyHistogram;
+
+    // Histogram for positive conformation energy occurrences
+    JumpHistogram_t PosConfEnergyHistogram;
+
+    // Histogram for negative conformation energy occurrences
+    JumpHistogram_t NegConfEnergyHistogram;
+
+    // Histogram for total energy occurrences
+    JumpHistogram_t TotalEnergyHistogram;
+
+} JumpStatistic_t;
+
+// Type for the storage of multiple jump statistics of the global trackers
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(JumpStatistic_t, JumpStatisticsState) JumpStatisticsState_t;
+
+// Type for the storage of the dynamic tracker mapping
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(int32_t, IndexingState) MobileTrackerMapping_t;
 
 // Type for the simulation state
 // Layout@ggc_x86_64 => 148@[16,8,8,16,16,16,16,16,16,24]
 typedef struct SimulationState
 {
+    // Access span to the full simulation state buffer
     Buffer_t                Buffer;
+
+    // The simulation state header access
     StateHeader_t           Header;
+
+    // The simulation state meta data access
     StateMetaInfo_t         Meta;
+
+    // The simulation state lattice data access
     LatticeState_t          Lattice;
+
+    // The simulation state counter data access
     CountersState_t         Counters;
+
+    // The simulation state global tracker data access
     TrackersState_t         GlobalTrackers;
+
+    // The simulation state mobile tracker data access
     TrackersState_t         MobileTrackers;
+
+    // The simulation state static tracker data access
     TrackersState_t         StaticTrackers;
-    IndexingState_t         MobileTrackerIndexing;
-    ProbabilityCountMap_t   ProbabilityTrackMap;
+
+    // The simulation state mobile tracker mapping data access
+    MobileTrackerMapping_t  MobileTrackerMapping;
+
+    // The simulation state jump statistics data access
+    JumpStatisticsState_t   JumpStatistics;
 
 } SimulationState_t;

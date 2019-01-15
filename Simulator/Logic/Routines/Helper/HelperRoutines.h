@@ -100,41 +100,41 @@ static inline byte_t GetIndexOfFirstNullUpdateParticle(EnvironmentDefinition_t *
     }
 }
 
-// Check if the job info has the passed flags set
-static inline bool_t JobInfoHasFlgs(__SCONTEXT_PAR, const Bitmask_t flgs)
+// Check if the job info has the passed flags set to true
+static inline bool_t JobInfoFlagsAreSet(__SCONTEXT_PAR, const Bitmask_t flgs)
 {
-    return flagsAreTrue(getJobInformation(SCONTEXT)->JobFlags, flgs);
+    return flagsAreTrue(getDbModelJobInfo(SCONTEXT)->JobFlags, flgs);
 }
 
-// Check if the job header has the passed flags set
-static inline bool_t JobHeaderHasFlgs(__SCONTEXT_PAR, const Bitmask_t flgs)
+// Check if the job header has the passed flags set to true
+static inline bool_t JobHeaderFlagsAreSet(__SCONTEXT_PAR, const Bitmask_t flgs)
 {
     return flagsAreTrue(getJobHeaderFlagsMmc(SCONTEXT), flgs);
 }
 
 // Check if the main state has the passed flags set
-static inline bool_t MainStateHasFlags(__SCONTEXT_PAR, const int32_t flgs)
+static inline bool_t StateFlagsAreSet(__SCONTEXT_PAR, const int32_t flgs)
 {
     return flagsAreTrue(getMainStateHeader(SCONTEXT)->Data->Flags, flgs);
 }
 
 // Get the total position count of the lattice
-static inline int32_t GetTotalPosCount(__SCONTEXT_PAR)
+static inline int32_t GetLatticePositionCount(__SCONTEXT_PAR)
 {
     Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
     return sizes->a * sizes->b * sizes->c * sizes->d;
 }
 
 // Get tha maximum particle id defined in the simulation
-static inline byte_t GetMaxParId(__SCONTEXT_PAR)
+static inline byte_t GetMaxParticleId(__SCONTEXT_PAR)
 {
     int32_t dimensions[2];
-    GetArrayDimensions((VoidArray_t*)getJumpDirectionsPerPositionTable(SCONTEXT), &dimensions[0]);
+    GetArrayDimensions((VoidArray_t*) getJumpCountMapping(SCONTEXT), &dimensions[0]);
     return (byte_t) dimensions[0];
 }
 
 // Get the number of unit cells in the lattice
-static inline const int32_t GetNumberOfUnitCells(__SCONTEXT_PAR)
+static inline const int32_t GetUnitCellCount(__SCONTEXT_PAR)
 {
     const Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
     return sizes->a * sizes->b * sizes->c;

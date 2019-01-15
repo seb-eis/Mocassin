@@ -92,9 +92,16 @@ typedef Array_t(EnvironmentState_t, 4, EnvironmentLattice) EnvironmentLattice_t;
 // Layout@ggc_x86_64 => 16@[4,4,4,4]
 typedef struct JumpSelectionInfo
 {
+    // The selected environment id
     int32_t EnvironmentId;
+
+    // The selected jump direction id
     int32_t JumpId;
+
+    // The selected relative jump id
     int32_t RelativeId;
+
+    // The selected offset id for an MMC transition
     int32_t OffsetId;
     
 } JumpSelectionInfo_t;
@@ -180,9 +187,9 @@ typedef Span_t(DirectionPool_t, DirectionPools) DirectionPools_t;
 // Layout@ggc_x86_64 => 64@[4,4,16,40]
 typedef struct JumpSelectionPool
 {
-    int32_t             NumOfSelectableJumps;
-    int32_t             NumOfDirectionPools;
-    IdRedirection_t     NumOfDirectionsToPoolId;
+    int32_t             SelectableJumpCount;
+    int32_t             DirectionPoolCount;
+    IdRedirection_t     DirectionPoolMapping;
     DirectionPools_t    DirectionPools;
     
 } JumpSelectionPool_t;

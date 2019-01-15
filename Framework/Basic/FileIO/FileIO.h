@@ -20,7 +20,7 @@
 // Defines the file stream type
 typedef FILE file_t;
 
-// Check if a file name points to an existing file
+// Check if a file name points to an existing file that can be accessed
 bool_t IsAccessibleFile(const char* restrict fileName);
 
 // Calculates the size of a file. Returns the number of bytes or MC_FILE_ERROR on failure
@@ -29,10 +29,10 @@ cerror_t GetFileSize(file_t* restrict fileStream);
 // Print a buffer as binary to a file stream. The file has to be opened in "wb" mode
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer);
 
-// Print any array of bytes to the target stream in hexadecimal unsigend bytes with the provided number of bytes per line
+// Print any array of bytes to the target stream in hexadecimal unsigned bytes with the provided number of bytes per line
 error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer, size_t bytesPerLine);
 
-// Loads a file as binary into the memory. Size is autodetermined. The file has to be opened in "rb" mode
+// Loads a file as binary into the memory. Size is auto determined. The file has to be opened in "rb" mode
 error_t LoadBufferFromStream(file_t* restrict fileStream, Buffer_t* restrict buffer);
 
 // Loads the contents of the provided file as binary into memory and creates the buffer access struct. Returna MC_NO_ERROR on success or error-code otherwise

@@ -20,7 +20,7 @@
 void PrepareForMainRoutine(__SCONTEXT_PAR);
 
 // Finishes the main routine pre-run and prepares for the actual run
-error_t FinishRoutinePrerun(__SCONTEXT_PAR);
+error_t FinishRoutinePreRun(__SCONTEXT_PAR);
 
 /* Main simulation routines */
 

@@ -28,4 +28,5 @@
     #define IGNORE_INVALID_PLUGINS
 #endif
 
+// Wrapper for the import of a function from a C library with the provided file and export name (Linux, Win32)
 void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error);

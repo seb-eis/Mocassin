@@ -31,20 +31,29 @@ error_t TryAllocateSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t*r
 
 void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *restrict outSpan);
 
+// Allocates a new span by constructing and casting a nw void type span
 #define new_Span(SPAN, SIZE) *(typeof(SPAN)*) ConstructVoidSpan((SIZE), sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
 
+// Deletes a span by freeing the dynamic memory the span is addressing (Do not call on a subspan)
 #define delete_Span(SPAN) free((SPAN).Begin)
 
+// Get the value type of a span
 #define vtypeof_span(SPAN) typeof(span_Get(SPAN, 0))
 
+// Get the size of the passed span
 #define span_GetSize(SPAN) ((SPAN).End-(SPAN).Begin)
 
+// Creates a sub-access span with new boundary info for the passed parent span
 #define span_Split(SPAN, NEWBEGIN, NEWEND) { (void*) ((SPAN).Begin + (NEWBEGIN)), (void*) ((SPAN).Begin + (NEWEND)) }
 
 // Access span by index. Works for getting and setting the value
 #define span_Get(SPAN, INDEX) (SPAN).Begin[(INDEX)]
 
+// Makes a void access type for the passed span
 #define span_AsVoid(SPAN) { (void*) (SPAN).Begin, (void*) (SPAN).End }
+
+// Macro function that will return true if the passed index value is out of range of the passed span
+#define span_IndexIsOutOfRange(SPAN, INDEX) ((size_t) (INDEX) >= span_GetSize(SPAN))
 
 /* Buffer definition */
 
@@ -55,7 +64,7 @@ typedef Span_t(byte_t, Buffer) Buffer_t;
 // Constructs the define buffer in place and returns an error when the request fails
 #define ctor_Buffer(BUFFER, SIZE) TryAllocateSpan((SIZE), 1, (VoidSpan_t*) &(BUFFER))
 
-// Sets all bytes specified by a start and a conter to 0
+// Sets all bytes specified by a start and a counter to 0
 static inline void setBufferByteValues(void* restrict start, const size_t byteCount, const byte_t value)
 {
     for(size_t i = 0; i < byteCount; i++)
@@ -67,7 +76,7 @@ static inline void setBufferByteValues(void* restrict start, const size_t byteCo
 // Copies the passed number of bytes from ten source buffer to the target buffer. Does not check for potential buffer overflow
 void CopyBuffer(byte_t const* source, byte_t* target, size_t size);
 
-// Copies the contents of the source buffer into the target buffer. Retruns buffer overflow error if target is smaller than source
+// Copies the contents of the source buffer into the target buffer. Returns buffer overflow error if target is smaller than source
 error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
 
 // Moves the contents of the source buffer into the target buffer and frees the source buffer
@@ -104,18 +113,28 @@ error_t TryAllocateList(size_t capacity, size_t sizeOfElement, VoidList_t*restri
 
 void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restrict outList);
 
+// Macro to allocate a new list with the specified capacity and type
 #define new_List(LIST, CAPACITY) *(typeof(LIST)*) ConstructVoidList((CAPACITY), sizeof(typeof(*(LIST).Begin)), (VoidList_t*) &(LIST))
 
+// Macro to free the dynamic memory the list access refers to
 #define delete_List(LIST) free((LIST).Begin)
 
+// Get the capacity of the passed list
 #define list_GetCapacity(LIST) ((LIST).CapacityEnd-(LIST).Begin)
 
+// Pushes the passed value to the end of the passed list without checking for overflow
 #define list_PushBack(LIST, VALUE) *((LIST).End++) = (VALUE)
 
+// Removes the last entry from the by decreasing the current end without checking for underflow
 #define list_PopBack(LIST) *(--(LIST).End)
 
-#define list_CanPushBack(LIST) (((LIST).End) != (LIST).CapacityEnd)
+// Macro to check if the passed list is full
+#define list_IsFull(LIST) (((LIST).End) != (LIST).CapacityEnd)
 
+// Macro to check if the list contains any entries
+#define list_IsEmpty(LIST) (((LIST).End) != (LIST).Begin)
+
+// Creates a list access from a span access
 #define span_AsList(SPAN) { (void*) (SPAN).Begin, (void*) (SPAN).Begin, (void*) (SPAN).End }
 
 /* Rectangular array definitions */
@@ -152,6 +171,7 @@ void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restr
 
 #define array_SkipBlock_5(ARRAY, RANK, VAL, ...) ((ARRAY).Header->Blocks[RANK-5] * (VAL) + array_SkipBlock_4((ARRAY), RANK, __VA_ARGS__))
 
+// Access a multidimensional rectangular array by a set of index values
 #define array_Get(ARRAY, ...)\
     __EVAL(\
       span_Get, (ARRAY),__EVAL(\

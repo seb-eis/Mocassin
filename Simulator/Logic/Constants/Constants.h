@@ -14,35 +14,31 @@
 
 #define OPT_LINK_ONLY_MOBILES
 
-/* Flag values */
+/* State buffer constants */
 
-#define FLG_KMC             0x1
-#define FLG_MMC             0x2
-#define FLG_PRERUN          0x4
-#define FLG_CONTINUE        0x8
-#define FLG_COMPLETED       0x10
-#define FLG_TIMEOUT         0x20
-#define FLG_ABORTCONDITION  0x40
-#define FLG_RATELIMIT       0x80
-#define FLG_FIRSTCYCLE      0x100
-#define FLG_INITIALIZED     0x20000000
-#define FLG_ABORT           0x40000000
-#define FLG_STATEERROR      0x80000000
+#define STATE_JUMPSTAT_SIZE 1000
+#define STATE_JUMPSTAT_EMIN 0
+#define STATE_JUMPSTAT_EMAX 10.0
 
-/* Jump constants */
+/* Job info flag values */
 
-// Defines the minimal jump length that is valid
-#define JUMPS_JUMPLENGTH_MIN 2
+#define INFO_FLG_KMC        1
+#define INFO_FLG_MMC        1 << 1
+#define INFO_FLG_USEPRERUN  1 << 2
 
-// Defines the longest jump length that is valid
-#define JUMPS_JUMPLENGTH_MAX 8
+/* Main state flag values */
 
-// Defines the jump length for MMC
-#define JUMPS_JUMPLENGTH_MMC 2
-
-// Defines the maximum number of jumplinks per single set
-#define JUMPS_JUMPLINK_LIMIT 64
-
+#define STATE_FLG_PRERUN        1
+#define STATE_FLG_CONTINUE      1 << 1
+#define STATE_FLG_COMPLETED     1 << 2
+#define STATE_FLG_TIMEOUT       1 << 3
+#define STATE_FLG_SIMABORT      1 << 4
+#define STATE_FLG_CONDABORT     1 << 5
+#define STATE_FLG_RATEABORT     1 << 6
+#define STATE_FLG_FIRSTCYCLE    1 << 7
+#define STATE_FLG_INITIALIZED   1 << 8
+#define STATE_FLG_SIMERROR      1 << 9
+#define STATE_FLG_PRERUN_RESET  1 << 10
 
 /* Monte Carlo constants */
 
@@ -69,6 +65,12 @@
 #define CYCLE_BLOCKSIZE_MIN 1000
 #define CYCLE_BLOCKSIZE_MAX 10000000
 
+/* Jump constants */
+
+#define JUMPS_JUMPLENGTH_MIN 2
+#define JUMPS_JUMPLENGTH_MAX 8
+#define JUMPS_JUMPLINK_LIMIT (JUMPS_JUMPLENGTH_MAX * (JUMPS_JUMPLENGTH_MAX - 1))
+
 /* Jump pool constants */
 
 #define JPOOL_DIRCOUNT_STATIC   -1
@@ -79,8 +81,10 @@
 
 #define PARTICLE_VOID       0
 #define PARTICLE_NULL       255
+#define PARTICLE_IDLIMIT    64
 #define POSITION_NULL       -1
 #define INVALID_INDEX       -1
+#define INVALID_COUNT       -1
 
 /* File and writemode definitions */
 
