@@ -85,6 +85,8 @@ int AssignStructureModel(char* sql_query, sqlite3* db, void* obj, const struct P
     StructureModel_t *structureModel = (StructureModel_t*) obj;
     structureModel->NumOfTrackersPerCell = sqlite3_column_int(sql_statement, 0);
     structureModel->NumOfGlobalTrackers = sqlite3_column_int(sql_statement, 1);
+    memcpy(&structureModel->InteractionRange, sqlite3_column_blob(sql_statement, 2),
+            (size_t) sqlite3_column_bytes(sql_statement, 2));
     int numberOfEnvironments =1; //TODO:delete this
     new_Span(structureModel->EnvironmentDefinitions, (size_t) numberOfEnvironments);
 
@@ -138,11 +140,16 @@ int AssignEnvironmentDefinitions(char* sql_query, sqlite3 *db, void *obj, const 
 
     cpp_foreach(current, *environmentDefinitions)
     {
-        current->ObjId = sqlite3_column_int(sql_statement, 0);
-        memcpy(current->PositionParticleIds, sqlite3_column_blob(sql_statement, 1), (size_t) sqlite3_column_bytes(sql_statement, 1));
-        memcpy(current->UpdateParticleIds, sqlite3_column_blob(sql_statement, 2), (size_t) sqlite3_column_bytes(sql_statement, 2));
-        memcpy(&current->PairDefinitions, sqlite3_column_blob(sql_statement, 3), (size_t) sqlite3_column_bytes(sql_statement, 3));
-        memcpy(&current->ClusterDefinitions, sqlite3_column_blob(sql_statement, 4), (size_t) sqlite3_column_bytes(sql_statement,4));
+        current->ObjectId = sqlite3_column_int(sql_statement, 0);
+        current->SelectionParticleMask = sqlite3_column_int(sql_statement, 1);
+        memcpy(current->UpdateParticleIds, sqlite3_column_blob(sql_statement, 2),
+                (size_t) sqlite3_column_bytes(sql_statement, 2));
+        memcpy(&current->PairDefinitions, sqlite3_column_blob(sql_statement, 3),
+                (size_t) sqlite3_column_bytes(sql_statement, 3));
+        memcpy(&current->ClusterDefinitions, sqlite3_column_blob(sql_statement, 4),
+                (size_t) sqlite3_column_bytes(sql_statement,4));
+        memcpy(current->PositionParticleIds, sqlite3_column_blob(sql_statement, 5),
+               (size_t) sqlite3_column_bytes(sql_statement, 5));
         CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW);
     }
 
@@ -160,7 +167,8 @@ int AssignPairEnergyTables(char* sql_query, sqlite3 *db, void *obj, const struct
     cpp_foreach(current, *pairTables)
     {
         current->ObjectId = sqlite3_column_int(sql_statement, 0);
-        memcpy(&current->EnergyTable, sqlite3_column_blob(sql_statement, 1), (size_t) sqlite3_column_bytes(sql_statement, 1));
+        memcpy(&current->EnergyTable, sqlite3_column_blob(sql_statement, 1),
+                (size_t) sqlite3_column_bytes(sql_statement, 1));
         CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW)
     }
 
@@ -178,8 +186,12 @@ int AssignClusterEnergyTables(char* sql_query, sqlite3 *db, void *obj, const str
     cpp_foreach(current, *clusterTables)
     {
         current->ObjectId = sqlite3_column_int(sql_statement, 0);
-        memcpy(&current->EnergyTable, sqlite3_column_blob(sql_statement, 1), (size_t) sqlite3_column_bytes(sql_statement, 1));
-        memcpy(&current->OccupationCodes, sqlite3_column_blob(sql_statement, 2), (size_t) sqlite3_column_bytes(sql_statement, 2));
+        memcpy(&current->EnergyTable, sqlite3_column_blob(sql_statement, 1),
+                (size_t) sqlite3_column_bytes(sql_statement, 1));
+        memcpy(&current->OccupationCodes, sqlite3_column_blob(sql_statement, 2),
+                (size_t) sqlite3_column_bytes(sql_statement, 2));
+        memcpy(current->ParticleToTableId, sqlite3_column_blob(sql_statement, 3),
+                (size_t) sqlite3_column_bytes(sql_statement, 3));
         CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW)
     }
 
@@ -195,8 +207,14 @@ int AssignTransitionModel(char* sql_query, sqlite3 *db, void *obj, const struct 
     CHECK_SQL(PrepareSqlStatement(sql_query, db, &sql_statement, projectIds->ProjectId), SQLITE_ROW)
 
     TransitionModel_t *transitionModel = (TransitionModel_t*) obj;
-    memcpy(&transitionModel->JumpAssignTable, sqlite3_column_blob(sql_statement, 0), (size_t) sqlite3_column_bytes(sql_statement, 0));
-    memcpy(&transitionModel->JumpCountTable, sqlite3_column_blob(sql_statement, 0), (size_t) sqlite3_column_bytes(sql_statement, 0));
+    memcpy(&transitionModel->JumpAssignTable, sqlite3_column_blob(sql_statement, 0),
+            (size_t) sqlite3_column_bytes(sql_statement, 0));
+    memcpy(&transitionModel->JumpCountTable, sqlite3_column_blob(sql_statement, 1),
+            (size_t) sqlite3_column_bytes(sql_statement, 1));
+    memcpy(&transitionModel->StaticTrackerAssignTable, sqlite3_column_blob(sql_statement, 2),
+           (size_t) sqlite3_column_bytes(sql_statement, 2));
+    memcpy(&transitionModel->GlobalTrackerAssignTable, sqlite3_column_blob(sql_statement, 3),
+           (size_t) sqlite3_column_bytes(sql_statement, 3));
 
     int numberOfJumpCollections = 0; //TODO: delete this
     int numberOfJumpDirections = 0; //TODO: delete this
@@ -218,8 +236,9 @@ int AssignJumpCollections(char* sql_query, sqlite3 *db, void *obj, const struct 
     cpp_foreach(current, *jumpCollections)
     {
         current->ObjectId = sqlite3_column_int(sql_statement, 1);
-        current->ParticleMask = sqlite3_column_int64(sql_statement, 2);
-        memcpy(&current->JumpRules, sqlite3_column_blob(sql_statement, 3), (size_t) sqlite3_column_bytes(sql_statement, 3));
+        current->MobileParticlesMask = sqlite3_column_int64(sql_statement, 2);
+        memcpy(&current->JumpRules, sqlite3_column_blob(sql_statement, 3),
+                (size_t) sqlite3_column_bytes(sql_statement, 3));
 
         CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW)
     }
@@ -239,15 +258,15 @@ int AssignJumpDirections(char* sql_query, sqlite3 *db, void *obj, const struct P
     cpp_foreach(current, *jumpDirections)
     {
         current->ObjectId = sqlite3_column_int(sql_statement, 0);
-        current->CollectionId = sqlite3_column_int(sql_statement, 1);
-        current->FieldProjectionFactor = sqlite3_column_double(sql_statement, 2);
+        current->JumpCollectionId = sqlite3_column_int(sql_statement, 1);
+        current->ElectricFieldFactor = sqlite3_column_double(sql_statement, 2);
         current->JumpLength = sqlite3_column_int(sql_statement, 3);
         current->PositionId = sqlite3_column_int(sql_statement, 4);
 
-        memcpy(&current->JumpSequence, sqlite3_column_blob(sql_statement, 5), (size_t) sqlite3_column_bytes(sql_statement, 5));
-        memcpy(&current->JumpLinkSequence, sqlite3_column_blob(sql_statement, 6), (size_t) sqlite3_column_bytes(sql_statement, 6));
-        memcpy(&current->GlobalMoveSequence, sqlite3_column_blob(sql_statement, 7), (size_t) sqlite3_column_bytes(sql_statement, 7));
-        memcpy(&current->LocalMoveSequence, sqlite3_column_blob(sql_statement, 8), (size_t) sqlite3_column_bytes(sql_statement, 8));
+        memcpy(&current->JumpSequence, sqlite3_column_blob(sql_statement, 5),
+                (size_t) sqlite3_column_bytes(sql_statement, 5));
+        memcpy(&current->LocalMoveSequence, sqlite3_column_blob(sql_statement, 8),
+                (size_t) sqlite3_column_bytes(sql_statement, 6));
 
 
         CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW)
@@ -267,9 +286,12 @@ int AssignLatticeModel(char* sql_query, sqlite3 *db, void *obj, const struct Pro
 
     latticeModel->NumOfMobiles = sqlite3_column_int(sql_statement, 0);
     latticeModel->NumOfSelectables = sqlite3_column_int(sql_statement, 1);
-    memcpy(&latticeModel->EnergyBackground, sqlite3_column_blob(sql_statement, 2), (size_t) sqlite3_column_bytes(sql_statement, 2));
-    memcpy(&latticeModel->Lattice, sqlite3_column_blob(sql_statement, 3), (size_t) sqlite3_column_bytes(sql_statement, 3));
-    memcpy(&latticeModel->SizeVector, sqlite3_column_blob(sql_statement, 4), (size_t) sqlite3_column_bytes(sql_statement, 4));
+    memcpy(&latticeModel->EnergyBackground, sqlite3_column_blob(sql_statement, 2),
+            (size_t) sqlite3_column_bytes(sql_statement, 2));
+    memcpy(&latticeModel->Lattice, sqlite3_column_blob(sql_statement, 3),
+            (size_t) sqlite3_column_bytes(sql_statement, 3));
+    memcpy(&latticeModel->Latt, sqlite3_column_blob(sql_statement, 4),
+            (size_t) sqlite3_column_bytes(sql_statement, 4));
 
     CHECK_SQL(sqlite3_finalize(sql_statement), SQLITE_OK);
 
@@ -283,25 +305,25 @@ int DistributeJumpDirections(DbModel_t* dbModel)
 
     int currentCollectionID = 0;
 
-    cpp_foreach(iter, dbModel->Transition.JumpDirections)
+    cpp_foreach(iter, dbModel->TransitionModel.JumpDirections)
     {
-        if (iter->CollectionId != currentCollectionID)
+        if (iter->JumpCollectionId != currentCollectionID)
         {
             span_end--;
 
-            span_Get(dbModel->Transition.JumpCollections, currentCollectionID).JumpDirections = (JumpDirections_t)
-                    span_Split(dbModel->Transition.JumpDirections, span_begin, span_end);
+            span_Get(dbModel->TransitionModel.JumpCollections, currentCollectionID).JumpDirections = (JumpDirections_t)
+                    span_Split(dbModel->TransitionModel.JumpDirections, span_begin, span_end);
 
             span_end++;
             span_begin = span_end;
-            currentCollectionID = iter->CollectionId;
+            currentCollectionID = iter->JumpCollectionId;
         }
         span_end++;
     }
 
     span_end--;
-    span_Get(dbModel->Transition.JumpCollections, currentCollectionID).JumpDirections = (JumpDirections_t)
-            span_Split(dbModel->Transition.JumpDirections, span_begin, span_end);
+    span_Get(dbModel->TransitionModel.JumpCollections, currentCollectionID).JumpDirections = (JumpDirections_t)
+            span_Split(dbModel->TransitionModel.JumpDirections, span_begin, span_end);
 
     return 0;
 }
@@ -313,7 +335,7 @@ int AssignDatabaseModel(DbModel_t* dbModel, char* dbFile, int projectNumber)
             .StructureId = -1,
             .EnergyId = -1,
             .TransitionId = -1,
-            .LatticeId = -1,
+            .LatticeId = -1
     };
 
     sqlite3 *db;

@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "Simulator/Data/Model/Database/DbModel.h"
+#include "Simulator/Data/Database/DbModel.h"
 
 /*
  * How to use the SqliteReader:
@@ -57,7 +57,8 @@
 #define NUMBER_OF_PARENT_OBJECTS 4
 #define PARENT_KEYWORDS { "Structure", "Energy", "Transition", "Lattice" }
 #define PARENT_OPERATIONS { AssignStructureModel, AssignEnergyModel, AssignTransitionModel, AssignLatticeModel }
-#define PARENT_OBJECTS(dbModel) { dbModel.Structure, dbModel.Energy, dbModel.Transition, dbModel.Lattice }
+#define PARENT_OBJECTS(dbModel) { dbModel.StructureModel, dbModel.EnergyModel,    \
+                                    dbModel.TransitionModel, dbModel.LatticeModel }
 
 // Macros for operations related to the child objects defined in CHILD_OBJECTS
 // For new child objects add sql KEYWORD, OPERATION and OBJECT
@@ -69,11 +70,11 @@
                             AssignClusterEnergyTables, \
                             AssignJumpCollections, \
                             AssignJumpDirections}
-#define CHILD_OBJECTS(dbModel) {dbModel.Structure.EnvironmentDefinitions, \
-                                dbModel.Energy.PairTables, \
-                                dbModel.Energy.ClusterTables, \
-                                dbModel.Transition.JumpCollections, \
-                                dbModel.Transition.JumpDirections}
+#define CHILD_OBJECTS(dbModel) {dbModel.StructureModel.EnvironmentDefinitions, \
+                                dbModel.EnergyModel.PairTables, \
+                                dbModel.EnergyModel.ClusterTables, \
+                                dbModel.TransitionModel.JumpCollections, \
+                                dbModel.TransitionModel.JumpDirections}
 
 // Macro the return the function in case something goes wrong
 #define CHECK_SQL(X, Y) if (X != Y) { return X; }
