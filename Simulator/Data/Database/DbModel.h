@@ -23,8 +23,8 @@ typedef int64_t OccCode_t;
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(int32_t, IdRedirection) IdRedirection_t;
 
-// Type for tracking movement (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 32@[8,8,8,8]
+// Type for tracking movement
+// Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Vector3_t MoveVector_t;
 
 // Type for defining a range of unit cells (Supports 16 bit alignment)

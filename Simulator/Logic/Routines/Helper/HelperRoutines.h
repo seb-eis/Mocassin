@@ -32,7 +32,7 @@ static inline byte_t GetCodeByteAt(OccCode_t* restrict code, const int32_t id)
 }
 
 // Adds two 4D vectors and trims the result into the unit cell
-static inline Vector4_t AddAndTrimVector4(Vector4_t* restrict lhs, const Vector4_t* restrict rhs, const Vector4_t* sizes)
+static inline Vector4_t AddAndTrimVector4(const Vector4_t* restrict lhs, const Vector4_t* restrict rhs, const Vector4_t* sizes)
 {
     Vector4_t result = AddVector4(lhs, rhs);
     PeriodicTrimVector4(&result, sizes);
@@ -83,8 +83,7 @@ static inline int32_t GetNextCeiledRandom(__SCONTEXT_PAR, const int32_t upperLim
 // Resolves the passed pair definition and start environment to the target environment state
 static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(__SCONTEXT_PAR, const PairDefinition_t *restrict pairDef, const EnvironmentState_t *startEnv)
 {
-    Vector4_t target = AddVector4(&startEnv->PositionVector, &pairDef->RelativeVector);
-    PeriodicTrimVector4(&target, getLatticeSizeVector(SCONTEXT));
+    Vector4_t target = AddAndTrimVector4(&startEnv->PositionVector, &pairDef->RelativeVector, getLatticeSizeVector(SCONTEXT));
     return getEnvironmentStateByVector4(SCONTEXT, &target);
 }
 

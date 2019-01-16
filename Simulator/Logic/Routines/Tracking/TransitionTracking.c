@@ -33,15 +33,15 @@ static inline void UpdatePathEnvironmentMovementTracking(__SCONTEXT_PAR, const b
 
     // Update the movement data on the mobile tracker
     Tracker_t* mobileTracker = getMobileTrackerAt(SCONTEXT, JUMPPATH[pathId]->MobileTrackerId);
-    *mobileTracker = AddVector3(mobileTracker, moveVector);
+    vector3VectorOp(*mobileTracker, *moveVector, +=);
 
     // Update the movement data of the static tracker
     Tracker_t* staticTracker = getStaticMovementTrackerAt(SCONTEXT, JUMPPATH[pathId]->PositionVector.D, JUMPPATH[pathId]->ParticleId);
-    *staticTracker = AddVector3(staticTracker, moveVector);
+    vector3VectorOp(*staticTracker, *moveVector, +=);
 
     // Update the movement data on the global tracker
     Tracker_t* globalTracker = getGlobalMovementTrackerAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
-    *globalTracker = AddVector3(globalTracker, moveVector);
+    vector3VectorOp(*globalTracker, *moveVector, +=);
 
 }
 

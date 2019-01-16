@@ -162,7 +162,7 @@ void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLin
 static inline double InvokeAndProfile(void (*func)(void))
 {
     clock_t start = clock();
-    (*func)();
+    func();
     clock_t end = clock();
-    return 1000.0*(double)(start - end)/(double)CLOCKS_PER_SEC;
+    return (double)(end - start);
 }
