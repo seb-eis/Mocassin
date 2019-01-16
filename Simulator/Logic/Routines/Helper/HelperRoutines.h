@@ -122,7 +122,7 @@ static inline bool_t StateFlagsAreSet(__SCONTEXT_PAR, const int32_t flgs)
 static inline int32_t GetLatticePositionCount(__SCONTEXT_PAR)
 {
     Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
-    return sizes->a * sizes->b * sizes->c * sizes->d;
+    return sizes->A * sizes->B * sizes->C * sizes->D;
 }
 
 // Get tha maximum particle id defined in the simulation
@@ -137,5 +137,5 @@ static inline byte_t GetMaxParticleId(__SCONTEXT_PAR)
 static inline const int32_t GetUnitCellCount(__SCONTEXT_PAR)
 {
     const Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
-    return sizes->a * sizes->b * sizes->c;
+    return sizes->A * sizes->B * sizes->C;
 }

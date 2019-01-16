@@ -262,7 +262,7 @@ typedef struct JumpDirection
     JumpSequence_t  JumpSequence;
 
     // The movement sequence for tracking
-    MoveSequence_t  LocalMoveSequence;
+    MoveSequence_t  MovementSequence;
     
 } JumpDirection_t;
 

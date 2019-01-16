@@ -14,7 +14,7 @@
 
 #define OPT_LINK_ONLY_MOBILES
 
-/* State buffer constants */
+/* State buffer constants and default values */
 
 #define STATE_JUMPSTAT_SIZE 1000
 #define STATE_JUMPSTAT_EMIN 0

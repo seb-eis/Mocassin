@@ -386,7 +386,7 @@ static error_t SetEnvStateEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t*
 static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t environmentId, Buffer_t* restrict occupationBuffer)
 {
     error_t error;
-    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
+    EnvironmentState_t* environment = getEnvironmentStateAt(SCONTEXT, environmentId);
 
     error = WriteEnvOccupationToBuffer(SCONTEXT, environment, occupationBuffer);
     return_if(error, error);
@@ -419,14 +419,14 @@ void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
 // Sets the status of the environment state with the passed id to the default status using the passed occupation particle id
 void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId)
 {
-    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
-
+    EnvironmentState_t* environment = getEnvironmentStateAt(SCONTEXT, environmentId);
     environment->ParticleId = particleId;
     environment->EnvironmentId = environmentId;
     environment->IsMobile = false;
     environment->IsStable = (particleId == PARTICLE_VOID) ? false : true;
     environment->PositionVector = Vector4FromInt32(environmentId, getLatticeBlockSizes(SCONTEXT));
-    environment->EnvironmentDefinition = getEnvironmentModelAt(SCONTEXT, environment->PositionVector.d);
+    environment->EnvironmentDefinition = getEnvironmentModelAt(SCONTEXT, environment->PositionVector.D);
+    environment->MobileTrackerId = INVALID_INDEX;
 }
 
 /* Simulation routines KMC and MMC */
@@ -434,7 +434,7 @@ void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, con
 // Sets the active work environment by evaluation of the provided environment link
 static inline void SetActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, EnvironmentLink_t *restrict environmentLink)
 {
-    SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateById(SCONTEXT, environmentLink->EnvironmentId);
+    SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateAt(SCONTEXT, environmentLink->EnvironmentId);
 }
 
 static inline void Set_ActiveWorkClusterByEnvAndId(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, const byte_t clusterId)

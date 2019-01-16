@@ -24,6 +24,7 @@
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
+#include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
 
 // Allocates the environment energy and cluster buffers with the required sizes
 static void AllocateEnvironmentBuffers(EnvironmentState_t *restrict env, EnvironmentDefinition_t *restrict envDef)
@@ -41,12 +42,12 @@ static void AllocateEnvironmentLattice(__SCONTEXT_PAR)
 {
     Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
 
-    EnvironmentLattice_t lattice = new_Array(lattice, sizes->a, sizes->b, sizes->c, sizes->d);
+    EnvironmentLattice_t lattice = new_Array(lattice, sizes->A, sizes->B, sizes->C, sizes->D);
     setEnvironmentLattice(SCONTEXT, lattice);
 
     for (int32_t i = 0; i < lattice.Header->Size; i++)
     {
-        AllocateEnvironmentBuffers(getEnvironmentStateById(SCONTEXT, i), getEnvironmentModelAt(SCONTEXT, i));
+        AllocateEnvironmentBuffers(getEnvironmentStateAt(SCONTEXT, i), getEnvironmentModelAt(SCONTEXT, i));
     }
 }
 
@@ -510,14 +511,16 @@ static error_t TryLoadSimulationState(__SCONTEXT_PAR)
         return error;
     }
 
-    return TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE);
+    error = TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE);
+    return error;
 }
 
 // Copies the database random number generator seed information to the main simulation state
-static void CopyDbRngInfoToMainState(__SCONTEXT_PAR)
+static error_t CopyDbRngInfoToMainState(__SCONTEXT_PAR)
 {
     getMainStateMetaData(SCONTEXT)->RngState = getDbModelJobInfo(SCONTEXT)->RngStateSeed;
     getMainStateMetaData(SCONTEXT)->RngIncrease = getDbModelJobInfo(SCONTEXT)->RngIncSeed;
+    return ((getMainStateMetaData(SCONTEXT)->RngIncrease & 1) != 0) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Copies the database lattice information to the simulation main state
@@ -534,13 +537,41 @@ static error_t CopyDbLatticeToMainState(__SCONTEXT_PAR)
     return ERR_OK;
 }
 
+// Translates the db lattice data into a mobile tracker id mapping on the state
+static error_t CopyDefaultMobileTrackersToMainState(__SCONTEXT_PAR)
+{
+    Lattice_t * dbLattice = getDbModelLattice(SCONTEXT);
+    int32_t trackerId = 0;
+
+    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+    {
+        byte_t particleId = span_Get(*dbLattice, envState->EnvironmentId);
+        if (getJumpCountAt(SCONTEXT, envState->EnvironmentDefinition->ObjectId, particleId) >= JPOOL_DIRCOUNT_PASSIVE)
+        {
+            envState->MobileTrackerId = trackerId++;
+        }
+    }
+
+    return (trackerId == getNumberOfMobiles(SCONTEXT)) ? ERR_OK : ERR_DATACONSISTENCY;
+}
+
 // Synchronizes the main state to the database model by overwriting existing information in the state
 static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
 {
-    CopyDbLatticeToMainState(SCONTEXT);
-    CopyDbRngInfoToMainState(SCONTEXT);
+    error_t error;
 
-    return ERR_OK;
+    error = CopyDbLatticeToMainState(SCONTEXT);
+    return_if(error, error);
+
+    error = CopyDbRngInfoToMainState(SCONTEXT);
+    return_if(error, error);
+
+    error = CopyDefaultMobileTrackersToMainState(SCONTEXT);
+    return_if(error, error);
+
+    error = InitJumpStatisticsTrackingSystem(SCONTEXT);
+
+    return error;
 }
 
 // Synchronizes the dynamic environment lattice with the main simulation state
@@ -561,11 +592,27 @@ static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
     return ERR_OK;
 }
 
+// Synchronizes the mobile tracker information of the dynamic lattice with the mapping data from the main state
+static error_t SyncMobileTrackersWithState(__SCONTEXT_PAR)
+{
+    int32_t trackerId = 0;
+    cpp_foreach(environmentId, getSimulationState(SCONTEXT)->MobileTrackerMapping)
+    {
+        EnvironmentState_t* envState = getEnvironmentStateAt(SCONTEXT, *environmentId);
+        envState->MobileTrackerId = trackerId++;
+    }
+
+    return (trackerId == getNumberOfMobiles(SCONTEXT)) ? ERR_OK : ERR_DATACONSISTENCY;
+}
+
 // Synchronizes the dynamic model to the main simulation state
 static error_t SyncDynamicModelToMainState(__SCONTEXT_PAR)
 {
     // Potentially incomplete sync. review during testing
     error_t error = SyncDynamicEnvironmentsWithState(SCONTEXT);
+    return_if(error, error);
+
+    error = SyncMobileTrackersWithState(SCONTEXT);
     return error;
 }
 
