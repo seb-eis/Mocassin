@@ -38,11 +38,14 @@
 
 /* Macro evaluation */
 
-#define __PASTE(MACRO, ...) MACRO(__VA_ARGS__)
+// Paste a macro string and a set of arguments
+#define __paste(MACRO, ...) MACRO(__VA_ARGS__)
 
-#define __EVAL(MACRO, ...) __PASTE(MACRO, __VA_ARGS__)
+// Eval a macro string and set of arguments
+#define __eval(MACRO, ...) __paste(MACRO, __VA_ARGS__)
 
-#define __CONCAT(A, B) A ## B
+// Concat two macro strings
+#define __concat(A, B) A ## B
 
 /* Ptr usage */
 
@@ -67,3 +70,32 @@
 #define setFlags(__VALUE, __FLAG) (__VALUE) |= (__FLAG)
 
 #define unsetFlags(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
+
+/* Local function decl and impl macros*/
+
+// Declare a local function using the passed declarer name
+#define __declfunc(FDECLTEMPLATE, ...) __eval(FDECLTEMPLATE, __VA_ARGS__)
+
+// Implement a declared local function using the passed implementer name
+#define __implfunc(FIMPLTEMPLATE, ...) __eval(FIMPLTEMPLATE, __VA_ARGS__)
+
+// Function declaration template macro for CPP-Style lower bound search on span types
+#define FUNCDECL_CPPLOWERBOUND(NAME, SPANTYPE, VTYPE) int32_t NAME(SPANTYPE* span, VTYPE* value)
+
+// Function implementation template macro for CPP-Style lower bound search on span types
+#define FUNCIMPL_CPPLOWERBOUND(NAME, SPANTYPE, VTYPE, COMP) int32_t NAME(SPANTYPE* span, VTYPE* value)\
+{\
+    int32_t firstIndex = 0, counter = span_GetSize(*span);\
+    while (counter > 0)\
+    {\
+        int32_t step = counter / 2;\
+        int32_t currentIndex = firstIndex + step;\
+        if (COMP(span->Begin[currentIndex], *value) == -1)\
+        {\
+            firstIndex = ++currentIndex;\
+            counter -= step + 1;\
+        }\
+        else counter = step;\
+    }\
+    return firstIndex;\
+}

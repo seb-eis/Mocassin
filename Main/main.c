@@ -20,9 +20,9 @@
 #include <immintrin.h>
 
 #if defined(MC_TESTBUILD)
-
     int main(int argc, char const * const *argv)
     {
+        getchar();
         return (0);
     }
 

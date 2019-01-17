@@ -17,7 +17,7 @@
 #include "Framework/Math/Types/Vector.h"
 #include "xmmintrin.h"
 
-#define get_compare(lhs,rhs) ((lhs)==(rhs)) ? 0 : ((lhs)<(rhs)) ? -1 : 1;
+#define get_compare(lhs,rhs) ((lhs)==(rhs)) ? 0 : ((lhs)<(rhs)) ? -1 : 1
 
 // Set a code byte at the provided index to the provided value
 static inline void SetCodeByteAt(OccCode_t* restrict code, const int32_t id, const byte_t value)
@@ -138,3 +138,30 @@ static inline const int32_t GetUnitCellCount(__SCONTEXT_PAR)
     const Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
     return sizes->A * sizes->B * sizes->C;
 }
+
+// Get the distance between two points on a 1D axis that has a periodic boundary and limited size
+static inline int32_t GetPeriodicPointDistance(const int32_t pointA, const int32_t pointB, const int32_t axisSize)
+{
+    int32_t distance = abs(pointA - pointB);
+    return (distance < (axisSize / 2)) ? distance : abs(distance - axisSize);
+}
+
+// Get a boolean value indicating if the two passed 4D positions are in interaction range
+static inline bool_t PositionAreInInteractionRange(__SCONTEXT_PAR, const Vector4_t* vector0, const Vector4_t* vector1)
+{
+    InteractionRange_t* range = &getDbStructureModel(SCONTEXT)->InteractionRange;
+    Vector4_t* latticeSizes = getLatticeSizeVector(SCONTEXT);
+
+    if (GetPeriodicPointDistance(vector0->A, vector1->A, latticeSizes->A) <= range->A)
+        return true;
+
+    if (GetPeriodicPointDistance(vector0->B, vector1->B, latticeSizes->B) <= range->B)
+        return true;
+
+    if (GetPeriodicPointDistance(vector0->C, vector1->C, latticeSizes->C) <= range->C)
+        return true;
+
+    return false;
+}
+
+

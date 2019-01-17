@@ -42,8 +42,6 @@
 
 /* Monte Carlo constants */
 
-#define MC_CONST_JUMPTRACK_MIN 1.0e-05
-#define MC_CONST_JUMPTRACK_MAX 1.0e+00
 #define MC_CONST_JUMPLIMIT_MIN 0.0e+00
 #define MC_CONST_JUMPLIMIT_MAX 1.0e+00
 
@@ -51,13 +49,6 @@
 
 #define NATCONST_BLOTZMANN  8.6173303e-05
 #define NATCONST_ELMCHARGE  1.6021766208e-19
-
-/* Tolerance constant */
-
-#define CONST_JUMPTRACK_MIN 1.0e-05
-#define CONST_JUMPTRACK_MAX 1.0e+00
-#define CONST_JUMPLIMIT_MIN 0.0e+00
-#define CONST_JUMPLIMIT_MAX 1.0e+00
 
 /* Run/Cycle constants */
 

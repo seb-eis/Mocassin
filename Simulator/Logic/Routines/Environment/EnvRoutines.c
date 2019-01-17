@@ -639,14 +639,38 @@ void AdvanceKmcSystemToState2(__SCONTEXT_PAR)
     }
 }
 
+// Searches the passed environment state link collection for a link to the passed environment id and builds a matching jump link object
+static inline JumpLink_t BuildMMCJumpLink(const EnvironmentState_t*restrict envState, const int32_t envId, const int32_t pathId)
+{
+    JumpLink_t result = { .PathId = pathId, .LinkId = 0 };
+    cpp_foreach(envLink, envState->EnvironmentLinks)
+    {
+        if (envLink->EnvironmentId == envId)
+            return result;
+
+        ++result.LinkId;
+    }
+    return (JumpLink_t){ .PathId = INVALID_INDEX, .LinkId = INVALID_INDEX };
+}
+
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {
-    // Implement as soon as KMC functionality of delta principle is validated!
-    // Note: Cannot be done jump link based, requires lookup based implementation
-    //       that finds the environment-links beloging to the environment-Ids of both Path[0] and Path[1], respectively
-    // Note: Possibly use a hash system that enables to directly detect if a link could be present or not
-    error_assert(ERR_NOTIMPLEMENTED, "MMC currently not supported");
+    // Check if positions are within interaction range, if not no local delta has to be created
+    if (!PositionAreInInteractionRange(SCONTEXT, &JUMPPATH[0]->PositionVector, &JUMPPATH[1]->PositionVector))
+        return;
+
+    // Find the required environment links and build matching temporary jump links
+    JumpLink_t path0Link = BuildMMCJumpLink(JUMPPATH[0], JUMPPATH[1]->EnvironmentId, 0);
+    JumpLink_t path1Link = BuildMMCJumpLink(JUMPPATH[1], JUMPPATH[0]->EnvironmentId, 1);
+    debug_assert(path0Link.LinkId != INVALID_INDEX);
+    debug_assert(path1Link.LinkId != INVALID_INDEX);
+
+    // Prepare the potential cluster state changes on both environments and invoke the link deltas
+    PrepareJumpLinkClusterStateChanges(SCONTEXT, &path0Link);
+    PrepareJumpLinkClusterStateChanges(SCONTEXT, &path1Link);
+    InvokeJumpLinkDeltas(SCONTEXT, &path0Link);
+    InvokeJumpLinkDeltas(SCONTEXT, &path1Link);
 }
 
 void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR)

@@ -156,7 +156,7 @@ error_t InitJumpStatisticsTrackingSystem(__SCONTEXT_PAR)
 {
     if (!StateFlagsAreSet(SCONTEXT, STATE_FLG_INITIALIZED))
     {
-        // ToDo: Implement system to customize EMIN and EMAX of the system
+        // ToDo: Implement customization of EMIN and EMAX for the histograms
         InitJumpStatisticSystemToDefault(SCONTEXT);
     }
 
