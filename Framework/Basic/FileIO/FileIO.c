@@ -170,3 +170,9 @@ bool_t EnsureFileIsDeleted(char const * restrict filePath)
     }
     return false;
 }
+
+void ClearStdintBuffer()
+{
+    int32_t c;
+    while ((c = getchar()) != '\n' && c != EOF) {};
+}

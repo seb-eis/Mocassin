@@ -173,10 +173,10 @@ void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restr
 
 // Access a multidimensional rectangular array by a set of index values
 #define array_Get(ARRAY, ...)\
-    __eval(\
-      span_Get, (ARRAY),__eval(\
-        __eval(\
-          __concat, array_SkipBlock_, __VA_NARG(__VA_ARGS__)\
+    evalMacro(\
+      span_Get, (ARRAY),evalMacro(\
+        evalMacro(\
+          concatMacro, array_SkipBlock_, __VA_NARG(__VA_ARGS__)\
         ),\
         (ARRAY), __VA_NARG(__VA_ARGS__), __VA_ARGS__\
       )\

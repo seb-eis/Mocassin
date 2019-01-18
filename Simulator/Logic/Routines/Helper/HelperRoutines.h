@@ -17,18 +17,16 @@
 #include "Framework/Math/Types/Vector.h"
 #include "xmmintrin.h"
 
-#define get_compare(lhs,rhs) ((lhs)==(rhs)) ? 0 : ((lhs)<(rhs)) ? -1 : 1
-
 // Set a code byte at the provided index to the provided value
 static inline void SetCodeByteAt(OccCode_t* restrict code, const int32_t id, const byte_t value)
 {
-    marshalAs(byte_t, code)[id] = value;
+    accessPtrAs(byte_t, code)[id] = value;
 }
 
 // Get the code byte value at the provided index
 static inline byte_t GetCodeByteAt(OccCode_t* restrict code, const int32_t id)
 {
-    return marshalAs(byte_t, code)[id];
+    return accessPtrAs(byte_t, code)[id];
 }
 
 // Adds two 4D vectors and trims the result into the unit cell

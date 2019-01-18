@@ -13,6 +13,7 @@
 #include "Simulator/Logic/Routines/Environment/EnvRoutines.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
+#include "Framework/Basic/Macros/BinarySearch.h"
 
 /* Local helper routines */
 
@@ -61,10 +62,10 @@ static inline void LoadCluStateBackup(ClusterState_t* restrict cluster)
 // Compares two cluster links by cluster id and code byte id
 static int32_t CompareClusterLinks(const ClusterLink_t* lhs, const ClusterLink_t* rhs)
 {
-    int32_t value = get_compare(lhs->ClusterId, rhs->ClusterId);
+    int32_t value = compareLhsToRhs(lhs->ClusterId, rhs->ClusterId);
     if (value == 0)
     {
-        return get_compare(lhs->CodeByteId, rhs->CodeByteId);
+        return compareLhsToRhs(lhs->CodeByteId, rhs->CodeByteId);
     }
     return value;
 }
@@ -220,7 +221,7 @@ static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, EnvironmentState_t*
 // Compares two environment links by their affiliated pair id
 static inline int32_t CompareEnvironmentLink(const EnvironmentLink_t* restrict lhs, const EnvironmentLink_t* restrict rhs)
 {
-    return get_compare(lhs->PairId, rhs->PairId);
+    return compareLhsToRhs(lhs->PairId, rhs->PairId);
 }
 
 // Sort the linking system of an environment state to the unit cell independent order
@@ -652,7 +653,6 @@ static inline JumpLink_t BuildMMCJumpLink(const EnvironmentState_t*restrict envS
     }
     return (JumpLink_t){ .PathId = INVALID_INDEX, .LinkId = INVALID_INDEX };
 }
-
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {

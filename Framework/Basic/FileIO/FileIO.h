@@ -49,3 +49,6 @@ error_t ConcatStrings(const char* lhs, const char* rhs, char** result);
 
 // Ensures that the passed file is delted. Returns true if the file was not already deleted
 bool_t EnsureFileIsDeleted(char const * restrict filePath);
+
+// Clears the pending stdint input buffer
+void ClearStdintBuffer();

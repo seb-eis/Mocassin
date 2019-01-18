@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <stdlib.h>
+
 /*Arg count macro from Roland Illig and Laurent Deniau*/
 
 #define __VA_NARG(...) \
@@ -39,21 +41,24 @@
 /* Macro evaluation */
 
 // Paste a macro string and a set of arguments
-#define __paste(MACRO, ...) MACRO(__VA_ARGS__)
+#define pasteMacro(MACRO, ...) MACRO(__VA_ARGS__)
 
 // Eval a macro string and set of arguments
-#define __eval(MACRO, ...) __paste(MACRO, __VA_ARGS__)
+#define evalMacro(MACRO, ...) pasteMacro(MACRO, __VA_ARGS__)
 
 // Concat two macro strings
-#define __concat(A, B) A ## B
+#define concatMacro(A, B) A ## B
 
 /* Ptr usage */
 
-// Marshal a pointer to a value as a pointer of another type for direct memory manipulation
-#define marshalAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+// Use a pointer as a pointer to the given type
+#define accessPtrAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
 
 // Access the passed value as the given type
-#define addressAs(__TYPE, __VALUE) *((__TYPE*) (__VALUE))
+#define accessValAs(__TYPE, __VALUE) *((__TYPE*) (__VALUE))
+
+// Compares the left value to the right value
+#define compareLhsToRhs(LHS,RHS) ((LHS)==(RHS)) ? 0 : ((LHS)<(RHS)) ? -1 : 1
 
 /* Math macros */
 
@@ -71,31 +76,22 @@
 
 #define unsetFlags(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
 
-/* Local function decl and impl macros*/
+/* Local function declaration and implementation macros*/
 
-// Declare a local function using the passed declarer name
-#define __declfunc(FDECLTEMPLATE, ...) __eval(FDECLTEMPLATE, __VA_ARGS__)
+// Builds the default local name for a function
+#define namelocal(NAME) local_##NAME
 
-// Implement a declared local function using the passed implementer name
-#define __implfunc(FIMPLTEMPLATE, ...) __eval(FIMPLTEMPLATE, __VA_ARGS__)
+// Declare a local function using the passed function declaration macro template
+#define decllocal(FDECLTEMPLATE, NAME, ...) evalMacro(FDECLTEMPLATE, namelocal(NAME), __VA_ARGS__);
 
-// Function declaration template macro for CPP-Style lower bound search on span types
-#define FUNCDECL_CPPLOWERBOUND(NAME, SPANTYPE, VTYPE) int32_t NAME(SPANTYPE* span, VTYPE* value)
+// Implement a local function using the passed function implementation macro template
+#define impllocal(FIMPLTEMPLATE, FULLNAME, ...) evalMacro(FIMPLTEMPLATE, FULLNAME, __VA_ARGS__)
 
-// Function implementation template macro for CPP-Style lower bound search on span types
-#define FUNCIMPL_CPPLOWERBOUND(NAME, SPANTYPE, VTYPE, COMP) int32_t NAME(SPANTYPE* span, VTYPE* value)\
-{\
-    int32_t firstIndex = 0, counter = span_GetSize(*span);\
-    while (counter > 0)\
-    {\
-        int32_t step = counter / 2;\
-        int32_t currentIndex = firstIndex + step;\
-        if (COMP(span->Begin[currentIndex], *value) == -1)\
-        {\
-            firstIndex = ++currentIndex;\
-            counter -= step + 1;\
-        }\
-        else counter = step;\
-    }\
-    return firstIndex;\
-}
+// Defines the default value getter macro for function templates that expands to the value itself
+#define valGetter(VAL, ...) (VAL)
+
+// Defines the default pointer getter macro for function templates that expands to the value of the pointer
+#define ptrGetter(PTR, ...) (*PTR)
+
+// Macro that expands to a field getter on a passed pointer for comparer template value getters
+#define makeCompGetter(PTR, FIELD) (PTR)->FIELD

@@ -17,6 +17,8 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
+#include "Framework/Basic/Macros/BinarySearch.h"
+#include "Framework/Basic/Macros/Macros.h"
 #include <immintrin.h>
 
 #if defined(MC_TESTBUILD)
@@ -25,6 +27,7 @@
         getchar();
         return (0);
     }
+
 
 #else
 

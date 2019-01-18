@@ -8,7 +8,7 @@
 // Short:   Error codes + messages      //
 //////////////////////////////////////////
 
-#include "McErrors.h"
+#include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 
 const char* ErrorCodeToString(error_t errCode)
@@ -52,9 +52,30 @@ const char* ErrorCodeToString(error_t errCode)
     return defaultMessage;
 }
 
+// Awaits an error response
+static void AwaitErrorResponse(error_t error)
+{
+    while (true)
+    {
+        fprintf(stdout, "Error %x, continue execution ? [y/n]", error);
+
+        int value = getchar();
+        ClearStdintBuffer();
+        switch(value)
+        {
+            case 'y': return;
+            case 'Y': return;
+            case 'n': exit(error);
+            case 'N': exit(error);
+            default: continue;
+        }
+    }
+}
+
 void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
     fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    AwaitErrorResponse(errCode);
     return;
 }
 

@@ -45,10 +45,10 @@ typedef int32_t error_t;
 typedef int64_t cerror_t;
 
 // Defines the format of the default error output
-#define ERROR_FORMAT "ERROR:\t0x%08x\nWhere:\t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\n"
+#define ERROR_FORMAT "ERROR:\t0x%08x\nFunc\t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\n"
 
 // Defines the format of the default error output with memory dump
-#define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nWhere:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
+#define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nFunc:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
 
 // Defines the path to the debug stderr dump folder
 #define STDERR_PATH "./Debug/stderr.log"

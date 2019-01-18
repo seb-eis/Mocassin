@@ -18,6 +18,7 @@
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
+#include "Framework/Basic/Macros/BinarySearch.h"
 
 void PrepareForMainRoutine(__SCONTEXT_PAR)
 {
@@ -460,7 +461,7 @@ static inline OccCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
     return getActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StateCode0;
 }
 
-static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
+static inline void LinearSearchAndSetActiveJumpRule(__SCONTEXT_PAR)
 {
     if (GetLastPossibleJumpCode(SCONTEXT) < getPathStateCode(SCONTEXT))
     {
@@ -480,14 +481,22 @@ static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
     }
 }
 
-static inline void BinaryJumpRuleLookup(__SCONTEXT_PAR)
+static inline void BinarySearchAndSetActiveJumpRule(__SCONTEXT_PAR)
 {
-    // Possible implementation on optimization
+    decllocal(FUNCDECL_COMPARER, BinarySearchAndSetActiveJumpRule_Compare, JumpRule_t);
+    decllocal(FUNCDECL_BINARYSEARCH, BinarySearchAndSetActiveJumpRule_Search, JumpRules_t, JumpRule_t);
+
+    JumpRule_t searchObj = {.StateCode0 = getPathStateCode(SCONTEXT)};
+    int32_t id = local_BinarySearchAndSetActiveJumpRule_Search(&getActiveJumpCollection(SCONTEXT)->JumpRules, &searchObj);
+    *getActiveJumpRule(SCONTEXT) = span_Get(getActiveJumpCollection(SCONTEXT)->JumpRules, id);
 }
+
+impllocal(FUNCIMPL_COMPARER, local_BinarySearchAndSetActiveJumpRule_Compare, JumpRule_t, makeCompGetter, StateCode0);
+impllocal(FUNCIMPL_BINARYSEARCH, local_BinarySearchAndSetActiveJumpRule_Search, JumpRules_t, JumpRule_t, local_BinarySearchAndSetActiveJumpRule_Compare);
 
 static inline void LookupAndSetActJumpRule(__SCONTEXT_PAR)
 {
-    LinearJumpRuleLookup(SCONTEXT);
+    LinearSearchAndSetActiveJumpRule(SCONTEXT);
 }
 
 bool_t GetKmcJumpRuleEvaluation(__SCONTEXT_PAR)
