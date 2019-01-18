@@ -162,4 +162,17 @@ static inline bool_t PositionAreInInteractionRange(__SCONTEXT_PAR, const Vector4
     return false;
 }
 
+// Count the number of particles in the simulation lattice that have the provided particle id
+static inline int32_t GetParticleCountInLattice(__SCONTEXT_PAR, const byte_t particleId)
+{
+    int32_t result = 0;
+    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+    {
+        if (envState->ParticleId == particleId)
+            result++;
+    }
+
+    return result;
+}
+
 

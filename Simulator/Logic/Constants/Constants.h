@@ -50,6 +50,12 @@
 #define NATCONST_BLOTZMANN  8.6173303e-05
 #define NATCONST_ELMCHARGE  1.6021766208e-19
 
+/* Conversion factors */
+#define CONV_LENGTH_ANG_TO_M 1.0e-10
+#define CONV_LENGTH_CM_TO_M 1.0e-2
+#define CONV_VOLUME_ANG_TO_M 1.0e-30
+#define CONV_VOLUME_CM_TO_M 1.0e-6
+
 /* Run/Cycle constants */
 
 #define CYCLE_BLOCKCOUNT    100LL

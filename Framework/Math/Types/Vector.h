@@ -9,6 +9,8 @@
 //////////////////////////////////////////
 
 #pragma once
+
+#include <math.h>
 #include <stdint.h>
 #include <immintrin.h>
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
@@ -107,11 +109,33 @@ static inline Vector3_t CalcVector3CrossProduct(const Vector3_t* lhs, const Vect
     return (Vector3_t) { lhs->B * rhs->C - lhs->C * rhs->B, lhs->C*rhs->A - lhs->A * rhs->C, lhs->A * rhs->B - lhs->B * rhs->A };
 }
 
+// Calculates the euclidean norm calculation for the passed vector
+static inline double CalcVector3Length(const Vector3_t* vectorA)
+{
+    double dotProduct = CalcVector3DotProduct(vectorA, vectorA);
+    return sqrt(dotProduct);
+}
+
+// Calculates the normalization of the passed vector 3
+static inline Vector3_t CalcVector3Normalization(const Vector3_t* vector)
+{
+    double length = CalcVector3Length(vector);
+    return ScalarDivideVector3(vector, length);
+}
+
 // Performs a spat product calculation (a * (b x c)) and returns the resulting value (Directional volume)
 static inline double CalcVector3SpatProduct(const Vector3_t* vectorA, const Vector3_t* vectorB, const Vector3_t * vectorC)
 {
     Vector3_t crossProduct = CalcVector3CrossProduct(vectorB, vectorC);
     return CalcVector3DotProduct(&crossProduct, vectorA);
+}
+
+// Calculates the vector projection of A onto B
+static inline Vector3_t CalcVector3Projection(const Vector3_t* vectorA, const Vector3_t* vectorB)
+{
+    Vector3_t result = ScalarMultiplyVector3(vectorB, CalcVector3DotProduct(vectorA, vectorB));
+    vector3ScalarOp(result, CalcVector3DotProduct(vectorB, vectorB), /=);
+    return result;
 }
 
 // Performs a conversion of a 4d int vector into an size_t value with the provided 4d size information (4D coordinate decoding by block sizes)
