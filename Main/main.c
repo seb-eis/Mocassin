@@ -17,8 +17,12 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
+#include "UnitTesting/MinimalUnitTest.h"
+#include "UnitTesting/UnitTests.h"
 
-#if !defined(MC_TESTBUILD)
+#define UNITTEST 1
+
+#if 0 //!defined(MC_TESTBUILD)
 
     int main(int argc, char const * const *argv)
     {
@@ -41,6 +45,23 @@
 
         return (0);
     }
+
+
+#elif UNITTEST
+
+    int main(int argc, char **argv) {
+
+        char *result = all_tests();
+        if (result != 0) {
+            printf("%s\n", result);
+        }
+        else {
+            printf("ALL TESTS PASSED\n");
+        }
+        printf("Tests run: %d\n", tests_run);
+
+        return result != 0;
+    };
 
 #else
 

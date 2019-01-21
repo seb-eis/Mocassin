@@ -62,11 +62,9 @@ Vector4_t ScalarMultVector4(const Vector4_t * lhs, int32_t rhs)
     return addressAs(Vector4_t, &result);
 }
 
-<<<<<<< HEAD
-vector4_t SubtractVector4(const vector4_t * lhs, const vector4_t * rhs)
-=======
+Vector4_t SubtractVector4(const Vector4_t * lhs, const Vector4_t * rhs);
+
 Vector4_t ScalarDivideVector4(const Vector4_t * lhs, int32_t rhs)
->>>>>>> master
 {
     __sse4s result = addressAs(__sse4s, lhs) / rhs;
     return addressAs(Vector4_t, &result);

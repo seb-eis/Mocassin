@@ -10,8 +10,23 @@ FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
 FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
 
-add_executable(ICon.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE} Framework/Basic/BaseTypes/Buffers.h Framework/Basic/BaseTypes/Buffers.c Framework/Basic/Macros/Macros.h Framework/Sqlite/SqliteReader.h Framework/Sqlite/SqliteReader.c UnitTesting/MinimalUnitTest.h UnitTesting/UnitTests.h Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.h Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.c Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.c)
-
+add_executable(ICon.Simulator
+        ./Main/main.c
+        ${FRAMEWORK_SOURCE}
+        ${SIMULATOR_SOURCE}
+        Framework/Basic/BaseTypes/Buffers.h
+        Framework/Basic/BaseTypes/Buffers.c
+        Framework/Basic/Macros/Macros.h
+        Framework/Sqlite/SqliteReader.h
+        Framework/Sqlite/SqliteReader.c
+        UnitTesting/MinimalUnitTest.h
+        UnitTesting/UnitTests.h
+        Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.h
+        Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.c
+        Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h
+        Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.c
+        Simulator/Logic/Routines/Tracking/TransitionTracking.h
+        Simulator/Logic/Routines/Tracking/TransitionTracking.c)
 
 include_directories(${PROJECT_SOURCE_DIR})
 

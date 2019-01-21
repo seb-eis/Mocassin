@@ -88,6 +88,13 @@ struct ProjectIds{
     int LatticeId;
 };
 
+
+struct SqlQuery{
+    char *SqlStatement;
+    int (*func_ptr)(sqlite3 *db, struct ProjectIds* projectIds);
+};
+
+
 // Main function - assign the provided DbModel object with the provided database and project number
 int AssignDatabaseModel(DbModel_t* dbModel, char* dbFile, int projectNumber);
 
@@ -115,7 +122,7 @@ int AssignStructureModel(char* sql_query, sqlite3 *db, void *obj, const struct P
 int AssignEnvironmentDefinitions(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
 
 
-int AssignEnergyModel(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
+int AssignEnergyModel(char* sqlQuery, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
 
 int AssignPairEnergyTables(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
 
@@ -128,12 +135,7 @@ int AssignJumpCollections(char* sql_query, sqlite3 *db, void *obj, const struct 
 
 int AssignJumpDirections(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
 
+int DistributeJumpDirections(DbModel_t* dbModel);
 
 int AssignLatticeModel(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
 
-
-// Test functions
-
-int TestDatabase( char* dbFile );
-
-int TestQuery(char* dbFile);
