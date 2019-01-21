@@ -19,28 +19,12 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
 #include "Framework/Basic/Macros/Macros.h"
-#include <immintrin.h>
+#include "Simulator/Logic/Routines/Output/DefaultOutput.h"
 
 #if defined(MC_TESTBUILD)
     int main(int argc, char const * const *argv)
     {
-        Span_t(int32_t) sourceArray = new_Span(sourceArray, 10000);
-        typeof(sourceArray) targetArray;
 
-        int32_t index = 0;
-        cpp_foreach(item, sourceArray)
-        {
-            *item = index++;
-        }
-
-        targetArray = span_FromBlob(targetArray, sourceArray.Begin, 10000);
-
-        Buffer_t sourceBuffer = { .Begin = (void*)sourceArray.Begin, .End = (void*)sourceArray.End };
-        Buffer_t targetBuffer = { .Begin = (void*)targetArray.Begin, .End = (void*)targetArray.End };
-        bool_t checkValue = HaveSameBufferContent(&sourceBuffer, &targetBuffer);
-
-        char* result = (checkValue) ? "true" : "false";
-        printf("Content is same %s", result);
         getchar();
         return (0);
     }

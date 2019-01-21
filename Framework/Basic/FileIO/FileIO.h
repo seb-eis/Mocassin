@@ -8,6 +8,8 @@
 // Short:   Basic file IO functions     //
 //////////////////////////////////////////
 
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -16,6 +18,16 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
+
+#define FORMAT_I8   "%" PRIi8
+#define FORMAT_I16  "%" PRIi16
+#define FORMAT_I32  "%" PRIi32
+#define FORMAT_I64  "%" PRIi64
+
+#define FORMAT_U8   "%" PRIu8
+#define FORMAT_U16  "%" PRIu16
+#define FORMAT_U32  "%" PRIu32
+#define FORMAT_U64  "%" PRIu64
 
 // Defines the file stream type
 typedef FILE file_t;
