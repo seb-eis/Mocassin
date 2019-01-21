@@ -14,7 +14,7 @@
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
-#include "SimContext.h"
+#include "Simulator/Data/SimContext/SimContext.h"
 
 /* Context access defines */
 
@@ -78,6 +78,7 @@ static inline JumpStatus_t* getJumpStatusByVector4(__SCONTEXT_PAR, const Vector4
 {
     return &array_Get(*getJumpStatusArray(SCONTEXT), vector->A,vector->B,vector->C,vector->D);
 }
+
 
 /* Simulation model getter/setter */
 

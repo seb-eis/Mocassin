@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Defines the MC test build macro
+// Defines the MC test build macro that enables most of the debugging assertions and save getter/setters
 #define MC_TESTBUILD
 
 // Defines the debug assert all macro
