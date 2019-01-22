@@ -97,11 +97,11 @@ static inline Pcg32_t ConstructTimeInitializedPcg32()
 {
 	Pcg32_t pcg;
 	char timeStr[100];
-	error_t error = GetFormatetTimeString("%Y-%m-%d-%H-%M-%S-STATE", timeStr, sizeof(timeStr));
+	error_t error = GetFormatedTimeStamp("%Y-%m-%d-%H-%M-%S-STATE", timeStr, sizeof(timeStr));
 	error_assert(error, "Failed to get system time string fro state");
 	uint64_t state = GetStringHash(timeStr);
 
-	error = GetFormatetTimeString("%Y-%m-%d-%H-%M-%S-INC", timeStr, sizeof(timeStr));
+	error = GetFormatedTimeStamp("%Y-%m-%d-%H-%M-%S-INC", timeStr, sizeof(timeStr));
 	error_assert(error, "Failed to get system time string for inc");
 	uint64_t inc = GetStringHash(timeStr) | 1ULL;
 

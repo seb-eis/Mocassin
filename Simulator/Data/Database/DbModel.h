@@ -18,7 +18,7 @@
 /* General */
 
 // Type for encoding state occupations
-typedef int64_t OccCode_t;
+typedef int64_t OccupationCode_t;
 
 // Type for index redirection lists
 // Layout@ggc_x86_64 => 16@[8,8]
@@ -151,7 +151,7 @@ typedef Array_t(double, 2, EnergyTable) EnergyTable_t;
 
 // Type for lists of occupation codes
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(OccCode_t, OccCodes) OccCodes_t;
+typedef Span_t(OccupationCode_t, OccCodes) OccCodes_t;
 
 // Type for pair tables to store energies of pair interactions
 // Layout@ggc_x86_64 => 32@[24,4,{4}]
@@ -272,13 +272,13 @@ typedef Span_t(JumpDirection_t, JumpDirections) JumpDirections_t;
 typedef struct JumpRule
 {
     // The occupation code for the start state
-    OccCode_t   StateCode0;
+    OccupationCode_t   StateCode0;
 
     // The occupation code for the transition state
-    OccCode_t   StateCode1;
+    OccupationCode_t   StateCode1;
 
     // The occupation code for the final state
-    OccCode_t   StateCode2;
+    OccupationCode_t   StateCode2;
 
     // The attempt frequency factor
     double      FrequencyFactor;

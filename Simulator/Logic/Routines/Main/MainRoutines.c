@@ -456,7 +456,7 @@ void SetKmcJumpPathProperties(__SCONTEXT_PAR)
     }
 }
 
-static inline OccCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
+static inline OccupationCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
 {
     return getActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StateCode0;
 }

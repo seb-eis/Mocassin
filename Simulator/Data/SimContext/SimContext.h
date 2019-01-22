@@ -52,8 +52,8 @@ typedef struct ClusterState
 {
     int32_t     CodeId;
     int32_t     CodeIdBackup;
-    OccCode_t   OccupationCode;
-    OccCode_t   OccupationCodeBackup;
+    OccupationCode_t   OccupationCode;
+    OccupationCode_t   OccupationCodeBackup;
     
 } ClusterState_t;
 
@@ -153,7 +153,7 @@ typedef struct EnvironmentBackup
 typedef struct CycleState
 {
     CycleCounterState_t         MainCounters;
-    OccCode_t                   ActiveStateCode;
+    OccupationCode_t                   ActiveStateCode;
     JumpSelectionInfo_t         ActiveSelectionInfo;
     JumpEnergyInfo_t            ActiveEnergyInfo;
     EnvironmentBackup_t         ActiveEnvironmentBackup;

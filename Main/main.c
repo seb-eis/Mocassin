@@ -19,12 +19,14 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
 #include "Framework/Basic/Macros/Macros.h"
-#include "Simulator/Logic/Routines/Output/DefaultOutput.h"
+#include "Simulator/Logic/Routines/Output/TagDataOutput.h"
 
 #if defined(MC_TESTBUILD)
     int main(int argc, char const * const *argv)
     {
-
+        char buffer[20];
+        SecondsToISO8601TimeSpan(buffer, 3661);
+        printf("%s", buffer);
         getchar();
         return (0);
     }

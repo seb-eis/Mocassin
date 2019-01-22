@@ -48,6 +48,15 @@ typedef struct Vector4 { int32_t A, B, C, D; } Vector4_t;
 (LHS).C OP (SCALAR);\
 (LHS).D OP (SCALAR);
 
+// Expand the first 2 coordinate values of a vector into "A,B"
+#define vecCoorSet2(VEC) (VEC).A, (VEC).B
+
+// Expand the first 3 coordinate values of a vector into "A,B,C"
+#define vecCoorSet3(VEC) vecCoorSet2(VEC), (VEC).C
+
+// Expand the first 4 coordinate values of a vector into "A,B,C,D"
+#define vecCoorSet4(VEC) vecCoorSet3(VEC), (VEC).D
+
 
 // Performs a vector addition (a + b) and returns the resulting vector
 static inline Vector3_t AddVector3(const Vector3_t* restrict lhs, const Vector3_t* restrict rhs)
