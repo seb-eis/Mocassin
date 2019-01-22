@@ -48,12 +48,12 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The jump count table that assigns each position id + particle id combination the number of selectable jumps
         /// </summary>
-        int[,] JumpCountTable { get; set; }
+        int[,] JumpCountMappingTable { get; set; }
 
         /// <summary>
         ///     The jump index assign table that assigns each position id + particle id + local direction id its valid jump
         ///     direction id
         /// </summary>
-        int[,,] JumpIndexAssignTable { get; set; }
+        int[,,] JumpDirectionIdMappingTable { get; set; }
     }
 }

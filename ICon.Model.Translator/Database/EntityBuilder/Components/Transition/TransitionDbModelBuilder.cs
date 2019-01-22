@@ -51,7 +51,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected JumpCountTableEntity GetJumpCountTableEntity(ISimulationEncodingModel encodingModel)
         {
-            return new JumpCountTableEntity(encodingModel.JumpCountTable);
+            return new JumpCountTableEntity(encodingModel.JumpCountMappingTable);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         protected JumpAssignTableEntity GetJumpAssignTableEntity(ISimulationEncodingModel encodingModel)
         {
-            return new JumpAssignTableEntity(encodingModel.JumpIndexAssignTable);
+            return new JumpAssignTableEntity(encodingModel.JumpDirectionIdMappingTable);
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 TransitionModelToJumpCollectionId = GetTransitionModelIndexing(simulationModel.TransitionModels),
                 TransitionMappingToJumpDirectionId = GetTransitionMappingIndexing(simulationModel.TransitionModels),
-                JumpCountTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels),
+                JumpCountMappingTable = GetJumpCountTable(simulationModel.MappingAssignMatrix, simulationModel.LocalJumpModels),
                 PositionIndexToMobilityTypesSet = GetPositionIndexToMobilitySetMapping(simulationModel.LocalJumpModels)
             };
 

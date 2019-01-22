@@ -21,9 +21,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IDictionary<ITransitionMappingModel, double> TransitionMappingToElectricFieldFactors { get; set; }
 
         /// <inheritdoc />
-        public int[,] JumpCountTable { get; set; }
+        public int[,] JumpCountMappingTable { get; set; }
 
         /// <inheritdoc />
-        public int[,,] JumpIndexAssignTable { get; set; }
+        public int[,,] JumpDirectionIdMappingTable { get; set; }
     }
 }

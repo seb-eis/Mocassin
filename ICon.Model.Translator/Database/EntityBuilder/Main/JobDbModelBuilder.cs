@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mocassin.Framework.Extensions;
-using Mocassin.Model.Translator.Optimization;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
+using Mocassin.Model.Translator.Optimization;
 
 namespace Mocassin.Model.Translator.EntityBuilder
 {
@@ -140,7 +140,35 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
+            SetSimulationTypeFlags(result, simulationModel);
             return result;
+        }
+
+        /// <summary>
+        ///     Set the simulation type flags according to a simulation model in the passed prepared simulation job model
+        /// </summary>
+        /// <param name="jobModel"></param>
+        /// <param name="simulationModel"></param>
+        protected void SetSimulationTypeFlags(SimulationJobModel jobModel, ISimulationModel simulationModel)
+        {
+            var kmcFlag = (long) SimulationJobInfoFlags.KmcSimulation;
+            var mmcFlag = (long) SimulationJobInfoFlags.MmcSimulation;
+
+            switch (simulationModel)
+            {
+                case IKineticSimulationModel _:
+                    jobModel.JobInfo.Structure.JobFlags |= kmcFlag;
+                    jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & mmcFlag;
+                    return;
+
+                case IMetropolisSimulationModel _:
+                    jobModel.JobInfo.Structure.JobFlags |= mmcFlag;
+                    jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & kmcFlag;
+                    return;
+
+                default:
+                    throw new ArgumentException("Type of simulation model is not supported", nameof(simulationModel));
+            }
         }
 
         /// <summary>
@@ -184,7 +212,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="packageModel"></param>
         protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel)
         {
-            foreach (var optimizer in _postBuildOptimizers) 
+            foreach (var optimizer in _postBuildOptimizers)
                 optimizer.Run(ProjectModelContext, packageModel);
         }
 
