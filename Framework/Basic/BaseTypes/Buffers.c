@@ -8,6 +8,7 @@
 // Short:   Container definitions       //
 //////////////////////////////////////////
 
+#include <string.h>
 #include "Framework/Basic/BaseTypes/Buffers.h"
 
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
@@ -27,6 +28,16 @@ void* ConstructVoidSpan(const size_t numOfElements, const size_t sizeOfElement, 
 {
     error_t error = TryAllocateSpan(numOfElements, sizeOfElement, outSpan);
     error_assert(error, "Out of memory on span construction.");
+    return outSpan;
+}
+
+void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan)
+{
+    *outSpan = new_Span(*outSpan, numOfBytes);
+    Buffer_t bufferSpan = (Buffer_t) {.Begin = buffer, .End = buffer + numOfBytes};
+    int error = SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
+    error_assert(error, "this has not worked \n");
+
     return outSpan;
 }
 
@@ -82,11 +93,25 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     return outArray;
 }
 
+void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElements, VoidArray_t *restrict outArray)
+{
+    VoidArray_t bufferArray = {.Header = buffer};
+    const int32_t headerByteCount = array_GetHeaderSize(bufferArray);
+    const int32_t dataByteCount = array_GetSize(bufferArray) * sizeOfElements;
+    const int32_t totalByteCount = headerByteCount + dataByteCount;
+
+    outArray->Header = malloc(totalByteCount);
+    error_assert((outArray->Header != NULL) ? ERR_OK : ERR_MEMALLOCATION, "Failed to build array from passed blob");
+    outArray->Begin = ((void*)outArray->Header) + headerByteCount;
+    outArray->End = outArray->Begin + dataByteCount;
+    memcpy(outArray->Header, buffer, totalByteCount);
+    return outArray;
+}
 
 void GetArrayDimensions(const VoidArray_t*restrict array, int32_t*restrict outBuffer)
 {
-    const int32_t rank = array->Header[0];
-    const int32_t size = array->Header[1];
+    const int32_t rank = array_GetRank(*array);
+    const int32_t size = array_GetSize(*array);
     const int32_t * blocks = &array->Header[2];
 
     outBuffer[0] = size / blocks[0];
@@ -121,7 +146,7 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs)
     byte_t* rhsit = rhs->Begin;
     while (lhsit != lhs->End)
     {
-        if (*(++lhsit) != *(++rhsit))
+        if (*(lhsit++) != *(rhsit++))
         {
             return false;
         }

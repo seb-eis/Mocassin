@@ -17,6 +17,8 @@
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
+#include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
+#include "Framework/Basic/Macros/BinarySearch.h"
 
 void PrepareForMainRoutine(__SCONTEXT_PAR)
 {
@@ -139,7 +141,9 @@ static inline void OnKmcJumpFromUnstableState(__SCONTEXT_PAR)
 {
     getActiveCounters(SCONTEXT)->UnstableStartCount++;
 
+    AdvanceTransitionTrackingSystem(SCONTEXT);
     AdvanceKmcSystemToState2(SCONTEXT);
+
     if (MakeJumpPoolUpdateKmc(SCONTEXT))
     {
         UpdateTimeStepping(SCONTEXT);
@@ -152,7 +156,10 @@ static inline void OnKmcJumpAccepted(__SCONTEXT_PAR)
     getActiveCounters(SCONTEXT)->McsCount++;
 
     AdvanceSimulatedTime(SCONTEXT);
+    AdvanceTransitionTrackingSystem(SCONTEXT);
+
     AdvanceKmcSystemToState2(SCONTEXT);
+
     if (MakeJumpPoolUpdateKmc(SCONTEXT))
     {
         UpdateTimeStepping(SCONTEXT);
@@ -164,6 +171,7 @@ static inline void OnKmcJumpAccepted(__SCONTEXT_PAR)
 static inline void OnKmcJumpRejected(__SCONTEXT_PAR)
 {
     getActiveCounters(SCONTEXT)->RejectionCount++;
+    AdvanceTransitionTrackingSystem(SCONTEXT);
     AdvanceSimulatedTime(SCONTEXT);
 }
 
@@ -387,20 +395,20 @@ static error_t GeneralSimulationFinish(__SCONTEXT_PAR)
 error_t FinishMainRoutineKmc(__SCONTEXT_PAR)
 {
     SIMERROR = GeneralSimulationFinish(SCONTEXT);
-    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine execution.");
     return SIMERROR;
 }
 
 error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
 {
     SIMERROR = GeneralSimulationFinish(SCONTEXT);
-    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine exceution.");
+    error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine execution.");
     return SIMERROR;
 }
 
 static inline int32_t LookupActJumpId(__SCONTEXT_PAR)
 {
-    return array_Get(*getJumpDirectionMapping(SCONTEXT), JUMPPATH[0]->PositionVector.d, JUMPPATH[0]->ParticleId, getJumpSelectionInfo(SCONTEXT)->RelativeId);
+    return array_Get(*getJumpDirectionMapping(SCONTEXT), JUMPPATH[0]->PositionVector.D, JUMPPATH[0]->ParticleId, getJumpSelectionInfo(SCONTEXT)->RelativeId);
 }
 
 static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
@@ -413,7 +421,7 @@ static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
 
 static inline void SetActPathStartEnv(__SCONTEXT_PAR)
 {
-    JUMPPATH[0] = getEnvironmentStateById(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->EnvironmentId);
+    JUMPPATH[0] = getEnvironmentStateAt(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->EnvironmentId);
     SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, 0, JUMPPATH[0]->ParticleId);
     JUMPPATH[0]->PathId = 0;
 }
@@ -453,7 +461,7 @@ static inline OccCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
     return getActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StateCode0;
 }
 
-static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
+static inline void LinearSearchAndSetActiveJumpRule(__SCONTEXT_PAR)
 {
     if (GetLastPossibleJumpCode(SCONTEXT) < getPathStateCode(SCONTEXT))
     {
@@ -473,14 +481,22 @@ static inline void LinearJumpRuleLookup(__SCONTEXT_PAR)
     }
 }
 
-static inline void BinaryJumpRuleLookup(__SCONTEXT_PAR)
+static inline void BinarySearchAndSetActiveJumpRule(__SCONTEXT_PAR)
 {
-    // Possible implementation on optimization
+    decllocal(FUNCDECL_COMPARER, BinarySearchAndSetActiveJumpRule_Compare, JumpRule_t);
+    decllocal(FUNCDECL_BINARYSEARCH, BinarySearchAndSetActiveJumpRule_Search, JumpRules_t, JumpRule_t);
+
+    JumpRule_t searchObj = {.StateCode0 = getPathStateCode(SCONTEXT)};
+    int32_t id = local_BinarySearchAndSetActiveJumpRule_Search(&getActiveJumpCollection(SCONTEXT)->JumpRules, &searchObj);
+    *getActiveJumpRule(SCONTEXT) = span_Get(getActiveJumpCollection(SCONTEXT)->JumpRules, id);
 }
+
+impllocal(FUNCIMPL_COMPARER, local_BinarySearchAndSetActiveJumpRule_Compare, JumpRule_t, makeCompGetter, StateCode0);
+impllocal(FUNCIMPL_BINARYSEARCH, local_BinarySearchAndSetActiveJumpRule_Search, JumpRules_t, JumpRule_t, local_BinarySearchAndSetActiveJumpRule_Compare);
 
 static inline void LookupAndSetActJumpRule(__SCONTEXT_PAR)
 {
-    LinearJumpRuleLookup(SCONTEXT);
+    LinearSearchAndSetActiveJumpRule(SCONTEXT);
 }
 
 bool_t GetKmcJumpRuleEvaluation(__SCONTEXT_PAR)
@@ -500,8 +516,12 @@ void SetKmcJumpProbabilities(__SCONTEXT_PAR)
 
     energyInfo->FieldInfluence = CalcElectricFieldInfluence(SCONTEXT);
     energyInfo->ConformationDelta = 0.5 * (energyInfo->Energy2 - energyInfo->Energy0);
-    energyInfo->Probability0to2 = exp(energyInfo->Energy1 + energyInfo->ConformationDelta) * getActiveJumpRule(SCONTEXT)->FrequencyFactor;
-    energyInfo->Probability2to0 = (energyInfo->ConformationDelta > energyInfo->Energy1) ? INFINITY : 0.0;
+
+    energyInfo->Energy0To2 = energyInfo->Energy1 + energyInfo->ConformationDelta + energyInfo->FieldInfluence;
+    energyInfo->Energy0To2 = energyInfo->Energy1 - energyInfo->ConformationDelta + energyInfo->FieldInfluence;
+
+    energyInfo->Probability0to2 = exp(energyInfo->Energy0To2) * getActiveJumpRule(SCONTEXT)->FrequencyFactor;
+    energyInfo->Probability2to0 = (energyInfo->Energy2To0 < 0.0) ? INFINITY : 0.0;
 }
 
 void SetKmcJumpEvaluationResults(__SCONTEXT_PAR)
@@ -545,14 +565,14 @@ void SetNextMmcJumpSelection(__SCONTEXT_PAR)
 void SetMmcJumpPathProperties(__SCONTEXT_PAR)
 {
     // Get the first environment state pointer (0,0,0,0) and write the offset source state to the unused 3rd path index
-    JUMPPATH[2] = getEnvironmentStateById(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->OffsetId);
-    JUMPPATH[1] = getEnvironmentStateById(SCONTEXT, 0);
+    JUMPPATH[2] = getEnvironmentStateAt(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->OffsetId);
+    JUMPPATH[1] = getEnvironmentStateAt(SCONTEXT, 0);
 
     // Advance the pointer by the affiliated block jumps
-    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[0] * JUMPPATH[2]->PositionVector.a;
-    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[1] * JUMPPATH[2]->PositionVector.b;
-    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[2] * JUMPPATH[2]->PositionVector.c;
-    JUMPPATH[1] += JUMPPATH[0]->PositionVector.d;
+    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[0] * JUMPPATH[2]->PositionVector.A;
+    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[1] * JUMPPATH[2]->PositionVector.B;
+    JUMPPATH[1] += getEnvironmentLattice(SCONTEXT)->Header->Blocks[2] * JUMPPATH[2]->PositionVector.C;
+    JUMPPATH[1] += JUMPPATH[0]->PositionVector.D;
 
     // Correct the active state code byte and set the path id of the second environment state
     SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, 1, JUMPPATH[1]->ParticleId);
@@ -562,7 +582,7 @@ void SetMmcJumpPathProperties(__SCONTEXT_PAR)
 bool_t GetMmcJumpRuleEvaluation(__SCONTEXT_PAR)
 {
     LookupAndSetActJumpRule(SCONTEXT);
-    return getCycleState(SCONTEXT)->ActiveJumpRule == 0;
+    return getCycleState(SCONTEXT)->ActiveJumpRule == NULL;
 }
 
 void SetMmcJumpProperties(__SCONTEXT_PAR)
@@ -572,7 +592,9 @@ void SetMmcJumpProperties(__SCONTEXT_PAR)
 
 void SetMmcJumpProbabilities(__SCONTEXT_PAR)
 {
-    getJumpEnergyInfo(SCONTEXT)->Probability0to2 = exp(getJumpEnergyInfo(SCONTEXT)->Energy2 - getJumpEnergyInfo(SCONTEXT)->Energy0);
+    JumpEnergyInfo_t* energyInfo = getJumpEnergyInfo(SCONTEXT);
+    energyInfo->Energy0To2 = energyInfo->Energy2 - energyInfo->Energy0;
+    energyInfo->Probability0to2 = exp(energyInfo->Energy0To2);
 }
 
 void SetMmcJumpEvaluationResults(__SCONTEXT_PAR)

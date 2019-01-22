@@ -13,6 +13,7 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Simulator/Logic/Constants/Constants.h"
 
 /* General */
 
@@ -22,10 +23,6 @@ typedef int64_t OccCode_t;
 // Type for index redirection lists
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(int32_t, IdRedirection) IdRedirection_t;
-
-// Type for tracking movement (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 32@[8,8,8,8]
-typedef Vector3_t MoveVector_t;
 
 // Type for defining a range of unit cells (Supports 16 bit alignment)
 // Layout@ggc_x86_64 => 16@[16]
@@ -237,7 +234,7 @@ typedef Span_t(Vector4_t, JumpSequence) JumpSequence_t;
 
 // Span type for movement sequences
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(MoveVector_t, MoveSequence) MoveSequence_t;
+typedef Span_t(Vector3_t, MoveSequence) MoveSequence_t;
 
 // Type for jump direction definitions
 // Layout@ggc_x86_64 => 56@[4,4,4,4,8,16,16]
@@ -262,7 +259,7 @@ typedef struct JumpDirection
     JumpSequence_t  JumpSequence;
 
     // The movement sequence for tracking
-    MoveSequence_t  LocalMoveSequence;
+    MoveSequence_t  MovementSequence;
     
 } JumpDirection_t;
 
@@ -290,7 +287,7 @@ typedef struct JumpRule
     double      ElectricFieldFactor;
 
     // The tracker order code that encodes the tracker reordering
-    byte_t      TrackerOrderCode[8];
+    byte_t      TrackerOrderCode[JUMPS_JUMPLENGTH_MAX];
     
 } JumpRule_t;
 

@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Defines the MC test build macro
+// Defines the MC test build macro that enables most of the debugging assertions and save getter/setters
 #define MC_TESTBUILD
 
 // Defines the debug assert all macro
@@ -45,10 +45,10 @@ typedef int32_t error_t;
 typedef int64_t cerror_t;
 
 // Defines the format of the default error output
-#define ERROR_FORMAT "ERROR:\t0x%08x\nWhere:\t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\n"
+#define ERROR_FORMAT "ERROR:\t0x%08x\nFunc\t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\n"
 
 // Defines the format of the default error output with memory dump
-#define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nWhere:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
+#define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nFunc:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
 
 // Defines the path to the debug stderr dump folder
 #define STDERR_PATH "./Debug/stderr.log"
@@ -162,7 +162,7 @@ void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLin
 static inline double InvokeAndProfile(void (*func)(void))
 {
     clock_t start = clock();
-    (*func)();
+    func();
     clock_t end = clock();
-    return 1000.0*(double)(start - end)/(double)CLOCKS_PER_SEC;
+    return (double)(end - start);
 }

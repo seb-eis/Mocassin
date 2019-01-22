@@ -19,7 +19,7 @@
 // Translates the passed environment state into the index of the required environment pool
 static inline int32_t LookupEnvironmentPoolId(JumpSelectionPool_t* restrict selectionPool, const JumpCountTable_t* restrict jumpCountTable, const EnvironmentState_t* restrict environment)
 {
-    int32_t idRedirect = array_Get(*jumpCountTable, environment->PositionVector.d, environment->ParticleId);
+    int32_t idRedirect = array_Get(*jumpCountTable, environment->PositionVector.D, environment->ParticleId);
     return span_Get(selectionPool->DirectionPoolMapping, idRedirect);
 }
 
@@ -79,8 +79,8 @@ static error_t AddEnvStateToSelectionPool(__SCONTEXT_PAR, EnvironmentState_t* re
 
 error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environmentId)
 {
-    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
-    int32_t numOfJumps = getJumpCountAt(SCONTEXT, environment->PositionVector.d, environment->ParticleId);
+    EnvironmentState_t* environment = getEnvironmentStateAt(SCONTEXT, environmentId);
+    int32_t numOfJumps = getJumpCountAt(SCONTEXT, environment->PositionVector.D, environment->ParticleId);
     int64_t selectionMask = environment->EnvironmentDefinition->SelectionParticleMask;
     
     if (!environment->IsStable || (numOfJumps <= JPOOL_DIRCOUNT_STATIC))
@@ -89,12 +89,14 @@ error_t HandleEnvStatePoolRegistration(__SCONTEXT_PAR, const int32_t environment
         UpdateEnvStateSelectionStatus(environment, JPOOL_NOT_SELECTABLE, JPOOL_NOT_SELECTABLE);
         return ERR_OK;
     }
+
     if (numOfJumps == JPOOL_DIRCOUNT_PASSIVE)
     {
         environment->IsMobile = true;
         UpdateEnvStateSelectionStatus(environment, JPOOL_NOT_SELECTABLE, JPOOL_NOT_SELECTABLE);
         return ERR_OK;
     }
+
     if (numOfJumps > JPOOL_DIRCOUNT_PASSIVE)
     {
         environment->IsMobile = true;

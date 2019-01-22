@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <stdlib.h>
+
 /*Arg count macro from Roland Illig and Laurent Deniau*/
 
 #define __VA_NARG(...) \
@@ -38,19 +40,25 @@
 
 /* Macro evaluation */
 
-#define __PASTE(MACRO, ...) MACRO(__VA_ARGS__)
+// Paste a macro string and a set of arguments
+#define pasteMacro(MACRO, ...) MACRO(__VA_ARGS__)
 
-#define __EVAL(MACRO, ...) __PASTE(MACRO, __VA_ARGS__)
+// Eval a macro string and set of arguments
+#define evalMacro(MACRO, ...) pasteMacro(MACRO, __VA_ARGS__)
 
-#define __CONCAT(A, B) A ## B
+// Concat two macro strings
+#define concatMacro(A, B) A ## B
 
 /* Ptr usage */
 
-// Marshal a pointer to a value as a pointer of another type for direct memory manipulation
-#define marshalAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+// Use a pointer as a pointer to the given type
+#define accessPtrAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
 
 // Access the passed value as the given type
-#define addressAs(__TYPE, __VALUE) *((__TYPE*) (__VALUE))
+#define accessValAs(__TYPE, __VALUE) *((__TYPE*) (__VALUE))
+
+// Compares the left value to the right value
+#define compareLhsToRhs(LHS,RHS) ((LHS)==(RHS)) ? 0 : ((LHS)<(RHS)) ? -1 : 1
 
 /* Math macros */
 
@@ -67,3 +75,23 @@
 #define setFlags(__VALUE, __FLAG) (__VALUE) |= (__FLAG)
 
 #define unsetFlags(__VALUE, __FLAG) (__VALUE) -= ((__VALUE) & (__FLAG))
+
+/* Local function declaration and implementation macros*/
+
+// Builds the default local name for a function
+#define namelocal(NAME) local_##NAME
+
+// Declare a local function using the passed function declaration macro template
+#define decllocal(FDECLTEMPLATE, NAME, ...) evalMacro(FDECLTEMPLATE, namelocal(NAME), __VA_ARGS__);
+
+// Implement a local function using the passed function implementation macro template
+#define impllocal(FIMPLTEMPLATE, FULLNAME, ...) evalMacro(FIMPLTEMPLATE, FULLNAME, __VA_ARGS__)
+
+// Defines the default value getter macro for function templates that expands to the value itself
+#define valGetter(VAL, ...) (VAL)
+
+// Defines the default pointer getter macro for function templates that expands to the value of the pointer
+#define ptrGetter(PTR, ...) (*PTR)
+
+// Macro that expands to a field getter on a passed pointer for comparer template value getters
+#define makeCompGetter(PTR, FIELD) (PTR)->FIELD

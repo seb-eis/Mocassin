@@ -195,32 +195,82 @@ static char *TestTransitionAssignment()
     TransitionModel_t* transitionModel = &dbModel.TransitionModel;
 
     error_code = AssignTransitionModel("", db, transitionModel, &projectIds);
-    sprintf(error_message, "Could not assign transition. Sql error code: %i", error_code);
+    sprintf(error_message, "Could not assign transition model. Sql error code: %i", error_code);
     mu_assert(error_message, error_code == SQLITE_OK);
 
     error_code = AssignJumpCollections("", db, &transitionModel->JumpCollections, &projectIds);
-    //sprintf(error_message, "Could not assign jump collection. Sql error code: %i", error_code);
+    sprintf(error_message, "Could not assign jump collection. Sql error code: %i", error_code);
     mu_assert(error_message, error_code == SQLITE_OK);
 
     error_code = AssignJumpDirections("", db, &transitionModel->JumpDirections, &projectIds);
-    //sprintf(error_message, "Could not assign jump direction. Sql error code: %i", error_code);
+    sprintf(error_message, "Could not assign jump direction. Sql error code: %i", error_code);
     mu_assert(error_message, error_code == SQLITE_OK);
 
-    //DistributeJumpDirections(&dbModel);
+    error_code = DistributeJumpDirections(&dbModel);
+    sprintf(error_message, "Could not distribute jump directions. Error code: %d", error_code);
+    mu_assert(error_message, error_code == 0);
+
 
     sqlite3_close(db);
 
     return 0;
 }
 
-static char * all_tests() {
+static char *TestEnergyAssigment()
+{
+    int error_code = 0;
+
+    sqlite3 *db;
+
+    char *database = "../Database/InteropTestJohn.db";
+    sqlite3_open(database, &db);
+
+    EnergyModel_t* energyModel = &dbModel.EnergyModel;
+
+    error_code = AssignEnergyModel("", db, energyModel, &projectIds);
+    sprintf(error_message, "Could not assign energy model. Sql error code: %i", error_code);
+    mu_assert(error_message, error_code == SQLITE_OK);
+
+    error_code = AssignPairEnergyTables("", db, &energyModel->PairTables, &projectIds);
+    sprintf(error_message, "Could not assign pair energy tables. Sql error code: %i", error_code);
+    mu_assert(error_message, error_code == SQLITE_OK);
+
+    error_code = AssignClusterEnergyTables("", db, &energyModel->ClusterTables, &projectIds);
+    sprintf(error_message, "Could not assign cluster energy tables. Sql error code: %i", error_code);
+    mu_assert(error_message, error_code == SQLITE_OK);
+
+    DistributeJumpDirections(&dbModel);
+
+    sqlite3_close(db);
+
+    return 0;
+}
+
+char *TestCompleteAssignment()
+{
+    DbModel_t dbModel;
+
+    int error_code = 0;
+
+    char *database = "../Database/InteropTestJohn.db";
+
+    error_code = AssignDatabaseModel(&dbModel, database, 1);
+
+    sprintf(error_message, "Could not assign databasemodel. Sql error code: %i", error_code);
+    mu_assert(error_message, error_code == 0);
+
+    return 0;
+}
+
+static char *all_tests() {
+
     printf("Testing spans...");
     mu_run_test(TestSpans);
     printf("Done\n");
 
-    printf("Testing arrays...");
+    //printf("Testing arrays...");
     //mu_run_test(TestArrays);
-    printf("Done\n");
+    //printf("Done\n");
 
     printf("Testing general database access and query...");
     mu_run_test(DatabaseTest);
@@ -229,6 +279,7 @@ static char * all_tests() {
     printf("Testing project id fetching...");
     mu_run_test(FetchProjectIDs);
     printf("Done\n");
+
 
     printf("Testing structure assignment...");
     mu_run_test(TestStructureModelAssignment);
@@ -240,6 +291,14 @@ static char * all_tests() {
 
     printf("Testing transition assignment...");
     mu_run_test(TestTransitionAssignment);
+    printf("Done\n");
+
+    printf("Testing energy model assignment...");
+    mu_run_test(TestEnergyAssigment);
+    printf("Done\n");
+
+    printf("Testing complete assignment...");
+    mu_run_test(TestCompleteAssignment);
     printf("Done\n");
 
     return 0;

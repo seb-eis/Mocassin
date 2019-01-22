@@ -16,7 +16,7 @@ static void AllocateJumpStatusArray(__SCONTEXT_PAR)
 {
     Vector4_t* cellSizes = getLatticeSizeVector(SCONTEXT);
     size_t numOfJumpsPerCell = span_GetSize(*getJumpCollections(SCONTEXT));
-    JumpStatusArray_t statusArray = new_Array(statusArray,cellSizes->a,cellSizes->b,cellSizes->c,numOfJumpsPerCell);
+    JumpStatusArray_t statusArray = new_Array(statusArray,cellSizes->A,cellSizes->B,cellSizes->C,numOfJumpsPerCell);
 
     *getJumpStatusArray(SCONTEXT) = statusArray;
 }
@@ -24,9 +24,9 @@ static void AllocateJumpStatusArray(__SCONTEXT_PAR)
 // Populates the jump path with the passed jump status vector and jump direction to prepare for the jump link search
 static error_t PrepareJumpPathForLinkSearch(__SCONTEXT_PAR, const Vector4_t*restrict jumpStatusVector, const JumpDirection_t*restrict jumpDirection)
 {
-    return_if(jumpStatusVector->d != jumpDirection->ObjectId, ERR_ARGUMENT);
+    return_if(jumpStatusVector->D != jumpDirection->ObjectId, ERR_ARGUMENT);
 
-    JUMPPATH[0] = getEnvironmentStateByIds(SCONTEXT, jumpStatusVector->a, jumpStatusVector->b, jumpStatusVector->c, jumpDirection->PositionId);
+    JUMPPATH[0] = getEnvironmentStateByIds(SCONTEXT, jumpStatusVector->A, jumpStatusVector->B, jumpStatusVector->C, jumpDirection->PositionId);
     for (int32_t i = 0; i < jumpDirection->JumpLength; ++i)
     {
         Vector4_t targetVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, &span_Get(jumpDirection->JumpSequence, i), getLatticeSizeVector(SCONTEXT));
@@ -95,7 +95,7 @@ static error_t BuildJumpStatusByStatusVector(__SCONTEXT_PAR, const Vector4_t *re
     error_t error;
     int32_t numOfLinks = 0;
     JumpStatus_t* jumpStatus = getJumpStatusByVector4(SCONTEXT, jumpStatusVector);
-    JumpDirection_t* jumpDirection = getJumpDirectionAt(SCONTEXT, jumpStatusVector->d);
+    JumpDirection_t* jumpDirection = getJumpDirectionAt(SCONTEXT, jumpStatusVector->D);
 
     error = PrepareJumpPathForLinkSearch(SCONTEXT, jumpStatusVector, jumpDirection);
     return_if(error != ERR_OK, error);
@@ -117,13 +117,13 @@ static error_t ConstructJumpStatusCollection(__SCONTEXT_PAR)
     int32_t numOfJumpDirections = span_GetSize(*getJumpDirections(SCONTEXT));
 
     // Generate jump status for each jump direction in each unit cell
-    for (;jumpStatusVector.a < getLatticeSizeVector(SCONTEXT)->a; ++jumpStatusVector.a)
+    for (;jumpStatusVector.A < getLatticeSizeVector(SCONTEXT)->A; ++jumpStatusVector.A)
     {
-        for (;jumpStatusVector.b < getLatticeSizeVector(SCONTEXT)->b; ++jumpStatusVector.b)
+        for (;jumpStatusVector.B < getLatticeSizeVector(SCONTEXT)->B; ++jumpStatusVector.B)
         {
-            for (;jumpStatusVector.c < getLatticeSizeVector(SCONTEXT)->c; ++jumpStatusVector.c)
+            for (;jumpStatusVector.C < getLatticeSizeVector(SCONTEXT)->C; ++jumpStatusVector.C)
             {
-                for (;jumpStatusVector.c < numOfJumpDirections; ++jumpStatusVector.d)
+                for (;jumpStatusVector.C < numOfJumpDirections; ++jumpStatusVector.D)
                 {
                     error = BuildJumpStatusByStatusVector(SCONTEXT, &jumpStatusVector, linkSearchBuffer);
                     return_if(error != ERR_OK, error);

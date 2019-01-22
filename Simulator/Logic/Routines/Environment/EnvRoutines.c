@@ -13,6 +13,7 @@
 #include "Simulator/Logic/Routines/Environment/EnvRoutines.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
+#include "Framework/Basic/Macros/BinarySearch.h"
 
 /* Local helper routines */
 
@@ -61,10 +62,10 @@ static inline void LoadCluStateBackup(ClusterState_t* restrict cluster)
 // Compares two cluster links by cluster id and code byte id
 static int32_t CompareClusterLinks(const ClusterLink_t* lhs, const ClusterLink_t* rhs)
 {
-    int32_t value = get_compare(lhs->ClusterId, rhs->ClusterId);
+    int32_t value = compareLhsToRhs(lhs->ClusterId, rhs->ClusterId);
     if (value == 0)
     {
-        return get_compare(lhs->CodeByteId, rhs->CodeByteId);
+        return compareLhsToRhs(lhs->CodeByteId, rhs->CodeByteId);
     }
     return value;
 }
@@ -220,7 +221,7 @@ static error_t LinkEnvironmentToSurroundings(__SCONTEXT_PAR, EnvironmentState_t*
 // Compares two environment links by their affiliated pair id
 static inline int32_t CompareEnvironmentLink(const EnvironmentLink_t* restrict lhs, const EnvironmentLink_t* restrict rhs)
 {
-    return get_compare(lhs->PairId, rhs->PairId);
+    return compareLhsToRhs(lhs->PairId, rhs->PairId);
 }
 
 // Sort the linking system of an environment state to the unit cell independent order
@@ -386,7 +387,7 @@ static error_t SetEnvStateEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t*
 static error_t DynamicLookupEnvironmentStatus(__SCONTEXT_PAR, const int32_t environmentId, Buffer_t* restrict occupationBuffer)
 {
     error_t error;
-    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
+    EnvironmentState_t* environment = getEnvironmentStateAt(SCONTEXT, environmentId);
 
     error = WriteEnvOccupationToBuffer(SCONTEXT, environment, occupationBuffer);
     return_if(error, error);
@@ -419,14 +420,14 @@ void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
 // Sets the status of the environment state with the passed id to the default status using the passed occupation particle id
 void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, const byte_t particleId)
 {
-    EnvironmentState_t* environment = getEnvironmentStateById(SCONTEXT, environmentId);
-
+    EnvironmentState_t* environment = getEnvironmentStateAt(SCONTEXT, environmentId);
     environment->ParticleId = particleId;
     environment->EnvironmentId = environmentId;
     environment->IsMobile = false;
     environment->IsStable = (particleId == PARTICLE_VOID) ? false : true;
     environment->PositionVector = Vector4FromInt32(environmentId, getLatticeBlockSizes(SCONTEXT));
-    environment->EnvironmentDefinition = getEnvironmentModelAt(SCONTEXT, environment->PositionVector.d);
+    environment->EnvironmentDefinition = getEnvironmentModelAt(SCONTEXT, environment->PositionVector.D);
+    environment->MobileTrackerId = INVALID_INDEX;
 }
 
 /* Simulation routines KMC and MMC */
@@ -434,7 +435,7 @@ void SetEnvStateStatusToDefault(__SCONTEXT_PAR, const int32_t environmentId, con
 // Sets the active work environment by evaluation of the provided environment link
 static inline void SetActiveWorkEnvironmentByEnvLink(__SCONTEXT_PAR, EnvironmentLink_t *restrict environmentLink)
 {
-    SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateById(SCONTEXT, environmentLink->EnvironmentId);
+    SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateAt(SCONTEXT, environmentLink->EnvironmentId);
 }
 
 static inline void Set_ActiveWorkClusterByEnvAndId(__SCONTEXT_PAR, EnvironmentState_t* restrict environment, const byte_t clusterId)
@@ -639,14 +640,37 @@ void AdvanceKmcSystemToState2(__SCONTEXT_PAR)
     }
 }
 
+// Searches the passed environment state link collection for a link to the passed environment id and builds a matching jump link object
+static inline JumpLink_t BuildMMCJumpLink(const EnvironmentState_t*restrict envState, const int32_t envId, const int32_t pathId)
+{
+    JumpLink_t result = { .PathId = pathId, .LinkId = 0 };
+    cpp_foreach(envLink, envState->EnvironmentLinks)
+    {
+        if (envLink->EnvironmentId == envId)
+            return result;
+
+        ++result.LinkId;
+    }
+    return (JumpLink_t){ .PathId = INVALID_INDEX, .LinkId = INVALID_INDEX };
+}
 
 void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR)
 {
-    // Implement as soon as KMC functionality of delta principle is validated!
-    // Note: Cannot be done jump link based, requires lookup based implementation
-    //       that finds the environment-links beloging to the environment-Ids of both Path[0] and Path[1], respectively
-    // Note: Possibly use a hash system that enables to directly detect if a link could be present or not
-    error_assert(ERR_NOTIMPLEMENTED, "MMC currently not supported");
+    // Check if positions are within interaction range, if not no local delta has to be created
+    if (!PositionAreInInteractionRange(SCONTEXT, &JUMPPATH[0]->PositionVector, &JUMPPATH[1]->PositionVector))
+        return;
+
+    // Find the required environment links and build matching temporary jump links
+    JumpLink_t path0Link = BuildMMCJumpLink(JUMPPATH[0], JUMPPATH[1]->EnvironmentId, 0);
+    JumpLink_t path1Link = BuildMMCJumpLink(JUMPPATH[1], JUMPPATH[0]->EnvironmentId, 1);
+    debug_assert(path0Link.LinkId != INVALID_INDEX);
+    debug_assert(path1Link.LinkId != INVALID_INDEX);
+
+    // Prepare the potential cluster state changes on both environments and invoke the link deltas
+    PrepareJumpLinkClusterStateChanges(SCONTEXT, &path0Link);
+    PrepareJumpLinkClusterStateChanges(SCONTEXT, &path1Link);
+    InvokeJumpLinkDeltas(SCONTEXT, &path0Link);
+    InvokeJumpLinkDeltas(SCONTEXT, &path1Link);
 }
 
 void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR)

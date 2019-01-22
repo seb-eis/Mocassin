@@ -9,6 +9,10 @@
 //////////////////////////////////////////
 
 #pragma once
+
+#include "Framework/Errors/McErrors.h"
+#include "Framework/Basic/Time/McTime.h"
+#include <time.h>
 #include <stdint.h>
 #include <limits.h>
 
@@ -21,13 +25,16 @@
 // Typedef of the pcg32 random number generator
 typedef struct Pcg32 { uint64_t State;  uint64_t Inc; } Pcg32_t;
 
+// Macro to build a new seeded pcg generator
+#define new_Pcg32(PCG32, STATE, INC) *Pcg32Seed(&(PCG32), (STATE), (INC))
+
 // Get next random unsigned integer from the passed pcg32 rng
 static inline uint32_t Pcg32Next(Pcg32_t* restrict rng)
 {
 	uint64_t oldstate = rng->State;
 	rng->State = oldstate * 6364136223846793005ULL + rng->Inc;
-	uint32_t xorshifted = ((oldstate >> 18u) ^ oldstate) >> 27u;
-	uint32_t rot = oldstate >> 59u;
+	uint32_t xorshifted = (uint32_t) (((oldstate >> 18u) ^ oldstate) >> 27u);
+	uint32_t rot = (uint32_t) (oldstate >> 59u);
 	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
 }
 
@@ -47,7 +54,7 @@ static inline double Pcg32NextDouble(Pcg32_t* restrict rng)
 	return ((double)Pcg32Next(rng) / (double)UINT32_MAX);
 }
 
-// Seed the rng
+// Seed the rng with state and increase value
 static inline Pcg32_t* Pcg32Seed(Pcg32_t* restrict rng, uint64_t state, uint64_t inc)
 {
 	rng->State = 0U;
@@ -73,4 +80,30 @@ static inline double Pcg32GlobalNextDouble()
 	return ((double)Pcg32GlobalNext() / (double)UINT32_MAX);
 }
 
-#define new_Pcg32(PCG32, STATE, INC) *Pcg32Seed(&(PCG32), (STATE), (INC))
+// Get a hash value for the passed string
+static inline uint64_t GetStringHash(const char* str)
+{
+	uint64_t hash = 5381ULL;
+	int c;
+
+	while ((c = *str++))
+		hash = ((hash << 5) + hash) + c;
+
+	return hash;
+}
+
+// Build a new PCG32 that is initialized using the current time
+static inline Pcg32_t ConstructTimeInitializedPcg32()
+{
+	Pcg32_t pcg;
+	char timeStr[100];
+	error_t error = GetFormatetTimeString("%Y-%m-%d-%H-%M-%S-STATE", timeStr, sizeof(timeStr));
+	error_assert(error, "Failed to get system time string fro state");
+	uint64_t state = GetStringHash(timeStr);
+
+	error = GetFormatetTimeString("%Y-%m-%d-%H-%M-%S-INC", timeStr, sizeof(timeStr));
+	error_assert(error, "Failed to get system time string for inc");
+	uint64_t inc = GetStringHash(timeStr) | 1ULL;
+
+	return new_Pcg32(pcg, state, inc);
+}

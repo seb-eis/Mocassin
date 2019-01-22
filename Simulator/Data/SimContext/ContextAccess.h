@@ -14,7 +14,7 @@
 #include "Framework/Math/Random/PcgRandom.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Math/Types/Vector.h"
-#include "SimContext.h"
+#include "Simulator/Data/SimContext/SimContext.h"
 
 /* Context access defines */
 
@@ -76,8 +76,9 @@ static inline JumpStatusArray_t* getJumpStatusArray(__SCONTEXT_PAR)
 // Get a jump status from the context by a 4D vector [A,B,C,JumpDirId]
 static inline JumpStatus_t* getJumpStatusByVector4(__SCONTEXT_PAR, const Vector4_t*restrict vector)
 {
-    return &array_Get(*getJumpStatusArray(SCONTEXT), vector->a,vector->b,vector->c,vector->d);
+    return &array_Get(*getJumpStatusArray(SCONTEXT), vector->A,vector->B,vector->C,vector->D);
 }
+
 
 /* Simulation model getter/setter */
 
@@ -118,7 +119,7 @@ static inline void setEnvironmentLattice(__SCONTEXT_PAR, EnvironmentLattice_t va
 }
 
 // Get an environment state by its linearized id from the context
-static inline EnvironmentState_t* getEnvironmentStateById(__SCONTEXT_PAR, const int32_t id)
+static inline EnvironmentState_t* getEnvironmentStateAt(__SCONTEXT_PAR, const int32_t id)
 {
     debug_assert(!span_IndexIsOutOfRange(*getEnvironmentLattice(SCONTEXT), id));
     return &span_Get(*getEnvironmentLattice(SCONTEXT), id);
@@ -133,7 +134,7 @@ static inline EnvironmentState_t* getEnvironmentStateByIds(__SCONTEXT_PAR, const
 // Get an environment state by a 4D vector access from the context
 static inline EnvironmentState_t* getEnvironmentStateByVector4(__SCONTEXT_PAR, const Vector4_t* restrict vector)
 {
-    return getEnvironmentStateByIds(SCONTEXT, vector->a, vector->b, vector->c, vector->d);
+    return getEnvironmentStateByIds(SCONTEXT, vector->A, vector->B, vector->C, vector->D);
 }
 
 // Get the lattice block sizes from the context
@@ -563,19 +564,25 @@ static inline Tracker_t* getStaticMovementTrackerAt(__SCONTEXT_PAR, const int32_
     return &span_Get(*getStaticMovementTrackers(SCONTEXT), trackerId);
 }
 
-// Get a global movement tracker for the passed combination of [jumpColId] and [particleId]
-static inline Tracker_t* getGlobalMovementTrackerAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
+// Get a global tracker id from the affiliated tracker mapping that belongs to the passed set of [jumpCollectionId] and [particleId]
+static inline int32_t getGlobalTrackerIdAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
 {
     int32_t trackerId = array_Get(*getGlobalTrackerMappingTable(SCONTEXT), jumpColId, particleId);
     debug_assert(!span_IndexIsOutOfRange(*getGlobalMovementTrackers(SCONTEXT), trackerId));
+    return trackerId;
+}
+
+// Get a global movement tracker for the passed combination of [jumpColId] and [particleId]
+static inline Tracker_t* getGlobalMovementTrackerAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
+{
+    int32_t trackerId = getGlobalTrackerIdAt(SCONTEXT, jumpColId, particleId);
     return &span_Get(*getGlobalMovementTrackers(SCONTEXT), trackerId);
 }
 
 // Get a jump statistic for the passed combination of [jumpColId] and [particleId]
 static inline JumpStatistic_t* getJumpStatisticAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
 {
-    int32_t trackerId = array_Get(*getGlobalTrackerMappingTable(SCONTEXT), jumpColId, particleId);
-    debug_assert(!span_IndexIsOutOfRange(*getGlobalMovementTrackers(SCONTEXT), trackerId));
+    int32_t trackerId = getGlobalTrackerIdAt(SCONTEXT, jumpColId, particleId);
     return &span_Get(*getJumpStatistics(SCONTEXT), trackerId);
 }
 
@@ -836,8 +843,8 @@ static inline double* getEnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t p
 static inline JumpLinks_t* getActiveLocalJumpLinks(__SCONTEXT_PAR)
 {
     return &array_Get(*getJumpStatusArray(SCONTEXT),
-            JUMPPATH[0]->PositionVector.a,
-            JUMPPATH[0]->PositionVector.b,
-            JUMPPATH[0]->PositionVector.c,
+            JUMPPATH[0]->PositionVector.A,
+            JUMPPATH[0]->PositionVector.B,
+            JUMPPATH[0]->PositionVector.C,
             getActiveJumpDirection(SCONTEXT)->ObjectId).JumpLinks;
 }

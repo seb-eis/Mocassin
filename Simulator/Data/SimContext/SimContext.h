@@ -65,18 +65,19 @@ typedef Span_t(ClusterState_t, ClusterStates) ClusterStates_t;
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(double, EnergyStates) EnergyStates_t;
 
-// Type for a full environment state definition (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 96@[1,1,1,1,4,4,4,16,16,16,24,8]
+// Type for a full environment state definition (Does not support 16 bit alignment)
+// Layout@ggc_x86_64 => 100@[1,1,1,1,4,4,4,16,4,,16,16,24,8]
 typedef struct EnvironmentState
 {
     bool_t                      IsMobile;
-    byte_t                      IsStable;
+    bool_t                      IsStable;
     byte_t                      ParticleId;
     byte_t                      PathId;
     int32_t                     EnvironmentId;
     int32_t                     PoolId;
     int32_t                     PoolPositionId;
     Vector4_t                   PositionVector;
+    int32_t                     MobileTrackerId;
     EnergyStates_t              EnergyStates;
     ClusterStates_t             ClusterStates;
     EnvironmentLinks_t          EnvironmentLinks;
@@ -107,7 +108,7 @@ typedef struct JumpSelectionInfo
 } JumpSelectionInfo_t;
 
 // Type for the transition energy information
-// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8]
 typedef struct JumpEnergyInfo
 {
     double Energy0;
@@ -115,6 +116,8 @@ typedef struct JumpEnergyInfo
     double Energy2;
     double FieldInfluence;
     double ConformationDelta;
+    double Energy0To2;
+    double Energy2To0;
     double Probability0to2;
     double Probability2to0;
     
@@ -133,16 +136,20 @@ typedef struct CycleCounterState
     
 } CycleCounterState_t;
 
-// Type for the path energy backups
-// Layout@ggc_x86_64 => 64@[8x8]
+// Type for the path related backups during a cycle
+// Layout@ggc_x86_64 => 96@[8x8,8x4]
 typedef struct EnvironmentBackup
 {
-    double PathEnergies[8];
-    
+    // Backups for the energy values of the path
+    double  PathEnergies[JUMPS_JUMPLENGTH_MAX];
+
+    // Backups for the mobile tracker mapping of the path
+    int32_t PathMobileMappings[JUMPS_JUMPLENGTH_MAX];
+
 } EnvironmentBackup_t;
 
 // Type for the cycle state storage
-// Layout@ggc_x86_64 => 208@[48,8,16,64,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 240@[48,8,16,96,8,8,8,8,8,8,8,8]
 typedef struct CycleState
 {
     CycleCounterState_t         MainCounters;
@@ -154,7 +161,7 @@ typedef struct CycleState
     JumpCollection_t*           ActiveJumpCollection;
     JumpRule_t*                 ActiveJumpRule;
     StateCounterCollection_t*   ActiveCounterCollection;
-    EnvironmentState_t*         ActivePathEnvironments[8];
+    EnvironmentState_t*         ActivePathEnvironments[JUMPS_JUMPLENGTH_MAX];
     EnvironmentState_t*         WorkEnvironment;
     ClusterState_t*             WorkCluster;
     PairTable_t*                WorkPairTable;

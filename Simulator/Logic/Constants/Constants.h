@@ -14,7 +14,7 @@
 
 #define OPT_LINK_ONLY_MOBILES
 
-/* State buffer constants */
+/* State buffer constants and default values */
 
 #define STATE_JUMPSTAT_SIZE 1000
 #define STATE_JUMPSTAT_EMIN 0
@@ -42,8 +42,6 @@
 
 /* Monte Carlo constants */
 
-#define MC_CONST_JUMPTRACK_MIN 1.0e-05
-#define MC_CONST_JUMPTRACK_MAX 1.0e+00
 #define MC_CONST_JUMPLIMIT_MIN 0.0e+00
 #define MC_CONST_JUMPLIMIT_MAX 1.0e+00
 
@@ -52,12 +50,11 @@
 #define NATCONST_BLOTZMANN  8.6173303e-05
 #define NATCONST_ELMCHARGE  1.6021766208e-19
 
-/* Tolerance constant */
-
-#define CONST_JUMPTRACK_MIN 1.0e-05
-#define CONST_JUMPTRACK_MAX 1.0e+00
-#define CONST_JUMPLIMIT_MIN 0.0e+00
-#define CONST_JUMPLIMIT_MAX 1.0e+00
+/* Conversion factors */
+#define CONV_LENGTH_ANG_TO_M 1.0e-10
+#define CONV_LENGTH_CM_TO_M 1.0e-2
+#define CONV_VOLUME_ANG_TO_M 1.0e-30
+#define CONV_VOLUME_CM_TO_M 1.0e-6
 
 /* Run/Cycle constants */
 

@@ -25,11 +25,17 @@
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(void, VoidSpan) VoidSpan_t;
 
+// Allocate a new voi span with the passed number of elements and size of elements
 VoidSpan_t AllocateSpan(size_t numOfElements, size_t sizeOfElement);
 
+// Tries to allocate a new void span with the passed parameters and returns an error code about the success
 error_t TryAllocateSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t*restrict outSpan);
 
+// Construct a new void span (With allocation failure handle) with the given parameter set and returns the span access as a pointer.
 void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *restrict outSpan);
+
+// Copies a specific number of bytes from the passed buffer into a newly constructed span. Does not free the original buffer!
+void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan);
 
 // Allocates a new span by constructing and casting a nw void type span
 #define new_Span(SPAN, SIZE) *(typeof(SPAN)*) ConstructVoidSpan((SIZE), sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
@@ -54,6 +60,9 @@ void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *
 
 // Macro function that will return true if the passed index value is out of range of the passed span
 #define span_IndexIsOutOfRange(SPAN, INDEX) ((size_t) (INDEX) >= span_GetSize(SPAN))
+
+// Macro to in-place construct a new span from the passed blob and number of elements information
+#define span_FromBlob(SPAN,BUFFER,SIZE) *(typeof(SPAN)*) ConstructSpanFromBlob((BUFFER), (SIZE)*sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
 
 /* Buffer definition */
 
@@ -88,12 +97,16 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 
 /* Foreach macro definitions */
 
+// Defines a CPP style foreach iteration over any access type that defines .Begin and .End pointers
 #define cpp_foreach(ITER, SPAN) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).Begin[0]; (ITER) < (SPAN).End; ++(ITER))
 
+// Defines a CPP style reverse foreach iteration over any access type that defines .Begin and .End pointers
 #define cpp_rforeach(ITER, SPAN) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).End[-1]; (ITER) >= (SPAN).Begin; --(ITER))
 
+// Defines a CPP style foreach iteration over any fixed size C array
 #define c_foreach(ITER, ARRAY) for(typeof((ARRAY)[0])* (ITER) = &(ARRAY)[0]; (ITER) < &(ARRAY)[sizeof((ARRAY))/sizeof(typeof((ARRAY)[0]))]; ++(ITER))
 
+// Defines a CPP style reverse foreach iteration over any fixed size C array
 #define c_rforeach(ITER, ARRAY) for(typeof((ARRAY)[0])* (ITER) = &(ARRAY)[sizeof((ARRAY))/sizeof(typeof((ARRAY)[0]))]; (ITER) >= &(ARRAY)[0]; --(ITER))
 
 
@@ -107,10 +120,13 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef List_t(void, VoidList) VoidList_t;
 
+// Allocates a new list with the given capacity and size of elements
 VoidList_t AllocateList(size_t capacity, size_t sizeOfElement);
 
+// Tries to allocate a new list with the given capacity and size of elements or returns an error code
 error_t TryAllocateList(size_t capacity, size_t sizeOfElement, VoidList_t*restrict outList);
 
+// Construct a new list with the given capacity and size of elements and returns the list pointer (Handles allocation errors)
 void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restrict outList);
 
 // Macro to allocate a new list with the specified capacity and type
@@ -147,36 +163,63 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 // Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]
 typedef struct { int32_t * Header; void * Begin, * End; } VoidArray_t;
 
+// Allocate a new array of given rank, size of elements and dimensions
 VoidArray_t AllocateArray(int32_t rank, size_t sizeOfElement, const int32_t dimensions[rank]);
 
+// Tries to allocate a new array of given rank, size of elements and dimensions or returns an error code
 error_t TryAllocateArray(int32_t rank, size_t sizeOfElement, const int32_t dimensions[rank], VoidArray_t*restrict outArray);
 
+// Constructs a new array of given rank, size of elements and dimensions and returns the pointer to the access struct (Handles allocation errors)
 void* ConstructVoidArray(int32_t rank, size_t sizeOfElement, const int32_t dimensions[rank], VoidArray_t*restrict outArray);
 
+// Get the dimensions of the passed array and writes them into the passed out buffer
 void GetArrayDimensions(const VoidArray_t*restrict array, int32_t*restrict outBuffer);
 
+// Calculates the required array block skips fro the passed dimension set and writes the to the out buffer
 void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restrict outBuffer);
 
+// Constructs a new array from the passed buffer by interpreting it as a previously build array. Does not free the original buffer!
+void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements, VoidArray_t *restrict outArray);
+
+// Macro to construct a new array of the passed type and dimensions
 #define new_Array(ARRAY, ...) *(typeof(ARRAY)*) ConstructVoidArray(sizeof((int32_t[]){__VA_ARGS__})/sizeof(int32_t), sizeof(typeof(*(ARRAY).Begin)), (int32_t[]){ __VA_ARGS__ }, (VoidArray_t*) &(ARRAY))
 
+// Frees the memory of any array
 #define delete_Array(ARRAY) free((ARRAY).Header)
 
+// Get the total number of elements in any type of array
+#define array_GetSize(ARRAY) (ARRAY).Header[1]
+
+// Get the rank of any type of array
+#define array_GetRank(ARRAY) (ARRAY).Header[0]
+
+// Get the header size in bytes of any array
+#define array_GetHeaderSize(ARRAY) (1 + array_GetRank(ARRAY)) * sizeof(int32_t)
+
+// Allocates a new array by interpreting the passed buffer pointer as a formatted array and copies the data. Does not free original buffer!
+#define array_FromBlob(ARRAY, BUFFER) *(typeof(ARRAY)*) ConstructArrayFromBlob((BUFFER), sizeof(typeof(*(ARRAY).Begin)), (VoidArray_t*) &(ARRAY))
+
+// Get the number of elements that need to be skipped to advance the passed number of steps in the 1. dimension of an array
 #define array_SkipBlock_1(ARRAY, VAL) (VAL)
 
+// Get the number of elements that need to be skipped to advance the passed number of steps in the 2. dimension of an array
 #define array_SkipBlock_2(ARRAY, RANK, VAL, ...) ((ARRAY).Header->Blocks[RANK-2] * (VAL) + array_SkipBlock_1((ARRAY), __VA_ARGS__))
 
+// Get the number of elements that need to be skipped to advance the passed number of steps in the 3. dimension of an array
 #define array_SkipBlock_3(ARRAY, RANK, VAL, ...) ((ARRAY).Header->Blocks[RANK-3] * (VAL) + array_SkipBlock_2((ARRAY), RANK, __VA_ARGS__))
 
+// Get the number of elements that need to be skipped to advance the passed number of steps in the 4. dimension of an array
 #define array_SkipBlock_4(ARRAY, RANK, VAL, ...) ((ARRAY).Header->Blocks[RANK-4] * (VAL) + array_SkipBlock_3((ARRAY), RANK, __VA_ARGS__))
 
+// Get the number of elements that need to be skipped to advance the passed number of steps in the 5. dimension of an array
 #define array_SkipBlock_5(ARRAY, RANK, VAL, ...) ((ARRAY).Header->Blocks[RANK-5] * (VAL) + array_SkipBlock_4((ARRAY), RANK, __VA_ARGS__))
 
 // Access a multidimensional rectangular array by a set of index values
 #define array_Get(ARRAY, ...)\
-    __EVAL(\
-      span_Get, (ARRAY),__EVAL(\
-        __EVAL(\
-          __CONCAT, array_SkipBlock_, __VA_NARG(__VA_ARGS__)\
+    evalMacro(\
+      span_Get, (ARRAY),evalMacro(\
+        evalMacro(\
+          concatMacro, array_SkipBlock_, __VA_NARG(__VA_ARGS__)\
         ),\
         (ARRAY), __VA_NARG(__VA_ARGS__), __VA_ARGS__\
       )\
