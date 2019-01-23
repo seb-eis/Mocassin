@@ -56,7 +56,7 @@ static inline CycleState_t* getCycleState(__SCONTEXT_PAR)
 }
 
 // Get the random number generator from the context
-static inline Pcg32_t* getRandomNumberGenerator(__SCONTEXT_PAR)
+static inline Pcg32_t* getMainRng(__SCONTEXT_PAR)
 {
     return &SCONTEXT->Rng;
 }
@@ -76,7 +76,8 @@ static inline JumpStatusArray_t* getJumpStatusArray(__SCONTEXT_PAR)
 // Get a jump status from the context by a 4D vector [A,B,C,JumpDirId]
 static inline JumpStatus_t* getJumpStatusByVector4(__SCONTEXT_PAR, const Vector4_t*restrict vector)
 {
-    return &array_Get(*getJumpStatusArray(SCONTEXT), vector->A,vector->B,vector->C,vector->D);
+    debug_assert(!array_IndicesAreOutOfRange(*getJumpStatusArray(SCONTEXT), vecCoorSet4(*vector)));
+    return &array_Get(*getJumpStatusArray(SCONTEXT), vecCoorSet4(*vector));
 }
 
 
@@ -118,23 +119,24 @@ static inline void setEnvironmentLattice(__SCONTEXT_PAR, EnvironmentLattice_t va
     *getEnvironmentLattice(SCONTEXT) = value;
 }
 
-// Get an environment state by its linearized id from the context
-static inline EnvironmentState_t* getEnvironmentStateAt(__SCONTEXT_PAR, const int32_t id)
+// Get an environment state by its linearized environment id from the context
+static inline EnvironmentState_t* getEnvironmentStateAt(__SCONTEXT_PAR, const int32_t environmentId)
 {
-    debug_assert(!span_IndexIsOutOfRange(*getEnvironmentLattice(SCONTEXT), id));
-    return &span_Get(*getEnvironmentLattice(SCONTEXT), id);
+    debug_assert(!span_IndexIsOutOfRange(*getEnvironmentLattice(SCONTEXT), environmentId));
+    return &span_Get(*getEnvironmentLattice(SCONTEXT), environmentId);
 }
 
 // Get an environment state by (A,B,C,D) coordinate access from the context
 static inline EnvironmentState_t* getEnvironmentStateByIds(__SCONTEXT_PAR, const int32_t a, const int32_t b, const int32_t c, const int32_t d)
 {
+    debug_assert(!array_IndicesAreOutOfRange(*getEnvironmentLattice(SCONTEXT), a, b, c, d));
     return &array_Get(*getEnvironmentLattice(SCONTEXT), a, b, c, d);
 }
 
 // Get an environment state by a 4D vector access from the context
 static inline EnvironmentState_t* getEnvironmentStateByVector4(__SCONTEXT_PAR, const Vector4_t* restrict vector)
 {
-    return getEnvironmentStateByIds(SCONTEXT, vector->A, vector->B, vector->C, vector->D);
+    return getEnvironmentStateByIds(SCONTEXT, vecCoorSet4(*vector));
 }
 
 // Get the lattice block sizes from the context
@@ -164,13 +166,13 @@ static inline CycleCounterState_t* getMainCycleCounters(__SCONTEXT_PAR)
 }
 
 // Get the active state code for the jump path
-static inline OccCode_t getPathStateCode(__SCONTEXT_PAR)
+static inline OccupationCode_t getPathStateCode(__SCONTEXT_PAR)
 {
     return getCycleState(SCONTEXT)->ActiveStateCode;
 }
 
 // Set the active state code for the jump path
-static inline void setPathStateCode(__SCONTEXT_PAR, const OccCode_t code)
+static inline void setPathStateCode(__SCONTEXT_PAR, const OccupationCode_t code)
 {
     getCycleState(SCONTEXT)->ActiveStateCode = code;
 }
@@ -244,14 +246,14 @@ static inline void setActiveCounters(__SCONTEXT_PAR, StateCounterCollection_t* v
 // Get the path environment by a path id value
 static inline EnvironmentState_t* getPathEnvironmentAt(__SCONTEXT_PAR, const byte_t pathId)
 {
-    debug_assert((pathId > 7) || (pathId < 0));
+    debug_assert((pathId < JUMPS_JUMPLENGTH_MAX));
     return getCycleState(SCONTEXT)->ActivePathEnvironments[pathId];
 }
 
 // Set the path environment at the given id
 static inline void setPathEnvironmentAt(__SCONTEXT_PAR, const byte_t pathId, EnvironmentState_t* value)
 {
-    debug_assert((pathId > 7) || (pathId < 0));
+    debug_assert(pathId < JUMPS_JUMPLENGTH_MAX);
     getCycleState(SCONTEXT)->ActivePathEnvironments[pathId] = value;
 }
 
@@ -399,6 +401,7 @@ static inline JumpCountTable_t* getJumpCountMapping(__SCONTEXT_PAR)
 // Get the jump count for the passed [positionId][particleId] combination
 static inline int32_t getJumpCountAt(__SCONTEXT_PAR, const int32_t positionId, const byte_t particleId)
 {
+    debug_assert(!array_IndicesAreOutOfRange(*getJumpCountMapping(SCONTEXT),positionId, particleId));
     return array_Get(*getJumpCountMapping(SCONTEXT), positionId, particleId);
 }
 
@@ -418,7 +421,7 @@ static inline JumpDirections_t* getJumpDirections(__SCONTEXT_PAR)
 static inline JumpDirection_t* getJumpDirectionAt(__SCONTEXT_PAR, const int32_t jumpDirectionId)
 {
     debug_assert(!span_IndexIsOutOfRange(*getJumpDirections(SCONTEXT), jumpDirectionId));
-    return &getJumpDirections(SCONTEXT)->Begin[jumpDirectionId];
+    return &span_Get(*getJumpDirections(SCONTEXT), jumpDirectionId);
 }
 
 // Get all jump collections from the database model data
@@ -556,26 +559,33 @@ static inline JumpStatisticsState_t* getJumpStatistics(__SCONTEXT_PAR)
     return &getSimulationState(SCONTEXT)->JumpStatistics;
 }
 
+// Get the mapped static movement tracker id for the passed combination of [positionId] and [particleId]
+static inline int32_t  getStaticMovementTrackerMappingIdAt(__SCONTEXT_PAR, const int32_t positionId, const byte_t particleId)
+{
+    debug_assert(!array_IndicesAreOutOfRange(*getStaticTrackerMappingTable(SCONTEXT), positionId, particleId));
+    return array_Get(*getStaticTrackerMappingTable(SCONTEXT), positionId, particleId);
+}
+
 // Get a static movement tracker for the passed combination of [positionId] and [particleId]
 static inline Tracker_t* getStaticMovementTrackerAt(__SCONTEXT_PAR, const int32_t positionId, const byte_t particleId)
 {
-    int32_t trackerId = array_Get(*getStaticTrackerMappingTable(SCONTEXT), positionId, particleId);
+    int32_t trackerId = getStaticMovementTrackerMappingIdAt(SCONTEXT, positionId, particleId);
     debug_assert(!span_IndexIsOutOfRange(*getStaticMovementTrackers(SCONTEXT), trackerId));
     return &span_Get(*getStaticMovementTrackers(SCONTEXT), trackerId);
 }
 
-// Get a global tracker id from the affiliated tracker mapping that belongs to the passed set of [jumpCollectionId] and [particleId]
+// Get the mapped global tracker id from the affiliated tracker mapping that belongs to the passed set of [jumpCollectionId] and [particleId]
 static inline int32_t getGlobalTrackerIdAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
 {
-    int32_t trackerId = array_Get(*getGlobalTrackerMappingTable(SCONTEXT), jumpColId, particleId);
-    debug_assert(!span_IndexIsOutOfRange(*getGlobalMovementTrackers(SCONTEXT), trackerId));
-    return trackerId;
+    debug_assert(!array_IndicesAreOutOfRange(*getGlobalTrackerMappingTable(SCONTEXT), jumpColId, particleId));
+    return array_Get(*getGlobalTrackerMappingTable(SCONTEXT), jumpColId, particleId);
 }
 
 // Get a global movement tracker for the passed combination of [jumpColId] and [particleId]
 static inline Tracker_t* getGlobalMovementTrackerAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
 {
     int32_t trackerId = getGlobalTrackerIdAt(SCONTEXT, jumpColId, particleId);
+    debug_assert(!span_IndexIsOutOfRange(*getGlobalMovementTrackers(SCONTEXT), trackerId));
     return &span_Get(*getGlobalMovementTrackers(SCONTEXT), trackerId);
 }
 
@@ -583,6 +593,7 @@ static inline Tracker_t* getGlobalMovementTrackerAt(__SCONTEXT_PAR, const int32_
 static inline JumpStatistic_t* getJumpStatisticAt(__SCONTEXT_PAR, const int32_t jumpColId, const byte_t particleId)
 {
     int32_t trackerId = getGlobalTrackerIdAt(SCONTEXT, jumpColId, particleId);
+    debug_assert(!span_IndexIsOutOfRange(*getJumpStatistics(SCONTEXT), trackerId))
     return &span_Get(*getJumpStatistics(SCONTEXT), trackerId);
 }
 
@@ -727,6 +738,7 @@ static inline void setEnvironmentPoolEntryAt(DirectionPool_t *restrict direction
 // Get the pair energy table entry from the passed table at the specified [particleId0, particleId1] combination
 static inline double getPairEnergyAt(const PairTable_t *restrict table, const byte_t particleId0, const byte_t particleId1)
 {
+    debug_assert(!array_IndicesAreOutOfRange(table->EnergyTable, particleId0, particleId1));
     return array_Get(table->EnergyTable, particleId0, particleId1);
 }
 
@@ -734,6 +746,7 @@ static inline double getPairEnergyAt(const PairTable_t *restrict table, const by
 static inline double getClusterEnergyAt(const ClusterTable_t *restrict table, const byte_t particleId, const int32_t codeId)
 {
     debug_assert(particleId < PARTICLE_IDLIMIT);
+    debug_assert(!array_IndicesAreOutOfRange(table->EnergyTable, table->ParticleTableMapping[particleId], codeId));
     return array_Get(table->EnergyTable, table->ParticleTableMapping[particleId], codeId);
 }
 
@@ -817,7 +830,7 @@ static inline byte_t getActiveParticleUpdateIdAt(__SCONTEXT_PAR, const byte_t id
 // Get an environment link by a jump link pointer
 static inline EnvironmentLink_t* getEnvLinkByJumpLink(__SCONTEXT_PAR, const JumpLink_t* restrict jumpLink)
 {
-    debug_assert(jumpLink->PathId < 8);
+    debug_assert(jumpLink->PathId < JUMPS_JUMPLENGTH_MAX);
     debug_assert(!span_IndexIsOutOfRange(JUMPPATH[jumpLink->PathId]->EnvironmentLinks, jumpLink->LinkId));
 
     return &span_Get(JUMPPATH[jumpLink->PathId]->EnvironmentLinks, jumpLink->LinkId);
@@ -826,7 +839,7 @@ static inline EnvironmentLink_t* getEnvLinkByJumpLink(__SCONTEXT_PAR, const Jump
 // Gte a path state energy pointer by path id and particle id
 static inline double* getPathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathId, const byte_t particleId)
 {
-    debug_assert(pathId < 8);
+    debug_assert(pathId < JUMPS_JUMPLENGTH_MAX);
     debug_assert(!span_IndexIsOutOfRange(JUMPPATH[pathId]->EnergyStates, particleId));
 
     return &span_Get(JUMPPATH[pathId]->EnergyStates, particleId);
@@ -835,16 +848,13 @@ static inline double* getPathStateEnergyByIds(__SCONTEXT_PAR, const byte_t pathI
 // Get the environment state energy backup pointer by a path id
 static inline double* getEnvStateEnergyBackupById(__SCONTEXT_PAR, const byte_t pathId)
 {
-    debug_assert(pathId < 8);
+    debug_assert(pathId < JUMPS_JUMPLENGTH_MAX);
     return &getCycleState(SCONTEXT)->ActiveEnvironmentBackup.PathEnergies[pathId];
 }
 
 // Get the jump links that are currently required for delta generation
 static inline JumpLinks_t* getActiveLocalJumpLinks(__SCONTEXT_PAR)
 {
-    return &array_Get(*getJumpStatusArray(SCONTEXT),
-            JUMPPATH[0]->PositionVector.A,
-            JUMPPATH[0]->PositionVector.B,
-            JUMPPATH[0]->PositionVector.C,
-            getActiveJumpDirection(SCONTEXT)->ObjectId).JumpLinks;
+    debug_assert(array_IndicesAreOutOfRange(*getJumpStatusArray(SCONTEXT), vecCoorSet3(JUMPPATH[0]->PositionVector), getActiveJumpDirection(SCONTEXT)->ObjectId));
+    return &array_Get(*getJumpStatusArray(SCONTEXT), vecCoorSet3(JUMPPATH[0]->PositionVector), getActiveJumpDirection(SCONTEXT)->ObjectId).JumpLinks;
 }

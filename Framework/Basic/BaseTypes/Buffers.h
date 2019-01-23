@@ -49,6 +49,12 @@ void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t
 // Get the size of the passed span
 #define span_GetSize(SPAN) ((SPAN).End-(SPAN).Begin)
 
+// Get the first entry of the span
+#define span_Front(SPAN) (SPAN).Begin
+
+// Get the last entry of the span
+#define span_Back(SPAN) ((SPAN).End - 1)
+
 // Creates a sub-access span with new boundary info for the passed parent span
 #define span_Split(SPAN, NEWBEGIN, NEWEND) { (void*) ((SPAN).Begin + (NEWBEGIN)), (void*) ((SPAN).Begin + (NEWEND)) }
 
@@ -188,10 +194,10 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
 #define delete_Array(ARRAY) free((ARRAY).Header)
 
 // Get the total number of elements in any type of array
-#define array_GetSize(ARRAY) (ARRAY).Header[1]
+#define array_GetSize(ARRAY) (accessValAs(VoidArray_t, ARRAY))->Header[1]
 
 // Get the rank of any type of array
-#define array_GetRank(ARRAY) (ARRAY).Header[0]
+#define array_GetRank(ARRAY) (accessValAs(VoidArray_t, ARRAY))->Header[0]
 
 // Get the header size in bytes of any array
 #define array_GetHeaderSize(ARRAY) (1 + array_GetRank(ARRAY)) * sizeof(int32_t)
@@ -224,5 +230,8 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
         (ARRAY), __VA_NARG(__VA_ARGS__), __VA_ARGS__\
       )\
     )
+
+// Get a boolean value indicating if the passed index set is out of the array access range
+#define array_IndicesAreOutOfRange(ARRAY, ...) ((array_GetRank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY)))
 
 /* */

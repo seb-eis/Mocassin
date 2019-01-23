@@ -22,9 +22,6 @@
 // Defines the number of byte/char required to print the ISO8601 UTC time string
 #define TIME_ISO8601_BYTECOUNT sizeof("YYYY-MM-DDTHH:MM:SS+HH:MM")
 
-// Defines the number of byte/char required to print the ISO8601 clock
-#define TIME_ISO8601_CLOCKBYTES sizeof("HH:MM:SS")
-
 // Get the current time info as local time or GMT if specified
 static inline error_t GetCurrenTimeInfo(struct tm*restrict timeInfo, bool_t asGMT)
 {
@@ -36,7 +33,7 @@ static inline error_t GetCurrenTimeInfo(struct tm*restrict timeInfo, bool_t asGM
 }
 
 // Get the current time as a string with the provided format and writes it to the passed buffer (Default if format is NULL). Return error code on failure!
-static inline error_t GetFormatetTimeString(const char *format, char *buffer, size_t maxBytes)
+static inline error_t GetFormatedTimeStamp(const char *format, char *buffer, size_t maxBytes)
 {
     struct tm tmInfo;
     error_t error = GetCurrenTimeInfo(&tmInfo, false);
@@ -62,15 +59,13 @@ static inline error_t GetCurrentTimeStampISO8601UTC(char *restrict buffer)
     return TimeToTimeStampISO8601UTC(buffer, &raw);
 }
 
-// Converts seconds to ISO8601 clock format of HH:MM:SS
-static inline error_t SecondsToISO8601Clock(char* restrict buffer, int64_t totalSeconds)
+// Converts seconds to an ISO8601 time period "PxxDTxxHxxMxxS"
+static inline error_t SecondsToISO8601TimeSpan(char *restrict buffer, const int64_t totalSeconds)
 {
-    char formatBuffer[20];
-    int64_t hours = totalSeconds / 3600;
+    const char format[] = "P" FORMAT_I64(02) "DT" FORMAT_I64(02) "H" FORMAT_I64(02) "M" FORMAT_I64(02) "S";
+    int64_t days = totalSeconds / (3600 * 24);
+    int64_t hours = (totalSeconds / (3600 * 24)) % 3600;
     int64_t minutes = (totalSeconds % 3600) / 60;
     int64_t seconds = totalSeconds % 60;
-    strcpy(formatBuffer, (hours < 10) ? "0" FORMAT_I64 ":" : FORMAT_I64":");
-    strcat(formatBuffer, (minutes < 10) ? "0" FORMAT_I64 ":" : FORMAT_I64 ":");
-    strcat(formatBuffer, (seconds < 10) ? "0" FORMAT_I64 : FORMAT_I64);
-    return sprintf(buffer, formatBuffer, hours, minutes, seconds) > 0 ? ERR_OK : ERR_STREAM;
+    return sprintf(buffer, format, days, hours, minutes, seconds) > 0 ? ERR_OK : ERR_STREAM;
 }

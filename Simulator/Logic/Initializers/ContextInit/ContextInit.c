@@ -42,7 +42,7 @@ static void AllocateEnvironmentLattice(__SCONTEXT_PAR)
 {
     Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
 
-    EnvironmentLattice_t lattice = new_Array(lattice, sizes->A, sizes->B, sizes->C, sizes->D);
+    EnvironmentLattice_t lattice = new_Array(lattice, vecCoorSet4(*sizes));
     setEnvironmentLattice(SCONTEXT, lattice);
 
     for (int32_t i = 0; i < lattice.Header->Size; i++)
@@ -357,7 +357,7 @@ static error_t ConstructMainStateBufferAccessors(__SCONTEXT_PAR)
     usedBufferBytes = ConfigStateMobileTrackerMappingAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateJumpStatisticsAccess(SCONTEXT, usedBufferBytes);
 
-    return (usedBufferBytes == span_GetSize(*getMainStateBuffer(SCONTEXT)));
+    return (usedBufferBytes == span_GetSize(*getMainStateBuffer(SCONTEXT))) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Calculates the required size in bytes for the main simulation state buffer

@@ -62,15 +62,15 @@ void* ConstructVoidList(const size_t capacity, const size_t sizeOfElement, VoidL
 
 VoidArray_t AllocateArray(const int32_t rank, const size_t sizeOfElement, const int32_t dimensions[rank])
 {
-    int32_t numOfHeaderBytes = (2 + rank -1) * sizeof(int32_t);
-    int32_t numOfDataBytes = dimensions[0] * sizeOfElement;
+    size_t numOfHeaderBytes = (2 + rank -1) * sizeof(int32_t);
+    size_t numOfDataBytes = dimensions[0] * sizeOfElement;
 
     for (int i = 1; i < rank; ++i)
     {
         numOfDataBytes *= dimensions[i];
     }
 
-    int32_t totalNumOfBytes = numOfHeaderBytes + numOfDataBytes;
+    size_t totalNumOfBytes = numOfHeaderBytes + numOfDataBytes;
     void* ptr = malloc(totalNumOfBytes);
     return (VoidArray_t) { .Header = ptr, .Begin = ptr + numOfHeaderBytes, .End = ptr + totalNumOfBytes };
 }
@@ -87,7 +87,7 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     error_assert(error, "Out of memory on array construct");
 
     MakeArrayBlocks(rank, dimensions, &outArray->Header[2]);
-    outArray->Header[1] = span_GetSize(*outArray) / sizeOfElement;
+    outArray->Header[1] = (int32_t) (span_GetSize(*outArray) / sizeOfElement);
     outArray->Header[0] = rank;
 
     return outArray;
@@ -96,12 +96,13 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
 void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElements, VoidArray_t *restrict outArray)
 {
     VoidArray_t bufferArray = {.Header = buffer};
-    const int32_t headerByteCount = array_GetHeaderSize(bufferArray);
-    const int32_t dataByteCount = array_GetSize(bufferArray) * sizeOfElements;
-    const int32_t totalByteCount = headerByteCount + dataByteCount;
+    const size_t headerByteCount = array_GetHeaderSize(bufferArray);
+    const size_t dataByteCount = array_GetSize(bufferArray) * sizeOfElements;
+    const size_t totalByteCount = headerByteCount + dataByteCount;
 
     outArray->Header = malloc(totalByteCount);
     error_assert((outArray->Header != NULL) ? ERR_OK : ERR_MEMALLOCATION, "Failed to build array from passed blob");
+
     outArray->Begin = ((void*)outArray->Header) + headerByteCount;
     outArray->End = outArray->Begin + dataByteCount;
     memcpy(outArray->Header, buffer, totalByteCount);

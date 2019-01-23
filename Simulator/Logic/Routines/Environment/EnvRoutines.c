@@ -18,7 +18,7 @@
 /* Local helper routines */
 
 // Finds a cluster code id by linear searching the passed occupation code (Safe search, returns an invalid index if the code cannot be found)
-static inline int32_t SaveFindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
+static inline int32_t SaveFindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccupationCode_t occupationCode)
 {
     int32_t index = 0;
     size_t numOfCodes = span_GetSize(clusterTable->OccupationCodes);
@@ -30,7 +30,7 @@ static inline int32_t SaveFindClusterCodeIdByLinearSearch(const ClusterTable_t* 
 }
 
 // Finds a cluster code id by linear searching the passed occupation code (Unsafe search, infinite loop if code does not exist)
-static inline int32_t FindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccCode_t occupationCode)
+static inline int32_t FindClusterCodeIdByLinearSearch(const ClusterTable_t* restrict clusterTable, const OccupationCode_t occupationCode)
 {
     int32_t index = 0;
     while (span_Get(clusterTable->OccupationCodes, index++) != occupationCode) {};
@@ -457,7 +457,7 @@ static inline void Set_ActiveWorkClusterEnergyTable(__SCONTEXT_PAR, EnvironmentS
                                                                                                       clusterLink->ClusterId)->EnergyTableId);
 }
 
-static inline int32_t FindClusterCodeIdInClusterTable(const ClusterTable_t* restrict clusterTable, const OccCode_t code)
+static inline int32_t FindClusterCodeIdInClusterTable(const ClusterTable_t* restrict clusterTable, const OccupationCode_t code)
 {
     return FindClusterCodeIdByLinearSearch(clusterTable, code);
 }

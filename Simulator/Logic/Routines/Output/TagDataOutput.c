@@ -1,7 +1,7 @@
 
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	DefaultOutput.h       		//
+// File:	TagDataOutput.h       		//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
@@ -9,16 +9,20 @@
 // Short:   Default runtime output      //
 //////////////////////////////////////////
 
-#include "Simulator/Logic/Routines/Output/DefaultOutput.h"
+#include "Simulator/Logic/Routines/Output/TagDataOutput.h"
 
 // Prints the passed value and tag to the passed stream and returns a stream error if failed
 static error_t TryPrintWithTag(FILE*restrict fstream, const char* restrict tag, const char*restrict value)
 {
-    return fprintf(fstream, "[%s]\t%s\n", tag, value) > 0 ? ERR_OK : ERR_STREAM;
+    error_t error;
+    error = fprintf(fstream, "[%-12s]\t", tag);
+    return_if(error < 0, ERR_STREAM);
+    error = fprintf(fstream, "%s\n", value);
+    return_if(error < 0, ERR_STREAM);
+    return ERR_OK;
 }
 
-error_t InvokeContextTagOutput(FILE *restrict fstream, const ContextTagOutputList_t *restrict callList,
-                               __SCONTEXT_PAR)
+error_t InvokeContextTagOutput(FILE *restrict fstream, const ContextTagOutputList_t *restrict callList, __SCONTEXT_PAR)
 {
     return_if((fstream == NULL) || (SCONTEXT == NULL), ERR_NULLPOINTER);
     cpp_foreach(item, *callList)

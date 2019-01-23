@@ -19,15 +19,15 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 
-#define FORMAT_I8   "%" PRIi8
-#define FORMAT_I16  "%" PRIi16
-#define FORMAT_I32  "%" PRIi32
-#define FORMAT_I64  "%" PRIi64
+#define FORMAT_I8(...)   "%" #__VA_ARGS__ PRIi8
+#define FORMAT_I16(...)  "%" #__VA_ARGS__ PRIi16
+#define FORMAT_I32(...)  "%" #__VA_ARGS__ PRIi32
+#define FORMAT_I64(...)  "%" #__VA_ARGS__ PRIi64
 
-#define FORMAT_U8   "%" PRIu8
-#define FORMAT_U16  "%" PRIu16
-#define FORMAT_U32  "%" PRIu32
-#define FORMAT_U64  "%" PRIu64
+#define FORMAT_U8(...)   "%" #__VA_ARGS__ PRIu8
+#define FORMAT_U16(...)  "%" #__VA_ARGS__ PRIu16
+#define FORMAT_U32(...)  "%" #__VA_ARGS__ PRIu32
+#define FORMAT_U64(...)  "%" #__VA_ARGS__ PRIu64
 
 // Defines the file stream type
 typedef FILE file_t;

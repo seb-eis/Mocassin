@@ -18,13 +18,13 @@
 #include "xmmintrin.h"
 
 // Set a code byte at the provided index to the provided value
-static inline void SetCodeByteAt(OccCode_t* restrict code, const int32_t id, const byte_t value)
+static inline void SetCodeByteAt(OccupationCode_t* restrict code, const int32_t id, const byte_t value)
 {
     accessPtrAs(byte_t, code)[id] = value;
 }
 
 // Get the code byte value at the provided index
-static inline byte_t GetCodeByteAt(OccCode_t* restrict code, const int32_t id)
+static inline byte_t GetCodeByteAt(OccupationCode_t* restrict code, const int32_t id)
 {
     return accessPtrAs(byte_t, code)[id];
 }
@@ -69,13 +69,13 @@ static inline int32_t FindMaxJumpDirectionCount(const JumpCountTable_t* restrict
 // Get the next compare double between [0,1] from the RNG
 static inline double GetNextRandomDouble(__SCONTEXT_PAR)
 {
-    return Pcg32NextDouble(&SCONTEXT->Rng);
+    return Pcg32NextDouble(getMainRng(SCONTEXT));
 }
 
 // Get a ceiled random number from the main RNG
 static inline int32_t GetNextCeiledRandom(__SCONTEXT_PAR, const int32_t upperLimit)
 {
-    return (int32_t) Pcg32NextCeiled(&SCONTEXT->Rng, upperLimit);
+    return (int32_t) Pcg32NextCeiled(getMainRng(SCONTEXT), upperLimit);
 }
 
 // Resolves the passed pair definition and start environment to the target environment state

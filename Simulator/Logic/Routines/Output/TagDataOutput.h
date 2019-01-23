@@ -1,7 +1,7 @@
 
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	DefaultOutput.h       		//
+// File:	TagDataOutput.h       		//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
