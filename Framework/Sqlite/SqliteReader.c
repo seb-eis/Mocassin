@@ -1,24 +1,5 @@
-//
-// Created by john on 18.09.2018.
-//
-
 #include <Simulator/Data/Database/DbModel.h>
 #include "SqliteReader.h"
-
-int GetSqlQuery(char* keyword, sqlite3 *db, char* sqlQuery)
-{
-    sqlite3_stmt *sql_statement = NULL;
-
-    char* sql_query = GET_SQL_QUERY;
-    CHECK_SQL(sqlite3_prepare_v2(db, sql_query, -1, &sql_statement, NULL), SQLITE_OK);
-    CHECK_SQL(sqlite3_bind_text(sql_statement, 1, keyword, -1, SQLITE_STATIC), SQLITE_OK);
-    CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW);
-    strcpy(sqlQuery, (char *)(sqlite3_column_text(sql_statement, 0)));
-
-    CHECK_SQL(sqlite3_finalize(sql_statement), SQLITE_OK);
-
-    return 0;
-}
 
 int PrepareSqlStatement(char *sql_query, sqlite3 *db, sqlite3_stmt **sql_statement, int id)
 {
@@ -44,29 +25,14 @@ int AssignProjectIds(sqlite3 *db, struct ProjectIds* projectIds)
     return SQLITE_OK;
 }
 
-int GetIdFromDatabase(char* sql_query, sqlite3 *db, int* id)
+int AssignParentObjects(DbModel_t *dbModel, sqlite3 *db, const struct ProjectIds* projectIds)
 {
-    sqlite3_stmt *sql_statement = NULL;
-    CHECK_SQL(sqlite3_prepare_v2(db, sql_query, -1, &sql_statement, NULL), SQLITE_OK);
-    CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW);
+    struct objectOperationPair ObjectOperationPairs[] = PARENT_OPERATIONS(dbModel);
+    int numberOfOperations = sizeof(ObjectOperationPairs)/sizeof(ObjectOperationPairs[0]);
 
-    *id = sqlite3_column_int(sql_statement, 0);
-
-    CHECK_SQL(sqlite3_finalize(sql_statement), SQLITE_OK);
-    return SQLITE_OK;
-}
-
-
-int AssignParentObjects(DbModel_t *dbModel, sqlite3 *db, const struct ProjectIds* ids)
-{
-    int (*operations[NUMBER_OF_PARENT_OBJECTS]) (char*, sqlite3*, void*, const struct ProjectIds*) = PARENT_OPERATIONS;
-    void *objects[NUMBER_OF_PARENT_OBJECTS] = PARENT_OBJECTS(&(*dbModel));
-    //char *keywords[NUMBER_OF_PARENT_OBJECTS] = PARENT_KEYWORDS;
-
-    for (int opId = 0; opId < NUMBER_OF_PARENT_OBJECTS; opId++)
+    for (int opId = 0; opId < numberOfOperations; opId++)
     {
-        //CHECK_SQL(GetSqlQuery(keywords[opId], db, sql_query), 0);
-        CHECK_SQL(operations[opId]("", db, objects[opId], ids), SQLITE_OK);
+        CHECK_SQL(ObjectOperationPairs[opId].Operation("", db, ObjectOperationPairs[opId].Object, projectIds), SQLITE_OK);
     }
 
     return SQLITE_OK;
@@ -112,15 +78,12 @@ int AssignEnergyModel(char* sqlQuery, sqlite3 *db, void *obj, const struct Proje
 
 int AssignChildObjects(DbModel_t *dbModel, sqlite3 *db, const struct ProjectIds *projectIds)
 {
+    struct objectOperationPair ObjectOperationPairs[] = CHILD_OPERATIONS(dbModel);
+    int numberOfOperations = sizeof(ObjectOperationPairs)/sizeof(ObjectOperationPairs[0]);
 
-    int (*operations[NUMBER_OF_CHILD_OBJECTS]) (char*, sqlite3*, void*, const struct ProjectIds*) = CHILD_OPERATIONS;
-    void *objects[NUMBER_OF_CHILD_OBJECTS] = CHILD_OBJECTS(&(*dbModel));
-   //char *keywords[NUMBER_OF_CHILD_OBJECTS] = CHILD_KEYWORDS;
-
-    for (int opId = 0; opId < NUMBER_OF_CHILD_OBJECTS; opId++)
+    for (int opId = 0; opId < numberOfOperations; opId++)
     {
-        //CHECK_SQL(GetSqlQuery(keywords[opId], db, sql_query), 0);
-        CHECK_SQL(operations[opId]("", db, objects[opId], projectIds), SQLITE_OK);
+        CHECK_SQL(ObjectOperationPairs[opId].Operation("", db, ObjectOperationPairs[opId].Object, projectIds), SQLITE_OK);
     }
 
     return SQLITE_OK;
@@ -146,14 +109,10 @@ int AssignEnvironmentDefinitions(char* sql_query, sqlite3 *db, void *obj, const 
                (size_t) sqlite3_column_bytes(sql_statement, 2));
 
         size_t numberOfPairDefinitions = sqlite3_column_bytes(sql_statement, 3) / sizeof(PairDefinition_t);
-        new_Span(current->PairDefinitions, numberOfPairDefinitions);
-        memcpy(current->PairDefinitions.Begin, sqlite3_column_blob(sql_statement, 3),
-               (size_t) sqlite3_column_bytes(sql_statement, 3));
+        span_FromBlob(current->PairDefinitions, sqlite3_column_blob(sql_statement, 3), numberOfPairDefinitions);
 
         size_t numberOfClusterDefinitions = sqlite3_column_bytes(sql_statement, 4) / sizeof(ClusterDefinition_t);
-        new_Span(current->ClusterDefinitions, numberOfClusterDefinitions);
-        memcpy(current->ClusterDefinitions.Begin, sqlite3_column_blob(sql_statement, 4),
-               (size_t) sqlite3_column_bytes(sql_statement,4));
+        span_FromBlob(current->ClusterDefinitions, sqlite3_column_blob(sql_statement, 4), numberOfClusterDefinitions);
 
         memcpy(current->PositionParticleIds, sqlite3_column_blob(sql_statement, 5),
                (size_t) sqlite3_column_bytes(sql_statement, 5));
@@ -216,9 +175,6 @@ int AssignClusterEnergyTables(char* sql_query, sqlite3 *db, void *obj, const str
 
         size_t numberOfOccupationCodes = sqlite3_column_bytes(sql_statement, 2) / sizeof(OccCodes_t);
         span_FromBlob(current->OccupationCodes, sqlite3_column_blob(sql_statement, 2), numberOfOccupationCodes);
-        //new_Span(current->OccupationCodes, numberOfOccupationCodes);
-        //memcpy(current->OccupationCodes.Begin, sqlite3_column_blob(sql_statement, 2),
-        //       (size_t) sqlite3_column_bytes(sql_statement, 2));
 
         memcpy(current->ParticleTableMapping, sqlite3_column_blob(sql_statement, 3),
                (size_t) sqlite3_column_bytes(sql_statement, 3));
@@ -285,11 +241,6 @@ int AssignJumpCollections(char* sql_query, sqlite3 *db, void *obj, const struct 
 
         span_FromBlob(current->JumpRules, sqlite3_column_blob(sql_statement, 2), numberOfJumpRules);
 
-        //new_Span(current->JumpRules, numberOfJumpRules);
-        //memcpy(current->JumpRules.Begin, sqlite3_column_blob(sql_statement, 2),
-        //       (size_t) sqlite3_column_bytes(sql_statement, 2));
-
-
          if (j < (numberOfJumpCollections - 1))
         {
             CHECK_SQL(sqlite3_step(sql_statement), SQLITE_ROW);
@@ -325,20 +276,11 @@ int AssignJumpDirections(char* sql_query, sqlite3 *db, void *obj, const struct P
         current->ElectricFieldFactor = sqlite3_column_double(sql_statement, 3);
         current->JumpCollectionId = sqlite3_column_int(sql_statement, 4);
 
-
         size_t numberOfJumpSequences = sqlite3_column_bytes(sql_statement, 5) / sizeof(JumpSequence_t);
-
         span_FromBlob(current->JumpSequence, sqlite3_column_blob(sql_statement, 5), numberOfJumpSequences);
-        //current->JumpSequence = new_Span(current->JumpSequence, numberOfJumpSequences);
-        //memcpy(current->JumpSequence.Begin, sqlite3_column_blob(sql_statement, 5),
-        //        (size_t) sqlite3_column_bytes(sql_statement, 5));
-
 
         size_t numberOfLocalMoveSequences = sqlite3_column_bytes(sql_statement, 6) / sizeof(MoveSequence_t);
         span_FromBlob(current->MovementSequence, sqlite3_column_blob(sql_statement, 6), numberOfLocalMoveSequences);
-        //new_Span(current->MovementSequence, numberOfLocalMoveSequences);
-        //memcpy(current->MovementSequence.Begin, sqlite3_column_blob(sql_statement, 6),
-        //       (size_t) sqlite3_column_bytes(sql_statement, 6));
 
         if (j < (numberOfJumpDirections - 1))
         {
@@ -361,20 +303,12 @@ int AssignLatticeModel(char* sql_query, sqlite3 *db, void *obj, const struct Pro
     LatticeModel_t *latticeModel = (LatticeModel_t*) obj;
 
     size_t numberOfEnergyBackgrounds = sqlite3_column_bytes(sql_statement, 0) / sizeof(EnergyBackground_t);
-    new_Span(latticeModel->EnergyBackground, numberOfEnergyBackgrounds);
-    memcpy(latticeModel->EnergyBackground.Begin, sqlite3_column_blob(sql_statement, 0),
-            (size_t) sqlite3_column_bytes(sql_statement, 0));
-
+    span_FromBlob(latticeModel->EnergyBackground, sqlite3_column_blob(sql_statement, 0), numberOfEnergyBackgrounds);
 
     memcpy(&latticeModel->LatticeInfo, sqlite3_column_blob(sql_statement, 2),
            (size_t) sqlite3_column_bytes(sql_statement, 2));
 
-
-    new_Array(latticeModel->Lattice, latticeModel->LatticeInfo.SizeVector.A, latticeModel->LatticeInfo.SizeVector.B,
-              latticeModel->LatticeInfo.SizeVector.C, latticeModel->LatticeInfo.SizeVector.D);
-    memcpy(latticeModel->Lattice.Header, sqlite3_column_blob(sql_statement, 1),
-            (size_t) sqlite3_column_bytes(sql_statement, 1));
-
+    array_FromBlob(latticeModel->Lattice, sqlite3_column_blob(sql_statement, 1));
 
     CHECK_SQL(sqlite3_finalize(sql_statement), SQLITE_OK);
 
