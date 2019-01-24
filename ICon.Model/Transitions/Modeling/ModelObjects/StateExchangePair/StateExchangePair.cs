@@ -4,28 +4,27 @@ using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangePair"/>
+    /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangePair" />
     [DataContract]
     public class StateExchangePair : ModelObject, IStateExchangePair
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticle DonorParticle { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticle AcceptorParticle { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        public bool IsVacancyPair { get; set; }
+        public bool IsVacancyPair => (DonorParticle?.IsVacancy ?? false) ^ (AcceptorParticle?.IsVacancy ?? false);
 
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "Property State Pair";
+            return "State Exchange Pair";
         }
 
         /// <inheritdoc />
@@ -36,15 +35,13 @@ namespace Mocassin.Model.Transitions
 
             DonorParticle = statePair.DonorParticle;
             AcceptorParticle = statePair.AcceptorParticle;
-            IsVacancyPair = statePair.IsVacancyPair;
             return this;
-
         }
 
         /// <inheritdoc />
         public bool Equals(IStateExchangePair other)
         {
-            if (other == null) 
+            if (other == null)
                 return false;
 
             if (DonorParticle == other.DonorParticle && AcceptorParticle == other.AcceptorParticle)
@@ -67,8 +64,8 @@ namespace Mocassin.Model.Transitions
         public int CompareTo(IStateExchangePair other)
         {
             var donorComp = DonorParticle.Index.CompareTo(other.DonorParticle);
-            return donorComp == 0 
-                ? AcceptorParticle.Index.CompareTo(other.AcceptorParticle) 
+            return donorComp == 0
+                ? AcceptorParticle.Index.CompareTo(other.AcceptorParticle)
                 : donorComp;
         }
     }

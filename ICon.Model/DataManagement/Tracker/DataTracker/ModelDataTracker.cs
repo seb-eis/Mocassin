@@ -68,9 +68,9 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
-        public TObject FindObjectByAlias<TObject>(string alias) where TObject : IModelObject
+        public TObject FindObjectByKey<TObject>(string key) where TObject : IModelObject
         {
-            if (string.IsNullOrWhiteSpace(alias))
+            if (string.IsNullOrWhiteSpace(key))
                 return default;
 
             if (typeof(TObject) == typeof(IModelObject))
@@ -79,7 +79,7 @@ namespace Mocassin.Model.DataManagement
             var lookup = FindObjectList(typeof(TObject));
             foreach (TObject item in lookup)
             {
-                if (item.Alias == alias)
+                if (item.Key == key)
                     return item;
             }
 
@@ -154,16 +154,16 @@ namespace Mocassin.Model.DataManagement
             var linkers = new List<Action<object>>();
             foreach (var property in objectType.GetProperties(flags))
             {
-                if (!(property.GetCustomAttribute(typeof(IndexResolvedAttribute)) is IndexResolvedAttribute attribute))
+                if (!(property.GetCustomAttribute(typeof(UseTrackedReferencesAttribute)) is UseTrackedReferencesAttribute attribute))
                     continue;
 
-                switch (attribute.IndexResolveLevel)
+                switch (attribute.ReferenceLevel)
                 {
-                    case IndexResolveLevel.Value:
+                    case ReferenceLevel.Value:
                         linkers.Add(MakeLinkDelegate(property));
                         break;
-                    case IndexResolveLevel.Content:
-                        HandleContentLinkableProperty(property);
+                    case ReferenceLevel.Content:
+                        HandleContentLinkableProperty(property.GetValue(obj));
                         break;
                     default:
                         throw new NotSupportedException("Linking flag is currently not supported by the tracker");
@@ -221,7 +221,7 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <summary>
-        ///     Creates a delegate to find a model object of a specific type by its index or alias
+        ///     Creates a delegate to find a model object of a specific type by its index or key
         /// </summary>
         /// <param name="objectType"></param>
         /// <returns></returns>
@@ -230,7 +230,7 @@ namespace Mocassin.Model.DataManagement
             IModelObject GetObject(IModelObject obj)
             {
                 var modelObject = ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Index == obj.Index);
-                return modelObject ?? ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Alias == obj.Alias);
+                return modelObject ?? ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Key == obj.Key);
             }
 
             return GetObject;

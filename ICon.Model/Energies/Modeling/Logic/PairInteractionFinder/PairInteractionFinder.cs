@@ -400,8 +400,7 @@ namespace Mocassin.Model.Energies
 
         /// <summary>
         ///     Takes an unstable environment and the original acceptance predicate and create a combined predicate that follows the
-        ///     unstable environment asymmetric
-        ///     pair interaction acceptance criteria
+        ///     unstable environment asymmetric pair interaction acceptance criteria
         /// </summary>
         /// <param name="unstableEnvironment"></param>
         /// <param name="orgPredicate"></param>

@@ -32,7 +32,7 @@ namespace Mocassin.Model.Simulations
         ///     The set of transitions attached to the simulation
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IKineticTransition> Transitions { get; set; }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override string GetParameterName()
         {
-            return "'Space Group Info'";
+            return "Space Group Info";
         }
 
         /// <summary>

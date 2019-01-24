@@ -13,7 +13,7 @@ namespace Mocassin.Model.Simulations
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IDoping Doping { get; set; }
 
         /// <inheritdoc />

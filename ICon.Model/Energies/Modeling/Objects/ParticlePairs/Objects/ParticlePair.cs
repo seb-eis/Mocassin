@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Energies
@@ -14,12 +15,14 @@ namespace Mocassin.Model.Energies
         ///     The first particle interface
         /// </summary>
         [DataMember]
+        [UseTrackedReferences]
         public IParticle Particle0 { get; set; }
 
         /// <summary>
         ///     The second particle interface
         /// </summary>
         [DataMember]
+        [UseTrackedReferences]
         public IParticle Particle1 { get; set; }
 
         /// <inheritdoc />

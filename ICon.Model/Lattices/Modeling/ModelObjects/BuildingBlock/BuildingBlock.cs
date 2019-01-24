@@ -23,7 +23,7 @@ namespace Mocassin.Model.Lattices
         /// The list interface of unit cell entries
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IParticle> CellEntries { get; set; }
 
         /// <summary>

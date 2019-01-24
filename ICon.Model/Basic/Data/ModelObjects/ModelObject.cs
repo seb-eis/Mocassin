@@ -18,7 +18,7 @@ namespace Mocassin.Model.Basic
 
         /// <inheritdoc />
         [DataMember]
-        public string Alias { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// Construct new model object that has an invalid index
@@ -65,7 +65,7 @@ namespace Mocassin.Model.Basic
             var internalObj = new T1().PopulateFrom(obj) as T1;
             if (internalObj != null)
             {
-                internalObj.Alias = obj.Alias;
+                internalObj.Key = obj.Key;
             }
 
             return internalObj;

@@ -192,21 +192,21 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public bool TryDeserialize(FileStream stream, XmlEventHandlers handlers, out T1 obj)
         {
-            object result;
             using (var reader = NewDefaultReader(stream))
             {
-                var serializer = GetSerializer(handlers);
-                result = serializer.Deserialize(reader);
+                try
+                {
+                    var serializer = GetSerializer(handlers);
+                    var result = serializer.Deserialize(reader);
+                    obj = (T1) result;
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    obj = default;
+                    return false;
+                }
             }
-
-            if (result != null)
-            {
-                obj = (T1) result;
-                return true;
-            }
-
-            obj = default;
-            return false;
         }
 
         /// <summary>

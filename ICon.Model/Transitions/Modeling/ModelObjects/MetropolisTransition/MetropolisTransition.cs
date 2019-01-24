@@ -14,24 +14,24 @@ namespace Mocassin.Model.Transitions
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IUnitCellPosition FirstUnitCellPosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IUnitCellPosition SecondUnitCellPosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
         ///     The list of affiliated metropolis transition rules (Auto-managed by model system)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<MetropolisRule> TransitionRules { get; set; }
 
         /// <inheritdoc />

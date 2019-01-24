@@ -22,7 +22,7 @@ namespace Mocassin.Model.Particles
         ///     The list of particles belonging to the particle set
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IParticle> Particles { get; set; }
 
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace Mocassin.Model.Particles
         /// <returns></returns>
         public static ParticleSet CreateEmpty()
         {
-            return new ParticleSet {Particles = new List<IParticle>(), Index = 0, Alias = "ParticleSet.Void"};
+            return new ParticleSet {Particles = new List<IParticle>(), Index = 0, Key = "ParticleSet.Void"};
         }
 
         /// <inheritdoc />

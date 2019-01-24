@@ -14,10 +14,12 @@ namespace Mocassin.Model.Energies
         [DataMember]
         public double MaxInteractionRange { get; set; }
 
+        //ToDo: Change the ignore system to enable (Wyckoff 0, Wyckoff 1, RadiusMin, RadiusMax) ignore definitions
         /// <summary>
         ///     The list of ignored pair interactions during environment sampling
         /// </summary>
         [DataMember]
+        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
         public List<SymmetricParticlePair> IgnoredPairInteractions { get; set; }
 
         /// <inheritdoc />
@@ -29,7 +31,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override string GetParameterName()
         {
-            return "'Stable Environment Info'";
+            return "Stable Environment Info";
         }
 
         /// <inheritdoc />

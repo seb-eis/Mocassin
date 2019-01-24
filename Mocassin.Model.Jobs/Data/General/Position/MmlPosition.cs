@@ -51,7 +51,7 @@ namespace Mocassin.Model.Mml
             return new MmlPosition
             {
                 UnitCellPositionId = unitCellPosition.Index,
-                UnitCellPositionAlias = unitCellPosition.Alias,
+                UnitCellPositionAlias = unitCellPosition.Key,
                 A = unitCellPosition.Vector.A,
                 B = unitCellPosition.Vector.B,
                 C = unitCellPosition.Vector.C

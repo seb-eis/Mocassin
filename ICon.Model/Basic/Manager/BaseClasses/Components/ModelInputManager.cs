@@ -513,20 +513,22 @@ namespace Mocassin.Model.Basic
             where T1 : IModelParameter
         {
             // Build and link the overwrites information into a new internal object
-            var tmpObject = ModelParameter.BuildInternalObject<T2>(newParam) ??
+            var newInternal = ModelParameter.BuildInternalObject<T2>(newParam) ??
                             throw new ArgumentException("Conversion to internal type failed");
+
+            ModelProject.DataTracker.LinkModelObject(newInternal);
 
             T2 Operation(DataAccessor<TData> dataAccess, OperationReport report)
             {
                 var orgObject = paramAccessQuery(dataAccess);
                 report.SetValidationReport(
-                    ModelProject.ValidationServices.ValidateParameter(tmpObject, dataAccess.AsReader(DataReaderSource)));
+                    ModelProject.ValidationServices.ValidateParameter(newInternal, dataAccess.AsReader(DataReaderSource)));
 
                 if (!report.IsGood) 
                     return orgObject;
 
                 report.IsCacheExpired = invalidatesCache;
-                ReplaceModelParameter(orgObject, tmpObject);
+                ReplaceModelParameter(orgObject, newInternal);
 
                 // Send the newly populated original into the handling and not the temporary
                 var conflictReport = ConflictHandlerProvider.ChangedModelParameterHandler.ResolveConflicts(orgObject, dataAccess);
@@ -543,7 +545,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnChangedModelParameters.OnNext(ModelParameterEventArgs.Create(orgObject));
             }
 
-            return InvokeDataOperation($"Set model parameter {tmpObject.GetParameterName()} in the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Set model parameter {newInternal.GetParameterName()} in the manager", Operation, OnSuccess);
         }
 
         /// <summary>

@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Random;
+using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
+using Mocassin.Model.Basic.Debug;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
@@ -13,13 +15,44 @@ using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Model.Translator.Optimization;
-using Newtonsoft.Json;
+using Mocassin.UI.Xml.ParticleData;
+using Mocassin.UI.Xml.ProjectData;
 
 namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
         private static void Main(string[] args)
+        {
+            TestXmlUI();
+
+            Console.ReadLine();
+        }
+
+        private static void TestXmlUI()
+        {
+            var filePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\XmlInputTest.xml";
+            var data = new XmlMocassinProjectData() { ParticleData = new XmlParticleData()};
+            var streamService = XmlStreamService.CreateFor(data);
+
+            var inTest = streamService.TryDeserialize(filePath, null, out data);
+            var outTest = streamService.TrySerializeToConsole(data);
+
+            var package = ManagerFactory.DebugFactory.CreateSimulationManagementPackage();
+            var inputter = new ProjectDataInputSystem();
+            inputter.AddMany(data.ParticleData.GetInputSequence());
+            inputter.AddMany(data.StructureData.GetInputSequence());
+            inputter.AddMany(data.TransitionData.GetInputSequence());
+            inputter.AddMany(data.EnergyData.GetInputSequence());
+            inputter.AutoInputData(package.ModelProject);
+
+            var report = inputter.GetReportJson();
+            Console.Write(report);
+            
+            Console.ReadLine();
+        }
+
+        private static void TestDbCreation()
         {
             for (int i = 0; i < 1; i++)
             {
@@ -47,8 +80,6 @@ namespace Mocassin.Framework.QuickTest
                 
                 DisplayWatch(watch);
             }
-
-            Console.ReadLine();
         }
 
 

@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="InputData\LatticeData\Main\" />
+    <Folder Include="InputData\LatticeData\Objects\" />
+    <Folder Include="InputData\LatticeData\Parameters\" />
+    <Folder Include="InputData\ParticleData\Parameters\" />
+    <Folder Include="InputData\SimulationData\Objects\" />
+    <Folder Include="InputData\SimulationData\Parameters\" />
+    <Folder Include="InputData\TransitionData\Parameters\" />
+  </ItemGroup>
+
+</Project>

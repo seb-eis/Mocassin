@@ -13,12 +13,12 @@ namespace Mocassin.Model.Transitions
         ///     The state exchange pairs affiliated with this state exchange group group
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IStateExchangePair> StateExchangePairs { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        public bool IsVacancyGroup { get; set; }
+        public bool IsVacancyGroup => StateExchangePairs?.Any(x => x.IsVacancyPair) ?? false;
 
         /// <inheritdoc />
         [IgnoreDataMember]
@@ -43,7 +43,6 @@ namespace Mocassin.Model.Transitions
                 return null;
 
             Index = group.Index;
-            IsVacancyGroup = group.IsVacancyGroup;
             StateExchangePairs = group.GetStateExchangePairs().ToList();
             return this;
 

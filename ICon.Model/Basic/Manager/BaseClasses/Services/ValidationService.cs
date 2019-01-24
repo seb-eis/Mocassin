@@ -71,10 +71,10 @@ namespace Mocassin.Model.Basic
         protected IValidationReport ValidateAlias<TObject>(TObject obj)
             where TObject : IModelObject
         {
-            if (ModelProject.DataTracker.FindObjectByAlias<TObject>(obj.Alias) == null) 
+            if (ModelProject.DataTracker.FindObjectByKey<TObject>(obj.Key) == null) 
                 return null;
 
-            var detail0 = $"The object [{obj.GetObjectName()}] with alias [{obj.Alias}] is already present.";
+            var detail0 = $"The object [{obj.GetObjectName()}] with alias [{obj.Key}] is already present.";
             const string detail1 = "Define another alias for the object or use an empty one";
             var report = new ValidationReport();
             report.AddWarning(ModelMessageSource.CreateAliasViolationWarning(this, detail0, detail1));

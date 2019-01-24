@@ -16,14 +16,14 @@ namespace Mocassin.Model.Energies
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
         ///     The set of unique ignored unit cell positions during environment sampling (Can be empty)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IUnitCellPosition> IgnoredPositions { get; set; }
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace Mocassin.Model.Energies
         ///     population)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
 
         /// <summary>
         ///     The list of generated group interactions (Automatically linked by the model)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>

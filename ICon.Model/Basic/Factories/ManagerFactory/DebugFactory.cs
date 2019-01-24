@@ -132,13 +132,13 @@ namespace Mocassin.Model.Basic
                 var particles = new[]
                 {
                     new Particle {Index = 0},
-                    new Particle {Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Alias = "Particle.Vc"},
-                    new Particle {Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Alias = "Particle.O"},
-                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Alias = "Particle.Ce4"},
-                    new Particle {Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Alias = "Particle.Y"},
-                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Alias = "Particle.Ce3"},
-                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Alias = "Particle.Zr4"},
-                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Alias = "Particle.Zr3"}
+                    new Particle {Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Key = "Particle.Vc"},
+                    new Particle {Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Key = "Particle.O"},
+                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Key = "Particle.Ce4"},
+                    new Particle {Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Key = "Particle.Y"},
+                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Key = "Particle.Ce3"},
+                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Key = "Particle.Zr4"},
+                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Key = "Particle.Zr3"}
                 };
                 var particleSets = new[]
                 {
@@ -166,27 +166,27 @@ namespace Mocassin.Model.Basic
                 };
                 var propertyPairs = new[]
                 {
-                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0},
-                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 3},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 4},
-                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 5},
-                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 6},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[6], IsVacancyPair = false, Index = 7},
-                    new StateExchangePair {DonorParticle = particles[5], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 8}
+                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[0], Index = 0},
+                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[1], Index = 1},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[4], Index = 2},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[5], Index = 3},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[7], Index = 4},
+                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[7], Index = 5},
+                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[5], Index = 6},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[6], Index = 7},
+                    new StateExchangePair {DonorParticle = particles[5], AcceptorParticle = particles[7], Index = 8}
                 };
                 var propertyGroups = new[]
                 {
                     new StateExchangeGroup
-                        {IsVacancyGroup = false, Index = 0, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[0]}},
+                        {Index = 0, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[0]}},
                     new StateExchangeGroup
-                        {IsVacancyGroup = true, Index = 1, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[1]}},
+                        {Index = 1, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[1]}},
                     new StateExchangeGroup
-                        {IsVacancyGroup = false, Index = 2, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[2]}},
+                        {Index = 2, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[2]}},
                     new StateExchangeGroup
                     {
-                        IsVacancyGroup = false, Index = 3, StateExchangePairs = new List<IStateExchangePair>
+                        Index = 3, StateExchangePairs = new List<IStateExchangePair>
                         {
                             propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6], propertyPairs[7], propertyPairs[8]
                         }

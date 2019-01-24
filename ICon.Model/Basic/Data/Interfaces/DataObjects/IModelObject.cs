@@ -17,9 +17,9 @@
         int Index { get; }
 
         /// <summary>
-        ///     Get the alias of the model object
+        ///     Get the key of the model object
         /// </summary>
-        string Alias { get; }
+        string Key { get; }
 
         /// <summary>
         ///     Deprecates object

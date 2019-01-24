@@ -14,7 +14,7 @@ namespace Mocassin.Model.Transitions
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Mocassin.Model.Transitions
         ///     The list of affiliated kinetic transition rules (auto-managed by the model)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<KineticRule> TransitionRules { get; set; }
 
         /// <inheritdoc />

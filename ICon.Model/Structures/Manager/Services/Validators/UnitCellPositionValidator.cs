@@ -50,8 +50,7 @@ namespace Mocassin.Model.Structures.Validators
 
         /// <summary>
         ///     Validates that the passed cell position vector cannot be found within the extended wyckoff sets of any of the
-        ///     already defined positions that are not deprecated
-        ///     and adds the results to the validation report
+        ///     already defined positions that are not deprecated and adds the results to the validation report
         /// </summary>
         /// <param name="position"></param>
         /// <param name="report"></param>

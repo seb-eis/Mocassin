@@ -31,7 +31,7 @@ namespace Mocassin.Model.Structures
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticleSet OccupationSet { get; set; }
 
         /// <inheritdoc />

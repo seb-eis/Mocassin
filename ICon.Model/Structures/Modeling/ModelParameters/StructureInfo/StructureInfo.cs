@@ -14,7 +14,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override string GetParameterName()
         {
-            return "'Structure Info'";
+            return "Structure Info";
         }
 
         /// <summary>

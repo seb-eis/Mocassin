@@ -35,7 +35,7 @@ namespace Mocassin.Model.Simulations
         ///     The metropolis transitions attached to this simulation
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IMetropolisTransition> Transitions { get; set; }
 
         /// <inheritdoc />

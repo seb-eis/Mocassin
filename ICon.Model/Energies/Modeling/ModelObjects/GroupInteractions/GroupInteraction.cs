@@ -18,7 +18,7 @@ namespace Mocassin.Model.Energies
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IUnitCellPosition CenterUnitCellPosition { get; set; }
 
         /// <summary>

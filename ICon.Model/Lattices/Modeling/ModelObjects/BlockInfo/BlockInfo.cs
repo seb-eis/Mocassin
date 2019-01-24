@@ -17,7 +17,7 @@ namespace Mocassin.Model.Lattices
         /// BuildingBlock Index
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IBuildingBlock Block { get; set; }
 
         /// <summary>
