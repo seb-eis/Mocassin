@@ -17,7 +17,7 @@ namespace Mocassin.UI.Xml.EnergyData
         /// <summary>
         ///     Get or set the stable environment info of the energy model
         /// </summary>
-        [XmlElement("StableEnvironmentInfo")]
+        [XmlElement("StableEnvironmentSetting")]
         public XmlStableEnvironmentInfo StableEnvironmentInfo { get; set; }
 
         /// <summary>
@@ -26,6 +26,13 @@ namespace Mocassin.UI.Xml.EnergyData
         [XmlArray("UnstableEnvironments")]
         [XmlArrayItem("UnstableEnvironment")]
         public List<XmlUnstableEnvironment> UnstableEnvironments { get; set; }
+
+        /// <summary>
+        ///     Get or set the list of unstable environments of the energy model
+        /// </summary>
+        [XmlArray("GroupInteractions")]
+        [XmlArrayItem("GroupInteraction")]
+        public List<XmlGroupInteraction> GroupInteractions { get; set; }
 
         /// <inheritdoc />
         public override IEnumerable<IModelParameter> GetInputParameters()
@@ -36,7 +43,8 @@ namespace Mocassin.UI.Xml.EnergyData
         /// <inheritdoc />
         public override IEnumerable<IModelObject> GetInputObjects()
         {
-            return UnstableEnvironments.Select(x => x.GetInputObject());
+            return UnstableEnvironments.Select(x => x.GetInputObject())
+                .Concat(GroupInteractions.Select(x => x.GetInputObject()));
         }
     }
 }

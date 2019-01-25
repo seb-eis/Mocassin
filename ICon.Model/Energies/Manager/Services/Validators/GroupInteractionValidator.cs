@@ -188,7 +188,7 @@ namespace Mocassin.Model.Energies.Validators
 
         /// <summary>
         ///     Determines if a group contains any forbidden position that are not defined within the set of pair interactions of
-        ///     the environment
+        ///     the environment due to an existing filter
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
@@ -200,18 +200,20 @@ namespace Mocassin.Model.Energies.Validators
             switch (group.CenterUnitCellPosition.Status)
             {
                 case PositionStatus.Stable:
-                    var ignoredPairs = DataReader.Access.GetStableEnvironmentInfo()
-                        .GetIgnoredPairs()
+                    var stableFilters = DataReader.Access
+                        .GetStableEnvironmentInfo()
+                        .GetInteractionFilters()
                         .ToList();
 
-                    return analyzer.GetAllGroupPairs(group).Any(value => ignoredPairs.Contains(value));
+                    return analyzer.GroupContainsFilteredPairs(group, stableFilters);
 
                 case PositionStatus.Unstable:
-                    var ignoredPos = DataReader.Access.GetUnstableEnvironment(group.CenterUnitCellPosition.Index)
-                        .GetIgnoredPositions()
+                    var unstableFilters = DataReader.Access
+                        .GetUnstableEnvironment(group.CenterUnitCellPosition)
+                        .GetInteractionFilters()
                         .ToList();
 
-                    return analyzer.GetGroupUnitCellPositions(group).Any(value => ignoredPos.Contains(value));
+                    return analyzer.GroupContainsFilteredPairs(group, unstableFilters);
 
                 case PositionStatus.Undefined:
                     throw new InvalidOperationException("Undefined position reached environment check");

@@ -34,7 +34,6 @@
     <Folder Include="InputData\LatticeData\Objects\" />
     <Folder Include="InputData\LatticeData\Parameters\" />
     <Folder Include="InputData\ParticleData\Parameters\" />
-    <Folder Include="InputData\SimulationData\Objects\" />
     <Folder Include="InputData\SimulationData\Parameters\" />
     <Folder Include="InputData\TransitionData\Parameters\" />
   </ItemGroup>

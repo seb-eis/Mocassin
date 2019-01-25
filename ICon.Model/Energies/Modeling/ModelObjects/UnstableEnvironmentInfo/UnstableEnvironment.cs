@@ -20,11 +20,11 @@ namespace Mocassin.Model.Energies
         public IUnitCellPosition UnitCellPosition { get; set; }
 
         /// <summary>
-        ///     The set of unique ignored unit cell positions during environment sampling (Can be empty)
+        ///     The set of defined interaction filters of the unstable environment (Can be empty)
         /// </summary>
         [DataMember]
-        [UseTrackedReferences]
-        public List<IUnitCellPosition> IgnoredPositions { get; set; }
+        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
+        public List<AsymmetricInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>
         ///     The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object
@@ -35,7 +35,8 @@ namespace Mocassin.Model.Energies
         public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
 
         /// <summary>
-        ///     The list of generated group interactions (Automatically linked by the model)
+        ///     The list of generated group interactions (Can be null, automatically managed and linked property, not part of object
+        ///     population)
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
@@ -46,15 +47,15 @@ namespace Mocassin.Model.Energies
         /// </summary>
         public UnstableEnvironment()
         {
-            IgnoredPositions = new List<IUnitCellPosition>();
+            InteractionFilters = new List<AsymmetricInteractionFilter>();
             PairInteractions = new List<IAsymmetricPairInteraction>();
             GroupInteractions = new List<IGroupInteraction>();
         }
 
         /// <inheritdoc />
-        public IEnumerable<IUnitCellPosition> GetIgnoredPositions()
+        public IEnumerable<IInteractionFilter> GetInteractionFilters()
         {
-            return (IgnoredPositions ?? new List<IUnitCellPosition>()).AsEnumerable();
+            return (InteractionFilters ?? new List<AsymmetricInteractionFilter>()).AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -83,7 +84,7 @@ namespace Mocassin.Model.Energies
 
             UnitCellPosition = info.UnitCellPosition;
             MaxInteractionRange = info.MaxInteractionRange;
-            IgnoredPositions = info.GetIgnoredPositions().ToList();
+            InteractionFilters = info.GetInteractionFilters().Select(AsymmetricInteractionFilter.FromInterface).ToList();
             GroupInteractions = info.GetGroupInteractions().ToList();
             return this;
         }

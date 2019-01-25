@@ -36,56 +36,57 @@ namespace Mocassin.Model.Energies
             IStableEnvironmentInfo environmentInfo, NumericComparer comparer)
         {
             var radialConstraint = new NumericConstraint(false, 0.0, environmentInfo.MaxInteractionRange, true, comparer);
-            var filterPredicate = GetIgnoredFilterPredicate(environmentInfo);
-            var unfilteredPositions = CreateUniqueSymmetricPairs(positions, radialConstraint, value => value.IsValidAndStable());
-            return FilterAndReindex(unfilteredPositions, filterPredicate, 0).ToList();
-        }
-
-        /// <summary>
-        ///     Creates the list of unique symmetric pair interaction objects for all passed unit cell positions within the provided
-        ///     radial constraint
-        ///     and general acceptance predicate
-        /// </summary>
-        /// <param name="positions"></param>
-        /// <param name="radialConstraint"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions,
-            NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate)
-        {
-            var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, predicate, false);
-            var values = CreateUniquePairs(candidateDictionary, CreateSymmetricPair);
-            return values.Cast<SymmetricPairInteraction>();
+            var acceptPredicate = GetSymmetricAcceptancePredicate(environmentInfo);
+            var unfilteredPairs = MakeUniqueSymmetricPairs(positions, radialConstraint);
+            return FilterAndReindex(unfilteredPairs, acceptPredicate, 0);
         }
 
         /// <inheritdoc />
         public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnstableEnvironment> unstableEnvironments,
             NumericComparer comparer)
         {
+            var unfilteredPairs = new List<AsymmetricPairInteraction>();
+
             foreach (var environment in unstableEnvironments)
             {
                 var radialConstraint = new NumericConstraint(false, 0.0, environment.MaxInteractionRange, true, comparer);
-                var predicate = MakeAsymmetricFilteringPredicate(environment, position => position.IsValidAndStable());
-                var singleResult = CreateUniqueAsymmetricPairs(new[] {environment.UnitCellPosition}, radialConstraint, predicate);
-
-                foreach (var item in singleResult) 
-                    yield return item;
+                var acceptPredicate = MakeAsymmetricAcceptancePredicate(environment);
+                var singleResult = MakeUniqueAsymmetricPairs(new[] {environment.UnitCellPosition}, radialConstraint);
+                unfilteredPairs.AddRange(singleResult.Where(x => acceptPredicate(x)));
             }
+
+            return FilterAndReindex(unfilteredPairs, x => true, 0);
         }
 
         /// <summary>
-        ///     Creates the list of unique polar pair interaction objects for all passed unit cell positions within the provided
-        ///     radial constraint
-        ///     and general acceptance predicate
+        ///     Creates the list of unique symmetric pair interaction objects for all passed unit cell positions within the
+        ///     provided radial constraint
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
-        /// <param name="predicate"></param>
         /// <returns></returns>
-        public IEnumerable<AsymmetricPairInteraction> CreateUniqueAsymmetricPairs(IEnumerable<IUnitCellPosition> positions,
-            NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate)
+        protected IEnumerable<SymmetricPairInteraction> MakeUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions,
+            NumericConstraint radialConstraint)
         {
-            var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, predicate, true);
+            bool Predicate(IUnitCellPosition position) => position.IsValidAndStable();
+
+            var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, false);
+            var values = CreateUniquePairs(candidateDictionary, CreateSymmetricPair);
+            return values.Cast<SymmetricPairInteraction>();
+        }
+
+        /// <summary>
+        ///     Creates the list of unique polar pair interaction objects for all passed unit cell positions within the provided radial constraint
+        /// </summary>
+        /// <param name="positions"></param>
+        /// <param name="radialConstraint"></param>
+        /// <returns></returns>
+        public IEnumerable<AsymmetricPairInteraction> MakeUniqueAsymmetricPairs(IEnumerable<IUnitCellPosition> positions,
+            NumericConstraint radialConstraint)
+        {
+            bool Predicate(IUnitCellPosition position) => position.IsValidAndStable();
+
+            var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, true);
             var values = CreateUniquePairs(candidateDictionary, CreateAsymmetricPair);
             return values.Cast<AsymmetricPairInteraction>();
         }
@@ -99,7 +100,7 @@ namespace Mocassin.Model.Energies
         /// <param name="selector"></param>
         /// <param name="startIndex"></param>
         /// <returns></returns>
-        public IEnumerable<T> FilterAndReindex<T>(IEnumerable<T> unfiltered, Predicate<T> selector, int startIndex) 
+        public IEnumerable<T> FilterAndReindex<T>(IEnumerable<T> unfiltered, Predicate<T> selector, int startIndex)
             where T : PairInteraction
         {
             var index = startIndex - 1;
@@ -166,9 +167,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Crates and indices the list of unique pair interaction candidates for the provided position list, radial constraint
-        ///     and basic acceptance predicate
-        ///     that is sorted by their distance
+        ///     Crates and indices the list of unique pair interaction candidates for the provided position list, radial constraint and basic acceptance predicate that is sorted by their distance
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
@@ -181,7 +180,9 @@ namespace Mocassin.Model.Energies
             if (!(positions is ICollection<IUnitCellPosition> positionCollection))
                 positionCollection = positions.ToList();
 
-            var baseCandidateDictionary = CreateCandidateDictionary(positionCollection, radialConstraint, predicate, skipInversionFiltering);
+            var baseCandidateDictionary =
+                CreateCandidateDictionary(positionCollection, radialConstraint, predicate, skipInversionFiltering);
+
             var uniqueCandidateDictionary = CreateUniqueCandidateDictionary(baseCandidateDictionary, positionCollection);
             return uniqueCandidateDictionary;
         }
@@ -212,9 +213,9 @@ namespace Mocassin.Model.Energies
         {
             var resultDictionary =
                 new SortedDictionary<double, List<PairCandidate>>(UnitCellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer);
-            var searchQueries = GetSearchQueries(positions, predicate, radialConstraint, skipInversionFiltering);
+            var searchQueries = GetSearchQueries(positions, radialConstraint, predicate, skipInversionFiltering);
 
-            foreach (var item in searchQueries) 
+            foreach (var item in searchQueries)
                 item.Start();
 
             foreach (var query in searchQueries)
@@ -240,7 +241,8 @@ namespace Mocassin.Model.Energies
             foreach (var item in rawDictionary)
             {
                 var filtered = new List<PairCandidate>(10);
-                foreach (var candidate in FilterCandidatesAndAssignIndices(item.Value, operationDictionary, baseIndex))
+                var candidates = FilterCandidatesAndAssignIndices(item.Value, operationDictionary, baseIndex).ToList();
+                foreach (var candidate in candidates)
                 {
                     baseIndex++;
                     filtered.Add(candidate);
@@ -272,7 +274,13 @@ namespace Mocassin.Model.Energies
 
                 foreach (var vector in possibleVectors)
                 {
-                    var index = rawCandidates.FindIndex(value => SpaceGroupService.Comparer.Compare(vector, value.PositionVector) == 0);
+                    bool IsCandidateMatch(PairCandidate value)
+                    {
+                        return value.Position0 == uniqueCandidate.Position0 
+                               && SpaceGroupService.Comparer.Compare(vector, value.PositionVector) == 0;
+                    }
+
+                    var index = rawCandidates.FindIndex(IsCandidateMatch);
                     if (index < 0)
                         continue;
 
@@ -330,8 +338,7 @@ namespace Mocassin.Model.Energies
         /// <param name="start"></param>
         /// <param name="positions"></param>
         /// <returns></returns>
-        protected IEnumerable<PairCandidate> MakePairCandidates(IUnitCellPosition start,
-            IEnumerable<CellEntry<IUnitCellPosition>> positions)
+        protected IEnumerable<PairCandidate> MakePairCandidates(IUnitCellPosition start, IEnumerable<CellEntry<IUnitCellPosition>> positions)
         {
             foreach (var position in positions)
             {
@@ -344,28 +351,27 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Takes a set of start positions, radial search constraint and basic acceptance predicate and create a sequence of
-        ///     radial search queries to locate all
-        ///     cell entries just once (Inverse duplicates are filtered if not specified otherwise)
+        ///     Takes a set of start positions, radial search constraint and acceptance predicate and create a sequence of
+        ///     radial search queries to locate all cell entries just once (Inverse duplicates are filtered if not specified
+        ///     otherwise)
         /// </summary>
         /// <param name="starts"></param>
-        /// <param name="predicate"></param>
         /// <param name="constraint"></param>
+        /// <param name="predicate"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected RadialSearchQuery<IUnitCellPosition>[] GetSearchQueries(IEnumerable<IUnitCellPosition> starts,
-            Predicate<IUnitCellPosition> predicate, NumericConstraint constraint, bool skipInversionFiltering)
+        protected RadialSearchQuery<IUnitCellPosition>[] GetSearchQueries(IEnumerable<IUnitCellPosition> starts, NumericConstraint constraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
         {
-            var positionSet = starts.ToArray();
-            var result = new RadialSearchQuery<IUnitCellPosition>[positionSet.Length];
-            for (var i = 0; i < positionSet.Length; i++)
+            var positionSet = starts.ToList();
+            var result = new RadialSearchQuery<IUnitCellPosition>[positionSet.Count];
+            for (var i = 0; i < positionSet.Count; i++)
             {
                 result[i] = new RadialSearchQuery<IUnitCellPosition>
                 {
                     StartCellEntry = new CellEntry<IUnitCellPosition>(positionSet[i].Vector, positionSet[i]),
-                    AcceptancePredicate = skipInversionFiltering 
-                        ? predicate 
-                        : MakeInversionFilteringPredicate(positionSet, predicate, i),
+                    AcceptancePredicate = skipInversionFiltering
+                        ? predicate
+                        : MakeSymmetricInversionAcceptancePredicate(positionSet, predicate, i),
 
                     UnitCellProvider = UnitCellProvider,
                     RadialConstraint = constraint
@@ -376,41 +382,32 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Combines the original predicate and the already searches unit cell positions into a combined acceptance predicate
-        ///     that follows the symmetric
-        ///     stable environment acceptance criteria
+        ///     Combines the original predicate and the already searched unit cell positions into a combined acceptance predicate
+        ///     that follows the symmetric stable environment acceptance criteria
         /// </summary>
         /// <param name="positions"></param>
-        /// <param name="orgPredicate"></param>
-        /// <param name="index"></param>
+        /// <param name="currentSearchIndex"></param>
         /// <returns></returns>
-        protected Predicate<IUnitCellPosition> MakeInversionFilteringPredicate(IUnitCellPosition[] positions,
-            Predicate<IUnitCellPosition> orgPredicate, int index)
+        protected Predicate<IUnitCellPosition> MakeSymmetricInversionAcceptancePredicate(IList<IUnitCellPosition> positions, Predicate<IUnitCellPosition> orgPredicate, int currentSearchIndex)
         {
-            bool AcceptPredicate(IUnitCellPosition value)
+            bool AcceptPredicate(IUnitCellPosition position)
             {
-                for (var i = 0; i < index; i++)
-                    if (value.Index == positions[i].Index)
-                        return false;
-                return orgPredicate(value);
+                return positions.Take(currentSearchIndex).All(x => x != position) && orgPredicate(position);
             }
 
             return AcceptPredicate;
         }
 
         /// <summary>
-        ///     Takes an unstable environment and the original acceptance predicate and create a combined predicate that follows the
-        ///     unstable environment asymmetric pair interaction acceptance criteria
+        ///     Takes an unstable environment and creates a predicate that follows the unstable environment asymmetric pair interaction acceptance criteria
         /// </summary>
-        /// <param name="unstableEnvironment"></param>
-        /// <param name="orgPredicate"></param>
+        /// <param name="environment"></param>
         /// <returns></returns>
-        protected Predicate<IUnitCellPosition> MakeAsymmetricFilteringPredicate(IUnstableEnvironment unstableEnvironment,
-            Predicate<IUnitCellPosition> orgPredicate)
+        protected Predicate<AsymmetricPairInteraction> MakeAsymmetricAcceptancePredicate(IUnstableEnvironment environment)
         {
-            bool AcceptPredicate(IUnitCellPosition position)
+            bool AcceptPredicate(AsymmetricPairInteraction interaction)
             {
-                return !unstableEnvironment.GetIgnoredPositions().Contains(position) && orgPredicate(position);
+                return !environment.GetInteractionFilters().Any(x => x.IsApplicable(interaction));
             }
 
             return AcceptPredicate;
@@ -419,16 +416,16 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     Get the filter predicate for ignored pair interactions defined in the stable environment info
         /// </summary>
-        /// <param name="info"></param>
+        /// <param name="environment"></param>
         /// <returns></returns>
-        protected Predicate<SymmetricPairInteraction> GetIgnoredFilterPredicate(IStableEnvironmentInfo info)
+        protected Predicate<SymmetricPairInteraction> GetSymmetricAcceptancePredicate(IStableEnvironmentInfo environment)
         {
-            bool FilterPredicate(SymmetricPairInteraction interaction)
+            bool AcceptPredicate(SymmetricPairInteraction interaction)
             {
-                return !info.GetIgnoredPairs().Any(pair => interaction.EnergyDictionary.Keys.Contains(pair));
+                return !environment.GetInteractionFilters().Any(x => x.IsApplicable(interaction));
             }
 
-            return FilterPredicate;
+            return AcceptPredicate;
         }
     }
 }

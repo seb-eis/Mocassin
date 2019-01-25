@@ -16,8 +16,7 @@ namespace Mocassin.Model.DataManagement
         /// <summary>
         ///     The object liker dictionary that contains cached linking delegates for known model data objects
         /// </summary>
-        [IgnoreDataMember] 
-        private readonly Dictionary<Type, Action<object>> _objectLinkerDictionary;
+        [IgnoreDataMember] private readonly Dictionary<Type, Action<object>> _objectLinkerDictionary;
 
         /// <summary>
         ///     The data object dictionary that stores the data object reference and affiliated manager as key value pairs
@@ -229,8 +228,11 @@ namespace Mocassin.Model.DataManagement
         {
             IModelObject GetObject(IModelObject obj)
             {
-                var modelObject = ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Index == obj.Index);
-                return modelObject ?? ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Key == obj.Key);
+                var modelObject = ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Index == obj.Index)
+                                  ?? ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Key == obj.Key);
+
+                return modelObject
+                       ?? throw new InvalidOperationException($"No Object [{obj.GetObjectName()}] with Key={obj.Key} Id={obj.Index} exists");
             }
 
             return GetObject;

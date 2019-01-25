@@ -55,6 +55,7 @@ namespace Mocassin.Model.Simulations
 
             base.PopulateFrom(obj);
             NormalizationProbability = simulation.NormalizationProbability;
+            ElectricFieldMagnitude = simulation.ElectricFieldMagnitude;
             ElectricFieldVector = new DataVector3D(simulation.ElectricFieldVector);
             Transitions = (simulation.Transitions ?? new List<IKineticTransition>()).ToList();
             return this;

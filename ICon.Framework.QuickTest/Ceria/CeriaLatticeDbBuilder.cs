@@ -107,7 +107,7 @@ namespace Mocassin.Framework.QuickTest
 
             var idVc = (byte) particles.Single(x => x.Name == "Vacancy").Index;
             var idY = (byte) particles.Single(x => x.Name == "Yttrium").Index;
-            var idCe = (byte) particles.Single(x => x.Name == "Cer" && x.Charge == 4.0).Index;
+            var idCe = (byte) particles.Single(x => x.Name == "Cerium" && x.Charge == 4.0).Index;
             var idO = (byte) particles.Single(x => x.Name == "Oxygen").Index;
             byte @void = 0;
 

@@ -15,9 +15,9 @@ namespace Mocassin.Model.Energies
         double MaxInteractionRange { get; }
 
         /// <summary>
-        ///     Get an enumerable for all ignored pair codes that are generally not include during environment sampling
+        ///     Get all interaction filters defined for the stable environments
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SymmetricParticlePair> GetIgnoredPairs();
+        IEnumerable<IInteractionFilter> GetInteractionFilters();
     }
 }

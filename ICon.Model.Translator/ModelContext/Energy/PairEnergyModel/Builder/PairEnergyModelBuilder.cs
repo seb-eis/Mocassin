@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
@@ -38,30 +39,31 @@ namespace Mocassin.Model.Translator.ModelContext
                 ModelId = index++
             };
 
-            var maxParticleIndex = CopyEnergyEntriesToModel(energyModel);
-            energyModel.EnergyTable = CreateEnergyTable(energyModel.EnergyEntries, maxParticleIndex);
+            var (maxCenterIndex, maxPartnerIndex) = CopyEnergyEntriesToModel(energyModel);
+            energyModel.EnergyTable = CreateEnergyTable(energyModel.EnergyEntries, maxCenterIndex, maxPartnerIndex);
             return energyModel;
         }
 
         /// <summary>
         ///     Copies all energy entries of the set interaction into the energy model list an returns the largest found particle
-        ///     index
+        ///     indices for center and partner
         /// </summary>
         /// <param name="energyModel"></param>
         /// <returns></returns>
-        protected int CopyEnergyEntriesToModel(IPairEnergyModel energyModel)
+        protected (int MaxCenterIndex, int MaxPartnerIndex) CopyEnergyEntriesToModel(IPairEnergyModel energyModel)
         {
-            var lastIndex = 0;
+            var (maxCenterIndex, maxPartnerIndex, largestIndex) = (0, 0, 0);
             energyModel.EnergyEntries = new List<PairEnergyEntry>();
 
             foreach (var entry in energyModel.PairInteraction.GetEnergyEntries())
             {
-                var checkIndex = entry.ParticlePair.Particle0.Index;
-                lastIndex = lastIndex > checkIndex ? lastIndex : checkIndex;
+                maxCenterIndex = Math.Max(maxCenterIndex, entry.ParticlePair.Particle0.Index);
+                maxPartnerIndex = Math.Max(maxPartnerIndex, entry.ParticlePair.Particle1.Index);
+                largestIndex = Math.Max(maxCenterIndex, maxPartnerIndex);
                 energyModel.EnergyEntries.Add(entry);
             }
 
-            return lastIndex;
+            return energyModel.IsAsymmetric ? (maxCenterIndex, maxPartnerIndex) : (largestIndex, largestIndex);
         }
 
         /// <summary>
@@ -70,9 +72,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="energyEntries"></param>
         /// <param name="largestIndex"></param>
         /// <returns></returns>
-        protected double[,] CreateEnergyTable(IList<PairEnergyEntry> energyEntries, int largestIndex)
+        protected double[,] CreateEnergyTable(IList<PairEnergyEntry> energyEntries, int maxCenterIndex, int maxPartnerIndex)
         {
-            var table = new double[largestIndex + 1, largestIndex + 1];
+            var table = new double[maxCenterIndex + 1, maxPartnerIndex + 1];
 
             foreach (var entry in energyEntries)
             {

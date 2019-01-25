@@ -5,7 +5,6 @@ using Mocassin.Model.Basic;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Structures;
 using Mocassin.UI.Xml.BaseData;
-using Mocassin.UI.Xml.StructureData;
 
 namespace Mocassin.UI.Xml.EnergyData
 {
@@ -16,23 +15,23 @@ namespace Mocassin.UI.Xml.EnergyData
     public class XmlUnstableEnvironment : XmlModelObject
     {
         /// <summary>
-        /// Get or set the maximum interaction range
+        ///     Get or set the maximum interaction range
         /// </summary>
         [XmlAttribute("InteractionRadius")]
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
-        /// Get or set the key of the center unit cell position
+        ///     Get or set the key of the center unit cell position
         /// </summary>
         [XmlAttribute("WyckoffPosition")]
         public string UnitCellPositionKey { get; set; }
 
         /// <summary>
-        /// Get or set the list of ignored wyckoff positions during interaction search
+        ///     Get or set the list of interaction filters of the environment
         /// </summary>
-        [XmlArray("IgnoredInteractions")]
-        [XmlArrayItem("Position")]
-        public List<XmlUnitCellPosition> IgnoredUnitCellPositions { get; set; }
+        [XmlArray("InteractionFilters")]
+        [XmlArrayItem("Filter")]
+        public List<XmlInteractionFilter> InteractionFilters { get; set; }
 
         /// <inheritdoc />
         protected override ModelObject GetPreparedModelObject()
@@ -41,7 +40,7 @@ namespace Mocassin.UI.Xml.EnergyData
             {
                 MaxInteractionRange = MaxInteractionRange,
                 UnitCellPosition = new UnitCellPosition {Key = UnitCellPositionKey},
-                IgnoredPositions = IgnoredUnitCellPositions.Select(x => x.GetInputObject()).Cast<IUnitCellPosition>().ToList()
+                InteractionFilters = InteractionFilters.Select(x => x.AsAsymmetric()).ToList()
             };
             return obj;
         }

@@ -1,5 +1,6 @@
 ﻿using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Energies
 {
@@ -65,6 +66,13 @@ namespace Mocassin.Model.Energies
         /// <param name="index"></param>
         /// <returns></returns>
         IUnstableEnvironment GetUnstableEnvironment(int index);
+
+        /// <summary>
+        ///     Get the unstable environment that belongs to the passed unit cell position. Returns null if it does not exist
+        /// </summary>
+        /// <param name="unitCellPosition"></param>
+        /// <returns></returns>
+        IUnstableEnvironment GetUnstableEnvironment(IUnitCellPosition unitCellPosition);
 
         /// <summary>
         ///     Get a raw energy setter provider that enables creation of energy value setters for interaction objects

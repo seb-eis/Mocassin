@@ -23,15 +23,16 @@ namespace Mocassin.Framework.QuickTest
     internal class Program
     {
         private static void Main(string[] args)
-        {
-            TestXmlUI();
+        { 
+            var package = TestXmlUI();
+            TestDbCreation(package);
 
             Console.ReadLine();
         }
 
-        private static void TestXmlUI()
+        private static ManagerPackage TestXmlUI()
         {
-            var filePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\XmlInputTest.xml";
+            var filePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinCeriaInput.xml";
             var data = new XmlMocassinProjectData() { ParticleData = new XmlParticleData()};
             var streamService = XmlStreamService.CreateFor(data);
 
@@ -40,24 +41,18 @@ namespace Mocassin.Framework.QuickTest
 
             var package = ManagerFactory.DebugFactory.CreateSimulationManagementPackage();
             var inputter = new ProjectDataInputSystem();
-            inputter.AddMany(data.ParticleData.GetInputSequence());
-            inputter.AddMany(data.StructureData.GetInputSequence());
-            inputter.AddMany(data.TransitionData.GetInputSequence());
-            inputter.AddMany(data.EnergyData.GetInputSequence());
+            inputter.AddMany(data.GetInputSequence());
             inputter.AutoInputData(package.ModelProject);
 
             var report = inputter.GetReportJson();
             Console.Write(report);
-            
-            Console.ReadLine();
+            return package;
         }
 
-        private static void TestDbCreation()
+        private static void TestDbCreation(ManagerPackage package)
         {
             for (int i = 0; i < 1; i++)
             {
-                var package = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
-
                 var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
                 var modelContext = contextBuilder.BuildNewContext().Result;
                 var dbLatticeBuilder = new CeriaLatticeDbBuilder(modelContext);

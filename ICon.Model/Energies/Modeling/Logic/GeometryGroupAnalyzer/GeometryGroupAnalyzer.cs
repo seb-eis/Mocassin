@@ -89,21 +89,39 @@ namespace Mocassin.Model.Energies
         {
             var particles =
                 new HashSet<IParticle>(GetGroupUnitCellPositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
-            var permutationSource = new PermutationSlotMachine<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
+            var permutationSource =
+                new PermutationSlotMachine<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
             return new HashSet<SymmetricParticlePair>(permutationSource.Select(perm => new SymmetricParticlePair
                 {Particle0 = perm[0], Particle1 = perm[1]})).AsEnumerable();
         }
 
         /// <summary>
-        ///     Get the unit cell position sequence described by a group interaction. Will contain null values if any of the
-        ///     fractional vector does not point to
-        ///     a valid position
+        ///     Get the unit cell position sequence described by a group interaction. Will contain null values if any of the fractional vector does not point to a valid position
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <returns></returns>
         public IEnumerable<IUnitCellPosition> GetGroupUnitCellPositions(IGroupInteraction groupInteraction)
         {
             return groupInteraction.GetBaseGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
+        }
+
+        /// <summary>
+        ///     Determines if the passed group interaction contains any pair interactions that are filtered by the passed set of
+        ///     interaction filters
+        /// </summary>
+        /// <param name="groupInteraction"></param>
+        /// <param name="filters"></param>
+        /// <returns></returns>
+        public bool GroupContainsFilteredPairs(IGroupInteraction groupInteraction, IEnumerable<IInteractionFilter> filters)
+        {         
+            var partnerPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
+            var distances = groupInteraction.GetBaseGeometry()
+                .Select(vector => vector - groupInteraction.CenterUnitCellPosition.Vector)
+                .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
+                .ToList();
+
+            return filters
+                .Any(x => distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterUnitCellPosition, partnerPositions[i])).Any());
         }
 
         /// <summary>
@@ -138,7 +156,7 @@ namespace Mocassin.Model.Energies
             foreach (var centerParticle in centerPosition.OccupationSet.GetParticles())
             {
                 var innerDictionary = new Dictionary<OccupationState, double>(10);
-                foreach (var state in occStateCollection) 
+                foreach (var state in occStateCollection)
                     innerDictionary.Add(state, 0.0);
 
                 result.Add(centerParticle, innerDictionary);

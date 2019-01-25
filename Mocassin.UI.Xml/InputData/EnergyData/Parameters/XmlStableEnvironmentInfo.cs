@@ -20,11 +20,11 @@ namespace Mocassin.UI.Xml.EnergyData
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
-        /// Get or set the list of ignored particle pairs
+        ///     Get or set the list of interaction filters for stable environments
         /// </summary>
-        [XmlArray("IgnoredInteractions")]
-        [XmlArrayItem("ParticlePair")]
-        public List<XmlParticlePair> IgnoredParticlePairs { get; set; }
+        [XmlArray("InteractionFilters")]
+        [XmlArrayItem("Filter")]
+        public List<XmlInteractionFilter> InteractionFilters { get; set; }
 
         /// <inheritdoc />
         protected override ModelParameter GetPreparedModelObject()
@@ -32,7 +32,7 @@ namespace Mocassin.UI.Xml.EnergyData
             var obj = new StableEnvironmentInfo
             {
                 MaxInteractionRange = MaxInteractionRange,
-                IgnoredPairInteractions = IgnoredParticlePairs.Select(x => x.AsSymmetric()).ToList()
+                InteractionFilters = InteractionFilters.Select(x => x.AsSymmetric()).ToList()
             };
             return obj;
         }

@@ -313,14 +313,16 @@ namespace Mocassin.Model.Basic
                 inputter.AddMany(abstractTransitions);
                 inputter.AddMany(metropolisTransitions);
                 inputter.AddMany(kineticTransitions);
-                inputter.Add(new StableEnvironmentInfo
-                    {MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymmetricParticlePair>()});
+                inputter.Add(new StableEnvironmentInfo {MaxInteractionRange = 6.5});
                 inputter.Add(new UnstableEnvironment
                 {
                     Index = 0,
-                    MaxInteractionRange = 1.5,
+                    MaxInteractionRange = 2.5,
                     UnitCellPosition = unitCellPositions[2],
-                    IgnoredPositions = new List<IUnitCellPosition>()
+                    InteractionFilters = new List<AsymmetricInteractionFilter>
+                    {
+                        new AsymmetricInteractionFilter { StartRadius = 0, EndRadius = 2.5, PartnerUnitCellPosition = unitCellPositions[1]}
+                    }
                 });
                 inputter.AddMany(groupInteractions);
                 inputter.AddMany(metropolisSimulations);

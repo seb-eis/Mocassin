@@ -1,5 +1,7 @@
-﻿using Mocassin.Framework.Collections;
+﻿using System.Linq;
+using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Energies
 {
@@ -47,13 +49,20 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public IUnstableEnvironment GetUnstableEnvironment(int index)
         {
-            return Data.UnstableEnvironmentInfos[index];
+            return Data.UnstableEnvironments[index];
+        }
+
+
+        /// <inheritdoc />
+        public IUnstableEnvironment GetUnstableEnvironment(IUnitCellPosition unitCellPosition)
+        {
+            return Data.UnstableEnvironments.SingleOrDefault(x => x.UnitCellPosition == unitCellPosition);
         }
         
         /// <inheritdoc />
         public ReadOnlyListAdapter<IUnstableEnvironment> GetUnstableEnvironments()
         {
-            return ReadOnlyListAdapter<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironmentInfos);
+            return ReadOnlyListAdapter<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironments);
         }
         
         /// <inheritdoc />
