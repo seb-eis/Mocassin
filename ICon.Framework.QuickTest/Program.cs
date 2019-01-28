@@ -36,8 +36,8 @@ namespace Mocassin.Framework.QuickTest
             var data = new XmlMocassinProjectData() { ParticleData = new XmlParticleData()};
             var streamService = XmlStreamService.CreateFor(data);
 
-            var inTest = streamService.TryDeserialize(filePath, null, out data);
-            var outTest = streamService.TrySerializeToConsole(data);
+            var inTest = streamService.TryDeserialize(filePath, null, out data, out var exception);
+            var outTest = streamService.TrySerializeToConsole(data, out exception);
 
             var package = ManagerFactory.DebugFactory.CreateSimulationManagementPackage();
             var inputter = new ProjectDataInputSystem();

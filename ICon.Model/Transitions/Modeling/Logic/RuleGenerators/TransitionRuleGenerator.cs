@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Xml;
 using Mocassin.Mathematics.Permutation;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
@@ -12,7 +13,7 @@ namespace Mocassin.Model.Transitions
     /// <summary>
     ///     Generic rule generator to create tha basic information of new transition rules
     /// </summary>
-    public class QuickRuleGenerator<TRule> where TRule : TransitionRule, new()
+    public class TransitionRuleGenerator<TRule> where TRule : TransitionRule, new()
     {
         /// <summary>
         ///     The particle pool dictionary to translate the indexing into actual particle references
@@ -23,10 +24,11 @@ namespace Mocassin.Model.Transitions
         ///     Create new quick rule generator that uses the provided set of particles
         /// </summary>
         /// <param name="particlePool"></param>
-        public QuickRuleGenerator(IEnumerable<IParticle> particlePool)
+        public TransitionRuleGenerator(IEnumerable<IParticle> particlePool)
         {
             ParticleDictionary = new SortedDictionary<int, IParticle>();
-            foreach (var item in particlePool) ParticleDictionary.Add(item.Index, item);
+            foreach (var item in particlePool)
+                ParticleDictionary.Add(item.Index, item);
         }
 
         /// <summary>
@@ -40,13 +42,12 @@ namespace Mocassin.Model.Transitions
         /// <remarks> Unsupported rules are typically physically meaningless e.g. they violate matter conservation rules </remarks>
         public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions, bool onlySupported)
         {
-
             var abstractCollection = abstractTransitions.ToCollection();
             var statePairGroups =
                 new StatePairGroupCreator().MakeGroupsWithBlanks(abstractCollection.SelectMany(value => value.GetStateExchangeGroups()));
 
             var results = MakeUniqueRules(abstractCollection, statePairGroups);
-            return onlySupported 
+            return onlySupported
                 ? results.Select(FilterByCommonBehaviorAndInversionRules)
                 : results;
         }
@@ -57,7 +58,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="abstractTransitions"></param>
         /// <param name="statePairGroups"></param>
         /// <returns></returns>
-        public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions,
+        protected IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions,
             IList<StatePairGroup> statePairGroups)
         {
             return abstractTransitions.Select(transition => MakeUniqueRules(transition, statePairGroups));
@@ -69,7 +70,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="abstractTransition"></param>
         /// <param name="statePairGroups"></param>
         /// <returns></returns>
-        public IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
+        protected IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
         {
             var stateDescription = abstractTransition.GetStateExchangeGroups()
                 .Select(value => statePairGroups[value.Index].AutoChangeStatus());
@@ -89,7 +90,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="pairGroups"></param>
         /// <param name="connectorTypes"></param>
         /// <returns></returns>
-        public IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes)
+        protected IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes)
         {
             return GetValidTransitionRules(pairGroups.ToArray(), connectorTypes.ToArray());
         }
@@ -110,7 +111,8 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Takes a state pair permutation and creates a permutation source that can create all possible states of the path allowed by
+        ///     Takes a state pair permutation and creates a permutation source that can create all possible states of the path
+        ///     allowed by
         ///     this state pair permutation
         /// </summary>
         /// <param name="statePairs"></param>
@@ -328,12 +330,11 @@ namespace Mocassin.Model.Transitions
             var (value0, direction0) = ChangeState(states.Item1, statePairs.Item1);
             var (value1, direction1) = ChangeState(states.Item2, statePairs.Item2);
 
-            if (direction0 + direction1 != 0) 
+            if (direction0 + direction1 != 0)
                 return false;
 
             states = (value0, value1);
             return true;
-
         }
 
         /// <summary>
@@ -361,17 +362,30 @@ namespace Mocassin.Model.Transitions
         /// <param name="unfilteredRules"></param>
         /// <remarks> Equivalent rules are; Back-jump rules, Symmetric rules or twisted symmetric rules  </remarks>
         /// <returns></returns>
-        public IEnumerable<TRule> FilterByCommonBehaviorAndInversionRules(IEnumerable<TRule> unfilteredRules)
+        protected IEnumerable<TRule> FilterByCommonBehaviorAndInversionRules(IEnumerable<TRule> unfilteredRules)
         {
             var results = new List<TRule>(10);
             foreach (var rule in DetermineAndSetRuleMovementTypes(unfilteredRules))
             {
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.NotSupported)) 
+                // If the rule determination detects not supported, try to handle the rule as a chained migration
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.NotSupported))
                     continue;
+
+                // Handle the push like case (intersticialcy) where the inverse rule was not created
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.IntersticialcyLike))
+                {
+                    HandleIntersticialcyLikeRule(rule);
+                    results.Add(rule);
+                    continue;
+                }
 
                 // Migration that contain physical migrations without a vacancy are possible but basically meaningless
                 if (rule.MovementFlags.HasFlag(RuleMovementFlags.PhysicalMigration) &&
-                    !rule.MovementFlags.HasFlag(RuleMovementFlags.Vacancy)) 
+                    !rule.MovementFlags.HasFlag(RuleMovementFlags.Vacancy))
+                    continue;
+
+                // Handle association/dissociation case where one has to be selected
+                if (!(!rule.AbstractTransition.IsAssociation ^ rule.MovementFlags.HasFlag(RuleMovementFlags.AssociationDissociation)))
                     continue;
 
                 results.Add(rule);
@@ -382,23 +396,125 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
+        ///     Tries to handle the passed rule as a chained/vehicle migration and creates the missing inverse rule if possible
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <returns></returns>
+        protected void HandleIntersticialcyLikeRule(TRule rule)
+        {
+            if (!rule.MovementFlags.HasFlag(RuleMovementFlags.IntersticialcyLike))
+                throw new InvalidOperationException("Rule does not have the valid flags for this operation");
+
+            var inverseRule = new TRule
+            {
+                RuleFlags = rule.RuleFlags,
+                AbstractTransition = rule.AbstractTransition,
+                StartState = rule.FinalState.DeepCopy(),
+                TransitionState = rule.TransitionState.DeepCopy(),
+                FinalState = rule.StartState.DeepCopy(),
+                MovementCode = rule.MovementCode.GetInverse()
+            };
+
+            rule.AddDependentRule(inverseRule);
+        }
+
+        /// <summary>
         ///     Determines the combination of rule movement flags for each rule and sets the values
         /// </summary>
         /// <param name="rules"></param>
         /// <returns></returns>
-        public IEnumerable<TRule> DetermineAndSetRuleMovementTypes(IEnumerable<TRule> rules)
+        protected IEnumerable<TRule> DetermineAndSetRuleMovementTypes(IEnumerable<TRule> rules)
         {
             foreach (var rule in rules)
             {
                 var moveType = rule.AbstractTransition.ConnectorCount == 1 ? RuleMovementFlags.Exchange : RuleMovementFlags.Migration;
-                var movement = rule.GetMovementDescription().ToArray();
-                var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToArray();
-                for (var i = 0; i < movement.Length - 1; i = i + 2)
+                moveType |= GetRequiredVehicleFlags(rule);
+
+                var movement = rule.GetMovementDescription().ToList();
+                var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToList();
+                for (var i = 0; i < movement.Count - 1; i = i + 2)
                     moveType |= GetStepMovementType(zipped[movement[i]], zipped[movement[i + 1]]);
+
+                if (IsIntersticialyLikeMovement(movement))
+                {
+                    moveType -= moveType & RuleMovementFlags.NotSupported;
+                    moveType |= RuleMovementFlags.IntersticialcyLike;
+                }
 
                 rule.MovementFlags = moveType;
                 yield return rule;
             }
+        }
+
+        /// <summary>
+        /// Checks if a rule movement description is like the intersticialcy type mechanism
+        /// </summary>
+        /// <param name="movement"></param>
+        /// <returns></returns>
+        protected bool IsIntersticialyLikeMovement(IList<int> movement)
+        {
+            if (movement.Count <= 2)
+                return false;
+
+            for (var i = 1; i < movement.Count - 2; i++)
+            {
+                if (movement[i] != movement[i + 1])
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Get the required vehicle flags for the passed transition rule or none if the rule does not describe a vehicle
+        ///     mechanism
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <returns></returns>
+        protected RuleMovementFlags GetRequiredVehicleFlags(TRule rule)
+        {
+            RuleMovementFlags result = 0;
+            if (rule.PathLength <= 3)
+                return result;
+
+            result |= RuleMovementFlags.Vehicle;
+            result |= MovementIsAssociationDissociation(rule) ? RuleMovementFlags.AssociationDissociation : 0;
+            return result;
+        }
+
+        /// <summary>
+        ///     Check if the movement description of the passed transition rule conforms to association/dissociation behavior
+        ///     independent of what is defined in its set abstract transition
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <returns></returns>
+        protected bool MovementIsAssociationDissociation(TRule rule)
+        {
+            if (rule.PathLength <= 3)
+                return false;
+
+            var (forwardCount, backwardCount) = (0, 0);
+            var statePairMap = rule.AbstractTransition.GetStateExchangeGroups().Select(x => x.GetStateExchangePairs().ToList()).ToList();
+            var movement = rule.MovementCode.AsExchangePairs().ToList();
+
+            for (var i = 0; i < rule.PathLength; i++)
+            {
+                if (rule.StartState[i].IsEmpty) 
+                    continue;
+
+                if (statePairMap[i].Count(x => x.DonorParticle == rule.StartState[i]) == 0)
+                    continue;
+
+                var firstMovement = movement.FirstOrDefault(x => x.Item1 == i || x.Item2 == i);
+                var direction = firstMovement.Item1 == i ? 1 : -1;
+
+                if (direction < 0)
+                    backwardCount++;
+                if (direction > 0)
+                    forwardCount++;
+            }
+
+            return forwardCount > 0 && backwardCount > 0;
         }
 
         /// <summary>
@@ -415,24 +531,23 @@ namespace Mocassin.Model.Transitions
             var isPhysicalExchange = lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;
             var isSameTypeExchange = lhs.start.Symbol == rhs.start.Symbol;
 
-            if (isVacancyExchange) 
+            if (isVacancyExchange)
                 return RuleMovementFlags.Physical | RuleMovementFlags.Vacancy;
 
-            if (isPropertyExchange && isPhysicalExchange && isSameTypeExchange) 
+            if (isPropertyExchange && isPhysicalExchange && isSameTypeExchange)
                 return RuleMovementFlags.Property;
 
-            if (isPhysicalExchange) 
+            if (isPhysicalExchange)
                 return RuleMovementFlags.Physical;
 
-            return isPropertyExchange 
-                ? RuleMovementFlags.Property 
+            return isPropertyExchange
+                ? RuleMovementFlags.Property
                 : RuleMovementFlags.NotSupported;
         }
 
         /// <summary>
         ///     Checks if two particle tuples describing the start and end states of two dynamically exchanging positions describe
-        ///     a valid vacancy exchange
-        ///     that does not violated matter conservation
+        ///     a valid vacancy exchange that does not violated matter conservation
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
@@ -442,7 +557,7 @@ namespace Mocassin.Model.Transitions
             if (!lhs.start.IsVacancy && !lhs.end.IsVacancy || lhs.start.IsVacancy && lhs.end.IsVacancy)
                 return false;
 
-            if (!rhs.start.IsVacancy && !rhs.end.IsVacancy || rhs.start.IsVacancy && rhs.end.IsVacancy) 
+            if (!rhs.start.IsVacancy && !rhs.end.IsVacancy || rhs.start.IsVacancy && rhs.end.IsVacancy)
                 return false;
 
             return lhs.start.Index == rhs.end.Index && lhs.end.Index == rhs.start.Index;

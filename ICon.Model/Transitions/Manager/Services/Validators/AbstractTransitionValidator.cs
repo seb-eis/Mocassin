@@ -26,6 +26,9 @@ namespace Mocassin.Model.Transitions.Validators
             var report = new ValidationReport();
 
             AddHasContentValidation(obj, report);
+            if (!report.IsGood)
+                return report;
+
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetAbstractTransitions(), report);
             AddContentRestrictionsValidation(obj, report);
             AddConnectorPatternValidation(obj, report);
@@ -71,12 +74,11 @@ namespace Mocassin.Model.Transitions.Validators
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
 
-            if (!new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name))
-            {
-                var detail =
-                    $"The abstract transition name ({transition.Name}) violates the contraining regular expression ({Settings.TransitionStringPattern})";
-                report.AddWarning(ModelMessageSource.CreateNamingViolationWarning(this, detail));
-            }
+            if (new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name)) 
+                return;
+
+            var detail = $"The abstract transition name ({transition.Name}) violates the constraint regex ({Settings.TransitionStringPattern})";
+            report.AddWarning(ModelMessageSource.CreateNamingViolationWarning(this, detail));
         }
 
         /// <summary>
@@ -93,9 +95,17 @@ namespace Mocassin.Model.Transitions.Validators
                 return;
             }
 
-            const string detail0 = "The provided connector pattern does not result in a supported physical transition";
-            var detail1 = validPatterns.Select(value => $"Valid type ('{value.PatternType}') pattern regex is ('{value.PatternRegex}')");
-            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail1.Concat(detail0.AsSingleton()).ToArray()));
+            var patternType = ConnectorPattern.DeterminePatternType(transition.GetConnectorSequence());
+            if (patternType != ConnectorPatternType.SingleVehicle && patternType != ConnectorPatternType.SplitVehicle &&
+                transition.IsAssociation)
+            {
+                const string detail0 = "Enabled association behavior flag has not effect on non vehicle connector patterns";
+                report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, detail0));
+            }
+
+            const string detail1 = "The provided connector pattern does not result in a supported physical transition";
+            var detail2 = validPatterns.Select(value => $"Valid type ('{value.PatternType}') pattern regex is ('{value.PatternRegex}')");
+            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail2.Concat(detail1.AsSingleton()).ToArray()));
         }
 
         /// <summary>

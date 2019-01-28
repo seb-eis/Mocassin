@@ -8,8 +8,7 @@ namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents a pair interaction finder that can search a specific system of space group service and unit cell
-    ///     provider for symmetric and asymmetric
-    ///     pair interactions
+    ///     provider for symmetric and asymmetric pair interactions
     /// </summary>
     public interface IPairInteractionFinder
     {

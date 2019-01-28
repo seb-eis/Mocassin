@@ -137,7 +137,7 @@ namespace Mocassin.Model.Test
             var hydrogenTransGroup = new StatePairGroup(new(int, int)[] { (hydrogen, empty) }, PositionStatus.Unstable);
             var vehicleTransGroup = new StatePairGroup(new(int, int)[] { (vehicle, empty) }, PositionStatus.Unstable);
 
-            var generator = new QuickRuleGenerator<KineticRule>(particles);
+            var generator = new TransitionRuleGenerator<KineticRule>(particles);
 
             // Migration pattern (Should yield 2 rules, without activated filtering the inverse case is also present)
             var migrationPattern = new ConnectorType[]

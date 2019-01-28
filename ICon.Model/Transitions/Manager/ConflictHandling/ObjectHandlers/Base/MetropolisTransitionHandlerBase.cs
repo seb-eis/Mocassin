@@ -26,7 +26,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         protected IEnumerable<MetropolisRule> CreateTransitionRules(MetropolisTransition transition)
         {
             var particles = ModelProject.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
-            var creator = new QuickRuleGenerator<MetropolisRule>(particles);
+            var creator = new TransitionRuleGenerator<MetropolisRule>(particles);
             return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
                 .SingleOrDefault()
                 .Action(rule => rule.Transition = transition);

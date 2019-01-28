@@ -27,6 +27,12 @@ namespace Mocassin.UI.Xml.TransitionData
         public string Name { get; set; }
 
         /// <summary>
+        ///     Get or set the association/dissociation flag that enables this behavior
+        /// </summary>
+        [XmlAttribute("IsAssociation")]
+        public bool IsAssociation { get; set; }
+
+        /// <summary>
         ///     Get or set the list of state exchange groups
         /// </summary>
         [XmlArray("StateChangeOptions")]
@@ -45,6 +51,7 @@ namespace Mocassin.UI.Xml.TransitionData
             var obj = new AbstractTransition
             {
                 Name = Name,
+                IsAssociation = IsAssociation,
                 StateExchangeGroups = StateExchangeGroups.Select(x => x.GetInputObject()).Cast<IStateExchangeGroup>().ToList(),
                 Connectors = GetConnectorSequence().ToList()
             };

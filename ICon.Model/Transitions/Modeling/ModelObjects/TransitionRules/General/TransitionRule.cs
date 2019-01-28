@@ -24,12 +24,15 @@ namespace Mocassin.Model.Transitions
     [Flags]
     public enum RuleMovementFlags
     {
-        NotSupported = 0b1,
-        Physical = 0b10,
-        Property = 0b100,
-        Exchange = 0b1000,
-        Migration = 0b10000,
-        Vacancy = 0b100000,
+        NotSupported = 1 << 1,
+        Physical = 1 << 2,
+        Property = 1 << 3,
+        Exchange = 1 << 4,
+        Migration = 1 << 5,
+        Vacancy = 1 << 6,
+        Vehicle = 1 << 7,
+        AssociationDissociation = 1 << 8,
+        IntersticialcyLike = 1 << 9,
         VacancyMigration = Physical + Migration + Vacancy,
         PhysicalMigration = Physical + Migration,
         PhysicalExchange = Physical + Exchange,

@@ -211,7 +211,7 @@ namespace Mocassin.Model.Transitions
 
             var particles = particlePort.Query(port => port.GetParticles().ToArray());
             var transitions = transitionPort.Query(port => port.GetMetropolisTransitions().ToArray());
-            var ruleGenerator = new QuickRuleGenerator<MetropolisRule>(particles);
+            var ruleGenerator = new TransitionRuleGenerator<MetropolisRule>(particles);
 
             var index = -1;
             return ruleGenerator
@@ -235,7 +235,7 @@ namespace Mocassin.Model.Transitions
 
             var particles = particlePort.Query(port => port.GetParticles().ToArray());
             var transitions = transitionPort.Query(port => port.GetKineticTransitions().ToArray());
-            var ruleGenerator = new QuickRuleGenerator<KineticRule>(particles);
+            var ruleGenerator = new TransitionRuleGenerator<KineticRule>(particles);
 
             var index = -1;
             return ruleGenerator

@@ -174,15 +174,26 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
         {
-            var manager = ModelProject.GetManager<IEnergyManager>();
-            var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
-            var asymmetricPairs = manager.QueryPort.Query(port => port.GetUnstablePairInteractions());
+            var energyManager = ModelProject.GetManager<IEnergyManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
+            var symmetricPairs = energyManager.QueryPort.Query(port => port.GetStablePairInteractions());
+            var asymmetricPairs = energyManager.QueryPort.Query(port => port.GetUnstablePairInteractions());
             var symmetricResult = AssignPairInteractionsToPosition(symmetricPairs);
             var asymmetricResult = AssignPairInteractionsToPosition(asymmetricPairs);
 
-            return symmetricResult
+            var result = symmetricResult
                 .Concat(asymmetricResult)
                 .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
+
+            foreach (var unitCellPosition in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            {
+                if (!result.ContainsKey(unitCellPosition))
+                {
+                    result.Add(unitCellPosition, new List<IPairInteraction>());
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
