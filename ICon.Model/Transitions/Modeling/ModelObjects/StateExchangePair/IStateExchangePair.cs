@@ -15,6 +15,11 @@ namespace Mocassin.Model.Transitions
         bool IsVacancyPair { get; }
 
         /// <summary>
+        ///     Flag if the exchange pair is only valid for unstable positions
+        /// </summary>
+        bool IsUnstablePositionPair { get; }
+
+        /// <summary>
         ///     The index of the particle representing the donor state
         /// </summary>
         IParticle DonorParticle { get; }

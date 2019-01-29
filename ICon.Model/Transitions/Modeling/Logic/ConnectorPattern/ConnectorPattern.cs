@@ -8,21 +8,50 @@ using Mocassin.Framework.Extensions;
 namespace Mocassin.Model.Transitions
 {
     /// <summary>
-    ///     Enum for the connectors ()
+    ///     Enum for the connectors types
     /// </summary>
     public enum ConnectorType : byte
     {
+        /// <summary>
+        ///     The connection step is dynamic and describes an exchange step
+        /// </summary>
         Dynamic,
+
+        /// <summary>
+        ///     The connection is static and describes a simple offset to the next start
+        /// </summary>
         Static
     }
 
+    /// <summary>
+    /// Enum for connector pattern types that are supported and recognized by the system
+    /// </summary>
     public enum ConnectorPatternType
     {
+        /// <summary>
+        ///     Pattern is undefined or not supported
+        /// </summary>
         Undefined,
+
+        /// <summary>
+        ///     Patterns follows basic kinetic transition definition or a basic chained kinetic type
+        /// </summary>
         BasicKinetic,
+
+        /// <summary>
+        ///     Patterns follows basic metropolis transition definition
+        /// </summary>
         Metropolis,
-        SingleVehicle,
-        SplitVehicle
+
+        /// <summary>
+        ///     Pattern follows normal vehicle transition with one transition position
+        /// </summary>
+        NormalVehicle,
+
+        /// <summary>
+        ///     Patterns follows split vehicle transition with separated transition positions
+        /// </summary>
+        SplitTransitionVehicle
     }
 
     /// <summary>
@@ -119,7 +148,7 @@ namespace Mocassin.Model.Transitions
             return new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({head}){{1}}({periodicBody}){{1,}}$"),
-                PatternType = ConnectorPatternType.SplitVehicle
+                PatternType = ConnectorPatternType.SplitTransitionVehicle
             };
         }
 
@@ -134,7 +163,7 @@ namespace Mocassin.Model.Transitions
             return new ConnectorPattern
             {
                 PatternRegex = new Regex($"^({headOrTail}{CodeSeparator}){{1,}}({body}){{1}}({CodeSeparator}{headOrTail}){{1,}}$"),
-                PatternType = ConnectorPatternType.SingleVehicle
+                PatternType = ConnectorPatternType.NormalVehicle
             };
         }
 

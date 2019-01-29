@@ -120,6 +120,8 @@ namespace Mocassin.Model.Energies.Validators
                                               .Query(port => port.GetLinearizedExtendedPositionList())
                                               .Count(position => position.Status == PositionStatus.Stable) - 1;
 
+            interactionPerUnitCell = Math.Max(interactionPerUnitCell, 1);
+
             var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetVectorEncoder())
                 .GetCellVolume();

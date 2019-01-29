@@ -17,8 +17,12 @@ namespace Mocassin.Model.Transitions
         public List<IStateExchangePair> StateExchangePairs { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
+        [IgnoreDataMember]
         public bool IsVacancyGroup => StateExchangePairs?.Any(x => x.IsVacancyPair) ?? false;
+
+        /// <inheritdoc />
+        [IgnoreDataMember]
+        public bool IsUnstablePositionGroup => StateExchangePairs?.Any(x => x.IsUnstablePositionPair) ?? false;
 
         /// <inheritdoc />
         [IgnoreDataMember]
@@ -33,7 +37,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public override string GetObjectName()
         {
-            return "Property Group";
+            return "State Exchange Group";
         }
 
         /// <inheritdoc />

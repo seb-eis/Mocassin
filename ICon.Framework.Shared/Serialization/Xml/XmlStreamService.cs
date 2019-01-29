@@ -31,7 +31,7 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public virtual XmlWriter NewDefaultWriter(Stream stream)
         {
-            if (stream == null) 
+            if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
             return XmlWriter.Create(stream, GetDefaultWriterSettings());
@@ -61,7 +61,7 @@ namespace Mocassin.Framework.Xml
                 Encoding = new UTF8Encoding(),
                 Indent = true,
                 NewLineChars = Environment.NewLine,
-                OmitXmlDeclaration = false
+                OmitXmlDeclaration = true
             };
         }
 
@@ -86,22 +86,10 @@ namespace Mocassin.Framework.Xml
             if (serializer == null || handlers == null)
                 return;
 
-            handlers.AttributeHandlers?.ForEach(handler =>
-            {
-                serializer.UnknownAttribute += handler;
-            });
-            handlers.ElementHandlers?.ForEach(handler =>
-            {
-                serializer.UnknownElement += handler;
-            });
-            handlers.NodeHandlers?.ForEach(handler =>
-            {
-                serializer.UnknownNode += handler;
-            });
-            handlers.ObjectHandlers?.ForEach(handler =>
-            {
-                serializer.UnreferencedObject += handler;
-            });
+            handlers.AttributeHandlers?.ForEach(handler => { serializer.UnknownAttribute += handler; });
+            handlers.ElementHandlers?.ForEach(handler => { serializer.UnknownElement += handler; });
+            handlers.NodeHandlers?.ForEach(handler => { serializer.UnknownNode += handler; });
+            handlers.ObjectHandlers?.ForEach(handler => { serializer.UnreferencedObject += handler; });
         }
 
         /// <summary>
@@ -109,7 +97,7 @@ namespace Mocassin.Framework.Xml
         /// </summary>
         /// <typeparam name="TSerializable"></typeparam>
         /// <returns></returns>
-        public static XmlStreamService<TSerializable> CreateFor<TSerializable>(TSerializable obj)
+        public static XmlStreamService<TSerializable> Create<TSerializable>(TSerializable obj)
         {
             return new XmlStreamService<TSerializable>();
         }
@@ -123,9 +111,36 @@ namespace Mocassin.Framework.Xml
         /// <param name="obj"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
-        public static bool TryDeserialize<TSerializable>(string filePath, XmlEventHandlers handlers, out TSerializable obj, out Exception exception)
+        public static bool TryDeserialize<TSerializable>(string filePath, XmlEventHandlers handlers, out TSerializable obj,
+            out Exception exception)
         {
             return new XmlStreamService<TSerializable>().TryDeserialize(filePath, handlers, out obj, out exception);
+        }
+
+        /// <summary>
+        ///     Tries to serialize the passed object to the passed file path
+        /// </summary>
+        /// <typeparam name="TSerializable"></typeparam>
+        /// <param name="filePath"></param>
+        /// <param name="obj"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static bool TrySerialize<TSerializable>(string filePath, TSerializable obj, out Exception exception)
+        {
+            return new XmlStreamService<TSerializable>().TrySerialize(filePath, obj, out exception);
+        }
+
+        /// <summary>
+        ///     Tries to serialize the passed object to the passed stream
+        /// </summary>
+        /// <typeparam name="TSerializable"></typeparam>
+        /// <param name="stream"></param>
+        /// <param name="obj"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static bool TrySerialize<TSerializable>(Stream stream, TSerializable obj, out Exception exception)
+        {
+            return new XmlStreamService<TSerializable>().TrySerialize(stream, obj, out exception);
         }
     }
 

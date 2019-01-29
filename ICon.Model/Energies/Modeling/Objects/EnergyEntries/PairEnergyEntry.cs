@@ -1,4 +1,5 @@
 ﻿using System;
+using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
@@ -10,6 +11,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The particle pair that identifies the energy entry
         /// </summary>
+        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
         public ParticlePair ParticlePair { get; }
 
         /// <summary>

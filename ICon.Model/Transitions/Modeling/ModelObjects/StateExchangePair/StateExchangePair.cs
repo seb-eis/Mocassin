@@ -19,6 +19,11 @@ namespace Mocassin.Model.Transitions
         public IParticle AcceptorParticle { get; set; }
 
         /// <inheritdoc />
+        [IgnoreDataMember]
+        public bool IsUnstablePositionPair => AcceptorParticle.Index == Particle.VoidIndex;
+
+        /// <inheritdoc />
+        [IgnoreDataMember]
         public bool IsVacancyPair => (DonorParticle?.IsVacancy ?? false) ^ (AcceptorParticle?.IsVacancy ?? false);
 
         /// <inheritdoc />

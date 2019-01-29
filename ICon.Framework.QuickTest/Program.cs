@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Random;
 using Mocassin.Framework.Xml;
@@ -15,6 +16,7 @@ using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Model.Translator.Optimization;
+using Mocassin.UI.Xml.CustomizationData;
 using Mocassin.UI.Xml.ParticleData;
 using Mocassin.UI.Xml.ProjectData;
 
@@ -22,9 +24,12 @@ namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
+        private const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinCeriaInput";
+
         private static void Main(string[] args)
         { 
             var package = TestXmlUI();
+            TestParameterSets(package);
             TestDbCreation(package);
 
             Console.ReadLine();
@@ -32,12 +37,11 @@ namespace Mocassin.Framework.QuickTest
 
         private static ManagerPackage TestXmlUI()
         {
-            var filePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinCeriaInput.xml";
-            var data = new XmlMocassinProjectData() { ParticleData = new XmlParticleData()};
-            var streamService = XmlStreamService.CreateFor(data);
+            var inputFilePath = _basePath + ".xml";
+            var data = new XmlMocassinProjectData() { ParticleModelData = new XmlParticleModelData()};
 
-            var inTest = streamService.TryDeserialize(filePath, null, out data, out var exception);
-            var outTest = streamService.TrySerializeToConsole(data, out exception);
+            var inTest = XmlStreamService.TryDeserialize(inputFilePath, null, out data, out var exception);
+            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), data, out exception);
 
             var package = ManagerFactory.DebugFactory.CreateSimulationManagementPackage();
             var inputter = new ProjectDataInputSystem();
@@ -46,7 +50,25 @@ namespace Mocassin.Framework.QuickTest
 
             var report = inputter.GetReportJson();
             Console.Write(report);
+
+
             return package;
+        }
+
+        private static void TestParameterSets(ManagerPackage package)
+        {
+            var outputFilePath =  _basePath + ".EnergyParam.xml";
+
+            var energySetterProvider = package.EnergyManager.QueryPort.Query(port => port.GetEnergySetterProvider());
+            var energyParameterSet = XmlEnergyParameterSet.Create(energySetterProvider);
+
+            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), energyParameterSet, out var exception);
+            var writeTest = XmlStreamService.TrySerialize(outputFilePath, energyParameterSet, out exception);
+
+            var test = XmlKineticRule.Create(
+                package.TransitionManager.QueryPort.Query(port => port.GetKineticTransitions().First().GetTransitionRules().First()));
+
+            Console.Write("");
         }
 
         private static void TestDbCreation(ManagerPackage package)

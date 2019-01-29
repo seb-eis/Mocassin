@@ -20,6 +20,11 @@ namespace Mocassin.Model.Transitions
         bool IsVacancyGroup { get; }
 
         /// <summary>
+        /// Flag if the exchange group is only valid for unstable positions
+        /// </summary>
+        bool IsUnstablePositionGroup { get; }
+
+        /// <summary>
         ///     Get the state exchange pairs forming the exchange group
         /// </summary>
         IEnumerable<IStateExchangePair> GetStateExchangePairs();

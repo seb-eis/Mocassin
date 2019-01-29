@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Xml;
@@ -58,7 +59,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="abstractTransitions"></param>
         /// <param name="statePairGroups"></param>
         /// <returns></returns>
-        protected IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions,
+        public IEnumerable<IEnumerable<TRule>> MakeUniqueRules(IEnumerable<IAbstractTransition> abstractTransitions,
             IList<StatePairGroup> statePairGroups)
         {
             return abstractTransitions.Select(transition => MakeUniqueRules(transition, statePairGroups));
@@ -70,7 +71,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="abstractTransition"></param>
         /// <param name="statePairGroups"></param>
         /// <returns></returns>
-        protected IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
+        public IEnumerable<TRule> MakeUniqueRules(IAbstractTransition abstractTransition, IList<StatePairGroup> statePairGroups)
         {
             var stateDescription = abstractTransition.GetStateExchangeGroups()
                 .Select(value => statePairGroups[value.Index].AutoChangeStatus());
@@ -90,7 +91,7 @@ namespace Mocassin.Model.Transitions
         /// <param name="pairGroups"></param>
         /// <param name="connectorTypes"></param>
         /// <returns></returns>
-        protected IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes)
+        public IEnumerable<TRule> MakeUniqueRules(IEnumerable<StatePairGroup> pairGroups, IEnumerable<ConnectorType> connectorTypes)
         {
             return GetValidTransitionRules(pairGroups.ToArray(), connectorTypes.ToArray());
         }
@@ -320,7 +321,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Tries to change the state
+        ///     Tries to change the state for a dynamically linked step
         /// </summary>
         /// <param name="states"></param>
         /// <param name="statePairs"></param>
@@ -368,11 +369,11 @@ namespace Mocassin.Model.Transitions
             foreach (var rule in DetermineAndSetRuleMovementTypes(unfilteredRules))
             {
                 // If the rule determination detects not supported, try to handle the rule as a chained migration
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.NotSupported))
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsUnsupported))
                     continue;
 
                 // Handle the push like case (intersticialcy) where the inverse rule was not created
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.IntersticialcyLike))
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsAtomPushing))
                 {
                     HandleIntersticialcyLikeRule(rule);
                     results.Add(rule);
@@ -381,11 +382,11 @@ namespace Mocassin.Model.Transitions
 
                 // Migration that contain physical migrations without a vacancy are possible but basically meaningless
                 if (rule.MovementFlags.HasFlag(RuleMovementFlags.PhysicalMigration) &&
-                    !rule.MovementFlags.HasFlag(RuleMovementFlags.Vacancy))
+                    !rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsVacancyMovement))
                     continue;
 
                 // Handle association/dissociation case where one has to be selected
-                if (!(!rule.AbstractTransition.IsAssociation ^ rule.MovementFlags.HasFlag(RuleMovementFlags.AssociationDissociation)))
+                if (!(!rule.AbstractTransition.IsAssociation ^ rule.MovementFlags.HasFlag(RuleMovementFlags.AssociationBehavior)))
                     continue;
 
                 results.Add(rule);
@@ -402,7 +403,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         protected void HandleIntersticialcyLikeRule(TRule rule)
         {
-            if (!rule.MovementFlags.HasFlag(RuleMovementFlags.IntersticialcyLike))
+            if (!rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsAtomPushing))
                 throw new InvalidOperationException("Rule does not have the valid flags for this operation");
 
             var inverseRule = new TRule
@@ -427,7 +428,7 @@ namespace Mocassin.Model.Transitions
         {
             foreach (var rule in rules)
             {
-                var moveType = rule.AbstractTransition.ConnectorCount == 1 ? RuleMovementFlags.Exchange : RuleMovementFlags.Migration;
+                var moveType = rule.AbstractTransition.ConnectorCount == 1 ? RuleMovementFlags.HasExchangeBehavior : RuleMovementFlags.HasMigrationBehavior;
                 moveType |= GetRequiredVehicleFlags(rule);
 
                 var movement = rule.GetMovementDescription().ToList();
@@ -437,8 +438,8 @@ namespace Mocassin.Model.Transitions
 
                 if (IsIntersticialyLikeMovement(movement))
                 {
-                    moveType -= moveType & RuleMovementFlags.NotSupported;
-                    moveType |= RuleMovementFlags.IntersticialcyLike;
+                    moveType -= moveType & RuleMovementFlags.ContainsUnsupported;
+                    moveType |= RuleMovementFlags.ContainsAtomPushing;
                 }
 
                 rule.MovementFlags = moveType;
@@ -477,8 +478,8 @@ namespace Mocassin.Model.Transitions
             if (rule.PathLength <= 3)
                 return result;
 
-            result |= RuleMovementFlags.Vehicle;
-            result |= MovementIsAssociationDissociation(rule) ? RuleMovementFlags.AssociationDissociation : 0;
+            result |= RuleMovementFlags.ContainsVehicleMovement;
+            result |= MovementIsAssociationDissociation(rule) ? RuleMovementFlags.AssociationBehavior : 0;
             return result;
         }
 
@@ -532,17 +533,17 @@ namespace Mocassin.Model.Transitions
             var isSameTypeExchange = lhs.start.Symbol == rhs.start.Symbol;
 
             if (isVacancyExchange)
-                return RuleMovementFlags.Physical | RuleMovementFlags.Vacancy;
+                return RuleMovementFlags.ContainsPhysicalMovement | RuleMovementFlags.ContainsVacancyMovement;
 
             if (isPropertyExchange && isPhysicalExchange && isSameTypeExchange)
-                return RuleMovementFlags.Property;
+                return RuleMovementFlags.ContainsPropertyMovement;
 
             if (isPhysicalExchange)
-                return RuleMovementFlags.Physical;
+                return RuleMovementFlags.ContainsPhysicalMovement;
 
             return isPropertyExchange
-                ? RuleMovementFlags.Property
-                : RuleMovementFlags.NotSupported;
+                ? RuleMovementFlags.ContainsPropertyMovement
+                : RuleMovementFlags.ContainsUnsupported;
         }
 
         /// <summary>

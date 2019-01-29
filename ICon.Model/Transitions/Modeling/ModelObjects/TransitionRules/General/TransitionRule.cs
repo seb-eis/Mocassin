@@ -14,8 +14,7 @@ namespace Mocassin.Model.Transitions
     [Flags]
     public enum RuleFlags
     {
-        IsCustomTransitionState = 0b1,
-        IsPhysicallyInvalid = 0b10
+        IsPhysicallyInvalid = 1
     }
 
     /// <summary>
@@ -24,21 +23,21 @@ namespace Mocassin.Model.Transitions
     [Flags]
     public enum RuleMovementFlags
     {
-        NotSupported = 1 << 1,
-        Physical = 1 << 2,
-        Property = 1 << 3,
-        Exchange = 1 << 4,
-        Migration = 1 << 5,
-        Vacancy = 1 << 6,
-        Vehicle = 1 << 7,
-        AssociationDissociation = 1 << 8,
-        IntersticialcyLike = 1 << 9,
-        VacancyMigration = Physical + Migration + Vacancy,
-        PhysicalMigration = Physical + Migration,
-        PhysicalExchange = Physical + Exchange,
-        PropertyMigration = Property + Migration,
-        PropertyExchange = Property + Exchange,
-        CombinatoryMigration = Physical + Property + Migration + Vacancy
+        ContainsUnsupported = 1,
+        ContainsPhysicalMovement = 1 << 1,
+        ContainsPropertyMovement = 1 << 2,
+        HasExchangeBehavior = 1 << 3,
+        HasMigrationBehavior = 1 << 4,
+        ContainsVacancyMovement = 1 << 5,
+        ContainsVehicleMovement = 1 << 6,
+        AssociationBehavior = 1 << 7,
+        ContainsAtomPushing = 1 << 8,
+        VacancyMigration = ContainsPhysicalMovement | HasMigrationBehavior | ContainsVacancyMovement,
+        PhysicalMigration = ContainsPhysicalMovement | HasMigrationBehavior,
+        PhysicalExchange = ContainsPhysicalMovement | HasExchangeBehavior,
+        PropertyMigration = ContainsPropertyMovement | HasMigrationBehavior,
+        PropertyExchange = ContainsPropertyMovement | HasExchangeBehavior,
+        CombinatoryMigration = ContainsPhysicalMovement | ContainsPropertyMovement | HasMigrationBehavior | ContainsVacancyMovement
     }
 
     /// <inheritdoc cref="Mocassin.Model.Transitions.ITransitionRule"/>

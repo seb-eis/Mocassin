@@ -32,7 +32,6 @@ namespace Mocassin.Model.Transitions.Validators
 
             AddAbstractTransitionValidation(obj, report);
             AddTransitionGeometryValidation(obj, report);
-            AddChargeConsistencyValidation(obj, report);
             return report;
         }
 
@@ -88,6 +87,8 @@ namespace Mocassin.Model.Transitions.Validators
             var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
             var unitCellPositions = transition.GetGeometrySequence().Select(x => unitCellProvider.GetEntryValueAt(x)).ToList();
 
+            AddExchangeGroupGeometryValidation(unitCellPositions, transition.AbstractTransition.GetStateExchangeGroups().ToList(), report);
+
             if (!unitCellPositions[0].IsValidAndStable() || !unitCellPositions[unitCellPositions.Count - 1].IsValidAndStable())
             {
                 const string detail0 = "Tailing positions of the transition are invalid or unstable!";
@@ -130,6 +131,36 @@ namespace Mocassin.Model.Transitions.Validators
         }
 
         /// <summary>
+        /// Validates that the set of passed exchange groups matches the set of binding unit cell positions and adds the results to the passed validation report
+        /// </summary>
+        /// <param name="unitCellPositions"></param>
+        /// <param name="stateExchangeGroups"></param>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        protected void AddExchangeGroupGeometryValidation(IList<IUnitCellPosition> unitCellPositions,
+            IList<IStateExchangeGroup> stateExchangeGroups, ValidationReport report)
+        {
+            if (unitCellPositions.Count != stateExchangeGroups.Count)
+                return;
+
+            var details = new List<string>();
+            for (var i = 0; i < unitCellPositions.Count; i++)
+            {
+                if ((unitCellPositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup) ||
+                    (unitCellPositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup))
+                    continue;
+
+                var detail = $"Exchange group and position at geometry step ({i}) do not match in stability";
+                details.Add(detail);
+            }
+
+            if (details.Count == 0)
+                return;
+
+            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, details.ToArray()));
+        }
+
+        /// <summary>
         ///     Validates that the transition abstract is a kinetic and not a metropolis type and adds the results to the report
         /// </summary>
         /// <param name="transition"></param>
@@ -147,25 +178,6 @@ namespace Mocassin.Model.Transitions.Validators
                 case ConnectorPatternType.Undefined:
                     throw new InvalidOperationException("Unsupported transition pattern type previously passed validation");
             }
-        }
-
-        /// <summary>
-        ///     Validates that the charge exchange between each consecutive dynamically linked is physically valid
-        /// </summary>
-        /// <param name="transition"></param>
-        /// <param name="report"></param>
-        protected void AddChargeConsistencyValidation(IKineticTransition transition, ValidationReport report)
-        {
-            var analyzer = new TransitionAnalyzer();
-            var swapChain = analyzer.GetChargeTransportChain(transition.AbstractTransition, ModelProject.CommonNumeric.RangeComparer);
-
-            if (!swapChain.Any(double.IsNaN))
-                return;
-
-            const string detail0 = "The transition charge transport chain is ill defined. ";
-            const string detail1 = "Problem 1 : Property based conductivity calculation will yield nonsense";
-            const string detail2 = "Problem 2 : Separation of complex property and ion movement will yield nonsense";
-            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail0, detail1, detail2));
         }
     }
 }

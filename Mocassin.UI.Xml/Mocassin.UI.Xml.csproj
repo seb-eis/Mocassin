@@ -30,12 +30,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InputData\LatticeData\Main\" />
-    <Folder Include="InputData\LatticeData\Objects\" />
-    <Folder Include="InputData\LatticeData\Parameters\" />
-    <Folder Include="InputData\ParticleData\Parameters\" />
-    <Folder Include="InputData\SimulationData\Parameters\" />
-    <Folder Include="InputData\TransitionData\Parameters\" />
+    <Folder Include="CustomizationData\Base\Objects\" />
+    <Folder Include="CustomizationData\Base\Roots\" />
+    <Folder Include="JobCreationData\" />
+    <Folder Include="ModelData\LatticeData\Main\" />
+    <Folder Include="ModelData\LatticeData\Objects\" />
+    <Folder Include="ModelData\LatticeData\Parameters\" />
+    <Folder Include="ModelData\ParticleData\Parameters\" />
+    <Folder Include="ModelData\SimulationData\Parameters\" />
+    <Folder Include="ModelData\TransitionData\Parameters\" />
   </ItemGroup>
 
 </Project>
