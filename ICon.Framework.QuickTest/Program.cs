@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Mocassin.Framework.Extensions;
+using Mocassin.Framework.Operations;
 using Mocassin.Framework.Random;
 using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
-using Mocassin.Model.Basic.Debug;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
@@ -19,12 +19,13 @@ using Mocassin.Model.Translator.Optimization;
 using Mocassin.UI.Xml.CustomizationData;
 using Mocassin.UI.Xml.ParticleData;
 using Mocassin.UI.Xml.ProjectData;
+using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
-        private const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinCeriaInput";
+        private const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinBaZrO3";
 
         private static void Main(string[] args)
         { 
@@ -37,37 +38,33 @@ namespace Mocassin.Framework.QuickTest
 
         private static ManagerPackage TestXmlUI()
         {
-            var inputFilePath = _basePath + ".xml";
-            var data = new XmlMocassinProjectData() { ParticleModelData = new XmlParticleModelData()};
+            var inputFilePath = _basePath + ".Input.xml";
 
-            var inTest = XmlStreamService.TryDeserialize(inputFilePath, null, out data, out var exception);
+            var inTest = XmlStreamService.TryDeserialize(inputFilePath, null, out XmlProjectModelData data, out var exception);
             var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), data, out exception);
 
             var package = ManagerFactory.DebugFactory.CreateSimulationManagementPackage();
-            var inputter = new ProjectDataInputSystem();
-            inputter.AddMany(data.GetInputSequence());
-            inputter.AutoInputData(package.ModelProject);
+            var reports = package.ModelProject.InputPipeline.PushToProject(data.GetInputSequence());
 
-            var report = inputter.GetReportJson();
-            Console.Write(report);
-
+            foreach (var report in reports)
+            {
+                Console.WriteLine(report.ToString());
+            }
 
             return package;
         }
 
         private static void TestParameterSets(ManagerPackage package)
         {
-            var outputFilePath =  _basePath + ".EnergyParam.xml";
+            Exception exception;
+            var outputFilePath =  _basePath + ".Custom.xml";
+            var customizationData = XmlProjectCustomization.Create(package.ModelProject);
 
-            var energySetterProvider = package.EnergyManager.QueryPort.Query(port => port.GetEnergySetterProvider());
-            var energyParameterSet = XmlEnergyParameterSet.Create(energySetterProvider);
+            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), customizationData, out exception);
+            var writeTest = XmlStreamService.TrySerialize(outputFilePath, customizationData, out exception);
 
-            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), energyParameterSet, out var exception);
-            var writeTest = XmlStreamService.TrySerialize(outputFilePath, energyParameterSet, out exception);
-
-            var test = XmlKineticRule.Create(
-                package.TransitionManager.QueryPort.Query(port => port.GetKineticTransitions().First().GetTransitionRules().First()));
-
+            var inTest = XmlStreamService.TryDeserialize(outputFilePath, null, out XmlProjectCustomization readData, out exception);
+            readData.PushToModel(package.ModelProject);
             Console.Write("");
         }
 
@@ -121,15 +118,11 @@ namespace Mocassin.Framework.QuickTest
                 {
                     SizeA = 10, SizeB = 10, SizeC = 10
                 },
-                JobInfoFlags = default,
                 JobId = 0,
-                KmcJobFlags = default,
                 RngIncreaseSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.State), 0),
                 RngStateSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.Increment), 0),
                 TargetMcsp = 200,
                 TimeLimit = (long) TimeSpan.FromHours(24).TotalSeconds,
-                StateFlags = default,
-                StateSize = 0,
                 Temperature = 1000
             };
 

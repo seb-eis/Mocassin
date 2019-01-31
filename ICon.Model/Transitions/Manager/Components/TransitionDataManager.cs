@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Transitions
 {
@@ -76,6 +78,23 @@ namespace Mocassin.Model.Transitions
         public IStateExchangePair GetStateExchangePair(int index)
         {
             return Data.StateExchangePairs[index];
+        }
+
+        /// <inheritdoc />
+        public IRuleSetterProvider GetRuleSetterProvider(ProjectSettings projectSettings)
+        {
+            if (projectSettings == null)
+                throw new ArgumentNullException(nameof(projectSettings));
+
+            var transitionSetting = projectSettings.GetModuleSettings<MocassinTransitionSettings>();
+
+            var lockSource = new AccessLockSource(projectSettings.ConcurrencySettings.MaxAttempts,
+                projectSettings.ConcurrencySettings.AttemptInterval);
+
+            return new RuleSetterProvider(new DataAccessorSource<TransitionModelData>(Data, lockSource))
+            {
+                AttemptFrequencyConstraint = transitionSetting.AttemptFrequency.ToConstraint()
+            };
         }
     }
 }

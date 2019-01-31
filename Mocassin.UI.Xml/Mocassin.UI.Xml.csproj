@@ -31,8 +31,6 @@
 
   <ItemGroup>
     <Folder Include="CustomizationData\Base\Objects\" />
-    <Folder Include="CustomizationData\Base\Roots\" />
-    <Folder Include="JobCreationData\" />
     <Folder Include="ModelData\LatticeData\Main\" />
     <Folder Include="ModelData\LatticeData\Objects\" />
     <Folder Include="ModelData\LatticeData\Parameters\" />

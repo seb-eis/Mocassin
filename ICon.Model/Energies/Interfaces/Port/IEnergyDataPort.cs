@@ -1,5 +1,6 @@
 ﻿using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Energies
@@ -75,9 +76,10 @@ namespace Mocassin.Model.Energies
         IUnstableEnvironment GetUnstableEnvironment(IUnitCellPosition unitCellPosition);
 
         /// <summary>
-        ///     Get a raw energy setter provider that enables creation of energy value setters for interaction objects
+        ///     Get an <see cref="IEnergySetterProvider" /> for all interactions that conforms to the passed
+        ///     <see cref="ProjectSettings" />
         /// </summary>
         /// <returns></returns>
-        IEnergySetterProvider GetEnergySetterProvider();
+        IEnergySetterProvider GetEnergySetterProvider(ProjectSettings projectSettings);
     }
 }

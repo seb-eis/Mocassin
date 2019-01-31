@@ -14,7 +14,10 @@ namespace Mocassin.Model.Transitions
     [Flags]
     public enum RuleFlags
     {
-        IsPhysicallyInvalid = 1
+        /// <summary>
+        ///     Flag for physically meaningless rules
+        /// </summary>
+        PhysicallyInvalid = 1
     }
 
     /// <summary>
@@ -23,24 +26,53 @@ namespace Mocassin.Model.Transitions
     [Flags]
     public enum RuleMovementFlags
     {
-        ContainsUnsupported = 1,
-        ContainsPhysicalMovement = 1 << 1,
-        ContainsPropertyMovement = 1 << 2,
-        HasExchangeBehavior = 1 << 3,
-        HasMigrationBehavior = 1 << 4,
-        ContainsVacancyMovement = 1 << 5,
-        ContainsVehicleMovement = 1 << 6,
-        AssociationBehavior = 1 << 7,
-        ContainsAtomPushing = 1 << 8,
-        VacancyMigration = ContainsPhysicalMovement | HasMigrationBehavior | ContainsVacancyMovement,
-        PhysicalMigration = ContainsPhysicalMovement | HasMigrationBehavior,
-        PhysicalExchange = ContainsPhysicalMovement | HasExchangeBehavior,
-        PropertyMigration = ContainsPropertyMovement | HasMigrationBehavior,
-        PropertyExchange = ContainsPropertyMovement | HasExchangeBehavior,
-        CombinatoryMigration = ContainsPhysicalMovement | ContainsPropertyMovement | HasMigrationBehavior | ContainsVacancyMovement
+        /// <summary>
+        ///     Movement contains unsupported or unrecognized steps
+        /// </summary>
+        HasUnsupportedMovement = 1,
+
+        /// <summary>
+        ///     Movement contains physical movement
+        /// </summary>
+        HasPhysicalMovement = 1 << 1,
+
+        /// <summary>
+        ///     Movement contains property exchange movement
+        /// </summary>
+        HasPropertyMovement = 1 << 2,
+
+        /// <summary>
+        ///     Movement contains vacancy movement
+        /// </summary>
+        HasVacancyMovement = 1 << 3,
+
+        /// <summary>
+        ///     Movement contains vehicle movement
+        /// </summary>
+        HasVehicleMovement = 1 << 4,
+
+        /// <summary>
+        ///     Movement contains physical atom pushing movement
+        /// </summary>
+        HasChainedMovement = 1 << 5,
+
+        /// <summary>
+        ///     Movement is recognized as an exchange
+        /// </summary>
+        IsExchange = 1 << 6,
+
+        /// <summary>
+        ///     Movement is recognized as a migration
+        /// </summary>
+        IsMigration = 1 << 7,
+
+        /// <summary>
+        ///     Movement is recognized as an association/dissociation type
+        /// </summary>
+        IsAssociation = 1 << 8,
     }
 
-    /// <inheritdoc cref="Mocassin.Model.Transitions.ITransitionRule"/>
+    /// <inheritdoc cref="Mocassin.Model.Transitions.ITransitionRule" />
     [DataContract]
     public abstract class TransitionRule : ModelObject, ITransitionRule, IComparable<ITransitionRule>
     {
@@ -97,8 +129,8 @@ namespace Mocassin.Model.Transitions
         public int CompareTo(ITransitionRule other)
         {
             var startComp = StartState.Select(a => a.Index).LexicographicCompare(other.GetStartStateOccupation().Select(a => a.Index));
-            return startComp == 0 
-                ? FinalState.Select(a => a.Index).LexicographicCompare(other.GetFinalStateOccupation().Select(a => a.Index)) 
+            return startComp == 0
+                ? FinalState.Select(a => a.Index).LexicographicCompare(other.GetFinalStateOccupation().Select(a => a.Index))
                 : startComp;
         }
 
@@ -109,8 +141,8 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public int CompareToWithCodeInversion(ITransitionRule other)
         {
-            return CompareTo(other) != 0 
-                ? StartState.Select(a => a.Index).LexicographicCompare(other.GetFinalStateOccupation().Select(a => a.Index)) 
+            return CompareTo(other) != 0
+                ? StartState.Select(a => a.Index).LexicographicCompare(other.GetFinalStateOccupation().Select(a => a.Index))
                 : 0;
         }
 
@@ -120,7 +152,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public bool IsPhysicallyInvalid()
         {
-            return (RuleFlags & RuleFlags.IsPhysicallyInvalid) != 0;
+            return (RuleFlags & RuleFlags.PhysicallyInvalid) != 0;
         }
 
         /// <inheritdoc />
@@ -161,7 +193,6 @@ namespace Mocassin.Model.Transitions
             MovementFlags = rule.MovementFlags;
             AbstractTransition = rule.AbstractTransition;
             return this;
-
         }
 
         /// <summary>

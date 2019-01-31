@@ -130,10 +130,14 @@ namespace Mocassin.Framework.Random
         /// <inheritdoc />
         public override void NextBytes(byte[] buffer)
         {
-            for (var i = -1; i < buffer.Length;)
+            for (var i = 0; i < buffer.Length;)
             {
-                var values = BitConverter.GetBytes(NextUnsigned());
-                for (var j = 0; j < 4; j++) buffer[++i] = values[j];
+                var random = NextUnsigned();
+                for (var j = 0; j < 4; j++)
+                {
+                    if (i + 1 == buffer.Length) return;
+                    buffer[i++] = (byte) ((random >> j * 8) & 0xFF);
+                }
             }
         }
 

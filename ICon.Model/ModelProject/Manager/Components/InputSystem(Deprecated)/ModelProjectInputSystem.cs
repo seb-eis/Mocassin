@@ -4,30 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mocassin.Framework.Operations;
-using Mocassin.Model.ModelProject;
+using Mocassin.Model.Basic;
 using Newtonsoft.Json;
 
-namespace Mocassin.Model.Basic.Debug
+namespace Mocassin.Model.ModelProject
 {
     /// <summary>
-    ///     Class for generic data input for the model system
+    ///     Input system for the <see cref="IModelProject" /> that automatically targets the correct
+    ///     <see cref="Mocassin.Model.Basic.IModelInputPort" />
     /// </summary>
-    public class ProjectDataInputSystem : IEnumerable<InputRequest>
+    public class ModelProjectInputSystem : IEnumerable<ProjectInputRequest>
     {
         /// <summary>
         ///     The list of input requests
         /// </summary>
-        public List<InputRequest> InputRequests { get; }
+        public List<ProjectInputRequest> InputRequests { get; }
 
         /// <summary>
-        ///     The input operation report
+        ///     Get the input report list created during the input operations
         /// </summary>
-        [JsonIgnore]
-        public List<IOperationReport> InputReports { get; set; }
+        public List<IOperationReport> InputReports { get; protected set; }
 
-        public ProjectDataInputSystem()
+        public ModelProjectInputSystem()
         {
-            InputRequests = new List<InputRequest>();
+            InputRequests = new List<ProjectInputRequest>();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Mocassin.Model.Basic.Debug
         /// <param name="inputObject"></param>
         public void Add(object inputObject)
         {
-            InputRequests.Add(new InputRequest {InputObject = inputObject});
+            InputRequests.Add(new ProjectInputRequest {InputObject = inputObject});
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Mocassin.Model.Basic.Debug
         ///     Inputs all data using the passed project service and returns all operation reports of the input
         /// </summary>
         /// <param name="modelProject"></param>
-        public void AutoInputData(IModelProject modelProject)
+        public void PushData(IModelProject modelProject)
         {
             AutoAssignInputDelegates();
             var callList = MakeCallList(modelProject);
@@ -61,7 +61,7 @@ namespace Mocassin.Model.Basic.Debug
             var totalReport = new OperationReport("Invoke input list");
             for (var i = 0; i < InputRequests.Count; i++)
             {
-                InputReports.Add(InputRequests[i].CallAndAwait(callList[i]));
+                InputReports.Add(InputRequests[i].Invoke(callList[i]));
                 if (InputReports[i].IsGood)
                     continue;
 
@@ -152,25 +152,15 @@ namespace Mocassin.Model.Basic.Debug
         }
 
         /// <inheritdoc />
-        public IEnumerator<InputRequest> GetEnumerator()
+        public IEnumerator<ProjectInputRequest> GetEnumerator()
         {
-            return ((IEnumerable<InputRequest>) InputRequests).GetEnumerator();
+            return ((IEnumerable<ProjectInputRequest>) InputRequests).GetEnumerator();
         }
 
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<InputRequest>) InputRequests).GetEnumerator();
-        }
-
-        /// <summary>
-        ///     Serialize to json with type handling and indentation
-        /// </summary>
-        /// <returns></returns>
-        public string JsonSerialize()
-        {
-            return JsonConvert.SerializeObject(this,
-                new JsonSerializerSettings {Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto});
+            return ((IEnumerable<ProjectInputRequest>) InputRequests).GetEnumerator();
         }
 
         /// <summary>

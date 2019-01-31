@@ -37,6 +37,12 @@ namespace Mocassin.Model.ModelProject
         IModelDataTracker DataTracker { get; }
 
         /// <summary>
+        ///     The <see cref="IProjectInputPipeline" /> that handles automated input redirection to the correct
+        ///     <see cref="IModelInputPort" />
+        /// </summary>
+        IProjectInputPipeline InputPipeline { get; }
+
+        /// <summary>
         ///     Floating point service for numeric geometry operations
         /// </summary>
         INumericService GeometryNumeric { get; }

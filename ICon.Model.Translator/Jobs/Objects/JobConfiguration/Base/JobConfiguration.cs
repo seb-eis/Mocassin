@@ -6,21 +6,6 @@
     public abstract class JobConfiguration
     {
         /// <summary>
-        ///     Get or set the simulation job flags
-        /// </summary>
-        public SimulationJobInfoFlags JobInfoFlags { get; set; }
-
-        /// <summary>
-        ///     Get or set the simulation status flags
-        /// </summary>
-        public SimulationStateFlags StateFlags { get; set; }
-
-        /// <summary>
-        ///     Get or set the simulation state size
-        /// </summary>
-        public long StateSize { get; set; }
-
-        /// <summary>
         ///     Get or set the target mcsp of the job
         /// </summary>
         public long TargetMcsp { get; set; }
@@ -61,7 +46,7 @@
         public LatticeConfiguration LatticeConfiguration { get; set; }
 
         /// <summary>
-        ///     Copies all data to the passed jon configuration
+        ///     Copies all data to the passed job configuration
         /// </summary>
         /// <param name="jobConfiguration"></param>
         public void CopyTo(JobConfiguration jobConfiguration)
@@ -69,13 +54,10 @@
             jobConfiguration.LatticeConfiguration = jobConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
             LatticeConfiguration.CopyTo(jobConfiguration.LatticeConfiguration);
-            jobConfiguration.JobInfoFlags = JobInfoFlags;
             jobConfiguration.JobId = JobId;
             jobConfiguration.MinimalSuccessRate = MinimalSuccessRate;
             jobConfiguration.RngIncreaseSeed = RngIncreaseSeed;
             jobConfiguration.RngStateSeed = RngStateSeed;
-            jobConfiguration.StateSize = StateSize;
-            jobConfiguration.StateFlags = StateFlags;
             jobConfiguration.TargetMcsp = TargetMcsp;
             jobConfiguration.Temperature = Temperature;
             jobConfiguration.TimeLimit = TimeLimit;
@@ -91,13 +73,12 @@
             {
                 Structure = new CJobInfo
                 {
-                    JobFlags = (long) JobInfoFlags,
+                    JobFlags = default,
                     MinimalSuccessRate = MinimalSuccessRate,
                     ObjectId = JobId,
                     RngIncreaseSeed = RngIncreaseSeed,
                     RngStateSeed = RngStateSeed,
-                    StateSize = StateSize,
-                    StatusFlags = (long) StateFlags,
+                    StatusFlags = default,
                     TargetMcsp = TargetMcsp,
                     Temperature = Temperature,
                     TimeLimit = TimeLimit

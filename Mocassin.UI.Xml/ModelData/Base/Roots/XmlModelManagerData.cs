@@ -10,7 +10,7 @@ namespace Mocassin.UI.Xml.BaseData
     ///     <see cref="Mocassin.Model.Basic.IModelManager" /> input pipelines
     /// </summary>
     [XmlRoot]
-    public abstract class XmlProjectManagerModelData
+    public abstract class XmlModelManagerData
     {
         /// <summary>
         ///     Get the sequence of model input parameters defined in the data root

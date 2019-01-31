@@ -12,7 +12,7 @@ namespace Mocassin.UI.Xml.SimulationData
     ///     system
     /// </summary>
     [XmlRoot("SimulationModel")]
-    public class XmlSimulationModelData : XmlProjectManagerModelData
+    public class XmlSimulationModelData : XmlModelManagerData
     {
         /// <summary>
         /// Get or set the list of metropolis simulations

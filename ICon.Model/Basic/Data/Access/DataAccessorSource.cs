@@ -69,7 +69,13 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public IDataAccessor<TData> CreateInterface()
+        public IDataAccessor<TData> CreateUnsafe()
+        {
+            return new DataAccessor<TData>(DataObject);
+        }
+
+        /// <inheritdoc />
+        IDataAccessor<TData> IDataAccessorSource<TData>.Create()
         {
             return Create();
         }

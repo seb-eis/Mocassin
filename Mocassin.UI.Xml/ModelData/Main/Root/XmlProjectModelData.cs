@@ -12,10 +12,11 @@ using Mocassin.UI.Xml.TransitionData;
 namespace Mocassin.UI.Xml.ProjectData
 {
     /// <summary>
-    ///     The main root for mocassin project data input as a serialized information
+    ///     The main root for mocassin project data that targets <see cref="Mocassin.Model.Basic.IModelManager" /> through the
+    ///     <see cref="Mocassin.Model.ModelProject.IProjectInputPipeline" /> interface
     /// </summary>
     [XmlRoot("MocassinModelGraph")]
-    public class XmlMocassinProjectData
+    public class XmlProjectModelData
     {
         /// <summary>
         ///     Get or set the input particle data
@@ -43,7 +44,7 @@ namespace Mocassin.UI.Xml.ProjectData
         /// </summary>
         [XmlElement("EnergyModel")]
         [ModelInputRoot(3)]
-        public XmlEnergyModelData EnergyModelData { get; set; }
+        public XmlEnergyModelData EnergyData { get; set; }
 
         /// <summary>
         ///     Get or set the input simulation data
@@ -59,7 +60,7 @@ namespace Mocassin.UI.Xml.ProjectData
         public IEnumerable<object> GetInputSequence()
         {
             var dataRoots = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Select(x => ((XmlProjectManagerModelData) x.GetValue(this), x.GetCustomAttribute<ModelInputRootAttribute>()))
+                .Select(x => ((XmlModelManagerData) x.GetValue(this), x.GetCustomAttribute<ModelInputRootAttribute>()))
                 .Where(x => x.Item2 != null && x.Item1 != null)
                 .OrderBy(x => x.Item2.Order)
                 .Select(x => x.Item1)

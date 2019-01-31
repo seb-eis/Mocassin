@@ -11,7 +11,7 @@ namespace Mocassin.UI.Xml.StructureData
     ///     system
     /// </summary>
     [XmlRoot("StructureModel")]
-    public class XmlStructureModelData : XmlProjectManagerModelData
+    public class XmlStructureModelData : XmlModelManagerData
     {
         /// <summary>
         ///     Get or set the xml structure info

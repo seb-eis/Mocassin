@@ -7,7 +7,7 @@ namespace Mocassin.UI.Xml.BaseData
     /// <summary>
     ///     Serializable helper object for serialization of <see cref="Mocassin.Mathematics.ValueTypes.IVector3D" /> data
     /// </summary>
-    [XmlRoot("D3Vector")]
+    [XmlRoot("Vector")]
     public class XmlVector3D
     {
         /// <summary>

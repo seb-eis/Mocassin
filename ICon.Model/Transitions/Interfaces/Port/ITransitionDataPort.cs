@@ -1,5 +1,6 @@
 ﻿using Mocassin.Framework.Collections;
 using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Transitions
 {
@@ -70,5 +71,13 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <returns></returns>
         int GetMetropolisTransitionCount();
+
+        /// <summary>
+        ///     Get a <see cref="IRuleSetterProvider" /> that uses the constraints defined by the passed
+        ///     <see cref="ProjectSettings" />
+        /// </summary>
+        /// <param name="projectSettings"></param>
+        /// <returns></returns>
+        IRuleSetterProvider GetRuleSetterProvider(ProjectSettings projectSettings);
     }
 }

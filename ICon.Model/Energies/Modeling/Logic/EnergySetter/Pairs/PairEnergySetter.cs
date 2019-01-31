@@ -43,7 +43,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override void PushData()
         {
-            using (DataAccessorSource.CreateInterface())
+            using (DataAccessorSource.Create())
             {
                 foreach (var item in EnergyEntries)
                 {

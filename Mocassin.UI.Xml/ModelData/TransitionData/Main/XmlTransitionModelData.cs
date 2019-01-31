@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.TransitionData
     ///     system
     /// </summary>
     [XmlRoot("TransitionModel")]
-    public class XmlTransitionModelData : XmlProjectManagerModelData
+    public class XmlTransitionModelData : XmlModelManagerData
     {
         /// <summary>
         ///     Get or set the list of state exchange input objects

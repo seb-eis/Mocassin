@@ -32,6 +32,28 @@ namespace Mocassin.UI.Xml.CustomizationData
 
         /// <summary>
         ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed
+        ///     <see cref="IModelProject" /> and type of <see cref="IPairInteraction" />
+        /// </summary>
+        /// <param name="modelProject"></param>
+        /// <param name="pairInteraction"></param>
+        /// <returns></returns>
+        public PairEnergyEntry ToInternal(IModelProject modelProject, IPairInteraction pairInteraction)
+        {
+            switch (pairInteraction)
+            {
+                case ISymmetricPairInteraction _:
+                    return ToSymmetricInternal(modelProject);
+
+                case IAsymmetricPairInteraction _:
+                    return ToAsymmetricInternal(modelProject);
+
+                default:
+                    throw new ArgumentException("Type of pair interaction is not supported", nameof(pairInteraction));
+            }
+        }
+
+        /// <summary>
+        ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed
         ///     <see cref="IModelProject" /> and describes an interaction between a <see cref="SymmetricParticlePair" />
         /// </summary>
         /// <param name="modelProject"></param>
@@ -41,7 +63,7 @@ namespace Mocassin.UI.Xml.CustomizationData
             var particlePair = new SymmetricParticlePair
             {
                 Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticleKey),
-                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticleKey),
+                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticleKey)
             };
 
             return new PairEnergyEntry(particlePair, Energy);
@@ -58,7 +80,7 @@ namespace Mocassin.UI.Xml.CustomizationData
             var particlePair = new AsymmetricParticlePair
             {
                 Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticleKey),
-                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticleKey),
+                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticleKey)
             };
 
             return new PairEnergyEntry(particlePair, Energy);
@@ -85,19 +107,19 @@ namespace Mocassin.UI.Xml.CustomizationData
         /// <inheritdoc />
         public int CompareTo(XmlPairEnergyEntry other)
         {
-            if (ReferenceEquals(this, other)) 
+            if (ReferenceEquals(this, other))
                 return 0;
 
             if (other is null)
                 return 1;
 
             var centerParticleKeyComparison = string.Compare(CenterParticleKey, other.CenterParticleKey, StringComparison.Ordinal);
-            if (centerParticleKeyComparison != 0) 
+            if (centerParticleKeyComparison != 0)
                 return centerParticleKeyComparison;
 
             var partnerParticleKeyComparison = string.Compare(PartnerParticleKey, other.PartnerParticleKey, StringComparison.Ordinal);
-            return partnerParticleKeyComparison != 0 
-                ? partnerParticleKeyComparison 
+            return partnerParticleKeyComparison != 0
+                ? partnerParticleKeyComparison
                 : Energy.CompareTo(other.Energy);
         }
     }

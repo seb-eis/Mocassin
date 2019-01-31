@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
@@ -91,6 +90,12 @@ namespace Mocassin.Model.Transitions
         public IList<IList<double>> GetAbstractChargeTransportChains()
         {
             return GetResultFromCache(CreateAbstractChargeTransportChains);
+        }
+
+        /// <inheritdoc />
+        public IRuleSetterProvider GetRuleSetterProvider()
+        {
+            return GetResultFromCache(CreateRuleSetterProvider);
         }
 
         /// <summary>
@@ -248,7 +253,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        /// Creates the abstract charge transport chains for all abstract transitions as a 2D list interface
+        ///     Creates the abstract charge transport chains for all abstract transitions as a 2D list interface
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
@@ -259,12 +264,20 @@ namespace Mocassin.Model.Transitions
             var abstracts = ModelProject.GetManager<ITransitionManager>().QueryPort.Query(port => port.GetAbstractTransitions());
             var result = new List<IList<double>>();
 
-            foreach (var abstractTransition in abstracts)
-            {
-                result.Add(analyzer.GetChargeTransportChain(abstractTransition, comparer));
-            }
+            foreach (var abstractTransition in abstracts) result.Add(analyzer.GetChargeTransportChain(abstractTransition, comparer));
 
             return result;
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="IRuleSetterProvider" /> for the current state of the <see cref="ProjectSettings" /> data
+        ///     object
+        /// </summary>
+        /// <returns></returns>
+        [CacheMethodResult]
+        protected IRuleSetterProvider CreateRuleSetterProvider()
+        {
+            return ModelProject.GetManager<ITransitionManager>().QueryPort.Query(port => port.GetRuleSetterProvider(ModelProject.Settings));
         }
     }
 }

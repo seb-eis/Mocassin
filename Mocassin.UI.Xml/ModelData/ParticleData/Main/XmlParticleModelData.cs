@@ -11,7 +11,7 @@ namespace Mocassin.UI.Xml.ParticleData
     ///     system
     /// </summary>
     [XmlRoot("ParticleModel")]
-    public class XmlParticleModelData : XmlProjectManagerModelData
+    public class XmlParticleModelData : XmlModelManagerData
     {
         /// <summary>
         ///     The list of defines particles

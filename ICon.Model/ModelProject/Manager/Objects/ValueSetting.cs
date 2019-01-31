@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Mocassin.Framework.Constraints;
 using Mocassin.Framework.Messaging;
 using Mocassin.Model.Basic;
 
@@ -129,6 +130,15 @@ namespace Mocassin.Model.ModelProject
             return lowerParse == 0 
                 ? ParseUpper(value) 
                 : lowerParse;
+        }
+
+        /// <summary>
+        ///     Creates a <see cref="IValueConstraint{TSource,TTarget}"/> of matching type from the setting
+        /// </summary>
+        /// <returns></returns>
+        public IValueConstraint<T, T> ToConstraint()
+        {
+            return new ValueConstraint<T>(true, MinValue, MaxValue, true);
         }
 
         /// <summary>

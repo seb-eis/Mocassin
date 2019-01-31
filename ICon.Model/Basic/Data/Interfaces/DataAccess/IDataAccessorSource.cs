@@ -7,9 +7,15 @@
     public interface IDataAccessorSource<out TData> where TData : ModelData
     {
         /// <summary>
-        ///     Creates a new disposable write interface to the data object
+        ///     Creates a new disposable write interface to the data object that is thread safe
         /// </summary>
         /// <returns></returns>
-        IDataAccessor<TData> CreateInterface();
+        IDataAccessor<TData> Create();
+
+        /// <summary>
+        ///     Creates a new disposable write interface for the data object that is not thread safe
+        /// </summary>
+        /// <returns></returns>
+        IDataAccessor<TData> CreateUnsafe();
     }
 }

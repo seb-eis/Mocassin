@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
+using Mocassin.Model.ModelProject;
 using Mocassin.UI.Xml.BaseData;
 
 namespace Mocassin.UI.Xml.CustomizationData
@@ -58,6 +59,18 @@ namespace Mocassin.UI.Xml.CustomizationData
         public List<XmlPairEnergyEntry> PairEnergyEntries { get; set; }
 
         /// <summary>
+        ///     Set all data on the passed <see cref="IPairEnergySetter" /> and push the values to the affiliated
+        ///     <see cref="Mocassin.Model.ModelProject.IModelProject" />
+        /// </summary>
+        /// <param name="modelProject"></param>
+        /// <param name="energySetter"></param>
+        public void PushToModel(IModelProject modelProject, IPairEnergySetter energySetter)
+        {
+            energySetter.SetEnergyValues(PairEnergyEntries.Select(x => x.ToInternal(modelProject, energySetter.PairInteraction)));
+            energySetter.PushData();
+        }
+
+        /// <summary>
         ///     Creates a new serializable <see cref="XmlPairEnergyParameterSet" /> by pulling all data defined in the passed
         ///     <see cref="IPairEnergySetter" /> context
         /// </summary>
@@ -65,9 +78,7 @@ namespace Mocassin.UI.Xml.CustomizationData
         /// <returns></returns>
         public static XmlPairEnergyParameterSet Create(IPairEnergySetter energySetter)
         {
-            if (energySetter == null)
-                throw new ArgumentNullException(nameof(energySetter));
-
+            if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
 
             var obj = new XmlPairEnergyParameterSet
             {
@@ -88,23 +99,20 @@ namespace Mocassin.UI.Xml.CustomizationData
         /// <inheritdoc />
         public int CompareTo(XmlPairEnergyParameterSet other)
         {
-            if (ReferenceEquals(this, other)) 
-                return 0;
-
-            if (other is null) 
-                return 1;
+            if (ReferenceEquals(this, other)) return 0;
+            if (other is null) return 1;
 
             var distanceComparison = Distance.CompareTo(other.Distance);
-            if (distanceComparison != 0)
-                return distanceComparison;
+            if (distanceComparison != 0) return distanceComparison;
 
-            var centerUnitCellPositionKeyComparison = string.Compare(CenterUnitCellPositionKey, other.CenterUnitCellPositionKey, StringComparison.Ordinal);
-            if (centerUnitCellPositionKeyComparison != 0) 
-                return centerUnitCellPositionKeyComparison;
+            var centerUnitCellPositionKeyComparison =
+                string.Compare(CenterUnitCellPositionKey, other.CenterUnitCellPositionKey, StringComparison.Ordinal);
+            if (centerUnitCellPositionKeyComparison != 0) return centerUnitCellPositionKeyComparison;
 
-            var partnerUnitCellPositionKeyComparison = string.Compare(PartnerUnitCellPositionKey, other.PartnerUnitCellPositionKey, StringComparison.Ordinal);
-            return partnerUnitCellPositionKeyComparison != 0 
-                ? distanceComparison 
+            var partnerUnitCellPositionKeyComparison =
+                string.Compare(PartnerUnitCellPositionKey, other.PartnerUnitCellPositionKey, StringComparison.Ordinal);
+            return partnerUnitCellPositionKeyComparison != 0
+                ? distanceComparison
                 : PairInteractionIndex.CompareTo(other.PairInteractionIndex);
         }
     }

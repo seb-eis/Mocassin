@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Basic.Debug;
 using Mocassin.Model.DataManagement;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Lattices;
@@ -118,7 +117,7 @@ namespace Mocassin.Model.Basic
             {
                 var package = CreateFullManagementSystem();
                 var inputSystem = MakeCeriaInputSystem();
-                inputSystem.AutoInputData(package.ModelProject);
+                inputSystem.PushData(package.ModelProject);
                 package.InputReportJson = inputSystem.GetReportJson();
                 return package;
             }
@@ -127,7 +126,7 @@ namespace Mocassin.Model.Basic
             ///     Makes an auto data input system that carries the ceria related data fro debug testing
             /// </summary>
             /// <returns></returns>
-            public static ProjectDataInputSystem MakeCeriaInputSystem()
+            public static ModelProjectInputSystem MakeCeriaInputSystem()
             {
                 var particles = new[]
                 {
@@ -301,7 +300,7 @@ namespace Mocassin.Model.Basic
                     }
                 };
 
-                var inputter = new ProjectDataInputSystem();
+                var inputter = new ModelProjectInputSystem();
                 inputter.AddMany(particles.Skip(1));
                 inputter.AddMany(particleSets);
                 inputter.Add(new StructureInfo {Name = "Ceria"});

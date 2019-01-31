@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.EnergyData
     ///     system
     /// </summary>
     [XmlRoot("EnergyModel")]
-    public class XmlEnergyModelData : XmlProjectManagerModelData
+    public class XmlEnergyModelData : XmlModelManagerData
     {
         /// <summary>
         ///     Get or set the stable environment info of the energy model

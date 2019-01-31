@@ -1,7 +1,7 @@
 ﻿namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
-    ///     A lattice configuration for a simulation jo that carries lattice build instructions
+    ///     A lattice configuration for a simulation job that carries lattice build instructions
     /// </summary>
     public class LatticeConfiguration
     {

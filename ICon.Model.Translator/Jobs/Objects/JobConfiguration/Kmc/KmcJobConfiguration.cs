@@ -6,11 +6,6 @@
     public class KmcJobConfiguration : JobConfiguration
     {
         /// <summary>
-        ///     Get or set the KMC specific job flags
-        /// </summary>
-        public SimulationKmcJobFlags KmcJobFlags { get; set; }
-
-        /// <summary>
         ///     Get or set the modulus of the electric field in [V/m]
         /// </summary>
         public double ElectricFieldModulus { get; set; }
@@ -40,7 +35,6 @@
         public void CopyTo(KmcJobConfiguration jobConfiguration)
         {
             base.CopyTo(jobConfiguration);
-            jobConfiguration.KmcJobFlags = KmcJobFlags;
             jobConfiguration.BaseFrequency = BaseFrequency;
             jobConfiguration.ElectricFieldModulus = ElectricFieldModulus;
             jobConfiguration.FixedNormalizationFactor = FixedNormalizationFactor;
@@ -56,7 +50,7 @@
                     BaseFrequency = BaseFrequency,
                     FixedNormalizationFactor = FixedNormalizationFactor,
                     ElectricFieldModulus = ElectricFieldModulus,
-                    JobFlags = (long) KmcJobFlags
+                    JobFlags = default
                 }
             };
         }

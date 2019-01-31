@@ -8,15 +8,9 @@ namespace Mocassin.UI.Xml.CustomizationData
     ///     Serializable data object for <see cref="Mocassin.Model.Transitions.IKineticRule" /> model object creation and
     ///     manipulation
     /// </summary>
-    [XmlRoot("KineticTransitionRule")]
+    [XmlRoot("KineticRule")]
     public class XmlKineticRule
     {
-        /// <summary>
-        ///     Get or set the key of the transition the rule is valid for
-        /// </summary>
-        [XmlAttribute("Transition")]
-        public string TransitionKey { get; set; }
-
         /// <summary>
         ///     Get or set the attempt frequency value of the rule in [Hz]
         /// </summary>
@@ -66,7 +60,6 @@ namespace Mocassin.UI.Xml.CustomizationData
 
             var obj = new XmlKineticRule
             {
-                TransitionKey = rule.Transition.Key,
                 RuleIndex = rule.Index,
                 AttemptFrequency = rule.AttemptFrequency,
                 FinalState = XmlOccupationState.Create(rule.GetFinalStateOccupation()),

@@ -222,7 +222,7 @@ namespace Mocassin.Model.Transitions
         {
             if (!CanHaveValidEndState(rule, statePairs))
             {
-                rule.RuleFlags |= RuleFlags.IsPhysicallyInvalid;
+                rule.RuleFlags |= RuleFlags.PhysicallyInvalid;
                 return false;
             }
 
@@ -238,7 +238,7 @@ namespace Mocassin.Model.Transitions
                 var states = (rule.FinalState[lastIndex].Index, rule.FinalState[i + 1].Index);
                 if (!TryChangeStateStep(ref states, (statePairs[lastIndex], statePairs[i + 1]), connectorTypes[lastIndex]))
                 {
-                    rule.RuleFlags |= RuleFlags.IsPhysicallyInvalid;
+                    rule.RuleFlags |= RuleFlags.PhysicallyInvalid;
                     return false;
                 }
 
@@ -369,11 +369,11 @@ namespace Mocassin.Model.Transitions
             foreach (var rule in DetermineAndSetRuleMovementTypes(unfilteredRules))
             {
                 // If the rule determination detects not supported, try to handle the rule as a chained migration
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsUnsupported))
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.HasUnsupportedMovement))
                     continue;
 
                 // Handle the push like case (intersticialcy) where the inverse rule was not created
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsAtomPushing))
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.HasChainedMovement))
                 {
                     HandleIntersticialcyLikeRule(rule);
                     results.Add(rule);
@@ -381,12 +381,12 @@ namespace Mocassin.Model.Transitions
                 }
 
                 // Migration that contain physical migrations without a vacancy are possible but basically meaningless
-                if (rule.MovementFlags.HasFlag(RuleMovementFlags.PhysicalMigration) &&
-                    !rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsVacancyMovement))
+                if (rule.MovementFlags.HasFlag(RuleMovementFlags.IsMigration | RuleMovementFlags.HasPhysicalMovement) &&
+                    !rule.MovementFlags.HasFlag(RuleMovementFlags.HasVacancyMovement))
                     continue;
 
                 // Handle association/dissociation case where one has to be selected
-                if (!(!rule.AbstractTransition.IsAssociation ^ rule.MovementFlags.HasFlag(RuleMovementFlags.AssociationBehavior)))
+                if (!(!rule.AbstractTransition.IsAssociation ^ rule.MovementFlags.HasFlag(RuleMovementFlags.IsAssociation)))
                     continue;
 
                 results.Add(rule);
@@ -403,7 +403,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         protected void HandleIntersticialcyLikeRule(TRule rule)
         {
-            if (!rule.MovementFlags.HasFlag(RuleMovementFlags.ContainsAtomPushing))
+            if (!rule.MovementFlags.HasFlag(RuleMovementFlags.HasChainedMovement))
                 throw new InvalidOperationException("Rule does not have the valid flags for this operation");
 
             var inverseRule = new TRule
@@ -428,7 +428,7 @@ namespace Mocassin.Model.Transitions
         {
             foreach (var rule in rules)
             {
-                var moveType = rule.AbstractTransition.ConnectorCount == 1 ? RuleMovementFlags.HasExchangeBehavior : RuleMovementFlags.HasMigrationBehavior;
+                var moveType = rule.AbstractTransition.ConnectorCount == 1 ? RuleMovementFlags.IsExchange : RuleMovementFlags.IsMigration;
                 moveType |= GetRequiredVehicleFlags(rule);
 
                 var movement = rule.GetMovementDescription().ToList();
@@ -438,8 +438,8 @@ namespace Mocassin.Model.Transitions
 
                 if (IsIntersticialyLikeMovement(movement))
                 {
-                    moveType -= moveType & RuleMovementFlags.ContainsUnsupported;
-                    moveType |= RuleMovementFlags.ContainsAtomPushing;
+                    moveType -= moveType & RuleMovementFlags.HasUnsupportedMovement;
+                    moveType |= RuleMovementFlags.HasChainedMovement;
                 }
 
                 rule.MovementFlags = moveType;
@@ -478,8 +478,8 @@ namespace Mocassin.Model.Transitions
             if (rule.PathLength <= 3)
                 return result;
 
-            result |= RuleMovementFlags.ContainsVehicleMovement;
-            result |= MovementIsAssociationDissociation(rule) ? RuleMovementFlags.AssociationBehavior : 0;
+            result |= RuleMovementFlags.HasVehicleMovement;
+            result |= MovementIsAssociationDissociation(rule) ? RuleMovementFlags.IsAssociation : 0;
             return result;
         }
 
@@ -533,17 +533,17 @@ namespace Mocassin.Model.Transitions
             var isSameTypeExchange = lhs.start.Symbol == rhs.start.Symbol;
 
             if (isVacancyExchange)
-                return RuleMovementFlags.ContainsPhysicalMovement | RuleMovementFlags.ContainsVacancyMovement;
+                return RuleMovementFlags.HasPhysicalMovement | RuleMovementFlags.HasVacancyMovement;
 
             if (isPropertyExchange && isPhysicalExchange && isSameTypeExchange)
-                return RuleMovementFlags.ContainsPropertyMovement;
+                return RuleMovementFlags.HasPropertyMovement;
 
             if (isPhysicalExchange)
-                return RuleMovementFlags.ContainsPhysicalMovement;
+                return RuleMovementFlags.HasPhysicalMovement;
 
             return isPropertyExchange
-                ? RuleMovementFlags.ContainsPropertyMovement
-                : RuleMovementFlags.ContainsUnsupported;
+                ? RuleMovementFlags.HasPropertyMovement
+                : RuleMovementFlags.HasUnsupportedMovement;
         }
 
         /// <summary>
