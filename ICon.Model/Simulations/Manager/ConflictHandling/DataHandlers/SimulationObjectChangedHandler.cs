@@ -16,5 +16,29 @@ namespace Mocassin.Model.Simulations.ConflictHandling
             : base(modelProject)
         {
         }
+
+        /// <summary>
+        ///     Resolver method that handles the required internal changes if the <see cref="KineticSimulation"/> changes
+        /// </summary>
+        /// <param name="simulation"></param>
+        /// <param name="dataAccess"></param>
+        /// <returns></returns>
+        [ConflictHandlingMethod]
+        protected IConflictReport ResolveSpaceGroupChange(KineticSimulation simulation, IDataAccessor<SimulationModelData> dataAccess)
+        {
+            return new KineticSimulationChangeHandler(dataAccess, ModelProject).HandleConflicts(simulation);
+        }
+
+        /// <summary>
+        ///     Resolver method that handles the required internal changes if the <see cref="MetropolisSimulation"/> changes
+        /// </summary>
+        /// <param name="simulation"></param>
+        /// <param name="dataAccess"></param>
+        /// <returns></returns>
+        [ConflictHandlingMethod]
+        protected IConflictReport ResolveCellParametersChange(MetropolisSimulation simulation, IDataAccessor<SimulationModelData> dataAccess)
+        {
+            return new MetropolisSimulationChangeHandler(dataAccess, ModelProject).HandleConflicts(simulation);
+        }
     }
 }

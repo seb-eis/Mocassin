@@ -3,13 +3,13 @@ using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
 
-namespace Mocassin.UI.Xml.JobCreationData
+namespace Mocassin.UI.Xml.CreationData
 {
     /// <summary>
     ///     The serializable data object for creation of <see cref="JobConfiguration" /> objects
     /// </summary>
     [XmlRoot]
-    public abstract class XmlJobConfiguration
+    public abstract class XmlJobDescription
     {
         /// <summary>
         ///     The number of target MCSP as a string
@@ -77,6 +77,8 @@ namespace Mocassin.UI.Xml.JobCreationData
         public JobConfiguration ToInternal(JobConfiguration baseConfiguration)
         {
             var obj = GetPreparedInternal(baseConfiguration);
+
+            obj.LatticeConfiguration = baseConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
             obj.TargetMcsp = TargetMcsp is null 
                 ? baseConfiguration.TargetMcsp 

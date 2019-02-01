@@ -54,5 +54,13 @@
                 }
             };
         }
+
+        /// <inheritdoc />
+        public override JobConfiguration DeepCopy()
+        {
+            var result = new KmcJobConfiguration();
+            CopyTo(result);
+            return result;
+        }
     }
 }

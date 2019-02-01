@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
 
-namespace Mocassin.UI.Xml.JobCreationData
+namespace Mocassin.UI.Xml.CreationData
 {
     /// <summary>
     ///     Serializable data object to store and create <see cref="MmcJobConfiguration" /> objects for the database creation
     ///     system
     /// </summary>
     [XmlRoot("MmcJobConfig")]
-    public class XmlMmcJobConfiguration : XmlJobConfiguration
+    public class XmlMmcJobDescription : XmlJobDescription
     {
         /// <summary>
         ///     Get or set the abort tolerance value as a string
@@ -45,19 +44,19 @@ namespace Mocassin.UI.Xml.JobCreationData
 
             var obj = new MmcJobConfiguration
             {
-                AbortTolerance = BreakTolerance is null 
-                    ? mmcBaseSimulation.RelativeBreakTolerance 
+                AbortTolerance = BreakTolerance is null
+                    ? mmcBaseSimulation.RelativeBreakTolerance
                     : double.Parse(BreakTolerance),
 
                 AbortSampleLength = BreakSampleLength is null
                     ? mmcBaseSimulation.BreakSampleLength
                     : int.Parse(BreakSampleLength),
 
-                AbortSampleInterval = BreakSampleInterval is null 
+                AbortSampleInterval = BreakSampleInterval is null
                     ? mmcBaseSimulation.BreakSampleIntervalMcs
                     : int.Parse(BreakSampleInterval),
 
-                AbortSequenceLength = ResultSampleMcs is null 
+                AbortSequenceLength = ResultSampleMcs is null
                     ? mmcBaseSimulation.ResultSampleMcs
                     : int.Parse(ResultSampleMcs)
             };
@@ -73,19 +72,19 @@ namespace Mocassin.UI.Xml.JobCreationData
 
             var obj = new MmcJobConfiguration
             {
-                AbortTolerance = BreakTolerance is null 
-                    ? mmcJobConfiguration.AbortTolerance 
+                AbortTolerance = BreakTolerance is null
+                    ? mmcJobConfiguration.AbortTolerance
                     : double.Parse(BreakTolerance),
 
                 AbortSampleLength = BreakSampleLength is null
                     ? mmcJobConfiguration.AbortSampleLength
                     : int.Parse(BreakSampleLength),
 
-                AbortSampleInterval = BreakSampleInterval is null 
+                AbortSampleInterval = BreakSampleInterval is null
                     ? mmcJobConfiguration.AbortSampleInterval
                     : int.Parse(BreakSampleInterval),
 
-                AbortSequenceLength = ResultSampleMcs is null 
+                AbortSequenceLength = ResultSampleMcs is null
                     ? mmcJobConfiguration.AbortSequenceLength
                     : int.Parse(ResultSampleMcs)
             };

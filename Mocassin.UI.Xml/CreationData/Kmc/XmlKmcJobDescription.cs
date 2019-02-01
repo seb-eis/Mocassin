@@ -4,14 +4,14 @@ using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
 
-namespace Mocassin.UI.Xml.JobCreationData
+namespace Mocassin.UI.Xml.CreationData
 {
     /// <summary>
     ///     Serializable data object to store and create <see cref="KmcJobConfiguration" /> objects for the database creation
     ///     system
     /// </summary>
     [XmlRoot("KmcJobConfig")]
-    public class XmlKmcJobConfiguration : XmlJobConfiguration
+    public class XmlKmcJobDescription : XmlJobDescription
     {
         /// <summary>
         ///     Get or set the modulus of the electric field in [V/m] as a string

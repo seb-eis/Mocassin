@@ -91,5 +91,11 @@
         /// </summary>
         /// <returns></returns>
         public abstract InteropObject GetInteropJobHeader();
+
+        /// <summary>
+        ///     Creates a deep copy of the <see cref="JobConfiguration" />
+        /// </summary>
+        /// <returns></returns>
+        public abstract JobConfiguration DeepCopy();
     }
 }

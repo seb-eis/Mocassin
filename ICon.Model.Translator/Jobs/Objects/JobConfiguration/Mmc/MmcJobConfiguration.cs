@@ -53,5 +53,13 @@
                 }
             };
         }
+
+        /// <inheritdoc />
+        public override JobConfiguration DeepCopy()
+        {
+            var result = new MmcJobConfiguration();
+            CopyTo(result);
+            return result;
+        }
     }
 }

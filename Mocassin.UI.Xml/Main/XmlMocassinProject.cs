@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using Mocassin.UI.Xml.CustomizationData;
-using Mocassin.UI.Xml.JobCreationData.Kmc;
+using Mocassin.UI.Xml.CreationData;
 using Mocassin.UI.Xml.ProjectData;
 
 namespace Mocassin.UI.Xml.Main
@@ -24,5 +24,13 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("ModelCustomizations")]
         [XmlArrayItem("ModelCustomization")]
         public List<XmlProjectCustomization> ProjectCustomizations { get; set; }
+
+        /// <summary>
+        ///     Get or set the list of <see cref="XmlDbCreationInstruction" /> that defines
+        ///     <see cref="Mocassin.Model.Translator.ISimulationDbContext" /> build instructions
+        /// </summary>
+        [XmlArray("DbCreationInstructions")]
+        [XmlArrayItem("DbCreationInstruction")]
+        public List<XmlDbCreationInstruction> DbCreationInstructions { get; set; }
     }
 }

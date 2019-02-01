@@ -19,9 +19,6 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <inheritdoc />
         public SimulationStructureModel BuildModel(ISimulationModel simulationModel)
         {
-            if (!ModelContext.SimulationModelContext.KineticSimulationModels.Any(x => ReferenceEquals(x, simulationModel)))
-                throw new InvalidOperationException("Connected model context does not contain the passed simulation model");
-
             var structureModel = CreateNewModel();
             structureModel.NumOfGlobalTrackers = GetNumberOfGlobalTrackers(simulationModel);
             structureModel.NumOfTrackersPerCell = GetNumberOfTrackersPerCell(simulationModel);

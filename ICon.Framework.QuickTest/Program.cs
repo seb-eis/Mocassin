@@ -16,6 +16,7 @@ using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Model.Translator.Optimization;
+using Mocassin.UI.Xml.CreationData;
 using Mocassin.UI.Xml.CustomizationData;
 using Mocassin.UI.Xml.ParticleData;
 using Mocassin.UI.Xml.ProjectData;
@@ -25,13 +26,14 @@ namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
-        private const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinBaZrO3";
+        private const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\MocassinCeria";
 
         private static void Main(string[] args)
         { 
             var package = TestXmlUI();
             TestParameterSets(package);
-            TestDbCreation(package);
+            var jobCollections = TestJobSystem(package);
+            TestDbCreation(package, jobCollections);
 
             Console.ReadLine();
         }
@@ -65,35 +67,45 @@ namespace Mocassin.Framework.QuickTest
 
             var inTest = XmlStreamService.TryDeserialize(outputFilePath, null, out XmlProjectCustomization readData, out exception);
             readData.PushToModel(package.ModelProject);
-            Console.Write("");
+            Console.Write("Parameters done!");
         }
 
-        private static void TestDbCreation(ManagerPackage package)
+        private static IList<IJobCollection> TestJobSystem(ManagerPackage package)
         {
-            for (int i = 0; i < 1; i++)
+            Exception exception;
+            var outputFilePath =  _basePath + ".Jobs.xml";
+            
+            var inTest = XmlStreamService.TryDeserialize(outputFilePath, null, out XmlDbCreationInstruction readData, out exception);
+            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), readData, out exception);
+
+            Console.Write("Job system done!");
+            return readData.ToInternals(package.ModelProject).ToList();
+        }
+
+        private static void TestDbCreation(ManagerPackage package, IList<IJobCollection> jobCollections)
+        {
+            var filePath = _basePath + ".db";
+
+            var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
+            var modelContext = contextBuilder.BuildNewContext().Result;
+            var dbLatticeBuilder = new CeriaLatticeDbBuilder(modelContext);
+            var dbJobBuilder = new JobDbEntityBuilder(modelContext)
             {
-                var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
-                var modelContext = contextBuilder.BuildNewContext().Result;
-                var dbLatticeBuilder = new CeriaLatticeDbBuilder(modelContext);
-                var dbJobBuilder = new JobDbEntityBuilder(modelContext)
-                {
-                    LatticeDbEntityBuilder = dbLatticeBuilder
-                };
+                LatticeDbEntityBuilder = dbLatticeBuilder
+            };
 
-                dbJobBuilder.AddPostBuildOptimizer(new JumpSelectionOptimizer());
+            dbJobBuilder.AddPostBuildOptimizer(new JumpSelectionOptimizer());
 
-                var jobCollection = GetKmcTestCollection(package.ModelProject, 5);
-                var watch = Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
 
-                var result = dbJobBuilder.BuildJobPackageModel(jobCollection);
-                DisplayWatch(watch);
-                var dbContext = new SimulationDbContext("C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\InteropTestJohn.db", true);
-                dbContext.Add(result);
-                dbContext.SaveChangesAsync().Wait();
-                dbContext.Dispose();
-                
-                DisplayWatch(watch);
-            }
+            var result = jobCollections.Select(x => dbJobBuilder.BuildJobPackageModel(x)).ToList();
+            DisplayWatch(watch);
+            var dbContext = new SimulationDbContext(filePath, true);
+            dbContext.AddRange(result);
+            dbContext.SaveChangesAsync().Wait();
+            dbContext.Dispose();
+            
+            DisplayWatch(watch);
         }
 
 
@@ -103,44 +115,6 @@ namespace Mocassin.Framework.QuickTest
             Console.WriteLine("Watch Dump: {0}", watch.Elapsed.ToString());
             watch.Reset();
             watch.Start();
-        }
-
-        private static IJobCollection GetKmcTestCollection(IModelProject project, int jobCount)
-        {
-            var random = new PcgRandom32("AkMartin12345");
-            var baseJob = new KmcJobConfiguration
-            {
-                ElectricFieldModulus = 1e8,
-                BaseFrequency = 1e13,
-                FixedNormalizationFactor = 1.0,
-                MinimalSuccessRate = 1.0,
-                LatticeConfiguration = new LatticeConfiguration
-                {
-                    SizeA = 10, SizeB = 10, SizeC = 10
-                },
-                JobId = 0,
-                RngIncreaseSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.State), 0),
-                RngStateSeed = BitConverter.ToInt64(BitConverter.GetBytes(random.Increment), 0),
-                TargetMcsp = 200,
-                TimeLimit = (long) TimeSpan.FromHours(24).TotalSeconds,
-                Temperature = 1000
-            };
-
-            var collection = new KmcJobCollection
-            {
-                Simulation = project.GetManager<ISimulationManager>().QueryPort.Query(port => port.GetKineticSimulation(0)),
-                JobConfigurations = new List<KmcJobConfiguration>(jobCount)
-            };
-
-            for (var i = 0; i < jobCount; i++)
-            {
-                var job = new KmcJobConfiguration();
-                baseJob.CopyTo(job);
-                job.Temperature += i;
-                collection.JobConfigurations.Add(job);
-            }
-
-            return collection;
         }
     }
 }
