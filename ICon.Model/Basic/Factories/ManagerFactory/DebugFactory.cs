@@ -63,8 +63,13 @@ namespace Mocassin.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateLatticeManagementSystem()
             {
+<<<<<<< HEAD
+                var package = CreateEnergyManagementSystem();
+                package.LatticeManager = (ILatticeManager)package.ProjectServices.CreateAndRegister(new LatticeManagerFactory());
+=======
                 var package = CreateProjectServicesSystem();
                 package.LatticeManager = (ILatticeManager) package.ModelProject.CreateAndRegister(new LatticeManagerFactory());
+>>>>>>> origin/s.eisele@dev
                 return package;
             }
 
@@ -107,7 +112,11 @@ namespace Mocassin.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateFullManagementSystem()
             {
+<<<<<<< HEAD
+                return CreateLatticeManagementSystem();
+=======
                 return CreateSimulationManagementPackage();
+>>>>>>> origin/s.eisele@dev
             }
 
             /// <summary>
@@ -247,6 +256,98 @@ namespace Mocassin.Model.Basic
                         }
                     }
                 };
+<<<<<<< HEAD
+                var buildingBlocks = new BuildingBlock[]
+                {
+                    new BuildingBlock()
+                    {
+                        Index = 0,
+                        CellEntries = new List<IParticle>()
+                        {
+                            particles[3], particles[0], particles[0], particles[3],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[2], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[2],
+                            particles[3], particles[0], particles[0], particles[3],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[2], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[2]
+                        }
+                    },
+
+                    new BuildingBlock()
+                    {
+                        Index = 1,
+                        CellEntries = new List<IParticle>()
+                        {
+                            particles[4], particles[0], particles[0], particles[4],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[2], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[1],
+                            particles[4], particles[0], particles[0], particles[4],
+                            particles[0], particles[0], particles[0], particles[0],
+                            particles[0], particles[1], particles[0], particles[2],
+                            particles[0], particles[0], particles[0], particles[2], particles[0], particles[2]
+                        }
+                    }
+                };
+                var blockInfos = new BlockInfo[]
+                {
+                    new BlockInfo()
+                    {
+                        Index = 0, BlockGrouping = new List<IBuildingBlock>() {buildingBlocks[0]},
+                        Origin = new DataIntVector3D(0,0,0),
+                        Extent = new DataIntVector3D(10,10,10),
+                        Size = new DataIntVector3D(1,1,1)
+                    }//,
+                    //new BlockInfo()
+                    //{
+                    //    Index = 1,
+                    //    BlockGrouping = new List<IBuildingBlock>()
+                    //    {
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //        buildingBlocks[0], buildingBlocks[1],
+                    //    },
+                    //    Origin = new DataIntVector3D(0,0,0),
+                    //    Extent = new DataIntVector3D(2,2,10),
+                    //    Size = new DataIntVector3D(2,2,2)
+                    //}
+                };
+                var dopingCombinations = new DopingCombination[]
+                {
+                    new DopingCombination()
+                    {
+                         Index = 0, BuildingBlock = buildingBlocks[0], Dopant = particles[4], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
+                    },
+                    new DopingCombination()
+                    {
+                         Index = 1, BuildingBlock = buildingBlocks[0], Dopant = particles[1], DopedParticle = particles[2], UnitCellPosition = unitCellPositions[1]
+                    },
+                    new DopingCombination()
+                    {
+                         Index = 2, BuildingBlock = buildingBlocks[0], Dopant = particles[7], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
+                    }
+                };
+                var dopings = new Doping[]
+                {
+                    new Doping()
+                    {
+                        Index = 0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+                    },
+                    new Doping()
+                    {
+                        Index = 1, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+                    },
+                    new Doping()
+                    {
+                        Index = 2, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+                    },
+                    new Doping()
+                    {
+                        Index = 3, DopingInfo = dopingCombinations[2], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
+=======
                 var groupInteractions = new[]
                 {
                     new GroupInteraction
@@ -298,6 +399,7 @@ namespace Mocassin.Model.Basic
                         ElectricFieldMagnitude = 10000000.0,
                         ElectricFieldVector = new DataVector3D(1, 0, 0),
                         Transitions = kineticTransitions.Cast<IKineticTransition>().ToList()
+>>>>>>> origin/s.eisele@dev
                     }
                 };
 
@@ -322,9 +424,16 @@ namespace Mocassin.Model.Basic
                     UnitCellPosition = unitCellPositions[2],
                     IgnoredPositions = new List<IUnitCellPosition>()
                 });
+<<<<<<< HEAD
+                inputter.AddMany(buildingBlocks);
+                inputter.AddMany(blockInfos);
+                inputter.AddMany(dopingCombinations);
+                inputter.AddMany(dopings);
+=======
                 inputter.AddMany(groupInteractions);
                 inputter.AddMany(metropolisSimulations);
                 inputter.AddMany(kineticSimulations);
+>>>>>>> origin/s.eisele@dev
                 return inputter;
             }
         }
