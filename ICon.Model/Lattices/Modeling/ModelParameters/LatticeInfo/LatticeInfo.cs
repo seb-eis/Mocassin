@@ -13,20 +13,6 @@ namespace Mocassin.Model.Lattices
     [DataContract(Name = "LatticeInfo")]
     public class LatticeInfo : ModelParameter, ILatticeInfo
     {
-        /// <summary>
-        /// Extent of lattice
-        /// </summary>
-        [DataMember]
-        public DataIntegralVector3D Extent { get; set; }
-
-        /// <summary>
-        /// Creates default lattice parameters (no extent of unit cell)
-        /// </summary>
-        /// <returns></returns>
-        public static LatticeInfo CreateDefault()
-        {
-            return new LatticeInfo() { Extent = (new DataIntegralVector3D(1, 1, 1)) };
-        }
 
         /// <summary>
         /// Get the type name string
@@ -34,7 +20,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override String GetParameterName()
         {
-            return "'Super Cell Extent Parameters'";
+            return "'Super Cell Parameters'";
         }
 
         /// <summary>
@@ -46,7 +32,6 @@ namespace Mocassin.Model.Lattices
         {
             if (modelParameter is ILatticeInfo casted)
             {
-                Extent = casted.Extent;
                 return this;
             }
             return null;
@@ -61,7 +46,7 @@ namespace Mocassin.Model.Lattices
         {
             if (other is ILatticeInfo castOther)
             {
-                return Extent.Equals(castOther.Extent);
+                return true;
             }
             return false;
         }

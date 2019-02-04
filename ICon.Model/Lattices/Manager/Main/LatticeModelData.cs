@@ -65,7 +65,6 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         public override void ResetToDefault()
         {
-            LatticeInfo = LatticeInfo.CreateDefault();
             ResetAllIndexedData();
         }
 

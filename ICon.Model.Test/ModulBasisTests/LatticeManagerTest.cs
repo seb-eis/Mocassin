@@ -34,6 +34,11 @@ namespace Mocassin.Model.Test
                 Assert.IsNotNull(item.GetValue(managers.LatticeManager));
             }
 
+<<<<<<< HEAD
+            Assert.IsNotNull(managers.LatticeManager.EventPort);
+            Assert.IsNotNull(managers.LatticeManager.QueryPort);
+            Assert.IsNotNull(managers.LatticeManager.InputPort);
+=======
             //Assert.IsNotNull(managers.LatticeManager.EventPort);
             //Assert.IsNotNull(managers.LatticeManager.QueryPort);
             //Assert.IsNotNull(managers.LatticeManager.InputPort);
@@ -195,6 +200,7 @@ namespace Mocassin.Model.Test
         void AcceptList(IReadOnlyCollection<IParticle> particles)
         {
             return;
+>>>>>>> origin/s.eisele@dev
         }
 
     }

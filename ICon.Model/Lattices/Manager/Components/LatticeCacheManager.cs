@@ -26,15 +26,22 @@ namespace Mocassin.Model.Lattices
         {
         }
 
+<<<<<<< HEAD
+=======
         public SupercellAdapter<IParticle> GetLattice()
         {
             return GetResultFromCache(CreateLattice);
         }
 
+>>>>>>> origin/s.eisele@dev
         /// <summary>
-        /// Generate Supercell
+        /// Get provider for generating a lattice with the model data
         /// </summary>
         /// <returns></returns>
+<<<<<<< HEAD
+        public ILatticeCreationProvider GetLatticeCreationProvider()
+        {
+=======
         [CacheMethodResult]
         public SupercellAdapter<IParticle> CreateLattice()
         {
@@ -73,11 +80,11 @@ namespace Mocassin.Model.Lattices
             var vectorEncoder = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
 
             WorkLattice workLattice = (new WorkLatticeFactory()).Fabricate(buildingBlocks, blockInfos, sublatticeIDs, latticeSize);
+>>>>>>> origin/s.eisele@dev
 
-            var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
-            (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
+            return new LatticeCreationProvider(ProjectServices.GetManager<LatticeManager>().QueryPort, 
+                ProjectServices.GetManager<StructureManager>().QueryPort, ProjectServices.SettingsData);
 
-            return workLattice;
         }
     }
 }

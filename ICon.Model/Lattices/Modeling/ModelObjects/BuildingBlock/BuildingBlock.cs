@@ -39,9 +39,9 @@ namespace Mocassin.Model.Lattices
         /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
         /// </summary>
         /// <param name="modelObject"></param>
-        public override ModelObject PopulateFrom(IModelObject obj)
+        public override ModelObject PopulateFrom(IModelObject modelObject)
         {
-            if (obj is IBuildingBlock casted)
+            if (CastWithDepricatedCheck<IBuildingBlock>(modelObject) is var casted)
             {
                 CellEntries = casted.CellEntries;
                 return this;

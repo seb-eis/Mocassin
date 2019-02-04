@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using Mocassin.Mathematics.ValueTypes;
@@ -14,23 +15,58 @@ namespace Mocassin.Model.Lattices
     public class BlockInfo : ModelObject, IBlockInfo
     {
         /// <summary>
-        /// BuildingBlock Index
+        /// BuildingBlocks which may construct a superblock
         /// </summary>
+<<<<<<< HEAD
+        [LinkableByIndex]
+        [DataMember]
+        public List<IBuildingBlock> BlockGrouping { get; set; }
+=======
         [DataMember]
         [IndexResolved]
         public IBuildingBlock Block { get; set; }
+>>>>>>> origin/s.eisele@dev
 
         /// <summary>
-        /// Origin of BuildingBlock
+        /// Origin of BuildingBlockAssembly
         /// </summary>
         [DataMember]
-        public DataIntegralVector3D Origin { get; set; }
+        public DataIntVector3D Origin { get; set; }
 
         /// <summary>
-        /// Extent of BuildingBlock
+        /// Extent of BuildingBlockAssembly
         /// </summary>
         [DataMember]
-        public DataIntegralVector3D Extent { get; set; }
+        public DataIntVector3D Extent { get; set; }
+
+        /// <summary>
+        /// Size of the BuildingBlockAssembly
+        /// </summary>
+        [DataMember]
+        public DataIntVector3D Size { get; set; }
+
+        /// <summary>
+        /// Return origin vector as read only struct
+        /// </summary>
+        [IgnoreDataMember]
+        VectorInt3D IBlockInfo.Origin => Origin.AsReadOnly();
+
+        /// <summary>
+        /// Return extent vector as read only struct
+        /// </summary>
+        [IgnoreDataMember]
+        VectorInt3D IBlockInfo.Extent => Extent.AsReadOnly();
+
+        /// <summary>
+        /// Return size vector as read only struct
+        /// </summary>
+        [IgnoreDataMember]
+        VectorInt3D IBlockInfo.Size => Size.AsReadOnly();
+
+        IEnumerable<IBuildingBlock> IBlockInfo.GetBlockGrouping()
+        {
+            return (BlockGrouping ?? new List<IBuildingBlock>()).AsEnumerable();
+        }
 
         /// <summary>
         /// Get the type name string
@@ -50,9 +86,10 @@ namespace Mocassin.Model.Lattices
         {
             if (CastIfNotDeprecated<IBlockInfo>(obj) is var blockInfo)
             {
-                Origin = blockInfo.Origin;
-                Extent = blockInfo.Extent;
-                Block = blockInfo.Block;
+                Origin = new DataIntVector3D(blockInfo.Origin.Coordinates);
+                Extent = new DataIntVector3D(blockInfo.Extent.Coordinates);
+                Size = new DataIntVector3D(blockInfo.Size.Coordinates);
+                BlockGrouping = blockInfo.GetBlockGrouping().ToList();
                 return this;
             }
             return null;

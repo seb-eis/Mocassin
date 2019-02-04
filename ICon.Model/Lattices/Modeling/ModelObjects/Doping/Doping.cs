@@ -14,12 +14,6 @@ namespace Mocassin.Model.Lattices
     public class Doping : ModelObject, IDoping
     {
         /// <summary>
-        /// Specifies the doping concentration
-        /// </summary>
-        [DataMember]
-        public double Concentration { set; get; }
-
-        /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
         [DataMember]
@@ -34,21 +28,48 @@ namespace Mocassin.Model.Lattices
         public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>
-        /// Get the type name string
+        /// Counter doping multiplier
         /// </summary>
+<<<<<<< HEAD
+        [DataMember]
+        public double CounterDopingMultiplier { get; set; }
+
+        /// <summary>
+        /// Flag that indicates whether the custom CounterDopingMultiplier is used
+        /// </summary>
+        [DataMember]
+        public bool UseCustomMultiplier { get; set; }
+=======
         /// <returns></returns>
         public override string GetObjectName()
         {
             return "Doping";
         }
+>>>>>>> origin/s.eisele@dev
 
         /// <summary>
-        /// creates a string that contains the model object information
+        /// Flag to indicate whether a counter doping should be applied
+        /// </summary>
+        [DataMember]
+        public bool UseCounterDoping { get; set; }
+
+        /// <summary>
+        /// Doping Group for simutaneous doping
+        /// </summary>
+        [DataMember]
+        public int DopingGroup { get; set; }
+
+        /// <summary>
+        /// Get the type name string
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public override string GetModelObjectName()
         {
+<<<<<<< HEAD
+            return "'Doping'";
+=======
             return $"{GetObjectName()} ({DopingInfo.ToString()}, {CounterDopingInfo.ToString()})";
+>>>>>>> origin/s.eisele@dev
         }
 
         /// <summary>
@@ -60,9 +81,12 @@ namespace Mocassin.Model.Lattices
         {
             if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
-                Concentration = doping.Concentration;
                 DopingInfo = doping.DopingInfo;
                 CounterDopingInfo = doping.CounterDopingInfo;
+                CounterDopingMultiplier = doping.CounterDopingMultiplier;
+                UseCustomMultiplier = doping.UseCustomMultiplier;
+                UseCounterDoping = doping.UseCounterDoping;
+                DopingGroup = doping.DopingGroup;
                 return this;
             }
             return null;

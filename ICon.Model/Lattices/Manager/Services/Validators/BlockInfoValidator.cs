@@ -33,85 +33,69 @@ namespace Mocassin.Model.Lattices.Validators
         public override IValidationReport Validate(IBlockInfo obj)
         {
             ValidationReport report = new ValidationReport();
-            AddNegativeVectorValidation(obj.Origin, report);
-            AddNegativeVectorValidation(obj.Extent, report);
-            AddNegativeSizeValidation(obj.Origin, obj.Extent, report);
-            AddOverhangValidation(obj.Origin, report);
-            AddOverhangValidation(obj.Extent, report);
+            AddBasicVectorValidation(obj, report);
+            AddExtentGreaterOriginValidation(obj, report);
+            AddUnfittingSuperBlockSizeValidation(obj, report);
 
             return report;
         }
 
         /// <summary>
-        /// Validate if any component of a vector is smaller than zero
+        /// Validate if the vectors of the BlockInfo follow the basic restrictions
         /// </summary>
-        /// <param name="vector"></param>
+        /// <param name="blockInfo"></param>
         /// <param name="report"></param>
-        protected void AddNegativeVectorValidation(DataIntegralVector3D vector, ValidationReport report)
+        protected void AddBasicVectorValidation(IBlockInfo blockInfo, ValidationReport report)
         {
-            if (vector.A < 0 || vector.B < 0 || vector.C < 0)
+            if (blockInfo.Origin.GetCoordinateProduct() < 0)
             {
-                var message = new WarningMessage(this, "BuildingInfo vector validation failure") { IsCritical = true};
-                message.Details.Add($"A component of a BlockInfo vector is smaller than 0");
-                report.AddWarning(message);
+                var detail0 = $"A component of the Origin vector is smaller than 0";
+                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+            }
+
+            if (blockInfo.Extent.GetCoordinateProduct() <= 0)
+            {
+                var detail0 = $"A component of the Extent vector is smaller than 0";
+                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+            }
+
+            if (blockInfo.Size.GetCoordinateProduct() <= 0)
+            {
+                var detail0 = $"A component of the Size vector is smaller than 0";
+                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
             }
         }
 
         /// <summary>
-        /// Validate if the origin vector is larger than the extent vector in any direction
+        /// Validate if the extent vector is larger than the origin vector in all directions
         /// </summary>
-        /// <param name="origin"></param>
-        /// <param name="extent"></param>
+        /// <param name="blockInfo"></param>
         /// <param name="report"></param>
-        protected void AddNegativeSizeValidation(DataIntegralVector3D origin, DataIntegralVector3D extent, ValidationReport report)
+        protected void AddExtentGreaterOriginValidation(IBlockInfo blockInfo, ValidationReport report)
         {
-            if (extent.A < origin.A || extent.B < origin.B || extent.C < origin.C)
+            if ((blockInfo.Extent - blockInfo.Origin).GetCoordinateProduct() <= 0)
             {
-                var message = new WarningMessage(this, "BlockInfo vector validation failure");
-                message.Details.Add($"A component of the extent vector is smaller than the corresponding component of the origin vector");
-                report.AddWarning(message);
+                var detail0 = $"A component of the extent vector is not greater than the corresponding component of the origin vector";
+                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
             }
         }
 
         /// <summary>
-        /// Validate if a vector is larger than the supercell in any direction
+        /// Validate if the 
         /// </summary>
-        /// <param name="vector"></param>
+        /// <param name="blockInfo"></param>
         /// <param name="report"></param>
-        protected void AddOverhangValidation(DataIntegralVector3D vector, ValidationReport report)
+        protected void AddUnfittingSuperBlockSizeValidation(IBlockInfo blockInfo, ValidationReport report)
         {
-            var latticeInfo = DataReader.Access.GetLatticeInfo();
-
-            if (vector.A > latticeInfo.Extent.A || vector.B > latticeInfo.Extent.B || vector.B > latticeInfo.Extent.B)
+            if (blockInfo.BlockGrouping.Count != blockInfo.Size.A * blockInfo.Size.B * blockInfo.Size.C)
             {
-                var message = new WarningMessage(this, "BlockInfo vector validation failure") { IsCritical = true };
-                message.Details.Add($"A component of a BlockInfo vector is larger than the corresponding component of the super cell vector");
-                report.AddWarning(message);
+                var detail0 = $"Number of super block elements does not match the provided BuildingBlocks";
+                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
             }
         }
 
-        /// <summary>
-        /// Validate the BlockID of the BlockInfo
-        /// </summary>
-        /// <param name="blockID"></param>
-        /// <param name="report"></param>
-        protected void AddBlockIDValidation(int blockID, ValidationReport report)
-        {
-            if (blockID < 0)
-            {
-                var message = new WarningMessage(this, "BlockInfo BlockID validation failure") { IsCritical = true };
-                message.Details.Add($"The BuildingBlock ID of the BlockInfo is smaller than 0");
-                report.AddWarning(message);
-            }
 
-            var buildingBlockCount = DataReader.Access.GetBuildingBlocks().Count;
 
-            if (blockID > buildingBlockCount)
-            {
-                var message = new WarningMessage(this, "BlockInfo BlockID validation failure") { IsCritical = true };
-                message.Details.Add($"The BuildingBlock ID of the BlockInfo is greater than the number of BuildingBlocks");
-                report.AddWarning(message);
-            }
-        }
+
     }
 }

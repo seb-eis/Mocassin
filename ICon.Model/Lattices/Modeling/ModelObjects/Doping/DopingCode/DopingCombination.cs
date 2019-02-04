@@ -37,12 +37,23 @@ namespace Mocassin.Model.Lattices
         public IUnitCellPosition UnitCellPosition { set; get; }
 
         /// <summary>
+        /// Building Block in which the doping should take place
+        /// </summary>
+        [DataMember]
+        [LinkableByIndex]
+        public IBuildingBlock BuildingBlock { get; set; }
+
+        /// <summary>
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
         public override string GetObjectName()
         {
+<<<<<<< HEAD
+            return "'DopingCombination'";
+=======
             return "ElementSublatticeCode";
+>>>>>>> origin/s.eisele@dev
         }
 
          /// <summary>
@@ -57,6 +68,7 @@ namespace Mocassin.Model.Lattices
                 Dopant = casted.Dopant;
                 DopedParticle = casted.DopedParticle;
                 UnitCellPosition = casted.UnitCellPosition;
+                BuildingBlock = casted.BuildingBlock;
                 return this;
             }
             return null;
