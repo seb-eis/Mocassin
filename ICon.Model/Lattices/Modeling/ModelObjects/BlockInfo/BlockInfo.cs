@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using Mocassin.Mathematics.ValueTypes;
@@ -17,15 +16,9 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// BuildingBlocks which may construct a superblock
         /// </summary>
-<<<<<<< HEAD
         [LinkableByIndex]
         [DataMember]
         public List<IBuildingBlock> BlockGrouping { get; set; }
-=======
-        [DataMember]
-        [IndexResolved]
-        public IBuildingBlock Block { get; set; }
->>>>>>> origin/s.eisele@dev
 
         /// <summary>
         /// Origin of BuildingBlockAssembly

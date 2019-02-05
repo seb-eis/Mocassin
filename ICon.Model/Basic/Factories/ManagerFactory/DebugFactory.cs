@@ -63,13 +63,12 @@ namespace Mocassin.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateLatticeManagementSystem()
             {
-<<<<<<< HEAD
                 var package = CreateEnergyManagementSystem();
                 package.LatticeManager = (ILatticeManager)package.ProjectServices.CreateAndRegister(new LatticeManagerFactory());
-=======
+
                 var package = CreateProjectServicesSystem();
                 package.LatticeManager = (ILatticeManager) package.ModelProject.CreateAndRegister(new LatticeManagerFactory());
->>>>>>> origin/s.eisele@dev
+
                 return package;
             }
 
@@ -112,11 +111,9 @@ namespace Mocassin.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateFullManagementSystem()
             {
-<<<<<<< HEAD
                 return CreateLatticeManagementSystem();
-=======
+                return CreateLatticeManagementSystem();
                 return CreateSimulationManagementPackage();
->>>>>>> origin/s.eisele@dev
             }
 
             /// <summary>
@@ -256,7 +253,7 @@ namespace Mocassin.Model.Basic
                         }
                     }
                 };
-<<<<<<< HEAD
+
                 var buildingBlocks = new BuildingBlock[]
                 {
                     new BuildingBlock()
@@ -347,7 +344,7 @@ namespace Mocassin.Model.Basic
                     new Doping()
                     {
                         Index = 3, DopingInfo = dopingCombinations[2], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
-=======
+
                 var groupInteractions = new[]
                 {
                     new GroupInteraction
@@ -399,7 +396,7 @@ namespace Mocassin.Model.Basic
                         ElectricFieldMagnitude = 10000000.0,
                         ElectricFieldVector = new DataVector3D(1, 0, 0),
                         Transitions = kineticTransitions.Cast<IKineticTransition>().ToList()
->>>>>>> origin/s.eisele@dev
+
                     }
                 };
 
@@ -424,16 +421,15 @@ namespace Mocassin.Model.Basic
                     UnitCellPosition = unitCellPositions[2],
                     IgnoredPositions = new List<IUnitCellPosition>()
                 });
-<<<<<<< HEAD
                 inputter.AddMany(buildingBlocks);
                 inputter.AddMany(blockInfos);
                 inputter.AddMany(dopingCombinations);
                 inputter.AddMany(dopings);
-=======
+
                 inputter.AddMany(groupInteractions);
                 inputter.AddMany(metropolisSimulations);
                 inputter.AddMany(kineticSimulations);
->>>>>>> origin/s.eisele@dev
+
                 return inputter;
             }
         }

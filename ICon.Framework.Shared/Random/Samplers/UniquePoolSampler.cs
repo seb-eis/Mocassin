@@ -2,14 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-<<<<<<< HEAD:ICon.Framework.Shared/Random/Samplers/UniquePoolSampler.cs
 
 namespace ICon.Framework.Random
-=======
-using Mocassin.Framework.Random;
-
-namespace Mocassin.Model.Lattices
->>>>>>> origin/s.eisele@dev:ICon.Model/Lattices/Modeling/Objects/UniquePoolSampler/UniquePoolSampler.cs
 {
     /// <summary>
     /// Get samples from a list

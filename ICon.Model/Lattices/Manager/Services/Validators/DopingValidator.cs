@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-<<<<<<< HEAD
 using ICon.Framework.Messaging;
 using ICon.Framework.Operations;
 using ICon.Model.Basic;
@@ -14,7 +13,6 @@ using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Lattices.Validators
 {
-<<<<<<< HEAD
     /// <summary>
     /// Validator for new Doping model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>
@@ -28,12 +26,6 @@ namespace Mocassin.Model.Lattices.Validators
         /// <param name="dataReader"></param>
         public DopingValidator(IProjectServices projectServices, BasicLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader) 
             : base(projectServices, settings, dataReader)
-=======
-    public class DopingValidator : DataValidator<IDoping, MocassinLatticeSettings, ILatticeDataPort>
-    {
-        public DopingValidator(IModelProject modelProject, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader) 
-            : base(modelProject, settings, dataReader)
->>>>>>> origin/s.eisele@dev
         {
         }
 

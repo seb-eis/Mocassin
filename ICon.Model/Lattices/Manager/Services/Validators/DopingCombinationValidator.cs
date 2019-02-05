@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-﻿using ICon.Framework.Messaging;
+using ICon.Framework.Messaging;
 using ICon.Framework.Operations;
 using ICon.Model.Basic;
-using ICon.Model.Particles;
 using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
 using System;
-=======
-﻿using System;
->>>>>>> origin/s.eisele@dev
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +12,6 @@ using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Lattices.Validators
 {
-<<<<<<< HEAD
     /// <summary>
     /// Validator for new DopingCombination model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>

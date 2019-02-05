@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Mocassin.Framework.Collections;
 
-<<<<<<< HEAD
 using ICon.Framework.Random;
 using ICon.Mathematics.Comparers;
 using System.Linq;
@@ -12,9 +11,7 @@ using System.Linq;
 using ICon.Framework.Extensions;
 
 namespace ICon.Model.Lattices
-=======
 namespace Mocassin.Model.Lattices
->>>>>>> origin/s.eisele@dev
 {
     /// <summary>
     /// Executes dopings on the Worklattice
@@ -32,9 +29,7 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Contains information about positions which can be doped and the original number of these
         /// </summary>
-<<<<<<< HEAD
         protected class PositionPool
-=======
         /// <param name="lattice"></param>
         /// <param name="dopings"></param>
         public void ExecuteMultible(WorkLattice lattice, ReadOnlyListAdapter<IDoping> dopings)

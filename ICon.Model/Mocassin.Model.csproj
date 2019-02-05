@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
+    <Compile Remove="Lattices\Modeling\Objects\UniquePoolSampler\UniquePoolSampler.cs" />
     <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />
     <Compile Remove="Transitions\Manager\Services\TransitionConflictResolver.cs" />
   </ItemGroup>

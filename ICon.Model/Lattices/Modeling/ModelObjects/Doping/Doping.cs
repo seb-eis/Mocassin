@@ -30,7 +30,6 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Counter doping multiplier
         /// </summary>
-<<<<<<< HEAD
         [DataMember]
         public double CounterDopingMultiplier { get; set; }
 
@@ -39,13 +38,6 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         [DataMember]
         public bool UseCustomMultiplier { get; set; }
-=======
-        /// <returns></returns>
-        public override string GetObjectName()
-        {
-            return "Doping";
-        }
->>>>>>> origin/s.eisele@dev
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied
@@ -65,11 +57,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override string GetModelObjectName()
         {
-<<<<<<< HEAD
             return "'Doping'";
-=======
-            return $"{GetObjectName()} ({DopingInfo.ToString()}, {CounterDopingInfo.ToString()})";
->>>>>>> origin/s.eisele@dev
         }
 
         /// <summary>
@@ -81,6 +69,7 @@ namespace Mocassin.Model.Lattices
         {
             if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
+                Concentration = doping.Concentration;
                 DopingInfo = doping.DopingInfo;
                 CounterDopingInfo = doping.CounterDopingInfo;
                 CounterDopingMultiplier = doping.CounterDopingMultiplier;

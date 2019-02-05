@@ -33,8 +33,8 @@ namespace Mocassin.Model.Lattices
         /// unit cell position (contains information about the sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolved]
-        public IUnitCellPosition UnitCellPosition { set; get; }
+        [LinkableByIndex]
+        public IBuildingBlock BuildingBlock { get; set; }
 
         /// <summary>
         /// Building Block in which the doping should take place
@@ -49,11 +49,7 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override string GetObjectName()
         {
-<<<<<<< HEAD
             return "'DopingCombination'";
-=======
-            return "ElementSublatticeCode";
->>>>>>> origin/s.eisele@dev
         }
 
          /// <summary>

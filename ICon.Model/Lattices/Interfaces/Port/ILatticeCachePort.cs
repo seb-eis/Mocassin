@@ -9,14 +9,12 @@ namespace Mocassin.Model.Lattices
     /// </summary>
     public interface ILatticeCachePort : IModelCachePort
     {
-<<<<<<< HEAD
-=======
+
         /// <summary>
         /// Create Supercellwrapper
         /// </summary>
         /// <returns></returns>
         SupercellAdapter<IParticle> CreateLattice();
->>>>>>> origin/s.eisele@dev
 
         ILatticeCreationProvider GetLatticeCreationProvider();
 

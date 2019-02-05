@@ -35,6 +35,7 @@ namespace Mocassin.Model.Test
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             Assert.IsNotNull(managers.LatticeManager.EventPort);
             Assert.IsNotNull(managers.LatticeManager.QueryPort);
             Assert.IsNotNull(managers.LatticeManager.InputPort);
@@ -201,6 +202,11 @@ namespace Mocassin.Model.Test
         {
             return;
 >>>>>>> origin/s.eisele@dev
+=======
+            Assert.IsNotNull(managers.LatticeManager.EventPort);
+            Assert.IsNotNull(managers.LatticeManager.QueryPort);
+            Assert.IsNotNull(managers.LatticeManager.InputPort);
+>>>>>>> 52f08c60e776628530af7c5b0d145ca5cfb288ae
         }
 
     }

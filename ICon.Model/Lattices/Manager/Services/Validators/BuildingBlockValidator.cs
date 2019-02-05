@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-<<<<<<< HEAD
 using ICon.Framework.Messaging;
 using ICon.Framework.Operations;
 using ICon.Model.Basic;
@@ -16,14 +15,10 @@ using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Lattices.Validators
 {
-<<<<<<< HEAD
     /// <summary>
     /// Validator for new BuildingBlock model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>
     public class BuildingBlockValidator : DataValidator<IBuildingBlock, BasicLatticeSettings, ILatticeDataPort>
-=======
-    public class BuildingBlockValidator : DataValidator<IBuildingBlock, MocassinLatticeSettings, ILatticeDataPort>
->>>>>>> origin/s.eisele@dev
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
