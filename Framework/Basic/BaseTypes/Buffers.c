@@ -35,7 +35,9 @@ void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t
 {
     *outSpan = new_Span(*outSpan, numOfBytes);
     Buffer_t bufferSpan = (Buffer_t) {.Begin = buffer, .End = buffer + numOfBytes};
-    SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
+    int error = SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
+    error_assert(error, "this has not worked \n");
+
     return outSpan;
 }
 
@@ -91,7 +93,7 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     return outArray;
 }
 
-void* ConstructArrayFromBlob(void *restrict buffer,const size_t sizeOfElements, VoidArray_t *restrict outArray)
+void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElements, VoidArray_t *restrict outArray)
 {
     VoidArray_t bufferArray = {.Header = buffer};
     const size_t headerByteCount = array_GetHeaderSize(bufferArray);

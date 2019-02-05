@@ -185,7 +185,7 @@ void GetArrayDimensions(const VoidArray_t*restrict array, int32_t*restrict outBu
 void MakeArrayBlocks(int32_t rank, const int32_t dimensions[rank], int32_t*restrict outBuffer);
 
 // Constructs a new array from the passed buffer by interpreting it as a previously build array. Does not free the original buffer!
-void* ConstructArrayFromBlob(void *restrict buffer, size_t sizeOfElements, VoidArray_t *restrict outArray);
+void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements, VoidArray_t *restrict outArray);
 
 // Macro to construct a new array of the passed type and dimensions
 #define new_Array(ARRAY, ...) *(typeof(ARRAY)*) ConstructVoidArray(sizeof((int32_t[]){__VA_ARGS__})/sizeof(int32_t), sizeof(typeof(*(ARRAY).Begin)), (int32_t[]){ __VA_ARGS__ }, (VoidArray_t*) &(ARRAY))

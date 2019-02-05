@@ -17,20 +17,51 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
-#include "Framework/Basic/Macros/BinarySearch.h"
-#include "Framework/Basic/Macros/Macros.h"
-#include "Simulator/Logic/Routines/Output/TagDataOutput.h"
+#include "UnitTesting/MinimalUnitTest.h"
+#include "UnitTesting/UnitTests.h"
 
-#if defined(MC_TESTBUILD)
+#define UNITTEST 1
+
+#if 0 //!defined(MC_TESTBUILD)
+
     int main(int argc, char const * const *argv)
     {
-        char buffer[20];
-        SecondsToISO8601TimeSpan(buffer, 3661);
-        printf("%s", buffer);
-        getchar();
+        Pcg32_t random = new_Pcg32(random, 856782567265295, 732567923986295);
+        int32_t values[100];
+
+        c_foreach(it, values)
+        {
+            *it = 0;
+        }
+
+        clock_t clock0 = clock();
+        for (int i = 0; i < 1000000000; ++i)
+        {
+          values[Pcg32Next(&random)%99]++;
+        }
+        clock_t clock1 = clock();
+
+        printf("Value: %llu Time: %li", random.State, clock1-clock0);
+
         return (0);
     }
 
+
+#elif UNITTEST
+
+    int main(int argc, char **argv) {
+
+        char *result = all_tests();
+        if (result != 0) {
+            printf("%s\n", result);
+        }
+        else {
+            printf("ALL TESTS PASSED\n");
+        }
+        printf("Tests run: %d\n", tests_run);
+
+        return result != 0;
+    };
 
 #else
 
@@ -47,8 +78,6 @@
         PrepareForMainRoutine(&SCONTEXT);
 
         StartMainRoutine(&SCONTEXT);
-
-        return (0);
     }
 
 #endif

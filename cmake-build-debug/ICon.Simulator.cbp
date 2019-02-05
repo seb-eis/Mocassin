@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ICon.Simulator"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Experimental">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 Experimental"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Continuous">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 Continuous"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Nightly">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 Nightly"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="package_source">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 package_source"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="package">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 package"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ICon.Simulator">
+				<Option output="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/ICon.Simulator.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/john/Documents/ICon.Simulator"/>
+					<Add directory="C:/ProgramFiles/sqlite3_64bit"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 ICon.Simulator"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ICon.Simulator/fast">
+				<Option output="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/ICon.Simulator.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/john/Documents/ICon.Simulator"/>
+					<Add directory="C:/ProgramFiles/sqlite3_64bit"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 ICon.Simulator/fast"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 test"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/john/Documents/ICon.Simulator/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/ProgramFiles/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/john/Documents/ICon.Simulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/BaseTypes/Buffers.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/BaseTypes/Buffers.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/FileIO/FileIO.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/FileIO/FileIO.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/Macros/Macros.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/Plugins/PluginLoading.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Basic/Plugins/PluginLoading.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Errors/McErrors.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Errors/McErrors.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Math/Types/Vector.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Math/Types/Vector.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Sqlite/SqliteReader.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Framework/Sqlite/SqliteReader.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Main/main.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/Database/DbModelLoad.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Data/Model/Database/DbModelLoad.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Initializers/ContextInitializer.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Initializers/ContextInitializer.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Objects/JumpSelection.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Objects/JumpSelection.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Environment/EnvRoutines.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Environment/EnvRoutines.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Main/MainRoutines.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Main/MainRoutines.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Statistics/McStatistics.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Routines/Statistics/McStatistics.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Validators/Validators.c">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/Simulator/Logic/Validators/Validators.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/UnitTesting/MinimalUnitTest.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/UnitTesting/UnitTests.h">
+			<Option target="ICon.Simulator"/>
+		</Unit>
+		<Unit filename="C:/Users/john/Documents/ICon.Simulator/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
