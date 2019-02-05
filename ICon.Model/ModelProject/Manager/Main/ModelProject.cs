@@ -190,7 +190,7 @@ namespace Mocassin.Model.ModelProject
             var crystalSystemProvider = CrystalSystemSource.CreateSoft(structureSettings.CellParameter.MaxValue,
                 settings.SymmetrySettings.ParameterTolerance);
             var crystalSystemService = new CrystalSystemService(crystalSystemProvider, settings.CommonNumericSettings.RangeValue);
-            var validationServices = new ValidationServiceProvider();
+            var validationServices = new ValidationServiceProvider(modelProject);
             var dataAccessLocker = new AccessLockSource(settings.ConcurrencySettings.MaxAttempts, settings.ConcurrencySettings.AttemptInterval);
             var messageSystem = new AsyncMessageSystem();
             var symmetryService = new SymmetryAnalysisService(SymmetryIndicator.MakeComparer(geometryNumeric.RelativeComparer),

@@ -9,6 +9,7 @@ using Mocassin.Framework.Random;
 using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Translator;

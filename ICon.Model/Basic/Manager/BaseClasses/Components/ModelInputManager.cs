@@ -233,8 +233,11 @@ namespace Mocassin.Model.Basic
             return GetSupportedModelObjects().Concat(GetSupportedModelParameters());
         }
 
+        /// <inheritdoc />
+        public abstract IDataReader<IModelDataPort> GetDataReader();
+
         /// <summary>
-        ///     Searches the input manager for all non public methods marked as data operations of the specififed type and creates
+        ///     Searches the input manager for all non public methods marked as data operations of the specified type and creates
         ///     a sequence of object processors
         /// </summary>
         /// <param name="operationType"></param>
@@ -318,6 +321,12 @@ namespace Mocassin.Model.Basic
             DataAccessorSource = Basic.DataAccessorSource.Create(modelData, project.AccessLockSource);
             DataReaderSource = Basic.DataReaderSource.Create(modelData, modelData.AsReadOnly(), project.AccessLockSource);
             ConflictHandlerProvider = CreateDataConflictHandlerProvider();
+        }
+
+        /// <inheritdoc />
+        public override IDataReader<IModelDataPort> GetDataReader()
+        {
+            return DataReaderSource.Create();
         }
 
         /// <inheritdoc />
@@ -452,8 +461,7 @@ namespace Mocassin.Model.Basic
         protected void RepopulateOrRestoreOriginal<TObject>(TObject orgObject, TObject replaceObject, bool replace)
             where TObject : ModelObject, new()
         {
-            if (replace)
-                orgObject.PopulateFrom(replaceObject);
+            if (replace) orgObject.PopulateFrom(replaceObject);
 
             orgObject.Restore();
         }

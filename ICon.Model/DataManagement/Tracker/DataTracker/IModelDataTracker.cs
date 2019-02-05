@@ -1,10 +1,12 @@
-﻿using Mocassin.Model.Basic;
+﻿using System;
+using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.DataManagement
 {
     /// <summary>
-    ///     Represents a model data tracker that handles the inter linking between model data and indexed model objects
+    ///     Represents a model data tracker that handles the reference tracking of <see cref="ModelData" /> and indexed
+    ///     <see cref="IModelObject" /> data
     /// </summary>
     public interface IModelDataTracker
     {

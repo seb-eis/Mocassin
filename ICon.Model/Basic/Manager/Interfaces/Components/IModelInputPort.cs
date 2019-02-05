@@ -16,7 +16,7 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="TParameter"></typeparam>
         /// <param name="modelParameter"></param>
         /// <returns></returns>
-        Task<IOperationReport> SetModelParameter<TParameter>(TParameter modelParameter) 
+        Task<IOperationReport> SetModelParameter<TParameter>(TParameter modelParameter)
             where TParameter : IModelParameter;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <param name="modelObject"></param>
         /// <returns></returns>
-        Task<IOperationReport> InputModelObject<TObject>(TObject modelObject) 
+        Task<IOperationReport> InputModelObject<TObject>(TObject modelObject)
             where TObject : IModelObject;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <param name="modelObject"></param>
         /// <returns></returns>
-        Task<IOperationReport> RemoveModelObject<TObject>(TObject modelObject) 
+        Task<IOperationReport> RemoveModelObject<TObject>(TObject modelObject)
             where TObject : IModelObject;
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Mocassin.Model.Basic
         /// <param name="original"></param>
         /// <param name="replacement"></param>
         /// <returns></returns>
-        Task<IOperationReport> ReplaceModelObject<TObject>(TObject original, TObject replacement) 
+        Task<IOperationReport> ReplaceModelObject<TObject>(TObject original, TObject replacement)
             where TObject : IModelObject;
 
         /// <summary>
@@ -64,5 +64,11 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <returns></returns>
         IEnumerable<Type> GetSupportedModelTypes();
+
+        /// <summary>
+        ///     Get a <see cref="IDataReader{TPort}" /> interface for the managed <see cref="ModelData" /> object
+        /// </summary>
+        /// <returns></returns>
+        IDataReader<IModelDataPort> GetDataReader();
     }
 }

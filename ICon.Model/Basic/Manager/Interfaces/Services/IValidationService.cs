@@ -13,6 +13,26 @@ namespace Mocassin.Model.Basic
         /// </summary>
         /// <returns></returns>
         Type DataPortType { get; }
+
+        /// <summary>
+        ///     Tries to validate a generic object of type <see cref="T" /> using the passed <see cref="IDataReader{TPort}" />
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="dataReader"></param>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        bool TryValidate<T>(T obj, IDataReader<IModelDataPort> dataReader, out IValidationReport report);
+
+        /// <summary>
+        ///     Check if the passed combination of object type <see cref="T" /> and <see cref="IDataReader{TPort}" /> can be used
+        ///     for a validation
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="dataReader"></param>
+        /// <returns></returns>
+        bool CanValidate<T>(T obj, IDataReader<IModelDataPort> dataReader);
     }
 
     /// <summary>
@@ -30,7 +50,7 @@ namespace Mocassin.Model.Basic
         /// <param name="obj"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
-        IValidationReport ValidateObject<TObject>(TObject obj, IDataReader<TDataPort> dataReader) 
+        IValidationReport ValidateObject<TObject>(TObject obj, IDataReader<TDataPort> dataReader)
             where TObject : IModelObject;
 
         /// <summary>

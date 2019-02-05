@@ -21,7 +21,7 @@ namespace Mocassin.Model.Structures
     {
         /// <inheritdoc />
         [IgnoreDataMember]
-        Fractional3D IUnitCellPosition.Vector => Vector.AsFractional();
+        Fractional3D IUnitCellPosition.Vector => Vector?.AsFractional() ?? new Fractional3D();
 
         /// <summary>
         ///     The fractional position vector of the unit cell position

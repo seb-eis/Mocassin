@@ -14,8 +14,7 @@ namespace Mocassin.Model.Basic
     ///     upon a synchronous data processing pipeline
     /// </summary>
     /// <typeparam name="TPort"></typeparam>
-    public abstract class ValidationService<TPort> : IValidationService<TPort> 
-        where TPort : class, IModelDataPort
+    public abstract class ValidationService<TPort> : IValidationService<TPort>  where TPort : class, IModelDataPort
     {
         /// <inheritdoc />
         public Type DataPortType { get; } = typeof(TPort);
@@ -34,6 +33,41 @@ namespace Mocassin.Model.Basic
         ///     The synchronous validation pipeline for model objects that have potential conflicts with existing data
         /// </summary>
         protected BreakPipeline<IValidationReport> ObjectPipeline { get; set; }
+
+        /// <inheritdoc />
+        public bool TryValidate<T>(T obj, IDataReader<IModelDataPort> dataReader, out IValidationReport report)
+        {
+            switch (obj)
+            {
+                case IModelObject _ when ObjectPipeline.CanProcess(obj, dataReader):
+                    report = ObjectPipeline.Process(obj, dataReader);
+                    return true;
+
+                case IModelParameter _ when ParameterPipeline.CanProcess(obj, dataReader):
+                    report = ParameterPipeline.Process(obj, dataReader);
+                    return true;
+
+                default:
+                    report = default;
+                    return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool CanValidate<T>(T obj, IDataReader<IModelDataPort> dataReader)
+        {
+            switch (obj)
+            {
+                case IModelObject _ when ObjectPipeline.CanProcess(obj, dataReader):
+                    return true;
+
+                case IModelParameter _ when ParameterPipeline.CanProcess(obj, dataReader):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         /// <summary>
         ///     Creates new validation service, initializes the validation pipeline with the handlers defined in the implementing

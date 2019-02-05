@@ -232,7 +232,8 @@ namespace Mocassin.Model.DataManagement
                                   ?? ModelObjectDictionary[objectType].Cast<IModelObject>().FirstOrDefault(item => item.Key == obj.Key);
 
                 return modelObject
-                       ?? throw new InvalidOperationException($"No Object [{obj.GetObjectName()}] with Key={obj.Key} Id={obj.Index} exists");
+                       ?? throw new InvalidOperationException(
+                           $"No Object [{obj.GetObjectName()}] with Key={obj.Key} Id={obj.Index} exists");
             }
 
             return GetObject;
