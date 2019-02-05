@@ -432,10 +432,10 @@ namespace Mocassin.Model.Basic
             where TObject : ModelObject
         {
             if (restricted.Contains(obj.Index))
-                throw new ArgumentException($"The index {obj.Index} for {obj.GetObjectName()} is protected from deprecation");
+                throw new ArgumentException($"The index {obj.Index} for {obj.ObjectName} is protected from deprecation");
 
             if (obj.Index >= objData.Count)
-                throw new ArgumentOutOfRangeException($"{obj.GetObjectName()} index is out of range", nameof(obj.Index));
+                throw new ArgumentOutOfRangeException($"{obj.ObjectName} index is out of range", nameof(obj.Index));
 
             var changed = !objData[obj.Index].IsDeprecated;
             objData[obj.Index].Deprecate();
@@ -586,7 +586,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnNewModelObjects.OnNext(ModelObjectEventArgs.Create((T1) newInternal));
             }
 
-            return InvokeDataOperation($"Add new {newInternal.GetObjectName()} to the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Add new {newInternal.ObjectName} to the manager", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -625,7 +625,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnRemovedModelObjects.OnNext(ModelObjectEventArgs.Create((T1) internalObj));
             }
 
-            return InvokeDataOperation($"Remove {internalObj.GetObjectName()} ({internalObj.Index}) from manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Remove {internalObj.ObjectName} ({internalObj.Index}) from manager", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -672,7 +672,7 @@ namespace Mocassin.Model.Basic
                 if (changedObject != null) EventManager.OnChangedModelObjects.OnNext(ModelObjectEventArgs.Create((T1) changedObject));
             }
 
-            return InvokeDataOperation($"Replace {tmpObject.GetObjectName()} ({orgObj.Index}) in the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Replace {tmpObject.ObjectName} ({orgObj.Index}) in the manager", Operation, OnSuccess);
         }
 
         /// <summary>

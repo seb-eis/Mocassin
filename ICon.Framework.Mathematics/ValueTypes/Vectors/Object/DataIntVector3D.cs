@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Runtime.Serialization;
+using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
@@ -70,9 +72,6 @@ namespace Mocassin.Mathematics.ValueTypes
             return A == vector.A && B == vector.B && C == vector.C;
         }
 
-        public VectorInt3D AsReadOnly()
-        {
-            return new VectorInt3D(A, B, C);
-        }
-    }
+		public VectorInt3D AsReadOnly() => new VectorInt3D(A, B, C);
+	}
 }

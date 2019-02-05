@@ -63,9 +63,6 @@ namespace Mocassin.Model.Basic
             /// <returns></returns>
             public static ManagerPackage CreateLatticeManagementSystem()
             {
-                var package = CreateEnergyManagementSystem();
-                package.LatticeManager = (ILatticeManager)package.ProjectServices.CreateAndRegister(new LatticeManagerFactory());
-
                 var package = CreateProjectServicesSystem();
                 package.LatticeManager = (ILatticeManager) package.ModelProject.CreateAndRegister(new LatticeManagerFactory());
 
@@ -327,24 +324,29 @@ namespace Mocassin.Model.Basic
                          Index = 2, BuildingBlock = buildingBlocks[0], Dopant = particles[7], DopedParticle = particles[3], UnitCellPosition = unitCellPositions[0]
                     }
                 };
-                var dopings = new Doping[]
-                {
-                    new Doping()
-                    {
-                        Index = 0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
-                    },
-                    new Doping()
-                    {
-                        Index = 1, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
-                    },
-                    new Doping()
-                    {
-                        Index = 2, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
-                    },
-                    new Doping()
-                    {
-                        Index = 3, DopingInfo = dopingCombinations[2], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true, UseCustomMultiplier = false, DopingGroup = 0
-
+	            var dopings = new Doping[]
+	            {
+		            new Doping()
+		            {
+			            Index = 0, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true,
+			            UseCustomMultiplier = false, DopingGroup = 0
+		            },
+		            new Doping()
+		            {
+			            Index = 1, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true,
+			            UseCustomMultiplier = false, DopingGroup = 0
+		            },
+		            new Doping()
+		            {
+			            Index = 2, DopingInfo = dopingCombinations[0], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true,
+			            UseCustomMultiplier = false, DopingGroup = 0
+		            },
+		            new Doping()
+		            {
+			            Index = 3, DopingInfo = dopingCombinations[2], CounterDopingInfo = dopingCombinations[1], UseCounterDoping = true,
+			            UseCustomMultiplier = false, DopingGroup = 0
+		            }
+	            };
                 var groupInteractions = new[]
                 {
                     new GroupInteraction

@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Messaging;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-=======
+using Mocassin.Framework.Messaging;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
+using Moccasin.Model.ProjectServices;
 using Mocassin.Model.ModelProject;
->>>>>>> origin/s.eisele@dev
 
 namespace Mocassin.Model.Lattices.Validators
 {
     /// <summary>
     /// Validator for new Doping model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>
-    public class DopingValidator : DataValidator<IDoping, BasicLatticeSettings, ILatticeDataPort>
+    public class DopingValidator : DataValidator<IDoping, MocassinLatticeSettings, ILatticeDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
@@ -24,7 +20,7 @@ namespace Mocassin.Model.Lattices.Validators
         /// <param name="projectServices"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public DopingValidator(IProjectServices projectServices, BasicLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader) 
+        public DopingValidator(IModelProject projectServices, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader) 
             : base(projectServices, settings, dataReader)
         {
         }
@@ -52,7 +48,7 @@ namespace Mocassin.Model.Lattices.Validators
             if (concentration < 0.0)
             {
                 var detail0 = $"The doping concentration cannot be smaller than zero";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
 
@@ -66,7 +62,7 @@ namespace Mocassin.Model.Lattices.Validators
             if (concentration > 1.0)
             {
                 var detail0 = $"The doping concentration should not be larger than one";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
     }

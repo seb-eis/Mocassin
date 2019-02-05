@@ -69,14 +69,11 @@ namespace Mocassin.Model.Energies
             return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Unstable Environment Info";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Unstable Environment Info";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IUnstableEnvironment>(obj) is IUnstableEnvironment info))
                 return null;

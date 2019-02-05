@@ -1,21 +1,22 @@
-﻿using ICon.Framework.Collections;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Particles;
-using ICon.Model.Structures;
-using ICon.Symmetry.Analysis;
+﻿using Mocassin.Framework.Collections;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Mocassin.Symmetry.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ICon.Framework.Extensions;
-using ICon.Mathematics;
-using ICon.Mathematics.Coordinates;
-using ICon.Model.Basic;
-using ICon.Model.Simulations;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics;
+using Mocassin.Mathematics.Coordinates;
+using Moccasin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Simulations;
 using System.Linq;
-using ICon.Model.ProjectServices;
-using ICon.Framework.Random;
+using Mocassin.Framework.Random;
+using Mocassin.Model.ModelProject;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Provider to create superlattice from data in structure and lattice manager
@@ -35,7 +36,7 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// List of block infos
         /// </summary>
-        private ReadOnlyList<IBlockInfo> BlockInfos { get; set; }
+        private ReadOnlyListAdapter<IBlockInfo> BlockInfos { get; set; }
 
         /// <summary>
         /// Dictionary of sublattice ID and corresponding unit cell position
@@ -45,12 +46,12 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// Vector encoder for supercellWrapper
         /// </summary>
-        private UnitCellVectorEncoder VectorEncoder { get; set; }
+        private IUnitCellVectorEncoder VectorEncoder { get; set; }
 
         /// <summary>
         /// List of dopings
         /// </summary>
-        private ReadOnlyList<IDoping> Dopings { get; set; }
+        private ReadOnlyListAdapter<IDoping> Dopings { get; set; }
 
         /// <summary>
         /// Doping tolerance for automated calculation of counter dopant
@@ -68,14 +69,14 @@ namespace ICon.Model.Lattices
         /// <param name="latticePort"></param>
         /// <param name="structurePort"></param>
         /// <param name="settingsData"></param>
-        public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettingsData settingsData)
+        public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettings settingsData)
             {
                 DefaultBlock = latticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
                 BlockInfos = latticePort.Query(port => port.GetBlockInfos());
                 SublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
                 VectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
                 Dopings = latticePort.Query(port => port.GetDopings());
-                DopingTolerance = settingsData.LatticeSettings.DopingCompensationTolerance;
+	            DopingTolerance = settingsData.DopingToleranceSetting;
                 DoubleCompareTolerance = settingsData.CommonNumericSettings.RangeValue;
             }
 
@@ -84,38 +85,39 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="bluePrint"></param>
         /// <returns></returns>
-        public List<SupercellWrapper<IParticle>> ConstructLattices(ISimulationSeriesBase simulationSeries)
-        {
-            PcgRandom32 randomGenerator;
-            if (int.TryParse(simulationSeries.BaseSimulation.CustomRngSeed, out int seed))
-            {
-                randomGenerator = new PcgRandom32(seed);
-            }
-            else
-            {
-                randomGenerator = new PcgRandom32(simulationSeries.BaseSimulation.CustomRngSeed.GetHashCode());
-            }
-
-            List<SupercellWrapper<IParticle>> supercells = new List<SupercellWrapper<IParticle>>();
-
-            foreach (var sizeSeriesEntry in simulationSeries.LatticeSizeSeries)
-            {
-                foreach (var dopingSeriesEntry in simulationSeries.DopingSeries)
-                {
-                    LatticeEntry[,,][] workLattice = GenerateDefaultLattice(DefaultBlock, SublatticeIDs, sizeSeriesEntry);
-
-                    FillLatticeWithCustomBlocks(workLattice, BlockInfos, SublatticeIDs);
-
-                    var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, randomGenerator);
-
-                    dopingExecuter.DopeLattice(workLattice, Dopings, dopingSeriesEntry);
-
-                    supercells.Add(Translate(workLattice, VectorEncoder));
-                }
-            }
-
-            return supercells;
-        }
+        // TODO: delete this if no longer needed
+        //public List<SupercellAdapter<IParticle>> ConstructLattices(ISimulationSeriesBase simulationSeries)
+        //{
+        //    PcgRandom32 randomGenerator;
+        //    if (int.TryParse(simulationSeries.BaseSimulation.CustomRngSeed, out int seed))
+        //    {
+        //        randomGenerator = new PcgRandom32(seed);
+        //    }
+        //    else
+        //    {
+        //        randomGenerator = new PcgRandom32((int) simulationSeries.BaseSimulation.CustomRngSeed);
+        //    }
+		//
+        //    List<SupercellAdapter<IParticle>> supercells = new List<SupercellAdapter<IParticle>>();
+		//
+        //    foreach (var sizeSeriesEntry in simulationSeries.LatticeSizeSeries)
+        //    {
+        //        foreach (var dopingSeriesEntry in simulationSeries.DopingSeries)
+        //        {
+        //            LatticeEntry[,,][] workLattice = GenerateDefaultLattice(DefaultBlock, SublatticeIDs, sizeSeriesEntry);
+		//
+        //            FillLatticeWithCustomBlocks(workLattice, BlockInfos, SublatticeIDs);
+		//
+        //            var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, randomGenerator);
+		//
+        //            dopingExecuter.DopeLattice(workLattice, Dopings, dopingSeriesEntry);
+		//
+        //            supercells.Add(Translate(workLattice, VectorEncoder));
+        //        }
+        //    }
+		//
+        //    return supercells;
+        //}
 
         /// <summary>
         /// Generate a default lattice with user defined size and the BuildingBlocks with index 0 
@@ -141,7 +143,7 @@ namespace ICon.Model.Lattices
         /// <param name="workLattice"></param>
         /// <param name="blockInfos"></param>
         /// <param name="sublatticeIDs"></param>
-        void FillLatticeWithCustomBlocks(LatticeEntry[,,][] workLattice, ReadOnlyList<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
+        void FillLatticeWithCustomBlocks(LatticeEntry[,,][] workLattice, ReadOnlyListAdapter<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
         {
             foreach (var blockInfo in blockInfos)
             {
@@ -200,7 +202,7 @@ namespace ICon.Model.Lattices
         /// <param name="workLattice"></param>
         /// <param name="encoder"></param>
         /// <returns></returns>
-        public SupercellWrapper<IParticle> Translate(LatticeEntry[,,][] workLattice, UnitCellVectorEncoder encoder)
+        public SupercellAdapter<IParticle> Translate(LatticeEntry[,,][] workLattice, IUnitCellVectorEncoder encoder)
         {
 
             IParticle[][] particlesLineratized = new IParticle[workLattice.GetLength(0) * workLattice.GetLength(1) * workLattice.GetLength(2)][];
@@ -219,7 +221,7 @@ namespace ICon.Model.Lattices
 
             var particlesMultiDim = new IParticle[workLattice.GetLength(0), workLattice.GetLength(1), workLattice.GetLength(2)][].Populate(particlesLineratized);
 
-            return new SupercellWrapper<IParticle>(particlesMultiDim, encoder);
+            return new SupercellAdapter<IParticle>(particlesMultiDim, encoder);
         }
     }
 }

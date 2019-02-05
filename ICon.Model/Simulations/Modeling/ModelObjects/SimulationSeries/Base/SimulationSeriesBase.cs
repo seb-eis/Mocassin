@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Reflection;
-using ICon.Framework.Constraints;
-using ICon.Framework.Provider;
-using ICon.Model.Basic;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Lattices;
+using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Provider;
+using Mocassin.Model.Basic;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Lattices;
 
-namespace ICon.Model.Simulations
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Absttract base class for implementations of specialized simulation series model objects that define a set of simulations

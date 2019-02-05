@@ -1,11 +1,11 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Structures;
+﻿using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Contains information about a CellEntry within the WorkLattice

@@ -22,14 +22,11 @@ namespace Mocassin.Model.Transitions
         [DataMember]
         public bool IsVacancyPair { get; set; }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Property State Pair";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Property State Pair";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IStateExchangePair>(obj) is IStateExchangePair statePair))
                 return null;

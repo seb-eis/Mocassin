@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace ICon.Model.ProjectServices
+namespace Mocassin.Model.ProjectServices
 {
     /// <summary>
     /// Data class for the model settings that stores general settings required throughout the entire model process (e.g. floating point tolerances)

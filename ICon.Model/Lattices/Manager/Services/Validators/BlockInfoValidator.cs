@@ -50,19 +50,19 @@ namespace Mocassin.Model.Lattices.Validators
             if (blockInfo.Origin.GetCoordinateProduct() < 0)
             {
                 var detail0 = $"A component of the Origin vector is smaller than 0";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
 
             if (blockInfo.Extent.GetCoordinateProduct() <= 0)
             {
                 var detail0 = $"A component of the Extent vector is smaller than 0";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
 
             if (blockInfo.Size.GetCoordinateProduct() <= 0)
             {
                 var detail0 = $"A component of the Size vector is smaller than 0";
-                report.AddWarning(ModelMessages.CreateRestrictionViolationWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
 
@@ -76,7 +76,7 @@ namespace Mocassin.Model.Lattices.Validators
             if ((blockInfo.Extent - blockInfo.Origin).GetCoordinateProduct() <= 0)
             {
                 var detail0 = $"A component of the extent vector is not greater than the corresponding component of the origin vector";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
 
@@ -90,7 +90,7 @@ namespace Mocassin.Model.Lattices.Validators
             if (blockInfo.BlockGrouping.Count != blockInfo.Size.A * blockInfo.Size.B * blockInfo.Size.C)
             {
                 var detail0 = $"Number of super block elements does not match the provided BuildingBlocks";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
 

@@ -7,6 +7,7 @@ using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Structures;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {
@@ -23,9 +24,9 @@ namespace Mocassin.Model.Lattices
         /// <param name="sublatticeIDs"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        public WorkLattice Fabricate(ReadOnlyListAdapter<IBuildingBlock> buildingBlocks, ReadOnlyListAdapter<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntegralVector3D latticeSize)
+        public WorkLattice Fabricate(ReadOnlyListAdapter<IBuildingBlock> buildingBlocks, ReadOnlyListAdapter<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, VectorInt3D latticeSize)
         {
-            if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new DataIntegralVector3D(0,0,0)))
+            if (!blockInfos.Single(x => x.Index == 0).Origin.Equals(new VectorInt3D(0,0,0)))
             {
                 throw new ArgumentException("WorkLatticeFactory", "Extent of default building block does not originate at 0, 0, 0");
             }
@@ -45,7 +46,7 @@ namespace Mocassin.Model.Lattices
                     {
                         for (int z = blockInfo.Origin.B; z < blockInfo.Extent.C; z++)
                         {
-                            workLattice.WorkCells[x, y, z] = (new WorkCellFactory()).Fabricate(blockInfo.Block, sublatticeIDs, (blockInfo.Index != 0));
+                            workLattice.WorkCells[x, y, z] = (new WorkCellFactory()).Fabricate(blockInfo.BlockGrouping[x+y+z], sublatticeIDs, (blockInfo.Index != 0));
                         }
                     }
                 }

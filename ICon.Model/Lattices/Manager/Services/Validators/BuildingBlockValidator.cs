@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ICon.Framework.Messaging;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
-using ICon.Model.Structures;
-=======
+using Mocassin.Framework.Messaging;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
+using Moccasin.Model.ProjectServices;
+using Moccasin.Model;
+using Mocassin.Framework.Operations;
 using Mocassin.Model.ModelProject;
->>>>>>> origin/s.eisele@dev
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Lattices.Validators
 {
     /// <summary>
     /// Validator for new BuildingBlock model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>
-    public class BuildingBlockValidator : DataValidator<IBuildingBlock, BasicLatticeSettings, ILatticeDataPort>
+    public class BuildingBlockValidator : DataValidator<IBuildingBlock, MocassinLatticeSettings, ILatticeDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
@@ -50,7 +48,7 @@ namespace Mocassin.Model.Lattices.Validators
         /// <param name="report"></param>
         protected void AddOccupationValidation(IBuildingBlock buildingBlock, ValidationReport report)
         {
-            var structurePort = ProjectServices.GetManager<IStructureManager>().QueryPort;
+            var structurePort = ModelProject.GetManager<IStructureManager>().QueryPort;
 
             var occupationList = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
 
@@ -59,7 +57,7 @@ namespace Mocassin.Model.Lattices.Validators
                 if (occupationList[i].OccupationSet.GetParticles().Contains(buildingBlock.CellEntries[i]) == false)
                 {
                     var detail0 = $"A Particle cannot be placed at the specified position";
-                    report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
+                    report.AddWarning(WarningMessage.CreateCritical(this, detail0));
                 }
             }
         }

@@ -74,7 +74,7 @@ namespace Mocassin.Model.Basic
             if (ModelProject.DataTracker.FindObjectByAlias<TObject>(obj.Alias) == null) 
                 return null;
 
-            var detail0 = $"The object [{obj.GetObjectName()}] with alias [{obj.Alias}] is already present.";
+            var detail0 = $"The object [{obj.ObjectName}] with alias [{obj.Alias}] is already present.";
             const string detail1 = "Define another alias for the object or use an empty one";
             var report = new ValidationReport();
             report.AddWarning(ModelMessageSource.CreateAliasViolationWarning(this, detail0, detail1));
@@ -133,7 +133,7 @@ namespace Mocassin.Model.Basic
                     continue;
 
                 var detail =
-                    $"The provided {obj.GetObjectName()} is a duplicate to the existing model object with index ({item.Index})";
+                    $"The provided {obj.ObjectName} is a duplicate to the existing model object with index ({item.Index})";
                 report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail));
             }
         }

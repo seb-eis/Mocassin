@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Defines the origin and extent of a building block
@@ -16,14 +17,16 @@ namespace ICon.Model.Lattices
         /// <summary>
         /// BuildingBlocks which may construct a superblock
         /// </summary>
-        [DataMember]
 <<<<<<< HEAD
-        [IndexResolvable]
+<<<<<<< HEAD
+        [LinkableByIndex]
+        [DataMember]
         public List<IBuildingBlock> BlockGrouping { get; set; }
 =======
-        [LinkableByIndex]
+        [DataMember]
+        [IndexResolved]
         public IBuildingBlock Block { get; set; }
->>>>>>> merge@dev
+>>>>>>> origin/s.eisele@dev
 
         /// <summary>
         /// Origin of BuildingBlockAssembly
@@ -41,33 +44,60 @@ namespace ICon.Model.Lattices
         /// Size of the BuildingBlockAssembly
         /// </summary>
         [DataMember]
+=======
+        [LinkableByIndex]
+        [DataMember]
+        public List<IBuildingBlock> BlockGrouping { get; set; }
+
+        /// <summary>
+        /// Origin of BuildingBlockAssembly
+        /// </summary>
+        [DataMember]
+        public DataIntVector3D Origin { get; set; }
+
+        /// <summary>
+        /// Extent of BuildingBlockAssembly
+        /// </summary>
+        [DataMember]
+        public DataIntVector3D Extent { get; set; }
+
+        /// <summary>
+        /// Size of the BuildingBlockAssembly
+        /// </summary>
+        [DataMember]
+>>>>>>> 52f08c60e776628530af7c5b0d145ca5cfb288ae
         public DataIntVector3D Size { get; set; }
 
         /// <summary>
         /// Return origin vector as read only struct
         /// </summary>
         [IgnoreDataMember]
-        CartesianInt3D IBlockInfo.Origin => Origin.AsReadOnly();
+        VectorInt3D IBlockInfo.Origin => Origin.AsReadOnly();
 
         /// <summary>
         /// Return extent vector as read only struct
         /// </summary>
         [IgnoreDataMember]
-        CartesianInt3D IBlockInfo.Extent => Extent.AsReadOnly();
+        VectorInt3D IBlockInfo.Extent => Extent.AsReadOnly();
 
         /// <summary>
         /// Return size vector as read only struct
         /// </summary>
         [IgnoreDataMember]
-        CartesianInt3D IBlockInfo.Size => Size.AsReadOnly();
+        VectorInt3D IBlockInfo.Size => Size.AsReadOnly();
+
+        IEnumerable<IBuildingBlock> IBlockInfo.GetBlockGrouping()
+        {
+            return (BlockGrouping ?? new List<IBuildingBlock>()).AsEnumerable();
+        }
 
         /// <summary>
         /// Get the type name string
         /// </summary>
         /// <returns></returns>
-        public override string GetModelObjectName()
+        public override string GetObjectName()
         {
-            return "'Building Block Info'";
+            return "Building Block Info";
         }
 
         /// <summary>
@@ -77,12 +107,12 @@ namespace ICon.Model.Lattices
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (CastWithDepricatedCheck<IBlockInfo>(obj) is var blockInfo)
+            if (CastIfNotDeprecated<IBlockInfo>(obj) is var blockInfo)
             {
                 Origin = new DataIntVector3D(blockInfo.Origin.Coordinates);
                 Extent = new DataIntVector3D(blockInfo.Extent.Coordinates);
                 Size = new DataIntVector3D(blockInfo.Size.Coordinates);
-                BlockGrouping = blockInfo.BlockGrouping;
+                BlockGrouping = blockInfo.GetBlockGrouping().ToList();
                 return this;
             }
             return null;

@@ -31,14 +31,11 @@ namespace Mocassin.Model.Transitions
             DependentRules = new List<KineticRule>();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Kinetic Rule";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Kinetic Rule";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IKineticRule>(obj) is IKineticRule rule))
                 return null;

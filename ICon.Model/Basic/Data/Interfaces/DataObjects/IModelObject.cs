@@ -26,10 +26,10 @@
         /// </summary>
         void Deprecate();
 
-        /// <summary>
-        ///     Returns a string that represents the model object type name
-        /// </summary>
-        /// <returns></returns>
-        string GetObjectName();
-    }
+		/// <summary>
+		///     Returns a string that represents the model object type name
+		/// </summary>
+		/// <returns></returns>
+		string ObjectName { get; }
+	}
 }

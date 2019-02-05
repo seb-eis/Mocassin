@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-using ICon.Framework.Constraints;
-using ICon.Framework.Provider;
-using ICon.Mathematics.ValueTypes;
-using ICon.Model.Basic;
-using ICon.Model.Lattices;
+using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Provider;
+using Moccasin.Mathematics.ValueTypes;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Lattices;
 
-namespace ICon.Model.Simulations
+
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// Represents a series description of monte carlo simulations of the same type with varrying parameters

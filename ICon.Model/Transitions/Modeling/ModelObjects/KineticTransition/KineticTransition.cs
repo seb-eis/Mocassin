@@ -58,14 +58,11 @@ namespace Mocassin.Model.Transitions
             return (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Kinetic Transition Rule";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Kinetic Transition Rule";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IKineticTransition>(obj) is IKineticTransition transition))
                 return null;

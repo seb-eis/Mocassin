@@ -63,14 +63,11 @@ namespace Mocassin.Model.Particles
             return GetEncoded().Equals(other.GetEncoded());
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Particle Set";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Particle Set";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IParticleSet>(obj) is IParticleSet particleSet))
                 return null;

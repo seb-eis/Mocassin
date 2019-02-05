@@ -1,11 +1,11 @@
-﻿using ICon.Model.Particles;
-using ICon.Model.Simulations;
-using ICon.Symmetry.Analysis;
+﻿using Mocassin.Model.Particles;
+using Mocassin.Model.Simulations;
+using Mocassin.Symmetry.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ICon.Model.Lattices
+namespace Mocassin.Model.Lattices
 {
     /// <summary>
     /// Interface of lattice creation provider. Constructs the lattice with a given simulationSeries
@@ -17,6 +17,7 @@ namespace ICon.Model.Lattices
         /// </summary>
         /// <param name="simulationSeries"></param>
         /// <returns></returns>
-        List<SupercellWrapper<IParticle>> ConstructLattices(ISimulationSeriesBase simulationSeries);
+        // TODO: delete if no longer needed
+        //List<SupercellAdapter<IParticle>> ConstructLattices(ISimulationSeriesBase simulationSeries);
     }
 }

@@ -36,14 +36,11 @@ namespace Mocassin.Model.Transitions
             return DependentRules.AsEnumerable();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Metropolis Rule";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Metropolis Rule";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IMetropolisRule>(obj) is IMetropolisRule rule))
                 return null;

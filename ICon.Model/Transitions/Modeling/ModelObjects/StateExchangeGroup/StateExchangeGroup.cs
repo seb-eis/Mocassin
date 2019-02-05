@@ -30,14 +30,11 @@ namespace Mocassin.Model.Transitions
             return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Property Group";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Property Group";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IStateExchangeGroup>(obj) is IStateExchangeGroup group))
                 return null;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace ICon.Model.ProjectServices
+namespace Moccasin.Model.ProjectServices
 {
     /// <summary>
     /// Settings data object for the lattice managing modul

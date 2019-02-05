@@ -51,25 +51,21 @@ namespace Mocassin.Model.Lattices
         [DataMember]
         public int DopingGroup { get; set; }
 
-        /// <summary>
-        /// Get the type name string
-        /// </summary>
-        /// <returns></returns>
-        public override string GetModelObjectName()
-        {
-            return "'Doping'";
-        }
+		/// <summary>
+		/// Get the type name string
+		/// </summary>
+		/// <returns></returns>
+		public override string ObjectName => "'Doping'";
 
-        /// <summary>
-        /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <summary>
+		/// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
-                Concentration = doping.Concentration;
                 DopingInfo = doping.DopingInfo;
                 CounterDopingInfo = doping.CounterDopingInfo;
                 CounterDopingMultiplier = doping.CounterDopingMultiplier;

@@ -1,7 +1,3 @@
-using ICon.Framework.Messaging;
-using ICon.Framework.Operations;
-using ICon.Model.Basic;
-using ICon.Model.ProjectServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +5,17 @@ using System.Text;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
+using Moccasin.Model.ProjectServices;
+using Mocassin.Framework.Messaging;
 
 namespace Mocassin.Model.Lattices.Validators
 {
     /// <summary>
     /// Validator for new DopingCombination model objects that checks for consistency and compatibility with existing data and general object constraints
     /// </summary>
-    public class DopingCombinationValidator : DataValidator<IDopingCombination, BasicLatticeSettings, ILatticeDataPort>
+    public class DopingCombinationValidator : DataValidator<IDopingCombination, MocassinLatticeSettings, ILatticeDataPort>
     {
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
@@ -23,14 +23,8 @@ namespace Mocassin.Model.Lattices.Validators
         /// <param name="projectServices"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public DopingCombinationValidator(IProjectServices projectServices, BasicLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader)
-            : base(projectServices, settings, dataReader)
-=======
-    public class DopingCombinationValidator : DataValidator<IDopingCombination, MocassinLatticeSettings, ILatticeDataPort>
-    {
         public DopingCombinationValidator(IModelProject modelProject, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader)
             : base(modelProject, settings, dataReader)
->>>>>>> origin/s.eisele@dev
         {
         }
 
@@ -58,7 +52,7 @@ namespace Mocassin.Model.Lattices.Validators
             if (position.OccupationSet.GetParticles().Contains(particle) == false)
             {
                 var detail0 = $"A Particle cannot be placed at the specified position";
-                report.AddWarning(ModelMessages.CreateContentMismatchWarning(this, detail0));
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
     }

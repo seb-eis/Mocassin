@@ -24,7 +24,7 @@ namespace Mocassin.Model.Simulations
         /// <summary>
         ///     The size of the lattice that should be created
         /// </summary>
-        VectorInt3D SizeVector { get; }
+        DataIntVector3D SizeVector { get; }
 
         /// <summary>
         ///     Get all doping infos of the blueprint

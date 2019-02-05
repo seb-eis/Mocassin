@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using Mocassin.Mathematics.ValueTypes;
 
-using ICon.Mathematics.Extensions;
-using ICon.Framework.Xml;
-
-namespace ICon.Mathematics.ValueTypes
+namespace Moccasin.Mathematics.ValueTypes
 {
     /// <summary>
     /// Basic cartesian vector that carries not additional information other than X,Y,Z coordinates

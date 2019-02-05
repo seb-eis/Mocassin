@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {
@@ -16,7 +18,6 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// BuildingBlocks which may construct a superblock
         /// </summary>
-        [LinkableByIndex]
         [DataMember]
         public List<IBuildingBlock> BlockGrouping { get; set; }
 
@@ -61,21 +62,18 @@ namespace Mocassin.Model.Lattices
             return (BlockGrouping ?? new List<IBuildingBlock>()).AsEnumerable();
         }
 
-        /// <summary>
-        /// Get the type name string
-        /// </summary>
-        /// <returns></returns>
-        public override string GetObjectName()
-        {
-            return "Building Block Info";
-        }
+		/// <summary>
+		/// Get the type name string
+		/// </summary>
+		/// <returns></returns>
+		public override string ObjectName => "Building Block Info";
 
-        /// <summary>
-        /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <summary>
+		/// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastIfNotDeprecated<IBlockInfo>(obj) is var blockInfo)
             {

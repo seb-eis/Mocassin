@@ -26,22 +26,19 @@ namespace Mocassin.Model.Lattices
         [IndexResolved]
         public List<IParticle> CellEntries { get; set; }
 
-        /// <summary>
-        /// Get the type name string
-        /// </summary>
-        /// <returns></returns>
-        public override string GetObjectName()
-        {
-            return "Building Block";
-        }
+		/// <summary>
+		/// Get the type name string
+		/// </summary>
+		/// <returns></returns>
+		public override string ObjectName => "Building Block";
 
-        /// <summary>
-        /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
-        /// </summary>
-        /// <param name="modelObject"></param>
-        public override ModelObject PopulateFrom(IModelObject modelObject)
+		/// <summary>
+		/// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
+		/// </summary>
+		/// <param name="modelObject"></param>
+		public override ModelObject PopulateFrom(IModelObject modelObject)
         {
-            if (CastWithDepricatedCheck<IBuildingBlock>(modelObject) is var casted)
+            if (CastIfNotDeprecated<IBuildingBlock>(modelObject) is var casted)
             {
                 CellEntries = casted.CellEntries;
                 return this;

@@ -66,15 +66,12 @@ namespace Mocassin.Model.Particles
             return new Particle {Name = "Void", Symbol = "Void", Alias = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsEmpty = true};
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Particle";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Particle";
 
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IParticle>(obj) is IParticle particle))
                 return null;

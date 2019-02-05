@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Lattices;
 
-namespace ICon.Model.Simulations
-=======
-﻿namespace Mocassin.Model.Simulations
->>>>>>> origin/s.eisele@dev
+namespace Mocassin.Model.Simulations
 {
     /// <summary>
     /// A lattice blueprint that describes a building instruction to create a custom lattice
@@ -16,7 +15,7 @@ namespace ICon.Model.Simulations
 
         public bool UseCustomBase { get; set; }
 
-        public VectorInt3D SizeVector { get; set; }
+        public DataIntVector3D SizeVector { get; set; }
 
         public IDictionary<IDoping, double> DopingConcentrations { get; set; }
 
