@@ -17,7 +17,7 @@ namespace Mocassin.Model.Transitions
         ///     List of affiliated state change group for each step
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IStateExchangeGroup> StateExchangeGroups { get; set; }
 
         /// <summary>
@@ -37,6 +37,10 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         [IgnoreDataMember]
         public bool IsMetropolis => StateCount == 2;
+
+        /// <inheritdoc />
+        [DataMember]
+        public bool IsAssociation { get; set; }
 
         /// <inheritdoc />
         public IEnumerable<ConnectorType> GetConnectorSequence()
@@ -60,6 +64,7 @@ namespace Mocassin.Model.Transitions
                 return null;
 
             Name = transition.Name;
+            IsAssociation = transition.IsAssociation;
             StateExchangeGroups = transition.GetStateExchangeGroups().ToList();
             Connectors = transition.GetConnectorSequence().ToList();
             return this;
@@ -70,6 +75,9 @@ namespace Mocassin.Model.Transitions
         public bool Equals(IAbstractTransition other)
         {
             if (other == null) 
+                return false;
+
+            if (IsAssociation != other.IsAssociation)
                 return false;
 
             var indices = StateExchangeGroups.Select(a => a.Index).ToList();

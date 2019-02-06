@@ -1,0 +1,95 @@
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+namespace Mocassin.Model.Translator
+{
+    /// <summary>
+    ///     Provides thread safe access to unmanaged memory for marshal operations of structs
+    /// </summary>
+    public class MarshalMemoryProvider : IDisposable
+    {
+        /// <summary>
+        ///     The lock object to mark that the target is in use
+        /// </summary>
+        public object LockObj { get; } = new object();
+
+        /// <summary>
+        ///     Creates new marshal memory provider
+        /// </summary>
+        /// <param name="pointer"></param>
+        /// <param name="typeSize"></param>
+        public MarshalMemoryProvider(IntPtr pointer, int typeSize)
+        {
+            Pointer = pointer;
+            TypeSize = typeSize;
+        }
+
+        /// <summary>
+        ///     Pointer to unmanaged memory
+        /// </summary>
+        public IntPtr Pointer { get; }
+
+        /// <summary>
+        ///     Size of the unmanaged memory
+        /// </summary>
+        public int TypeSize { get; }
+
+        /// <summary>
+        ///     Tries to get an exclusive lock on the target
+        /// </summary>
+        /// <returns></returns>
+        public LockedMarshalMemory GetLocked()
+        {
+            return Monitor.TryEnter(LockObj)
+                ? new LockedMarshalMemory(this)
+                : null;
+        }
+
+        /// <summary>
+        ///     Unlocks the target
+        /// </summary>
+        public void Unlock()
+        {
+            Monitor.Exit(LockObj);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Marshal.FreeHGlobal(Pointer);
+        }
+    }
+
+    /// <summary>
+    ///     Locked marshal memory that encapsulates a marshal memory provider and unlocks it on dispose
+    /// </summary>
+    public class LockedMarshalMemory : IDisposable
+    {
+        public LockedMarshalMemory(MarshalMemoryProvider memoryProvider)
+        {
+            MemoryProvider = memoryProvider ?? throw new ArgumentNullException(nameof(memoryProvider));
+        }
+
+        /// <summary>
+        ///     The locked marshal memory provider
+        /// </summary>
+        private MarshalMemoryProvider MemoryProvider { get; }
+
+        /// <summary>
+        ///     Get the unmanaged memory pointer
+        /// </summary>
+        public IntPtr Pointer => MemoryProvider.Pointer;
+
+        /// <summary>
+        ///     Get the size of the structure
+        /// </summary>
+        public int TypeSize => MemoryProvider.TypeSize;
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            MemoryProvider.Unlock();
+        }
+    }
+}

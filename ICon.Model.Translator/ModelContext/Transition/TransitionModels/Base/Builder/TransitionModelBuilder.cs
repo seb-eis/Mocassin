@@ -166,9 +166,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="transitionModel"></param>
         protected void AddBasicMobilityInformation(ITransitionModel transitionModel)
         {
-            var buffer = new byte[8];
             transitionModel.SelectableParticles = CreateSelectableParticleSet(transitionModel.GetRuleModels());
-            transitionModel.SelectableParticlesMask = Create64BitIndexCode(transitionModel.SelectableParticles.Select(a => a.Index), buffer);
+            transitionModel.SelectableParticlesMask = transitionModel.SelectableParticles.AsLong();
         }
     }
 }

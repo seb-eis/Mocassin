@@ -14,7 +14,7 @@ namespace Mocassin.Model.Transitions
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Mocassin.Model.Transitions
         ///     The list of affiliated kinetic transition rules (auto-managed by the model)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<KineticRule> TransitionRules { get; set; }
 
         /// <inheritdoc />
@@ -58,11 +58,14 @@ namespace Mocassin.Model.Transitions
             return (TransitionRules ?? new List<KineticRule>()).AsEnumerable();
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Kinetic Transition Rule";
+        /// <inheritdoc />
+        public override string GetObjectName()
+        {
+            return "Kinetic Transition";
+        }
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IKineticTransition>(obj) is IKineticTransition transition))
                 return null;

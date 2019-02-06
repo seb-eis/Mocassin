@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mocassin.Model.Translator
@@ -76,14 +78,29 @@ namespace Mocassin.Model.Translator
         {
             base.SaveChanges();
 
-            using (var marshalProvider = new MarshalProvider())
+            using (var marshalService = new MarshalService())
             {
                 foreach (var item in Blobs)
-                    item.ChangeStateToBinary(marshalProvider);
+                    item.ChangeStateToBinary(marshalService);
 
-                PerformActionOnAllInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalProvider));
+                PerformActionOnInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalService));
 
                 return base.SaveChanges();
+            }
+        }
+
+        /// <inheritdoc />
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await base.SaveChangesAsync(cancellationToken);
+            using (var marshalService = new MarshalService())
+            {
+                foreach (var item in Blobs)
+                    item.ChangeStateToBinary(marshalService);
+
+                await PerformActionOnInteropEntitiesAsync(a => a.ChangePropertyStatesToBinaries(marshalService), cancellationToken);
+
+                return await base.SaveChangesAsync(cancellationToken);
             }
         }
 
@@ -109,7 +126,7 @@ namespace Mocassin.Model.Translator
         /// <param name="modelBuilder"></param>
         private void RedirectBinaryObjects(ModelBuilder modelBuilder)
         {
-            if (ModelBuildActions == null) 
+            if (ModelBuildActions == null)
                 ModelBuildActions = CreateRedirectionDelegates();
 
             foreach (var item in ModelBuildActions)
@@ -140,7 +157,7 @@ namespace Mocassin.Model.Translator
         ///     Performs the passed action on all properties of database set entries that are interop entities
         /// </summary>
         /// <param name="action"></param>
-        private void PerformActionOnAllInteropEntities(Action<InteropEntityBase> action)
+        private void PerformActionOnInteropEntities(Action<InteropEntityBase> action)
         {
             foreach (var dbSetProperty in GetDbSetPropertyInfos())
             {
@@ -150,6 +167,28 @@ namespace Mocassin.Model.Translator
                 foreach (var item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this))
                     action(item);
             }
+        }
+
+        /// <summary>
+        ///     Performs the passed action on all properties of database set entries that are interop entities asynchronously
+        /// </summary>
+        /// <param name="action"></param>
+        private Task PerformActionOnInteropEntitiesAsync(Action<InteropEntityBase> action, CancellationToken cancellationToken = default)
+        {
+            var operationTasks = new List<Task>();
+            foreach (var dbSetProperty in GetDbSetPropertyInfos())
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    return Task.FromCanceled(cancellationToken);
+
+                if (!typeof(InteropEntityBase).IsAssignableFrom(dbSetProperty.PropertyType.GetGenericArguments()[0]))
+                    continue;
+
+                operationTasks.AddRange(from item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this)
+                    select Task.Run(() => action(item), cancellationToken));
+            }
+
+            return Task.WhenAll(operationTasks);
         }
 
         /// <summary>

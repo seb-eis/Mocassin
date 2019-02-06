@@ -100,9 +100,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var transitionModels = TransitionModelContext.MetropolisTransitionModels;
             foreach (var simulationModel in SimulationModelContext.MetropolisSimulationModels)
             {
-                simulationModel.TransitionModels = transitionModels
-                    .Select(a => transitionModels
-                        .Single(b => b.Transition == a.Transition))
+                simulationModel.TransitionModels = simulationModel.TransitionModels
+                    .Select(a => transitionModels.Single(b => b.Transition == a.Transition))
                     .ToList();
             }
         }
@@ -115,9 +114,8 @@ namespace Mocassin.Model.Translator.ModelContext
             var transitionModels = TransitionModelContext.KineticTransitionModels;
             foreach (var simulationModel in SimulationModelContext.KineticSimulationModels)
             {
-                simulationModel.TransitionModels = transitionModels
-                    .Select(a => transitionModels
-                        .Single(b => b.Transition == a.Transition))
+                simulationModel.TransitionModels = simulationModel.TransitionModels
+                    .Select(a => transitionModels.Single(b => b.Transition == a.Transition))
                     .ToList();
             }
         }

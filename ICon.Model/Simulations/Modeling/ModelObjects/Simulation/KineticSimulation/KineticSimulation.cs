@@ -32,7 +32,7 @@ namespace Mocassin.Model.Simulations
         ///     The set of transitions attached to the simulation
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IKineticTransition> Transitions { get; set; }
 
         /// <summary>
@@ -52,6 +52,7 @@ namespace Mocassin.Model.Simulations
 
             base.PopulateFrom(obj);
             NormalizationProbability = simulation.NormalizationProbability;
+            ElectricFieldMagnitude = simulation.ElectricFieldMagnitude;
             ElectricFieldVector = new DataVector3D(simulation.ElectricFieldVector);
             Transitions = (simulation.Transitions ?? new List<IKineticTransition>()).ToList();
             return this;

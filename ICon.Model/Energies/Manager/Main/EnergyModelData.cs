@@ -29,7 +29,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         [DataMember]
         [IndexedModelData(typeof(IUnstableEnvironment))]
-        public List<UnstableEnvironment> UnstableEnvironmentInfos { get; set; }
+        public List<UnstableEnvironment> UnstableEnvironments { get; set; }
 
         /// <summary>
         ///     The list of pair information that describe all existing pair interactions for stable positions (Auto-managed, no

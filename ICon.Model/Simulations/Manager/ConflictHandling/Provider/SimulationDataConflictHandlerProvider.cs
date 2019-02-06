@@ -13,5 +13,15 @@ namespace Mocassin.Model.Simulations.ConflictHandling
             : base(modelProject)
         {
         }
+
+        /// <summary>
+        ///     Creation method for the simulation added conflict handler
+        /// </summary>
+        /// <returns></returns>
+        [HandlerFactoryMethod(DataOperationType.NewObject)]
+        protected object CreateObjectHandler()
+        {
+            return new SimulationObjectChangedHandler(ModelProject);
+        }
     }
 }

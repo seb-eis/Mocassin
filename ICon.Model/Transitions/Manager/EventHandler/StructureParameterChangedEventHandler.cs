@@ -26,8 +26,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleChangedCellParameters(IModelParameterEventArgs<ICellParameters> eventArgs)
         {
-            Console.WriteLine($"{eventArgs} received on {ToString()}");
-            return new ConflictReport();
+            return EventTestReaction(eventArgs);
         }
 
         /// <summary>
@@ -38,8 +37,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleChangedSpaceGroupInfo(IModelParameterEventArgs<ISpaceGroupInfo> eventArgs)
         {
-            Console.WriteLine($"{eventArgs} received on {ToString()}");
-            return new ConflictReport();
+            return EventTestReaction(eventArgs);
         }
 
         /// <summary>
@@ -50,8 +48,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleStructureInfoChange(IModelParameterEventArgs<IStructureInfo> eventArgs)
         {
-            Console.WriteLine($"{eventArgs} received on {ToString()}");
-            return new ConflictReport();
+            return EventTestReaction(eventArgs);
         }
     }
 }

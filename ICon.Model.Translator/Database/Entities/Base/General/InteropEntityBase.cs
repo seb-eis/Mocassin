@@ -6,7 +6,7 @@ namespace Mocassin.Model.Translator
 {
     /// <summary>
     ///     Represents an interop entity that has properties that are represents as local blobs in the database but is not
-    ///     itself a blob
+    ///     itself a blob stored entity
     /// </summary>
     public abstract class InteropEntityBase : EntityBase
     {
@@ -14,9 +14,9 @@ namespace Mocassin.Model.Translator
         ///     Delegate fro the state change action of interop entities
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="provider"></param>
+        /// <param name="service"></param>
         /// <param name="isToBinary"></param>
-        public delegate void StateChangeAction(InteropEntityBase entity, IMarshalProvider provider, bool isToBinary);
+        public delegate void StateChangeAction(InteropEntityBase entity, IMarshalService service, bool isToBinary);
 
         /// <summary>
         ///     Abstract access to the implementing class state change action list
@@ -26,19 +26,19 @@ namespace Mocassin.Model.Translator
         /// <summary>
         ///     Parses the blob entity object into the binary data and header properties
         /// </summary>
-        public virtual void ChangePropertyStatesToBinaries(IMarshalProvider marshalProvider)
+        public virtual void ChangePropertyStatesToBinaries(IMarshalService marshalService)
         {
             foreach (var item in GetStateChangeDelegates())
-                item.Invoke(this, marshalProvider, true);
+                item.Invoke(this, marshalService, true);
         }
 
         /// <summary>
         ///     Parses the binary data and header properties and populates the object
         /// </summary>
-        public virtual void ChangePropertyStatesToObjects(IMarshalProvider marshalProvider)
+        public virtual void ChangePropertyStatesToObjects(IMarshalService marshalService)
         {
             foreach (var item in GetStateChangeDelegates())
-                item.Invoke(this, marshalProvider, false);
+                item.Invoke(this, marshalService, false);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Build handler delegate for an interop property
+        ///     Build handler delegate for an interop property that handles conversion from or to the binary state
         /// </summary>
         /// <param name="sourceProperty"></param>
         /// <param name="attribute"></param>
@@ -85,23 +85,23 @@ namespace Mocassin.Model.Translator
             var targetProperty = GetType().GetProperty(attribute.BinaryPropertyName)
                                  ?? throw new InvalidOperationException("Binary target property does not exist");
 
-            void HandleToBinary(InteropEntityBase entity, IMarshalProvider marshalProvider)
+            void HandleToBinary(InteropEntityBase entity, IMarshalService marshalService)
             {
                 if (!(sourceProperty.GetValue(entity) is InteropObject netObject))
                     return;
 
                 var buffer = new byte[netObject.ByteCount];
-                netObject.ToBinary(buffer, 0, marshalProvider);
+                netObject.ToBinary(buffer, 0, marshalService);
                 targetProperty.SetValue(entity, buffer);
             }
 
-            void HandleFromBinary(InteropEntityBase entity, IMarshalProvider marshalProvider)
+            void HandleFromBinary(InteropEntityBase entity, IMarshalService marshalService)
             {
                 if (!(targetProperty.GetValue(entity) is byte[] binBuffer))
                     return;
 
                 var netObject = (InteropObject) Activator.CreateInstance(sourceProperty.PropertyType);
-                netObject.FromBinary(binBuffer, 0, marshalProvider);
+                netObject.FromBinary(binBuffer, 0, marshalService);
             }
 
             return (entity, marshalProvider, isToBinary) =>
@@ -118,7 +118,7 @@ namespace Mocassin.Model.Translator
 
 
         /// <summary>
-        ///     Build handler delegate for an owned blob property
+        ///     Build handler delegate for an owned blob property that handles conversion from or to the binary state
         /// </summary>
         /// <param name="sourceProperty"></param>
         /// <param name="attribute"></param>
@@ -128,23 +128,23 @@ namespace Mocassin.Model.Translator
             var targetProperty = GetType().GetProperty(attribute.BlobPropertyName)
                                  ?? throw new InvalidOperationException("Blob property does not exist");
 
-            void HandleToBinary(InteropEntityBase entity, IMarshalProvider marshalProvider)
+            void HandleToBinary(InteropEntityBase entity, IMarshalService marshalService)
             {
                 if (!(sourceProperty.GetValue(entity) is BlobEntityBase netObject))
                     return;
 
-                netObject.ChangeStateToBinary(marshalProvider);
+                netObject.ChangeStateToBinary(marshalService);
                 targetProperty.SetValue(entity, netObject.BinaryState);
             }
 
-            void HandleFromBinary(InteropEntityBase entity, IMarshalProvider marshalProvider)
+            void HandleFromBinary(InteropEntityBase entity, IMarshalService marshalService)
             {
                 if (!(targetProperty.GetValue(entity) is byte[] binBuffer))
                     return;
 
                 var netObject = (BlobEntityBase) Activator.CreateInstance(sourceProperty.PropertyType);
                 netObject.BinaryState = binBuffer;
-                netObject.ChangeStateToObject(marshalProvider);
+                netObject.ChangeStateToObject(marshalService);
                 sourceProperty.SetValue(entity, netObject);
             }
 

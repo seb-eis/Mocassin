@@ -56,7 +56,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static bool IsAlmostEqualByRange(this double value, double other, double range)
+        public static bool IsAlmostEqualByRange(this double value, double other, double range = 1.0e-10)
         {
             return Math.Abs(value - other) <= Math.Abs(range);
         }
@@ -68,7 +68,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="factor"></param>
         /// <returns></returns>
-        public static bool IsAlmostEqualByRelative(this double value, double other, double factor)
+        public static bool IsAlmostEqualByRelative(this double value, double other, double factor = 0.00001)
         {
             if (value == 0.0)
             {
@@ -103,7 +103,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static int CompareToByRange(this double value, double other, double range)
+        public static int CompareToByRange(this double value, double other, double range = 1.0e-10)
         {
             if (value.IsAlmostEqualByRange(other, range))
                 return 0;

@@ -63,7 +63,7 @@ namespace Mocassin.Model.Energies
         [DataOperation(DataOperationType.NewObject)]
         protected IOperationReport TryRegisterNewUnstableEnvironmentInfo(IUnstableEnvironment newObject)
         {
-            return DefaultRegisterModelObject(newObject, accessor => accessor.Query(data => data.UnstableEnvironmentInfos));
+            return DefaultRegisterModelObject(newObject, accessor => accessor.Query(data => data.UnstableEnvironments));
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Mocassin.Model.Energies
         [DataOperation(DataOperationType.ObjectChange)]
         protected IOperationReport TryReplaceUnstableEnvironmentInfo(IUnstableEnvironment orgObject, IUnstableEnvironment newObject)
         {
-            return DefaultReplaceModelObject(orgObject, newObject, accessor => accessor.Query(data => data.UnstableEnvironmentInfos));
+            return DefaultReplaceModelObject(orgObject, newObject, accessor => accessor.Query(data => data.UnstableEnvironments));
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Mocassin.Model.Energies
         [DataOperation(DataOperationType.ObjectRemoval)]
         protected IOperationReport TryRemoveUnstableEnvironmentInfo(IUnstableEnvironment orgObject)
         {
-            return DefaultRemoveModelObject(orgObject, accessor => accessor.Query(data => data.UnstableEnvironmentInfos));
+            return DefaultRemoveModelObject(orgObject, accessor => accessor.Query(data => data.UnstableEnvironments));
         }
 
         /// <summary>

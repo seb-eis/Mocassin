@@ -33,11 +33,11 @@ namespace Mocassin.Model.Basic
         [EventPortConnector]
         public IDisposable InvokeSubscription(T1 eventPort)
         {
-            var unsubscription = new DisposableCollection();
+            var subscriptionDisposer = new DisposableCollection();
             foreach (var item in SubscriptionDelegates)
-                unsubscription.Add(item(eventPort));
+                subscriptionDisposer.Add(item(eventPort));
 
-            return unsubscription;
+            return subscriptionDisposer;
         }
     }
 }

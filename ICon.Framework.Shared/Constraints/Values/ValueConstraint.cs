@@ -8,7 +8,7 @@ namespace Mocassin.Framework.Constraints
     /// Generic value constraint for cases where source and target type of the constraint are identical
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
-    public class ValueConstraint<TSource> : IValueConstraint<TSource, TSource> where TSource : struct, IComparable<TSource>
+    public class ValueConstraint<TSource> : IValueConstraint<TSource, TSource> where TSource : IComparable<TSource>
     {
         /// <summary>
         /// Creates new basic value constraint with the given limitation information

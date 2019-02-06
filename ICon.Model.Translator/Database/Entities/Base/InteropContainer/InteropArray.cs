@@ -40,7 +40,7 @@ namespace Mocassin.Model.Translator
         public int[] IndexSkips { get; set; }
 
         /// <summary>
-        ///     The dimension of the matrix entity
+        ///     The rank of the matrix entity
         /// </summary>
         [NotMapped]
         public int Rank => (IndexSkips?.Length ?? -1) + 1;
@@ -72,34 +72,41 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public override void ChangeStateToObject(IMarshalProvider marshalProvider)
+        public override void ChangeStateToObject(IMarshalService marshalService)
         {
-            var itemSize = Marshal.SizeOf(default(T));
-            var arraySize = (BinaryState.Length - HeaderByteCount) / itemSize;
+            if (BinaryState != null)
+            {
+                var itemSize = Marshal.SizeOf(default(T));
+                var arraySize = (BinaryState.Length - HeaderByteCount) / itemSize;
 
-            IndexSkips = new int[HeaderByteCount / sizeof(int) - 2];
+                IndexSkips = new int[HeaderByteCount / sizeof(int) - 2];
 
-            for (var i = 0; i < IndexSkips.Length; i++) IndexSkips[i] = BitConverter.ToInt32(BinaryState, sizeof(int) * (2 + i));
+                for (var i = 0; i < IndexSkips.Length; i++)
+                    IndexSkips[i] = BitConverter.ToInt32(BinaryState, sizeof(int) * (2 + i));
 
-            Values = new T[arraySize].Populate(marshalProvider.BytesToManyStructures<T>(BinaryState, HeaderByteCount, BinaryState.Length));
+                Values = new T[arraySize].Populate(marshalService.GetStructures<T>(BinaryState, HeaderByteCount, BinaryState.Length));
+            }
 
             BinaryState = null;
         }
 
         /// <inheritdoc />
-        public override void ChangeStateToBinary(IMarshalProvider marshalProvider)
+        public override void ChangeStateToBinary(IMarshalService marshalService)
         {
-            var itemSize = Marshal.SizeOf(default(T));
-            BinaryState = new byte[HeaderByteCount + itemSize * Values.Length];
+            if (Values != null)
+            {
+                var itemSize = Marshal.SizeOf(default(T));
+                BinaryState = new byte[HeaderByteCount + itemSize * Length];
 
-            Buffer.BlockCopy(BitConverter.GetBytes(Rank), 0, BinaryState, 0, sizeof(int));
-            Buffer.BlockCopy(BitConverter.GetBytes(Length), 0, BinaryState, sizeof(int), sizeof(int));
-            Buffer.BlockCopy(IndexSkips, 0, BinaryState, 2 * sizeof(int), IndexSkips.Length * sizeof(int));
+                Buffer.BlockCopy(BitConverter.GetBytes(Rank), 0, BinaryState, 0, sizeof(int));
+                Buffer.BlockCopy(BitConverter.GetBytes(Length), 0, BinaryState, sizeof(int), sizeof(int));
+                Buffer.BlockCopy(IndexSkips, 0, BinaryState, 2 * sizeof(int), IndexSkips.Length * sizeof(int));
 
-            marshalProvider.ManyStructuresToBytes(BinaryState, HeaderByteCount, Values);
+                marshalService.GetBytes(BinaryState, HeaderByteCount, Values);
+            }
 
             Values = null;
-            IndexSkips = new int[0];
+            IndexSkips = null;
         }
 
         /// <summary>
@@ -131,6 +138,19 @@ namespace Mocassin.Model.Translator
 
             indices[IndexSkips.Length] = index;
             return indices;
+        }
+
+        /// <summary>
+        ///     Get the dimensions of the interop array
+        /// </summary>
+        /// <returns></returns>
+        public int[] GetDimensions()
+        {
+            var result = IndicesOf(Length - 1);
+            for (var i = 0; i < result.Length; i++)
+                result[i]++;
+
+            return result;
         }
 
         /// <summary>

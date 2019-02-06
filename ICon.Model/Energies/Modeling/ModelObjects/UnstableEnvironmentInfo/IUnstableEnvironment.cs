@@ -21,10 +21,10 @@ namespace Mocassin.Model.Energies
         IUnitCellPosition UnitCellPosition { get; }
 
         /// <summary>
-        ///     Get all unit cell positions that are ignored during the environment search
+        ///     Get all interaction filters of the unstable environment
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IUnitCellPosition> GetIgnoredPositions();
+        IEnumerable<IInteractionFilter> GetInteractionFilters();
 
         /// <summary>
         ///     Get all pair interactions affiliated with this environment

@@ -42,10 +42,10 @@ namespace Mocassin.Model.Energies
         IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions();
 
         /// <summary>
-        ///     Get an energy setter provider that has the value constraints set to their porject settings defined values
+        ///     Get an energy setter provider that has the value constraints set to their project settings defined values
         /// </summary>
         /// <returns></returns>
-        IEnergySetterProvider GetFullEnergySetterProvider();
+        IEnergySetterProvider GetEnergySetterProvider();
 
         /// <summary>
         ///     Get a read only list of all stable pair interaction energy setters

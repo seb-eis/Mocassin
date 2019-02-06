@@ -46,6 +46,9 @@ namespace Mocassin.Model.ModelProject
         public IValidationServiceProvider ValidationServices => ValidationServiceProvider;
 
         /// <inheritdoc />
+        public IProjectInputPipeline InputPipeline { get; protected set; }
+
+        /// <inheritdoc />
         public INumericService GeometryNumeric { get; protected set; }
         
         /// <inheritdoc />
@@ -174,31 +177,35 @@ namespace Mocassin.Model.ModelProject
 
             var structureSettings = settings.GetModuleSettings<MocassinStructureSettings>();
 
-            var projectService = new ModelProject();
+            var modelProject = new ModelProject
+            {
+                DataTracker = new ModelDataTracker()
+            };
+
+            modelProject.InputPipeline = new ProjectInputPipeline(modelProject);
+
             var geometryNumeric = new NumericService(settings.GeometryNumericSettings);
             var commonNumeric = new NumericService(settings.CommonNumericSettings);
             var spaceGroupService = new SpaceGroupService(settings.SymmetrySettings.SpaceGroupDbPath, settings.SymmetrySettings.VectorTolerance);
             var crystalSystemProvider = CrystalSystemSource.CreateSoft(structureSettings.CellParameter.MaxValue,
                 settings.SymmetrySettings.ParameterTolerance);
             var crystalSystemService = new CrystalSystemService(crystalSystemProvider, settings.CommonNumericSettings.RangeValue);
-            var validationServices = new ValidationServiceProvider();
+            var validationServices = new ValidationServiceProvider(modelProject);
             var dataAccessLocker = new AccessLockSource(settings.ConcurrencySettings.MaxAttempts, settings.ConcurrencySettings.AttemptInterval);
             var messageSystem = new AsyncMessageSystem();
             var symmetryService = new SymmetryAnalysisService(SymmetryIndicator.MakeComparer(geometryNumeric.RelativeComparer),
                 ObjectProvider.Create(() => crystalSystemService.VectorTransformer));
-            var dataTracker = new ModelDataTracker();
 
-            projectService.SymmetryAnalysisService = symmetryService;
-            projectService.Settings = settings;
-            projectService.GeometryNumeric = geometryNumeric;
-            projectService.CommonNumeric = commonNumeric;
-            projectService.ValidationServiceProvider = validationServices;
-            projectService.AccessLockSource = dataAccessLocker;
-            projectService.MessageSystem = messageSystem;
-            projectService.SpaceGroupService = spaceGroupService;
-            projectService.CrystalSystemService = crystalSystemService;
-            projectService.DataTracker = dataTracker;
-            return projectService;
+            modelProject.SymmetryAnalysisService = symmetryService;
+            modelProject.Settings = settings;
+            modelProject.GeometryNumeric = geometryNumeric;
+            modelProject.CommonNumeric = commonNumeric;
+            modelProject.ValidationServiceProvider = validationServices;
+            modelProject.AccessLockSource = dataAccessLocker;
+            modelProject.MessageSystem = messageSystem;
+            modelProject.SpaceGroupService = spaceGroupService;
+            modelProject.CrystalSystemService = crystalSystemService;
+            return modelProject;
         }
     }
 }

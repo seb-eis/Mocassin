@@ -26,9 +26,13 @@ namespace Mocassin.Model.Transitions.Validators
             var report = new ValidationReport();
 
             AddHasContentValidation(obj, report);
+            if (!report.IsGood)
+                return report;
+
             AddGenericObjectDuplicateValidation(obj, DataReader.Access.GetAbstractTransitions(), report);
             AddContentRestrictionsValidation(obj, report);
             AddConnectorPatternValidation(obj, report);
+            AddChargeConsistencyValidation(obj, report);
 
             return report;
         }
@@ -71,12 +75,11 @@ namespace Mocassin.Model.Transitions.Validators
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
 
-            if (!new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name))
-            {
-                var detail =
-                    $"The abstract transition name ({transition.Name}) violates the contraining regular expression ({Settings.TransitionStringPattern})";
-                report.AddWarning(ModelMessageSource.CreateNamingViolationWarning(this, detail));
-            }
+            if (new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name)) 
+                return;
+
+            var detail = $"The abstract transition name ({transition.Name}) violates the constraint regex ({Settings.TransitionStringPattern})";
+            report.AddWarning(ModelMessageSource.CreateNamingViolationWarning(this, detail));
         }
 
         /// <summary>
@@ -93,9 +96,54 @@ namespace Mocassin.Model.Transitions.Validators
                 return;
             }
 
-            const string detail0 = "The provided connector pattern does not result in a supported physical transition";
-            var detail1 = validPatterns.Select(value => $"Valid type ('{value.PatternType}') pattern regex is ('{value.PatternRegex}')");
-            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail1.Concat(detail0.AsSingleton()).ToArray()));
+            var patternType = ConnectorPattern.DeterminePatternType(transition.GetConnectorSequence());
+            if (patternType != ConnectorPatternType.NormalVehicle && patternType != ConnectorPatternType.SplitTransitionVehicle &&
+                transition.IsAssociation)
+            {
+                const string detail0 = "Enabled association behavior flag has not effect on non vehicle connector patterns";
+                report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, detail0));
+            }
+
+            if (patternType == ConnectorPatternType.SplitTransitionVehicle)
+                AddNormalVehicleRestrictionValidation(transition, report);
+
+            const string detail1 = "The provided connector pattern does not result in a supported physical transition";
+            var detail2 = validPatterns.Select(value => $"Valid type ('{value.PatternType}') pattern regex is ('{value.PatternRegex}')");
+            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail2.Concat(detail1.AsSingleton()).ToArray()));
+        }
+
+        /// <summary>
+        /// Validates that the passed abstract transition does not carry ambiguous transition definition in case of regular vehicle patterns
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void AddNormalVehicleRestrictionValidation(IAbstractTransition transition, ValidationReport report)
+        {
+            var unstableStateGroups = transition.GetStateExchangeGroups().Where(x => x.IsUnstablePositionGroup).ToList();
+            if (unstableStateGroups.Count > 1 || unstableStateGroups[0].StatePairCount == 1)
+                return;
+
+            const string detail0 = "Multiple transition exchange pairs on single transition vehicles is not supported";
+            const string detail1 = "Reason: Automatic determination of transition state is not possible";
+            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
+        }
+
+        /// <summary>
+        ///     Validates that the charge exchange between each consecutive dynamically linked is physically valid
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        protected void AddChargeConsistencyValidation(IAbstractTransition transition, ValidationReport report)
+        {
+            var analyzer = new TransitionAnalyzer();
+            var swapChain = analyzer.GetChargeTransportChain(transition, ModelProject.CommonNumeric.RangeComparer);
+
+            if (!swapChain.Any(double.IsNaN) || transition.IsMetropolis)
+                return;
+
+            const string detail0 = "The transition charge transport chain is ill/ambiguously defined";
+            const string detail1 = "Problem : Focal point charge transfer modulus is ambiguous/undefined and cannot be encoded";
+            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail0, detail1));
         }
 
         /// <summary>

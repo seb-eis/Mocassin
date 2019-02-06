@@ -23,6 +23,12 @@ namespace Mocassin.Model.ModelProject
         public ValueSetting<int> TransitionLength { get; set; }
 
         /// <summary>
+        ///     The value restriction for attempt frequencies
+        /// </summary>
+        [DataMember]
+        public ValueSetting<double> AttemptFrequency { get; set; }
+
+        /// <summary>
         ///     The regular expression string pattern for the abstract transition naming restriction
         /// </summary>
         [DataMember]
@@ -40,6 +46,7 @@ namespace Mocassin.Model.ModelProject
             TransitionCount = new ValueSetting<int>("Transition Count", 0, 100);
             TransitionLength = new ValueSetting<int>("Transition Length", 2, 8);
             TransitionStringPattern = "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$";
+            AttemptFrequency = new ValueSetting<double>("Attempt Frequency", 0, double.MaxValue);
             FilterNotRecognizedRuleTypes = true;
         }
     }

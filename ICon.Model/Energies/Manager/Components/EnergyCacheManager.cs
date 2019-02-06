@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Mathematics.Constraints;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Structures;
@@ -47,7 +46,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IEnergySetterProvider GetFullEnergySetterProvider()
+        public IEnergySetterProvider GetEnergySetterProvider()
         {
             return GetResultFromCache(CreateEnergySetterProvider);
         }
@@ -95,7 +94,7 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyList<IPairEnergySetter> CreateStablePairEnergySetters()
         {
-            return GetFullEnergySetterProvider().GetStablePairEnergySetters();
+            return GetEnergySetterProvider().GetStablePairEnergySetters();
         }
 
         /// <summary>
@@ -105,7 +104,7 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyList<IPairEnergySetter> CreateUnstablePairEnergySetters()
         {
-            return GetFullEnergySetterProvider().GetUnstablePairEnergySetters();
+            return GetEnergySetterProvider().GetUnstablePairEnergySetters();
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyList<IGroupEnergySetter> CreateGroupEnergySetters()
         {
-            return GetFullEnergySetterProvider().GetGroupEnergySetters();
+            return GetEnergySetterProvider().GetGroupEnergySetters();
         }
 
         /// <summary>
@@ -124,18 +123,9 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         [CacheMethodResult]
         protected IEnergySetterProvider CreateEnergySetterProvider()
-        {         
-            var provider = ModelProject.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetEnergySetterProvider());
-            var settings = ModelProject.Settings.GetModuleSettings<MocassinEnergySettings>();
-
-            var (pairMin, pairMax) = settings.PairEnergies.GetMinMaxTuple();
-            var (groupMin, groupMax) = settings.GroupEnergies.GetMinMaxTuple();
-
-            provider.PairEnergyConstraint =
-                new NumericConstraint(true, pairMin, pairMax, true, ModelProject.CommonNumeric.RangeComparer);
-
-            provider.GroupEnergyConstraint =
-                new NumericConstraint(true, groupMin, groupMax, true, ModelProject.CommonNumeric.RangeComparer);
+        {
+            var provider = ModelProject.GetManager<IEnergyManager>().QueryPort
+                .Query(port => port.GetEnergySetterProvider(ModelProject.Settings));
 
             return provider;
         }
@@ -174,15 +164,23 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
         {
-            var manager = ModelProject.GetManager<IEnergyManager>();
-            var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
-            var asymmetricPairs = manager.QueryPort.Query(port => port.GetUnstablePairInteractions());
+            var energyManager = ModelProject.GetManager<IEnergyManager>();
+            var structureManager = ModelProject.GetManager<IStructureManager>();
+            var symmetricPairs = energyManager.QueryPort.Query(port => port.GetStablePairInteractions());
+            var asymmetricPairs = energyManager.QueryPort.Query(port => port.GetUnstablePairInteractions());
             var symmetricResult = AssignPairInteractionsToPosition(symmetricPairs);
             var asymmetricResult = AssignPairInteractionsToPosition(asymmetricPairs);
 
-            return symmetricResult
+            var result = symmetricResult
                 .Concat(asymmetricResult)
                 .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
+
+            foreach (var unitCellPosition in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            {
+                if (!result.ContainsKey(unitCellPosition)) result.Add(unitCellPosition, new List<IPairInteraction>());
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -190,7 +188,8 @@ namespace Mocassin.Model.Energies
         ///     position only
         /// </summary>
         /// <returns></returns>
-        protected IDictionary<IUnitCellPosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(IEnumerable<T> pairInteractions) 
+        protected IDictionary<IUnitCellPosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(
+            IEnumerable<T> pairInteractions)
             where T : IPairInteraction
         {
             var localResult = new Dictionary<IUnitCellPosition, List<IPairInteraction>>();

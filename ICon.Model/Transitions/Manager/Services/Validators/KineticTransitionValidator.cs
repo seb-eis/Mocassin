@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Transitions.Validators
 {
@@ -23,10 +25,13 @@ namespace Mocassin.Model.Transitions.Validators
         public override IValidationReport Validate(IKineticTransition obj)
         {
             var report = new ValidationReport();
+
             AddHasContentValidation(obj, report);
+            if (!report.IsGood)
+                return report;
+
             AddAbstractTransitionValidation(obj, report);
             AddTransitionGeometryValidation(obj, report);
-            AddChargeConsistencyValidation(obj, report);
             return report;
         }
 
@@ -39,7 +44,7 @@ namespace Mocassin.Model.Transitions.Validators
         /// <returns></returns>
         protected void AddHasContentValidation(IKineticTransition transition, ValidationReport report)
         {
-            if (transition.GeometryStepCount != 0) 
+            if (transition.GeometryStepCount != 0)
                 return;
 
             const string detail = "The provided kinetic transition contains no geometry information and cannot describe a valid transition";
@@ -57,17 +62,102 @@ namespace Mocassin.Model.Transitions.Validators
             var groupCount = transition.AbstractTransition.StateCount;
             if (transition.GeometryStepCount != groupCount)
             {
-                const string detail0 = "The abstract transition and the selected geometry set for the kinetic transition do not match in transition size";
-                var detail1 =
-                    $"Abstract transition defines ({groupCount}) positions while the geometry set defines ({transition.GeometryStepCount}) positions";
+                const string detail0 = "Size mismatch between abstract transition and selected geometry binding";
+                var detail1 = $"Abstract defines ({groupCount}) positions, geometry defines ({transition.GeometryStepCount}) positions";
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
 
-            if (!new TransitionAnalyzer().ContainsRingTransition(transition.GetGeometrySequence(), ModelProject.SpaceGroupService.Comparer)
-            ) return;
+            if (TransitionGeometryIsPlausible(transition, report)) 
+                return;
 
-            const string detail2 = "The transition geometry contains a ring transition where one position is contained multiple times";
-            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail2));
+            const string detail2 = "Transition geometry does not form a meaningful kinetic transition!";
+            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail2));
+        }
+
+        /// <summary>
+        ///     Checks if the passed kinetic transition has a plausible geometry binding that can form meaningful kinetic
+        ///     transition and adds the found problems to the passed validation report
+        /// </summary>
+        /// <param name="transition"></param>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        protected bool TransitionGeometryIsPlausible(IKineticTransition transition, ValidationReport report)
+        {
+            var details = new List<string>();
+            var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
+            var unitCellPositions = transition.GetGeometrySequence().Select(x => unitCellProvider.GetEntryValueAt(x)).ToList();
+
+            AddExchangeGroupGeometryValidation(unitCellPositions, transition.AbstractTransition.GetStateExchangeGroups().ToList(), report);
+
+            if (!unitCellPositions[0].IsValidAndStable() || !unitCellPositions[unitCellPositions.Count - 1].IsValidAndStable())
+            {
+                const string detail0 = "Tailing positions of the transition are invalid or unstable!";
+                details.Add(detail0);
+            }
+
+            if (unitCellPositions.Any(x => !x.IsValidAndUnstable() && !x.IsValidAndStable()))
+            {
+                const string detail1 = "Geometry sequence contains deprecated unit cell positions!";
+                details.Add(detail1);
+            }
+
+            for (var i = 1; i < unitCellPositions.Count - 1; i++)
+            {
+                if (!unitCellPositions[i].IsValidAndUnstable() || !unitCellPositions[i + 1].IsValidAndUnstable()) 
+                    continue;
+
+                var detail2 = $"The geometry position contains consecutive unstable positions at positions ({i}) and ({i+1})";
+                break;
+            }
+
+            if (unitCellPositions.All(x => x.Status != PositionStatus.Unstable))
+            {
+                const string detail3 = "The geometry set does not contain any unstable position for the transition state";
+                details.Add(detail3);
+            }
+
+            var analyzer = new TransitionAnalyzer();
+            if (analyzer.ContainsRingTransition(transition.GetGeometrySequence(), ModelProject.SpaceGroupService.Comparer))
+            {
+                const string detail4 = "The transition geometry forms or contains a ring!";
+                details.Add(detail4);
+            }
+
+            if (details.Count == 0)
+                return true;
+
+            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, details.ToArray()));
+            return false;
+        }
+
+        /// <summary>
+        /// Validates that the set of passed exchange groups matches the set of binding unit cell positions and adds the results to the passed validation report
+        /// </summary>
+        /// <param name="unitCellPositions"></param>
+        /// <param name="stateExchangeGroups"></param>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        protected void AddExchangeGroupGeometryValidation(IList<IUnitCellPosition> unitCellPositions,
+            IList<IStateExchangeGroup> stateExchangeGroups, ValidationReport report)
+        {
+            if (unitCellPositions.Count != stateExchangeGroups.Count)
+                return;
+
+            var details = new List<string>();
+            for (var i = 0; i < unitCellPositions.Count; i++)
+            {
+                if ((unitCellPositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup) ||
+                    (unitCellPositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup))
+                    continue;
+
+                var detail = $"Exchange group and position at geometry step ({i}) do not match in stability";
+                details.Add(detail);
+            }
+
+            if (details.Count == 0)
+                return;
+
+            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, details.ToArray()));
         }
 
         /// <summary>
@@ -81,32 +171,13 @@ namespace Mocassin.Model.Transitions.Validators
             switch (patternType)
             {
                 case ConnectorPatternType.Metropolis:
-                    var detail0 = $"Kinetic transitions cannot use the {patternType} pattern type as is does not support a transition state";
+                    var detail0 = $"Abstract defines {patternType} that does not support a transition state";
                     report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0));
                     break;
 
                 case ConnectorPatternType.Undefined:
                     throw new InvalidOperationException("Unsupported transition pattern type previously passed validation");
             }
-        }
-
-        /// <summary>
-        ///     Validates that the charge exchange between each consecutive dynamically linked is physically valid
-        /// </summary>
-        /// <param name="transition"></param>
-        /// <param name="report"></param>
-        protected void AddChargeConsistencyValidation(IKineticTransition transition, ValidationReport report)
-        {
-            var swapChain =
-                new TransitionAnalyzer().GetChargeTransportChain(transition.AbstractTransition, ModelProject.CommonNumeric.RangeComparer);
-
-            if (!swapChain.Any(double.IsNaN)) 
-                return;
-
-            const string detail0 = "The transition charge transport chain is ill defined. Please reconsider your abstract transition definition!";
-            const string detail1 = "Problem 1 : Property based conductivity calculation will yield nonsense";
-            const string detail2 = "Problem 2 : Separation of complex property and ion movement will yield nonsense";
-            report.AddWarning(ModelMessageSource.CreateFeatureBreakingInputWarning(this, detail0, detail1, detail2));
         }
     }
 }

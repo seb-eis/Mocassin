@@ -63,7 +63,7 @@ namespace Mocassin.Model.Particles
         /// <returns></returns>
         public static Particle CreateEmpty()
         {
-            return new Particle {Name = "Void", Symbol = "Void", Alias = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsEmpty = true};
+            return new Particle {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsEmpty = true};
         }
 
 		/// <inheritdoc />

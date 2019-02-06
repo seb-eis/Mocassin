@@ -19,14 +19,14 @@ namespace Mocassin.Model.Lattices
         /// Dopand particle
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticle Dopant { set; get; }
 
         /// <summary>
         /// Particle that is doped
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticle DopedParticle { set; get; }
 
         /// <summary>

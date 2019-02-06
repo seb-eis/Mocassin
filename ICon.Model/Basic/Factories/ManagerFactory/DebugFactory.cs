@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Basic.Debug;
 using Mocassin.Model.DataManagement;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Lattices;
@@ -121,7 +120,7 @@ namespace Mocassin.Model.Basic
             {
                 var package = CreateFullManagementSystem();
                 var inputSystem = MakeCeriaInputSystem();
-                inputSystem.AutoInputData(package.ModelProject);
+                inputSystem.PushData(package.ModelProject);
                 package.InputReportJson = inputSystem.GetReportJson();
                 return package;
             }
@@ -130,18 +129,18 @@ namespace Mocassin.Model.Basic
             ///     Makes an auto data input system that carries the ceria related data fro debug testing
             /// </summary>
             /// <returns></returns>
-            public static ProjectDataInputSystem MakeCeriaInputSystem()
+            public static ModelProjectInputSystem MakeCeriaInputSystem()
             {
                 var particles = new[]
                 {
                     new Particle {Index = 0},
-                    new Particle {Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Alias = "Particle.Vc"},
-                    new Particle {Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Alias = "Particle.O"},
-                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Alias = "Particle.Ce4"},
-                    new Particle {Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Alias = "Particle.Y"},
-                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Alias = "Particle.Ce3"},
-                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Alias = "Particle.Zr4"},
-                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Alias = "Particle.Zr3"}
+                    new Particle {Name = "Vacancy", Symbol = "Vc", Charge = 0.0, IsVacancy = true, Key = "Particle.Vc"},
+                    new Particle {Name = "Oxygen", Symbol = "O", Charge = -2.0, IsVacancy = false, Key = "Particle.O"},
+                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 4.0, IsVacancy = false, Key = "Particle.Ce4"},
+                    new Particle {Name = "Yttrium", Symbol = "Y", Charge = 3.0, IsVacancy = false, Key = "Particle.Y"},
+                    new Particle {Name = "Cer", Symbol = "Ce", Charge = 3.0, IsVacancy = false, Key = "Particle.Ce3"},
+                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 4.0, IsVacancy = false, Key = "Particle.Zr4"},
+                    new Particle {Name = "Zirconium", Symbol = "Zr", Charge = 3.0, IsVacancy = false, Key = "Particle.Zr3"}
                 };
                 var particleSets = new[]
                 {
@@ -169,27 +168,27 @@ namespace Mocassin.Model.Basic
                 };
                 var propertyPairs = new[]
                 {
-                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[0], IsVacancyPair = false, Index = 0},
-                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[1], IsVacancyPair = true, Index = 1},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[4], IsVacancyPair = false, Index = 2},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 3},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 4},
-                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 5},
-                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[5], IsVacancyPair = false, Index = 6},
-                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[6], IsVacancyPair = false, Index = 7},
-                    new StateExchangePair {DonorParticle = particles[5], AcceptorParticle = particles[7], IsVacancyPair = false, Index = 8}
+                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[0], Index = 0},
+                    new StateExchangePair {DonorParticle = particles[2], AcceptorParticle = particles[1], Index = 1},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[4], Index = 2},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[5], Index = 3},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[7], Index = 4},
+                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[7], Index = 5},
+                    new StateExchangePair {DonorParticle = particles[6], AcceptorParticle = particles[5], Index = 6},
+                    new StateExchangePair {DonorParticle = particles[3], AcceptorParticle = particles[6], Index = 7},
+                    new StateExchangePair {DonorParticle = particles[5], AcceptorParticle = particles[7], Index = 8}
                 };
                 var propertyGroups = new[]
                 {
                     new StateExchangeGroup
-                        {IsVacancyGroup = false, Index = 0, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[0]}},
+                        {Index = 0, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[0]}},
                     new StateExchangeGroup
-                        {IsVacancyGroup = true, Index = 1, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[1]}},
+                        {Index = 1, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[1]}},
                     new StateExchangeGroup
-                        {IsVacancyGroup = false, Index = 2, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[2]}},
+                        {Index = 2, StateExchangePairs = new List<IStateExchangePair> {propertyPairs[2]}},
                     new StateExchangeGroup
                     {
-                        IsVacancyGroup = false, Index = 3, StateExchangePairs = new List<IStateExchangePair>
+                        Index = 3, StateExchangePairs = new List<IStateExchangePair>
                         {
                             propertyPairs[3], propertyPairs[4], propertyPairs[5], propertyPairs[6], propertyPairs[7], propertyPairs[8]
                         }
@@ -402,7 +401,7 @@ namespace Mocassin.Model.Basic
                     }
                 };
 
-                var inputter = new ProjectDataInputSystem();
+                var inputter = new ModelProjectInputSystem();
                 inputter.AddMany(particles.Skip(1));
                 inputter.AddMany(particleSets);
                 inputter.Add(new StructureInfo {Name = "Ceria"});
@@ -414,14 +413,16 @@ namespace Mocassin.Model.Basic
                 inputter.AddMany(abstractTransitions);
                 inputter.AddMany(metropolisTransitions);
                 inputter.AddMany(kineticTransitions);
-                inputter.Add(new StableEnvironmentInfo
-                    {MaxInteractionRange = 6.5, IgnoredPairInteractions = new List<SymmetricParticlePair>()});
+                inputter.Add(new StableEnvironmentInfo {MaxInteractionRange = 6.5});
                 inputter.Add(new UnstableEnvironment
                 {
                     Index = 0,
-                    MaxInteractionRange = 1.5,
+                    MaxInteractionRange = 2.5,
                     UnitCellPosition = unitCellPositions[2],
-                    IgnoredPositions = new List<IUnitCellPosition>()
+                    InteractionFilters = new List<AsymmetricInteractionFilter>
+                    {
+                        new AsymmetricInteractionFilter { StartRadius = 0, EndRadius = 2.5, PartnerUnitCellPosition = unitCellPositions[1]}
+                    }
                 });
                 inputter.AddMany(buildingBlocks);
                 inputter.AddMany(blockInfos);

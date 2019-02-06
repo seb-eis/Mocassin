@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
+using Mocassin.Framework.Messaging;
 using Mocassin.Framework.Operations;
 using Mocassin.Framework.Processing;
 using Mocassin.Framework.Reflection;
@@ -77,7 +78,9 @@ namespace Mocassin.Model.Basic
         [EventPortConnector]
         public IDisposable Connect(T1 eventPort)
         {
-            if (IsConnected) return null;
+            if (IsConnected)
+                return null;
+
             EventSubscription = SubscribeToEvent(eventPort);
             return Disposable.Create(Disconnect);
         }
@@ -142,13 +145,13 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        ///     Placeholder debug dummy reaction that writes the passed information to console and returns an empty resolver report
+        ///     Placeholder debug dummy reaction that writes the passed information to the messaging system and returns empty report
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         protected virtual IConflictReport EventTestReaction(object obj)
         {
-            Console.WriteLine($"{obj} received on {ToString()}");
+            ModelProject.MessageSystem.SendMessage(new InfoMessage(this, $"{obj} received on {ToString()}"));
             return new ConflictReport();
         }
     }

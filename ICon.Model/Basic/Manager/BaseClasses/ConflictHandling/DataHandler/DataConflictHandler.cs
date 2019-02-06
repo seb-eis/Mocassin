@@ -47,7 +47,7 @@ namespace Mocassin.Model.Basic
         ///     Searches the data conflict resolver for all marked methods and creates the resolver processors for the pipeline
         /// </summary>
         /// <returns></returns>
-        protected virtual IEnumerable<IObjectProcessor<IConflictReport>> CreateResolverProcessors()
+        protected IEnumerable<IObjectProcessor<IConflictReport>> CreateResolverProcessors()
         {
             bool DelegateSearchMethod(MethodInfo methodInfo)
             {
@@ -63,7 +63,7 @@ namespace Mocassin.Model.Basic
         ///     resolver report)
         /// </summary>
         /// <returns></returns>
-        protected virtual IObjectProcessor<IConflictReport> CreateOnCannotProcessProcessor()
+        protected IObjectProcessor<IConflictReport> CreateOnCannotProcessProcessor()
         {
             return new ObjectProcessor<object, IConflictReport>(obj => new ConflictReport());
         }

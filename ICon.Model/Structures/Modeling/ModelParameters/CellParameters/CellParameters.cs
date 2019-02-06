@@ -64,7 +64,7 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override string GetParameterName()
         {
-            return "'Cell Parameters'";
+            return "Cell Parameters";
         }
 
         /// <inheritdoc />

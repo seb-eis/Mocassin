@@ -49,7 +49,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             if (group.CenterUnitCellPosition.Status != PositionStatus.Unstable) return;
 
             var environment = DataAccess.Query(data =>
-                data.UnstableEnvironmentInfos.Find(value => value.Index == group.CenterUnitCellPosition.Index));
+                data.UnstableEnvironments.Find(value => value.UnitCellPosition == group.CenterUnitCellPosition));
 
             if (environment.GroupInteractions.Contains(group))
                 return;

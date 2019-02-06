@@ -14,7 +14,6 @@ namespace Mocassin.Model.Basic
         /// <inheritdoc />
         public IConflictReport ResolveConflicts(T2 source, IDataAccessor<T1> dataAccess)
         {
-            Console.WriteLine($"Dummy conflict resolver {GetType()} called for {source.GetType()}");
             return new ConflictReport();
         }
     }

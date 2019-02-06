@@ -15,21 +15,22 @@ namespace Mocassin.Model.Energies
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
-        ///     The list of ignored pair interactions during environment sampling
+        ///     The list of interaction filters for stable environments
         /// </summary>
         [DataMember]
-        public List<SymmetricParticlePair> IgnoredPairInteractions { get; set; }
+        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
+        public List<SymmetricInteractionFilter> InteractionFilters { get; set; }
 
         /// <inheritdoc />
-        public IEnumerable<SymmetricParticlePair> GetIgnoredPairs()
+        public IEnumerable<IInteractionFilter> GetInteractionFilters()
         {
-            return IgnoredPairInteractions.AsEnumerable();
+            return (InteractionFilters ?? new List<SymmetricInteractionFilter>()).AsEnumerable();
         }
 
         /// <inheritdoc />
         public override string GetParameterName()
         {
-            return "'Stable Environment Info'";
+            return "Stable Environment Info";
         }
 
         /// <inheritdoc />
@@ -39,7 +40,7 @@ namespace Mocassin.Model.Energies
                 return null;
 
             MaxInteractionRange = info.MaxInteractionRange;
-            IgnoredPairInteractions = info.GetIgnoredPairs().ToList();
+            InteractionFilters = info.GetInteractionFilters().Select(SymmetricInteractionFilter.FromInterface).ToList();
             return this;
 
         }
@@ -50,17 +51,21 @@ namespace Mocassin.Model.Energies
             if (!(other is IStableEnvironmentInfo info))
                 return false;
 
-            return MaxInteractionRange.IsAlmostEqualByRange(info.MaxInteractionRange, 1.0e-10) 
-                   && info.GetIgnoredPairs().All(pairCode => IgnoredPairInteractions.Contains(pairCode));
+            foreach (var interactionFilter in InteractionFilters)
+            {
+                if (!info.GetInteractionFilters().Contains(interactionFilter))
+                    return false;
+            }
+            return MaxInteractionRange.IsAlmostEqualByRange(info.MaxInteractionRange);
         }
 
         /// <summary>
-        ///     Create a default environment info parameter (Range of one internal unit and no ignored interactions)
+        ///     Create a default environment info parameter (Range of one internal unit and no interaction filters)
         /// </summary>
         /// <returns></returns>
         public static StableEnvironmentInfo CreateDefault()
         {
-            return new StableEnvironmentInfo {IgnoredPairInteractions = new List<SymmetricParticlePair>(0), MaxInteractionRange = 1.0};
+            return new StableEnvironmentInfo {InteractionFilters = new List<SymmetricInteractionFilter>(0), MaxInteractionRange = 1.0};
         }
     }
 }

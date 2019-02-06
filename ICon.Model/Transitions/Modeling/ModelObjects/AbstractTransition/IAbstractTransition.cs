@@ -30,6 +30,12 @@ namespace Mocassin.Model.Transitions
         bool IsMetropolis { get; }
 
         /// <summary>
+        ///     Flag that defines the abstract transition to use association/dissociation mechanism behavior instead of movement
+        ///     behavior
+        /// </summary>
+        bool IsAssociation { get; }
+
+        /// <summary>
         ///     Get the state exchange group for each step of the transition
         /// </summary>
         IEnumerable<IStateExchangeGroup> GetStateExchangeGroups();

@@ -71,14 +71,14 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <summary>
         ///     Converts the raw list based mapping assign matrix into a fixed size 3D array and fills the placeholder spots with
-        ///     an invalid mapping
+        ///     an invalid null mapping
         /// </summary>
         /// <param name="rawMatrix"></param>
         /// <returns></returns>
         protected TMappingModel[,,] ConvertRawAssignListsToMatrix<TMappingModel>(IList<IList<IList<TMappingModel>>> rawMatrix)
             where TMappingModel : ITransitionMappingModel
         {
-            var (sizeA, sizeB, sizeC) = GetRawAssignListSizeInfo(rawMatrix);
+            var (sizeA, sizeB, sizeC) = GetMappingAssignMatrixLengths(rawMatrix);
             var matrix = new TMappingModel[sizeA, sizeB, sizeC];
 
             for (var a = 0; a < rawMatrix.Count; a++)
@@ -94,14 +94,20 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Get the size information in three dimensions for the list based mapping assign matrix
+        ///     Get the required size information in three dimensions for the mapping model assign matrix
         /// </summary>
         /// <param name="rawMatrix"></param>
         /// <returns></returns>
-        protected (int, int, int) GetRawAssignListSizeInfo<TMappingModel>(IList<IList<IList<TMappingModel>>> rawMatrix)
+        protected (int, int, int) GetMappingAssignMatrixLengths<TMappingModel>(IList<IList<IList<TMappingModel>>> rawMatrix)
             where TMappingModel : ITransitionMappingModel
         {
-            return (rawMatrix.Count, rawMatrix[0].Count, rawMatrix.SelectMany(a => a.Select(b => b).Select(c => c.Count)).Max());
+            var maxParticleId = ModelProject.GetManager<IParticleManager>()
+                .QueryPort.Query(port => port.ParticleCount);
+
+            var maxPositionId = ModelProject.GetManager<IStructureManager>()
+                .QueryPort.Query(port => port.GetLinearizedExtendedPositionCount());
+
+            return (maxPositionId, maxParticleId, rawMatrix.SelectMany(a => a.Select(b => b).Select(c => c.Count)).Max());
         }
 
         /// <summary>
@@ -195,7 +201,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 }
             }
 
-            encodingModel.JumpIndexAssignTable = result;
+            encodingModel.JumpDirectionIdMappingTable = result;
         }
 
         /// <summary>

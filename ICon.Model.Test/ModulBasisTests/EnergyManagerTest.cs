@@ -21,21 +21,11 @@ namespace Mocassin.Model.Test
             var validEnvInfo = new StableEnvironmentInfo()
             {
                 MaxInteractionRange = 5.0,
-                IgnoredPairInteractions = new List<SymmetricParticlePair>
-                {
-                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
-                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
-                }
             };
 
             var invalidEnvInfo = new StableEnvironmentInfo()
             {
                 MaxInteractionRange = 100.0,
-                IgnoredPairInteractions = new List<SymmetricParticlePair>
-                {
-                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
-                    new SymmetricParticlePair() { Particle0 = new Particle(){ Index = 1}, Particle1 = new Particle(){ Index = 1} },
-                }
             };
 
             var firstResult = managers.EnergyManager.InputPort.SetModelParameter(invalidEnvInfo).Result;

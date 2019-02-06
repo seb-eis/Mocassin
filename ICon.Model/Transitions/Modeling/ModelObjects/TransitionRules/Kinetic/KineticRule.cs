@@ -12,7 +12,7 @@ namespace Mocassin.Model.Transitions
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IKineticTransition Transition { get; set; }
 
         /// <inheritdoc />

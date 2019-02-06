@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
+using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
@@ -28,7 +32,7 @@ namespace Mocassin.Model.Energies.Validators
 
             AddObjectUniquenessValidation(envInfo, report);
             AddContentRestrictionValidation(envInfo, report);
-            AddGroupInteractionValidation(envInfo, report);
+            AddInteractionFilterValidation(envInfo, report);
 
             return report;
         }
@@ -69,25 +73,70 @@ namespace Mocassin.Model.Energies.Validators
             if (Settings.PositionsPerUnstable.ParseValue(approxInteractionCount, out var warnings) >= 0) report.AddWarnings(warnings);
         }
 
-        /// <summary>
-        ///     Validates that the group interactions specified with the environment match the environment
+                /// <summary>
+        ///     Validates the interaction filters of the stable environments and adds the results to the validation report
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="report"></param>
-        protected void AddGroupInteractionValidation(IUnstableEnvironment envInfo, ValidationReport report)
+        protected void AddInteractionFilterValidation(IUnstableEnvironment envInfo, ValidationReport report)
         {
-            foreach (var interaction in envInfo.GetGroupInteractions()
-                .Where(value => value.CenterUnitCellPosition != envInfo.UnitCellPosition))
+            AddInteractionFilterRangeValidation(envInfo, report);
+            AddInteractionFilterUniquenessValidation(envInfo, report);
+        }
+
+        /// <summary>
+        /// Validates that the interaction filter definitions of the environment are unique
+        /// </summary>
+        /// <param name="envInfo"></param>
+        /// <param name="report"></param>
+        protected void AddInteractionFilterUniquenessValidation(IUnstableEnvironment envInfo, ValidationReport report)
+        {
+            var duplicateIndices = envInfo.GetInteractionFilters()
+                .ToList().RemoveDuplicatesAndGetRemovedIndices((a, b) => a.IsEqualFilter(b));
+
+            var details = duplicateIndices
+                .Select(index => $"Filter ({index}) is a duplicate of previous filter definition")
+                .ToList();
+
+            if (details.Count == 0)
+                return;
+
+            report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, details.ToArray()));
+        }
+
+        /// <summary>
+        /// Validates that the interaction filter definitions of the environment have valid range definitions
+        /// </summary>
+        /// <param name="envInfo"></param>
+        /// <param name="report"></param>
+        protected void AddInteractionFilterRangeValidation(IUnstableEnvironment envInfo, ValidationReport report)
+        {
+            var index = 0;
+            var constraint = new NumericConstraint(true, 0.0, envInfo.MaxInteractionRange, true, NumericComparer.Default());
+            var details = new List<string>();
+            foreach (var filter in envInfo.GetInteractionFilters())
             {
-                var detail0 = $"The group interaction with index ({interaction.Index}) cannot be applied to this environment";
-                report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0));
+                if (!constraint.IsValid(filter.StartRadius) || !constraint.IsValid(filter.EndRadius))
+                {
+                    details.Add($"Range ({filter.StartRadius} to {filter.EndRadius}) of filter ({index}) is out of constraint {constraint}");
+                }
+                if (filter.StartRadius > filter.EndRadius)
+                {
+                    details.Add($"Start radius of filter ({index}) is below its end radius!");
+                }
+
+                index++;
             }
+
+            if (details.Count == 0)
+                return;
+
+            report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, details.ToArray()));
         }
 
         /// <summary>
         ///     Approximates how many interactions a radial search will produce in the worst case though the pair interaction
-        ///     density of the unit cell
-        ///     and the ignored position information of the environment
+        ///     density of the unit cell when no filter has any effect
         /// </summary>
         /// <param name="envInfo"></param>
         /// <returns></returns>
@@ -95,7 +144,7 @@ namespace Mocassin.Model.Energies.Validators
         {
             long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetExtendedIndexToPositionDictionary())
-                .Count(entry => entry.Value.Status == PositionStatus.Stable && !envInfo.GetIgnoredPositions().Contains(entry.Value));
+                .Count(entry => entry.Value.Status == PositionStatus.Stable);
 
             var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetVectorEncoder())

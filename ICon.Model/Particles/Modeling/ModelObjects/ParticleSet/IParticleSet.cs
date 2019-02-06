@@ -38,5 +38,11 @@ namespace Mocassin.Model.Particles
         /// </summary>
         /// <returns></returns>
         bool IsEmpty();
+
+        /// <summary>
+        ///     Returns the indices of the contained particles as a long bitmask
+        /// </summary>
+        /// <returns></returns>
+        long AsLong();
     }
 }

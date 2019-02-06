@@ -31,7 +31,7 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public virtual XmlWriter NewDefaultWriter(Stream stream)
         {
-            if (stream == null) 
+            if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
             return XmlWriter.Create(stream, GetDefaultWriterSettings());
@@ -86,22 +86,10 @@ namespace Mocassin.Framework.Xml
             if (serializer == null || handlers == null)
                 return;
 
-            handlers.AttributeHandlers?.ForEach(handler =>
-            {
-                serializer.UnknownAttribute += handler;
-            });
-            handlers.ElementHandlers?.ForEach(handler =>
-            {
-                serializer.UnknownElement += handler;
-            });
-            handlers.NodeHandlers?.ForEach(handler =>
-            {
-                serializer.UnknownNode += handler;
-            });
-            handlers.ObjectHandlers?.ForEach(handler =>
-            {
-                serializer.UnreferencedObject += handler;
-            });
+            handlers.AttributeHandlers?.ForEach(handler => { serializer.UnknownAttribute += handler; });
+            handlers.ElementHandlers?.ForEach(handler => { serializer.UnknownElement += handler; });
+            handlers.NodeHandlers?.ForEach(handler => { serializer.UnknownNode += handler; });
+            handlers.ObjectHandlers?.ForEach(handler => { serializer.UnreferencedObject += handler; });
         }
 
         /// <summary>
@@ -109,7 +97,7 @@ namespace Mocassin.Framework.Xml
         /// </summary>
         /// <typeparam name="TSerializable"></typeparam>
         /// <returns></returns>
-        public static XmlStreamService<TSerializable> CreateFor<TSerializable>(TSerializable obj)
+        public static XmlStreamService<TSerializable> Create<TSerializable>(TSerializable obj)
         {
             return new XmlStreamService<TSerializable>();
         }
@@ -121,10 +109,38 @@ namespace Mocassin.Framework.Xml
         /// <param name="filePath"></param>
         /// <param name="handlers"></param>
         /// <param name="obj"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public static bool TryDeserialize<TSerializable>(string filePath, XmlEventHandlers handlers, out TSerializable obj)
+        public static bool TryDeserialize<TSerializable>(string filePath, XmlEventHandlers handlers, out TSerializable obj,
+            out Exception exception)
         {
-            return new XmlStreamService<TSerializable>().TryDeserialize(filePath, handlers, out obj);
+            return new XmlStreamService<TSerializable>().TryDeserialize(filePath, handlers, out obj, out exception);
+        }
+
+        /// <summary>
+        ///     Tries to serialize the passed object to the passed file path
+        /// </summary>
+        /// <typeparam name="TSerializable"></typeparam>
+        /// <param name="filePath"></param>
+        /// <param name="obj"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static bool TrySerialize<TSerializable>(string filePath, TSerializable obj, out Exception exception)
+        {
+            return new XmlStreamService<TSerializable>().TrySerialize(filePath, obj, out exception);
+        }
+
+        /// <summary>
+        ///     Tries to serialize the passed object to the passed stream
+        /// </summary>
+        /// <typeparam name="TSerializable"></typeparam>
+        /// <param name="stream"></param>
+        /// <param name="obj"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static bool TrySerialize<TSerializable>(Stream stream, TSerializable obj, out Exception exception)
+        {
+            return new XmlStreamService<TSerializable>().TrySerialize(stream, obj, out exception);
         }
     }
 
@@ -139,8 +155,9 @@ namespace Mocassin.Framework.Xml
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="stream"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public bool TrySerialize(Stream stream, T1 obj)
+        public bool TrySerialize(Stream stream, T1 obj, out Exception exception)
         {
             using (var writer = NewDefaultWriter(stream))
             {
@@ -151,10 +168,12 @@ namespace Mocassin.Framework.Xml
                 }
                 catch (Exception e)
                 {
+                    exception = e;
                     return false;
                 }
             }
 
+            exception = default;
             return true;
         }
 
@@ -162,10 +181,11 @@ namespace Mocassin.Framework.Xml
         ///     Tries to serialize the object to the console output
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public bool TrySerializeToConsole(T1 obj)
+        public bool TrySerializeToConsole(T1 obj, out Exception exception)
         {
-            return TrySerialize(Console.OpenStandardOutput(), obj);
+            return TrySerialize(Console.OpenStandardOutput(), obj, out exception);
         }
 
         /// <summary>
@@ -173,12 +193,13 @@ namespace Mocassin.Framework.Xml
         /// </summary>
         /// <param name="filepath"></param>
         /// <param name="obj"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public bool TrySerialize(string filepath, T1 obj)
+        public bool TrySerialize(string filepath, T1 obj, out Exception exception)
         {
             using (var stream = new FileStream(filepath, FileMode.Create))
             {
-                return TrySerialize(stream, obj);
+                return TrySerialize(stream, obj, out exception);
             }
         }
 
@@ -189,24 +210,27 @@ namespace Mocassin.Framework.Xml
         /// <param name="stream"></param>
         /// <param name="handlers"></param>
         /// <param name="obj"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public bool TryDeserialize(FileStream stream, XmlEventHandlers handlers, out T1 obj)
+        public bool TryDeserialize(FileStream stream, XmlEventHandlers handlers, out T1 obj, out Exception exception)
         {
-            object result;
+            exception = default;
             using (var reader = NewDefaultReader(stream))
             {
-                var serializer = GetSerializer(handlers);
-                result = serializer.Deserialize(reader);
+                try
+                {
+                    var serializer = GetSerializer(handlers);
+                    var result = serializer.Deserialize(reader);
+                    obj = (T1) result;
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    obj = default;
+                    exception = e;
+                    return false;
+                }
             }
-
-            if (result != null)
-            {
-                obj = (T1) result;
-                return true;
-            }
-
-            obj = default;
-            return false;
         }
 
         /// <summary>
@@ -215,19 +239,14 @@ namespace Mocassin.Framework.Xml
         /// <param name="filepath"></param>
         /// <param name="handlers"></param>
         /// <param name="obj"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public bool TryDeserialize(string filepath, XmlEventHandlers handlers, out T1 obj)
+        public bool TryDeserialize(string filepath, XmlEventHandlers handlers, out T1 obj, out Exception exception)
         {
-            if (File.Exists(filepath))
+            using (var stream = new FileStream(filepath, FileMode.Open))
             {
-                using (var stream = new FileStream(filepath, FileMode.Open))
-                {
-                    return TryDeserialize(stream, handlers, out obj);
-                }
+                return TryDeserialize(stream, handlers, out obj, out exception);
             }
-
-            obj = default;
-            return false;
         }
 
         /// <summary>

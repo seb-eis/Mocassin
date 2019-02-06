@@ -33,6 +33,12 @@ namespace Mocassin.Model.Translator
         public int NumOfGlobalTrackers { get; set; }
 
         /// <summary>
+        ///     The number of environment definition entities
+        /// </summary>
+        [Column("NumOfEnvironmentDefinitions")]
+        public int NumOfEnvironmentDefinitions { get; set; }
+
+        /// <summary>
         ///     Interaction range blob conversion backing property
         /// </summary>
         [Column("InteractionRange")]

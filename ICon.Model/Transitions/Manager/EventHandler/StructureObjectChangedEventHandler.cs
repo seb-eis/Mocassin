@@ -26,8 +26,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleUnitCellPositionChange(IModelObjectEventArgs<IUnitCellPosition> eventArgs)
         {
-            Console.WriteLine($"{eventArgs.ToString()} received on {ToString()}");
-            return new ConflictReport();
+            return EventTestReaction(eventArgs);
         }
     }
 }

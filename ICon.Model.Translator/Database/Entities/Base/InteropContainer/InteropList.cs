@@ -33,22 +33,22 @@ namespace Mocassin.Model.Translator
         }
 
         /// <inheritdoc />
-        public override void ChangeStateToBinary(IMarshalProvider marshalProvider)
+        public override void ChangeStateToBinary(IMarshalService marshalService)
         {
             if (Values == null)
                 throw new InvalidOperationException("Translation list is null");
 
             BinaryState = new byte[GetBinarySizeOfValueList()];
-            marshalProvider.ManyStructuresToBytes(BinaryState, 0, Values);
+            marshalService.GetBytes(BinaryState, 0, Values);
         }
 
         /// <inheritdoc />
-        public override void ChangeStateToObject(IMarshalProvider marshalProvider)
+        public override void ChangeStateToObject(IMarshalService marshalService)
         {
             if (BinaryState == null)
                 throw new InvalidOperationException("Binary state is null");
 
-            Values = marshalProvider.BytesToManyStructures<T>(BinaryState, 0, BinaryState.Length).ToList();
+            Values = marshalService.GetStructures<T>(BinaryState, 0, BinaryState.Length).ToList();
         }
 
         /// <summary>

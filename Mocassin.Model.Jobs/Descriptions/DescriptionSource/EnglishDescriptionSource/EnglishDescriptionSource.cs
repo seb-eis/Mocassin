@@ -75,7 +75,7 @@ namespace Mocassin.Model.Mml.Descriptions
         /// <returns></returns>
         public static string GetIdentification(IModelObject modelObject)
         {
-            return $"[{modelObject.ObjectName}, {modelObject.Index}, {modelObject.Alias ?? "Unnamed"}]";
+            return $"[{modelObject.GetObjectName()}, {modelObject.Index}, {modelObject.Key ?? "Unnamed"}]";
         }
 
         /// <summary>

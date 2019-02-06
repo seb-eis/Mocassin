@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 
 namespace Mocassin.Model.Basic
 {
@@ -22,11 +23,21 @@ namespace Mocassin.Model.Basic
         /// <param name="lockSource"></param>
         public DataAccessor(TData data, AccessLockSource lockSource)
         {
-            if (lockSource == null) 
+            if (lockSource == null)
                 throw new ArgumentNullException(nameof(lockSource));
 
             Data = data ?? throw new ArgumentNullException(nameof(data));
             Lock = lockSource.TryGetFullAccess(data);
+        }
+
+        /// <summary>
+        ///     Creates new data writer for a data object that is not require an access lock
+        /// </summary>
+        /// <param name="data"></param>
+        public DataAccessor(TData data)
+        {
+            Data = data ?? throw new ArgumentNullException(nameof(data));
+            Lock = Disposable.Empty;
         }
 
         /// <inheritdoc />
@@ -49,7 +60,7 @@ namespace Mocassin.Model.Basic
         }
 
         /// <inheritdoc />
-        public IDataReader<TPort> AsReader<TPort>() 
+        public IDataReader<TPort> AsReader<TPort>()
             where TPort : class, IModelDataPort
         {
             return new ReadOnlyDataAccessorAdapter<TData, TPort>(this);
@@ -69,7 +80,7 @@ namespace Mocassin.Model.Basic
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TPort"></typeparam>
     public class ReadOnlyDataAccessorAdapter<TData, TPort> : IDataReader<TPort>
-        where TData : ModelData 
+        where TData : ModelData
         where TPort : class, IModelDataPort
     {
         /// <inheritdoc />

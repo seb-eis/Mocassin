@@ -112,7 +112,7 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public static WarningMessage CreateAliasViolationWarning(object sender, params string[] details)
         {
-            var message = WarningMessage.CreateCritical(sender, "Alias Violation");
+            var message = WarningMessage.CreateCritical(sender, "Key Violation");
             message.AddDetails(details);
             return message;
         }

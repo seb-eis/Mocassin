@@ -28,13 +28,15 @@ namespace Mocassin.Model.Translator.ModelContext
             var metropolisTransitions = manager.QueryPort.Query(port => port.GetMetropolisTransitions());
             var kineticTransitions = manager.QueryPort.Query(port => port.GetKineticTransitions());
 
-            var kineticTask = Task.Run(() => KineticTransitionModelBuilder.BuildModels(kineticTransitions));
-            var metropolisTask = Task.Run(() => MetropolisTransitionModelBuilder.BuildModels(metropolisTransitions));
+            var kineticTask = Task.Run(
+                () => modelContext.KineticTransitionModels = KineticTransitionModelBuilder.BuildModels(kineticTransitions));
+
+            var metropolisTask = Task.Run(
+                () => modelContext.MetropolisTransitionModels = MetropolisTransitionModelBuilder.BuildModels(metropolisTransitions));
+
             var awaitTask = Task.WhenAll(kineticTask, metropolisTask);
             var positionTask = Task.Run(() => PositionTransitionModelBuilder.BuildModels(modelContext, awaitTask));
 
-            modelContext.KineticTransitionModels = kineticTask.Result;
-            modelContext.MetropolisTransitionModels = metropolisTask.Result;
             modelContext.PositionTransitionModels = positionTask.Result;
             return modelContext;
         }

@@ -286,6 +286,27 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
+        /// Removes all duplicates from a list based upon the provided equality compare function and returns removed indices
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="compareFunc"></param>
+        public static IEnumerable<int> RemoveDuplicatesAndGetRemovedIndices<T1>(this IList<T1> list, Func<T1, T1, bool> compareFunc)
+        {
+            for (var i = 0; i < list.Count - 1; i++)
+            {
+                for (var j = list.Count - 1; j > i; j--)
+                {
+                    if (!compareFunc(list[i], list[j]))
+                        continue;
+
+                    list.RemoveAt(j);
+                    yield return j;
+                }
+            }
+        }
+
+        /// <summary>
         /// Removes the duplicates from a list based upon the passed equality comparer
         /// </summary>
         /// <typeparam name="T1"></typeparam>

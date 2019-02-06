@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
-using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {
@@ -19,7 +18,8 @@ namespace Mocassin.Model.Lattices
         /// BuildingBlocks which may construct a superblock
         /// </summary>
         [DataMember]
-        public List<IBuildingBlock> BlockGrouping { get; set; }
+        [UseTrackedReferences]
+        public IBuildingBlock Block { get; set; }
 
         /// <summary>
         /// Origin of BuildingBlockAssembly

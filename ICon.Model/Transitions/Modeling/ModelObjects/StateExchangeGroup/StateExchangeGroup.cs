@@ -13,12 +13,16 @@ namespace Mocassin.Model.Transitions
         ///     The state exchange pairs affiliated with this state exchange group group
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public List<IStateExchangePair> StateExchangePairs { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        public bool IsVacancyGroup { get; set; }
+        [IgnoreDataMember]
+        public bool IsVacancyGroup => StateExchangePairs?.Any(x => x.IsVacancyPair) ?? false;
+
+        /// <inheritdoc />
+        [IgnoreDataMember]
+        public bool IsUnstablePositionGroup => StateExchangePairs?.Any(x => x.IsUnstablePositionPair) ?? false;
 
         /// <inheritdoc />
         [IgnoreDataMember]
@@ -30,17 +34,19 @@ namespace Mocassin.Model.Transitions
             return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Property Group";
+        /// <inheritdoc />
+        public override string GetObjectName()
+        {
+            return "State Exchange Group";
+        }
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IStateExchangeGroup>(obj) is IStateExchangeGroup group))
                 return null;
 
             Index = group.Index;
-            IsVacancyGroup = group.IsVacancyGroup;
             StateExchangePairs = group.GetStateExchangePairs().ToList();
             return this;
 

@@ -17,14 +17,14 @@ namespace Mocassin.Model.Lattices
         /// Information about the doping (particles and sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IDopingCombination DopingInfo { set; get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>

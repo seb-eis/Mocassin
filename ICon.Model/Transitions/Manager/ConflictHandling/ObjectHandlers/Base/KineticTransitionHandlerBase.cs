@@ -26,7 +26,7 @@ namespace Mocassin.Model.Transitions.ConflictHandling
         protected IEnumerable<KineticRule> CreateTransitionRules(KineticTransition transition)
         {
             var particles = ModelProject.GetManager<IParticleManager>().QueryPort.Query(port => port.GetParticles());
-            var creator = new QuickRuleGenerator<KineticRule>(particles);
+            var creator = new TransitionRuleGenerator<KineticRule>(particles);
             return creator.MakeUniqueRules(transition.AbstractTransition.AsSingleton(), true)
                 .SingleOrDefault()
                 .Action(rule => rule.Transition = transition);

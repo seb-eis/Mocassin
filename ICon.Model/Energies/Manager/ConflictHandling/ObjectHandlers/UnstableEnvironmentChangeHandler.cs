@@ -148,8 +148,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             int Compare(AsymmetricPairInteraction lhs, AsymmetricPairInteraction rhs)
             {
                 var indexCompare = lhs.Position0.Index.CompareTo(rhs.Position0.Index);
-                if (indexCompare == 0) return lhs.Distance.CompareTo(rhs.Distance);
-                return indexCompare;
+                return indexCompare == 0 ? lhs.Distance.CompareTo(rhs.Distance) : indexCompare;
             }
 
             return Comparer<AsymmetricPairInteraction>.Create(Compare);

@@ -6,11 +6,6 @@
     public class MmcJobConfiguration : JobConfiguration
     {
         /// <summary>
-        ///     Get or seth the metropolis specific job flags
-        /// </summary>
-        public SimulationMmcJobFlags MmcJobFlags { get; set; }
-
-        /// <summary>
         ///     Get or set the abort tolerance value
         /// </summary>
         public double AbortTolerance { get; set; }
@@ -41,7 +36,6 @@
             jobConfiguration.AbortSampleLength = AbortSampleLength;
             jobConfiguration.AbortSequenceLength = AbortSequenceLength;
             jobConfiguration.AbortTolerance = AbortTolerance;
-            jobConfiguration.MmcJobFlags = MmcJobFlags;
         }
 
         /// <inheritdoc />
@@ -55,9 +49,17 @@
                     AbortSampleLength = AbortSampleLength,
                     AbortSequenceLength = AbortSequenceLength,
                     AbortTolerance = AbortTolerance,
-                    JobFlags = (long) JobFlags
+                    JobFlags = default
                 }
             };
+        }
+
+        /// <inheritdoc />
+        public override JobConfiguration DeepCopy()
+        {
+            var result = new MmcJobConfiguration();
+            CopyTo(result);
+            return result;
         }
     }
 }

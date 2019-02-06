@@ -4,44 +4,49 @@ using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangePair"/>
+    /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangePair" />
     [DataContract]
     public class StateExchangePair : ModelObject, IStateExchangePair
     {
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticle DonorParticle { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        [IndexResolved]
+        [UseTrackedReferences]
         public IParticle AcceptorParticle { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        public bool IsVacancyPair { get; set; }
+        [IgnoreDataMember]
+        public bool IsUnstablePositionPair => AcceptorParticle.Index == Particle.VoidIndex;
 
-		/// <inheritdoc />
-		public override string ObjectName => "Property State Pair";
+        /// <inheritdoc />
+        [IgnoreDataMember]
+        public bool IsVacancyPair => (DonorParticle?.IsVacancy ?? false) ^ (AcceptorParticle?.IsVacancy ?? false);
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override string GetObjectName()
+        {
+            return "State Exchange Pair";
+        }
+
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IStateExchangePair>(obj) is IStateExchangePair statePair))
                 return null;
 
             DonorParticle = statePair.DonorParticle;
             AcceptorParticle = statePair.AcceptorParticle;
-            IsVacancyPair = statePair.IsVacancyPair;
             return this;
-
         }
 
         /// <inheritdoc />
         public bool Equals(IStateExchangePair other)
         {
-            if (other == null) 
+            if (other == null)
                 return false;
 
             if (DonorParticle == other.DonorParticle && AcceptorParticle == other.AcceptorParticle)
@@ -64,8 +69,8 @@ namespace Mocassin.Model.Transitions
         public int CompareTo(IStateExchangePair other)
         {
             var donorComp = DonorParticle.Index.CompareTo(other.DonorParticle);
-            return donorComp == 0 
-                ? AcceptorParticle.Index.CompareTo(other.AcceptorParticle) 
+            return donorComp == 0
+                ? AcceptorParticle.Index.CompareTo(other.AcceptorParticle)
                 : donorComp;
         }
     }

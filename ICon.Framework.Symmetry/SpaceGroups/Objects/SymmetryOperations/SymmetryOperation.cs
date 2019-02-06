@@ -11,7 +11,7 @@ namespace Mocassin.Symmetry.SpaceGroups
     public class SymmetryOperation : SymmetryOperationBase
     {
         /// <summary>
-        ///     Linearized version of the 12 matrix operation entries (Not recommended to set manually)
+        ///     Linearized version of the 12 matrix operation entries
         /// </summary>
         [DataMember]
         public double[] Operations { get; set; }

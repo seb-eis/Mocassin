@@ -1,10 +1,12 @@
-﻿using Mocassin.Model.Basic;
+﻿using System;
+using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.DataManagement
 {
     /// <summary>
-    ///     Represents a model data tracker that handles the inter linking between model data and indexed model objects
+    ///     Represents a model data tracker that handles the reference tracking of <see cref="ModelData" /> and indexed
+    ///     <see cref="IModelObject" /> data
     /// </summary>
     public interface IModelDataTracker
     {
@@ -38,11 +40,11 @@ namespace Mocassin.Model.DataManagement
         TObject FindObjectByIndex<TObject>(int index) where TObject : IModelObject;
 
         /// <summary>
-        ///     Lookup the internal model object that can be assigned to the specified type that has the given alias
+        ///     Lookup the internal model object that can be assigned to the specified type that has the given key
         /// </summary>
         /// <typeparam name="TObject"></typeparam>
-        /// <param name="alias"></param>
+        /// <param name="key"></param>
         /// <returns>The found model object or null if none was found</returns>
-        TObject FindObjectByAlias<TObject>(string alias) where TObject : IModelObject;
+        TObject FindObjectByKey<TObject>(string key) where TObject : IModelObject;
     }
 }

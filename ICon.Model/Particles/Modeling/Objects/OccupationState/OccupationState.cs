@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,7 +9,7 @@ namespace Mocassin.Model.Particles
 {
     /// <inheritdoc />
     [DataContract]
-    public class OccupationState : IOccupationState
+    public class OccupationState : IEquatable<OccupationState>, IOccupationState
     {
         /// <inheritdoc />
         [IgnoreDataMember]
@@ -82,15 +83,18 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public bool Equals(IOccupationState other)
         {
-            if (other == null)
-                return false;
-
-            if (StateLength != other.StateLength) 
-                return false;
+            if (other == null) return false;
+            if (StateLength != other.StateLength)  return false;
 
             return !Particles
                 .Where((t, i) => !t.Equals(other.Particles[i]))
                 .Any();
+        }
+
+        /// <inheritdoc />
+        public bool Equals(OccupationState other)
+        {
+            return Equals(other as IOccupationState);
         }
 
         /// <summary>
