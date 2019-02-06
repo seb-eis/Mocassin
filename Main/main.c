@@ -20,7 +20,7 @@
 #include "UnitTesting/MinimalUnitTest.h"
 #include "UnitTesting/UnitTests.h"
 
-#define UNITTEST 1
+#define UNITTEST 0
 
 #if 0 //!defined(MC_TESTBUILD)
 

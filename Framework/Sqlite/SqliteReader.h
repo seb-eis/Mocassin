@@ -1,14 +1,20 @@
-#ifndef ICON_SIMULATOR_SQLITEREADER_H
-#define ICON_SIMULATOR_SQLITEREADER_H
+//////////////////////////////////////////
+// Project: C Monte Carlo Simulator		//
+// File:	SqliteReader.h              //
+// Author:	John Arnold 			    //
+//			Workgroup Martin, IPC       //
+//			RWTH Aachen University      //
+//			© 2018 John Arnold          //
+// Short:   Db sqlite reader interface  //
+//////////////////////////////////////////
 
-#endif //ICON_SIMULATOR_SQLITEREADER_H
-
+#pragma once
 #include <stdio.h>
-#include "ExternalLibraries/sqlite3.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "Simulator/Data/Database/DbModel.h"
+#include "ExternalLibraries/sqlite3.h"
 
 /*
  * How to use the SqliteReader:
@@ -38,76 +44,54 @@
 #define ID_POS_IN_SQLSTMT 1
 
 // Macro the return the function in case something goes wrong
-#define CHECK_SQL(X, Y) if (X != Y) { return X; }
+#define check_Sql(X, Y) if (X != Y) { return X; }
+
+// Type for the database load instruction index set
+// Layout@ggc_x86_64 => 24@[4,4,4,4,4,4]
+typedef struct DbLoadIndices
+{
+    // The context id of the job model to load
+    int32_t JobContextId;
+
+    // The context id of the package model to load
+    int32_t PackageContextId;
+
+    // The context id of the structure model to load
+    int32_t StructureContextId;
+
+    // The context id of the energy model to load
+    int32_t EnergyContextId;
+
+    // The context id of the transition model to load
+    int32_t TransitionContextId;
+
+    // The context id of the lattice model to load
+    int32_t LatticeContextId;
+
+} DbLoadIndices_t;
 
 
-struct ProjectIds{
-    int ProjectId;
-    int StructureId;
-    int EnergyId;
-    int TransitionId;
-    int LatticeId;
-};
-
-
-struct objectOperationPair{
+// Type for object operation pair types
+// Layout@ggc_x86_64 => 24@[4,4,4,4,4,4]
+typedef struct ObjectOperationPair
+{
+    // The pointer to the object
     void *Object;
-    int (*Operation)(char*, sqlite3*, void*, const struct ProjectIds*);
-};
 
-// object operation pairs for the parent operations. provide the dbModel should be a pointer to database model.
-#define PARENT_OPERATIONS(dbModel) {{.Object = &dbModel->StructureModel, .Operation = &AssignStructureModel},     \
-                                    {.Object = &dbModel->EnergyModel, .Operation = &AssignEnergyModel},           \
-                                    {.Object = &dbModel->TransitionModel, .Operation = &AssignTransitionModel},   \
-                                    {.Object = &dbModel->LatticeModel, .Operation = &AssignLatticeModel}};
+    //
+    int32_t (*Operation)(char*, sqlite3*, void*, const DbLoadIndices_t*);
 
-#define CHILD_OPERATIONS(dbModel) {{.Object = &dbModel->StructureModel.EnvironmentDefinitions,    \
-                                    .Operation = &AssignEnvironmentDefinitions},                 \
-                                   {.Object = &dbModel->EnergyModel.PairTables,                   \
-                                    .Operation = &AssignPairEnergyTables},                       \
-                                   {.Object = &dbModel->EnergyModel.ClusterTables,                \
-                                    .Operation = AssignClusterEnergyTables},                     \
-                                   {.Object = &dbModel->TransitionModel.JumpCollections,          \
-                                    .Operation = AssignJumpCollections},                         \
-                                   {.Object = &dbModel->TransitionModel.JumpDirections,           \
-                                    .Operation = AssignJumpDirections}}
+} ObjectOperationPair_t;
 
+// Type for object operation pair spans
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(ObjectOperationPair_t, ObjectOperationSet) ObjectOperationSet_t;
 
-// Main function - assign the provided DbModel object with the provided database and project number
-int AssignDatabaseModel(DbModel_t* dbModel, char* dbFile, int projectNumber);
+// Get an access struct for the set of parent object operations
+ObjectOperationSet_t GetParentOperationSet(DbModel_t* dbModel);
 
-// Get Project IDs from database and store them in projectIds
-int AssignProjectIds(sqlite3 *db, struct ProjectIds* projectIds);
+// Get an access struct for the set of child object operations
+ObjectOperationSet_t GetChildOperationSet(DbModel_t* dbModel);
 
-// Prepare SQL Statement and assign project or parent ID to sql statement
-int PrepareSqlStatement(char *sql_query, sqlite3 *db, sqlite3_stmt **sql_statement, int id);
-
-// Assignment functions
-
-int AssignParentObjects(DbModel_t *dbModel, sqlite3 *db, const struct ProjectIds* projectIds);
-
-int AssignChildObjects(DbModel_t *dbModel, sqlite3 *db, const struct ProjectIds *projectIds);
-
-
-int AssignStructureModel(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-int AssignEnvironmentDefinitions(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-
-int AssignEnergyModel(char* sqlQuery, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-int AssignPairEnergyTables(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-int AssignClusterEnergyTables(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-
-int AssignTransitionModel(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-int AssignJumpCollections(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-int AssignJumpDirections(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-int AssignLatticeModel(char* sql_query, sqlite3 *db, void *obj, const struct ProjectIds *projectIds);
-
-// Assign the JumpDirections to their corresponding JumpCollections
-int DistributeJumpDirections(DbModel_t* dbModel);
+// Main function - assign the provided DbModel object with the provided database and job context id
+int32_t AssignDatabaseModel(DbModel_t* dbModel, const char* dbFile, int32_t jobContextId);

@@ -47,7 +47,7 @@ error_t ValidateIsValidFilePath(char const * value)
     return ERR_OK;
 }
 
-// Validates the database srtingf fromat to be [#Package].[#Parent].[#Job] e.g. "1.1.24"
+// Validates the database string format to be #JobId
 error_t ValidateDatabaseQueryString(char const* value)
 {
     if (ValidateStringNotNullOrEmpty(value) != ERR_OK)
@@ -55,16 +55,17 @@ error_t ValidateDatabaseQueryString(char const* value)
         return ERR_VALIDATION;
     }
 
-    int32_t package, parent, job;
+    int32_t jobId;
 
-    if (sscanf(value, "%i.%i.%i", &package, &parent, &job) != 3)
+    if (sscanf(value, "%i", &jobId) != 1)
     {
         return ERR_VALIDATION;
     }
 
-    if ((package >= 0) && (parent >= 0) && (job >= 0))
+    if (jobId >= 0)
     {
         return ERR_OK;
     }
+
     return ERR_VALIDATION;
 }

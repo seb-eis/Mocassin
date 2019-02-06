@@ -52,10 +52,10 @@
 /* Ptr usage */
 
 // Use a pointer as a pointer to the given type
-#define accessPtrAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+#define accessPtrAs(__TYPE, __VALUE) ((__TYPE*) ((void*) __VALUE))
 
 // Access the passed value as the given type
-#define accessValAs(__TYPE, __VALUE) ((__TYPE*) (&__VALUE))
+#define accessValAs(__TYPE, __VALUE) ((__TYPE*) ((void*) &__VALUE))
 
 // Compares the left value to the right value
 #define compareLhsToRhs(LHS,RHS) ((LHS)==(RHS)) ? 0 : ((LHS)<(RHS)) ? -1 : 1

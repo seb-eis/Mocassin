@@ -28,17 +28,21 @@ add_executable(ICon.Simulator
         Simulator/Logic/Routines/Tracking/TransitionTracking.h
         Simulator/Logic/Routines/Tracking/TransitionTracking.c)
 
+add_library(sqlite3 ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
+set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h)
+set_property(TARGET sqlite3 PROPERTY C_STANDARD 11)
+
 include_directories(${PROJECT_SOURCE_DIR})
 
 set_property(TARGET ICon.Simulator PROPERTY C_STANDARD 11)
 set(CMAKE_C_FLAGS_DEBUG "-Wall -g -O2")
-set(CMAKE_C_FLAGS_RELEASE "-Wall -O2")
+set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
-find_path(sqlPath sqlite3.h)
-find_library(sqlLib sqlite3)
-include_directories(${sqlPath})
-target_link_libraries(ICon.Simulator "${sqlLib}")
+target_link_libraries(ICon.Simulator sqlite3)
+#find_path(sqlPath sqlite3.h)
+#find_library(sqlLib sqlite3)
+#include_directories(${sqlPath})

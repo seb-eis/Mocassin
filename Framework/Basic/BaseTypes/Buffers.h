@@ -35,7 +35,7 @@ error_t TryAllocateSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t*r
 void* ConstructVoidSpan(size_t numOfElements, size_t sizeOfElement, VoidSpan_t *restrict outSpan);
 
 // Copies a specific number of bytes from the passed buffer into a newly constructed span. Does not free the original buffer!
-void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan);
+void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan);
 
 // Allocates a new span by constructing and casting a nw void type span
 #define new_Span(SPAN, SIZE) *(typeof(SPAN)*) ConstructVoidSpan((SIZE), sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
@@ -165,9 +165,9 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 // Layout@ggc_x86_64 => 24@[8,8,8]
 #define Array_t(TYPE, RANK, NAMING...) struct NAMING { struct { int32_t Rank, Size; int32_t Blocks[(RANK)-1]; }* Header; TYPE* Begin, * End; }
 
-// Type for the undefined void array access
-// Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]
-typedef struct { int32_t * Header; void * Begin, * End; } VoidArray_t;
+// Type for the undefined void array access with header access to rank, size and the first block entry
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef struct { struct { int32_t Rank, Size, FirstBlockEntry; } * Header; void * Begin, * End; } VoidArray_t;
 
 // Allocate a new array of given rank, size of elements and dimensions
 VoidArray_t AllocateArray(int32_t rank, size_t sizeOfElement, const int32_t dimensions[rank]);
@@ -194,10 +194,10 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
 #define delete_Array(ARRAY) free((ARRAY).Header)
 
 // Get the total number of elements in any type of array
-#define array_GetSize(ARRAY) (accessValAs(VoidArray_t, ARRAY))->Header[1]
+#define array_GetSize(ARRAY) ((ARRAY).Header->Size)
 
 // Get the rank of any type of array
-#define array_GetRank(ARRAY) (accessValAs(VoidArray_t, ARRAY))->Header[0]
+#define array_GetRank(ARRAY) ((ARRAY).Header->Rank)
 
 // Get the header size in bytes of any array
 #define array_GetHeaderSize(ARRAY) (1 + array_GetRank(ARRAY)) * sizeof(int32_t)

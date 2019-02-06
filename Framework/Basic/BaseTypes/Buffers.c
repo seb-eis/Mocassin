@@ -10,6 +10,7 @@
 
 #include <string.h>
 #include "Framework/Basic/BaseTypes/Buffers.h"
+#include "Buffers.h"
 
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {
@@ -31,10 +32,10 @@ void* ConstructVoidSpan(const size_t numOfElements, const size_t sizeOfElement, 
     return outSpan;
 }
 
-void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan)
+void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan)
 {
     *outSpan = new_Span(*outSpan, numOfBytes);
-    Buffer_t bufferSpan = (Buffer_t) {.Begin = buffer, .End = buffer + numOfBytes};
+    Buffer_t bufferSpan = (Buffer_t) {.Begin = (void*) buffer, .End = (void*) buffer + numOfBytes};
     int error = SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
     error_assert(error, "this has not worked \n");
 
@@ -86,16 +87,16 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     error_t error = TryAllocateArray(rank, sizeOfElement, dimensions, outArray);
     error_assert(error, "Out of memory on array construct");
 
-    MakeArrayBlocks(rank, dimensions, &outArray->Header[2]);
-    outArray->Header[1] = (int32_t) (span_GetSize(*outArray) / sizeOfElement);
-    outArray->Header[0] = rank;
+    MakeArrayBlocks(rank, dimensions, &outArray->Header->FirstBlockEntry);
+    outArray->Header->Size = (int32_t) (span_GetSize(*outArray) / sizeOfElement);
+    outArray->Header->Rank = rank;
 
     return outArray;
 }
 
 void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElements, VoidArray_t *restrict outArray)
 {
-    VoidArray_t bufferArray = {.Header = buffer};
+    VoidArray_t bufferArray = {.Header = (void*) buffer};
     const size_t headerByteCount = array_GetHeaderSize(bufferArray);
     const size_t dataByteCount = array_GetSize(bufferArray) * sizeOfElements;
     const size_t totalByteCount = headerByteCount + dataByteCount;
@@ -113,7 +114,7 @@ void GetArrayDimensions(const VoidArray_t*restrict array, int32_t*restrict outBu
 {
     const int32_t rank = array_GetRank(*array);
     const int32_t size = array_GetSize(*array);
-    const int32_t * blocks = &array->Header[2];
+    const int32_t * blocks = &array->Header->FirstBlockEntry;
 
     outBuffer[0] = size / blocks[0];
     outBuffer[rank-1] = blocks[rank-2];
