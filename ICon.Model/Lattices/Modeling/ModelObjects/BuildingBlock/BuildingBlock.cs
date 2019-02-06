@@ -19,6 +19,7 @@ namespace Mocassin.Model.Lattices
     [DataContract(Name = "BuildingBlock")]
     public class BuildingBlock : ModelObject, IBuildingBlock
     {
+        /// <inheritdoc />
         /// <summary>
         /// The list interface of unit cell entries
         /// </summary>
@@ -26,6 +27,7 @@ namespace Mocassin.Model.Lattices
         [IndexResolved]
         public List<IParticle> CellEntries { get; set; }
 
+		/// <inheritdoc />
 		/// <summary>
 		/// Get the type name string
 		/// </summary>
