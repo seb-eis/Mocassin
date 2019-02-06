@@ -33,6 +33,9 @@
   <ItemGroup>
     <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
     <Compile Remove="Lattices\Modeling\Objects\UniquePoolSampler\UniquePoolSampler.cs" />
+    <Compile Remove="ProjectServices\Manager\Main\ProjectSettingsData.cs" />
+    <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\ISimulationSeriesBase.cs" />
+    <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\SimulationSeriesBase.cs" />
     <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />
     <Compile Remove="Transitions\Manager\Services\TransitionConflictResolver.cs" />
   </ItemGroup>
@@ -56,6 +59,7 @@
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
     <Folder Include="Simulations\Modeling\Logic\" />
+    <Folder Include="Simulations\Modeling\ModelObjects\SimulationSeries\Base\" />
     <Folder Include="Simulations\Modeling\ModelParameters\" />
     <Folder Include="Structures\Modeling\Logic\" />
     <Folder Include="Transitions\Modeling\ModelParameters\" />
