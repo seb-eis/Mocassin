@@ -116,10 +116,11 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var positionInfo in targetInfos)
             {
                 var targetInfo = new TargetPositionInfo
-                {
+                {                   
                     UnitCellPosition = positionInfo.UnitCellPosition,
                     Distance = positionInfo.Distance,
-                    AbsoluteFractional3D = operation.ApplyUntrimmed(positionInfo.AbsoluteFractional3D)
+                    AbsoluteFractional3D = operation.ApplyUntrimmed(positionInfo.AbsoluteFractional3D),
+                    PairInteractionModel = positionInfo.PairInteractionModel
                 };
 
                 targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - centerVector;
@@ -136,8 +137,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a new target info list that ensures the correct sorting of the target position infos by the relative 4D
-        ///     vector
+        ///     Creates a new <see cref="ITargetPositionInfo"/> list that ensures the correct sorting
         /// </summary>
         /// <param name="capacity"></param>
         /// <returns></returns>
@@ -145,7 +145,8 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             int Compare(ITargetPositionInfo lhs, ITargetPositionInfo rhs)
             {
-                return lhs.RelativeVector4D.CompareTo(rhs.RelativeVector4D);
+                return lhs.PairInteractionModel.ModelId.CompareTo(rhs.PairInteractionModel.ModelId);
+                //return lhs.RelativeVector4D.CompareTo(rhs.RelativeVector4D);
             }
 
             return new SetList<ITargetPositionInfo>(Comparer<ITargetPositionInfo>.Create(Compare), capacity);

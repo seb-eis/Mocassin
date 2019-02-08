@@ -4,10 +4,15 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
-    ///     Carries information about a target position
+    ///     Carries information about a target position and its affiliated <see cref="IPairInteractionModel" />
     /// </summary>
     public interface ITargetPositionInfo
     {
+        /// <summary>
+        ///     Get or set the affiliated <see cref="IPairInteractionModel" />
+        /// </summary>
+        IPairInteractionModel PairInteractionModel { get; set; }
+
         /// <summary>
         ///     The unit cell position at the target
         /// </summary>

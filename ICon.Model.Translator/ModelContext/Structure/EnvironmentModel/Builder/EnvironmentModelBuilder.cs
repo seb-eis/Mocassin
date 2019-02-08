@@ -120,6 +120,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 PairEnergyModel = new PairEnergyModel(pairInteraction),
                 TargetPositionInfo = new TargetPositionInfo()
             };
+            pairModel.TargetPositionInfo.PairInteractionModel = pairModel;
 
             if (pairInteraction.Position0 != environmentModel.UnitCellPosition)
                 SetInteractionDataAsInverted(pairModel, pairInteraction);
@@ -219,7 +220,7 @@ namespace Mocassin.Model.Translator.ModelContext
             if (!VectorEncoder.TryEncodeAsRelative(startVector, relativeVector, out var relativeVector4D))
                 throw new InvalidOperationException("Could not create valid relative 4D interaction target");
 
-            return new PairInteractionModel
+            var result = new PairInteractionModel
             {
                 PairEnergyModel = originalModel.PairEnergyModel,
                 EnvironmentModel = originalModel.EnvironmentModel,
@@ -233,6 +234,10 @@ namespace Mocassin.Model.Translator.ModelContext
                     Distance = originalModel.TargetPositionInfo.Distance
                 }
             };
+
+            result.TargetPositionInfo.PairInteractionModel = result;
+
+            return result;
         }
 
         /// <summary>
@@ -274,8 +279,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <summary>
         ///     Extend the passed group interaction model into its set of symmetry equivalents and looks up the required pair
-        ///     interaction
-        ///     information
+        ///     interaction information
         /// </summary>
         /// <param name="groupModel"></param>
         /// <returns></returns>

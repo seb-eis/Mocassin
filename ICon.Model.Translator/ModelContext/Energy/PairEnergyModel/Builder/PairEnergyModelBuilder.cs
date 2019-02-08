@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 
@@ -59,7 +60,7 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 maxCenterIndex = Math.Max(maxCenterIndex, entry.ParticlePair.Particle0.Index);
                 maxPartnerIndex = Math.Max(maxPartnerIndex, entry.ParticlePair.Particle1.Index);
-                largestIndex = Math.Max(maxCenterIndex, maxPartnerIndex);
+                largestIndex = Math.Max(largestIndex, Math.Max(maxPartnerIndex, maxCenterIndex));
                 energyModel.EnergyEntries.Add(entry);
             }
 
@@ -67,14 +68,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Builds the energy table based upon the passed energy entry collection
+        ///     Builds the energy table based upon the passed energy entry collection and index limits
         /// </summary>
         /// <param name="energyEntries"></param>
-        /// <param name="largestIndex"></param>
+        /// <param name="maxCenterIndex"></param>
+        /// <param name="maxPartnerIndex"></param>
         /// <returns></returns>
         protected double[,] CreateEnergyTable(IList<PairEnergyEntry> energyEntries, int maxCenterIndex, int maxPartnerIndex)
         {
-            var table = new double[maxCenterIndex + 1, maxPartnerIndex + 1];
+            var table = new double[maxCenterIndex + 1, maxPartnerIndex + 1].Populate(() => double.NaN);
 
             foreach (var entry in energyEntries)
             {

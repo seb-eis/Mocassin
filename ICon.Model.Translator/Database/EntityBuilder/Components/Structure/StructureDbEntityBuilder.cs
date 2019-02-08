@@ -187,7 +187,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         protected PairDefinitionListEntity GetPairDefinitionList(IPositionModel positionModel)
         {
             var definitions = positionModel.TargetPositionInfos
-                .Select((info, id) => GetPairDefinitionStruct(positionModel.EnvironmentModel.PairInteractionModels[id], info))
+                .Select(info => GetPairDefinitionStruct(info.PairInteractionModel, info))
                 .ToList();
 
             return new PairDefinitionListEntity

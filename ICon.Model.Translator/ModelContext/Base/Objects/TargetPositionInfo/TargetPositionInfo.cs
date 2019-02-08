@@ -1,4 +1,5 @@
 ﻿using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Energies;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -6,6 +7,9 @@ namespace Mocassin.Model.Translator.ModelContext
     /// <inheritdoc />
     public class TargetPositionInfo : ITargetPositionInfo
     {
+        /// <inheritdoc />
+        public IPairInteractionModel PairInteractionModel { get; set; }
+
         /// <inheritdoc />
         public IUnitCellPosition UnitCellPosition { get; set; }
 
