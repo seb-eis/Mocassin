@@ -1,15 +1,23 @@
-﻿using System.Threading.Tasks;
-using Mocassin.Model.Translator.Optimization;
+﻿using System;
+using System.Reactive;
+using System.Threading.Tasks;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
+using Mocassin.Model.Translator.Optimization;
 
 namespace Mocassin.Model.Translator.EntityBuilder
 {
     /// <summary>
-    ///     Database entity builder that converts job model definitions into the required job database model objects
+    ///     Database entity builder that converts <see cref="IJobCollection" /> build instructions into
+    ///     <see cref="SimulationJobPackageModel" /> database translations
     /// </summary>
     public interface IJobDbEntityBuilder
     {
+        /// <summary>
+        ///    Get the <see cref="IObservable{T}" /> that informs about every build job
+        /// </summary>
+        IObservable<int> WhenJobIsBuild { get; }
+
         /// <summary>
         ///     Get or seth the used project model context for translation
         /// </summary>

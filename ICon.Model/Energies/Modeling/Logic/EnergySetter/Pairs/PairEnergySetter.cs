@@ -33,9 +33,15 @@ namespace Mocassin.Model.Energies
         /// <remarks> Used to lock the energy data object as long as the setter is writing energy values </remarks>
         public IDataAccessorSource<EnergyModelData> DataAccessorSource { get; set; }
 
+        /// <summary>
+        ///     Get the <see cref="IEnergyQueryPort" /> to invalidate cached data
+        /// </summary>
+        protected IEnergyQueryPort EnergyQueryPort { get; }
+
         /// <inheritdoc />
-        public PairEnergySetter(PairInteraction pairInteraction)
+        public PairEnergySetter(PairInteraction pairInteraction, IEnergyQueryPort energyQueryPort)
         {
+            EnergyQueryPort = energyQueryPort ?? throw new ArgumentNullException(nameof(energyQueryPort));
             PairInteraction = pairInteraction ?? throw new ArgumentNullException(nameof(pairInteraction));
             EnergyEntries = CreateEnergySet(pairInteraction);
         }
@@ -55,6 +61,7 @@ namespace Mocassin.Model.Energies
                 }
             }
 
+            EnergyQueryPort?.Query(x => x.ClearCachedData());
             OnValuesPushed.OnNext();
         }
 

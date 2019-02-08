@@ -32,10 +32,10 @@ namespace Mocassin.Model.Basic
             if (Connections[type] != null)
                 return false;
 
-            if (!(ConnectionPipeline.Process(eventPort) is IDisposable unsubscriber))
+            if (!(ConnectionPipeline.Process(eventPort) is IDisposable subscription))
                 return false;
 
-            Connections[type] = unsubscriber;
+            Connections[type] = subscription;
             return true;
 
         }

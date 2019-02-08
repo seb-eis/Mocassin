@@ -60,7 +60,7 @@ namespace Mocassin.Model.Energies
             extGroup.UniqueOccupationStates =
                 GetUniqueGroupOccupationStates(extGroup.PointOperationGroup, GetGroupStatePermutationSource(groupInteraction)).ToList();
 
-            extGroup.UniqueEnergyDictionary = MakeFullEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);
+            extGroup.UniqueEnergyDictionary = MakeFullEnergyDictionary(extGroup.UniqueOccupationStates, extGroup.CenterPosition);    
             return extGroup;
         }
 

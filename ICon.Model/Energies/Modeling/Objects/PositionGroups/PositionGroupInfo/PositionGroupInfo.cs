@@ -47,5 +47,17 @@ namespace Mocassin.Model.Energies
                 .SelectMany(outer => outer.Value.Select(inner => new GroupEnergyEntry(outer.Key, inner.Key, inner.Value)))
                 .ToList();
         }
+
+        /// <inheritdoc />
+        public void SynchronizeEnergyDictionary()
+        {
+            foreach (var outerPair in GroupInteraction.GetEnergyDictionarySet())
+            {
+                foreach (var innerPair in outerPair.Value)
+                {
+                    ExtendedPositionGroup.UniqueEnergyDictionary[outerPair.Key][innerPair.Key] = innerPair.Value;
+                }
+            }
+        }
     }
 }

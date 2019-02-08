@@ -77,9 +77,9 @@ namespace Mocassin.Model.Energies
 
         /// <summary>
         ///     Get an <see cref="IEnergySetterProvider" /> for all interactions that conforms to the passed
-        ///     <see cref="ProjectSettings" />
+        ///     <see cref="ProjectSettings" /> and uses the provided <see cref="IEnergyQueryPort"/>
         /// </summary>
         /// <returns></returns>
-        IEnergySetterProvider GetEnergySetterProvider(ProjectSettings projectSettings);
+        IEnergySetterProvider GetEnergySetterProvider(ProjectSettings projectSettings, IEnergyQueryPort queryPort);
     }
 }

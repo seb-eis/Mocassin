@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Framework.Processing;
 using Mocassin.Framework.Reflection;
@@ -473,10 +473,10 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="TObject"></typeparam>
         /// <param name="objData"></param>
         /// <returns></returns>
-        protected ReindexingList CleanAndReindexModelObjects<TObject>(IList<TObject> objData) 
+        protected ReindexingList CleanAndReindexModelObjects<TObject>(IList<TObject> objData)
             where TObject : ModelObject
         {
-            if (objData.All(obj => !obj.IsDeprecated)) 
+            if (objData.All(obj => !obj.IsDeprecated))
                 return new ReindexingList();
 
             var reindexing = new ReindexingList(objData.Count);
@@ -516,13 +516,12 @@ namespace Mocassin.Model.Basic
         /// <param name="invalidatesCache"></param>
         /// <returns></returns>
         protected IOperationReport DefaultSetModelParameter<T1, T2>(T1 newParam, Func<DataAccessor<TData>, T2> paramAccessQuery,
-            bool invalidatesCache) 
-            where T2 : ModelParameter, T1, new() 
+            bool invalidatesCache)
+            where T2 : ModelParameter, T1, new()
             where T1 : IModelParameter
         {
-            // Build and link the overwrites information into a new internal object
-            var newInternal = ModelParameter.BuildInternalObject<T2>(newParam) ??
-                            throw new ArgumentException("Conversion to internal type failed");
+            var newInternal = ModelParameter.BuildInternalObject<T2>(newParam)
+                              ?? throw new ArgumentException("Conversion to internal type failed");
 
             ModelProject.DataTracker.LinkModelObject(newInternal);
 
@@ -532,7 +531,7 @@ namespace Mocassin.Model.Basic
                 report.SetValidationReport(
                     ModelProject.ValidationServices.ValidateParameter(newInternal, dataAccess.AsReader(DataReaderSource)));
 
-                if (!report.IsGood) 
+                if (!report.IsGood)
                     return orgObject;
 
                 report.IsCacheExpired = invalidatesCache;
@@ -547,7 +546,7 @@ namespace Mocassin.Model.Basic
 
             void OnSuccess(T2 orgObject)
             {
-                if (invalidatesCache) 
+                if (invalidatesCache)
                     EventManager.OnExtendedDataExpiration.OnNext();
 
                 EventManager.OnChangedModelParameters.OnNext(ModelParameterEventArgs.Create(orgObject));
@@ -566,7 +565,7 @@ namespace Mocassin.Model.Basic
         /// <param name="dataAccessQuery"></param>
         /// <returns></returns>
         protected IOperationReport DefaultRegisterModelObject<T1, T2>(T1 obj, Func<DataAccessor<TData>, IList<T2>> dataAccessQuery)
-            where T1 : IModelObject 
+            where T1 : IModelObject
             where T2 : ModelObject, T1, new()
         {
             // Build and link a new internal object of the replacement type
@@ -580,7 +579,7 @@ namespace Mocassin.Model.Basic
                 report.SetValidationReport(
                     ModelProject.ValidationServices.ValidateObject(newInternal, accessor.AsReader(DataReaderSource)));
 
-                if (!report.IsGood) 
+                if (!report.IsGood)
                     return false;
 
                 WriteToModelObjectList(newInternal, dataAccessQuery(accessor));
@@ -588,7 +587,6 @@ namespace Mocassin.Model.Basic
                 var conflictReport = ConflictHandlerProvider.NewModelObjectHandler.ResolveConflicts(newInternal, accessor);
                 report.SetConflictReport(conflictReport);
                 return true;
-
             }
 
             void OnSuccess(bool isGood)
@@ -609,8 +607,8 @@ namespace Mocassin.Model.Basic
         /// <param name="restrictedIndices"></param>
         /// <returns></returns>
         protected IOperationReport DefaultRemoveModelObject<T1, T2>(T1 obj, Func<DataAccessor<TData>, IList<T2>> dataAccessQuery,
-            params int[] restrictedIndices) 
-            where T1 : IModelObject 
+            params int[] restrictedIndices)
+            where T1 : IModelObject
             where T2 : ModelObject, T1, new()
         {
             // Lookup the actual internal object interface and cast it to the internal data type
@@ -628,7 +626,7 @@ namespace Mocassin.Model.Basic
 
             void OnSuccess(bool deprecationSuccess)
             {
-                if (!deprecationSuccess) 
+                if (!deprecationSuccess)
                     return;
 
                 EventManager.OnExtendedDataExpiration.OnNext();
@@ -649,13 +647,14 @@ namespace Mocassin.Model.Basic
         /// <param name="orgObj"></param>
         /// <returns></returns>
         protected IOperationReport DefaultReplaceModelObject<T1, T2>(T1 orgObj, T1 newObj,
-            Func<DataAccessor<TData>, IList<T2>> dataAccessQuery) 
-            where T1 : IModelObject 
+            Func<DataAccessor<TData>, IList<T2>> dataAccessQuery)
+            where T1 : IModelObject
             where T2 : ModelObject, T1, new()
         {
             // Build and link a temporary internal object with the replacement information
             var tmpObject = ModelObject.ToInternalObject<T2>(newObj) ??
                             throw new ArgumentException("Could not build internal object from interface");
+
             ModelProject.DataTracker.LinkModelObject(tmpObject);
             tmpObject.Index = orgObj.Index;
 
@@ -664,17 +663,14 @@ namespace Mocassin.Model.Basic
                 var orgInternal = dataAccessQuery(accessor)[orgObj.Index];
                 orgInternal.Deprecate();
 
-                report.SetValidationReport(
-                    ModelProject.ValidationServices.ValidateObject(tmpObject, accessor.AsReader(DataReaderSource)));
+                report.SetValidationReport(ModelProject.ValidationServices.ValidateObject(tmpObject, accessor.AsReader(DataReaderSource)));
                 RepopulateOrRestoreOriginal(orgInternal, tmpObject, report.IsGood);
 
-                if (!report.IsGood) 
-                    return null;
+                if (!report.IsGood) return null;
 
                 var conflictReport = ConflictHandlerProvider.ChangedModelObjectsHandler.ResolveConflicts(orgInternal, accessor);
                 report.SetConflictReport(conflictReport);
                 return orgInternal;
-
             }
 
             void OnSuccess(T2 changedObject)

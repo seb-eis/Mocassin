@@ -5,7 +5,7 @@ using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="IGroupEnergySetter"/>
+    /// <inheritdoc cref="IGroupEnergySetter" />
     public class GroupEnergySetter : ValueSetter, IGroupEnergySetter
     {
         /// <inheritdoc />
@@ -32,9 +32,15 @@ namespace Mocassin.Model.Energies
         /// </summary>
         protected HashSet<GroupEnergyEntry> EnergyEntries { get; set; }
 
+        /// <summary>
+        ///     Get the <see cref="IEnergyQueryPort" /> to invalidate cached data
+        /// </summary>
+        protected IEnergyQueryPort EnergyQueryPort { get; }
+
         /// <inheritdoc />
-        public GroupEnergySetter(GroupInteraction groupInteraction)
+        public GroupEnergySetter(GroupInteraction groupInteraction, IEnergyQueryPort energyQueryPort)
         {
+            EnergyQueryPort = energyQueryPort ?? throw new ArgumentNullException(nameof(energyQueryPort));
             GroupInteraction = groupInteraction ?? throw new ArgumentNullException(nameof(groupInteraction));
             EnergyEntries = CreateEnergyEntries(groupInteraction);
         }
@@ -49,20 +55,21 @@ namespace Mocassin.Model.Energies
         {
             foreach (var item in EnergyEntries)
             {
-                if (GroupInteraction.TrySetEnergyEntry(item)) 
+                if (GroupInteraction.TrySetEnergyEntry(item))
                     continue;
 
                 OnValuesPushed.OnError(new InvalidOperationException("The state of the group energy setter contains invalid entries"));
                 return;
             }
 
+            EnergyQueryPort?.Query(x => x.ClearCachedData());
             OnValuesPushed.OnNext();
         }
 
         /// <inheritdoc />
         public void SetEnergyEntries(IEnumerable<GroupEnergyEntry> energyEntries)
         {
-            foreach (var item in energyEntries) 
+            foreach (var item in energyEntries)
                 SetEnergyEntry(item);
         }
 

@@ -7,8 +7,7 @@ namespace Mocassin.Mathematics.Permutation
 {
     /// <summary>
     ///     A generic permutation class that counter lexicographically and periodically generates the permutations of a two
-    ///     dimensional list
-    ///     using a slot machine setup
+    ///     dimensional list using a slot machine setup
     /// </summary>
     public class PermutationSlotMachine<T1> : IPermutationSource<T1> where T1 : IComparable<T1>
     {

@@ -40,5 +40,10 @@ namespace Mocassin.Model.Energies
         ///     value
         /// </summary>
         IReadOnlyList<GroupEnergyEntry> GetEnergyEntryList();
+
+        /// <summary>
+        ///     Synchronizes the energy dictionary with the currently set values on the interaction
+        /// </summary>
+        void SynchronizeEnergyDictionary();
     }
 }

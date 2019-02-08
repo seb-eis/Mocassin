@@ -124,9 +124,8 @@ namespace Mocassin.Model.Energies
         [CacheMethodResult]
         protected IEnergySetterProvider CreateEnergySetterProvider()
         {
-            var provider = ModelProject.GetManager<IEnergyManager>().QueryPort
-                .Query(port => port.GetEnergySetterProvider(ModelProject.Settings));
-
+            var queryPort = ModelProject.GetManager<IEnergyManager>().QueryPort;
+            var provider = queryPort.Query(port => port.GetEnergySetterProvider(ModelProject.Settings, queryPort));
             return provider;
         }
 
@@ -153,8 +152,12 @@ namespace Mocassin.Model.Energies
             var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
             var interactions = ModelProject.GetManager<IEnergyManager>().QueryPort.Query(port => port.GetGroupInteractions());
 
-            return analyzer.CreateExtendedPositionGroups(interactions)
-                .Select(value => (IPositionGroupInfo) new PositionGroupInfo(value)).ToList();
+            var result = analyzer.CreateExtendedPositionGroups(interactions)
+                .Select(value => (IPositionGroupInfo) new PositionGroupInfo(value))
+                .ToList();
+
+            result.ForEach(x => x.SynchronizeEnergyDictionary());
+            return result;
         }
 
         /// <summary>

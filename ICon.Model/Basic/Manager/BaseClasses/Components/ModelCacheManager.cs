@@ -17,6 +17,9 @@ namespace Mocassin.Model.Basic
         public abstract object GetDataCopy();
 
         /// <inheritdoc />
+        public abstract void ClearCachedData();
+
+        /// <inheritdoc />
         public abstract string JsonSerializeData();
 
         /// <inheritdoc />
@@ -66,10 +69,8 @@ namespace Mocassin.Model.Basic
             return (TResult) Cache.FindCacheEntry(creatorMethod).GetValue();
         }
 
-        /// <summary>
-        ///     Clears all cached data objects causing them to be recalculated on the next data access
-        /// </summary>
-        public virtual void ClearCachedData()
+        /// <inheritdoc />
+        public override void ClearCachedData()
         {
             foreach (var data in Cache.DataCache)
                 data?.Clear();
@@ -107,21 +108,22 @@ namespace Mocassin.Model.Basic
         /// </summary>
         protected void InitializeIfNotInitialized()
         {
-            if (Cache.IsInitialized) 
+            if (Cache.IsInitialized)
                 return;
 
             Cache.Initialize(FindAndMakeCacheEntries());
         }
 
         /// <summary>
-        ///     Searches the manager for all marked methods and creates the sequence of cache objects
+        ///     Searches the manager for all <see cref="CacheMethodResultAttribute" /> marked methods and creates the sequence of
+        ///     <see cref="ICachedObjectSource"/> provider interfaces
         /// </summary>
         /// <returns></returns>
         protected IEnumerable<ICachedObjectSource> FindAndMakeCacheEntries()
         {
             foreach (var method in GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic))
             {
-                if (!(method.GetCustomAttribute(typeof(CacheMethodResultAttribute)) is CacheMethodResultAttribute attribute)) 
+                if (!(method.GetCustomAttribute<CacheMethodResultAttribute>() is CacheMethodResultAttribute attribute))
                     continue;
 
                 var delegateType = typeof(Func<>).MakeGenericType(method.ReturnType);
@@ -132,10 +134,11 @@ namespace Mocassin.Model.Basic
                 {
                     cachedData = (ICachedObjectSource) Activator.CreateInstance(wrapperType, method.CreateDelegate(delegateType, this));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException("Instance creation of cached data interface by attribute properties failed");
+                    throw new InvalidOperationException("Instance cached object provider failed", e);
                 }
+
                 yield return cachedData;
             }
         }

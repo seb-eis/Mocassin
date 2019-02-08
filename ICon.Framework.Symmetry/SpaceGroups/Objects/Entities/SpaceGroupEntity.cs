@@ -74,11 +74,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool Equals(SpaceGroupEntity other)
         {
-            return other != null && (Literal == other.Literal
-                                     && Specifier == other.Specifier
-                                     && Index == other.Index
-                                     && SpecifierIndex == other.SpecifierIndex
-                                     && CrystalSystemIndex == other.CrystalSystemIndex);
+            return other != null 
+                 && (Literal == other.Literal
+                 && Specifier == other.Specifier
+                 && Index == other.Index
+                 && SpecifierIndex == other.SpecifierIndex
+                 && CrystalSystemIndex == other.CrystalSystemIndex);
         }
 
         /// <inheritdoc />

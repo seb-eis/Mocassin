@@ -5,5 +5,9 @@
     /// </summary>
     public interface IModelCachePort : IModelDataPort
     {
+        /// <summary>
+        ///     Clears all cached data objects causing them to be recalculated on the next data access
+        /// </summary>
+        void ClearCachedData();
     }
 }

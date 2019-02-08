@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
+using Mocassin.Framework.Events;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
@@ -13,9 +15,17 @@ namespace Mocassin.Model.Translator.EntityBuilder
     public class JobDbEntityBuilder : IJobDbEntityBuilder
     {
         /// <summary>
-        ///     Readonly set of post build data optimizers for after build data optimization
+        ///     Get the set of <see cref="IPostBuildOptimizer"/> interfaces registered with the builder
         /// </summary>
-        private readonly HashSet<IPostBuildOptimizer> _postBuildOptimizers;
+        private HashSet<IPostBuildOptimizer> PostBuildOptimizers { get; }
+
+        /// <summary>
+        /// Get the <see cref="ReactiveEvent{TSubject}"/> that is called on finished jobs
+        /// </summary>
+        private ReactiveEvent<int> JobIsBuildEvent { get; }
+
+        /// <inheritdoc />
+        public IObservable<int> WhenJobIsBuild => JobIsBuildEvent.AsObservable();
 
         /// <inheritdoc />
         public IProjectModelContext ProjectModelContext { get; set; }
@@ -47,7 +57,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public JobDbEntityBuilder(IProjectModelContext projectModelContext)
         {
             ProjectModelContext = projectModelContext ?? throw new ArgumentNullException(nameof(projectModelContext));
-            _postBuildOptimizers = new HashSet<IPostBuildOptimizer>();
+            PostBuildOptimizers = new HashSet<IPostBuildOptimizer>();
+            JobIsBuildEvent = new ReactiveEvent<int>();
         }
 
         /// <inheritdoc />
@@ -80,7 +91,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <inheritdoc />
         public void AddPostBuildOptimizer(IPostBuildOptimizer postBuildOptimizer)
         {
-            _postBuildOptimizers.Add(postBuildOptimizer);
+            PostBuildOptimizers.Add(postBuildOptimizer);
         }
 
         /// <summary>
@@ -114,11 +125,16 @@ namespace Mocassin.Model.Translator.EntityBuilder
         {
             var result = new List<Task<SimulationJobModel>>();
 
-            var index = 0;
+            var index = 1;
             foreach (var jobConfiguration in jobConfigurations)
             {
                 jobConfiguration.JobId = index++;
-                var jobModelTask = Task.Run(() => GetJobModel(simulationModel, jobConfiguration));
+                var jobModelTask = Task.Run(() =>
+                {
+                    var jobModel = GetJobModel(simulationModel, jobConfiguration);
+                    JobIsBuildEvent.OnNext(jobConfiguration.JobId);
+                    return jobModel;
+                });
                 result.Add(jobModelTask);
             }
 
@@ -135,6 +151,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         {
             var result = new SimulationJobModel
             {
+                JobNumber = jobConfiguration.JobId,
                 JobInfo = jobConfiguration.GetInteropJobInfo(),
                 JobHeader = jobConfiguration.GetInteropJobHeader(),
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
@@ -151,8 +168,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="simulationModel"></param>
         protected void SetSimulationTypeFlags(SimulationJobModel jobModel, ISimulationModel simulationModel)
         {
-            var kmcFlag = (long) SimulationJobInfoFlags.KmcSimulation;
-            var mmcFlag = (long) SimulationJobInfoFlags.MmcSimulation;
+            const long kmcFlag = (long) SimulationJobInfoFlags.KmcSimulation;
+            const long mmcFlag = (long) SimulationJobInfoFlags.MmcSimulation;
 
             switch (simulationModel)
             {
@@ -212,7 +229,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="packageModel"></param>
         protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel)
         {
-            foreach (var optimizer in _postBuildOptimizers)
+            foreach (var optimizer in PostBuildOptimizers)
                 optimizer.Run(ProjectModelContext, packageModel);
         }
 

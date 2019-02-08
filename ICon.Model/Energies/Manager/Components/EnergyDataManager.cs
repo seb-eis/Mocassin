@@ -80,7 +80,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IEnergySetterProvider GetEnergySetterProvider(ProjectSettings projectSettings)
+        public IEnergySetterProvider GetEnergySetterProvider(ProjectSettings projectSettings, IEnergyQueryPort queryPort)
         {
             if (projectSettings == null)
                 throw new ArgumentNullException(nameof(projectSettings));
@@ -89,7 +89,7 @@ namespace Mocassin.Model.Energies
             var accessLockSource = new AccessLockSource(projectSettings.ConcurrencySettings.MaxAttempts,
                 projectSettings.ConcurrencySettings.AttemptInterval);
 
-            return new EnergySetterProvider(new DataAccessorSource<EnergyModelData>(Data, accessLockSource))
+            return new EnergySetterProvider(new DataAccessorSource<EnergyModelData>(Data, accessLockSource), queryPort)
             {
                 GroupEnergyConstraint = energySettings.GroupEnergies.ToConstraint(),
                 PairEnergyConstraint = energySettings.PairEnergies.ToConstraint()
