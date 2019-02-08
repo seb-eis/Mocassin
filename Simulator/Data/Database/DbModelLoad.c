@@ -14,14 +14,16 @@
 void LoadSimulationModelFromDatabase(__SCONTEXT_PAR)
 {
     int32_t jobContextId = -1;
-    if (sscanf("%i", getFileInformation(SCONTEXT)->DbQueryString, &jobContextId) != 1)
+    if (sscanf(getFileInformation(SCONTEXT)->DbQueryString, "%i", &jobContextId) != 1)
     {
         error_exit(ERR_VALIDATION, "Job context id is invalid");
     }
 
-    error_t error = AssignDatabaseModel(&SCONTEXT->DbModel, getFileInformation(SCONTEXT)->DatabasePath, jobContextId);
+    error_t error = PopulateDbModelFromDatabase(&SCONTEXT->DbModel, getFileInformation(SCONTEXT)->DatabasePath,
+                                                jobContextId);
     if (error != ERR_OK)
     {
-        error_exit(error, "Failed to load the information from the database");
+        ErrorToStdout(error, __FUNCTION__, __LINE__, "Failed to load the information from the database");
+        getchar();
     }
 }

@@ -23,7 +23,7 @@
  * operation stops and a SQLITE3 error number (always positive) or a custom error number (always negative) is returned.
  *
  * How the SqliteReader works internally:
- * When the "AssignDatabaseModel" function is called, the provided database is accessed and the required data is
+ * When the "PopulateDbModelFromDatabase" function is called, the provided database is accessed and the required data is
  * fetched from the database by the provided Project ID. This is accomplished in three steps:
  * 1) The IDs of the parent objects are fetched from the database. The parent objects are the member variables within
  *    the database object, e.g. the Structure object.
@@ -46,52 +46,34 @@
 // Macro the return the function in case something goes wrong
 #define check_Sql(X, Y) if (X != Y) { return X; }
 
-// Type for the database load instruction index set
-// Layout@ggc_x86_64 => 24@[4,4,4,4,4,4]
-typedef struct DbLoadIndices
-{
-    // The context id of the job model to load
-    int32_t JobContextId;
+// Macro that call finalize on a sql statement and returns the error code if the condition is true
+#define sql_FinalizeAndReturnIf(COND, STMT) if (COND) { return sqlite3_finalize(STMT);  }
 
-    // The context id of the package model to load
-    int32_t PackageContextId;
+// Macro that closes the database file and returns
+#define sql_DbCloseAndReturnIf(COND, DB) if (COND) { return sqlite3_close(DB);  }
 
-    // The context id of the structure model to load
-    int32_t StructureContextId;
+// Function pointer for database load operations that get a query, database and target database model
+typedef error_t (*FDbModelLoad_t)(char* sqlQuery, sqlite3* db, DbModel_t* dbModel);
 
-    // The context id of the energy model to load
-    int32_t EnergyContextId;
+// Function pointer for operations that should be performed on the loaded model after successful loading from the database
+typedef error_t (*FDbOnModelLoaded_t)(DbModel_t* dbModel);
 
-    // The context id of the transition model to load
-    int32_t TransitionContextId;
+// List for model load operation function pointers
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Span_t(FDbModelLoad_t, DbModelLoadOperations) DbModelLoadOperations_t;
 
-    // The context id of the lattice model to load
-    int32_t LatticeContextId;
-
-} DbLoadIndices_t;
-
-
-// Type for object operation pair types
-// Layout@ggc_x86_64 => 24@[4,4,4,4,4,4]
-typedef struct ObjectOperationPair
-{
-    // The pointer to the object
-    void *Object;
-
-    //
-    int32_t (*Operation)(char*, sqlite3*, void*, const DbLoadIndices_t*);
-
-} ObjectOperationPair_t;
-
-// Type for object operation pair spans
-// Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(ObjectOperationPair_t, ObjectOperationSet) ObjectOperationSet_t;
+// List for model after model loading operations
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Span_t(FDbOnModelLoaded_t, DbModelOnLoadedOperations) DbModelOnLoadedOperations_t;
 
 // Get an access struct for the set of parent object operations
-ObjectOperationSet_t GetParentOperationSet(DbModel_t* dbModel);
+DbModelLoadOperations_t GetParentLoadOperations();
 
 // Get an access struct for the set of child object operations
-ObjectOperationSet_t GetChildOperationSet(DbModel_t* dbModel);
+DbModelLoadOperations_t GetChildLoadOperations();
+
+// Get an access struct for the set of after loading operations
+DbModelOnLoadedOperations_t GetOnLoadedOperations();
 
 // Main function - assign the provided DbModel object with the provided database and job context id
-int32_t AssignDatabaseModel(DbModel_t* dbModel, const char* dbFile, int32_t jobContextId);
+error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId);

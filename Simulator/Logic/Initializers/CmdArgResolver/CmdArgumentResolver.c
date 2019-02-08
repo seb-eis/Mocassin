@@ -17,7 +17,7 @@ static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
 {
     static const CmdArgResolver_t resolvers[] =
             {
-                    { "-dbPath",    (FValidator_t) ValidateStringNotNullOrEmpty,  (FCmdCallback_t) setDatabasePath },
+                    { "-dbPath",    (FValidator_t) ValidateIsValidFilePath,       (FCmdCallback_t) setDatabasePath },
                     { "-dbQuery",   (FValidator_t) ValidateDatabaseQueryString,   (FCmdCallback_t) setDatabaseLoadString }
             };
 

@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+/**
+
 int tests_run = 0;
 char error_message[265];
 
@@ -299,3 +301,5 @@ static char *all_tests() {
 
     return 0;
 };
+
+ **/

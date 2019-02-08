@@ -33,7 +33,7 @@ static inline void PushBackEnvIdToDirectionPool(DirectionPool_t *restrict direct
 // Tries to push back the passed if to the direction pool. Returns false if failed
 static inline bool_t TryPushBackEnvIdToDirectionPool(DirectionPool_t* restrict directionPool, const int32_t entry)
 {
-    if (!list_IsFull(directionPool->EnvironmentPool))
+    if (list_IsFull(directionPool->EnvironmentPool))
     {
         return false;
     }

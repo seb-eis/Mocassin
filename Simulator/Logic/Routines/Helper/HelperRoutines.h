@@ -85,14 +85,26 @@ static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(__SCONTEXT_
     return getEnvironmentStateByVector4(SCONTEXT, &target);
 }
 
-// Get the index of the first update particle that is null
-static inline byte_t GetIndexOfFirstNullUpdateParticle(EnvironmentDefinition_t *restrict envDef)
+// Get the highest index within the update particle set of an environment definition
+static inline byte_t GetMaxParticleUpdateId(EnvironmentDefinition_t *restrict envDef)
 {
     for(byte_t i = 0;; i++)
     {
         if(envDef->UpdateParticleIds[i] == PARTICLE_NULL)
         {
-            return envDef->UpdateParticleIds[i-1];
+            return (i == 0) ? (byte_t) PARTICLE_NULL : envDef->UpdateParticleIds[i-1];
+        }
+    }
+}
+
+// Get the highest index of a particle occupation on the passed environment model
+static inline byte_t GetEnvironmentMaxParticleId(EnvironmentDefinition_t *restrict envDef)
+{
+    for(byte_t i = 0;; i++)
+    {
+        if(envDef->PositionParticleIds[i] == PARTICLE_NULL)
+        {
+            return (i == 0) ? (byte_t) PARTICLE_NULL : envDef->PositionParticleIds[i-1];
         }
     }
 }

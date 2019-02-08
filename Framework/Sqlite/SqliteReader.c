@@ -11,320 +11,339 @@
 #include <Simulator/Data/Database/DbModel.h>
 #include "SqliteReader.h"
 
-static int32_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **sqlStatement, int32_t contextId)
+static error_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **sqlStatement, int32_t id)
 {
-    check_Sql(sqlite3_prepare_v2(db, sqlQuery, -1, &(*sqlStatement), NULL), SQLITE_OK);
-    check_Sql(sqlite3_bind_int(*sqlStatement, ID_POS_IN_SQLSTMT, contextId), SQLITE_OK);
-    check_Sql(sqlite3_step(*sqlStatement), SQLITE_ROW);
-    return SQLITE_ROW;
+    error_t error = sqlite3_prepare_v2(db, sqlQuery, -1, &(*sqlStatement), NULL);
+    return_if(error != SQLITE_OK, error);
+
+    error = sqlite3_bind_int(*sqlStatement, ID_POS_IN_SQLSTMT, id);
+    return_if(error != SQLITE_OK, error);
+
+    error = sqlite3_step(*sqlStatement);
+    return error;
 }
 
 
-static int32_t AssignProjectIds(sqlite3 *db, DbLoadIndices_t* loadIndices)
+static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char *sqlQuery = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId "
-                     "from JobModels where Id = ?1";
+    char localQuery[] = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader "
+                        "from JobModels where Id = ?1";
+    sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->PackageContextId), SQLITE_ROW)
 
-    loadIndices->StructureContextId = sqlite3_column_int(sqlStatement, 0);
-    loadIndices->EnergyContextId = sqlite3_column_int(sqlStatement, 1);
-    loadIndices->TransitionContextId = sqlite3_column_int(sqlStatement, 2);
-    loadIndices->LatticeContextId = sqlite3_column_int(sqlStatement, 3);
-    loadIndices->PackageContextId = sqlite3_column_int(sqlStatement, 4);
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.ContextId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    return SQLITE_OK;
+    dbModel->JobModel.StructureModelId = sqlite3_column_int(sqlStatement, 0);
+    dbModel->JobModel.EnergyModelId = sqlite3_column_int(sqlStatement, 1);
+    dbModel->JobModel.TransitionModelId = sqlite3_column_int(sqlStatement, 2);
+    dbModel->JobModel.LatticeModelId = sqlite3_column_int(sqlStatement, 3);
+    dbModel->JobModel.PackageId = sqlite3_column_int(sqlStatement, 4);
+    dbModel->JobModel.JobInfo = *(JobInfo_t*) sqlite3_column_blob(sqlStatement, 5);
+
+    size_t jobHeaderSize = (size_t) sqlite3_column_bytes(sqlStatement, 6);
+    dbModel->JobModel.JobHeader = malloc(jobHeaderSize);
+    dbModel->JobModel.JobInfo.JobHeader = dbModel->JobModel.JobHeader;
+    memcpy(dbModel->JobModel.JobHeader, sqlite3_column_blob(sqlStatement, 6), jobHeaderSize);
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
 }
 
-static int32_t AssignParentObjects(DbModel_t *dbModel, sqlite3 *db, const DbLoadIndices_t* loadIndices)
+// Invokes the passed load operation set using the provided database and model
+static error_t InvokeLoadOperations(sqlite3 *db, DbModel_t *dbModel, const DbModelLoadOperations_t operations)
 {
-    ObjectOperationSet_t operationSet = GetParentOperationSet(dbModel);
+    return_if(dbModel == NULL || db == NULL, ERR_NULLPOINTER);
 
-    cpp_foreach (item, operationSet)
+    char queryBuffer[250];
+
+    cpp_foreach (item, operations)
     {
-        check_Sql(item->Operation("", db, item->Object, loadIndices), SQLITE_OK);
+        error_t error = (*item)(queryBuffer, db, dbModel);
+        return_if(error != SQLITE_OK, error);
     }
 
-    delete_Span(operationSet);
     return SQLITE_OK;
 }
 
-
-static int32_t AssignStructureModel(char* sqlQuery, sqlite3* db, void* obj, const DbLoadIndices_t* loadIndices)
+// Invokes the passed on load operation set using the provided database and model
+static error_t InvokeOnLoadedOperations(DbModel_t* dbModel, const DbModelOnLoadedOperations_t operations)
 {
-    sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions "
-                "from StructureModels where Id = ?1";
+    return_if(dbModel == NULL, ERR_NULLPOINTER);
 
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->StructureContextId), SQLITE_ROW)
-
-    StructureModel_t *structureModel = (StructureModel_t*) obj;
-
-    structureModel->NumOfTrackersPerCell = sqlite3_column_int(sqlStatement, 0);
-    structureModel->NumOfGlobalTrackers = sqlite3_column_int(sqlStatement, 1);
-    memcpy(&structureModel->InteractionRange, sqlite3_column_blob(sqlStatement, 2),(size_t) sqlite3_column_bytes(sqlStatement, 2));
-
-    int32_t numberOfEnvironments = sqlite3_column_int(sqlStatement, 3);
-    structureModel->EnvironmentDefinitions = new_Span(structureModel->EnvironmentDefinitions, (size_t) numberOfEnvironments);
-
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-    return SQLITE_OK;
-}
-
-
-static int32_t AssignEnergyModel(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
-{
-    sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
-
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->PackageContextId), SQLITE_ROW)
-
-    EnergyModel_t *energyModel = (EnergyModel_t*) obj;
-    int32_t numberOfPairTables = sqlite3_column_int(sqlStatement, 0);
-    int32_t numberOfClusterTables = sqlite3_column_int(sqlStatement, 1);
-    energyModel->PairTables = new_Span(energyModel->PairTables, (size_t) numberOfPairTables);
-    energyModel->ClusterTables = new_Span(energyModel->ClusterTables, (size_t) numberOfClusterTables);
-
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-    return SQLITE_OK;
-}
-
-
-static int32_t AssignChildObjects(DbModel_t *dbModel, sqlite3 *db, const DbLoadIndices_t *loadIndices)
-{
-    ObjectOperationSet_t operationSet = GetChildOperationSet(dbModel);
-
-    cpp_foreach (item, operationSet)
+    cpp_foreach (item, operations)
     {
-        check_Sql(item->Operation("", db, item->Object, loadIndices), SQLITE_OK);
+        error_t error = (*item)(dbModel);
+        return_if(error != ERR_OK, error);
     }
 
-    delete_Span(operationSet);
-    return SQLITE_OK;
+    return ERR_OK;
 }
 
 
-static int32_t AssignEnvironmentDefinitions(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
+
+static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
+    char localQuery[] = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions "
+                        "from StructureModels where Id = ?1";
+    sqlQuery = localQuery;
+
     sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select ObjectId, SelectionMask, UpdateParticleIds, PairDefinitions, ClusterDefinitions, "
-                "PositionParticleIds from EnvironmentDefinitions where StructureModelId = ?1 order by ObjectId";
+    StructureModel_t * model = &dbModel->StructureModel;
 
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->StructureContextId), SQLITE_ROW)
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.StructureModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    EnvironmentDefinitions_t *environmentDefinitions = (EnvironmentDefinitions_t*) obj;
+    int32_t environmentCount = sqlite3_column_int(sqlStatement, 3);
 
-    size_t numberOfEnvironments = span_GetSize(*environmentDefinitions);
-    for(size_t j=0; j<numberOfEnvironments; j++)
-    {
-        EnvironmentDefinition_t* current = &span_Get(*environmentDefinitions, j);
-        current->ObjectId = sqlite3_column_int(sqlStatement, 0);
-        current->SelectionParticleMask = sqlite3_column_int(sqlStatement, 1);
-        memcpy(current->UpdateParticleIds, sqlite3_column_blob(sqlStatement, 2), (size_t) sqlite3_column_bytes(sqlStatement, 2));
+    model->NumOfTrackersPerCell = sqlite3_column_int(sqlStatement, 0);
+    model->NumOfGlobalTrackers = sqlite3_column_int(sqlStatement, 1);
+    model->InteractionRange = *(InteractionRange_t*) sqlite3_column_blob(sqlStatement, 2);
+    model->EnvironmentDefinitions = new_Span(model->EnvironmentDefinitions, environmentCount);
 
-        size_t numberOfPairDefinitions = sqlite3_column_bytes(sqlStatement, 3) / sizeof(PairDefinition_t);
-        current->PairDefinitions = span_FromBlob(current->PairDefinitions, sqlite3_column_blob(sqlStatement, 3), numberOfPairDefinitions);
-
-        size_t numberOfClusterDefinitions = sqlite3_column_bytes(sqlStatement, 4) / sizeof(ClusterDefinition_t);
-        current->ClusterDefinitions = span_FromBlob(current->ClusterDefinitions, sqlite3_column_blob(sqlStatement, 4), numberOfClusterDefinitions);
-
-        memcpy(current->PositionParticleIds, sqlite3_column_blob(sqlStatement, 5), (size_t) sqlite3_column_bytes(sqlStatement, 5));
-
-        if (j < (numberOfEnvironments - 1))
-        {
-            check_Sql(sqlite3_step(sqlStatement), SQLITE_ROW);
-        }
-    }
-
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-
-    return SQLITE_OK;
-}
-
-static int32_t AssignPairEnergyTables(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
-{
-    sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select ObjectId, EnergyTable "
-                "from PairEnergyTables where EnergyModelId = ?1 order by ObjectId";
-
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->EnergyContextId), SQLITE_ROW)
-
-    PairTables_t *pairTables = (PairTables_t*) obj;
-    size_t numberOfPairTables = span_GetSize(*pairTables);
-    for (size_t j = 0; j < numberOfPairTables; j++)
-    {
-        PairTable_t* current = &span_Get(*pairTables, j);
-        current->ObjectId = sqlite3_column_int(sqlStatement, 0);
-
-        current->EnergyTable = array_FromBlob(current->EnergyTable, sqlite3_column_blob(sqlStatement, 1));
-
-        if (j < (numberOfPairTables - 1))
-        {
-            check_Sql(sqlite3_step(sqlStatement), SQLITE_ROW);
-        }
-    }
-    check_Sql(sqlite3_step(sqlStatement), SQLITE_DONE);
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-
-    return SQLITE_OK;
-}
-
-static int32_t AssignClusterEnergyTables(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
-{
-    sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select ObjectId, EnergyTable, OccupationCodes, TableIndexing from ClusterEnergyTables "
-                "where EnergyModelId = ?1 order by ObjectId";
-
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->EnergyContextId), SQLITE_ROW)
-
-    ClusterTables_t *clusterTables = (ClusterTables_t*) obj;
-
-    size_t numberOfClusterTables = span_GetSize(*clusterTables);
-    for (size_t j = 0; j < numberOfClusterTables; j++)
-    {
-        ClusterTable_t* current = &span_Get(*clusterTables, j);
-
-        current->ObjectId = sqlite3_column_int(sqlStatement, 0);
-
-        current->EnergyTable = array_FromBlob(current->EnergyTable, sqlite3_column_blob(sqlStatement, 1));
-
-        size_t numberOfOccupationCodes = sqlite3_column_bytes(sqlStatement, 2) / sizeof(OccCodes_t);
-        current->OccupationCodes = span_FromBlob(current->OccupationCodes, sqlite3_column_blob(sqlStatement, 2), numberOfOccupationCodes);
-
-        memcpy(current->ParticleTableMapping, sqlite3_column_blob(sqlStatement, 3), (size_t) sqlite3_column_bytes(sqlStatement, 3));
-
-        if (j < (numberOfClusterTables - 1))
-        {
-            check_Sql(sqlite3_step(sqlStatement), SQLITE_ROW);
-        }
-    }
-    check_Sql(sqlite3_step(sqlStatement), SQLITE_DONE);
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-
-    return SQLITE_OK;
+    error = sqlite3_finalize(sqlStatement);
+    return  error;
 }
 
 
-static int32_t AssignTransitionModel(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
+static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
+    char localQuery[] = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
+    sqlQuery = localQuery;
+
     sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select JumpMappingTable, JumpCountTable, StaticTrackerMapping, GlobalTrackerMapping, NumOfCollections, NumOfDirections "
-                "from TransitionModels where Id = ?1";
+    EnergyModel_t *model = &dbModel->EnergyModel;
 
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->PackageContextId), SQLITE_ROW)
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    TransitionModel_t *transitionModel = obj;
-    transitionModel->JumpDirectionMappingTable = array_FromBlob(transitionModel->JumpDirectionMappingTable, sqlite3_column_blob(sqlStatement, 0));
-    transitionModel->JumpCountMappingTable = array_FromBlob(transitionModel->JumpCountMappingTable, sqlite3_column_blob(sqlStatement, 1));
-    transitionModel->StaticTrackerMappingTable = array_FromBlob(transitionModel->StaticTrackerMappingTable, sqlite3_column_blob(sqlStatement, 2));
-    transitionModel->GlobalTrackerMappingTable = array_FromBlob(transitionModel->GlobalTrackerMappingTable, sqlite3_column_blob(sqlStatement, 3));
+    int32_t pairTableCount = sqlite3_column_int(sqlStatement, 0);
+    int32_t clusterTableCount = sqlite3_column_int(sqlStatement, 1);
 
-    int32_t numberOfJumpCollections = sqlite3_column_int(sqlStatement, 4);
-    int32_t numberOfJumpDirections = sqlite3_column_int(sqlStatement, 5);
-    transitionModel->JumpCollections = new_Span(transitionModel->JumpCollections, (size_t) numberOfJumpCollections);
-    transitionModel->JumpDirections = new_Span(transitionModel->JumpDirections, (size_t) numberOfJumpDirections);
+    model->PairTables = new_Span(model->PairTables, pairTableCount);
+    model->ClusterTables = new_Span(model->ClusterTables, clusterTableCount);
 
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-    return SQLITE_OK;
+    error = sqlite3_finalize(sqlStatement);
+    return error;
 }
 
-static int32_t AssignJumpCollections(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
+static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
+    char localQuery[] = "select JumpMappingTable, JumpCountTable, StaticTrackerMapping, GlobalTrackerMapping, NumOfCollections, NumOfDirections "
+                        "from TransitionModels where Id = ?1";
+    sqlQuery = localQuery;
+
     sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select ObjectId, SelectionMask, JumpRules "
-                "from JumpCollections where TransitionModelId = ?1 order by ObjectId";
+    TransitionModel_t *model = &dbModel->TransitionModel;
 
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->TransitionContextId), SQLITE_ROW)
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    JumpCollections_t *jumpCollections = (JumpCollections_t*) obj;
+    int32_t jumpCollectionCount = sqlite3_column_int(sqlStatement, 4);
+    int32_t jumpDirectionCount = sqlite3_column_int(sqlStatement, 5);
 
-    size_t numberOfJumpCollections = span_GetSize(*jumpCollections);
-    for (size_t j = 0; j < numberOfJumpCollections; j++)
-    {
+    model->JumpDirectionMappingTable = array_FromBlob(model->JumpDirectionMappingTable, sqlite3_column_blob(sqlStatement, 0));
+    model->JumpCountMappingTable = array_FromBlob(model->JumpCountMappingTable, sqlite3_column_blob(sqlStatement, 1));
+    model->StaticTrackerMappingTable = array_FromBlob(model->StaticTrackerMappingTable, sqlite3_column_blob(sqlStatement, 2));
+    model->GlobalTrackerMappingTable = array_FromBlob(model->GlobalTrackerMappingTable, sqlite3_column_blob(sqlStatement, 3));
+    model->JumpCollections = new_Span(model->JumpCollections, jumpCollectionCount);
+    model->JumpDirections = new_Span(model->JumpDirections, jumpDirectionCount);
 
-        JumpCollection_t *current = &span_Get(*jumpCollections, j);
-
-        current->ObjectId = sqlite3_column_int(sqlStatement, 0);
-        current->MobileParticlesMask = sqlite3_column_int64(sqlStatement, 1);
-
-        size_t numberOfJumpRules = sqlite3_column_bytes(sqlStatement, 2) / sizeof(JumpRule_t);
-
-        current->JumpRules = span_FromBlob(current->JumpRules, sqlite3_column_blob(sqlStatement, 2), numberOfJumpRules);
-
-         if (j < (numberOfJumpCollections - 1))
-        {
-            check_Sql(sqlite3_step(sqlStatement), SQLITE_ROW);
-        }
-
-
-    }
-    check_Sql(sqlite3_step(sqlStatement), SQLITE_DONE);
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-
-    return SQLITE_OK;
+    error = sqlite3_finalize(sqlStatement);
+    return error;
 }
 
-static int32_t AssignJumpDirections(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
+static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
+    char localQuery[] = "select EnergyBackground, Lattice, LatticeInfo from LatticeModels where Id = ?1";
+    sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select ObjectId, PositionId, JumpLength, FieldProjection, CollectionId, JumpSequence, LocalMoveSequence "
-                "from JumpDirections where TransitionModelId = ?1 order by ObjectId";
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->TransitionContextId), SQLITE_ROW)
+    LatticeModel_t *latticeModel = &dbModel->LatticeModel;
 
-    JumpDirections_t *jumpDirections =  obj;
-
-    size_t numberOfJumpDirections = span_GetSize(*jumpDirections);
-    for (size_t j = 0; j < numberOfJumpDirections; j++)
-    {
-
-        JumpDirection_t *current = &span_Get(*jumpDirections, j);
-
-        current->ObjectId = sqlite3_column_int(sqlStatement, 0);
-        current->PositionId = sqlite3_column_int(sqlStatement, 1);
-        current->JumpLength = sqlite3_column_int(sqlStatement, 2);
-        current->ElectricFieldFactor = sqlite3_column_double(sqlStatement, 3);
-        current->JumpCollectionId = sqlite3_column_int(sqlStatement, 4);
-
-        size_t numberOfJumpSequences = sqlite3_column_bytes(sqlStatement, 5) / sizeof(JumpSequence_t);
-        current->JumpSequence = span_FromBlob(current->JumpSequence, sqlite3_column_blob(sqlStatement, 5), numberOfJumpSequences);
-
-        size_t numberOfLocalMoveSequences = sqlite3_column_bytes(sqlStatement, 6) / sizeof(MoveSequence_t);
-        current->MovementSequence = span_FromBlob(current->MovementSequence, sqlite3_column_blob(sqlStatement, 6), numberOfLocalMoveSequences);
-
-        if (j < (numberOfJumpDirections - 1))
-        {
-            check_Sql(sqlite3_step(sqlStatement), SQLITE_ROW);
-        }
-
-    }
-    check_Sql(sqlite3_step(sqlStatement), SQLITE_DONE);
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
-
-    return SQLITE_OK;
-}
-
-static int32_t AssignLatticeModel(char* sqlQuery, sqlite3 *db, void *obj, const DbLoadIndices_t *loadIndices)
-{
-    sqlite3_stmt *sqlStatement = NULL;
-    sqlQuery = "select EnergyBackground, Lattice, LatticeInfo from LatticeModels where Id = ?1";
-
-    check_Sql(PrepareSqlStatement(sqlQuery, db, &sqlStatement, loadIndices->LatticeContextId), SQLITE_ROW)
-
-    LatticeModel_t *latticeModel = (LatticeModel_t*) obj;
-
-    latticeModel->EnergyBackground = array_FromBlob(latticeModel->EnergyBackground, sqlite3_column_blob(sqlStatement, 0));
-    memcpy(&latticeModel->LatticeInfo, sqlite3_column_blob(sqlStatement, 2), (size_t) sqlite3_column_bytes(sqlStatement, 2));
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.LatticeModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     latticeModel->Lattice = array_FromBlob(latticeModel->Lattice, sqlite3_column_blob(sqlStatement, 1));
+    latticeModel->LatticeInfo = *(LatticeInfo_t*) sqlite3_column_blob(sqlStatement, 2);
 
-    check_Sql(sqlite3_finalize(sqlStatement), SQLITE_OK);
+    const void* energyBackgroundBlob = sqlite3_column_blob(sqlStatement, 0);
+    if (energyBackgroundBlob != NULL)
+    {
+        latticeModel->EnergyBackground = array_FromBlob(latticeModel->EnergyBackground, energyBackgroundBlob);
+    }
 
-    return SQLITE_OK;
+    error = sqlite3_finalize(sqlStatement);
+    return error;
 }
 
-static int32_t DistributeJumpDirections(DbModel_t* dbModel)
+static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    char localQuery[] = "select ObjectId, SelectionMask, UpdateParticleIds, PairDefinitions, ClusterDefinitions, "
+                        "PositionParticleIds from EnvironmentDefinitions where StructureModelId = ?1 order by ObjectId";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+    EnvironmentDefinitions_t *environmentDefinitions = &dbModel->StructureModel.EnvironmentDefinitions;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.StructureModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+
+    cpp_foreach(item, *environmentDefinitions)
+    {
+        size_t pairDefinitionCount = sqlite3_column_bytes(sqlStatement, 3) / sizeof(PairDefinition_t);
+        size_t clusterDefinitionCount = sqlite3_column_bytes(sqlStatement, 4) / sizeof(ClusterDefinition_t);
+
+        item->ObjectId = sqlite3_column_int(sqlStatement, 0);
+        item->SelectionParticleMask = sqlite3_column_int64(sqlStatement, 1);
+        item->PairDefinitions = span_FromBlob(item->PairDefinitions, sqlite3_column_blob(sqlStatement, 3), pairDefinitionCount);
+        item->ClusterDefinitions = span_FromBlob(item->ClusterDefinitions, sqlite3_column_blob(sqlStatement, 4), clusterDefinitionCount);
+
+        memcpy(item->UpdateParticleIds, sqlite3_column_blob(sqlStatement, 2), (size_t) sqlite3_column_bytes(sqlStatement, 2));
+        memcpy(item->PositionParticleIds, sqlite3_column_blob(sqlStatement, 5), (size_t) sqlite3_column_bytes(sqlStatement, 5));
+
+        if (item != environmentDefinitions->End - 1)
+        {
+            error = sqlite3_step(sqlStatement);
+            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+        }
+    }
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
+
+static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    char localQuery[] = "select ObjectId, EnergyTable "
+                        "from PairEnergyTables where EnergyModelId = ?1 order by ObjectId";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+    PairTables_t* tables = &dbModel->EnergyModel.PairTables;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+
+    cpp_foreach(table, *tables)
+    {
+        table->ObjectId = sqlite3_column_int(sqlStatement, 0);
+        table->EnergyTable = array_FromBlob(table->EnergyTable, sqlite3_column_blob(sqlStatement, 1));
+
+        if (table != tables->End - 1)
+        {
+            error = sqlite3_step(sqlStatement);
+            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+        }
+    }
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
+
+static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    char localQuery[] = "select ObjectId, EnergyTable, OccupationCodes, TableIndexing from ClusterEnergyTables "
+                        "where EnergyModelId = ?1 order by ObjectId";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+    ClusterTables_t* tables = &dbModel->EnergyModel.ClusterTables;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+
+    cpp_foreach(table, *tables)
+    {
+        size_t occupationCodeCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(OccCodes_t);
+
+        table->ObjectId = sqlite3_column_int(sqlStatement, 0);
+        table->EnergyTable = array_FromBlob(table->EnergyTable, sqlite3_column_blob(sqlStatement, 1));
+        table->OccupationCodes = span_FromBlob(table->OccupationCodes, sqlite3_column_blob(sqlStatement, 2), occupationCodeCount);
+
+        memcpy(table->ParticleTableMapping, sqlite3_column_blob(sqlStatement, 3), (size_t) sqlite3_column_bytes(sqlStatement, 3));
+
+        if (table != tables->End - 1)
+        {
+            error = sqlite3_step(sqlStatement);
+            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+        }
+    }
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
+
+static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    char localQuery[] = "select ObjectId, SelectionMask, JumpRules "
+                        "from JumpCollections where TransitionModelId = ?1 order by ObjectId";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+    JumpCollections_t *collections = &dbModel->TransitionModel.JumpCollections;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+
+    cpp_foreach(collection, *collections)
+    {
+        size_t jumpRuleCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(JumpRule_t);
+
+        collection->ObjectId = sqlite3_column_int(sqlStatement, 0);
+        collection->MobileParticlesMask = sqlite3_column_int64(sqlStatement, 1);
+        collection->JumpRules = span_FromBlob(collection->JumpRules, sqlite3_column_blob(sqlStatement, 2), jumpRuleCount);
+
+        if (collection != collections->End - 1)
+        {
+            error = sqlite3_step(sqlStatement);
+            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+        }
+    }
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
+
+static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    char localQuery[] = "select ObjectId, PositionId, JumpLength, FieldProjection, CollectionId, JumpSequence, LocalMoveSequence "
+                        "from JumpDirections where TransitionModelId = ?1 order by ObjectId";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+    JumpDirections_t *directions = &dbModel->TransitionModel.JumpDirections;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+
+    cpp_foreach(direction, *directions)
+    {
+        size_t moveSequenceCount = sqlite3_column_bytes(sqlStatement, 6) / sizeof(MoveSequence_t);
+        size_t jumpSequenceCount = sqlite3_column_bytes(sqlStatement, 5) / sizeof(JumpSequence_t);
+
+        direction->ObjectId = sqlite3_column_int(sqlStatement, 0);
+        direction->PositionId = sqlite3_column_int(sqlStatement, 1);
+        direction->JumpLength = sqlite3_column_int(sqlStatement, 2);
+        direction->ElectricFieldFactor = sqlite3_column_double(sqlStatement, 3);
+        direction->JumpCollectionId = sqlite3_column_int(sqlStatement, 4);
+        direction->JumpSequence = span_FromBlob(direction->JumpSequence, sqlite3_column_blob(sqlStatement, 5), jumpSequenceCount);
+        direction->MovementSequence = span_FromBlob(direction->MovementSequence, sqlite3_column_blob(sqlStatement, 6), moveSequenceCount);
+
+        if (direction != directions->End - 1)
+        {
+            error = sqlite3_step(sqlStatement);
+            sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+        }
+    }
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
+
+// Assigns each jump collection its sub-span access to the main jump direction buffer
+static error_t AssignDirectionBuffersToJumpCollections(DbModel_t *dbModel)
 {
     int32_t newBegin = 0;
     int32_t newEnd = 0;
@@ -362,65 +381,59 @@ static int32_t DistributeJumpDirections(DbModel_t* dbModel)
     return 0;
 }
 
-int32_t AssignDatabaseModel(DbModel_t* dbModel, const char* dbFile, int32_t jobContextId)
-{
-    DbLoadIndices_t projectIds =
-    {
-            .PackageContextId = -1,
-            .StructureContextId = -1,
-            .EnergyContextId = -1,
-            .TransitionContextId = -1,
-            .LatticeContextId = -1,
-            .JobContextId = jobContextId
-    };
 
+error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int32_t jobContextId)
+{
+    error_t error;
     sqlite3 *db;
-    check_Sql(sqlite3_open(dbFile, &db), SQLITE_OK)
+    dbModel->JobModel.ContextId = jobContextId;
 
-    check_Sql(AssignProjectIds(db, &projectIds), SQLITE_OK)
-    check_Sql(AssignParentObjects(dbModel, db, &projectIds), SQLITE_OK)
-    check_Sql(AssignChildObjects(dbModel, db, &projectIds), SQLITE_OK)
+    error = sqlite3_open(dbFile, &db);
+    sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
 
-    DistributeJumpDirections(dbModel);
+    error = InvokeLoadOperations(db, dbModel, GetParentLoadOperations());
+    sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
 
-    return 0;
+    error = InvokeLoadOperations(db, dbModel, GetChildLoadOperations());
+    sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
+
+    error = InvokeOnLoadedOperations(dbModel, GetOnLoadedOperations());
+
+    error_assert(sqlite3_close(db), "Failed to close the database file");
+    return error;
 }
 
-ObjectOperationSet_t GetChildOperationSet(DbModel_t * dbModel)
+DbModelLoadOperations_t GetChildLoadOperations()
 {
-    ObjectOperationSet_t operationSet = new_Span(operationSet, 5);
-    span_Get(operationSet, 0) = (ObjectOperationPair_t)
-            {.Object = &dbModel->StructureModel.EnvironmentDefinitions, .Operation = AssignEnvironmentDefinitions};
-
-    span_Get(operationSet, 1) = (ObjectOperationPair_t)
-            {.Object = &dbModel->EnergyModel.PairTables, .Operation = AssignPairEnergyTables};
-
-    span_Get(operationSet, 2) = (ObjectOperationPair_t)
-            {.Object = &dbModel->EnergyModel.ClusterTables, .Operation = AssignClusterEnergyTables};
-
-    span_Get(operationSet, 3) = (ObjectOperationPair_t)
-            {.Object = &dbModel->TransitionModel.JumpCollections, .Operation = AssignJumpCollections};
-
-    span_Get(operationSet, 4) = (ObjectOperationPair_t)
-            {.Object = &dbModel->TransitionModel.JumpDirections, .Operation = AssignJumpDirections};
-
-    return operationSet;
+    static FDbModelLoad_t operations[] =
+    {
+            (FDbModelLoad_t) GetEnvironmentDefinitionsFromDb,
+            (FDbModelLoad_t) GetPairEnergyTablesFromDb,
+            (FDbModelLoad_t) GetClusterEnergyTablesFromDb,
+            (FDbModelLoad_t) GetJumpCollectionsFromDb,
+            (FDbModelLoad_t) GetJumpDirectionsFromDb
+    };
+    return (DbModelLoadOperations_t) span_CArrayToSpan(operations);
 }
 
-ObjectOperationSet_t GetParentOperationSet(DbModel_t * dbModel)
+DbModelLoadOperations_t GetParentLoadOperations()
 {
-    ObjectOperationSet_t operationSet = new_Span(operationSet, 5);
-    span_Get(operationSet, 0) = (ObjectOperationPair_t)
-            {.Object = &dbModel->StructureModel, .Operation = AssignStructureModel};
+    static FDbModelLoad_t operations[] =
+    {
+           (FDbModelLoad_t) GetJobModelFromDb,
+           (FDbModelLoad_t) GetStructureModelFromDb,
+           (FDbModelLoad_t) GetEnergyModelFromDb,
+           (FDbModelLoad_t) GetTransitionModelFromDb,
+           (FDbModelLoad_t) GetLatticeModelFromDb
+    };
+    return (DbModelLoadOperations_t) span_CArrayToSpan(operations);
+}
 
-    span_Get(operationSet, 1) = (ObjectOperationPair_t)
-            {.Object = &dbModel->EnergyModel, .Operation = AssignEnergyModel};
-
-    span_Get(operationSet, 2) = (ObjectOperationPair_t)
-            {.Object = &dbModel->TransitionModel, .Operation = AssignTransitionModel};
-
-    span_Get(operationSet, 3) = (ObjectOperationPair_t)
-            {.Object = &dbModel->LatticeModel, .Operation = AssignLatticeModel};
-
-    return operationSet;
+DbModelOnLoadedOperations_t GetOnLoadedOperations()
+{
+    static FDbOnModelLoaded_t operations[] =
+    {
+            (FDbOnModelLoaded_t) AssignDirectionBuffersToJumpCollections
+    };
+    return (DbModelOnLoadedOperations_t) span_CArrayToSpan(operations);
 }

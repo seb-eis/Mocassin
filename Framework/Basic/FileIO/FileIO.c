@@ -10,7 +10,7 @@
 
 #include "Framework/Basic/FileIO/FileIO.h"
 
-cerror_t GetFileSize(file_t* restrict fileStream)
+cerror_t CalculateFileSize(file_t *restrict fileStream)
 {
     int64_t fileSize;
     if (fileStream == NULL || fseek(fileStream, 0L, SEEK_END) != 0)
@@ -27,7 +27,8 @@ cerror_t GetFileSize(file_t* restrict fileStream)
 
 bool_t IsAccessibleFile(const char* restrict fileName)
 {
-    return access(fileName, F_OK) != -1;
+    int32_t error = access(fileName, F_OK);
+    return error == 0;
 }
 
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
@@ -126,7 +127,7 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
     int64_t bufferSize;
     int32_t writeResult;
 
-    if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = GetFileSize(fileStream)) < 0)
+    if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
     {
         return ERR_STREAM;
     }

@@ -67,13 +67,11 @@
 
     int main(int argc, char const * const *argv)
     {
-        SimulationContext_t SCONTEXT;
+        SimulationContext_t SCONTEXT = ctor_SimulationContext();
 
         ResolveCommandLineArguments(&SCONTEXT, argc, argv);
 
         LoadSimulationModelFromDatabase(&SCONTEXT);
-
-        PrepareContextForSimulation(&SCONTEXT);
 
         PrepareForMainRoutine(&SCONTEXT);
 

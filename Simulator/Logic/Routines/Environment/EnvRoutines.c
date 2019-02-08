@@ -156,31 +156,25 @@ static void ResolvePairTargetAndIncreaseLinkCounter(__SCONTEXT_PAR, const Enviro
 static error_t SetAllLinkListCountersToRequiredSize(__SCONTEXT_PAR)
 {
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
-    {
         cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairDefinitions)
-        {
             ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT, environment, pairDefinition);
-        }
-    }
+
     return ERR_OK;
 }
 
 // Allocates the environment linker lists to the size defined by their previously set counter status
 static error_t AllocateEnvLinkListBuffersByPresetCounters(__SCONTEXT_PAR)
 {
-    error_t error;
-    Buffer_t tmpBuffer;
+    EnvironmentLinks_t tmpBuffer;
 
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
     {
         // Link is counted using the NULL initialized span access struct
         size_t linkCount = span_GetSize(environment->EnvironmentLinks);
-
-        error = ctor_Buffer(tmpBuffer, linkCount * sizeof(EnvironmentLink_t));
-        return_if(error, error);
-
-        environment->EnvironmentLinks = (EnvironmentLinks_t) span_AsList(tmpBuffer);
+        tmpBuffer = new_List(tmpBuffer, linkCount);
+        environment->EnvironmentLinks = tmpBuffer;
     }
+
     return ERR_OK;
 }
 
@@ -270,18 +264,16 @@ void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR)
     error_assert(error, "Failed to construct the environment linking system.");
 }
 
-// Allocates the dynamic environment occupation buffer for dynamic lookup of environment occupations (Size fits the largets environment definition)
+// Allocates the dynamic environment occupation buffer for dynamic lookup of environment occupations (Size fits the largest environment definition)
 static error_t AllocateDynamicEnvOccupationBuffer(__SCONTEXT_PAR, Buffer_t* restrict buffer)
 {
     size_t bufferSize = 0;
 
     cpp_foreach(environmentDefinition, *getEnvironmentModels(SCONTEXT))
-    {
-        size_t count = span_GetSize(environmentDefinition->PairDefinitions);
-        bufferSize = getMaxOfTwo(bufferSize, count);
-    }
+        bufferSize = getMaxOfTwo(bufferSize, span_GetSize(environmentDefinition->PairDefinitions));
 
-    return ctor_Buffer(*buffer, bufferSize *sizeof(byte_t));
+    *buffer = new_Span(*buffer, bufferSize);
+    return ERR_OK;
 }
 
 // Find an environment state by resolving the passed pair id in the context of the start environment state
@@ -307,14 +299,10 @@ static error_t WriteEnvOccupationToBuffer(__SCONTEXT_PAR, EnvironmentState_t* en
 static void ResetEnvStateBuffersToZero(EnvironmentState_t* restrict environment)
 {
     cpp_foreach(energy, environment->EnergyStates)
-    {
         *energy = 0;
-    }
 
     cpp_foreach(cluster, environment->ClusterStates)
-    {
         *cluster = (ClusterState_t) { 0, 0, 0ULL, 0ULL };
-    }
 }
 
 // Adds all environment pair energies of the passed environment state to its internal energy buffers using the passed occupation buffer as the occupation source
@@ -329,8 +317,8 @@ static void AddEnvPairEnergyByOccupation(__SCONTEXT_PAR, EnvironmentState_t* res
         {
             byte_t positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
             byte_t partnerParticleId = span_Get(*occupationBuffer, i);
-            span_Get(environment->EnergyStates, positionParticleId) += getPairEnergyAt(pairTable, positionParticleId,
-                                                                                       partnerParticleId);
+            double energy = getPairEnergyAt(pairTable, positionParticleId, partnerParticleId);
+            span_Get(environment->EnergyStates, positionParticleId) += energy;
         }
     } 
 }
@@ -408,9 +396,9 @@ void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR)
     error = AllocateDynamicEnvOccupationBuffer(SCONTEXT, &occupationBuffer);
     error_assert(error, "Buffer creation for environment occupation lookup failed.");
 
-    for (int32_t i = 0; i < (int32_t) span_GetSize(*getMainStateLattice(SCONTEXT)); i++)
+    cpp_foreach (envState, *getEnvironmentLattice(SCONTEXT))
     {
-        error = DynamicLookupEnvironmentStatus(SCONTEXT, i, &occupationBuffer);
+        error = DynamicLookupEnvironmentStatus(SCONTEXT, envState->EnvironmentId, &occupationBuffer);
         error_assert(error, "Dynamic lookup of environment occupation and energy failed.");
     }
 

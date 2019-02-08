@@ -39,7 +39,7 @@ error_t ResetContextAfterPrerun(__SCONTEXT_PAR)
 
 error_t StartMainRoutine(__SCONTEXT_PAR)
 {
-    runtime_assertion(StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
+    runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
 
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
@@ -60,10 +60,10 @@ error_t StartMainRoutine(__SCONTEXT_PAR)
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
         {
             SIMERROR = StartMainMmcRoutine(SCONTEXT);
-            error_assert(SIMERROR, "Prerun execution of main KMC routine aborted with an error");
+            error_assert(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
 
             SIMERROR = FinishRoutinePreRun(SCONTEXT);
-            error_assert(SIMERROR, "Prerun finish of KMC main routine failed.")
+            error_assert(SIMERROR, "Pre-run finish of KMC main routine failed.")
         }
         
         return StartMainKmcRoutine(SCONTEXT);
@@ -183,9 +183,10 @@ static inline void OnKmcJumpSiteBlocked(__SCONTEXT_PAR)
 
 error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
 {
+    getMainCycleCounters(SCONTEXT)->StepGoalMcs += getMainCycleCounters(SCONTEXT)->McsPerBlock;
     while (getMainCycleCounters(SCONTEXT)->Mcs < getMainCycleCounters(SCONTEXT)->StepGoalMcs)
     {
-        for (size_t i = 0; i < getMainCycleCounters(SCONTEXT)->McsPerBlock; i++)
+        for (size_t i = 0; i < getMainCycleCounters(SCONTEXT)->CyclesPerBlock; i++)
         {
             SetNextKmcJumpSelection(SCONTEXT);
             SetKmcJumpPathProperties(SCONTEXT);
@@ -209,7 +210,7 @@ static void SharedCycleBlockFinish(__SCONTEXT_PAR)
     UnsetMainStateFlags(SCONTEXT, STATE_FLG_FIRSTCYCLE);
 
     SIMERROR = SyncSimulationState(SCONTEXT);
-    error_assert(SIMERROR, "Simulation aborted due to failed sycnhronization between dynamic model and state object.");
+    error_assert(SIMERROR, "Simulation aborted due to failed synchronization between dynamic model and state object.");
 
     SIMERROR = SaveSimulationState(SCONTEXT);
     error_assert(SIMERROR, "Simulation aborted due to error during serialization of the state object.");

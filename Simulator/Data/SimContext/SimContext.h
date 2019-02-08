@@ -187,7 +187,7 @@ typedef struct DirectionPool
 } DirectionPool_t;
 
 // Type for lists of direction pools
-// Layout@ggc_x86_64 => 40@[24,4,4,4,{4}]
+// Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(DirectionPool_t, DirectionPools) DirectionPools_t;
 
 // Type for the jump selection pool
@@ -360,3 +360,11 @@ typedef struct SimulationContext
     error_t             ErrorCode;
     
 } SimulationContext_t;
+
+// Construct a new raw simulation context struct
+static inline SimulationContext_t ctor_SimulationContext()
+{
+    SimulationContext_t context;
+    memset(&context, 0, sizeof(SimulationContext_t));
+    return context;
+}

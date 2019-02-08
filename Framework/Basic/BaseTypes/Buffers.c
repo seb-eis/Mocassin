@@ -29,6 +29,7 @@ void* ConstructVoidSpan(const size_t numOfElements, const size_t sizeOfElement, 
 {
     error_t error = TryAllocateSpan(numOfElements, sizeOfElement, outSpan);
     error_assert(error, "Out of memory on span construction.");
+    memset(outSpan->Begin, 0, numOfElements * sizeOfElement);
     return outSpan;
 }
 
@@ -58,6 +59,7 @@ void* ConstructVoidList(const size_t capacity, const size_t sizeOfElement, VoidL
 {
     error_t error = TryAllocateList(capacity, sizeOfElement, outList);
     error_assert(error, "Out of memory on list construction.");
+    memset(outList->Begin, 0, capacity * sizeOfElement);
     return outList;
 }
 
@@ -90,6 +92,8 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     MakeArrayBlocks(rank, dimensions, &outArray->Header->FirstBlockEntry);
     outArray->Header->Size = (int32_t) (span_GetSize(*outArray) / sizeOfElement);
     outArray->Header->Rank = rank;
+
+    memset(outArray->Begin, 0, span_ByteCount(*outArray));
 
     return outArray;
 }

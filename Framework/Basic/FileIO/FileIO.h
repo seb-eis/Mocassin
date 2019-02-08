@@ -36,7 +36,7 @@ typedef FILE file_t;
 bool_t IsAccessibleFile(const char* restrict fileName);
 
 // Calculates the size of a file. Returns the number of bytes or MC_FILE_ERROR on failure
-cerror_t GetFileSize(file_t* restrict fileStream);
+cerror_t CalculateFileSize(file_t *restrict fileStream);
 
 // Print a buffer as binary to a file stream. The file has to be opened in "wb" mode
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer);

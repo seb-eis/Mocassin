@@ -35,7 +35,7 @@ set_property(TARGET sqlite3 PROPERTY C_STANDARD 11)
 include_directories(${PROJECT_SOURCE_DIR})
 
 set_property(TARGET ICon.Simulator PROPERTY C_STANDARD 11)
-set(CMAKE_C_FLAGS_DEBUG "-Wall -g -O2")
+set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
 set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

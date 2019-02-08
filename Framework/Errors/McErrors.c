@@ -16,7 +16,7 @@ const char* ErrorCodeToString(error_t errCode)
     // Redirect all non-critical errors to FATAL FAILURE since they should never cause an error string lookup
     errCode = (errCode <= 0) ? 0 : errCode;
 
-    const char* defaultMessage = "No detail on error code available";
+    static char defaultMessage[] = "No detail on error code available";
     static struct { int32_t ErrCode; char* Message; } errTable[] =
     {
             { ERR_OK,               "FATAL FAILURE. Runtime error exit triggered without an error flag.\n\t(Expected reason: Implementation error)" },
@@ -75,6 +75,7 @@ static void AwaitErrorResponse(error_t error)
 void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
     fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    fflush(stdout);
     AwaitErrorResponse(errCode);
     return;
 }

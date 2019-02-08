@@ -19,7 +19,6 @@ error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, CycleCounterState_t* count
         return ERR_NULLPOINTER;
     }
 
-    setBufferByteValues(counters, sizeof(CycleCounterState_t), 0);
     counters->TotalGoalMcs = getDbModelJobInfo(SCONTEXT)->TargetMcsp * getNumberOfMobiles(SCONTEXT);
 
     int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;

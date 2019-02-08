@@ -29,15 +29,15 @@
 // Allocates the environment energy and cluster buffers with the required sizes
 static void AllocateEnvironmentBuffers(EnvironmentState_t *restrict env, EnvironmentDefinition_t *restrict envDef)
 {
-    size_t energyStatesSize = GetIndexOfFirstNullUpdateParticle(envDef) + 1;
+    byte_t environmentMaxParticleId = GetEnvironmentMaxParticleId(envDef);
     size_t clusterStatesSize = span_GetSize(envDef->ClusterDefinitions);
+    size_t energyStatesSize = (environmentMaxParticleId == PARTICLE_NULL) ? 0 : environmentMaxParticleId + 1;
 
-    setBufferByteValues(env, sizeof(EnvironmentState_t), 0);
     env->EnergyStates = new_Span(env->EnergyStates, energyStatesSize);
     env->ClusterStates = new_Span(env->ClusterStates, clusterStatesSize);
 }
 
-// Allocates the the environment lattice and affiliated buffers
+// Allocates the the environment lattice and affiliated buffers ands sets the affiliated model pointers
 static void AllocateEnvironmentLattice(__SCONTEXT_PAR)
 {
     Vector4_t* sizes = getLatticeSizeVector(SCONTEXT);
@@ -45,9 +45,16 @@ static void AllocateEnvironmentLattice(__SCONTEXT_PAR)
     EnvironmentLattice_t lattice = new_Array(lattice, vecCoorSet4(*sizes));
     setEnvironmentLattice(SCONTEXT, lattice);
 
-    for (int32_t i = 0; i < lattice.Header->Size; i++)
+    for (int32_t i = 0; i < lattice.Header->Size;)
     {
-        AllocateEnvironmentBuffers(getEnvironmentStateAt(SCONTEXT, i), getEnvironmentModelAt(SCONTEXT, i));
+        for (int j = 0; j < sizes->D; ++j)
+        {
+            EnvironmentState_t * envState = getEnvironmentStateAt(SCONTEXT, i);
+            EnvironmentDefinition_t * envModel = getEnvironmentModelAt(SCONTEXT, j);
+            AllocateEnvironmentBuffers(envState, envModel);
+            envState->EnvironmentDefinition = envModel;
+            envState->EnvironmentId = i++;
+        }
     }
 }
 
@@ -55,7 +62,12 @@ static void AllocateEnvironmentLattice(__SCONTEXT_PAR)
 static void AllocateLatticeEnergyBuffer(Flp64Buffer_t *restrict bufferAccess, MmcHeader_t *restrict header)
 {
     Buffer_t tmp = new_Span(tmp, header->AbortSequenceLength * sizeof(double));
-    *bufferAccess = (Flp64Buffer_t) { .Begin = (void*) tmp.Begin, .End = (void*) tmp.Begin, .CapacityEnd = (void*) tmp.End, .LastAverage = 0.0 };
+    *bufferAccess = (Flp64Buffer_t)
+        { .Begin = (void*) tmp.Begin,
+          .End = (void*) tmp.Begin,
+          .CapacityEnd = (void*) tmp.End,
+          .LastAverage = 0.0
+        };
 }
 
 // Allocates the abort condition buffers if they are required
@@ -77,50 +89,45 @@ static void ConstructSimulationModel(__SCONTEXT_PAR)
 // Constructs the selection pool index redirection that redirects jump counts to selection pool id
 static error_t ConstructSelectionPoolIndexRedirection(__SCONTEXT_PAR)
 {
-    error_t error;
-
-    Buffer_t tmpBuffer;
-    int32_t poolCount = 1 + FindMaxJumpDirectionCount(&getDbTransitionModel(SCONTEXT)->JumpCountMappingTable);
+    int32_t maxPoolCount = 1 + FindMaxJumpDirectionCount(&getDbTransitionModel(SCONTEXT)->JumpCountMappingTable);
     int32_t poolIndex = 1;
 
-    error = ctor_Buffer(tmpBuffer, poolCount * sizeof(int32_t));
-    return_if(error, error);
-
-    setBufferByteValues(tmpBuffer.Begin, span_GetSize(tmpBuffer), 0);
-    setDirectionPoolMapping(SCONTEXT, (IdRedirection_t) span_AsVoid(tmpBuffer));
+    IdRedirection_t poolMapping = new_Span(poolMapping, maxPoolCount);
+    setDirectionPoolMapping(SCONTEXT, poolMapping);
 
     cpp_foreach(dirCount, getDbTransitionModel(SCONTEXT)->JumpCountMappingTable)
     {
-        if ((*dirCount != 0) && (getDirectionPoolIdByJumpCount(SCONTEXT, *dirCount) != 0))
+        if ((*dirCount > JPOOL_DIRCOUNT_PASSIVE) && (getDirectionPoolIdByJumpCount(SCONTEXT, *dirCount) == 0))
         {
             setDirectionPoolIdByJumpCount(SCONTEXT, *dirCount, poolIndex);
             poolIndex++;
         }
     }
 
+    getJumpSelectionPool(SCONTEXT)->DirectionPoolCount = poolIndex;
     return ERR_OK;
 }
 
 // Construct the selection pool direction buffers
 static error_t ConstructSelectionPoolDirectionBuffers(__SCONTEXT_PAR)
 {
-    error_t error;
-
-    Buffer_t tmpBuffer;
-    size_t poolCount = span_GetSize(*getDirectionPools(SCONTEXT));
+    int32_t poolCount = getJumpSelectionPool(SCONTEXT)->DirectionPoolCount;
     int32_t poolSize = getNumberOfSelectables(SCONTEXT);
 
-    error = ctor_Buffer(tmpBuffer, poolCount * sizeof(DirectionPool_t));
-    return_if(error, error);
-    
-    setDirectionPools(SCONTEXT, (DirectionPools_t) span_AsVoid(tmpBuffer));
+    DirectionPools_t directionPools = new_Span(directionPools, poolCount);
+    setDirectionPools(SCONTEXT, directionPools);
 
-    cpp_foreach(dirPool, *getDirectionPools(SCONTEXT))
+    cpp_foreach(dirPool, directionPools)
     {
-        error = ctor_Buffer(tmpBuffer, poolSize * sizeof(EnvironmentPool_t));
-        return_if(error, error);
+        EnvironmentPool_t envPool = new_List(envPool, poolSize);
+        dirPool->EnvironmentPool = envPool;
+    }
 
-        dirPool->EnvironmentPool = (EnvironmentPool_t) span_AsList(tmpBuffer);
+    int32_t jumpCount = 0;
+    cpp_foreach(id, *getDirectionPoolMapping(SCONTEXT))
+    {
+        if (*id > 0) span_Get(directionPools, *id).NumOfDirections = jumpCount;
+        jumpCount++;
     }
 
     return ERR_OK;
@@ -182,7 +189,7 @@ static int32_t ConfigStateLatticeAccess(__SCONTEXT_PAR, const int32_t usedBuffer
     
     getMainStateHeader(SCONTEXT)->Data->LatticeStartByte = usedBufferBytes;
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + usedBufferBytes;
+    configObject->End = configObject->Begin + cfgBufferBytes;
 
     return usedBufferBytes + cfgBufferBytes;
 }
@@ -201,7 +208,7 @@ static int32_t ConfigStateCountersAccess(__SCONTEXT_PAR, const int32_t usedBuffe
     
     getMainStateHeader(SCONTEXT)->Data->CountersStartByte = usedBufferBytes;
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + (usedBufferBytes / sizeof(StateCounterCollection_t));
+    configObject->End = configObject->Begin + (cfgBufferBytes / sizeof(StateCounterCollection_t));
 
     return usedBufferBytes + cfgBufferBytes;
 }
@@ -281,8 +288,7 @@ static int32_t ConfigStateStaticTrackerAccess(__SCONTEXT_PAR, const int32_t used
         TrackersState_t* configObject = getStaticMovementTrackers(SCONTEXT);
 
         configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-        configObject->End = configObject->Begin + (getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell *
-                GetUnitCellCount(SCONTEXT));
+        configObject->End = configObject->Begin + (getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetUnitCellCount(SCONTEXT));
     }
 
     return usedBufferBytes + cfgBufferBytes;
@@ -383,15 +389,13 @@ static void ConstructMainState(__SCONTEXT_PAR)
 {
     error_t error;
 
-    setBufferByteValues(getSimulationState(SCONTEXT), sizeof(SimulationState_t), 0);
+    memset(getSimulationState(SCONTEXT), 0, sizeof(SimulationState_t));
 
     getDbModelJobInfo(SCONTEXT)->StateSize = CalculateMainStateBufferSize(SCONTEXT);
     size_t stateSize = (size_t) getDbModelJobInfo(SCONTEXT)->StateSize;
 
-    error = ctor_Buffer(*getMainStateBuffer(SCONTEXT), stateSize);
-    error_assert(error, "Failed to construct main state.");
-
-    setBufferByteValues(getMainStateBuffer(SCONTEXT)->Begin, stateSize, 0);
+    Buffer_t stateBuffer = new_Span(stateBuffer, stateSize);
+    *getMainStateBuffer(SCONTEXT) = stateBuffer;
 
     error = ConstructMainStateBufferAccessors(SCONTEXT);
     error_assert(error, "Failed to construct main state buffer accessor system.");
@@ -528,7 +532,6 @@ static error_t CopyDbLatticeToMainState(__SCONTEXT_PAR)
 {
     Lattice_t * dbLattice = getDbModelLattice(SCONTEXT);
     LatticeState_t * stLattice = getMainStateLattice(SCONTEXT);
-
     size_t latticeSize = span_GetSize(*stLattice);
 
     return_if(latticeSize != dbLattice->Header->Size, ERR_DATACONSISTENCY);
@@ -541,19 +544,30 @@ static error_t CopyDbLatticeToMainState(__SCONTEXT_PAR)
 static error_t CopyDefaultMobileTrackersToMainState(__SCONTEXT_PAR)
 {
     Lattice_t * dbLattice = getDbModelLattice(SCONTEXT);
+    MobileTrackerMapping_t * mapping = getMobileTrackerMapping(SCONTEXT);
     int32_t trackerId = 0;
 
     cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
     {
         byte_t particleId = span_Get(*dbLattice, envState->EnvironmentId);
-        if (getJumpCountAt(SCONTEXT, envState->EnvironmentDefinition->ObjectId, particleId) >= JPOOL_DIRCOUNT_PASSIVE)
+        int32_t jumpCount = getJumpCountAt(SCONTEXT, envState->EnvironmentDefinition->ObjectId, particleId);
+        if ((jumpCount >= JPOOL_DIRCOUNT_PASSIVE) && (particleId != PARTICLE_VOID))
         {
-            envState->MobileTrackerId = trackerId++;
+            envState->MobileTrackerId = trackerId;
+            span_Get(*mapping, trackerId) = envState->EnvironmentId;
+            trackerId++;
         }
     }
 
     return (trackerId == getNumberOfMobiles(SCONTEXT)) ? ERR_OK : ERR_DATACONSISTENCY;
 }
+
+// Sets all default flags on a new state when none could be loaded from file
+static void SetMainStateFlagsToStartConditions(__SCONTEXT_PAR)
+{
+    setMainStateFlags(SCONTEXT, STATE_FLG_FIRSTCYCLE);
+}
+
 
 // Synchronizes the main state to the database model by overwriting existing information in the state
 static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
@@ -570,6 +584,7 @@ static error_t SyncMainStateToDatabaseModel(__SCONTEXT_PAR)
     return_if(error, error);
 
     error = InitJumpStatisticsTrackingSystem(SCONTEXT);
+    SetMainStateFlagsToStartConditions(SCONTEXT);
 
     return error;
 }
@@ -579,7 +594,6 @@ static error_t SyncDynamicEnvironmentsWithState(__SCONTEXT_PAR)
 {
     EnvironmentLattice_t* envLattice = getEnvironmentLattice(SCONTEXT);
     LatticeState_t* stLattice = getMainStateLattice(SCONTEXT);
-
     size_t latticeSize = span_GetSize(*stLattice);
 
     return_if(envLattice->Header->Size != latticeSize, ERR_DATACONSISTENCY);
@@ -608,7 +622,7 @@ static error_t SyncMobileTrackersWithState(__SCONTEXT_PAR)
 // Synchronizes the dynamic model to the main simulation state
 static error_t SyncDynamicModelToMainState(__SCONTEXT_PAR)
 {
-    // Potentially incomplete sync. review during testing
+    // ToDo: Potentially incomplete sync. review during testing
     error_t error = SyncDynamicEnvironmentsWithState(SCONTEXT);
     return_if(error, error);
 
@@ -620,6 +634,10 @@ static error_t SyncDynamicModelToMainState(__SCONTEXT_PAR)
 static void PopulateSimulationState(__SCONTEXT_PAR)
 {
     error_t error;
+
+    // ToDo: Remove deletes after testing
+    EnsureFileIsDeleted(FILE_PRERSTATE);
+    EnsureFileIsDeleted(FILE_MAINSTATE);
 
     if ((error = TryLoadSimulationState(SCONTEXT)) == ERR_USEDEFAULT)
     {
@@ -642,9 +660,6 @@ static void PopulateDynamicSimulationModel(__SCONTEXT_PAR)
 
     error = SyncDynamicModelToMainState(SCONTEXT);
     error_assert(error, "Data structure synchronization failed (state ==> dynamic model).");
-
-    error = CalcPhysicalSimulationFactors(SCONTEXT, getPhysicalFactors(SCONTEXT));
-    error_assert(error, "Failed to calculate default physical factors.");
 }
 
 // Synchronizes the cycle counters of the dynamic state with the info from the main simulation state
@@ -683,6 +698,36 @@ static void SyncSelectionPoolWithDynamicModel(__SCONTEXT_PAR)
     }
 }
 
+// Converts all energy values in pair and cluster tables from [eV] to units of [kT]
+static error_t ConvertEnergyTablesToInternalUnits(__SCONTEXT_PAR)
+{
+    double conversionFactor = getPhysicalFactors(SCONTEXT)->EnergyConversionFactor;
+    return_if(!isfinite(conversionFactor) || (conversionFactor <  0), ERR_DATACONSISTENCY);
+
+    cpp_foreach(table, *getPairEnergyTables(SCONTEXT))
+        cpp_foreach(value, table->EnergyTable)
+            *value *= conversionFactor;
+
+
+    cpp_foreach(table, *getClusterEnergyTables(SCONTEXT))
+        cpp_foreach(value, table->EnergyTable)
+            *value *= conversionFactor;
+
+    return ERR_OK;
+}
+
+// Synchronizes the physical simulation with the loaded db data and makes required data corrections to the input data
+static void SyncPhysicalParametersAndEnergyTables(__SCONTEXT_PAR)
+{
+    error_t error;
+
+    error = CalcPhysicalSimulationFactors(SCONTEXT, getPhysicalFactors(SCONTEXT));
+    error_assert(error, "Failed to calculate default physical factors.");
+
+    error = ConvertEnergyTablesToInternalUnits(SCONTEXT);
+    error_assert(error, "Failed to convert energy tables to internal units");
+}
+
 // Initializes the random number generator from the main state seed information
 static void PopulateRngFromMainState(__SCONTEXT_PAR)
 {
@@ -697,6 +742,7 @@ static void PopulateSimulationContext(__SCONTEXT_PAR)
     PopulateDynamicSimulationModel(SCONTEXT);
     SyncSimulationCycleStateWithModel(SCONTEXT);
     SyncSelectionPoolWithDynamicModel(SCONTEXT);
+    SyncPhysicalParametersAndEnergyTables(SCONTEXT);
     PopulateRngFromMainState(SCONTEXT);
 }
 
