@@ -32,7 +32,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<int> EndIndexingDeltas { get; set; }
 
         /// <inheritdoc />
-        public abstract double AttemptFrequency { get; set; }
+        public abstract double AttemptFrequency { get; }
 
         /// <inheritdoc />
         public long StartStateCode { get; set; }

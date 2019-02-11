@@ -16,7 +16,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public override IParticle SelectableParticle => MetropolisRule.SelectableParticle;
 
         /// <inheritdoc />
-        public override double AttemptFrequency { get; set; }
+        public override double AttemptFrequency => 0;
 
         /// <inheritdoc />
         public override long TransitionStateCode { get; set; }

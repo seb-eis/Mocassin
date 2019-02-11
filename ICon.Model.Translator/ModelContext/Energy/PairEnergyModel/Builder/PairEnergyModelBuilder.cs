@@ -76,7 +76,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected double[,] CreateEnergyTable(IList<PairEnergyEntry> energyEntries, int maxCenterIndex, int maxPartnerIndex)
         {
-            var table = new double[maxCenterIndex + 1, maxPartnerIndex + 1].Populate(() => double.NaN);
+            var table = new double[maxCenterIndex + 1, maxPartnerIndex + 1];
 
             foreach (var entry in energyEntries)
             {

@@ -36,7 +36,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IParticle> TransitionState { get; set; }
 
         /// <inheritdoc />
-        public override double AttemptFrequency { get; set; }
+        public override double AttemptFrequency => KineticRule?.AttemptFrequency ?? 0;
 
         /// <inheritdoc />
         public override long TransitionStateCode { get; set; }

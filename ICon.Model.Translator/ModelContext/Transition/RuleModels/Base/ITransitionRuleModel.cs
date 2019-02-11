@@ -32,6 +32,11 @@ namespace Mocassin.Model.Translator.ModelContext
         IParticle SelectableParticle { get; }
 
         /// <summary>
+        ///     Get or the attempt frequency of the rule model
+        /// </summary>
+        double AttemptFrequency { get; }
+
+        /// <summary>
         ///     The list of particles that describes the path occupation in the start state
         /// </summary>
         IList<IParticle> StartState { get; set; }
@@ -45,11 +50,6 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     The indexing description that describes the offset of particles in the end state compared to the start state
         /// </summary>
         IList<int> EndIndexingDeltas { get; set; }
-
-        /// <summary>
-        ///     Get or set the attempt frequency of the rule model
-        /// </summary>
-        double AttemptFrequency { get; set; }
 
         /// <summary>
         ///     Index encoded version of the start state occupation
