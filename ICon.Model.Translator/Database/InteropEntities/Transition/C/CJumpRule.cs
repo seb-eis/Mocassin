@@ -6,12 +6,9 @@ namespace Mocassin.Model.Translator
     /// <summary>
     ///     Jump rule simulation object Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 56)]
+    [StructLayout(LayoutKind.Sequential, Size = 48)]
     public struct CJumpRule
     {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        private byte[] trackerOrder;
-
         [field: MarshalAs(UnmanagedType.I8)]
         public long StateCode0 { get; set; }
 
@@ -26,6 +23,9 @@ namespace Mocassin.Model.Translator
 
         [field: MarshalAs(UnmanagedType.R8)]
         public double ElectricFieldFactor { get; set; }
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+        private byte[] trackerOrder;
 
         public byte[] TrackerOrder
         {
