@@ -42,7 +42,7 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
+#target_compile_options(ICon.Simulator PUBLIC -pg)
+#target_link_options(ICon.Simulator PUBLIC -pg)
+
 target_link_libraries(ICon.Simulator sqlite3)
-#find_path(sqlPath sqlite3.h)
-#find_library(sqlLib sqlite3)
-#include_directories(${sqlPath})

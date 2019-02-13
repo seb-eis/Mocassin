@@ -26,8 +26,8 @@ static error_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **s
 
 static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader "
-                        "from JobModels where Id = ?1";
+    let localQuery = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader "
+                     "from JobModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
@@ -42,7 +42,7 @@ static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel
     dbModel->JobModel.PackageId = sqlite3_column_int(sqlStatement, 4);
     dbModel->JobModel.JobInfo = *(JobInfo_t*) sqlite3_column_blob(sqlStatement, 5);
 
-    size_t jobHeaderSize = (size_t) sqlite3_column_bytes(sqlStatement, 6);
+    let jobHeaderSize = (size_t) sqlite3_column_bytes(sqlStatement, 6);
     dbModel->JobModel.JobHeader = malloc(jobHeaderSize);
     dbModel->JobModel.JobInfo.JobHeader = dbModel->JobModel.JobHeader;
     memcpy(dbModel->JobModel.JobHeader, sqlite3_column_blob(sqlStatement, 6), jobHeaderSize);
@@ -85,17 +85,17 @@ static error_t InvokeOnLoadedOperations(DbModel_t* dbModel, const DbModelOnLoade
 
 static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions "
-                        "from StructureModels where Id = ?1";
+    let localQuery = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions "
+                     "from StructureModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    StructureModel_t * model = &dbModel->StructureModel;
+    var model = &dbModel->StructureModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.StructureModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    int32_t environmentCount = sqlite3_column_int(sqlStatement, 3);
+    let environmentCount = sqlite3_column_int(sqlStatement, 3);
 
     model->NumOfTrackersPerCell = sqlite3_column_int(sqlStatement, 0);
     model->NumOfGlobalTrackers = sqlite3_column_int(sqlStatement, 1);
@@ -109,17 +109,17 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
 
 static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
+    let localQuery = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    EnergyModel_t *model = &dbModel->EnergyModel;
+    var model = &dbModel->EnergyModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    int32_t pairTableCount = sqlite3_column_int(sqlStatement, 0);
-    int32_t clusterTableCount = sqlite3_column_int(sqlStatement, 1);
+    let pairTableCount = sqlite3_column_int(sqlStatement, 0);
+    let clusterTableCount = sqlite3_column_int(sqlStatement, 1);
 
     model->PairTables = new_Span(model->PairTables, pairTableCount);
     model->ClusterTables = new_Span(model->ClusterTables, clusterTableCount);
@@ -130,18 +130,18 @@ static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbMo
 
 static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select JumpMappingTable, JumpCountTable, StaticTrackerMapping, GlobalTrackerMapping, NumOfCollections, NumOfDirections "
-                        "from TransitionModels where Id = ?1";
+    let localQuery = "select JumpMappingTable, JumpCountTable, StaticTrackerMapping, GlobalTrackerMapping, NumOfCollections, NumOfDirections "
+                     "from TransitionModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    TransitionModel_t *model = &dbModel->TransitionModel;
+    var model = &dbModel->TransitionModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    int32_t jumpCollectionCount = sqlite3_column_int(sqlStatement, 4);
-    int32_t jumpDirectionCount = sqlite3_column_int(sqlStatement, 5);
+    let jumpCollectionCount = sqlite3_column_int(sqlStatement, 4);
+    let jumpDirectionCount = sqlite3_column_int(sqlStatement, 5);
 
     model->JumpDirectionMappingTable = array_FromBlob(model->JumpDirectionMappingTable, sqlite3_column_blob(sqlStatement, 0));
     model->JumpCountMappingTable = array_FromBlob(model->JumpCountMappingTable, sqlite3_column_blob(sqlStatement, 1));
@@ -156,23 +156,18 @@ static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
 
 static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select EnergyBackground, Lattice, LatticeInfo from LatticeModels where Id = ?1";
+    let localQuery = "select EnergyBackground, Lattice, LatticeInfo from LatticeModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    LatticeModel_t *latticeModel = &dbModel->LatticeModel;
+    var latticeModel = &dbModel->LatticeModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.LatticeModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     latticeModel->Lattice = array_FromBlob(latticeModel->Lattice, sqlite3_column_blob(sqlStatement, 1));
     latticeModel->LatticeInfo = *(LatticeInfo_t*) sqlite3_column_blob(sqlStatement, 2);
-
-    const void* energyBackgroundBlob = sqlite3_column_blob(sqlStatement, 0);
-    if (energyBackgroundBlob != NULL)
-    {
-        latticeModel->EnergyBackground = array_FromBlob(latticeModel->EnergyBackground, energyBackgroundBlob);
-    }
+    latticeModel->EnergyBackground = array_FromBlob(latticeModel->EnergyBackground, sqlite3_column_blob(sqlStatement, 0));
 
     error = sqlite3_finalize(sqlStatement);
     return error;
@@ -180,20 +175,20 @@ static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbM
 
 static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select ObjectId, SelectionMask, UpdateParticleIds, PairDefinitions, ClusterDefinitions, "
-                        "PositionParticleIds from EnvironmentDefinitions where StructureModelId = ?1 order by ObjectId";
+    let localQuery = "select ObjectId, SelectionMask, UpdateParticleIds, PairDefinitions, ClusterDefinitions, "
+                     "PositionParticleIds from EnvironmentDefinitions where StructureModelId = ?1 order by ObjectId";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    EnvironmentDefinitions_t *environmentDefinitions = &dbModel->StructureModel.EnvironmentDefinitions;
+    var environmentDefinitions = &dbModel->StructureModel.EnvironmentDefinitions;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.StructureModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     cpp_foreach(item, *environmentDefinitions)
     {
-        size_t pairDefinitionCount = sqlite3_column_bytes(sqlStatement, 3) / sizeof(PairDefinition_t);
-        size_t clusterDefinitionCount = sqlite3_column_bytes(sqlStatement, 4) / sizeof(ClusterDefinition_t);
+        let pairDefinitionCount = sqlite3_column_bytes(sqlStatement, 3) / sizeof(PairDefinition_t);
+        let clusterDefinitionCount = sqlite3_column_bytes(sqlStatement, 4) / sizeof(ClusterDefinition_t);
 
         item->ObjectId = sqlite3_column_int(sqlStatement, 0);
         item->SelectionParticleMask = sqlite3_column_int64(sqlStatement, 1);
@@ -216,12 +211,12 @@ static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbMo
 
 static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select ObjectId, EnergyTable "
-                        "from PairEnergyTables where EnergyModelId = ?1 order by ObjectId";
+    let localQuery = "select ObjectId, EnergyTable "
+                     "from PairEnergyTables where EnergyModelId = ?1 order by ObjectId";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    PairTables_t* tables = &dbModel->EnergyModel.PairTables;
+    var tables = &dbModel->EnergyModel.PairTables;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
@@ -244,19 +239,19 @@ static error_t GetPairEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t 
 
 static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select ObjectId, EnergyTable, OccupationCodes, TableIndexing from ClusterEnergyTables "
-                        "where EnergyModelId = ?1 order by ObjectId";
+    let localQuery = "select ObjectId, EnergyTable, OccupationCodes, TableIndexing from ClusterEnergyTables "
+                     "where EnergyModelId = ?1 order by ObjectId";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    ClusterTables_t* tables = &dbModel->EnergyModel.ClusterTables;
+    var tables = &dbModel->EnergyModel.ClusterTables;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     cpp_foreach(table, *tables)
     {
-        size_t occupationCodeCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(OccCodes_t);
+        let occupationCodeCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(OccCodes_t);
 
         table->ObjectId = sqlite3_column_int(sqlStatement, 0);
         table->EnergyTable = array_FromBlob(table->EnergyTable, sqlite3_column_blob(sqlStatement, 1));
@@ -277,19 +272,19 @@ static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel
 
 static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select ObjectId, SelectionMask, JumpRules "
-                        "from JumpCollections where TransitionModelId = ?1 order by ObjectId";
+    let localQuery = "select ObjectId, SelectionMask, JumpRules "
+                     "from JumpCollections where TransitionModelId = ?1 order by ObjectId";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    JumpCollections_t *collections = &dbModel->TransitionModel.JumpCollections;
+    var collections = &dbModel->TransitionModel.JumpCollections;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     cpp_foreach(collection, *collections)
     {
-        size_t jumpRuleCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(JumpRule_t);
+        let jumpRuleCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(JumpRule_t);
 
         collection->ObjectId = sqlite3_column_int(sqlStatement, 0);
         collection->MobileParticlesMask = sqlite3_column_int64(sqlStatement, 1);
@@ -308,20 +303,20 @@ static error_t GetJumpCollectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
 
 static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    char localQuery[] = "select ObjectId, PositionId, JumpLength, FieldProjection, CollectionId, JumpSequence, LocalMoveSequence "
-                        "from JumpDirections where TransitionModelId = ?1 order by ObjectId";
+    let localQuery = "select ObjectId, PositionId, JumpLength, FieldProjection, CollectionId, JumpSequence, LocalMoveSequence "
+                     "from JumpDirections where TransitionModelId = ?1 order by ObjectId";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
-    JumpDirections_t *directions = &dbModel->TransitionModel.JumpDirections;
+    var directions = &dbModel->TransitionModel.JumpDirections;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.TransitionModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     cpp_foreach(direction, *directions)
     {
-        size_t moveSequenceCount = sqlite3_column_bytes(sqlStatement, 6) / sizeof(MoveSequence_t);
-        size_t jumpSequenceCount = sqlite3_column_bytes(sqlStatement, 5) / sizeof(JumpSequence_t);
+        let moveSequenceCount = sqlite3_column_bytes(sqlStatement, 6) / sizeof(MoveSequence_t);
+        let jumpSequenceCount = sqlite3_column_bytes(sqlStatement, 5) / sizeof(JumpSequence_t);
 
         direction->ObjectId = sqlite3_column_int(sqlStatement, 0);
         direction->PositionId = sqlite3_column_int(sqlStatement, 1);
@@ -345,40 +340,29 @@ static error_t GetJumpDirectionsFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
 // Assigns each jump collection its sub-span access to the main jump direction buffer
 static error_t AssignDirectionBuffersToJumpCollections(DbModel_t *dbModel)
 {
-    int32_t newBegin = 0;
-    int32_t newEnd = 0;
-    int32_t collectionID = 0;
+    int32_t newBegin = 0, newEnd = 0, collectionID = 0;
 
-    cpp_foreach(iter, dbModel->TransitionModel.JumpDirections)
+    cpp_foreach(jumpDirection, dbModel->TransitionModel.JumpDirections)
     {
-        if (iter->JumpCollectionId != collectionID)
+        if (jumpDirection->JumpCollectionId != collectionID)
         {
             newEnd--;
 
-            JumpCollection_t* currentJumpCollection = &span_Get(dbModel->TransitionModel.JumpCollections, collectionID);
-            JumpDirections_t* currentJumpDirection = &(JumpDirections_t) span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
-
-            currentJumpCollection->JumpDirections = new_Span(currentJumpCollection->JumpDirections, span_GetSize(*currentJumpDirection));
-            JumpDirections_t subSpan = (JumpDirections_t) span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
-
+            let subSpan = span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
             span_Get(dbModel->TransitionModel.JumpCollections, collectionID).JumpDirections = subSpan;
 
             newEnd++;
             newBegin = newEnd;
-            collectionID = iter->JumpCollectionId;
+            collectionID = jumpDirection->JumpCollectionId;
         }
         newEnd++;
     }
 
     newEnd--;
-    JumpCollection_t* currentJumpCollection = &span_Get(dbModel->TransitionModel.JumpCollections, collectionID);
-    JumpDirections_t* currentJumpDirection = &(JumpDirections_t) span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
-    currentJumpCollection->JumpDirections = new_Span(currentJumpCollection->JumpDirections, span_GetSize(*currentJumpDirection));
-
-    JumpDirections_t subDirections = (JumpDirections_t) span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
+    let subDirections = span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
     span_Get(dbModel->TransitionModel.JumpCollections, collectionID).JumpDirections = subDirections;
 
-    return 0;
+    return SQLITE_OK;
 }
 
 

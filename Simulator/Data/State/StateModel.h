@@ -106,7 +106,7 @@ typedef struct StateCounterCollection
 typedef Span_t(StateCounterCollection_t, CountersState) CountersState_t;
 
 // Type for the state meta information
-// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8,8]
 typedef struct StateMetaData
 {
     // The simulated time span of the system [seconds]
@@ -117,6 +117,9 @@ typedef struct StateMetaData
 
     // The highest jump probability that has occurred
     double      MaxJumpProbability;
+
+    // The last calculated lattice energy value in [eV]
+    double      LatticeEnergy;
 
     // The runtime of the program in [seconds]
     int64_t     ProgramRunTime;

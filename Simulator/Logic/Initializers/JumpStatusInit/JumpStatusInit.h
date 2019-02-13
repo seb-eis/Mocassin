@@ -14,4 +14,4 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
 // Builds the jump status collection on the passed initialized simulation context
-void BuildJumpStatusCollection(__SCONTEXT_PAR);
+void BuildJumpStatusCollection(SCONTEXT_PARAM);

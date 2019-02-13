@@ -59,7 +59,7 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
 #define span_Back(SPAN) ((SPAN).End - 1)
 
 // Creates a sub-access span with new boundary info for the passed parent span
-#define span_Split(SPAN, NEWBEGIN, NEWEND) { (void*) ((SPAN).Begin + (NEWBEGIN)), (void*) ((SPAN).Begin + (NEWEND)) }
+#define span_Split(SPAN, NEWBEGIN, NEWEND) (typeof(SPAN)) { (void*) ((SPAN).Begin + (NEWBEGIN)), (void*) ((SPAN).Begin + (NEWEND)) }
 
 // Access span by index. Works for getting and setting the value
 #define span_Get(SPAN, INDEX) (SPAN).Begin[(INDEX)]
@@ -89,7 +89,7 @@ typedef Span_t(byte_t, Buffer) Buffer_t;
 void CopyBuffer(byte_t const* source, byte_t* target, size_t size);
 
 // Copies the contents of the source buffer into the target buffer. Returns buffer overflow error if target is smaller than source
-error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
+error_t SaveCopyBuffer(const Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
 
 // Moves the contents of the source buffer into the target buffer and frees the source buffer
 error_t SaveMoveBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer);
@@ -102,6 +102,9 @@ bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs);
 
 // Defines a CPP style foreach iteration over any access type that defines .Begin and .End pointers
 #define cpp_foreach(ITER, SPAN) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).Begin[0]; (ITER) < (SPAN).End; ++(ITER))
+
+// Defines a CPP style foreach iteration with a specified start point over any access type that defines .Begin and .End pointers
+#define cpp_offset_foreach(ITER, SPAN, START) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).Begin[(START)]; (ITER) < (SPAN).End; ++(ITER))
 
 // Defines a CPP style reverse foreach iteration over any access type that defines .Begin and .End pointers
 #define cpp_rforeach(ITER, SPAN) for(vtypeof_span(SPAN)* (ITER) = &(SPAN).End[-1]; (ITER) >= (SPAN).Begin; --(ITER))
@@ -151,7 +154,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 #define list_IsFull(LIST) (((LIST).End) == (LIST).CapacityEnd)
 
 // Macro to check if the list contains any entries
-#define list_IsEmpty(LIST) (((LIST).End) != (LIST).Begin)
+#define list_IsEmpty(LIST) (((LIST).End) == (LIST).Begin)
 
 // Creates a list access from a span access
 #define span_AsList(SPAN) { (void*) (SPAN).Begin, (void*) (SPAN).Begin, (void*) (SPAN).End }
@@ -164,7 +167,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 
 // Type for the undefined void array access with header access to rank, size and the first block entry
 // Layout@ggc_x86_64 => 24@[8,8,8]
-typedef struct { struct { int32_t Rank, Size, FirstBlockEntry; } * Header; void * Begin, * End; } VoidArray_t;
+typedef struct VoidArray { struct { int32_t Rank, Size, FirstBlockEntry; } * Header; void * Begin, * End; } VoidArray_t;
 
 // Allocate a new array of given rank, size of elements and dimensions
 VoidArray_t AllocateArray(int32_t rank, size_t sizeOfElement, const int32_t dimensions[rank]);

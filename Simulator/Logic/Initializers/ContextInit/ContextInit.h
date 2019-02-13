@@ -12,4 +12,4 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
 // Prepares the simulation context for the simulation
-void PrepareContextForSimulation(__SCONTEXT_PAR);
+void PrepareContextForSimulation(SCONTEXT_PARAM);

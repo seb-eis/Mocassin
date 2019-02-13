@@ -23,20 +23,17 @@
 #define TIME_ISO8601_BYTECOUNT sizeof("YYYY-MM-DDTHH:MM:SS+HH:MM")
 
 // Get the current time info as local time or GMT if specified
-static inline error_t GetCurrenTimeInfo(struct tm*restrict timeInfo, bool_t asGMT)
+static inline error_t GetCurrentTimeInfo(struct tm *restrict timeInfo, bool_t asGMT)
 {
     time_t raw = time(NULL);
-    if (asGMT)
-        return gmtime_s(timeInfo, &raw);
-
-    return localtime_s(timeInfo, &raw);
+    return  (asGMT) ? gmtime_s(timeInfo, &raw) : localtime_s(timeInfo, &raw);
 }
 
 // Get the current time as a string with the provided format and writes it to the passed buffer (Default if format is NULL). Return error code on failure!
 static inline error_t GetFormatedTimeStamp(const char *format, char *buffer, size_t maxBytes)
 {
     struct tm tmInfo;
-    error_t error = GetCurrenTimeInfo(&tmInfo, false);
+    error_t error = GetCurrentTimeInfo(&tmInfo, false);
     return_if(error, error);
     error = strftime(buffer, maxBytes, format ? format : "%c", &tmInfo) != 0 ? ERR_OK : ERR_UNKNOWN;
     return error;
@@ -63,9 +60,9 @@ static inline error_t GetCurrentTimeStampISO8601UTC(char *restrict buffer)
 static inline error_t SecondsToISO8601TimeSpan(char *restrict buffer, const int64_t totalSeconds)
 {
     const char format[] = "P" FORMAT_I64(02) "DT" FORMAT_I64(02) "H" FORMAT_I64(02) "M" FORMAT_I64(02) "S";
-    int64_t days = totalSeconds / (3600 * 24);
-    int64_t hours = (totalSeconds / (3600 * 24)) % 3600;
-    int64_t minutes = (totalSeconds % 3600) / 60;
-    int64_t seconds = totalSeconds % 60;
+    let days = totalSeconds / (3600 * 24);
+    let hours = (totalSeconds / (3600 * 24)) % 3600;
+    let minutes = (totalSeconds % 3600) / 60;
+    let seconds = totalSeconds % 60;
     return sprintf(buffer, format, days, hours, minutes, seconds) > 0 ? ERR_OK : ERR_STREAM;
 }

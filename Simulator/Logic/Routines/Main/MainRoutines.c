@@ -19,25 +19,42 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
+#include "Simulator/Logic/Routines/Debug/DebugRoutines.h"
 
-void PrepareForMainRoutine(__SCONTEXT_PAR)
+// Advances the block counters of the main loop to the next step goal
+static inline void AdvanceMainCycleCounterStepGoal(SCONTEXT_PARAM)
 {
-    PrepareContextForSimulation(SCONTEXT);
+    var counters = getMainCycleCounters(SCONTEXT);
+    counters->StepGoalMcs += counters->McsPerBlock;
 }
 
-error_t ResetContextAfterPrerun(__SCONTEXT_PAR)
+// Sets the simulation run info to the current program status
+static inline void SetRuntimeInfoToCurrent(SCONTEXT_PARAM)
+{
+    var runInfo = getRuntimeInformation(SCONTEXT);
+    runInfo->MainRoutineStartClock = clock();
+    runInfo->PreviousBlockFinishClock = runInfo->MainRoutineStartClock;
+}
+
+void PrepareForMainRoutine(SCONTEXT_PARAM)
+{
+    PrepareContextForSimulation(SCONTEXT);
+
+    if (getMainCycleCounters(SCONTEXT)->StepGoalMcs == 0)
+        AdvanceMainCycleCounterStepGoal(SCONTEXT);
+
+    SetRuntimeInfoToCurrent(SCONTEXT);
+}
+
+error_t ResetContextAfterPreRun(SCONTEXT_PARAM)
 {
     return_if(!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_USEPRERUN), ERR_OK);
-
-    if(!StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN_RESET))
-    {
-        setMainStateFlags(SCONTEXT, STATE_FLG_PRERUN_RESET);
-    }
+    setMainStateFlags(SCONTEXT, STATE_FLG_PRERUN_RESET);
 
     return ERR_NOTIMPLEMENTED;
 }
 
-error_t StartMainRoutine(__SCONTEXT_PAR)
+error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
 {
     runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
 
@@ -45,28 +62,28 @@ error_t StartMainRoutine(__SCONTEXT_PAR)
     {
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
         {
-            SIMERROR = StartMainKmcRoutine(SCONTEXT);
+            SIMERROR = KMC_StartMainRoutine(SCONTEXT);
             error_assert(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
 
             SIMERROR = FinishRoutinePreRun(SCONTEXT);
             error_assert(SIMERROR, "Pre-run finish of KMC main routine failed.")
         }
         
-        return StartMainKmcRoutine(SCONTEXT);
+        return KMC_StartMainRoutine(SCONTEXT);
     }
 
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC))
     {
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
         {
-            SIMERROR = StartMainMmcRoutine(SCONTEXT);
+            SIMERROR = MMC_StartMainRoutine(SCONTEXT);
             error_assert(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
 
             SIMERROR = FinishRoutinePreRun(SCONTEXT);
             error_assert(SIMERROR, "Pre-run finish of KMC main routine failed.")
         }
         
-        return StartMainKmcRoutine(SCONTEXT);
+        return MMC_StartMainRoutine(SCONTEXT);
     }
 
     error_assert(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
@@ -74,12 +91,12 @@ error_t StartMainRoutine(__SCONTEXT_PAR)
 }
 
 // Finishes the routine pre-run and resets the context for the main simulation routine
-error_t FinishRoutinePreRun(__SCONTEXT_PAR)
+error_t FinishRoutinePreRun(SCONTEXT_PARAM)
 {
     SIMERROR = SaveSimulationState(SCONTEXT);
     error_assert(SIMERROR, "State save after pre-run completion failed.");
 
-    SIMERROR = ResetContextAfterPrerun(SCONTEXT);
+    SIMERROR = ResetContextAfterPreRun(SCONTEXT);
     error_assert(SIMERROR, "Context reset after pre-run completion failed.");
 
     UnsetMainStateFlags(SCONTEXT, STATE_FLG_PRERUN);
@@ -87,129 +104,128 @@ error_t FinishRoutinePreRun(__SCONTEXT_PAR)
 }
 
 // Starts the main kinetic simulation routine
-error_t StartMainKmcRoutine(__SCONTEXT_PAR)
+error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
 {
-    while (GetKmcAbortCondEval(SCONTEXT) == STATE_FLG_CONTINUE)
+    error_t abortFlag = KMC_CheckAbortConditions(SCONTEXT);
+
+    while(abortFlag == STATE_FLG_CONTINUE)
     {
-        SIMERROR = DoNextKmcCycleBlock(SCONTEXT);
+        SIMERROR = KMC_DoNextCycleBlock(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block execution.");
 
-        SIMERROR = FinishKmcCycleBlock(SCONTEXT);
+        SIMERROR = KMC_FinishCycleBlock(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
+
+        abortFlag = KMC_CheckAbortConditions(SCONTEXT);
+        PrintRunStatistics(SCONTEXT, stdout);
     }
 
-    return FinishMainRoutineKmc(SCONTEXT);
+    return KMC_FinishMainRoutine(SCONTEXT);
 }
 
 // Starts the main metropolis simulation routine
-error_t StartMainMmcRoutine(__SCONTEXT_PAR)
+error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
 {
-    while (GetMmcAbortCondEval(SCONTEXT) == STATE_FLG_CONTINUE)
+    error_t abortFlag = MMC_CheckAbortConditions(SCONTEXT);
+
+    while(abortFlag == STATE_FLG_CONTINUE)
     {
-        SIMERROR = DoNextMmcCycleBlock(SCONTEXT);
+        SIMERROR = MMC_DoNextCycleBlock(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block execution.");
 
-        SIMERROR = FinishMmcCycleBlock(SCONTEXT);
+        SIMERROR = MMC_FinishCycleBlock(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
+
+        abortFlag = MMC_CheckAbortConditions(SCONTEXT);
+        PrintRunStatistics(SCONTEXT, stdout);
     }
 
-    return FinishMainRoutineMmc(SCONTEXT);
+    return MMC_FinishMainRoutine(SCONTEXT);
 }
 
 // Calls the output plugin callback if any is set
-static inline error_t CallOutputPlugin(__SCONTEXT_PAR)
+static inline error_t CallOutputPlugin(SCONTEXT_PARAM)
 {
     return_if(SCONTEXT->Plugins.OnDataOutput == NULL, ERR_OK);
     SCONTEXT->Plugins.OnDataOutput(SCONTEXT);
     return SIMERROR;
 }
 
-static inline void AdvanceBlockCounters(__SCONTEXT_PAR)
-{
-    getMainCycleCounters(SCONTEXT)->StepGoalMcs += getMainCycleCounters(SCONTEXT)->McsPerBlock;
-}
-
 // Action for cases where the MMC jump selection leads to an unstable end state
-static inline void OnKmcJumpToUnstableState(__SCONTEXT_PAR)
+static inline void KMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->UnstableEndCount++;
     AdvanceSimulatedTime(SCONTEXT);
 }
 
 // Action for cases where the jump selection enables to leave a currently unstable state
-static inline void OnKmcJumpFromUnstableState(__SCONTEXT_PAR)
+static inline void KMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->UnstableStartCount++;
 
     AdvanceTransitionTrackingSystem(SCONTEXT);
-    AdvanceKmcSystemToState2(SCONTEXT);
+    KMC_AdvanceSystemToFinalState(SCONTEXT);
 
-    if (MakeJumpPoolUpdateKmc(SCONTEXT))
-    {
-        UpdateTimeStepping(SCONTEXT);
-    }
+    if (KMC_UpdateJumpPool(SCONTEXT)) UpdateTimeStepping(SCONTEXT);
 }
 
 // Action for cases where the jump selection has been statistically accepted
-static inline void OnKmcJumpAccepted(__SCONTEXT_PAR)
+static inline void KMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
 {
-    getActiveCounters(SCONTEXT)->McsCount++;
+    ++getActiveCounters(SCONTEXT)->McsCount;
+    ++getMainCycleCounters(SCONTEXT)->Mcs;
 
     AdvanceSimulatedTime(SCONTEXT);
     AdvanceTransitionTrackingSystem(SCONTEXT);
 
-    AdvanceKmcSystemToState2(SCONTEXT);
+    KMC_AdvanceSystemToFinalState(SCONTEXT);
 
-    if (MakeJumpPoolUpdateKmc(SCONTEXT))
-    {
-        UpdateTimeStepping(SCONTEXT);
-    }
-
+    if (KMC_UpdateJumpPool(SCONTEXT)) UpdateTimeStepping(SCONTEXT);
 }
 
 // Action for cases where the jump selection has been statistically rejected
-static inline void OnKmcJumpRejected(__SCONTEXT_PAR)
+static inline void KMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->RejectionCount++;
-    AdvanceTransitionTrackingSystem(SCONTEXT);
     AdvanceSimulatedTime(SCONTEXT);
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
-static inline void OnKmcJumpSiteBlocked(__SCONTEXT_PAR)
+static inline void KMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->SiteBlockingCount++;
+    AdvanceSimulatedTime(SCONTEXT);
 }
 
-error_t DoNextKmcCycleBlock(__SCONTEXT_PAR)
+error_t KMC_DoNextCycleBlock(SCONTEXT_PARAM)
 {
-    getMainCycleCounters(SCONTEXT)->StepGoalMcs += getMainCycleCounters(SCONTEXT)->McsPerBlock;
-    while (getMainCycleCounters(SCONTEXT)->Mcs < getMainCycleCounters(SCONTEXT)->StepGoalMcs)
+    var counters = getMainCycleCounters(SCONTEXT);
+    for (;counters->Mcs < counters->StepGoalMcs; counters->Cycles += counters->CyclesPerBlock)
     {
-        for (size_t i = 0; i < getMainCycleCounters(SCONTEXT)->CyclesPerBlock; i++)
+        for (size_t i = 0; i < counters->CyclesPerBlock; ++i)
         {
-            SetNextKmcJumpSelection(SCONTEXT);
-            SetKmcJumpPathProperties(SCONTEXT);
+            KMC_SetNextJumpSelection(SCONTEXT);
+            KMC_SetJumpPathProperties(SCONTEXT);
 
-            if (GetKmcJumpRuleEvaluation(SCONTEXT))
+            if (KMC_TrySetJumpRule(SCONTEXT))
             {
-                SetKmcJumpProperties(SCONTEXT);
-                SetKmcJumpEvaluationResults(SCONTEXT);
+                KMC_SetJumpProperties(SCONTEXT);
+                KMC_OnEnergeticJumpEvaluation(SCONTEXT);
             }
             else
             {
-                OnKmcJumpSiteBlocked(SCONTEXT);
+                KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
     }
     return SIMERROR;
 }
 
-static void SharedCycleBlockFinish(__SCONTEXT_PAR)
+static void SharedCycleBlockFinish(SCONTEXT_PARAM)
 {
     UnsetMainStateFlags(SCONTEXT, STATE_FLG_FIRSTCYCLE);
 
-    SIMERROR = SyncSimulationState(SCONTEXT);
+    SIMERROR = SyncSimulationStateToRunStatus(SCONTEXT);
     error_assert(SIMERROR, "Simulation aborted due to failed synchronization between dynamic model and state object.");
 
     SIMERROR = SaveSimulationState(SCONTEXT);
@@ -219,129 +235,135 @@ static void SharedCycleBlockFinish(__SCONTEXT_PAR)
     error_assert(SIMERROR, "Simulation aborted due to error in the external output plugin.");
 }
 
-error_t FinishKmcCycleBlock(__SCONTEXT_PAR)
+error_t KMC_FinishCycleBlock(SCONTEXT_PARAM)
 {
-    AdvanceBlockCounters(SCONTEXT);
+    AdvanceMainCycleCounterStepGoal(SCONTEXT);
     SharedCycleBlockFinish(SCONTEXT);
 
     return SIMERROR;
 }
 
 // Action for cases where the MMC jump selection leads to an unstable end state
-static inline void OnMmcJumpToUnstableState(__SCONTEXT_PAR)
+static inline void MMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->UnstableEndCount++;
 }
 
 // Action for cases where the jump selection enables to leave a currently unstable state
-static inline void OnMmcJumpFromUnstableState(__SCONTEXT_PAR)
+static inline void MMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->UnstableStartCount++;
 }
 
 // Action for cases where the jump selection has been statistically accepted
-static inline void OnMmcJumpAccepted(__SCONTEXT_PAR)
+static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
 {
-    getActiveCounters(SCONTEXT)->McsCount++;
-    AdvanceMmcSystemToState2(SCONTEXT);
-    MakeJumpPoolUpdateMmc(SCONTEXT);
+    ++getActiveCounters(SCONTEXT)->McsCount;
+    ++getMainCycleCounters(SCONTEXT)->Mcs;
+
+    MMC_AdvanceSystemToFinalState(SCONTEXT);
+    MMC_UpdateJumpPool(SCONTEXT);
 }
 
 // Action for cases where the jump selection has been statistically rejected
-static inline void OnMmcJumpRejected(__SCONTEXT_PAR)
+static inline void MMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->RejectionCount++;
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
-static inline void OnMmcJumpSiteBlocked(__SCONTEXT_PAR)
+static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
 {
     getActiveCounters(SCONTEXT)->SiteBlockingCount++;
 }
 
-error_t DoNextMmcCycleBlock(__SCONTEXT_PAR)
+error_t MMC_DoNextCycleBlock(SCONTEXT_PARAM)
 {
-    while (getMainCycleCounters(SCONTEXT)->Mcs < getMainCycleCounters(SCONTEXT)->StepGoalMcs)
+    var counters = getMainCycleCounters(SCONTEXT);
+    for (;counters->Mcs < counters->StepGoalMcs; counters->Cycles += counters->CyclesPerBlock)
     {
-        for (size_t i = 0; i < getMainCycleCounters(SCONTEXT)->McsPerBlock; i++)
+        for (size_t i = 0; i < counters->CyclesPerBlock; i++)
         {
-            SetNextMmcJumpSelection(SCONTEXT);
-            SetMmcJumpPathProperties(SCONTEXT);
+            MMC_SetNextJumpSelection(SCONTEXT);
+            MMC_SetJumpPathProperties(SCONTEXT);
 
-            if (GetMmcJumpRuleEvaluation(SCONTEXT))
+            if (MMC_TrySetJumpRule(SCONTEXT))
             {
-                SetMmcJumpProperties(SCONTEXT);
-                SetMmcJumpEvaluationResults(SCONTEXT);
+                MMC_SetJumpProperties(SCONTEXT);
+                MMC_OnEnergeticJumpEvaluation(SCONTEXT);
             }
             else
             {
-                OnMmcJumpSiteBlocked(SCONTEXT);
+                MMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
     }
     return SIMERROR;
 }
 
-error_t FinishMmcCycleBlock(__SCONTEXT_PAR)
+error_t MMC_FinishCycleBlock(SCONTEXT_PARAM)
 {
-    AdvanceBlockCounters(SCONTEXT);
+    AdvanceMainCycleCounterStepGoal(SCONTEXT);
     SharedCycleBlockFinish(SCONTEXT);
 
     return SIMERROR;
 }
 
-static inline Bitmask_t GetTimeoutAbortEval(__SCONTEXT_PAR)
+// Evaluates if the ETA of the simulation is likely to timeout during the next block
+static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
 {
-    int64_t newClock = clock();
-    int64_t lastClock = getRuntimeInformation(SCONTEXT)->LastClock;
+    let jobInfo = getDbModelJobInfo(SCONTEXT);
+    var runInfo = getRuntimeInformation(SCONTEXT);
+    var metaData = getMainStateMetaData(SCONTEXT);
+    var newClock = clock();
 
-    getMainStateMetaData(SCONTEXT)->TimePerBlock = (newClock - lastClock) / CLOCKS_PER_SEC;
-    getMainStateMetaData(SCONTEXT)->ProgramRunTime += (newClock - lastClock) / CLOCKS_PER_SEC;
-    int64_t blockEta = getMainStateMetaData(SCONTEXT)->TimePerBlock + getMainStateMetaData(SCONTEXT)->ProgramRunTime;
+    metaData->TimePerBlock = (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
+    metaData->ProgramRunTime += (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
+    var blockEta = metaData->TimePerBlock + metaData->ProgramRunTime;
 
-    bool_t isTimeout = (getMainStateMetaData(SCONTEXT)->ProgramRunTime >= getDbModelJobInfo(SCONTEXT)->TimeLimit) || (blockEta >
-            getDbModelJobInfo(SCONTEXT)->TimeLimit);
-    return (isTimeout) ? STATE_FLG_TIMEOUT : STATE_FLG_CONTINUE;
+    runInfo->PreviousBlockFinishClock = newClock;
+
+    bool_t isTimeout = (metaData->ProgramRunTime >= jobInfo->TimeLimit) || (blockEta >jobInfo->TimeLimit);
+    return isTimeout;
 }
 
-static inline bool_t GetRateAbortEval(__SCONTEXT_PAR)
+// Evaluates if the current success and cycles rates are below the limit
+static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
 {
-    getMainStateMetaData(SCONTEXT)->SuccessRate = getMainCycleCounters(SCONTEXT)->Mcs / getMainStateMetaData(SCONTEXT)->ProgramRunTime;
-    getMainStateMetaData(SCONTEXT)->CycleRate = getMainCycleCounters(SCONTEXT)->Cycles / getMainStateMetaData(SCONTEXT)->ProgramRunTime;
+    let jobInfo = getDbModelJobInfo(SCONTEXT);
+    let counters = getMainCycleCounters(SCONTEXT);
+    var metaData = getMainStateMetaData(SCONTEXT);
 
-    if (getMainStateMetaData(SCONTEXT)->CycleRate < getDbModelJobInfo(SCONTEXT)->MinimalSuccessRate)
-    {
-        return true;
-    }
-    return false;
+    metaData->SuccessRate = counters->Mcs / metaData->ProgramRunTime;
+    metaData->CycleRate = counters->Cycles / metaData->ProgramRunTime;
+
+    return (metaData->CycleRate < jobInfo->MinimalSuccessRate);
 }
 
-static inline bool_t GetMcsTargetReachedEval(__SCONTEXT_PAR)
+// Evaluates if the mcs target is reached
+static inline bool_t UpdateAndEvaluateMcsAbortCondition(SCONTEXT_PARAM)
 {
-    if (getMainCycleCounters(SCONTEXT)->Mcs >= getMainCycleCounters(SCONTEXT)->TotalGoalMcs)
-    {
-        return true;
-    }
-    return false;
+    let counters = getMainCycleCounters(SCONTEXT);
+    return (counters->Mcs >= counters->TotalGoalMcs);
 }
 
-static error_t GetGeneralAbortCondEval(__SCONTEXT_PAR)
+// Evaluates the general abort conditions and returns the corresponding state flag
+static error_t EvaluateGeneralAbortConditions(SCONTEXT_PARAM)
 {
     if (StateFlagsAreSet(SCONTEXT, STATE_FLG_FIRSTCYCLE))
-    {
         return STATE_FLG_CONTINUE;
-    }
-    if (GetTimeoutAbortEval(SCONTEXT))
+
+    if (UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT))
     {
         setMainStateFlags(SCONTEXT, STATE_FLG_TIMEOUT);
         return STATE_FLG_TIMEOUT;
     }
-    if (GetRateAbortEval(SCONTEXT))
+    if (UpdateAndEvaluateRateAbortConditions(SCONTEXT))
     {
         setMainStateFlags(SCONTEXT, STATE_FLG_RATEABORT);
         return STATE_FLG_RATEABORT;
     }
-    if (GetMcsTargetReachedEval(SCONTEXT))
+    if (UpdateAndEvaluateMcsAbortCondition(SCONTEXT))
     {
         setMainStateFlags(SCONTEXT, STATE_FLG_COMPLETED);
         return STATE_FLG_COMPLETED;
@@ -350,220 +372,262 @@ static error_t GetGeneralAbortCondEval(__SCONTEXT_PAR)
     return STATE_FLG_CONTINUE;
 }
 
-error_t GetKmcAbortCondEval(__SCONTEXT_PAR)
+error_t KMC_CheckAbortConditions(SCONTEXT_PARAM)
 {
-    if (GetGeneralAbortCondEval(SCONTEXT) != STATE_FLG_CONTINUE)
-    {
-        return STATE_FLG_CONDABORT;
-    }
-    return STATE_FLG_CONTINUE;
+    return (EvaluateGeneralAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE)
+        ? STATE_FLG_CONDABORT
+        : STATE_FLG_CONTINUE;
 }
 
-error_t GetMmcAbortCondEval(__SCONTEXT_PAR)
+error_t MMC_CheckAbortConditions(SCONTEXT_PARAM)
 {
-    if (GetGeneralAbortCondEval(SCONTEXT) != STATE_FLG_CONTINUE)
-    {
-        return STATE_FLG_CONDABORT;
-    }
-    return STATE_FLG_CONTINUE;
+    return (EvaluateGeneralAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE)
+        ? STATE_FLG_CONDABORT
+        : STATE_FLG_CONTINUE;
 }
 
-error_t SyncSimulationState(__SCONTEXT_PAR)
+error_t SyncMainStateLatticeToRunStatus(SCONTEXT_PARAM)
 {
+    let environmentLattice = getEnvironmentLattice(SCONTEXT);
+    var latticeState = getMainStateLattice(SCONTEXT);
+
+    return_if(span_GetSize(*latticeState) != array_GetSize(*environmentLattice), ERR_DATACONSISTENCY);
+
+    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+        span_Get(*latticeState, envState->EnvironmentId) = envState->ParticleId;
+
     return ERR_OK;
 }
 
-error_t SaveSimulationState(__SCONTEXT_PAR)
+error_t SyncMainStateCountersToRunStatus(SCONTEXT_PARAM)
+{
+    let counterState = getMainCycleCounters(SCONTEXT);
+    var headerData = getMainStateHeader(SCONTEXT)->Data;
+
+    headerData->Cycles = counterState->Cycles;
+    headerData->Mcs = counterState->Mcs;
+
+    return ERR_OK;
+}
+
+error_t SyncMainStateMetaDataToRunStatus(SCONTEXT_PARAM)
+{
+    let rng = getMainRng(SCONTEXT);
+    var data = getMainStateMetaData(SCONTEXT);
+
+    data->RngState = rng->State;
+    data->RngIncrease = rng->Inc;
+
+    return ERR_OK;
+}
+
+error_t SyncSimulationStateToRunStatus(SCONTEXT_PARAM)
+{
+    ResynchronizeEnvironmentEnergyStatus(SCONTEXT);
+
+    var error = SyncMainStateTrackerMappingToSimulation(SCONTEXT);
+    return_if(error, error);
+
+    error = SyncMainStateLatticeToRunStatus(SCONTEXT);
+    return_if(error, error);
+
+    error = SyncMainStateCountersToRunStatus(SCONTEXT);
+    return_if(error, error);
+
+    error = SyncMainStateMetaDataToRunStatus(SCONTEXT);
+
+    return error;
+}
+
+error_t SaveSimulationState(SCONTEXT_PARAM)
 {
     if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
-    {
         SIMERROR = SaveWriteBufferToFile(FILE_PRERSTATE, FMODE_BINARY_W, getMainStateBuffer(SCONTEXT));
-    }
     else
-    {
         SIMERROR = SaveWriteBufferToFile(FILE_MAINSTATE, FMODE_BINARY_W, getMainStateBuffer(SCONTEXT));
-    }
+
     return SIMERROR;
 }
 
-static error_t GeneralSimulationFinish(__SCONTEXT_PAR)
+static error_t GeneralSimulationFinish(SCONTEXT_PARAM)
 {
     setMainStateFlags(SCONTEXT, STATE_FLG_COMPLETED);
     SIMERROR = SaveSimulationState(SCONTEXT);
     return SIMERROR;
 }
 
-error_t FinishMainRoutineKmc(__SCONTEXT_PAR)
+error_t KMC_FinishMainRoutine(SCONTEXT_PARAM)
 {
     SIMERROR = GeneralSimulationFinish(SCONTEXT);
     error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine execution.");
     return SIMERROR;
 }
 
-error_t FinishMainRoutineMmc(__SCONTEXT_PAR)
+error_t MMC_FinishMainRoutine(SCONTEXT_PARAM)
 {
     SIMERROR = GeneralSimulationFinish(SCONTEXT);
     error_assert(SIMERROR, "Simulation aborted due to error in general simulation finisher routine execution.");
     return SIMERROR;
 }
 
-static inline int32_t LookupActJumpId(__SCONTEXT_PAR)
+static inline int32_t GetActiveJumpId(SCONTEXT_PARAM)
 {
-    return array_Get(*getJumpDirectionMapping(SCONTEXT), JUMPPATH[0]->PositionVector.D, JUMPPATH[0]->ParticleId, getJumpSelectionInfo(SCONTEXT)->RelativeId);
+    let jumpMapping = getJumpDirectionMapping(SCONTEXT);
+    let jumpSelection = getJumpSelectionInfo(SCONTEXT);
+    return array_Get(*jumpMapping, JUMPPATH[0]->PositionVector.D, JUMPPATH[0]->ParticleId, jumpSelection->RelativeId);
 }
 
-static inline void SetActJumpDirAndCol(__SCONTEXT_PAR)
+// Sets the active jump direction and collection on the context (Requires start path entry to be set!)
+static inline void SetActiveJumpDirectionAndCollection(SCONTEXT_PARAM)
 {
-    getJumpSelectionInfo(SCONTEXT)->JumpId = LookupActJumpId(SCONTEXT);
-    getCycleState(SCONTEXT)->ActiveJumpDirection = getJumpDirectionAt(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->JumpId);
-    getCycleState(SCONTEXT)->ActiveJumpCollection = getJumpCollectionAt(SCONTEXT, getActiveJumpDirection(
-            SCONTEXT)->JumpCollectionId);
+    var jumpSelection = getJumpSelectionInfo(SCONTEXT);
+    var cycleState = getCycleState(SCONTEXT);
+
+    jumpSelection->JumpId = GetActiveJumpId(SCONTEXT);
+    cycleState->ActiveJumpDirection = getJumpDirectionAt(SCONTEXT, jumpSelection->JumpId);
+    cycleState->ActiveJumpCollection = getJumpCollectionAt(SCONTEXT, cycleState->ActiveJumpDirection->JumpCollectionId);
 }
 
-static inline void SetActPathStartEnv(__SCONTEXT_PAR)
+static inline void SetActivePathStartEnvironment(SCONTEXT_PARAM)
 {
     JUMPPATH[0] = getEnvironmentStateAt(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->EnvironmentId);
     SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, 0, JUMPPATH[0]->ParticleId);
     JUMPPATH[0]->PathId = 0;
 }
 
-static inline void SetActCounterCol(__SCONTEXT_PAR)
+static inline void SetActiveCounterCollection(SCONTEXT_PARAM)
 {
     getCycleState(SCONTEXT)->ActiveCounterCollection = getMainStateCounterAt(SCONTEXT, JUMPPATH[0]->ParticleId);
 }
 
-void SetNextKmcJumpSelection(__SCONTEXT_PAR)
+// Sets the active jump status for the currently selected KMC on the context
+static inline void KMC_SetActiveJumpStatus(SCONTEXT_PARAM)
 {
-    RollNextKmcSelect(SCONTEXT);
-    getCycleState(SCONTEXT)->ActiveStateCode = 0ULL;
+    let statusArray = getJumpStatusArray(SCONTEXT);
+    let jumpDirection = getActiveJumpDirection(SCONTEXT);
 
-    SetActCounterCol(SCONTEXT);
-    SetActPathStartEnv(SCONTEXT);
-    SetActJumpDirAndCol(SCONTEXT);
+    debug_assert(!array_IndicesAreOutOfRange(*statusArray, vecCoorSet3(JUMPPATH[0]->PositionVector), jumpDirection->ObjectId));
+    getCycleState(SCONTEXT)->ActiveJumpStatus = &array_Get(*statusArray, vecCoorSet3(JUMPPATH[0]->PositionVector), jumpDirection->ObjectId);
 }
 
-void SetKmcJumpPathProperties(__SCONTEXT_PAR)
+void KMC_SetNextJumpSelection(SCONTEXT_PARAM)
 {
+    KMC_RollNextJumpSelection(SCONTEXT);
+    getCycleState(SCONTEXT)->ActiveStateCode = 0ULL;
+
+    SetActivePathStartEnvironment(SCONTEXT);
+
+    SetActiveJumpDirectionAndCollection(SCONTEXT);
+    SetActiveCounterCollection(SCONTEXT);
+}
+
+void KMC_SetJumpPathProperties(SCONTEXT_PARAM)
+{
+    let latticeSizes = getLatticeSizeVector(SCONTEXT);
+    var stateCode = &getCycleState(SCONTEXT)->ActiveStateCode;
     Vector4_t actVector;
-    byte_t index = 0;
+    byte_t index = 1;
 
     cpp_foreach(relVector, getActiveJumpDirection(SCONTEXT)->JumpSequence)
     {
-        actVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, getLatticeSizeVector(SCONTEXT));
+        actVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, latticeSizes);
         JUMPPATH[index] = getEnvironmentStateByVector4(SCONTEXT, &actVector);
 
-        SetCodeByteAt(&getCycleState(SCONTEXT)->ActiveStateCode, index, JUMPPATH[index]->ParticleId);
+        SetCodeByteAt(stateCode, index, JUMPPATH[index]->ParticleId);
         JUMPPATH[index]->PathId = index;
+        ++index;
     }
 }
 
-static inline OccupationCode_t GetLastPossibleJumpCode(__SCONTEXT_PAR)
+static inline void LinearSearchAndSetActiveJumpRule(SCONTEXT_PARAM)
 {
-    return getActiveJumpCollection(SCONTEXT)->JumpRules.End[-1].StateCode0;
-}
+    let stateCode = getPathStateCode(SCONTEXT);
+    var cycleState = getCycleState(SCONTEXT);
 
-static inline void LinearSearchAndSetActiveJumpRule(__SCONTEXT_PAR)
-{
-    if (GetLastPossibleJumpCode(SCONTEXT) < getPathStateCode(SCONTEXT))
+    cpp_foreach(jumpRule, cycleState->ActiveJumpCollection->JumpRules)
     {
-        getCycleState(SCONTEXT)->ActiveJumpRule = NULL;
-    }
-    else
-    {
-        getCycleState(SCONTEXT)->ActiveJumpRule = getActiveJumpCollection(SCONTEXT)->JumpRules.Begin;
-        while (getActiveJumpRule(SCONTEXT)->StateCode0 < getPathStateCode(SCONTEXT))
+        if (jumpRule->StateCode0 == stateCode)
         {
-            getCycleState(SCONTEXT)->ActiveJumpRule++;
-        }
-        if (getActiveJumpRule(SCONTEXT)->StateCode0 != getPathStateCode(SCONTEXT))
-        {
-            getCycleState(SCONTEXT)->ActiveJumpRule = NULL;
+            cycleState->ActiveJumpRule = jumpRule;
+            return;
         }
     }
+    cycleState->ActiveJumpRule = NULL;
 }
 
-static inline void BinarySearchAndSetActiveJumpRule(__SCONTEXT_PAR)
-{
-    decllocal(FUNCDECL_COMPARER, BinarySearchAndSetActiveJumpRule_Compare, JumpRule_t);
-    decllocal(FUNCDECL_BINARYSEARCH, BinarySearchAndSetActiveJumpRule_Search, JumpRules_t, JumpRule_t);
-
-    JumpRule_t searchObj = {.StateCode0 = getPathStateCode(SCONTEXT)};
-    int32_t id = local_BinarySearchAndSetActiveJumpRule_Search(&getActiveJumpCollection(SCONTEXT)->JumpRules, &searchObj);
-    *getActiveJumpRule(SCONTEXT) = span_Get(getActiveJumpCollection(SCONTEXT)->JumpRules, id);
-}
-
-impllocal(FUNCIMPL_COMPARER, local_BinarySearchAndSetActiveJumpRule_Compare, JumpRule_t, makeCompGetter, StateCode0);
-impllocal(FUNCIMPL_BINARYSEARCH, local_BinarySearchAndSetActiveJumpRule_Search, JumpRules_t, JumpRule_t, local_BinarySearchAndSetActiveJumpRule_Compare);
-
-static inline void LookupAndSetActJumpRule(__SCONTEXT_PAR)
+static inline void LookupAndSetActJumpRule(SCONTEXT_PARAM)
 {
     LinearSearchAndSetActiveJumpRule(SCONTEXT);
 }
 
-bool_t GetKmcJumpRuleEvaluation(__SCONTEXT_PAR)
+bool_t KMC_TrySetJumpRule(SCONTEXT_PARAM)
 {
     LookupAndSetActJumpRule(SCONTEXT);
-    return getActiveJumpRule(SCONTEXT) == NULL;
+    return getActiveJumpRule(SCONTEXT) != NULL;
 }
 
-void SetKmcJumpProperties(__SCONTEXT_PAR)
+void KMC_SetJumpProperties(SCONTEXT_PARAM)
 {
-    SetAllStateEnergiesKmc(SCONTEXT);
+    KMC_SetActiveJumpStatus(SCONTEXT);
+    KMC_SetStateEnergies(SCONTEXT);
 }
 
-void SetKmcJumpProbabilities(__SCONTEXT_PAR)
+void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
 {
-    JumpEnergyInfo_t* energyInfo = getJumpEnergyInfo(SCONTEXT);
+    let factors = getPhysicalFactors(SCONTEXT);
+    let jumpRule = getActiveJumpRule(SCONTEXT);
+    var energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     energyInfo->FieldInfluence = CalcElectricFieldInfluence(SCONTEXT);
     energyInfo->ConformationDelta = 0.5 * (energyInfo->Energy2 - energyInfo->Energy0);
 
     energyInfo->Energy0To2 = energyInfo->Energy1 + energyInfo->ConformationDelta + energyInfo->FieldInfluence;
-    energyInfo->Energy0To2 = energyInfo->Energy1 - energyInfo->ConformationDelta + energyInfo->FieldInfluence;
+    energyInfo->Energy2To0 = energyInfo->Energy1 - energyInfo->ConformationDelta - energyInfo->FieldInfluence;
 
-    energyInfo->Probability0to2 = exp(energyInfo->Energy0To2) * getActiveJumpRule(SCONTEXT)->FrequencyFactor;
+    energyInfo->Probability0to2 = exp(-energyInfo->Energy0To2) * jumpRule->FrequencyFactor * factors->TotalNormalizationFactor;
+
     energyInfo->Probability2to0 = (energyInfo->Energy2To0 < 0.0) ? INFINITY : 0.0;
 }
 
-void SetKmcJumpEvaluationResults(__SCONTEXT_PAR)
+void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
 {
     SCONTEXT->Plugins.OnSetJumpProbabilities(SCONTEXT);
 
     // Unstable end: Do not advance system, update counter and simulated time
     if (getJumpEnergyInfo(SCONTEXT)->Probability2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
-        OnKmcJumpToUnstableState(SCONTEXT);
+        KMC_OnJumpIsToUnstableState(SCONTEXT);
         return;
     }
 
     // Unstable start: Advance system, update counter but not simulated time, do pool update
     if (getJumpEnergyInfo(SCONTEXT)->Probability0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
-        OnKmcJumpFromUnstableState(SCONTEXT);
+        KMC_OnJumpIsFromUnstableState(SCONTEXT);
         return;
     }
     
     // Successful jump: Advance system, update counters and simulated time, do pool update
     if (GetNextRandomDouble(SCONTEXT) < getJumpEnergyInfo(SCONTEXT)->Probability0to2)
     {
-        OnKmcJumpAccepted(SCONTEXT);
+        KMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
         return;
     }
 
     // Rejected jump: Do not advance system, update counter and simulated time, no pool update
-    OnKmcJumpRejected(SCONTEXT);
+    KMC_OnJumpIsStatisticallyRejected(SCONTEXT);
 }
 
-void SetNextMmcJumpSelection(__SCONTEXT_PAR)
+void MMC_SetNextJumpSelection(SCONTEXT_PARAM)
 {
-    RollNextMmcSelect(SCONTEXT);
+    MMC_RollNextJumpSelection(SCONTEXT);
 
-    SetActCounterCol(SCONTEXT);
-    SetActPathStartEnv(SCONTEXT);
-    SetActJumpDirAndCol(SCONTEXT);
+    SetActiveCounterCollection(SCONTEXT);
+    SetActivePathStartEnvironment(SCONTEXT);
+    SetActiveJumpDirectionAndCollection(SCONTEXT);
 }
 
-void SetMmcJumpPathProperties(__SCONTEXT_PAR)
+void MMC_SetJumpPathProperties(SCONTEXT_PARAM)
 {
     // Get the first environment state pointer (0,0,0,0) and write the offset source state to the unused 3rd path index
     JUMPPATH[2] = getEnvironmentStateAt(SCONTEXT, getJumpSelectionInfo(SCONTEXT)->OffsetId);
@@ -580,49 +644,49 @@ void SetMmcJumpPathProperties(__SCONTEXT_PAR)
     JUMPPATH[1]->PathId = 1;
 }
 
-bool_t GetMmcJumpRuleEvaluation(__SCONTEXT_PAR)
+bool_t MMC_TrySetJumpRule(SCONTEXT_PARAM)
 {
     LookupAndSetActJumpRule(SCONTEXT);
-    return getCycleState(SCONTEXT)->ActiveJumpRule == NULL;
+    return getActiveJumpRule(SCONTEXT) != NULL;
 }
 
-void SetMmcJumpProperties(__SCONTEXT_PAR)
+void MMC_SetJumpProperties(SCONTEXT_PARAM)
 {
-    SetAllStateEnergiesMmc(SCONTEXT);
+    MMC_SetStateEnergies(SCONTEXT);
 }
 
-void SetMmcJumpProbabilities(__SCONTEXT_PAR)
+void MMC_SetJumpProbabilities(SCONTEXT_PARAM)
 {
-    JumpEnergyInfo_t* energyInfo = getJumpEnergyInfo(SCONTEXT);
+    var energyInfo = getJumpEnergyInfo(SCONTEXT);
     energyInfo->Energy0To2 = energyInfo->Energy2 - energyInfo->Energy0;
     energyInfo->Probability0to2 = exp(energyInfo->Energy0To2);
 }
 
-void SetMmcJumpEvaluationResults(__SCONTEXT_PAR)
+void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
 {
     SCONTEXT->Plugins.OnSetJumpProbabilities(SCONTEXT);
 
     // Handle case where the end state is unstable
     if (getJumpEnergyInfo(SCONTEXT)->Probability2to0 > MC_CONST_JUMPLIMIT_MAX)
     {
-        OnMmcJumpToUnstableState(SCONTEXT);
+        MMC_OnJumpIsToUnstableState(SCONTEXT);
         return;
     }
 
     // Handle case where the start state is unstable
     if (getJumpEnergyInfo(SCONTEXT)->Probability0to2 > MC_CONST_JUMPLIMIT_MAX)
     {
-        OnMmcJumpFromUnstableState(SCONTEXT);
+        MMC_OnJumpIsFromUnstableState(SCONTEXT);
         return;
     }
 
     // Handle case where the jump is statistically accepted
     if (GetNextRandomDouble(SCONTEXT) < getJumpEnergyInfo(SCONTEXT)->Probability0to2)
     {
-        OnMmcJumpAccepted(SCONTEXT);
+        MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
         return;
     }
 
     // Handle case where the jump is statistically rejected
-    OnMmcJumpRejected(SCONTEXT);
+    MMC_OnJumpIsStatisticallyRejected(SCONTEXT);
 }

@@ -11,5 +11,5 @@
 #pragma once
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
-void LoadSimulationModelFromDatabase(__SCONTEXT_PAR);
+void LoadSimulationModelFromDatabase(SCONTEXT_PARAM);
 

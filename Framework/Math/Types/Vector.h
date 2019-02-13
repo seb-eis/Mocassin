@@ -121,28 +121,28 @@ static inline Vector3_t CalcVector3CrossProduct(const Vector3_t* lhs, const Vect
 // Calculates the euclidean norm calculation for the passed vector
 static inline double CalcVector3Length(const Vector3_t* vectorA)
 {
-    double dotProduct = CalcVector3DotProduct(vectorA, vectorA);
+    let dotProduct = CalcVector3DotProduct(vectorA, vectorA);
     return sqrt(dotProduct);
 }
 
 // Calculates the normalization of the passed vector 3
 static inline Vector3_t CalcVector3Normalization(const Vector3_t* vector)
 {
-    double length = CalcVector3Length(vector);
+    let length = CalcVector3Length(vector);
     return ScalarDivideVector3(vector, length);
 }
 
 // Performs a spat product calculation (a * (b x c)) and returns the resulting value (Directional volume)
 static inline double CalcVector3SpatProduct(const Vector3_t* vectorA, const Vector3_t* vectorB, const Vector3_t * vectorC)
 {
-    Vector3_t crossProduct = CalcVector3CrossProduct(vectorB, vectorC);
+    let crossProduct = CalcVector3CrossProduct(vectorB, vectorC);
     return CalcVector3DotProduct(&crossProduct, vectorA);
 }
 
 // Calculates the vector projection of A onto B
 static inline Vector3_t CalcVector3Projection(const Vector3_t* vectorA, const Vector3_t* vectorB)
 {
-    Vector3_t result = ScalarMultiplyVector3(vectorB, CalcVector3DotProduct(vectorA, vectorB));
+    var result = ScalarMultiplyVector3(vectorB, CalcVector3DotProduct(vectorA, vectorB));
     vector3ScalarOp(result, CalcVector3DotProduct(vectorB, vectorB), /=);
     return result;
 }
@@ -156,7 +156,7 @@ static inline int32_t Int32FromVector4(const Vector4_t* restrict value, const in
 // Performs conversion of a 4d int vector pair describing start and relative offset into a linear id (4D coordinate decoding by block sizes)
 static inline int32_t Int32FromVector4Pair(const Vector4_t* restrict start, const Vector4_t* restrict offset, const int32_t* restrict blockSizes)
 {
-    Vector4_t target = AddVector4(start, offset);
+    let target = AddVector4(start, offset);
     return Int32FromVector4(&target, blockSizes);
 }
 

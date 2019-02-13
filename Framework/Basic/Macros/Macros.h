@@ -9,8 +9,15 @@
 //////////////////////////////////////////
 
 #pragma once
-
 #include <stdlib.h>
+
+/* Auto types */
+
+// Macro that defines the variable auto type
+#define var __auto_type
+
+// Macro that defines the const auto type
+#define let var const
 
 /*Arg count macro from Roland Illig and Laurent Deniau*/
 
@@ -79,13 +86,13 @@
 /* Local function declaration and implementation macros*/
 
 // Builds the default local name for a function
-#define namelocal(NAME) local_##NAME
+#define name_local_func(NAME) local_##NAME
 
 // Declare a local function using the passed function declaration macro template
-#define decllocal(FDECLTEMPLATE, NAME, ...) evalMacro(FDECLTEMPLATE, namelocal(NAME), __VA_ARGS__);
+#define decl_local_func(FDECLTEMPLATE, NAME, ...) evalMacro(FDECLTEMPLATE, name_local_func(NAME), __VA_ARGS__);
 
 // Implement a local function using the passed function implementation macro template
-#define impllocal(FIMPLTEMPLATE, FULLNAME, ...) evalMacro(FIMPLTEMPLATE, FULLNAME, __VA_ARGS__)
+#define impl_local_func(FIMPLTEMPLATE, FULLNAME, ...) evalMacro(FIMPLTEMPLATE, FULLNAME, __VA_ARGS__)
 
 // Defines the default value getter macro for function templates that expands to the value itself
 #define valGetter(VAL, ...) (VAL)

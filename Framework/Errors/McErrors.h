@@ -17,10 +17,10 @@
 // Defines the MC test build macro that enables most of the debugging assertions and save getter/setters
 #define MC_TESTBUILD
 
-// Defines the debug assert all macro
-#define DEBUG_ASSERT_ALL
+// Define to enable all debug assertions
+//#define ENABLE_DEBUG_ASSERTIONS
 
-#if defined(DEBUG_ASSERT_ALL)
+#if defined(ENABLE_DEBUG_ASSERTIONS)
     // Active debug assertion macro. Asserts that the condition is true during runtime
     #define debug_assert(cond) if (!(cond)) { ErrorToStdout(ERR_DEBUGASSERT, __FUNCTION__, __LINE__, #cond); }
 #else

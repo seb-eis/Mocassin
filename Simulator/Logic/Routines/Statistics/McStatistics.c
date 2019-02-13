@@ -11,44 +11,37 @@
 #include <math.h>
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
+#include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 
-error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, CycleCounterState_t* counters)
+error_t SetCycleCounterToDefaultStatus(SCONTEXT_PARAM, CycleCounterState_t *counters)
 {
-    if (counters == NULL)
-    {
-        return ERR_NULLPOINTER;
-    }
+    return_if (counters == NULL, ERR_NULLPOINTER);
 
     counters->TotalGoalMcs = getDbModelJobInfo(SCONTEXT)->TargetMcsp * getNumberOfMobiles(SCONTEXT);
 
-    int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
+    let rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
     if (rem != 0)
-    {
         counters->TotalGoalMcs += CYCLE_BLOCKCOUNT - rem;
-    }
 
     counters->CyclesPerBlock = CYCLE_BLOCKSIZE_MIN;
     counters->McsPerBlock = counters->TotalGoalMcs / CYCLE_BLOCKCOUNT;
     return ERR_OK;
 }
 
-error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, PhysicalInfo_t* factors)
+error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAM, PhysicalInfo_t *factors)
 {
-    if (factors == NULL)
-    {
-        return ERR_NULLPOINTER;
-    }
+    return_if (factors == NULL, ERR_NULLPOINTER);
 
     factors->EnergyConversionFactor = CalcEnergyConversionFactor(SCONTEXT);
-    factors->CurrentTimeStepping = CalcTimeStepPerJump(SCONTEXT);
-    if (isfinite(CalcBasicJumpNormalization(SCONTEXT)))
-    {
-        factors->TotalNormalizationFactor = CalcTotalJumpNormalization(SCONTEXT);
-    }
-    else
-    {
-        factors->TotalNormalizationFactor = getDbModelJobHeaderAsKMC(SCONTEXT)->FixedNormFactor;
-    }
+    factors->InverseEnergyConversionFactor = 1.0 / factors->EnergyConversionFactor;
 
+    return_if (!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC), ERR_OK);
+
+    if (isfinite(CalcBasicJumpNormalization(SCONTEXT)))
+        factors->TotalNormalizationFactor = CalcTotalJumpNormalization(SCONTEXT);
+    else
+        factors->TotalNormalizationFactor = getDbModelJobHeaderAsKMC(SCONTEXT)->FixedNormFactor;
+
+    factors->CurrentTimeStepping = CalcTimeStepPerJump(SCONTEXT);
     return ERR_OK;
 }

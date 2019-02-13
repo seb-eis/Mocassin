@@ -148,23 +148,82 @@ typedef struct EnvironmentBackup
 
 } EnvironmentBackup_t;
 
-// Type for the cycle state storage
-// Layout@ggc_x86_64 => 240@[48,8,16,96,8,8,8,8,8,8,8,8]
+// Type for jump links
+// Layout@ggc_x86_64 => 8@[4,4]
+typedef struct JumpLink
+{
+    // The path id of the sender that contains the affiliated environment link
+    int32_t     SenderPathId;
+
+    // The relative id in the collection of the corresponding link list
+    int32_t     LinkId;
+
+} JumpLink_t;
+
+// Type for jump link lists
+// Layout@ggc_x86_64 => 16@[8,8]
+typedef Span_t(JumpLink_t, JumpLinks) JumpLinks_t;
+
+// Type for the jump status that holds the jump link information of a single KMC jump
+// Layout@ggc_x86_64 => 48@[16]
+typedef struct JumpStatus
+{
+    // The jump links of the jump status
+    JumpLinks_t JumpLinks;
+
+} JumpStatus_t;
+
+// Type for a 4D array of jump status objects access by [A,B,C,JumpDirId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(JumpStatus_t, 4, JumpStatusArray) JumpStatusArray_t;
+
+// Type for the cycle state storage. Contains all information manipulated and buffered during simulation cycles
+// Layout@ggc_x86_64 => 248@[48,8,16,96,8,8,8,8,8,8,8,8,8]
 typedef struct CycleState
 {
+    // The main counter state. Controls the cycle loop settings
     CycleCounterState_t         MainCounters;
-    OccupationCode_t                   ActiveStateCode;
+
+    // The current active state code that describes a transition start state
+    OccupationCode_t            ActiveStateCode;
+
+    // The jump selection that contains the transition selection information
     JumpSelectionInfo_t         ActiveSelectionInfo;
+
+    // Teh jump energy info that stores energy and probability information on the current transition
     JumpEnergyInfo_t            ActiveEnergyInfo;
+
+    // The environment backup that stores rollback information about the path during the cycle
     EnvironmentBackup_t         ActiveEnvironmentBackup;
+
+    // The pointer to the currently active jump direction
     JumpDirection_t*            ActiveJumpDirection;
+
+    // The pointer to the currently active jump collection
     JumpCollection_t*           ActiveJumpCollection;
+
+    // The pointer to the currently active jump rule
     JumpRule_t*                 ActiveJumpRule;
+
+    // The pointer to the currently active counter collection
     StateCounterCollection_t*   ActiveCounterCollection;
+
+    // The environment path array that buffers the current transition path
     EnvironmentState_t*         ActivePathEnvironments[JUMPS_JUMPLENGTH_MAX];
+
+    // The active jump status
+    JumpStatus_t*               ActiveJumpStatus;
+
+    // The pointer to the current work environment
     EnvironmentState_t*         WorkEnvironment;
+
+    // The pointer to the current work cluster
     ClusterState_t*             WorkCluster;
+
+    // The pointer to the current pair table
     PairTable_t*                WorkPairTable;
+
+    // The pointer to the current work cluster table
     ClusterTable_t*             WorkClusterTable;
 
 } CycleState_t;
@@ -177,11 +236,19 @@ typedef List_t(int32_t, EnvironmentPool) EnvironmentPool_t;
 // Layout@ggc_x86_64 => 40@[24,4,4,4,{4}]
 typedef struct DirectionPool
 {
+    // The environment pool of the direction pool. Contains affiliated [environmentId]
     EnvironmentPool_t   EnvironmentPool;
-    int32_t             NumOfPositions;
-    int32_t             NumOfDirections;
-    int32_t             NumOfJumps;
 
+    // The current position count of the pool
+    int32_t             PositionCount;
+
+    // The direction count of the pool
+    int32_t             DirectionCount;
+
+    // The current selectable jump count of the pool
+    int32_t             JumpCount;
+
+    // Padding integer
     int32_t             Padding:32;
     
 } DirectionPool_t;
@@ -194,9 +261,16 @@ typedef Span_t(DirectionPool_t, DirectionPools) DirectionPools_t;
 // Layout@ggc_x86_64 => 64@[4,4,16,40]
 typedef struct JumpSelectionPool
 {
+    // The number of selectable jumps in the pool
     int32_t             SelectableJumpCount;
+
+    // The number of directions pools in the selection pool
     int32_t             DirectionPoolCount;
+
+    // The direction count to pool index mapping
     IdRedirection_t     DirectionPoolMapping;
+
+    // The span of direction pools
     DirectionPools_t    DirectionPools;
     
 } JumpSelectionPool_t;
@@ -205,17 +279,28 @@ typedef struct JumpSelectionPool
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef struct SimulationRunInfo
 {
-    int64_t StartClock;
-    int64_t LastClock;
+    // The clock value at simulation start
+    int64_t MainRoutineStartClock;
+
+    // The last clock value taken
+    int64_t PreviousBlockFinishClock;
 
 } SimulationRunInfo_t;
 
 // Type for physical simulation values
-// Layout@ggc_x86_64 => 24@[8,8,8]
+// Layout@ggc_x86_64 => 24@[8,8,8,8]
 typedef struct PhysicalInfo
 {
+    // The energy conversion factor from [eV] to [kT]
     double EnergyConversionFactor;
+
+    // The energy conversion factor from [kT] to [eV]
+    double InverseEnergyConversionFactor;
+
+    // The total jump normalization factor
     double TotalNormalizationFactor;
+
+    // The current time stepping in [s]
     double CurrentTimeStepping;
     
 } PhysicalInfo_t;
@@ -224,12 +309,25 @@ typedef struct PhysicalInfo
 // Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct FileInfo
 {
-    char const* DbQueryString;
+    // The database query string for data loading
+    char const* JobDbQuery;
+
+    // The program execution path
     char const* ExecutionPath;
-    char const* DatabasePath;
+
+    // The job database path
+    char const* JobDbPath;
+
+    // The output plugin path
     char const* OutputPluginPath;
+
+    // The output plugin search symbol
     char const* OutputPluginSymbol;
+
+    // The energy plugin path
     char const* EnergyPluginPath;
+
+    // The energy plugin search symbol
     char const* EnergyPluginSymbol;
     
 } FileInfo_t;
@@ -238,41 +336,19 @@ typedef struct FileInfo
 // Layout@ggc_x86_64 => 32@[8,8,8,8]
 typedef struct Flp64Buffer
 {
+    // Buffer start ptr
     double* Begin;
+
+    // Buffer end ptr
     double* End;
+
+    // Capacity end ptr
     double* CapacityEnd;
+
+    // The last average value
     double  LastAverage;
     
 } Flp64Buffer_t;
-
-// Type for jump links
-// Layout@ggc_x86_64 => 8@[4,4]
-typedef struct JumpLink
-{
-    // The path id te jump link is valid for
-    int32_t     PathId;
-
-    // The id of the corresponding environment link
-    int32_t     LinkId;
-
-} JumpLink_t;
-
-// Type for jump link lists
-// Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(JumpLink_t, JumpLinks) JumpLinks_t;
-
-// Type for the jump status that holds the runtime information of a single jump
-// Layout@ggc_x86_64 => 16@[16]
-typedef struct JumpStatus
-{
-    // The jump links of the jump status
-    JumpLinks_t JumpLinks;
-
-} JumpStatus_t;
-
-// Type for a 4D array of jump status objects access by [A,B,C,JumpDirId]
-// Layout@ggc_x86_64 => 24@[8,8,8]
-typedef Array_t(JumpStatus_t, 4, JumpStatusArray) JumpStatusArray_t;
 
 // Type for the simulation dynamic model
 // Layout@ggc_x86_64 => 168@[56,24,32,16,24,16]

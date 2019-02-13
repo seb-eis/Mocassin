@@ -67,7 +67,7 @@
 
     int main(int argc, char const * const *argv)
     {
-        SimulationContext_t SCONTEXT = ctor_SimulationContext();
+        var SCONTEXT = ctor_SimulationContext();
 
         ResolveCommandLineArguments(&SCONTEXT, argc, argv);
 
@@ -75,7 +75,7 @@
 
         PrepareForMainRoutine(&SCONTEXT);
 
-        StartMainRoutine(&SCONTEXT);
+        StartMainSimulationRoutine(&SCONTEXT);
     }
 
 #endif

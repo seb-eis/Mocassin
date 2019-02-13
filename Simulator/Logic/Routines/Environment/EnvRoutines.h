@@ -14,36 +14,51 @@
 
 /* Initializer routines */
 
-void BuildEnvironmentLinkingSystem(__SCONTEXT_PAR);
+// Builds the environment linking system of the dynamic simulation environment lattice
+void BuildEnvironmentLinkingSystem(SCONTEXT_PARAM);
 
-void SyncEnvironmentEnergyStatus(__SCONTEXT_PAR);
+// Synchronizes all energy status options for the dynamic simulation lattice
+void ResynchronizeEnvironmentEnergyStatus(SCONTEXT_PARAM);
 
-void SetEnvStateStatusToDefault(__SCONTEXT_PAR, int32_t environmentId, byte_t particleId);
+// Set the status of environment state at the provided id to default conditions and the passed particle id
+void SetEnvironmentStateToDefault(SCONTEXT_PARAM, const int32_t environmentId, const byte_t particleId);
 
 /* Simulation routines KMC */
 
-void CreateLocalJumpDeltaKmc(__SCONTEXT_PAR);
+// Backups required data and creates the local jump delta for KMC transitions
+void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM);
 
-void RollbackLocalJumpDeltaKmc(__SCONTEXT_PAR);
+// Restores the pre-delta status of the system in KMC by loading the affiliated backups
+void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAM);
 
-void SetAllStateEnergiesKmc(__SCONTEXT_PAR);
+// Sets all required state energies for the current KMC transition on the main cycle state
+void KMC_SetStateEnergies(SCONTEXT_PARAM);
 
-void SetState0And1EnergiesKmc(__SCONTEXT_PAR);
+// Sets the state energies 0 and 1 for the current KMC transition on the main cycle state
+void KMC_SetStartAndTransitionStateEnergies(SCONTEXT_PARAM);
 
-void SetState2EnergyKmc(__SCONTEXT_PAR);
+// Sets the state energy 2 for the current KMC transition on the main cycle state
+void KMC_SetFinalStateEnergy(SCONTEXT_PARAM);
 
-void AdvanceKmcSystemToState2(__SCONTEXT_PAR);
+// Advances the system to the final state using the currently active KMC transition
+void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAM);
 
 /* Simulation routines MMC */
 
-void CreateLocalJumpDeltaMmc(__SCONTEXT_PAR);
+// Backups required data and creates the local jump delta for MMC transitions
+void MMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM);
 
-void RollbackLocalJumpDeltaMmc(__SCONTEXT_PAR);
+// Restores the pre-delta status of the system in MMC by loading the affiliated backups
+void MMC_LoadJumpDeltaBackup(SCONTEXT_PARAM);
 
-void SetAllStateEnergiesMmc(__SCONTEXT_PAR);
+// Sets all required state energies for the current MMC transition on the main cycle state
+void MMC_SetStateEnergies(SCONTEXT_PARAM);
 
-void SetState0EnergyMmc(__SCONTEXT_PAR);
+// Sets the state energy 0 for the current MMC transition on the main cycle state
+void MMC_SetStartStateEnergy(SCONTEXT_PARAM);
 
-void SetState2EnergyMmc(__SCONTEXT_PAR);
+// Sets the state energy 2 for the current MMC transition on the main cycle state
+void MMC_SetFinalStateEnergy(SCONTEXT_PARAM);
 
-void AdvanceMmcSystemToState2(__SCONTEXT_PAR);
+// Advances the system to the final state using the currently active MMC transition
+void MMC_AdvanceSystemToFinalState(SCONTEXT_PARAM);

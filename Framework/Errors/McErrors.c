@@ -16,7 +16,7 @@ const char* ErrorCodeToString(error_t errCode)
     // Redirect all non-critical errors to FATAL FAILURE since they should never cause an error string lookup
     errCode = (errCode <= 0) ? 0 : errCode;
 
-    static char defaultMessage[] = "No detail on error code available";
+    static var defaultMessage = "No detail on error code available";
     static struct { int32_t ErrCode; char* Message; } errTable[] =
     {
             { ERR_OK,               "FATAL FAILURE. Runtime error exit triggered without an error flag.\n\t(Expected reason: Implementation error)" },
@@ -42,12 +42,7 @@ const char* ErrorCodeToString(error_t errCode)
     };
 
     c_foreach(error, errTable)
-    {
-        if (error->ErrCode == errCode)
-        {
-            return error->Message;
-        }
-    }
+        return_if (error->ErrCode == errCode, error->Message);
 
     return defaultMessage;
 }
@@ -59,7 +54,7 @@ static void AwaitErrorResponse(error_t error)
     {
         fprintf(stdout, "Error %x, continue execution ? [y/n]", error);
 
-        int value = getchar();
+        let value = getchar();
         ClearStdintBuffer();
         switch(value)
         {
@@ -77,12 +72,11 @@ void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const 
     fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
     fflush(stdout);
     AwaitErrorResponse(errCode);
-    return;
 }
 
 void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg)
 {
-    FILE* fileStream = fopen(STDERR_PATH, "w");
+    var fileStream = fopen(STDERR_PATH, "w");
     fprintf(fileStream, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
     fclose(fileStream);
     exit(errCode);
@@ -90,10 +84,10 @@ void OnErrorExit(int32_t errCode, const char* errFunc, int32_t errLine, const ch
 
 void OnErrorExitWithMemDump(int32_t errCode, const char* errFunc, int32_t errLine, const char* errMsg, uint8_t* memStart, uint8_t* memEnd)
 {
-    FILE* fileStream = fopen(STDERR_PATH, "w");
+    var fileStream = fopen(STDERR_PATH, "w");
     fprintf(fileStream, ERROR_FORMAT_WDUMP, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
 
-    Buffer_t buffer = {memStart, memEnd};
+    let buffer = (Buffer_t) {.Begin = memStart, .End = memEnd};
     WriteBufferHexToStream(fileStream, &buffer, 24);
     fclose(fileStream);
     exit(errCode);
