@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
@@ -22,6 +23,7 @@ namespace Mocassin.Framework.QuickTest
 
         private static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             var package = TestXmlInputSystem();
             TestParameterSets(package);
             var jobCollections = TestJobSystem(package);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Mocassin.Model.Translator.ModelContext
+﻿namespace Mocassin.Model.Translator.ModelContext
 {
     /// <summary>
     ///     Fully describes the behaviour of a transition mapping model in the context of a simulation model
@@ -20,13 +18,16 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The electric field influence factor that is bound to the transition rule on simulation database creation
         /// </summary>
-        /// <remarks> Describes the direction of the charge movement as a factor of [-1;0;1] </remarks>
+        /// <remarks> Describes the direction of the charge movement as a factor [-1;0;1] </remarks>
         double ElectricFieldRuleInfluence { get; }
 
         /// <summary>
         ///     The electric field influence factor that is bound to the transition mapping on simulation database creation
         /// </summary>
-        /// <remarks> Describes the fraction of the normalized field that is applied if the transport charge moves in positive direction </remarks>
+        /// <remarks>
+        ///     Describes the potential energy gain in the electric field a [eV * m / V] if charge is transported in the positive
+        ///     rule and field direction
+        /// </remarks>
         double ElectricFieldMappingFactor { get; set; }
 
         /// <summary>

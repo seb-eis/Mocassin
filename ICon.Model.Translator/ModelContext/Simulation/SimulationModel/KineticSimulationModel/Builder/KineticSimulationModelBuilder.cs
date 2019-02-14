@@ -233,7 +233,8 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Determines the electric influence factors of the jump model in the context of the passed simulation model
+        ///     Determines the electric influence factor of a <see cref="IKineticLocalJumpModel" /> in the context of the passed
+        ///     <see cref="IKineticSimulationModel" />
         /// </summary>
         /// <param name="jumpModel"></param>
         /// <param name="simulationModel"></param>
