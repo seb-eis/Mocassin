@@ -13,18 +13,22 @@
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 
-error_t SetCycleCounterToDefaultStatus(SCONTEXT_PARAM, CycleCounterState_t *counters)
+error_t SetCycleCounterStateToDefault(SCONTEXT_PARAM, CycleCounterState_t *counters)
 {
     return_if (counters == NULL, ERR_NULLPOINTER);
 
-    counters->TotalGoalMcs = getDbModelJobInfo(SCONTEXT)->TargetMcsp * getNumberOfMobiles(SCONTEXT);
+    let jobInfo = getDbModelJobInfo(SCONTEXT);
+    let mobileCount = getNumberOfMobiles(SCONTEXT);
 
-    let rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
-    if (rem != 0)
-        counters->TotalGoalMcs += CYCLE_BLOCKCOUNT - rem;
+    counters->TotalSimulationGoalMcs = jobInfo->TargetMcsp * mobileCount;
+    let rem = counters->TotalSimulationGoalMcs % CYCLE_BLOCKCOUNT;
+    if (rem != 0) counters->TotalSimulationGoalMcs += CYCLE_BLOCKCOUNT - rem;
+    counters->McsPerExecutionPhase = counters->TotalSimulationGoalMcs / CYCLE_BLOCKCOUNT;
 
-    counters->CyclesPerBlock = CYCLE_BLOCKSIZE_MIN;
-    counters->McsPerBlock = counters->TotalGoalMcs / CYCLE_BLOCKCOUNT;
+    counters->CyclesPerExecutionLoop = counters->McsPerExecutionPhase * CYCLE_BLOCKSIZE_MUL;
+    counters->CyclesPerExecutionLoop = getMinOfTwo(counters->CyclesPerExecutionLoop, CYCLE_BLOCKSIZE_MAX);
+    counters->CyclesPerExecutionLoop = getMinOfTwo(counters->CyclesPerExecutionLoop, CYCLE_BLOCKSIZE_MIN);
+
     return ERR_OK;
 }
 
@@ -32,16 +36,17 @@ error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAM, PhysicalInfo_t *fa
 {
     return_if (factors == NULL, ERR_NULLPOINTER);
 
-    factors->EnergyConversionFactor = CalcEnergyConversionFactor(SCONTEXT);
-    factors->InverseEnergyConversionFactor = 1.0 / factors->EnergyConversionFactor;
+    factors->EnergyFactorEvToKt = GetEnergyFactorEvToKt(SCONTEXT);
+    factors->EnergyFactorKtToEv = 1.0 / factors->EnergyFactorEvToKt;
 
     return_if (!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC), ERR_OK);
 
-    if (isfinite(CalcBasicJumpNormalization(SCONTEXT)))
-        factors->TotalNormalizationFactor = CalcTotalJumpNormalization(SCONTEXT);
+    let jobHeader = getDbModelJobHeaderAsKMC(SCONTEXT);
+    if (isfinite(GetBasicJumpNormalization(SCONTEXT)))
+        factors->TotalJumpNormalization = GetTotalJumpNormalization(SCONTEXT);
     else
-        factors->TotalNormalizationFactor = getDbModelJobHeaderAsKMC(SCONTEXT)->FixedNormFactor;
+        factors->TotalJumpNormalization = jobHeader->FixedNormalizationFactor;
 
-    factors->CurrentTimeStepping = CalcTimeStepPerJump(SCONTEXT);
+    factors->TimeStepPerJumpAttempt = GetCurrentTimeStepPerJumpAttempt(SCONTEXT);
     return ERR_OK;
 }

@@ -62,7 +62,7 @@ static inline void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHi
 // Updates the jump statistics affiliated with the passed environment state in the current simulation cycle context
 static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAM, const byte_t pathId)
 {
-    let toEvFactor = getPhysicalFactors(SCONTEXT)->InverseEnergyConversionFactor;
+    let toEvFactor = getPhysicalFactors(SCONTEXT)->EnergyFactorKtToEv;
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
     var jumpStatistic = getJumpStatisticAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
 

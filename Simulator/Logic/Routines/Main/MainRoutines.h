@@ -45,23 +45,26 @@ error_t ResetContextAfterPreRun(SCONTEXT_PARAM);
 // Starts the main simulation routine including a potential pre-run
 error_t StartMainSimulationRoutine(SCONTEXT_PARAM);
 
+// Start the kinetic monte carlo pre-run routine
+error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM);
+
 // Start the main kinetic monte carlo routine
 error_t KMC_StartMainRoutine(SCONTEXT_PARAM);
 
 // Start the main metropolis monte carlo routine
 error_t MMC_StartMainRoutine(SCONTEXT_PARAM);
 
-// Run the kmc simulation for the next cycle block
-error_t KMC_DoNextCycleBlock(SCONTEXT_PARAM);
+// Run the kmc simulation for one execution phase
+error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM);
 
-// Finishes a kmc cycle block completion
-error_t KMC_FinishCycleBlock(SCONTEXT_PARAM);
+// Finishes a kmc execution phase
+error_t KMC_FinishExecutionPhase(SCONTEXT_PARAM);
 
-// Run the mmc simulation for the next cycle block
-error_t MMC_DoNextCycleBlock(SCONTEXT_PARAM);
+// Run the mmc simulation for one execution phase
+error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM);
 
-// Finishes a mmc cycle block completion
-error_t MMC_FinishCycleBlock(SCONTEXT_PARAM);
+// Finishes the mmc execution phase
+error_t MMC_FinishExecutionPhase(SCONTEXT_PARAM);
 
 // Evaluate the abort conditions for a kmc simulation
 error_t KMC_CheckAbortConditions(SCONTEXT_PARAM);
@@ -84,7 +87,7 @@ void KMC_SetNextJumpSelection(SCONTEXT_PARAM);
 void KMC_SetJumpPathProperties(SCONTEXT_PARAM);
 
 // Tries to set the active KMC jump rule in the simulation context. Returns false if no rule for the current path exists
-bool_t KMC_TrySetJumpRule(SCONTEXT_PARAM);
+JumpRule_t* KMC_TrySetActiveJumpRule(SCONTEXT_PARAM);
 
 // Set the energetic KMC jump properties on the context
 void KMC_SetJumpProperties(SCONTEXT_PARAM);
@@ -104,7 +107,7 @@ void MMC_SetNextJumpSelection(SCONTEXT_PARAM);
 void MMC_SetJumpPathProperties(SCONTEXT_PARAM);
 
 // Tries to set the active MMC jump rule in the simulation context. Returns false if no rule for the current path exists
-bool_t MMC_TrySetJumpRule(SCONTEXT_PARAM);
+JumpRule_t* MMC_TrySetActiveJumpRule(SCONTEXT_PARAM);
 
 // Set the energetic MMC jump properties on the the context
 void MMC_SetJumpProperties(SCONTEXT_PARAM);

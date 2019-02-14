@@ -280,7 +280,7 @@ typedef struct JumpRule
     // The occupation code for the final state
     OccupationCode_t   StateCode2;
 
-    // The attempt frequency factor
+    // The attempt frequency factor that describes the fraction of the frequency modulus that is applied
     double      FrequencyFactor;
 
     // The electric field rule factor that encodes direction
@@ -384,7 +384,7 @@ typedef struct KmcHeader
     double      AttemptFrequencyModulus;
 
     // Fixed norm factor for the simulation
-    double      FixedNormFactor;
+    double      FixedNormalizationFactor;
 
 } KmcHeader_t;
 

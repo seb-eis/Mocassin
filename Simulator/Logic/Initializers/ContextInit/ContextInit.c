@@ -41,10 +41,10 @@ static void AllocateEnvironmentBuffers(EnvironmentState_t *restrict env, Environ
 static void AllocateEnvironmentLattice(SCONTEXT_PARAM)
 {
     let sizes = getLatticeSizeVector(SCONTEXT);
-    EnvironmentLattice_t lattice = new_Array(lattice, vecCoorSet4(*sizes));
-    setEnvironmentLattice(SCONTEXT, lattice);
+    var lattice = getEnvironmentLattice(SCONTEXT);
+    *lattice = new_Array(*lattice, vecCoorSet4(*sizes));
 
-    for (int32_t i = 0; i < lattice.Header->Size;)
+    for (int32_t i = 0; i < lattice->Header->Size;)
     {
         for (int32_t j = 0; j < sizes->D; ++j)
         {
@@ -75,8 +75,12 @@ static void AllocateLatticeEnergyBuffer(Flp64Buffer_t *restrict bufferAccess, Mm
 // Allocates the abort condition buffers if they are required
 static void AllocateAbortConditionBuffers(SCONTEXT_PARAM)
 {
-    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC))
-        AllocateLatticeEnergyBuffer(getLatticeEnergyBuffer(SCONTEXT), getDbModelJobInfo(SCONTEXT)->JobHeader);
+    voidreturn_if(!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC))
+
+    let jobInfo = getDbModelJobInfo(SCONTEXT);
+    var energyBuffer = getLatticeEnergyBuffer(SCONTEXT);
+
+    AllocateLatticeEnergyBuffer(energyBuffer, jobInfo ->JobHeader);
 }
 
 // Constructs the dynamic simulation model
@@ -89,13 +93,14 @@ static void ConstructSimulationModel(SCONTEXT_PARAM)
 // Constructs the selection pool index redirection that redirects jump counts to selection pool id
 static error_t ConstructSelectionPoolIndexRedirection(SCONTEXT_PARAM)
 {
-    let maxPoolCount = 1 + FindMaxJumpDirectionCount(&getDbTransitionModel(SCONTEXT)->JumpCountMappingTable);
+    let transitionModel = getDbTransitionModel(SCONTEXT);
+    let maxPoolCount = 1 + FindMaxJumpDirectionCount(&transitionModel->JumpCountMappingTable);
+    var poolMapping = getDirectionPoolMapping(SCONTEXT);
+    var selectionPool = getJumpSelectionPool(SCONTEXT);
     int32_t poolIndex = 1;
-    IdRedirection_t poolMapping = new_Span(poolMapping, maxPoolCount);
 
-    setDirectionPoolMapping(SCONTEXT, poolMapping);
-
-    cpp_foreach(dirCount, getDbTransitionModel(SCONTEXT)->JumpCountMappingTable)
+    *poolMapping = new_Span(*poolMapping, maxPoolCount);
+    cpp_foreach(dirCount, transitionModel->JumpCountMappingTable)
     {
         if ((*dirCount > JPOOL_DIRCOUNT_PASSIVE) && (getDirectionPoolIdByJumpCount(SCONTEXT, *dirCount) == 0))
         {
@@ -103,8 +108,7 @@ static error_t ConstructSelectionPoolIndexRedirection(SCONTEXT_PARAM)
             poolIndex++;
         }
     }
-
-    getJumpSelectionPool(SCONTEXT)->DirectionPoolCount = poolIndex;
+    selectionPool->DirectionPoolCount = poolIndex;
     return ERR_OK;
 }
 
@@ -113,32 +117,26 @@ static error_t ConstructSelectionPoolDirectionBuffers(SCONTEXT_PARAM)
 {
     let poolCount = getJumpSelectionPool(SCONTEXT)->DirectionPoolCount;
     let poolSize = getNumberOfSelectables(SCONTEXT);
+    let poolMapping = getDirectionPoolMapping(SCONTEXT);
+    var directionPools = getDirectionPools(SCONTEXT);
 
-    DirectionPools_t directionPools = new_Span(directionPools, poolCount);
-    setDirectionPools(SCONTEXT, directionPools);
-
-    cpp_foreach(dirPool, directionPools)
-    {
-        EnvironmentPool_t envPool = new_List(envPool, poolSize);
-        dirPool->EnvironmentPool = envPool;
-    }
+    *directionPools = new_Span(*directionPools, poolCount);
+    cpp_foreach(dirPool, *directionPools)
+        dirPool->EnvironmentPool = new_List(dirPool->EnvironmentPool, poolSize);
 
     int32_t jumpCount = 0;
-    cpp_foreach(id, *getDirectionPoolMapping(SCONTEXT))
+    cpp_foreach(id, *poolMapping)
     {
-        if (*id > 0) span_Get(directionPools, *id).DirectionCount = jumpCount;
+        if (*id > 0) span_Get(*directionPools, *id).DirectionCount = jumpCount;
         jumpCount++;
     }
-
     return ERR_OK;
 }
 
 // Construct the jump selection pool on the simulation context
 static void ConstructJumpSelectionPool(SCONTEXT_PARAM)
 {
-    error_t error;
-
-    error = ConstructSelectionPoolIndexRedirection(SCONTEXT);
+    var error = ConstructSelectionPoolIndexRedirection(SCONTEXT);
     error_assert(error, "Failed to construct selection pool indexing information.");
 
     error = ConstructSelectionPoolDirectionBuffers(SCONTEXT);
@@ -154,7 +152,8 @@ static inline int32_t GetStateHeaderDataSize(SCONTEXT_PARAM)
 // Configure the state header access address and return the number of used buffer bytes
 static int32_t ConfigStateHeaderAccess(SCONTEXT_PARAM)
 {
-    getMainStateHeader(SCONTEXT)->Data = getMainStateBufferAddress(SCONTEXT, 0);
+    var stateHeader = getMainStateHeader(SCONTEXT);
+    stateHeader->Data = getMainStateBufferAddress(SCONTEXT, 0);
     return GetStateHeaderDataSize(SCONTEXT);
 }
 
@@ -168,9 +167,11 @@ static inline int32_t GetStateMetaDataSize(SCONTEXT_PARAM)
 static int32_t ConfigStateMetaAccess(SCONTEXT_PARAM, const int32_t usedBufferBytes)
 {
     let cfgBufferBytes = GetStateMetaDataSize(SCONTEXT);
+    var headerData = getMainStateHeader(SCONTEXT)->Data;
+    var metaInfo = getMainStateMetaInfo(SCONTEXT);
 
-    getMainStateHeader(SCONTEXT)->Data->MetaStartByte = usedBufferBytes;   
-    getMainStateMetaInfo(SCONTEXT)->Data = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
+    headerData->MetaStartByte = usedBufferBytes;
+    metaInfo->Data = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
 
     return usedBufferBytes + cfgBufferBytes;
 }
@@ -178,7 +179,8 @@ static int32_t ConfigStateMetaAccess(SCONTEXT_PARAM, const int32_t usedBufferByt
 // Get the number of bytes the state lattice data requires
 static inline int32_t GetStateLatticeDataSize(SCONTEXT_PARAM)
 {
-    return getDbLatticeModel(SCONTEXT)->Lattice.Header->Size;
+    let latticeModel = getDbLatticeModel(SCONTEXT);
+    return latticeModel->Lattice.Header->Size;
 }
 
 // Configure the state lattice access address and return the new number of used buffer bytes
@@ -291,24 +293,26 @@ static int32_t ConfigStateStaticTrackerAccess(SCONTEXT_PARAM, const int32_t used
 // Get the number of bytes the state mobile tracker mapping data requires
 static inline int32_t GetStateMobileTrackerMappingDataSize(SCONTEXT_PARAM)
 {
-    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        return getNumberOfMobiles(SCONTEXT) * sizeof(int32_t);
-
-    return 0;
+    let mobileCount = getNumberOfMobiles(SCONTEXT);
+    return (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
+        ? mobileCount * sizeof(int32_t)
+        : 0;
 }
 
 // Configure the state mobile tracking mapping access address and return the new number of used buffer bytes
 static int32_t ConfigStateMobileTrackerMappingAccess(SCONTEXT_PARAM, const int32_t usedBufferBytes)
 {
     let cfgBufferBytes = GetStateMobileTrackerMappingDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->MobileTrackerIdxStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
+    var headerData = getMainStateHeader(SCONTEXT)->Data;
 
+    headerData->MobileTrackerIdxStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
     return_if(cfgBufferBytes == 0, usedBufferBytes);
 
     var configObject = getMobileTrackerMapping(SCONTEXT);
+    let mobileCount = getNumberOfMobiles(SCONTEXT);
 
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + getNumberOfMobiles(SCONTEXT);
+    configObject->End = configObject->Begin + mobileCount;
 
     return usedBufferBytes + cfgBufferBytes;
 }
@@ -316,25 +320,26 @@ static int32_t ConfigStateMobileTrackerMappingAccess(SCONTEXT_PARAM, const int32
 // Get the number of bytes the state jump statistics data requires
 static inline int32_t GetStateJumpStatisticsDataSize(SCONTEXT_PARAM)
 {
-    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        return getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers * sizeof(JumpStatistic_t);
-
-    return 0;
+    let structureModel = getDbStructureModel(SCONTEXT);
+    return (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
+        ? structureModel->NumOfGlobalTrackers * sizeof(JumpStatistic_t)
+        : 0;
 }
 
 // Configure the state jump probability tracking access address and return the new number of used buffer bytes
 static int32_t ConfigStateJumpStatisticsAccess(SCONTEXT_PARAM, const int32_t usedBufferBytes)
 {
     let cfgBufferBytes = GetStateJumpStatisticsDataSize(SCONTEXT);
-    getMainStateHeader(SCONTEXT)->Data->JumpStatisticsStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
+    var headerData = getMainStateHeader(SCONTEXT)->Data;
 
+    headerData->JumpStatisticsStartByte = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? usedBufferBytes : -1;
     return_if(cfgBufferBytes == 0, usedBufferBytes);
 
     var configObject = getJumpStatistics(SCONTEXT);
+    let structureModel = getDbStructureModel(SCONTEXT);
 
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers;
-
+    configObject->End = configObject->Begin + structureModel->NumOfGlobalTrackers;
     return usedBufferBytes + cfgBufferBytes;
 }
 
@@ -342,6 +347,7 @@ static int32_t ConfigStateJumpStatisticsAccess(SCONTEXT_PARAM, const int32_t use
 static error_t ConstructMainStateBufferAccessors(SCONTEXT_PARAM)
 {
     int32_t usedBufferBytes = 0;
+    let stateBuffer = getMainStateBuffer(SCONTEXT);
 
     usedBufferBytes = ConfigStateHeaderAccess(SCONTEXT);
     usedBufferBytes = ConfigStateMetaAccess(SCONTEXT, usedBufferBytes);
@@ -353,7 +359,7 @@ static error_t ConstructMainStateBufferAccessors(SCONTEXT_PARAM)
     usedBufferBytes = ConfigStateMobileTrackerMappingAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateJumpStatisticsAccess(SCONTEXT, usedBufferBytes);
 
-    return (usedBufferBytes == span_GetSize(*getMainStateBuffer(SCONTEXT))) ? ERR_OK : ERR_DATACONSISTENCY;
+    return (usedBufferBytes == span_GetSize(*stateBuffer)) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Calculates the required size in bytes for the main simulation state buffer
@@ -377,17 +383,15 @@ static int32_t CalculateMainStateBufferSize(SCONTEXT_PARAM)
 // Construct the simulation main state on the simulation context
 static void ConstructMainState(SCONTEXT_PARAM)
 {
-    error_t error;
+    var stateBuffer = getMainStateBuffer(SCONTEXT);
+    var state = getSimulationState(SCONTEXT);
+    var jobInfo = getDbModelJobInfo(SCONTEXT);
 
-    memset(getSimulationState(SCONTEXT), 0, sizeof(SimulationState_t));
+    memset(state, 0, sizeof(SimulationState_t));
+    jobInfo->StateSize = CalculateMainStateBufferSize(SCONTEXT);
+    *stateBuffer = new_Span(*stateBuffer, jobInfo->StateSize);
 
-    getDbModelJobInfo(SCONTEXT)->StateSize = CalculateMainStateBufferSize(SCONTEXT);
-    let stateSize = (size_t) getDbModelJobInfo(SCONTEXT)->StateSize;
-
-    Buffer_t stateBuffer = new_Span(stateBuffer, stateSize);
-    *getMainStateBuffer(SCONTEXT) = stateBuffer;
-
-    error = ConstructMainStateBufferAccessors(SCONTEXT);
+    var error = ConstructMainStateBufferAccessors(SCONTEXT);
     error_assert(error, "Failed to construct main state buffer accessor system.");
 }
 
@@ -404,13 +408,10 @@ static error_t TryLoadOutputPlugin(SCONTEXT_PARAM)
 {
     error_t error = ERR_OK;
     let fileInfo = getFileInformation(SCONTEXT);
+    var plugins = getPluginCollection(SCONTEXT);
 
-    if ((fileInfo->OutputPluginPath) == NULL || (fileInfo->OutputPluginSymbol == NULL))
-    {
-        return ERR_USEDEFAULT;
-    }
-
-    if ((getPluginCollection(SCONTEXT)->OnDataOutput = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
+    return_if((fileInfo->OutputPluginPath) == NULL || (fileInfo->OutputPluginSymbol == NULL), ERR_USEDEFAULT);
+    if ((plugins->OnDataOutput = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
@@ -428,13 +429,10 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAM)
 {
     error_t error = ERR_OK;
     let fileInfo = getFileInformation(SCONTEXT);
+    var plugins = getPluginCollection(SCONTEXT);
 
-    if ((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyPluginSymbol == NULL))
-    {
-        return ERR_USEDEFAULT;
-    }
-
-    if ((getPluginCollection(SCONTEXT)->OnSetJumpProbabilities = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
+    return_if((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyPluginSymbol == NULL), ERR_USEDEFAULT);
+    if ((plugins->OnSetJumpProbabilities = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
@@ -450,16 +448,19 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAM)
 // Sets the energy plugin function to the internal default function
 static inline void SetEnergyPluginFunctionToDefault(SCONTEXT_PARAM)
 {
+    var plugins = getPluginCollection(SCONTEXT);
+
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        getPluginCollection(SCONTEXT)->OnSetJumpProbabilities = (FPlugin_t) KMC_SetJumpProbabilities;
+        plugins->OnSetJumpProbabilities = (FPlugin_t) KMC_SetJumpProbabilities;
     else
-        getPluginCollection(SCONTEXT)->OnSetJumpProbabilities = (FPlugin_t) MMC_SetJumpProbabilities;
+        plugins->OnSetJumpProbabilities = (FPlugin_t) MMC_SetJumpProbabilities;
 }
 
 // Set the output plugin function to the internal default
 static inline void SetOutputPluginFunctionToDefault(SCONTEXT_PARAM)
 {
-    getPluginCollection(SCONTEXT)->OnDataOutput = NULL;
+    var plugins = getPluginCollection(SCONTEXT);
+    plugins->OnDataOutput = NULL;
 }
 
 // Populates the plugin delegates to either loadable plugins or the internal default
@@ -496,7 +497,6 @@ static error_t TryLoadSimulationState(SCONTEXT_PARAM)
         EnsureFileIsDeleted(FILE_PRERSTATE);
         return error;
     }
-
     error = TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE);
     return error;
 }
@@ -504,9 +504,12 @@ static error_t TryLoadSimulationState(SCONTEXT_PARAM)
 // Copies the database random number generator seed information to the main simulation state
 static error_t CopyDbRngInfoToMainState(SCONTEXT_PARAM)
 {
-    getMainStateMetaData(SCONTEXT)->RngState = getDbModelJobInfo(SCONTEXT)->RngStateSeed;
-    getMainStateMetaData(SCONTEXT)->RngIncrease = getDbModelJobInfo(SCONTEXT)->RngIncSeed;
-    return ((getMainStateMetaData(SCONTEXT)->RngIncrease & 1) != 0) ? ERR_OK : ERR_DATACONSISTENCY;
+    let jobInfo = getDbModelJobInfo(SCONTEXT);
+    var metaData = getMainStateMetaData(SCONTEXT);
+
+    metaData->RngState = jobInfo->RngStateSeed;
+    metaData->RngIncrease = jobInfo->RngIncSeed;
+    return ((metaData->RngIncrease & 1) != 0) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Copies the database lattice information to the simulation main state
@@ -554,9 +557,7 @@ static void SetMainStateFlagsToStartConditions(SCONTEXT_PARAM)
 // Synchronizes the main state to the database model by overwriting existing information in the state
 static error_t SyncMainStateToDatabaseModel(SCONTEXT_PARAM)
 {
-    error_t error;
-
-    error = CopyDbLatticeToMainState(SCONTEXT);
+    var error = CopyDbLatticeToMainState(SCONTEXT);
     return_if(error, error);
 
     error = CopyDbRngInfoToMainState(SCONTEXT);
@@ -603,7 +604,7 @@ static error_t SyncMobileTrackersWithState(SCONTEXT_PARAM)
 static error_t SyncDynamicModelToMainState(SCONTEXT_PARAM)
 {
     // ToDo: Potentially incomplete sync. review during testing
-    error_t error = SyncDynamicEnvironmentsWithState(SCONTEXT);
+    var error = SyncDynamicEnvironmentsWithState(SCONTEXT);
     return_if(error, error);
 
     error = SyncMobileTrackersWithState(SCONTEXT);
@@ -636,9 +637,7 @@ static void PopulateSimulationState(SCONTEXT_PARAM)
 // Populates the constructed dynamic simulation model with the required run information
 static void PopulateDynamicSimulationModel(SCONTEXT_PARAM)
 {
-    error_t error;
-
-    error = SyncDynamicModelToMainState(SCONTEXT);
+    var error = SyncDynamicModelToMainState(SCONTEXT);
     error_assert(error, "Data structure synchronization failed (state ==> dynamic model).");
 }
 
@@ -646,20 +645,20 @@ static void PopulateDynamicSimulationModel(SCONTEXT_PARAM)
 static error_t SyncCycleCountersWithStateStatus(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
-    var stHeader = getMainStateHeader(SCONTEXT)->Data;
+    var stateHeader = getMainStateHeader(SCONTEXT)->Data;
     
-    counters->Cycles = stHeader->Cycles;
-    counters->Mcs = stHeader->Mcs;
+    counters->CurrentCycles = stateHeader->Cycles;
+    counters->CurrentMcs = stateHeader->Mcs;
 
-    return (counters->Mcs < counters->TotalGoalMcs) ? ERR_OK : ERR_DATACONSISTENCY;
+    return (counters->CurrentMcs < counters->TotalSimulationGoalMcs) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Synchronizes the simulation cycle state to the main simulation state
 static void SyncSimulationCycleStateWithModel(SCONTEXT_PARAM)
 {
-    error_t error;
+    var cycleCounters = getMainCycleCounters(SCONTEXT);
 
-    error = SetCycleCounterToDefaultStatus(SCONTEXT, getMainCycleCounters(SCONTEXT));
+    var error = SetCycleCounterStateToDefault(SCONTEXT, cycleCounters);
     error_assert(error, "Failed to set default main counter status.");
 
     error = SyncCycleCountersWithStateStatus(SCONTEXT);
@@ -669,11 +668,11 @@ static void SyncSimulationCycleStateWithModel(SCONTEXT_PARAM)
 // Synchronizes the selection pool with the prepared dynamic simulation model
 static void SyncSelectionPoolWithDynamicModel(SCONTEXT_PARAM)
 {
-    error_t error;
+    let lattice = getEnvironmentLattice(SCONTEXT);
 
-    for (int32_t i = 0; i < getEnvironmentLattice(SCONTEXT)->Header->Size; i++)
+    for (int32_t i = 0; i < lattice->Header->Size; i++)
     {
-        error = HandleEnvStatePoolRegistration(SCONTEXT, i);
+        var error = HandleEnvStatePoolRegistration(SCONTEXT, i);
         error_assert(error, "Could not register environment on the jump selection pool.");
     }
 }
@@ -681,17 +680,36 @@ static void SyncSelectionPoolWithDynamicModel(SCONTEXT_PARAM)
 // Converts all energy values in pair and cluster tables from [eV] to units of [kT]
 static error_t ConvertEnergyTablesToInternalUnits(SCONTEXT_PARAM)
 {
-    double conversionFactor = getPhysicalFactors(SCONTEXT)->EnergyConversionFactor;
-    return_if(!isfinite(conversionFactor) || (conversionFactor <  0), ERR_DATACONSISTENCY);
+    let pairTables = getPairEnergyTables(SCONTEXT);
+    let clusterTables = getClusterEnergyTables(SCONTEXT);
+    let factor = getPhysicalFactors(SCONTEXT)->EnergyFactorEvToKt;
+    return_if(!isfinite(factor) || (factor <  0), ERR_DATACONSISTENCY);
 
-    cpp_foreach(table, *getPairEnergyTables(SCONTEXT))
+    cpp_foreach(table, *pairTables)
         cpp_foreach(value, table->EnergyTable)
-            *value *= conversionFactor;
+            *value *= factor;
 
-
-    cpp_foreach(table, *getClusterEnergyTables(SCONTEXT))
+    cpp_foreach(table, *clusterTables)
         cpp_foreach(value, table->EnergyTable)
-            *value *= conversionFactor;
+            *value *= factor;
+
+    return ERR_OK;
+}
+
+// Corrects all loaded electric field mapping factors from [eV * m/V] to units of [kT]
+static error_t ConvertElectricFieldFactorsToInternalUnits(SCONTEXT_PARAM)
+{
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC), ERR_OK);
+
+    let jumpDirections = getJumpDirections(SCONTEXT);
+    let physicalFactors = getPhysicalFactors(SCONTEXT);
+    let jobHeader = getDbModelJobHeaderAsKMC(SCONTEXT);
+    let factor = physicalFactors->EnergyFactorEvToKt * jobHeader->ElectricFieldModulus;
+
+    return_if(!isfinite(factor) || (factor <  0), ERR_DATACONSISTENCY);
+
+    cpp_foreach(direction, *jumpDirections)
+        direction->ElectricFieldFactor *= factor;
 
     return ERR_OK;
 }
@@ -699,19 +717,25 @@ static error_t ConvertEnergyTablesToInternalUnits(SCONTEXT_PARAM)
 // Synchronizes the physical simulation with the loaded db data and makes required data corrections to the input data
 static void SyncPhysicalParametersAndEnergyTables(SCONTEXT_PARAM)
 {
-    error_t error;
+    var physicalFactors = getPhysicalFactors(SCONTEXT);
 
-    error = SetPhysicalSimulationFactorsToDefault(SCONTEXT, getPhysicalFactors(SCONTEXT));
+    var error = SetPhysicalSimulationFactorsToDefault(SCONTEXT, physicalFactors);
     error_assert(error, "Failed to calculate default physical factors.");
 
     error = ConvertEnergyTablesToInternalUnits(SCONTEXT);
     error_assert(error, "Failed to convert energy tables to internal units");
+
+    error = ConvertElectricFieldFactorsToInternalUnits(SCONTEXT);
+    error_assert(error, "Failed to convert field influence data to internal units");
 }
 
 // Initializes the random number generator from the main state seed information
 static void PopulateRngFromMainState(SCONTEXT_PARAM)
 {
-    SCONTEXT->Rng = (Pcg32_t) { getMainStateMetaData(SCONTEXT)->RngState, getMainStateMetaData(SCONTEXT)->RngIncrease };
+    var rng = getMainRng(SCONTEXT);
+    let metaData = getMainStateMetaData(SCONTEXT);
+
+    *rng = (Pcg32_t) { .State = metaData->RngState, .Inc = metaData->RngIncrease };
 }
 
 // Populates a freshly constructed simulation context with the required runtime information

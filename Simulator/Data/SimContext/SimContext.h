@@ -127,12 +127,23 @@ typedef struct JumpEnergyInfo
 // Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct CycleCounterState
 {
-    int64_t Cycles;
-    int64_t Mcs;
-    int64_t CyclesPerBlock;
-    int64_t McsPerBlock;
-    int64_t StepGoalMcs;
-    int64_t TotalGoalMcs;
+    // The total number of cycles
+    int64_t CurrentCycles;
+
+    // The total successful steps
+    int64_t CurrentMcs;
+
+    // The cycles per execution loop
+    int64_t CyclesPerExecutionLoop;
+
+    // The goal mcs per execution phase
+    int64_t McsPerExecutionPhase;
+
+    // The next total mcs an execution phase has to reach before entering the next write phase
+    int64_t NextExecutionPhaseGoalMcs;
+
+    // The simulation abort mcs count
+    int64_t TotalSimulationGoalMcs;
     
 } CycleCounterState_t;
 
@@ -292,16 +303,16 @@ typedef struct SimulationRunInfo
 typedef struct PhysicalInfo
 {
     // The energy conversion factor from [eV] to [kT]
-    double EnergyConversionFactor;
+    double EnergyFactorEvToKt;
 
     // The energy conversion factor from [kT] to [eV]
-    double InverseEnergyConversionFactor;
+    double EnergyFactorKtToEv;
 
     // The total jump normalization factor
-    double TotalNormalizationFactor;
+    double TotalJumpNormalization;
 
     // The current time stepping in [s]
-    double CurrentTimeStepping;
+    double TimeStepPerJumpAttempt;
     
 } PhysicalInfo_t;
 

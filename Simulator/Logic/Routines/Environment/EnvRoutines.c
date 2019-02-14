@@ -292,7 +292,6 @@ static void AddEnvPairEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_t* res
     {
         let tableId = span_Get(environment->EnvironmentDefinition->PairDefinitions, i).EnergyTableId;
         let pairTable = getPairEnergyTableAt(SCONTEXT, tableId);
-
         for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
         {
             let positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
@@ -319,26 +318,28 @@ static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_
     return_if(span_GetSize(environment->ClusterStates) != span_GetSize(environment->EnvironmentDefinition->ClusterDefinitions), ERR_DATACONSISTENCY);
 
     error_t error;
-    var cluster = environment->ClusterStates.Begin;
+    var clusterState = environment->ClusterStates.Begin;
+    let clusterStateEnd = environment->ClusterStates.End;
 
     cpp_foreach(clusterDefinition, environment->EnvironmentDefinition->ClusterDefinitions)
     {
+        return_if(clusterState == clusterStateEnd, ERR_DATACONSISTENCY);
         let clusterTable = getClusterEnergyTableAt(SCONTEXT, clusterDefinition->EnergyTableId);
         for (byte_t i = 0; clusterDefinition->EnvironmentPairIds[i] != POSITION_NULL; i++)
         {
             let codeByteId = clusterDefinition->EnvironmentPairIds[i];
-            SetCodeByteAt(&cluster->OccupationCode, i, span_Get(*occupationBuffer, codeByteId));
+            SetCodeByteAt(&clusterState->OccupationCode, i, span_Get(*occupationBuffer, codeByteId));
         }
-
-        error = InitializeClusterStateStatus(SCONTEXT, cluster, clusterTable);
+        error = InitializeClusterStateStatus(SCONTEXT, clusterState, clusterTable);
         return_if(error != ERR_OK, ERR_DATACONSISTENCY);
 
         for (int32_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
         {
             let positionParticleId = environment->EnvironmentDefinition->PositionParticleIds[j];
-            let energy = getClusterEnergyAt(clusterTable, positionParticleId, cluster->CodeId);
+            let energy = getClusterEnergyAt(clusterTable, positionParticleId, clusterState->CodeId);
             span_Get(environment->EnergyStates, positionParticleId) += energy;
         }
+        ++clusterState;
     }
 
     return ERR_OK;
@@ -375,6 +376,8 @@ void ResynchronizeEnvironmentEnergyStatus(SCONTEXT_PARAM)
     error_t error;
     double energy = 0;
     Buffer_t occupationBuffer;
+    var metaData = getMainStateMetaData(SCONTEXT);
+    let physicalFactors = getPhysicalFactors(SCONTEXT);
 
     error = AllocateDynamicEnvOccupationBuffer(SCONTEXT, &occupationBuffer);
     error_assert(error, "Buffer creation for environment occupation lookup failed.");
@@ -383,12 +386,9 @@ void ResynchronizeEnvironmentEnergyStatus(SCONTEXT_PARAM)
     {
         error = DynamicLookupEnvironmentStatus(SCONTEXT, envState->EnvironmentId, &occupationBuffer);
         error_assert(error, "Dynamic lookup of environment occupation and energy failed.");
-
         energy += GetEnvironmentStateEnergy(envState);
     }
-
-    getMainStateMetaData(SCONTEXT)->LatticeEnergy = energy * getPhysicalFactors(SCONTEXT)->InverseEnergyConversionFactor;
-
+    metaData->LatticeEnergy = energy * physicalFactors->EnergyFactorKtToEv;
     delete_Span(occupationBuffer);
 }
 
@@ -482,13 +482,15 @@ static inline void InvokeDeltaOfActiveCluster(SCONTEXT_PARAM, const byte_t updat
 // Invokes all changes on the cluster set of the passed environment link
 static void InvokeEnvironmentLinkClusterUpdates(SCONTEXT_PARAM, const EnvironmentLink_t *restrict environmentLink, const byte_t newParticleId)
 {
+    let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
-        SetActiveWorkCluster(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), clusterLink->ClusterId);
-        SetActiveWorkClusterTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), clusterLink);
+        SetActiveWorkCluster(SCONTEXT, workEnvironment, clusterLink->ClusterId);
+        SetActiveWorkClusterTable(SCONTEXT, workEnvironment, clusterLink);
+        let clusterTable = getActiveClusterTable(SCONTEXT);
+        let workCluster = getActiveWorkCluster(SCONTEXT);
 
-        UpdateClusterState(getActiveClusterTable(SCONTEXT), clusterLink, getActiveWorkCluster(SCONTEXT), newParticleId);
-
+        UpdateClusterState(clusterTable, clusterLink, workCluster, newParticleId);
         for (byte_t i = 0; getActiveParticleUpdateIdAt(SCONTEXT, i) != PARTICLE_NULL; i++)
             InvokeDeltaOfActiveCluster(SCONTEXT, i);
 
@@ -514,13 +516,14 @@ static inline void InvokeActiveLocalPairDelta(SCONTEXT_PARAM, const byte_t updat
 // Invokes the cluster changes of the passed environment link for local delta data with the provided particle information
 static inline void InvokeLocalEnvironmentLinkClusterDeltas(SCONTEXT_PARAM, const EnvironmentLink_t *restrict environmentLink, const byte_t updateParticleId)
 {
+    let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
-        SetActiveWorkCluster(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), clusterLink->ClusterId);
-
-        if (getActiveWorkCluster(SCONTEXT)->OccupationCode != getActiveWorkCluster(SCONTEXT)->OccupationCodeBackup)
+        SetActiveWorkCluster(SCONTEXT, workEnvironment, clusterLink->ClusterId);
+        let workCluster = getActiveWorkCluster(SCONTEXT);
+        if (workCluster->OccupationCode != workCluster->OccupationCodeBackup)
         {
-            SetActiveWorkClusterTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), clusterLink);
+            SetActiveWorkClusterTable(SCONTEXT, workEnvironment, clusterLink);
             InvokeDeltaOfActiveCluster(SCONTEXT, updateParticleId);
             LoadClusterStateBackup(getActiveWorkCluster(SCONTEXT));
         }
@@ -533,11 +536,14 @@ static inline void PrepareJumpLinkClusterStateChanges(SCONTEXT_PARAM, const Jump
     let environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
     SetActiveWorkEnvironment(SCONTEXT, environmentLink);
 
+    let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
+    var jumpRule = getActiveJumpRule(SCONTEXT);
     cpp_foreach(clusterLink, environmentLink->ClusterLinks)
     {
-        let newCodeByte = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, jumpLink->SenderPathId);
-        SetActiveWorkCluster(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), clusterLink->ClusterId);
-        SetCodeByteAt(&getActiveWorkCluster(SCONTEXT)->OccupationCode, clusterLink->CodeByteId, newCodeByte);
+        let newCodeByte = GetCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
+        SetActiveWorkCluster(SCONTEXT, workEnvironment, clusterLink->ClusterId);
+        var workCluster = getActiveWorkCluster(SCONTEXT);
+        SetCodeByteAt(&workCluster->OccupationCode, clusterLink->CodeByteId, newCodeByte);
     }
 }
 
@@ -545,12 +551,14 @@ static inline void PrepareJumpLinkClusterStateChanges(SCONTEXT_PARAM, const Jump
 static void InvokeJumpLinkDeltas(SCONTEXT_PARAM, const JumpLink_t* restrict jumpLink)
 {
     let environmentLink = getEnvLinkByJumpLink(SCONTEXT, jumpLink);
+    let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
+    let jumpRule = getActiveJumpRule(SCONTEXT);
 
     SetActiveWorkEnvironment(SCONTEXT, environmentLink);
-    SetActiveWorkPairTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
+    SetActiveWorkPairTable(SCONTEXT, workEnvironment, environmentLink);
 
-    let newParticleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, jumpLink->SenderPathId);
-    let updateParticleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, getActiveWorkEnvironment(SCONTEXT)->PathId);
+    let newParticleId = GetCodeByteAt(&jumpRule->StateCode2, jumpLink->SenderPathId);
+    let updateParticleId = GetCodeByteAt(&jumpRule->StateCode2, getActiveWorkEnvironment(SCONTEXT)->PathId);
 
     InvokeActiveLocalPairDelta(SCONTEXT, updateParticleId, JUMPPATH[jumpLink->SenderPathId]->ParticleId, newParticleId);
     InvokeLocalEnvironmentLinkClusterDeltas(SCONTEXT, environmentLink, updateParticleId);
@@ -562,7 +570,8 @@ static void DistributeEnvironmentUpdate(SCONTEXT_PARAM, EnvironmentState_t *rest
     cpp_foreach(environmentLink, environment->EnvironmentLinks)
     {
         SetActiveWorkEnvironment(SCONTEXT, environmentLink);
-        SetActiveWorkPairTable(SCONTEXT, getActiveWorkEnvironment(SCONTEXT), environmentLink);
+        let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
+        SetActiveWorkPairTable(SCONTEXT, workEnvironment, environmentLink);
         InvokeEnvironmentLinkUpdates(SCONTEXT, environmentLink, environment->ParticleId, newParticleId);
     }
 }
@@ -570,8 +579,8 @@ static void DistributeEnvironmentUpdate(SCONTEXT_PARAM, EnvironmentState_t *rest
 // Writes the state energy entry that is subjected to jump link changes to the environment energy backup buffer
 static inline void SetFinalStateEnergyBackup(SCONTEXT_PARAM, const byte_t pathId)
 {
-    let stateCode = &getActiveJumpRule(SCONTEXT)->StateCode2;
-    let updateParticleId = GetCodeByteAt(stateCode, pathId);
+    let jumpRule = getActiveJumpRule(SCONTEXT);
+    let updateParticleId = GetCodeByteAt(&jumpRule->StateCode2, pathId);
     *getEnvStateEnergyBackupById(SCONTEXT, pathId) = *getPathStateEnergyByIds(SCONTEXT, pathId, updateParticleId);
 }
 
@@ -588,9 +597,10 @@ static inline void LoadFinalStateEnergyBackup(SCONTEXT_PARAM, const byte_t pathI
 void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM)
 {
     let jumpStatus = getActiveJumpStatus(SCONTEXT);
+    let JumpDirection = getActiveJumpDirection(SCONTEXT);
 
     // Backup all required energy states
-    for (byte_t i = 0; i < getActiveJumpDirection(SCONTEXT)->JumpLength; ++i)
+    for (byte_t i = 0; i < JumpDirection->JumpLength; ++i)
         SetFinalStateEnergyBackup(SCONTEXT, i);
 
     // Prepare the cluster state changes to avoid multiple code lookups
@@ -604,7 +614,8 @@ void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM)
 
 void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAM)
 {
-    for(byte_t i = 0; i < getActiveJumpDirection(SCONTEXT)->JumpLength; i++)
+    let jumpDirection = getActiveJumpDirection(SCONTEXT);
+    for(byte_t i = 0; i < jumpDirection->JumpLength; i++)
         LoadFinalStateEnergyBackup(SCONTEXT, i);
 }
 
@@ -618,40 +629,38 @@ void KMC_SetStateEnergies(SCONTEXT_PARAM)
 
 void KMC_SetStartAndTransitionStateEnergies(SCONTEXT_PARAM)
 {
+    let jumpDirection = getActiveJumpDirection(SCONTEXT);
+    let jumpRule = getActiveJumpRule(SCONTEXT);
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
-    var particleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode0, 0);
+    var particleId = GetCodeByteAt(&jumpRule->StateCode0, 0);
 
     // Set the values of the first entry, the first transition state energy is always zero
     energyInfo->Energy0 = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
     energyInfo->Energy1 = 0;
-
     // Add all remaining components to start and transition state
-    for (byte_t i = 1; i < getActiveJumpDirection(SCONTEXT)->JumpLength;i++)
+    for (byte_t i = 1; i < jumpDirection->JumpLength;i++)
     {
-        if(JUMPPATH[i]->IsStable)
-        {
-            particleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode0, i);
+            // ToDo: Verify that leaving out the stability check branching performs better
+            particleId = GetCodeByteAt(&jumpRule->StateCode0, i);
             energyInfo->Energy0 += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
-        }
-        else
-        {
-            particleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode1, i);
+            particleId = GetCodeByteAt(&jumpRule->StateCode1, i);
             energyInfo->Energy1 += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
-        }
     }
 }
 
 void KMC_SetFinalStateEnergy(SCONTEXT_PARAM)
 {
+    let jumpRule = getActiveJumpRule(SCONTEXT);
+    let jumpDirection = getActiveJumpDirection(SCONTEXT);
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
-    var particleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, 0);
+    var particleId = GetCodeByteAt(&jumpRule->StateCode2, 0);
 
     // Set the values of the first entry
     energyInfo->Energy2 = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
 
-    for(byte_t i = 1; i < getActiveJumpDirection(SCONTEXT)->JumpLength;i++)
+    for(byte_t i = 1; i < jumpDirection->JumpLength;i++)
     {
-        particleId = GetCodeByteAt(&getActiveJumpRule(SCONTEXT)->StateCode2, i);
+        particleId = GetCodeByteAt(&jumpRule->StateCode2, i);
         energyInfo->Energy2 += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
     }
 }
@@ -659,10 +668,12 @@ void KMC_SetFinalStateEnergy(SCONTEXT_PARAM)
 void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAM)
 {
     let stateCode = &getActiveJumpRule(SCONTEXT)->StateCode2;
-    for(byte_t i = 0; i < getActiveJumpDirection(SCONTEXT)->JumpLength; i++)
+    let jumpDirection = getActiveJumpDirection(SCONTEXT);
+
+    for(byte_t i = 0; i < jumpDirection->JumpLength; i++)
     {
         let newParticleId = GetCodeByteAt(stateCode, i);
-        if(JUMPPATH[i]->IsStable) DistributeEnvironmentUpdate(SCONTEXT, JUMPPATH[i], newParticleId);
+        DistributeEnvironmentUpdate(SCONTEXT, JUMPPATH[i], newParticleId);
         JUMPPATH[i]->ParticleId = newParticleId;
     }
 }
@@ -720,37 +731,34 @@ void MMC_SetStateEnergies(SCONTEXT_PARAM)
 
 void MMC_SetStartStateEnergy(SCONTEXT_PARAM)
 {
-    let stateCode = &getActiveJumpRule(SCONTEXT)->StateCode0;
+    let jumpRule = getActiveJumpRule(SCONTEXT);
     var jumpEnergyInfo = getJumpEnergyInfo(SCONTEXT);
 
-    let particleId0 = GetCodeByteAt(stateCode, 0);
+    let particleId0 = GetCodeByteAt(&jumpRule->StateCode0, 0);
     jumpEnergyInfo->Energy0 =  *getPathStateEnergyByIds(SCONTEXT, 0, particleId0);
-
-    let particleId1 = GetCodeByteAt(stateCode, 1);
+    let particleId1 = GetCodeByteAt(&jumpRule->StateCode0, 1);
     jumpEnergyInfo->Energy0 += *getPathStateEnergyByIds(SCONTEXT, 1, particleId1);
 }
 
 void MMC_SetFinalStateEnergy(SCONTEXT_PARAM)
 {
-    let stateCode = &getActiveJumpRule(SCONTEXT)->StateCode2;
+    let jumpRule = getActiveJumpRule(SCONTEXT);
     var jumpEnergyInfo = getJumpEnergyInfo(SCONTEXT);
 
-    let particleId0 = GetCodeByteAt(stateCode, 0);
+    let particleId0 = GetCodeByteAt(&jumpRule->StateCode2, 0);
     jumpEnergyInfo->Energy2 =  *getPathStateEnergyByIds(SCONTEXT, 0, particleId0);
-
-    let particleId1 = GetCodeByteAt(stateCode, 1);
+    let particleId1 = GetCodeByteAt(&jumpRule->StateCode2, 1);
     jumpEnergyInfo->Energy2 += *getPathStateEnergyByIds(SCONTEXT, 1, particleId1);
 }
 
 void MMC_AdvanceSystemToFinalState(SCONTEXT_PARAM)
 {
-    let stateCode = &getActiveJumpRule(SCONTEXT)->StateCode2;
-    let newParticleId0 = GetCodeByteAt(stateCode, 0);
-    let newParticleId1 = GetCodeByteAt(stateCode, 1);
+    let jumpRule = getActiveJumpRule(SCONTEXT);
+    let newParticleId0 = GetCodeByteAt(&jumpRule->StateCode2, 0);
+    let newParticleId1 = GetCodeByteAt(&jumpRule->StateCode2, 1);
 
     DistributeEnvironmentUpdate(SCONTEXT, JUMPPATH[0], newParticleId0);
     JUMPPATH[0]->ParticleId = newParticleId0;
-
     DistributeEnvironmentUpdate(SCONTEXT, JUMPPATH[1], newParticleId1);
     JUMPPATH[1]->ParticleId = newParticleId1;
 }
