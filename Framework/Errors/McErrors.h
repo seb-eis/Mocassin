@@ -18,7 +18,7 @@
 #define MC_TESTBUILD
 
 // Define to enable all debug assertions
-#define ENABLE_DEBUG_ASSERTIONS
+//#define ENABLE_DEBUG_ASSERTIONS
 
 #if defined(ENABLE_DEBUG_ASSERTIONS)
     // Active debug assertion macro. Asserts that the condition is true during runtime

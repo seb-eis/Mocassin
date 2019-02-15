@@ -343,20 +343,20 @@ typedef struct FileInfo
     
 } FileInfo_t;
 
-// Type for floating point buffers with storage of last average
+// Type for floating point buffers with storage for last average
 // Layout@ggc_x86_64 => 32@[8,8,8,8]
 typedef struct Flp64Buffer
 {
-    // Buffer start ptr
+    // Buffer start ptr. Values are buffered as [kT]
     double* Begin;
 
-    // Buffer end ptr
+    // Buffer end ptr. Values are buffered as [kT]
     double* End;
 
-    // Capacity end ptr
+    // Capacity end ptr. Values are buffered as [kT]
     double* CapacityEnd;
 
-    // The last average value
+    // The last average value in [eV]
     double  LastAverage;
     
 } Flp64Buffer_t;
@@ -366,22 +366,22 @@ typedef struct Flp64Buffer
 typedef struct DynamicModel
 {
     // The simulation file information
-    FileInfo_t          FileInfo;
+    FileInfo_t              FileInfo;
 
     // The simulation physical factor collection
-    PhysicalInfo_t      PhysicalFactors;
+    PhysicalInfo_t          PhysicalFactors;
 
     // The lattice energy buffer
-    Flp64Buffer_t       LatticeEnergyBuffer;
+    Flp64Buffer_t           LatticeEnergyBuffer;
 
     // The simulation runtime information
-    SimulationRunInfo_t RuntimeInfo;
+    SimulationRunInfo_t     RuntimeInfo;
 
     // The simulation environment lattice
-    EnvironmentLattice_t  EnvironmentLattice;
+    EnvironmentLattice_t    EnvironmentLattice;
 
     // The jump status array
-    JumpStatusArray_t   JumpStatusArray;
+    JumpStatusArray_t       JumpStatusArray;
 
 } DynamicModel_t;
 

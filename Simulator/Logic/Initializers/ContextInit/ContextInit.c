@@ -60,7 +60,7 @@ static void AllocateEnvironmentLattice(SCONTEXT_PARAM)
 }
 
 // Allocates the lattice energy buffer by the passed mmc job header
-static void AllocateLatticeEnergyBuffer(Flp64Buffer_t *restrict bufferAccess, MmcHeader_t *restrict header)
+static void AllocateEnergyFluctuationAbortBuffer(Flp64Buffer_t *restrict bufferAccess, MmcHeader_t *restrict header)
 {
     Buffer_t tmp = new_Span(tmp, header->AbortSequenceLength * sizeof(double));
     *bufferAccess = (Flp64Buffer_t)
@@ -68,7 +68,7 @@ static void AllocateLatticeEnergyBuffer(Flp64Buffer_t *restrict bufferAccess, Mm
         .Begin = (void*) tmp.Begin,
         .End = (void*) tmp.Begin,
         .CapacityEnd = (void*) tmp.End,
-        .LastAverage = 0.0
+        .LastAverage = INFINITY
     };
 }
 
@@ -80,7 +80,7 @@ static void AllocateAbortConditionBuffers(SCONTEXT_PARAM)
     let jobInfo = getDbModelJobInfo(SCONTEXT);
     var energyBuffer = getLatticeEnergyBuffer(SCONTEXT);
 
-    AllocateLatticeEnergyBuffer(energyBuffer, jobInfo ->JobHeader);
+    AllocateEnergyFluctuationAbortBuffer(energyBuffer, jobInfo->JobHeader);
 }
 
 // Constructs the dynamic simulation model

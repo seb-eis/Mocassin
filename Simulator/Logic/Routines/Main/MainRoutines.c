@@ -143,6 +143,24 @@ static inline error_t CallOutputPlugin(SCONTEXT_PARAM)
     return SIMERROR;
 }
 
+// Writes the current jump delta energy of an MMC transition to the abort buffer
+static inline void MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT_PARAM)
+{
+    var buffer = getLatticeEnergyBuffer(SCONTEXT);
+    let energyInfo = getJumpEnergyInfo(SCONTEXT);
+    let factors = getPhysicalFactors(SCONTEXT);
+    if (buffer->End == buffer->CapacityEnd)
+    {
+        buffer->LastAverage = 0;
+        cpp_foreach(value, *buffer) buffer->LastAverage += *value;
+        buffer->LastAverage /= (double) list_GetCapacity(*buffer);
+        buffer->LastAverage *= factors->EnergyFactorKtToEv;
+        buffer->End = buffer->Begin;
+    }
+
+    list_PushBack(*buffer, energyInfo->Energy0To2);
+}
+
 // Action for cases where the MMC jump selection leads to an unstable end state
 static inline void KMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
 {
@@ -217,7 +235,6 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
-        return_if(KMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -260,6 +277,7 @@ static inline void MMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
 // Action for cases where the jump selection has been statistically accepted
 static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
 {
+    MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT);
     var activeCounters = getActiveCounters(SCONTEXT);
     var cycleCounters = getMainCycleCounters(SCONTEXT);
 
@@ -285,9 +303,7 @@ static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
 
 error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
-    // ToDo: Implement a save way to avoid stuck MMC simulations due to full lattice relaxation
     var counters = getMainCycleCounters(SCONTEXT);
-
     for (;counters->CurrentMcs < counters->NextExecutionPhaseGoalMcs; counters->CurrentCycles += counters->CyclesPerExecutionLoop)
     {
         for (size_t i = 0; i < counters->CyclesPerExecutionLoop; i++)
@@ -305,7 +321,6 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 MMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
-        return_if(MMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -393,11 +408,22 @@ error_t KMC_CheckAbortConditions(SCONTEXT_PARAM)
         : STATE_FLG_CONTINUE;
 }
 
+// Checks if the fluctuation in the energy abort buffer indicates a relaxed system
+static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAM)
+{
+    let metaData = getMainStateMetaData(SCONTEXT);
+    let jobHeader = getDbModelJobHeaderAsMMC(SCONTEXT);
+    let abortBuffer = getLatticeEnergyBuffer(SCONTEXT);
+    let limitFluctuation = fabs(metaData->LatticeEnergy * jobHeader->AbortTolerance);
+
+    return (isfinite(abortBuffer->LastAverage)) ? (limitFluctuation >= fabs(abortBuffer->LastAverage)) : false;
+}
+
 error_t MMC_CheckAbortConditions(SCONTEXT_PARAM)
 {
-    return (EvaluateGeneralAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE)
-        ? STATE_FLG_CONDABORT
-        : STATE_FLG_CONTINUE;
+    return_if(EvaluateGeneralAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, STATE_FLG_CONDABORT);
+    let isRelaxed = MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT);
+    return (isRelaxed) ? STATE_FLG_CONDABORT : STATE_FLG_CONTINUE;
 }
 
 error_t SyncMainStateLatticeToRunStatus(SCONTEXT_PARAM)
