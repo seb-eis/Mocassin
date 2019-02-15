@@ -205,12 +205,12 @@ static inline void OnPoolUpdateSelectableToSelectable(SCONTEXT_PARAM, JumpSelect
 // Creates the environment pool entry update using the provided environment state
 static inline void MakeEnvironmentPoolEntriesUpdate(SCONTEXT_PARAM, const JumpCountTable_t *restrict jumpCountTable, EnvironmentState_t *restrict environment)
 {
-    voidreturn_if(!environment->IsStable);
+    return_if(!environment->IsStable);
     var selectionPool = getJumpSelectionPool(SCONTEXT);
     let newPoolId = GetEnvironmentPoolId(selectionPool, jumpCountTable, environment);
 
     // Case: The pool id has not changed or both old and new are not selectable -> do nothing
-    voidreturn_if(environment->PoolId == newPoolId);
+    return_if(environment->PoolId == newPoolId);
 
     // Case: The pool id changed from not-selectable to selectable -> push new entry to affiliated pool
     if (environment->PoolId == JPOOL_NOT_SELECTABLE)

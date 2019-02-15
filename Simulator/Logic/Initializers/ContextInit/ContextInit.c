@@ -75,7 +75,7 @@ static void AllocateLatticeEnergyBuffer(Flp64Buffer_t *restrict bufferAccess, Mm
 // Allocates the abort condition buffers if they are required
 static void AllocateAbortConditionBuffers(SCONTEXT_PARAM)
 {
-    voidreturn_if(!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC))
+    return_if(!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC));
 
     let jobInfo = getDbModelJobInfo(SCONTEXT);
     var energyBuffer = getLatticeEnergyBuffer(SCONTEXT);
@@ -528,6 +528,8 @@ static error_t CopyDbLatticeToMainState(SCONTEXT_PARAM)
 // Translates the db lattice data into a mobile tracker id mapping on the state
 static error_t CopyDefaultMobileTrackersToMainState(SCONTEXT_PARAM)
 {
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC), ERR_OK);
+
     let dbLattice = getDbModelLattice(SCONTEXT);
     var mapping = getMobileTrackerMapping(SCONTEXT);
     int32_t trackerId = 0;
@@ -590,6 +592,8 @@ static error_t SyncDynamicEnvironmentsWithState(SCONTEXT_PARAM)
 // Synchronizes the mobile tracker information of the dynamic lattice with the mapping data from the main state
 static error_t SyncMobileTrackersWithState(SCONTEXT_PARAM)
 {
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC), ERR_OK);
+
     int32_t trackerId = 0;
     cpp_foreach(environmentId, getSimulationState(SCONTEXT)->MobileTrackerMapping)
     {

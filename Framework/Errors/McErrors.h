@@ -18,7 +18,7 @@
 #define MC_TESTBUILD
 
 // Define to enable all debug assertions
-//#define ENABLE_DEBUG_ASSERTIONS
+#define ENABLE_DEBUG_ASSERTIONS
 
 #if defined(ENABLE_DEBUG_ASSERTIONS)
     // Active debug assertion macro. Asserts that the condition is true during runtime
@@ -135,10 +135,7 @@ typedef int64_t cerror_t;
 #define error_assert(error, msg) runtime_assertion((error) == (ERR_OK), (error), (msg))
 
 // Macro for conditional one line returns statements
-#define return_if(cond, value) if (cond) return (value)
-
-// Macro for conditional one line returns statements without return value
-#define voidreturn_if(cond) if (cond) return;
+#define return_if(cond, ...) if (cond) return __VA_ARGS__
 
 // Macro for conditional one line continue statements
 #define continue_if(cond) if (cond) continue

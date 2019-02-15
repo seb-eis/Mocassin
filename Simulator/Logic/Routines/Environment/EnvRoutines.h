@@ -45,8 +45,8 @@ void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAM);
 
 /* Simulation routines MMC */
 
-// Backups required data and creates the local jump delta for MMC transitions
-void MMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM);
+// Backups required data and creates the local jump delta for MMC transitions if required, returns true if backup was required
+bool_t MMC_TryCreateBackupAndJumpDelta(SCONTEXT_PARAM);
 
 // Restores the pre-delta status of the system in MMC by loading the affiliated backups
 void MMC_LoadJumpDeltaBackup(SCONTEXT_PARAM);

@@ -83,7 +83,7 @@ static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAM, const byt
 static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAM, const byte_t pathId)
 {
     getEnvironmentBackup(SCONTEXT)->PathMobileMappings[pathId] = JUMPPATH[pathId]->MobileTrackerId;
-    voidreturn_if(!JUMPPATH[pathId]->IsMobile);
+    return_if(!JUMPPATH[pathId]->IsMobile);
 
     // ToDo: Optimize this to lookup the required globalTrackerId only once (Needed for movement and jump statistics)
     UpdatePathEnvironmentMovementTracking(SCONTEXT, pathId);

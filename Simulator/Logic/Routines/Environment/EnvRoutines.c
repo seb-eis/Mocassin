@@ -131,7 +131,7 @@ static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAM, const Enviro
 
     // Immobility OPT Part 1 and 2 - No incoming or outgoing updates for immobiles are required
     #if defined(OPT_LINK_ONLY_MOBILES)
-        voidreturn_if(!environment->IsMobile || !targetEnvironment->IsMobile);
+        return_if(!environment->IsMobile || !targetEnvironment->IsMobile);
     #endif
 
     // Use the uninitialized span access struct to count the elements before allocation!
@@ -679,38 +679,39 @@ void KMC_AdvanceSystemToFinalState(SCONTEXT_PARAM)
 }
 
 // Searches the passed environment state link collection for a link to the passed environment id and builds a matching jump link object
-static inline JumpLink_t MMC_BuildJumpLink(const EnvironmentState_t *restrict envState, const int32_t envId, const int32_t pathId)
+static inline JumpLink_t MMC_BuildJumpLink(const EnvironmentState_t *restrict envState, const int32_t targetEnvId)
 {
-    var result = (JumpLink_t) { .SenderPathId = pathId, .LinkId = 0 };
+    var result = (JumpLink_t) { .SenderPathId = envState->PathId, .LinkId = 0 };
     cpp_foreach(envLink, envState->EnvironmentLinks)
     {
-        return_if(envLink->EnvironmentId == envId, result);
+        return_if(envLink->EnvironmentId == targetEnvId, result);
         ++result.LinkId;
     }
     return (JumpLink_t){ .SenderPathId = INVALID_INDEX, .LinkId = INVALID_INDEX };
 }
 
-void MMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM)
+bool_t MMC_TryCreateBackupAndJumpDelta(SCONTEXT_PARAM)
 {
-    // Check if positions are within interaction range, if not no local delta has to be created
-    voidreturn_if(!PositionAreInInteractionRange(SCONTEXT, &JUMPPATH[0]->PositionVector, &JUMPPATH[1]->PositionVector));
+    // Check if the positions are potentially close enough to be linked
+    return_if(!PositionAreInInteractionRange(SCONTEXT, &JUMPPATH[0]->PositionVector, &JUMPPATH[1]->PositionVector), false);
+
+    // Find the required environment links and build matching temporary jump links if they exist
+    // If the first is not found the second can by definition not exist as well
+    let path0JumpLink = MMC_BuildJumpLink(JUMPPATH[0], JUMPPATH[1]->EnvironmentId);
+    return_if(path0JumpLink.LinkId == INVALID_INDEX, false);
+
+    let path1JumpLink = MMC_BuildJumpLink(JUMPPATH[1], JUMPPATH[0]->EnvironmentId);
 
     // Backup the final state energies
     SetFinalStateEnergyBackup(SCONTEXT, 0);
     SetFinalStateEnergyBackup(SCONTEXT, 1);
-
-    // Find the required environment links and build matching temporary jump links
-    let path0JumpLink = MMC_BuildJumpLink(JUMPPATH[0], JUMPPATH[1]->EnvironmentId, 0);
-    let path1JumpLink = MMC_BuildJumpLink(JUMPPATH[1], JUMPPATH[0]->EnvironmentId, 1);
-
-    debug_assert(path0JumpLink.LinkId != INVALID_INDEX);
-    debug_assert(path1JumpLink.LinkId != INVALID_INDEX);
 
     // Prepare the potential cluster state changes on both environments and invoke the link deltas
     PrepareJumpLinkClusterStateChanges(SCONTEXT, &path0JumpLink);
     PrepareJumpLinkClusterStateChanges(SCONTEXT, &path1JumpLink);
     InvokeJumpLinkDeltas(SCONTEXT, &path0JumpLink);
     InvokeJumpLinkDeltas(SCONTEXT, &path1JumpLink);
+    return true;
 }
 
 void MMC_LoadJumpDeltaBackup(SCONTEXT_PARAM)
@@ -723,9 +724,15 @@ void MMC_LoadJumpDeltaBackup(SCONTEXT_PARAM)
 void MMC_SetStateEnergies(SCONTEXT_PARAM)
 {
     MMC_SetStartStateEnergy(SCONTEXT);
-    MMC_CreateBackupAndJumpDelta(SCONTEXT);
+
+    // Try to create a backup if required, else the positions do not interact and the final energy can be directly set
+    if (MMC_TryCreateBackupAndJumpDelta(SCONTEXT))
+    {
+        MMC_SetFinalStateEnergy(SCONTEXT);
+        MMC_LoadJumpDeltaBackup(SCONTEXT);
+        return;
+    }
     MMC_SetFinalStateEnergy(SCONTEXT);
-    MMC_LoadJumpDeltaBackup(SCONTEXT);
 }
 
 

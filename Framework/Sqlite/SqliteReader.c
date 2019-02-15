@@ -346,19 +346,15 @@ static error_t AssignDirectionBuffersToJumpCollections(DbModel_t *dbModel)
     {
         if (jumpDirection->JumpCollectionId != collectionID)
         {
-            newEnd--;
-
             let subSpan = span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
             span_Get(dbModel->TransitionModel.JumpCollections, collectionID).JumpDirections = subSpan;
 
-            newEnd++;
             newBegin = newEnd;
             collectionID = jumpDirection->JumpCollectionId;
         }
-        newEnd++;
+        ++newEnd;
     }
 
-    newEnd--;
     let subDirections = span_Split(dbModel->TransitionModel.JumpDirections, newBegin, newEnd);
     span_Get(dbModel->TransitionModel.JumpCollections, collectionID).JumpDirections = subDirections;
 

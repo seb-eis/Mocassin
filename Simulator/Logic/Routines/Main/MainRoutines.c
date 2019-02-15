@@ -47,14 +47,6 @@ void PrepareForMainRoutine(SCONTEXT_PARAM)
     SetRuntimeInfoToCurrent(SCONTEXT);
 }
 
-error_t ResetContextAfterPreRun(SCONTEXT_PARAM)
-{
-    return_if(!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_USEPRERUN), ERR_OK);
-    setMainStateFlags(SCONTEXT, STATE_FLG_PRERUN_RESET);
-
-    return ERR_NOTIMPLEMENTED;
-}
-
 error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
 {
     runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
@@ -63,42 +55,35 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
     {
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
         {
-            SIMERROR = KMC_StartMainRoutine(SCONTEXT);
+            SIMERROR = KMC_StartPreRunRoutine(SCONTEXT);
             error_assert(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
-
-            SIMERROR = FinishRoutinePreRun(SCONTEXT);
-            error_assert(SIMERROR, "Pre-run finish of KMC main routine failed.")
         }
-        return KMC_StartMainRoutine(SCONTEXT);
+        return SIMERROR = KMC_StartMainRoutine(SCONTEXT);
     }
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC))
     {
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
         {
-            SIMERROR = MMC_StartMainRoutine(SCONTEXT);
+            SIMERROR = MMC_StartPreRunRoutine(SCONTEXT);
             error_assert(SIMERROR, "Pre-run execution of main KMC routine aborted with an error");
-
-            SIMERROR = FinishRoutinePreRun(SCONTEXT);
-            error_assert(SIMERROR, "Pre-run finish of KMC main routine failed.")
         }
-        return MMC_StartMainRoutine(SCONTEXT);
+        return SIMERROR = MMC_StartMainRoutine(SCONTEXT);
     }
 
     error_assert(ERR_UNKNOWN, "Main routine starter skipped selection process. Neither MMC nor KMC flags is set.");
     return ERR_UNKNOWN; // GCC [-Wall] expects return value, even with exit(..) statement
 }
 
-// Finishes the routine pre-run and resets the context for the main simulation routine
-error_t FinishRoutinePreRun(SCONTEXT_PARAM)
+// Start the KMC pre run routine
+error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM)
 {
-    SIMERROR = SaveSimulationState(SCONTEXT);
-    error_assert(SIMERROR, "State save after pre-run completion failed.");
+    return ERR_NOTIMPLEMENTED;
+}
 
-    SIMERROR = ResetContextAfterPreRun(SCONTEXT);
-    error_assert(SIMERROR, "Context reset after pre-run completion failed.");
-
-    UnsetMainStateFlags(SCONTEXT, STATE_FLG_PRERUN);
-    return SIMERROR;
+// Cleanup the context aftre a KMC pre run
+error_t KMC_FinishPreRunRoutine(SCONTEXT_PARAM)
+{
+    return ERR_NOTIMPLEMENTED;
 }
 
 // Starts the main kinetic simulation routine
@@ -117,6 +102,17 @@ error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
         PrintRunStatistics(SCONTEXT, stdout);
     }
     return KMC_FinishMainRoutine(SCONTEXT);
+}
+
+error_t MMC_StartPreRunRoutine(SCONTEXT_PARAM)
+{
+    return ERR_NOTIMPLEMENTED;
+}
+
+// Start the kinetic monte carlo pre-run routine
+error_t MMC_FinishPreRunRoutine(SCONTEXT_PARAM)
+{
+    return ERR_NOTIMPLEMENTED;
 }
 
 // Starts the main metropolis simulation routine
@@ -221,6 +217,7 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        return_if(KMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -288,7 +285,9 @@ static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
 
 error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
+    // ToDo: Implement a save way to avoid stuck MMC simulations due to full lattice relaxation
     var counters = getMainCycleCounters(SCONTEXT);
+
     for (;counters->CurrentMcs < counters->NextExecutionPhaseGoalMcs; counters->CurrentCycles += counters->CyclesPerExecutionLoop)
     {
         for (size_t i = 0; i < counters->CyclesPerExecutionLoop; i++)
@@ -306,6 +305,7 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 MMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        return_if(MMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -327,8 +327,10 @@ static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
 
     metaData->TimePerBlock = (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
     metaData->ProgramRunTime += (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
+
     var blockEta = metaData->TimePerBlock + metaData->ProgramRunTime;
     runInfo->PreviousBlockFinishClock = newClock;
+
     bool_t isTimeout = (metaData->ProgramRunTime >= jobInfo->TimeLimit) || (blockEta >jobInfo->TimeLimit);
     return isTimeout;
 }
@@ -339,6 +341,14 @@ static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
     let jobInfo = getDbModelJobInfo(SCONTEXT);
     let counters = getMainCycleCounters(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
+
+    // Fixes potential divisions by zero and avoids abort rate trigger on very fast simulations
+    if (metaData->ProgramRunTime == 0)
+    {
+        metaData->SuccessRate = INT64_MAX;
+        metaData->CycleRate = INT64_MAX;
+        return false;
+    }
 
     metaData->SuccessRate = counters->CurrentMcs / metaData->ProgramRunTime;
     metaData->CycleRate = counters->CurrentCycles / metaData->ProgramRunTime;
@@ -492,7 +502,7 @@ static inline void SetActiveJumpDirectionAndCollection(SCONTEXT_PARAM)
     cycleState->ActiveJumpCollection = getJumpCollectionAt(SCONTEXT, cycleState->ActiveJumpDirection->JumpCollectionId);
 }
 
-// Set the path start environment using the current inetranl state of the context
+// Set the path start environment using the current internal state of the context
 static inline void SetActivePathStartEnvironment(SCONTEXT_PARAM)
 {
     let selectionInfo = getJumpSelectionInfo(SCONTEXT);
@@ -628,14 +638,15 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
 void MMC_SetNextJumpSelection(SCONTEXT_PARAM)
 {
     MMC_RollNextJumpSelection(SCONTEXT);
-    SetActiveCounterCollection(SCONTEXT);
     SetActivePathStartEnvironment(SCONTEXT);
+    SetActiveCounterCollection(SCONTEXT);
     SetActiveJumpDirectionAndCollection(SCONTEXT);
 }
 
 void MMC_SetJumpPathProperties(SCONTEXT_PARAM)
 {
     let selectionInfo = getJumpSelectionInfo(SCONTEXT);
+    let jumpVector = getActiveJumpDirection(SCONTEXT)->JumpSequence.Begin;
     let lattice = getEnvironmentLattice(SCONTEXT);
     var cycleState = getCycleState(SCONTEXT);
 
@@ -643,11 +654,11 @@ void MMC_SetJumpPathProperties(SCONTEXT_PARAM)
     JUMPPATH[2] = getEnvironmentStateAt(SCONTEXT, selectionInfo->OffsetId);
     JUMPPATH[1] = getEnvironmentStateAt(SCONTEXT, 0);
 
-    // Advance the pointer by the affiliated block jumps
+    // Advance the pointer by the affiliated block jumps and the relative jump sequence entry
     JUMPPATH[1] += lattice->Header->Blocks[0] * JUMPPATH[2]->PositionVector.A;
     JUMPPATH[1] += lattice->Header->Blocks[1] * JUMPPATH[2]->PositionVector.B;
     JUMPPATH[1] += lattice->Header->Blocks[2] * JUMPPATH[2]->PositionVector.C;
-    JUMPPATH[1] += JUMPPATH[0]->PositionVector.D;
+    JUMPPATH[1] += jumpVector->D;
 
     // Correct the active state code byte and set the path id of the second environment state
     SetCodeByteAt(&cycleState->ActiveStateCode, 1, JUMPPATH[1]->ParticleId);

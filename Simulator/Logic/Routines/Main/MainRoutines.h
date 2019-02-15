@@ -19,9 +19,6 @@
 // Prepares the simulation context for the main simulation routine
 void PrepareForMainRoutine(SCONTEXT_PARAM);
 
-// Finishes the main routine pre-run and prepares for the actual run
-error_t FinishRoutinePreRun(SCONTEXT_PARAM);
-
 // Synchronizes the main simulation state to the current simulation status
 error_t SyncSimulationStateToRunStatus(SCONTEXT_PARAM);
 
@@ -39,20 +36,19 @@ error_t SaveSimulationState(SCONTEXT_PARAM);
 
 /* Main simulation routine functions with errors */
 
-// Resets the context after a simulation pre-run
-error_t ResetContextAfterPreRun(SCONTEXT_PARAM);
-
 // Starts the main simulation routine including a potential pre-run
 error_t StartMainSimulationRoutine(SCONTEXT_PARAM);
+
+/* KMC routine */
 
 // Start the kinetic monte carlo pre-run routine
 error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM);
 
+// Finishes the KMC pre run routine
+error_t KMC_FinishPreRunRoutine(SCONTEXT_PARAM);
+
 // Start the main kinetic monte carlo routine
 error_t KMC_StartMainRoutine(SCONTEXT_PARAM);
-
-// Start the main metropolis monte carlo routine
-error_t MMC_StartMainRoutine(SCONTEXT_PARAM);
 
 // Run the kmc simulation for one execution phase
 error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM);
@@ -60,20 +56,31 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM);
 // Finishes a kmc execution phase
 error_t KMC_FinishExecutionPhase(SCONTEXT_PARAM);
 
+// Evaluate the abort conditions for a kmc simulation
+error_t KMC_CheckAbortConditions(SCONTEXT_PARAM);
+
+// Finishes the main kmc routine
+error_t KMC_FinishMainRoutine(SCONTEXT_PARAM);
+
+/* MMC routine */
+
+// Start the MMC pre-run routine
+error_t MMC_StartPreRunRoutine(SCONTEXT_PARAM);
+
+// Finishes the MMC pre run routine
+error_t MMC_FinishPreRunRoutine(SCONTEXT_PARAM);
+
 // Run the mmc simulation for one execution phase
 error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM);
+
+// Start the main metropolis monte carlo routine
+error_t MMC_StartMainRoutine(SCONTEXT_PARAM);
 
 // Finishes the mmc execution phase
 error_t MMC_FinishExecutionPhase(SCONTEXT_PARAM);
 
-// Evaluate the abort conditions for a kmc simulation
-error_t KMC_CheckAbortConditions(SCONTEXT_PARAM);
-
 // Evaluate the abort condition for an mmc simulation
 error_t MMC_CheckAbortConditions(SCONTEXT_PARAM);
-
-// Finishes the main kmc routine
-error_t KMC_FinishMainRoutine(SCONTEXT_PARAM);
 
 // Finishes the main mmc routine
 error_t MMC_FinishMainRoutine(SCONTEXT_PARAM);

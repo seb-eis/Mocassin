@@ -134,9 +134,11 @@ static error_t ConstructJumpStatusCollection(SCONTEXT_PARAM)
     return error;
 }
 
-// Builds the jump status collection on an initialized simulation context
+// Builds the KMC jump status collection on an initialized simulation context
 void BuildJumpStatusCollection(SCONTEXT_PARAM)
 {
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC));
+
     error_t error;
 
     AllocateJumpStatusArray(SCONTEXT);

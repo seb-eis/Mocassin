@@ -110,7 +110,7 @@ static inline byte_t GetMaxParticleId(SCONTEXT_PARAM)
 {
     int32_t dimensions[2];
     GetArrayDimensions((VoidArray_t*) getJumpCountMapping(SCONTEXT), &dimensions[0]);
-    return (byte_t) dimensions[0];
+    return (byte_t) dimensions[1];
 }
 
 // Get the number of unit cells in the lattice
@@ -130,19 +130,14 @@ static inline int32_t GetPeriodicPointDistance(const int32_t pointA, const int32
 // Get a boolean value indicating if the two passed 4D positions are in interaction range
 static inline bool_t PositionAreInInteractionRange(SCONTEXT_PARAM, const Vector4_t* vector0, const Vector4_t* vector1)
 {
+    // To be in interaction range all distances (x,y,z) on their affiliated periodic 1D axis have to be in range
     let interactionRange = &getDbStructureModel(SCONTEXT)->InteractionRange;
     let latticeSizes = getLatticeSizeVector(SCONTEXT);
 
-    if (GetPeriodicPointDistance(vector0->A, vector1->A, latticeSizes->A) <= interactionRange->A)
-        return true;
-
-    if (GetPeriodicPointDistance(vector0->B, vector1->B, latticeSizes->B) <= interactionRange->B)
-        return true;
-
-    if (GetPeriodicPointDistance(vector0->C, vector1->C, latticeSizes->C) <= interactionRange->C)
-        return true;
-
-    return false;
+    var result = GetPeriodicPointDistance(vector0->A, vector1->A, latticeSizes->A) <= interactionRange->A;
+    result &= GetPeriodicPointDistance(vector0->B, vector1->B, latticeSizes->B) <= interactionRange->B;
+    result &= GetPeriodicPointDistance(vector0->C, vector1->C, latticeSizes->C) <= interactionRange->C;
+    return result;
 }
 
 // Count the number of particles in the simulation lattice that have the provided particle id
