@@ -18,13 +18,13 @@
 #include "xmmintrin.h"
 
 // Set a code byte at the provided index to the provided value
-static inline void SetCodeByteAt(OccupationCode_t* restrict code, const int32_t id, const byte_t value)
+static inline void SetCodeByteAt(OccupationCode64_t* restrict code, const int32_t id, const byte_t value)
 {
     accessPtrAs(byte_t, code)[id] = value;
 }
 
 // Get the code byte value at the provided index
-static inline byte_t GetCodeByteAt(OccupationCode_t* restrict code, const int32_t id)
+static inline byte_t GetCodeByteAt(OccupationCode64_t* restrict code, const int32_t id)
 {
     return accessPtrAs(byte_t, code)[id];
 }
@@ -58,7 +58,7 @@ static inline int32_t GetNextCeiledRandom(SCONTEXT_PARAM, const int32_t upperLim
 }
 
 // Resolves the passed pair definition and start environment to the target environment state
-static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(SCONTEXT_PARAM, const PairDefinition_t *restrict pairDef, const EnvironmentState_t *startEnv)
+static inline EnvironmentState_t* GetPairDefinitionTargetEnvironment(SCONTEXT_PARAM, const PairInteraction_t *restrict pairDef, const EnvironmentState_t *startEnv)
 {
     let target = AddAndTrimVector4(&startEnv->PositionVector, &pairDef->RelativeVector, getLatticeSizeVector(SCONTEXT));
     return getEnvironmentStateByVector4(SCONTEXT, &target);

@@ -52,8 +52,8 @@ typedef struct ClusterState
 {
     int32_t     CodeId;
     int32_t     CodeIdBackup;
-    OccupationCode_t   OccupationCode;
-    OccupationCode_t   OccupationCodeBackup;
+    OccupationCode64_t   OccupationCode;
+    OccupationCode64_t   OccupationCodeBackup;
     
 } ClusterState_t;
 
@@ -196,7 +196,7 @@ typedef struct CycleState
     CycleCounterState_t         MainCounters;
 
     // The current active state code that describes a transition start state
-    OccupationCode_t            ActiveStateCode;
+    OccupationCode64_t            ActiveStateCode;
 
     // The jump selection that contains the transition selection information
     JumpSelectionInfo_t         ActiveSelectionInfo;
@@ -279,7 +279,7 @@ typedef struct JumpSelectionPool
     int32_t             DirectionPoolCount;
 
     // The direction count to pool index mapping
-    IdRedirection_t     DirectionPoolMapping;
+    IdMappingSpan_t     DirectionPoolMapping;
 
     // The span of direction pools
     DirectionPools_t    DirectionPools;

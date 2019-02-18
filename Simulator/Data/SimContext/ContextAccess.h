@@ -166,13 +166,13 @@ static inline CycleCounterState_t* getMainCycleCounters(SCONTEXT_PARAM)
 }
 
 // Get the active state code for the jump path
-static inline OccupationCode_t getPathStateCode(SCONTEXT_PARAM)
+static inline OccupationCode64_t getPathStateCode(SCONTEXT_PARAM)
 {
     return getCycleState(SCONTEXT)->ActiveStateCode;
 }
 
 // Set the active state code for the jump path
-static inline void setPathStateCode(SCONTEXT_PARAM, const OccupationCode_t code)
+static inline void setPathStateCode(SCONTEXT_PARAM, const OccupationCode64_t code)
 {
     getCycleState(SCONTEXT)->ActiveStateCode = code;
 }
@@ -383,13 +383,13 @@ static inline Vector4_t* getLatticeSizeVector(SCONTEXT_PARAM)
 // Get the number of mobiles from the db lattice meta info
 static inline int32_t getNumberOfMobiles(SCONTEXT_PARAM)
 {
-    return getDbLatticeInfo(SCONTEXT)->NumOfMobiles;
+    return getDbLatticeInfo(SCONTEXT)->MobileParticleCount;
 }
 
 // Get the number of selectable particles from the db lattice meta info
 static inline int32_t getNumberOfSelectables(SCONTEXT_PARAM)
 {
-    return getDbLatticeInfo(SCONTEXT)->NumOfMobiles;
+    return getDbLatticeInfo(SCONTEXT)->MobileParticleCount;
 }
 
 // Get the jump count mapping that assigns each [positionId][particleId] combination its jump count
@@ -584,7 +584,7 @@ static inline int32_t getCellIndexByVector4(SCONTEXT_PARAM, const Vector4_t* vec
 static inline Tracker_t* getStaticMovementTrackerAt(SCONTEXT_PARAM, const Vector4_t* vector, const byte_t particleId)
 {
     var index = getStaticMovementTrackerIdOffsetAt(SCONTEXT, vector->D, particleId);
-    index += getCellIndexByVector4(SCONTEXT, vector) * getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell;
+    index += getCellIndexByVector4(SCONTEXT, vector) * getDbStructureModel(SCONTEXT)->StaticTrackersPerCellCount;
     debug_assert(!span_IndexIsOutOfRange(*getStaticMovementTrackers(SCONTEXT), index));
     return &span_Get(*getStaticMovementTrackers(SCONTEXT), index);
 }
@@ -615,13 +615,13 @@ static inline JumpStatistic_t* getJumpStatisticAt(SCONTEXT_PARAM, const int32_t 
 /* Jump selection pool getter/setter */
 
 // Get the direction pool mapping that maps number of directions to a [directionPoolId]
-static inline IdRedirection_t* getDirectionPoolMapping(SCONTEXT_PARAM)
+static inline IdMappingSpan_t* getDirectionPoolMapping(SCONTEXT_PARAM)
 {
     return &getJumpSelectionPool(SCONTEXT)->DirectionPoolMapping;
 }
 
 // Set the direction pool mapping to the passed value
-static inline void setDirectionPoolMapping(SCONTEXT_PARAM, IdRedirection_t value)
+static inline void setDirectionPoolMapping(SCONTEXT_PARAM, IdMappingSpan_t value)
 {
     *getDirectionPoolMapping(SCONTEXT) = value;
 }
@@ -802,14 +802,14 @@ static inline int32_t getEnvironmentPairDefinitionCount(EnvironmentState_t *rest
 }
 
 // Get the pair definition at the passed [relPairId] from an environment state
-static inline PairDefinition_t* getEnvironmentPairDefinitionAt(EnvironmentState_t *restrict envState, const int32_t relPairId)
+static inline PairInteraction_t* getEnvironmentPairDefinitionAt(EnvironmentState_t *restrict envState, const int32_t relPairId)
 {
     debug_assert(!span_IndexIsOutOfRange(envState->EnvironmentDefinition->PairDefinitions, relPairId));
     return &span_Get(envState->EnvironmentDefinition->PairDefinitions, relPairId);
 }
 
 // Get the cluster definition at the passed [relClusterId] from an environment state
-static inline ClusterDefinition_t* getEnvironmentClusterDefinitionAt(EnvironmentState_t *restrict envState, const int32_t relClusterId)
+static inline ClusterInteraction_t* getEnvironmentClusterDefinitionAt(EnvironmentState_t *restrict envState, const int32_t relClusterId)
 {
     debug_assert(!span_IndexIsOutOfRange(envState->EnvironmentDefinition->ClusterDefinitions, relClusterId));
     return &span_Get(envState->EnvironmentDefinition->ClusterDefinitions, relClusterId);

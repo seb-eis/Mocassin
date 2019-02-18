@@ -219,7 +219,7 @@ static int32_t ConfigStateCountersAccess(SCONTEXT_PARAM, const int32_t usedBuffe
 static inline int32_t GetStateGlobalTrackerDataSize(SCONTEXT_PARAM)
 {
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        return getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers * sizeof(Tracker_t);
+        return getDbStructureModel(SCONTEXT)->GlobalTrackerCount * sizeof(Tracker_t);
 
     return 0;
 }
@@ -235,7 +235,7 @@ static int32_t ConfigStateGlobalTrackerAccess(SCONTEXT_PARAM, const int32_t used
     var configObject = getGlobalMovementTrackers(SCONTEXT);
 
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + getDbStructureModel(SCONTEXT)->NumOfGlobalTrackers;
+    configObject->End = configObject->Begin + getDbStructureModel(SCONTEXT)->GlobalTrackerCount;
 
     return usedBufferBytes + cfgBufferBytes;
 }
@@ -269,7 +269,7 @@ static int32_t ConfigStateMobileTrackerAccess(SCONTEXT_PARAM, const int32_t used
 static inline int32_t GetStateStaticTrackerDataSize(SCONTEXT_PARAM)
 {
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        return getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetUnitCellCount(SCONTEXT) * sizeof(Tracker_t);
+        return getDbStructureModel(SCONTEXT)->StaticTrackersPerCellCount * GetUnitCellCount(SCONTEXT) * sizeof(Tracker_t);
 
     return 0;
 }
@@ -285,7 +285,7 @@ static int32_t ConfigStateStaticTrackerAccess(SCONTEXT_PARAM, const int32_t used
     var configObject = getStaticMovementTrackers(SCONTEXT);
 
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + (getDbStructureModel(SCONTEXT)->NumOfTrackersPerCell * GetUnitCellCount(SCONTEXT));
+    configObject->End = configObject->Begin + (getDbStructureModel(SCONTEXT)->StaticTrackersPerCellCount * GetUnitCellCount(SCONTEXT));
 
     return usedBufferBytes + cfgBufferBytes;
 }
@@ -322,7 +322,7 @@ static inline int32_t GetStateJumpStatisticsDataSize(SCONTEXT_PARAM)
 {
     let structureModel = getDbStructureModel(SCONTEXT);
     return (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        ? structureModel->NumOfGlobalTrackers * sizeof(JumpStatistic_t)
+        ? structureModel->GlobalTrackerCount * sizeof(JumpStatistic_t)
         : 0;
 }
 
@@ -339,7 +339,7 @@ static int32_t ConfigStateJumpStatisticsAccess(SCONTEXT_PARAM, const int32_t use
     let structureModel = getDbStructureModel(SCONTEXT);
 
     configObject->Begin = getMainStateBufferAddress(SCONTEXT, usedBufferBytes);
-    configObject->End = configObject->Begin + structureModel->NumOfGlobalTrackers;
+    configObject->End = configObject->Begin + structureModel->GlobalTrackerCount;
     return usedBufferBytes + cfgBufferBytes;
 }
 
@@ -507,8 +507,8 @@ static error_t CopyDbRngInfoToMainState(SCONTEXT_PARAM)
     let jobInfo = getDbModelJobInfo(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
 
-    metaData->RngState = jobInfo->RngStateSeed;
-    metaData->RngIncrease = jobInfo->RngIncSeed;
+    metaData->RngState = jobInfo->RngStartState;
+    metaData->RngIncrease = jobInfo->RngIncValue;
     return ((metaData->RngIncrease & 1) != 0) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 

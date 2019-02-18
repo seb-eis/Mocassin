@@ -19,7 +19,7 @@
 /* Local helper routines */
 
 // Finds a cluster code id by linear searching the passed occupation code (Safe search, returns an invalid index if the code cannot be found)
-static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode_t occupationCode)
+static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
 {
     int32_t index = 0;
     let numOfCodes = span_GetSize(clusterTable->OccupationCodes);
@@ -30,7 +30,7 @@ static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restri
 }
 
 // Finds a cluster code id by linear searching the passed occupation code (Unsafe search, infinite loop if code does not exist)
-static inline int32_t LinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode_t occupationCode)
+static inline int32_t LinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
 {
     int32_t index = 0;
     while (span_Get(clusterTable->OccupationCodes, index++) != occupationCode);
@@ -83,7 +83,7 @@ static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* enviro
     cpp_foreach(clusterDefinition, environmentDefinition->ClusterDefinitions)
     {
         relativeId = 0;
-        c_foreach(environmentPairId, clusterDefinition->EnvironmentPairIds)
+        c_foreach(environmentPairId, clusterDefinition->PairInteractionIds)
         {
             if (*environmentPairId == pairId)
             {
@@ -110,7 +110,7 @@ static error_t InPlaceConstructEnvironmentLink(const EnvironmentDefinition_t* re
 }
 
 // Get the next environment link pointer from the target environment for in place construction of the link
-static EnvironmentLink_t* GetNextLinkFromTargetEnvironment(SCONTEXT_PARAM, const PairDefinition_t *restrict pairDefinition, EnvironmentState_t *restrict environment)
+static EnvironmentLink_t* GetNextLinkFromTargetEnvironment(SCONTEXT_PARAM, const PairInteraction_t *restrict pairDefinition, EnvironmentState_t *restrict environment)
 {
     var targetEnvironment = GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
@@ -125,7 +125,7 @@ static EnvironmentLink_t* GetNextLinkFromTargetEnvironment(SCONTEXT_PARAM, const
 }
 
 // Resolves the target environment of a pair interaction and counts the link counter up by one
-static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAM, const EnvironmentState_t* restrict environment, const PairDefinition_t* restrict pairDefinition)
+static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAM, const EnvironmentState_t* restrict environment, const PairInteraction_t* restrict pairDefinition)
 {
     var targetEnvironment = GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
@@ -325,9 +325,9 @@ static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_
     {
         return_if(clusterState == clusterStateEnd, ERR_DATACONSISTENCY);
         let clusterTable = getClusterEnergyTableAt(SCONTEXT, clusterDefinition->EnergyTableId);
-        for (byte_t i = 0; clusterDefinition->EnvironmentPairIds[i] != POSITION_NULL; i++)
+        for (byte_t i = 0; clusterDefinition->PairInteractionIds[i] != POSITION_NULL; i++)
         {
-            let codeByteId = clusterDefinition->EnvironmentPairIds[i];
+            let codeByteId = clusterDefinition->PairInteractionIds[i];
             SetCodeByteAt(&clusterState->OccupationCode, i, span_Get(*occupationBuffer, codeByteId));
         }
         error = InitializeClusterStateStatus(SCONTEXT, clusterState, clusterTable);
@@ -434,7 +434,7 @@ static inline void SetActiveWorkClusterTable(SCONTEXT_PARAM, EnvironmentState_t 
 }
 
 // Finds a cluster code ID in a cluster table
-static inline int32_t SearchClusterCodeIdInTable(const ClusterTable_t *restrict clusterTable,const OccupationCode_t code)
+static inline int32_t SearchClusterCodeIdInTable(const ClusterTable_t *restrict clusterTable,const OccupationCode64_t code)
 {
     return LinearSearchClusterCodeId(clusterTable, code);
 }

@@ -97,8 +97,8 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
 
     let environmentCount = sqlite3_column_int(sqlStatement, 3);
 
-    model->NumOfTrackersPerCell = sqlite3_column_int(sqlStatement, 0);
-    model->NumOfGlobalTrackers = sqlite3_column_int(sqlStatement, 1);
+    model->StaticTrackersPerCellCount = sqlite3_column_int(sqlStatement, 0);
+    model->GlobalTrackerCount = sqlite3_column_int(sqlStatement, 1);
     model->InteractionRange = *(InteractionRange_t*) sqlite3_column_blob(sqlStatement, 2);
     model->EnvironmentDefinitions = new_Span(model->EnvironmentDefinitions, environmentCount);
 
@@ -187,8 +187,8 @@ static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbMo
 
     cpp_foreach(item, *environmentDefinitions)
     {
-        let pairDefinitionCount = sqlite3_column_bytes(sqlStatement, 3) / sizeof(PairDefinition_t);
-        let clusterDefinitionCount = sqlite3_column_bytes(sqlStatement, 4) / sizeof(ClusterDefinition_t);
+        let pairDefinitionCount = sqlite3_column_bytes(sqlStatement, 3) / sizeof(PairInteraction_t);
+        let clusterDefinitionCount = sqlite3_column_bytes(sqlStatement, 4) / sizeof(ClusterInteraction_t);
 
         item->ObjectId = sqlite3_column_int(sqlStatement, 0);
         item->SelectionParticleMask = sqlite3_column_int64(sqlStatement, 1);
@@ -251,7 +251,7 @@ static error_t GetClusterEnergyTablesFromDb(char *sqlQuery, sqlite3 *db, DbModel
 
     cpp_foreach(table, *tables)
     {
-        let occupationCodeCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(OccCodes_t);
+        let occupationCodeCount = sqlite3_column_bytes(sqlStatement, 2) / sizeof(OccupationCodes64_t);
 
         table->ObjectId = sqlite3_column_int(sqlStatement, 0);
         table->EnergyTable = array_FromBlob(table->EnergyTable, sqlite3_column_blob(sqlStatement, 1));
