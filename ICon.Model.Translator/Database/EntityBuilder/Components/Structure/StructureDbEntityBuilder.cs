@@ -202,13 +202,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="pairModel"></param>
         /// <param name="positionInfo"></param>
         /// <returns></returns>
-        protected CPairDefinition GetPairDefinitionStruct(IPairInteractionModel pairModel, ITargetPositionInfo positionInfo)
+        protected CPairInteraction GetPairDefinitionStruct(IPairInteractionModel pairModel, ITargetPositionInfo positionInfo)
         {
             var cVector = new CVector4(positionInfo.RelativeVector4D);
 
-            return new CPairDefinition
+            return new CPairInteraction
             {
-                EnergyTableId = pairModel.PairEnergyModel.ModelId,
+                PairTableId = pairModel.PairEnergyModel.ModelId,
                 RelativeVector = cVector
             };
         }
@@ -235,14 +235,14 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="groupModel"></param>
         /// <returns></returns>
-        protected CClusterDefinition GetClusterDefinitionStruct(IGroupInteractionModel groupModel)
+        protected CClusterInteraction GetClusterDefinitionStruct(IGroupInteractionModel groupModel)
         {
             var buffer = new int[groupModel.PairIndexCoding.Length];
             groupModel.PairIndexCoding.CopyTo(buffer, 0);
 
-            return new CClusterDefinition
+            return new CClusterInteraction
             {
-                TableId = groupModel.GroupEnergyModel.ModelId,
+                ClusterTableId = groupModel.GroupEnergyModel.ModelId,
                 RelativePositionIds = buffer
             };
         }

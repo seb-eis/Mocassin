@@ -8,9 +8,6 @@ namespace Mocassin.Model.Translator
     [StructLayout(LayoutKind.Sequential, Size = 16)]
     public struct CInteractionRange
     {
-        [MarshalAs(UnmanagedType.I4)]
-        private readonly int paddingInt;
-
         [field: MarshalAs(UnmanagedType.I4)]
         public int A { get; set; }
 
@@ -19,5 +16,8 @@ namespace Mocassin.Model.Translator
 
         [field: MarshalAs(UnmanagedType.I4)]
         public int C { get; set; }
+
+        [MarshalAs(UnmanagedType.I4)]
+        private readonly int paddingInt;
     }
 }
