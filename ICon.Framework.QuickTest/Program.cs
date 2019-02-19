@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
+using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
@@ -14,15 +19,26 @@ using Mocassin.Model.Translator.Optimization;
 using Mocassin.UI.Xml.CreationData;
 using Mocassin.UI.Xml.CustomizationData;
 using Mocassin.UI.Xml.ProjectData;
+using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
-        private const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\YDopedCeria\\Ceria";
+        private static string _basePath = "";
+        private static string _baseFile = "";
 
         private static void Main(string[] args)
         {
+            while (!Directory.Exists(_basePath))
+            {
+                Console.WriteLine($"Base directory does not exist: {_basePath}");
+                Console.WriteLine($"Enter new base directory:");
+                _basePath = Console.ReadLine() + "\\";
+                Console.WriteLine($"Enter new base file name:");
+                _baseFile = Console.ReadLine();
+            }
+
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             var package = TestXmlInputSystem();
             TestParameterSets(package);
@@ -34,72 +50,91 @@ namespace Mocassin.Framework.QuickTest
 
         private static ManagerPackage TestXmlInputSystem()
         {
-            ManagerPackage package = null;
-            var inputFilePath = _basePath + ".Input.xml";
+            var filePath = _basePath + _baseFile + ".Input.xml";
+      
+            Console.WriteLine($"Reading project XML description from: {filePath}");
+            if (!XmlStreamService.TryDeserialize(filePath, null, out XmlProjectModelData data, out var exception)) 
+                ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception.Message}");
 
-            var inTest = XmlStreamService.TryDeserialize(inputFilePath, null, out XmlProjectModelData data, out var exception);
-            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), data, out exception);
+            Console.WriteLine("Creating new model project ...");
+            var package = CreateManagerPackage();
 
-            var watch = Stopwatch.StartNew();
-            package = ManagerFactory.DebugFactory.CreateSimulationManagementPackage();
+            Console.WriteLine("Pushing input data to model project...");
             var reports = package.ModelProject.InputPipeline.PushToProject(data.GetInputSequence());
 
-            foreach (var report in reports) Console.WriteLine(report.ToString());
+            foreach (var report in reports)
+            {
+                if (!report.IsGood)
+                {
+                    ExitOnKeyPress("A validation failed, please refer to the report set...");
+                    Console.WriteLine(report.ToString());
+                }
 
+                if (report?.ConflictReport.GetWarnings().FirstOrDefault() == null)
+                    continue;
+
+                Console.WriteLine(report.ToString());
+            }
+
+            Console.WriteLine("Model project input system done!");
             return package;
         }
 
         private static void TestParameterSets(ManagerPackage package)
         {
-            Exception exception;
-            var outputFilePath = _basePath + ".Custom.xml";
+            var filePath = _basePath + _baseFile + ".Custom.xml";
             var customizationData = XmlProjectCustomization.Create(package.ModelProject);
+            if (!File.Exists(filePath))
+            {
+                var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), customizationData, out var exception);
+                ExitOnKeyPress($"New customization file written to target: {filePath}");
+            }
+            Console.WriteLine($"Reading project XML customization data from: {filePath}");
+            if (!XmlStreamService.TryDeserialize(filePath, null, out XmlProjectCustomization readData, out var exception2))
+                ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception2.Message}");
 
-            //var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), customizationData, out exception);
-            //var writeTest = XmlStreamService.TrySerialize(outputFilePath, customizationData, out exception);
-
-            var inTest = XmlStreamService.TryDeserialize(outputFilePath, null, out XmlProjectCustomization readData, out exception);
             readData.PushToModel(package.ModelProject);
-            Console.WriteLine("Parameter system done!");
+            Console.WriteLine("Parameter input system done!");
         }
 
         private static IList<IJobCollection> TestJobSystem(ManagerPackage package)
         {
-            Exception exception;
-            var outputFilePath = _basePath + ".Jobs.xml";
+            var filePath = _basePath + _baseFile + ".Jobs.xml";
 
-            var inTest = XmlStreamService.TryDeserialize(outputFilePath, null, out XmlDbCreationInstruction readData, out exception);
-            var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), readData, out exception);
+            Console.WriteLine($"Reading job XML description from: {filePath}");
+            if (!XmlStreamService.TryDeserialize(filePath, null, out XmlDbCreationInstruction readData, out var exception))
+                ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception.Message}");
 
-            Console.WriteLine("Job system done!");
+            Console.WriteLine("Job input system done!");
             return readData.ToInternals(package.ModelProject).ToList();
         }
 
         private static void TestDbCreation(ManagerPackage package, IList<IJobCollection> jobCollections)
         {
-            var filePath = _basePath + ".db";
+            var filePath = _basePath + _baseFile + ".db";
 
+            Console.WriteLine($"Starting job database creation system with target: {filePath}");
+            Console.WriteLine("Building project model context...");
             var contextBuilder = new ProjectModelContextBuilder(package.ModelProject);
             var modelContext = contextBuilder.BuildNewContext().Result;
+
+            Console.WriteLine("Translating XML job descriptions to database entities...");
             var dbLatticeBuilder = new CeriaLatticeDbBuilder(modelContext);
             var dbJobBuilder = new JobDbEntityBuilder(modelContext)
             {
                 LatticeDbEntityBuilder = dbLatticeBuilder
             };
 
-            dbJobBuilder.AddPostBuildOptimizer(new JumpSelectionOptimizer());
-
-            var watch = Stopwatch.StartNew();
 
             var result = jobCollections.Select(x => dbJobBuilder.BuildJobPackageModel(x)).ToList();
-            DisplayWatch(watch);
+
+            Console.WriteLine("Adding entities to database context and saving changes...");
             var dbContext = new SimulationDbContext(filePath, true);
             dbContext.AddRange(result);
             dbContext.SaveChangesAsync().Wait();
             dbContext.Dispose();
 
-            DisplayWatch(watch);
-            Console.WriteLine("Db-Creation system done!");
+            Console.WriteLine("Database creation system done!");
             Console.ReadLine();
         }
 
@@ -110,6 +145,20 @@ namespace Mocassin.Framework.QuickTest
             Console.WriteLine("Watch Dump: {0}", watch.Elapsed.ToString());
             watch.Reset();
             watch.Start();
+        }
+
+        private static void ExitOnKeyPress(string message)
+        {
+            Console.WriteLine(message + "\nPress button to exit...");
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+
+        private static ManagerPackage CreateManagerPackage()
+        {
+            var filePath = _basePath + "Mocassin.Settings.xml";
+            var projectSettings = ProjectSettings.Deserialize(filePath);
+            return ManagerFactory.DebugFactory.CreateSimulationManagementPackage(projectSettings);
         }
     }
 }

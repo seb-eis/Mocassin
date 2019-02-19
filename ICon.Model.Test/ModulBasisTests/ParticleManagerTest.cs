@@ -12,7 +12,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestManagementCreation()
         {
-            var managers = ManagerFactory.DebugFactory.CreateParticleManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateParticleManagementSystem(null);
             foreach (var item in managers.ParticleManager.GetType().GetProperties())
             {
                 Assert.IsNotNull(item.GetValue(managers.ParticleManager));
@@ -24,7 +24,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestInputPortSystem()
         {
-            var managers = ManagerFactory.DebugFactory.CreateParticleManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateParticleManagementSystem(null);
             // Test default inputs
             for (int i = 1; i < 64; i++)
             {

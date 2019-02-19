@@ -15,7 +15,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestInputPortSystem()
         {
-            var manager = ManagerFactory.DebugFactory.CreateStructureManagementSystem();
+            var manager = ManagerFactory.DebugFactory.CreateStructureManagementSystem(null);
 
             var dummy = new PositionDummy() { Vector = new DataVector3D(0.5, 0.5, 0.5) };
 
@@ -28,7 +28,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public void FullSpaceGroupDatabaseLoadTest()
         {
-            var managers = ManagerFactory.DebugFactory.CreateStructureManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateStructureManagementSystem(null);
             var groups = managers.ModelProject.SpaceGroupService.GetFullGroupList();
             groups.RemoveAt(0);
             foreach (var item in groups)
@@ -41,7 +41,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public void TestVectorEncoderUpdate()
         {
-            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria(null);
             var comparer = new VectorComparer3D<Cartesian3D>(NumericComparer.CreateRanged(1.0e-6));
             for (int i = 1; i < 10; i++)
             {
@@ -57,7 +57,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestManagementCreation()
         {
-            var managers = ManagerFactory.DebugFactory.CreateStructureManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateStructureManagementSystem(null);
             foreach (var item in managers.StructureManager.GetType().GetProperties())
             {
                 Assert.IsNotNull(item.GetValue(managers.StructureManager));

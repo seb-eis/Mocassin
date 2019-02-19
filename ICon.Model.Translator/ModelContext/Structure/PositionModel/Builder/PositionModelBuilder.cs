@@ -32,7 +32,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 .SelectMany(CreatePositionModels)
                 .ToList();
 
-            IndexPositionModels(positionModels);
+            IndexAndSortPositionModels(positionModels);
             return positionModels;
         }
 
@@ -46,15 +46,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Synchronizes the position model indexing with the extended wyckoff position list sorting
+        ///     Synchronizes the <see cref="IPositionModel" /> list indexing and sorting with the extended wyckoff position list
         /// </summary>
         /// <param name="positionModels"></param>
-        protected void IndexPositionModels(IEnumerable<IPositionModel> positionModels)
+        protected void IndexAndSortPositionModels(List<IPositionModel> positionModels)
         {
             foreach (var positionModel in positionModels)
-            {
                 positionModel.ModelId = VectorEncoder.PositionList.IndexOf(positionModel.CenterVector);
-            }
+
+            positionModels.Sort(Comparer<IPositionModel>.Create((a, b) => a.ModelId.CompareTo(b.ModelId)));
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var positionInfo in targetInfos)
             {
                 var targetInfo = new TargetPositionInfo
-                {                   
+                {
                     UnitCellPosition = positionInfo.UnitCellPosition,
                     Distance = positionInfo.Distance,
                     AbsoluteFractional3D = operation.ApplyUntrimmed(positionInfo.AbsoluteFractional3D),
@@ -137,7 +137,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ITargetPositionInfo"/> list that ensures the correct sorting
+        ///     Creates a new <see cref="ITargetPositionInfo" /> list that ensures the correct sorting
         /// </summary>
         /// <param name="capacity"></param>
         /// <returns></returns>

@@ -5,6 +5,7 @@ using Mocassin.Framework.Random;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
+using Mocassin.Model.Translator.Optimization;
 
 namespace Mocassin.UI.Xml.CreationData
 {
@@ -43,6 +44,12 @@ namespace Mocassin.UI.Xml.CreationData
         public ISimulation GetSimulation()
         {
             return Simulation;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers()
+        {
+            return JobPackageDescription.ManualOptimizers.Select(x => x.ToInternal(ModelProject));
         }
 
         /// <inheritdoc />

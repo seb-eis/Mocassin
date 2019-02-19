@@ -17,11 +17,6 @@ namespace Mocassin.Model.Translator.ModelContext
         IKineticSimulation Simulation { get; set; }
 
         /// <summary>
-        ///     The normalized electric field vector in cartesian coordinates. Describes a field strength of 1 [V/Ang]
-        /// </summary>
-        Cartesian3D NormalizedElectricFieldVector { get; set; }
-
-        /// <summary>
         ///     The list of transition models that are valid in this simulation model
         /// </summary>
         IList<IKineticTransitionModel> TransitionModels { get; set; }

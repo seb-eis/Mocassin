@@ -77,7 +77,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             packageModel.JobModels = jobModelTasks.Select(x => x.Result).ToList();
 
             LinkPackageModel(packageModel);
-            RunPostBuildOptimizers(packageModel);
+            RunPostBuildOptimizers(packageModel, jobCollection);
 
             return packageModel;
         }
@@ -224,12 +224,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Calls all attached post build optimizers for the passed simulation job package
+        ///     Calls all attached <see cref="IPostBuildOptimizer"/> and additionally defined ones of <see cref="IJobCollection"/>
         /// </summary>
         /// <param name="packageModel"></param>
-        protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel)
+        /// <param name="jobCollection"></param>
+        protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel, IJobCollection jobCollection)
         {
-            foreach (var optimizer in PostBuildOptimizers)
+            foreach (var optimizer in PostBuildOptimizers.Concat(jobCollection.GetPostBuildOptimizers()))
                 optimizer.Run(ProjectModelContext, packageModel);
         }
 

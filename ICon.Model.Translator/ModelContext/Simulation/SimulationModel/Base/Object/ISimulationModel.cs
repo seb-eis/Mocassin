@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -10,9 +11,14 @@ namespace Mocassin.Model.Translator.ModelContext
     public interface ISimulationModel : IModelComponent
     {
         /// <summary>
-        /// Get or set the maximum attempt frequency for the simulation model
+        ///     Get or set the maximum attempt frequency for the simulation model
         /// </summary>
         double MaxAttemptFrequency { get; set; }
+
+        /// <summary>
+        ///     Get or set the cartesian normalized electric field vector. Describes [1 V/m] field strength
+        /// </summary>
+        Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <summary>
         ///     Get the simulation encoding model

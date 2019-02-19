@@ -23,7 +23,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestManagementCreation()
         {
-            var managers = ManagerFactory.DebugFactory.CreateTransitionManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateTransitionManagementSystem(null);
             foreach (var item in managers.TransitionManager.GetType().GetProperties())
             {
                 Assert.IsNotNull(item.GetValue(managers.TransitionManager));

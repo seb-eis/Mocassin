@@ -17,8 +17,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public override double MaxAttemptFrequency { get; set; }
 
-        /// <inheritdoc />
-        public Cartesian3D NormalizedElectricFieldVector { get; set; }
+        /// <inheritdoc cref="IKineticSimulationModel.NormalizedElectricFieldVector"/>
+        public override Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <inheritdoc />
         public IList<IKineticTransitionModel> TransitionModels { get; set; }

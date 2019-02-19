@@ -45,6 +45,12 @@ namespace Mocassin.Model.Translator
         public byte[] InteractionRangeBinary { get; set; }
 
         /// <summary>
+        ///     The structure meta data blob conversion backing property
+        /// </summary>
+        [Column("MetaData")]
+        public byte[] StructureMetaDataBinary { get; set; }
+
+        /// <summary>
         ///     The list of affiliated environment definition entities
         /// </summary>
         public List<EnvironmentDefinitionEntity> EnvironmentDefinitions { get; set; }
@@ -55,5 +61,12 @@ namespace Mocassin.Model.Translator
         [NotMapped]
         [InteropProperty(nameof(InteractionRangeBinary))]
         public InteropObject<CInteractionRange> InteractionRange { get; set; }
+
+        /// <summary>
+        ///     The structure meta data object that carries non-essential additional structure info for calculations
+        /// </summary>
+        [NotMapped]
+        [InteropProperty(nameof(StructureMetaDataBinary))]
+        public InteropObject<CStructureMetaData> StructureMetaData { get; set; }
     }
 }

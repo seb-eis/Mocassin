@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mocassin.Model.Simulations;
+using Mocassin.Model.Translator.Optimization;
 
 namespace Mocassin.Model.Translator.Jobs
 {
@@ -13,6 +14,11 @@ namespace Mocassin.Model.Translator.Jobs
         /// </summary>
         /// <returns></returns>
         ISimulation GetSimulation();
+
+        /// <summary>
+        /// Get the set of defined <see cref="IPostBuildOptimizer"/> for the translation operation
+        /// </summary>
+        IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers();
 
         /// <summary>
         ///     Get the sequence of job configurations on th collection

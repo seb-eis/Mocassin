@@ -26,7 +26,7 @@ namespace Mocassin.Model.Test
                 }
             }
 
-            ManagerPackage manager = ManagerFactory.DebugFactory.CreateFullManagementSystem();
+            ManagerPackage manager = ManagerFactory.DebugFactory.CreateFullManagementSystem(null);
             CheckNoPropertyNull(manager);
         }
     }

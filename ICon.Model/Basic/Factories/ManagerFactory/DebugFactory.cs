@@ -25,22 +25,24 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Create a project service system for testing
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateProjectServicesSystem()
-            {
+            public static ManagerPackage CreateProjectServicesSystem(ProjectSettings settings)
+            {            
                 return new ManagerPackage
                 {
-                    ModelProject = ModelProject.ModelProject.Create(ProjectSettings.CreateDefault())
+                    ModelProject = ModelProject.ModelProject.Create(settings ?? ProjectSettings.CreateDefault())
                 };
             }
 
             /// <summary>
             ///     Creates and links default project services and particle manager for testing
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateParticleManagementSystem()
+            public static ManagerPackage CreateParticleManagementSystem(ProjectSettings settings)
             {
-                var package = CreateProjectServicesSystem();
+                var package = CreateProjectServicesSystem(settings);
                 package.ParticleManager = (IParticleManager) package.ModelProject.CreateAndRegister(new ParticleManagerFactory());
                 return package;
             }
@@ -48,10 +50,11 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Creates structure management system for testing
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateStructureManagementSystem()
+            public static ManagerPackage CreateStructureManagementSystem(ProjectSettings settings)
             {
-                var package = CreateParticleManagementSystem();
+                var package = CreateParticleManagementSystem(settings);
                 package.StructureManager = (IStructureManager) package.ModelProject.CreateAndRegister(new StructureManagerFactory());
                 return package;
             }
@@ -59,10 +62,11 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Creates lattice management system for testing
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateLatticeManagementSystem()
+            public static ManagerPackage CreateLatticeManagementSystem(ProjectSettings settings)
             {
-                var package = CreateProjectServicesSystem();
+                var package = CreateProjectServicesSystem(settings);
                 package.LatticeManager = (ILatticeManager) package.ModelProject.CreateAndRegister(new LatticeManagerFactory());
                 return package;
             }
@@ -70,10 +74,11 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Creates a management system that is capable of the modeling process until transition inputs
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateTransitionManagementSystem()
+            public static ManagerPackage CreateTransitionManagementSystem(ProjectSettings settings)
             {
-                var package = CreateStructureManagementSystem();
+                var package = CreateStructureManagementSystem(settings);
                 package.TransitionManager = (ITransitionManager) package.ModelProject.CreateAndRegister(new TransitionManagerFactory());
                 return package;
             }
@@ -81,10 +86,11 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Creates a management system that is capable of the modeling process until energy inputs
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateEnergyManagementSystem()
+            public static ManagerPackage CreateEnergyManagementSystem(ProjectSettings settings)
             {
-                var package = CreateTransitionManagementSystem();
+                var package = CreateTransitionManagementSystem(settings);
                 package.EnergyManager = (IEnergyManager) package.ModelProject.CreateAndRegister(new EnergyManagerFactory());
                 return package;
             }
@@ -92,10 +98,11 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Creates a management system that is capable of the modeling process until simulation inputs
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateSimulationManagementPackage()
+            public static ManagerPackage CreateSimulationManagementPackage(ProjectSettings settings)
             {
-                var package = CreateEnergyManagementSystem();
+                var package = CreateEnergyManagementSystem(settings);
                 package.SimulationManager = (ISimulationManager) package.ModelProject.CreateAndRegister(new SimulationManagerFactory());
                 return package;
             }
@@ -103,19 +110,21 @@ namespace Mocassin.Model.Basic
             /// <summary>
             ///     Creates the currently most developed management system
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateFullManagementSystem()
+            public static ManagerPackage CreateFullManagementSystem(ProjectSettings settings)
             {
-                return CreateSimulationManagementPackage();
+                return CreateSimulationManagementPackage(settings);
             }
 
             /// <summary>
             ///     Creates a new management system for testing purposes that contains particle and structure information of ceria
             /// </summary>
+            /// <param name="settings"></param>
             /// <returns></returns>
-            public static ManagerPackage CreateManageSystemForCeria()
+            public static ManagerPackage CreateManageSystemForCeria(ProjectSettings settings)
             {
-                var package = CreateFullManagementSystem();
+                var package = CreateFullManagementSystem(settings);
                 var inputSystem = MakeCeriaInputSystem();
                 inputSystem.PushData(package.ModelProject);
                 package.InputReportJson = inputSystem.GetReportJson();

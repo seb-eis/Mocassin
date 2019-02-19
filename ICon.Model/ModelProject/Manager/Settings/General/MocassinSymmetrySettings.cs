@@ -6,7 +6,7 @@ namespace Mocassin.Model.ModelProject
     /// <summary>
     ///     Basic symmetry settings that contain information on space group and crystal system handling and databases
     /// </summary>
-    [Serializable]
+    [DataContract]
     public class MocassinSymmetrySettings
     {
         /// <summary>

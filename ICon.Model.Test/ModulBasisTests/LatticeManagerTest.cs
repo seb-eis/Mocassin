@@ -27,7 +27,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestManagementCreation()
         {
-            var managers = ManagerFactory.DebugFactory.CreateLatticeManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateLatticeManagementSystem(null);
 
             foreach (var item in managers.LatticeManager.GetType().GetProperties())
             {

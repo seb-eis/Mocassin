@@ -32,6 +32,13 @@ namespace Mocassin.UI.Xml.CreationData
         public string JobCountPerConfig { get; set; }
 
         /// <summary>
+        ///     Get or set the list of <see cref="XmlManualOptimizer" /> objects
+        /// </summary>
+        [XmlArray("ManualOptimizers")]
+        [XmlArrayItem(typeof(XmlSelectionOptimizer), ElementName = "SelectionOptimizer")]
+        public List<XmlManualOptimizer> ManualOptimizers { get; set; }
+
+        /// <summary>
         ///     Creates a <see cref="IJobCollection" /> for simulation database creation in the context of the passed
         ///     <see cref="IModelProject" />
         /// </summary>

@@ -18,7 +18,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public void MetropolisMapperBaseTest()
         {
-            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria(null);
             var mapper = new MetropolisTransitionMapper();
 
             var encoded = managers.StructureManager.QueryPort.Query(port => port.GetEncodedExtendedPositionLists());
@@ -41,7 +41,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public void TestKineticAppoxMapper()
         {
-            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria(null);
 
             var comparer = managers.ModelProject.GeometryNumeric.RangeComparer;
             var ucProvider = managers.StructureManager.QueryPort.Query(port => port.GetOccupationUnitCellProvider());
@@ -77,7 +77,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public void TestKineticQuickMapper()
         {
-            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria(null);
             var structureManager = managers.ModelProject.GetManager<IStructureManager>();
             var encoder = structureManager.QueryPort.Query(port => port.GetVectorEncoder());
             var ucp = structureManager.QueryPort.Query(port => port.GetFullUnitCellProvider());

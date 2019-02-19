@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 using Mocassin.Model.Translator.ModelContext;
 
 namespace Mocassin.Model.Translator.EntityBuilder
@@ -20,8 +21,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public SimulationStructureModel BuildModel(ISimulationModel simulationModel)
         {
             var structureModel = CreateNewModel();
-            structureModel.NumOfGlobalTrackers = GetNumberOfGlobalTrackers(simulationModel);
-            structureModel.NumOfTrackersPerCell = GetNumberOfTrackersPerCell(simulationModel);
+            structureModel.StructureMetaData = GetStructureMetaData(simulationModel);
+            structureModel.NumOfGlobalTrackers = GetGlobalTrackerCount(simulationModel);
+            structureModel.NumOfTrackersPerCell = GetStaticTrackerCountPerCell(simulationModel);
             SetUpdateAndSelectionInformation(structureModel, simulationModel.SimulationEncodingModel);
             LinkModel(structureModel);
 
@@ -90,7 +92,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <returns></returns>
-        protected int GetNumberOfTrackersPerCell(ISimulationModel simulationModel)
+        protected int GetStaticTrackerCountPerCell(ISimulationModel simulationModel)
         {
             return simulationModel.SimulationTrackingModel.StaticTrackerCount;
         }
@@ -100,22 +102,55 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <returns></returns>
-        protected int GetNumberOfGlobalTrackers(ISimulationModel simulationModel)
+        protected int GetGlobalTrackerCount(ISimulationModel simulationModel)
         {
             return simulationModel.SimulationTrackingModel.GlobalTrackerCount;
         }
 
         /// <summary>
-        ///     Get the interaction range interop object for the current project context
+        ///     Get the wrapped <see cref="CInteractionRange" /> interop object for the current project context
         /// </summary>
         /// <returns></returns>
         protected InteropObject<CInteractionRange> GetInteractionRange()
         {
             var cStructure = new CInteractionRange
             {
-                A = ModelContext.StructureModelContext.InteractionRangeModel.CellsInDirectionA,
-                B = ModelContext.StructureModelContext.InteractionRangeModel.CellsInDirectionB,
-                C = ModelContext.StructureModelContext.InteractionRangeModel.CellsInDirectionC
+                Vector = new CVector4
+                {
+                    A = ModelContext.StructureModelContext.InteractionRangeModel.CellsInDirectionA,
+                    B = ModelContext.StructureModelContext.InteractionRangeModel.CellsInDirectionB,
+                    C = ModelContext.StructureModelContext.InteractionRangeModel.CellsInDirectionC,
+                    D = 0
+                }
+            };
+
+            return InteropObject.Create(cStructure);
+        }
+
+        /// <summary>
+        ///     Get the <see cref="CStructureMetaData" /> object from the current project context that belongs to the passed
+        ///     <see cref="ISimulationModel" />
+        /// </summary>
+        /// <param name="simulationModel"></param>
+        /// <returns></returns>
+        protected InteropObject<CStructureMetaData> GetStructureMetaData(ISimulationModel simulationModel)
+        {
+            var (cellVectorA, cellVectorB, cellVectorC) = ModelContext.ModelProject
+                .GetManager<IStructureManager>()
+                .QueryPort.Query(x => x.GetVectorEncoder())
+                .Transformer.FractionalSystem.GetBaseVectors();
+
+            var charges = new double[64].Populate(double.NaN);
+            foreach (var particle in ModelContext.ModelProject.GetManager<IParticleManager>().QueryPort.Query(x => x.GetParticles()))
+                charges[particle.Index] = particle.Charge;
+
+            var cStructure = new CStructureMetaData
+            {
+                ParticleCharges = charges,
+                NormalizedElectricFieldVector = new CVector3(simulationModel.NormalizedElectricFieldVector),
+                UnitCellVectorA = new CVector3(cellVectorA),
+                UnitCellVectorB = new CVector3(cellVectorB),
+                UnitCellVectorC = new CVector3(cellVectorC)
             };
 
             return InteropObject.Create(cStructure);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Mocassin.Framework.Xml;
 
 namespace Mocassin.Model.ModelProject
 {
@@ -14,10 +15,10 @@ namespace Mocassin.Model.ModelProject
     public class ProjectSettings
     {
         /// <summary>
-        /// The module settings collection
+        ///     The module settings collection
         /// </summary>
         [DataMember]
-        private HashSet<MocassinModuleSettings> ModuleSettings { get; }
+        private HashSet<MocassinModuleSettings> ModuleSettings { get; set; }
 
         /// <summary>
         ///     The numeric settings for common calculations and comparisons
@@ -50,7 +51,7 @@ namespace Mocassin.Model.ModelProject
         public MocassinSymmetrySettings SymmetrySettings { get; set; }
 
         /// <summary>
-        /// Default construct project settings with empty module settings collection
+        ///     Default construct project settings with empty module settings collection
         /// </summary>
         public ProjectSettings()
         {
@@ -58,7 +59,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        /// Tries to get a module setting from the project settings collection
+        ///     Tries to get a module setting from the project settings collection
         /// </summary>
         /// <typeparam name="TSettings"></typeparam>
         /// <param name="settings"></param>
@@ -71,7 +72,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        /// Tries to get a module settings from the collection by module type
+        ///     Tries to get a module settings from the collection by module type
         /// </summary>
         /// <param name="moduleType"></param>
         /// <param name="settings"></param>
@@ -83,7 +84,7 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        /// Get the module settings of the specified type or null if they do not exist
+        ///     Get the module settings of the specified type or null if they do not exist
         /// </summary>
         /// <typeparam name="TSettings"></typeparam>
         /// <returns></returns>
@@ -93,18 +94,20 @@ namespace Mocassin.Model.ModelProject
         }
 
         /// <summary>
-        /// Looks-up all module settings objects that are marked with the module settings attribute in the passed assembly an adds one instance of each
-        /// to the module settings collection
+        ///     Looks-up all module settings objects that are marked with the module settings attribute in the passed assembly an
+        ///     adds one instance of each
+        ///     to the module settings collection
         /// </summary>
         /// <param name="sourceAssembly"></param>
         public void LookupAndAddModuleSettings(Assembly sourceAssembly)
         {
-            if (sourceAssembly == null) 
+            if (sourceAssembly == null)
                 throw new ArgumentNullException(nameof(sourceAssembly));
 
             foreach (var type in sourceAssembly.ExportedTypes)
             {
-                if (!typeof(MocassinModuleSettings).IsAssignableFrom(type) || type.GetCustomAttribute(typeof(ModuleSettingsAttribute)) == null) 
+                if (!typeof(MocassinModuleSettings).IsAssignableFrom(type) ||
+                    type.GetCustomAttribute(typeof(ModuleSettingsAttribute)) == null)
                     continue;
 
                 var setting = (MocassinModuleSettings) Activator.CreateInstance(type);
@@ -147,7 +150,8 @@ namespace Mocassin.Model.ModelProject
                 },
                 SymmetrySettings = new MocassinSymmetrySettings
                 {
-                    SpaceGroupDbPath = $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Program/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
+                    SpaceGroupDbPath =
+                        $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Program/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
                     VectorTolerance = 1.0e-6,
                     ParameterTolerance = 1.0e-6
                 }
@@ -155,6 +159,65 @@ namespace Mocassin.Model.ModelProject
 
             settings.LookupAndAddModuleSettings(Assembly.GetExecutingAssembly());
             return settings;
+        }
+
+        /// <summary>
+        ///     Get the sequence of <see cref="Type" /> in the main <see cref="Assembly" /> an all passed additional search
+        ///     <see cref="Assembly" /> objects
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetModuleSettingTypes(IEnumerable<Assembly> additionalAssemblies = null)
+        {
+            var types = Assembly.GetAssembly(typeof(MocassinModuleSettings)).ExportedTypes;
+            if (additionalAssemblies != null)
+                types = types.Concat(additionalAssemblies.SelectMany(x => x.ExportedTypes));
+
+            return types.Where(x => !x.IsAbstract && typeof(MocassinModuleSettings).IsAssignableFrom(x));
+        }
+
+        /// <summary>
+        ///     Serializes the <see cref="ProjectSettings" /> to into a string an optional set of <see cref="Assembly" /> to extend
+        ///     the search for <see cref="MocassinModuleSettings" /> implementations
+        /// </summary>
+        /// <param name="additionalAssemblies"></param>
+        public string Serialize(IEnumerable<Assembly> additionalAssemblies = null)
+        {
+            return DataContractConverter.Serialize(this, null, GetDefaultSerializer(additionalAssemblies));
+        }
+
+        /// <summary>
+        ///     Serializes the <see cref="ProjectSettings" /> to the passed file path with optional indentation and search
+        ///     <see cref="Assembly" /> objects
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="additionalAssemblies"></param>
+        public void Serialize(string filePath, IEnumerable<Assembly> additionalAssemblies = null)
+        {
+            DataContractConverter.Serialize(this, filePath, null, GetDefaultSerializer(additionalAssemblies));
+        }
+
+        /// <summary>
+        ///     Deserializes a <see cref="ProjectSettings" /> object from the passed file path using the
+        ///     <see cref="DataContractSerializer" /> and the additional set of <see cref="Assembly" /> objects for settings type
+        ///     search
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="additionalAssemblies"></param>
+        /// <returns></returns>
+        public static ProjectSettings Deserialize(string filePath, IEnumerable<Assembly> additionalAssemblies = null)
+        {
+            return DataContractConverter.DeserializeFromFile<ProjectSettings>(filePath, null, GetDefaultSerializer(additionalAssemblies));
+        }
+
+        /// <summary>
+        ///     Get the default <see cref="DataContractSerializer" /> for the settings that includes the passed additional search
+        ///     <see cref="Assembly" /> objects
+        /// </summary>
+        /// <param name="additionalAssemblies"></param>
+        /// <returns></returns>
+        private static DataContractSerializer GetDefaultSerializer(IEnumerable<Assembly> additionalAssemblies = null)
+        {
+            return new DataContractSerializer(typeof(ProjectSettings), GetModuleSettingTypes(additionalAssemblies));
         }
     }
 }

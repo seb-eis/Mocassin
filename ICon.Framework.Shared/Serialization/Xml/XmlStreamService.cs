@@ -243,9 +243,18 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public bool TryDeserialize(string filepath, XmlEventHandlers handlers, out T1 obj, out Exception exception)
         {
-            using (var stream = new FileStream(filepath, FileMode.Open))
+            try
             {
-                return TryDeserialize(stream, handlers, out obj, out exception);
+                using (var stream = new FileStream(filepath, FileMode.Open))
+                {
+                    return TryDeserialize(stream, handlers, out obj, out exception);
+                }
+            }
+            catch (Exception e)
+            {
+                exception = e;
+                obj = default;
+                return false;
             }
         }
 

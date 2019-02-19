@@ -16,7 +16,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestInputPortSystem()
         {
-            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria();
+            var managers = ManagerFactory.DebugFactory.CreateManageSystemForCeria(null);
 
             var validEnvInfo = new StableEnvironmentInfo()
             {
@@ -38,7 +38,7 @@ namespace Mocassin.Model.Test
         [TestMethod]
         public override void TestManagementCreation()
         {
-            var managers = ManagerFactory.DebugFactory.CreateEnergyManagementSystem();
+            var managers = ManagerFactory.DebugFactory.CreateEnergyManagementSystem(null);
             foreach (var item in managers.EnergyManager.GetType().GetProperties())
             {
                 Assert.IsNotNull(item.GetValue(managers.EnergyManager));

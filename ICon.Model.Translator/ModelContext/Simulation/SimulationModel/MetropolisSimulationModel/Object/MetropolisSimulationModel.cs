@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -30,6 +31,9 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public override double MaxAttemptFrequency { get; set; }
+
+        /// <inheritdoc />
+        public override Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <inheritdoc />
         public override IEnumerable<ITransitionModel> GetTransitionModels()

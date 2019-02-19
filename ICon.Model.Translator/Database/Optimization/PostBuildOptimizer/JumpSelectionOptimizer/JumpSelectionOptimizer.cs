@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mocassin.Model.Particles;
+using Mocassin.Model.Structures;
 using Mocassin.Model.Translator.ModelContext;
 
 namespace Mocassin.Model.Translator.Optimization
 {
     /// <summary>
-    ///     Jump selection optimizer that analyzes jump collections and lattice configuration to optimize the selection
-    ///     masks
+    ///     Optimizer that removes particles from the <see cref="EnvironmentDefinitionEntity" /> objects of a
+    ///     <see cref="SimulationJobPackageModel" /> to improve simulation performance
     /// </summary>
     public class JumpSelectionOptimizer : IPostBuildOptimizer
     {
@@ -19,6 +21,11 @@ namespace Mocassin.Model.Translator.Optimization
         ///     The current job package that the optimizer is handling
         /// </summary>
         protected SimulationJobPackageModel JobPackage { get; set; }
+
+        /// <summary>
+        ///     The list of <see cref="IParticle" /> objects to remove on their affiliated <see cref="IUnitCellPosition" />
+        /// </summary>
+        public IList<(IParticle, IUnitCellPosition)> RemoveCombinations { get; set; }
 
         /// <inheritdoc />
         public void Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
@@ -34,15 +41,17 @@ namespace Mocassin.Model.Translator.Optimization
         }
 
         /// <summary>
-        ///     Optimizes the selection particle set for the passed environment definition (Currently placeholder system that does
-        ///     nothing)
+        ///     Optimizes the <see cref="IParticleSet" /> that is defined as selectable on each
+        ///     <see cref="EnvironmentDefinitionEntity" />
         /// </summary>
         /// <param name="environmentDefinition"></param>
         /// <returns></returns>
         protected virtual IParticleSet GetOptimizedSelectionParticles(EnvironmentDefinitionEntity environmentDefinition)
         {
-            // ToDo: Implement an actual working optimization routine based on a jump analysis and averaged lattice conformation
-            return DecodeSelectionMask(environmentDefinition.SelectionParticleMask);
+            var unitCellPosition = ModelContext.StructureModelContext.PositionModels[environmentDefinition.ObjectId].UnitCellPosition;
+            var rawSet = DecodeSelectionMask(environmentDefinition.SelectionParticleMask).ToList();
+            rawSet.RemoveAll(x => RemoveCombinations.FirstOrDefault(pair => pair.Item1 == x && pair.Item2 == unitCellPosition).Item1 != null);
+            return ParticleSet.ToSortedSet(rawSet);
         }
 
         /// <summary>

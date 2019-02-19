@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -11,6 +12,9 @@ namespace Mocassin.Model.Translator.ModelContext
     {
         /// <inheritdoc />
         public abstract double MaxAttemptFrequency { get; set; }
+
+        /// <inheritdoc />
+        public abstract Cartesian3D NormalizedElectricFieldVector { get; set; }
 
         /// <inheritdoc />
         public ISimulationEncodingModel SimulationEncodingModel { get; set; }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Mocassin.Model.ModelProject
 {
     /// <summary>
     /// Abstract base class for module settings objects
     /// </summary>
+    [DataContract]
     public abstract class MocassinModuleSettings
     {
         /// <summary>
@@ -16,9 +18,7 @@ namespace Mocassin.Model.ModelProject
         public bool IsValidForModule(Type moduleType)
         {
             if (GetType().GetCustomAttribute(typeof(ModuleSettingsAttribute)) is ModuleSettingsAttribute attribute)
-            {
                 return attribute.ModuleType == moduleType;
-            }
 
             return false;
         }

@@ -6,7 +6,7 @@ namespace Mocassin.Model.Translator
     /// <summary>
     ///     Simulation cluster definition object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 40)]
+    [StructLayout(LayoutKind.Sequential, Size = 36)]
     public struct CClusterInteraction
     {
         /// <summary>
@@ -20,12 +20,6 @@ namespace Mocassin.Model.Translator
         /// </summary>
         [field: MarshalAs(UnmanagedType.I4)]
         public int ClusterTableId { get; set; }
-
-        /// <summary>
-        ///     Padding for 8 byte alignment
-        /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        private readonly int paddingInt;
 
         /// <summary>
         ///     Get or set the cluster id encoding by <see cref="CPairInteraction" /> objects
