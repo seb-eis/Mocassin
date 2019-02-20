@@ -134,8 +134,7 @@ namespace Mocassin.Framework.QuickTest
             dbContext.SaveChangesAsync().Wait();
             dbContext.Dispose();
 
-            Console.WriteLine("Database creation system done!");
-            Console.ReadLine();
+            ExitOnKeyPress("Database creation system done!");
         }
 
 
@@ -157,6 +156,8 @@ namespace Mocassin.Framework.QuickTest
         private static ManagerPackage CreateManagerPackage()
         {
             var filePath = _basePath + "Mocassin.Settings.xml";
+            if (!File.Exists(filePath)) return ManagerFactory.DebugFactory.CreateSimulationManagementPackage(null);
+
             var projectSettings = ProjectSettings.Deserialize(filePath);
             return ManagerFactory.DebugFactory.CreateSimulationManagementPackage(projectSettings);
         }
