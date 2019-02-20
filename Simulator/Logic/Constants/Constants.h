@@ -39,6 +39,7 @@
 #define STATE_FLG_INITIALIZED   1 << 8
 #define STATE_FLG_SIMERROR      1 << 9
 #define STATE_FLG_PRERUN_RESET  1 << 10
+#define STATE_FLG_ENERGYABORT   1 << 11
 
 /* Monte Carlo constants */
 

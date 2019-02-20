@@ -19,7 +19,7 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
-#include "Simulator/Logic/Routines/Debug/DebugRoutines.h"
+#include "Simulator/Logic/Routines/Debug/PrintRoutines.h"
 
 // Advances the block counters of the main loop to the next step goal
 static inline void AdvanceMainCycleCounterToNextStepGoal(SCONTEXT_PARAM)
@@ -51,6 +51,7 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
 {
     runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
 
+    PrintJobStartInfo(SCONTEXT, stdout);
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
@@ -99,7 +100,7 @@ error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
         abortFlag = KMC_CheckAbortConditions(SCONTEXT);
-        PrintRunStatistics(SCONTEXT, stdout);
+        PrintFullSimulationStatistics(SCONTEXT, stdout);
     }
     return KMC_FinishMainRoutine(SCONTEXT);
 }
@@ -128,7 +129,7 @@ error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
 
         abortFlag = MMC_CheckAbortConditions(SCONTEXT);
-        PrintRunStatistics(SCONTEXT, stdout);
+        PrintFullSimulationStatistics(SCONTEXT, stdout);
     }
     return MMC_FinishMainRoutine(SCONTEXT);
 }
@@ -151,11 +152,13 @@ static inline void MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT_PARAM)
     let factors = getPhysicalFactors(SCONTEXT);
     if (buffer->End == buffer->CapacityEnd)
     {
-        buffer->LastAverage = 0;
-        cpp_foreach(value, *buffer) buffer->LastAverage += *value;
-        buffer->LastAverage /= (double) list_GetCapacity(*buffer);
-        buffer->LastAverage *= factors->EnergyFactorKtToEv;
+        buffer->LastSum = buffer->CurrentSum;
+        buffer->CurrentSum = 0;
+
+        cpp_foreach(value, *buffer) buffer->LastSum += *value;
+        buffer->LastSum *= factors->EnergyFactorKtToEv;
         buffer->End = buffer->Begin;
+        return;
     }
 
     list_PushBack(*buffer, energyInfo->Energy0To2);
@@ -235,6 +238,7 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        return_if(KMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, STATE_FLG_CONDABORT);
     }
     return SIMERROR;
 }
@@ -321,6 +325,7 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 MMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        return_if(MMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -340,13 +345,13 @@ static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
     var metaData = getMainStateMetaData(SCONTEXT);
     var newClock = clock();
 
-    metaData->TimePerBlock = (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
-    metaData->ProgramRunTime += (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
+    metaData->TimePerBlock = (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
+    metaData->ProgramRunTime += (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
 
     var blockEta = metaData->TimePerBlock + metaData->ProgramRunTime;
     runInfo->PreviousBlockFinishClock = newClock;
 
-    bool_t isTimeout = (metaData->ProgramRunTime >= jobInfo->TimeLimit) || (blockEta >jobInfo->TimeLimit);
+    bool_t isTimeout = (metaData->ProgramRunTime >= jobInfo->TimeLimit) || (blockEta > jobInfo->TimeLimit);
     return isTimeout;
 }
 
@@ -357,13 +362,7 @@ static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
     let counters = getMainCycleCounters(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
 
-    // Fixes potential divisions by zero and avoids abort rate trigger on very fast simulations
-    if (metaData->ProgramRunTime == 0)
-    {
-        metaData->SuccessRate = INT64_MAX;
-        metaData->CycleRate = INT64_MAX;
-        return false;
-    }
+    if (metaData->ProgramRunTime == 0) return false;
 
     metaData->SuccessRate = counters->CurrentMcs / metaData->ProgramRunTime;
     metaData->CycleRate = counters->CurrentCycles / metaData->ProgramRunTime;
@@ -380,22 +379,22 @@ static inline bool_t UpdateAndEvaluateMcsAbortCondition(SCONTEXT_PARAM)
 // Evaluates the general abort conditions and returns the corresponding state flag
 static error_t EvaluateGeneralAbortConditions(SCONTEXT_PARAM)
 {
-    // Note: Evaluation would always fail on first cycle!
-    return_if(StateFlagsAreSet(SCONTEXT, STATE_FLG_FIRSTCYCLE), STATE_FLG_CONTINUE);
-
     if (UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT))
     {
-        setMainStateFlags(SCONTEXT, STATE_FLG_TIMEOUT);
+        // Note: Timeout evaluation does not yield usable statistics before a second of run time
+        return_if(getMainStateMetaData(SCONTEXT)->ProgramRunTime < 1.0, STATE_FLG_CONTINUE);
+
+        setMainStateFlags(SCONTEXT, STATE_FLG_TIMEOUT | STATE_FLG_CONDABORT);
         return STATE_FLG_TIMEOUT;
     }
     if (UpdateAndEvaluateRateAbortConditions(SCONTEXT))
     {
-        setMainStateFlags(SCONTEXT, STATE_FLG_RATEABORT);
+        setMainStateFlags(SCONTEXT, STATE_FLG_RATEABORT | STATE_FLG_CONDABORT);
         return STATE_FLG_RATEABORT;
     }
     if (UpdateAndEvaluateMcsAbortCondition(SCONTEXT))
     {
-        setMainStateFlags(SCONTEXT, STATE_FLG_COMPLETED);
+        setMainStateFlags(SCONTEXT, STATE_FLG_COMPLETED | STATE_FLG_CONDABORT);
         return STATE_FLG_COMPLETED;
     }
     return STATE_FLG_CONTINUE;
@@ -415,15 +414,21 @@ static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAM)
     let jobHeader = getDbModelJobHeaderAsMMC(SCONTEXT);
     let abortBuffer = getLatticeEnergyBuffer(SCONTEXT);
     let limitFluctuation = fabs(metaData->LatticeEnergy * jobHeader->AbortTolerance);
+    let currentFluctuation = abortBuffer->CurrentSum - abortBuffer->LastSum;
 
-    return (isfinite(abortBuffer->LastAverage)) ? (limitFluctuation >= fabs(abortBuffer->LastAverage)) : false;
+    return (isfinite(currentFluctuation)) ? (limitFluctuation >= fabs(currentFluctuation)) : false;
 }
 
 error_t MMC_CheckAbortConditions(SCONTEXT_PARAM)
 {
     return_if(EvaluateGeneralAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, STATE_FLG_CONDABORT);
-    let isRelaxed = MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT);
-    return (isRelaxed) ? STATE_FLG_CONDABORT : STATE_FLG_CONTINUE;
+
+    if (MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT))
+    {
+        setMainStateFlags(SCONTEXT, STATE_FLG_ENERGYABORT | STATE_FLG_CONDABORT);
+        return STATE_FLG_CONDABORT;
+    }
+    return STATE_FLG_CONTINUE;
 }
 
 error_t SyncMainStateLatticeToRunStatus(SCONTEXT_PARAM)

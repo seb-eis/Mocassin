@@ -356,8 +356,11 @@ typedef struct Flp64Buffer
     // Capacity end ptr. Values are buffered as [kT]
     double* CapacityEnd;
 
-    // The last average value in [eV]
-    double  LastAverage;
+    // The last sum value in [eV]
+    double  LastSum;
+
+    // The current sum value in [eV]
+    double  CurrentSum;
     
 } Flp64Buffer_t;
 

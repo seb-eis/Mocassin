@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(ICon.Simulator VERSION 0.1.0)
+project(Mocassin.Simulator VERSION 0.1.0)
 
 include(CTest)
 enable_testing()
@@ -10,7 +10,7 @@ FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
 FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
 
-add_executable(ICon.Simulator
+add_executable(Mocassin.Simulator
         ./Main/main.c
         ${FRAMEWORK_SOURCE}
         ${SIMULATOR_SOURCE}
@@ -34,7 +34,7 @@ set_property(TARGET sqlite3 PROPERTY C_STANDARD 11)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-set_property(TARGET ICon.Simulator PROPERTY C_STANDARD 11)
+set_property(TARGET Mocassin.Simulator PROPERTY C_STANDARD 11)
 set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
 set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
@@ -42,7 +42,7 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
-#target_compile_options(ICon.Simulator PUBLIC -pg)
-#target_link_options(ICon.Simulator PUBLIC -pg)
+#target_compile_options(Mocassin.Simulator PUBLIC -pg)
+#target_link_options(Mocassin.Simulator PUBLIC -pg)
 
-target_link_libraries(ICon.Simulator sqlite3)
+target_link_libraries(Mocassin.Simulator sqlite3)

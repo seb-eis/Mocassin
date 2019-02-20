@@ -80,7 +80,7 @@ static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* enviro
     byte_t clusterId = 0, relativeId = 0;
     size_t linkCount = 0;
 
-    cpp_foreach(clusterDefinition, environmentDefinition->ClusterDefinitions)
+    cpp_foreach(clusterDefinition, environmentDefinition->ClusterInteractions)
     {
         relativeId = 0;
         c_foreach(environmentPairId, clusterDefinition->PairInteractionIds)
@@ -142,7 +142,7 @@ static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAM, const Enviro
 static error_t SetAllLinkListCountersToRequiredSize(SCONTEXT_PARAM)
 {
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
-        cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairDefinitions)
+        cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairInteractions)
             ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT, environment, pairDefinition);
 
     return ERR_OK;
@@ -184,7 +184,7 @@ static error_t LinkEnvironmentToSurroundings(SCONTEXT_PARAM, EnvironmentState_t*
     error_t error;
     int32_t pairId = 0;
 
-    cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairDefinitions)
+    cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairInteractions)
     {
         var environmentLink = GetNextLinkFromTargetEnvironment(SCONTEXT, pairDefinition, environment);
         if (environmentLink != NULL)
@@ -253,7 +253,7 @@ static error_t AllocateDynamicEnvOccupationBuffer(SCONTEXT_PARAM, Buffer_t* rest
     size_t bufferSize = 0;
 
     cpp_foreach(environmentDefinition, *getEnvironmentModels(SCONTEXT))
-        bufferSize = getMaxOfTwo(bufferSize, span_GetSize(environmentDefinition->PairDefinitions));
+        bufferSize = getMaxOfTwo(bufferSize, span_GetSize(environmentDefinition->PairInteractions));
 
     *buffer = new_Span(*buffer, bufferSize);
     return ERR_OK;
@@ -288,9 +288,9 @@ static void NullEnvironmentStateBuffers(EnvironmentState_t *restrict environment
 // Adds all environment pair energies of the passed environment state to its internal energy buffers using the passed occupation buffer as the occupation source
 static void AddEnvPairEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
-    for (size_t i = 0; i < span_GetSize(environment->EnvironmentDefinition->PairDefinitions); i++)
+    for (size_t i = 0; i < span_GetSize(environment->EnvironmentDefinition->PairInteractions); i++)
     {
-        let tableId = span_Get(environment->EnvironmentDefinition->PairDefinitions, i).EnergyTableId;
+        let tableId = span_Get(environment->EnvironmentDefinition->PairInteractions, i).EnergyTableId;
         let pairTable = getPairEnergyTableAt(SCONTEXT, tableId);
         for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
         {
@@ -315,13 +315,13 @@ static error_t InitializeClusterStateStatus(SCONTEXT_PARAM, ClusterState_t* rest
 // Synchronizes the all cluster states of the passed environment state and adds the resulting energies to the environment state energy buffer
 static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
-    return_if(span_GetSize(environment->ClusterStates) != span_GetSize(environment->EnvironmentDefinition->ClusterDefinitions), ERR_DATACONSISTENCY);
+    return_if(span_GetSize(environment->ClusterStates) != span_GetSize(environment->EnvironmentDefinition->ClusterInteractions), ERR_DATACONSISTENCY);
 
     error_t error;
     var clusterState = environment->ClusterStates.Begin;
     let clusterStateEnd = environment->ClusterStates.End;
 
-    cpp_foreach(clusterDefinition, environment->EnvironmentDefinition->ClusterDefinitions)
+    cpp_foreach(clusterDefinition, environment->EnvironmentDefinition->ClusterInteractions)
     {
         return_if(clusterState == clusterStateEnd, ERR_DATACONSISTENCY);
         let clusterTable = getClusterEnergyTableAt(SCONTEXT, clusterDefinition->EnergyTableId);

@@ -42,7 +42,7 @@ typedef Vector4_t InteractionRange_t;
 /* Structure model */
 
 // Type for pair interaction definitions
-// Layout@ggc_x86_64 => 24@[16,4,{4}]
+// Layout@ggc_x86_64 => 20@[16,4]
 typedef struct PairInteraction
 {
     // The relative 4D vector that points to the target
@@ -51,13 +51,10 @@ typedef struct PairInteraction
     // The energy table Id that the pair belongs to
     int32_t     EnergyTableId;
 
-    // Padding
-    int32_t     Padding0:32;
-
 } PairInteraction_t;
 
 // Type for cluster interaction definitions
-// Layout@ggc_x86_64 => 40@[8x4,4,{4}]
+// Layout@ggc_x86_64 => 36@[8x4,4]
 typedef struct ClusterInteraction
 {
     // The pair interaction ids that from the cluster
@@ -65,9 +62,6 @@ typedef struct ClusterInteraction
 
     // The energy table id that the cluster belongs to
     int32_t     EnergyTableId;
-
-    // Padding
-    int32_t     Padding:32;
 
 } ClusterInteraction_t;
 
@@ -93,18 +87,18 @@ typedef struct EnvironmentDefinition
     Bitmask_t                   SelectionParticleMask;
 
     // The pair interaction collection
-    PairInteractions_t          PairDefinitions;
+    PairInteractions_t          PairInteractions;
 
     // The cluster interaction collection
-    ClusterInteractions_t       ClusterDefinitions;
+    ClusterInteractions_t       ClusterInteractions;
 
     // Position particle id byte buffer, encodes possible particles
     // First one that is an invalid index terminates the set
-    byte_t                      PositionParticleIds[64];
+    byte_t                      PositionParticleIds[PARTICLE_IDLIMIT];
 
     // Update particle id buffer, encodes energy update particles
     // First one that is an invalid index terminates the set
-    byte_t                      UpdateParticleIds[64];
+    byte_t                      UpdateParticleIds[PARTICLE_IDLIMIT];
 
 } EnvironmentDefinition_t;
 
@@ -112,8 +106,29 @@ typedef struct EnvironmentDefinition
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(EnvironmentDefinition_t, EnvironmentDefinitions) EnvironmentDefinitions_t;
 
+// Type for the structure meta data that contains non essential structure information
+// Layout@ggc_x86_64 => 608@[64x8, 4x24]
+typedef struct StructureMetaData
+{
+    // The charge values of the particles in units of [C]
+    double      ParticleCharges[PARTICLE_IDLIMIT];
+
+    // The normalized electric field vector in cartesian coordinates
+    Vector3_t   NormElectricFieldVector;
+
+    // The cartesian unit cell vector for direction A in [Ang]
+    Vector3_t   CellVectorA;
+
+    // The cartesian unit cell vector for direction B in [Ang]
+    Vector3_t   CellVectorB;
+
+    // The cartesian unit cell vector for direction C in [Ang]
+    Vector3_t   CellVectorC;
+
+} StructureMetaData_t;
+
 // Type for the structure model
-// Layout@ggc_x86_64 => 40@[4,4,16,16]
+// Layout@ggc_x86_64 => 48@[4,4,8,16,16]
 typedef struct StructureModel
 {
     // The number of required static trackers per cell
@@ -121,6 +136,9 @@ typedef struct StructureModel
 
     // The number of required global trackers
     int32_t                         GlobalTrackerCount;
+
+    // The pointer to the structure meta data
+    StructureMetaData_t*            MetaData;
 
     // The interaction range cube for MMC
     InteractionRange_t              InteractionRange;
@@ -172,7 +190,7 @@ typedef struct ClusterTable
 
     // The particle table mapping. Assigns each particle id its valid sub table in the cluster table
     // Access by [ParticleId]
-    byte_t          ParticleTableMapping[64];
+    byte_t          ParticleTableMapping[PARTICLE_IDLIMIT];
 
     // Padding
     int32_t         Padding:32;

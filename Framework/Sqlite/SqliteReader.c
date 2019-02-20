@@ -85,8 +85,8 @@ static error_t InvokeOnLoadedOperations(DbModel_t* dbModel, const DbModelOnLoade
 
 static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    let localQuery = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions "
-                     "from StructureModels where Id = ?1";
+    let localQuery = "select NumOfTrackersPerCell, NumOfGlobalTrackers, InteractionRange, NumOfEnvironmentDefinitions"
+                     ", MetaData from StructureModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
@@ -101,6 +101,10 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
     model->GlobalTrackerCount = sqlite3_column_int(sqlStatement, 1);
     model->InteractionRange = *(InteractionRange_t*) sqlite3_column_blob(sqlStatement, 2);
     model->EnvironmentDefinitions = new_Span(model->EnvironmentDefinitions, environmentCount);
+
+    model->MetaData = malloc(sizeof(StructureMetaData_t));
+    sql_FinalizeAndReturnIf(model->MetaData == NULL, sqlStatement);
+    memcpy(model->MetaData, sqlite3_column_blob(sqlStatement, 4), sizeof(StructureMetaData_t));
 
     error = sqlite3_finalize(sqlStatement);
     return  error;
@@ -192,8 +196,8 @@ static error_t GetEnvironmentDefinitionsFromDb(char *sqlQuery, sqlite3 *db, DbMo
 
         item->ObjectId = sqlite3_column_int(sqlStatement, 0);
         item->SelectionParticleMask = sqlite3_column_int64(sqlStatement, 1);
-        item->PairDefinitions = span_FromBlob(item->PairDefinitions, sqlite3_column_blob(sqlStatement, 3), pairDefinitionCount);
-        item->ClusterDefinitions = span_FromBlob(item->ClusterDefinitions, sqlite3_column_blob(sqlStatement, 4), clusterDefinitionCount);
+        item->PairInteractions = span_FromBlob(item->PairInteractions, sqlite3_column_blob(sqlStatement, 3), pairDefinitionCount);
+        item->ClusterInteractions = span_FromBlob(item->ClusterInteractions, sqlite3_column_blob(sqlStatement, 4), clusterDefinitionCount);
 
         memcpy(item->UpdateParticleIds, sqlite3_column_blob(sqlStatement, 2), (size_t) sqlite3_column_bytes(sqlStatement, 2));
         memcpy(item->PositionParticleIds, sqlite3_column_blob(sqlStatement, 5), (size_t) sqlite3_column_bytes(sqlStatement, 5));

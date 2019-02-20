@@ -122,16 +122,16 @@ typedef struct StateMetaData
     double      LatticeEnergy;
 
     // The runtime of the program in [seconds]
-    int64_t     ProgramRunTime;
+    double      ProgramRunTime;
 
     // The cycle rate of the simulation in [Hz]
-    int64_t     CycleRate;
+    double      CycleRate;
 
     // The success rate of the simulation in [Hz]
-    int64_t     SuccessRate;
+    double      SuccessRate;
 
     // The number of seconds for a block completion
-    int64_t     TimePerBlock;
+    double      TimePerBlock;
 
     // The random number generator state value
     uint64_t    RngState;

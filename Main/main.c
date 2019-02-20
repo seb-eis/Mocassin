@@ -17,6 +17,7 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
+#include "Simulator/Logic/Routines/Debug/PrintRoutines.h"
 #include "UnitTesting/MinimalUnitTest.h"
 #include "UnitTesting/UnitTests.h"
 
@@ -65,6 +66,20 @@
 
 #else
 
+    void OnMainFinish(SCONTEXT_PARAM)
+    {
+        char buffer[100];
+        let waitTime = 10;
+        let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
+        SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(SCONTEXT)->ProgramRunTime);
+
+        PrintFullSimulationStatistics(SCONTEXT, stdout);
+        fprintf(stdout, "Main routine reached end @ %s  (ERR=0x%08x, FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
+        fprintf(stdout, "Auto termination in %i seconds...", waitTime);
+        fflush(stdout);
+        sleep(waitTime);
+    }
+
     int main(int argc, char const * const *argv)
     {
         var SCONTEXT = ctor_SimulationContext();
@@ -76,6 +91,8 @@
         PrepareForMainRoutine(&SCONTEXT);
 
         StartMainSimulationRoutine(&SCONTEXT);
+
+        OnMainFinish(&SCONTEXT);
     }
 
 #endif

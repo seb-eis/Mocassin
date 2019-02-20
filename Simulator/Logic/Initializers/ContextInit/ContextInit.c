@@ -30,7 +30,7 @@
 static void AllocateEnvironmentBuffers(EnvironmentState_t *restrict env, EnvironmentDefinition_t *restrict envDef)
 {
     let environmentMaxParticleId = GetEnvironmentMaxParticleId(envDef);
-    let clusterStatesSize = span_GetSize(envDef->ClusterDefinitions);
+    let clusterStatesSize = span_GetSize(envDef->ClusterInteractions);
     let energyStatesSize = (environmentMaxParticleId == PARTICLE_NULL) ? 0 : environmentMaxParticleId + 1;
 
     env->EnergyStates = new_Span(env->EnergyStates, energyStatesSize);
@@ -68,7 +68,8 @@ static void AllocateEnergyFluctuationAbortBuffer(Flp64Buffer_t *restrict bufferA
         .Begin = (void*) tmp.Begin,
         .End = (void*) tmp.Begin,
         .CapacityEnd = (void*) tmp.End,
-        .LastAverage = INFINITY
+        .LastSum = INFINITY,
+        .CurrentSum = INFINITY
     };
 }
 

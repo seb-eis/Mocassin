@@ -349,6 +349,12 @@ static inline StructureModel_t* getDbStructureModel(SCONTEXT_PARAM)
     return &getDatabaseModel(SCONTEXT)->StructureModel;
 }
 
+// Get the structure meta data from the model data
+static inline StructureMetaData_t* getDbStructureModelMetaData(SCONTEXT_PARAM)
+{
+    return getDbStructureModel(SCONTEXT)->MetaData;
+}
+
 // Get the energy model from the database model
 static inline EnergyModel_t* getDbEnergyModel(SCONTEXT_PARAM)
 {
@@ -798,21 +804,21 @@ static inline Bitmask_t getJobHeaderFlagsKmc(SCONTEXT_PARAM)
 // Get the number of pair definitions on the passed environment state
 static inline int32_t getEnvironmentPairDefinitionCount(EnvironmentState_t *restrict envState)
 {
-    return (int32_t) span_GetSize(envState->EnvironmentDefinition->PairDefinitions);
+    return (int32_t) span_GetSize(envState->EnvironmentDefinition->PairInteractions);
 }
 
 // Get the pair definition at the passed [relPairId] from an environment state
 static inline PairInteraction_t* getEnvironmentPairDefinitionAt(EnvironmentState_t *restrict envState, const int32_t relPairId)
 {
-    debug_assert(!span_IndexIsOutOfRange(envState->EnvironmentDefinition->PairDefinitions, relPairId));
-    return &span_Get(envState->EnvironmentDefinition->PairDefinitions, relPairId);
+    debug_assert(!span_IndexIsOutOfRange(envState->EnvironmentDefinition->PairInteractions, relPairId));
+    return &span_Get(envState->EnvironmentDefinition->PairInteractions, relPairId);
 }
 
 // Get the cluster definition at the passed [relClusterId] from an environment state
 static inline ClusterInteraction_t* getEnvironmentClusterDefinitionAt(EnvironmentState_t *restrict envState, const int32_t relClusterId)
 {
-    debug_assert(!span_IndexIsOutOfRange(envState->EnvironmentDefinition->ClusterDefinitions, relClusterId));
-    return &span_Get(envState->EnvironmentDefinition->ClusterDefinitions, relClusterId);
+    debug_assert(!span_IndexIsOutOfRange(envState->EnvironmentDefinition->ClusterInteractions, relClusterId));
+    return &span_Get(envState->EnvironmentDefinition->ClusterInteractions, relClusterId);
 }
 
 // Get the cluster state at the passed [relClusterId] from an environment state
