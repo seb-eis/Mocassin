@@ -103,13 +103,13 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
     fflush(fstream);
 }
 
-// Prints the particle information about the passed context to the passes stream
-static void PrintParticleInformation(SCONTEXT_PARAM, FILE *fstream)
+// Prints the particle information (optional only mobile skip) about the passed context to the passed stream
+static void PrintParticleInformation(SCONTEXT_PARAM, FILE *fstream, const bool_t onlyMobiles)
 {
     let meta = getDbStructureModelMetaData(SCONTEXT);
     for (byte_t i = 1; isfinite(meta->ParticleCharges[i]);++i)
     {
-        continue_if(!ParticleIsMarkedAsMobile(SCONTEXT, i));
+        continue_if(!ParticleIsMarkedAsMobile(SCONTEXT, i) && onlyMobiles);
 
         var particleStatistics = (ParticleStatistics_t) { .ParticleId = i, .ParticleCharge = meta->ParticleCharges[i] };
         PopulateParticleStatistics(SCONTEXT, &particleStatistics);
@@ -190,11 +190,11 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
 
 }
 
-void PrintFullSimulationStatistics(SCONTEXT_PARAM, FILE *fstream)
+void PrintFullSimulationStatistics(SCONTEXT_PARAM, FILE *fstream, const bool_t onlyMobiles)
 {
     fprintf(fstream, "\n\nn== Simulation statistics status ==\n\n");
     PrintRunStatisticsMetaInfo(SCONTEXT, fstream);
-    PrintParticleInformation(SCONTEXT, fstream);
+    PrintParticleInformation(SCONTEXT, fstream, onlyMobiles);
     fflush(fstream);
 }
 
@@ -259,7 +259,7 @@ void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream)
     PrintGeneralJobInfo(SCONTEXT, fstream);
 
     fprintf(fstream, "=== MOCASSIN SIMULATION START STATE STATUS ===\n\n");
-    PrintFullSimulationStatistics(SCONTEXT, fstream);
+    PrintFullSimulationStatistics(SCONTEXT, fstream, false);
     fprintf(fstream, "==============================================\n\n");
     fflush(fstream);
 }
@@ -267,7 +267,7 @@ void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream)
 void PrintContextResetNotice(SCONTEXT_PARAM, file_t *fstream)
 {
     fprintf(fstream, "\n\n=== MOCASSIN PRE-RUN COMPLETION NOTIFICATION ===\n\n");
-    PrintFullSimulationStatistics(SCONTEXT, fstream);
+    PrintFullSimulationStatistics(SCONTEXT, fstream, true);
     fflush(fstream);
 }
 
@@ -278,7 +278,7 @@ void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream)
     let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
     SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(SCONTEXT)->ProgramRunTime);
 
-    PrintFullSimulationStatistics(SCONTEXT, stdout);
+    PrintFullSimulationStatistics(SCONTEXT, stdout, true);
     fprintf(stdout, "Main routine reached end @ %s  (ERR=0x%08x, FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
     fprintf(stdout, "Auto termination in %i seconds...", waitTime);
     fflush(stdout);

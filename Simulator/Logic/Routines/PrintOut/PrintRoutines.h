@@ -26,8 +26,8 @@
 #define MC_DEFAULT_FORMAT(VALUEFORMAT,...) MC_OUTTAG_FORMAT ": " MC_UNIT_FORMAT " " VALUEFORMAT " " __VA_ARGS__ "\n"
 #define MC_STATHEADER_FORMAT "\n== Particle statistics for (Id=%i, Charge=%+.2e [e], Count=%i) ==\n"
 
-// Prints the run statistics to a stream
-void PrintFullSimulationStatistics(SCONTEXT_PARAM, file_t *fstream);
+// Prints the run statistics to a stream with an optional flag to print only the mobile species data
+void PrintFullSimulationStatistics(SCONTEXT_PARAM, file_t *fstream, bool_t onlyMobiles);
 
 // Prints the start information of the simulation
 void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream);

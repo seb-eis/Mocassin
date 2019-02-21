@@ -87,7 +87,7 @@ error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
         abortFlag = KMC_CheckAbortConditions(SCONTEXT);
-        PrintFullSimulationStatistics(SCONTEXT, stdout);
+        PrintFullSimulationStatistics(SCONTEXT, stdout, true);
     }
     return KMC_FinishPreRun(SCONTEXT);
 }
@@ -117,7 +117,7 @@ error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
         abortFlag = KMC_CheckAbortConditions(SCONTEXT);
-        PrintFullSimulationStatistics(SCONTEXT, stdout);
+        PrintFullSimulationStatistics(SCONTEXT, stdout, true);
     }
     return KMC_FinishMainRoutine(SCONTEXT);
 }
@@ -146,7 +146,7 @@ error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
 
         abortFlag = MMC_CheckAbortConditions(SCONTEXT);
-        PrintFullSimulationStatistics(SCONTEXT, stdout);
+        PrintFullSimulationStatistics(SCONTEXT, stdout, true);
     }
     return MMC_FinishMainRoutine(SCONTEXT);
 }
