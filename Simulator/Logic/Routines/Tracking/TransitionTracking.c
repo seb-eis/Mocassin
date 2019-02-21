@@ -67,16 +67,16 @@ static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAM, const byt
     var jumpStatistic = getJumpStatisticAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
 
     // Handle edge energy
-    AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyInfo->Energy0 * toEvFactor);
+    AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyInfo->S0Energy * toEvFactor);
 
     // Handle conformation influence depending on prefix
-    if (energyInfo->ConformationDelta < 0.0)
-        AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyInfo->ConformationDelta) * toEvFactor);
+    if (energyInfo->ConformationDeltaEnergy < 0.0)
+        AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyInfo->ConformationDeltaEnergy) * toEvFactor);
     else
-        AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyInfo->ConformationDelta * toEvFactor);
+        AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyInfo->ConformationDeltaEnergy * toEvFactor);
 
     // Handle the total energy value
-    AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, energyInfo->Energy0To2 * toEvFactor);
+    AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, energyInfo->S0toS2DeltaEnergy * toEvFactor);
 }
 
 // Updates all tracking data (movement and jump statistics) affiliated with the passed path id in the current cycle context

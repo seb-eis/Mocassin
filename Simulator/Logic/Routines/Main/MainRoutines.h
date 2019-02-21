@@ -41,11 +41,14 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAM);
 
 /* KMC routine */
 
-// Start the kinetic monte carlo pre-run routine
+// Start the KMC pre run routine
 error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM);
 
+// Run the kmc simulation for one execution phase using the self optimizing pre run routine
+error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM);
+
 // Finishes the KMC pre run routine
-error_t KMC_FinishPreRunRoutine(SCONTEXT_PARAM);
+error_t KMC_FinishPreRun(SCONTEXT_PARAM);
 
 // Start the main kinetic monte carlo routine
 error_t KMC_StartMainRoutine(SCONTEXT_PARAM);
@@ -64,11 +67,11 @@ error_t KMC_FinishMainRoutine(SCONTEXT_PARAM);
 
 /* MMC routine */
 
-// Start the MMC pre-run routine
+// Start the KMC pre run routine
 error_t MMC_StartPreRunRoutine(SCONTEXT_PARAM);
 
 // Finishes the MMC pre run routine
-error_t MMC_FinishPreRunRoutine(SCONTEXT_PARAM);
+error_t MMC_FinishPreRun(SCONTEXT_PARAM);
 
 // Run the mmc simulation for one execution phase
 error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM);

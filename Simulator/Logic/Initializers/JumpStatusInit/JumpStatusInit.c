@@ -42,7 +42,7 @@ static bool_t TryGetEnvironmentLinkId(const EnvironmentLinks_t*restrict environm
 {
     for (int32_t i = 0; i < span_GetSize(*environmentLinks); ++i)
     {
-        if (span_Get(*environmentLinks, i).EnvironmentId == searchEnvId)
+        if (span_Get(*environmentLinks, i).TargetEnvironmentId == searchEnvId)
         {
             *outId = i;
             return true;

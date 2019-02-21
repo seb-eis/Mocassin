@@ -36,8 +36,13 @@ typedef Span_t(ClusterLink_t, ClusterLinks) ClusterLinks_t;
 // Layout@ggc_x86_64 => 24@[4,4,16]
 typedef struct EnvironmentLink
 {
-    int32_t         EnvironmentId;
-    int32_t         PairId;
+    // The linear id of the target environment
+    int32_t         TargetEnvironmentId;
+
+    // The target pair id in the environment
+    int32_t         TargetPairId;
+
+    // The collection of affiliated cluster links
     ClusterLinks_t  ClusterLinks;
     
 } EnvironmentLink_t;
@@ -50,10 +55,17 @@ typedef List_t(EnvironmentLink_t, EnvironmentLinks) EnvironmentLinks_t;
 // Layout@ggc_x86_64 => 24@[4,4,8,8]
 typedef struct ClusterState
 {
-    int32_t     CodeId;
-    int32_t     CodeIdBackup;
-    OccupationCode64_t   OccupationCode;
-    OccupationCode64_t   OccupationCodeBackup;
+    // The current code id of the cluster
+    int32_t                 CodeId;
+
+    // The current code id backup
+    int32_t                 CodeIdBackup;
+
+    // The current occupation code
+    OccupationCode64_t      OccupationCode;
+
+    // The current occupation code backup
+    OccupationCode64_t      OccupationCodeBackup;
     
 } ClusterState_t;
 
@@ -69,18 +81,43 @@ typedef Span_t(double, EnergyStates) EnergyStates_t;
 // Layout@ggc_x86_64 => 100@[1,1,1,1,4,4,4,16,4,,16,16,24,8]
 typedef struct EnvironmentState
 {
+    // Boolean flag if the environment center is mobile
     bool_t                      IsMobile;
+
+    // Boolean flag if the environment center is stable
     bool_t                      IsStable;
+
+    // Current occupation particle id
     byte_t                      ParticleId;
+
+    // Current id of the environment in the jump path
     byte_t                      PathId;
+
+    // Environment id in the linearized lattice
     int32_t                     EnvironmentId;
+
+    // Current direction pool id the environment is registered in
     int32_t                     PoolId;
+
+    // Current relative position id in the affiliated direction pool environment list
     int32_t                     PoolPositionId;
+
+    // Absolute 4D position vector of the environment
     Vector4_t                   PositionVector;
+
+    // Current mobile tracker id of the environment
     int32_t                     MobileTrackerId;
+
+    // Current energy states of the environment
     EnergyStates_t              EnergyStates;
+
+    // Current cluster states of the environment
     ClusterStates_t             ClusterStates;
+
+    // Set of registered links to other environments
     EnvironmentLinks_t          EnvironmentLinks;
+
+    // Pointer to the affiliated environment definition
     EnvironmentDefinition_t*    EnvironmentDefinition;
 
 } EnvironmentState_t;
@@ -96,54 +133,77 @@ typedef struct JumpSelectionInfo
     // The selected environment id
     int32_t EnvironmentId;
 
-    // The selected jump direction id
-    int32_t JumpId;
+    // The global jump id of the selection
+    int32_t GlobalJumpId;
 
-    // The selected relative jump id
-    int32_t RelativeId;
+    // The selected relative jump id within the selected environment
+    int32_t RelativeJumpId;
 
-    // The selected offset id for an MMC transition
-    int32_t OffsetId;
+    // The selected offset source environment id (MMC only)
+    int32_t MmcOffsetSourceId;
     
 } JumpSelectionInfo_t;
 
 // Type for the transition energy information
-// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
 typedef struct JumpEnergyInfo
 {
-    double Energy0;
-    double Energy1;
-    double Energy2;
-    double FieldInfluence;
-    double ConformationDelta;
-    double Energy0To2;
-    double Energy2To0;
-    double Probability0to2;
-    double Probability2to0;
+    // The S0 energy in units of [kT]
+    double S0Energy;
+
+    // The S1 energy in units of [kT]
+    double S1Energy;
+
+    // The S2 energy in units of [kT]
+    double S2Energy;
+
+    // The electric field influence energy in units of [kT]
+    double ElectricFieldEnergy;
+
+    // The conformation delta energy in units of [kT]
+    double ConformationDeltaEnergy;
+
+    // The state energy change from S0 to S2 energy in units of [kT]
+    double S0toS2DeltaEnergy;
+
+    // The state energy change from S2 to S0 energy in units of [kT]
+    double S2toS0DeltaEnergy;
+
+    // The non-normalized state change probability from S0 to S2
+    double RawS0toS2Probability;
+
+    // The non-normalized state change probability from S2 to S0
+    double RawS2toS0Probability;
+
+    // The normalized compare state change probability from S0 to S2
+    double CompareS0toS2Probability;
     
 } JumpEnergyInfo_t;
 
 // Type for the internal simulation cycle counters
-// Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
 typedef struct CycleCounterState
 {
     // The total number of cycles
-    int64_t CurrentCycles;
+    int64_t CycleCount;
 
     // The total successful steps
-    int64_t CurrentMcs;
+    int64_t McsCount;
 
     // The cycles per execution loop
-    int64_t CyclesPerExecutionLoop;
+    int64_t CycleCountPerExecutionLoop;
 
     // The goal mcs per execution phase
-    int64_t McsPerExecutionPhase;
+    int64_t McsCountPerExecutionPhase;
 
     // The next total mcs an execution phase has to reach before entering the next write phase
-    int64_t NextExecutionPhaseGoalMcs;
+    int64_t NextExecutionPhaseGoalMcsCount;
 
     // The simulation abort mcs count
-    int64_t TotalSimulationGoalMcs;
+    int64_t TotalSimulationGoalMcsCount;
+
+    // The pre run mcs of the target mcs of the simulation
+    int64_t PrerunGoalMcs;
     
 } CycleCounterState_t;
 
@@ -189,14 +249,14 @@ typedef struct JumpStatus
 typedef Array_t(JumpStatus_t, 4, JumpStatusArray) JumpStatusArray_t;
 
 // Type for the cycle state storage. Contains all information manipulated and buffered during simulation cycles
-// Layout@ggc_x86_64 => 248@[48,8,16,96,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 248@[48,8,16,80,8,8,8,8,8,8,8,8,8]
 typedef struct CycleState
 {
     // The main counter state. Controls the cycle loop settings
     CycleCounterState_t         MainCounters;
 
     // The current active state code that describes a transition start state
-    OccupationCode64_t            ActiveStateCode;
+    OccupationCode64_t          ActiveStateCode;
 
     // The jump selection that contains the transition selection information
     JumpSelectionInfo_t         ActiveSelectionInfo;

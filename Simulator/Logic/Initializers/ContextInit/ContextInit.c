@@ -13,7 +13,7 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Simulator/Data/Database/DbModel.h"
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
-#include "Simulator/Logic/Objects/JumpSelection.h"
+#include "Simulator/Logic/JumpSelection/JumpSelection.h"
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Basic/Plugins/PluginLoading.h"
@@ -554,6 +554,9 @@ static error_t CopyDefaultMobileTrackersToMainState(SCONTEXT_PARAM)
 static void SetMainStateFlagsToStartConditions(SCONTEXT_PARAM)
 {
     setMainStateFlags(SCONTEXT, STATE_FLG_FIRSTCYCLE);
+
+    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_USEPRERUN))
+        setMainStateFlags(SCONTEXT, STATE_FLG_PRERUN);
 }
 
 
@@ -647,26 +650,26 @@ static void PopulateDynamicSimulationModel(SCONTEXT_PARAM)
 }
 
 // Synchronizes the cycle counters of the dynamic state with the info from the main simulation state
-static error_t SyncCycleCountersWithStateStatus(SCONTEXT_PARAM)
+static error_t SyncMainCycleCountersWithStateStatus(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
     var stateHeader = getMainStateHeader(SCONTEXT)->Data;
     
-    counters->CurrentCycles = stateHeader->Cycles;
-    counters->CurrentMcs = stateHeader->Mcs;
+    counters->CycleCount = stateHeader->Cycles;
+    counters->McsCount = stateHeader->Mcs;
 
-    return (counters->CurrentMcs < counters->TotalSimulationGoalMcs) ? ERR_OK : ERR_DATACONSISTENCY;
+    return (counters->McsCount < counters->TotalSimulationGoalMcsCount) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Synchronizes the simulation cycle state to the main simulation state
 static void SyncSimulationCycleStateWithModel(SCONTEXT_PARAM)
 {
-    var cycleCounters = getMainCycleCounters(SCONTEXT);
+    var mainCounters = getMainCycleCounters(SCONTEXT);
 
-    var error = SetCycleCounterStateToDefault(SCONTEXT, cycleCounters);
+    var error = SetCycleCounterStateToDefault(SCONTEXT, mainCounters);
     error_assert(error, "Failed to set default main counter status.");
 
-    error = SyncCycleCountersWithStateStatus(SCONTEXT);
+    error = SyncMainCycleCountersWithStateStatus(SCONTEXT);
     error_assert(error, "Failed to synchronize data structure (state ==> cycle counters).");
 }
 
@@ -741,6 +744,76 @@ static void PopulateRngFromMainState(SCONTEXT_PARAM)
     let metaData = getMainStateMetaData(SCONTEXT);
 
     *rng = (Pcg32_t) { .State = metaData->RngState, .Inc = metaData->RngIncrease };
+}
+
+// Resets the status of a single jump histogram to start conditions without touching the set limits
+static void ResetJumpHistogramToNull(JumpHistogram_t*restrict histogram)
+{
+    histogram->OverflowCount = 0;
+    histogram->UnderflowCount = 0;
+    nullStructContent(histogram->CountBuffer);
+}
+
+// Resets all jump histogram buffers to zero values
+static error_t ResetJumpStatisticsToNull(SCONTEXT_PARAM)
+{
+    let jumpStatistics = getJumpStatistics(SCONTEXT);
+    cpp_foreach(statistic, *jumpStatistics)
+    {
+        ResetJumpHistogramToNull(&statistic->EdgeEnergyHistogram);
+        ResetJumpHistogramToNull(&statistic->NegConfEnergyHistogram);
+        ResetJumpHistogramToNull(&statistic->PosConfEnergyHistogram);
+        ResetJumpHistogramToNull(&statistic->TotalEnergyHistogram);
+    }
+    return ERR_OK;
+}
+
+// Resets all state counter collections to zero values
+static error_t ResetStateCounterCollectionsToNull(SCONTEXT_PARAM)
+{
+    var counters = getMainStateCounters(SCONTEXT);
+    cpp_foreach(counter, *counters)
+        nullStructContent(*counter);
+
+    return ERR_OK;
+}
+
+// Resets all state meta data to null that is affiliated with physical properties
+static error_t ResetStateMetaDataToNull(SCONTEXT_PARAM)
+{
+    var metaData = getMainStateMetaData(SCONTEXT);
+    metaData->SimulatedTime = 0;
+
+    return ERR_OK;
+}
+
+
+// Resets the KMC tracking system to zero
+static error_t ResetTrackingSystemToNull(SCONTEXT_PARAM)
+{
+    var mobileTrackers = getMobileMovementTrackers(SCONTEXT);
+    var staticTrackers = getStaticMovementTrackers(SCONTEXT);
+    var globalTrackers = getGlobalMovementTrackers(SCONTEXT);
+
+    memset(mobileTrackers->Begin, 0, span_ByteCount(*mobileTrackers));
+    memset(staticTrackers->Begin, 0, span_ByteCount(*staticTrackers));
+    memset(globalTrackers->Begin, 0, span_ByteCount(*globalTrackers));
+    return ERR_OK;
+}
+
+error_t KMC_ResetContextAfterPreRun(SCONTEXT_PARAM)
+{
+    var error = ResetJumpStatisticsToNull(SCONTEXT);
+    return_if(error, error);
+
+    error = ResetStateCounterCollectionsToNull(SCONTEXT);
+    return_if(error, error);
+
+    error = ResetStateMetaDataToNull(SCONTEXT);
+    return_if(error, error);
+
+    error = ResetTrackingSystemToNull(SCONTEXT);
+    return error;
 }
 
 // Populates a freshly constructed simulation context with the required runtime information

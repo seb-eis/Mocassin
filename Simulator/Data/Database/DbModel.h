@@ -106,24 +106,33 @@ typedef struct EnvironmentDefinition
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(EnvironmentDefinition_t, EnvironmentDefinitions) EnvironmentDefinitions_t;
 
+// Type for the unit cell vector collection
+// Layout@ggc_x86_64 => 72@[3x24]
+typedef struct UnitCellVectors
+{
+    // The cartesian unit cell vector for direction A in [Ang]
+    Vector3_t   A;
+
+    // The cartesian unit cell vector for direction B in [Ang]
+    Vector3_t   B;
+
+    // The cartesian unit cell vector for direction C in [Ang]
+    Vector3_t   C;
+
+} UnitCellVectors_t;
+
 // Type for the structure meta data that contains non essential structure information
-// Layout@ggc_x86_64 => 608@[64x8, 4x24]
+// Layout@ggc_x86_64 => 608@[64x8,8,72]
 typedef struct StructureMetaData
 {
     // The charge values of the particles in units of [C]
-    double      ParticleCharges[PARTICLE_IDLIMIT];
+    double              ParticleCharges[PARTICLE_IDLIMIT];
 
     // The normalized electric field vector in cartesian coordinates
-    Vector3_t   NormElectricFieldVector;
+    Vector3_t           NormElectricFieldVector;
 
-    // The cartesian unit cell vector for direction A in [Ang]
-    Vector3_t   CellVectorA;
-
-    // The cartesian unit cell vector for direction B in [Ang]
-    Vector3_t   CellVectorB;
-
-    // The cartesian unit cell vector for direction C in [Ang]
-    Vector3_t   CellVectorC;
+    // The unit cell vector collection in units of [Ang]
+    UnitCellVectors_t   CellVectors;
 
 } StructureMetaData_t;
 
@@ -376,7 +385,7 @@ typedef struct MmcHeader
 } MmcHeader_t;
 
 // Type for the kmc job header
-// Layout@ggc_x86_64 => 32@[8,8,8,8]
+// Layout@ggc_x86_64 => 40@[8,8,8,8,4,{4}]
 typedef struct KmcHeader
 {
     // Bitmask for KMC specific job flags
@@ -390,6 +399,12 @@ typedef struct KmcHeader
 
     // Fixed norm factor for the simulation
     double      FixedNormalizationFactor;
+
+    // Pre-run mcsp before the main simulation
+    int32_t     PreRunMcsp;
+
+    // Padding
+    int32_t     Padding:32;
 
 } KmcHeader_t;
 

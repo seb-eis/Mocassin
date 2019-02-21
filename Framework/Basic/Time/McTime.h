@@ -16,6 +16,12 @@
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Errors/McErrors.h"
 
+#define TIME_SECONDS_PER_MINUTE 60
+
+#define TIME_SECONDS_PER_HOUR (TIME_SECONDS_PER_MINUTE * 60)
+
+#define TIME_SECONDS_PER_DAY (TIME_SECONDS_PER_HOUR * 24)
+
 // Defines the format for ISO8601 UTC time (YYYY-MM-DDTHH:MM:SS+HH:MM) format string
 #define TIME_ISO8601_FORMATSTR "%Y-%m-%dT%H:%M:%S+00:00"
 
@@ -60,9 +66,9 @@ static inline error_t GetCurrentTimeStampISO8601UTC(char *restrict buffer)
 static inline error_t SecondsToISO8601TimeSpan(char *restrict buffer, const int64_t totalSeconds)
 {
     const char format[] = "P" FORMAT_I64(02) "DT" FORMAT_I64(02) "H" FORMAT_I64(02) "M" FORMAT_I64(02) "S";
-    let days = totalSeconds / (3600 * 24);
-    let hours = (totalSeconds / (3600 * 24)) % 3600;
-    let minutes = (totalSeconds % 3600) / 60;
+    let days = totalSeconds / TIME_SECONDS_PER_DAY;
+    let hours = (totalSeconds % TIME_SECONDS_PER_DAY) / TIME_SECONDS_PER_HOUR;
+    let minutes = (totalSeconds % TIME_SECONDS_PER_HOUR) / TIME_SECONDS_PER_MINUTE;
     let seconds = totalSeconds % 60;
     return sprintf(buffer, format, days, hours, minutes, seconds) > 0 ? ERR_OK : ERR_STREAM;
 }

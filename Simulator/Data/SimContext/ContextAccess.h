@@ -782,7 +782,7 @@ static inline void setMainStateFlags(SCONTEXT_PARAM, const Bitmask_t flags)
 }
 
 // Unsets the passed flags on the main state
-static inline void UnsetMainStateFlags(SCONTEXT_PARAM, const Bitmask_t flags)
+static inline void unSetMainStateFlags(SCONTEXT_PARAM, const Bitmask_t flags)
 {
     unsetFlags(getMainStateHeader(SCONTEXT)->Data->Flags, flags);
 }

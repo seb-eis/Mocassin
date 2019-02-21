@@ -10,23 +10,7 @@ FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
 FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
 
-add_executable(Mocassin.Simulator
-        ./Main/main.c
-        ${FRAMEWORK_SOURCE}
-        ${SIMULATOR_SOURCE}
-        Framework/Basic/BaseTypes/Buffers.h
-        Framework/Basic/BaseTypes/Buffers.c
-        Framework/Basic/Macros/Macros.h
-        Framework/Sqlite/SqliteReader.h
-        Framework/Sqlite/SqliteReader.c
-        UnitTesting/MinimalUnitTest.h
-        UnitTesting/UnitTests.h
-        Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.h
-        Simulator/Logic/Initializers/JumpStatusInit/JumpStatusInit.c
-        Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h
-        Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.c
-        Simulator/Logic/Routines/Tracking/TransitionTracking.h
-        Simulator/Logic/Routines/Tracking/TransitionTracking.c)
+add_executable(Mocassin.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE})
 
 add_library(sqlite3 ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
 set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h)

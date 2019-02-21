@@ -9,7 +9,7 @@
 //////////////////////////////////////////
 
 #include "Simulator/Logic/Constants/Constants.h"
-#include "Simulator/Logic/Objects/JumpSelection.h"
+#include "Simulator/Logic/JumpSelection/JumpSelection.h"
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
 #include "Framework/Basic/BaseTypes/Buffers.h"
@@ -127,7 +127,7 @@ static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAM)
         }
 
         selectionInfo->EnvironmentId = getEnvironmentPoolEntryAt(directionPool, random / directionPool->DirectionCount);
-        selectionInfo->RelativeId = random % directionPool->DirectionCount;
+        selectionInfo->RelativeJumpId = random % directionPool->DirectionCount;
 
         return;
     }
@@ -138,7 +138,7 @@ static inline void RollPositionAndDirectionFromPool(SCONTEXT_PARAM)
 // Roll an environment offset id for the MMC selection process
 static inline void MMC_RollEnvironmentOffsetId(SCONTEXT_PARAM)
 {
-    getJumpSelectionInfo(SCONTEXT)->OffsetId = GetNextCeiledRandom(SCONTEXT, getEnvironmentLattice(SCONTEXT)->Header->Size);
+    getJumpSelectionInfo(SCONTEXT)->MmcOffsetSourceId = GetNextCeiledRandom(SCONTEXT, getEnvironmentLattice(SCONTEXT)->Header->Size);
 }
 
 // Replaces the direction pool entry at the passed id by the last entry and updates the id set of the moved environment

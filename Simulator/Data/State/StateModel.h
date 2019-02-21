@@ -19,7 +19,7 @@
 typedef Vector3_t Tracker_t;
 
 // Type for the state header information
-// Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]
+// Layout@ggc_x86_64 => 48@[8,8,8,4,4,4,4,4,4,4,4,4,{4}]
 typedef struct StateHeaderData
 {
     // The number of successful steps
@@ -115,8 +115,8 @@ typedef struct StateMetaData
     // The current jump normalization value
     double      JumpNormalization;
 
-    // The highest jump probability that has occurred
-    double      MaxJumpProbability;
+    // The highest raw (non-normalized) jump probability that has occurred as a successful jump
+    double      RawMaxJumpProbability;
 
     // The last calculated lattice energy value in [eV]
     double      LatticeEnergy;

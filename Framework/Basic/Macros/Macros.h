@@ -102,3 +102,9 @@
 
 // Macro that expands to a field getter on a passed pointer for comparer template value getters
 #define makeCompGetter(PTR, FIELD) (PTR)->FIELD
+
+// Macro to calculate the percent value of a total or 0 if the value is not finite
+#define getPercent(VALUE, TOTAL) isfinite(100.0 * ((double) VALUE / (double) TOTAL)) ? 100.0 * ((double) VALUE / (double) TOTAL) : 0
+
+// Nulls all fields of a variable
+#define nullStructContent(VARIABLE) memset(&(VARIABLE), 0, sizeof(typeof(VARIABLE)))

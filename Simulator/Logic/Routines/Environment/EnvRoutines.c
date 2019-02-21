@@ -102,8 +102,8 @@ static error_t InPlaceConstructEnvironmentLink(const EnvironmentDefinition_t* re
 {
     error_t error;
 
-    environmentLink->EnvironmentId = environmentId;
-    environmentLink->PairId = pairId;
+    environmentLink->TargetEnvironmentId = environmentId;
+    environmentLink->TargetPairId = pairId;
     error = BuildClusterLinkingByPairId(environmentDefinition, pairId, &environmentLink->ClusterLinks);
 
     return error;
@@ -201,7 +201,7 @@ static error_t LinkEnvironmentToSurroundings(SCONTEXT_PARAM, EnvironmentState_t*
 // Compares two environment links by their affiliated pair id
 static inline int32_t CompareEnvironmentLink(const EnvironmentLink_t* restrict lhs, const EnvironmentLink_t* restrict rhs)
 {
-    return compareLhsToRhs(lhs->PairId, rhs->PairId);
+    return compareLhsToRhs(lhs->TargetPairId, rhs->TargetPairId);
 }
 
 // Sort the linking system of an environment state to the unit cell independent order
@@ -410,7 +410,7 @@ void SetEnvironmentStateToDefault(SCONTEXT_PARAM, const int32_t environmentId, c
 // Sets the active work environment by an environment link
 static inline void SetActiveWorkEnvironment(SCONTEXT_PARAM, EnvironmentLink_t *restrict environmentLink)
 {
-    SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateAt(SCONTEXT, environmentLink->EnvironmentId);
+    SCONTEXT->CycleState.WorkEnvironment = getEnvironmentStateAt(SCONTEXT, environmentLink->TargetEnvironmentId);
 }
 
 // Sets the active work cluster by environment and cluster id
@@ -422,7 +422,7 @@ static inline void SetActiveWorkCluster(SCONTEXT_PARAM, EnvironmentState_t *rest
 // Sets the active work pair energy table by environment and environment link
 static inline void SetActiveWorkPairTable(SCONTEXT_PARAM, EnvironmentState_t *restrict environment, EnvironmentLink_t *restrict environmentLink)
 {
-    let pairDefinition = getEnvironmentPairDefinitionAt(environment, environmentLink->PairId);
+    let pairDefinition = getEnvironmentPairDefinitionAt(environment, environmentLink->TargetPairId);
     SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableAt(SCONTEXT, pairDefinition->EnergyTableId);
 }
 
@@ -635,16 +635,16 @@ void KMC_SetStartAndTransitionStateEnergies(SCONTEXT_PARAM)
     var particleId = GetCodeByteAt(&jumpRule->StateCode0, 0);
 
     // Set the values of the first entry, the first transition state energy is always zero
-    energyInfo->Energy0 = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
-    energyInfo->Energy1 = 0;
+    energyInfo->S0Energy = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
+    energyInfo->S1Energy = 0;
     // Add all remaining components to start and transition state
     for (byte_t i = 1; i < jumpDirection->JumpLength;i++)
     {
             // ToDo: Verify that leaving out the stability check branching performs better
             particleId = GetCodeByteAt(&jumpRule->StateCode0, i);
-            energyInfo->Energy0 += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
+            energyInfo->S0Energy += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
             particleId = GetCodeByteAt(&jumpRule->StateCode1, i);
-            energyInfo->Energy1 += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
+            energyInfo->S1Energy += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
     }
 }
 
@@ -656,12 +656,12 @@ void KMC_SetFinalStateEnergy(SCONTEXT_PARAM)
     var particleId = GetCodeByteAt(&jumpRule->StateCode2, 0);
 
     // Set the values of the first entry
-    energyInfo->Energy2 = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
+    energyInfo->S2Energy = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
 
     for(byte_t i = 1; i < jumpDirection->JumpLength;i++)
     {
         particleId = GetCodeByteAt(&jumpRule->StateCode2, i);
-        energyInfo->Energy2 += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
+        energyInfo->S2Energy += *getPathStateEnergyByIds(SCONTEXT, i, particleId);
     }
 }
 
@@ -684,7 +684,7 @@ static inline JumpLink_t MMC_BuildJumpLink(const EnvironmentState_t *restrict en
     var result = (JumpLink_t) { .SenderPathId = envState->PathId, .LinkId = 0 };
     cpp_foreach(envLink, envState->EnvironmentLinks)
     {
-        return_if(envLink->EnvironmentId == targetEnvId, result);
+        return_if(envLink->TargetEnvironmentId == targetEnvId, result);
         ++result.LinkId;
     }
     return (JumpLink_t){ .SenderPathId = INVALID_INDEX, .LinkId = INVALID_INDEX };
@@ -742,9 +742,9 @@ void MMC_SetStartStateEnergy(SCONTEXT_PARAM)
     var jumpEnergyInfo = getJumpEnergyInfo(SCONTEXT);
 
     let particleId0 = GetCodeByteAt(&jumpRule->StateCode0, 0);
-    jumpEnergyInfo->Energy0 =  *getPathStateEnergyByIds(SCONTEXT, 0, particleId0);
+    jumpEnergyInfo->S0Energy =  *getPathStateEnergyByIds(SCONTEXT, 0, particleId0);
     let particleId1 = GetCodeByteAt(&jumpRule->StateCode0, 1);
-    jumpEnergyInfo->Energy0 += *getPathStateEnergyByIds(SCONTEXT, 1, particleId1);
+    jumpEnergyInfo->S0Energy += *getPathStateEnergyByIds(SCONTEXT, 1, particleId1);
 }
 
 void MMC_SetFinalStateEnergy(SCONTEXT_PARAM)
@@ -753,9 +753,9 @@ void MMC_SetFinalStateEnergy(SCONTEXT_PARAM)
     var jumpEnergyInfo = getJumpEnergyInfo(SCONTEXT);
 
     let particleId0 = GetCodeByteAt(&jumpRule->StateCode2, 0);
-    jumpEnergyInfo->Energy2 =  *getPathStateEnergyByIds(SCONTEXT, 0, particleId0);
+    jumpEnergyInfo->S2Energy =  *getPathStateEnergyByIds(SCONTEXT, 0, particleId0);
     let particleId1 = GetCodeByteAt(&jumpRule->StateCode2, 1);
-    jumpEnergyInfo->Energy2 += *getPathStateEnergyByIds(SCONTEXT, 1, particleId1);
+    jumpEnergyInfo->S2Energy += *getPathStateEnergyByIds(SCONTEXT, 1, particleId1);
 }
 
 void MMC_AdvanceSystemToFinalState(SCONTEXT_PARAM)
