@@ -39,13 +39,20 @@ namespace Mocassin.Framework.QuickTest
                 _baseFile = Console.ReadLine();
             }
 
-            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            var package = TestXmlInputSystem();
-            TestParameterSets(package);
-            var jobCollections = TestJobSystem(package);
-            TestDbCreation(package, jobCollections);
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+                var package = TestXmlInputSystem();
+                TestParameterSets(package);
+                var jobCollections = TestJobSystem(package);
+                TestDbCreation(package, jobCollections);
+            }
+            catch (Exception e)
+            {
+                ExitOnKeyPress($"Fatal exception during execution:\n{e}");
+            }
 
-            Console.ReadLine();
+            ExitOnKeyPress("Finished successfully...");
         }
 
         private static ManagerPackage TestXmlInputSystem()
@@ -66,8 +73,8 @@ namespace Mocassin.Framework.QuickTest
             {
                 if (!report.IsGood)
                 {
-                    ExitOnKeyPress("A validation failed, please refer to the report set...");
                     Console.WriteLine(report.ToString());
+                    ExitOnKeyPress("A validation failed, please refer to the report set...");
                 }
 
                 if (report?.ConflictReport.GetWarnings().FirstOrDefault() == null)
@@ -156,10 +163,20 @@ namespace Mocassin.Framework.QuickTest
         private static ManagerPackage CreateManagerPackage()
         {
             var filePath = _basePath + "Mocassin.Settings.xml";
-            if (!File.Exists(filePath)) return ManagerFactory.DebugFactory.CreateSimulationManagementPackage(null);
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"Settings missing, created new @ {filePath}");
+                WriteDefaultSettingsContract(filePath);
+            }
 
             var projectSettings = ProjectSettings.Deserialize(filePath);
             return ManagerFactory.DebugFactory.CreateSimulationManagementPackage(projectSettings);
+        }
+
+        private static void WriteDefaultSettingsContract(string filePath)
+        {
+            var settings = ProjectSettings.CreateDefault();
+            settings.Serialize(filePath);
         }
     }
 }

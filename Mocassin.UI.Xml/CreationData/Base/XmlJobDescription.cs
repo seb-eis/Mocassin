@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
@@ -50,19 +51,19 @@ namespace Mocassin.UI.Xml.CreationData
         public JobConfiguration ToInternal(ISimulation baseSimulation)
         {
             var obj = GetPreparedInternal(baseSimulation);
-            obj.TargetMcsp = TargetMcsp is null 
-                ? baseSimulation.TargetMcsp 
+            obj.TargetMcsp = TargetMcsp is null
+                ? baseSimulation.TargetMcsp
                 : int.Parse(TargetMcsp);
 
-            obj.TimeLimit = (TimeLimit is null ? baseSimulation.SaveRunTimeLimit.Ticks : TimeSpan.Parse(TimeLimit).Ticks) /
+            obj.TimeLimit = (TimeLimit is null ? baseSimulation.SaveRunTimeLimit.Ticks : ParseTimeString(TimeLimit).Ticks) /
                             TimeSpan.TicksPerSecond;
 
-            obj.Temperature = Temperature is null 
-                ? baseSimulation.Temperature 
+            obj.Temperature = Temperature is null
+                ? baseSimulation.Temperature
                 : double.Parse(Temperature);
 
-            obj.MinimalSuccessRate = MinimalSuccessRate is null 
-                ? baseSimulation.LowerSuccessRateLimit 
+            obj.MinimalSuccessRate = MinimalSuccessRate is null
+                ? baseSimulation.LowerSuccessRateLimit
                 : double.Parse(MinimalSuccessRate);
 
             return obj;
@@ -80,20 +81,20 @@ namespace Mocassin.UI.Xml.CreationData
 
             obj.LatticeConfiguration = baseConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
-            obj.TargetMcsp = TargetMcsp is null 
-                ? baseConfiguration.TargetMcsp 
+            obj.TargetMcsp = TargetMcsp is null
+                ? baseConfiguration.TargetMcsp
                 : int.Parse(TargetMcsp);
 
             obj.TimeLimit = TimeLimit is null
                 ? baseConfiguration.TimeLimit
-                : TimeSpan.Parse(TimeLimit).Ticks / TimeSpan.TicksPerSecond;
+                : ParseTimeString(TimeLimit).Ticks / TimeSpan.TicksPerSecond;
 
-            obj.Temperature = Temperature is null 
-                ? baseConfiguration.Temperature 
+            obj.Temperature = Temperature is null
+                ? baseConfiguration.Temperature
                 : double.Parse(Temperature);
 
-            obj.MinimalSuccessRate = MinimalSuccessRate is null 
-                ? baseConfiguration.MinimalSuccessRate 
+            obj.MinimalSuccessRate = MinimalSuccessRate is null
+                ? baseConfiguration.MinimalSuccessRate
                 : double.Parse(MinimalSuccessRate);
 
             return obj;
@@ -114,5 +115,29 @@ namespace Mocassin.UI.Xml.CreationData
         /// <param name="baseConfiguration"></param>
         /// <returns></returns>
         protected abstract JobConfiguration GetPreparedInternal(JobConfiguration baseConfiguration);
+
+        /// <summary>
+        ///     Parses the passed time string under consideration of both ISO8601 and current culture settings. If both fail a
+        ///     default value is set
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="defaultHours"></param>
+        /// <returns></returns>
+        protected static TimeSpan ParseTimeString(string s, int defaultHours = 24)
+        {
+            if (!TimeSpan.TryParse(s, out var timeLimit))
+            {
+                try
+                {
+                    timeLimit = XmlConvert.ToTimeSpan(s);
+                }
+                catch (Exception e)
+                {
+                    timeLimit = TimeSpan.FromHours(defaultHours);
+                }
+            }
+
+            return timeLimit;
+        }
     }
 }

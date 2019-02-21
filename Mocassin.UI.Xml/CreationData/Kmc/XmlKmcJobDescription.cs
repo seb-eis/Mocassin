@@ -14,6 +14,12 @@ namespace Mocassin.UI.Xml.CreationData
     public class XmlKmcJobDescription : XmlJobDescription
     {
         /// <summary>
+        ///     Get or set the pre run monte carlo steps per particle as a string
+        /// </summary>
+        [XmlAttribute("PrerunMcsp")]
+        public string PreRunMcsp { get; set; }
+
+        /// <summary>
         ///     Get or set the modulus of the electric field in [V/m] as a string
         /// </summary>
         [XmlAttribute("ElectricFieldModulus")]
@@ -39,6 +45,10 @@ namespace Mocassin.UI.Xml.CreationData
 
             var obj = new KmcJobConfiguration
             {
+                PreRunMcsp = PreRunMcsp is null 
+                    ? kmcBaseSimulation.PreRunMcsp
+                    : int.Parse(PreRunMcsp),
+
                 BaseFrequency = MaxAttemptFrequency is null
                     ? kmcBaseSimulation.Transitions.SelectMany(x => x.GetTransitionRules()).Max(rule => rule.AttemptFrequency)
                     : double.Parse(MaxAttemptFrequency),
@@ -63,6 +73,10 @@ namespace Mocassin.UI.Xml.CreationData
 
             var obj = new KmcJobConfiguration
             {
+                PreRunMcsp = PreRunMcsp is null 
+                    ? kmcBaseConfig.PreRunMcsp
+                    : int.Parse(PreRunMcsp),
+
                 BaseFrequency = MaxAttemptFrequency is null
                     ? kmcBaseConfig.BaseFrequency
                     : double.Parse(MaxAttemptFrequency),

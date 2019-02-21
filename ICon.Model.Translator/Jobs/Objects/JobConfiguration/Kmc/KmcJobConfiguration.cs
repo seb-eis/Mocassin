@@ -6,6 +6,11 @@
     public class KmcJobConfiguration : JobConfiguration
     {
         /// <summary>
+        ///     Get or set the pre run mcsp of the simulation
+        /// </summary>
+        public int PreRunMcsp { get; set; }
+
+        /// <summary>
         ///     Get or set the modulus of the electric field in [V/m]
         /// </summary>
         public double ElectricFieldModulus { get; set; }
@@ -35,6 +40,7 @@
         public void CopyTo(KmcJobConfiguration jobConfiguration)
         {
             base.CopyTo(jobConfiguration);
+            jobConfiguration.PreRunMcsp = PreRunMcsp;
             jobConfiguration.BaseFrequency = BaseFrequency;
             jobConfiguration.ElectricFieldModulus = ElectricFieldModulus;
             jobConfiguration.FixedNormalizationFactor = FixedNormalizationFactor;
@@ -47,6 +53,7 @@
             {
                 Structure = new CKmcJobHeader
                 {
+                    PreRunMcsp = PreRunMcsp,
                     BaseFrequency = BaseFrequency,
                     FixedNormalizationFactor = FixedNormalizationFactor,
                     ElectricFieldModulus = ElectricFieldModulus,

@@ -5,7 +5,7 @@ namespace Mocassin.Model.Translator
     /// <summary>
     ///     Simulation job info object. Layout marshals to its binary unmanaged 'C' representation
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 32)]
+    [StructLayout(LayoutKind.Sequential, Size = 40)]
     public struct CKmcJobHeader
     {
         [field: MarshalAs(UnmanagedType.I8)]
@@ -19,5 +19,11 @@ namespace Mocassin.Model.Translator
 
         [field: MarshalAs(UnmanagedType.R8)]
         public double FixedNormalizationFactor { get; set; }
+
+        [field: MarshalAs(UnmanagedType.I4)]
+        public int PreRunMcsp { get; set; }
+
+        [field: MarshalAs(UnmanagedType.I4)] 
+        private readonly int padding;
     }
 }

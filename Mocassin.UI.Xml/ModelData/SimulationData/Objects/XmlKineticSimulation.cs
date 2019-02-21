@@ -16,6 +16,12 @@ namespace Mocassin.UI.Xml.SimulationData
     public class XmlKineticSimulation : XmlSimulationBase
     {
         /// <summary>
+        /// Get or set the pre-run mcsp for normalization and relaxation of the lattice
+        /// </summary>
+        [XmlAttribute("PrerunMcsp")]
+        public int PreRunMcsp;
+
+        /// <summary>
         ///     Get or set a custom normalization probability for the simulation
         /// </summary>
         [XmlAttribute("NormalizationProbability")]
@@ -48,7 +54,8 @@ namespace Mocassin.UI.Xml.SimulationData
                 NormalizationProbability = NormalizationProbability,
                 ElectricFieldMagnitude = Math.Abs(ElectricFieldMagnitude),
                 ElectricFieldVector = ElectricFieldVector.AsDataVector3D(),
-                Transitions = Transitions.Select(x => x.GetInputObject()).Cast<IKineticTransition>().ToList()
+                Transitions = Transitions.Select(x => x.GetInputObject()).Cast<IKineticTransition>().ToList(),
+                PreRunMcsp = PreRunMcsp
             };
             return obj;
         }

@@ -157,7 +157,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
-            SetSimulationTypeFlags(result, simulationModel);
+            SetSimulationJobInfoFlags(result, simulationModel);
             return result;
         }
 
@@ -166,16 +166,19 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="simulationModel"></param>
-        protected void SetSimulationTypeFlags(SimulationJobModel jobModel, ISimulationModel simulationModel)
+        protected void SetSimulationJobInfoFlags(SimulationJobModel jobModel, ISimulationModel simulationModel)
         {
             const long kmcFlag = (long) SimulationJobInfoFlags.KmcSimulation;
             const long mmcFlag = (long) SimulationJobInfoFlags.MmcSimulation;
+            const long preFlag = (long) SimulationJobInfoFlags.UsePrerun;
 
             switch (simulationModel)
             {
                 case IKineticSimulationModel _:
+                    var header = ((InteropObject<CKmcJobHeader>) jobModel.JobHeader).Structure;
                     jobModel.JobInfo.Structure.JobFlags |= kmcFlag;
                     jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & mmcFlag;
+                    jobModel.JobInfo.Structure.JobFlags |= header.PreRunMcsp == 0 ? 0 : preFlag;
                     return;
 
                 case IMetropolisSimulationModel _:

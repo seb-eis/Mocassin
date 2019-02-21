@@ -38,6 +38,9 @@ namespace Mocassin.Model.Simulations
 
             if (Settings.ElectricField.ParseValue(simulation.ElectricFieldMagnitude, out warnings) != 0)
                 report.AddWarnings(warnings);
+
+            if (Settings.PreRunMcsp.ParseValue(simulation.PreRunMcsp, out warnings) != 0)
+                report.AddWarnings(warnings);
         }
 
         /// <summary>

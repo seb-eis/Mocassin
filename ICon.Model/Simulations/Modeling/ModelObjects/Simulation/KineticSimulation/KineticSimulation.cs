@@ -22,6 +22,10 @@ namespace Mocassin.Model.Simulations
 
         /// <inheritdoc />
         [DataMember]
+        public int PreRunMcsp { get; set; }
+
+        /// <inheritdoc />
+        [DataMember]
         public double NormalizationProbability { get; set; }
 
         /// <inheritdoc />
@@ -58,6 +62,7 @@ namespace Mocassin.Model.Simulations
             ElectricFieldMagnitude = simulation.ElectricFieldMagnitude;
             ElectricFieldVector = new DataVector3D(simulation.ElectricFieldVector);
             Transitions = (simulation.Transitions ?? new List<IKineticTransition>()).ToList();
+            PreRunMcsp = simulation.PreRunMcsp;
             return this;
         }
     }

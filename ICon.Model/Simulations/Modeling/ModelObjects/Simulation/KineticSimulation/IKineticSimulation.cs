@@ -10,6 +10,11 @@ namespace Mocassin.Model.Simulations
     public interface IKineticSimulation : ISimulation
     {
         /// <summary>
+        ///     Get the number of pre run MCSP for relaxation and normalization
+        /// </summary>
+        int PreRunMcsp { get; }
+
+        /// <summary>
         ///     The electric field direction as a read only fractional vector
         /// </summary>
         Fractional3D ElectricFieldVector { get; }

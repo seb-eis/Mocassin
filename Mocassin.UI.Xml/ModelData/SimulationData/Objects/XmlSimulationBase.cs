@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Simulations;
@@ -63,13 +64,25 @@ namespace Mocassin.UI.Xml.SimulationData
         /// <inheritdoc />
         protected override ModelObject GetPreparedModelObject()
         {
+            if (!TimeSpan.TryParse(SaveRunTimeLimit, out var timeLimit))
+            {
+                try
+                {
+                    timeLimit = XmlConvert.ToTimeSpan(SaveRunTimeLimit);
+                }
+                catch (Exception e)
+                {
+                    timeLimit = TimeSpan.FromHours(24);
+                }
+            }
+
             var simulationBase = GetPreparedSpecifiedSimulation();
             simulationBase.Name = Name ?? Guid.NewGuid().ToString();
             simulationBase.CustomRngSeed = CustomRngSeed;
             simulationBase.Temperature = Temperature;
             simulationBase.TargetMcsp = TargetMcsp;
             simulationBase.WriteOutCount = SimulationBlockCount;
-            simulationBase.SaveRunTimeLimit = TimeSpan.Parse(SaveRunTimeLimit);
+            simulationBase.SaveRunTimeLimit = timeLimit;
             simulationBase.LowerSuccessRateLimit = LowerSuccessRateLimit;
             simulationBase.JobCount = JobCount;
             return simulationBase;

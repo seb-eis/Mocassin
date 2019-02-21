@@ -6,7 +6,7 @@ namespace Mocassin.UI.GUI.Displays.ReportDisplay
     /// <summary>
     ///     View model for the basic text display of multiple <see cref="IOperationReport" /> interfaces
     /// </summary>
-    public class ReportTextDisplayViewModel : StringCollectionViewModel
+    public class ReportTextDisplayViewModel : ObservableCollectionViewModel
     {
         /// <summary>
         ///     Appends an <see cref="IOperationReport" /> to the display collection
@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Displays.ReportDisplay
         /// <param name="report"></param>
         public void AppendReport(IOperationReport report)
         {
-            AppendDisplayString(report?.ToString());
+            AppenCollectionItem(report?.ToString());
         }
     }
 }
