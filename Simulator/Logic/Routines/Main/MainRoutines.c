@@ -19,7 +19,7 @@
 #include "Simulator/Logic/Initializers/ContextInit/ContextInit.h"
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
-#include "Simulator/Logic/Routines/PrintOut/PrintRoutines.h"
+#include "InternalLibraries/Interfaces/ProgressPrint.h"
 
 // Advances the block counters of the main loop to the next step goal
 static inline void AdvanceMainCycleCounterToNextStepGoal(SCONTEXT_PARAM)
@@ -548,6 +548,7 @@ error_t SyncSimulationStateToRunStatus(SCONTEXT_PARAM)
 
 error_t SaveSimulationState(SCONTEXT_PARAM)
 {
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_SKIPSAVE), ERR_OK);
     let stateBuffer = getMainStateBuffer(SCONTEXT);
     let targetFile = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN) ? FILE_PRERSTATE : FILE_MAINSTATE;
 

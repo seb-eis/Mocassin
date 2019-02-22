@@ -22,9 +22,10 @@
 
 /* Job info flag values */
 
-#define INFO_FLG_KMC        1
-#define INFO_FLG_MMC        1 << 1
-#define INFO_FLG_USEPRERUN  1 << 2
+#define INFO_FLG_KMC        1       // Flag that marks a job as MMC
+#define INFO_FLG_MMC        1 << 1  // Flag that marks a job as KMC
+#define INFO_FLG_USEPRERUN  1 << 2  // Flag that marks a job to contain pre-run
+#define INFO_FLG_SKIPSAVE   1 << 3  // Flag that marks a job as unsaved with no state saving
 
 /* Main state flag values */
 

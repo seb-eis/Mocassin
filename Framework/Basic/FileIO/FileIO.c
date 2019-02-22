@@ -111,10 +111,10 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
     if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
         return ERR_STREAM;
 
-    if (ctor_Buffer(*outBuffer, (size_t)bufferSize) != ERR_OK)
-    {     
-        fclose(fileStream);
-        return ERR_MEMALLOCATION;
+    if (span_GetSize(*outBuffer) != (size_t)bufferSize)
+    {
+        delete_Span(*outBuffer);
+        *outBuffer = new_Span(*outBuffer, (size_t)bufferSize);
     }
 
     error = LoadBufferFromStream(fileStream, outBuffer);

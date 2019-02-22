@@ -9,7 +9,17 @@
 //////////////////////////////////////////
 
 #include <Simulator/Data/Database/DbModel.h>
-#include "SqliteReader.h"
+#include "Sqlite3JobLoader.h"
+
+void LoadSimulationDbModelToContext(SCONTEXT_PARAM)
+{
+    int32_t jobContextId = -1;
+    if (sscanf(getFileInformation(SCONTEXT)->JobDbQuery, "%i", &jobContextId) != 1)
+        error_exit(ERR_VALIDATION, "Job context id is invalid");
+
+    error_t error = PopulateDbModelFromDatabase(&SCONTEXT->DbModel, getFileInformation(SCONTEXT)->JobDbPath, jobContextId);
+    error_assert(error != ERR_OK, "Failed to load the job from the database.");
+}
 
 static error_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **sqlStatement, int32_t id)
 {

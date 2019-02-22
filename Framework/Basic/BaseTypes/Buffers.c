@@ -9,8 +9,8 @@
 //////////////////////////////////////////
 
 #include <string.h>
+#include <stdlib.h>
 #include "Framework/Basic/BaseTypes/Buffers.h"
-#include "Buffers.h"
 
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {

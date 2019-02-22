@@ -11,6 +11,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdlib.h>
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/Macros/Macros.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"

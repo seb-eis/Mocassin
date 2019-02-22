@@ -4,7 +4,7 @@
 #endif //ICON_SIMULATOR_UNITTESTS_H
 
 #include "MinimalUnitTest.h"
-#include "Framework/Sqlite/SqliteReader.h"
+#include "InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.h"
 #include <stdio.h>
 #include "ExternalLibraries/sqlite3.h"
 #include <string.h>

@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include "Simulator/Data/Database/DbModel.h"
 #include "ExternalLibraries/sqlite3.h"
+#include "InternalLibraries/Interfaces/JobLoader.h"
 
 /*
  * How to use the SqliteReader:

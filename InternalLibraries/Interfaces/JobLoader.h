@@ -11,5 +11,6 @@
 #pragma once
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
-void LoadSimulationModelFromDatabase(SCONTEXT_PARAM);
+// Loads the database model of the job to the passed simulation context
+void LoadSimulationDbModelToContext(SCONTEXT_PARAM);
 

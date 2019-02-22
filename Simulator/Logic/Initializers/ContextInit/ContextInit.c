@@ -478,7 +478,8 @@ static void PopulatePluginDelegates(SCONTEXT_PARAM)
 static error_t TryLoadStateFromFile(SCONTEXT_PARAM, char const * restrict filePath)
 {
     return_if(!IsAccessibleFile(filePath), ERR_USEDEFAULT);
-    return LoadBufferFromFile(filePath, getMainStateBuffer(SCONTEXT));
+    var stateBuffer = getMainStateBuffer(SCONTEXT);
+    return LoadBufferFromFile(filePath, stateBuffer);
 }
 
 // Drop creates a state file by ensuring that the original is deleted
@@ -494,10 +495,8 @@ static error_t TryLoadSimulationState(SCONTEXT_PARAM)
     error_t error;
 
     if ((error = TryLoadStateFromFile(SCONTEXT, FILE_MAINSTATE)) == ERR_OK)
-    {
-        EnsureFileIsDeleted(FILE_PRERSTATE);
         return error;
-    }
+
     error = TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE);
     return error;
 }
@@ -624,17 +623,10 @@ static void PopulateSimulationState(SCONTEXT_PARAM)
 {
     error_t error;
 
-    // ToDo: Remove deletes after testing
-    EnsureFileIsDeleted(FILE_PRERSTATE);
-    EnsureFileIsDeleted(FILE_MAINSTATE);
-
     if ((error = TryLoadSimulationState(SCONTEXT)) == ERR_USEDEFAULT)
     {
         error = SyncMainStateToDatabaseModel(SCONTEXT);
         error_assert(error, "Data structure synchronization failure (static model ==> state).");
-
-        error = DropCreateStateFile(SCONTEXT, FILE_PRERSTATE);
-        error_assert(error, "Could not create initial state file.");
 
         return;
     }
