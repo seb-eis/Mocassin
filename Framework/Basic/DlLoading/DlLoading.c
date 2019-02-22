@@ -8,7 +8,7 @@
 // Short:   General plugin loading      //
 //////////////////////////////////////////
 
-#include "Framework/Basic/Plugins/PluginLoading.h"
+#include "Framework/Basic/DlLoading/DlLoading.h"
 
 #if !defined(MC_USE_PLUGIN_SUPPORT)
     void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
@@ -20,6 +20,7 @@
         static void LogOsApiError(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "WIN32 API ERROR:\t0x%lx\n API CALL DETAIL:\t%s\n", GetLastError(), message);
+            fflush(stream);
         }
 
         void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
@@ -27,7 +28,7 @@
             HMODULE module;
             void* function = NULL;
 
-            if ((module = LoadLibrary(libraryPath)) == NULL)
+            if ((module = GetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'LoadLibrary(<FILENAME>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -42,19 +43,37 @@
             }
             return function;
         }
+
+        bool_t UnloadDynamicLibrary(const char* restrict libraryName)
+        {
+            HMODULE module = GetModuleHandleA(libraryName);
+            return_if(module == NULL, false);
+            return (bool_t) FreeLibrary(module);
+        }
+
+        LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
+        {
+            HMODULE module;
+            if ((module = GetModuleHandleA(libraryPath)) == NULL)
+                module = LoadLibraryA(libraryPath);
+
+            return module;
+        }
+
     #endif
 
     #if defined(linux)
         static void LogOsApiError(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "LINUX API ERROR:\t%s\n API CALL DETAIL:\t%s\n", dlerror(), message);
+            fflush(stream);
         }
 
         void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             void* dlHandle, function;
             
-            if ((dlHandle = dlopen(libraryPath, RTLD_LAZY)) == NULL)
+            if ((dlHandle = GetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'dlopen(<FILENAME>, <FLAGS>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -68,6 +87,20 @@
                 return NULL;
             }
             return function;
+        }
+
+        LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
+        {
+            void* dlHandle;
+            if ((dlHandle) = dlopen(libraryPath, RTLD_NOLOAD) == NULL)
+                dlHandle =dlopen(libraryPath, RTLD_LAZY);
+
+            return dlHandle;
+        }
+
+        bool_t UnloadDynamicLibrary(const char* restrict libraryName)
+        {
+            dlclose()
         }
     #endif
 #endif

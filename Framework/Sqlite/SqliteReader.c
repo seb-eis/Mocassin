@@ -421,3 +421,4 @@ DbModelOnLoadedOperations_t GetOnLoadedOperations()
     };
     return (DbModelOnLoadedOperations_t) span_CArrayToSpan(operations);
 }
+

@@ -12,7 +12,7 @@ FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
 
 add_executable(Mocassin.Simulator ./Main/main.c ${FRAMEWORK_SOURCE} ${SIMULATOR_SOURCE})
 
-add_library(sqlite3 ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
+add_library(sqlite3 SHARED ./ExternalLibraries/sqlite3.h ./ExternalLibraries/sqlite3.c)
 set_target_properties(sqlite3 PROPERTIES PUBLIC_HEADER ./ExternalLibraries/sqlite3.h)
 set_property(TARGET sqlite3 PROPERTY C_STANDARD 11)
 

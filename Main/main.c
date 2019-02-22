@@ -18,6 +18,7 @@
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Simulator/Logic/Routines/PrintOut/PrintRoutines.h"
+#include "Framework/Basic/DlLoading/DlLoading.h"
 #include "UnitTesting/MinimalUnitTest.h"
 #include "UnitTesting/UnitTests.h"
 
