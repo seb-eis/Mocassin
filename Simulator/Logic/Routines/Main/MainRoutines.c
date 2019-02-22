@@ -41,7 +41,7 @@ void PrepareForMainRoutine(SCONTEXT_PARAM)
     let cycleCounters = getMainCycleCounters(SCONTEXT);
 
     PrepareContextForSimulation(SCONTEXT);
-    if (cycleCounters->NextExecutionPhaseGoalMcsCount == 0)
+    while (cycleCounters->NextExecutionPhaseGoalMcsCount <= cycleCounters->McsCount)
         AdvanceMainCycleCounterToNextStepGoal(SCONTEXT);
 
     SetRuntimeInfoToCurrent(SCONTEXT);
