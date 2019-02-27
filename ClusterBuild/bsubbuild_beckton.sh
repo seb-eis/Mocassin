@@ -3,11 +3,11 @@ rm -f build_job
 cpu_model="Beckton"
 cat > build_job <<end_B
 ### Job name
-#BSUB -J mocassin_build
+#BSUB -J $cpu_model.build
 
 ### File / path where STDOUT & STDERR will be written
 ###    %J is the job ID, %I is the array ID
-#BSUB -o mocassin_build.%J.%I
+#BSUB -o $PWD/Logs/$cpu_model.%J.%I
 
 ### Request the time you need for execution in minutes
 ### The format for the parameter is: [hour:]minute,
@@ -20,7 +20,7 @@ cat > build_job <<end_B
 #BSUB -M 2048
 
 ### Change to the work directory
-cd $HOME/Mocassin/Simulator
+cd $HOME/Mocassin/Simulator/ClusterBuild/Logs
 
 ### Execute your application
 $HOME/Mocassin/Simulator/clusterbuild.sh $cpu_model $@
