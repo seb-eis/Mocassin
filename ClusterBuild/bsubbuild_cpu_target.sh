@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 rm -f build_job
-cpu_model="Beckton"
-cat > build_job <<end_B
+cpu_model=$1
+cat > $HOME/Mocassin/Simulator/ClusterBuild/Logs/$cpu_model.build_job <<end_B
 ### Job name
 #BSUB -J $cpu_model.build
 
@@ -23,6 +23,6 @@ cat > build_job <<end_B
 cd $HOME/Mocassin/Simulator/ClusterBuild/Logs
 
 ### Execute your application
-$HOME/Mocassin/Simulator/clusterbuild.sh $cpu_model $@
+$HOME/Mocassin/Simulator/ClusterBuild/clusterbuild.sh $cpu_model $@
 end_B
-bsub < build_job
+bsub < $HOME/Mocassin/Simulator/ClusterBuild/Logs/$cpu_model.build_job
