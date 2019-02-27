@@ -172,8 +172,8 @@ static inline void MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT_PARAM)
         buffer->LastSum = buffer->CurrentSum;
         buffer->CurrentSum = 0;
 
-        cpp_foreach(value, *buffer) buffer->LastSum += *value;
-        buffer->LastSum *= factors->EnergyFactorKtToEv;
+        cpp_foreach(value, *buffer) buffer->CurrentSum += *value;
+        buffer->CurrentSum *= factors->EnergyFactorKtToEv;
         buffer->End = buffer->Begin;
         return;
     }
@@ -318,18 +318,18 @@ error_t KMC_FinishExecutionPhase(SCONTEXT_PARAM)
 }
 
 // Action for cases where the MMC jump selection leads to an unstable end state
-static inline void MMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
-{
-    var counters = getActiveCounters(SCONTEXT);
-    ++counters->UnstableEndCount;
-}
-
-// Action for cases where the jump selection enables to leave a currently unstable state
-static inline void MMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
-{
-    var counters = getActiveCounters(SCONTEXT);
-    ++counters->UnstableStartCount;
-}
+//static inline void MMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
+//{
+//    var counters = getActiveCounters(SCONTEXT);
+//    ++counters->UnstableEndCount;
+//}
+//
+//// Action for cases where the jump selection enables to leave a currently unstable state
+//static inline void MMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
+//{
+//    var counters = getActiveCounters(SCONTEXT);
+//    ++counters->UnstableStartCount;
+//}
 
 // Action for cases where the jump selection has been statistically accepted
 static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
@@ -403,6 +403,7 @@ static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
     metaData->TimePerBlock = (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
     metaData->ProgramRunTime += (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
 
+
     var blockEta = metaData->TimePerBlock + metaData->ProgramRunTime;
     runInfo->PreviousBlockFinishClock = newClock;
 
@@ -417,7 +418,7 @@ static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
     let counters = getMainCycleCounters(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
 
-    if (metaData->ProgramRunTime == 0) return false;
+    return_if(metaData->ProgramRunTime == 0, false);
 
     metaData->SuccessRate = counters->McsCount / metaData->ProgramRunTime;
     metaData->CycleRate = counters->CycleCount / metaData->ProgramRunTime;
@@ -479,7 +480,7 @@ static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAM)
     let jobHeader = getDbModelJobHeaderAsMMC(SCONTEXT);
     let abortBuffer = getLatticeEnergyBuffer(SCONTEXT);
     let limitFluctuation = fabs(metaData->LatticeEnergy * jobHeader->AbortTolerance);
-    let currentFluctuation = abortBuffer->CurrentSum - abortBuffer->LastSum;
+    let currentFluctuation = abortBuffer->CurrentSum;
 
     return (isfinite(currentFluctuation)) ? (limitFluctuation >= fabs(currentFluctuation)) : false;
 }
@@ -501,7 +502,7 @@ error_t SyncMainStateLatticeToRunStatus(SCONTEXT_PARAM)
     let environmentLattice = getEnvironmentLattice(SCONTEXT);
     var latticeState = getMainStateLattice(SCONTEXT);
 
-    return_if(span_GetSize(*latticeState) != array_GetSize(*environmentLattice), ERR_DATACONSISTENCY);
+    return_if(span_Length(*latticeState) != array_Length(*environmentLattice), ERR_DATACONSISTENCY);
 
     cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
         span_Get(*latticeState, envState->EnvironmentId) = envState->ParticleId;
@@ -776,7 +777,7 @@ void MMC_SetJumpProbabilities(SCONTEXT_PARAM)
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = exp(energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = exp(-energyInfo->S0toS2DeltaEnergy);
     energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
@@ -787,18 +788,6 @@ void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
 
     plugins->OnSetJumpProbabilities(SCONTEXT);
 
-    // Handle case where the end state is unstable
-    if (energyInfo->CompareS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
-    {
-        MMC_OnJumpIsToUnstableState(SCONTEXT);
-        return;
-    }
-    // Handle case where the start state is unstable
-    if (energyInfo->CompareS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
-    {
-        MMC_OnJumpIsFromUnstableState(SCONTEXT);
-        return;
-    }
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDouble(SCONTEXT);
     if (energyInfo->CompareS0toS2Probability >= random)

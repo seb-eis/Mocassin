@@ -31,7 +31,7 @@ bool_t IsAccessibleFile(const char* restrict fileName)
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
 {
     return_if(fileStream == NULL, ERR_STREAM);
-    let bufferSize = span_GetSize(*buffer);
+    let bufferSize = span_Length(*buffer);
 
     if (fwrite(buffer->Begin, sizeof(byte_t), bufferSize, fileStream) != bufferSize)
         return ERR_STREAM;
@@ -98,7 +98,7 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
 error_t LoadBufferFromStream(file_t* restrict fileStream, Buffer_t* restrict buffer)
 {
     return_if(fileStream == NULL, ERR_STREAM);
-    fread(buffer->Begin, 1, span_GetSize(*buffer), fileStream);
+    fread(buffer->Begin, 1, span_Length(*buffer), fileStream);
     return ERR_OK;
 }
 
@@ -111,7 +111,7 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
     if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
         return ERR_STREAM;
 
-    if (span_GetSize(*outBuffer) != (size_t)bufferSize)
+    if (span_Length(*outBuffer) != (size_t)bufferSize)
     {
         delete_Span(*outBuffer);
         *outBuffer = new_Span(*outBuffer, (size_t)bufferSize);

@@ -15,7 +15,7 @@
 static void AllocateJumpStatusArray(SCONTEXT_PARAM)
 {
     let cellSizes = getLatticeSizeVector(SCONTEXT);
-    let jumpCountPerCell = (int32_t) span_GetSize(*getJumpDirections(SCONTEXT));
+    let jumpCountPerCell = (int32_t) span_Length(*getJumpDirections(SCONTEXT));
     JumpStatusArray_t statusArray = new_Array(statusArray,cellSizes->A,cellSizes->B,cellSizes->C,jumpCountPerCell);
 
     *getJumpStatusArray(SCONTEXT) = statusArray;
@@ -40,7 +40,7 @@ static error_t PrepareJumpPathForLinkSearch(SCONTEXT_PARAM, const Vector4_t*rest
 // Tries to find the passed environment id in the passed set of environment links and writes the index of the link to the passed buffer if found
 static bool_t TryGetEnvironmentLinkId(const EnvironmentLinks_t*restrict environmentLinks, const int32_t searchEnvId, int32_t*restrict outId)
 {
-    for (int32_t i = 0; i < span_GetSize(*environmentLinks); ++i)
+    for (int32_t i = 0; i < span_Length(*environmentLinks); ++i)
     {
         if (span_Get(*environmentLinks, i).TargetEnvironmentId == searchEnvId)
         {
@@ -111,7 +111,7 @@ static error_t ConstructJumpStatusCollection(SCONTEXT_PARAM)
 {
     error_t error;
     JumpLink_t linkSearchBuffer[JUMPS_JUMPLINK_LIMIT];
-    let jumpDirectionCount = (int32_t) span_GetSize(*getJumpDirections(SCONTEXT));
+    let jumpDirectionCount = (int32_t) span_Length(*getJumpDirections(SCONTEXT));
     memset(linkSearchBuffer, 0, sizeof(linkSearchBuffer));
 
     // Generate jump status for each jump direction in each unit cell

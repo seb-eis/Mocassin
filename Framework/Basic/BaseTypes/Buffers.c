@@ -94,7 +94,7 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     error_assert(error, "Out of memory on array construct");
 
     MakeArrayBlocks(rank, dimensions, &outArray->Header->FirstBlockEntry);
-    outArray->Header->Size = (int32_t) (span_GetSize(*outArray) / sizeOfElement);
+    outArray->Header->Size = (int32_t) (span_Length(*outArray) / sizeOfElement);
     outArray->Header->Rank = rank;
 
     memset(outArray->Begin, 0, span_ByteCount(*outArray));
@@ -111,8 +111,8 @@ void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElem
     }
 
     let bufferArray = (VoidArray_t) {.Header = (void*) buffer};
-    let headerByteCount = array_GetHeaderSize(bufferArray);
-    let dataByteCount = array_GetSize(bufferArray) * sizeOfElements;
+    let headerByteCount = array_HeaderByteCount(bufferArray);
+    let dataByteCount = array_Length(bufferArray) * sizeOfElements;
     let totalByteCount = headerByteCount + dataByteCount;
 
     outArray->Header = malloc(totalByteCount);
@@ -126,8 +126,8 @@ void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElem
 
 void GetArrayDimensions(const VoidArray_t*restrict array, int32_t*restrict outBuffer)
 {
-    let rank = array_GetRank(*array);
-    let size = array_GetSize(*array);
+    let rank = array_Rank(*array);
+    let size = array_Length(*array);
     let blocks = &array->Header->FirstBlockEntry;
 
     outBuffer[0] = size / blocks[0];
@@ -149,7 +149,7 @@ void MakeArrayBlocks(const int32_t rank, const int32_t dimensions[rank], int32_t
 bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs)
 {
     return_if(lhs->Begin == rhs->Begin && lhs->End == rhs->End, true);
-    return_if(span_GetSize(*lhs) != span_GetSize(*rhs), false);
+    return_if(span_Length(*lhs) != span_Length(*rhs), false);
 
     byte_t * lhsit = lhs->Begin;
     byte_t * rhsit = rhs->Begin;
@@ -168,8 +168,8 @@ void CopyBuffer(byte_t const* source, byte_t* target, const size_t size)
 
 error_t SaveCopyBuffer(const Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer)
 {
-    let sourceSize = span_GetSize(*sourceBuffer);
-    return_if(sourceSize > span_GetSize(*targetBuffer), ERR_BUFFEROVERFLOW);
+    let sourceSize = span_Length(*sourceBuffer);
+    return_if(sourceSize > span_Length(*targetBuffer), ERR_BUFFEROVERFLOW);
     CopyBuffer(sourceBuffer->Begin, targetBuffer->Begin, sourceSize);
     return ERR_OK;
 }

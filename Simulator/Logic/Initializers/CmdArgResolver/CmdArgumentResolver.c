@@ -12,6 +12,13 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Simulator/Logic/Validators/Validators.h"
 
+// Tries to redirect the stdout stream to a file stream
+static void setStdoutRedirection(SCONTEXT_PARAM, const char* filePath)
+{
+    let error = freopen(filePath, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
+    error_assert(error, "Stream redirection of stdout to a file returned a null stream");
+}
+
 // Get the collection of resolvers for essential cmd arguments
 static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
 {
@@ -38,7 +45,8 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
         { "-outPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setOutputPluginPath },
         { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setOutputPluginSymbol },
         { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
-        { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol }
+        { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
+        { "-stdRedirect",     (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection}
     };
 
     static const CmdArgLookup_t resolverTable =
@@ -80,7 +88,7 @@ static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAM)
 {
     error_t error;
     let resolverTable = getEssentialCmdArgsResolverTable();
-    var unresolved = span_GetSize(*resolverTable);
+    var unresolved = span_Length(*resolverTable);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {
@@ -103,7 +111,7 @@ static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAM)
 {
     error_t error;
     let resolverTable = getOptionalCmdArgsResolverTable();
-    var unresolved = span_GetSize(*resolverTable);
+    var unresolved = span_Length(*resolverTable);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {

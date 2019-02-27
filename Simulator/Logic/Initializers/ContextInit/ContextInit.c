@@ -30,7 +30,7 @@
 static void AllocateEnvironmentBuffers(EnvironmentState_t *restrict env, EnvironmentDefinition_t *restrict envDef)
 {
     let environmentMaxParticleId = GetEnvironmentMaxParticleId(envDef);
-    let clusterStatesSize = span_GetSize(envDef->ClusterInteractions);
+    let clusterStatesSize = span_Length(envDef->ClusterInteractions);
     let energyStatesSize = (environmentMaxParticleId == PARTICLE_NULL) ? 0 : environmentMaxParticleId + 1;
 
     env->EnergyStates = new_Span(env->EnergyStates, energyStatesSize);
@@ -360,7 +360,7 @@ static error_t ConstructMainStateBufferAccessors(SCONTEXT_PARAM)
     usedBufferBytes = ConfigStateMobileTrackerMappingAccess(SCONTEXT, usedBufferBytes);
     usedBufferBytes = ConfigStateJumpStatisticsAccess(SCONTEXT, usedBufferBytes);
 
-    return (usedBufferBytes == span_GetSize(*stateBuffer)) ? ERR_OK : ERR_DATACONSISTENCY;
+    return (usedBufferBytes == span_Length(*stateBuffer)) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
 // Calculates the required size in bytes for the main simulation state buffer
@@ -483,11 +483,11 @@ static error_t TryLoadStateFromFile(SCONTEXT_PARAM, char const * restrict filePa
 }
 
 // Drop creates a state file by ensuring that the original is deleted
-static error_t DropCreateStateFile(SCONTEXT_PARAM, char const * restrict filePath)
-{
-    EnsureFileIsDeleted(filePath);
-    return WriteBufferToFile(filePath, FMODE_BINARY_W, getMainStateBuffer(SCONTEXT));
-}
+//static error_t DropCreateStateFile(SCONTEXT_PARAM, char const * restrict filePath)
+//{
+//    EnsureFileIsDeleted(filePath);
+//    return WriteBufferToFile(filePath, FMODE_BINARY_W, getMainStateBuffer(SCONTEXT));
+//}
 
 // Tries to load the simulation state from the typical possible save locations
 static error_t TryLoadSimulationState(SCONTEXT_PARAM)
@@ -517,7 +517,7 @@ static error_t CopyDbLatticeToMainState(SCONTEXT_PARAM)
 {
     let dbLattice = getDbModelLattice(SCONTEXT);
     var stLattice = getMainStateLattice(SCONTEXT);
-    let latticeSize = span_GetSize(*stLattice);
+    let latticeSize = span_Length(*stLattice);
 
     return_if(latticeSize != dbLattice->Header->Size, ERR_DATACONSISTENCY);
 
@@ -582,7 +582,7 @@ static error_t SyncDynamicEnvironmentsWithState(SCONTEXT_PARAM)
 {
     let envLattice = getEnvironmentLattice(SCONTEXT);
     let stLattice = getMainStateLattice(SCONTEXT);
-    let latticeSize = span_GetSize(*stLattice);
+    let latticeSize = span_Length(*stLattice);
 
     return_if(envLattice->Header->Size != latticeSize, ERR_DATACONSISTENCY);
 
@@ -763,6 +763,10 @@ static error_t ResetJumpStatisticsToNull(SCONTEXT_PARAM)
 // Resets all state counter collections to zero values
 static error_t ResetStateCounterCollectionsToNull(SCONTEXT_PARAM)
 {
+    // Change the main counters to compensate for overflow during pre-run phase
+    var mainCounters = getMainCycleCounters(SCONTEXT);
+    mainCounters->TotalSimulationGoalMcsCount += mainCounters->McsCount - mainCounters->PrerunGoalMcs;
+
     var counters = getMainStateCounters(SCONTEXT);
     cpp_foreach(counter, *counters)
         nullStructContent(*counter);

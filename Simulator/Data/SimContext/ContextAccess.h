@@ -804,7 +804,7 @@ static inline Bitmask_t getJobHeaderFlagsKmc(SCONTEXT_PARAM)
 // Get the number of pair definitions on the passed environment state
 static inline int32_t getEnvironmentPairDefinitionCount(EnvironmentState_t *restrict envState)
 {
-    return (int32_t) span_GetSize(envState->EnvironmentDefinition->PairInteractions);
+    return (int32_t) span_Length(envState->EnvironmentDefinition->PairInteractions);
 }
 
 // Get the pair definition at the passed [relPairId] from an environment state

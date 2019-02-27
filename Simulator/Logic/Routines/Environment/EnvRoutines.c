@@ -22,7 +22,7 @@
 static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
 {
     int32_t index = 0;
-    let numOfCodes = span_GetSize(clusterTable->OccupationCodes);
+    let numOfCodes = span_Length(clusterTable->OccupationCodes);
     while ((span_Get(clusterTable->OccupationCodes, index) != occupationCode) && (index < numOfCodes))
         index++;
 
@@ -156,7 +156,7 @@ static error_t AllocateEnvLinkListBuffersByPresetCounters(SCONTEXT_PARAM)
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
     {
         // Link is counted using the NULL initialized span access struct
-        let linkCount = span_GetSize(environment->EnvironmentLinks);
+        let linkCount = span_Length(environment->EnvironmentLinks);
         tmpBuffer = new_List(tmpBuffer, linkCount);
         environment->EnvironmentLinks = tmpBuffer;
     }
@@ -208,7 +208,7 @@ static inline int32_t CompareEnvironmentLink(const EnvironmentLink_t* restrict l
 static void SortEnvironmentLinkingSystem(SCONTEXT_PARAM, EnvironmentState_t* environment)
 {
     var sortBase = environment->EnvironmentLinks.Begin;
-    let elementCount = span_GetSize(environment->EnvironmentLinks);
+    let elementCount = span_Length(environment->EnvironmentLinks);
     qsort(sortBase, elementCount, sizeof(EnvironmentLink_t), (FComparer_t) CompareEnvironmentLink);
 }
 
@@ -253,7 +253,7 @@ static error_t AllocateDynamicEnvOccupationBuffer(SCONTEXT_PARAM, Buffer_t* rest
     size_t bufferSize = 0;
 
     cpp_foreach(environmentDefinition, *getEnvironmentModels(SCONTEXT))
-        bufferSize = getMaxOfTwo(bufferSize, span_GetSize(environmentDefinition->PairInteractions));
+        bufferSize = getMaxOfTwo(bufferSize, span_Length(environmentDefinition->PairInteractions));
 
     *buffer = new_Span(*buffer, bufferSize);
     return ERR_OK;
@@ -288,7 +288,7 @@ static void NullEnvironmentStateBuffers(EnvironmentState_t *restrict environment
 // Adds all environment pair energies of the passed environment state to its internal energy buffers using the passed occupation buffer as the occupation source
 static void AddEnvPairEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
-    for (size_t i = 0; i < span_GetSize(environment->EnvironmentDefinition->PairInteractions); i++)
+    for (size_t i = 0; i < span_Length(environment->EnvironmentDefinition->PairInteractions); i++)
     {
         let tableId = span_Get(environment->EnvironmentDefinition->PairInteractions, i).EnergyTableId;
         let pairTable = getPairEnergyTableAt(SCONTEXT, tableId);
@@ -315,7 +315,7 @@ static error_t InitializeClusterStateStatus(SCONTEXT_PARAM, ClusterState_t* rest
 // Synchronizes the all cluster states of the passed environment state and adds the resulting energies to the environment state energy buffer
 static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
-    return_if(span_GetSize(environment->ClusterStates) != span_GetSize(environment->EnvironmentDefinition->ClusterInteractions), ERR_DATACONSISTENCY);
+    return_if(span_Length(environment->ClusterStates) != span_Length(environment->EnvironmentDefinition->ClusterInteractions), ERR_DATACONSISTENCY);
 
     error_t error;
     var clusterState = environment->ClusterStates.Begin;

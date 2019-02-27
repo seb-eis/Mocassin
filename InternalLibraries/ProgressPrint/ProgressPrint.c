@@ -1,11 +1,11 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	DebugRoutines.h        		//
+// File:	FullProgressPint.h        	//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
 //			© 2018 Sebastian Eisele     //
-// Short:   Debug routines              //
+// Short:   Full print routines         //
 //////////////////////////////////////////
 
 #include <math.h>
@@ -43,8 +43,8 @@ static inline int64_t GetRemainingRunTimeEta(SCONTEXT_PARAM)
 static inline int64_t  GetCounterCollectionCycleCount(const StateCounterCollection_t* restrict counters)
 {
     return counters->McsCount + counters->RejectionCount
-        + counters->UnstableEndCount + counters->UnstableStartCount
-        + counters->SiteBlockingCount;
+           + counters->UnstableEndCount + counters->UnstableStartCount
+           + counters->SiteBlockingCount;
 }
 
 // Checks if a particle id is potentially marked as mobile in any environment definition

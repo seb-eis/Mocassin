@@ -47,8 +47,8 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
 // Get the value type of a span
 #define vtypeof_span(SPAN) typeof(span_Get(SPAN, 0))
 
-// Get the size of the passed span
-#define span_GetSize(SPAN) ((SPAN).End-(SPAN).Begin)
+// Get the number of elements of the passed span
+#define span_Length(SPAN) ((SPAN).End-(SPAN).Begin)
 
 // Get the number of bytes of the passed span
 #define span_ByteCount(SPAN) ((void*) (SPAN).End - (void*) (SPAN).Begin)
@@ -69,7 +69,7 @@ void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, Void
 #define span_AsVoid(SPAN) { (void*) (SPAN).Begin, (void*) (SPAN).End }
 
 // Macro function that will return true if the passed index value is out of range of the passed span
-#define span_IndexIsOutOfRange(SPAN, INDEX) ((INDEX) >= span_GetSize(SPAN) || INDEX < 0)
+#define span_IndexIsOutOfRange(SPAN, INDEX) ((INDEX) >= span_Length(SPAN) || INDEX < 0)
 
 // Macro to in-place construct a new span from the passed blob and number of elements information
 #define span_FromBlob(SPAN,BUFFER,SIZE) *(typeof(SPAN)*) ConstructSpanFromBlob((BUFFER), (SIZE)*sizeof(typeof(*(SPAN).Begin)), (VoidSpan_t*) &(SPAN))
@@ -143,7 +143,7 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 #define delete_List(LIST) free((LIST).Begin)
 
 // Get the capacity of the passed list
-#define list_GetCapacity(LIST) ((LIST).CapacityEnd-(LIST).Begin)
+#define list_Capacity(LIST) ((LIST).CapacityEnd-(LIST).Begin)
 
 // Pushes the passed value to the end of the passed list without checking for overflow
 #define list_PushBack(LIST, VALUE) *((LIST).End++) = (VALUE)
@@ -195,13 +195,13 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
 #define delete_Array(ARRAY) free((ARRAY).Header)
 
 // Get the total number of elements in any type of array
-#define array_GetSize(ARRAY) ((ARRAY).Header->Size)
+#define array_Length(ARRAY) ((ARRAY).Header->Size)
 
 // Get the rank of any type of array
-#define array_GetRank(ARRAY) ((ARRAY).Header->Rank)
+#define array_Rank(ARRAY) ((ARRAY).Header->Rank)
 
 // Get the header size in bytes of any array
-#define array_GetHeaderSize(ARRAY) (1 + array_GetRank(ARRAY)) * sizeof(int32_t)
+#define array_HeaderByteCount(ARRAY) (1 + array_Rank(ARRAY)) * sizeof(int32_t)
 
 // Allocates a new array by interpreting the passed buffer pointer as a formatted array and copies the data. Does not free original buffer!
 #define array_FromBlob(ARRAY, BUFFER) *(typeof(ARRAY)*) ConstructArrayFromBlob((BUFFER), sizeof(typeof(*(ARRAY).Begin)), (VoidArray_t*) &(ARRAY))
@@ -233,6 +233,6 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
     )
 
 // Get a boolean value indicating if the passed index set is out of the array access range
-#define array_IndicesAreOutOfRange(ARRAY, ...) ((array_GetRank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY)))
+#define array_IndicesAreOutOfRange(ARRAY, ...) ((array_Rank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY)))
 
 /* */

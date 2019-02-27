@@ -50,9 +50,10 @@ const char* ErrorCodeToString(error_t errCode)
 // Awaits an error response
 static void AwaitErrorResponse(error_t error)
 {
+    #if defined(MC_AWAIT_TERMINATION_OK)
     while (true)
     {
-        fprintf(stdout, "Error %x, continue execution ? [y/n]", error);
+        fprintf(stderr, "Error %x, continue execution? [y/n]", error);
 
         let value = getchar();
         ClearStdintBuffer();
@@ -65,12 +66,13 @@ static void AwaitErrorResponse(error_t error)
             default: continue;
         }
     }
+    #endif
 }
 
 void ErrorToStdout(int32_t errCode, const char *errFunc, int32_t errLine, const char *errMsg)
 {
-    fprintf(stdout, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
-    fflush(stdout);
+    fprintf(stderr, ERROR_FORMAT, errCode, errFunc, errLine, ErrorCodeToString(errCode), errMsg);
+    fflush(stderr);
     AwaitErrorResponse(errCode);
 }
 

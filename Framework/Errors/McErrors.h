@@ -15,7 +15,10 @@
 #include <stdlib.h>
 
 // Defines the MC test build macro that enables most of the debugging assertions and save getter/setters
-#define MC_TESTBUILD
+//#define MC_TESTBUILD
+
+// Defines the await termination macro
+//#define MC_AWAIT_TERMINATION_OK
 
 // Define to enable all debug assertions
 //#define ENABLE_DEBUG_ASSERTIONS
@@ -51,7 +54,7 @@ typedef int64_t cerror_t;
 #define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nFunc:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
 
 // Defines the path to the debug stderr dump folder
-#define STDERR_PATH "./Debug/stderr.log"
+#define STDERR_PATH "./stderr.log"
 
 // Defines the error code that indicates that a default value should be used (Not translatable to string)
 #define ERR_USEDEFAULT (-1)

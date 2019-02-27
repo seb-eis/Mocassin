@@ -4,8 +4,6 @@
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 
-#define MC_AWAIT_TERMINATION_OK
-
 int main(int argc, char const * const *argv)
 {
     var SCONTEXT = ctor_SimulationContext();
