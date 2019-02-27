@@ -37,17 +37,33 @@ set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER InternalLib
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-# Basic compiler settings
-#set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
-#set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
-
-# Advanced compiler settings, small performance improvement
-set(CMAKE_C_FLAGS_DEBUG "-Wall -g -msse3 -mavx2 -fno-cx-limited-range -funroll-loops -march=native")
-set(CMAKE_C_FLAGS_RELEASE "-Wall -O3 -msse3 -mavx2 -fno-cx-limited-range -funroll-loops -march=native")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+
+if (WIN32)
+    # Compiler settings for windows
+    message(STATUS "** Compiling with WINDOWS settings **")
+    # Basic compiler settings
+    #set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
+    #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
+
+    # Advanced compiler settings, small performance improvement
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -g -msse3 -fno-cx-limited-range -funroll-loops -march=native")
+    set(CMAKE_C_FLAGS_RELEASE "-Wall -O3 -msse3 -fno-cx-limited-range -funroll-loops -march=native")
+
+elseif (UNIX)
+    # Compiler settings for linux
+    message(STATUS "** Compiling with UNIX settings **")
+    # Basic compiler settings
+    #set(CMAKE_C_FLAGS_DEBUG "-Wall -g -lm -ldl -pthread")
+    #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3 -lm -ldl -pthread")
+
+    # Advanced compiler settings, small performance improvement
+    set(CMAKE_C_FLAGS_RELEASE "-O3 -w -msse3 -fno-cx-limited-range -funroll-loops -march=native -lm -ldl -pthread")
+    set(CMAKE_C_FLAGS_DEBUG "-g -msse3 -fno-cx-limited-range -funroll-loops -march=native -lm -ldl -pthread")
+endif ()
 
 target_link_libraries(jobloader sqlite3 framework)
 target_link_libraries(progressprint framework)

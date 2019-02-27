@@ -25,6 +25,11 @@
         #define LIBHANDLE void*
     #endif
 
+    #if defined(__INTEL_COMPILER)
+        #include <dlfcn.h>
+        #define LIBHANDLE void*
+    #endif
+
     #if !defined(_DEBUG)
         #define IGNORE_INVALID_PLUGINS
     #endif

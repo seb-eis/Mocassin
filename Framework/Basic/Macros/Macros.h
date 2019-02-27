@@ -17,7 +17,11 @@
 #define var __auto_type
 
 // Macro that defines the const auto type
+#ifdef __INTEL_COMPILER
+#define let var
+#else
 #define let var const
+#endif
 
 /*Arg count macro from Roland Illig and Laurent Deniau*/
 

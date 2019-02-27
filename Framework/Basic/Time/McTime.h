@@ -11,6 +11,9 @@
 #pragma once
 
 #include <string.h>
+#if defined(_WIN32)
+#define __STDC_WANT_LIB_EXT1__ 1
+#endif
 #include <time.h>
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
@@ -32,7 +35,13 @@
 static inline error_t GetCurrentTimeInfo(struct tm *restrict timeInfo, bool_t asGMT)
 {
     time_t raw = time(NULL);
+    #if defined (linux) || defined(__INTEL_COMPILER)
+    let ptr = (asGMT) ? gmtime_r(&raw, timeInfo) : localtime_r(&raw, timeInfo);
+    return (ptr != NULL) ? ERR_OK : ERR_UNKNOWN;
+    #else
     return  (asGMT) ? gmtime_s(timeInfo, &raw) : localtime_s(timeInfo, &raw);
+    #endif
+
 }
 
 // Get the current time as a string with the provided format and writes it to the passed buffer (Default if format is NULL). Return error code on failure!
@@ -49,10 +58,15 @@ static inline error_t GetFormatedTimeStamp(const char *format, char *buffer, siz
 static inline error_t TimeToTimeStampISO8601UTC(char *restrict buffer, const time_t *restrict time)
 {
     struct tm timeInfo;
+    #if defined(linux) || defined(__INTEL_COMPILER)
+    error_t error = (gmtime_r(time, &timeInfo) != NULL) ? ERR_OK : ERR_UNKNOWN;
+    #else
     error_t error = gmtime_s(&timeInfo, time);
+    #endif
     return_if(error, error);
     error = strftime(buffer, TIME_ISO8601_BYTECOUNT, TIME_ISO8601_FORMATSTR, &timeInfo) != 0 ? ERR_OK : ERR_UNKNOWN;
     return error;
+
 }
 
 // Get the current time as UTC with an ISO8601 format or an error if the creation fails

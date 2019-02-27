@@ -61,8 +61,7 @@
         }
 
     #endif
-
-    #if defined(linux)
+    #if defined(linux) || defined(__INTEL_COMPILER)
         static void LogOsApiError(FILE* restrict stream, const char* restrict message)
         {
             fprintf(stream, "LINUX API ERROR:\t%s\n API CALL DETAIL:\t%s\n", dlerror(), message);
@@ -71,7 +70,7 @@
 
         void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
-            void* dlHandle, function;
+            void* dlHandle, *function;
             
             if ((dlHandle = GetLibraryHandle(libraryPath)) == NULL)
             {
@@ -92,15 +91,18 @@
         LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
         {
             void* dlHandle;
-            if ((dlHandle) = dlopen(libraryPath, RTLD_NOLOAD) == NULL)
-                dlHandle =dlopen(libraryPath, RTLD_LAZY);
+            if ((dlHandle = dlopen(libraryPath, RTLD_NOLOAD)) == NULL)
+                dlHandle = dlopen(libraryPath, RTLD_LAZY);
 
             return dlHandle;
         }
 
         bool_t UnloadDynamicLibrary(const char* restrict libraryName)
         {
-            dlclose()
+	        void* dlHandle = GetLibraryHandle(libraryName);
+            return_if(dlHandle == NULL, false);
+            return (bool_t) dlclose(dlHandle);
+
         }
     #endif
 #endif
