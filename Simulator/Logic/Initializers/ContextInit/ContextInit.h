@@ -12,4 +12,7 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
 // Prepares the simulation context for the simulation
-void PrepareContextForSimulation(__SCONTEXT_PAR);
+void PrepareContextForSimulation(SCONTEXT_PARAM);
+
+// Resets the required simulation context components after pre run completion in KMC routines
+error_t KMC_ResetContextAfterPreRun(SCONTEXT_PARAM);

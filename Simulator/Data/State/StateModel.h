@@ -19,7 +19,7 @@
 typedef Vector3_t Tracker_t;
 
 // Type for the state header information
-// Layout@ggc_x86_64 => 48@[8,8,4,4,4,4,4,4,4,4,4,{4}]
+// Layout@ggc_x86_64 => 48@[8,8,8,4,4,4,4,4,4,4,4,4,{4}]
 typedef struct StateHeaderData
 {
     // The number of successful steps
@@ -106,7 +106,7 @@ typedef struct StateCounterCollection
 typedef Span_t(StateCounterCollection_t, CountersState) CountersState_t;
 
 // Type for the state meta information
-// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8,8]
 typedef struct StateMetaData
 {
     // The simulated time span of the system [seconds]
@@ -115,20 +115,23 @@ typedef struct StateMetaData
     // The current jump normalization value
     double      JumpNormalization;
 
-    // The highest jump probability that has occurred
-    double      MaxJumpProbability;
+    // The highest raw (non-normalized) jump probability that has occurred as a successful jump
+    double      RawMaxJumpProbability;
+
+    // The last calculated lattice energy value in [eV]
+    double      LatticeEnergy;
 
     // The runtime of the program in [seconds]
-    int64_t     ProgramRunTime;
+    double      ProgramRunTime;
 
     // The cycle rate of the simulation in [Hz]
-    int64_t     CycleRate;
+    double      CycleRate;
 
     // The success rate of the simulation in [Hz]
-    int64_t     SuccessRate;
+    double      SuccessRate;
 
     // The number of seconds for a block completion
-    int64_t     TimePerBlock;
+    double      TimePerBlock;
 
     // The random number generator state value
     uint64_t    RngState;

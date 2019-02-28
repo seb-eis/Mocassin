@@ -11,45 +11,194 @@
 #include <math.h>
 #include "Simulator/Logic/Constants/Constants.h"
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
+#include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 
-error_t CalcCycleCounterDefaultStatus(__SCONTEXT_PAR, CycleCounterState_t* counters)
+error_t SetCycleCounterStateToDefault(SCONTEXT_PARAM, CycleCounterState_t *counters)
 {
-    if (counters == NULL)
-    {
-        return ERR_NULLPOINTER;
-    }
+    return_if (counters == NULL, ERR_NULLPOINTER);
+    nullStructContent(*counters);
 
-    setBufferByteValues(counters, sizeof(CycleCounterState_t), 0);
-    counters->TotalGoalMcs = getDbModelJobInfo(SCONTEXT)->TargetMcsp * getNumberOfMobiles(SCONTEXT);
+    let jobInfo = getDbModelJobInfo(SCONTEXT);
+    let mobileCount = getNumberOfMobiles(SCONTEXT);
+    let kmcHeader = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? getDbModelJobHeaderAsKMC(SCONTEXT) : NULL;
 
-    int64_t rem = counters->TotalGoalMcs % CYCLE_BLOCKCOUNT;
-    if (rem != 0)
-    {
-        counters->TotalGoalMcs += CYCLE_BLOCKCOUNT - rem;
-    }
+    counters->PrerunGoalMcs = (kmcHeader != NULL) ? kmcHeader->PreRunMcsp * mobileCount : 0;
+    counters->TotalSimulationGoalMcsCount = counters->PrerunGoalMcs + jobInfo->TargetMcsp * mobileCount;
 
-    counters->CyclesPerBlock = CYCLE_BLOCKSIZE_MIN;
-    counters->McsPerBlock = counters->TotalGoalMcs / CYCLE_BLOCKCOUNT;
+    let rem = counters->TotalSimulationGoalMcsCount % CYCLE_BLOCKCOUNT;
+    if (rem != 0) counters->TotalSimulationGoalMcsCount += CYCLE_BLOCKCOUNT - rem;
+    counters->McsCountPerExecutionPhase = counters->TotalSimulationGoalMcsCount / CYCLE_BLOCKCOUNT;
+
+    counters->CycleCountPerExecutionLoop = counters->McsCountPerExecutionPhase * CYCLE_BLOCKSIZE_MUL;
+    counters->CycleCountPerExecutionLoop = getMinOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MAX);
+    counters->CycleCountPerExecutionLoop = getMinOfTwo(counters->CycleCountPerExecutionLoop, CYCLE_BLOCKSIZE_MIN);
+
     return ERR_OK;
 }
 
-error_t CalcPhysicalSimulationFactors(__SCONTEXT_PAR, PhysicalInfo_t* factors)
+error_t SetPhysicalSimulationFactorsToDefault(SCONTEXT_PARAM, PhysicalInfo_t *factors)
 {
-    if (factors == NULL)
-    {
-        return ERR_NULLPOINTER;
-    }
+    return_if (factors == NULL, ERR_NULLPOINTER);
 
-    factors->EnergyConversionFactor = CalcEnergyConversionFactor(SCONTEXT);
-    factors->CurrentTimeStepping = CalcTimeStepPerJump(SCONTEXT);
-    if (isfinite(CalcBasicJumpNormalization(SCONTEXT)))
-    {
-        factors->TotalNormalizationFactor = CalcTotalJumpNormalization(SCONTEXT);
-    }
+    factors->EnergyFactorEvToKt = GetEnergyFactorEvToKt(SCONTEXT);
+    factors->EnergyFactorKtToEv = 1.0 / factors->EnergyFactorEvToKt;
+
+    return_if (!JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC), ERR_OK);
+
+    let jobHeader = getDbModelJobHeaderAsKMC(SCONTEXT);
+    if (isfinite(GetBasicJumpNormalization(SCONTEXT)))
+        factors->TotalJumpNormalization = GetTotalJumpNormalization(SCONTEXT);
     else
+        factors->TotalJumpNormalization = jobHeader->FixedNormalizationFactor;
+
+    factors->TimeStepPerJumpAttempt = GetCurrentTimeStepPerJumpAttempt(SCONTEXT);
+    return ERR_OK;
+}
+
+Vector3_t CalculateMobileTrackerEnsembleShift(SCONTEXT_PARAM, byte_t particleId, bool_t isSquared)
+{
+    Vector3_t result = {.A = 0, .B = 0, .C = 0};
+
+    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
     {
-        factors->TotalNormalizationFactor = getDbModelJobHeaderAsKMC(SCONTEXT)->FixedNormFactor;
+        continue_if((envState->ParticleId != particleId) || (envState->MobileTrackerId <= INVALID_INDEX));
+
+        var tracker = *getMobileTrackerAt(SCONTEXT, envState->MobileTrackerId);
+        if (isSquared)
+        {
+            vector3VectorOp(tracker, tracker, *=);
+        }
+        vector3VectorOp(result, tracker, +=);
     }
 
-    return ERR_OK;
+    return result;
+}
+
+Vector3_t CalculateStaticTrackerEnsembleShift(SCONTEXT_PARAM, byte_t particleId)
+{
+    Vector3_t result = {.A = 0, .B = 0, .C = 0};
+
+    cpp_foreach(envState, *getEnvironmentLattice(SCONTEXT))
+    {
+        continue_if(envState->MobileTrackerId <= INVALID_INDEX);
+
+        let tracker = *getStaticMovementTrackerAt(SCONTEXT, &envState->PositionVector, particleId);
+        vector3VectorOp(result, tracker, +=);
+    }
+
+    return result;
+}
+
+Vector3_t GetGlobalTrackerEnsembleShift(SCONTEXT_PARAM, JumpCollection_t *jumpCollection, byte_t particleId)
+{
+    return *getGlobalMovementTrackerAt(SCONTEXT, jumpCollection->ObjectId, particleId);
+}
+
+// Get a mobility vector component in [m^2 / (V s)]
+static double GetMobilityVectorComponent(SCONTEXT_PARAM, const double displacement, const double normField)
+{
+    if (fabs(normField) < 0.0001)
+        return 0;
+
+    let component = displacement / (normField * getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus * getMainStateMetaData(SCONTEXT)->SimulatedTime);
+    return component;
+}
+
+double CalculateFieldProjectedMobility(SCONTEXT_PARAM, const Vector3_t *displacement, const Vector3_t *normFieldVector)
+{
+    let moveProj = CalcVector3Projection(displacement, normFieldVector);
+    let normProj = CalcVector3Normalization(&moveProj);
+    let fieldVec = ScalarMultiplyVector3(normFieldVector, getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus);
+    let projLength = CalcVector3Length(&moveProj);
+
+    let result = projLength / (CalcVector3DotProduct(&normProj, &fieldVec) * getMainStateMetaData(SCONTEXT)->SimulatedTime);
+    return result;
+}
+
+Vector3_t CalculateMobilityVector(SCONTEXT_PARAM, const Vector3_t *displacement, const Vector3_t *normFieldVector)
+{
+    Vector3_t result;
+    result.A = GetMobilityVectorComponent(SCONTEXT, displacement->A, normFieldVector->A);
+    result.B = GetMobilityVectorComponent(SCONTEXT, displacement->B, normFieldVector->B);
+    result.C = GetMobilityVectorComponent(SCONTEXT, displacement->C, normFieldVector->C);
+    return result;
+}
+
+double CalculateParticleDensity(SCONTEXT_PARAM, byte_t particleId)
+{
+    let volume = CalculateSuperCellVolume(SCONTEXT);
+    let particleCount = (double) GetParticleCountInLattice(SCONTEXT, particleId);
+    return particleCount / volume;
+}
+
+double CalculateSuperCellVolume(SCONTEXT_PARAM)
+{
+    let cellVectors = &getDbStructureModelMetaData(SCONTEXT)->CellVectors;
+    let spatProduct = CalcVector3SpatProduct(&cellVectors->A, &cellVectors->B, &cellVectors->C);
+    let cellCount = (double) GetUnitCellCount(SCONTEXT);
+    let volume = fabs(spatProduct) * CONV_VOLUME_ANG_TO_M * cellCount;
+    return volume;
+}
+
+double CalculateTotalConductivity(const double mobility, const double charge, const double particleDensity)
+{
+    return mobility * charge * particleDensity * NATCONST_ELMCHARGE;
+}
+
+static inline Vector3_t TransformFractionalToCartesian(Vector3_t *vector, const UnitCellVectors_t* cellVectors)
+{
+    Vector3_t result;
+    result.A = vector->A * cellVectors->A.A + vector->B * cellVectors->B.A  + vector->C * cellVectors->C.A;
+    result.B = vector->A * cellVectors->A.B + vector->B * cellVectors->B.B  + vector->C * cellVectors->C.B;
+    result.C = vector->A * cellVectors->A.C + vector->B * cellVectors->B.C  + vector->C * cellVectors->C.C;
+    return result;
+}
+
+static inline Vector3_t TransformSquaredFractionalToCartesian(Vector3_t *vector, const UnitCellVectors_t* cellVectors)
+{
+    var result = TransformFractionalToCartesian(vector, cellVectors);
+    result = TransformFractionalToCartesian(&result, cellVectors);
+    return result;
+}
+
+// Get the diffusion coefficient from mean square displacement and time information
+static inline double CalculateDiffusionCoefficient(const Vector3_t* vectorR2, const double time)
+{
+    return (1.0 /(6.0 * time)) * (vectorR2->A + vectorR2->B + vectorR2->C);
+}
+
+void PopulateMobilityData(SCONTEXT_PARAM, ParticleMobilityData_t *restrict data)
+{
+    let meta = getDbStructureModelMetaData(SCONTEXT);
+    let id = data->ParticleStatistics->ParticleId;
+    let count = data->ParticleStatistics->ParticleCount;
+    let density = data->ParticleStatistics->ParticleDensity;
+    let simulatedTime = getMainStateMetaData(SCONTEXT)->SimulatedTime;
+
+    data->EnsembleMoveR1 = CalculateMobileTrackerEnsembleShift(SCONTEXT, id, false);
+    data->EnsembleMoveR2 = CalculateMobileTrackerEnsembleShift(SCONTEXT, id, true);
+    vector3ScalarOp(data->EnsembleMoveR1, CONV_LENGTH_ANG_TO_M, *=);
+    vector3ScalarOp(data->EnsembleMoveR2, CONV_LENGTH_ANG_TO_M*CONV_LENGTH_ANG_TO_M, *=);
+
+    data->EnsembleMoveR1 = TransformFractionalToCartesian(&data->EnsembleMoveR1, &meta->CellVectors);
+    data->EnsembleMoveR2 = TransformSquaredFractionalToCartesian(&data->EnsembleMoveR2, &meta->CellVectors);
+
+    data->MeanMoveR1 = data->EnsembleMoveR1;
+    data->MeanMoveR2 = data->EnsembleMoveR2;
+    vector3ScalarOp(data->MeanMoveR1, count, /=);
+    vector3ScalarOp(data->MeanMoveR2, count, /=);
+
+    data->DiffusionCoefficient = CalculateDiffusionCoefficient(&data->MeanMoveR2, simulatedTime);
+    data->MobilityVector = CalculateMobilityVector(SCONTEXT, &data->MeanMoveR1, &meta->NormElectricFieldVector);
+    data->TotalMobility = CalculateFieldProjectedMobility(SCONTEXT, &data->MeanMoveR1, &meta->NormElectricFieldVector);
+
+    data->TotalConductivity = CalculateTotalConductivity(data->TotalMobility, meta->ParticleCharges[id], density);
+}
+
+void PopulateParticleStatistics(SCONTEXT_PARAM, ParticleStatistics_t *restrict statistics)
+{
+    statistics->SuperCellVolume = CalculateSuperCellVolume(SCONTEXT);
+    statistics->ParticleCount = GetParticleCountInLattice(SCONTEXT, statistics->ParticleId);
+    statistics->ParticleDensity = (double) statistics->ParticleCount / statistics->SuperCellVolume;
+    statistics->CounterCollection = getMainStateCounterAt(SCONTEXT, statistics->ParticleId);
 }

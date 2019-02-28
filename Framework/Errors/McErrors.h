@@ -15,12 +15,15 @@
 #include <stdlib.h>
 
 // Defines the MC test build macro that enables most of the debugging assertions and save getter/setters
-#define MC_TESTBUILD
+//#define MC_TESTBUILD
 
-// Defines the debug assert all macro
-#define DEBUG_ASSERT_ALL
+// Defines the await termination macro
+//#define MC_AWAIT_TERMINATION_OK
 
-#if defined(DEBUG_ASSERT_ALL)
+// Define to enable all debug assertions
+//#define ENABLE_DEBUG_ASSERTIONS
+
+#if defined(ENABLE_DEBUG_ASSERTIONS)
     // Active debug assertion macro. Asserts that the condition is true during runtime
     #define debug_assert(cond) if (!(cond)) { ErrorToStdout(ERR_DEBUGASSERT, __FUNCTION__, __LINE__, #cond); }
 #else
@@ -51,7 +54,7 @@ typedef int64_t cerror_t;
 #define ERROR_FORMAT_WDUMP "ERROR:\t0x%08x\nFunc:t%s\nLine:\t%d\nType:\t%s\nInfo:\t%s\nBuffer:\n\n"
 
 // Defines the path to the debug stderr dump folder
-#define STDERR_PATH "./Debug/stderr.log"
+#define STDERR_PATH "./stderr.log"
 
 // Defines the error code that indicates that a default value should be used (Not translatable to string)
 #define ERR_USEDEFAULT (-1)
@@ -120,13 +123,13 @@ typedef int64_t cerror_t;
 #define ERR_DEBUGASSERT 19
 
 // Defines the default error display with code and message
-#define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG);
+#define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
-#define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG);
+#define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
-#define error_exitdump(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND);
+#define error_exitdump(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND)
 
 // Asserts that the passed condition is true. Calls default error handling if condition is false
 #define runtime_assertion(cond, error, msg) if (!(cond)) errorhandle_default((error), (msg))
@@ -135,10 +138,7 @@ typedef int64_t cerror_t;
 #define error_assert(error, msg) runtime_assertion((error) == (ERR_OK), (error), (msg))
 
 // Macro for conditional one line returns statements
-#define return_if(cond, value) if (cond) return (value)
-
-// Macro for conditional one line returns statements without return value
-#define voidreturn_if(cond) if (cond) return;
+#define return_if(cond, ...) if (cond) return __VA_ARGS__
 
 // Macro for conditional one line continue statements
 #define continue_if(cond) if (cond) continue

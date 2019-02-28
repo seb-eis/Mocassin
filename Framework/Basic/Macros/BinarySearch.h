@@ -28,7 +28,7 @@
 // Function implementation template macro for CPP-Style lower bound search on span types
 #define FUNCIMPL_CPPLOWERBOUND(NAME, SPANTYPE, VTYPE, COMP) int32_t NAME(SPANTYPE* span, const VTYPE* value)\
 {\
-    int32_t firstIndex = 0, counter = span_GetSize(*span);\
+    int32_t firstIndex = 0, counter = span_Length(*span);\
     while (counter > 0)\
     {\
         int32_t step = counter / 2;\
@@ -49,7 +49,7 @@
 // Function implementation template macro for CPP style binary search on span types
 #define FUNCIMPL_BINARYSEARCH(NAME, SPANTYPE, VTYPE, COMP) int32_t NAME(SPANTYPE* span, const VTYPE* value)\
 {\
-    int32_t firstIndex = 0, counter = span_GetSize(*span);\
+    int32_t firstIndex = 0, counter = span_Length(*span);\
     while (counter > 0)\
     {\
         int32_t step = counter / 2;\
@@ -61,7 +61,7 @@
         }\
         else counter = step;\
     }\
-    firstIndex = (span_GetSize(*span) != firstIndex) ? firstIndex : -1;\
+    firstIndex = (span_Length(*span) != firstIndex) ? firstIndex : -1;\
     debug_assert(firstIndex != -1);\
     return firstIndex;\
 }

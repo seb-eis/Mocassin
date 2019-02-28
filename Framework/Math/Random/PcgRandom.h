@@ -31,19 +31,19 @@ typedef struct Pcg32 { uint64_t State;  uint64_t Inc; } Pcg32_t;
 // Get next random unsigned integer from the passed pcg32 rng
 static inline uint32_t Pcg32Next(Pcg32_t* restrict rng)
 {
-	uint64_t oldstate = rng->State;
+	let oldstate = rng->State;
 	rng->State = oldstate * 6364136223846793005ULL + rng->Inc;
-	uint32_t xorshifted = (uint32_t) (((oldstate >> 18u) ^ oldstate) >> 27u);
-	uint32_t rot = (uint32_t) (oldstate >> 59u);
+	let xorshifted = (uint32_t) (((oldstate >> 18u) ^ oldstate) >> 27u);
+	let rot = (uint32_t) (oldstate >> 59u);
 	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
 }
 
 static inline uint32_t Pcg32NextCeiled(Pcg32_t* restrict rng, uint32_t ceil)
 {
-    uint32_t threshold = -ceil % ceil;
+    let threshold = -ceil % ceil;
     for(;;)
     {
-        uint32_t rnv = Pcg32Next(rng);
+        let rnv = Pcg32Next(rng);
         if(rnv >= threshold) return rnv % ceil;
     }
 }
@@ -84,7 +84,7 @@ static inline double Pcg32GlobalNextDouble()
 static inline uint64_t GetStringHash(const char* str)
 {
 	uint64_t hash = 5381ULL;
-	int c;
+	int32_t c;
 
 	while ((c = *str++))
 		hash = ((hash << 5) + hash) + c;

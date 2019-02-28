@@ -22,9 +22,10 @@
 
 /* Job info flag values */
 
-#define INFO_FLG_KMC        1
-#define INFO_FLG_MMC        1 << 1
-#define INFO_FLG_USEPRERUN  1 << 2
+#define INFO_FLG_KMC        1       // Flag that marks a job as MMC
+#define INFO_FLG_MMC        1 << 1  // Flag that marks a job as KMC
+#define INFO_FLG_USEPRERUN  1 << 2  // Flag that marks a job to contain pre-run
+#define INFO_FLG_SKIPSAVE   1 << 3  // Flag that marks a job as unsaved with no state saving
 
 /* Main state flag values */
 
@@ -39,6 +40,7 @@
 #define STATE_FLG_INITIALIZED   1 << 8
 #define STATE_FLG_SIMERROR      1 << 9
 #define STATE_FLG_PRERUN_RESET  1 << 10
+#define STATE_FLG_ENERGYABORT   1 << 11
 
 /* Monte Carlo constants */
 
@@ -59,8 +61,9 @@
 /* Run/Cycle constants */
 
 #define CYCLE_BLOCKCOUNT    100LL
-#define CYCLE_BLOCKSIZE_MIN 1000
+#define CYCLE_BLOCKSIZE_MIN 100000
 #define CYCLE_BLOCKSIZE_MAX 10000000
+#define CYCLE_BLOCKSIZE_MUL 100
 
 /* Jump constants */
 
@@ -73,6 +76,9 @@
 #define JPOOL_DIRCOUNT_STATIC   -1
 #define JPOOL_DIRCOUNT_PASSIVE   0
 #define JPOOL_NOT_SELECTABLE    -1
+
+/* Cluster defines */
+#define CLUSTER_MAXLINK_COUNT   256
 
 /* Particle/position/index constants */
 

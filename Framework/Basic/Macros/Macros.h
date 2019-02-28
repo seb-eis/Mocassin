@@ -9,8 +9,19 @@
 //////////////////////////////////////////
 
 #pragma once
-
 #include <stdlib.h>
+
+/* Auto types */
+
+// Macro that defines the variable auto type
+#define var __auto_type
+
+// Macro that defines the const auto type
+#ifdef __INTEL_COMPILER
+#define let var
+#else
+#define let var const
+#endif
 
 /*Arg count macro from Roland Illig and Laurent Deniau*/
 
@@ -52,10 +63,10 @@
 /* Ptr usage */
 
 // Use a pointer as a pointer to the given type
-#define accessPtrAs(__TYPE, __VALUE) ((__TYPE*) (__VALUE))
+#define accessPtrAs(__TYPE, __VALUE) ((__TYPE*) ((void*) __VALUE))
 
 // Access the passed value as the given type
-#define accessValAs(__TYPE, __VALUE) ((__TYPE*) (&__VALUE))
+#define accessValAs(__TYPE, __VALUE) ((__TYPE*) ((void*) &__VALUE))
 
 // Compares the left value to the right value
 #define compareLhsToRhs(LHS,RHS) ((LHS)==(RHS)) ? 0 : ((LHS)<(RHS)) ? -1 : 1
@@ -79,13 +90,13 @@
 /* Local function declaration and implementation macros*/
 
 // Builds the default local name for a function
-#define namelocal(NAME) local_##NAME
+#define name_local_func(NAME) local_##NAME
 
 // Declare a local function using the passed function declaration macro template
-#define decllocal(FDECLTEMPLATE, NAME, ...) evalMacro(FDECLTEMPLATE, namelocal(NAME), __VA_ARGS__);
+#define decl_local_func(FDECLTEMPLATE, NAME, ...) evalMacro(FDECLTEMPLATE, name_local_func(NAME), __VA_ARGS__);
 
 // Implement a local function using the passed function implementation macro template
-#define impllocal(FIMPLTEMPLATE, FULLNAME, ...) evalMacro(FIMPLTEMPLATE, FULLNAME, __VA_ARGS__)
+#define impl_local_func(FIMPLTEMPLATE, FULLNAME, ...) evalMacro(FIMPLTEMPLATE, FULLNAME, __VA_ARGS__)
 
 // Defines the default value getter macro for function templates that expands to the value itself
 #define valGetter(VAL, ...) (VAL)
@@ -95,3 +106,9 @@
 
 // Macro that expands to a field getter on a passed pointer for comparer template value getters
 #define makeCompGetter(PTR, FIELD) (PTR)->FIELD
+
+// Macro to calculate the percent value of a total or 0 if the value is not finite
+#define getPercent(VALUE, TOTAL) isfinite(100.0 * ((double) VALUE / (double) TOTAL)) ? 100.0 * ((double) VALUE / (double) TOTAL) : 0
+
+// Nulls all fields of a variable
+#define nullStructContent(VARIABLE) memset(&(VARIABLE), 0, sizeof(typeof(VARIABLE)))

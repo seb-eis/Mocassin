@@ -9,12 +9,13 @@
 //////////////////////////////////////////
 
 #include <string.h>
+#include <stdlib.h>
 #include "Framework/Basic/BaseTypes/Buffers.h"
 
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {
-    size_t numOfBytes = numOfElements*sizeOfElement;
-    void* ptr = malloc(numOfBytes);
+    let numOfBytes = numOfElements*sizeOfElement;
+    let ptr = malloc(numOfBytes);
     return (VoidSpan_t) { .Begin = ptr, .End = ptr +  numOfBytes };
 }
 
@@ -28,14 +29,21 @@ void* ConstructVoidSpan(const size_t numOfElements, const size_t sizeOfElement, 
 {
     error_t error = TryAllocateSpan(numOfElements, sizeOfElement, outSpan);
     error_assert(error, "Out of memory on span construction.");
+    memset(outSpan->Begin, 0, numOfElements * sizeOfElement);
     return outSpan;
 }
 
-void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan)
+void* ConstructSpanFromBlob(const void *restrict buffer, size_t numOfBytes, VoidSpan_t *restrict outSpan)
 {
+    if (buffer == NULL)
+    {
+        *outSpan = (VoidSpan_t) {.Begin = NULL, .End = NULL};
+        return outSpan;
+    }
+
     *outSpan = new_Span(*outSpan, numOfBytes);
-    Buffer_t bufferSpan = (Buffer_t) {.Begin = buffer, .End = buffer + numOfBytes};
-    int error = SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
+    let bufferSpan = (Buffer_t) {.Begin = (void*) buffer, .End = (void*) buffer + numOfBytes};
+    var error = SaveCopyBuffer(&bufferSpan, (Buffer_t*) outSpan);
     error_assert(error, "this has not worked \n");
 
     return outSpan;
@@ -43,7 +51,7 @@ void* ConstructSpanFromBlob(void *restrict buffer, size_t numOfBytes, VoidSpan_t
 
 VoidList_t AllocateList(const size_t capacity, const size_t sizeOfElement)
 {
-    VoidSpan_t span = AllocateSpan(capacity, sizeOfElement);
+    let span = AllocateSpan(capacity, sizeOfElement);
     return  (VoidList_t) { .Begin = span.Begin, .End = span.Begin, .CapacityEnd = span.End };
 }
 
@@ -57,21 +65,20 @@ void* ConstructVoidList(const size_t capacity, const size_t sizeOfElement, VoidL
 {
     error_t error = TryAllocateList(capacity, sizeOfElement, outList);
     error_assert(error, "Out of memory on list construction.");
+    memset(outList->Begin, 0, capacity * sizeOfElement);
     return outList;
 }
 
 VoidArray_t AllocateArray(const int32_t rank, const size_t sizeOfElement, const int32_t dimensions[rank])
 {
-    size_t numOfHeaderBytes = (2 + rank -1) * sizeof(int32_t);
-    size_t numOfDataBytes = dimensions[0] * sizeOfElement;
+    let numOfHeaderBytes = (2 + rank -1) * sizeof(int32_t);
+    var numOfDataBytes = dimensions[0] * sizeOfElement;
 
     for (int i = 1; i < rank; ++i)
-    {
         numOfDataBytes *= dimensions[i];
-    }
 
-    size_t totalNumOfBytes = numOfHeaderBytes + numOfDataBytes;
-    void* ptr = malloc(totalNumOfBytes);
+    let totalNumOfBytes = numOfHeaderBytes + numOfDataBytes;
+    let ptr = malloc(totalNumOfBytes);
     return (VoidArray_t) { .Header = ptr, .Begin = ptr + numOfHeaderBytes, .End = ptr + totalNumOfBytes };
 }
 
@@ -86,19 +93,27 @@ void* ConstructVoidArray(const int32_t rank, const size_t sizeOfElement, const i
     error_t error = TryAllocateArray(rank, sizeOfElement, dimensions, outArray);
     error_assert(error, "Out of memory on array construct");
 
-    MakeArrayBlocks(rank, dimensions, &outArray->Header[2]);
-    outArray->Header[1] = (int32_t) (span_GetSize(*outArray) / sizeOfElement);
-    outArray->Header[0] = rank;
+    MakeArrayBlocks(rank, dimensions, &outArray->Header->FirstBlockEntry);
+    outArray->Header->Size = (int32_t) (span_Length(*outArray) / sizeOfElement);
+    outArray->Header->Rank = rank;
+
+    memset(outArray->Begin, 0, span_ByteCount(*outArray));
 
     return outArray;
 }
 
 void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElements, VoidArray_t *restrict outArray)
 {
-    VoidArray_t bufferArray = {.Header = buffer};
-    const size_t headerByteCount = array_GetHeaderSize(bufferArray);
-    const size_t dataByteCount = array_GetSize(bufferArray) * sizeOfElements;
-    const size_t totalByteCount = headerByteCount + dataByteCount;
+    if (buffer == NULL)
+    {
+        *outArray = (VoidArray_t) {.Header = NULL, .Begin = NULL, .End = NULL};
+        return outArray;
+    }
+
+    let bufferArray = (VoidArray_t) {.Header = (void*) buffer};
+    let headerByteCount = array_HeaderByteCount(bufferArray);
+    let dataByteCount = array_Length(bufferArray) * sizeOfElements;
+    let totalByteCount = headerByteCount + dataByteCount;
 
     outArray->Header = malloc(totalByteCount);
     error_assert((outArray->Header != NULL) ? ERR_OK : ERR_MEMALLOCATION, "Failed to build array from passed blob");
@@ -111,67 +126,50 @@ void* ConstructArrayFromBlob(const void *restrict buffer,const size_t sizeOfElem
 
 void GetArrayDimensions(const VoidArray_t*restrict array, int32_t*restrict outBuffer)
 {
-    const int32_t rank = array_GetRank(*array);
-    const int32_t size = array_GetSize(*array);
-    const int32_t * blocks = &array->Header[2];
+    let rank = array_Rank(*array);
+    let size = array_Length(*array);
+    let blocks = &array->Header->FirstBlockEntry;
 
     outBuffer[0] = size / blocks[0];
     outBuffer[rank-1] = blocks[rank-2];
 
-    for (int32_t i = 1; i < rank - 1; i++)
-    {
+    for (var i = 1; i < rank - 1; i++)
         outBuffer[i] = blocks[i-1] / blocks[i];
-    }
 }
 
 void MakeArrayBlocks(const int32_t rank, const int32_t dimensions[rank], int32_t*restrict outBuffer)
 {
-    for (int32_t i = rank - 2; i >= 0; i--)
+    for (var i = rank - 2; i >= 0; i--)
     {
-        int32_t multiplier = (i == (rank - 2)) ? 1 : outBuffer[i+1];
+        let multiplier = (i == (rank - 2)) ? 1 : outBuffer[i+1];
         outBuffer[i] = dimensions[i+1] * multiplier;
     }
 }
 
 bool_t HaveSameBufferContent(const Buffer_t* lhs, const Buffer_t* rhs)
 {
-    if (lhs->Begin == rhs->Begin && lhs->End == rhs->End)
-    {
-        return true;
-    }
-    if (span_GetSize(*lhs) != span_GetSize(*rhs))
-    {
-        return false;
-    }
-    byte_t* lhsit = lhs->Begin;
-    byte_t* rhsit = rhs->Begin;
+    return_if(lhs->Begin == rhs->Begin && lhs->End == rhs->End, true);
+    return_if(span_Length(*lhs) != span_Length(*rhs), false);
+
+    byte_t * lhsit = lhs->Begin;
+    byte_t * rhsit = rhs->Begin;
     while (lhsit != lhs->End)
-    {
         if (*(lhsit++) != *(rhsit++))
-        {
             return false;
-        }
-    }
+
     return true;
 }
 
 void CopyBuffer(byte_t const* source, byte_t* target, const size_t size)
 {
-    for (size_t i = 0; i < size; i++)
-    {
+    for (var i = 0; i < size; i++)
         target[i] = source[i];
-    }
 }
 
-error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer)
+error_t SaveCopyBuffer(const Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer)
 {
-    size_t sourceSize = span_GetSize(*sourceBuffer);
-
-    if (sourceSize > span_GetSize(*targetBuffer))
-    {
-        return ERR_BUFFEROVERFLOW;
-    }
-
+    let sourceSize = span_Length(*sourceBuffer);
+    return_if(sourceSize > span_Length(*targetBuffer), ERR_BUFFEROVERFLOW);
     CopyBuffer(sourceBuffer->Begin, targetBuffer->Begin, sourceSize);
     return ERR_OK;
 }
@@ -179,9 +177,7 @@ error_t SaveCopyBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targe
 error_t SaveMoveBuffer(Buffer_t* restrict sourceBuffer, Buffer_t* restrict targetBuffer)
 {
     if (SaveCopyBuffer(sourceBuffer, targetBuffer) != ERR_OK)
-    {
         return ERR_BUFFEROVERFLOW;
-    }
 
     delete_Span(*sourceBuffer);
     return ERR_OK;

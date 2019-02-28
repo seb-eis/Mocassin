@@ -15,45 +15,35 @@
 #include "Framework/Basic/BaseTypes/Buffers.h"
 #include "Simulator/Logic/Constants/Constants.h"
 
-/* General */
+/* General definitions */
 
-// Type for encoding state occupations
-typedef int64_t OccupationCode_t;
+// Type for encoding state occupations with 64 bits (8 Particles max)
+typedef int64_t OccupationCode64_t;
 
-// Type for index redirection lists
+// Type for encoding state occupations with 128 bits (16 particles max)
+typedef struct OccupationCode128
+{
+    // First code part, contains occupation particles 0-7
+    int64_t CodePart0;
+
+    // First code part, contains occupation particles 8-15
+    int64_t CodePart1;
+
+} OccupationCode128_t;
+
+// Type for 1D index mappings
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(int32_t, IdRedirection) IdRedirection_t;
+typedef Span_t(int32_t, IdMappingSpan) IdMappingSpan_t;
 
 // Type for defining a range of unit cells (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 16@[16]
+// Layout@ggc_x86_64 => 16@[4,4,4,4]
 typedef Vector4_t InteractionRange_t;
-
-// Type for blob loading from the database
-// Layout@ggc_x86_64 => 24@[8,4,4,4,{4}]
-typedef struct DbBlob
-{
-    // Buffer pointer
-    void*       Buffer;
-
-    // The db context key of the object
-    int32_t     Key;
-
-    // The number of bytes in the header
-    int32_t     HeaderSize;
-
-    // The size of the blob
-    int32_t     BlobSize;
-
-    // Padding integer
-    int32_t     Padding:32;
-
-} DbBlob_t;
 
 /* Structure model */
 
-// Type for pair interaction definitions (Supports 16 bit alignment)
-// Layout@ggc_x86_64 => 32@[16,4,{4},{8}]
-typedef struct PairDefinition
+// Type for pair interaction definitions
+// Layout@ggc_x86_64 => 20@[16,4]
+typedef struct PairInteraction
 {
     // The relative 4D vector that points to the target
     Vector4_t   RelativeVector;
@@ -61,85 +51,109 @@ typedef struct PairDefinition
     // The energy table Id that the pair belongs to
     int32_t     EnergyTableId;
 
-    // Padding
-    int32_t     Padding0:32;
-
-    // Padding
-    int64_t     Padding1:64;
-
-} PairDefinition_t;
+} PairInteraction_t;
 
 // Type for cluster interaction definitions
-// Layout@ggc_x86_64 => 40@[8x4,4,{4}]
-typedef struct ClusterDefinition
+// Layout@ggc_x86_64 => 36@[8x4,4]
+typedef struct ClusterInteraction
 {
     // The pair interaction ids that from the cluster
-    int32_t     EnvironmentPairIds[8];
+    int32_t     PairInteractionIds[8];
 
     // The energy table id that the cluster belongs to
     int32_t     EnergyTableId;
 
-    // Padding
-    int32_t     Padding:32;
-
-} ClusterDefinition_t;
+} ClusterInteraction_t;
 
 // Span type for pair definitions
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(PairDefinition_t, PairDefinitions) PairDefinitions_t;
+typedef Span_t(PairInteraction_t, PairInteractions) PairInteractions_t;
 
 // Span type for cluster definitions
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(ClusterDefinition_t, ClusterDefinitions) ClusterDefinitions_t;
+typedef Span_t(ClusterInteraction_t, ClusterInteractions) ClusterInteractions_t;
 
 // Type for full environment definitions
 // Layout@ggc_x86_64 => 176@[4,{4},8,16,16,64,64]
 typedef struct EnvironmentDefinition
 {
     // The object id of the environment. Is equal to the position id
-    int32_t                 ObjectId;
+    int32_t                     ObjectId;
 
     // Padding
-    int32_t                 Padding:32;
+    int32_t                     Padding:32;
 
     // The particle mask of center positions that should be put into the selection pool
-    Bitmask_t               SelectionParticleMask;
+    Bitmask_t                   SelectionParticleMask;
 
-    // The pair definition collection
-    PairDefinitions_t       PairDefinitions;
+    // The pair interaction collection
+    PairInteractions_t          PairInteractions;
 
-    // Teh cluster defintion collection
-    ClusterDefinitions_t    ClusterDefinitions;
+    // The cluster interaction collection
+    ClusterInteractions_t       ClusterInteractions;
 
     // Position particle id byte buffer, encodes possible particles
     // First one that is an invalid index terminates the set
-    byte_t                  PositionParticleIds[64];
+    byte_t                      PositionParticleIds[PARTICLE_IDLIMIT];
 
     // Update particle id buffer, encodes energy update particles
     // First one that is an invalid index terminates the set
-    byte_t                  UpdateParticleIds[64];
+    byte_t                      UpdateParticleIds[PARTICLE_IDLIMIT];
 
 } EnvironmentDefinition_t;
 
 // Span of environment definitions
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(EnvironmentDefinition_t, EnvironmentDefinitions_t) EnvironmentDefinitions_t;
+typedef Span_t(EnvironmentDefinition_t, EnvironmentDefinitions) EnvironmentDefinitions_t;
+
+// Type for the unit cell vector collection
+// Layout@ggc_x86_64 => 72@[3x24]
+typedef struct UnitCellVectors
+{
+    // The cartesian unit cell vector for direction A in [Ang]
+    Vector3_t   A;
+
+    // The cartesian unit cell vector for direction B in [Ang]
+    Vector3_t   B;
+
+    // The cartesian unit cell vector for direction C in [Ang]
+    Vector3_t   C;
+
+} UnitCellVectors_t;
+
+// Type for the structure meta data that contains non essential structure information
+// Layout@ggc_x86_64 => 608@[64x8,8,72]
+typedef struct StructureMetaData
+{
+    // The charge values of the particles in units of [C]
+    double              ParticleCharges[PARTICLE_IDLIMIT];
+
+    // The normalized electric field vector in cartesian coordinates
+    Vector3_t           NormElectricFieldVector;
+
+    // The unit cell vector collection in units of [Ang]
+    UnitCellVectors_t   CellVectors;
+
+} StructureMetaData_t;
 
 // Type for the structure model
-// Layout@ggc_x86_64 => 40@[4,4,16,16]
+// Layout@ggc_x86_64 => 48@[4,4,8,16,16]
 typedef struct StructureModel
 {
     // The number of required static trackers per cell
-    int32_t                     NumOfTrackersPerCell;
+    int32_t                         StaticTrackersPerCellCount;
 
     // The number of required global trackers
-    int32_t                     NumOfGlobalTrackers;
+    int32_t                         GlobalTrackerCount;
+
+    // The pointer to the structure meta data
+    StructureMetaData_t*            MetaData;
 
     // The interaction range cube for MMC
-    InteractionRange_t          InteractionRange;
+    InteractionRange_t              InteractionRange;
 
     // The environment definition collection
-    EnvironmentDefinitions_t    EnvironmentDefinitions;
+    EnvironmentDefinitions_t        EnvironmentDefinitions;
     
 } StructureModel_t;
 
@@ -151,7 +165,7 @@ typedef Array_t(double, 2, EnergyTable) EnergyTable_t;
 
 // Type for lists of occupation codes
 // Layout@ggc_x86_64 => 16@[8,8]
-typedef Span_t(OccupationCode_t, OccCodes) OccCodes_t;
+typedef Span_t(OccupationCode64_t, OccupationCodes64) OccupationCodes64_t;
 
 // Type for pair tables to store energies of pair interactions
 // Layout@ggc_x86_64 => 32@[24,4,{4}]
@@ -174,7 +188,7 @@ typedef struct PairTable
 typedef struct ClusterTable
 {
     // The occupation code collection in order of [OccCodeId]
-    OccCodes_t      OccupationCodes;
+    OccupationCodes64_t      OccupationCodes;
 
     // The energy table of the cluster.
     // Access by [TableId,OccCodId]
@@ -185,7 +199,7 @@ typedef struct ClusterTable
 
     // The particle table mapping. Assigns each particle id its valid sub table in the cluster table
     // Access by [ParticleId]
-    byte_t          ParticleTableMapping[64];
+    byte_t          ParticleTableMapping[PARTICLE_IDLIMIT];
 
     // Padding
     int32_t         Padding:32;
@@ -272,15 +286,15 @@ typedef Span_t(JumpDirection_t, JumpDirections) JumpDirections_t;
 typedef struct JumpRule
 {
     // The occupation code for the start state
-    OccupationCode_t   StateCode0;
+    OccupationCode64_t   StateCode0;
 
     // The occupation code for the transition state
-    OccupationCode_t   StateCode1;
+    OccupationCode64_t   StateCode1;
 
     // The occupation code for the final state
-    OccupationCode_t   StateCode2;
+    OccupationCode64_t   StateCode2;
 
-    // The attempt frequency factor
+    // The attempt frequency factor that describes the fraction of the frequency modulus that is applied
     double      FrequencyFactor;
 
     // The electric field rule factor that encodes direction
@@ -371,7 +385,7 @@ typedef struct MmcHeader
 } MmcHeader_t;
 
 // Type for the kmc job header
-// Layout@ggc_x86_64 => 32@[8,8,8,8]
+// Layout@ggc_x86_64 => 40@[8,8,8,8,4,{4}]
 typedef struct KmcHeader
 {
     // Bitmask for KMC specific job flags
@@ -384,7 +398,13 @@ typedef struct KmcHeader
     double      AttemptFrequencyModulus;
 
     // Fixed norm factor for the simulation
-    double      FixedNormFactor;
+    double      FixedNormalizationFactor;
+
+    // Pre-run mcsp before the main simulation
+    int32_t     PreRunMcsp;
+
+    // Padding
+    int32_t     Padding:32;
 
 } KmcHeader_t;
 
@@ -407,11 +427,11 @@ typedef struct JobInfo
     // The save run time limit in seconds
     int64_t     TimeLimit;
 
-    // The random number generator state seed
-    uint64_t    RngStateSeed;
+    // The random number generator start state
+    uint64_t    RngStartState;
 
-    // The random number generator increase seed
-    uint64_t    RngIncSeed;
+    // The random number generator increase value
+    uint64_t    RngIncValue;
 
     // The simulation temperature in kelvin
     double      Temperature;
@@ -478,10 +498,10 @@ typedef struct LatticeInfo
     Vector4_t           SizeVector;
 
     // The number of mobiles in the lattice
-    int32_t             NumOfMobiles;
+    int32_t             MobileParticleCount;
 
-    // The number of selectables in the lattice
-    int32_t             NumOfSelectables;
+    // The number of select-able particles in the lattice
+    int32_t             SelectParticleCount;
 
 } LatticeInfo_t;
 

@@ -12,15 +12,20 @@
 #include "Framework/Errors/McErrors.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 
-static inline error_t ValidateNothing(void const * value)
+// Empty validation that is always true
+static inline error_t ValidateAsTrue(void const *value)
 {
     return ERR_OK;
 }
 
+// Validates the cmd argument formatting
 error_t ValidateCmdKeyArgumentFormat(char const * value);
 
+// Validates that is string is not null or empty
 error_t ValidateStringNotNullOrEmpty(char const * value);
 
+// Validates that a string is a valid file path
 error_t ValidateIsValidFilePath(char const * value);
 
+// Validates the database query string
 error_t ValidateDatabaseQueryString(char const* value);

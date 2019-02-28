@@ -4,12 +4,14 @@
 #endif //ICON_SIMULATOR_UNITTESTS_H
 
 #include "MinimalUnitTest.h"
-#include "Framework/Sqlite/SqliteReader.h"
+#include "InternalLibraries/SqliteJobLoader/Sqlite3JobLoader.h"
 #include <stdio.h>
 #include "ExternalLibraries/sqlite3.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+
+/**
 
 int tests_run = 0;
 char error_message[265];
@@ -19,7 +21,7 @@ typedef Span_t(int32_t, IntegerSpan) IntergerSpan_t;
 static char* TestSpans()
 {
     IntergerSpan_t integerSpan;
-    new_Span(integerSpan, 10);
+    integerSpan = new_Span(integerSpan, 10);
 
     int i = 0;
     cpp_foreach(intIter, integerSpan)
@@ -44,7 +46,7 @@ static char* TestArrays()
 {
     Array_t(int, 4, intArray);
     struct intArray arr;
-    new_Array(arr, 4);
+    arr = new_Array(arr, 4);
     printf("%d", array_Get(arr, 0,0,0,0));
 
     return 0;
@@ -81,12 +83,12 @@ static char* DatabaseTest()
     return 0;
 };
 
-struct ProjectIds projectIds = {
-        .ProjectId = 1,
-        .StructureId = -1,
-        .EnergyId = -1,
-        .TransitionId = -1,
-        .LatticeId = -1
+struct DbLoadIndices projectIds = {
+        .PackageContextId = 1,
+        .StructureContextId = -1,
+        .EnergyContextId = -1,
+        .TransitionContextId = -1,
+        .LatticeContextId = -1
 };
 
 static char *FetchProjectIDs()
@@ -105,16 +107,16 @@ static char *FetchProjectIDs()
 
     int expectedStructureId = 1;
     sprintf(error_message, "Did not get right structure id. Expected: %i , Received: %i",
-            expectedStructureId, projectIds.StructureId);
-    mu_assert(error_message, projectIds.StructureId == expectedStructureId);
+            expectedStructureId, projectIds.StructureContextId);
+    mu_assert(error_message, projectIds.StructureContextId == expectedStructureId);
     int expectedEnergyId = 1;
     sprintf(error_message, "Did not get right energy id. Expected: %i , Received: %i",
-            expectedEnergyId, projectIds.EnergyId);
-    mu_assert(error_message, projectIds.EnergyId == expectedEnergyId);
+            expectedEnergyId, projectIds.EnergyContextId);
+    mu_assert(error_message, projectIds.EnergyContextId == expectedEnergyId);
     int expectedTransitionId = 1;
     sprintf(error_message, "Did not get right transition id. Expected: %i , Received: %i",
-            expectedTransitionId, projectIds.TransitionId);
-    mu_assert(error_message, projectIds.TransitionId == expectedTransitionId);
+            expectedTransitionId, projectIds.TransitionContextId);
+    mu_assert(error_message, projectIds.TransitionContextId == expectedTransitionId);
 
 
     sqlite3_close(db);
@@ -299,3 +301,5 @@ static char *all_tests() {
 
     return 0;
 };
+
+ **/

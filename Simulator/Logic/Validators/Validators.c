@@ -14,57 +14,30 @@
 
 error_t ValidateCmdKeyArgumentFormat(char const * value)
 {
-    if (ValidateStringNotNullOrEmpty(value) != ERR_OK)
-    {
-        return ERR_VALIDATION;
-    }
+    return_if (ValidateStringNotNullOrEmpty(value) != ERR_OK, ERR_VALIDATION);
     return (value[0] == '-') ? ERR_OK : ERR_VALIDATION;
 }
 
 error_t ValidateStringNotNullOrEmpty(char const * value)
 {
-    if (value == NULL)
-    {
-        return ERR_VALIDATION;
-    }
-    if (strcmp(value, "") == 0)
-    {
-        return ERR_VALIDATION;
-    }
+    return_if(value == NULL, ERR_VALIDATION);
+    return_if(strcmp(value, "") == 0, ERR_VALIDATION);
     return ERR_OK;
 }
 
 error_t ValidateIsValidFilePath(char const * value)
 {
-    if (ValidateStringNotNullOrEmpty(value) != ERR_OK)
-    {
-        return ERR_VALIDATION;
-    }
-    if (IsAccessibleFile(value) != ERR_OK)
-    {
-        return ERR_VALIDATION;
-    }
+    return_if(ValidateStringNotNullOrEmpty(value) != ERR_OK, ERR_VALIDATION);
+    return_if (!IsAccessibleFile(value), ERR_VALIDATION);
     return ERR_OK;
 }
 
-// Validates the database srtingf fromat to be [#Package].[#Parent].[#Job] e.g. "1.1.24"
+// Validates the database string format to be #JobId
 error_t ValidateDatabaseQueryString(char const* value)
 {
-    if (ValidateStringNotNullOrEmpty(value) != ERR_OK)
-    {
-        return ERR_VALIDATION;
-    }
+    return_if (ValidateStringNotNullOrEmpty(value) != ERR_OK, ERR_VALIDATION);
 
-    int32_t package, parent, job;
-
-    if (sscanf(value, "%i.%i.%i", &package, &parent, &job) != 3)
-    {
-        return ERR_VALIDATION;
-    }
-
-    if ((package >= 0) && (parent >= 0) && (job >= 0))
-    {
-        return ERR_OK;
-    }
-    return ERR_VALIDATION;
+    int32_t jobId;
+    return_if (sscanf(value, "%i", &jobId) != 1, ERR_VALIDATION);
+    return  (jobId >= 0) ? ERR_OK : ERR_VALIDATION;
 }

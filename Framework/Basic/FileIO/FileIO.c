@@ -10,54 +10,46 @@
 
 #include "Framework/Basic/FileIO/FileIO.h"
 
-cerror_t GetFileSize(file_t* restrict fileStream)
+cerror_t CalculateFileSize(file_t *restrict fileStream)
 {
     int64_t fileSize;
     if (fileStream == NULL || fseek(fileStream, 0L, SEEK_END) != 0)
-    {
         return ERR_FILE;
-    }
+
     if ((fileSize = ftell(fileStream)) < 0)
-    {
         return ERR_FILE;
-    }
+
     rewind(fileStream);
     return fileSize;
 }
 
 bool_t IsAccessibleFile(const char* restrict fileName)
 {
-    return access(fileName, F_OK) != -1;
+    return access(fileName, F_OK) == 0;
 }
 
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
 {
-    if (fileStream == NULL)
-    {
-        return ERR_STREAM;
-    }
+    return_if(fileStream == NULL, ERR_STREAM);
+    let bufferSize = span_Length(*buffer);
 
-    size_t bufferSize = span_GetSize(*buffer);
     if (fwrite(buffer->Begin, sizeof(byte_t), bufferSize, fileStream) != bufferSize)
-    {
         return ERR_STREAM;
-    }
+
     return ERR_OK;
 }
 
 error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fileMode, const Buffer_t* restrict buffer)
 {
     file_t* fileStream = NULL;
-    int32_t result; 
+    error_t result;
 
     if (strcmp(fileMode, "wb") != 0 && strcmp(fileMode, "ab") != 0)
-    {
         return ERR_FILEMODE;
-    }
+
     if ((fileStream = fopen(fileName, fileMode)) == NULL)
-    {
         return ERR_STREAM;
-    }
+
     result = WriteBufferToStream(fileStream, buffer);
     fclose(fileStream);
     return result;
@@ -66,16 +58,13 @@ error_t WriteBufferToFile(const char* restrict fileName, const char* restrict fi
 error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
 {
     error_t error = 0;
-    size_t bufferSize = strlen(lhs) + strlen(rhs) + 1;
+    let bufferSize = strlen(lhs) + strlen(rhs) + 1;
     *result = malloc(bufferSize);
 
-    if(*result == NULL)
-    {
-        return ERR_MEMALLOCATION;
-    }
+    return_if(*result == NULL, ERR_MEMALLOCATION);
 
-    error |= strcpy_s(*result, bufferSize, lhs);
-    error |= strcat_s(*result, bufferSize, rhs);
+    error |= (strncpy(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strncat(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
     return error;
 }
 
@@ -99,12 +88,8 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
     }
 
     if((error = WriteBufferToFile(fileName, fileMode, buffer)) == ERR_OK)
-    {
         if(tmpName != NULL)
-        {
             error = remove(tmpName);
-        }
-    }
 
     free(tmpName);
     return error;
@@ -112,11 +97,8 @@ error_t SaveWriteBufferToFile(const char* restrict fileName, const char* restric
 
 error_t LoadBufferFromStream(file_t* restrict fileStream, Buffer_t* restrict buffer)
 {
-    if (fileStream == NULL)
-    {
-        return ERR_STREAM;
-    }
-    fread(buffer->Begin, 1, span_GetSize(*buffer), fileStream);
+    return_if(fileStream == NULL, ERR_STREAM);
+    fread(buffer->Begin, 1, span_Length(*buffer), fileStream);
     return ERR_OK;
 }
 
@@ -124,39 +106,34 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
 {
     file_t* fileStream;
     int64_t bufferSize;
-    int32_t writeResult;
+    error_t error;
 
-    if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = GetFileSize(fileStream)) < 0)
-    {
+    if ((fileStream = fopen(fileName, "rb")) == NULL || (bufferSize = CalculateFileSize(fileStream)) < 0)
         return ERR_STREAM;
+
+    if (span_Length(*outBuffer) != (size_t)bufferSize)
+    {
+        delete_Span(*outBuffer);
+        *outBuffer = new_Span(*outBuffer, (size_t)bufferSize);
     }
 
-    if (ctor_Buffer(*outBuffer, (size_t)bufferSize) != ERR_OK)
-    {     
-        fclose(fileStream);
-        return ERR_MEMALLOCATION;
-    }
-
-    writeResult = LoadBufferFromStream(fileStream, outBuffer);
+    error = LoadBufferFromStream(fileStream, outBuffer);
     fclose(fileStream);
-    return writeResult;
+    return error;
 }
 
 error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer, size_t bytesPerLine)
 {
-    if (fileStream == NULL)
-    {
-        return ERR_STREAM;
-    }
+    return_if (fileStream == NULL, ERR_STREAM);
 
-    size_t lineCnt = 0;
-    for (byte_t* it = buffer->Begin; it < buffer->End; it++)
+    size_t lineCount = 0;
+    cpp_foreach(it, *buffer)
     {
         fprintf(fileStream, "%02x ", *it);
-        if  (++lineCnt == bytesPerLine)
+        if  (++lineCount == bytesPerLine)
         {
             fprintf(fileStream, "\n");
-            lineCnt = 0;
+            lineCount = 0;
         }
     }
     return ERR_OK;
@@ -165,9 +142,8 @@ error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* rest
 bool_t EnsureFileIsDeleted(char const * restrict filePath)
 {
     if (IsAccessibleFile(filePath))
-    {
         return remove(filePath) == 0;
-    }
+
     return false;
 }
 

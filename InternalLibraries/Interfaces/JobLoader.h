@@ -1,17 +1,16 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	JumpStatusInit.h       		//
+// File:	ModelSqLite.h      	        //
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
 //			© 2018 Sebastian Eisele     //
-// Short:   Jump status initializer     //
+// Short:   SQL functions for db model  //
 //////////////////////////////////////////
 
 #pragma once
-
-#include "Framework/Errors/McErrors.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
-// Builds the jump status collection on the passed initialized simulation context
-void BuildJumpStatusCollection(SCONTEXT_PARAM);
+// Loads the database model of the job to the passed simulation context
+void LoadSimulationDbModelToContext(SCONTEXT_PARAM);
+

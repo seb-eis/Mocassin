@@ -12,24 +12,25 @@
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 
 // Allocates the memory for the jump status collection span
-static void AllocateJumpStatusArray(__SCONTEXT_PAR)
+static void AllocateJumpStatusArray(SCONTEXT_PARAM)
 {
-    Vector4_t* cellSizes = getLatticeSizeVector(SCONTEXT);
-    size_t numOfJumpsPerCell = span_GetSize(*getJumpCollections(SCONTEXT));
-    JumpStatusArray_t statusArray = new_Array(statusArray,cellSizes->A,cellSizes->B,cellSizes->C,numOfJumpsPerCell);
+    let cellSizes = getLatticeSizeVector(SCONTEXT);
+    let jumpCountPerCell = (int32_t) span_Length(*getJumpDirections(SCONTEXT));
+    JumpStatusArray_t statusArray = new_Array(statusArray,cellSizes->A,cellSizes->B,cellSizes->C,jumpCountPerCell);
 
     *getJumpStatusArray(SCONTEXT) = statusArray;
 }
 
 // Populates the jump path with the passed jump status vector and jump direction to prepare for the jump link search
-static error_t PrepareJumpPathForLinkSearch(__SCONTEXT_PAR, const Vector4_t*restrict jumpStatusVector, const JumpDirection_t*restrict jumpDirection)
+static error_t PrepareJumpPathForLinkSearch(SCONTEXT_PARAM, const Vector4_t*restrict jumpStatusVector, const JumpDirection_t*restrict jumpDirection)
 {
     return_if(jumpStatusVector->D != jumpDirection->ObjectId, ERR_ARGUMENT);
 
     JUMPPATH[0] = getEnvironmentStateByIds(SCONTEXT, jumpStatusVector->A, jumpStatusVector->B, jumpStatusVector->C, jumpDirection->PositionId);
-    for (int32_t i = 0; i < jumpDirection->JumpLength; ++i)
+    for (int32_t i = 1; i < jumpDirection->JumpLength; i++)
     {
-        Vector4_t targetVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, &span_Get(jumpDirection->JumpSequence, i), getLatticeSizeVector(SCONTEXT));
+        let relVector = &span_Get(jumpDirection->JumpSequence, i-1);
+        let targetVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, getLatticeSizeVector(SCONTEXT));
         JUMPPATH[i] = getEnvironmentStateByVector4(SCONTEXT, &targetVector);
     }
 
@@ -39,9 +40,9 @@ static error_t PrepareJumpPathForLinkSearch(__SCONTEXT_PAR, const Vector4_t*rest
 // Tries to find the passed environment id in the passed set of environment links and writes the index of the link to the passed buffer if found
 static bool_t TryGetEnvironmentLinkId(const EnvironmentLinks_t*restrict environmentLinks, const int32_t searchEnvId, int32_t*restrict outId)
 {
-    for (int32_t i = 0; i < span_GetSize(*environmentLinks); ++i)
+    for (int32_t i = 0; i < span_Length(*environmentLinks); ++i)
     {
-        if (span_Get(*environmentLinks, i).EnvironmentId == searchEnvId)
+        if (span_Get(*environmentLinks, i).TargetEnvironmentId == searchEnvId)
         {
             *outId = i;
             return true;
@@ -52,22 +53,21 @@ static bool_t TryGetEnvironmentLinkId(const EnvironmentLinks_t*restrict environm
 }
 
 // Determines the jump links that the current jump-path has until the provided jump length and writes the result to the passed buffer and counter
-static error_t BufferJumpLinksOfJumpPath(__SCONTEXT_PAR, const int32_t jumpLength, int32_t *restrict outCount, JumpLink_t *restrict outBuffer)
+static error_t BufferJumpLinksOfJumpPath(SCONTEXT_PARAM, const int32_t jumpLength, int32_t *restrict outCount, JumpLink_t *restrict outBuffer)
 {
     return_if((jumpLength < JUMPS_JUMPLENGTH_MIN)||(jumpLength > JUMPS_JUMPLENGTH_MAX), ERR_ARGUMENT);
 
+    int32_t linkId;
     *outCount = 0;
+
     for (int32_t receiverPathId = 0; receiverPathId < jumpLength; ++receiverPathId)
     {
-        int32_t searchEnvId = JUMPPATH[receiverPathId]->EnvironmentId;
+        let searchEnvId = JUMPPATH[receiverPathId]->EnvironmentId;
         for (int32_t senderPathId = 0; senderPathId < jumpLength; ++senderPathId)
         {
             continue_if(receiverPathId == senderPathId);
-            int32_t idBuffer;
-            if (TryGetEnvironmentLinkId(&JUMPPATH[senderPathId]->EnvironmentLinks, searchEnvId, &idBuffer))
-            {
-                outBuffer[(*outCount)++] = (JumpLink_t) { .PathId = receiverPathId, .LinkId = idBuffer };
-            }
+            if (TryGetEnvironmentLinkId(&JUMPPATH[senderPathId]->EnvironmentLinks, searchEnvId, &linkId))
+                outBuffer[(*outCount)++] = (JumpLink_t) { .SenderPathId = senderPathId, .LinkId = linkId };
         }
     }
 
@@ -75,56 +75,55 @@ static error_t BufferJumpLinksOfJumpPath(__SCONTEXT_PAR, const int32_t jumpLengt
 }
 
 // Constructs the jump status at the provided location from the passed buffer and number of links
-static error_t ConstructJumpStatusFromLinkBuffer(JumpStatus_t*restrict jumpStatus, const int32_t numOfLinks, JumpLink_t*restrict buffer)
+static error_t ConstructJumpStatusFromLinkBuffer(JumpStatus_t*restrict jumpStatus, const int32_t linkCount, JumpLink_t*restrict buffer)
 {
     return_if(jumpStatus == NULL, ERR_NULLPOINTER);
-    return_if(numOfLinks == 0, ERR_OK);
+    return_if(linkCount == 0, ERR_OK);
 
-    jumpStatus->JumpLinks = new_Span(jumpStatus->JumpLinks, numOfLinks);
-    for (int32_t i = 0; i < numOfLinks; ++i)
-    {
+    jumpStatus->JumpLinks = new_Span(jumpStatus->JumpLinks, linkCount);
+    for (int32_t i = 0; i < linkCount; ++i)
         span_Get(jumpStatus->JumpLinks, i) = buffer[i];
-    }
 
     return ERR_OK;
 }
 
 // Finds the jump links that are required for the jump status that can be accessed by the passed status id vector
-static error_t BuildJumpStatusByStatusVector(__SCONTEXT_PAR, const Vector4_t *restrict jumpStatusVector, JumpLink_t *restrict linkBuffer)
+static error_t BuildJumpStatusByStatusVector(SCONTEXT_PARAM, const Vector4_t *restrict jumpStatusVector, JumpLink_t *restrict linkBuffer)
 {
     error_t error;
-    int32_t numOfLinks = 0;
-    JumpStatus_t* jumpStatus = getJumpStatusByVector4(SCONTEXT, jumpStatusVector);
-    JumpDirection_t* jumpDirection = getJumpDirectionAt(SCONTEXT, jumpStatusVector->D);
+    int32_t linkCount = 0;
+    var jumpStatus = getJumpStatusByVector4(SCONTEXT, jumpStatusVector);
+    let jumpDirection = getJumpDirectionAt(SCONTEXT, jumpStatusVector->D);
 
     error = PrepareJumpPathForLinkSearch(SCONTEXT, jumpStatusVector, jumpDirection);
-    return_if(error != ERR_OK, error);
+    return_if(error, error);
 
-    error = BufferJumpLinksOfJumpPath(SCONTEXT, jumpDirection->JumpLength, &numOfLinks, linkBuffer);
-    return_if(error != ERR_OK, error);
+    error = BufferJumpLinksOfJumpPath(SCONTEXT, jumpDirection->JumpLength, &linkCount, linkBuffer);
+    return_if(error, error);
 
-    error = ConstructJumpStatusFromLinkBuffer(jumpStatus, numOfLinks, linkBuffer);
+    error = ConstructJumpStatusFromLinkBuffer(jumpStatus, linkCount, linkBuffer);
 
     return error;
 }
 
 // Constructs all jump status objects into the allocated jump status collection
-static error_t ConstructJumpStatusCollection(__SCONTEXT_PAR)
+static error_t ConstructJumpStatusCollection(SCONTEXT_PARAM)
 {
     error_t error;
     JumpLink_t linkSearchBuffer[JUMPS_JUMPLINK_LIMIT];
-    Vector4_t jumpStatusVector = (Vector4_t) { 0, 0, 0, 0 };
-    int32_t numOfJumpDirections = span_GetSize(*getJumpDirections(SCONTEXT));
+    let jumpDirectionCount = (int32_t) span_Length(*getJumpDirections(SCONTEXT));
+    memset(linkSearchBuffer, 0, sizeof(linkSearchBuffer));
 
     // Generate jump status for each jump direction in each unit cell
-    for (;jumpStatusVector.A < getLatticeSizeVector(SCONTEXT)->A; ++jumpStatusVector.A)
+    for (int32_t a = 0; a < getLatticeSizeVector(SCONTEXT)->A; ++a)
     {
-        for (;jumpStatusVector.B < getLatticeSizeVector(SCONTEXT)->B; ++jumpStatusVector.B)
+        for (int32_t b = 0; b < getLatticeSizeVector(SCONTEXT)->B; ++b)
         {
-            for (;jumpStatusVector.C < getLatticeSizeVector(SCONTEXT)->C; ++jumpStatusVector.C)
+            for (int32_t c = 0; c < getLatticeSizeVector(SCONTEXT)->C; ++c)
             {
-                for (;jumpStatusVector.C < numOfJumpDirections; ++jumpStatusVector.D)
+                for (int32_t d = 0; d < jumpDirectionCount; ++d)
                 {
+                    let jumpStatusVector = (Vector4_t) { .A = a, .B = b, .C = c, .D = d };
                     error = BuildJumpStatusByStatusVector(SCONTEXT, &jumpStatusVector, linkSearchBuffer);
                     return_if(error != ERR_OK, error);
                 }
@@ -132,13 +131,14 @@ static error_t ConstructJumpStatusCollection(__SCONTEXT_PAR)
         }
     }
 
-
     return error;
 }
 
-// Builds the jump status collection on an initialized simulation context
-void BuildJumpStatusCollection(__SCONTEXT_PAR)
+// Builds the KMC jump status collection on an initialized simulation context
+void BuildJumpStatusCollection(SCONTEXT_PARAM)
 {
+    return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC));
+
     error_t error;
 
     AllocateJumpStatusArray(SCONTEXT);

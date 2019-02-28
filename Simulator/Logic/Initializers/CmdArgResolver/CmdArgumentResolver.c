@@ -12,20 +12,27 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Simulator/Logic/Validators/Validators.h"
 
+// Tries to redirect the stdout stream to a file stream
+static void setStdoutRedirection(SCONTEXT_PARAM, const char* filePath)
+{
+    let error = freopen(filePath, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
+    error_assert(error, "Stream redirection of stdout to a file returned a null stream");
+}
+
 // Get the collection of resolvers for essential cmd arguments
 static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
 {
     static const CmdArgResolver_t resolvers[] =
-            {
-                    { "-dbPath",    (FValidator_t) ValidateStringNotNullOrEmpty,  (FCmdCallback_t) setDatabasePath },
-                    { "-dbQuery",   (FValidator_t) ValidateDatabaseQueryString,   (FCmdCallback_t) setDatabaseLoadString }
-            };
+    {
+        { "-dbPath",    (FValidator_t) ValidateIsValidFilePath,       (FCmdCallback_t) setDatabasePath },
+        { "-dbQuery",   (FValidator_t) ValidateDatabaseQueryString,   (FCmdCallback_t) setDatabaseLoadString }
+    };
 
     static const CmdArgLookup_t resolverTable =
-            {
-                    &resolvers[0],
-                    &resolvers[sizeof(resolvers) / sizeof(CmdArgResolver_t)]
-            };
+    {
+            &resolvers[0],
+            &resolvers[sizeof(resolvers) / sizeof(CmdArgResolver_t)]
+    };
 
     return &resolverTable;
 }
@@ -34,28 +41,29 @@ static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
 static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
 {
     static const CmdArgResolver_t resolvers[] =
-            {
-                    { "-outPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setOutputPluginPath },
-                    { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setOutputPluginSymbol },
-                    { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
-                    { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol }
-            };
+    {
+        { "-outPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setOutputPluginPath },
+        { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setOutputPluginSymbol },
+        { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
+        { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
+        { "-stdRedirect",     (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection}
+    };
 
     static const CmdArgLookup_t resolverTable =
-            {
-                    &resolvers[0],
-                    &resolvers[sizeof(resolvers) / sizeof(CmdArgResolver_t)]
-            };
+        {
+            &resolvers[0],
+            &resolvers[sizeof(resolvers) / sizeof(CmdArgResolver_t)]
+        };
 
     return &resolverTable;
 }
 
 // Searches for a command line argument in the passed resolver table and calls validator and callback if a handler is found
-static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const CmdArgLookup_t* restrict resolverTable, const int32_t argId)
+static error_t LookupAndResolveCmdArgument(SCONTEXT_PARAM, const CmdArgLookup_t* restrict resolverTable, const int32_t argId)
 {
     error_t error;
-    char const * keyArgument = getCommandArgumentStringAt(SCONTEXT, argId);
-    char const * valArgument = getCommandArgumentStringAt(SCONTEXT, argId + 1);
+    let keyArgument = getCommandArgumentStringAt(SCONTEXT, argId);
+    let valArgument = getCommandArgumentStringAt(SCONTEXT, argId + 1);
 
     error = ValidateCmdKeyArgumentFormat(keyArgument);
     return_if(error, ERR_CONTINUE);
@@ -76,12 +84,11 @@ static error_t LookupAndResolveCmdArgument(__SCONTEXT_PAR, const CmdArgLookup_t*
 }
 
 // Resolves the essential command line arguments and using the affiliated callback table
-static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
+static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAM)
 {
     error_t error;
-
-    const CmdArgLookup_t* resolverTable = getEssentialCmdArgsResolverTable();
-    size_t unresolved = span_GetSize(*resolverTable);
+    let resolverTable = getEssentialCmdArgsResolverTable();
+    var unresolved = span_Length(*resolverTable);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {
@@ -100,12 +107,11 @@ static error_t ResolveAndSetEssentialCmdArguments(__SCONTEXT_PAR)
 }
 
 // Resolves all optional command line arguments and calls the affiliated callbacks
-static error_t ResolveAndSetOptionalCmdArguments(__SCONTEXT_PAR)
+static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAM)
 {
     error_t error;
-
-    const CmdArgLookup_t* resolverTable = getOptionalCmdArgsResolverTable();
-    size_t unresolved = span_GetSize(*resolverTable);
+    let resolverTable = getOptionalCmdArgsResolverTable();
+    var unresolved = span_Length(*resolverTable);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {
@@ -118,7 +124,7 @@ static error_t ResolveAndSetOptionalCmdArguments(__SCONTEXT_PAR)
     return ERR_OK;
 }
 
-void ResolveCommandLineArguments(__SCONTEXT_PAR, const int32_t argCount, char const * const * argValues)
+void ResolveCommandLineArguments(SCONTEXT_PARAM, const int32_t argCount, char const * const * argValues)
 {
     error_t error;
 
