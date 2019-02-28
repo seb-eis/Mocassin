@@ -10,7 +10,8 @@ namespace Mocassin.Model.Translator.Jobs
     {
         KmcSimulation = 1,
         MmcSimulation = 1 << 1,
-        UsePrerun = 1 << 2   
+        UsePrerun = 1 << 2,
+        SkipSaving = 1 << 3
     }
 
     /// <summary>

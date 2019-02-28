@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.MainControls.ProjectConsole.ProjectConsoleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectConsole"
+             xmlns:sub="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectConsole.SubControls.MessageConsole"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance local:ProjectConsoleViewModel}"
+             Height="Auto" Width="Auto">
+
+  <Grid Margin="0,0,0,0">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <TabControl ItemsSource="{Binding ViewCollection}"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                VerticalAlignment="Stretch" VerticalContentAlignment="Stretch">
+      <TabControl.Resources>
+        <DataTemplate DataType="{x:Type sub:MessageConsoleViewModel}">
+          <sub:MessageConsoleView/>
+        </DataTemplate>
+      </TabControl.Resources>
+      <TabControl.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="Test"/>
+        </DataTemplate>
+      </TabControl.ItemTemplate>
+    </TabControl>
+  </Grid>
+</UserControl>

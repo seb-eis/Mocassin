@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
-using Mocassin.UI.Xml.CustomizationData;
-using Mocassin.UI.Xml.CreationData;
-using Mocassin.UI.Xml.ProjectData;
+using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Xml.Jobs;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Main
 {

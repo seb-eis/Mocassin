@@ -16,9 +16,11 @@ using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Model.Translator.Optimization;
-using Mocassin.UI.Xml.CreationData;
-using Mocassin.UI.Xml.CustomizationData;
-using Mocassin.UI.Xml.ProjectData;
+using Mocassin.UI.Xml.Jobs;
+using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Xml.Model;
+using Mocassin.UI.Xml.ModelLibrary;
+using Mocassin.UI.Xml.ParticleModel;
 using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest

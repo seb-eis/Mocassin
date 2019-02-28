@@ -4,9 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mocassin.UI.GUI"
+        xmlns:projectMenuBar="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectMenuBar"
+        xmlns:projectBrowser="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectBrowser"
+        xmlns:projectTabControl="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectTabControl"
+        xmlns:projectConsole="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectConsole"
+        xmlns:projectStatusBar="clr-namespace:Mocassin.UI.GUI.MainControls.ProjectStatusBar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Mocassin Model Builder"
+        Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"
+        Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
+
+
+  <Grid Margin="10,10,10,10" ShowGridLines="True">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="1*"/>
+      <RowDefinition Height="80*" />
+      <RowDefinition Height="23*" />
+      <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="3*" />
+    </Grid.ColumnDefinitions>
+
+    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                                       DataContext="{Binding ProjectMenuBarViewModel}" />
+
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0"
+                                       DataContext="{Binding ProjectBrowserViewModel}"/>
+    <projectTabControl:ProjectTabControlView Grid.Row="1" Grid.Column="1"
+                                             DataContext="{Binding ProjectTabControlViewModel}"/>
+
+    <projectConsole:ProjectConsoleView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                       DataContext="{Binding ProjectConsoleViewModel}"/>
+
+    <projectStatusBar:ProjectStatusBarView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                           DataContext="{Binding ProjectStatusBarViewModel}"/>
+  </Grid>
 </Window>

@@ -30,13 +30,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CustomizationData\Base\Objects\" />
-    <Folder Include="ModelData\LatticeData\Main\" />
-    <Folder Include="ModelData\LatticeData\Objects\" />
-    <Folder Include="ModelData\LatticeData\Parameters\" />
-    <Folder Include="ModelData\ParticleData\Parameters\" />
-    <Folder Include="ModelData\SimulationData\Parameters\" />
-    <Folder Include="ModelData\TransitionData\Parameters\" />
+    <Folder Include="Model\LatticeData\Main\" />
+    <Folder Include="Model\LatticeData\Objects\" />
+    <Folder Include="Model\LatticeData\Parameters\" />
+    <Folder Include="Model\ParticleData\Parameters\" />
+    <Folder Include="Model\SimulationData\Parameters\" />
+    <Folder Include="Model\TransitionData\Parameters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
 </Project>

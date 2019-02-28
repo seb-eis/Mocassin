@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 namespace Mocassin.UI.Base.Commands
 {
     /// <summary>
-    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="ParameterlessAsyncCommandBase" />
+    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="ParameterlessAsyncCommand" />
     /// </summary>
-    public sealed class AsyncRelayCommand : ParameterlessAsyncCommandBase
+    public sealed class AsyncRelayCommand : ParameterlessAsyncCommand
     {
         /// <summary>
         ///     The <see cref="Delegate" /> to call on command execution
@@ -51,9 +51,9 @@ namespace Mocassin.UI.Base.Commands
     }
 
     /// <summary>
-    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="AsyncCommandBase{T}" /> />
+    ///     Adapter class that wraps <see cref="Delegate" /> objects into a <see cref="AsyncCommand{T}" /> />
     /// </summary>
-    public sealed class AsyncRelayCommand<T> : AsyncCommandBase<T>
+    public sealed class AsyncRelayCommand<T> : AsyncCommand<T>
     {
         /// <summary>
         ///     The <see cref="Delegate" /> to call on command execution
@@ -66,7 +66,7 @@ namespace Mocassin.UI.Base.Commands
         private readonly Func<T, bool> _canExecuteFunc;
 
         /// <summary>
-        ///     Create new <see cref="AsyncCommandBase{T}" /> using the provided execution <see cref="Delegate" />
+        ///     Create new <see cref="AsyncCommand{T}" /> using the provided execution <see cref="Delegate" />
         /// </summary>
         /// <param name="execute"></param>
         public AsyncRelayCommand(Func<T, Task> execute)

@@ -6,6 +6,11 @@
     public abstract class JobConfiguration
     {
         /// <summary>
+        ///     Get or set additional job info flags
+        /// </summary>
+        public SimulationJobInfoFlags JobInfoFlags { get; set; }
+
+        /// <summary>
         ///     Get or set the target mcsp of the job
         /// </summary>
         public long TargetMcsp { get; set; }
@@ -54,6 +59,7 @@
             jobConfiguration.LatticeConfiguration = jobConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
             LatticeConfiguration.CopyTo(jobConfiguration.LatticeConfiguration);
+            jobConfiguration.JobInfoFlags = JobInfoFlags;
             jobConfiguration.JobId = JobId;
             jobConfiguration.MinimalSuccessRate = MinimalSuccessRate;
             jobConfiguration.RngIncreaseSeed = RngIncreaseSeed;
@@ -73,7 +79,7 @@
             {
                 Structure = new CJobInfo
                 {
-                    JobFlags = default,
+                    JobFlags = (long) JobInfoFlags,
                     MinimalSuccessRate = MinimalSuccessRate,
                     ObjectId = JobId,
                     RngIncreaseSeed = RngIncreaseSeed,
