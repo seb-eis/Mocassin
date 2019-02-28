@@ -123,13 +123,13 @@ typedef int64_t cerror_t;
 #define ERR_DEBUGASSERT 19
 
 // Defines the default error display with code and message
-#define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG);
+#define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error dump macro. Dumps error information to stderr and quits programm with error code
-#define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG);
+#define error_exit(__CODE, __MSG) OnErrorExit(__CODE, __FUNCTION__, __LINE__, __MSG)
 
 // Defines the simulator error and memory dump macro. Dumps error information to stderr and quits programm with error code
-#define error_exitdump(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND);
+#define error_exitdump(__CODE, __MSG, __BSTART, __BEND) OnErrorExitWithMemDump(__CODE, __FUNCTION__, __LINE__, __MSG, __BSTART, __BEND)
 
 // Asserts that the passed condition is true. Calls default error handling if condition is false
 #define runtime_assertion(cond, error, msg) if (!(cond)) errorhandle_default((error), (msg))

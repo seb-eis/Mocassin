@@ -77,6 +77,9 @@
 #define JPOOL_DIRCOUNT_PASSIVE   0
 #define JPOOL_NOT_SELECTABLE    -1
 
+/* Cluster defines */
+#define CLUSTER_MAXLINK_COUNT   256
+
 /* Particle/position/index constants */
 
 #define PARTICLE_VOID       0

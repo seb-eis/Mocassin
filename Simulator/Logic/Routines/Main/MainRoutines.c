@@ -49,7 +49,7 @@ void PrepareForMainRoutine(SCONTEXT_PARAM)
 
 error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
 {
-    runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.")
+    runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.");
 
     PrintJobStartInfo(SCONTEXT, stdout);
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))

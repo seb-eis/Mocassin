@@ -10,11 +10,11 @@
 
 #pragma once
 
-#include <string.h>
 #if defined(_WIN32)
 #define __STDC_WANT_LIB_EXT1__ 1
 #endif
 #include <time.h>
+#include <string.h>
 #include "Framework/Basic/FileIO/FileIO.h"
 #include "Framework/Basic/BaseTypes/BaseTypes.h"
 #include "Framework/Errors/McErrors.h"
@@ -35,7 +35,7 @@
 static inline error_t GetCurrentTimeInfo(struct tm *restrict timeInfo, bool_t asGMT)
 {
     time_t raw = time(NULL);
-    #if defined (linux) || defined(__INTEL_COMPILER)
+    #if defined (linux) || defined (__INTEL_COMPILER)
     let ptr = (asGMT) ? gmtime_r(&raw, timeInfo) : localtime_r(&raw, timeInfo);
     return (ptr != NULL) ? ERR_OK : ERR_UNKNOWN;
     #else

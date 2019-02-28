@@ -6,12 +6,23 @@ enable_testing()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
-FILE(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
-FILE(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
-FILE(GLOB_RECURSE FRAMEWORK_HEADER ./Framework/*.h)
-FILE(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
 
+include_directories(${PROJECT_SOURCE_DIR})
 
+# SSE Variables
+set(COMPILE_FLAGS_SSE_INTEL "-axSSE4.2 -xSSE2")
+set(COMPILE_FLAGS_SSE_GNU "-msse2 -msse3 -msse4.2")
+
+# Resursive search for source files
+file(GLOB_RECURSE FRAMEWORK_SOURCE ./Framework/*.c)
+file(GLOB_RECURSE SIMULATOR_SOURCE ./Simulator/*.c)
+file(GLOB_RECURSE FRAMEWORK_HEADER ./Framework/*.h)
+file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
+
+# Library and executable definitions
 add_executable(Mocassin.Simulator ./Main/main.c)
 set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 
@@ -35,35 +46,39 @@ add_library(progressprint.minimal SHARED InternalLibraries/Interfaces/ProgressPr
             Simulator/Logic/Routines/Statistics/McStatistics.c Simulator/Logic/Routines/Statistics/McStatistics.h)
 set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
 
-include_directories(${PROJECT_SOURCE_DIR})
-
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
-
+# Compiler settings
 if (WIN32)
     # Compiler settings for windows
     message(STATUS "** Compiling with WINDOWS settings **")
-    # Basic compiler settings
+    # Basic compiler settings, not mchine specific
     #set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
     #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
     # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -g -msse3 -fno-cx-limited-range -funroll-loops -march=native")
-    set(CMAKE_C_FLAGS_RELEASE "-Wall -O3 -msse3 -fno-cx-limited-range -funroll-loops -march=native")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall ${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
+    set(CMAKE_C_FLAGS_RELEASE "-Wall ${COMPILE_FLAGS_SSE_GNU} -O3 -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
 
 elseif (UNIX)
-    # Compiler settings for linux
-    message(STATUS "** Compiling with UNIX settings **")
-    # Basic compiler settings
-    #set(CMAKE_C_FLAGS_DEBUG "-Wall -g -lm -ldl -pthread")
-    #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3 -lm -ldl -pthread")
+    # Advanced gnu compiler settings
+    if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+        message(STATUS "** Compiling with GNU settings **")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -Wall -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -Wall -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
 
-    # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_RELEASE "-O3 -w -msse3 -fno-cx-limited-range -funroll-loops -march=native -lm -ldl -pthread")
-    set(CMAKE_C_FLAGS_DEBUG "-g -msse3 -fno-cx-limited-range -funroll-loops -march=native -lm -ldl -pthread")
+    # Advanced intel compiler settings
+    elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "Intel")
+        message(STATUS "** Compiling with Intel settings **")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -Wall -fno-cx-limited-range -funroll-loops -ldl -pthread")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_INTEL} -Wall -fno-cx-limited-range -funroll-loops -ldl -pthread")
+
+    # Fallback settings
+    else()
+        set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
+        set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
+    endif()
 endif ()
+
+# Link settings
 
 target_link_libraries(jobloader sqlite3 framework)
 target_link_libraries(progressprint framework)

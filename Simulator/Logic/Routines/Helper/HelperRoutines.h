@@ -114,7 +114,7 @@ static inline byte_t GetMaxParticleId(SCONTEXT_PARAM)
 }
 
 // Get the number of unit cells in the lattice
-static inline const int32_t GetUnitCellCount(SCONTEXT_PARAM)
+static inline int32_t GetUnitCellCount(SCONTEXT_PARAM)
 {
     let sizes = getLatticeSizeVector(SCONTEXT);
     return sizes->A * sizes->B * sizes->C;

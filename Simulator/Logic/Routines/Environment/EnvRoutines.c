@@ -75,8 +75,7 @@ static error_t SortAndBuildClusterLinks(ClusterLink_t* restrict linkBuffer, cons
 // Builds a cluster linking for the provided pair interaction id in the context of the passed environment definition
 static error_t BuildClusterLinkingByPairId(const EnvironmentDefinition_t* environmentDefinition, const int32_t pairId, ClusterLinks_t* restrict clusterLinks)
 {
-    // ToDo: Implement the limit this as a #define
-    ClusterLink_t tmpLinkBuffer[sizeof(ClusterLink_t) * 256];
+    ClusterLink_t tmpLinkBuffer[sizeof(ClusterLink_t) * CLUSTER_MAXLINK_COUNT];
     byte_t clusterId = 0, relativeId = 0;
     size_t linkCount = 0;
 
