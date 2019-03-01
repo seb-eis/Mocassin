@@ -382,7 +382,7 @@ error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int3
     sqlite3 *db;
     dbModel->JobModel.ContextId = jobContextId;
 
-    error = sqlite3_open(dbFile, &db);
+    error = sqlite3_open_v2(dbFile, &db, SQLITE_OPEN_READONLY, NULL);
     sql_DbCloseAndReturnIf(error != SQLITE_OK, db);
 
     error = InvokeLoadOperations(db, dbModel, GetParentLoadOperations());
