@@ -55,21 +55,21 @@ if (WIN32)
     #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
     # Advanced compiler settings, small performance improvement
-    set(CMAKE_C_FLAGS_DEBUG "-Wall ${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
-    set(CMAKE_C_FLAGS_RELEASE "-Wall ${COMPILE_FLAGS_SSE_GNU} -O3 -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
+    set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
+    set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
 
 elseif (UNIX)
     # Advanced gnu compiler settings
     if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
         message(STATUS "** Compiling with GNU settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -Wall -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
-        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -Wall -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_GNU} -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_GNU} -fno-cx-limited-range -funroll-loops -march=native -mtune=native -lm -ldl -pthread")
 
     # Advanced intel compiler settings
     elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "Intel")
         message(STATUS "** Compiling with Intel settings **")
-        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -Wall -fno-cx-limited-range -funroll-loops -ldl -pthread")
-        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_INTEL} -Wall -fno-cx-limited-range -funroll-loops -ldl -pthread")
+        set(CMAKE_C_FLAGS_RELEASE "-O3 ${COMPILE_FLAGS_SSE_INTEL} -w -fno-cx-limited-range -funroll-loops -ldl -pthread")
+        set(CMAKE_C_FLAGS_DEBUG "-g ${COMPILE_FLAGS_SSE_INTEL} -fno-cx-limited-range -funroll-loops -ldl -pthread")
 
     # Fallback settings
     else()

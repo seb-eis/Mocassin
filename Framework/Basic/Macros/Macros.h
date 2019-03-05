@@ -16,11 +16,12 @@
 // Macro that defines the variable auto type
 #define var __auto_type
 
-// Macro that defines the const auto type
 #ifdef __INTEL_COMPILER
+// Macro that defines the const auto type to var on the intel compiler
 #define let var
 #else
-#define let var const
+// Macro that defines the const auto type
+#define let const var
 #endif
 
 /*Arg count macro from Roland Illig and Laurent Deniau*/

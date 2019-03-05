@@ -13,6 +13,9 @@
 #if defined(_WIN32)
 #define __STDC_WANT_LIB_EXT1__ 1
 #endif
+#if defined(__INTEL_COMPILER)
+#pragma disable(266)
+#endif
 #include <time.h>
 #include <string.h>
 #include "Framework/Basic/FileIO/FileIO.h"
