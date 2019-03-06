@@ -109,31 +109,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Base\ViewModels\MenuBar\DynamicMenuBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainControls\ProjectConsole\ProjectConsoleView.xaml">
+    <Page Include="Controls\ProjectBrowser\SubControls\DataBrowser\ModelDataBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainControls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml">
+    <Page Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainControls\ProjectMenuBar\ProjectMenuBarView.xaml">
+    <Page Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainControls\ProjectBrowser\ProjectBrowserView.xaml">
+    <Page Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainControls\ProjectStatusBar\ProjectStatusBarView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainControls\ProjectTabControl\ProjectTabControlView.xaml">
+    <Page Include="Controls\ProjectTabControl\SubControls\XmlControl\XmlInstructionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,37 +151,43 @@
     <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
+    <Compile Include="Base\ViewModels\Collections\ICollectionViewModel.cs" />
+    <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarView.xaml.cs">
+      <DependentUpon>DynamicMenuBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarViewModel.cs" />
+    <Compile Include="Base\ViewModels\Tabs\Items\CloseableUserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml.cs">
       <DependentUpon>UserControlTabControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Base\ViewModels\Tabs\UserControlTabItem.cs" />
+    <Compile Include="Base\ViewModels\Tabs\Items\UserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\ViewModel.cs" />
-    <Compile Include="MainControls\ProjectConsole\ProjectConsoleView.xaml.cs">
-      <DependentUpon>ProjectConsoleView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ModelDataBrowserView.xaml.cs">
+      <DependentUpon>ModelDataBrowserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainControls\ProjectConsole\ProjectConsoleViewModel.cs" />
-    <Compile Include="MainControls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml.cs">
+    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ModelDataBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserView.xaml.cs">
+      <DependentUpon>ReportBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectConsole\ProjectConsoleTabControlViewModel.cs" />
+    <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml.cs">
       <DependentUpon>MessageConsoleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainControls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
-    <Compile Include="MainControls\ProjectMenuBar\ProjectMenuBarView.xaml.cs">
-      <DependentUpon>ProjectMenuBarView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainControls\ProjectMenuBar\ProjectMenuBarViewModel.cs" />
-    <Compile Include="MainControls\ProjectBrowser\ProjectBrowserView.xaml.cs">
-      <DependentUpon>ProjectBrowserView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainControls\ProjectBrowser\ProjectBrowserViewModel.cs" />
-    <Compile Include="MainControls\ProjectStatusBar\ProjectStatusBarView.xaml.cs">
+    <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\ProjectBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml.cs">
       <DependentUpon>ProjectStatusBarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainControls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
-    <Compile Include="MainControls\ProjectTabControl\ProjectTabControlView.xaml.cs">
-      <DependentUpon>ProjectTabControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainControls\ProjectTabControl\ProjectTabControlViewModel.cs" />
+    <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
+    <Compile Include="Controls\ProjectTabControl\ProjectTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
+    <Compile Include="Controls\ProjectTabControl\SubControls\XmlControl\XmlInstructionControlView.xaml.cs">
+      <DependentUpon>XmlInstructionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectTabControl\SubControls\XmlControl\XmlInstructionControlViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -215,7 +221,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controls\ProjectMenuBar\SubControls\" />
+    <Folder Include="Controls\ProjectStatusBar\SubControls\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">
       <Project>{1c025f0c-4e11-49ff-88ec-6fcf6314a083}</Project>

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
+namespace Mocassin.UI.GUI.Controls.ProjectTabControl.SubControls.XmlControl
 {
     /// <summary>
-    /// Interaktionslogik für UserControlTabControlView.xaml
+    /// Interaktionslogik für XmlInstructionControlView.xaml
     /// </summary>
-    public partial class UserControlTabControlView : UserControl
+    public partial class XmlInstructionControlView : UserControl
     {
-        public UserControlTabControlView()
+        public XmlInstructionControlView()
         {
             InitializeComponent();
         }

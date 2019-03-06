@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
+namespace Mocassin.UI.GUI.Base.ViewModels.MenuBar
 {
     /// <summary>
-    /// Interaktionslogik für UserControlTabControlView.xaml
+    /// Interaktionslogik für DynamicMenuBarView.xaml
     /// </summary>
-    public partial class UserControlTabControlView : UserControl
+    public partial class DynamicMenuBarView : UserControl
     {
-        public UserControlTabControlView()
+        public DynamicMenuBarView()
         {
             InitializeComponent();
         }

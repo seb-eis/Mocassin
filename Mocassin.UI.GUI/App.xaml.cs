@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Windows;
-using Mocassin.UI.GUI.MainControls.ProjectBrowser;
-using Mocassin.UI.GUI.MainControls.ProjectConsole;
-using Mocassin.UI.GUI.MainControls.ProjectConsole.SubControls.MessageConsole;
-using Mocassin.UI.GUI.MainControls.ProjectMenuBar;
-using Mocassin.UI.GUI.MainControls.ProjectStatusBar;
-using Mocassin.UI.GUI.MainControls.ProjectTabControl;
+using Mocassin.UI.GUI.Controls.ProjectBrowser;
+using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser;
+using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ReportBrowser;
+using Mocassin.UI.GUI.Controls.ProjectConsole;
+using Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar;
+using Mocassin.UI.GUI.Controls.ProjectStatusBar;
+using Mocassin.UI.GUI.Controls.ProjectTabControl;
+using Mocassin.UI.GUI.Controls.ProjectTabControl.SubControls.XmlControl;
 
 namespace Mocassin.UI.GUI
 {
@@ -16,17 +19,8 @@ namespace Mocassin.UI.GUI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var projectBrowserViewModel = new ProjectBrowserViewModel();
-            var projectConsoleViewModel = new ProjectConsoleViewModel();
-            var projectMenuBarViewModel = new ProjectMenuBarViewModel();
-            var projectTabControlViewModel = new ProjectTabControlViewModel();
-            var projectStatusBarViewModel = new ProjectStatusBarViewModel();
-            var mainViewModel = new MainWindowViewModel(projectMenuBarViewModel, projectStatusBarViewModel, projectBrowserViewModel,
-                projectConsoleViewModel, projectTabControlViewModel);
-            var mainWindow = new MainWindow
-            {
-                DataContext = mainViewModel
-            };
+            var viewModel = CreateNewMainWindowViewModel();
+            var mainWindow = CreateNewMainWindow(viewModel);
         
             mainWindow.Show();
             base.OnStartup(e);
@@ -38,10 +32,10 @@ namespace Mocassin.UI.GUI
         /// <returns></returns>
         public MainWindowViewModel CreateNewMainWindowViewModel()
         {
-            var projectBrowserViewModel = new ProjectBrowserViewModel();
-            var projectConsoleViewModel = new ProjectConsoleViewModel();
+            var projectBrowserViewModel = new ProjectBrowserViewModel(new ModelDataBrowserViewModel(), new ReportBrowserViewModel());
+            var projectConsoleViewModel = new ProjectConsoleTabControlViewModel();
             var projectMenuBarViewModel = new ProjectMenuBarViewModel();
-            var projectTabControlViewModel = new ProjectTabControlViewModel();
+            var projectTabControlViewModel = new ProjectTabControlViewModel(new XmlInstructionControlViewModel());
             var projectStatusBarViewModel = new ProjectStatusBarViewModel();
             var mainViewModel = new MainWindowViewModel(projectMenuBarViewModel, projectStatusBarViewModel, projectBrowserViewModel,
                 projectConsoleViewModel, projectTabControlViewModel);

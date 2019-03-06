@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
+namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
 {
     /// <summary>
-    /// Interaktionslogik für UserControlTabControlView.xaml
+    /// Interaktionslogik für MessageConsoleView.xaml
     /// </summary>
-    public partial class UserControlTabControlView : UserControl
+    public partial class MessageConsoleView : UserControl
     {
-        public UserControlTabControlView()
+        public MessageConsoleView()
         {
             InitializeComponent();
         }

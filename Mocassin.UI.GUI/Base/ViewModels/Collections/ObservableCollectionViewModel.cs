@@ -1,12 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using Mocassin.UI.Base.ViewModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Mocassin.UI.Base.Commands;
+using Mocassin.UI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
     /// <summary>
-    ///     Basic view model for providing an <see cref="ObservableCollection{T}" /> with a limited size
+    ///     Abstract base <see cref="ViewModel"/> for providing an <see cref="ObservableCollection{T}" /> with a limited size
     /// </summary>
-    public class ObservableCollectionViewModel<T> : ViewModel
+    public abstract class ObservableCollectionViewModel<T> : ViewModel, ICollectionViewModel<T>
     {
         /// <summary>
         ///     The <see cref="Capacity" /> backing field
@@ -30,29 +33,71 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <summary>
         /// Creates new <see cref="ObservableCollectionViewModel{T}"/>
         /// </summary>
-        public ObservableCollectionViewModel()
+        protected ObservableCollectionViewModel()
         {
             capacity = 10;
             ObservableItems = new ObservableCollection<T>();
         }
 
         /// <summary>
-        ///     Appends an item <see cref="T" /> to the end of the observable collection
+        /// Creates new <see cref="ObservableCollectionViewModel{T}"/> with specified capacity limit
         /// </summary>
-        /// <param name="value"></param>
-        public void AppendCollectionItem(T value)
+        protected ObservableCollectionViewModel(int capacity)
         {
-            InvokeOnDispatcher(() => AppendCollectionItemInternal(value));
+            Capacity = capacity;
+        }
+
+        /// <inheritdoc />
+        public void InsertCollectionItem(int index, T value)
+        {
+            InvokeOnDispatcher(() => InsertCollectionItemInternal(index, value));
+        }
+
+        /// <inheritdoc />
+        public void AddCollectionItem(T value)
+        {
+            InvokeOnDispatcher(() => AddCollectionItemInternal(value));
+        }
+
+        /// <inheritdoc />
+        public void RemoveCollectionItem(T value)
+        {
+            InvokeOnDispatcher(() => RemoveCollectionItemInternal(value));
+        }
+
+        /// <inheritdoc />
+        public bool CollectionContains(T value)
+        {
+            return ObservableItems.Contains(value);
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="AppendCollectionItem" /> method
+        ///     Internal implementation of the <see cref="AddCollectionItem" /> method
         /// </summary>
         /// <param name="value"></param>
-        private void AppendCollectionItemInternal(T value)
+        protected virtual void AddCollectionItemInternal(T value)
         {
             if (ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
             ObservableItems.Add(value);
+        }
+
+        /// <summary>
+        ///     Internal implementation of the <see cref="RemoveCollectionItem"/> method
+        /// </summary>
+        /// <param name="value"></param>
+        protected virtual void RemoveCollectionItemInternal(T value)
+        {
+            ObservableItems.Remove(value);
+        }
+
+        /// <summary>
+        ///     Internal implementation of the <see cref="InsertCollectionItem"/> method
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="index"></param>
+        protected virtual void InsertCollectionItemInternal(int index, T value)
+        {
+            ObservableItems.Insert(index, value);
         }
     }
 }
