@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using Mocassin.UI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
@@ -8,7 +7,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     ///     Base <see cref="ViewModel" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
     ///     <see cref="System.Windows.Controls.TabControl" />
     /// </summary>
-    public abstract class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>
+    public class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabControlViewModel
     {
         /// <summary>
         ///     The <see cref="SelectedTab" /> backing field
@@ -66,7 +65,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <summary>
         ///     Initializes the default <see cref="UserControlTabItem" /> instances of the control
         /// </summary>
-        protected virtual void InitializeDefaultTabs()
+        public virtual void InitializeDefaultTabs()
         {
         }
     }

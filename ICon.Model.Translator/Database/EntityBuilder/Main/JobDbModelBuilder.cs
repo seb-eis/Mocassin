@@ -71,7 +71,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 throw new ArgumentException("Simulation cannot be found in the project model context");
 
             var packageModel = CreatePackageModel(simulationModel);
-            var jobModelTasks = GetJobModelBuildTasks(simulationModel, jobCollection.GetJobConfigurations());
+            var jobModelTasks = GetJobModelBuildTasks(simulationModel, jobCollection);
             Task.WhenAll(jobModelTasks).Wait();
 
             packageModel.JobModels = jobModelTasks.Select(x => x.Result).ToList();

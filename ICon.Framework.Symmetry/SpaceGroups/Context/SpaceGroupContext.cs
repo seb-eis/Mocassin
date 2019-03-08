@@ -9,11 +9,6 @@ namespace Mocassin.Symmetry.SpaceGroups
     public sealed class SpaceGroupContext : SqLiteContext<SpaceGroupContext>
     {
         /// <inheritdoc />
-        public SpaceGroupContext()
-        {
-        }
-
-        /// <inheritdoc />
         public SpaceGroupContext(string optionsBuilderParameterString)
             : base(optionsBuilderParameterString)
         {
@@ -29,11 +24,5 @@ namespace Mocassin.Symmetry.SpaceGroups
         ///     Symmetry operation database sets
         /// </summary>
         public DbSet<SymmetryOperationEntity> SymmetryOperations { get; set; }
-
-        /// <inheritdoc />
-        public override SpaceGroupContext CreateNewContext(string optionsBuilderParameterString)
-        {
-            return new SpaceGroupContext(optionsBuilderParameterString);
-        }
     }
 }

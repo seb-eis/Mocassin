@@ -1,7 +1,9 @@
-﻿using System.Windows.Controls;
-using Mocassin.Framework.Operations;
-using Mocassin.UI.Base.ViewModels;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
+using Mocassin.UI.GUI.Controls.Base;
 using Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole;
 
 namespace Mocassin.UI.GUI.Controls.ProjectConsole
@@ -9,30 +11,34 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
     /// <summary>
     ///     TThe <see cref="ViewModel" /> for the main project console
     /// </summary>
-    public class ProjectConsoleTabControlViewModel : UserControlTabControlViewModel
+    public class ProjectConsoleTabControlViewModel : PrimaryControlViewModel, IUserControlTabControlViewModel
     {
         /// <summary>
-        ///    Get the <see cref="SubControls.MessageConsole.MessageConsoleViewModel" /> that controls the display of string messages
+        ///     Get the <see cref="SubControls.MessageConsole.MessageConsoleViewModel" /> that controls the display of string
+        ///     messages
         /// </summary>
         private MessageConsoleViewModel MessageConsoleViewModel { get; }
 
         /// <summary>
-        /// Get the <see cref="SubControls.MessageConsole.MessageConsoleViewModel" /> that controls the display of string reports
+        ///     Get the <see cref="UserControlTabControlViewModel" /> that controls the tabs of the console control
         /// </summary>
-        private MessageConsoleViewModel ReportConsoleViewModel { get; }
+        private UserControlTabControlViewModel TabControlViewModel { get; }
 
-        /// <summary>
-        ///     Create new <see cref="ProjectConsoleTabControlViewModel" />
-        /// </summary>
-        public ProjectConsoleTabControlViewModel()
+        /// <inheritdoc />
+        public ObservableCollection<UserControlTabItem> ObservableItems => TabControlViewModel.ObservableItems;
+
+
+        /// <inheritdoc />
+        public ProjectConsoleTabControlViewModel(IMocassinProjectControl mainProjectControl)
+            : base(mainProjectControl)
         {
+            TabControlViewModel = new UserControlTabControlViewModel();
             MessageConsoleViewModel = new MessageConsoleViewModel();
-            ReportConsoleViewModel = new MessageConsoleViewModel();
             InitializeDefaultTabs();
         }
 
         /// <summary>
-        ///     Display a message <see cref="string" /> in the console
+        ///     Display a simple message <see cref="string" /> in the message console
         /// </summary>
         /// <param name="str"></param>
         public void DisplayMessage(string str)
@@ -41,22 +47,61 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
             MessageConsoleViewModel.AddCollectionItem(str);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="operationReport"></param>
-        public void Display(IOperationReport operationReport)
+        /// <inheritdoc />
+        public UserControlTabItem SelectedTab
         {
-            if (operationReport is null) return;
-            ReportConsoleViewModel.AddCollectionItem(operationReport.ToString());
+            get => TabControlViewModel.SelectedTab;
+            set => TabControlViewModel.SelectedTab = value;
         }
 
         /// <inheritdoc />
-        protected sealed override void InitializeDefaultTabs()
+        public int HeaderFontSize
         {
-            base.InitializeDefaultTabs();
-            AddNonClosableTab("Messages", MessageConsoleViewModel, new MessageConsoleView());
-            AddNonClosableTab("Operations", ReportConsoleViewModel, new MessageConsoleView());
+            get => TabControlViewModel.HeaderFontSize;
+            set => TabControlViewModel.HeaderFontSize = value;
+        }
+
+        /// <inheritdoc />
+        public void AddCloseableTab(string tabName, ViewModel viewModel, UserControl userControl)
+        {
+            TabControlViewModel.AddCloseableTab(tabName, viewModel, userControl);
+        }
+
+        /// <inheritdoc />
+        public void AddNonClosableTab(string tabName, ViewModel viewModel, UserControl userControl)
+        {
+            TabControlViewModel.AddNonClosableTab(tabName, viewModel, userControl);
+        }
+
+        /// <inheritdoc />
+        public void InitializeDefaultTabs()
+        {
+            TabControlViewModel.InitializeDefaultTabs();
+            TabControlViewModel.AddNonClosableTab("Messages", MessageConsoleViewModel, new MessageConsoleView());
+        }
+
+        /// <inheritdoc />
+        public void InsertCollectionItem(int index, UserControlTabItem value)
+        {
+            TabControlViewModel.InsertCollectionItem(index, value);
+        }
+
+        /// <inheritdoc />
+        public void AddCollectionItem(UserControlTabItem value)
+        {
+            TabControlViewModel.AddCollectionItem(value);
+        }
+
+        /// <inheritdoc />
+        public void RemoveCollectionItem(UserControlTabItem value)
+        {
+            TabControlViewModel.RemoveCollectionItem(value);
+        }
+
+        /// <inheritdoc />
+        public bool CollectionContains(UserControlTabItem value)
+        {
+            return TabControlViewModel.CollectionContains(value);
         }
     }
 }

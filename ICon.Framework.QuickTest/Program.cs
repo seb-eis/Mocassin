@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using Mocassin.Framework.SQLiteCore;
 using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
@@ -18,8 +19,9 @@ using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Model.Translator.Optimization;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.ModelLibrary;
+using Mocassin.UI.Xml.ProjectLibrary;
 using Mocassin.UI.Xml.ParticleModel;
 using Newtonsoft.Json;
 
@@ -27,8 +29,8 @@ namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
-        private static string _basePath = "";
-        private static string _baseFile = "";
+        private static string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\YDopedCeria\\";
+        private static string _baseFile = "Ceria";
 
         private static void Main(string[] args)
         {
@@ -62,7 +64,7 @@ namespace Mocassin.Framework.QuickTest
             var filePath = _basePath + _baseFile + ".Input.xml";
       
             Console.WriteLine($"Reading project XML description from: {filePath}");
-            if (!XmlStreamService.TryDeserialize(filePath, null, out XmlProjectModelData data, out var exception)) 
+            if (!XmlStreamService.TryDeserialize(filePath, null, out ProjectModelGraph data, out var exception)) 
                 ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception.Message}");
 
             Console.WriteLine("Creating new model project ...");
@@ -92,14 +94,14 @@ namespace Mocassin.Framework.QuickTest
         private static void TestParameterSets(ManagerPackage package)
         {
             var filePath = _basePath + _baseFile + ".Custom.xml";
-            var customizationData = XmlProjectCustomization.Create(package.ModelProject);
+            var customizationData = ProjectCustomizationGraph.Create(package.ModelProject);
             if (!File.Exists(filePath))
             {
                 var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), customizationData, out var exception);
                 ExitOnKeyPress($"New customization file written to target: {filePath}");
             }
             Console.WriteLine($"Reading project XML customization data from: {filePath}");
-            if (!XmlStreamService.TryDeserialize(filePath, null, out XmlProjectCustomization readData, out var exception2))
+            if (!XmlStreamService.TryDeserialize(filePath, null, out ProjectCustomizationGraph readData, out var exception2))
                 ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception2.Message}");
 
             readData.PushToModel(package.ModelProject);
@@ -111,7 +113,7 @@ namespace Mocassin.Framework.QuickTest
             var filePath = _basePath + _baseFile + ".Jobs.xml";
 
             Console.WriteLine($"Reading job XML description from: {filePath}");
-            if (!XmlStreamService.TryDeserialize(filePath, null, out XmlDbCreationInstruction readData, out var exception))
+            if (!XmlStreamService.TryDeserialize(filePath, null, out ProjectJobTranslationGraph readData, out var exception))
                 ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception.Message}");
 
             Console.WriteLine("Job input system done!");
@@ -138,7 +140,7 @@ namespace Mocassin.Framework.QuickTest
             var result = jobCollections.Select(x => dbJobBuilder.BuildJobPackageModel(x)).ToList();
 
             Console.WriteLine("Adding entities to database context and saving changes...");
-            var dbContext = new SimulationDbContext(filePath, true);
+            var dbContext = SqLiteContext.OpenDatabase<SimulationLibraryContext>(filePath, true);
             dbContext.AddRange(result);
             dbContext.SaveChangesAsync().Wait();
             dbContext.Dispose();

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using Mocassin.UI.Base.Commands;
-using Mocassin.UI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 {

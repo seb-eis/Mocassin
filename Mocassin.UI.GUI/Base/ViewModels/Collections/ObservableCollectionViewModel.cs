@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using Mocassin.UI.Base.Commands;
-using Mocassin.UI.Base.ViewModels;
+﻿using System.Collections.ObjectModel;
+using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
     /// <summary>
-    ///     Abstract base <see cref="ViewModel"/> for providing an <see cref="ObservableCollection{T}" /> with a limited size
+    ///     Base <see cref="ViewModel" /> for providing an <see cref="ObservableCollection{T}" /> with a limited size
     /// </summary>
-    public abstract class ObservableCollectionViewModel<T> : ViewModel, ICollectionViewModel<T>
+    public class ObservableCollectionViewModel<T> : ViewModel, IObservableCollectionViewModel<T>
     {
         /// <summary>
         ///     The <see cref="Capacity" /> backing field
@@ -31,18 +28,18 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        /// Creates new <see cref="ObservableCollectionViewModel{T}"/>
+        ///     Creates new <see cref="ObservableCollectionViewModel{T}" />
         /// </summary>
-        protected ObservableCollectionViewModel()
+        public ObservableCollectionViewModel()
         {
             capacity = 10;
             ObservableItems = new ObservableCollection<T>();
         }
 
         /// <summary>
-        /// Creates new <see cref="ObservableCollectionViewModel{T}"/> with specified capacity limit
+        ///     Creates new <see cref="ObservableCollectionViewModel{T}" /> with specified capacity limit
         /// </summary>
-        protected ObservableCollectionViewModel(int capacity)
+        public ObservableCollectionViewModel(int capacity)
         {
             Capacity = capacity;
         }
@@ -82,7 +79,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="RemoveCollectionItem"/> method
+        ///     Internal implementation of the <see cref="RemoveCollectionItem" /> method
         /// </summary>
         /// <param name="value"></param>
         protected virtual void RemoveCollectionItemInternal(T value)
@@ -91,7 +88,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="InsertCollectionItem"/> method
+        ///     Internal implementation of the <see cref="InsertCollectionItem" /> method
         /// </summary>
         /// <param name="value"></param>
         /// <param name="index"></param>

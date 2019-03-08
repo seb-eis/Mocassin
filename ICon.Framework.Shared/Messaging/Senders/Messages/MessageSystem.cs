@@ -31,16 +31,16 @@ namespace Mocassin.Framework.Messaging
         private Subject<PushMessage> PushMessageSubject { get; }
 
         /// <inheritdoc />
-        public IObservable<InfoMessage> WhenInfoMessageSend => InfoMessageSubject.AsObservable();
+        public IObservable<InfoMessage> InfoMessageNotification => InfoMessageSubject.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<WarningMessage> WhenWarningMessageSend => WarningMessageSubject.AsObservable();
+        public IObservable<WarningMessage> WarningMessageNotification => WarningMessageSubject.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<ErrorMessage> WhenErrorMessageSend => ErrorMessageSubject.AsObservable();
+        public IObservable<ErrorMessage> ErrorMessageNotification => ErrorMessageSubject.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<PushMessage> WhenMessageSend => PushMessageSubject.AsObservable();
+        public IObservable<PushMessage> AnyMessageNotification => PushMessageSubject.AsObservable();
 
         /// <inheritdoc />
         public bool ConsoleSubscriptionActive { get; private set; }
@@ -159,7 +159,7 @@ namespace Mocassin.Framework.Messaging
         public void SubscribeConsoleDisplay()
         {
             if (ConsoleSubscriptionActive == false)
-                ConsoleSubscription = WhenMessageSend.Subscribe(DumpMessageToConsole);
+                ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
 
             ConsoleSubscriptionActive = true;
         }

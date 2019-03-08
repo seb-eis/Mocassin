@@ -8,27 +8,12 @@ namespace Mocassin.Symmetry.SpaceGroups
     public class SpaceGroupContextProvider : SqLiteContextProvider<SpaceGroupContext>
     {
         /// <inheritdoc />
-        public override string DefaultFilepath { get; } =
-            "C:/Users/hims-user/source/repos/ICon.Project/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db";
-
-        /// <inheritdoc />
-        public SpaceGroupContextProvider()
-        {
-        }
+        public override string DefaultFilepath { get; } = ".\\";
 
         /// <inheritdoc />
         public SpaceGroupContextProvider(string filepath)
             : base(filepath)
         {
-        }
-
-        /// <summary>
-        ///     Factory method to create a new space group context
-        /// </summary>
-        /// <returns></returns>
-        public SpaceGroupContext NewContext()
-        {
-            return new SpaceGroupContext("Filename=" + DefaultFilepath);
         }
     }
 }

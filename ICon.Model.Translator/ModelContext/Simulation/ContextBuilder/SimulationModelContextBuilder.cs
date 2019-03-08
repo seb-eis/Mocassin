@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Mocassin.Model.Simulations;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -21,6 +22,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override ISimulationModelContext PopulateContext(ISimulationModelContext modelContext)
         {
+            if (!CheckBuildRequirements()) return modelContext;
+
             var manager = ModelProject.GetManager<ISimulationManager>();
             var metropolisSimulations = manager.QueryPort.Query(port => port.GetMetropolisSimulations());
             var kineticSimulations = manager.QueryPort.Query(port => port.GetKineticSimulations());
@@ -44,8 +47,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is ISimulationManager) ?? false;
+        }
+
+        /// <inheritdoc />
         public override Task BuildLinkDependentComponents()
         {
+            if (!CheckLinkDependentBuildRequirements()) return Task.CompletedTask;
             var tasks = new[]
             {
                 Task.Run(

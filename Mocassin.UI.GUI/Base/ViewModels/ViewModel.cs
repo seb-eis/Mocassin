@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace Mocassin.UI.Base.ViewModels
+namespace Mocassin.UI.GUI.Base.ViewModels
 {
     /// <summary>
     ///     Base class for implementations of view models that support the <see cref="INotifyPropertyChanged" /> interface

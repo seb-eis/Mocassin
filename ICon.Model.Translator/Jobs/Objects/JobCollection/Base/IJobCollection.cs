@@ -7,7 +7,7 @@ namespace Mocassin.Model.Translator.Jobs
     /// <summary>
     ///     Represents a job collection that bundles multiple job configurations for simulation database creation
     /// </summary>
-    public interface IJobCollection
+    public interface IJobCollection : IEnumerable<JobConfiguration>
     {
         /// <summary>
         ///     Get the simulation model object the collection is valid for
@@ -19,11 +19,5 @@ namespace Mocassin.Model.Translator.Jobs
         /// Get the set of defined <see cref="IPostBuildOptimizer"/> for the translation operation
         /// </summary>
         IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers();
-
-        /// <summary>
-        ///     Get the sequence of job configurations on th collection
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<JobConfiguration> GetJobConfigurations();
     }
 }

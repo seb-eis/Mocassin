@@ -22,6 +22,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override IEnergyModelContext PopulateContext(IEnergyModelContext modelContext)
         {
+            if (!CheckBuildRequirements()) return modelContext;
+
             var manager = ModelProject.GetManager<IEnergyManager>();
             var symmetricPairs = manager.QueryPort.Query(port => port.GetStablePairInteractions());
             var asymmetricPairs = manager.QueryPort.Query(port => port.GetUnstablePairInteractions());
@@ -47,6 +49,18 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             GroupEnergyModelBuilder = GroupEnergyModelBuilder ?? new GroupEnergyModelBuilder(ModelProject);
             PairEnergyModelBuilder = PairEnergyModelBuilder ?? new PairEnergyModelBuilder(ModelProject);
+        }
+
+        /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is IEnergyManager) ?? false;
+        }
+
+        /// <inheritdoc />
+        public override bool CheckLinkDependentBuildRequirements()
+        {
+            return true;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -24,6 +25,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override ITransitionModelContext PopulateContext(ITransitionModelContext modelContext)
         {
+            if (!CheckBuildRequirements()) return modelContext;
+
             var manager = ModelProject.GetManager<ITransitionManager>();
             var metropolisTransitions = manager.QueryPort.Query(port => port.GetMetropolisTransitions());
             var kineticTransitions = manager.QueryPort.Query(port => port.GetKineticTransitions());
@@ -53,6 +56,12 @@ namespace Mocassin.Model.Translator.ModelContext
             MetropolisTransitionModelBuilder = MetropolisTransitionModelBuilder ?? new MetropolisTransitionModelBuilder(ModelProject);
             KineticTransitionModelBuilder = KineticTransitionModelBuilder ?? new KineticTransitionModelBuilder(ModelProject);
             PositionTransitionModelBuilder = PositionTransitionModelBuilder ?? new PositionTransitionModelBuilder(ModelProject);
+        }
+
+        /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is ITransitionManager) ?? false;
         }
     }
 }

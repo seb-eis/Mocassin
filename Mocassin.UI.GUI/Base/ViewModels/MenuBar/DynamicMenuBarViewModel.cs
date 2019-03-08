@@ -2,12 +2,12 @@
 using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
-namespace Mocassin.UI.Base.ViewModels.MenuBar
+namespace Mocassin.UI.GUI.Base.ViewModels.MenuBar
 {
     /// <summary>
     ///     Base class for <see cref="ViewModel" /> implementations of observable <see cref="MenuItem" /> collections
     /// </summary>
-    public abstract class DynamicMenuBarViewModel : ObservableCollectionViewModel<MenuItem>
+    public class DynamicMenuBarViewModel : ObservableCollectionViewModel<MenuItem>, IDynamicMenuBarViewModel
     {
         /// <summary>
         ///     The <see cref="DockPanelDock" /> backing field
@@ -19,18 +19,14 @@ namespace Mocassin.UI.Base.ViewModels.MenuBar
         /// </summary>
         private int fontSize = 14;
 
-        /// <summary>
-        ///     Get or set the <see cref="System.Windows.Controls.Dock" /> value of the menu bar <see cref="DockPanel" />
-        /// </summary>
+        /// <inheritdoc />
         public Dock DockPanelDock
         {
             get => dockPanelDock;
             set => SetProperty(ref dockPanelDock, value);
         }
 
-        /// <summary>
-        ///     Get or set the font size of the menu bar
-        /// </summary>
+        /// <inheritdoc />
         public int FontSize
         {
             get => fontSize;
@@ -41,7 +37,7 @@ namespace Mocassin.UI.Base.ViewModels.MenuBar
         ///     Creates new <see cref="DynamicMenuBarViewModel" /> witch specified <see cref="Dock" /> value
         /// </summary>
         /// <param name="dockPanelDock"></param>
-        protected DynamicMenuBarViewModel(Dock dockPanelDock)
+        public DynamicMenuBarViewModel(Dock dockPanelDock)
         {
             DockPanelDock = dockPanelDock;
         }

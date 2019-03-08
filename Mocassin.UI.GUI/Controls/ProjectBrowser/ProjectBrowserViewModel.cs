@@ -1,43 +1,103 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
-using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser;
+using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser;
 using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ReportBrowser;
 
 namespace Mocassin.UI.GUI.Controls.ProjectBrowser
 {
     /// <summary>
-    ///     The <see cref="UserControlTabControlViewModel" /> that controls project browser tabs
+    ///     The <see cref="PrimaryControlViewModel" /> that controls project browser tabs
     /// </summary>
-    public class ProjectBrowserViewModel : UserControlTabControlViewModel
+    public class ProjectBrowserViewModel : PrimaryControlViewModel, IUserControlTabControlViewModel
     {
         /// <summary>
-        /// Get the <see cref="ModelDataBrowserViewModel"/> that controls model data browsing
+        ///     Get the <see cref="ProjectLibraryBrowserViewModel" /> that controls model data browsing
         /// </summary>
-        private ModelDataBrowserViewModel ModelDataBrowserViewModel { get; }
+        private ProjectLibraryBrowserViewModel ProjectLibraryBrowserViewModel { get; }
 
         /// <summary>
-        /// Get the <see cref="ReportBrowserViewModel"/> that controls report browsing
+        ///     Get the <see cref="ReportBrowserViewModel" /> that controls report browsing
         /// </summary>
         private ReportBrowserViewModel ReportBrowserViewModel { get; }
 
         /// <summary>
-        /// Creates new <see cref="ProjectBrowserViewModel"/> from
+        ///     Get the <see cref="UserControlTabControlViewModel" /> that controls the browser tabs
         /// </summary>
-        /// <param name="modelDataBrowserViewModel"></param>
-        /// <param name="reportBrowserViewModel"></param>
-        public ProjectBrowserViewModel(ModelDataBrowserViewModel modelDataBrowserViewModel, ReportBrowserViewModel reportBrowserViewModel)
+        private UserControlTabControlViewModel TabControlViewModel { get; }
+
+        /// <inheritdoc />
+        public ProjectBrowserViewModel(IMocassinProjectControl mainProjectControl)
+            : base(mainProjectControl)
         {
-            ModelDataBrowserViewModel = modelDataBrowserViewModel ?? throw new ArgumentNullException(nameof(modelDataBrowserViewModel));
-            ReportBrowserViewModel = reportBrowserViewModel ?? throw new ArgumentNullException(nameof(reportBrowserViewModel));
+            ProjectLibraryBrowserViewModel = new ProjectLibraryBrowserViewModel(mainProjectControl);
+            ReportBrowserViewModel = new ReportBrowserViewModel(mainProjectControl);
+            TabControlViewModel = new UserControlTabControlViewModel();
             InitializeDefaultTabs();
         }
 
         /// <inheritdoc />
-        protected sealed override void InitializeDefaultTabs()
+        public UserControlTabItem SelectedTab
         {
-            base.InitializeDefaultTabs();
-            AddNonClosableTab("Model Browser", ModelDataBrowserViewModel, new ModelDataBrowserView());
-            AddNonClosableTab("Report Browser", ReportBrowserViewModel, new ReportBrowserView());
+            get => TabControlViewModel.SelectedTab;
+            set => TabControlViewModel.SelectedTab = value;
+        }
+
+        /// <inheritdoc />
+        public int HeaderFontSize
+        {
+            get => TabControlViewModel.HeaderFontSize;
+            set => TabControlViewModel.HeaderFontSize = value;
+        }
+
+        /// <inheritdoc />
+        public ObservableCollection<UserControlTabItem> ObservableItems => TabControlViewModel.ObservableItems;
+
+        /// <inheritdoc />
+        public void AddCloseableTab(string tabName, ViewModel viewModel, UserControl userControl)
+        {
+            TabControlViewModel.AddCloseableTab(tabName, viewModel, userControl);
+        }
+
+        /// <inheritdoc />
+        public void AddNonClosableTab(string tabName, ViewModel viewModel, UserControl userControl)
+        {
+            TabControlViewModel.AddNonClosableTab(tabName, viewModel, userControl);
+        }
+
+        /// <inheritdoc />
+        public void InitializeDefaultTabs()
+        {
+            TabControlViewModel.InitializeDefaultTabs();
+            TabControlViewModel.AddNonClosableTab("Project Library", ProjectLibraryBrowserViewModel, new ProjectLibraryBrowserView());
+            TabControlViewModel.AddNonClosableTab("Project Reports", ReportBrowserViewModel, new ReportBrowserView());
+        }
+
+        /// <inheritdoc />
+        public void InsertCollectionItem(int index, UserControlTabItem value)
+        {
+            TabControlViewModel.InsertCollectionItem(index, value);
+        }
+
+        /// <inheritdoc />
+        public void AddCollectionItem(UserControlTabItem value)
+        {
+            TabControlViewModel.AddCollectionItem(value);
+        }
+
+        /// <inheritdoc />
+        public void RemoveCollectionItem(UserControlTabItem value)
+        {
+            TabControlViewModel.RemoveCollectionItem(value);
+        }
+
+        /// <inheritdoc />
+        public bool CollectionContains(UserControlTabItem value)
+        {
+            return TabControlViewModel.CollectionContains(value);
         }
     }
 }

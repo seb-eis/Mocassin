@@ -117,7 +117,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectBrowser\SubControls\DataBrowser\ModelDataBrowserView.xaml">
+    <Page Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -133,7 +133,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectTabControl\SubControls\XmlControl\XmlInstructionControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\SubControls\JobBuild\JobBuildControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\XmlControl\XmlInstructionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,22 +155,26 @@
     <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
-    <Compile Include="Base\ViewModels\Collections\ICollectionViewModel.cs" />
+    <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
+    <Compile Include="Base\ViewModels\Collections\IObservableCollectionViewModel.cs" />
     <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarView.xaml.cs">
       <DependentUpon>DynamicMenuBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarViewModel.cs" />
+    <Compile Include="Base\ViewModels\MenuBar\IDynamicMenuBarViewModel.cs" />
     <Compile Include="Base\ViewModels\Tabs\Items\CloseableUserControlTabItem.cs" />
+    <Compile Include="Base\ViewModels\Tabs\IUserControlTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml.cs">
       <DependentUpon>UserControlTabControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\ViewModels\Tabs\Items\UserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\ViewModel.cs" />
-    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ModelDataBrowserView.xaml.cs">
-      <DependentUpon>ModelDataBrowserView.xaml</DependentUpon>
+    <Compile Include="Controls\Base\PrimaryControlViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml.cs">
+      <DependentUpon>ProjectLibraryBrowserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectBrowser\SubControls\DataBrowser\ModelDataBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserView.xaml.cs">
       <DependentUpon>ReportBrowserView.xaml</DependentUpon>
     </Compile>
@@ -182,12 +190,16 @@
       <DependentUpon>ProjectStatusBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
-    <Compile Include="Controls\ProjectTabControl\ProjectTabControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
-    <Compile Include="Controls\ProjectTabControl\SubControls\XmlControl\XmlInstructionControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\SubControls\JobBuild\JobBuildControlView.xaml.cs">
+      <DependentUpon>JobBuildControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\JobBuild\JobBuildControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\XmlControl\XmlInstructionControlView.xaml.cs">
       <DependentUpon>XmlInstructionControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectTabControl\SubControls\XmlControl\XmlInstructionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\XmlControl\XmlInstructionControlViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -224,6 +236,7 @@
   <ItemGroup>
     <Folder Include="Controls\ProjectMenuBar\SubControls\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\JobBuild\Commands\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">

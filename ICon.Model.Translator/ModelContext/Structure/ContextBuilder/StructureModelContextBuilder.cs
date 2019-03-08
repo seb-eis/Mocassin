@@ -1,4 +1,5 @@
-﻿using Mocassin.Model.Structures;
+﻿using System.Linq;
+using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -23,6 +24,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override IStructureModelContext PopulateContext(IStructureModelContext modelContext)
         {
+            if (!CheckBuildRequirements()) return modelContext;
+
             var manager = ModelProject.GetManager<IStructureManager>();
             var unitCellPositions = manager.QueryPort.Query(port => port.GetUnitCellPositions());
             var environmentModels = EnvironmentModelBuilder.BuildModels(unitCellPositions);
@@ -47,6 +50,12 @@ namespace Mocassin.Model.Translator.ModelContext
             EnvironmentModelBuilder = EnvironmentModelBuilder ?? new EnvironmentModelBuilder(ModelProject);
             PositionModelBuilder = PositionModelBuilder ?? new PositionModelBuilder(ModelProject);
             InteractionRangeModelBuilder = InteractionRangeModelBuilder ?? new InteractionRangeModelBuilder();
+        }
+
+        /// <inheritdoc />
+        public override bool CheckBuildRequirements()
+        {
+            return ModelProject?.GetAllManagers().Any(x => x is IStructureManager) ?? false;
         }
     }
 }

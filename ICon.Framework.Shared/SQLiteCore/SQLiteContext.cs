@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mocassin.Framework.SQLiteCore
 {
@@ -23,14 +24,26 @@ namespace Mocassin.Framework.SQLiteCore
         }
 
         /// <inheritdoc />
-        protected SqLiteContext()
-        {
-        }
-
-        /// <inheritdoc />
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite(OptionsBuilderParameterString);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="DbContext" /> of type <see cref="T1" /> using the provided file path and ensures that the
+        ///     database is created
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="dropCreate"></param>
+        /// <returns></returns>
+        public static T1 OpenDatabase<T1>(string filePath, bool dropCreate = false) where T1 : SqLiteContext
+        {
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+
+            var context = (T1) Activator.CreateInstance(typeof(T1), $"Filename={filePath}");
+            if (dropCreate) context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            return context;
         }
     }
 
@@ -39,24 +52,12 @@ namespace Mocassin.Framework.SQLiteCore
     ///     database is created
     /// </summary>
     /// <typeparam name="T1"></typeparam>
-    public abstract class SqLiteContext<T1> : SqLiteContext where T1 : SqLiteContext, new()
+    public abstract class SqLiteContext<T1> : SqLiteContext where T1 : SqLiteContext
     {
-        /// <inheritdoc />
-        protected SqLiteContext()
-        {
-        }
-
         /// <inheritdoc />
         protected SqLiteContext(string optionsBuilderParameterString)
             : base(optionsBuilderParameterString)
         {
         }
-
-        /// <summary>
-        ///     Creates a new context of this type with the provided options builder parameter string
-        /// </summary>
-        /// <param name="optionsBuilderParameterString"></param>
-        /// <returns></returns>
-        public abstract T1 CreateNewContext(string optionsBuilderParameterString);
     }
 }

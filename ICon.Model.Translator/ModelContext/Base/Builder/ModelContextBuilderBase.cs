@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Mocassin.Model.Basic;
+using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
+using Mocassin.Model.Simulations;
+using Mocassin.Model.Structures;
+using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -66,5 +74,24 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Sets all unset builder instances to the internally defined default builder system
         /// </summary>
         protected abstract void SetNullBuildersToDefault();
+
+        /// <inheritdoc />
+        public abstract bool CheckBuildRequirements();
+
+
+        /// <inheritdoc />
+        public virtual bool CheckLinkDependentBuildRequirements()
+        {
+            if (ModelProject is null) return false;
+
+            var isOk = true;
+            var managers = ModelProject.GetAllManagers().ToList();
+            isOk &= managers.Any(x => x is IParticleManager);
+            isOk &= managers.Any(x => x is IStructureManager);
+            isOk &= managers.Any(x => x is IEnergyManager);
+            isOk &= managers.Any(x => x is ITransitionManager);
+            isOk &= managers.Any(x => x is ISimulationManager);
+            return isOk;
+        }
     }
 }

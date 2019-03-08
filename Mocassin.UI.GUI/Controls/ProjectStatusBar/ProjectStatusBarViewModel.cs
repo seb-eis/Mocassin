@@ -1,9 +1,18 @@
-﻿using Mocassin.UI.Base.ViewModels;
+﻿using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.Base;
 
 namespace Mocassin.UI.GUI.Controls.ProjectStatusBar
 {
-    public class ProjectStatusBarViewModel : ViewModel
+    /// <summary>
+    ///     The <see cref="PrimaryControlViewModel"/> for the <see cref="ProjectStatusBarView"/>
+    /// </summary>
+    public class ProjectStatusBarViewModel : PrimaryControlViewModel
     {
-        
+        /// <inheritdoc />
+        public ProjectStatusBarViewModel(IMocassinProjectControl mainProjectControl)
+            : base(mainProjectControl)
+        {
+        }
     }
 }

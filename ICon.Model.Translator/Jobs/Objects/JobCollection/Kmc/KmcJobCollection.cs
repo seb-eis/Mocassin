@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Optimization;
@@ -38,9 +39,15 @@ namespace Mocassin.Model.Translator.Jobs
         }
 
         /// <inheritdoc />
-        public IEnumerable<JobConfiguration> GetJobConfigurations()
+        public IEnumerator<JobConfiguration> GetEnumerator()
         {
-            return JobConfigurations.AsEnumerable();
+            return JobConfigurations.GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return JobConfigurations.GetEnumerator();
         }
     }
 }

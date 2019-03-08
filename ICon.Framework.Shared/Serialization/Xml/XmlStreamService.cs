@@ -81,7 +81,7 @@ namespace Mocassin.Framework.Xml
         /// </summary>
         /// <param name="serializer"></param>
         /// <param name="handlers"></param>
-        public virtual void AttachHandlerPackageToSerializer(XmlSerializer serializer, XmlEventHandlers handlers)
+        public static void AttachHandlerPackageToSerializer(XmlSerializer serializer, XmlEventHandlers handlers)
         {
             if (serializer == null || handlers == null)
                 return;
@@ -90,6 +90,19 @@ namespace Mocassin.Framework.Xml
             handlers.ElementHandlers?.ForEach(handler => { serializer.UnknownElement += handler; });
             handlers.NodeHandlers?.ForEach(handler => { serializer.UnknownNode += handler; });
             handlers.ObjectHandlers?.ForEach(handler => { serializer.UnreferencedObject += handler; });
+        }
+
+        /// <summary>
+        ///     Creates a new XML serializer matching the passed object type and attaches all events handlers
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="handlers"></param>
+        /// <returns></returns>
+        public static XmlSerializer GetSerializer(Type type, XmlEventHandlers handlers)
+        {
+            var serializer = new XmlSerializer(type);
+            AttachHandlerPackageToSerializer(serializer, handlers);
+            return serializer;
         }
 
         /// <summary>
@@ -141,6 +154,50 @@ namespace Mocassin.Framework.Xml
         public static bool TrySerialize<TSerializable>(Stream stream, TSerializable obj, out Exception exception)
         {
             return new XmlStreamService<TSerializable>().TrySerialize(stream, obj, out exception);
+        }
+
+        /// <summary>
+        ///     Serializes the given object into its xml representation without further formatting options
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="encoding"></param>
+        /// <param name="eventHandlers"></param>
+        /// <returns></returns>
+        public static string Serialize(object obj, Encoding encoding, XmlEventHandlers eventHandlers = null)
+        {
+            encoding = encoding ?? Encoding.UTF8;
+            var stream = new MemoryStream();
+            var serializer = GetSerializer(obj.GetType(), eventHandlers);
+            try
+            {
+                serializer.Serialize(stream, obj);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return encoding.GetString(stream.ToArray());
+        }
+
+        /// <summary>
+        /// Deserializes an xml representation into an object of the specified type without further formatting options
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <param name="eventHandlers"></param>
+        /// <returns></returns>
+        public static object Deserialize(string xml, Type type, XmlEventHandlers eventHandlers = null)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            var serializer = GetSerializer(type, eventHandlers);
+            var reader = new StringReader(xml);
+            try
+            {
+                return serializer.Deserialize(reader);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
@@ -219,7 +276,7 @@ namespace Mocassin.Framework.Xml
             {
                 try
                 {
-                    var serializer = GetSerializer(handlers);
+                    var serializer = GetSerializer(typeof(T1), handlers);
                     var result = serializer.Deserialize(reader);
                     obj = (T1) result;
                     return true;
@@ -256,19 +313,6 @@ namespace Mocassin.Framework.Xml
                 obj = default;
                 return false;
             }
-        }
-
-        /// <summary>
-        ///     Creates a new XML serializer matching the passed object type and attaches all events handlers
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="handlers"></param>
-        /// <returns></returns>
-        public XmlSerializer GetSerializer(XmlEventHandlers handlers)
-        {
-            var serializer = new XmlSerializer(typeof(T1));
-            AttachHandlerPackageToSerializer(serializer, handlers);
-            return serializer;
         }
     }
 }

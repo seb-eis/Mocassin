@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
-using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.DataBrowser;
+using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser;
 using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ReportBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
-using Mocassin.UI.GUI.Controls.ProjectTabControl;
-using Mocassin.UI.GUI.Controls.ProjectTabControl.SubControls.XmlControl;
+using ProjectWorkControl;
+using ProjectWorkControl.SubControls.XmlControl;
 
 namespace Mocassin.UI.GUI
 {
@@ -32,15 +32,7 @@ namespace Mocassin.UI.GUI
         /// <returns></returns>
         public MainWindowViewModel CreateNewMainWindowViewModel()
         {
-            var projectBrowserViewModel = new ProjectBrowserViewModel(new ModelDataBrowserViewModel(), new ReportBrowserViewModel());
-            var projectConsoleViewModel = new ProjectConsoleTabControlViewModel();
-            var projectMenuBarViewModel = new ProjectMenuBarViewModel();
-            var projectTabControlViewModel = new ProjectTabControlViewModel(new XmlInstructionControlViewModel());
-            var projectStatusBarViewModel = new ProjectStatusBarViewModel();
-            var mainViewModel = new MainWindowViewModel(projectMenuBarViewModel, projectStatusBarViewModel, projectBrowserViewModel,
-                projectConsoleViewModel, projectTabControlViewModel);
-
-            return mainViewModel;
+            return new MainWindowViewModel();
         }
 
         /// <summary>

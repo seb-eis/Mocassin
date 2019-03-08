@@ -29,5 +29,17 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="modelContext"></param>
         Task<TContext> RebuildContext(TContext modelContext);
+
+        /// <summary>
+        ///     Checks if the requirements to build non link dependent components are met
+        /// </summary>
+        /// <returns></returns>
+        bool CheckBuildRequirements();
+
+        /// <summary>
+        ///     Checks if the requirements to build the link dependent components are met
+        /// </summary>
+        /// <returns></returns>
+        bool CheckLinkDependentBuildRequirements();
     }
 }

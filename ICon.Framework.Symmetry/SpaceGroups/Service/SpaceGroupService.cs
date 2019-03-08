@@ -19,7 +19,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <summary>
         ///     The space group context provider
         /// </summary>
-        public SqLiteContextProvider<SpaceGroupContext> ContextProvider { get; set; }
+        public ISqLiteContextProvider<SpaceGroupContext> ContextProvider { get; set; }
 
         /// <summary>
         ///     The currently loaded space group object
@@ -61,21 +61,11 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <summary>
-        ///     Creates a new space group service from the default database path
-        /// </summary>
-        /// <param name="comparer"></param>
-        public SpaceGroupService(IComparer<double> comparer)
-        {
-            ContextProvider = new SpaceGroupContextProvider();
-            VectorComparer = new VectorComparer3D<Fractional3D>(comparer);
-        }
-
-        /// <summary>
         ///     Creates new space group service from custom SQLiteCoreContextProvider
         /// </summary>
         /// <param name="contextProvider"></param>
         /// <param name="comparer"></param>
-        public SpaceGroupService(SqLiteContextProvider<SpaceGroupContext> contextProvider, IComparer<double> comparer)
+        public SpaceGroupService(ISqLiteContextProvider<SpaceGroupContext> contextProvider, IComparer<double> comparer)
         {
             ContextProvider = contextProvider ?? throw new ArgumentNullException(nameof(contextProvider));
             VectorComparer = new VectorComparer3D<Fractional3D>(comparer);

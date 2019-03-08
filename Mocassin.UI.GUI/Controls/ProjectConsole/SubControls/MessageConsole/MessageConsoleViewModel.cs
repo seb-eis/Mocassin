@@ -1,5 +1,5 @@
-﻿using Mocassin.UI.Base.ViewModels;
-using Mocassin.UI.GUI.Base.ViewModels.Collections;
+﻿using Mocassin.UI.GUI.Base.ViewModels.Collections;
+using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
 {
