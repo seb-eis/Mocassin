@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.ParticleModel
 {
@@ -16,24 +17,28 @@ namespace Mocassin.UI.Xml.ParticleModel
         ///     Get or set the charge value of the particle as a string
         /// </summary>
         [XmlAttribute("Charge")]
+        [JsonProperty("Charge")]
         public double Charge { get; set; }
 
         /// <summary>
         ///     Get or set the name of the particle
         /// </summary>
         [XmlAttribute("Name")]
+        [JsonProperty("Name")]
         public string Name { get; set; }
 
         /// <summary>
         ///     Get or set the symbol of the particle
         /// </summary>
         [XmlAttribute("Symbol")]
+        [JsonProperty("Symbol")]
         public string Symbol { get; set; }
 
         /// <summary>
         ///     Get or set the boolean flag that enables the vacancy behavior of the particle
         /// </summary>
         [XmlAttribute("IsVacancy")]
+        [JsonProperty("IsVacancy")]
         public bool IsVacancy { get; set; }
 
         /// <inheritdoc />

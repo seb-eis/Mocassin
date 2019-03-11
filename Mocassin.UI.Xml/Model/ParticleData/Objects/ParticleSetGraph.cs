@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.ParticleModel
 {

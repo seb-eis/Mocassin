@@ -1,14 +1,36 @@
 ﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser.ProjectLibraryBrowserView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser"
-             mc:Ignorable="d" 
+             xmlns:jsonBrowser="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.JsonBrowser"
+             xmlns:data="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
+             xmlns:model="clr-namespace:Mocassin.UI.Xml.Model;assembly=Mocassin.UI.Xml"
+             mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectLibraryBrowserViewModel, IsDesignTimeCreatable = True}"
              d:DesignHeight="450" d:DesignWidth="800"
              Height="Auto" Width="Auto">
-    <Grid>
-            
-    </Grid>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <TreeView ItemsSource="{Binding ProjectGraphs}">
+      <TreeView.Resources>
+        <DataTemplate DataType="{x:Type data:MocassinProjectGraph}">
+          <TreeViewItem Header="Project Graph">
+            <TreeViewItem Header="{Binding ProjectGuid}" />
+            <TreeViewItem Header="{Binding ProjectName}" />
+            <TreeViewItem Header="Model Graph" ItemsSource="{Binding ProjectModelGraph}">
+              <TreeViewItem Header="Model Graph" />
+            </TreeViewItem>
+          </TreeViewItem>
+        </DataTemplate>
+      </TreeView.Resources>
+    </TreeView>
+  </Grid>
 </UserControl>

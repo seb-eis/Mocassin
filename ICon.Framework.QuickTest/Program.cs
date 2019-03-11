@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Framework.Xml;
 using Mocassin.Model.Basic;
@@ -16,14 +13,9 @@ using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.EntityBuilder;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
-using Mocassin.Model.Translator.Optimization;
-using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.ProjectLibrary;
-using Mocassin.UI.Xml.ParticleModel;
-using Newtonsoft.Json;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -37,15 +29,15 @@ namespace Mocassin.Framework.QuickTest
             while (!Directory.Exists(_basePath))
             {
                 Console.WriteLine($"Base directory does not exist: {_basePath}");
-                Console.WriteLine($"Enter new base directory:");
+                Console.WriteLine("Enter new base directory:");
                 _basePath = Console.ReadLine() + "\\";
-                Console.WriteLine($"Enter new base file name:");
+                Console.WriteLine("Enter new base file name:");
                 _baseFile = Console.ReadLine();
             }
 
             try
             {
-                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 var package = TestXmlInputSystem();
                 TestParameterSets(package);
                 var jobCollections = TestJobSystem(package);
@@ -62,9 +54,9 @@ namespace Mocassin.Framework.QuickTest
         private static ManagerPackage TestXmlInputSystem()
         {
             var filePath = _basePath + _baseFile + ".Input.xml";
-      
+
             Console.WriteLine($"Reading project XML description from: {filePath}");
-            if (!XmlStreamService.TryDeserialize(filePath, null, out ProjectModelGraph data, out var exception)) 
+            if (!XmlStreamService.TryDeserialize(filePath, null, out ProjectModelGraph data, out var exception))
                 ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception.Message}");
 
             Console.WriteLine("Creating new model project ...");
@@ -100,6 +92,7 @@ namespace Mocassin.Framework.QuickTest
                 var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), customizationData, out var exception);
                 ExitOnKeyPress($"New customization file written to target: {filePath}");
             }
+
             Console.WriteLine($"Reading project XML customization data from: {filePath}");
             if (!XmlStreamService.TryDeserialize(filePath, null, out ProjectCustomizationGraph readData, out var exception2))
                 ExitOnKeyPress($"Failed to read the XML file ...\nException: {exception2.Message}");

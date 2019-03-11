@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Base
 {
@@ -16,18 +17,21 @@ namespace Mocassin.UI.Xml.Base
         ///     Get or set the A coordinate
         /// </summary>
         [XmlAttribute("A")]
+        [JsonProperty("A")]
         public double A { get; set; }
 
         /// <summary>
         ///     Get or set the B coordinate
         /// </summary>
         [XmlAttribute("B")]
+        [JsonProperty("B")]
         public double B { get; set; }
 
         /// <summary>
         ///     Get or set the C coordinate
         /// </summary>
         [XmlAttribute("C")]
+        [JsonProperty("C")]
         public double C { get; set; }
 
         /// <summary>

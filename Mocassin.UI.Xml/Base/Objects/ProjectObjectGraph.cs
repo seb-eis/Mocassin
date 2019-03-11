@@ -16,11 +16,13 @@ namespace Mocassin.UI.Xml.Base
         /// <summary>
         ///     Specifies the default serialization encoding
         /// </summary>
+        [JsonIgnore]
         public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
 
         /// <summary>
         ///     Specifies the default culture info for serialization
         /// </summary>
+        [JsonIgnore]
         public static CultureInfo DefaultCultureInfo { get; set; } = CultureInfo.InvariantCulture;
 
         /// <summary>

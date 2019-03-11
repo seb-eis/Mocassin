@@ -1,14 +1,5 @@
 ﻿using System;
 using System.Windows;
-using Mocassin.UI.GUI.Controls.ProjectBrowser;
-using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser;
-using Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ReportBrowser;
-using Mocassin.UI.GUI.Controls.ProjectConsole;
-using Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar;
-using Mocassin.UI.GUI.Controls.ProjectStatusBar;
-using ProjectWorkControl;
-using ProjectWorkControl.SubControls.XmlControl;
 
 namespace Mocassin.UI.GUI
 {
@@ -21,7 +12,7 @@ namespace Mocassin.UI.GUI
         {
             var viewModel = CreateNewMainWindowViewModel();
             var mainWindow = CreateNewMainWindow(viewModel);
-        
+
             mainWindow.Show();
             base.OnStartup(e);
         }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Structures;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Base
 {
@@ -17,24 +18,28 @@ namespace Mocassin.UI.Xml.Base
         ///     Get or set the start radius of the filter
         /// </summary>
         [XmlAttribute("StartRadius")]
+        [JsonProperty("StartRadius")]
         public double StartRadius { get; set; }
 
         /// <summary>
         ///     Get or set the end radius of the filter
         /// </summary>
         [XmlAttribute("EndRadius")]
+        [JsonProperty("EndRadius")]
         public double EndRadius { get; set; }
 
         /// <summary>
         ///     Get or set the center unit cell position key
         /// </summary>
         [XmlAttribute("FromWyckoff")]
+        [JsonProperty("FromWyckoff")]
         public string CenterUnitCellPositionKey { get; set; }
 
         /// <summary>
         ///     Get or set the partner unit cell position key
         /// </summary>
         [XmlAttribute("ToWyckoff")]
+        [JsonProperty("ToWyckoff")]
         public string PartnerUnitCellPositionKey { get; set; }
 
         /// <summary>
