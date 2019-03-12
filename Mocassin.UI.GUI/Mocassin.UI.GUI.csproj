@@ -221,15 +221,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\JobBuild\JobBuildControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\XmlControl\XmlInstructionControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -281,22 +285,25 @@
       <DependentUpon>MessageConsoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml.cs">
+      <DependentUpon>ProjectMenuBarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\ProjectBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml.cs">
+      <DependentUpon>ProjectManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerViewModel.cs" />
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml.cs">
       <DependentUpon>ProjectStatusBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\JobBuild\JobBuildControlView.xaml.cs">
-      <DependentUpon>JobBuildControlView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml.cs">
+      <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\JobBuild\JobBuildControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\XmlControl\XmlInstructionControlView.xaml.cs">
-      <DependentUpon>XmlInstructionControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\XmlControl\XmlInstructionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -331,9 +338,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\ProjectMenuBar\SubControls\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\JobBuild\Commands\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\ModelGraph\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleSet\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\Particle\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">

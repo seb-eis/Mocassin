@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
@@ -24,6 +25,14 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [JsonIgnore]
         public static CultureInfo DefaultCultureInfo { get; set; } = CultureInfo.InvariantCulture;
+
+        /// <summary>
+        ///     Get or set a display name for the object graph
+        /// </summary>
+        [XmlAttribute("DisplayName")]
+        [JsonProperty("DisplayName")]
+        [NotMapped]
+        public string DisplayName { get; set; }
 
         /// <summary>
         ///     Converts the <see cref="ProjectObjectGraph" /> to ist xml representation

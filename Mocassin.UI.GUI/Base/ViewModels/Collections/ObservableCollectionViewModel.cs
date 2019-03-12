@@ -42,6 +42,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         public ObservableCollectionViewModel(int capacity)
         {
             Capacity = capacity;
+            ObservableItems = new ObservableCollection<T>();
         }
 
         /// <inheritdoc />

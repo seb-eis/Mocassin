@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.JobBuild
+namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
 {
     /// <summary>
-    /// Interaktionslogik für JobBuildControlView.xaml
+    /// Interaktionslogik für ProjectManagerView.xaml
     /// </summary>
-    public partial class JobBuildControlView : UserControl
+    public partial class ProjectManagerView : UserControl
     {
-        public JobBuildControlView()
+        public ProjectManagerView()
         {
             InitializeComponent();
         }

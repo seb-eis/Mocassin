@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Framework.Xml;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -62,49 +65,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         public ProjectLibraryBrowserViewModel(IMocassinProjectControl mainProjectControl)
             : base(mainProjectControl)
         {
-            if (mainProjectControl.OpenProjectLibrary != null)
-                ProjectLibrary = mainProjectControl.OpenProjectLibrary;
-
-            LoadTestTree();
+            if (mainProjectControl.OpenProjectLibrary != null) ProjectLibrary = mainProjectControl.OpenProjectLibrary;
+            JsonBrowserViewModel = new JsonBrowserViewModel();
         }
 
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
             ProjectLibrary = newProjectLibrary;
-            LoadLibraryContents();
-        }
-
-        /// <summary>
-        ///     Loads all content from the <see cref="IMocassinProjectLibrary"/> into the affiliated <see cref="ObservableCollection{T}"/>
-        /// </summary>
-        private void LoadLibraryContents()
-        {
-            if (projectLibrary == null) return;
-            projectLibrary.MocassinProjectGraphs.Load();
-            projectLibrary.ProjectModelGraphs.Load();
-            projectLibrary.ProjectCustomizationGraphs.Load();
-            projectLibrary.ProjectJobTranslationGraphs.Load();
-            projectLibrary.MocassinProjectBuildGraphs.Load();
-            ProjectGraphs = ProjectLibrary.MocassinProjectGraphs.Local.ToObservableCollection();
-        }
-
-        private void LoadTestTree()
-        {
-            const string _basePath = "C:\\Users\\hims-user\\Documents\\Gitlab\\MocassinTestFiles\\YDopedCeria\\";
-            const string _baseFile = "Ceria";
-            var filePath = _basePath + _baseFile + ".Input.xml";
-
-            Console.WriteLine($"Reading project XML description from: {filePath}");
-            if (XmlStreamService.TryDeserialize(filePath, null, out ProjectModelGraph data, out var exception))
-            {
-                var browser = new JsonBrowserViewModel();
-                browser.SetActiveTreeView(data, "Library");
-                JsonBrowserViewModel = browser;
-            }
-
-            var library = SqLiteContext.OpenDatabase<MocassinProjectContext>(_basePath + "ProjectLibrary.db");
-            OnProjectLibraryChangedInternal(library);
+            var graph = ProjectLibrary?.MocassinProjectGraphs.ToList();
+            JsonBrowserViewModel.SetActiveTreeView(graph, "Project Graphs");
         }
     }
 }

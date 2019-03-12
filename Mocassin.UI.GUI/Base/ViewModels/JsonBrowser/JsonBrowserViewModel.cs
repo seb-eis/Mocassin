@@ -1,5 +1,7 @@
-﻿using System.Security.RightsManagement;
+﻿using System.Collections.Generic;
+using System.Security.RightsManagement;
 using System.Windows.Controls;
+using Mocassin.Framework.Extensions;
 using Newtonsoft.Json;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
@@ -10,17 +12,17 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
     public class JsonBrowserViewModel : ViewModel
     {
         /// <summary>
-        ///     The <see cref="RootViewItem"/> backing field
+        ///     The <see cref="RootViewItems"/> backing field
         /// </summary>
-        private TreeViewItem rootViewItem;
+        private IEnumerable<TreeViewItem> rootViewItems;
 
         /// <summary>
         ///     Get or set the <see cref="TreeViewItem"/> that is the root item
         /// </summary>
-        public TreeViewItem RootViewItem
+        public IEnumerable<TreeViewItem> RootViewItems
         {
-            get => rootViewItem;
-            private set => SetProperty(ref rootViewItem, value);
+            get => rootViewItems;
+            private set => SetProperty(ref rootViewItems, value);
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         public void SetActiveTreeView(object obj, string rootName = null)
         {
             var builder = new JsonTreeViewBuilder();
-            RootViewItem = builder.ConvertToTreeView(obj, rootName ?? DefaultRootName, SerializerSettings);
+            RootViewItems = builder.ConvertToTreeView(obj, rootName ?? DefaultRootName, SerializerSettings).AsSingleton();
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         public void SetActiveTreeView(string json, string rootName = null)
         {
             var builder = new JsonTreeViewBuilder();
-            RootViewItem = builder.ConvertToTreeView(json, rootName ?? DefaultRootName, SerializerSettings);
+            RootViewItems = builder.ConvertToTreeView(json, rootName ?? DefaultRootName, SerializerSettings).AsSingleton();
         }
     }
 }

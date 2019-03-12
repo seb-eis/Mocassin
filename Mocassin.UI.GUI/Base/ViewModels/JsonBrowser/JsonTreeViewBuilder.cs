@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using System.Windows.Controls;
 using Newtonsoft.Json;
@@ -22,11 +23,29 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         {
             try
             {
-                if (!(obj is JObject jObject))
-                    jObject = JObject.FromObject(obj, JsonSerializer.CreateDefault(serializerSettings));
-
+                var settings = JsonSerializer.CreateDefault(serializerSettings);
                 var treeView = new TreeViewItem {Header = rootName};
-                AddToTreeView(jObject, treeView);
+                switch (obj)
+                {
+                    case JObject jObject:
+                        AddToTreeView(jObject, treeView);
+                        break;
+
+                    case JArray jArray:
+                        AddToTreeView(jArray, treeView);
+                        break;
+
+                    case IEnumerable _:
+                        var enumerable = JArray.FromObject(obj, settings);
+                        AddToTreeView(enumerable, treeView);
+                        break;
+
+                    default:
+                        var @object = JObject.FromObject(obj, settings);
+                        AddToTreeView(@object, treeView);
+                        break;
+                }
+
                 return treeView;
             }
             catch (Exception e)

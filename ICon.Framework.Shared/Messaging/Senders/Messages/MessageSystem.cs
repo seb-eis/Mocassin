@@ -1,76 +1,73 @@
 ﻿using System;
-using System.Reactive.Subjects;
-using System.Reactive.Linq;
-using Mocassin.Framework.Async;
+using Mocassin.Framework.Events;
 
 namespace Mocassin.Framework.Messaging
 {
     /// <summary>
-    /// Synchronous reactive push messaging system to distribute messages through subscriptions to IObservables
+    ///     Synchronous reactive push messaging system to distribute messages through subscriptions to IObservables
     /// </summary>
     public class MessageSystem : IPushMessageSystem
     {
         /// <summary>
-        /// Subject for info messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="InfoMessage" /> notifications
         /// </summary>
-        private Subject<InfoMessage> InfoMessageSubject { get; }
+        private ReactiveEvent<InfoMessage> SendInfoMessageEvent { get; }
 
         /// <summary>
-        /// Subject for error messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="ErrorMessage" /> notifications
         /// </summary>
-        private Subject<ErrorMessage> ErrorMessageSubject { get; }
+        private ReactiveEvent<ErrorMessage> SendErrorMessageEvent { get; }
 
         /// <summary>
-        /// Subject for warning messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="WarningMessage" /> notifications
         /// </summary>
-        private Subject<WarningMessage> WarningMessageSubject { get; }
+        private ReactiveEvent<WarningMessage> SendWarningMessageEvent { get; }
 
         /// <summary>
-        /// Subject for arbitrary push messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="PushMessage" /> notifications
         /// </summary>
-        private Subject<PushMessage> PushMessageSubject { get; }
+        private ReactiveEvent<PushMessage> SendPushMessageEvent { get; }
 
         /// <inheritdoc />
-        public IObservable<InfoMessage> InfoMessageNotification => InfoMessageSubject.AsObservable();
+        public IObservable<InfoMessage> InfoMessageNotification => SendInfoMessageEvent.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<WarningMessage> WarningMessageNotification => WarningMessageSubject.AsObservable();
+        public IObservable<WarningMessage> WarningMessageNotification => SendWarningMessageEvent.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<ErrorMessage> ErrorMessageNotification => ErrorMessageSubject.AsObservable();
+        public IObservable<ErrorMessage> ErrorMessageNotification => SendErrorMessageEvent.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<PushMessage> AnyMessageNotification => PushMessageSubject.AsObservable();
+        public IObservable<PushMessage> AnyMessageNotification => SendPushMessageEvent.AsObservable();
 
         /// <inheritdoc />
         public bool ConsoleSubscriptionActive { get; private set; }
 
         /// <summary>
-        /// Stores the console subscription disposable
+        ///     Stores the console subscription disposable
         /// </summary>
         private IDisposable ConsoleSubscription { get; set; }
 
         /// <summary>
-        /// Counts how many messages are currently send and await completion
+        ///     Counts how many messages are currently send and await completion
         /// </summary>
         public int AwaitCompletion { get; protected set; }
 
         /// <summary>
-        /// Creates new sync message system for push notifications
+        ///     Creates new sync message system for push notifications
         /// </summary>
         public MessageSystem()
         {
-            InfoMessageSubject = new Subject<InfoMessage>();
-            WarningMessageSubject = new Subject<WarningMessage>();
-            ErrorMessageSubject = new Subject<ErrorMessage>();
-            PushMessageSubject = new Subject<PushMessage>();
+            SendErrorMessageEvent = new ReactiveEvent<ErrorMessage>();
+            SendInfoMessageEvent = new ReactiveEvent<InfoMessage>();
+            SendPushMessageEvent = new ReactiveEvent<PushMessage>();
+            SendWarningMessageEvent = new ReactiveEvent<WarningMessage>();
         }
 
         /// <inheritdoc />
         public void SendMessage(InfoMessage message)
         {
-            if (message == null)
-                return;
+            if (message == null) return;
 
             PrepareSending();
             OnInfoMessageReceived(message);
@@ -81,8 +78,7 @@ namespace Mocassin.Framework.Messaging
         /// <inheritdoc />
         public void SendMessage(ErrorMessage message)
         {
-            if (message == null)
-                return;
+            if (message == null) return;
 
             PrepareSending();
             OnErrorMessageReceived(message);
@@ -93,8 +89,7 @@ namespace Mocassin.Framework.Messaging
         /// <inheritdoc />
         public void SendMessage(WarningMessage message)
         {
-            if (message == null)
-                return;
+            if (message == null) return;
 
             PrepareSending();
             OnWarningMessageReceived(message);
@@ -103,50 +98,49 @@ namespace Mocassin.Framework.Messaging
         }
 
         /// <summary>
-        /// Takes arbitrary operation message and distributes the message to all registered observers
+        ///     Takes arbitrary operation message and distributes the message to all registered observers
         /// </summary>
         /// <param name="message"></param>
         protected void SendMessage(PushMessage message)
         {
-            if (message != null)
-                OnMessageReceived(message);
+            if (message != null) OnMessageReceived(message);
         }
 
         /// <summary>
-        /// Invokes the subscription handlers on all info message subscribers
+        ///     Invokes the subscription handlers on all info message subscribers
         /// </summary>
         /// <param name="message"></param>
         protected void OnInfoMessageReceived(InfoMessage message)
         {
-            InfoMessageSubject.OnNext(message);
+            SendInfoMessageEvent.OnNext(message);
         }
 
         /// <summary>
-        /// Invokes the subscription handlers on all warning message subscribers
+        ///     Invokes the subscription handlers on all warning message subscribers
         /// </summary>
         /// <param name="message"></param>
         protected void OnWarningMessageReceived(WarningMessage message)
         {
-            WarningMessageSubject.OnNext(message);
+            SendWarningMessageEvent.OnNext(message);
         }
 
         /// <summary>
-        /// Invokes the subscription handlers on all error message subscribers
+        ///     Invokes the subscription handlers on all error message subscribers
         /// </summary>
         /// <param name="message"></param>
         protected void OnErrorMessageReceived(ErrorMessage message)
         {
-            ErrorMessageSubject.OnNext(message);
+            SendErrorMessageEvent.OnNext(message);
         }
 
         /// <summary>
-        /// Invokes the subscription handlers on all arbitrary message subscribers
+        ///     Invokes the subscription handlers on all arbitrary message subscribers
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
         protected void OnMessageReceived(PushMessage message)
         {
-            PushMessageSubject.OnNext(message);
+            SendPushMessageEvent.OnNext(message);
         }
 
         /// <inheritdoc />
@@ -158,8 +152,7 @@ namespace Mocassin.Framework.Messaging
         /// <inheritdoc />
         public void SubscribeConsoleDisplay()
         {
-            if (ConsoleSubscriptionActive == false)
-                ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
+            if (ConsoleSubscriptionActive == false) ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
 
             ConsoleSubscriptionActive = true;
         }
@@ -172,11 +165,12 @@ namespace Mocassin.Framework.Messaging
                 ConsoleSubscription?.Dispose();
                 ConsoleSubscription = null;
             }
+
             ConsoleSubscriptionActive = false;
         }
 
         /// <summary>
-        /// Creates a display string from a message event that contains the sender information
+        ///     Creates a display string from a message event that contains the sender information
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
@@ -186,7 +180,7 @@ namespace Mocassin.Framework.Messaging
         }
 
         /// <summary>
-        /// Locks the sender lock and counts the number of uncompleted senders up
+        ///     Locks the sender lock and counts the number of uncompleted senders up
         /// </summary>
         protected void PrepareSending()
         {
@@ -194,20 +188,11 @@ namespace Mocassin.Framework.Messaging
         }
 
         /// <summary>
-        /// Locks the sender object and counts the number of unfinished messages down and notifies awaiters of completion
+        ///     Locks the sender object and counts the number of unfinished messages down and notifies awaiters of completion
         /// </summary>
         protected void FinishSending()
         {
             AwaitCompletion--;
-        }
-
-        /// <summary>
-        /// Gets an awaiter for the message system that frees the next time the system has finished sending all messages
-        /// </summary>
-        /// <returns></returns>
-        public IAwaiter GetAwaiter()
-        {
-            return ObservableAwaiter.Empty();
         }
     }
 }

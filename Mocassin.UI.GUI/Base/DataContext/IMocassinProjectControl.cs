@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
-using ProjectWorkControl;
+using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Base.DataContext
@@ -27,12 +29,19 @@ namespace Mocassin.UI.GUI.Base.DataContext
         IMocassinProjectLibrary OpenProjectLibrary { get; }
 
         /// <summary>
-        ///     Get or set the main <see cref="PushMessageSystem" />
+        ///     Get an <see cref="ObservableCollection{T}" /> of <see cref="MocassinProjectGraph" /> that stays in sync with the
+        ///     loaded <see cref="IMocassinProjectLibrary" />
         /// </summary>
-        IPushMessageSystem PushMessageSystem { get; set; }
+        ObservableCollection<MocassinProjectGraph> ProjectGraphs { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectMenuBarViewModel" /> that controls the primary menu bar
+        ///     Get or set the main <see cref="PushMessageSystem" />
+        /// </summary>
+        IPushMessageSystem PushMessageSystem { get; }
+
+        /// <summary>
+        ///     Get the <see cref="Mocassin.UI.GUI.Controls.ProjectMenuBar.ProjectMenuBarViewModel" /> that controls the primary
+        ///     menu bar
         /// </summary>
         ProjectMenuBarViewModel ProjectMenuBarViewModel { get; }
 
@@ -55,9 +64,21 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ProjectConsoleTabControlViewModel ProjectConsoleTabControlViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectWorkControl.ProjectWorkTabControlViewModel" /> that controls the work
-        ///     tab selection
+        ///     Get the <see cref="Mocassin.UI.GUI.Controls.ProjectWorkControl.ProjectWorkTabControlViewModel" /> that controls the
+        ///     work tab selection
         /// </summary>
         ProjectWorkTabControlViewModel ProjectWorkTabControlViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.ProjectManagerViewModel" />
+        ///     that controls project file operations
+        /// </summary>
+        ProjectManagerViewModel ProjectManagerViewModel { get; }
+
+        /// <summary>
+        ///     Sets a new <see cref="IMocassinProjectLibrary" /> as the open library
+        /// </summary>
+        /// <param name="projectLibrary"></param>
+        void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
     }
 }

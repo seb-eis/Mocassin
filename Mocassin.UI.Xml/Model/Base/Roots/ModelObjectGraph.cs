@@ -35,6 +35,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [XmlAttribute("Key")]
         [Column("Key")]
+        [JsonProperty("Key")]
         public string Key
         {
             get => key;
@@ -50,6 +51,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [XmlAttribute("Ref")]
         [Column("Ref")]
+        [JsonProperty("KeyReference")]
         public string KeyReference
         {
             get => keyReference;

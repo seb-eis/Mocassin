@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,14 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         void IMocassinProjectLibrary.Add<TEntity>(TEntity entity)
         {
             Add(entity);
+        }
+
+        /// <inheritdoc />
+        public bool HasUnsavedChanges()
+        {
+            return ChangeTracker.Entries().Any(x => x.State == EntityState.Added ||
+                                                    x.State == EntityState.Modified ||
+                                                    x.State == EntityState.Deleted);
         }
 
         /// <inheritdoc />

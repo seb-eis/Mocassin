@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Width="Auto" Height="Auto">
     <Grid>
-      <TreeView ItemsSource="{Binding RootViewItem}">
+      <TreeView ItemsSource="{Binding RootViewItems}">
 
       </TreeView>
     </Grid>

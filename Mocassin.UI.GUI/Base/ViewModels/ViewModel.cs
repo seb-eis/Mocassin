@@ -45,7 +45,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="action"></param>
         protected void InvokeOnDispatcher(Action action)
         {
-            if (!Application.Current.Dispatcher.CheckAccess()) Application.Current.Dispatcher.Invoke(action);
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(action);
+                return;
+            }
             action.Invoke();
         }
 

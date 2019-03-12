@@ -4,6 +4,7 @@ using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
 {
@@ -83,6 +84,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         public void InitializeDefaultTabs()
         {
             TabControlViewModel.InitializeDefaultTabs();
+            TabControlViewModel.AddNonClosableTab("Particle Control", new ParticleModelControlViewModel(MainProjectControl), new ParticleModelControlView());
         }
     }
 }

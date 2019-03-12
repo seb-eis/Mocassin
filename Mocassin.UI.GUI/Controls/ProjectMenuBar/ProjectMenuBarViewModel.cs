@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.MenuBar;
 using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
 {
@@ -12,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
     public class ProjectMenuBarViewModel : PrimaryControlViewModel, IDynamicMenuBarViewModel
     {
         /// <summary>
-        ///     Get the <see cref="DynamicMenuBarViewModel" /> that controls the menu items
+        ///     Get the <see cref="DynamicMenuBarViewModel" /> that controls the additional menu items
         /// </summary>
         private DynamicMenuBarViewModel MenuBarViewModel { get; }
 
@@ -33,9 +34,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         /// <inheritdoc />
         public ObservableCollection<MenuItem> ObservableItems => MenuBarViewModel.ObservableItems;
 
-
         /// <inheritdoc />
-        public ProjectMenuBarViewModel(IMocassinProjectControl mainProjectControl) : base(mainProjectControl)
+        public ProjectMenuBarViewModel(IMocassinProjectControl mainProjectControl)
+            : base(mainProjectControl)
         {
             MenuBarViewModel = new DynamicMenuBarViewModel(Dock.Top);
         }

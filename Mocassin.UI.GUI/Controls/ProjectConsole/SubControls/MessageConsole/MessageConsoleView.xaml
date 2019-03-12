@@ -5,27 +5,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:messaging="clr-namespace:Mocassin.Framework.Messaging;assembly=Mocassin.Framework"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:MessageConsoleViewModel, IsDesignTimeCreatable=True}"
              Height="Auto" Width="Auto">
 
-  <Grid Margin="5,5,5,5">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+  <Grid Margin="2,2,2,2">
     <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto"
                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                   VerticalAlignment="Stretch" VerticalContentAlignment="Stretch">
-      <ItemsControl ItemsSource="{Binding ObservableItems}" FontSize="{Binding FontSize}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <TextBlock Text="{Binding}" TextAlignment="Left"/>
+      <TreeView ItemsSource="{Binding ObservableItems}">
+        <TreeView.Resources>
+          <DataTemplate DataType="{x:Type messaging:WarningMessage}">
+            <TreeViewItem Header="{Binding TimeStamp}" />
           </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
+          <DataTemplate DataType="{x:Type messaging:ErrorMessage}">
+            <TreeViewItem Header="{Binding TimeStamp}">
+              <TreeViewItem Header="{Binding ShortInfo}" />
+            </TreeViewItem>
+          </DataTemplate>
+          <DataTemplate DataType="{x:Type messaging:InfoMessage}">
+            <TreeViewItem Header="{Binding TimeStamp}" />
+          </DataTemplate>
+        </TreeView.Resources>
+      </TreeView>
     </ScrollViewer>
   </Grid>
 

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Mocassin.Framework.Events;
 
 namespace Mocassin.Framework.Messaging
 {
@@ -11,36 +10,36 @@ namespace Mocassin.Framework.Messaging
     public class AsyncMessageSystem : IPushMessageSystem
     {
         /// <summary>
-        ///     Subject for info messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="InfoMessage" /> notifications
         /// </summary>
-        private Subject<InfoMessage> InfoMessaging { get; }
+        private ReactiveEvent<InfoMessage> SendInfoMessageEvent { get; }
 
         /// <summary>
-        ///     Subject for error messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="ErrorMessage" /> notifications
         /// </summary>
-        private Subject<ErrorMessage> ErrorMessaging { get; }
+        private ReactiveEvent<ErrorMessage> SendErrorMessageEvent { get; }
 
         /// <summary>
-        ///     Subject for warning messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="WarningMessage" /> notifications
         /// </summary>
-        private Subject<WarningMessage> WarningMessaging { get; }
+        private ReactiveEvent<WarningMessage> SendWarningMessageEvent { get; }
 
         /// <summary>
-        ///     Subject for arbitrary push messages
+        ///     The <see cref="ReactiveEvent{TSubject}" /> for <see cref="PushMessage" /> notifications
         /// </summary>
-        private Subject<PushMessage> AllMessaging { get; }
+        private ReactiveEvent<PushMessage> SendPushMessageEvent { get; }
 
         /// <inheritdoc />
-        public IObservable<InfoMessage> InfoMessageNotification => InfoMessaging.AsObservable();
+        public IObservable<InfoMessage> InfoMessageNotification => SendInfoMessageEvent.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<WarningMessage> WarningMessageNotification => WarningMessaging.AsObservable();
+        public IObservable<WarningMessage> WarningMessageNotification => SendWarningMessageEvent.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<ErrorMessage> ErrorMessageNotification => ErrorMessaging.AsObservable();
+        public IObservable<ErrorMessage> ErrorMessageNotification => SendErrorMessageEvent.AsObservable();
 
         /// <inheritdoc />
-        public IObservable<PushMessage> AnyMessageNotification => AllMessaging.AsObservable();
+        public IObservable<PushMessage> AnyMessageNotification => SendPushMessageEvent.AsObservable();
 
         /// <inheritdoc />
         public bool ConsoleSubscriptionActive { get; private set; }
@@ -55,10 +54,10 @@ namespace Mocassin.Framework.Messaging
         /// </summary>
         public AsyncMessageSystem()
         {
-            InfoMessaging = new Subject<InfoMessage>();
-            WarningMessaging = new Subject<WarningMessage>();
-            ErrorMessaging = new Subject<ErrorMessage>();
-            AllMessaging = new Subject<PushMessage>();
+            SendInfoMessageEvent = new ReactiveEvent<InfoMessage>();
+            SendWarningMessageEvent = new ReactiveEvent<WarningMessage>();
+            SendErrorMessageEvent = new ReactiveEvent<ErrorMessage>();
+            SendPushMessageEvent = new ReactiveEvent<PushMessage>();
         }
 
         /// <inheritdoc />
@@ -91,7 +90,7 @@ namespace Mocassin.Framework.Messaging
         /// <param name="message"></param>
         protected Task OnInfoMessageReceived(InfoMessage message)
         {
-            return Task.Run(() => InfoMessaging.OnNext(message));
+            return Task.Run(() => SendInfoMessageEvent.OnNext(message));
         }
 
         /// <summary>
@@ -100,7 +99,7 @@ namespace Mocassin.Framework.Messaging
         /// <param name="message"></param>
         protected Task OnWarningMessageReceived(WarningMessage message)
         {
-            return Task.Run(() => WarningMessaging.OnNext(message));
+            return Task.Run(() => SendWarningMessageEvent.OnNext(message));
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace Mocassin.Framework.Messaging
         /// <param name="message"></param>
         protected Task OnErrorMessageReceived(ErrorMessage message)
         {
-            return Task.Run(() => ErrorMessaging.OnNext(message));
+            return Task.Run(() => SendErrorMessageEvent.OnNext(message));
         }
 
         /// <summary>
@@ -119,7 +118,7 @@ namespace Mocassin.Framework.Messaging
         /// <returns></returns>
         protected Task OnMessageReceived(PushMessage message)
         {
-            return Task.Run(() => AllMessaging.OnNext(message));
+            return Task.Run(() => SendPushMessageEvent.OnNext(message));
         }
 
         /// <inheritdoc />
@@ -131,8 +130,7 @@ namespace Mocassin.Framework.Messaging
         /// <inheritdoc />
         public void SubscribeConsoleDisplay()
         {
-            if (ConsoleSubscriptionActive == false)
-                ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
+            if (ConsoleSubscriptionActive == false) ConsoleSubscription = AnyMessageNotification.Subscribe(DumpMessageToConsole);
 
             ConsoleSubscriptionActive = true;
         }

@@ -4,13 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mocassin.UI.GUI"
-        xmlns:projectMenuBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar"
-        xmlns:projectBrowser="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser"
-        xmlns:projectTabControl="clr-namespace:ProjectWorkControl"
-        xmlns:projectConsole="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole"
         xmlns:projectStatusBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectStatusBar"
         xmlns:tabs="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.Tabs"
         xmlns:menuBar="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.MenuBar"
+        xmlns:projectMenuBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar"
         mc:Ignorable="d"
         Title="Mocassin Model Builder"
         Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"
@@ -32,7 +29,7 @@
       <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
-    <menuBar:DynamicMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                 DataContext="{Binding ProjectMenuBarViewModel}" />
 
     <tabs:UserControlTabControlView Grid.Row="1" Grid.Column="0"

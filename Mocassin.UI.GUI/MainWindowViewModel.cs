@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
+using Mocassin.Framework.SQLiteCore;
+using Mocassin.Framework.Xml;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
+using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Xml.Model;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI
@@ -26,6 +35,11 @@ namespace Mocassin.UI.GUI
         ///     The <see cref="OpenProjectLibrary" /> backing field
         /// </summary>
         private IMocassinProjectLibrary openProjectLibrary;
+
+        /// <summary>
+        ///     The <see cref="ProjectGraphs"/> backing field
+        /// </summary>
+        private ObservableCollection<MocassinProjectGraph> projectGraphs;
 
         /// <inheritdoc />
         public IPushMessageSystem PushMessageSystem { get; set; }
@@ -46,14 +60,29 @@ namespace Mocassin.UI.GUI
         public ProjectWorkTabControlViewModel ProjectWorkTabControlViewModel { get; }
 
         /// <inheritdoc />
+        public ProjectManagerViewModel ProjectManagerViewModel { get; }
+
+        /// <inheritdoc />
+        public void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
+        {
+            OpenProjectLibrary?.Dispose();
+            ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
+            OpenProjectLibrary = projectLibrary;
+            ProjectLibraryChangedEvent.OnNext(projectLibrary);
+        }
+
+        /// <inheritdoc />
         public IMocassinProjectLibrary OpenProjectLibrary
         {
             get => openProjectLibrary;
-            set
-            {
-                SetProperty(ref openProjectLibrary, value);
-                ProjectLibraryChangedEvent.OnNext(value);
-            }
+            private set => SetProperty(ref openProjectLibrary, value);
+        }
+
+        /// <inheritdoc />
+        public ObservableCollection<MocassinProjectGraph> ProjectGraphs
+        {
+            get => projectGraphs;
+            set => SetProperty(ref projectGraphs, value);
         }
 
         /// <inheritdoc />
@@ -71,6 +100,7 @@ namespace Mocassin.UI.GUI
             ProjectBrowserViewModel = new ProjectBrowserViewModel(this);
             ProjectConsoleTabControlViewModel = new ProjectConsoleTabControlViewModel(this);
             ProjectWorkTabControlViewModel = new ProjectWorkTabControlViewModel(this);
+            ProjectManagerViewModel = new ProjectManagerViewModel(this);
         }
     }
 }

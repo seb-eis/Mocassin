@@ -1,33 +1,67 @@
-﻿using Mocassin.UI.GUI.Base.ViewModels.Collections;
-using Mocassin.UI.GUI.Base.ViewModels;
+﻿using System;
+using System.Reactive;
+using System.Collections.ObjectModel;
+using Mocassin.Framework.Messaging;
+using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.ViewModels.Collections;
+using Mocassin.UI.GUI.Controls.Base;
 
 namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
 {
     /// <summary>
-    ///     The <see cref="ViewModel" /> implementation for the main message display console
+    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="MessageConsoleView" /> that controls the display of
+    ///     send <see cref="PushMessage" /> instances
     /// </summary>
-    public class MessageConsoleViewModel : ObservableCollectionViewModel<string>
+    public class MessageConsoleViewModel : PrimaryControlViewModel, IObservableCollectionViewModel<PushMessage>
     {
         /// <summary>
-        ///     The <see cref="FontSize" /> backing field
+        ///     Get the <see cref="IObservableCollectionViewModel{T}" /> that controls the visible <see cref="PushMessage" />
+        ///     instances
         /// </summary>
-        private int fontSize;
+        public ObservableCollectionViewModel<PushMessage> PushMessageCollectionViewModel { get; }
 
-        /// <summary>
-        ///     Get or set the font size of the message console
-        /// </summary>
-        public int FontSize
+        /// <inheritdoc />
+        public MessageConsoleViewModel(IMocassinProjectControl mainProjectControl)
+            : base(mainProjectControl)
         {
-            get => fontSize;
-            set => SetProperty(ref fontSize, value);
+            PushMessageCollectionViewModel = new ObservableCollectionViewModel<PushMessage>(100);
+            SubscribeToMessageSystem(mainProjectControl.PushMessageSystem);
+        }
+
+        /// <inheritdoc />
+        public ObservableCollection<PushMessage> ObservableItems => PushMessageCollectionViewModel.ObservableItems;
+
+        /// <inheritdoc />
+        public void InsertCollectionItem(int index, PushMessage value)
+        {
+            PushMessageCollectionViewModel.InsertCollectionItem(index, value);
+        }
+
+        /// <inheritdoc />
+        public void AddCollectionItem(PushMessage value)
+        {
+            PushMessageCollectionViewModel.AddCollectionItem(value);
+        }
+
+        /// <inheritdoc />
+        public void RemoveCollectionItem(PushMessage value)
+        {
+            PushMessageCollectionViewModel.RemoveCollectionItem(value);
+        }
+
+        /// <inheritdoc />
+        public bool CollectionContains(PushMessage value)
+        {
+            return PushMessageCollectionViewModel.CollectionContains(value);
         }
 
         /// <summary>
-        ///     Creates a new <see cref="MessageConsoleViewModel" /> with default settings
+        ///     Creates basic subscriptions to the passed <see cref="IPushMessageSystem"/> notifications
         /// </summary>
-        public MessageConsoleViewModel()
+        /// <param name="messageSystem"></param>
+        private void SubscribeToMessageSystem(IPushMessageSystem messageSystem)
         {
-            FontSize = 14;
+            messageSystem?.AnyMessageNotification.Subscribe(AddCollectionItem);
         }
     }
 }

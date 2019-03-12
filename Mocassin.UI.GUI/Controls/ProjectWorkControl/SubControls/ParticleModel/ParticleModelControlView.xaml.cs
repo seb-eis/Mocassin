@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ProjectWorkControl.SubControls.XmlControl
+namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
 {
     /// <summary>
-    /// Interaktionslogik für XmlInstructionControlView.xaml
+    /// Interaktionslogik für ParticleModelControlView.xaml
     /// </summary>
-    public partial class XmlInstructionControlView : UserControl
+    public partial class ParticleModelControlView : UserControl
     {
-        public XmlInstructionControlView()
+        public ParticleModelControlView()
         {
             InitializeComponent();
         }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mocassin.Framework.SQLiteCore
 {
@@ -31,7 +34,7 @@ namespace Mocassin.Framework.SQLiteCore
 
         /// <summary>
         ///     Creates a new <see cref="DbContext" /> of type <see cref="T1" /> using the provided file path and ensures that the
-        ///     database is created
+        ///     database is created if requested (Note: No overwrite warning is provided!)
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="dropCreate"></param>
@@ -41,8 +44,15 @@ namespace Mocassin.Framework.SQLiteCore
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
 
             var context = (T1) Activator.CreateInstance(typeof(T1), $"Filename={filePath}");
-            if (dropCreate) context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            if (dropCreate)
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            }
+
+            if (!context.GetService<IRelationalDatabaseCreator>().Exists())
+                throw new InvalidEnumArgumentException("The database does not exist or the provided file is in an invalid format!");
+
             return context;
         }
     }

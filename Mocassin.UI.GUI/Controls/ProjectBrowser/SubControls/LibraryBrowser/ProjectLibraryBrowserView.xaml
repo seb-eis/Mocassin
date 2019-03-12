@@ -13,24 +13,6 @@
              Height="Auto" Width="Auto">
 
   <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-    <TreeView ItemsSource="{Binding ProjectGraphs}">
-      <TreeView.Resources>
-        <DataTemplate DataType="{x:Type data:MocassinProjectGraph}">
-          <TreeViewItem Header="Project Graph">
-            <TreeViewItem Header="{Binding ProjectGuid}" />
-            <TreeViewItem Header="{Binding ProjectName}" />
-            <TreeViewItem Header="Model Graph" ItemsSource="{Binding ProjectModelGraph}">
-              <TreeViewItem Header="Model Graph" />
-            </TreeViewItem>
-          </TreeViewItem>
-        </DataTemplate>
-      </TreeView.Resources>
-    </TreeView>
+    <jsonBrowser:JsonBrowserView DataContext="{Binding JsonBrowserViewModel}" />
   </Grid>
 </UserControl>

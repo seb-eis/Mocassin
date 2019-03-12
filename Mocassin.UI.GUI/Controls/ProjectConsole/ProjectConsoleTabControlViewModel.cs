@@ -33,18 +33,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
             : base(mainProjectControl)
         {
             TabControlViewModel = new UserControlTabControlViewModel();
-            MessageConsoleViewModel = new MessageConsoleViewModel();
+            MessageConsoleViewModel = new MessageConsoleViewModel(mainProjectControl);
             InitializeDefaultTabs();
-        }
-
-        /// <summary>
-        ///     Display a simple message <see cref="string" /> in the message console
-        /// </summary>
-        /// <param name="str"></param>
-        public void DisplayMessage(string str)
-        {
-            if (str is null) return;
-            MessageConsoleViewModel.AddCollectionItem(str);
         }
 
         /// <inheritdoc />

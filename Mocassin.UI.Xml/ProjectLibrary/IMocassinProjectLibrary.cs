@@ -70,5 +70,11 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         /// </summary>
         /// <param name="cancellationToken"></param>
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///     Checks if the project library has unsaved changes
+        /// </summary>
+        /// <returns></returns>
+        bool HasUnsavedChanges();
     }
 }
