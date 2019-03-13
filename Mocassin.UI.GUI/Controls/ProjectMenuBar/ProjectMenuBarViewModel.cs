@@ -1,9 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.MenuBar;
-using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.Commands;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
 {
@@ -34,11 +39,35 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         /// <inheritdoc />
         public ObservableCollection<MenuItem> ObservableItems => MenuBarViewModel.ObservableItems;
 
+        /// <summary>
+        ///     Get a <see cref="ICommand"/> to start the project loading dialog
+        /// </summary>
+        public ICommand ShowProjectLoadingDialogCommand { get; }
+
+        /// <summary>
+        ///     Get a <see cref="ICommand"/> to star the project creation dialog
+        /// </summary>
+        public ICommand ShowProjectCreationDialogCommand { get; }
+
+        /// <summary>
+        ///     Get a <see cref="ICommand"/> to safely exit the program with save changes check and cancel option
+        /// </summary>
+        public ICommand SaveExitProgramCommand { get; }
+
+        /// <summary>
+        ///     Get a <see cref="ICommand"/> to safely close the current project with save changes check and cancel option
+        /// </summary>
+        public ICommand SaveCloseProjectLibraryCommand { get; }
+
         /// <inheritdoc />
         public ProjectMenuBarViewModel(IMocassinProjectControl mainProjectControl)
             : base(mainProjectControl)
         {
             MenuBarViewModel = new DynamicMenuBarViewModel(Dock.Top);
+            ShowProjectLoadingDialogCommand = new ShowProjectLoadingDialogCommand(mainProjectControl);
+            ShowProjectCreationDialogCommand = new ShowProjectCreationDialogCommand(mainProjectControl);
+            SaveExitProgramCommand = new SaveExitProgramCommand(mainProjectControl);
+            SaveCloseProjectLibraryCommand = MakeCloseCommandRelay(mainProjectControl);
         }
 
         /// <inheritdoc />
@@ -63,6 +92,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         public bool CollectionContains(MenuItem value)
         {
             return MenuBarViewModel.CollectionContains(value);
+        }
+
+        /// <summary>
+        ///     Creates a <see cref="RelayCommand"/> for closing the current project
+        /// </summary>
+        /// <param name="projectControl"></param>
+        /// <returns></returns>
+        private RelayCommand MakeCloseCommandRelay(IMocassinProjectControl projectControl)
+        {
+            if (projectControl == null) throw new ArgumentNullException(nameof(projectControl));
+            return new RelayCommand(() => projectControl.ProjectManagerViewModel.CloseActiveProjectLibrary());
         }
     }
 }

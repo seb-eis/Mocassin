@@ -48,6 +48,54 @@ namespace Mocassin.UI.Base.Commands
         {
             _action.Invoke();
         }
+
+        /// <summary>
+        ///     Wraps a <see cref="Command{T}" /> with a fixed parameter into a parameterless <see cref="RelayCommand" />
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="command"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public static RelayCommand WrapCommand<T>(Command<T> command, T parameter)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+
+            return new RelayCommand(() => command.Execute(parameter), () => command.CanExecute(parameter));
+        }
+
+        /// <summary>
+        ///     Wraps a <see cref="Command{T}" /> and a parameter provider <see cref="Func{TResult}" /> into a parameterless
+        ///     <see cref="RelayCommand" />
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="command"></param>
+        /// <param name="paramProvider"></param>
+        /// <returns></returns>
+        public static RelayCommand WrapCommand<T>(Command<T> command, Func<T> paramProvider)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (paramProvider == null) throw new ArgumentNullException(nameof(paramProvider));
+
+            return new RelayCommand(() => command.Execute(paramProvider()), () => command.CanExecute(paramProvider()));
+        }
+
+        /// <summary>
+        ///     Wraps a <see cref="Command{T}" /> provider and a parameter provider <see cref="Func{TResult}" /> into a parameterless <see cref="RelayCommand" />
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="commandProvider"></param>
+        /// <param name="paramProvider"></param>
+        /// <returns></returns>
+        public static RelayCommand WrapCommand<T>(Func<Command<T>> commandProvider, Func<T> paramProvider)
+        {
+            if (commandProvider == null) throw new ArgumentNullException(nameof(commandProvider));
+            if (paramProvider == null) throw new ArgumentNullException(nameof(paramProvider));
+
+            void LocalExecute() => commandProvider()?.Execute(paramProvider());
+            bool LocalCanExecute() { var command = commandProvider(); return command != null && command.CanExecute(paramProvider());}
+
+            return new RelayCommand(LocalExecute, LocalCanExecute);
+        }
     }
 
     /// <summary>

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
-using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl

@@ -59,7 +59,7 @@
     </Grid.RowDefinitions>
     <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource DataGridScrollViewStyle}">
       <StackPanel>
-        <ComboBox ItemsSource="{Binding MainProjectControl.ProjectGraphs}">
+        <ComboBox ItemsSource="{Binding MainProjectControl.ProjectGraphs}" SelectedItem="{Binding SelectedModelGraph}">
           <ComboBox.ItemTemplate>
             <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
               <TextBlock Text="Test"/>

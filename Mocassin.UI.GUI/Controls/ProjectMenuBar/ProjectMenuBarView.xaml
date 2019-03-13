@@ -1,5 +1,6 @@
 ﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectMenuBar.ProjectMenuBarView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,17 +23,41 @@
         <Menu Style="{StaticResource MenuStyle}">
           <MenuItem Header="_File">
             <MenuItem Header="_New">
-              <MenuItem Header="New Project Library"></MenuItem>
+              <MenuItem Header="New Project Library">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding ShowProjectCreationDialogCommand}"/>
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </MenuItem>
             </MenuItem>
             <MenuItem Header="_Open">
-              <MenuItem Header="Open Project Library" Click="MenuItem_OpenProjectLibrary_OnClick"></MenuItem>
+              <MenuItem Header="Open Project Library">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding ShowProjectLoadingDialogCommand}"/>
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </MenuItem>
             </MenuItem>
             <MenuItem Header="_Close" >
-              <MenuItem Header="Close Project Library" Click="MenuItem_CloseProjectLibrary_OnClick"></MenuItem>
+              <MenuItem Header="Close Project Library">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding SaveCloseProjectLibraryCommand}"/>
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </MenuItem>
             </MenuItem>
             <MenuItem Header="_Save" />
             <Separator />
-            <MenuItem Header="_Exit" Click="MenuItem_Exit_OnClick"/>
+            <MenuItem Header="_Exit">
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                  <i:InvokeCommandAction Command="{Binding SaveExitProgramCommand}"/>
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+            </MenuItem>
           </MenuItem>
         </Menu>
       </DockPanel>

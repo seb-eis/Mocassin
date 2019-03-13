@@ -18,7 +18,7 @@
     </Style>
   </UserControl.Resources>
 
-  <Grid>
+  <Grid Margin="5,5,5,5">
     <TabControl ItemsSource="{Binding ObservableItems}" SelectedItem="{Binding SelectedTab}" FontSize="{Binding HeaderFontSize}">
       <TabControl.Resources>
         <DataTemplate DataType="{x:Type local:CloseableUserControlTabItem}">

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
@@ -30,10 +32,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             private set => SetProperty(ref openDatabaseFilePath, value);
         }
 
+        /// <summary>
+        ///     Get the <see cref="ICommand" /> to load a <see cref="IMocassinProjectLibrary" /> file location
+        /// </summary>
+        public ICommand OpenProjectLibraryCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ICommand" /> to close the active <see cref="IMocassinProjectLibrary" />
+        /// </summary>
+        public ICommand CloseProjectLibraryCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ICommand" /> to create and open a <see cref="IMocassinProjectLibrary" /> file location
+        /// </summary>
+        public ICommand CreateProjectLibraryCommand { get; }
+
         /// <inheritdoc />
         public ProjectManagerViewModel(IMocassinProjectControl mainProjectControl)
             : base(mainProjectControl)
         {
+            OpenProjectLibraryCommand = new OpenProjectLibraryCommand(this);
+            CloseProjectLibraryCommand = new CloseProjectLibraryCommand(this);
+            CreateProjectLibraryCommand = new CreateProjectLibraryCommand(this);
         }
 
         /// <summary>
@@ -41,7 +61,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         /// </summary>
         public void CloseActiveProjectLibrary()
         {
-            if (TryCloseProjectLibrary(MainProjectControl.OpenProjectLibrary)) MainProjectControl.SetOpenProjectLibrary(null);
+            if (TryCloseProjectLibrary(MainProjectControl.OpenProjectLibrary))
+            {
+                MainProjectControl.SetOpenProjectLibrary(null);
+                SendCallInfoMessage("Project closed!");
+            }
+            else
+            {
+                SendCallInfoMessage("Project close aborted!");
+            }
+
         }
 
         /// <summary>
@@ -60,7 +89,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             if (!TryOpenProjectLibrary(filePath, false, out var exception))
                 SendCallErrorMessage(exception);
             else
-                SendCallInfoMessage($"Project loaded from: {filePath}".AsSingleton());
+                SendCallInfoMessage($"Project loaded from: {filePath}");
         }
 
         /// <summary>
@@ -79,7 +108,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             if (!TryOpenProjectLibrary(filePath, true, out var exception))
                 SendCallErrorMessage(exception);
             else
-                SendCallInfoMessage($"Project created at: {filePath}".AsSingleton());
+                SendCallInfoMessage($"Project created at: {filePath}");
         }
 
         /// <summary>
@@ -115,7 +144,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
 
         /// <summary>
         ///     Closes the passed <see cref="IMocassinProjectLibrary" /> and requests a save confirmation from the user. Returns
-        ///     false if the close was canceled or the library cannot be closed
+        ///     false if the close was canceled by the user
         /// </summary>
         /// <param name="projectLibrary"></param>
         public bool TryCloseProjectLibrary(IMocassinProjectLibrary projectLibrary)
@@ -123,7 +152,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             if (projectLibrary == null) return false;
             if (projectLibrary.HasUnsavedChanges())
             {
-                var choice = GetUserProjectSaveConfirmation(projectLibrary);
+                var choice = GetSaveConfirmationFromUser(projectLibrary);
                 switch (choice)
                 {
                     case MessageBoxResult.Yes:
@@ -146,7 +175,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         ///     Enforces closing of the passed <see cref="IMocassinProjectLibrary" /> without checking for changes
         /// </summary>
         /// <param name="projectLibrary"></param>
-        public void ForceCloseProjectLibrary(IMocassinProjectLibrary projectLibrary)
+        private void ForceCloseProjectLibrary(IMocassinProjectLibrary projectLibrary)
         {
             projectLibrary?.Dispose();
         }
@@ -169,11 +198,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         ///     Requests a user input if the changes in the passed <see cref="IMocassinProjectLibrary" /> should be saved or not
         /// </summary>
         /// <returns></returns>
-        private MessageBoxResult GetUserProjectSaveConfirmation(IMocassinProjectLibrary projectLibrary)
+        private MessageBoxResult GetSaveConfirmationFromUser(IMocassinProjectLibrary projectLibrary)
         {
             const string caption = "Close Confirmation";
-            const string message = "Close of project library with unsaved changes requested. Should the changes be saved before closing?";
-            return projectLibrary == null ? MessageBoxResult.No : MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel);
+            const string message = "Project library has unsaved changes. Save changes before closing?";
+            var choice = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel);
+            SendCallInfoMessage($"Choice: {choice}");
+            return projectLibrary == null ? MessageBoxResult.No : choice;
         }
     }
 }

@@ -9,7 +9,7 @@ using Mocassin.Framework.SQLiteCore;
 using Mocassin.Framework.Xml;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
-using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;

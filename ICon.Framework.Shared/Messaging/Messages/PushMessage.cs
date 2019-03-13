@@ -34,7 +34,7 @@ namespace Mocassin.Framework.Messaging
         {
             Sender = sender;
             ShortInfo = shortInfo;
-            TimeStamp = DateTime.Now.ToLocalTime();
+            TimeStamp = DateTime.Now;
         }
 
         /// <summary>

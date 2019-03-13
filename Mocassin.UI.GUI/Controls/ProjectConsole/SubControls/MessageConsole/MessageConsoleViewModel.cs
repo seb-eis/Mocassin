@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
-using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
 {
@@ -14,6 +14,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
     /// </summary>
     public class MessageConsoleViewModel : PrimaryControlViewModel, IObservableCollectionViewModel<PushMessage>
     {
+        /// <summary>
+        ///     The <see cref="SelectedMessage"/> backing field
+        /// </summary>
+        private PushMessage selectedMessage;
+
+        /// <summary>
+        ///     Get or set the currently selected <see cref="PushMessage"/>
+        /// </summary>
+        public PushMessage SelectedMessage
+        {
+            get => selectedMessage;
+            set => SetProperty(ref selectedMessage, value);
+        }
+
         /// <summary>
         ///     Get the <see cref="IObservableCollectionViewModel{T}" /> that controls the visible <see cref="PushMessage" />
         ///     instances

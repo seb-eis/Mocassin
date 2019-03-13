@@ -14,21 +14,22 @@
     <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto"
                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                   VerticalAlignment="Stretch" VerticalContentAlignment="Stretch">
-      <TreeView ItemsSource="{Binding ObservableItems}">
-        <TreeView.Resources>
-          <DataTemplate DataType="{x:Type messaging:WarningMessage}">
-            <TreeViewItem Header="{Binding TimeStamp}" />
-          </DataTemplate>
-          <DataTemplate DataType="{x:Type messaging:ErrorMessage}">
-            <TreeViewItem Header="{Binding TimeStamp}">
-              <TreeViewItem Header="{Binding ShortInfo}" />
-            </TreeViewItem>
-          </DataTemplate>
-          <DataTemplate DataType="{x:Type messaging:InfoMessage}">
-            <TreeViewItem Header="{Binding TimeStamp}" />
-          </DataTemplate>
-        </TreeView.Resources>
-      </TreeView>
+      <DataGrid ItemsSource="{Binding ObservableItems}" IsReadOnly="True" SelectedItem="{Binding SelectedMessage}"
+                AutoGenerateColumns="False">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Time" IsReadOnly="True" Width="Auto" Binding="{Binding TimeStamp}" />
+          <DataGridTextColumn Header="What" IsReadOnly="True" Width="Auto" Binding="{Binding ShortInfo}" />
+          <DataGridTemplateColumn Header="Information" Width="Auto">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate DataType="{x:Type messaging:InfoMessage}">
+                <TreeView>
+                  <TreeViewItem ItemsSource="{Binding Details}" Header="Details" />
+                </TreeView>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
     </ScrollViewer>
   </Grid>
 

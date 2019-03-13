@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.Xml.ProjectLibrary;
 
-namespace Mocassin.UI.GUI.Controls.Base
+namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
     ///     Base <see cref="ViewModel" /> implementation for primary controls with access to the components of the
@@ -81,7 +82,18 @@ namespace Mocassin.UI.GUI.Controls.Base
         /// <param name="callMemberName"></param>
         protected void SendCallInfoMessage(IEnumerable<string> details, [CallerMemberName] string callMemberName = default)
         {
-            SendInfoMessage($"Info\t@ {callMemberName}", details);
+            SendInfoMessage($"Message @ {callMemberName}", details);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="InfoMessage" /> which informs about a warning in the calling method and distributes it
+        ///     through the main <see cref="IPushMessageSystem" />
+        /// </summary>
+        /// <param name="detail"></param>
+        /// <param name="callMemberName"></param>
+        protected void SendCallInfoMessage(string detail, [CallerMemberName] string callMemberName = default)
+        {
+            SendCallInfoMessage(detail.AsSingleton(), callMemberName);
         }
 
         /// <summary>
@@ -106,7 +118,18 @@ namespace Mocassin.UI.GUI.Controls.Base
         /// <param name="callMemberName"></param>
         protected void SendCallWarningMessage(IEnumerable<string> details, [CallerMemberName] string callMemberName = default)
         {
-            SendWarningMessage($"Warning\t@ {callMemberName}", details);
+            SendWarningMessage($"Warning @ {callMemberName}", details);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="WarningMessage" /> which informs about a warning in the calling method and distributes it
+        ///     through the main <see cref="IPushMessageSystem" />
+        /// </summary>
+        /// <param name="detais"></param>
+        /// <param name="callMemberName"></param>
+        protected void SendCallWarningMessage(string detail, [CallerMemberName] string callMemberName = default)
+        {
+            SendCallWarningMessage(detail.AsSingleton(), callMemberName);
         }
 
         /// <summary>
@@ -131,7 +154,7 @@ namespace Mocassin.UI.GUI.Controls.Base
         /// <param name="exception"></param>
         protected void SendCallErrorMessage(Exception exception, [CallerMemberName] string callMemberName = default)
         {
-            SendErrorMessage($"Error\t@ {callMemberName}", exception);
+            SendErrorMessage($"Error @ {callMemberName}", exception);
         }
     }
 }

@@ -26,26 +26,5 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         {
             InitializeComponent();
         }
-
-        private void MenuItem_Exit_OnClick(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void MenuItem_OpenProjectLibrary_OnClick(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Database Files (*.db)|*.db|All files (*.*)|*.*";
-            openFileDialog.ShowDialog();
-            var name = openFileDialog.FileName;
-            var control = (ProjectMenuBarViewModel) DataContext;
-           control.MainProjectControl.ProjectManagerViewModel.LoadActiveProjectLibrary(name);
-        }
-
-        private void MenuItem_CloseProjectLibrary_OnClick(object sender, RoutedEventArgs e)
-        {
-            var control = (ProjectMenuBarViewModel) DataContext;
-            control.MainProjectControl.ProjectManagerViewModel.CloseActiveProjectLibrary();
-        }
     }
 }

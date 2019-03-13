@@ -1,6 +1,6 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.Base;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Controls.ProjectStatusBar
 {
