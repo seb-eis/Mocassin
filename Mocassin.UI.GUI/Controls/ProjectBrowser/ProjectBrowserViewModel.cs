@@ -54,6 +54,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         }
 
         /// <inheritdoc />
+        public Dock TabStripPlacement
+        {
+            get => TabControlViewModel.TabStripPlacement;
+            set => TabControlViewModel.TabStripPlacement = value;
+        }
+
+        /// <inheritdoc />
         public ObservableCollection<UserControlTabItem> ObservableItems => TabControlViewModel.ObservableItems;
 
         /// <inheritdoc />

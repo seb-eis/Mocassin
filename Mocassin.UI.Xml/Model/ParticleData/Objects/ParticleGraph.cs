@@ -66,7 +66,7 @@ namespace Mocassin.UI.Xml.ParticleModel
             {
                 Charge = particle.Charge,
                 IsVacancy = particle.IsVacancy,
-                KeyReference = particle.Key,
+                Key = particle.Key,
                 Name = particle.Name,
                 Symbol = particle.Symbol
             };

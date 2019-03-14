@@ -20,51 +20,46 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         private int headerFontSize = 14;
 
         /// <summary>
-        ///     Get or set the currently selected tab
+        ///     The <see cref="TabStripPlacement"/> backing field
         /// </summary>
+        private Dock tabStripPlacement = Dock.Top;
+
+        /// <inheritdoc />
+        public Dock TabStripPlacement
+        {
+            get => tabStripPlacement;
+            set => SetProperty(ref tabStripPlacement, value);
+        }
+
+        /// <inheritdoc />
         public UserControlTabItem SelectedTab
         {
             get => selectedTab;
             set => SetProperty(ref selectedTab, value);
         }
 
-        /// <summary>
-        /// </summary>
+        /// <inheritdoc />
         public int HeaderFontSize
         {
             get => headerFontSize;
             set => SetProperty(ref headerFontSize, value);
         }
 
-        /// <summary>
-        ///     Adds a <see cref="ViewModel" /> and <see cref="UserControl" /> as a <see cref="CloseableUserControlTabItem" /> with
-        ///     the given tab name
-        /// </summary>
-        /// <param name="tabName"></param>
-        /// <param name="viewModel"></param>
-        /// <param name="userControl"></param>
+        /// <inheritdoc />
         public void AddCloseableTab(string tabName, ViewModel viewModel, UserControl userControl)
         {
             var tabItem = new CloseableUserControlTabItem(tabName, viewModel, userControl, this);
             AddCollectionItem(tabItem);
         }
 
-        /// <summary>
-        ///     Adds a <see cref="ViewModel" /> and <see cref="UserControl" /> as a <see cref="UserControlTabItem" /> with the
-        ///     given tab name
-        /// </summary>
-        /// <param name="tabName"></param>
-        /// <param name="viewModel"></param>
-        /// <param name="userControl"></param>
+        /// <inheritdoc />
         public void AddNonClosableTab(string tabName, ViewModel viewModel, UserControl userControl)
         {
             var tabItem = new UserControlTabItem(tabName, viewModel, userControl);
             AddCollectionItem(tabItem);
         }
 
-        /// <summary>
-        ///     Initializes the default <see cref="UserControlTabItem" /> instances of the control
-        /// </summary>
+        /// <inheritdoc />
         public virtual void InitializeDefaultTabs()
         {
         }

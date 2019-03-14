@@ -21,6 +21,9 @@ namespace Mocassin.Framework.Messaging
         public IList<string> Details { get; set; }
 
         /// <inheritdoc />
+        public override IEnumerable<string> DetailSequence => Details?.AsEnumerable();
+
+        /// <inheritdoc />
         public WarningMessage(object sender, string shortInfo) : base(sender, shortInfo)
         {
             Details = new List<string>();

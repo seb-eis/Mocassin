@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Mocassin.Framework.Messaging
@@ -14,6 +15,12 @@ namespace Mocassin.Framework.Messaging
         /// </summary>
         [JsonIgnore]
         public object Sender { get; }
+
+        /// <summary>
+        ///     Get an <see cref="IEnumerable{T}"/> sequence of <see cref="string"/> that describe details fo the messsage
+        /// </summary>
+        [JsonIgnore]
+        public abstract IEnumerable<string> DetailSequence { get; }
 
         /// <summary>
         ///     Basic short message describing the contents of the model message

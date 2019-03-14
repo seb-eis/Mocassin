@@ -7,8 +7,8 @@ using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.MenuBar;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.Commands;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.Commands;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
 {
@@ -40,24 +40,34 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         public ObservableCollection<MenuItem> ObservableItems => MenuBarViewModel.ObservableItems;
 
         /// <summary>
-        ///     Get a <see cref="ICommand"/> to start the project loading dialog
+        ///     Get a <see cref="ICommand" /> to start the project loading dialog
         /// </summary>
         public ICommand ShowProjectLoadingDialogCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="ICommand"/> to star the project creation dialog
+        ///     Get a <see cref="ICommand" /> to star the project creation dialog
         /// </summary>
         public ICommand ShowProjectCreationDialogCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="ICommand"/> to safely exit the program with save changes check and cancel option
+        ///     Get a <see cref="ICommand" /> to safely exit the program with save changes check and cancel option
         /// </summary>
         public ICommand SaveExitProgramCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="ICommand"/> to safely close the current project with save changes check and cancel option
+        ///     Get a <see cref="ICommand" /> to safely close the current project with save changes check and cancel option
         /// </summary>
-        public ICommand SaveCloseProjectLibraryCommand { get; }
+        public ICommand SaveCloseProjectLibraryCommand { get; private set; }
+
+        /// <summary>
+        ///     Get a <see cref="ICommand" /> to add a new project graph to the loaded project
+        /// </summary>
+        public ICommand AddProjectGraphToProjectCommand { get; private set; }
+
+        /// <summary>
+        ///     Get the <see cref="ICommand"/> to save current changes of the open project library
+        /// </summary>
+        public ICommand SaveProjectLibraryChangesCommand { get; }
 
         /// <inheritdoc />
         public ProjectMenuBarViewModel(IMocassinProjectControl mainProjectControl)
@@ -67,7 +77,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
             ShowProjectLoadingDialogCommand = new ShowProjectLoadingDialogCommand(mainProjectControl);
             ShowProjectCreationDialogCommand = new ShowProjectCreationDialogCommand(mainProjectControl);
             SaveExitProgramCommand = new SaveExitProgramCommand(mainProjectControl);
-            SaveCloseProjectLibraryCommand = MakeCloseCommandRelay(mainProjectControl);
+            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(mainProjectControl);
+            CreateAndSetRelayCommands();
         }
 
         /// <inheritdoc />
@@ -95,7 +106,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         }
 
         /// <summary>
-        ///     Creates a <see cref="RelayCommand"/> for closing the current project
+        ///     Creates and sets <see cref="ICommand" /> properties that are relay commands
+        /// </summary>
+        private void CreateAndSetRelayCommands()
+        {
+            SaveCloseProjectLibraryCommand = new RelayCommand(() => 
+                MainProjectControl.ProjectManagerViewModel.CloseActiveProjectLibrary());
+
+            AddProjectGraphToProjectCommand = new RelayCommand(() =>
+                MainProjectControl.ProjectManagerViewModel.AddNewProjectGraphToProject(MainProjectControl.OpenProjectLibrary));
+        }
+
+        /// <summary>
+        ///     Creates a <see cref="RelayCommand" /> for closing the current project
         /// </summary>
         /// <param name="projectControl"></param>
         /// <returns></returns>

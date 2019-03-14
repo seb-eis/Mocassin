@@ -52,6 +52,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
         }
 
         /// <inheritdoc />
+        public Dock TabStripPlacement
+        {
+            get => TabControlViewModel.TabStripPlacement;
+            set => TabControlViewModel.TabStripPlacement = value;
+        }
+
+        /// <inheritdoc />
         public void AddCloseableTab(string tabName, ViewModel viewModel, UserControl userControl)
         {
             TabControlViewModel.AddCloseableTab(tabName, viewModel, userControl);

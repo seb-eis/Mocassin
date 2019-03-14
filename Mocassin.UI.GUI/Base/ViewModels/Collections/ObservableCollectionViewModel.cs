@@ -28,11 +28,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Creates new <see cref="ObservableCollectionViewModel{T}" />
+        ///     Creates new <see cref="ObservableCollectionViewModel{T}" /> with unlimited capacity
         /// </summary>
         public ObservableCollectionViewModel()
         {
-            capacity = 10;
+            capacity = -1;
             ObservableItems = new ObservableCollection<T>();
         }
 
@@ -75,7 +75,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <param name="value"></param>
         protected virtual void AddCollectionItemInternal(T value)
         {
-            if (ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
+            if (Capacity > 0 && ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
             ObservableItems.Add(value);
         }
 
@@ -96,6 +96,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         protected virtual void InsertCollectionItemInternal(int index, T value)
         {
             ObservableItems.Insert(index, value);
+            if (Capacity > 0 && ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
         }
     }
 }

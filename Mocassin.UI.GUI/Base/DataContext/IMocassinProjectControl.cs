@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
@@ -19,9 +20,10 @@ namespace Mocassin.UI.GUI.Base.DataContext
     public interface IMocassinProjectControl : INotifyPropertyChanged
     {
         /// <summary>
-        ///     Get an <see cref="IObservable{T}" /> notifier for changes in the <see cref="OpenProjectLibrary" />
+        ///     Get an <see cref="IObservable{T}" /> that informs about replacement of the open
+        ///     <see cref="IMocassinProjectLibrary" />
         /// </summary>
-        IObservable<IMocassinProjectLibrary> LibraryChangeNotification { get; }
+        IObservable<IMocassinProjectLibrary> ProjectLibraryChangeNotification { get; }
 
         /// <summary>
         ///     Get the currently loaded work <see cref="IMocassinProjectLibrary" />

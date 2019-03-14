@@ -215,6 +215,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Base\Views\NoContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -236,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,6 +277,7 @@
     </Compile>
     <Compile Include="Base\ViewModels\MenuBar\DynamicMenuBarViewModel.cs" />
     <Compile Include="Base\ViewModels\MenuBar\IDynamicMenuBarViewModel.cs" />
+    <Compile Include="Base\ViewModels\EmptyViewModel.cs" />
     <Compile Include="Base\ViewModels\Tabs\Items\CloseableUserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\IUserControlTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml.cs">
@@ -277,6 +286,13 @@
     <Compile Include="Base\ViewModels\Tabs\Items\UserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\ViewModel.cs" />
+    <Compile Include="Base\Views\NoContentView.xaml.cs">
+      <DependentUpon>NoContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Base\Commands\AddBasicModelControlTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
+    <Compile Include="Controls\Base\Interfaces\IReactToSelectionChanges.cs" />
     <Compile Include="Controls\Base\IO\UserFileSelectionSource.cs" />
     <Compile Include="Controls\Base\ViewModels\PrimaryControlViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml.cs">
@@ -301,9 +317,11 @@
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\ProjectBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\AddProjectGraphToProjectCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CloseProjectLibraryCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CreateProjectLibraryCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\OpenProjectLibraryCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\SaveProjectLibraryChangesCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml.cs">
       <DependentUpon>ProjectManagerView.xaml</DependentUpon>
     </Compile>
@@ -314,6 +332,11 @@
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlView.xaml.cs">
+      <DependentUpon>BasicModelContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\Commands\AddParticleControlWorkTabCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml.cs">
       <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
@@ -352,11 +375,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\Base\Commands\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\ModelGraph\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleSet\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\Particle\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />

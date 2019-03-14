@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.EnergyModel;
@@ -76,5 +78,10 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         /// </summary>
         /// <returns></returns>
         bool HasUnsavedChanges();
+
+        /// <summary>
+        ///     Get a <see cref="IObservable{T}"/> that informs that an internal change in the library happened
+        /// </summary>
+        IObservable<Unit> StateChangedNotification { get; }
     }
 }

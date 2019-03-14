@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
@@ -13,7 +16,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
     ///     The <see cref="PrimaryControlViewModel" /> for <see cref="ParticleModelControlView" /> that controls
     ///     <see cref="ParticleModelGraph" /> creation and manipulation
     /// </summary>
-    public class ParticleModelControlViewModel : PrimaryControlViewModel
+    public class ParticleModelControlViewModel : PrimaryControlViewModel, IReactToSelectionChanges<MocassinProjectGraph>
     {
         /// <summary>
         ///     The <see cref="ParticleGraphs"/> backing field
@@ -26,9 +29,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         private IList<ParticleSetGraph> particleSetGraphs;
 
         /// <summary>
-        ///     The <see cref="SelectedModelGraph"/> backing field
+        ///     The
         /// </summary>
-        private ProjectModelGraph selectedModelGraph;
+        private MocassinProjectGraph selectedProjectGraph;
 
         /// <summary>
         ///     Get or set the <see cref="IList{T}"/> of <see cref="ParticleGraph"/> objects
@@ -49,15 +52,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         }
 
         /// <summary>
-        ///     Get or set the currently selected <see cref="ProjectModelGraph"/>
+        ///     Get or set the currently selected <see cref="MocassinProjectGraph"/>
         /// </summary>
-        public ProjectModelGraph SelectedModelGraph
+        public MocassinProjectGraph SelectedProjectGraph
         {
-            get => selectedModelGraph;
+            get => selectedProjectGraph;
             set
             {
-                SetProperty(ref selectedModelGraph, value); 
-                OnNewModelGraphSelected(value);
+                SetProperty(ref selectedProjectGraph, value); 
+                OnNewModelGraphSelected(value?.ProjectModelGraph);
             }
         }
 
@@ -71,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-            SelectedModelGraph = MainProjectControl.ProjectGraphs?.FirstOrDefault()?.ProjectModelGraph;
+            SelectedProjectGraph = MainProjectControl.ProjectGraphs?.FirstOrDefault();
             base.OnProjectLibraryChangedInternal(newProjectLibrary);
         }
 
@@ -82,6 +85,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         {
             ParticleGraphs = modelGraph?.ParticleModelGraph?.Particles;
             ParticleSetGraphs = modelGraph?.ParticleModelGraph?.ParticleSets;
+        }
+
+        public void NotifyThatSelectionChanged(MocassinProjectGraph newObj)
+        {
+            OnNewModelGraphSelected(newObj?.ProjectModelGraph);
+        }
+
+        public void NotifyThatSelectionChanged(object newObj)
+        {
+            NotifyThatSelectionChanged(newObj as MocassinProjectGraph);
+        }
+
+        protected override void OnProjectContentChangedInternal()
+        {
+            SendCallInfoMessage("Content changed");
+            base.OnProjectContentChangedInternal();
         }
     }
 }

@@ -13,63 +13,12 @@ namespace Mocassin.UI.Xml.Base
     public abstract class ModelObjectGraph : ProjectObjectGraph
     {
         /// <summary>
-        ///     Key value backing field
-        /// </summary>
-        [XmlIgnore] private string key;
-
-        /// <summary>
-        ///     Key reference value backing field
-        /// </summary>
-        [XmlIgnore] private string keyReference;
-
-        /// <summary>
-        ///     Get a boolean if the object is a reference
-        /// </summary>
-        [XmlIgnore]
-        [NotMapped]
-        [JsonIgnore]
-        public bool IsReference => keyReference != null;
-
-        /// <summary>
-        ///     The key of the model object. Setting this value erases the reference
+        ///     The key of the model object. Has to be unique within the object graph type group
         /// </summary>
         [XmlAttribute("Key")]
         [Column("Key")]
         [JsonProperty("Key")]
-        public string Key
-        {
-            get => key;
-            set
-            {
-                keyReference = null;
-                key = value;
-            }
-        }
-
-        /// <summary>
-        ///     The key reference of the model object. Setting this property erases the key
-        /// </summary>
-        [XmlAttribute("Ref")]
-        [Column("Ref")]
-        [JsonProperty("KeyReference")]
-        public string KeyReference
-        {
-            get => keyReference;
-            set
-            {
-                key = null;
-                keyReference = value;
-            }
-        }
-
-        /// <summary>
-        ///     Get the set key or key reference of the object and throws an exception if both are null
-        /// </summary>
-        /// <returns></returns>
-        public string GetKey()
-        {
-            return Key ?? KeyReference ?? throw new InvalidOperationException("Both key options are null");
-        }
+        public string Key { get; set; }
 
         /// <summary>
         ///     Get the input <see cref="ModelObject" /> for the automated data input system of the model management
@@ -78,7 +27,7 @@ namespace Mocassin.UI.Xml.Base
         public ModelObject GetInputObject()
         {
             var obj = GetModelObjectInternal();
-            obj.Key = Key ?? KeyReference;
+            obj.Key = Key;
             obj.Index = -1;
             return obj;
         }

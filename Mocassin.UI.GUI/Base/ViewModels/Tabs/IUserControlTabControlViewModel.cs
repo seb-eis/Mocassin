@@ -19,6 +19,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         int HeaderFontSize { get; set; }
 
         /// <summary>
+        ///     Get or set the <see cref="Dock"/> for the tab strip position
+        /// </summary>
+        Dock TabStripPlacement { get; set; }
+
+        /// <summary>
         ///     Adds a <see cref="ViewModel" /> and <see cref="UserControl" /> as a closable <see cref="UserControlTabItem" />
         /// </summary>
         /// <param name="tabName"></param>

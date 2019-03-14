@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Transitions;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.SimulationModel
@@ -42,14 +43,14 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         [XmlArray("Transitions")]
         [XmlArrayItem("Transition")]
-        public List<MetropolisTransitionGraph> Transitions { get; set; }
+        public List<ModelObjectReferenceGraph<MetropolisTransition>> Transitions { get; set; }
 
         /// <summary>
         ///     Creates new <see cref="MetropolisSimulationGraph" /> with empty component lists
         /// </summary>
         public MetropolisSimulationGraph()
         {
-            Transitions = new List<MetropolisTransitionGraph>();
+            Transitions = new List<ModelObjectReferenceGraph<MetropolisTransition>>();
         }
 
         /// <inheritdoc />

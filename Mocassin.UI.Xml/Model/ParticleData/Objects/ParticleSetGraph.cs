@@ -18,14 +18,14 @@ namespace Mocassin.UI.Xml.ParticleModel
         ///     List of particles contained in the set
         /// </summary>
         [XmlElement("Particle")]
-        public List<ParticleGraph> Particles { get; set; }
+        public List<ModelObjectReferenceGraph<Particle>> Particles { get; set; }
 
         /// <summary>
         ///     creates new <see cref="ParticleSetGraph" /> with empty component lists
         /// </summary>
         public ParticleSetGraph()
         {
-            Particles = new List<ParticleGraph>();
+            Particles = new List<ModelObjectReferenceGraph<Particle>>();
         }
 
         /// <inheritdoc />

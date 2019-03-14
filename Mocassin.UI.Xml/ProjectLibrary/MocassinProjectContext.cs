@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Mocassin.Framework.Events;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
@@ -23,6 +27,11 @@ namespace Mocassin.UI.Xml.ProjectLibrary
     /// </summary>
     public sealed class MocassinProjectContext : SqLiteContext<MocassinProjectContext>, IMocassinProjectLibrary
     {
+        /// <summary>
+        ///     Get the <see cref="ReactiveEvent{TSubject}"/> that relays internal state change events
+        /// </summary>
+        private ReactiveEvent<Unit> StateChangedEvent { get; }
+
         /// <inheritdoc />
         public DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; set; }
 
@@ -37,6 +46,9 @@ namespace Mocassin.UI.Xml.ProjectLibrary
 
         /// <inheritdoc />
         public DbSet<MocassinProjectBuildGraph> MocassinProjectBuildGraphs { get; set; }
+
+        /// <inheritdoc />
+        public IObservable<Unit> StateChangedNotification => StateChangedEvent.AsObservable();
 
         /// <inheritdoc />
         void IMocassinProjectLibrary.Add<TEntity>(TEntity entity)
@@ -56,7 +68,24 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         public MocassinProjectContext(string optionsBuilderParameterString)
             : base(optionsBuilderParameterString)
         {
+            StateChangedEvent = new ReactiveEvent<Unit>();
+            ChangeTracker.StateChanged += RelayEntityChangeEvent;
+            ChangeTracker.Tracked += RelayEntityChangeEvent;
+        }
 
+        /// <summary>
+        ///     Relays the <see cref="DbContext"/> entity changed event to the internal <see cref="ReactiveEvent{TSubject}"/>
+        /// </summary>
+        private void RelayEntityChangeEvent(object sender, EventArgs args)
+        {
+            StateChangedEvent.OnNext(Unit.Default);
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            base.Dispose();
+            StateChangedEvent.OnCompleted();
         }
     }
 }

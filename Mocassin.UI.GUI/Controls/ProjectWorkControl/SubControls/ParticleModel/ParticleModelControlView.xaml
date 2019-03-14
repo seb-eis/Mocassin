@@ -62,7 +62,7 @@
         <ComboBox ItemsSource="{Binding MainProjectControl.ProjectGraphs}" SelectedItem="{Binding SelectedModelGraph}">
           <ComboBox.ItemTemplate>
             <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
-              <TextBlock Text="Test"/>
+              <TextBlock Text="{Binding ProjectGuid}"/>
             </DataTemplate>
           </ComboBox.ItemTemplate>
         </ComboBox>

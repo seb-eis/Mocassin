@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Runtime.CompilerServices;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Messaging;
@@ -17,9 +18,14 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
     public abstract class PrimaryControlViewModel : ViewModel, IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="IDisposable" /> subscription to the <see cref="IMocassinProjectLibrary" /> changes
+        ///     Get the <see cref="IDisposable" /> subscription to the <see cref="IMocassinProjectLibrary" /> replacements
         /// </summary>
         private IDisposable ProjectLibraryChangeSubscription { get; }
+
+        /// <summary>
+        ///     Get the <see cref="IDisposable" /> subscription to the <see cref="IMocassinProjectLibrary" /> entity changes
+        /// </summary>
+        private IDisposable ProjectEntityChangeSubscription { get; set; }
 
         /// <summary>
         ///     Get the main <see cref="IMocassinProjectControl" /> that this sub control is connected to
@@ -34,16 +40,28 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         protected PrimaryControlViewModel(IMocassinProjectControl mainProjectControl)
         {
             MainProjectControl = mainProjectControl ?? throw new ArgumentNullException(nameof(mainProjectControl));
-            ProjectLibraryChangeSubscription = mainProjectControl.LibraryChangeNotification.Subscribe(OnProjectLibraryChanged);
+            ProjectLibraryChangeSubscription = mainProjectControl.ProjectLibraryChangeNotification
+                .Subscribe(OnProjectLibraryChanged);
         }
 
         /// <summary>
         ///     Action that is executed when the <see cref="IMocassinProjectLibrary" /> changes
         /// </summary>
         /// <param name="newProjectLibrary"></param>
-        protected void OnProjectLibraryChanged(IMocassinProjectLibrary newProjectLibrary)
+        private void OnProjectLibraryChanged(IMocassinProjectLibrary newProjectLibrary)
         {
+            ProjectEntityChangeSubscription = newProjectLibrary?.StateChangedNotification.Subscribe(OnProjectContentChanged);
             OnProjectLibraryChangedInternal(newProjectLibrary);
+        }
+
+        /// <summary>
+        ///     Action that is executed when the content of the current <see cref="IMocassinProjectLibrary" /> changes
+        /// </summary>
+        /// <param name="unit"></param>
+        private void OnProjectContentChanged(Unit unit)
+        {
+            ProjectEntityChangeSubscription?.Dispose();
+            OnProjectContentChangedInternal();
         }
 
         /// <summary>
@@ -51,6 +69,14 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="newProjectLibrary"></param>
         protected virtual void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
+        {
+
+        }
+
+        /// <summary>
+        ///     Implementation dependent reaction to the change of the entities in the open <see cref="IMocassinProjectLibrary" />
+        /// </summary>
+        protected virtual void OnProjectContentChangedInternal()
         {
         }
 

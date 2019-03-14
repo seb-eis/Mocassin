@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mocassin.Framework.Messaging
@@ -19,5 +20,8 @@ namespace Mocassin.Framework.Messaging
         /// Contains additional information and explanations 
         /// </summary>
         public IList<string> Details { get; set; }
+
+        /// <inheritdoc />
+        public override IEnumerable<string> DetailSequence => Details?.AsEnumerable();
     }
 }

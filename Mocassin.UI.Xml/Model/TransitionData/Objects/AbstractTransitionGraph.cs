@@ -37,7 +37,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("StateChangeOptions")]
         [XmlArrayItem("StateChangeGroup")]
-        public List<StateExchangeGroupGraph> StateExchangeGroups { get; set; }
+        public List<ModelObjectReferenceGraph<StateExchangeGroup>> StateExchangeGroups { get; set; }
 
         /// <summary>
         ///     Get or set the string that describes the connector sequence
@@ -50,7 +50,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         public AbstractTransitionGraph()
         {
-            StateExchangeGroups = new List<StateExchangeGroupGraph>();
+            StateExchangeGroups = new List<ModelObjectReferenceGraph<StateExchangeGroup>>();
             ConnectorString = ConnectorType.Dynamic.ToString();
             Name = "New Abstract Transition";
         }

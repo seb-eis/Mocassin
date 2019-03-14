@@ -44,14 +44,14 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         [XmlArray("Transitions")]
         [XmlArrayItem("Transition")]
-        public List<KineticTransitionGraph> Transitions { get; set; }
+        public List<ModelObjectReferenceGraph<KineticTransition>> Transitions { get; set; }
 
         /// <summary>
         ///     Creates new <see cref="KineticSimulationGraph"/> with empty component lists
         /// </summary>
         public KineticSimulationGraph()
         {
-            Transitions = new List<KineticTransitionGraph>();
+            Transitions = new List<ModelObjectReferenceGraph<KineticTransition>>();
             ElectricFieldVector = new VectorGraph3D {A = 1};
             NormalizationProbability = 1.0;
         }

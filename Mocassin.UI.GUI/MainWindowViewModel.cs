@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
 using Mocassin.Framework.SQLiteCore;
@@ -86,7 +87,7 @@ namespace Mocassin.UI.GUI
         }
 
         /// <inheritdoc />
-        public IObservable<IMocassinProjectLibrary> LibraryChangeNotification => ProjectLibraryChangedEvent.AsObservable();
+        public IObservable<IMocassinProjectLibrary> ProjectLibraryChangeNotification => ProjectLibraryChangedEvent.AsObservable();
 
         /// <summary>
         ///     Creates new <see cref="MainWindowViewModel" /> for the Mocassin GUI

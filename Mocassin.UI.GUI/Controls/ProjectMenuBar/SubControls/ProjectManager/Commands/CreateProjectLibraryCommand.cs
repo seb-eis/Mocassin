@@ -1,31 +1,29 @@
-﻿using System;
-using Mocassin.UI.Base.Commands;
+﻿using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.Commands;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands
 {
     /// <summary>
-    ///     The <see cref="Command{T}"/> to create a new project library
+    ///     The <see cref="ProjectControlCommand{T}" /> to create a new project library
     /// </summary>
-    public class CreateProjectLibraryCommand : Command<string>
+    public class CreateProjectLibraryCommand : ProjectControlCommand<string>
     {
-        /// <summary>
-        ///     The affiliated <see cref="ProjectManagerViewModel"/>
-        /// </summary>
-        private readonly ProjectManagerViewModel projectManagerViewModel;
-
-        /// <summary>
-        ///     Creates new <see cref="CreateProjectLibraryCommand"/> that targets the passed <see cref="ProjectManagerViewModel"/>
-        /// </summary>
-        /// <param name="projectManagerViewModel"></param>
-        public CreateProjectLibraryCommand(ProjectManagerViewModel projectManagerViewModel)
+        /// <inheritdoc />
+        public CreateProjectLibraryCommand(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
-            this.projectManagerViewModel = projectManagerViewModel ?? throw new ArgumentNullException(nameof(projectManagerViewModel));
+        }
+
+        /// <inheritdoc />
+        public override bool CanExecuteInternal(string parameter)
+        {
+            return ProjectControl.ProjectManagerViewModel != null;
         }
 
         /// <inheritdoc />
         public override void Execute(string parameter)
         {
-            projectManagerViewModel.CreateActiveProjectLibrary(parameter);
+            ProjectControl.ProjectManagerViewModel.CreateActiveProjectLibrary(parameter);
         }
     }
 }

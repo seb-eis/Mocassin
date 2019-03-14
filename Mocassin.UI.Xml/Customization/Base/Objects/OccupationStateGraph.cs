@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.ParticleModel;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -19,7 +18,7 @@ namespace Mocassin.UI.Xml.Customization
         ///     Get or set the list of particles that describe the occupation
         /// </summary>
         [XmlElement("Particle")]
-        public List<ParticleGraph> Particles { get; set; }
+        public List<ModelObjectReferenceGraph<Particle>> Particles { get; set; }
 
         /// <summary>
         ///     Get the object as an <see cref="IOccupationState" /> interface that is valid in the context of the passed
@@ -29,7 +28,7 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public IOccupationState ToInternal(IModelProject modelProject)
         {
-            var particles = Particles.Select(x => modelProject.DataTracker.FindObjectByKey<IParticle>(x.GetKey())).ToList();
+            var particles = Particles.Select(x => modelProject.DataTracker.FindObjectByKey<IParticle>(x.Key)).ToList();
             var obj = new OccupationState
             {
                 Particles = particles
@@ -49,7 +48,8 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        /// Creates a new <see cref="OccupationStateGraph"/> from the passed sequence of <see cref="IParticle"/> model object interfaces
+        ///     Creates a new <see cref="OccupationStateGraph" /> from the passed sequence of <see cref="IParticle" /> model object
+        ///     interfaces
         /// </summary>
         /// <param name="occupationParticles"></param>
         /// <returns></returns>
@@ -57,7 +57,7 @@ namespace Mocassin.UI.Xml.Customization
         {
             var obj = new OccupationStateGraph
             {
-                Particles = occupationParticles.Select(ParticleGraph.Create).ToList()
+                Particles = occupationParticles.Select(x => new ModelObjectReferenceGraph<Particle> {Key = x.Key}).ToList()
             };
             return obj;
         }

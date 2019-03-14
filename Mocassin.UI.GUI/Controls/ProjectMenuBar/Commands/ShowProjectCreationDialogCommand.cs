@@ -1,33 +1,24 @@
-﻿using System;
-using Mocassin.UI.Base.Commands;
+﻿using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.IO;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.Commands
 {
     /// <summary>
-    ///     The <see cref="ParameterlessCommand" /> to show a project loading dialog
+    ///     The <see cref="ProjectControlCommand" /> to show a project loading dialog
     /// </summary>
-    public class ShowProjectCreationDialogCommand : ParameterlessCommand
+    public class ShowProjectCreationDialogCommand : ProjectControlCommand
     {
-        /// <summary>
-        ///     The <see cref="IMocassinProjectControl" /> that is targeted by the command
-        /// </summary>
-        private readonly IMocassinProjectControl projectControl;
-
         /// <summary>
         ///     The <see cref="UserFileSelectionSource" /> that is used by the command
         /// </summary>
         private readonly UserFileSelectionSource userFileSelectionSource;
 
-        /// <summary>
-        ///     Creates new <see cref="ShowProjectCreationDialogCommand" /> that targets the passed <see cref="IMocassinProjectControl"/>
-        /// </summary>
-        /// <param name="projectControl"></param>
+        /// <inheritdoc />
         public ShowProjectCreationDialogCommand(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
-            this.projectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
             userFileSelectionSource = UserFileSelectionSource.CreateForProjectFiles();
         }
 
@@ -35,15 +26,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.Commands
         public override void Execute()
         {
             if (userFileSelectionSource.TryGetFileSelection(out var selected))
-            {
-                projectControl.ProjectManagerViewModel.CreateProjectLibraryCommand.Execute(selected);
-            }
+                ProjectControl.ProjectManagerViewModel.CreateProjectLibraryCommand.Execute(selected);
         }
 
         /// <inheritdoc />
-        public override bool CanExecute()
+        public override bool CanExecuteInternal()
         {
-            return base.CanExecute() && projectControl.ProjectManagerViewModel != null;
+            return ProjectControl.ProjectManagerViewModel != null;
         }
     }
 }

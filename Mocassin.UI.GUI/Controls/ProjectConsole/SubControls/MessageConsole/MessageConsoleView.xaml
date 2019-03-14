@@ -17,13 +17,13 @@
       <DataGrid ItemsSource="{Binding ObservableItems}" IsReadOnly="True" SelectedItem="{Binding SelectedMessage}"
                 AutoGenerateColumns="False">
         <DataGrid.Columns>
-          <DataGridTextColumn Header="Time" IsReadOnly="True" Width="Auto" Binding="{Binding TimeStamp}" />
-          <DataGridTextColumn Header="What" IsReadOnly="True" Width="Auto" Binding="{Binding ShortInfo}" />
+          <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp}" />
+          <DataGridTextColumn Header="What" Width="Auto" Binding="{Binding ShortInfo}" />
           <DataGridTemplateColumn Header="Information" Width="Auto">
             <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate DataType="{x:Type messaging:InfoMessage}">
+              <DataTemplate DataType="{x:Type messaging:PushMessage}">
                 <TreeView>
-                  <TreeViewItem ItemsSource="{Binding Details}" Header="Details" />
+                  <TreeViewItem ItemsSource="{Binding DetailSequence}" Header="Details" />
                 </TreeView>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>

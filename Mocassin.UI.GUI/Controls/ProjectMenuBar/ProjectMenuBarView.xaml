@@ -30,6 +30,13 @@
                   </i:EventTrigger>
                 </i:Interaction.Triggers>
               </MenuItem>
+              <MenuItem Header="New Project Graph">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding AddProjectGraphToProjectCommand}"/>
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </MenuItem>
             </MenuItem>
             <MenuItem Header="_Open">
               <MenuItem Header="Open Project Library">
@@ -49,7 +56,15 @@
                 </i:Interaction.Triggers>
               </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Save" />
+            <MenuItem Header="_Save">
+              <MenuItem Header="Save Project Library Changes">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding SaveProjectLibraryChangesCommand}"/>
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </MenuItem>
+            </MenuItem>
             <Separator />
             <MenuItem Header="_Exit">
               <i:Interaction.Triggers>

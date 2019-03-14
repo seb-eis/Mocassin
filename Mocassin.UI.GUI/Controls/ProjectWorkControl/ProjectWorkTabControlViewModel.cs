@@ -4,6 +4,8 @@ using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.Content;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
@@ -45,6 +47,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         }
 
         /// <inheritdoc />
+        public Dock TabStripPlacement
+        {
+            get => TabControlViewModel.TabStripPlacement;
+            set => TabControlViewModel.TabStripPlacement = value;
+        }
+
+        /// <inheritdoc />
         public void InsertCollectionItem(int index, UserControlTabItem value)
         {
             TabControlViewModel.InsertCollectionItem(index, value);
@@ -81,10 +90,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         }
 
         /// <inheritdoc />
-        public void InitializeDefaultTabs()
+        public void InitializeDefaultTabs() 
         {
             TabControlViewModel.InitializeDefaultTabs();
             TabControlViewModel.AddNonClosableTab("Particle Control", new ParticleModelControlViewModel(MainProjectControl), new ParticleModelControlView());
+
+            var pcon = new ParticleModelControlViewModel(MainProjectControl);
+            var pview = new ParticleModelControlView() {DataContext = pcon};
+            var test = new BasicModelContentControlViewModel(MainProjectControl) {DataContentControl = pview };
+            TabControlViewModel.AddNonClosableTab("Default Look",test, new BasicModelContentControlView());
         }
     }
 }

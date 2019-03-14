@@ -3,11 +3,12 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.Commands;
+using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
@@ -47,13 +48,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         /// </summary>
         public ICommand CreateProjectLibraryCommand { get; }
 
+        /// <summary>
+        ///     Get the <see cref="ICommand"/> to save all pending changes on the open <see cref="IMocassinProjectLibrary"/>
+        /// </summary>
+        public ICommand SaveProjectLibraryChangesCommand { get; }
+
         /// <inheritdoc />
         public ProjectManagerViewModel(IMocassinProjectControl mainProjectControl)
             : base(mainProjectControl)
         {
-            OpenProjectLibraryCommand = new OpenProjectLibraryCommand(this);
-            CloseProjectLibraryCommand = new CloseProjectLibraryCommand(this);
-            CreateProjectLibraryCommand = new CreateProjectLibraryCommand(this);
+            OpenProjectLibraryCommand = new OpenProjectLibraryCommand(mainProjectControl);
+            CloseProjectLibraryCommand = new CloseProjectLibraryCommand(mainProjectControl);
+            CreateProjectLibraryCommand = new CreateProjectLibraryCommand(mainProjectControl);
+            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(mainProjectControl);
         }
 
         /// <summary>
@@ -67,10 +74,29 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
                 SendCallInfoMessage("Project closed!");
             }
             else
-            {
                 SendCallInfoMessage("Project close aborted!");
-            }
+        }
 
+        /// <summary>
+        ///     Saves the current changes in the open <see cref="IMocassinProjectLibrary"/>
+        /// </summary>
+        public void SaveActiveProjectLibraryChanges()
+        {
+            if (MainProjectControl.OpenProjectLibrary == null)
+            {
+                SendCallWarningMessage("Cannot save changes when no project is loaded!");
+                return;
+            }
+            try
+            {
+                MainProjectControl.OpenProjectLibrary.SaveChanges();
+                SendCallInfoMessage($"Project changes saved!");
+            }
+            catch (Exception e)
+            {
+                var exception = new InvalidOperationException("Internal error on saving", e);
+                SendCallErrorMessage(exception);
+            }
         }
 
         /// <summary>
@@ -109,6 +135,31 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
                 SendCallErrorMessage(exception);
             else
                 SendCallInfoMessage($"Project created at: {filePath}");
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="MocassinProjectGraph" /> and adds it to the passed <see cref="IMocassinProjectLibrary" />
+        /// </summary>
+        /// <param name="projectLibrary"></param>
+        public void AddNewProjectGraphToProject(IMocassinProjectLibrary projectLibrary)
+        {
+            if (projectLibrary == null)
+            {
+                SendCallWarningMessage("Cannot add project graph. Library is missing.");
+                return;
+            }
+
+            try
+            {
+                var projectGraph = MocassinProjectGraph.CreateNew();
+                projectLibrary.Add(projectGraph);
+                SendCallInfoMessage($"New project graph (ID = {projectGraph.ProjectGuid}) added to project");
+            }
+            catch (Exception e)
+            {
+                var exception = new InvalidOperationException("Internal error during graph adding!", e);
+                SendCallErrorMessage(exception);
+            }
         }
 
         /// <summary>

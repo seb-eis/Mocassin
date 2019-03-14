@@ -1,31 +1,31 @@
 ﻿using System;
 using Mocassin.UI.Base.Commands;
+using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.Commands;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands
 {
     /// <summary>
-    ///     The <see cref="Command" /> to close a project library
+    ///     The <see cref="ProjectControlCommand" /> to close the active project library
     /// </summary>
-    public class CloseProjectLibraryCommand : ParameterlessCommand
+    public class CloseProjectLibraryCommand : ProjectControlCommand
     {
-        /// <summary>
-        ///     The affiliated <see cref="ProjectManagerViewModel" />
-        /// </summary>
-        private readonly ProjectManagerViewModel projectManagerViewModel;
-
-        /// <summary>
-        ///     Creates new <see cref="CloseProjectLibraryCommand" /> that targets the passed <see cref="ProjectManagerViewModel" />
-        /// </summary>
-        /// <param name="projectManagerViewModel"></param>
-        public CloseProjectLibraryCommand(ProjectManagerViewModel projectManagerViewModel)
+        /// <inheritdoc />
+        public CloseProjectLibraryCommand(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
-            this.projectManagerViewModel = projectManagerViewModel ?? throw new ArgumentNullException(nameof(projectManagerViewModel));
         }
 
         /// <inheritdoc />
         public override void Execute()
         {
-            projectManagerViewModel.CloseActiveProjectLibrary();
+            ProjectControl.ProjectManagerViewModel.CloseActiveProjectLibrary();
+        }
+
+        /// <inheritdoc />
+        public override bool CanExecuteInternal()
+        {
+            return ProjectControl.ProjectManagerViewModel != null;
         }
     }
 }
