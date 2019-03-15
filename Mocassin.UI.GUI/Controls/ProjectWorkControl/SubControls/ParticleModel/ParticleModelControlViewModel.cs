@@ -65,8 +65,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         }
 
         /// <inheritdoc />
-        public ParticleModelControlViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ParticleModelControlViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
 
         }
@@ -74,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-            SelectedProjectGraph = MainProjectControl.ProjectGraphs?.FirstOrDefault();
+            SelectedProjectGraph = ProjectControl.ProjectGraphs?.FirstOrDefault();
             base.OnProjectLibraryChangedInternal(newProjectLibrary);
         }
 
@@ -99,8 +99,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
 
         protected override void OnProjectContentChangedInternal()
         {
-            SendCallInfoMessage("Content changed");
-            base.OnProjectContentChangedInternal();
+
         }
     }
 }

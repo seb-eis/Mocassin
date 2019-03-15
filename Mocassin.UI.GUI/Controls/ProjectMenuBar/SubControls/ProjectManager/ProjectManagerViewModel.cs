@@ -7,7 +7,6 @@ using Mocassin.Framework.SQLiteCore;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.Commands;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
 
@@ -49,18 +48,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         public ICommand CreateProjectLibraryCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ICommand"/> to save all pending changes on the open <see cref="IMocassinProjectLibrary"/>
+        ///     Get the <see cref="ICommand" /> to save all pending changes on the open <see cref="IMocassinProjectLibrary" />
         /// </summary>
         public ICommand SaveProjectLibraryChangesCommand { get; }
 
         /// <inheritdoc />
-        public ProjectManagerViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ProjectManagerViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
-            OpenProjectLibraryCommand = new OpenProjectLibraryCommand(mainProjectControl);
-            CloseProjectLibraryCommand = new CloseProjectLibraryCommand(mainProjectControl);
-            CreateProjectLibraryCommand = new CreateProjectLibraryCommand(mainProjectControl);
-            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(mainProjectControl);
+            OpenProjectLibraryCommand = new OpenProjectLibraryCommand(projectControl);
+            CloseProjectLibraryCommand = new CloseProjectLibraryCommand(projectControl);
+            CreateProjectLibraryCommand = new CreateProjectLibraryCommand(projectControl);
+            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(projectControl);
         }
 
         /// <summary>
@@ -68,9 +67,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         /// </summary>
         public void CloseActiveProjectLibrary()
         {
-            if (TryCloseProjectLibrary(MainProjectControl.OpenProjectLibrary))
+            if (TryCloseProjectLibrary(ProjectControl.OpenProjectLibrary))
             {
-                MainProjectControl.SetOpenProjectLibrary(null);
+                ProjectControl.SetOpenProjectLibrary(null);
                 SendCallInfoMessage("Project closed!");
             }
             else
@@ -78,19 +77,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         }
 
         /// <summary>
-        ///     Saves the current changes in the open <see cref="IMocassinProjectLibrary"/>
+        ///     Saves the current changes in the open <see cref="IMocassinProjectLibrary" />
         /// </summary>
         public void SaveActiveProjectLibraryChanges()
         {
-            if (MainProjectControl.OpenProjectLibrary == null)
+            if (ProjectControl.OpenProjectLibrary == null)
             {
                 SendCallWarningMessage("Cannot save changes when no project is loaded!");
                 return;
             }
+
             try
             {
-                MainProjectControl.OpenProjectLibrary.SaveChanges();
-                SendCallInfoMessage($"Project changes saved!");
+                ProjectControl.OpenProjectLibrary.SaveChanges();
+                SendCallInfoMessage("Project changes saved!");
             }
             catch (Exception e)
             {
@@ -175,17 +175,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             IMocassinProjectLibrary newProjectLibrary = default;
             try
             {
-                TryCloseProjectLibrary(MainProjectControl.OpenProjectLibrary);
+                TryCloseProjectLibrary(ProjectControl.OpenProjectLibrary);
                 newProjectLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(filePath, dropCreate);
                 LoadLibraryContents(newProjectLibrary);
-                MainProjectControl.SetOpenProjectLibrary(newProjectLibrary);
+                ProjectControl.SetOpenProjectLibrary(newProjectLibrary);
                 OpenDatabaseFilePath = filePath;
                 exception = null;
             }
             catch (Exception e)
             {
                 ForceCloseProjectLibrary(newProjectLibrary);
-                MainProjectControl.SetOpenProjectLibrary(null);
+                ProjectControl.SetOpenProjectLibrary(null);
                 OpenDatabaseFilePath = "";
                 exception = new InvalidOperationException("Internal error on project loading!", e);
             }

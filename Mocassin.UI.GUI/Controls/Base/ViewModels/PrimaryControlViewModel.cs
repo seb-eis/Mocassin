@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.Base.Commands;
+using Mocassin.UI.GUI.Helper;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.Base.ViewModels
@@ -30,17 +34,17 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <summary>
         ///     Get the main <see cref="IMocassinProjectControl" /> that this sub control is connected to
         /// </summary>
-        public IMocassinProjectControl MainProjectControl { get; }
+        public IMocassinProjectControl ProjectControl { get; }
 
         /// <summary>
         ///     Create new <see cref="PrimaryControlViewModel" /> that is connected to the passed
         ///     <see cref="IMocassinProjectControl" />
         /// </summary>
-        /// <param name="mainProjectControl"></param>
-        protected PrimaryControlViewModel(IMocassinProjectControl mainProjectControl)
+        /// <param name="projectControl"></param>
+        protected PrimaryControlViewModel(IMocassinProjectControl projectControl)
         {
-            MainProjectControl = mainProjectControl ?? throw new ArgumentNullException(nameof(mainProjectControl));
-            ProjectLibraryChangeSubscription = mainProjectControl.ProjectLibraryChangeNotification
+            ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
+            ProjectLibraryChangeSubscription = projectControl.ProjectLibraryChangeNotification
                 .Subscribe(OnProjectLibraryChanged);
         }
 
@@ -50,6 +54,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <param name="newProjectLibrary"></param>
         private void OnProjectLibraryChanged(IMocassinProjectLibrary newProjectLibrary)
         {
+            ProjectEntityChangeSubscription?.Dispose();
             ProjectEntityChangeSubscription = newProjectLibrary?.StateChangedNotification.Subscribe(OnProjectContentChanged);
             OnProjectLibraryChangedInternal(newProjectLibrary);
         }
@@ -60,7 +65,6 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <param name="unit"></param>
         private void OnProjectContentChanged(Unit unit)
         {
-            ProjectEntityChangeSubscription?.Dispose();
             OnProjectContentChangedInternal();
         }
 
@@ -70,7 +74,6 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <param name="newProjectLibrary"></param>
         protected virtual void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-
         }
 
         /// <summary>
@@ -97,7 +100,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             {
                 Details = details.ToList()
             };
-            MainProjectControl.PushMessageSystem.SendMessage(message);
+            ProjectControl.PushMessageSystem.SendMessage(message);
         }
 
         /// <summary>
@@ -133,7 +136,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             {
                 Details = details.ToList()
             };
-            MainProjectControl.PushMessageSystem.SendMessage(message);
+            ProjectControl.PushMessageSystem.SendMessage(message);
         }
 
         /// <summary>
@@ -169,7 +172,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             {
                 Exception = exception
             };
-            MainProjectControl.PushMessageSystem.SendMessage(message);
+            ProjectControl.PushMessageSystem.SendMessage(message);
         }
 
         /// <summary>
@@ -181,6 +184,27 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         protected void SendCallErrorMessage(Exception exception, [CallerMemberName] string callMemberName = default)
         {
             SendErrorMessage($"Error @ {callMemberName}", exception);
+        }
+
+        /// <summary>
+        ///     Searches the primary and plugin <see cref="Assembly" /> instances for marked <see cref="ProjectControlCommand" />
+        ///     types and creates a <see cref="IReadOnlyDictionary{TKey,TValue}" /> using the provided
+        ///     <see cref="Func{T, TResult}" /> and the <see cref="IMocassinProjectControl" /> the
+        ///     <see cref="PrimaryControlViewModel" /> is linked to
+        /// </summary>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public IReadOnlyDictionary<TValue, ICommand> CreateCommandLookupDictionary<TAttribute, TValue>(Func<TAttribute, TValue> selector)
+            where TAttribute : Attribute
+        {
+            var dictionary = Assembly.GetAssembly(typeof(ProjectControlCommand)).AsSingleton()
+                .Concat(ProjectControl.PluginAssemblies)
+                .SelectMany(x => x.MakeAttributedInstances<ProjectControlCommand, TAttribute>(ProjectControl))
+                .ToDictionary(y => selector(y.Value), z => (ICommand) z.Key);
+
+            return dictionary;
         }
     }
 }

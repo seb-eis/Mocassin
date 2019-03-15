@@ -16,8 +16,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.ReportBrowser
         public ObservableCollectionViewModel<IOperationReport> OperationReportCollectionViewModel { get; }
 
         /// <inheritdoc />
-        public ReportBrowserViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ReportBrowserViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
         }
     }

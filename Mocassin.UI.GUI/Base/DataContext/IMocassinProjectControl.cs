@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
@@ -82,5 +84,11 @@ namespace Mocassin.UI.GUI.Base.DataContext
         /// </summary>
         /// <param name="projectLibrary"></param>
         void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
+
+        /// <summary>
+        ///     Get a <see cref="IList{T}"/> of loaded plugin <see cref="Assembly"/> instances
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Assembly> PluginAssemblies { get; }
     }
 }

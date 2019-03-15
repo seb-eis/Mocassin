@@ -10,8 +10,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectStatusBar
     public class ProjectStatusBarViewModel : PrimaryControlViewModel
     {
         /// <inheritdoc />
-        public ProjectStatusBarViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ProjectStatusBarViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
         }
     }

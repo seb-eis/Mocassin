@@ -1,5 +1,9 @@
-﻿using Mocassin.UI.Base.Commands;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
+using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.Loading;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.IO;
 
@@ -26,7 +30,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.Commands
         public override void Execute()
         {
             if (userFileSelectionSource.TryGetFileSelection(out var selected, true))
-                ProjectControl.ProjectManagerViewModel.OpenProjectLibraryCommand.Execute(selected);
+            {
+                AsyncWindowedBackgroundTask.RunWithLoadingWindow(() 
+                    => ProjectControl.ProjectManagerViewModel.OpenProjectLibraryCommand.Execute(selected));
+            }
         }
 
         /// <inheritdoc />

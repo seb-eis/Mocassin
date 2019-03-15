@@ -30,11 +30,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         private UserControlTabControlViewModel TabControlViewModel { get; }
 
         /// <inheritdoc />
-        public ProjectBrowserViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ProjectBrowserViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
-            ProjectLibraryBrowserViewModel = new ProjectLibraryBrowserViewModel(mainProjectControl);
-            ReportBrowserViewModel = new ReportBrowserViewModel(mainProjectControl);
+            ProjectLibraryBrowserViewModel = new ProjectLibraryBrowserViewModel(projectControl);
+            ReportBrowserViewModel = new ReportBrowserViewModel(projectControl);
             TabControlViewModel = new UserControlTabControlViewModel();
             InitializeDefaultTabs();
         }
@@ -81,6 +81,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
             TabControlViewModel.InitializeDefaultTabs();
             TabControlViewModel.AddNonClosableTab("Project Library", ProjectLibraryBrowserViewModel, new ProjectLibraryBrowserView());
             TabControlViewModel.AddNonClosableTab("Project Reports", ReportBrowserViewModel, new ReportBrowserView());
+            TabControlViewModel.SetActiveTabByIndex(0);
         }
 
         /// <inheritdoc />

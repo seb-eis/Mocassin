@@ -70,14 +70,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         public ICommand SaveProjectLibraryChangesCommand { get; }
 
         /// <inheritdoc />
-        public ProjectMenuBarViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ProjectMenuBarViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
             MenuBarViewModel = new DynamicMenuBarViewModel(Dock.Top);
-            ShowProjectLoadingDialogCommand = new ShowProjectLoadingDialogCommand(mainProjectControl);
-            ShowProjectCreationDialogCommand = new ShowProjectCreationDialogCommand(mainProjectControl);
-            SaveExitProgramCommand = new SaveExitProgramCommand(mainProjectControl);
-            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(mainProjectControl);
+            ShowProjectLoadingDialogCommand = new ShowProjectLoadingDialogCommand(projectControl);
+            ShowProjectCreationDialogCommand = new ShowProjectCreationDialogCommand(projectControl);
+            SaveExitProgramCommand = new SaveExitProgramCommand(projectControl);
+            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(projectControl);
             CreateAndSetRelayCommands();
         }
 
@@ -111,10 +111,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
         private void CreateAndSetRelayCommands()
         {
             SaveCloseProjectLibraryCommand = new RelayCommand(() => 
-                MainProjectControl.ProjectManagerViewModel.CloseActiveProjectLibrary());
+                ProjectControl.ProjectManagerViewModel.CloseActiveProjectLibrary());
 
             AddProjectGraphToProjectCommand = new RelayCommand(() =>
-                MainProjectControl.ProjectManagerViewModel.AddNewProjectGraphToProject(MainProjectControl.OpenProjectLibrary));
+                ProjectControl.ProjectManagerViewModel.AddNewProjectGraphToProject(ProjectControl.OpenProjectLibrary));
         }
 
         /// <summary>

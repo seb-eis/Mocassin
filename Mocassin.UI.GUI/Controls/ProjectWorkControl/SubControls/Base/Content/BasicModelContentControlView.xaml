@@ -21,7 +21,7 @@
     </Grid.RowDefinitions>
     <GroupBox Height="Auto" Header="Data Control" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
       <StackPanel>
-        <ComboBox ItemsSource="{Binding MainProjectControl.ProjectGraphs}"
+        <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
                   SelectedItem="{Binding SelectedProjectGraph}" />
         <ContentPresenter Content="{Binding DataContentControl}" />
       </StackPanel>

@@ -203,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Base\Loading\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Base\ViewModels\JsonBrowser\JsonBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,6 +216,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Views\ContentLoadingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\Views\LoadingSpinerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,7 +282,12 @@
     <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
+    <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
+    <Compile Include="Base\Loading\AsyncWindowedBackgroundTask.cs" />
+    <Compile Include="Base\Loading\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Base\ViewModels\Collections\IObservableCollectionViewModel.cs" />
     <Compile Include="Base\ViewModels\JsonBrowser\JsonBrowserView.xaml.cs">
       <DependentUpon>JsonBrowserView.xaml</DependentUpon>
@@ -286,9 +307,16 @@
     <Compile Include="Base\ViewModels\Tabs\Items\UserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\ViewModel.cs" />
+    <Compile Include="Base\Views\ContentLoadingView.xaml.cs">
+      <DependentUpon>ContentLoadingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\Views\LoadingSpinerView.xaml.cs">
+      <DependentUpon>LoadingSpinerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Base\Views\NoContentView.xaml.cs">
       <DependentUpon>NoContentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Base\Attributes\ControlMenuCommandAttribute.cs" />
     <Compile Include="Controls\Base\Commands\AddBasicModelControlTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
@@ -317,6 +345,10 @@
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\ProjectBrowserViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuView.xaml.cs">
+      <DependentUpon>ControlMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\AddProjectGraphToProjectCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CloseProjectLibraryCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CreateProjectLibraryCommand.cs" />
@@ -341,6 +373,7 @@
       <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlViewModel.cs" />
+    <Compile Include="Helper\TypeSearchExtensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -375,6 +408,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Base\Adapter\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />

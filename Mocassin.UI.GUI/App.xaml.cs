@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
+using Mocassin.UI.GUI.Base.Loading;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu;
 
 namespace Mocassin.UI.GUI
 {
@@ -23,7 +28,8 @@ namespace Mocassin.UI.GUI
         /// <returns></returns>
         public MainWindowViewModel CreateNewMainWindowViewModel()
         {
-            return new MainWindowViewModel();
+            var pluginAssemblies = LoadPlugins(null);
+            return new MainWindowViewModel(pluginAssemblies);
         }
 
         /// <summary>
@@ -39,6 +45,16 @@ namespace Mocassin.UI.GUI
                 DataContext = mainWindowViewModel
             };
             return mainWindow;
+        }
+
+        /// <summary>
+        ///     Loads all plugin <see cref="Assembly"/> instances and returns the created <see cref="List{T}"/>
+        /// </summary>
+        /// <param name="sourceDirectory"></param>
+        /// <returns></returns>
+        public List<Assembly> LoadPlugins(string sourceDirectory)
+        {
+            return null;
         }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Reflection;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
-using Mocassin.Framework.SQLiteCore;
-using Mocassin.Framework.Xml;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
@@ -17,7 +13,6 @@ using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
 using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.Model;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI
@@ -38,7 +33,7 @@ namespace Mocassin.UI.GUI
         private IMocassinProjectLibrary openProjectLibrary;
 
         /// <summary>
-        ///     The <see cref="ProjectGraphs"/> backing field
+        ///     The <see cref="ProjectGraphs" /> backing field
         /// </summary>
         private ObservableCollection<MocassinProjectGraph> projectGraphs;
 
@@ -62,6 +57,9 @@ namespace Mocassin.UI.GUI
 
         /// <inheritdoc />
         public ProjectManagerViewModel ProjectManagerViewModel { get; }
+
+        /// <inheritdoc />
+        public IEnumerable<Assembly> PluginAssemblies { get; }
 
         /// <inheritdoc />
         public void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
@@ -90,10 +88,12 @@ namespace Mocassin.UI.GUI
         public IObservable<IMocassinProjectLibrary> ProjectLibraryChangeNotification => ProjectLibraryChangedEvent.AsObservable();
 
         /// <summary>
-        ///     Creates new <see cref="MainWindowViewModel" /> for the Mocassin GUI
+        ///     Creates new <see cref="MainWindowViewModel" /> for the Mocassin GUI with the provided set of plugin
+        ///     <see cref="Assembly" />
         /// </summary>
-        public MainWindowViewModel()
+        public MainWindowViewModel(IEnumerable<Assembly> pluginAssemblies)
         {
+            PluginAssemblies = pluginAssemblies ?? new Assembly[0];
             ProjectLibraryChangedEvent = new ReactiveEvent<IMocassinProjectLibrary>();
             PushMessageSystem = new AsyncMessageSystem();
             ProjectMenuBarViewModel = new ProjectMenuBarViewModel(this);

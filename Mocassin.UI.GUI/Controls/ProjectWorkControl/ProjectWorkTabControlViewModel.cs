@@ -21,8 +21,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         private UserControlTabControlViewModel TabControlViewModel { get; }
 
         /// <inheritdoc />
-        public ProjectWorkTabControlViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ProjectWorkTabControlViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
             TabControlViewModel = new UserControlTabControlViewModel();
             InitializeDefaultTabs();
@@ -93,11 +93,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         public void InitializeDefaultTabs() 
         {
             TabControlViewModel.InitializeDefaultTabs();
-            TabControlViewModel.AddNonClosableTab("Particle Control", new ParticleModelControlViewModel(MainProjectControl), new ParticleModelControlView());
+            TabControlViewModel.AddNonClosableTab("Particle Control", new ParticleModelControlViewModel(ProjectControl), new ParticleModelControlView());
 
-            var pcon = new ParticleModelControlViewModel(MainProjectControl);
+            var pcon = new ParticleModelControlViewModel(ProjectControl);
             var pview = new ParticleModelControlView() {DataContext = pcon};
-            var test = new BasicModelContentControlViewModel(MainProjectControl) {DataContentControl = pview };
+            var test = new BasicModelContentControlViewModel(ProjectControl) {DataContentControl = pview };
             TabControlViewModel.AddNonClosableTab("Default Look",test, new BasicModelContentControlView());
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Mocassin.UI.GUI.Base.ViewModels
@@ -43,13 +44,14 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         ///     Ensures that the provided <see cref="Action" /> is executed on the dispatcher thread
         /// </summary>
         /// <param name="action"></param>
-        protected void InvokeOnDispatcher(Action action)
+        protected void ExecuteOnDispatcher(Action action)
         {
             if (!Application.Current.Dispatcher.CheckAccess())
             {
                 Application.Current.Dispatcher.Invoke(action);
                 return;
             }
+
             action.Invoke();
         }
 
@@ -57,9 +59,41 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         ///     Ensures that the provided <see cref="Func{TResult}" /> is executed on the dispatcher thread
         /// </summary>
         /// <param name="function"></param>
-        protected TResult InvokeOnDispatcher<TResult>(Func<TResult> function)
+        protected TResult ExecuteOnDispatcher<TResult>(Func<TResult> function)
         {
-            return !Application.Current.Dispatcher.CheckAccess() ? Application.Current.Dispatcher.Invoke(function) : function.Invoke();
+            return !Application.Current.Dispatcher.CheckAccess()
+                ? Application.Current.Dispatcher.Invoke(function)
+                : function.Invoke();
+        }
+
+        /// <summary>
+        ///     Queues the provided <see cref="Action" /> for invocation on the dispatcher thread
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        protected async Task ExecuteOnDispatcherAsync(Action action)
+        {
+            await Task.Run(() => ExecuteOnDispatcher(action));
+        }
+
+        /// <summary>
+        ///     Queues the provided <see cref="Func{TResult}" /> for invocation on the dispatcher thread and
+        /// </summary>
+        /// <param name="function"></param>
+        /// <returns></returns>
+        protected async Task<TResult> ExecuteOnDispatcherAsync<TResult>(Func<TResult> function)
+        {
+            return await Task.Run(() => ExecuteOnDispatcher(function));
+        }
+
+        /// <summary>
+        ///     Queues an <see cref="Action" /> for execution on the dispatcher. This method should be used when awaiting the
+        ///     operation is not required and it does not matter when the execution takes place
+        /// </summary>
+        /// <param name="action"></param>
+        protected void SendToDispatcher(Action action)
+        {
+            Task.Run(() => ExecuteOnDispatcher(action));
         }
     }
 }

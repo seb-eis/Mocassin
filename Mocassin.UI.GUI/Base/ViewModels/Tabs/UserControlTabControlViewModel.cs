@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         private int headerFontSize = 14;
 
         /// <summary>
-        ///     The <see cref="TabStripPlacement"/> backing field
+        ///     The <see cref="TabStripPlacement" /> backing field
         /// </summary>
         private Dock tabStripPlacement = Dock.Top;
 
@@ -62,6 +62,22 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <inheritdoc />
         public virtual void InitializeDefaultTabs()
         {
+        }
+
+        /// <summary>
+        ///     Sets the <see cref="SelectedTab" /> property to the item with the passed index. Negative values default to the last
+        ///     item
+        /// </summary>
+        public void SetActiveTabByIndex(int index)
+        {
+            if (ObservableItems.Count == 0) return;
+            if (index < 0)
+            {
+                SelectedTab = ObservableItems[ObservableItems.Count - 1];
+                return;
+            }
+
+            SelectedTab = ObservableItems[index];
         }
     }
 }

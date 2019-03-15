@@ -75,8 +75,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.Content
         }
 
         /// <inheritdoc />
-        public BasicModelContentControlViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public BasicModelContentControlViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
         }
 

@@ -35,11 +35,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         public ObservableCollectionViewModel<PushMessage> PushMessageCollectionViewModel { get; }
 
         /// <inheritdoc />
-        public MessageConsoleViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public MessageConsoleViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
             PushMessageCollectionViewModel = new ObservableCollectionViewModel<PushMessage>(100);
-            SubscribeToMessageSystem(mainProjectControl.PushMessageSystem);
+            SubscribeToMessageSystem(projectControl.PushMessageSystem);
         }
 
         /// <inheritdoc />

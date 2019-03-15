@@ -1,0 +1,78 @@
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace Mocassin.UI.GUI.Base.Loading
+{
+    /// <summary>
+    ///     Wrapper for async execution of tasks while a progress <see cref="Window"/> is shown that blocks the UI thread
+    /// </summary>
+    public class AsyncWindowedBackgroundTask : IDisposable
+    {
+        /// <summary>
+        ///     The <see cref="Window"/> that is shown as long as the executor is not
+        /// </summary>
+        private readonly Window window;
+
+        /// <summary>
+        ///     The <see cref="Task"/> that is executed in the background
+        /// </summary>
+        private readonly Task task;
+
+        /// <summary>
+        ///     Creates a new <see cref="AsyncWindowedBackgroundTask"/> with the provided window and task
+        /// </summary>
+        /// <param name="window"></param>
+        /// <param name="task"></param>
+        public AsyncWindowedBackgroundTask(Window window, Task task)
+        {
+            this.window = window ?? throw new ArgumentNullException(nameof(window));
+            this.task = task ?? throw new ArgumentNullException(nameof(task));
+        }
+
+        /// <summary>
+        ///     Internal execution routine that completes once the wrapped work <see cref="Task"/> is finished
+        /// </summary>
+        /// <returns></returns>
+        private async Task ExecuteInternal()
+        {
+            if (!task.IsCompleted)
+            {
+                using (this)
+                {
+                    task.Start();
+                    window.Show();
+                    await Task.WhenAll(task);   
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            window.Close();
+        }
+
+        /// <summary>
+        ///     Run the passed <see cref="Action"/> while showing the passed <see cref="Window"/>
+        /// </summary>
+        /// <param name="window"></param>
+        /// <param name="action"></param>
+        public static async void Run(Window window, Action action)
+        {
+            using (var task = new AsyncWindowedBackgroundTask(window, new Task(action)))
+            {
+               await task.ExecuteInternal();
+            }
+        }
+
+        /// <summary>
+        ///     Run the passed <see cref="Action"/> while showing a default <see cref="LoadingWindow"/>
+        /// </summary>
+        /// <param name="action"></param>
+        public static void RunWithLoadingWindow(Action action)
+        {
+            Run(new LoadingWindow(), action);
+        }
+    }
+}

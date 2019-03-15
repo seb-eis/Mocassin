@@ -48,19 +48,19 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <inheritdoc />
         public void InsertCollectionItem(int index, T value)
         {
-            InvokeOnDispatcher(() => InsertCollectionItemInternal(index, value));
+            ExecuteOnDispatcher(() => InsertCollectionItemInternal(index, value));
         }
 
         /// <inheritdoc />
         public void AddCollectionItem(T value)
         {
-            InvokeOnDispatcher(() => AddCollectionItemInternal(value));
+            ExecuteOnDispatcher(() => AddCollectionItemInternal(value));
         }
 
         /// <inheritdoc />
         public void RemoveCollectionItem(T value)
         {
-            InvokeOnDispatcher(() => RemoveCollectionItemInternal(value));
+            ExecuteOnDispatcher(() => RemoveCollectionItemInternal(value));
         }
 
         /// <inheritdoc />

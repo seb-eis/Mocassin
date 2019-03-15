@@ -29,11 +29,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
 
 
         /// <inheritdoc />
-        public ProjectConsoleTabControlViewModel(IMocassinProjectControl mainProjectControl)
-            : base(mainProjectControl)
+        public ProjectConsoleTabControlViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
             TabControlViewModel = new UserControlTabControlViewModel();
-            MessageConsoleViewModel = new MessageConsoleViewModel(mainProjectControl);
+            MessageConsoleViewModel = new MessageConsoleViewModel(projectControl);
             InitializeDefaultTabs();
         }
 
@@ -74,7 +74,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
         public void InitializeDefaultTabs()
         {
             TabControlViewModel.InitializeDefaultTabs();
-            TabControlViewModel.AddNonClosableTab("Messages", MessageConsoleViewModel, new MessageConsoleView());
+            TabControlViewModel.AddNonClosableTab("Notifications", MessageConsoleViewModel, new MessageConsoleView());
+            TabControlViewModel.SetActiveTabByIndex(0);
         }
 
         /// <inheritdoc />
