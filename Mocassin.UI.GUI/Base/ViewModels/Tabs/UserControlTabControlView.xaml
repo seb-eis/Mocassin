@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.Tabs"
              mc:Ignorable="d"
@@ -10,23 +11,21 @@
              Height="Auto" Width="Auto">
 
   <UserControl.Resources>
-    <Style TargetType="TextBlock" x:Key="TabHeaderStyle">
-
-    </Style>
-    <Style TargetType="Button" x:Key="CloseButtonStyle">
-      <Setter Property="Content" Value="x" />
-    </Style>
+    <Style TargetType="TextBlock" x:Key="TabHeaderStyle" />
   </UserControl.Resources>
 
   <Grid Margin="5,5,5,5">
-    <TabControl ItemsSource="{Binding ObservableItems}" SelectedItem="{Binding SelectedTab}" FontSize="{Binding HeaderFontSize}"
+    <TabControl ItemsSource="{Binding ObservableItems}"
+                SelectedItem="{Binding SelectedTab}"
+                FontSize="{Binding HeaderFontSize}"
                 TabStripPlacement="{Binding TabStripPlacement}">
       <TabControl.Resources>
         <DataTemplate DataType="{x:Type local:CloseableUserControlTabItem}">
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding TabName}" Style="{StaticResource TabHeaderStyle}"/>
-            <Button Command="{Binding CloseTabCommand}" Style="{StaticResource CloseButtonStyle}" />
-          </StackPanel>
+          <TextBlock Text="{Binding TabName}" Style="{StaticResource TabHeaderStyle}">
+            <TextBlock.InputBindings>
+              <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CloseTabCommand}" />
+            </TextBlock.InputBindings>
+          </TextBlock>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
           <StackPanel Orientation="Horizontal">

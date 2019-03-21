@@ -123,8 +123,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         ///     the active project library
         /// </summary>
         /// <param name="filePath"></param>
-        public void CreateActiveProjectLibrary(string filePath)
+        public void CreateNewActiveProjectLibrary(string filePath)
         {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                SendCallWarningMessage("Aborted due to null or white space creation path!");
+                return;
+            }
             if (File.Exists(filePath))
             {
                 SendCallErrorMessage(new FileNotFoundException("Requested file already exists!", filePath));

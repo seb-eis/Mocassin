@@ -18,9 +18,9 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI
 {
     /// <summary>
-    ///     <see cref="ViewModel" /> for the main window of the Mocassin GUI
+    ///     <see cref="ViewModelBase" /> for the main window of the Mocassin GUI
     /// </summary>
-    public class MainWindowViewModel : ViewModel, IMocassinProjectControl
+    public class MainWindowViewModel : ViewModelBase, IMocassinProjectControl
     {
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> for changes in the open <see cref="IMocassinProjectLibrary" />

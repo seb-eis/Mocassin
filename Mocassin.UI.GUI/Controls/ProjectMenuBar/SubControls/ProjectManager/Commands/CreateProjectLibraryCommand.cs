@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Com
         /// <inheritdoc />
         public override void Execute(string parameter)
         {
-            ProjectControl.ProjectManagerViewModel.CreateActiveProjectLibrary(parameter);
+            ProjectControl.ProjectManagerViewModel.CreateNewActiveProjectLibrary(parameter);
         }
     }
 }

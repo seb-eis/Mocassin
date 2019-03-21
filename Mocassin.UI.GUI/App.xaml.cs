@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Documents;
-using Mocassin.UI.GUI.Base.Loading;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu;
 
 namespace Mocassin.UI.GUI
 {
@@ -13,10 +10,13 @@ namespace Mocassin.UI.GUI
     /// </summary>
     public partial class App : Application
     {
+        /// <inheritdoc />
         protected override void OnStartup(StartupEventArgs e)
         {
             var viewModel = CreateNewMainWindowViewModel();
             var mainWindow = CreateNewMainWindow(viewModel);
+
+            mainWindow.DataContext = viewModel;
 
             mainWindow.Show();
             base.OnStartup(e);
@@ -48,7 +48,7 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Loads all plugin <see cref="Assembly"/> instances and returns the created <see cref="List{T}"/>
+        ///     Loads all plugin <see cref="Assembly" /> instances and returns the created <see cref="List{T}" />
         /// </summary>
         /// <param name="sourceDirectory"></param>
         /// <returns></returns>

@@ -5,74 +5,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar"
+             xmlns:menuBar="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.MenuBar"
+             xmlns:fileMenu="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu"
+             xmlns:controlMenu="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectMenuBarViewModel, IsDesignTimeCreatable = True}"
              d:DesignHeight="450" d:DesignWidth="800">
-
-  <UserControl.Resources>
-    <Style TargetType="DockPanel" x:Key="DockPanelStyle" />
-    <Style TargetType="Menu" x:Key="MenuStyle">
-      <Setter Property="FontSize" Value="{Binding FontSize}" />
-      <Setter Property="DockPanel.Dock" Value="{Binding DockPanelDock}" />
-    </Style>
-  </UserControl.Resources>
-
   <Grid>
-    <StackPanel Orientation="Horizontal">
-      <DockPanel Style="{StaticResource DockPanelStyle}">
-        <Menu Style="{StaticResource MenuStyle}">
-          <MenuItem Header="_File">
-            <MenuItem Header="_New">
-              <MenuItem Header="New Project Library">
-                <i:Interaction.Triggers>
-                  <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding ShowProjectCreationDialogCommand}"/>
-                  </i:EventTrigger>
-                </i:Interaction.Triggers>
-              </MenuItem>
-              <MenuItem Header="New Project Graph">
-                <i:Interaction.Triggers>
-                  <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding AddProjectGraphToProjectCommand}"/>
-                  </i:EventTrigger>
-                </i:Interaction.Triggers>
-              </MenuItem>
-            </MenuItem>
-            <MenuItem Header="_Open">
-                <i:Interaction.Triggers>
-                  <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding ShowProjectLoadingDialogCommand}"/>
-                  </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="_Close" >
-                <i:Interaction.Triggers>
-                  <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding SaveCloseProjectLibraryCommand}"/>
-                  </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="_Save">
-                <i:Interaction.Triggers>
-                  <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding SaveProjectLibraryChangesCommand}"/>
-                  </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MenuItem>
-            <Separator />
-            <MenuItem Header="_Exit">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                  <i:InvokeCommandAction Command="{Binding SaveExitProgramCommand}"/>
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </MenuItem>
-          </MenuItem>
-        </Menu>
+    <StackPanel Orientation="Horizontal" Background="Transparent">
+      <DockPanel Dock="Top">
+        <fileMenu:FileMenuView DataContext="{Binding FileMenuViewModel}"/>
+        <controlMenu:ControlMenuView DataContext="{Binding ControlMenuViewModel}" />
       </DockPanel>
-      <DockPanel Style="{StaticResource DockPanelStyle}">
-        <Menu ItemsSource="{Binding ObservableItems}" Style="{StaticResource MenuStyle}" />
-      </DockPanel>
+      <menuBar:DynamicMenuBarView DataContext="{Binding MenuBarViewModel}" />
     </StackPanel>
   </Grid>
 </UserControl>

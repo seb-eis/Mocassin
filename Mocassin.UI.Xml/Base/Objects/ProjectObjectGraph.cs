@@ -32,7 +32,7 @@ namespace Mocassin.UI.Xml.Base
         [XmlAttribute("DisplayName")]
         [JsonProperty("DisplayName")]
         [NotMapped]
-        public string DisplayName { get; set; }
+        public virtual string DisplayName { get; set; }
 
         /// <summary>
         ///     Converts the <see cref="ProjectObjectGraph" /> to ist xml representation
@@ -110,6 +110,12 @@ namespace Mocassin.UI.Xml.Base
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects, 
                 Culture = DefaultCultureInfo
             };
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return DisplayName ?? base.ToString();
         }
     }
 }

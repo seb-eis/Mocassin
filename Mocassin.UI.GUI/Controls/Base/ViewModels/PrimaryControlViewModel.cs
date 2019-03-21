@@ -16,10 +16,10 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
-    ///     Base <see cref="ViewModel" /> implementation for primary controls with access to the components of the
+    ///     Base <see cref="ViewModelBase" /> implementation for primary controls with access to the components of the
     ///     <see cref="IMocassinProjectControl" />
     /// </summary>
-    public abstract class PrimaryControlViewModel : ViewModel, IDisposable
+    public abstract class PrimaryControlViewModel : ViewModelBase, IDisposable
     {
         /// <summary>
         ///     Get the <see cref="IDisposable" /> subscription to the <see cref="IMocassinProjectLibrary" /> replacements

@@ -24,20 +24,20 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         Dock TabStripPlacement { get; set; }
 
         /// <summary>
-        ///     Adds a <see cref="ViewModel" /> and <see cref="UserControl" /> as a closable <see cref="UserControlTabItem" />
+        ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a closable <see cref="UserControlTabItem" />
         /// </summary>
         /// <param name="tabName"></param>
-        /// <param name="viewModel"></param>
+        /// <param name="viewModelBase"></param>
         /// <param name="userControl"></param>
-        void AddCloseableTab(string tabName, ViewModel viewModel, UserControl userControl);
+        void AddCloseableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl);
 
         /// <summary>
-        ///     Adds a <see cref="ViewModel" /> and <see cref="UserControl" /> as a non closable <see cref="UserControlTabItem" />
+        ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a non closable <see cref="UserControlTabItem" />
         /// </summary>
         /// <param name="tabName"></param>
-        /// <param name="viewModel"></param>
+        /// <param name="viewModelBase"></param>
         /// <param name="userControl"></param>
-        void AddNonClosableTab(string tabName, ViewModel viewModel, UserControl userControl);
+        void AddNonClosableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl);
 
         /// <summary>
         ///     Initializes any default <see cref="UserControlTabItem" /> components

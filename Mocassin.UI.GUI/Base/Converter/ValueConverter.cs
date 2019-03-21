@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace Mocassin.UI.GUI.Base.Converter
 {
@@ -10,11 +11,12 @@ namespace Mocassin.UI.GUI.Base.Converter
     /// <typeparam name="TIn"></typeparam>
     /// <typeparam name="TOut"></typeparam>
     /// <typeparam name="TParam"></typeparam>
-    public abstract class ValueConverter<TIn, TOut, TParam> : IValueConverter
+    public abstract class ValueConverter<TIn, TOut, TParam> : MarkupExtension, IValueConverter
     {
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is TIn)) return value;
             return Convert((TIn) value, (TParam) parameter, culture);
         }
 
@@ -24,22 +26,31 @@ namespace Mocassin.UI.GUI.Base.Converter
             return ConvertBack((TOut) value, (TParam) parameter, culture);
         }
 
-        /// <summary>
-        ///     Internal typed implementation of <see cref="Convert"/>
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
-        protected abstract TOut Convert(TIn value, TParam parameter, CultureInfo culture);
+        /// <inheritdoc />
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
+        }
 
         /// <summary>
-        ///     Internal typed implementation of <see cref="ConvertBack"/>
+        ///     Typed implementation of the value-to-value conversion for <see cref="TOut"/> to <see cref="TIn"/>
         /// </summary>
         /// <param name="value"></param>
         /// <param name="parameter"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
-        protected abstract TOut ConvertBack(TOut value, TParam parameter, CultureInfo culture);
+        public virtual TIn ConvertBack(TOut value, TParam parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException("Back conversion is not supported by this converter");
+        }
+
+        /// <summary>
+        ///     Typed implementation of the value-to-value conversion for <see cref="TIn"/> to <see cref="TOut"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public abstract TOut Convert(TIn value, TParam parameter, CultureInfo culture);
     }
 }

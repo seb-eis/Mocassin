@@ -4,9 +4,9 @@ using Mocassin.UI.GUI.Base.ViewModels;
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
     /// <summary>
-    ///     Base <see cref="ViewModel" /> for providing an <see cref="ObservableCollection{T}" /> with a limited size
+    ///     Base <see cref="ViewModelBase" /> for providing an <see cref="ObservableCollection{T}" /> with a limited size
     /// </summary>
-    public class ObservableCollectionViewModel<T> : ViewModel, IObservableCollectionViewModel<T>
+    public class ObservableCollectionViewModel<T> : ViewModelBase, IObservableCollectionViewModel<T>
     {
         /// <summary>
         ///     The <see cref="Capacity" /> backing field

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Collections.ObjectModel;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -15,12 +14,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
     public class MessageConsoleViewModel : PrimaryControlViewModel, IObservableCollectionViewModel<PushMessage>
     {
         /// <summary>
-        ///     The <see cref="SelectedMessage"/> backing field
+        ///     The <see cref="SelectedMessage" /> backing field
         /// </summary>
         private PushMessage selectedMessage;
 
         /// <summary>
-        ///     Get or set the currently selected <see cref="PushMessage"/>
+        ///     Get or set the currently selected <see cref="PushMessage" />
         /// </summary>
         public PushMessage SelectedMessage
         {
@@ -70,7 +69,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         }
 
         /// <summary>
-        ///     Creates basic subscriptions to the passed <see cref="IPushMessageSystem"/> notifications
+        ///     Creates basic subscriptions to the passed <see cref="IPushMessageSystem" /> notifications
         /// </summary>
         /// <param name="messageSystem"></param>
         private void SubscribeToMessageSystem(IPushMessageSystem messageSystem)

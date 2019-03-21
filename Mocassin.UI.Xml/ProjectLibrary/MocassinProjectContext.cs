@@ -85,7 +85,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         public override void Dispose()
         {
             base.Dispose();
-            StateChangedEvent.OnCompleted();
+            StateChangedEvent.OnCompleted();         
         }
     }
 }

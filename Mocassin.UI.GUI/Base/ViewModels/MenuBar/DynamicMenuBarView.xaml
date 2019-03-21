@@ -9,16 +9,13 @@
              d:DataContext="{d:DesignInstance menuBar:DynamicMenuBarViewModel, IsDesignTimeCreatable=True}"
              Width="Auto" Height="Auto">
 
-  <UserControl.Resources>
-    <Style TargetType="DockPanel" x:Key="DockPanelStyle" />
-    <Style TargetType="Menu" x:Key="MenuStyle">
-      <Setter Property="FontSize" Value="{Binding FontSize}" />
-      <Setter Property="DockPanel.Dock" Value="{Binding DockPanelDock}" />
-    </Style>
-  </UserControl.Resources>
   <Grid>
-    <DockPanel Style="{StaticResource DockPanelStyle}">
-      <Menu ItemsSource="{Binding ObservableItems}" Style="{StaticResource MenuStyle}" />
-    </DockPanel>
+    <ItemsControl ItemsSource="{Binding ObservableItems}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <DockPanel Dock="{Binding DockPanelDock}"/>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+    </ItemsControl>
   </Grid>
 </UserControl>

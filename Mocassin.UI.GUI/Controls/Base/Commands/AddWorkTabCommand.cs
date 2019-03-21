@@ -25,14 +25,15 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         public override void Execute()
         {
-            ProjectControl.ProjectWorkTabControlViewModel.AddCloseableTab(GetTabName(), GetViewModel(), GetUserControl());
+            ProjectControl.ProjectWorkTabControlViewModel.TabControlViewModel
+                .AddCloseableTab(GetTabName(), GetViewModel(), GetUserControl());
         }
 
         /// <summary>
-        ///     Get the <see cref="ViewModel" /> that the tab should use
+        ///     Get the <see cref="ViewModelBase" /> that the tab should use
         /// </summary>
         /// <returns></returns>
-        protected virtual ViewModel GetViewModel()
+        protected virtual ViewModelBase GetViewModel()
         {
             return new EmptyViewModel();
         }

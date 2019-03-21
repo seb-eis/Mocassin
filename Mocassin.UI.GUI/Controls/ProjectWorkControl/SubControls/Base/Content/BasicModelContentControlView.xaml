@@ -19,17 +19,27 @@
       <RowDefinition Height="2*" />
       <RowDefinition Height="1*" />
     </Grid.RowDefinitions>
-    <GroupBox Height="Auto" Header="Data Control" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+    <ScrollViewer Grid.RowSpan="2">
       <StackPanel>
-        <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-                  SelectedItem="{Binding SelectedProjectGraph}" />
-        <ContentPresenter Content="{Binding DataContentControl}" />
+        <GroupBox Height="Auto" Header="Graph Selection">
+          <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
+                    SelectedItem="{Binding SelectedProjectGraph}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding ProjectGuid}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </GroupBox>
+        <GroupBox Height="Auto" Header="Data Control">
+          <ContentPresenter Content="{Binding DataContentControl}" />
+        </GroupBox>
       </StackPanel>
-    </GroupBox>
-    <GroupBox Height="Auto" Header="Visualizer" Grid.Row="0" Grid.Column="1">
+    </ScrollViewer>
+    <GroupBox Height="Auto" Header="Visualization" Grid.Row="0" Grid.Column="1">
       <ContentPresenter Content="{Binding VisualizerContentControl}" />
     </GroupBox>
-    <GroupBox Height="Auto" Header="Info" Grid.Row="1" Grid.Column="1">
+    <GroupBox Height="Auto" Header="Control Information" Grid.Row="1" Grid.Column="1">
       <ContentPresenter Content="{Binding InfoContentControl}" />
     </GroupBox>
   </Grid>

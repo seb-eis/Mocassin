@@ -18,13 +18,13 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         ///     Creates new <see cref="CloseableUserControlTabItem" /> with a host <see cref="ObservableCollectionViewModel{T}" />
         /// </summary>
         /// <param name="tabName"></param>
-        /// <param name="viewModel"></param>
+        /// <param name="viewModelBase"></param>
         /// <param name="userControl"></param>
         /// <param name=""></param>
         /// <param name="hostCollectionViewModel"></param>
-        public CloseableUserControlTabItem(string tabName, ViewModel viewModel, UserControl userControl,
+        public CloseableUserControlTabItem(string tabName, ViewModelBase viewModelBase, UserControl userControl,
             IObservableCollectionViewModel<UserControlTabItem> hostCollectionViewModel)
-            : base(tabName, viewModel, userControl)
+            : base(tabName, viewModelBase, userControl)
         {
             CloseTabCommand = MakeTabCloseCommand(hostCollectionViewModel);
         }

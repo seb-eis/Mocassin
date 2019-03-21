@@ -1,134 +1,22 @@
-﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.ParticleModelControlView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel"
-             xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:ParticleModelControlViewModel, IsDesignTimeCreatable = True}"
-             d:DesignHeight="450" d:DesignWidth="800"
-             Width="Auto" Height="Auto">
-
-  <UserControl.Resources>
-    <Style TargetType="{x:Type ScrollViewer}" x:Key="DataGridScrollViewStyle">
-      <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-    </Style>
-    <Style TargetType="{x:Type TextBlock}" x:Key="DescriptionBoxStyle">
-      <Setter Property="Margin" Value="2,2,2,2"></Setter>
-      <Setter Property="HorizontalAlignment" Value="Stretch" />
-      <Setter Property="TextAlignment" Value="Justify"/>
-      <Setter Property="Width" Value="Auto" />
-      <Setter Property="Height" Value="Auto" />
-      <Setter Property="TextWrapping" Value="Wrap"/>
-    </Style>
-    <Style TargetType="{x:Type GroupBox}" x:Key="ContentGroupBoxStyle">
-      <Setter Property="VerticalAlignment" Value="Top"/>
-      <Setter Property="Margin" Value="5,5,5,5" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="Black" />
-    </Style>
-    <Style TargetType="{x:Type StackPanel}" x:Key="DataGridStackPanelStyle">
-      <Setter Property="HorizontalAlignment" Value="Left" />
-    </Style>
-    <Style TargetType="{x:Type Run}" x:Key="KeywordRunStyle">
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Foreground" Value="Red" />
-    </Style>
-    <Style TargetType="{x:Type Run}" x:Key="DescriptionRunStyle">
-      <Setter Property="FontWeight" Value="Normal" />
-      <Setter Property="Foreground" Value="Black" />
-    </Style>
-    <Style TargetType="{x:Type Run}" x:Key="PropertyRunStyle">
-      <Setter Property="FontWeight" Value="Normal" />
-      <Setter Property="Foreground" Value="Green" />
-    </Style>
-    <Style TargetType="{x:Type DataGrid}" x:Key="DataGridStyle">
-      <Setter Property="SelectionMode" Value="Extended"/>
-    </Style>
-  </UserControl.Resources>
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.ParticleModelControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel"
+  xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
+  xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.DataControl"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:ParticleModelControlViewModel, IsDesignTimeCreatable = True}"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Width="Auto" Height="Auto">
 
   <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="4*" />
-      <ColumnDefinition Width="3*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="2*" />
-      <RowDefinition Height="1*" />
-    </Grid.RowDefinitions>
-    <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource DataGridScrollViewStyle}">
-      <StackPanel>
-        <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}" SelectedItem="{Binding SelectedModelGraph}">
-          <ComboBox.ItemTemplate>
-            <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
-              <TextBlock Text="{Binding ProjectGuid}"/>
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-        <GroupBox Style="{StaticResource ContentGroupBoxStyle}" Height="Auto" Header="Model Controls">
-          <StackPanel>
-            <GroupBox Style="{StaticResource ContentGroupBoxStyle}" Height="Auto" Header="Description">
-              <TextBlock Style="{StaticResource DescriptionBoxStyle}">
-                <TextBlock.Inlines>
-                  <Run Style="{StaticResource DescriptionRunStyle}">
-                    Controls model object graphs of type
-                  </Run>
-                  <Run Style="{StaticResource KeywordRunStyle}">
-                    Particle
-                  </Run>
-                  <Run Style="{StaticResource DescriptionRunStyle}">
-                    which enables to define simulation species and their affiliated properties. One implicit
-                    object with key 
-                  </Run>
-                  <Run Style="{StaticResource PropertyRunStyle}">
-                    Particle.Void 
-                  </Run>
-                  <Run Style="{StaticResource DescriptionRunStyle}">
-                    exists. It is used to define a void state e.g. for describing the default occupation state
-                    of an unstable position.
-                  </Run>
-                </TextBlock.Inlines>
-              </TextBlock>
-            </GroupBox>
-            <DataGrid Style="{StaticResource DataGridStyle}" AutoGenerateColumns="True"
-                      ItemsSource="{Binding ParticleGraphs}" HorizontalAlignment="Stretch">
-
-            </DataGrid>
-          </StackPanel>
-        </GroupBox>
-        <GroupBox Style="{StaticResource ContentGroupBoxStyle}" Height="Auto" Header="Model Controls">
-          <StackPanel>
-            <GroupBox Style="{StaticResource ContentGroupBoxStyle}" Height="Auto" Header="Description">
-              <TextBlock Style="{StaticResource DescriptionBoxStyle}">
-                <TextBlock.Inlines>
-                  <Run Style="{StaticResource DescriptionRunStyle}">
-                    Controls model object graphs of type
-                  </Run>
-                  <Run Style="{StaticResource KeywordRunStyle}">
-                    Particle
-                  </Run>
-                  <Run Style="{StaticResource DescriptionRunStyle}">
-                    which enables to define simulation species and their affiliated properties. One implicit
-                    object with key 
-                  </Run>
-                  <Run Style="{StaticResource PropertyRunStyle}">
-                    Particle.Void 
-                  </Run>
-                  <Run Style="{StaticResource DescriptionRunStyle}">
-                    exists. It is used to define a void state e.g. for describing the default occupation state
-                    of an unstable position.
-                  </Run>
-                </TextBlock.Inlines>
-              </TextBlock>
-            </GroupBox>
-            <DataGrid Style="{StaticResource DataGridStyle}" AutoGenerateColumns="True"
-                      ItemsSource="{Binding ParticleSetGraphs}" HorizontalAlignment="Stretch">
-
-            </DataGrid>
-          </StackPanel>
-        </GroupBox>
-      </StackPanel>
-    </ScrollViewer>
+    <StackPanel>
+      <dataControl:ParticleDataControlView DataContext="{Binding ParticleDataControlViewModel}" />
+      <Separator />
+      <dataControl:ParticleSetDataControlView DataContext="{Binding ParticleSetDataControlViewModel}" />
+    </StackPanel>
   </Grid>
 </UserControl>

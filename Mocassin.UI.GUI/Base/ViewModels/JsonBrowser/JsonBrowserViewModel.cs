@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
 {
     /// <summary>
-    ///     <see cref="ViewModel"/> for <see cref="JsonBrowserView"/> that enables browsing of JSON data
+    ///     <see cref="ViewModelBase"/> for <see cref="JsonBrowserView"/> that enables browsing of JSON data
     /// </summary>
-    public class JsonBrowserViewModel : ViewModel
+    public class JsonBrowserViewModel : ViewModelBase
     {
         /// <summary>
         ///     The <see cref="RootViewItems"/> backing field
@@ -35,6 +35,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         /// </summary>
         public string DefaultRootName { get; set; } = "JObject";
 
+        /// <inheritdoc />
+        public JsonBrowserViewModel()
+        {
+            SetRootViewToNoContent();
+        }
+
         /// <summary>
         ///     Sets the active <see cref="TreeViewItem"/> by converting the provided <see cref="object"/>
         /// </summary>
@@ -55,6 +61,14 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         {
             var builder = new JsonTreeViewBuilder();
             RootViewItems = builder.ConvertToTreeView(json, rootName ?? DefaultRootName, SerializerSettings).AsSingleton();
+        }
+
+        /// <summary>
+        ///     Set the root view item collection to no content
+        /// </summary>
+        public void SetRootViewToNoContent()
+        {
+            RootViewItems = new TreeViewItem().AsSingleton();
         }
     }
 }

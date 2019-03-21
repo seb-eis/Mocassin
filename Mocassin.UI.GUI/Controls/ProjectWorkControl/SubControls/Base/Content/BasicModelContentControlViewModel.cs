@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
+using Mocassin.Framework.Events;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
@@ -9,29 +11,14 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.Content
 {
     /// <summary>
-    ///     Basic <see cref="ViewModel" /> for <see cref="BasicModelContentControlView" /> that provides a default control
+    ///     Basic <see cref="ViewModelBase" /> for <see cref="BasicModelContentControlView" /> that provides a default control
     ///     content for model data manipulation
     /// </summary>
     public class BasicModelContentControlViewModel : PrimaryControlViewModel
     {
-        /// <summary>
-        ///     The <see cref="SelectedProjectGraph" /> backing field
-        /// </summary>
         private MocassinProjectGraph selectedProjectGraph;
-
-        /// <summary>
-        ///     The <see cref="DataContentControl" /> backing field
-        /// </summary>
         private ContentControl dataContentControl;
-
-        /// <summary>
-        ///     The <see cref="InfoContentControl" /> backing field
-        /// </summary>
         private ContentControl visualizerContentControl;
-
-        /// <summary>
-        ///     The <see cref="VisualizerContentControl" /> backing field
-        /// </summary>
         private ContentControl infoContentControl;
 
         /// <summary>
@@ -96,8 +83,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.Content
         /// <param name="contentControl"></param>
         private void NotifyGraphSelectionChanged(ContentControl contentControl)
         {
-            if (contentControl.DataContext is IReactToSelectionChanges<MocassinProjectGraph> reactToSelectionChanges)
-                reactToSelectionChanges.NotifyThatSelectionChanged(SelectedProjectGraph);
+            if (contentControl.DataContext is IContentSupplier<MocassinProjectGraph> contentSupplier)
+                contentSupplier.ChangeContentSource(SelectedProjectGraph);
         }
     }
 }

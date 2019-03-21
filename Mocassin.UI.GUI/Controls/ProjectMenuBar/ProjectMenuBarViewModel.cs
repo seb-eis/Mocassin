@@ -1,131 +1,40 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.MenuBar;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.Commands;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Commands;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.Commands;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="DynamicMenuBarView" /> of the main menu
+    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="ProjectMenuBarView" /> that supplies project controls
     /// </summary>
-    public class ProjectMenuBarViewModel : PrimaryControlViewModel, IDynamicMenuBarViewModel
+    public class ProjectMenuBarViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="DynamicMenuBarViewModel" /> that controls the additional menu items
+        ///     The <see cref="SubControls.FileMenu.FileMenuViewModel"/> that controls basic file operations
         /// </summary>
-        private DynamicMenuBarViewModel MenuBarViewModel { get; }
-
-        /// <inheritdoc />
-        public Dock DockPanelDock
-        {
-            get => MenuBarViewModel.DockPanelDock;
-            set => MenuBarViewModel.DockPanelDock = value;
-        }
-
-        /// <inheritdoc />
-        public int FontSize
-        {
-            get => MenuBarViewModel.FontSize;
-            set => MenuBarViewModel.FontSize = value;
-        }
-
-        /// <inheritdoc />
-        public ObservableCollection<MenuItem> ObservableItems => MenuBarViewModel.ObservableItems;
+        public FileMenuViewModel FileMenuViewModel { get; }
 
         /// <summary>
-        ///     Get a <see cref="ICommand" /> to start the project loading dialog
+        ///     The <see cref="SubControls.ControlMenu.ControlMenuViewModel"/> that controls basic control options
         /// </summary>
-        public ICommand ShowProjectLoadingDialogCommand { get; }
+        public ControlMenuViewModel ControlMenuViewModel { get; }
 
         /// <summary>
-        ///     Get a <see cref="ICommand" /> to star the project creation dialog
+        ///     Get the <see cref="IDynamicMenuBarViewModel" /> that controls the additional menu items
         /// </summary>
-        public ICommand ShowProjectCreationDialogCommand { get; }
-
-        /// <summary>
-        ///     Get a <see cref="ICommand" /> to safely exit the program with save changes check and cancel option
-        /// </summary>
-        public ICommand SaveExitProgramCommand { get; }
-
-        /// <summary>
-        ///     Get a <see cref="ICommand" /> to safely close the current project with save changes check and cancel option
-        /// </summary>
-        public ICommand SaveCloseProjectLibraryCommand { get; private set; }
-
-        /// <summary>
-        ///     Get a <see cref="ICommand" /> to add a new project graph to the loaded project
-        /// </summary>
-        public ICommand AddProjectGraphToProjectCommand { get; private set; }
-
-        /// <summary>
-        ///     Get the <see cref="ICommand"/> to save current changes of the open project library
-        /// </summary>
-        public ICommand SaveProjectLibraryChangesCommand { get; }
+        public IDynamicMenuBarViewModel MenuBarViewModel { get; } 
 
         /// <inheritdoc />
         public ProjectMenuBarViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             MenuBarViewModel = new DynamicMenuBarViewModel(Dock.Top);
-            ShowProjectLoadingDialogCommand = new ShowProjectLoadingDialogCommand(projectControl);
-            ShowProjectCreationDialogCommand = new ShowProjectCreationDialogCommand(projectControl);
-            SaveExitProgramCommand = new SaveExitProgramCommand(projectControl);
-            SaveProjectLibraryChangesCommand = new SaveProjectLibraryChangesCommand(projectControl);
-            CreateAndSetRelayCommands();
-        }
-
-        /// <inheritdoc />
-        public void InsertCollectionItem(int index, MenuItem value)
-        {
-            MenuBarViewModel.InsertCollectionItem(index, value);
-        }
-
-        /// <inheritdoc />
-        public void AddCollectionItem(MenuItem value)
-        {
-            MenuBarViewModel.AddCollectionItem(value);
-        }
-
-        /// <inheritdoc />
-        public void RemoveCollectionItem(MenuItem value)
-        {
-            MenuBarViewModel.RemoveCollectionItem(value);
-        }
-
-        /// <inheritdoc />
-        public bool CollectionContains(MenuItem value)
-        {
-            return MenuBarViewModel.CollectionContains(value);
-        }
-
-        /// <summary>
-        ///     Creates and sets <see cref="ICommand" /> properties that are relay commands
-        /// </summary>
-        private void CreateAndSetRelayCommands()
-        {
-            SaveCloseProjectLibraryCommand = new RelayCommand(() => 
-                ProjectControl.ProjectManagerViewModel.CloseActiveProjectLibrary());
-
-            AddProjectGraphToProjectCommand = new RelayCommand(() =>
-                ProjectControl.ProjectManagerViewModel.AddNewProjectGraphToProject(ProjectControl.OpenProjectLibrary));
-        }
-
-        /// <summary>
-        ///     Creates a <see cref="RelayCommand" /> for closing the current project
-        /// </summary>
-        /// <param name="projectControl"></param>
-        /// <returns></returns>
-        private RelayCommand MakeCloseCommandRelay(IMocassinProjectControl projectControl)
-        {
-            if (projectControl == null) throw new ArgumentNullException(nameof(projectControl));
-            return new RelayCommand(() => projectControl.ProjectManagerViewModel.CloseActiveProjectLibrary());
+            FileMenuViewModel = new FileMenuViewModel(projectControl);
+            ControlMenuViewModel = new ControlMenuViewModel(projectControl);
         }
     }
 }

@@ -231,11 +231,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectBrowser\ProjectBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectBrowser\SubControls\GraphBrowser\ProjectGraphBrowserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserView.xaml">
+    <Page Include="Controls\ProjectConsole\ProjectConsoleTabControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,6 +259,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -259,11 +271,43 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleDataControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetDataControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -279,15 +323,19 @@
     <Compile Include="Base\Commands\AsyncCommand.cs" />
     <Compile Include="Base\Commands\AsyncRelayCommand.cs" />
     <Compile Include="Base\Commands\Command.cs" />
+    <Compile Include="Base\Commands\CommandDictionary.cs" />
     <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
+    <Compile Include="Base\Converter\UniqueLookupConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
+    <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
     <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
     <Compile Include="Base\Loading\AsyncWindowedBackgroundTask.cs" />
     <Compile Include="Base\Loading\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Base\UiElements\ComboBox\BindableDataGridComboBoxColumn.cs" />
     <Compile Include="Base\ViewModels\Collections\IObservableCollectionViewModel.cs" />
     <Compile Include="Base\ViewModels\JsonBrowser\JsonBrowserView.xaml.cs">
       <DependentUpon>JsonBrowserView.xaml</DependentUpon>
@@ -306,7 +354,7 @@
     </Compile>
     <Compile Include="Base\ViewModels\Tabs\Items\UserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\UserControlTabControlViewModel.cs" />
-    <Compile Include="Base\ViewModels\ViewModel.cs" />
+    <Compile Include="Base\ViewModels\ViewModelBase.cs" />
     <Compile Include="Base\Views\ContentLoadingView.xaml.cs">
       <DependentUpon>ContentLoadingView.xaml</DependentUpon>
     </Compile>
@@ -316,30 +364,39 @@
     <Compile Include="Base\Views\NoContentView.xaml.cs">
       <DependentUpon>NoContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Base\Attributes\ControlMenuCommandAttribute.cs" />
-    <Compile Include="Controls\Base\Commands\AddBasicModelControlTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AddDefaultLayoutControlTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AutoProjectCommandSource.cs" />
+    <Compile Include="Controls\Base\Commands\ProjectControlCommandDictionary.cs" />
     <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
-    <Compile Include="Controls\Base\Interfaces\IReactToSelectionChanges.cs" />
+    <Compile Include="Controls\Base\Interfaces\IContentSupplier.cs" />
     <Compile Include="Controls\Base\IO\UserFileSelectionSource.cs" />
+    <Compile Include="Controls\Base\ViewModels\DataCollectionControlViewModel.cs" />
     <Compile Include="Controls\Base\ViewModels\PrimaryControlViewModel.cs" />
+    <Compile Include="Controls\ProjectBrowser\ProjectBrowserView.xaml.cs">
+      <DependentUpon>ProjectBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectBrowser\SubControls\GraphBrowser\ProjectGraphBrowserView.xaml.cs">
+      <DependentUpon>ProjectGraphBrowserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectBrowser\SubControls\GraphBrowser\ProjectGraphBrowserViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserView.xaml.cs">
       <DependentUpon>ProjectLibraryBrowserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectBrowser\SubControls\LibraryBrowser\ProjectLibraryBrowserViewModel.cs" />
     <Compile Include="Base\ViewModels\JsonBrowser\JsonTreeViewBuilder.cs" />
-    <Compile Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserView.xaml.cs">
-      <DependentUpon>ReportBrowserView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectConsole\ProjectConsoleTabControlView.xaml.cs">
+      <DependentUpon>ProjectConsoleTabControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectBrowser\SubControls\ReportBrowser\ReportBrowserViewModel.cs" />
     <Compile Include="Controls\ProjectConsole\ProjectConsoleTabControlViewModel.cs" />
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleView.xaml.cs">
       <DependentUpon>MessageConsoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
-    <Compile Include="Controls\ProjectMenuBar\Commands\SaveExitProgramCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\Commands\ShowProjectCreationDialogCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\Commands\ShowProjectLoadingDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectCreationDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectLoadingDialogCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml.cs">
       <DependentUpon>ProjectMenuBarView.xaml</DependentUpon>
     </Compile>
@@ -349,7 +406,11 @@
       <DependentUpon>ControlMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuViewModel.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\AddProjectGraphToProjectCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml.cs">
+      <DependentUpon>FileMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\AddNewProjectGraphCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CloseProjectLibraryCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\CreateProjectLibraryCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\Commands\OpenProjectLibraryCommand.cs" />
@@ -362,17 +423,50 @@
       <DependentUpon>ProjectStatusBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml.cs">
+      <DependentUpon>ProjectWorkTabControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlView.xaml.cs">
       <DependentUpon>BasicModelContentControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\Commands\AddParticleControlWorkTabCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionView.xaml.cs">
+      <DependentUpon>HostGraphModelObjectSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleDataControlView.xaml.cs">
+      <DependentUpon>ParticleDataControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleDataControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetDataControlView.xaml.cs">
+      <DependentUpon>ParticleSetDataControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetDataControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\GridControl\ParticleSetParticleSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\GridControl\ParticleSetParticleSelectionVmConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml.cs">
       <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml.cs">
+      <DependentUpon>CellPositionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlView.xaml.cs">
+      <DependentUpon>StructureParameterControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlView.xaml.cs">
+      <DependentUpon>StructureModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlView.xaml.cs">
+      <DependentUpon>WelcomeControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlViewModel.cs" />
+    <Compile Include="Extensions\UserControlExtensions.cs" />
+    <Compile Include="Helper\DataGridExtensions.cs" />
     <Compile Include="Helper\TypeSearchExtensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -412,13 +506,14 @@
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleSet\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\Particle\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\" />
-    <Folder Include="Ressources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">
@@ -445,6 +540,9 @@
       <Project>{0027a849-0a7c-48f6-8575-434e165f10b0}</Project>
       <Name>Mocassin.UI.Xml</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Ressources\Icons\MocassinLogoRound3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.13\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.13\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.ProjectLibrary;
@@ -7,7 +8,7 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
 {
     /// <summary>
-    ///     The <see cref="Mocassin.UI.GUI.Base.ViewModels.ViewModel" /> for <see cref="ProjectLibraryBrowserView" />
+    ///     The <see cref="ViewModelBase" /> for <see cref="ProjectLibraryBrowserView" />
     /// </summary>
     public class ProjectLibraryBrowserViewModel : PrimaryControlViewModel
     {
@@ -50,7 +51,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// </summary>
         private void RebuildProjectTreeView()
         {
-            if (ProjectControl.ProjectGraphs == null) return;
+            if (ProjectControl.ProjectGraphs == null)
+            {
+                JsonBrowserViewModel.SetRootViewToNoContent();
+                return;
+            }
+
             JsonBrowserViewModel.SetActiveTreeView(ProjectControl.ProjectGraphs, "Project Graphs");
         }
     }

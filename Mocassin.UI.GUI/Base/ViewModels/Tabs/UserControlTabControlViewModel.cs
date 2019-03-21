@@ -4,7 +4,7 @@ using Mocassin.UI.GUI.Base.ViewModels.Collections;
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 {
     /// <summary>
-    ///     Base <see cref="ViewModel" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
+    ///     Base <see cref="ViewModelBase" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
     ///     <see cref="System.Windows.Controls.TabControl" />
     /// </summary>
     public class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabControlViewModel
@@ -46,16 +46,16 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
-        public void AddCloseableTab(string tabName, ViewModel viewModel, UserControl userControl)
+        public void AddCloseableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl)
         {
-            var tabItem = new CloseableUserControlTabItem(tabName, viewModel, userControl, this);
+            var tabItem = new CloseableUserControlTabItem(tabName, viewModelBase, userControl, this);
             AddCollectionItem(tabItem);
         }
 
         /// <inheritdoc />
-        public void AddNonClosableTab(string tabName, ViewModel viewModel, UserControl userControl)
+        public void AddNonClosableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl)
         {
-            var tabItem = new UserControlTabItem(tabName, viewModel, userControl);
+            var tabItem = new UserControlTabItem(tabName, viewModelBase, userControl);
             AddCollectionItem(tabItem);
         }
 

@@ -6,14 +6,17 @@
         xmlns:local="clr-namespace:Mocassin.UI.GUI"
         xmlns:projectStatusBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectStatusBar"
         xmlns:tabs="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.Tabs"
-        xmlns:menuBar="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.MenuBar"
         xmlns:projectMenuBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar"
+        xmlns:projectConsole="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole"
+        xmlns:projectBrowser="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser"
+        xmlns:projectWorkControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl"
         mc:Ignorable="d"
         Title="Mocassin Model Builder"
         Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"
         Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
         WindowStartupLocation="CenterScreen"
-        d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
+        Closing="MainWindow_OnClosing">
 
 
   <Grid Margin="5,5,5,5" ShowGridLines="True">
@@ -30,16 +33,16 @@
     </Grid.ColumnDefinitions>
 
     <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                DataContext="{Binding ProjectMenuBarViewModel}" />
+                                       DataContext="{Binding ProjectMenuBarViewModel}" />
 
-    <tabs:UserControlTabControlView Grid.Row="1" Grid.Column="0"
-                                    DataContext="{Binding ProjectBrowserViewModel}" />
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0"
+                                       DataContext="{Binding ProjectBrowserViewModel}" />
 
-    <tabs:UserControlTabControlView Grid.Row="1" Grid.Column="1"
-                                    DataContext="{Binding ProjectWorkTabControlViewModel}" />
+    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="1"
+                                                  DataContext="{Binding ProjectWorkTabControlViewModel}" />
 
-    <tabs:UserControlTabControlView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                    DataContext="{Binding ProjectConsoleTabControlViewModel}" />
+    <projectConsole:ProjectConsoleTabControlView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                 DataContext="{Binding ProjectConsoleTabControlViewModel}" />
 
     <projectStatusBar:ProjectStatusBarView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                                            DataContext="{Binding ProjectStatusBarViewModel}" />
