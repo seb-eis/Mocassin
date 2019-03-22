@@ -327,6 +327,7 @@
     <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
+    <Compile Include="Base\Converter\IndexToEnumConverter.cs" />
     <Compile Include="Base\Converter\UniqueLookupConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
@@ -394,6 +395,7 @@
     </Compile>
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectCreationDialogCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectLoadingDialogCommand.cs" />
@@ -450,6 +452,7 @@
       <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\Adapter\CrystalParameterSetter.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml.cs">
       <DependentUpon>CellPositionControlView.xaml</DependentUpon>
     </Compile>
@@ -457,6 +460,7 @@
     <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlView.xaml.cs">
       <DependentUpon>StructureParameterControlView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlView.xaml.cs">
       <DependentUpon>StructureModelControlView.xaml</DependentUpon>
     </Compile>

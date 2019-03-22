@@ -37,12 +37,11 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public bool TrySetParameters(CrystalParameterSet parameterSet)
         {
-            if (!CrystalSystem.TrySetParameters(parameterSet)) 
+            if (!CrystalSystem.TrySetParameters(parameterSet))
                 return false;
 
             UpdateVectorTransformer();
             return true;
-
         }
 
         /// <summary>
@@ -57,16 +56,25 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public bool LoadNewSystem(ISpaceGroup group)
         {
-            if (group == null) 
+            if (group == null)
                 throw new ArgumentNullException(nameof(group));
 
             return LoadIfDifferentSystem(CrystalSystemSource.Create(group));
         }
 
         /// <inheritdoc />
+        public CrystalSystem GetSystem(ISpaceGroup group)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            return CrystalSystemSource.Create(group);
+        }
+
+        /// <inheritdoc />
         public bool LoadNewSystem(int systemIndex, string variationName)
         {
-            if (variationName == null) 
+            if (variationName == null)
                 throw new ArgumentNullException(nameof(variationName));
 
             return LoadIfDifferentSystem(CrystalSystemSource.Create(systemIndex, variationName));

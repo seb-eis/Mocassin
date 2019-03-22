@@ -121,8 +121,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var setList = new SetList<ISpaceGroup>(Comparer<ISpaceGroup>.Default, 274);
             using (var context = ContextProvider.CreateContext())
             {
-                foreach (var group in context.SpaceGroups)
-                    setList.Add(group);
+                setList.AddMany(context.SpaceGroups.Include(x => x.BaseSymmetryOperations));
             }
 
             return setList;

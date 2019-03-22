@@ -77,10 +77,10 @@ namespace Mocassin.UI.Xml.StructureModel
         }
 
         /// <summary>
-        ///     Translates the set properties into a cystal parameter set
+        ///     Translates the set properties into a crystal parameter set
         /// </summary>
         /// <returns></returns>
-        private CrystalParameterSet GetParameterSet()
+        public CrystalParameterSet GetParameterSet()
         {
             var result = new CrystalParameterSet
             {
@@ -98,6 +98,26 @@ namespace Mocassin.UI.Xml.StructureModel
             result.Beta = MocassinMath.DegreeToRadian(result.Beta);
             result.Gamma = MocassinMath.DegreeToRadian(result.Gamma);
             return result;
+        }
+
+        /// <summary>
+        ///     Populates from the passed <see cref="CrystalParameterSet"/>
+        /// </summary>
+        /// <param name="parameterSet"></param>
+        public void PopulateFrom(CrystalParameterSet parameterSet)
+        {
+            parameterSet = parameterSet ?? CrystalParameterSet.CreateDefault();
+            ParamA = Math.Abs(parameterSet.ParamA);
+            ParamB = Math.Abs(parameterSet.ParamB);
+            ParamC = Math.Abs(parameterSet.ParamC);
+            Alpha = parameterSet.Alpha;
+            Beta = parameterSet.Beta;
+            Gamma = parameterSet.Gamma;
+
+            if (IsRadian) return;
+            Alpha = MocassinMath.RadianToDegree(Alpha);
+            Beta = MocassinMath.RadianToDegree(Beta);
+            Gamma = MocassinMath.RadianToDegree(Gamma);
         }
     }
 }

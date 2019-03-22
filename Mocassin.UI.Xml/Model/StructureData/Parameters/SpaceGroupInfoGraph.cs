@@ -54,7 +54,7 @@ namespace Mocassin.UI.Xml.StructureModel
         ///     Get the space group entry object for the set properties
         /// </summary>
         /// <returns>Space group entry for the current object state or P1 default object if the group number is out of range</returns>
-        private SpaceGroupEntry GetSpaceGroupEntry()
+        public SpaceGroupEntry GetSpaceGroupEntry()
         {
             try
             {
@@ -64,6 +64,18 @@ namespace Mocassin.UI.Xml.StructureModel
             {
                 return SpaceGroupEntry.CreateDefault();
             }
+        }
+
+        /// <summary>
+        ///     Populates the <see cref="SpaceGroupInfoGraph"/> from the passed <see cref="SpaceGroupEntry"/>
+        /// </summary>
+        /// <param name="entry"></param>
+        public void PopulateFrom(SpaceGroupEntry entry)
+        {
+            entry = entry ?? SpaceGroupEntry.CreateDefault();
+            Number = entry.Index;
+            Literal = entry.Literal;
+            Specifier = entry.Specifier;
         }
     }
 }

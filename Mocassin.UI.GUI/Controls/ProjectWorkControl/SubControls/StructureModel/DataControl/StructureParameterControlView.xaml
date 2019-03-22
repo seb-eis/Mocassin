@@ -1,12 +1,92 @@
-﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel.DataControl.StructureParameterControlView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel.DataControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel.DataControl.StructureParameterControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel.DataControl"
+  xmlns:spaceGroups="clr-namespace:Mocassin.Symmetry.SpaceGroups;assembly=Mocassin.Symmetry"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:crystalSystems="clr-namespace:Mocassin.Symmetry.CrystalSystems;assembly=Mocassin.Symmetry"
+  d:DataContext="{d:DesignInstance local:StructureParameterControlViewModel, IsDesignTimeCreatable = True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <UserControl.Resources>
+    <Style TargetType="{x:Type TextBox}" x:Key="ReadOnlyBoxStyle">
+      <Style.Triggers>
+        <Trigger Property="IsReadOnly" Value="True">
+          <Setter Property="Opacity" Value=".5" />
+        </Trigger>
+        <Trigger Property="IsReadOnly" Value="False">
+          <Setter Property="Opacity" Value="1" />
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="2*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <ScrollViewer MaxHeight="200" CanContentScroll="True" Grid.Row="0">
+      <DataGrid ColumnWidth="*"
+                ItemsSource="{Binding SpaceGroups}" SelectedItem="{Binding SelectedSpaceGroup}"
+                IsReadOnly="True" AutoGenerateColumns="False"
+                GridLinesVisibility="None">
+        <DataGrid.Columns>
+          <DataGridTextColumn Binding="{Binding Index}" Header="Number" />
+          <DataGridTextColumn Binding="{Binding Literal}" Header="Name" />
+          <DataGridTextColumn Binding="{Binding Specifier}" Header="Specifier" />
+          <DataGridTextColumn Binding="{Binding CrystalSystemIndex, Converter={converter:IndexToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" Header="System"/>
+        </DataGrid.Columns>
+      </DataGrid>
+    </ScrollViewer>
+    <ScrollViewer MaxHeight="200" Grid.Column="1" Background="Transparent" Grid.Row="0">
+      <ListView ItemsSource="{Binding SelectedSpaceGroup.OperationLiterals}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding}"/>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </ScrollViewer>
+    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+      <Separator/>
+      <GroupBox Header="Parameter Settings"
+                DataContext="{Binding ParameterSetter}">
+        <StackPanel>
+          <GroupBox Header="Parameter A [Ang]">
+            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamA}"
+                     IsReadOnly="{Binding IsReadOnlyParamA}" />
+          </GroupBox>
+          <GroupBox Header="Parameter B [Ang]">
+            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamB}"
+                     IsReadOnly="{Binding IsReadOnlyParamB}" />
+          </GroupBox>
+          <GroupBox Header="Parameter C [Ang]">
+            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamC}"
+                     IsReadOnly="{Binding IsReadOnlyParamC}" />
+          </GroupBox>
+          <GroupBox Header="Angle Alpha [°]">
+            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Alpha}"
+                     IsReadOnly="{Binding IsReadOnlyAlpha}" />
+          </GroupBox>
+          <GroupBox Header="Angle Beta [°]">
+            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Beta}"
+                     IsReadOnly="{Binding IsReadOnlyBeta}" />
+          </GroupBox>
+          <GroupBox Header="Angle Gamma [°]">
+            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Gamma}"
+                     IsReadOnly="{Binding IsReadOnlyGamma}" />
+          </GroupBox>
+        </StackPanel>
+      </GroupBox>
+    </StackPanel>
+  </Grid>
 </UserControl>

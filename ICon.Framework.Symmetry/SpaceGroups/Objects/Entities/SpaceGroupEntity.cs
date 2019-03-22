@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Mocassin.Symmetry.SpaceGroups
@@ -36,6 +37,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         [XmlAttribute("SystemId")]
         [Column("SystemId")]
         public int CrystalSystemIndex { get; set; }
+
+        /// <inheritdoc />
+        public IEnumerable<string> OperationLiterals => BaseSymmetryOperations?.Select(x => x.Literal);
 
         /// <summary>
         ///     The context ID for database storage and retrieval

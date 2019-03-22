@@ -74,5 +74,14 @@ namespace Mocassin.UI.GUI.Base.Loading
         {
             Run(new LoadingWindow(), action);
         }
+
+        /// <summary>
+        ///     Run the passed <see cref="Action"/> while showing a default <see cref="LoadingWindow"/> and returns an awaitable task
+        /// </summary>
+        /// <param name="action"></param>
+        public static Task StartWithLoadingWindow(Action action)
+        {
+            return Task.Run(() => RunWithLoadingWindow(action));
+        }
     }
 }

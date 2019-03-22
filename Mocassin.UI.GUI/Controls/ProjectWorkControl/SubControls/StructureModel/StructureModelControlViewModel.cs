@@ -1,6 +1,7 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel.DataControl;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
@@ -13,10 +14,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; protected set; }
 
+        /// <summary>
+        ///     Get the <see cref="CellPositionControlViewModel"/> that controls wyckoff positions
+        /// </summary>
+        public CellPositionControlViewModel PositionControlViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="StructureParameterControlViewModel"/> that controls geometry and misc info
+        /// </summary>
+        public StructureParameterControlViewModel ParameterControlViewModel { get; }
+
         /// <inheritdoc />
         public StructureModelControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
+            ParameterControlViewModel = new StructureParameterControlViewModel(projectControl);
+            PositionControlViewModel = new CellPositionControlViewModel(ParameterControlViewModel);
         }
 
         /// <inheritdoc />
@@ -28,7 +41,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
-            throw new System.NotImplementedException();
+            ParameterControlViewModel.ChangeContentSource(contentSource);
+            PositionControlViewModel.ChangeContentSource(contentSource);
         }
     }
 }

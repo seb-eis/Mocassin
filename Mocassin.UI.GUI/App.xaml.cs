@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
+using Mocassin.UI.GUI.Base.Loading;
 
 namespace Mocassin.UI.GUI
 {
@@ -12,11 +14,9 @@ namespace Mocassin.UI.GUI
     {
         /// <inheritdoc />
         protected override void OnStartup(StartupEventArgs e)
-        {
+        {   
             var viewModel = CreateNewMainWindowViewModel();
             var mainWindow = CreateNewMainWindow(viewModel);
-
-            mainWindow.DataContext = viewModel;
 
             mainWindow.Show();
             base.OnStartup(e);

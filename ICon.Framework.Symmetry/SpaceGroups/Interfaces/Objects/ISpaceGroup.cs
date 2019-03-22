@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -31,6 +32,11 @@ namespace Mocassin.Symmetry.SpaceGroups
         ///     The index of the crystal system affiliated with the group (0 to 6)
         /// </summary>
         int CrystalSystemIndex { get; }
+
+        /// <summary>
+        ///     Get a <see cref="IEnumerable{T}"/> of the operation strings
+        /// </summary>
+        IEnumerable<string> OperationLiterals { get; }
 
         /// <summary>
         ///     Get the space group entry that contains group index, literal name and the spcifier

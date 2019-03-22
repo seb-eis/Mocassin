@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
+using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
@@ -78,6 +79,9 @@ namespace Mocassin.UI.GUI
         }
 
         /// <inheritdoc />
+        public IModelProject ServiceModelProject { get; }
+
+        /// <inheritdoc />
         public ObservableCollection<MocassinProjectGraph> ProjectGraphs
         {
             get => projectGraphs;
@@ -102,6 +106,16 @@ namespace Mocassin.UI.GUI
             ProjectConsoleTabControlViewModel = new ProjectConsoleTabControlViewModel(this);
             ProjectWorkTabControlViewModel = new ProjectWorkTabControlViewModel(this);
             ProjectManagerViewModel = new ProjectManagerViewModel(this);
+            ServiceModelProject = CreateServiceModelProject();
+        }
+
+        /// <summary>
+        ///     Creates <see cref="IModelProject"/> that supplies access to most model services
+        /// </summary>
+        /// <returns></returns>
+        public IModelProject CreateServiceModelProject()
+        {
+            return ModelProject.Create(ProjectSettings.CreateDefault());
         }
     }
 }

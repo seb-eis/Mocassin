@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.Framework.Messaging;
+using Mocassin.Model.ModelProject;
+using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
@@ -31,6 +33,11 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ///     Get the currently loaded work <see cref="IMocassinProjectLibrary" />
         /// </summary>
         IMocassinProjectLibrary OpenProjectLibrary { get; }
+
+        /// <summary>
+        ///     Get a <see cref="IModelProject"/> that does not support input but provides the internal services
+        /// </summary>
+        IModelProject ServiceModelProject { get; }
 
         /// <summary>
         ///     Get an <see cref="ObservableCollection{T}" /> of <see cref="MocassinProjectGraph" /> that stays in sync with the
