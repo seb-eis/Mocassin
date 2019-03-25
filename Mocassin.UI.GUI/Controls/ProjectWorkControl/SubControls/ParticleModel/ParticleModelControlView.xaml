@@ -10,13 +10,15 @@
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ParticleModelControlViewModel, IsDesignTimeCreatable = True}"
   d:DesignHeight="450" d:DesignWidth="800"
-  Width="Auto" Height="Auto">
+  Width="Auto" Height="Auto"
+  Background="Transparent">
 
   <Grid>
-    <StackPanel>
-      <dataControl:ParticleDataControlView DataContext="{Binding ParticleDataControlViewModel}" />
-      <Separator />
-      <dataControl:ParticleSetDataControlView DataContext="{Binding ParticleSetDataControlViewModel}" />
-    </StackPanel>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <dataControl:ParticleDataControlView DataContext="{Binding ParticleDataControlViewModel}" Grid.Row="0" />
+    <dataControl:ParticleSetDataControlView DataContext="{Binding ParticleSetDataControlViewModel}" Grid.Row="1" />
   </Grid>
 </UserControl>

@@ -16,18 +16,18 @@ namespace Mocassin.Symmetry.CrystalSystems
             switch (Variation)
             {
                 case CrystalVariation.UniqueAxisA:
-                    paramSet.Beta = paramSet.Alpha;
-                    paramSet.Gamma = paramSet.Alpha;
+                    paramSet.Beta = Beta.Value;
+                    paramSet.Gamma = Gamma.Value;
                     return;
 
                 case CrystalVariation.UniqueAxisB:
-                    paramSet.Alpha = paramSet.Beta;
-                    paramSet.Gamma = paramSet.Beta;
+                    paramSet.Alpha = Alpha.Value;
+                    paramSet.Gamma = Gamma.Value;
                     return;
 
                 case CrystalVariation.UniqueAxisC:
-                    paramSet.Alpha = paramSet.Gamma;
-                    paramSet.Beta = paramSet.Gamma;
+                    paramSet.Alpha = Alpha.Value;
+                    paramSet.Beta = Beta.Value;
                     return;
 
                 default:

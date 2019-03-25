@@ -17,9 +17,9 @@ namespace Mocassin.Symmetry.CrystalSystems
             {
                 case CrystalVariation.HexagonalAxes:
                     paramSet.ParamB = paramSet.ParamA;
-                    paramSet.Alpha = MocassinMath.Radian90;
-                    paramSet.Beta = MocassinMath.Radian90;
-                    paramSet.Gamma = MocassinMath.Radian120;
+                    paramSet.Alpha = Alpha.Value;
+                    paramSet.Beta = Beta.Value;
+                    paramSet.Gamma = Gamma.Value;
                     return;
 
                 case CrystalVariation.RhombohedralAxes:

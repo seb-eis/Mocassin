@@ -31,62 +31,71 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <ScrollViewer MaxHeight="200" CanContentScroll="True" Grid.Row="0">
-      <DataGrid ColumnWidth="*"
-                ItemsSource="{Binding SpaceGroups}" SelectedItem="{Binding SelectedSpaceGroup}"
-                IsReadOnly="True" AutoGenerateColumns="False"
-                GridLinesVisibility="None">
-        <DataGrid.Columns>
-          <DataGridTextColumn Binding="{Binding Index}" Header="Number" />
-          <DataGridTextColumn Binding="{Binding Literal}" Header="Name" />
-          <DataGridTextColumn Binding="{Binding Specifier}" Header="Specifier" />
-          <DataGridTextColumn Binding="{Binding CrystalSystemIndex, Converter={converter:IndexToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" Header="System"/>
-        </DataGrid.Columns>
-      </DataGrid>
-    </ScrollViewer>
-    <ScrollViewer MaxHeight="200" Grid.Column="1" Background="Transparent" Grid.Row="0">
-      <ListView ItemsSource="{Binding SelectedSpaceGroup.OperationLiterals}">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <TextBlock Text="{Binding}"/>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-    </ScrollViewer>
-    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-      <Separator/>
-      <GroupBox Header="Parameter Settings"
-                DataContext="{Binding ParameterSetter}">
-        <StackPanel>
-          <GroupBox Header="Parameter A [Ang]">
-            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamA}"
-                     IsReadOnly="{Binding IsReadOnlyParamA}" />
-          </GroupBox>
-          <GroupBox Header="Parameter B [Ang]">
-            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamB}"
-                     IsReadOnly="{Binding IsReadOnlyParamB}" />
-          </GroupBox>
-          <GroupBox Header="Parameter C [Ang]">
-            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamC}"
-                     IsReadOnly="{Binding IsReadOnlyParamC}" />
-          </GroupBox>
-          <GroupBox Header="Angle Alpha [°]">
-            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Alpha}"
-                     IsReadOnly="{Binding IsReadOnlyAlpha}" />
-          </GroupBox>
-          <GroupBox Header="Angle Beta [°]">
-            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Beta}"
-                     IsReadOnly="{Binding IsReadOnlyBeta}" />
-          </GroupBox>
-          <GroupBox Header="Angle Gamma [°]">
-            <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Gamma}"
-                     IsReadOnly="{Binding IsReadOnlyGamma}" />
-          </GroupBox>
-        </StackPanel>
-      </GroupBox>
+    <DataGrid Grid.Row="0" Grid.Column="0"
+              ColumnWidth="*"
+              ItemsSource="{Binding SpaceGroups}" SelectedItem="{Binding SelectedSpaceGroup}"
+              IsReadOnly="True" AutoGenerateColumns="False"
+              GridLinesVisibility="None"
+              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto">
+      <DataGrid.Columns>
+        <DataGridTextColumn Binding="{Binding Index}" Header="Number" />
+        <DataGridTextColumn Binding="{Binding Literal}" Header="Name" />
+        <DataGridTextColumn Binding="{Binding Specifier}" Header="Specifier" />
+        <DataGridTextColumn
+          Binding="{Binding CrystalSystemIndex, Converter={converter:IndexToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}"
+          Header="System" />
+      </DataGrid.Columns>
+    </DataGrid>
+    <DataGrid Grid.Row="0" Grid.Column="1" 
+              AutoGenerateColumns="False" 
+              ColumnWidth="*" 
+              GridLinesVisibility="None" 
+              VerticalScrollBarVisibility="Auto"
+              ItemsSource="{Binding SelectedSpaceGroup.OperationLiterals}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Binding="{Binding}" Header="Operations"/>
+      </DataGrid.Columns>
+    </DataGrid>
+    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch">
+      <Separator />
+      <Grid DataContext="{Binding ParameterSetter}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <GroupBox Header="Parameter A [Ang]">
+              <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamA, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       IsReadOnly="{Binding IsReadOnlyParamA}" />
+            </GroupBox>
+            <GroupBox Header="Parameter B [Ang]">
+              <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamB, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       IsReadOnly="{Binding IsReadOnlyParamB}" />
+            </GroupBox>
+            <GroupBox Header="Parameter C [Ang]">
+              <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding ParamC, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       IsReadOnly="{Binding IsReadOnlyParamC}" />
+            </GroupBox>
+          </StackPanel>
+          <StackPanel Grid.Column="1">
+            <GroupBox Header="Angle Alpha [°]">
+              <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Alpha, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       IsReadOnly="{Binding IsReadOnlyAlpha}" />
+            </GroupBox>
+            <GroupBox Header="Angle Beta [°]">
+              <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Beta, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       IsReadOnly="{Binding IsReadOnlyBeta}" />
+            </GroupBox>
+            <GroupBox Header="Angle Gamma [°]">
+              <TextBox Style="{StaticResource ReadOnlyBoxStyle}" Text="{Binding Gamma, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       IsReadOnly="{Binding IsReadOnlyGamma}" />
+            </GroupBox>
+          </StackPanel>
+      </Grid>
     </StackPanel>
   </Grid>
 </UserControl>

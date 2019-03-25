@@ -16,31 +16,35 @@
       <ColumnDefinition Width="3*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="2*" />
-      <RowDefinition Height="1*" />
+      <RowDefinition Height="10*"></RowDefinition>
+      <RowDefinition Height="80*" />
+      <RowDefinition Height="60*" />
     </Grid.RowDefinitions>
-    <ScrollViewer Grid.RowSpan="2">
-      <StackPanel>
-        <GroupBox Height="Auto" Header="Graph Selection">
-          <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-                    SelectedItem="{Binding SelectedProjectGraph}">
-            <ComboBox.ItemTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding ProjectGuid}" />
-              </DataTemplate>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
-        </GroupBox>
-        <GroupBox Height="Auto" Header="Data Control">
-          <ContentPresenter Content="{Binding DataContentControl}" />
-        </GroupBox>
-      </StackPanel>
-    </ScrollViewer>
-    <GroupBox Height="Auto" Header="Visualization" Grid.Row="0" Grid.Column="1">
-      <ContentPresenter Content="{Binding VisualizerContentControl}" />
+      <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1"
+                Header="Graph Selection" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
+                  SelectedItem="{Binding SelectedProjectGraph}"
+                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding ProjectGuid}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </GroupBox>
+      <GroupBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"
+                Header="Data Control" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <ContentPresenter Content="{Binding DataContentControl}"
+                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+     </GroupBox>
+    <GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"  
+              Header="Visualization">
+      <ContentPresenter Content="{Binding VisualizerContentControl}" 
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </GroupBox>
-    <GroupBox Height="Auto" Header="Control Information" Grid.Row="1" Grid.Column="1">
-      <ContentPresenter Content="{Binding InfoContentControl}" />
+    <GroupBox Grid.Row="2" Grid.Column="1" Header="Control Information">
+      <ContentPresenter Content="{Binding InfoContentControl}" 
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </GroupBox>
   </Grid>
 </UserControl>

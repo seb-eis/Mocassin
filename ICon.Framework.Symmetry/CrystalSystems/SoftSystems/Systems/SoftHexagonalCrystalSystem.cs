@@ -12,9 +12,9 @@ namespace Mocassin.Symmetry.CrystalSystems
         public override void ApplyParameterDependencies(CrystalParameterSet paramSet)
         {
             paramSet.ParamB = paramSet.ParamA;
-            paramSet.Alpha = MocassinMath.Radian90;
-            paramSet.Beta = MocassinMath.Radian90;
-            paramSet.Gamma = MocassinMath.Radian120;
+            paramSet.Alpha = Alpha.Value;
+            paramSet.Beta = Beta.Value;
+            paramSet.Gamma = Gamma.Value;
         }
 
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <inheritdoc />
         public override CrystalParameterSet GetDefaultParameterSet()
         {
-            return new CrystalParameterSet(1.0, 1.0, 1.0, MocassinMath.Radian90, MocassinMath.Radian90, MocassinMath.Radian120);
+            return new CrystalParameterSet(1.0, 1.0, 1.0, Alpha.Value, Beta.Value, Gamma.Value);
         }
     }
 }
