@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
@@ -58,6 +59,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             }
 
             JsonBrowserViewModel.SetActiveTreeView(ProjectControl.ProjectGraphs, "Project Graphs");
+
+            foreach (var rootViewItem in JsonBrowserViewModel.RootViewItems) rootViewItem.ExpandSubtree();
         }
     }
 }

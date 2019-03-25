@@ -92,6 +92,12 @@ namespace Mocassin.Symmetry.SpaceGroups
             return new SpaceGroupEntry(Index, Literal, Specifier);
         }
 
+        /// <inheritdoc />
+        public IEnumerable<ISymmetryOperation> GetOperations()
+        {
+            return BaseSymmetryOperations.AsEnumerable();
+        }
+
         /// <summary>
         ///     Compares to other space group interface by index and specifier index
         /// </summary>

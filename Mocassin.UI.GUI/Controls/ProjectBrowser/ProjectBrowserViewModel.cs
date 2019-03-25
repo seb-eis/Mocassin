@@ -12,11 +12,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
     public class ProjectBrowserViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="ProjectLibraryBrowserViewModel" /> that controls model data browsing
-        /// </summary>
-        private ProjectLibraryBrowserViewModel ProjectLibraryBrowserViewModel { get; }
-
-        /// <summary>
         ///     Get the <see cref="UserControlTabControlViewModel" /> that controls the browser tabs
         /// </summary>
         public UserControlTabControlViewModel TabControlViewModel { get; }
@@ -25,9 +20,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         public ProjectBrowserViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            ProjectLibraryBrowserViewModel = new ProjectLibraryBrowserViewModel(projectControl);
             TabControlViewModel = new UserControlTabControlViewModel();
-            TabControlViewModel.AddNonClosableTab("Project Library", ProjectLibraryBrowserViewModel, new ProjectLibraryBrowserView());
+            TabControlViewModel.AddNonClosableTab("Project Graphs", new ProjectGraphBrowserViewModel(projectControl), new ProjectGraphBrowserView());
+            TabControlViewModel.AddNonClosableTab("Overview", new ProjectLibraryBrowserViewModel(projectControl), new ProjectLibraryBrowserView());
             TabControlViewModel.SetActiveTabByIndex(0);
         }
     }

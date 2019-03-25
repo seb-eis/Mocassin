@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Mocassin.Framework.Collections;
+using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
@@ -13,6 +19,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
     public class CellPositionControlViewModel : DataCollectionControlViewModel<UnitCellPositionGraph>,
         IContentSupplier<MocassinProjectGraph>
     {
+        private IList<Fractional3D> selectedVectorExpansion;
+
         /// <summary>
         ///     Get the <see cref="ParameterControlViewModel"/> that controls the space group
         /// </summary>
@@ -21,11 +29,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; protected set; }
 
+        /// <summary>
+        ///     Get or set a <see cref="IList{T}"/> of the expanded <see cref="Fractional3D"/> of the current graph selection
+        /// </summary>
+        public IList<Fractional3D> SelectedVectorExpansion
+        {
+            get => selectedVectorExpansion;
+            private set => SetProperty(ref selectedVectorExpansion, value);
+        }
+
         /// <inheritdoc />
         public CellPositionControlViewModel(StructureParameterControlViewModel parameterControlViewModel)
         {
             ParameterControlViewModel = parameterControlViewModel 
                                         ?? throw new ArgumentNullException(nameof(parameterControlViewModel));
+            PropertyChanged += UpdateVectorsOnSelectionChange;
         }
 
 
@@ -41,6 +59,34 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
             ContentSource = contentSource;
             var modelGraph = contentSource?.ProjectModelGraph?.StructureModelGraph;
             DataCollection = modelGraph?.UnitCellPositions;
+        }
+
+        /// <summary>
+        ///     Get the expanded vector <see cref="IList{T}"/> of the passed <see cref="positionGraph"/>
+        /// </summary>
+        /// <param name="positionGraph"></param>
+        /// <returns></returns>
+        public IList<Fractional3D> GetExpandedVectorCollection(UnitCellPositionGraph positionGraph)
+        {
+            if (positionGraph == null) return new List<Fractional3D>();
+            var comparer = ParameterControlViewModel.ProjectControl.ServiceModelProject.SpaceGroupService.Comparer;
+            var vector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
+            var list = ParameterControlViewModel.SelectedSpaceGroup
+                .GetOperations().Select(x => x.ApplyWithTrim(vector))
+                .ToSetList(comparer);
+
+            return list;
+        }
+
+        /// <summary>
+        ///     Action that is called if the selected <see cref="UnitCellPositionGraph"/> changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void UpdateVectorsOnSelectionChange(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName != nameof(SelectedCollectionItem)) return;
+            SelectedVectorExpansion = GetExpandedVectorCollection(SelectedCollectionItem);
         }
     }
 }

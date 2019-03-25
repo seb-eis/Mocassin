@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -43,5 +44,11 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <returns></returns>
         SpaceGroupEntry GetGroupEntry();
+
+        /// <summary>
+        ///     Gets the sequence of <see cref="ISymmetryOperation"/> operations defined in the <see cref="ISpaceGroup"/>
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ISymmetryOperation> GetOperations();
     }
 }

@@ -5,16 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser"
              xmlns:graphs="clr-namespace:Mocassin.UI.Xml.Base;assembly=Mocassin.UI.Xml"
+             xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
-    <TreeView ItemsSource="{Binding ProjectGraphs}" SelectedValuePath="{Binding SelectedObjectGraph}">
-      <TreeView.ItemTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type graphs:ProjectObjectGraph}">
-          <TextBlock Text="Object"/>
-        </HierarchicalDataTemplate>
-      </TreeView.ItemTemplate>
+    <TreeView ItemsSource="{Binding ProjectGraphs}">
+
     </TreeView>
   </Grid>
 </UserControl>
