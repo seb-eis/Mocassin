@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
     /// </summary>
     /// <typeparam name="TModelObject"></typeparam>
     /// <typeparam name="TObjectGraph"></typeparam>
-    public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> : DataCollectionControlViewModel<ModelObjectReferenceGraph<TModelObject>>,
+    public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> : CollectionControlViewModel<ModelObjectReferenceGraph<TModelObject>>,
         IContentSupplier<MocassinProjectGraph>,
         IObjectDropAcceptor
         where TModelObject : ModelObject, new()

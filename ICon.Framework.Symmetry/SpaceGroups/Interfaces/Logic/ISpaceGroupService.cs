@@ -12,6 +12,11 @@ namespace Mocassin.Symmetry.SpaceGroups
     public interface ISpaceGroupService
     {
         /// <summary>
+        ///     Get a boolean flag if the service has a database connection to load space groups
+        /// </summary>
+        bool HasDbConnection { get; }
+
+        /// <summary>
         ///     Get the currently loaded space group interface
         /// </summary>
         ISpaceGroup LoadedGroup { get; }
@@ -130,6 +135,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="entry"></param>
         /// <returns></returns>
         bool TryLoadGroup(SpaceGroupEntry entry);
+
+        /// <summary>
+        ///     Loads the passed <see cref="ISpaceGroup"/> into the service
+        /// </summary>
+        /// <param name="spaceGroup"></param>
+        void LoadGroup(ISpaceGroup spaceGroup);
 
         /// <summary>
         ///     Creates a vector comparer for a special type of 3D vector interface

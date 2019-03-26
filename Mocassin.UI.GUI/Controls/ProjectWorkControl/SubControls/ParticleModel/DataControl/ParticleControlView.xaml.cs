@@ -5,11 +5,11 @@ using System.Windows.Input;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.DataControl
 {
     /// <summary>
-    ///     Interaktionslogik für ParticleDataControlView.xaml
+    ///     Interaktionslogik für ParticleControlView.xaml
     /// </summary>
-    public partial class ParticleDataControlView : UserControl
+    public partial class ParticleControlView : UserControl
     {
-        public ParticleDataControlView()
+        public ParticleControlView()
         {
             InitializeComponent();
         }

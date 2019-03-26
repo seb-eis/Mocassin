@@ -18,13 +18,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         /// <summary>
         ///     Get the <see cref="ViewModelBase" /> for the <see cref="ParticleGraph" /> data control
         /// </summary>
-        public ParticleDataControlViewModel ParticleDataControlViewModel { get; }
+        public ParticleControlViewModel ParticleControlViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="ViewModelBase" /> for the <see cref="ParticleSetGraph" /> data
         ///     control
         /// </summary>
-        public ParticleSetDataControlViewModel ParticleSetDataControlViewModel { get; }
+        public ParticleSetControlViewModel ParticleSetControlViewModel { get; }
 
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; protected set; }
@@ -33,8 +33,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         public ParticleModelControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            ParticleDataControlViewModel = new ParticleDataControlViewModel();
-            ParticleSetDataControlViewModel = new ParticleSetDataControlViewModel();
+            ParticleControlViewModel = new ParticleControlViewModel();
+            ParticleSetControlViewModel = new ParticleSetControlViewModel();
         }
 
         /// <inheritdoc />
@@ -47,8 +47,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            ParticleDataControlViewModel.ChangeContentSource(contentSource);
-            ParticleSetDataControlViewModel.ChangeContentSource(contentSource);
+            ParticleControlViewModel.ChangeContentSource(contentSource);
+            ParticleSetControlViewModel.ChangeContentSource(contentSource);
         }
 
         /// <inheritdoc />

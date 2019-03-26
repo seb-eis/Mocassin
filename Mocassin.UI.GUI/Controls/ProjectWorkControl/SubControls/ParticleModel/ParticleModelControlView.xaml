@@ -18,7 +18,7 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <dataControl:ParticleDataControlView DataContext="{Binding ParticleDataControlViewModel}" Grid.Row="0" />
-    <dataControl:ParticleSetDataControlView DataContext="{Binding ParticleSetDataControlViewModel}" Grid.Row="1" />
+    <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" Grid.Row="0" />
+    <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" Grid.Row="1" />
   </Grid>
 </UserControl>

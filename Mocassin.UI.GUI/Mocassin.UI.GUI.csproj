@@ -283,11 +283,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleDataControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetDataControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -304,6 +304,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -372,7 +388,7 @@
     <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
     <Compile Include="Controls\Base\Interfaces\IContentSupplier.cs" />
     <Compile Include="Controls\Base\IO\UserFileSelectionSource.cs" />
-    <Compile Include="Controls\Base\ViewModels\DataCollectionControlViewModel.cs" />
+    <Compile Include="Controls\Base\ViewModels\CollectionControlViewModel.cs" />
     <Compile Include="Controls\Base\ViewModels\PrimaryControlViewModel.cs" />
     <Compile Include="Controls\ProjectBrowser\ProjectBrowserView.xaml.cs">
       <DependentUpon>ProjectBrowserView.xaml</DependentUpon>
@@ -396,6 +412,7 @@
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddTransitionControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectCreationDialogCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectLoadingDialogCommand.cs" />
@@ -438,14 +455,14 @@
       <DependentUpon>HostGraphModelObjectSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleDataControlView.xaml.cs">
-      <DependentUpon>ParticleDataControlView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
+      <DependentUpon>ParticleControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleDataControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetDataControlView.xaml.cs">
-      <DependentUpon>ParticleSetDataControlView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetControlView.xaml.cs">
+      <DependentUpon>ParticleSetControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetDataControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\GridControl\ParticleSetParticleSelectionViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\GridControl\ParticleSetParticleSelectionVmConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml.cs">
@@ -465,6 +482,22 @@
       <DependentUpon>StructureModelControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\AbstractTransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml.cs">
+      <DependentUpon>AbstractTransitionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlView.xaml.cs">
+      <DependentUpon>TransitionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml.cs">
+      <DependentUpon>ExchangePairGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlView.xaml.cs">
+      <DependentUpon>TransitionModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlView.xaml.cs">
       <DependentUpon>WelcomeControlView.xaml</DependentUpon>
     </Compile>
@@ -514,10 +547,10 @@
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\GridControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\VisualControl\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">

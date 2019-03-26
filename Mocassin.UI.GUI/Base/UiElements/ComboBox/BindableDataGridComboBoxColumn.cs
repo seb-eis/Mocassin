@@ -27,15 +27,15 @@ namespace Mocassin.UI.GUI.Base.UiElements.ComboBox
         }
 
         /// <summary>
-        ///     Copies the item source of the column to the passed <see cref="DependencyObject"/>
+        ///     Copies the item source of the column to the passed <see cref="DataGridCell"/>
         /// </summary>
-        /// <param name="dependencyObject"></param>
-        private void CopyItemsSource(DependencyObject dependencyObject)
+        /// <param name="element"></param>
+        private void CopyItemsSource(FrameworkElement element)
         {
             var binding = BindingOperations.GetBinding(this, ItemsControl.ItemsSourceProperty) 
                           ?? throw new InvalidOperationException("Binding is null");
 
-            BindingOperations.SetBinding(dependencyObject, ItemsControl.ItemsSourceProperty, binding);
+            BindingOperations.SetBinding(element, ItemsControl.ItemsSourceProperty, binding);
         }
     }
 }

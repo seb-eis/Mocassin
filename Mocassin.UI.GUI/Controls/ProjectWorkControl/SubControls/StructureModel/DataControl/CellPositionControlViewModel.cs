@@ -8,15 +8,16 @@ using Mocassin.Mathematics.ValueTypes;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Xml.ParticleModel;
 using Mocassin.UI.Xml.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="DataCollectionControlViewModel{T}" /> for controlling sets of <see cref="UnitCellPositionGraph" /> of a
+    ///     The <see cref="CollectionControlViewModel{T}" /> for controlling sets of <see cref="UnitCellPositionGraph" /> of a
     ///     selectable <see cref="MocassinProjectGraph" />
     /// </summary>
-    public class CellPositionControlViewModel : DataCollectionControlViewModel<UnitCellPositionGraph>,
+    public class CellPositionControlViewModel : CollectionControlViewModel<UnitCellPositionGraph>,
         IContentSupplier<MocassinProjectGraph>
     {
         private IList<Fractional3D> selectedVectorExpansion;
@@ -46,6 +47,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
             PropertyChanged += UpdateVectorsOnSelectionChange;
         }
 
+        /// <summary>
+        ///     Get the <see cref="IEnumerable{T}"/> of possible occupation <see cref="ParticleSetGraph"/>
+        /// </summary>
+        public IEnumerable<ParticleSetGraph> OccupationSetOptions => ContentSource?.ProjectModelGraph?.ParticleModelGraph?.ParticleSets;
 
         /// <inheritdoc />
         public void ChangeContentSource(object contentSource)
@@ -69,13 +74,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         public IList<Fractional3D> GetExpandedVectorCollection(UnitCellPositionGraph positionGraph)
         {
             if (positionGraph == null) return new List<Fractional3D>();
-            var comparer = ParameterControlViewModel.ProjectControl.ServiceModelProject.SpaceGroupService.Comparer;
-            var vector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
-            var list = ParameterControlViewModel.SelectedSpaceGroup
-                .GetOperations().Select(x => x.ApplyWithTrim(vector))
-                .ToSetList(comparer);
-
-            return list;
+            
+            var vector = new Fractional3D(positionGraph.A,positionGraph.B,positionGraph.C);
+            return ParameterControlViewModel.SpaceGroupService.GetAllWyckoffPositions(vector);
         }
 
         /// <summary>

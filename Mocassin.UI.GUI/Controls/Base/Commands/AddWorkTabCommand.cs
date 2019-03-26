@@ -27,6 +27,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         {
             ProjectControl.ProjectWorkTabControlViewModel.TabControlViewModel
                 .AddCloseableTab(GetTabName(), GetViewModel(), GetUserControl());
+            ProjectControl.ProjectWorkTabControlViewModel.TabControlViewModel.SetActiveTabByIndex(-1);
         }
 
         /// <summary>

@@ -40,7 +40,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         IEnumerable<string> OperationLiterals { get; }
 
         /// <summary>
-        ///     Get the space group entry that contains group index, literal name and the spcifier
+        ///     Get the space group entry that contains group index, literal name and the specifier
         /// </summary>
         /// <returns></returns>
         SpaceGroupEntry GetGroupEntry();
@@ -49,6 +49,6 @@ namespace Mocassin.Symmetry.SpaceGroups
         ///     Gets the sequence of <see cref="ISymmetryOperation"/> operations defined in the <see cref="ISpaceGroup"/>
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ISymmetryOperation> GetOperations();
+        IReadOnlyList<ISymmetryOperation> GetOperations();
     }
 }

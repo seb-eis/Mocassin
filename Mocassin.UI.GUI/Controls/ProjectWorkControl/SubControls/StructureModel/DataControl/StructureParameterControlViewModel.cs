@@ -22,6 +22,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         private StructureModelGraph modelGraph;
         private ISpaceGroup selectedSpaceGroup;
         private CrystalParameterSetter parameterSetter;
+        private StructureInfoGraph structureInfo;
 
         /// <summary>
         ///     Get or set the current <see cref="StructureModelGraph"/>
@@ -43,9 +44,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
                 SetProperty(ref selectedSpaceGroup,value);
                 ModelGraph?.SpaceGroupInfo?.PopulateFrom(value?.GetGroupEntry());
                 ParameterSetter = CreateParameterSetter(value);
+                SpaceGroupService.LoadGroup(value ?? SpaceGroups.First());
             }
         }
 
+        /// <summary>
+        ///     Get or set the <see cref="CrystalParameterSetter"/> to manipulate the crystal parameters
+        /// </summary>
         public CrystalParameterSetter ParameterSetter
         {
             get => parameterSetter;
@@ -53,15 +58,30 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         }
 
         /// <summary>
+        ///     Get or set the <see cref="StructureInfoGraph"/> that controls misc information
+        /// </summary>
+        public StructureInfoGraph StructureInfo
+        {
+            get => structureInfo;
+            protected set => SetProperty(ref structureInfo, value);
+        }
+
+        /// <summary>
         ///     Get a <see cref="IReadOnlyList{T}"/> of all available <see cref="ISpaceGroup"/> instances
         /// </summary>
         public IList<ISpaceGroup> SpaceGroups { get; }
+
+        /// <summary>
+        ///     Get the local <see cref="ISpaceGroupService"/> of the control
+        /// </summary>
+        public ISpaceGroupService SpaceGroupService { get; }
 
         /// <inheritdoc />
         public StructureParameterControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             spaceGroups = spaceGroups ?? projectControl?.ServiceModelProject.SpaceGroupService.GetFullGroupList();
+            SpaceGroupService = new SpaceGroupService(ProjectControl.ServiceModelProject.GeometryNumeric.RangeComparer);
             SpaceGroups = spaceGroups;
         }
 
@@ -79,6 +99,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.StructureModel
         {
             ContentSource = contentSource;
             ModelGraph = ContentSource?.ProjectModelGraph?.StructureModelGraph;
+            StructureInfo = ModelGraph?.StructureInfo;
             SelectedSpaceGroup = FindSpaceGroup(ModelGraph?.SpaceGroupInfo?.GetSpaceGroupEntry());
         }
 

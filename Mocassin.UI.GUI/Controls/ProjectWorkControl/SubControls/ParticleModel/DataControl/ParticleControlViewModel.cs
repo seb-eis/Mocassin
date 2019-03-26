@@ -6,10 +6,10 @@ using Mocassin.UI.Xml.ParticleModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="DataCollectionControlViewModel{T}" /> for controlling sets of <see cref="ParticleGraph" /> of a
+    ///     The <see cref="CollectionControlViewModel{T}" /> for controlling sets of <see cref="ParticleGraph" /> of a
     ///     selectable <see cref="MocassinProjectGraph" />
     /// </summary>
-    public class ParticleDataControlViewModel : DataCollectionControlViewModel<ParticleGraph>,
+    public class ParticleControlViewModel : CollectionControlViewModel<ParticleGraph>,
         IContentSupplier<MocassinProjectGraph>
     {
         /// <inheritdoc />

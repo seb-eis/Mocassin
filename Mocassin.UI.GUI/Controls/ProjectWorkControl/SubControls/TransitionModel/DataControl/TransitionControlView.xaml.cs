@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.DataControl
+namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionModel.DataControl
 {
     /// <summary>
-    /// Interaktionslogik für ParticleSetDataControlView.xaml
+    /// Interaktionslogik für TransitionControlView.xaml
     /// </summary>
-    public partial class ParticleSetDataControlView : UserControl
+    public partial class TransitionControlView : UserControl
     {
-        public ParticleSetDataControlView()
+        public TransitionControlView()
         {
             InitializeComponent();
         }

@@ -93,9 +93,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IEnumerable<ISymmetryOperation> GetOperations()
+        public IReadOnlyList<ISymmetryOperation> GetOperations()
         {
-            return BaseSymmetryOperations.AsEnumerable();
+            return BaseSymmetryOperations;
         }
 
         /// <summary>

@@ -4,10 +4,10 @@ using Mocassin.UI.GUI.Base.ViewModels;
 namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
-    ///     Generic base <see cref="ViewModelBase" /> for views that provide collection data for manipulation
+    ///     Generic base <see cref="ViewModelBase" /> for views that provide <see cref="ICollection{T}"/> interfaces
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class DataCollectionControlViewModel<T> : ViewModelBase
+    public class CollectionControlViewModel<T> : ViewModelBase
     {
         private T selectedCollectionItem;
         private ICollection<T> dataCollection;
@@ -28,6 +28,16 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         {
             get => selectedCollectionItem;
             set => SetProperty(ref selectedCollectionItem, value);
+        }
+
+        /// <summary>
+        ///     Set a new <see cref="ICollection{T}"/> for the view model
+        /// </summary>
+        /// <param name="collection"></param>
+        public void SetCollection(ICollection<T> collection)
+        {
+            DataCollection = collection;
+            SelectedCollectionItem = default;
         }
     }
 }

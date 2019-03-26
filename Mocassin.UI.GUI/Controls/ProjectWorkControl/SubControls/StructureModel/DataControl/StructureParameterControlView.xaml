@@ -31,8 +31,8 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="2*" />
+      <RowDefinition Height="3*" />
     </Grid.RowDefinitions>
     <DataGrid Grid.Row="0" Grid.Column="0"
               ColumnWidth="*"
@@ -44,7 +44,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Binding="{Binding Index}" Header="Number" />
         <DataGridTextColumn Binding="{Binding Literal}" Header="Name" />
-        <DataGridTextColumn Binding="{Binding Specifier}" Header="Specifier" />
+        <DataGridTextColumn Binding="{Binding Specifier}" Header="Info" />
         <DataGridTextColumn
           Binding="{Binding CrystalSystemIndex, Converter={converter:IndexToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}"
           Header="System" />
@@ -57,10 +57,23 @@
               VerticalScrollBarVisibility="Auto"
               ItemsSource="{Binding SelectedSpaceGroup.OperationLiterals}">
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding}" Header="Operations"/>
+        <DataGridTextColumn Binding="{Binding}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.SelectedSpaceGroup}">
+                <TextBlock Text="{Binding Literal, StringFormat=Selected {0}}"/>
+                <TextBlock Text=" "/>
+                <TextBlock Text="{Binding Index, StringFormat=({0})}"/>
+              </DockPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+        </DataGridTextColumn>
       </DataGrid.Columns>
     </DataGrid>
     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch">
+      <GroupBox Header="Structure Name">
+        <TextBox Text="{Binding StructureInfo.Name, UpdateSourceTrigger=PropertyChanged,Delay=500}"/>
+      </GroupBox>
       <Separator />
       <Grid DataContext="{Binding ParameterSetter}">
         <Grid.ColumnDefinitions>

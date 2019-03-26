@@ -12,7 +12,7 @@
   <Grid>
     <Menu FontSize="14">
       <MenuItem Header="Model Controls">
-        <MenuItem Header="New Particle Control">
+        <MenuItem Header="New Particle Control Tab">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -20,11 +20,19 @@
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
-        <MenuItem Header="New Structure Control">
+        <MenuItem Header="New Structure Control Tab">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
                                      CommandParameter="{x:Type tabCommands:AddStructureControlTabCommand}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </MenuItem>
+        <MenuItem Header="New Transition Control Tab">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddTransitionControlTabCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>

@@ -19,32 +19,41 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <summary>
         ///     The space group context provider
         /// </summary>
-        public ISqLiteContextProvider<SpaceGroupContext> ContextProvider { get; set; }
-
-        /// <summary>
-        ///     The currently loaded space group object
-        /// </summary>
-        public SpaceGroupEntity LoadedGroupEntity { get; set; }
+        public ISqLiteContextProvider<SpaceGroupContext> ContextProvider { get; }
 
         /// <inheritdoc />
-        public ISpaceGroup LoadedGroup => LoadedGroupEntity;
+        public bool HasDbConnection => ContextProvider != null;
+
+        /// <inheritdoc />
+        public ISpaceGroup LoadedGroup { get; protected set; }
 
         /// <summary>
         ///     The equality comparator which contains the almost equal information for the double vectors
         /// </summary>
-        public VectorComparer3D<Fractional3D> VectorComparer { get; set; }
+        public VectorComparer3D<Fractional3D> VectorComparer { get; }
 
         /// <inheritdoc />
         public IComparer<Fractional3D> Comparer => VectorComparer;
 
         /// <summary>
-        ///     Creates new space group service using the default space group context, database filepath and double comparer
+        ///     Creates new <see cref="SpaceGroupService"/> that uses the provided comparer and database file path
         /// </summary>
         /// <param name="dbFilepath"></param>
         /// <param name="comparer"></param>
         public SpaceGroupService(string dbFilepath, IComparer<double> comparer)
+            :this(comparer)
         {
+            if (dbFilepath == null) throw new ArgumentNullException(nameof(dbFilepath));
             ContextProvider = new SpaceGroupContextProvider(dbFilepath);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="SpaceGroupService"/> with the passed comparer that does not have a database connection
+        /// </summary>
+        /// <param name="comparer"></param>
+        public SpaceGroupService(IComparer<double> comparer)
+        {
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
             VectorComparer = new VectorComparer3D<Fractional3D>(comparer);
         }
 
@@ -74,6 +83,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool TryLoadGroup(Predicate<ISpaceGroup> searchPredicate)
         {
+            if (!HasDbConnection) return false;
+
             SpaceGroupEntity newGroup;
             using (var context = ContextProvider.CreateContext())
             {
@@ -82,13 +93,13 @@ namespace Mocassin.Symmetry.SpaceGroups
                     .Include(g => g.BaseSymmetryOperations)
                     .SingleOrDefault();
 
-                if (LoadedGroupEntity == null) 
-                    LoadedGroupEntity = newGroup;
+                if (LoadedGroup == null) 
+                    LoadedGroup = newGroup;
 
-                if (newGroup != null && !newGroup.GetGroupEntry().Equals(LoadedGroupEntity.GetGroupEntry()))
-                    LoadedGroupEntity = !newGroup.GetGroupEntry().Equals(LoadedGroupEntity.GetGroupEntry()) 
+                if (newGroup != null && !newGroup.GetGroupEntry().Equals(LoadedGroup.GetGroupEntry()))
+                    LoadedGroup = !newGroup.GetGroupEntry().Equals(LoadedGroup.GetGroupEntry()) 
                         ? newGroup 
-                        : LoadedGroupEntity;
+                        : LoadedGroup;
             }
 
             return newGroup != null;
@@ -97,22 +108,29 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool TryLoadGroup(SpaceGroupEntry groupEntry)
         {
-            if (groupEntry == null)
-                throw new ArgumentNullException(nameof(groupEntry));
+            if (!HasDbConnection) return false;
 
-            if (LoadedGroupEntity != null && groupEntry.Equals(LoadedGroupEntity.GetGroupEntry()))
-                return true;
+            if (groupEntry == null) throw new ArgumentNullException(nameof(groupEntry));
+
+            if (LoadedGroup != null && groupEntry.Equals(LoadedGroup.GetGroupEntry())) return true;
 
             return TryLoadGroup(group => group.Index == groupEntry.Index && group.Specifier == groupEntry.Specifier);
         }
 
         /// <inheritdoc />
+        public void LoadGroup(ISpaceGroup spaceGroup)
+        {
+            if (spaceGroup == null) throw new ArgumentNullException(nameof(spaceGroup));
+            if (LoadedGroup != spaceGroup) LoadedGroup = spaceGroup;
+        }
+
+        /// <inheritdoc />
         public CrystalSystem CreateCrystalSystem(ICrystalSystemSource source)
         {
-            if (LoadedGroupEntity == null)
+            if (LoadedGroup == null)
                 throw new InvalidObjectStateException("No space group loaded, cannot create crystal system");
 
-            return source.Create(LoadedGroupEntity);
+            return source.Create(LoadedGroup);
         }
 
         /// <inheritdoc />
@@ -166,8 +184,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         protected SetList<Fractional3D> CreatePositionSetList(Fractional3D vector)
         {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.GetOperations().Count);
+            foreach (var operation in LoadedGroup.GetOperations())
                 results.Add(operation.ApplyWithTrim(vector));
 
             results.List.TrimExcess();
@@ -183,8 +201,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         protected SetList<Fractional3D> CreatePositionSetList(double a, double b, double c)
         {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.GetOperations().Count);
+            foreach (var operation in LoadedGroup.GetOperations())
                 results.Add(operation.ApplyWithTrim(a, b, c));
 
             results.List.TrimExcess();
@@ -200,9 +218,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         protected SetList<TSource> CreatePositionSetList<TSource>(TSource vector) where TSource : struct, IFractional3D<TSource>
         {
             var results = new SetList<TSource>(VectorComparer.ToCompatibleComparer<TSource>(),
-                LoadedGroupEntity.BaseSymmetryOperations.Count);
+                LoadedGroup.GetOperations().Count);
 
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            foreach (var operation in LoadedGroup.GetOperations())
                 results.Add(operation.ApplyWithTrim(vector));
 
             results.List.TrimExcess();
@@ -228,7 +246,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
             var result = new SetList<Fractional3D[]>(comparer);
 
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            foreach (var operation in LoadedGroup.GetOperations())
                 result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray()));
 
             return result;
@@ -237,8 +255,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IList<Fractional3D[]> GetAllWyckoffSequences(IEnumerable<Fractional3D> refSequence)
         {
-            return LoadedGroupEntity.BaseSymmetryOperations
-                .Select(operation => refSequence.Select(vector => operation.ApplyUntrimmed(vector)).ToArray()).ToList();
+            return LoadedGroup.GetOperations()
+                .Select(operation => refSequence.Select(vector => operation.ApplyUntrimmed(vector)).ToArray())
+                .ToList();
         }
 
         /// <inheritdoc />
@@ -265,7 +284,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public ISymmetryOperation CreateOperationToTarget(in Fractional3D source, in Fractional3D target)
         {
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            foreach (var operation in LoadedGroup.GetOperations())
             {
                 var vector = operation.ApplyWithTrim(source, out var trimVector);
                 if (Comparer.Compare(vector, target) == 0) 
@@ -296,7 +315,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var operationComparer = Comparer<ISymmetryOperation>.Create((a, b) => string.Compare(a.Literal, b.Literal, StringComparison.Ordinal));
             var dictionary = new SortedDictionary<Fractional3D, SetList<ISymmetryOperation>>(VectorComparer);
 
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            foreach (var operation in LoadedGroup.GetOperations())
             {
                 var vector = operation.ApplyWithTrim(sourceVector);
                 if (!dictionary.ContainsKey(vector))
@@ -305,14 +324,14 @@ namespace Mocassin.Symmetry.SpaceGroups
                 dictionary[vector].Add(operation);
             }
 
-            return new WyckoffOperationDictionary(sourceVector, LoadedGroupEntity, dictionary);
+            return new WyckoffOperationDictionary(sourceVector, LoadedGroup, dictionary);
         }
 
         /// <inheritdoc />
         public IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection)
         {
-            var result = new List<ISymmetryOperation>(LoadedGroupEntity.BaseSymmetryOperations.Count);
-            foreach (var operation in LoadedGroupEntity.BaseSymmetryOperations)
+            var result = new List<ISymmetryOperation>(LoadedGroup.GetOperations().Count);
+            foreach (var operation in LoadedGroup.GetOperations())
             {
                 var untrimmedVector = operation.ApplyUntrimmed(sourceVector);
                 if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) != 0)

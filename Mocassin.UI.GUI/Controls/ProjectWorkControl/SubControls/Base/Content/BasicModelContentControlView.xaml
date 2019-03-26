@@ -21,7 +21,7 @@
       <RowDefinition Height="60*" />
     </Grid.RowDefinitions>
       <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1"
-                Header="Graph Selection" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                Header="Model Graph Selection" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
                   SelectedItem="{Binding SelectedProjectGraph}"
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -42,7 +42,7 @@
       <ContentPresenter Content="{Binding VisualizerContentControl}" 
                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </GroupBox>
-    <GroupBox Grid.Row="2" Grid.Column="1" Header="Control Information">
+    <GroupBox Grid.Row="2" Grid.Column="1" Header="Information">
       <ContentPresenter Content="{Binding InfoContentControl}" 
                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </GroupBox>

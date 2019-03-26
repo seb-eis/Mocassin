@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mocassin.UI.GUI"
         xmlns:projectStatusBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectStatusBar"
-        xmlns:tabs="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.Tabs"
         xmlns:projectMenuBar="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar"
         xmlns:projectConsole="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole"
         xmlns:projectBrowser="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser"
@@ -19,7 +18,7 @@
         Closing="MainWindow_OnClosing">
 
 
-  <Grid Margin="5,5,5,5" ShowGridLines="True">
+  <Grid Margin="5,5,5,5">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="80*" />
@@ -28,7 +27,7 @@
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="3*" />
+      <ColumnDefinition Width="4*" />
       <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
