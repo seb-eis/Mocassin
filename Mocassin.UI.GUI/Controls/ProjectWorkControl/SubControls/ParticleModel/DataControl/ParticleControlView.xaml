@@ -12,12 +12,17 @@
   Background="Transparent">
 
   <Grid>
-      <DataGrid ItemsSource="{Binding DataCollection}" 
+      <DataGrid Name="ParticleDataGrid" 
+                ItemsSource="{Binding DataCollection}" 
+                SelectedItem="{Binding SelectedCollectionItem}"
                 AutoGenerateColumns="True" 
                 ColumnWidth="*"
-                MouseMove="DataGrid_OnMouseMove" 
                 VerticalAlignment="Stretch" 
                 VerticalScrollBarVisibility="Auto"
-                Background="Transparent"/>
+                Background="Transparent"
+                PreviewMouseLeftButtonDown="ParticleDataGrid_OnPreviewMouseLeftButtonDown"
+                PreviewMouseLeftButtonUp="ParticleDataGrid_OnPreviewMouseLeftButtonUp"
+                PreviewMouseMove="ParticleDataGrid_OnPreviewMouseMove"/>
+
   </Grid>
 </UserControl>

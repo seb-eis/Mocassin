@@ -11,29 +11,35 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
+    <DataGrid Name="ExchangePairDataGrid"
+              ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               Background="Transparent"
               VerticalAlignment="Stretch"
               VerticalContentAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"
-              ColumnWidth="*">
+              ColumnWidth="*"
+              Sorting="ExchangePairDataGrid_OnSorting"
+              PreviewMouseLeftButtonDown="ExchangePairDataGrid_OnPreviewMouseLeftButtonDown"
+              PreviewMouseLeftButtonUp="ExchangePairDataGrid_OnPreviewMouseLeftButtonUp"
+              PreviewMouseMove="ExchangePairDataGrid_OnPreviewMouseMove">
 
       <DataGrid.Columns>
         <DataGridTextColumn Binding="{Binding Key}" Header="Key" />
         <DataGridTextColumn Binding="{Binding DisplayName}" Header="DisplayName" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
+        <comboBox:BindableDataGridComboBoxColumn Header="Acceptor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Key"
-                                                 SelectedValueBinding="{Binding AcceptorParticleKey}"/>
+                                                 SelectedValueBinding="{Binding AcceptorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Key"
-                                                 SelectedValueBinding="{Binding DonorParticleKey}"/>
+                                                 SelectedValueBinding="{Binding DonorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

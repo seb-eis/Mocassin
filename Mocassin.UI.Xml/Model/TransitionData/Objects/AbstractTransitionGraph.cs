@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// <summary>
         ///     Get the regex for the connector string
         /// </summary>
-        private static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
+        public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
 
         /// <summary>
         ///     Get or set a name for the abstract transition

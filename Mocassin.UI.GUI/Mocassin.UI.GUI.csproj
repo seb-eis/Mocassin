@@ -315,7 +315,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -348,6 +364,7 @@
     <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
     <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
+    <Compile Include="Base\DragHandler.cs" />
     <Compile Include="Base\Loading\AsyncWindowedBackgroundTask.cs" />
     <Compile Include="Base\Loading\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
@@ -455,6 +472,7 @@
       <DependentUpon>HostGraphModelObjectSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphGuestSelectionVmConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
       <DependentUpon>ParticleControlView.xaml</DependentUpon>
     </Compile>
@@ -490,10 +508,30 @@
       <DependentUpon>TransitionControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml.cs">
+      <DependentUpon>AbstractTransitionGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\AbstractTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml.cs">
+      <DependentUpon>ExchangeGroupGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangeGroupGridControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml.cs">
       <DependentUpon>ExchangePairGridControlView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml.cs">
+      <DependentUpon>KineticTransitionGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\KineticTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml.cs">
+      <DependentUpon>MetropolisTransitionGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\MetropolisTransitionGridControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlView.xaml.cs">
       <DependentUpon>TransitionModelControlView.xaml</DependentUpon>
     </Compile>

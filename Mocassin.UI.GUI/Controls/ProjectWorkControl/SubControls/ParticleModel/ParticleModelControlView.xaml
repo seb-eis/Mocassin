@@ -18,7 +18,17 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" Grid.Row="0" />
-    <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" Grid.Row="1" />
+
+    <GroupBox Grid.Row="0"
+              Header="Particle Definitions">
+
+      <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" />
+    </GroupBox>
+
+    <GroupBox Grid.Row="1"
+              Header="Occupation Definitions">
+
+      <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" />
+    </GroupBox>
   </Grid>
 </UserControl>

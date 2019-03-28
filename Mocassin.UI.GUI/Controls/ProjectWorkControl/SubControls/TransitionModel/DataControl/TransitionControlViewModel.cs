@@ -1,6 +1,7 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionModel.GridControl;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
 
@@ -15,10 +16,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; protected set; }
 
+        /// <summary>
+        ///     Get the <see cref="MetropolisTransitionGridControlViewModel " /> that controls metropolis transition definitions
+        /// </summary>
+        public MetropolisTransitionGridControlViewModel MetropolisTransitionGridViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="KineticTransitionGridControlViewModel" /> that controls kinetic transition definitions
+        /// </summary>
+        public KineticTransitionGridControlViewModel KineticTransitionGridViewModel { get; }
+
         /// <inheritdoc />
         public TransitionControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
+            MetropolisTransitionGridViewModel = new MetropolisTransitionGridControlViewModel();
+            KineticTransitionGridViewModel = new KineticTransitionGridControlViewModel();
         }
 
         /// <inheritdoc />
@@ -31,6 +44,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
+            MetropolisTransitionGridViewModel.ChangeContentSource(contentSource);
+            KineticTransitionGridViewModel.ChangeContentSource(contentSource);
         }
 
         /// <inheritdoc />

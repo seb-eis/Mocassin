@@ -58,7 +58,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
             if (BaseParticleOptions == null) yield break;
             foreach (var particleGraph in BaseParticleOptions)
             {
-                if (!CannotDefinePair(DataCollection, particleGraph.Key, SelectedCollectionItem?.AcceptorParticleKey))
+                if (!PairIsAlreadyDefined(DataCollection, particleGraph.Key, SelectedCollectionItem?.AcceptorParticleKey))
                     yield return particleGraph;
             }
         }
@@ -74,9 +74,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
             if (BaseParticleOptions == null) yield break;
             foreach (var particleGraph in BaseParticleOptions)
             {
-                if (!CannotDefinePair(DataCollection, SelectedCollectionItem?.DonorParticleKey, particleGraph.Key))
+                if (!PairIsAlreadyDefined(DataCollection, SelectedCollectionItem?.DonorParticleKey, particleGraph.Key))
                     yield return particleGraph;
             }
+
+            yield return ParticleGraph.VoidParticle;
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         /// <param name="donorKey"></param>
         /// <param name="acceptorKey"></param>
         /// <returns></returns>
-        private bool CannotDefinePair(ICollection<StateExchangePairGraph> defined, string donorKey, string acceptorKey)
+        private bool PairIsAlreadyDefined(ICollection<StateExchangePairGraph> defined, string donorKey, string acceptorKey)
         {
             return donorKey == acceptorKey 
                    || defined != null && defined

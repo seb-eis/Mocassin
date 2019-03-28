@@ -21,13 +21,21 @@ namespace Mocassin.UI.Xml.Base
         public string Key { get; set; }
 
         /// <summary>
+        ///     Creates a new <see cref="ModelObjectGraph"/> with a unique object key
+        /// </summary>
+        protected ModelObjectGraph()
+        {
+            Key = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
         ///     Get the input <see cref="ModelObject" /> for the automated data input system of the model management
         /// </summary>
         /// <returns></returns>
         public ModelObject GetInputObject()
         {
             var obj = GetModelObjectInternal();
-            obj.Key = Key;
+            obj.Key = Key ?? Guid.NewGuid().ToString();
             obj.Index = -1;
             return obj;
         }
@@ -37,5 +45,13 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         /// <returns></returns>
         protected abstract ModelObject GetModelObjectInternal();
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.IsNullOrWhiteSpace(DisplayName) 
+                ? $"[{Key}]" 
+                : DisplayName;
+        }
     }
 }

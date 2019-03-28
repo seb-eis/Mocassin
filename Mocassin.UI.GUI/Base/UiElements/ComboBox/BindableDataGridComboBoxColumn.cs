@@ -32,8 +32,8 @@ namespace Mocassin.UI.GUI.Base.UiElements.ComboBox
         /// <param name="element"></param>
         private void CopyItemsSource(FrameworkElement element)
         {
-            var binding = BindingOperations.GetBinding(this, ItemsControl.ItemsSourceProperty) 
-                          ?? throw new InvalidOperationException("Binding is null");
+            var binding = BindingOperations.GetBinding(this, ItemsControl.ItemsSourceProperty);
+            if (binding == null) return;
 
             BindingOperations.SetBinding(element, ItemsControl.ItemsSourceProperty, binding);
         }

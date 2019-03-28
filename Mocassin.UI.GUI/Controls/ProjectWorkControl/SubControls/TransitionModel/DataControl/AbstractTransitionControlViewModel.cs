@@ -18,15 +18,30 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <summary>
-        ///     Get the <see cref="ExchangePairGridControlViewModel"/> that controls the collection of <see cref="StateExchangePairGraph"/>
+        ///     Get the <see cref="ExchangePairGridControlViewModel" /> that controls the collection of
+        ///     <see cref="StateExchangePairGraph" /> instances
         /// </summary>
-        public ExchangePairGridControlViewModel ExchangePairControlViewModel { get; }
+        public ExchangePairGridControlViewModel ExchangePairGridViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ExchangeGroupGridControlViewModel" /> that controls the collection of
+        ///     <see cref="StateExchangeGroupGraph" /> instances
+        /// </summary>
+        public ExchangeGroupGridControlViewModel ExchangeGroupGridViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="AbstractTransitionGridControlViewModel" /> that controls the collection of
+        ///     <see cref="AbstractTransitionGraph" /> instances
+        /// </summary>
+        public AbstractTransitionGridControlViewModel AbstractTransitionGridViewModel { get; }
 
         /// <inheritdoc />
         public AbstractTransitionControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            ExchangePairControlViewModel = new ExchangePairGridControlViewModel();
+            ExchangePairGridViewModel = new ExchangePairGridControlViewModel();
+            ExchangeGroupGridViewModel = new ExchangeGroupGridControlViewModel();
+            AbstractTransitionGridViewModel = new AbstractTransitionGridControlViewModel();
         }
 
         /// <inheritdoc />
@@ -39,7 +54,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            ExchangePairControlViewModel.ChangeContentSource(contentSource);
+            ExchangePairGridViewModel.ChangeContentSource(contentSource);
+            ExchangeGroupGridViewModel.ChangeContentSource(contentSource);
+            AbstractTransitionGridViewModel.ChangeContentSource(contentSource);
         }
 
         /// <inheritdoc />

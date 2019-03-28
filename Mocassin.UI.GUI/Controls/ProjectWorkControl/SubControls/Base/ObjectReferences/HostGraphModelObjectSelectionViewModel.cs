@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using Mocassin.Model.Basic;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -15,11 +14,13 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridControl
 {
     /// <summary>
-    ///     Base <see cref="ViewModelBase"/> for types that control grid data manipulation of <see cref="ModelObjectReferenceGraph{T}" /> collection selections for a hosting <see cref="ModelObjectGraph"/>
+    ///     Base <see cref="ViewModelBase" /> for types that control grid data manipulation of
+    ///     <see cref="ModelObjectReferenceGraph{T}" /> collection selections for a hosting <see cref="ModelObjectGraph" />
     /// </summary>
     /// <typeparam name="TModelObject"></typeparam>
     /// <typeparam name="TObjectGraph"></typeparam>
-    public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> : CollectionControlViewModel<ModelObjectReferenceGraph<TModelObject>>,
+    public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> :
+        CollectionControlViewModel<ModelObjectReferenceGraph<TModelObject>>,
         IContentSupplier<MocassinProjectGraph>,
         IObjectDropAcceptor
         where TModelObject : ModelObject, new()
@@ -39,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
         public bool IsDuplicateFiltered { get; }
 
         /// <summary>
-        ///     Get the hosting <see cref="TObjectGraph"/>
+        ///     Get the hosting <see cref="TObjectGraph" />
         /// </summary>
         public TObjectGraph HostObject { get; }
 
@@ -99,6 +100,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
             ContentSource = contentSource;
             ReferenceObjectGraphs = GetSourceCollection(ContentSource);
             DataCollection = GetTargetCollection(HostObject);
+            SelectionBackup = null;
         }
 
         /// <inheritdoc />
@@ -124,7 +126,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
         protected abstract ICollection<ModelObjectReferenceGraph<TModelObject>> GetTargetCollection(TObjectGraph sourceObject);
 
         /// <summary>
-        ///     Get a <see cref="Command{T}"/> to add an
+        ///     Get a <see cref="Command{T}" /> to add a <see cref="TGraph" /> reference from a <see cref="IDataObject" /> drop to
+        ///     the host collection
         /// </summary>
         /// <returns></returns>
         public Command<IDataObject> GetDropAddObjectCommand<TGraph>() where TGraph : ModelObjectGraph
@@ -138,10 +141,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
             bool CanExecute(IDataObject obj)
             {
                 return obj.GetData(typeof(TGraph)) is TGraph graph
+                       && !GetDropRejectPredicates().Any(predicate => predicate.Invoke(obj))
                        && (!IsDuplicateFiltered || GetTargetCollection(HostObject).All(x => x.Key != graph.Key));
             }
 
             return new RelayCommand<IDataObject>(Execute, CanExecute);
+        }
+
+        /// <summary>
+        ///     Get an <see cref="IEnumerable{T}"/> of additional rejection <see cref="Predicate{T}"/> instances for a drop object
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IEnumerable<Predicate<IDataObject>> GetDropRejectPredicates()
+        {
+            yield break;
         }
     }
 }

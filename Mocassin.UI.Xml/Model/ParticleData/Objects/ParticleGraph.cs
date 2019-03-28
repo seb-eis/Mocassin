@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
@@ -13,6 +12,11 @@ namespace Mocassin.UI.Xml.ParticleModel
     [XmlRoot("Particle")]
     public class ParticleGraph : ModelObjectGraph
     {
+        /// <summary>
+        ///     Get the <see cref="ParticleGraph" /> equivalent to the model <see cref="Particle" /> that represents the void state
+        /// </summary>
+        public static readonly ParticleGraph VoidParticle = new ParticleGraph {Key = Particle.CreateEmpty().Key};
+
         /// <summary>
         ///     Get or set the charge value of the particle as a string
         /// </summary>

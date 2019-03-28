@@ -12,9 +12,15 @@
   d:DesignHeight="450" d:DesignWidth="800">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}" AutoGenerateColumns="False" ColumnWidth="*"
+    <DataGrid ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              AutoGenerateColumns="False" 
+              ColumnWidth="*"
               AllowDrop="True"
+              GridLinesVisibility="None"
+              VerticalScrollBarVisibility="Auto"
               Drop="DataGrid_OnDrop">
+
       <DataGrid.Columns>
         <DataGridTemplateColumn>
           <DataGridTemplateColumn.CellTemplate>

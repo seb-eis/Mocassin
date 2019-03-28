@@ -21,10 +21,16 @@
               ColumnWidth="*"
               SelectedItem="{Binding SelectedCollectionItem}"
               VerticalAlignment="Stretch"
-              VerticalScrollBarVisibility="Auto" Background="Transparent">
+              VerticalScrollBarVisibility="Auto" 
+              Background="Transparent">
+
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Key" Binding="{Binding Key}"/>
-        <DataGridTextColumn Header="Display Name" Binding="{Binding DisplayName}" />
+        <DataGridTextColumn Header="Key" 
+                            Binding="{Binding Key}"/>
+
+        <DataGridTextColumn Header="Display Name" 
+                            Binding="{Binding DisplayName}" />
+
         <DataGridTemplateColumn Header="Particles">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type particleModel:ParticleSetGraph}">

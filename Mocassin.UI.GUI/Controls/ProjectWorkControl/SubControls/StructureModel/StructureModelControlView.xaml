@@ -15,7 +15,17 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" Grid.Row="0" />
-    <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" Grid.Row="1" />
+
+    <GroupBox Grid.Row="0"
+              Header="Unit Cell Geometry">
+
+      <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" />
+    </GroupBox>
+
+    <GroupBox Grid.Row="1"
+              Header="Wyckoff Positions">
+
+      <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" />
+    </GroupBox>
   </Grid>
 </UserControl>
