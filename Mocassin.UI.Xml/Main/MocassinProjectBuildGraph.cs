@@ -25,12 +25,6 @@ namespace Mocassin.UI.Xml.Main
         }
 
         /// <summary>
-        ///     Get or set a name for the <see cref="MocassinProjectBuildGraph" />
-        /// </summary>
-        [XmlAttribute("Name")]
-        public string Name { get; set; }
-
-        /// <summary>
         ///     Get or set the <see cref="Mocassin.UI.Xml.Model.ProjectModelGraph" />
         /// </summary>
         [XmlElement("ProjectModelGraph")]

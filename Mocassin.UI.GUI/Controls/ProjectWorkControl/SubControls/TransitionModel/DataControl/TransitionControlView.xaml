@@ -12,20 +12,26 @@
   Background="Transparent">
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition
+        Width="*" />
+      <ColumnDefinition
+        Width="*" />
     </Grid.ColumnDefinitions>
 
-    <GroupBox Grid.Column="0"
-              Header="Metropolis Transitions">
+    <GroupBox
+      Grid.Column="0"
+      Header="Metropolis Transitions">
 
-      <gridControl:MetropolisTransitionGridControlView DataContext="{Binding MetropolisTransitionGridViewModel}"/>
+      <gridControl:MetropolisTransitionGridControlView
+        DataContext="{Binding MetropolisTransitionGridViewModel}" />
     </GroupBox>
 
-    <GroupBox Grid.Column="1"
-              Header="Kinetic Transitions">
+    <GroupBox
+      Grid.Column="1"
+      Header="Kinetic Transitions">
 
-      <gridControl:KineticTransitionGridControlView DataContext="{Binding KineticTransitionGridViewModel}"/>
+      <gridControl:KineticTransitionGridControlView
+        DataContext="{Binding KineticTransitionGridViewModel}" />
     </GroupBox>
 
   </Grid>

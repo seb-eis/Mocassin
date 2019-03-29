@@ -24,10 +24,11 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name"
-                            Binding="{Binding DisplayName}" />
+                            Binding="{Binding Name}" />
         <comboBox:BindableDataGridComboBoxColumn Header="Abstract"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
                                                  SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
+                                                 DisplayMemberPath="Name"
                                                  SelectedValuePath="Key"/>
 
         <DataGridTemplateColumn Header="Geometry (A,B,C)">

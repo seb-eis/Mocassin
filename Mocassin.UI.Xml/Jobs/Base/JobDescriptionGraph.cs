@@ -146,7 +146,7 @@ namespace Mocassin.UI.Xml.Jobs
             {
                 timeLimit = XmlConvert.ToTimeSpan(s);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 timeLimit = TimeSpan.FromHours(defaultHours);
             }

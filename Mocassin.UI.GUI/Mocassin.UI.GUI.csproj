@@ -283,6 +283,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -473,6 +481,14 @@
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphGuestSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlView.xaml.cs">
+      <DependentUpon>EnergyParameterControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlView.xaml.cs">
+      <DependentUpon>EnergyModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
       <DependentUpon>ParticleControlView.xaml</DependentUpon>
     </Compile>
@@ -579,7 +595,9 @@
   <ItemGroup>
     <Folder Include="Base\Adapter\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\VisualControl\" />

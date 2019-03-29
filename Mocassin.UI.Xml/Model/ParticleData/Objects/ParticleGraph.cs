@@ -15,7 +15,7 @@ namespace Mocassin.UI.Xml.ParticleModel
         /// <summary>
         ///     Get the <see cref="ParticleGraph" /> equivalent to the model <see cref="Particle" /> that represents the void state
         /// </summary>
-        public static readonly ParticleGraph VoidParticle = new ParticleGraph {Key = Particle.CreateEmpty().Key};
+        public static readonly ParticleGraph VoidParticle = new ParticleGraph {Key = Particle.CreateEmpty().Key, Name = "Void"};
 
         /// <summary>
         ///     Get or set the charge value of the particle as a string
@@ -23,13 +23,6 @@ namespace Mocassin.UI.Xml.ParticleModel
         [XmlAttribute("Charge")]
         [JsonProperty("Charge")]
         public double Charge { get; set; }
-
-        /// <summary>
-        ///     Get or set the name of the particle
-        /// </summary>
-        [XmlAttribute("Name")]
-        [JsonProperty("Name")]
-        public string Name { get; set; }
 
         /// <summary>
         ///     Get or set the symbol of the particle

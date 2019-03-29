@@ -12,12 +12,6 @@ namespace Mocassin.UI.Xml.StructureModel
     public class StructureInfoGraph : ModelParameterGraph
     {
         /// <summary>
-        ///     The name of the structure
-        /// </summary>
-        [XmlAttribute("Name")]
-        public string Name { get; set; }
-
-        /// <summary>
         ///     Creates new default <see cref="StructureInfoGraph"/>
         /// </summary>
         public StructureInfoGraph()

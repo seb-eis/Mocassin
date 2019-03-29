@@ -135,14 +135,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
             void Execute(IDataObject obj)
             {
                 if (!(obj.GetData(typeof(TGraph)) is TGraph graph)) return;
-                DataCollection.Add(new ModelObjectReferenceGraph<TModelObject> {Key = graph.Key});
+                DataCollection.Add(new ModelObjectReferenceGraph<TModelObject> {Key = graph.Key, TargetGraph = graph});
             }
 
             bool CanExecute(IDataObject obj)
             {
-                return obj.GetData(typeof(TGraph)) is TGraph graph
-                       && !GetDropRejectPredicates().Any(predicate => predicate.Invoke(obj))
-                       && (!IsDuplicateFiltered || GetTargetCollection(HostObject).All(x => x.Key != graph.Key));
+                if (!(obj.GetData(typeof(TGraph)) is TGraph graph)) return false;
+                var result = !GetDropRejectPredicates().Any(predicate => predicate.Invoke(obj));
+                result &=  !IsDuplicateFiltered || GetTargetCollection(HostObject).All(x => x.Key != graph.Key);
+                return result;
             }
 
             return new RelayCommand<IDataObject>(Execute, CanExecute);

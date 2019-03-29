@@ -23,11 +23,8 @@
               ColumnWidth="*">
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Key"
-                            Binding="{Binding Key}" />
-
-        <DataGridTextColumn Header="Display Name"
-                            Binding="{Binding DisplayName}" />
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
 
         <DataGridTextColumn Header="Connection"
                             Binding="{Binding ConnectorString}">
@@ -49,7 +46,7 @@
         <DataGridCheckBoxColumn Header="Association"
                                 Binding="{Binding IsAssociation}"/>
 
-        <DataGridTemplateColumn Header="Exchange Group">
+        <DataGridTemplateColumn Header="Exchange Groups">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionGraph}">
               <gridControl:HostGraphModelObjectSelectionView>

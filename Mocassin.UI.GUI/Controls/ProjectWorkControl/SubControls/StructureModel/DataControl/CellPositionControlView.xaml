@@ -35,27 +35,43 @@
 
       <DataGrid.RowDetailsTemplate>
         <DataTemplate>
-          <ListView ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectedVectorExpansion}"
-                    VerticalContentAlignment="Stretch" MaxHeight="100"
-                    Background="Transparent">
+          <DataGrid
+            ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectedVectorExpansion}"
+            VerticalContentAlignment="Stretch"
+            MaxHeight="100"
+            Background="Transparent"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            ColumnWidth="*"
+            VerticalScrollBarVisibility="Auto"
+            GridLinesVisibility="None">
 
-            <ListView.View>
-              <GridView>
-                <GridViewColumn Header="A" DisplayMemberBinding="{Binding A}" />
-                <GridViewColumn Header="B" DisplayMemberBinding="{Binding B}" />
-                <GridViewColumn Header="C" DisplayMemberBinding="{Binding C}" />
-              </GridView>
-            </ListView.View>
-          </ListView>
+            <DataGrid.Columns>
+              <DataGridTextColumn Binding="{Binding A}"
+                                  Width="Auto" />
+
+              <DataGridTextColumn Binding="{Binding B}"
+                                  Width="Auto" />
+
+              <DataGridTextColumn Binding="{Binding C}"
+                                  Width="Auto" />
+            </DataGrid.Columns>
+          </DataGrid>
         </DataTemplate>
       </DataGrid.RowDetailsTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Key" Binding="{Binding Key}" />
-        <DataGridTextColumn Header="DisplayName" Binding="{Binding DisplayName}" />
-        <DataGridTextColumn Header="A" Binding="{Binding A}" />
-        <DataGridTextColumn Header="B" Binding="{Binding B}" />
-        <DataGridTextColumn Header="C" Binding="{Binding C}" />
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
+
+        <DataGridTextColumn Header="A"
+                            Binding="{Binding A}" />
+
+        <DataGridTextColumn Header="B"
+                            Binding="{Binding B}" />
+
+        <DataGridTextColumn Header="C"
+                            Binding="{Binding C}" />
 
         <DataGridComboBoxColumn Header="Stability"
                                 ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
@@ -64,8 +80,8 @@
         <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.OccupationSetOptions}"
                                                  SelectedValuePath="Key"
-                                                 DisplayMemberPath="Key"
-                                                 SelectedValueBinding="{Binding OccupationKey}"/>
+                                                 DisplayMemberPath="Name"
+                                                 SelectedValueBinding="{Binding OccupationKey}" />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

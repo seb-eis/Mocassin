@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Mocassin.Framework.Collections;
+using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
@@ -43,7 +47,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         /// <returns></returns>
         public IEnumerable<AbstractTransitionGraph> GetAbstractOptions(KineticTransitionGraph current)
         {
-            return ContentSource?.ProjectModelGraph?.TransitionModelGraph?.AbstractTransitions;
+            return ContentSource?.ProjectModelGraph?.TransitionModelGraph
+                ?.AbstractTransitions.Where(x => x.StateExchangeGroups.Count > 2);
         }
     }
 }

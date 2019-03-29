@@ -21,12 +21,6 @@ namespace Mocassin.UI.Xml.TransitionModel
         public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
 
         /// <summary>
-        ///     Get or set a name for the abstract transition
-        /// </summary>
-        [XmlAttribute("Name")]
-        public string Name { get; set; }
-
-        /// <summary>
         ///     Get or set the association/dissociation flag that enables this behavior
         /// </summary>
         [XmlAttribute("IsAssociation")]

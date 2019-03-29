@@ -26,19 +26,19 @@
               PreviewMouseMove="ExchangePairDataGrid_OnPreviewMouseMove">
 
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding Key}" Header="Key" />
-        <DataGridTextColumn Binding="{Binding DisplayName}" Header="DisplayName" />
+        <DataGridTextColumn Binding="{Binding Name}" 
+                            Header="Name" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Acceptor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
                                                  SelectedValuePath="Key"
-                                                 DisplayMemberPath="Key"
+                                                 DisplayMemberPath="Name"
                                                  SelectedValueBinding="{Binding AcceptorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
                                                  SelectedValuePath="Key"
-                                                 DisplayMemberPath="Key"
+                                                 DisplayMemberPath="Name"
                                                  SelectedValueBinding="{Binding DonorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
       </DataGrid.Columns>
     </DataGrid>

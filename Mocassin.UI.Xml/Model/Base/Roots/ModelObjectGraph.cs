@@ -49,9 +49,9 @@ namespace Mocassin.UI.Xml.Base
         /// <inheritdoc />
         public override string ToString()
         {
-            return string.IsNullOrWhiteSpace(DisplayName) 
+            return string.IsNullOrWhiteSpace(Name) 
                 ? $"[{Key}]" 
-                : DisplayName;
+                : Name;
         }
     }
 }

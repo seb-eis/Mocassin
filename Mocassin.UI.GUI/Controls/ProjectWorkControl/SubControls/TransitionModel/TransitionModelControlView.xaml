@@ -12,15 +12,21 @@
   Background="Transparent">
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="3*" />
-      <RowDefinition Height="2*" />
+      <RowDefinition
+        Height="3*" />
+
+      <RowDefinition
+        Height="2*" />
+
     </Grid.RowDefinitions>
 
-    <dataControl:AbstractTransitionControlView Grid.Row="0"
-                                               DataContext="{Binding AbstractTransitionControlViewModel}" />
+    <dataControl:AbstractTransitionControlView
+      Grid.Row="0"
+      DataContext="{Binding AbstractTransitionControlViewModel}" />
 
-    <dataControl:TransitionControlView Grid.Row="1" 
-                                       DataContext="{Binding TransitionControlViewModel}" />
+    <dataControl:TransitionControlView
+      Grid.Row="1"
+      DataContext="{Binding TransitionControlViewModel}" />
 
   </Grid>
 </UserControl>

@@ -14,12 +14,6 @@ namespace Mocassin.UI.Xml.SimulationModel
     public abstract class SimulationBaseGraph : ModelObjectGraph
     {
         /// <summary>
-        ///     Get or set the name of the simulation
-        /// </summary>
-        [XmlAttribute("Name")]
-        public string Name { get; set; }
-
-        /// <summary>
         ///     Get or set the custom rng seed for the simulation
         /// </summary>
         [XmlAttribute("RngSeed")]
@@ -70,7 +64,7 @@ namespace Mocassin.UI.Xml.SimulationModel
                 {
                     timeLimit = XmlConvert.ToTimeSpan(SaveRunTimeLimit);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     timeLimit = TimeSpan.FromHours(24);
                 }

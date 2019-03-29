@@ -60,7 +60,7 @@ namespace Mocassin.UI.Xml.StructureModel
             {
                 return new SpaceGroupEntry(Number, Literal ?? "", Specifier ?? "None");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return SpaceGroupEntry.CreateDefault();
             }
