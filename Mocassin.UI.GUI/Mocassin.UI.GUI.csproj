@@ -287,7 +287,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\GroupInteractionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -435,6 +451,7 @@
       <DependentUpon>MessageConsoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddEnergyControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddTransitionControlTabCommand.cs" />
@@ -485,10 +502,27 @@
       <DependentUpon>EnergyParameterControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\GroupInteractionControlView.xaml.cs">
+      <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\GroupInteractionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml.cs">
+      <DependentUpon>UnstableEnvironmentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\UnstableEnvironmentControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlView.xaml.cs">
       <DependentUpon>EnergyModelControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\Adapter\UnstableEnvironmentInteractionFilterVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml.cs">
+      <DependentUpon>UnstableEnvironmentGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\UnstableEnvironmentGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml.cs">
+      <DependentUpon>InteractionFilterGridControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\InteractionFilterGridControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
       <DependentUpon>ParticleControlView.xaml</DependentUpon>
     </Compile>
@@ -595,7 +629,6 @@
   <ItemGroup>
     <Folder Include="Base\Adapter\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />

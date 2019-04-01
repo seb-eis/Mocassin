@@ -5,6 +5,7 @@ using Mocassin.Model.Basic;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Structures;
 using Mocassin.UI.Xml.Base;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.EnergyModel
 {

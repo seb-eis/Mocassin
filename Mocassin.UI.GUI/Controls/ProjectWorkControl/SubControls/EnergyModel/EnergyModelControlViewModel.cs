@@ -1,5 +1,4 @@
-﻿using System;
-using Mocassin.UI.GUI.Base.DataContext;
+﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.DataControl;
@@ -17,15 +16,27 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel
         public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <summary>
-        ///     Get the <see cref="EnergyParameterControlViewModel"/> that controls the stable environment settings
+        ///     Get the <see cref="EnergyParameterControlViewModel" /> that controls the stable environment settings
         /// </summary>
         public EnergyParameterControlViewModel ParameterControlViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="UnstableEnvironmentControlViewModel" /> that controls the unstable environment instances
+        /// </summary>
+        public UnstableEnvironmentControlViewModel UnstableEnvironmentViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="GroupInteractionControlViewModel" /> that controls the interaction group instances
+        /// </summary>
+        public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
 
         /// <inheritdoc />
         public EnergyModelControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            ParameterControlViewModel = new EnergyParameterControlViewModel();
+            ParameterControlViewModel = new EnergyParameterControlViewModel(projectControl);
+            UnstableEnvironmentViewModel = new UnstableEnvironmentControlViewModel(projectControl);
+            GroupInteractionViewModel = new GroupInteractionControlViewModel();
         }
 
         /// <inheritdoc />
@@ -38,6 +49,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
+            ParameterControlViewModel.ChangeContentSource(contentSource);
+            UnstableEnvironmentViewModel.ChangeContentSource(contentSource);
+            GroupInteractionViewModel.ChangeContentSource(contentSource);
         }
     }
 }

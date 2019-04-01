@@ -5,6 +5,8 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.DataControl"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.GridControl"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:EnergyParameterControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800">
@@ -13,41 +15,27 @@
       <ColumnDefinition
         Width="1*" />
       <ColumnDefinition
-        Width="2*" />
+        Width="3*" />
     </Grid.ColumnDefinitions>
 
     <GroupBox
       Grid.Column="0"
-      Header="Interaction Radius">
-      <TextBox 
-        Text="{Binding InteractionRadius, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
+      Header="Interaction Radius [Ang]"
+      Height="Auto"
+      VerticalAlignment="Top">
+
+      <TextBox
+        Text="{Binding InteractionRadius, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+
     </GroupBox>
+
     <GroupBox
       Grid.Column="1"
       Header="Interaction Filters">
 
-      <DataGrid
-        Name="InteractionFilterDataGrid"
-        ItemsSource="{Binding DataCollection}"
-        SelectedItem="{Binding SelectedCollectionItem}"
-        VerticalAlignment="Stretch"
-        VerticalContentAlignment="Stretch"
-        VerticalScrollBarVisibility="Auto"
-        AutoGenerateColumns="False"
-        ColumnWidth="*">
+      <gridControl:InteractionFilterGridControlView
+        DataContext="{Binding InteractionFilterGridViewModel}" />
 
-        <DataGrid.Columns>
-          <DataGridTextColumn
-            Header="Name"
-            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
-          <DataGridTextColumn
-            Header="From Radius [Ang]"
-            Binding="{Binding StartRadius, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
-          <DataGridTextColumn
-            Header="End Radius [Ang]"
-            Binding="{Binding EndRadius, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
-        </DataGrid.Columns>
-      </DataGrid>
     </GroupBox>
   </Grid>
 </UserControl>

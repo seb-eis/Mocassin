@@ -13,16 +13,32 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition
-        Height="*" />
+        Height="2*" />
       <RowDefinition
-        Height="*" />
+        Height="3*" />
+      <RowDefinition
+        Height="3*" />
     </Grid.RowDefinitions>
 
     <GroupBox
       Grid.Row="0"
-      Header="Stable Environment">
-      <dataControl:EnergyParameterControlView 
-        DataContext="{Binding ParameterControlViewModel}"/>
+      Header="Stable Environments">
+      <dataControl:EnergyParameterControlView
+        DataContext="{Binding ParameterControlViewModel}" />
+    </GroupBox>
+
+    <GroupBox
+      Grid.Row="1"
+      Header="Unstable Environments">
+      <dataControl:UnstableEnvironmentControlView
+        DataContext="{Binding UnstableEnvironmentViewModel}" />
+    </GroupBox>
+
+    <GroupBox
+      Grid.Row="2"
+      Header="Interaction Groups">
+      <dataControl:GroupInteractionControlView
+        DataContext="{Binding GroupInteractionViewModel}" />
     </GroupBox>
   </Grid>
 </UserControl>

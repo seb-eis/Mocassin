@@ -34,7 +34,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         ///     Set a new <see cref="ICollection{T}"/> for the view model
         /// </summary>
         /// <param name="collection"></param>
-        public void SetCollection(ICollection<T> collection)
+        public virtual void SetCollection(ICollection<T> collection)
         {
             DataCollection = collection;
             SelectedCollectionItem = default;

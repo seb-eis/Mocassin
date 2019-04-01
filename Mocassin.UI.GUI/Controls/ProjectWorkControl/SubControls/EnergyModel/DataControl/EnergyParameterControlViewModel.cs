@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Mocassin.Model.Structures;
+﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.GridControl;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.EnergyModel;
 using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.DataControl
 {
@@ -14,19 +12,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.Da
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="InteractionFilterGraph" /> and radius definitions
     ///     of the stable environment
     /// </summary>
-    public class EnergyParameterControlViewModel : CollectionControlViewModel<InteractionFilterGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class EnergyParameterControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
     {
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <summary>
-        ///     Get the <see cref="StableEnvironmentGraph"/> of the currently < set <see cref="MocassinProjectGraph"/>
+        ///     Get the <see cref="InteractionFilterGridControlViewModel" /> that controls the affiliated
+        ///     <see cref="InteractionFilterGraph" /> instances
+        /// </summary>
+        public InteractionFilterGridControlViewModel InteractionFilterGridViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="StableEnvironmentGraph" /> of the currently < set <see cref="MocassinProjectGraph" />
         /// </summary>
         public StableEnvironmentGraph Environment => ContentSource?.ProjectModelGraph?.EnergyModelGraph?.StableEnvironment;
 
         /// <summary>
-        ///     Get or set the interaction radius of the currently set <see cref="StableEnvironmentGraph"/> in [Ang]
+        ///     Get or set the interaction radius of the currently set <see cref="StableEnvironmentGraph" /> in [Ang]
         /// </summary>
         public double InteractionRadius
         {
@@ -40,6 +43,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.Da
         }
 
         /// <inheritdoc />
+        public EnergyParameterControlViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
+        {
+            InteractionFilterGridViewModel = new InteractionFilterGridControlViewModel(true);
+        }
+
+        /// <inheritdoc />
         public void ChangeContentSource(object contentSource)
         {
             if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
@@ -49,13 +59,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel.Da
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.EnergyModelGraph?.StableEnvironment?.InteractionFilters);
-        }
-
-        public IEnumerable<UnitCellPositionGraph> GetFilterWyckoffOptions(InteractionFilterGraph current)
-        {
-            return ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions
-                ?.Where(x => x.PositionStatus == PositionStatus.Stable);
+            InteractionFilterGridViewModel.ChangeContentSource(contentSource);
+            InteractionFilterGridViewModel.SetCollection(Environment?.InteractionFilters);
+            OnPropertyChanged(nameof(InteractionRadius));
         }
     }
 }
