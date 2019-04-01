@@ -19,25 +19,25 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// Get or set the pre-run mcsp for normalization and relaxation of the lattice
         /// </summary>
         [XmlAttribute("PrerunMcsp")]
-        public int PreRunMcsp;
+        public int PreRunMcsp { get; set; } = 100;
 
         /// <summary>
         ///     Get or set a custom normalization probability for the simulation
         /// </summary>
         [XmlAttribute("NormalizationProbability")]
-        public double NormalizationProbability { get; set; }
+        public double NormalizationProbability { get; set; } = 1.0;
 
         /// <summary>
         ///     Get or set the electric field magnitude in [V/m]
         /// </summary>
         [XmlAttribute("ElectricFieldModulus")]
-        public double ElectricFieldMagnitude { get; set; }
+        public double ElectricFieldMagnitude { get; set; } = 100e6;
 
         /// <summary>
         ///     Get or set the electric field direction vector in fractional coordinates
         /// </summary>
         [XmlElement("ElectricFieldVector")]
-        public VectorGraph3D ElectricFieldVector { get; set; }
+        public VectorGraph3D ElectricFieldVector { get; set; } = new VectorGraph3D {A = 1};
 
         /// <summary>
         ///     Get or set the list of active kinetic transitions in this kinetic simulation
@@ -52,8 +52,6 @@ namespace Mocassin.UI.Xml.SimulationModel
         public KineticSimulationGraph()
         {
             Transitions = new List<ModelObjectReferenceGraph<KineticTransition>>();
-            ElectricFieldVector = new VectorGraph3D {A = 1};
-            NormalizationProbability = 1.0;
         }
 
         /// <inheritdoc />

@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.SimulationModel
 {
@@ -18,25 +17,25 @@ namespace Mocassin.UI.Xml.SimulationModel
         ///     Get or set the relative break tolerance value
         /// </summary>
         [XmlAttribute("BreakTolerance")]
-        public double RelativeBreakTolerance { get; set; }
+        public double RelativeBreakTolerance { get; set; } = 0.0001;
 
         /// <summary>
         ///     Get or set the sample length for the break
         /// </summary>
         [XmlAttribute("BreakSampleLength")]
-        public int BreakSampleLength { get; set; }
+        public int BreakSampleLength { get; set; } = 1000;
 
         /// <summary>
         ///     Get or set the sample interval for the break
         /// </summary>
         [XmlAttribute("BreakSampleInterval")]
-        public int BreakSampleIntervalMcs { get; set; }
+        public int BreakSampleIntervalMcs { get; set; } = 100;
 
         /// <summary>
         ///     Get or set the result sample mcs
         /// </summary>
         [XmlAttribute("ResultSampleMcs")]
-        public int ResultSampleMcs { get; set; }
+        public int ResultSampleMcs { get; set; } = 200;
 
         /// <summary>
         ///     Get or set the list of metropolis transitions active in the simulation

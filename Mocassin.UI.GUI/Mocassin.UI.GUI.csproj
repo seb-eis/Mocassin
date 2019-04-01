@@ -319,6 +319,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\KineticSimulationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -453,6 +465,7 @@
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddEnergyControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddSimulationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddTransitionControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
@@ -537,6 +550,18 @@
       <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\KineticSimulationControlView.xaml.cs">
+      <DependentUpon>KineticSimulationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\KineticSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml.cs">
+      <DependentUpon>MetropolisSimulationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlView.xaml.cs">
+      <DependentUpon>SimulationModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\Adapter\CrystalParameterSetter.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml.cs">
       <DependentUpon>CellPositionControlView.xaml</DependentUpon>
@@ -635,7 +660,9 @@
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\InfoControl\" />

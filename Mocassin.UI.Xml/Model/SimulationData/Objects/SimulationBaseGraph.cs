@@ -23,37 +23,37 @@ namespace Mocassin.UI.Xml.SimulationModel
         ///     Get or set the base simulation temperature in [K]
         /// </summary>
         [XmlAttribute("Temperature")]
-        public double Temperature { get; set; }
+        public double Temperature { get; set; } = 1000;
 
         /// <summary>
         ///     Get or set the target MCSP value
         /// </summary>
         [XmlAttribute("Mcsp")]
-        public int TargetMcsp { get; set; }
+        public int TargetMcsp { get; set; } = 1000;
 
         /// <summary>
         ///     Get or set the number of simulation blocks
         /// </summary>
         [XmlAttribute("SimulationBlocks")]
-        public int SimulationBlockCount { get; set; }
+        public int SimulationBlockCount { get; set; } = 100;
 
         /// <summary>
         ///     Get or set the hard run limit as a time span
         /// </summary>
         [XmlAttribute("TimeLimit")]
-        public string SaveRunTimeLimit { get; set; }
+        public string SaveRunTimeLimit { get; set; } = "PT24H";
 
         /// <summary>
         ///     Get or set the hard lower success rate limit in [Hz]
         /// </summary>
         [XmlAttribute("MinSuccessRate")]
-        public double LowerSuccessRateLimit { get; set; }
+        public double LowerSuccessRateLimit { get; set; } = 1;
 
         /// <summary>
         ///     Get or set the basic job count multiplier
         /// </summary>
         [XmlAttribute("JobCount")]
-        public int JobCount { get; set; }
+        public int JobCount { get; set; } = 12;
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()
