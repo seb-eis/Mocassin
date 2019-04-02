@@ -8,9 +8,11 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}"/> for the relation of <see cref="StateExchangePairGraph"/> to <see cref="StateExchangeGroupGraph"/> host instances
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     <see cref="StateExchangePairGraph" /> to <see cref="StateExchangeGroupGraph" /> host instances
     /// </summary>
-    public class ExchangeGroupExchangePairSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangePair, StateExchangeGroupGraph>
+    public sealed class ExchangeGroupExchangePairSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangePair,
+        StateExchangeGroupGraph>
     {
         /// <inheritdoc />
         public ExchangeGroupExchangePairSelectionViewModel(StateExchangeGroupGraph hostObject)
@@ -21,13 +23,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         }
 
         /// <inheritdoc />
-        protected sealed override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
         {
             return projectGraph?.ProjectModelGraph?.TransitionModelGraph?.StateExchangePairs;
         }
 
         /// <inheritdoc />
-        protected sealed override ICollection<ModelObjectReferenceGraph<StateExchangePair>> GetTargetCollection(StateExchangeGroupGraph sourceObject)
+        protected override ICollection<ModelObjectReferenceGraph<StateExchangePair>> GetTargetCollection(
+            StateExchangeGroupGraph sourceObject)
         {
             return sourceObject?.StateExchangePairs;
         }

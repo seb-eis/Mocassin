@@ -9,7 +9,12 @@ using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionModel.GridControl.Adapter
 {
-    public class AbstractTransitionExchangeGroupSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangeGroup, AbstractTransitionGraph>
+    /// <summary>
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     <see cref="StateExchangeGroupGraph" /> to <see cref="AbstractTransitionGraph" /> host instances
+    /// </summary>
+    public sealed class AbstractTransitionExchangeGroupSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangeGroup,
+        AbstractTransitionGraph>
     {
         /// <inheritdoc />
         public AbstractTransitionExchangeGroupSelectionViewModel(AbstractTransitionGraph hostObject)
@@ -20,13 +25,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         }
 
         /// <inheritdoc />
-        protected sealed override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
         {
             return projectGraph?.ProjectModelGraph?.TransitionModelGraph?.StateExchangeGroups;
         }
 
         /// <inheritdoc />
-        protected sealed override ICollection<ModelObjectReferenceGraph<StateExchangeGroup>> GetTargetCollection(AbstractTransitionGraph sourceObject)
+        protected override ICollection<ModelObjectReferenceGraph<StateExchangeGroup>> GetTargetCollection(
+            AbstractTransitionGraph sourceObject)
         {
             return sourceObject?.StateExchangeGroups;
         }
@@ -38,7 +44,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionMode
         }
 
         /// <summary>
-        ///     Checks if the host collection is full in the context of the current connector string 
+        ///     Checks if the host collection is full in the context of the current connector string
         /// </summary>
         /// <returns></returns>
         public bool HostCollectionIsFull()

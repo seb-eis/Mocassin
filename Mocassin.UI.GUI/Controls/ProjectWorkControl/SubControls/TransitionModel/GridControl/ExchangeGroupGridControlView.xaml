@@ -37,8 +37,8 @@
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate
               DataType="{x:Type transitionModel:StateExchangeGroupGraph}">
-              <gridControl:HostGraphModelObjectSelectionView>
-                <gridControl:HostGraphModelObjectSelectionView.DataContext>
+              <gridControl:HostGraphModelObjectDropSelectionView>
+                <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
                   <MultiBinding
                     Converter="{adapter:ExchangeGroupExchangePairSelectionVmConverter}">
                     <Binding
@@ -47,8 +47,8 @@
                       Path="DataContext" />
                     <Binding />
                   </MultiBinding>
-                </gridControl:HostGraphModelObjectSelectionView.DataContext>
-              </gridControl:HostGraphModelObjectSelectionView>
+                </gridControl:HostGraphModelObjectDropSelectionView.DataContext>
+              </gridControl:HostGraphModelObjectDropSelectionView>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

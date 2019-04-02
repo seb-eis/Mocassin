@@ -21,7 +21,7 @@
 
     <GroupBox
       Grid.Row="0"
-      Header="[MMC] Metropolis Simulation Bases">
+      Header="Metropolis Simulation Bases">
 
       <dataControl:MetropolisSimulationControlView
         DataContext="{Binding MetropolisSimulationViewModel}" />
@@ -30,7 +30,7 @@
 
     <GroupBox
       Grid.Row="1"
-      Header="[KMC] Kinetic Simulation Bases">
+      Header="Kinetic Simulation Bases">
 
       <dataControl:KineticSimulationControlView
         DataContext="{Binding KineticSimulationViewModel}" />

@@ -49,15 +49,15 @@
         <DataGridTemplateColumn Header="Exchange Groups">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionGraph}">
-              <gridControl:HostGraphModelObjectSelectionView>
-                <gridControl:HostGraphModelObjectSelectionView.DataContext>
+              <gridControl:HostGraphModelObjectDropSelectionView>
+                <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
                   <MultiBinding Converter="{adapter:AbstractTransitionExchangeGroupSelectionVmConverter}">
                     <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
                              Path="DataContext" />
                     <Binding />
                   </MultiBinding>
-                </gridControl:HostGraphModelObjectSelectionView.DataContext>
-              </gridControl:HostGraphModelObjectSelectionView>
+                </gridControl:HostGraphModelObjectDropSelectionView.DataContext>
+              </gridControl:HostGraphModelObjectDropSelectionView>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

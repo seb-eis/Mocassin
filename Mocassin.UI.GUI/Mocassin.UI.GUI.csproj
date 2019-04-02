@@ -279,7 +279,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionView.xaml">
+    <Page Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -324,6 +328,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\SimulationBaseControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -506,8 +514,11 @@
       <DependentUpon>BasicModelContentControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionView.xaml.cs">
-      <DependentUpon>HostGraphModelObjectSelectionView.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml.cs">
+      <DependentUpon>HostGraphModelObjectBoxSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml.cs">
+      <DependentUpon>HostGraphModelObjectDropSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphGuestSelectionVmConverter.cs" />
@@ -558,6 +569,13 @@
       <DependentUpon>MetropolisSimulationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\SimulationBaseControlView.xaml.cs">
+      <DependentUpon>SimulationBaseControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlView.xaml.cs">
       <DependentUpon>SimulationModelControlView.xaml</DependentUpon>
     </Compile>
@@ -660,7 +678,6 @@
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\InfoControl\" />

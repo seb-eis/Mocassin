@@ -8,7 +8,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.DataControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:particleModel="clr-namespace:Mocassin.UI.Xml.ParticleModel;assembly=Mocassin.UI.Xml"
-  xmlns:baseGridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridControl"
+  xmlns:hosting="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridControl"
   xmlns:particleGridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.GridControl"
   d:DataContext="{d:DesignInstance local:ParticleSetControlViewModel, IsDesignTimeCreatable = True}"
   mc:Ignorable="d"
@@ -16,30 +16,36 @@
   Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
-              AutoGenerateColumns="False"
-              ColumnWidth="*"
-              SelectedItem="{Binding SelectedCollectionItem}"
-              VerticalAlignment="Stretch"
-              VerticalScrollBarVisibility="Auto" 
-              Background="Transparent">
+    <DataGrid
+      ItemsSource="{Binding DataCollection}"
+      AutoGenerateColumns="False"
+      ColumnWidth="*"
+      SelectedItem="{Binding SelectedCollectionItem}"
+      VerticalAlignment="Stretch"
+      VerticalScrollBarVisibility="Auto"
+      Background="Transparent">
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" 
-                            Binding="{Binding Name}" />
+        <DataGridTextColumn
+          Header="Name"
+          Binding="{Binding Name}" />
 
-        <DataGridTemplateColumn Header="Particles">
+        <DataGridTemplateColumn
+          Header="Particles">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type particleModel:ParticleSetGraph}">
-              <baseGridControl:HostGraphModelObjectSelectionView>
-                <baseGridControl:HostGraphModelObjectSelectionView.DataContext>
-                  <MultiBinding Converter="{particleGridControl:ParticleSetParticleSelectionVmConverter}">
-                      <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" 
-                               Path="DataContext"/>
-                      <Binding/>
-                    </MultiBinding>
-                  </baseGridControl:HostGraphModelObjectSelectionView.DataContext>
-                </baseGridControl:HostGraphModelObjectSelectionView>
+            <DataTemplate
+              DataType="{x:Type particleModel:ParticleSetGraph}">
+              <hosting:HostGraphModelObjectDropSelectionView>
+                <hosting:HostGraphModelObjectDropSelectionView.DataContext>
+                  <MultiBinding
+                    Converter="{particleGridControl:ParticleSetParticleSelectionVmConverter}">
+                    <Binding
+                      RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                      Path="DataContext" />
+                    <Binding />
+                  </MultiBinding>
+                </hosting:HostGraphModelObjectDropSelectionView.DataContext>
+              </hosting:HostGraphModelObjectDropSelectionView>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

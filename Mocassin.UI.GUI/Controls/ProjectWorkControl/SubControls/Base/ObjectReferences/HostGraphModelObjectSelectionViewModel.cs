@@ -26,8 +26,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
         where TModelObject : ModelObject, new()
         where TObjectGraph : ModelObjectGraph
     {
-        private ModelObjectReferenceGraph<TModelObject> selectionBackup;
-
         /// <summary>
         ///     Get or set the <see cref="IReadOnlyCollection{T}" /> of <see cref="MocassinProjectGraph" /> instances that can be
         ///     referenced
@@ -48,21 +46,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
         public Command<IDataObject> HandleDropAddCommand { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> of currently selectable key <see cref="string" /> values
+        ///     Get the <see cref="IEnumerable{T}" /> of currently selectable <see cref="ModelObjectGraph" /> instances
         /// </summary>
-        public virtual IEnumerable<string> SelectableKeys => FilterKeyOptions(ReferenceObjectGraphs);
+        public virtual IEnumerable<ModelObjectGraph> SelectableReferences => FilterReferences(ReferenceObjectGraphs);
 
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; protected set; }
-
-        /// <summary>
-        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> selection backup value
-        /// </summary>
-        public ModelObjectReferenceGraph<TModelObject> SelectionBackup
-        {
-            get => selectionBackup;
-            set => SetProperty(ref selectionBackup, value);
-        }
 
         /// <summary>
         ///     Creates new <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> with a boolean
@@ -78,20 +67,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="string" /> key values that remains after internal
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectGraph" /> values that remains after internal
         ///     filtering is applied
         /// </summary>
         /// <param name="baseCollection"></param>
         /// <returns></returns>
-        public virtual IEnumerable<string> FilterKeyOptions(IReadOnlyCollection<ModelObjectGraph> baseCollection)
+        public virtual IEnumerable<ModelObjectGraph> FilterReferences(IReadOnlyCollection<ModelObjectGraph> baseCollection)
         {
-            var keyCollection = baseCollection.Select(x => x.Key);
-            if (!IsDuplicateFiltered) return keyCollection;
+            if (!IsDuplicateFiltered || SelectedCollectionItem == null) return baseCollection;
 
             var targetCollection = GetTargetCollection(HostObject);
             return targetCollection == null
-                ? keyCollection
-                : keyCollection.Where(x => targetCollection.All(y => y.Key != x || y.Key == selectionBackup?.Key));
+                ? baseCollection
+                : baseCollection.Where(x => targetCollection.All(y => y.Key != x.Key));
         }
 
         /// <inheritdoc />
@@ -100,7 +88,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.GridContr
             ContentSource = contentSource;
             ReferenceObjectGraphs = GetSourceCollection(ContentSource);
             DataCollection = GetTargetCollection(HostObject);
-            SelectionBackup = null;
         }
 
         /// <inheritdoc />

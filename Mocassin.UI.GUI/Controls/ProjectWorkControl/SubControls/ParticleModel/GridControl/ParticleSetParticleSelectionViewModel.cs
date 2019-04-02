@@ -8,8 +8,8 @@ using Mocassin.UI.Xml.ParticleModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.ParticleModel.GridControl
 {
     /// <summary>
-    ///     Data control <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for
-    ///     <see cref="ParticleSetGraph" /> hosting <see cref="Particle" /> references
+    ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
+    ///     <see cref="ParticleGraph" /> to <see cref="ParticleSetGraph" /> host instances
     /// </summary>
     public sealed class ParticleSetParticleSelectionViewModel
         : HostGraphModelObjectSelectionViewModel<Particle, ParticleSetGraph>

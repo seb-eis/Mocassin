@@ -12,6 +12,11 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot]
     public class ModelObjectReferenceGraph<T> : ModelObjectGraph where T : ModelObject, new()
     {
+        [XmlIgnore]
+        [NotMapped]
+        [JsonIgnore]
+        private ModelObjectGraph targetGraph;
+
         /// <summary>
         ///     Get or set the reference target <see cref="ModelObjectGraph" />. Only serialized in JSON mode with reference
         ///     handling
@@ -19,7 +24,15 @@ namespace Mocassin.UI.Xml.Base
         [XmlIgnore]
         [NotMapped]
         [JsonProperty("Target")]
-        public ModelObjectGraph TargetGraph { get; set; }
+        public ModelObjectGraph TargetGraph
+        {
+            get => targetGraph;
+            set
+            {
+                targetGraph = value;
+                Key = value?.Key;
+            }
+        }
 
 
         /// <inheritdoc />
