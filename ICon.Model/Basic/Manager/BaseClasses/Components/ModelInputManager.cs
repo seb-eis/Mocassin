@@ -9,6 +9,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Framework.Processing;
 using Mocassin.Framework.Reflection;
+using Mocassin.Model.Energies.Handler;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Basic
@@ -520,10 +521,8 @@ namespace Mocassin.Model.Basic
             where T2 : ModelParameter, T1, new()
             where T1 : IModelParameter
         {
-            var newInternal = ModelParameter.BuildInternalObject<T2>(newParam)
-                              ?? throw new ArgumentException("Conversion to internal type failed");
-
-            ModelProject.DataTracker.LinkModelObject(newInternal);
+            if (!TryBuildAndLinkInternalModelParameter<T2>(newParam, out var newInternal, out var message))
+                return OperationReport.MakeObjectBuildErrorReport($"Set [{newParam?.GetParameterName() ?? "Model Parameter"}]", message);
 
             T2 Operation(DataAccessor<TData> dataAccess, OperationReport report)
             {
@@ -552,7 +551,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnChangedModelParameters.OnNext(ModelParameterEventArgs.Create(orgObject));
             }
 
-            return InvokeDataOperation($"Set model parameter {newInternal.GetParameterName()} in the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Register [{newInternal.GetParameterName()}]", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -569,13 +568,12 @@ namespace Mocassin.Model.Basic
             where T2 : ModelObject, T1, new()
         {
             // Build and link a new internal object of the replacement type
+            if (!TryBuildAndLinkInternalModelObject<T2>(obj, out var newInternal, out var message))
+                return OperationReport.MakeObjectBuildErrorReport($"Register [{obj?.GetObjectName() ?? "Model Object"}]", message);
 
-            var newInternal = ModelObject.ToInternalObject<T2>(obj) ??
-                              throw new ArgumentException("Could not build internal object from interface");
-            ModelProject.DataTracker.LinkModelObject(newInternal);
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
-            {
+            {   
                 report.SetValidationReport(
                     ModelProject.ValidationServices.ValidateObject(newInternal, accessor.AsReader(DataReaderSource)));
 
@@ -594,7 +592,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnNewModelObjects.OnNext(ModelObjectEventArgs.Create((T1) newInternal));
             }
 
-            return InvokeDataOperation($"Add new {newInternal.GetObjectName()} to the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Register [{newInternal.GetObjectName()}]", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -633,7 +631,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnRemovedModelObjects.OnNext(ModelObjectEventArgs.Create((T1) internalObj));
             }
 
-            return InvokeDataOperation($"Remove {internalObj.GetObjectName()} ({internalObj.Index}) from manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Remove [{internalObj.GetObjectName()}] ({internalObj.Index})", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -652,10 +650,9 @@ namespace Mocassin.Model.Basic
             where T2 : ModelObject, T1, new()
         {
             // Build and link a temporary internal object with the replacement information
-            var tmpObject = ModelObject.ToInternalObject<T2>(newObj) ??
-                            throw new ArgumentException("Could not build internal object from interface");
+            if (!TryBuildAndLinkInternalModelObject<T2>(newObj, out var tmpObject, out var message))
+                return OperationReport.MakeObjectBuildErrorReport($"Replace [{orgObj?.GetObjectName() ?? "Model Object"}]", message);
 
-            ModelProject.DataTracker.LinkModelObject(tmpObject);
             tmpObject.Index = orgObj.Index;
 
             T2 Operation(DataAccessor<TData> accessor, OperationReport report)
@@ -678,7 +675,7 @@ namespace Mocassin.Model.Basic
                 if (changedObject != null) EventManager.OnChangedModelObjects.OnNext(ModelObjectEventArgs.Create((T1) changedObject));
             }
 
-            return InvokeDataOperation($"Replace {tmpObject.GetObjectName()} ({orgObj.Index}) in the manager", Operation, OnSuccess);
+            return InvokeDataOperation($"Replace [{tmpObject.GetObjectName()}] ({orgObj.Index})", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -773,6 +770,76 @@ namespace Mocassin.Model.Basic
                 .Where(attribute => attribute != null)
                 .Select(attribute => attribute.InterfaceType)
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Tries to build and link an internal <see cref="ModelObject"/> from the passed <see cref="IModelObject"/> interface
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="modelObject"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool TryBuildAndLinkInternalModelObject<T>(IModelObject obj, out T modelObject, out string message) 
+            where T : ModelObject, new()
+        {
+            message = null;
+
+            if(!(ModelObject.BuildInternalObject<T>(obj) is T tmpObj))
+            {
+                message = $"Could not convert interface [{obj?.GetObjectName()}] to internal object!";
+                modelObject = null;
+                return false;
+            }
+
+            try
+            {
+                ModelProject.DataTracker.LinkModelObject(tmpObj);
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+                modelObject = null;
+                return false;
+            }
+
+            modelObject = tmpObj;
+            return true;
+        }
+
+        /// <summary>
+        /// Tries to build and link an internal <see cref="ModelParameter"/> from the passed <see cref="IModelParameter"/> interface
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="modelObject"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool TryBuildAndLinkInternalModelParameter<T>(IModelParameter obj, out T modelObject, out string message) 
+            where T : ModelParameter, new()
+        {
+            message = null;
+
+            if(!(ModelParameter.BuildInternalObject<T>(obj) is T tmpObj))
+            {
+                message = $"Could not convert interface [{obj?.GetParameterName()}] to internal parameter!";
+                modelObject = null;
+                return false;
+            }
+
+            try
+            {
+                ModelProject.DataTracker.LinkModelObject(tmpObj);
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+                modelObject = null;
+                return false;
+            }
+
+            modelObject = tmpObj;
+            return true;
         }
     }
 }

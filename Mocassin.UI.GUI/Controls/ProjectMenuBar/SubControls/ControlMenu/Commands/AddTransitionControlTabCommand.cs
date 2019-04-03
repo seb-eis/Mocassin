@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.TransitionModel;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Commands
 {

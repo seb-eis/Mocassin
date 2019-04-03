@@ -1,7 +1,7 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.WelcomeControl;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeControl;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
 {

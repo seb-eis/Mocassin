@@ -67,7 +67,9 @@ namespace Mocassin.Model.Transitions.Validators
         /// <param name="report"></param>
         protected void AddContentRestrictionsValidation(IAbstractTransition transition, ValidationReport report)
         {
-            if (Settings.TransitionCount.ParseValue(transition.StateCount, out var warnings) != 0) report.AddWarnings(warnings);
+            if (Settings.TransitionCount.ParseValue(transition.StateCount, out var warnings) != 0)
+                report.AddWarnings(warnings);
+
             if (transition.StateCount != transition.ConnectorCount + 1)
             {
                 var detail0 = $"The transition ({transition.StateCount}) base positions but ({transition.ConnectorCount}) connector steps";
@@ -75,11 +77,8 @@ namespace Mocassin.Model.Transitions.Validators
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
 
-            if (new Regex(Settings.TransitionStringPattern).IsMatch(transition.Name)) 
-                return;
-
-            var detail = $"The abstract transition name ({transition.Name}) violates the constraint regex ({Settings.TransitionStringPattern})";
-            report.AddWarning(ModelMessageSource.CreateNamingViolationWarning(this, detail));
+            if (!Settings.Naming.ParseValue(transition.Name, out warnings))
+                report.AddWarnings(warnings);
         }
 
         /// <summary>

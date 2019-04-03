@@ -84,7 +84,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public virtual void Dispose()
         {
             ProjectLibraryChangeSubscription?.Dispose();
         }

@@ -14,6 +14,16 @@ namespace Mocassin.Framework.Operations
         bool IsError { get; }
 
         /// <summary>
+        ///     Boolean flag that indicates if the report contains a validation failure
+        /// </summary>
+        bool HasValidationReport{ get; }
+
+        /// <summary>
+        ///     Boolean flag that indicates if the report has relevant conflict handling information
+        /// </summary>
+        bool HasRelevantConflictReport { get; }
+
+        /// <summary>
         ///     Flag that indicates that the project returned a busy signal because an input operation is already in progress
         /// </summary>
         bool IsBusySignal { get; }
@@ -37,6 +47,11 @@ namespace Mocassin.Framework.Operations
         ///     Access to the resolver report if an operation called the conflict resolver
         /// </summary>
         IConflictReport ConflictReport { get; set; }
+
+        /// <summary>
+        ///     Get the <see cref="DateTime"/> when the report was created
+        /// </summary>
+        DateTime TimeStamp { get; }
 
         /// <summary>
         ///     Adds an exception to the operation report

@@ -1,0 +1,88 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl.CellPositionControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
+  xmlns:structures="clr-namespace:Mocassin.Model.Structures;assembly=Mocassin.Model"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:CellPositionControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+
+  <UserControl.Resources>
+
+    <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type system:Enum}" x:Key="StabilityEnumValues">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="structures:PositionStatus" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+  </UserControl.Resources>
+
+  <Grid>
+    <DataGrid ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              VerticalContentAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              RowDetailsVisibilityMode="VisibleWhenSelected"
+              Background="Transparent">
+
+      <DataGrid.RowDetailsTemplate>
+        <DataTemplate>
+          <DataGrid
+            ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectedVectorExpansion}"
+            VerticalContentAlignment="Stretch"
+            MaxHeight="100"
+            Background="Transparent"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            ColumnWidth="*"
+            VerticalScrollBarVisibility="Auto"
+            GridLinesVisibility="None">
+
+            <DataGrid.Columns>
+              <DataGridTextColumn Binding="{Binding A}"
+                                  Width="Auto" />
+
+              <DataGridTextColumn Binding="{Binding B}"
+                                  Width="Auto" />
+
+              <DataGridTextColumn Binding="{Binding C}"
+                                  Width="Auto" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </DataTemplate>
+      </DataGrid.RowDetailsTemplate>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
+
+        <DataGridTextColumn Header="A"
+                            Binding="{Binding A}" />
+
+        <DataGridTextColumn Header="B"
+                            Binding="{Binding B}" />
+
+        <DataGridTextColumn Header="C"
+                            Binding="{Binding C}" />
+
+        <DataGridComboBoxColumn Header="Stability"
+                                ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
+                                SelectedItemBinding="{Binding PositionStatus}" />
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.OccupationSetOptions}"
+                                                 SelectedValuePath="Key"
+                                                 DisplayMemberPath="Name"
+                                                 SelectedValueBinding="{Binding OccupationKey}" />
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

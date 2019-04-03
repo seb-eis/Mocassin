@@ -251,6 +251,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -260,10 +264,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerView.xaml">
+    <Page Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\ProjectMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -271,119 +279,123 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicModelContentControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\EnergyParameterControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\GroupInteractionControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\GroupInteractionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\EnergyModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleSetControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\ParticleModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\KineticSimulationControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\KineticSimulationControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\SimulationBaseControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\SimulationBaseControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\SimulationModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\CellPositionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\StructureParameterControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\StructureModel\StructureModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\TransitionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\TransitionModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlView.xaml">
+    <Page Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -471,14 +483,16 @@
       <DependentUpon>MessageConsoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectConsole\SubControls\MessageConsole\MessageConsoleViewModel.cs" />
+    <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\Commands\SetSoftUpdateStopCommand.cs" />
+    <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleView.xaml.cs">
+      <DependentUpon>OperationReportConsoleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddEnergyControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddSimulationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddTransitionControlTabCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectCreationDialogCommand.cs" />
-    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectLoadingDialogCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\ProjectMenuBarView.xaml.cs">
       <DependentUpon>ProjectMenuBarView.xaml</DependentUpon>
     </Compile>
@@ -488,6 +502,9 @@
       <DependentUpon>ControlMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\ControlMenuViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\SaveExitProgramCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectCreationDialogCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\ShowProjectLoadingDialogCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\FileMenuView.xaml.cs">
       <DependentUpon>FileMenuView.xaml</DependentUpon>
     </Compile>
@@ -501,141 +518,151 @@
       <DependentUpon>ProjectManagerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerViewModel.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\Commands\AddLiveOperationConsoleCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\ProjectMenuView.xaml.cs">
+      <DependentUpon>ProjectMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\ProjectMenuViewModel.cs" />
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarView.xaml.cs">
       <DependentUpon>ProjectStatusBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectStatusBar\ProjectStatusBarViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlView.xaml.cs">
+      <DependentUpon>ModelCustomizationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml.cs">
       <DependentUpon>ProjectWorkTabControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlViewModel.cs" />
     <Compile Include="Base\ViewModels\Collections\ObservableCollectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicModelContentControlView.xaml.cs">
       <DependentUpon>BasicModelContentControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\Content\BasicModelContentControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicModelContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectBoxSelectionView.xaml.cs">
       <DependentUpon>HostGraphModelObjectBoxSelectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectDropSelectionView.xaml.cs">
       <DependentUpon>HostGraphModelObjectDropSelectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\Base\ObjectReferences\HostGraphGuestSelectionVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphModelObjectSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\ObjectReferences\HostGraphGuestSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\EnergyParameterControlView.xaml.cs">
       <DependentUpon>EnergyParameterControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\EnergyParameterControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\GroupInteractionControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\EnergyParameterControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\GroupInteractionControlView.xaml.cs">
       <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\GroupInteractionControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\GroupInteractionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\UnstableEnvironmentControlView.xaml.cs">
       <DependentUpon>UnstableEnvironmentControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\DataControl\UnstableEnvironmentControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\UnstableEnvironmentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\EnergyModelControlView.xaml.cs">
       <DependentUpon>EnergyModelControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\EnergyModelControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\Adapter\UnstableEnvironmentInteractionFilterVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\EnergyModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\Adapter\UnstableEnvironmentInteractionFilterVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\UnstableEnvironmentGridControlView.xaml.cs">
       <DependentUpon>UnstableEnvironmentGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\UnstableEnvironmentGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\UnstableEnvironmentGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\InteractionFilterGridControlView.xaml.cs">
       <DependentUpon>InteractionFilterGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\EnergyModel\GridControl\InteractionFilterGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\GridControl\InteractionFilterGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleControlView.xaml.cs">
       <DependentUpon>ParticleControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleSetControlView.xaml.cs">
       <DependentUpon>ParticleSetControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\DataControl\ParticleSetControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\GridControl\ParticleSetParticleSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\GridControl\ParticleSetParticleSelectionVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\DataControl\ParticleSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\GridControl\ParticleSetParticleSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\GridControl\ParticleSetParticleSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\ParticleModelControlView.xaml.cs">
       <DependentUpon>ParticleModelControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\ParticleModel\ParticleModelControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\KineticSimulationControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\ParticleModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\KineticSimulationControlView.xaml.cs">
       <DependentUpon>KineticSimulationControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\KineticSimulationControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\KineticSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\MetropolisSimulationControlView.xaml.cs">
       <DependentUpon>MetropolisSimulationControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\DataControl\MetropolisSimulationControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\GridControl\SimulationBaseControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\DataControl\MetropolisSimulationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\KineticSimulationTransitionSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\Adapter\MetropolisSimulationTransitionSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\GridControl\SimulationBaseControlView.xaml.cs">
       <DependentUpon>SimulationBaseControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\SimulationModelControlView.xaml.cs">
       <DependentUpon>SimulationModelControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\SimulationModel\SimulationModelControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\Adapter\CrystalParameterSetter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\SimulationModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\Adapter\CrystalParameterSetter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\CellPositionControlView.xaml.cs">
       <DependentUpon>CellPositionControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\CellPositionControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\CellPositionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\StructureParameterControlView.xaml.cs">
       <DependentUpon>StructureParameterControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\DataControl\StructureParameterControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\DataControl\StructureParameterControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\StructureModelControlView.xaml.cs">
       <DependentUpon>StructureModelControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\StructureModel\StructureModelControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\AbstractTransitionControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\StructureModel\StructureModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\AbstractTransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\AbstractTransitionControlView.xaml.cs">
       <DependentUpon>AbstractTransitionControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\TransitionControlView.xaml.cs">
       <DependentUpon>TransitionControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\DataControl\TransitionControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\DataControl\TransitionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\AbstractTransitionGridControlView.xaml.cs">
       <DependentUpon>AbstractTransitionGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\AbstractTransitionGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionVmConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\AbstractTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\AbstractTransitionExchangeGroupSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\Adapter\ExchangeGroupExchangePairSelectionVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangeGroupGridControlView.xaml.cs">
       <DependentUpon>ExchangeGroupGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangeGroupGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangeGroupGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangePairGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\ExchangePairGridControlView.xaml.cs">
       <DependentUpon>ExchangePairGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\KineticTransitionGridControlView.xaml.cs">
       <DependentUpon>KineticTransitionGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\KineticTransitionGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\KineticTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\MetropolisTransitionGridControlView.xaml.cs">
       <DependentUpon>MetropolisTransitionGridControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\GridControl\MetropolisTransitionGridControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\GridControl\MetropolisTransitionGridControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\TransitionModelControlView.xaml.cs">
       <DependentUpon>TransitionModelControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\TransitionModel\TransitionModelControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlView.xaml.cs">
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\TransitionModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlView.xaml.cs">
       <DependentUpon>WelcomeControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ProjectWorkControl\SubControls\WelcomeControl\WelcomeControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlViewModel.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Helper\DataGridExtensions.cs" />
     <Compile Include="Helper\TypeSearchExtensions.cs" />
+    <Compile Include="Logic\Validation\ModelLiveValidator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -672,18 +699,24 @@
   <ItemGroup>
     <Folder Include="Base\Adapter\" />
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\EnergyModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\LatticeModel\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\ParticleModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\ProjectGraph\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\SimulationModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\StructureModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\SubControls\TransitionModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectGraph\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\VisualControl\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
@@ -28,6 +29,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         void AddCollectionItem(T value);
 
         /// <summary>
+        ///     Appends an <see cref="IEnumerable{T}" /> sequence of item <see cref="T" /> to the end of the view model collection
+        /// </summary>
+        void AddCollectionItems(IEnumerable<T> values);
+
+        /// <summary>
         ///     Removes the first occurence of <see cref="T" /> from the view model collection
         /// </summary>
         /// <param name="value"></param>
@@ -39,5 +45,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <param name="value"></param>
         /// <returns></returns>
         bool CollectionContains(T value);
+
+        /// <summary>
+        ///     Clears all contents of the collection
+        /// </summary>
+        void ClearCollection();
     }
 }

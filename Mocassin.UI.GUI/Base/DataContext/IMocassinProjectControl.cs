@@ -97,5 +97,11 @@ namespace Mocassin.UI.GUI.Base.DataContext
         /// </summary>
         /// <returns></returns>
         IEnumerable<Assembly> PluginAssemblies { get; }
+
+        /// <summary>
+        ///     Creates a new <see cref="IModelProject"/> interface with all internally defined settings and capabilities
+        /// </summary>
+        /// <returns></returns>
+        IModelProject CreateModelProject();
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
+using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
@@ -116,6 +117,31 @@ namespace Mocassin.UI.GUI
         public IModelProject CreateServiceModelProject()
         {
             return ModelProject.Create(ProjectSettings.CreateDefault());
+        }
+
+        /// <inheritdoc />
+        public IModelProject CreateModelProject()
+        {
+            var modelProject = CreateServiceModelProject();
+            foreach (var factory in GetModelManagerFactories()) modelProject.CreateAndRegister(factory);
+            return modelProject;
+        }
+
+        /// <summary>
+        ///     Get the <see cref="IEnumerable{T}"/> of known <see cref="IModelManagerFactory"/> that can be used to register services to <see cref="IModelProject"/> interface
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IModelManagerFactory> GetModelManagerFactories()
+        {
+            var factories = new List<IModelManagerFactory>
+            {
+                new ParticleManagerFactory(),
+                new StructureManagerFactory(),
+                new TransitionManagerFactory(),
+                new EnergyManagerFactory(),
+                new SimulationManagerFactory()
+            };
+            return factories;
         }
     }
 }

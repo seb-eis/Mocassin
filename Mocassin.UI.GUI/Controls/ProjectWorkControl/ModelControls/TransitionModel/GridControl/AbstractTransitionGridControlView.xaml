@@ -1,0 +1,67 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.AbstractTransitionGridControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
+  xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
+  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:AbstractTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+    <DataGrid Name="AbstractTransitionDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              VerticalAlignment="Stretch"
+              VerticalContentAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
+              AutoGenerateColumns="False"
+              ColumnWidth="*">
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
+
+        <DataGridTextColumn Header="Connection"
+                            Binding="{Binding ConnectorString}">
+
+          <DataGridTextColumn.ElementStyle>
+            <Style TargetType="TextBlock">
+              <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+          </DataGridTextColumn.ElementStyle>
+
+          <DataGridTextColumn.EditingElementStyle>
+            <Style TargetType="TextBox">
+              <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+          </DataGridTextColumn.EditingElementStyle>
+
+        </DataGridTextColumn>
+
+        <DataGridCheckBoxColumn Header="Association"
+                                Binding="{Binding IsAssociation}"/>
+
+        <DataGridTemplateColumn Header="Exchange Groups">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionGraph}">
+              <gridControl:HostGraphModelObjectDropSelectionView>
+                <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
+                  <MultiBinding Converter="{adapter:AbstractTransitionExchangeGroupSelectionVmConverter}">
+                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                             Path="DataContext" />
+                    <Binding />
+                  </MultiBinding>
+                </gridControl:HostGraphModelObjectDropSelectionView.DataContext>
+              </gridControl:HostGraphModelObjectDropSelectionView>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

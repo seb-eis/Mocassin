@@ -35,10 +35,10 @@ namespace Mocassin.Model.Particles.Validators
         /// <param name="report"></param>
         protected void AddStringPropertyValidations(IParticle particle, ValidationReport report)
         {
-            if (!Settings.ParticleName.ParseValue(particle.Name, out var warnings)) 
+            if (!Settings.Naming.ParseValue(particle.Name, out var warnings)) 
                 report.AddWarnings(warnings);
 
-            if (!Settings.ParticleSymbol.ParseValue(particle.Symbol, out warnings)) 
+            if (!Settings.SymbolNaming.ParseValue(particle.Symbol, out warnings)) 
                 report.AddWarnings(warnings);
         }
 

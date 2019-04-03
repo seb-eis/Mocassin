@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -57,6 +58,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         }
 
         /// <inheritdoc />
+        public void AddCollectionItems(IEnumerable<PushMessage> values)
+        {
+            PushMessageCollectionViewModel.AddCollectionItems(values);
+        }
+
+        /// <inheritdoc />
         public void RemoveCollectionItem(PushMessage value)
         {
             PushMessageCollectionViewModel.RemoveCollectionItem(value);
@@ -66,6 +73,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         public bool CollectionContains(PushMessage value)
         {
             return PushMessageCollectionViewModel.CollectionContains(value);
+        }
+
+        /// <inheritdoc />
+        public void ClearCollection()
+        {
+            PushMessageCollectionViewModel.ClearCollection();
         }
 
         /// <summary>

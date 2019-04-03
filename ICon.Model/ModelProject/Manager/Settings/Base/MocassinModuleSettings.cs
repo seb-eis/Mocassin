@@ -11,6 +11,12 @@ namespace Mocassin.Model.ModelProject
     public abstract class MocassinModuleSettings
     {
         /// <summary>
+        ///     The <see cref="StringSetting"/> for general naming
+        /// </summary>
+        [DataMember]
+        public StringSetting Naming { get; set; } = new StringSetting("Name", "[ -~]{1,100}", false);
+
+        /// <summary>
         /// Checks if the module settings is a valid settings object for the passed module type
         /// </summary>
         /// <param name="moduleType"></param>

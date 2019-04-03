@@ -7,7 +7,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     ///     Class to provide <see cref="Mocassin.UI.Base.ViewModels.ViewModel" /> of
     ///     <see cref="System.Windows.Controls.UserControl" /> to <see cref="TabControl" /> systems
     /// </summary>
-    public class UserControlTabItem
+    public class UserControlTabItem : IDisposable
     {
         /// <summary>
         ///     Get the <see cref="Mocassin.UI.Base.ViewModels.ViewModel" /> of the tab
@@ -36,6 +36,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
             ViewModel = viewModelBase ?? throw new ArgumentNullException(nameof(viewModelBase));
             UserControl = userControl ?? throw new ArgumentNullException(nameof(userControl));
             UserControl.DataContext = ViewModel;
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            (ViewModel as IDisposable)?.Dispose();
         }
     }
 }

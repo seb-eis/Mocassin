@@ -75,9 +75,6 @@ namespace Mocassin.Model.Particles
             if (!(CastIfNotDeprecated<IParticleSet>(obj) is IParticleSet particleSet))
                 return null;
 
-            if (particleSet.IsEmpty())
-                throw new ArgumentException("Interface consume function called on empty particle set interface");
-
             Particles = particleSet.GetParticles().ToList();
             return this;
         }

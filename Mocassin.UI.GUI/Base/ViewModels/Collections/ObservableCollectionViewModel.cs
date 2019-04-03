@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
@@ -58,6 +59,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <inheritdoc />
+        public void AddCollectionItems(IEnumerable<T> values)
+        {
+            ExecuteOnDispatcher(() => AddCollectionItemsInternal(values));
+        }
+
+        /// <inheritdoc />
         public void RemoveCollectionItem(T value)
         {
             ExecuteOnDispatcher(() => RemoveCollectionItemInternal(value));
@@ -67,6 +74,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         public bool CollectionContains(T value)
         {
             return ObservableItems.Contains(value);
+        }
+
+        /// <inheritdoc />
+        public void ClearCollection()
+        {
+            ExecuteOnDispatcher(ClearCollectionInternal);
         }
 
         /// <summary>
@@ -97,6 +110,23 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         {
             ObservableItems.Insert(index, value);
             if (Capacity > 0 && ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
+        }
+
+        /// <summary>
+        ///     Internal implementation of the <see cref="ClearCollection"/> method
+        /// </summary>
+        protected virtual void ClearCollectionInternal()
+        {
+            ObservableItems.Clear();
+        }
+
+        /// <summary>
+        ///     Internal implementation of the <see cref="AddCollectionItems" /> method
+        /// </summary>
+        protected virtual void AddCollectionItemsInternal(IEnumerable<T> values)
+        {
+            if (values == null) return;
+            foreach (var item in values) AddCollectionItemInternal(item);
         }
     }
 }

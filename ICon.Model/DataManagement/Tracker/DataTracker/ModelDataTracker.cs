@@ -104,7 +104,7 @@ namespace Mocassin.Model.DataManagement
             try
             {
                 LinkModelObject(obj);
-                return false;
+                return true;
             }
             catch (Exception)
             {

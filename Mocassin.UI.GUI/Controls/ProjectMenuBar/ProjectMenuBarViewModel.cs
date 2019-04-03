@@ -5,6 +5,7 @@ using Mocassin.UI.GUI.Base.ViewModels.MenuBar;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
 {
@@ -35,6 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
             MenuBarViewModel = new DynamicMenuBarViewModel(Dock.Top);
             FileMenuViewModel = new FileMenuViewModel(projectControl);
             ControlMenuViewModel = new ControlMenuViewModel(projectControl);
+            MenuBarViewModel.AddCollectionItem(new ProjectMenuView {DataContext = new ProjectMenuViewModel(projectControl)});
         }
     }
 }

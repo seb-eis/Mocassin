@@ -33,13 +33,7 @@ namespace Mocassin.Model.ModelProject
         ///     The regular expression for the particle symbol
         /// </summary>
         [DataMember]
-        public StringSetting ParticleSymbol { get; set; }
-
-        /// <summary>
-        ///     The regular expression for the particle name
-        /// </summary>
-        [DataMember]
-        public StringSetting ParticleName { get; set; }
+        public StringSetting SymbolNaming { get; set; }
 
         /// <inheritdoc />
         public override void InitAsDefault()
@@ -47,8 +41,7 @@ namespace Mocassin.Model.ModelProject
             ParticleCharge = new ValueSetting<double>("Particle Charge", -1000, 1000);
             ParticleCount = new ValueSetting<int>("Particle Count", 0, 64);
             ParticleSetCount = new ValueSetting<int>("Particle Set Count", 0, 100);
-            ParticleName = new StringSetting("Particle Name", "^[a-zA-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{1,100}$", false);
-            ParticleSymbol = new StringSetting("Particle Symbol", "^[A-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{0,4}$", false);
+            SymbolNaming = new StringSetting("Particle Symbol", "^[A-Z]{1,1}[a-zA-Z0-9\\+\\-\\(\\)]{0,10}$", false);
         }
     }
 }

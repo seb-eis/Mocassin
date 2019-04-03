@@ -1,4 +1,5 @@
-﻿using Mocassin.UI.GUI.Base.DataContext;
+﻿using System.Windows.Controls;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -26,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
         public ProjectConsoleTabControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            TabControlViewModel = new UserControlTabControlViewModel();
+            TabControlViewModel = new UserControlTabControlViewModel {TabStripPlacement = Dock.Bottom};
             MessageConsoleViewModel = new MessageConsoleViewModel(projectControl);
             TabControlViewModel.AddNonClosableTab("Notifications", MessageConsoleViewModel, new MessageConsoleView());
             TabControlViewModel.SetActiveTabByIndex(0);

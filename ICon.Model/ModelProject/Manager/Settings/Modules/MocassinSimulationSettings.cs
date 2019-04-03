@@ -134,12 +134,6 @@ namespace Mocassin.Model.ModelProject
         ///     The regex pattern for the restriction of simulation related string definitions
         /// </summary>
         [DataMember]
-        public StringSetting Naming { get; set; }
-
-        /// <summary>
-        ///     The regex pattern for the restriction of simulation related string definitions
-        /// </summary>
-        [DataMember]
         public StringSetting Seeding { get; set; }
 
         /// <inheritdoc />
@@ -165,7 +159,6 @@ namespace Mocassin.Model.ModelProject
             TerminationSuccessRate = new ValueSetting<double>("Lower Termination Success Rate", 1, 10, int.MaxValue, int.MaxValue);
             EnergySetCount = new ValueSetting<int>("Energy Set Count", 0, 0, 10, 100);
             TransitionCount = new ValueSetting<int>("Transitions per Simulation", 0, 0, 10, 100);
-            Naming = new StringSetting("Name String", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$", false);
             Seeding = new StringSetting("Seed String", "^[a-zA-Z0-9\\+\\-\\(\\)]{0,100}$", true);
         }
     }

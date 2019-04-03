@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Mocassin.Framework.Exceptions;
 using Newtonsoft.Json;
@@ -18,6 +19,12 @@ namespace Mocassin.Framework.Operations
         /// <inheritdoc />
         public bool IsError { get; protected set; }
 
+        /// <inheritdoc />
+        public bool HasValidationReport => ValidationReport != null;
+
+        /// <inheritdoc />
+        public bool HasRelevantConflictReport => ConflictReport != null && ConflictReport.GetWarnings().Count() != 0;
+
         /// <summary>
         ///     Flag that indicates if the operation has caused on demand data to expire
         /// </summary>
@@ -35,11 +42,14 @@ namespace Mocassin.Framework.Operations
         /// <inheritdoc />
         public IConflictReport ConflictReport { get; set; }
 
+        public DateTime TimeStamp { get; }
+
         /// <summary>
         ///     Creates new unnamed operation result that is by default a success until set otherwise
         /// </summary>
         public OperationReport()
         {
+            TimeStamp = DateTime.Now;
             IsGood = true;
         }
 
@@ -146,6 +156,19 @@ namespace Mocassin.Framework.Operations
 
             result.AddException(new InvalidPipelineInputException(builder.ToString(), unexpectedType));
             return result;
+        }
+
+        /// <summary>
+        ///Creates a new <see cref="OperationReport"/> for model build errors
+        /// </summary>
+        /// <param name="description"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static OperationReport MakeObjectBuildErrorReport(string description, string message)
+        {
+            var report = new OperationReport(description);
+            report.AddException(new InvalidOperationException($"Object build error:\n{message}"));
+            return report;
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.EnergyModel;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Commands
 {

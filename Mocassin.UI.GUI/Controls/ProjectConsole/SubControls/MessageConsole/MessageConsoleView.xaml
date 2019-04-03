@@ -1,39 +1,42 @@
-﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole.MessageConsoleView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
-             xmlns:messaging="clr-namespace:Mocassin.Framework.Messaging;assembly=Mocassin.Framework"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:MessageConsoleViewModel, IsDesignTimeCreatable=True}"
-             Height="Auto" Width="Auto">
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole.MessageConsoleView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
+  xmlns:messaging="clr-namespace:Mocassin.Framework.Messaging;assembly=Mocassin.Framework"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:MessageConsoleViewModel, IsDesignTimeCreatable=True}"
+  Height="Auto" Width="Auto">
 
   <Grid Margin="2,2,2,2">
-    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto"
-                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                  VerticalAlignment="Stretch" VerticalContentAlignment="Stretch">
-      <DataGrid ItemsSource="{Binding ObservableItems}"
-                IsReadOnly="True"
-                SelectedItem="{Binding SelectedMessage}"
-                AutoGenerateColumns="False"
-                GridLinesVisibility="None">
-        <DataGrid.Columns>
-          <DataGridTextColumn Header="Time" Binding="{Binding TimeStamp}" />
-          <DataGridTextColumn Header="What" Binding="{Binding ShortInfo}" />
-          <DataGridTemplateColumn Header="Information">
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate DataType="{x:Type messaging:PushMessage}">
-                <TreeView BorderThickness="0" Background="Transparent">
-                  <TreeViewItem ItemsSource="{Binding DetailSequence}" Header="Details" />
-                </TreeView>
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-        </DataGrid.Columns>
-      </DataGrid>
-    </ScrollViewer>
+    <DataGrid ItemsSource="{Binding ObservableItems}"
+              IsReadOnly="True"
+              SelectedItem="{Binding SelectedMessage}"
+              AutoGenerateColumns="False"
+              GridLinesVisibility="None"
+              Background="Transparent"
+              VerticalScrollBarVisibility="Auto">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Time"
+                            Binding="{Binding TimeStamp}" />
+        <DataGridTextColumn Header="What"
+                            Binding="{Binding ShortInfo}" />
+        <DataGridTemplateColumn Header="Information">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate DataType="{x:Type messaging:PushMessage}">
+              <TreeView BorderThickness="0"
+                        Background="Transparent">
+                <TreeViewItem ItemsSource="{Binding DetailSequence}"
+                              Header="Details" />
+              </TreeView>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
   </Grid>
 
 </UserControl>

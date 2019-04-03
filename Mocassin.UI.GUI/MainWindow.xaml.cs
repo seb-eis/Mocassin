@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands;
 
@@ -14,6 +16,8 @@ namespace Mocassin.UI.GUI
         public MainWindow()
         {
             InitializeComponent();
+            ToolTipService.ShowDurationProperty.OverrideMetadata(
+                typeof(DependencyObject), new FrameworkPropertyMetadata(int.MaxValue));
         }
 
         /// <summary>

@@ -29,11 +29,6 @@ namespace Mocassin.Model.ModelProject
         [DataMember]
         public ValueSetting<double> CellParameter { get; set; }
 
-        /// <summary>
-        ///     The string restriction pattern for structure naming
-        /// </summary>
-        [DataMember]
-        public StringSetting StructureName { get; set; }
 
         /// <inheritdoc />
         public override void InitAsDefault()
@@ -41,7 +36,6 @@ namespace Mocassin.Model.ModelProject
             BasePositionCount = new ValueSetting<int>("Base Position Count", 0, 1000);
             TotalPositionCount = new ValueSetting<int>("Total Position Count", 0, 10000);
             CellParameter = new ValueSetting<double>("Cell Parameter Length", 0.1, 1000);
-            StructureName = new StringSetting("Structure Name", "^[a-zA-Z0-9\\+\\-\\(\\)]{2,100}$", false);
         }
     }
 }

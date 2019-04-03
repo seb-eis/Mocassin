@@ -36,7 +36,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <returns></returns>
         private ICommand MakeTabCloseCommand(IObservableCollectionViewModel<UserControlTabItem> hostCollectionViewModel)
         {
-            void CloseTab() => hostCollectionViewModel.RemoveCollectionItem(this);
+            void CloseTab()
+            {
+                Dispose();
+                hostCollectionViewModel.RemoveCollectionItem(this);
+            }
             bool CanCloseTab() => hostCollectionViewModel.CollectionContains(this);
             return new RelayCommand(CloseTab, CanCloseTab);
         }

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.Content;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content;
 
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {

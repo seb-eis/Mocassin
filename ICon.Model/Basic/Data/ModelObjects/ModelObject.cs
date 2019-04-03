@@ -60,7 +60,7 @@ namespace Mocassin.Model.Basic
         /// <typeparam name="T1"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static T1 ToInternalObject<T1>(IModelObject obj) where T1 : ModelObject, new()
+        public static T1 BuildInternalObject<T1>(IModelObject obj) where T1 : ModelObject, new()
         {
             var internalObj = new T1().PopulateFrom(obj) as T1;
             if (internalObj != null)

@@ -33,7 +33,7 @@ namespace Mocassin.Model.Structures.Validators
         /// <param name="report"></param>
         private void AddNameValidation(IStructureInfo info, ValidationReport report)
         {
-            if (!Settings.StructureName.ParseValue(info.Name, out var warnings))
+            if (!Settings.Naming.ParseValue(info.Name, out var warnings))
                 report.AddWarnings(warnings);
         }
     }
