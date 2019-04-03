@@ -50,17 +50,6 @@ namespace Mocassin.Model.Lattices
             return new BuildingBlockValidator(ModelProject, Settings, dataReader).Validate(buildingBlock);
         }
 
-        /// <summary>
-        /// Validate a BlockInfo in terms of conflicts with basic limitations
-        /// </summary>
-        /// <param name="blockInfo"></param>
-        /// <param name="dataReader"></param>
-        /// <returns></returns>
-        [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateBlockInfo(IBlockInfo blockInfo, IDataReader<ILatticeDataPort> dataReader)
-        {
-            return new BlockInfoValidator(ModelProject, Settings, dataReader).Validate(blockInfo);
-        }
 
         /// <summary>
         /// Validate a DopingCombination in terms of conflicts with basic limitations and ParticleSets of UnitcellPosition

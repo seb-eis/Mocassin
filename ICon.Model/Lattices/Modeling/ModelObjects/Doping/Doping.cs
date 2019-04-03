@@ -28,18 +28,6 @@ namespace Mocassin.Model.Lattices
         public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>
-        /// Counter doping multiplier
-        /// </summary>
-        [DataMember]
-        public double CounterDopingMultiplier { get; set; }
-
-        /// <summary>
-        /// Flag that indicates whether the custom CounterDopingMultiplier is used
-        /// </summary>
-        [DataMember]
-        public bool UseCustomMultiplier { get; set; }
-
-        /// <summary>
         /// Flag to indicate whether a counter doping should be applied
         /// </summary>
         [DataMember]
@@ -68,8 +56,6 @@ namespace Mocassin.Model.Lattices
             {
                 DopingInfo = doping.DopingInfo;
                 CounterDopingInfo = doping.CounterDopingInfo;
-                CounterDopingMultiplier = doping.CounterDopingMultiplier;
-                UseCustomMultiplier = doping.UseCustomMultiplier;
                 UseCounterDoping = doping.UseCounterDoping;
                 DopingGroup = doping.DopingGroup;
                 return this;

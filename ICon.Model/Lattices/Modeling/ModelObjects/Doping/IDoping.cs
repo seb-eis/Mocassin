@@ -22,19 +22,9 @@ namespace Mocassin.Model.Lattices
         IDopingCombination CounterDopingInfo { get; }
 
         /// <summary>
-        /// Counter doping multiplier
-        /// </summary>
-        double CounterDopingMultiplier { get; }
-
-        /// <summary>
-        /// Doping group ID for simutaneous doping
+        /// Doping group ID for simultaneous doping
         /// </summary>
         int DopingGroup { get; }
-
-        /// <summary>
-        /// Flag that indicates whether the custom CounterDopingMultiplier is used
-        /// </summary>
-        bool UseCustomMultiplier {  get; }
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied
