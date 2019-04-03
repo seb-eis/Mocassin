@@ -54,14 +54,11 @@ namespace Mocassin.Model.Transitions
             return (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Abstract Transition";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Abstract Transition";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IAbstractTransition>(obj) is IAbstractTransition transition)) 
                 return null;

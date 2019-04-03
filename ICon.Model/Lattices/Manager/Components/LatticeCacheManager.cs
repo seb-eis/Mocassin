@@ -26,58 +26,16 @@ namespace Mocassin.Model.Lattices
         {
         }
 
-        public SupercellAdapter<IParticle> GetLattice()
-        {
-            return GetResultFromCache(CreateLattice);
-        }
 
-        /// <summary>
-        /// Generate Supercell
-        /// </summary>
-        /// <returns></returns>
-        [CacheMethodResult]
-        public SupercellAdapter<IParticle> CreateLattice()
-        {
-            var latticeManager = ModelProject.GetManager<ILatticeManager>();
-            var structureManager = ModelProject.GetManager<IStructureManager>();
+	    /// <summary>
+	    /// Get provider for generating a lattice with the model data
+	    /// </summary>
+	    /// <returns></returns>
+	    public ILatticeCreationProvider GetLatticeCreationProvider()
+	    {
+		    return new LatticeCreationProvider(ModelProject.GetManager<LatticeManager>().QueryPort, 
+			    ModelProject.GetManager<StructureManager>().QueryPort, ModelProject.Settings);
+	    }
 
-            var buildingBlocks = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBuildingBlocks());
-            var blockInfos = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBlockInfos());
-            var sublatticeIDs = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetExtendedIndexToPositionDictionary());
-            var latticeSize = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetLatticeInfo().Extent);
-            var vectorEncoder = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
-
-            WorkLattice workLattice = (new WorkLatticeFactory()).Fabricate(buildingBlocks, blockInfos, sublatticeIDs, latticeSize);
-
-            var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
-
-            (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
-
-            return (new SupercellTranslater()).Translate(workLattice, vectorEncoder);
-
-        }
-
-        /// <summary>
-        /// Create WorkLattice (only for testing)
-        /// </summary>
-        /// <returns></returns>
-        public WorkLattice CreateWorkLattice()
-        {
-            var latticeManager = ModelProject.GetManager<ILatticeManager>();
-            var structureManager = ModelProject.GetManager<IStructureManager>();
-
-            var buildingBlocks = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBuildingBlocks());
-            var blockInfos = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetBlockInfos());
-            var sublatticeIDs = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetExtendedIndexToPositionDictionary());
-            var latticeSize = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetLatticeInfo().Extent);
-            var vectorEncoder = structureManager.QueryPort.Query((IStructureCachePort port) => port.GetVectorEncoder());
-
-            WorkLattice workLattice = (new WorkLatticeFactory()).Fabricate(buildingBlocks, blockInfos, sublatticeIDs, latticeSize);
-
-            var dopings = latticeManager.QueryPort.Query((ILatticeDataPort port) => port.GetDopings());
-            (new DopingExecuter()).ExecuteMultible(workLattice, dopings);
-
-            return workLattice;
-        }
     }
 }

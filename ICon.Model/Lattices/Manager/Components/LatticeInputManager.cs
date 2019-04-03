@@ -87,41 +87,6 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Registers a new BlockInfo to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
-        /// </summary>
-        /// <param name="buildingBlock"></param>
-        /// <returns></returns>
-        [DataOperation(DataOperationType.NewObject)]
-        protected IOperationReport TryRegisterNewBlockInfo(IBlockInfo blockInfo)
-        {
-            var result = DefaultRegisterModelObject(blockInfo, accessor => accessor.Query(data => data.BlockInfos));
-            return result;
-        }
-
-        /// <summary>
-        /// Removes a BlockInfo from the manager by deprecation if possible (Awaits distribution of affiliated events in case of operation success)
-        /// </summary>
-        /// <param name="buildingBlock"></param>
-        /// <returns></returns>
-        [DataOperation(DataOperationType.ObjectRemoval)]
-        protected IOperationReport TryRemoveBlockInfo(IBlockInfo blockInfo)
-        {
-            return DefaultRemoveModelObject(blockInfo, accessor => accessor.Query(data => data.BlockInfos), 0);
-        }
-
-        /// <summary>
-        /// Replaces a BlockInfo in the manager by another if the new one passes validation (Awaits distribution of affiliated events in case of operation success)
-        /// </summary>
-        /// <param name="orgBuildingBlock"></param>
-        /// <param name="newBuildingBlock"></param>
-        /// <returns></returns>
-        [DataOperation(DataOperationType.ObjectChange)]
-        protected IOperationReport TryReplaceBlockInfo(IBlockInfo orgBlockInfo, IBlockInfo newBlockInfo)
-        {
-            return DefaultReplaceModelObject(orgBlockInfo, newBlockInfo, accessor => accessor.Query(data => data.BlockInfos));
-        }
-
-        /// <summary>
         /// Registers a new Doping to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
         /// </summary>
         /// <param name="buildingBlock"></param>

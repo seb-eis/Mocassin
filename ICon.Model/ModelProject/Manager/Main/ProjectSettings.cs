@@ -50,6 +50,11 @@ namespace Mocassin.Model.ModelProject
         [DataMember]
         public MocassinSymmetrySettings SymmetrySettings { get; set; }
 
+		/// <summary>
+		///		The basic doping range tolerance
+		/// </summary>
+		public double DopingToleranceSetting { get; set; }
+
         /// <summary>
         ///     Default construct project settings with empty module settings collection
         /// </summary>
@@ -154,7 +159,8 @@ namespace Mocassin.Model.ModelProject
                         $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Program/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
                     VectorTolerance = 1.0e-6,
                     ParameterTolerance = 1.0e-6
-                }
+                },
+	            DopingToleranceSetting = 1.0e-4
             };
 
             settings.LookupAndAddModuleSettings(Assembly.GetExecutingAssembly());

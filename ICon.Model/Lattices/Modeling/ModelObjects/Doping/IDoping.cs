@@ -12,11 +12,6 @@ namespace Mocassin.Model.Lattices
     public interface IDoping : IModelObject
     {
         /// <summary>
-        /// Specifies the doping concentration
-        /// </summary>
-        double Concentration { get; }
-
-        /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
         IDopingCombination DopingInfo { get; }
@@ -25,5 +20,15 @@ namespace Mocassin.Model.Lattices
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
         IDopingCombination CounterDopingInfo { get; }
+
+        /// <summary>
+        /// Doping group ID for simultaneous doping
+        /// </summary>
+        int DopingGroup { get; }
+
+        /// <summary>
+        /// Flag to indicate whether a counter doping should be applied
+        /// </summary>
+        bool UseCounterDoping { get; }
     }
 }

@@ -14,12 +14,6 @@ namespace Mocassin.Model.Lattices
     public class Doping : ModelObject, IDoping
     {
         /// <summary>
-        /// Specifies the doping concentration
-        /// </summary>
-        [DataMember]
-        public double Concentration { set; get; }
-
-        /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
         [DataMember]
@@ -34,35 +28,36 @@ namespace Mocassin.Model.Lattices
         public IDopingCombination CounterDopingInfo { set; get; }
 
         /// <summary>
-        /// Get the type name string
+        /// Flag to indicate whether a counter doping should be applied
         /// </summary>
-        /// <returns></returns>
-        public override string GetObjectName()
-        {
-            return "Doping";
-        }
+        [DataMember]
+        public bool UseCounterDoping { get; set; }
 
         /// <summary>
-        /// creates a string that contains the model object information
+        /// Doping Group for simutaneous doping
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{GetObjectName()} ({DopingInfo.ToString()}, {CounterDopingInfo.ToString()})";
-        }
+        [DataMember]
+        public int DopingGroup { get; set; }
 
-        /// <summary>
-        /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <summary>
+		/// Get the type name string
+		/// </summary>
+		/// <returns></returns>
+		public override string ObjectName => "'Doping'";
+
+		/// <summary>
+		/// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
-                Concentration = doping.Concentration;
                 DopingInfo = doping.DopingInfo;
                 CounterDopingInfo = doping.CounterDopingInfo;
+                UseCounterDoping = doping.UseCounterDoping;
+                DopingGroup = doping.DopingGroup;
                 return this;
             }
             return null;

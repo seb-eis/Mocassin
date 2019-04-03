@@ -38,14 +38,11 @@ namespace Mocassin.Model.Simulations
         [UseTrackedReferences]
         public List<IMetropolisTransition> Transitions { get; set; }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Metropolis Simulation";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Metropolis Simulation";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IMetropolisSimulation>(obj) is IMetropolisSimulation simulation))
                 return null;

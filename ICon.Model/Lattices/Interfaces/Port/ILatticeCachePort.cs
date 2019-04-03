@@ -9,16 +9,6 @@ namespace Mocassin.Model.Lattices
     /// </summary>
     public interface ILatticeCachePort : IModelCachePort
     {
-        /// <summary>
-        /// Create Supercellwrapper
-        /// </summary>
-        /// <returns></returns>
-        SupercellAdapter<IParticle> CreateLattice();
 
-        /// <summary>
-        /// Create WorkLattice (only for testing)
-        /// </summary>
-        /// <returns></returns>
-        WorkLattice CreateWorkLattice();
     }
 }

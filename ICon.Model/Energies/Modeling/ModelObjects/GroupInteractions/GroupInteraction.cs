@@ -52,14 +52,11 @@ namespace Mocassin.Model.Energies
             return result;
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Group Interaction";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Group Interaction";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IGroupInteraction>(obj) is IGroupInteraction interaction))
                 return null;

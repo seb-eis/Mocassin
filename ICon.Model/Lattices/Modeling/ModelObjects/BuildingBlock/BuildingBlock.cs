@@ -19,31 +19,39 @@ namespace Mocassin.Model.Lattices
     [DataContract(Name = "BuildingBlock")]
     public class BuildingBlock : ModelObject, IBuildingBlock
     {
+        /// <inheritdoc />
         /// <summary>
-        /// The list interface of unit cell entries
+        /// The occupation of the building block
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
         public List<IParticle> CellEntries { get; set; }
 
-        /// <summary>
-        /// Get the type name string
-        /// </summary>
-        /// <returns></returns>
-        public override string GetObjectName()
-        {
-            return "Building Block";
-        }
+	    /// <inheritdoc />
+	    /// <summary>
+	    /// The population instructions to fill the super cell
+	    /// </summary>
+	    //[DataMember]
+	    //[UseTrackedReferences]
+		//public Matrix2D PopulationInstructions { get; set; }
 
-        /// <summary>
-        /// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
-        /// </summary>
-        /// <param name="modelObject"></param>
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		/// <summary>
+		/// Get the type name string
+		/// </summary>
+		/// <returns></returns>
+		public override string ObjectName => "Building Block";
+
+		/// <summary>
+		/// Copies the information from the provided model object interface and returns the object (Retruns null if type mismatch)
+		/// </summary>
+		/// <param name="modelObject"></param>
+		public override ModelObject PopulateFrom(IModelObject modelObject)
         {
-            if (obj is IBuildingBlock casted)
+            if (CastIfNotDeprecated<IBuildingBlock>(modelObject) is var casted)
             {
                 CellEntries = casted.CellEntries;
+	            //PopulationInstructions = casted.PopulationInstructions;
                 return this;
             }
             return null;

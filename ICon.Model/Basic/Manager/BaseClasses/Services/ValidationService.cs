@@ -167,7 +167,7 @@ namespace Mocassin.Model.Basic
                     continue;
 
                 var detail =
-                    $"The provided {obj.GetObjectName()} is a duplicate to the existing model object with index ({item.Index})";
+                    $"The provided {obj.ObjectName} is a duplicate to the existing model object with index ({item.Index})";
                 report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail));
             }
         }

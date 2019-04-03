@@ -18,14 +18,11 @@ namespace Mocassin.Model.Structures
         [IgnoreDataMember]
         Fractional3D IPositionDummy.Vector => Vector.AsFractional();
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Dummy Position";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Dummy Position";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IPositionDummy>(obj) is IPositionDummy dummy))
                 return null;

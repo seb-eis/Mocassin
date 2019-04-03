@@ -40,15 +40,6 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Get read only list of block infos
-        /// </summary>
-        /// <returns></returns>
-        public ReadOnlyListAdapter<IBlockInfo> GetBlockInfos()
-        {
-            return ReadOnlyListAdapter<IBlockInfo>.FromEnumerable(Data.BlockInfos);
-        }
-
-        /// <summary>
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>

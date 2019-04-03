@@ -30,33 +30,35 @@ namespace Mocassin.Model.Lattices
         public IParticle DopedParticle { set; get; }
 
         /// <summary>
-        /// unit cell position (contains information about the sublattice)
+        /// Building Block in which the doping should take place
         /// </summary>
         [DataMember]
-        [UseTrackedReferences]
-        public IUnitCellPosition UnitCellPosition { set; get; }
+        public IBuildingBlock BuildingBlock { get; set; }
 
-        /// <summary>
-        /// Get the type name string
-        /// </summary>
-        /// <returns></returns>
-        public override string GetObjectName()
-        {
-            return "ElementSublatticeCode";
-        }
+		/// <summary>
+		/// Unit cell position that should be doped
+		/// </summary>
+		public IUnitCellPosition UnitCellPosition { get; set; }
 
-         /// <summary>
-        /// Copies the information from the provided parameter interface and returns the object (Retruns null if type mismatch)
-        /// </summary>
-        /// <param name="modelObject"></param>
-        /// <returns></returns>
-        public override ModelObject PopulateFrom(IModelObject modelObject)
+		/// <summary>
+		/// Get the type name string
+		/// </summary>
+		/// <returns></returns>
+		public override string ObjectName => "'DopingCombination'";
+
+		/// <summary>
+		/// Copies the information from the provided parameter interface and returns the object (Retruns null if type mismatch)
+		/// </summary>
+		/// <param name="modelObject"></param>
+		/// <returns></returns>
+		public override ModelObject PopulateFrom(IModelObject modelObject)
         {
             if (CastIfNotDeprecated<IDopingCombination>(modelObject) is var casted)
             {
                 Dopant = casted.Dopant;
                 DopedParticle = casted.DopedParticle;
                 UnitCellPosition = casted.UnitCellPosition;
+                BuildingBlock = casted.BuildingBlock;
                 return this;
             }
             return null;

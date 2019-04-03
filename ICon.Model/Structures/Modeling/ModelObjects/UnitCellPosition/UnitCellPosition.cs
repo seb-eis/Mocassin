@@ -38,14 +38,11 @@ namespace Mocassin.Model.Structures
         [DataMember]
         public PositionStatus Status { get; set; }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Unit Cell Position";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Unit Cell Position";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IUnitCellPosition>(obj) is IUnitCellPosition position))
                 return null;

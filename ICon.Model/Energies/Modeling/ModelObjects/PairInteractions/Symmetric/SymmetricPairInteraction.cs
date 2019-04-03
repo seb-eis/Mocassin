@@ -33,14 +33,11 @@ namespace Mocassin.Model.Energies
             return EnergyDictionary ?? new Dictionary<SymmetricParticlePair, double>();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Symmetric Pair Interaction";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Symmetric Pair Interaction";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<ISymmetricPairInteraction>(obj) is ISymmetricPairInteraction interaction))
                 return null;

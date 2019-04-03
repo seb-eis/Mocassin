@@ -31,13 +31,6 @@ namespace Mocassin.Model.Lattices
         public List<BuildingBlock> BuildingBlocks { get; set; }
 
         /// <summary>
-        /// List of building block information (origin and extent)
-        /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IBlockInfo))]
-        public List<BlockInfo> BlockInfos { get; set; }
-
-        /// <summary>
         /// List of doping combinations (dopant, doped element, unitcell position)
         /// </summary>
         [DataMember]
@@ -65,7 +58,6 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         public override void ResetToDefault()
         {
-            LatticeInfo = LatticeInfo.CreateDefault();
             ResetAllIndexedData();
         }
 

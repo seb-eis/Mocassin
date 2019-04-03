@@ -34,14 +34,11 @@ namespace Mocassin.Model.Energies
         }
 
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Asymmetric Pair Interaction";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Asymmetric Pair Interaction";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IAsymmetricPairInteraction>(obj) is IAsymmetricPairInteraction interaction))
                 return null;

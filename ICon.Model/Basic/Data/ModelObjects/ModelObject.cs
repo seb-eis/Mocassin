@@ -48,11 +48,11 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{GetObjectName()}\n{JsonConvert.SerializeObject(this, Formatting.Indented)}";
+            return $"{ObjectName}\n{JsonConvert.SerializeObject(this, Formatting.Indented)}";
         }
 
-        /// <inheritdoc />
-        public abstract string GetObjectName();
+		/// <inheritdoc />
+		public abstract string ObjectName { get; }
 
         /// <summary>
         ///     Builds the specified object and populates it by the passed interface

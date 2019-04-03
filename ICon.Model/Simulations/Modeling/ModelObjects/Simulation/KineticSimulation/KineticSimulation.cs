@@ -45,14 +45,11 @@ namespace Mocassin.Model.Simulations
         [DataMember]
         public DataVector3D ElectricFieldVector { get; set; }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Kinetic Simulation";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Kinetic Simulation";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IKineticSimulation>(obj) is IKineticSimulation simulation))
                 return null;

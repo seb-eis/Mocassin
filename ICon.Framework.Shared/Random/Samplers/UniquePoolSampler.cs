@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using Mocassin.Framework.Random;
 
-namespace Mocassin.Model.Lattices
+namespace ICon.Framework.Random
 {
     /// <summary>
     /// Get samples from a list
@@ -13,23 +13,26 @@ namespace Mocassin.Model.Lattices
     /// Discussed in D. E. Knuth "The Art of Computer Programming Vol. 2 - Seminumerical Algorithms" (1997) 142-143
     /// </remarks>
     public class UniquePoolSampler<T1>
-
     {
         /// <summary>
-        /// Get samples from a list
+        /// Get samples from a pool
         /// </summary>
         /// <param name="list"></param>
         /// <param name="samplingSize"></param>
         /// <returns></returns>
-        public List<T1> GetSamples(IList<T1> list, uint samplingSize)
+        public List<T1> GetSamples(IEnumerable<T1> pool, uint samplingSize)
         {
+
+            var random = new System.Random();
+
             int passedCount = 0;
-            Random random = new Random();
+            int poolCount = pool.Count();
+
             List<T1> sampling = new List<T1>();
 
-            foreach (var item in list)  
+            foreach (var item in pool)  
             {
-                if (Convert.ToDouble(samplingSize - sampling.Count) <= Convert.ToDouble(list.Count - passedCount) * random.NextDouble())
+                if (Convert.ToDouble(samplingSize - sampling.Count) <= Convert.ToDouble(poolCount - passedCount) * random.NextDouble())
                 {
                     passedCount++;
                     continue;
@@ -48,19 +51,39 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Apply an action to samples from a list
+        /// Apply an action to samples from a pool
         /// </summary>
         /// <param name="list"></param>
         /// <param name="samplingSize"></param>
         /// <param name="action"></param>
-        public void ApplyToSamples(IList<T1> list, uint samplingSize, Action<T1> action)
+        public void ApplyToSamples(IEnumerable<T1> list, uint samplingSize, Action<T1> action)
         {
-            IList<T1> samples = GetSamples(list, samplingSize);
+            List<T1> samples = GetSamples(list, samplingSize);
 
             foreach (T1 item in samples)
             {
                 action(item);
             }
+        }
+
+        /// <summary>
+        /// Apply an action to samples from a pool
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="samplingSize"></param>
+        /// <param name="action"></param>
+        public List<T1> ApplyToSamplesAndReturn(IEnumerable<T1> list, uint samplingSize, Func<T1,T1> function)
+        {
+            List<T1> samples = GetSamples(list, samplingSize);
+
+            List<T1> updatedSamples = new List<T1>();
+
+            foreach (T1 item in samples)
+            {
+                updatedSamples.Add(function(item));
+            }
+
+            return updatedSamples;
         }
     }
 }

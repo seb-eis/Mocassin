@@ -68,14 +68,11 @@ namespace Mocassin.Model.Transitions
         }
 
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "Metropolis Transition";
-        }
+		/// <inheritdoc />
+		public override string ObjectName => "Metropolis Transition";
 
-        /// <inheritdoc />
-        public override ModelObject PopulateFrom(IModelObject obj)
+		/// <inheritdoc />
+		public override ModelObject PopulateFrom(IModelObject obj)
         {
             if (!(CastIfNotDeprecated<IMetropolisTransition>(obj) is IMetropolisTransition transition)) 
                 return null;

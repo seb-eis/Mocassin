@@ -11,9 +11,5 @@ namespace Mocassin.Model.Lattices
     /// </summary>
     public interface ILatticeInfo : IModelParameter
     {
-        /// <summary>
-        /// Extent of lattice
-        /// </summary>
-        DataIntegralVector3D Extent { get; }
     }
 }
