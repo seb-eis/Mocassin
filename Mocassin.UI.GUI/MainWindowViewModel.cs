@@ -14,6 +14,7 @@ using Mocassin.UI.GUI.Controls.ProjectMenuBar;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
+using Mocassin.UI.GUI.Logic.Updating;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
 
@@ -63,6 +64,8 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public IEnumerable<Assembly> PluginAssemblies { get; }
 
+        public ProjectContentChangeDistributor ChangeDistributor { get; set; }
+
         /// <inheritdoc />
         public void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
         {
@@ -70,6 +73,7 @@ namespace Mocassin.UI.GUI
             ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
             OpenProjectLibrary = projectLibrary;
             ProjectLibraryChangedEvent.OnNext(projectLibrary);
+            ChangeDistributor = ChangeDistributor ?? new ProjectContentChangeDistributor(this);
         }
 
         /// <inheritdoc />

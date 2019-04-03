@@ -46,6 +46,8 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
             ProjectLibraryChangeSubscription = projectControl.ProjectLibraryChangeNotification
                 .Subscribe(OnProjectLibraryChanged);
+
+            if (ProjectControl.OpenProjectLibrary != null) OnProjectLibraryChanged(projectControl.OpenProjectLibrary);
         }
 
         /// <summary>

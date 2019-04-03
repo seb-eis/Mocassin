@@ -16,12 +16,12 @@ namespace Mocassin.Framework.Operations
         /// <summary>
         ///     Boolean flag that indicates if the report contains a validation failure
         /// </summary>
-        bool HasValidationReport{ get; }
+        bool HasValidationError{ get; }
 
         /// <summary>
         ///     Boolean flag that indicates if the report has relevant conflict handling information
         /// </summary>
-        bool HasRelevantConflictReport { get; }
+        bool HasUnsolvedConflict { get; }
 
         /// <summary>
         ///     Flag that indicates that the project returned a busy signal because an input operation is already in progress

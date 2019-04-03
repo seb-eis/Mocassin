@@ -62,10 +62,11 @@ namespace Mocassin.UI.Xml.Main
         /// <returns></returns>
         public static MocassinProjectGraph CreateNew()
         {
+            var guid = Guid.NewGuid().ToString();
             return new MocassinProjectGraph
             {
-                ProjectGuid = Guid.NewGuid().ToString(),
-                ProjectName = "New Project Graph",
+                ProjectGuid = guid,
+                ProjectName = $"Project {guid}",
                 ProjectModelGraph = ProjectModelGraph.CreateNew(),
                 ProjectCustomizationGraphs = new List<ProjectCustomizationGraph>(),
                 ProjectJobTranslationGraphs = new List<ProjectJobTranslationGraph>(),

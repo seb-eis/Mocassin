@@ -662,6 +662,7 @@
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Helper\DataGridExtensions.cs" />
     <Compile Include="Helper\TypeSearchExtensions.cs" />
+    <Compile Include="Logic\Updating\ProjectContentChangeDistributor.cs" />
     <Compile Include="Logic\Validation\ModelLiveValidator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

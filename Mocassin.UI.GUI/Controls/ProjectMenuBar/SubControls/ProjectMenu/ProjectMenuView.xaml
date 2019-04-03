@@ -15,7 +15,7 @@
       <MenuItem
         Header="Project">
         <MenuItem
-          Header="Live Validation">
+          Header="Model Validation Console">
           <i:Interaction.Triggers>
             <i:EventTrigger
               EventName="Click">
