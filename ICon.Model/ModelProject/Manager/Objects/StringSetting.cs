@@ -68,11 +68,13 @@ namespace Mocassin.Model.ModelProject
                     return true;
 
                 case null:
-                    return false;
-            }
+                    break;
 
-            if (Regex.IsMatch(value, RegexPattern))
-                return true;
+                default:
+                    if (Regex.IsMatch(value, RegexPattern))
+                        return true;
+                    break;
+            }
 
             var messages = new List<WarningMessage>(2);
             var detail0 = $"The defined string value ({value}) for [{DisplayName}] violates its allowed regex pattern ({RegexPattern})";

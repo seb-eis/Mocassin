@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public IEnumerable<Assembly> PluginAssemblies { get; }
 
-        public ProjectContentChangeDistributor ChangeDistributor { get; set; }
+        public AsyncProjectContentChangeTrigger ChangeTrigger { get; set; }
 
         /// <inheritdoc />
         public void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
@@ -73,7 +73,7 @@ namespace Mocassin.UI.GUI
             ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
             OpenProjectLibrary = projectLibrary;
             ProjectLibraryChangedEvent.OnNext(projectLibrary);
-            ChangeDistributor = ChangeDistributor ?? new ProjectContentChangeDistributor(this);
+            ChangeTrigger = ChangeTrigger ?? new AsyncProjectContentChangeTrigger(this);
         }
 
         /// <inheritdoc />

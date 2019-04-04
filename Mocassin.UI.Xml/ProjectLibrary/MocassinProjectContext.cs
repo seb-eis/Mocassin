@@ -1,34 +1,40 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.SQLiteCore;
-using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.EnergyModel;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.ParticleModel;
-using Mocassin.UI.Xml.SimulationModel;
-using Mocassin.UI.Xml.StructureModel;
-using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.ProjectLibrary
 {
     /// <summary>
-    ///     The <see cref="DbContext" /> for the <see cref="IMocassinProjectLibrary"/> that stores user project data
+    ///     The <see cref="DbContext" /> for the <see cref="IMocassinProjectLibrary" /> that stores user project data
     /// </summary>
     public sealed class MocassinProjectContext : SqLiteContext<MocassinProjectContext>, IMocassinProjectLibrary
     {
+        private readonly object lockObject = new object();
+        private bool isDisposed;
+        private int lastHash;
+
+        /// <inheritdoc />
+        public bool IsDisposed
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    return isDisposed;
+                }
+            }
+        }
+
         /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}"/> that relays internal state change events
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> that relays internal state change events
         /// </summary>
         private ReactiveEvent<Unit> StateChangedEvent { get; }
 
@@ -51,20 +57,6 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         public IObservable<Unit> StateChangedNotification => StateChangedEvent.AsObservable();
 
         /// <inheritdoc />
-        void IMocassinProjectLibrary.Add<TEntity>(TEntity entity)
-        {
-            Add(entity);
-        }
-
-        /// <inheritdoc />
-        public bool HasUnsavedChanges()
-        {
-            return ChangeTracker.Entries().Any(x => x.State == EntityState.Added ||
-                                                    x.State == EntityState.Modified ||
-                                                    x.State == EntityState.Deleted);
-        }
-
-        /// <inheritdoc />
         public MocassinProjectContext(string optionsBuilderParameterString)
             : base(optionsBuilderParameterString)
         {
@@ -73,8 +65,60 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             ChangeTracker.Tracked += RelayEntityChangeEvent;
         }
 
+        /// <inheritdoc />
+        public int GetProjectHash()
+        {
+            var result = 517;
+            foreach (var projectGraph in MocassinProjectGraphs)
+            {
+                unchecked
+                {
+                    result += projectGraph.ToJson().GetHashCode();   
+                }
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public bool CheckForContentChange()
+        {
+            if (IsDisposed || !HasUnsavedChanges()) return false;
+            lock (lockObject)
+            {
+                var hash = GetProjectHash();
+                if (hash != lastHash) StateChangedEvent.OnNext(Unit.Default);
+                lastHash = hash;
+                return lastHash != hash;
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<bool> CheckForContentChangeAsync()
+        {
+            return Task.Run(CheckForContentChange);
+        }
+
+        /// <inheritdoc />
+        void IMocassinProjectLibrary.Add<TEntity>(TEntity entity)
+        {
+            if (IsDisposed) return;
+            Add(entity);
+        }
+
+        /// <inheritdoc />
+        public bool HasUnsavedChanges()
+        {
+            lock (lockObject)
+            {
+                return ChangeTracker.Entries().Any(x => x.State == EntityState.Added ||
+                                                        x.State == EntityState.Modified ||
+                                                        x.State == EntityState.Deleted);
+            }
+        }
+
         /// <summary>
-        ///     Relays the <see cref="DbContext"/> entity changed event to the internal <see cref="ReactiveEvent{TSubject}"/>
+        ///     Relays the <see cref="DbContext" /> entity changed event to the internal <see cref="ReactiveEvent{TSubject}" />
         /// </summary>
         private void RelayEntityChangeEvent(object sender, EventArgs args)
         {
@@ -84,8 +128,13 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         /// <inheritdoc />
         public override void Dispose()
         {
-            base.Dispose();
-            StateChangedEvent.OnCompleted();         
+            lock (lockObject)
+            {
+                base.Dispose();
+                isDisposed = true;
+            }
+
+            StateChangedEvent.OnCompleted();
         }
     }
 }

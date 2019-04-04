@@ -46,9 +46,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="action"></param>
         protected void ExecuteOnDispatcher(Action action)
         {
-            if (!Application.Current.Dispatcher.CheckAccess())
+            if (Application.Current.Dispatcher.HasShutdownStarted) return;
+            if (Application.Current.Dispatcher?.CheckAccess() == false)
             {
-                Application.Current.Dispatcher.Invoke(action);
+                Application.Current.Dispatcher?.Invoke(action);
                 return;
             }
 

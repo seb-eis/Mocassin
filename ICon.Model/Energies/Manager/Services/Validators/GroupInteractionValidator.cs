@@ -30,9 +30,12 @@ namespace Mocassin.Model.Energies.Validators
             if (!AddDefinedPositionValidation(group, report))
                 return report;
 
-            AddContentRestrictionValidation(group, report);
             AddGeometricDuplicateValidation(group, report);
             AddEnvironmentConsistencyValidation(group, report);
+
+            if (!report.IsGood) return report;
+
+            AddContentRestrictionValidation(group, report);
 
             return report;
         }
@@ -121,12 +124,14 @@ namespace Mocassin.Model.Energies.Validators
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0));
             }
 
-            if (!GroupContainsNonEnvironmentPositions(group))
+            var geometryValidity = GetGroupEnvironmentPositionValidity(group);
+            if (geometryValidity == GroupGeometryValidity.IsValid)
                 return;
 
-            const string detail1 = "The group contains positions that form ignored pair interactions with the center position";
-            const string detail2 = "Groups can only contain positions that are also defined as pair interactions with the center";
-            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail1, detail2));
+            var detail1 = $"Group geometry has the following validity error flag [{geometryValidity.ToString()}]";
+            const string detail2 = "Note 1: Group geometry members have to be defined and stable except for the center!";
+            const string detail3 = "Note 2: Group geometry members have to be unaffected by interaction filters of the center!";
+            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail1, detail2, detail3));
         }
 
         /// <summary>
@@ -187,12 +192,12 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        ///     Determines if a group contains any forbidden position that are not defined within the set of pair interactions of
-        ///     the environment due to an existing filter
+        ///     Determines if a group contains any forbidden or non existing positions and returns the affiliated
+        ///     <see cref="GroupGeometryValidity" />
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        protected bool GroupContainsNonEnvironmentPositions(IGroupInteraction group)
+        protected GroupGeometryValidity GetGroupEnvironmentPositionValidity(IGroupInteraction group)
         {
             var ucProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
             var analyzer = new GeometryGroupAnalyzer(ucProvider, ModelProject.SpaceGroupService);
@@ -205,7 +210,7 @@ namespace Mocassin.Model.Energies.Validators
                         .GetInteractionFilters()
                         .ToList();
 
-                    return analyzer.GroupContainsFilteredPairs(group, stableFilters);
+                    return analyzer.CheckGroupGeometryValidity(group, stableFilters);
 
                 case PositionStatus.Unstable:
                     var unstableFilters = DataReader.Access
@@ -213,7 +218,7 @@ namespace Mocassin.Model.Energies.Validators
                         .GetInteractionFilters()
                         .ToList();
 
-                    return analyzer.GroupContainsFilteredPairs(group, unstableFilters);
+                    return analyzer.CheckGroupGeometryValidity(group, unstableFilters);
 
                 case PositionStatus.Undefined:
                     throw new InvalidOperationException("Undefined position reached environment check");
