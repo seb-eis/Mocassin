@@ -115,5 +115,10 @@ namespace Mocassin.Model.ModelProject
         /// </summary>
         /// <returns></returns>
         IEnumerable<IModelManager> GetAllManagers();
+
+        /// <summary>
+        ///     Resets the <see cref="IModelProject"/> to mint factory status with default data status
+        /// </summary>
+        void ResetProject();
     }
 }

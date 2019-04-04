@@ -165,6 +165,15 @@ namespace Mocassin.Model.ModelProject
             return ActiveManagers;
         }
 
+        /// <inheritdoc />
+        public void ResetProject()
+        {
+            lock (ProjectLock)
+            {
+                foreach (var modelManager in GetAllManagers()) modelManager.InputPort.ResetManager();   
+            }
+        }
+
         /// <summary>
         ///     Factory to create new project services interface from data object
         /// </summary>

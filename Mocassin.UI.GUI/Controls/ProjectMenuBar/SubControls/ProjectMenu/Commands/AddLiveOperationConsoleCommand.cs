@@ -22,6 +22,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Comman
             var viewModel = new OperationReportConsoleViewModel(ProjectControl);
             ProjectControl.ProjectConsoleTabControlViewModel.TabControlViewModel
                 .AddCloseableTab("Model Validation", viewModel, view);
+
+            ProjectControl.ProjectConsoleTabControlViewModel.TabControlViewModel.SetActiveTabByIndex(-1);
         }
     }
 }

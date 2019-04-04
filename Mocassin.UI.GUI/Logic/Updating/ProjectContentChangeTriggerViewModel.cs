@@ -10,7 +10,10 @@ using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Logic.Updating
 {
-    public sealed class AsyncProjectContentChangeTrigger : PrimaryControlViewModel
+    /// <summary>
+    ///     The <see cref="PrimaryControlViewModel"/> that continuously checks the active project library for content changes
+    /// </summary>
+    public sealed class ProjectContentChangeTriggerViewModel : PrimaryControlViewModel
     {
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> for the <see cref="CheckTriggerNotification" />
@@ -38,7 +41,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         public TimeSpan CheckInterval { get; set; } = TimeSpan.FromSeconds(1);
 
         /// <inheritdoc />
-        public AsyncProjectContentChangeTrigger(IMocassinProjectControl projectControl)
+        public ProjectContentChangeTriggerViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             CheckTriggeredEvent = new ReactiveEvent<Unit>();

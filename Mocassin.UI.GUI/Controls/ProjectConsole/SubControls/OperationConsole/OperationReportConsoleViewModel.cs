@@ -34,16 +34,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         private IOperationReport selectedReport;
         private TimeSpan validationInterval = TimeSpan.FromSeconds(5);
         private MocassinProjectGraph selectedProjectGraph;
+        private ModelValidatorViewModel validatorViewModel;
 
         /// <summary>
         ///     Get or set the last received <see cref="IEnumerable{T}" /> of <see cref="IOperationReport" /> instances
         /// </summary>
         private IEnumerable<IOperationReport> LastReportSet { get; set; }
-
-        /// <summary>
-        ///     Get or set a <see cref="ModelLiveValidator" /> instance that periodically checks its linked model definition
-        /// </summary>
-        private ModelLiveValidator LiveValidator { get; set; }
 
         /// <summary>
         ///     The <see cref="IDisposable" /> for an active report subscription
@@ -59,6 +55,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         ///     Get the <see cref="IEnumerable{T}" /> of selectable project graphs
         /// </summary>
         public IEnumerable<MocassinProjectGraph> ProjectGraphs => GetProjectGraphs();
+
+        /// <summary>
+        ///     Get or set a <see cref="ModelValidatorViewModel" /> instance that periodically checks its linked model definition
+        /// </summary>
+        public ModelValidatorViewModel ValidatorViewModel
+        {
+            get => validatorViewModel;
+            private set => SetProperty(ref validatorViewModel, value);
+        }
 
         /// <summary>
         ///     Get or set the currently selected <see cref="IOperationReport" />
@@ -95,38 +100,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         {
             get => isSoftUpdateStop;
             set => SetProperty(ref isSoftUpdateStop, value);
-        }
-
-        /// <summary>
-        ///     Get or set a boolean flag that defines if updating of received report lists is hard stopped
-        /// </summary>
-        public bool IsHardUpdateStop
-        {
-            get => isHardUpdateStop;
-            set => SetProperty(ref isHardUpdateStop, value);
-        }
-
-        /// <summary>
-        ///     Get or set the live validation interval <see cref="TimeSpan" />
-        /// </summary>
-        public TimeSpan ValidationInterval
-        {
-            get => validationInterval;
-            set
-            {
-                SetProperty(ref validationInterval, value);
-                if (LiveValidator == null) return;
-                LiveValidator.ValidationInterval = value;
-            }
-        }
-
-        /// <summary>
-        ///     Get or set a <see cref="string" /> name of the last report display request source
-        /// </summary>
-        public string ReportSourceName
-        {
-            get => reportSourceName ?? "Unknown";
-            protected set => SetProperty(ref reportSourceName, value);
         }
 
         /// <summary>
@@ -182,6 +155,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
             {
                 AsyncDisposeLiveValidation();
                 DisplayReports(null);
+                ValidatorViewModel = null;
+                LiveReportSubscription = null;
                 if (reportSource == null) return;
 
                 LiveReportSubscription = reportSource.Subscribe(DisplayReports);
@@ -189,18 +164,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         }
 
         /// <summary>
-        ///     Starts a <see cref="Task" /> that awaits disposal of the current <see cref="ModelLiveValidator" /> and affiliated
+        ///     Starts a <see cref="Task" /> that awaits disposal of the current <see cref="ModelValidatorViewModel" /> and affiliated
         ///     subscription
         /// </summary>
         private void AsyncDisposeLiveValidation()
         {
             var subscription = LiveReportSubscription;
-            var validator = LiveValidator;
+            var validator = ValidatorViewModel;
             Task.Run(() =>
             {
+                if (subscription == null && validator == null) return;
                 subscription?.Dispose();
-                validator?.Dispose();
-                SendCallInfoMessage($"A live validation for [{validator?.ModelGraph.Parent.ProjectName}] was deactivated!");
+                validator.Dispose();
+                SendCallInfoMessage($"A [{validator?.ModelGraph.Parent.ProjectName}] validation subscription was disposed!");
             });
         }
 
@@ -241,15 +217,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         private async void OnProjectGraphChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(SelectedProjectGraph)) return;
-            await Task.Run(() => SwitchLiveValidationTarget(SelectedProjectGraph?.ProjectModelGraph));
+            await Task.Run(() => SwitchValidationTarget(SelectedProjectGraph?.ProjectModelGraph));
         }
 
         /// <summary>
-        ///     Switches the <see cref="ModelLiveValidator" /> system to target the passed <see cref="ProjectModelGraph" /> or
+        ///     Switches the <see cref="ModelValidatorViewModel" /> system to target the passed <see cref="ProjectModelGraph" /> or
         ///     stops the system if the argument is null
         /// </summary>
         /// <param name="targetModelGraph"></param>
-        public void SwitchLiveValidationTarget(ProjectModelGraph targetModelGraph)
+        public void SwitchValidationTarget(ProjectModelGraph targetModelGraph)
         {
             if (targetModelGraph == null || ReferenceEquals(targetModelGraph, DummyProjectGraph.ProjectModelGraph))
             {
@@ -257,12 +233,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 return;
             }
 
-            var liveValidator = new ModelLiveValidator(targetModelGraph, ProjectControl);
-            ChangeReportSubscription(liveValidator.ReportsChangeNotification);
-            liveValidator.ValidationInterval = ValidationInterval;
-            liveValidator.StartContinuousValidation();
-            LiveValidator = liveValidator;
-            SendCallInfoMessage($"A live validation for [{targetModelGraph.Parent.ProjectName}] is now active!");
+            var validator = new ModelValidatorViewModel(targetModelGraph, ProjectControl);
+            ChangeReportSubscription(validator.ReportsChangeNotification);
+            ValidatorViewModel = validator;
+            ValidatorViewModel.RunValidationCommand.Execute(null);
+            SendCallInfoMessage($"New [{targetModelGraph.Parent.ProjectName}] validation subscription created!");
         }
 
         /// <inheritdoc />

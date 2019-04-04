@@ -662,8 +662,9 @@
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Helper\DataGridExtensions.cs" />
     <Compile Include="Helper\TypeSearchExtensions.cs" />
-    <Compile Include="Logic\Updating\AsyncProjectContentChangeTrigger.cs" />
-    <Compile Include="Logic\Validation\ModelLiveValidator.cs" />
+    <Compile Include="Logic\Updating\ProjectContentChangeTriggerViewModel.cs" />
+    <Compile Include="Logic\Validation\AsyncRunValidationCommand.cs" />
+    <Compile Include="Logic\Validation\ModelValidatorViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -17,22 +17,20 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <DockPanel Grid.Row="0">
-      <TextBlock Text="Set validation target: " VerticalAlignment="Center"/>
+    <DockPanel Grid.Row="0" 
+               HorizontalAlignment="Left">
+      <TextBlock Text="Target: " 
+                 VerticalAlignment="Center"/>
       <ComboBox ItemsSource="{Binding ProjectGraphs}"
                 SelectedItem="{Binding SelectedProjectGraph}"
                 DisplayMemberPath="ProjectName"/>
-      <TextBlock Text=" Set update interval: " 
-                 VerticalAlignment="Center"/>
-      <TextBox Text="{Binding ValidationInterval, UpdateSourceTrigger=PropertyChanged, Delay=500}"
-               VerticalAlignment="Center"/>
-      <TextBlock Text="  Show errors only: " 
+      <TextBlock Text="Show errors only: " 
                  VerticalAlignment="Center"/>
       <CheckBox IsChecked="{Binding IsErrorContentFiltered}" 
                 VerticalAlignment="Center" />
-      <TextBlock Text=" Do not display updates: " 
+      <TextBlock Text="Disable content change auto-update" 
                  VerticalAlignment="Center"/>
-      <CheckBox IsChecked="{Binding IsHardUpdateStop}" 
+      <CheckBox IsChecked="{Binding ValidatorViewModel.IsIgnoreContentChange}" 
                 VerticalAlignment="Center" />
     </DockPanel>
     <DataGrid Grid.Row="1"
