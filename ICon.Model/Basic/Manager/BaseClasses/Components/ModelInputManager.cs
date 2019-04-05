@@ -340,7 +340,7 @@ namespace Mocassin.Model.Basic
 
             void OnSuccess()
             {
-                EventManager.OnManagerResets.OnNextAsync().Wait();
+                EventManager.OnManagerResets.OnNext();
             }
 
             return InvokeDataOperation("Reset manager data to default state", Operation, OnSuccess);

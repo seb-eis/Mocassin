@@ -38,6 +38,11 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private bool isIgnoreContentChange;
 
         /// <summary>
+        ///     Get the <see cref="IModelProject"/> interface that provides the validation functionality
+        /// </summary>
+        private IModelProject ModelProject { get; }
+
+        /// <summary>
         ///     Get or set a boolean value if the validator is disposed
         /// </summary>
         private bool IsDisposed { get; set; }
@@ -109,6 +114,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
             ReportSetChangedEvent = new ReactiveEvent<IEnumerable<IOperationReport>>();
             ModelValidationStatusChangedEvent = new ReactiveEvent<ModelValidationStatus>();
             RunValidationCommand = new AsyncRunValidationCommand(this);
+            ModelProject = ProjectControl.CreateModelProject();
         }
 
         /// <summary>
@@ -188,15 +194,14 @@ namespace Mocassin.UI.GUI.Logic.Validation
         /// </summary>
         public void RunValidation()
         {
-            var modelProject = ProjectControl.CreateModelProject();
-
+            ModelProject.ResetProject();
             if (!TryPrepareModelInput(out var inputObjects))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelNotReady);
                 return;
             }
 
-            if (!TryPushModelInput(modelProject, inputObjects, out var reports))
+            if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.FatalException);
                 return;
@@ -209,13 +214,42 @@ namespace Mocassin.UI.GUI.Logic.Validation
                 return;
             }
 
-            if (!TryGenerateModelCustomization(modelProject, out var customization))
+            if (!TryGenerateModelCustomization(ModelProject, out var customization))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationNotCreatable);
                 return;
             }
 
             ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.NoErrorsDetected);
+        }
+
+        /// <summary>
+        ///     Tries to create a new <see cref="ProjectCustomizationGraph"/> for the current <see cref="ProjectModelGraph"/>
+        /// </summary>
+        /// <param name="customization"></param>
+        /// <returns></returns>
+        public ModelValidationStatus TryCreateCustomization(out ProjectCustomizationGraph customization)
+        {
+            ModelProject.ResetProject();
+            customization = null;
+            if (!TryPrepareModelInput(out var inputObjects))
+            {
+                return ModelValidationStatus.ModelNotReady;
+            }
+
+            if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
+            {
+                return ModelValidationStatus.FatalException;
+            }
+
+            if (reports.Any(x => !x.IsGood))
+            {
+                return ModelValidationStatus.ModelRejected;
+            }
+
+            return !TryGenerateModelCustomization(ModelProject, out customization) 
+                ? ModelValidationStatus.CustomizationNotCreatable 
+                : ModelValidationStatus.NoErrorsDetected;
         }
 
         /// <summary>

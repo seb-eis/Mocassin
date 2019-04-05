@@ -256,9 +256,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         /// <returns></returns>
         private MessageBoxResult GetSaveConfirmationFromUser(IMocassinProjectLibrary projectLibrary)
         {
-            const string caption = "Close Confirmation";
-            const string message = "Project library has unsaved changes. Save changes before closing?";
-            var choice = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel);
+            const string caption = "Confirmation required";
+            const string message = "Project entities have changed. Do you want to save the changes?";
+            var choice = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             SendCallInfoMessage($"Choice: {choice}");
             return projectLibrary == null ? MessageBoxResult.No : choice;
         }

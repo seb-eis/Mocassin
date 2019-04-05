@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Mocassin.Framework.Operations;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -24,16 +25,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         /// <summary>
         ///     Get a dummy <see cref="MocassinProjectGraph" /> that serves as a stop dummy for the live validation
         /// </summary>
-        private static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "[None]"};
+        public static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "[None]"};
 
         private readonly object lockObject = new object();
         private bool isErrorContentFiltered;
         private bool isSoftUpdateStop;
-        private bool isHardUpdateStop;
-        private string reportSourceName;
         private IOperationReport selectedReport;
-        private TimeSpan validationInterval = TimeSpan.FromSeconds(5);
-        private MocassinProjectGraph selectedProjectGraph;
+        private MocassinProjectGraph selectedProjectGraph = DummyProjectGraph;
         private ModelValidatorViewModel validatorViewModel;
 
         /// <summary>
@@ -118,14 +116,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         }
 
         /// <summary>
-        ///     Requests the displaying of the passed <see cref="IEnumerable{T}" /> sequence of
+        ///     Requests the displaying of the passed <see cref="IEnumerable{T}" /> sequence of <see cref="IOperationReport" />
+        ///     with optional boolean flag to ignore the soft update stop
         /// </summary>
         /// <param name="reports"></param>
-        public void DisplayReports(IEnumerable<IOperationReport> reports)
+        /// <param name="ignoreSoftStop"></param>
+        public void DisplayReports(IEnumerable<IOperationReport> reports, bool ignoreSoftStop = false)
         {
             lock (lockObject)
             {
-                if (isSoftUpdateStop || isHardUpdateStop) return;
+                if (IsSoftUpdateStop && !ignoreSoftStop)
+                {
+                    AttachToPropertyChange(() => DisplayReports(reports, true), 
+                        (bool x) => !x, 
+                        nameof(IsSoftUpdateStop));
+                    return;
+                }
 
                 LastReportSet = reports;
                 OperationCollectionViewModel.ClearCollection();
@@ -159,7 +165,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 LiveReportSubscription = null;
                 if (reportSource == null) return;
 
-                LiveReportSubscription = reportSource.Subscribe(DisplayReports);
+                LiveReportSubscription = reportSource.Subscribe(reports => DisplayReports(reports));
             }
         }
 

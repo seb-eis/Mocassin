@@ -60,8 +60,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem
-          Header="Lattice Model Control">
+        <MenuItem Header="Lattice Model Control">
           <i:Interaction.Triggers>
             <!--
             <i:EventTrigger 
@@ -74,6 +73,15 @@
           </i:Interaction.Triggers>
         </MenuItem>
         <Separator />
+        
+        <MenuItem Header="Model Customization Control">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddCustomizationControlTabCommand}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </MenuItem>
       </MenuItem>
     </Menu>
   </Grid>

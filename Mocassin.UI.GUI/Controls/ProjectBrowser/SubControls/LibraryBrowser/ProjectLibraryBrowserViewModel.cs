@@ -59,8 +59,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             }
 
             JsonBrowserViewModel.SetActiveTreeView(ProjectControl.ProjectGraphs, "Project Graphs");
-
-            foreach (var rootViewItem in JsonBrowserViewModel.RootViewItems) rootViewItem.ExpandSubtree();
         }
     }
 }

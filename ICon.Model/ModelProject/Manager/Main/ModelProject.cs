@@ -168,10 +168,8 @@ namespace Mocassin.Model.ModelProject
         /// <inheritdoc />
         public void ResetProject()
         {
-            lock (ProjectLock)
-            {
-                foreach (var modelManager in GetAllManagers()) modelManager.InputPort.ResetManager();   
-            }
+            foreach (var modelManager in GetAllManagers()) 
+                modelManager.InputPort.ResetManager().Wait();   
         }
 
         /// <summary>
@@ -181,8 +179,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         public static ModelProject Create(ProjectSettings settings)
         {
-            if (settings == null) 
-                throw new ArgumentNullException(nameof(settings));
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
 
             var structureSettings = settings.GetModuleSettings<MocassinStructureSettings>();
 

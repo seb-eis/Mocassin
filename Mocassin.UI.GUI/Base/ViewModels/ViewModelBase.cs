@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Mocassin.UI.GUI.Base.ViewModels
 {
@@ -46,9 +47,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="action"></param>
         protected void ExecuteOnDispatcher(Action action)
         {
-            if (Application.Current.Dispatcher?.CheckAccess() == false)
+            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
+            if (!dispatcher.CheckAccess())
             {
-                Application.Current.Dispatcher?.Invoke(action);
+                dispatcher.Invoke(action);
                 return;
             }
 
@@ -61,9 +63,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="function"></param>
         protected TResult ExecuteOnDispatcher<TResult>(Func<TResult> function)
         {
-            return !Application.Current.Dispatcher.CheckAccess()
-                ? Application.Current.Dispatcher.Invoke(function)
-                : function.Invoke();
+            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
+
+            return dispatcher.CheckAccess()
+                ? function.Invoke()
+                : dispatcher.Invoke(function);
         }
 
         /// <summary>
@@ -94,6 +98,38 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         protected void SendToDispatcher(Action action)
         {
             Task.Run(() => ExecuteOnDispatcher(action));
-        } 
+        }
+
+        /// <summary>
+        ///     Attaches a single <see cref="Action"/> invoke to the next property change that fulfills the <see cref="Predicate{T}"/>
+        /// </summary>
+        /// <typeparam name="TProperty"></typeparam>
+        /// <param name="action"></param>
+        /// <param name="predicate"></param>
+        /// <param name="propertyName"></param>
+        public void AttachToPropertyChange<TProperty>(Action action, Predicate<TProperty> predicate, string propertyName)
+        {
+            bool CheckProperty(string name)
+            {
+                if (propertyName != name) return false;
+                var value = (TProperty) GetType().GetProperty(propertyName)?.GetValue(this);
+                return predicate(value);
+            }
+
+            void InvokeAction(object sender, PropertyChangedEventArgs e)
+            {
+                if (!CheckProperty(e.PropertyName)) return;
+                action();
+                PropertyChanged -= InvokeAction;
+            }
+
+            if (CheckProperty(propertyName))
+            {
+                action();
+                return;
+            }
+
+            PropertyChanged += InvokeAction;
+        }
     }
 }

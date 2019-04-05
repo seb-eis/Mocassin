@@ -9,14 +9,11 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="InteractionFilterGraph" /> and radius definitions
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="InteractionFilterGraph" /> and radius definitions
     ///     of the stable environment
     /// </summary>
-    public class EnergyParameterControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class EnergyParameterControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="InteractionFilterGridControlViewModel" /> that controls the affiliated
         ///     <see cref="InteractionFilterGraph" /> instances
@@ -50,13 +47,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             InteractionFilterGridViewModel.ChangeContentSource(contentSource);

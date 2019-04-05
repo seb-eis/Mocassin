@@ -82,8 +82,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         public virtual void ClearAll()
         {
-            foreach (var data in DataCache)
-                data?.Clear();
+            foreach (var data in DataCache) data?.Clear();
         }
 
         /// <inheritdoc />
@@ -97,8 +96,7 @@ namespace Mocassin.Model.Basic
         /// </summary>
         protected void MarkAllAsObsolete()
         {
-            foreach (var data in DataCache) 
-                data?.MarkAsDeprecated();
+            foreach (var data in DataCache) data?.MarkAsDeprecated();
         }
 
         /// <summary>
