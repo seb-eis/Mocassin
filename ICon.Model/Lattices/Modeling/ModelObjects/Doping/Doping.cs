@@ -18,14 +18,20 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
-        public IDopingCombination DopingInfo { set; get; }
+        public IDopingCombination PrimaryDoping { set; get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
-        public IDopingCombination CounterDopingInfo { set; get; }
+        public IDopingCombination CounterDoping { set; get; }
+
+	    /// <summary>
+	    /// Building Block in which the doping should take place
+	    /// </summary>
+	    [DataMember]
+	    public IBuildingBlock BuildingBlock { get; set; }
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied
@@ -37,7 +43,7 @@ namespace Mocassin.Model.Lattices
         /// Doping Group for simutaneous doping
         /// </summary>
         [DataMember]
-        public int DopingGroup { get; set; }
+        public int Priority { get; set; }
 
 		/// <summary>
 		/// Get the type name string
@@ -54,10 +60,10 @@ namespace Mocassin.Model.Lattices
         {
             if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
-                DopingInfo = doping.DopingInfo;
-                CounterDopingInfo = doping.CounterDopingInfo;
+                PrimaryDoping = doping.PrimaryDoping;
+                CounterDoping = doping.CounterDoping;
                 UseCounterDoping = doping.UseCounterDoping;
-                DopingGroup = doping.DopingGroup;
+                Priority = doping.Priority;
                 return this;
             }
             return null;

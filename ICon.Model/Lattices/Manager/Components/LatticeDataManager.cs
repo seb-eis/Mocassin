@@ -22,15 +22,6 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Get lattice info
-        /// </summary>
-        /// <returns></returns>
-        public ILatticeInfo GetLatticeInfo()
-        {
-            return Data.LatticeInfo;
-        }
-
-        /// <summary>
         /// Get read only list of used dopings
         /// </summary>
         /// <returns></returns>

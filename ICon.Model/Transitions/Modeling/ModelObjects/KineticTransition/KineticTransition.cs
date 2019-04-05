@@ -59,11 +59,11 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        /// TODO: delete this?
-        //public override string GetObjectName()
-        //{
-        //    return "Kinetic Transition";
-        //}
+        //TODO: correct this if neccessary
+        public override string ObjectName
+        {
+	        get { return "Kinetic Transition"; }
+        }
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

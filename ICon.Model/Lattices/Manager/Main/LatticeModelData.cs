@@ -17,13 +17,6 @@ namespace Mocassin.Model.Lattices
     public class LatticeModelData : ModelData<ILatticeDataPort>
     {
         /// <summary>
-        /// Informations about the lattice, such as the extent of the super cell
-        /// </summary>
-        [DataMember]
-        [ModelParameter(typeof(ILatticeInfo))]
-        public LatticeInfo LatticeInfo { get; set; }
-
-        /// <summary>
         /// Default building block (index = 0) and custom building blocks of lattice
         /// </summary>
         [DataMember]

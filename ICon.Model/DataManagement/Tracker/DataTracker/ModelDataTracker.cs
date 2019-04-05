@@ -233,7 +233,7 @@ namespace Mocassin.Model.DataManagement
 
                 return modelObject
                        ?? throw new InvalidOperationException(
-                           $"No Object [{obj.GetObjectName()}] with Key={obj.Key} Id={obj.Index} exists");
+                           $"No Object [{obj.ObjectName}] with Key={obj.Key} Id={obj.Index} exists");
             }
 
             return GetObject;

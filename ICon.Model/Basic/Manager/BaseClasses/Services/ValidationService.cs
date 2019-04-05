@@ -108,7 +108,7 @@ namespace Mocassin.Model.Basic
             if (ModelProject.DataTracker.FindObjectByKey<TObject>(obj.Key) == null) 
                 return null;
 
-            var detail0 = $"The object [{obj.GetObjectName()}] with alias [{obj.Key}] is already present.";
+            var detail0 = $"The object [{obj.ObjectName}] with alias [{obj.Key}] is already present.";
             const string detail1 = "Define another alias for the object or use an empty one";
             var report = new ValidationReport();
             report.AddWarning(ModelMessageSource.CreateAliasViolationWarning(this, detail0, detail1));

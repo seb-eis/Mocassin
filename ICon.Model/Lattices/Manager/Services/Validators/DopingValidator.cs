@@ -33,8 +33,10 @@ namespace Mocassin.Model.Lattices.Validators
         public override IValidationReport Validate(IDoping obj)
         {
             ValidationReport report = new ValidationReport();
-            //AddNegativeDopingValidation(obj.Concentration, report);
-            //AddOverdopingValidation(obj.Concentration, report);
+	        if (obj.UseCounterDoping)
+	        {
+		        AddCounterChargeValidation(obj.PrimaryDoping, obj.CounterDoping, report);
+	        }
             return report;
         }
 
@@ -43,27 +45,17 @@ namespace Mocassin.Model.Lattices.Validators
         /// </summary>
         /// <param name="concentration"></param>
         /// <param name="report"></param>
-        protected void AddNegativeDopingValidation(double concentration, ValidationReport report)
+        protected void AddCounterChargeValidation(IDopingCombination primaryDoping, IDopingCombination counterDoping, ValidationReport report)
         {
-            if (concentration < 0.0)
-            {
-                var detail0 = $"The doping concentration cannot be smaller than zero";
-                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
-            }
+	        double deltaDopingCharge = primaryDoping.Dopant.Charge - primaryDoping.Dopable.Charge;
+	        double deltaCounterDopingCharge = counterDoping.Dopant.Charge - counterDoping.Dopable.Charge;
+	        if (deltaDopingCharge * deltaCounterDopingCharge > 0.0)
+	        {
+		        var detail0 = $"The charge created by the doping has to be compensated by the counter doping.";
+		        report.AddWarning(WarningMessage.CreateCritical(this, detail0));
+	        }
         }
 
-        /// <summary>
-        /// Validate if doping concentration is greater than one
-        /// </summary>
-        /// <param name="concentration"></param>
-        /// <param name="report"></param>
-        protected void AddOverdopingValidation(double concentration, ValidationReport report)
-        {
-            if (concentration > 1.0)
-            {
-                var detail0 = $"The doping concentration should not be larger than one";
-                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
-            }
-        }
+
     }
 }

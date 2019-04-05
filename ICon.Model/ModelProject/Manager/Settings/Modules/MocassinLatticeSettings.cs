@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Mocassin.Model.Lattices;
 
 namespace Mocassin.Model.ModelProject
 {
@@ -6,6 +7,7 @@ namespace Mocassin.Model.ModelProject
     ///     Settings data object for the energy managing module
     /// </summary>
     [DataContract]
+	[ModuleSettings(typeof(ILatticeManager))]
     public class MocassinLatticeSettings : MocassinModuleSettings
     {
         /// <inheritdoc />

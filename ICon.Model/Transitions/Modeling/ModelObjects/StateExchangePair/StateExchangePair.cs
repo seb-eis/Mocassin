@@ -26,11 +26,8 @@ namespace Mocassin.Model.Transitions
         [IgnoreDataMember]
         public bool IsVacancyPair => (DonorParticle?.IsVacancy ?? false) ^ (AcceptorParticle?.IsVacancy ?? false);
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "State Exchange Pair";
-        }
+	    /// <inheritdoc />
+	    public override string ObjectName => "State Exchange Pair";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

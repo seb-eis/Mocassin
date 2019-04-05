@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml.Serialization;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.EnergyModel;
+using Mocassin.UI.Xml.LatticeModel;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ParticleModel;
 using Mocassin.UI.Xml.SimulationModel;
@@ -59,12 +60,20 @@ namespace Mocassin.UI.Xml.Model
         [ModelInputRoot(3)]
         [NotMapped]
         public EnergyModelGraph EnergyModelGraph { get; set; }
+		
+		/// <summary>
+		///		Get or set the input lattice data
+		/// </summary>
+		[XmlElement("LatticeModel")]
+		[ModelInputRoot(4)]
+		[NotMapped]
+		public LatticeModelGraph LatticeModelGraph { get; set; }
 
         /// <summary>
         ///     Get or set the input simulation data
         /// </summary>
         [XmlElement("SimulationModel")]
-        [ModelInputRoot(4)]
+        [ModelInputRoot(5)]
         [NotMapped]
         public SimulationModelGraph SimulationModelGraph { get; set; }
 
@@ -97,6 +106,7 @@ namespace Mocassin.UI.Xml.Model
                 StructureModelGraph = new StructureModelGraph(),
                 EnergyModelGraph = new EnergyModelGraph(),
                 TransitionModelGraph = new TransitionModelGraph(),
+				LatticeModelGraph = new LatticeModelGraph(),
                 SimulationModelGraph = new SimulationModelGraph()
             };
         }

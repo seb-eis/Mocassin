@@ -442,10 +442,10 @@ namespace Mocassin.Model.Basic
             where TObject : ModelObject
         {
             if (restricted.Contains(obj.Index))
-                throw new ArgumentException($"The index {obj.Index} for {obj.GetObjectName()} is protected from deprecation");
+                throw new ArgumentException($"The index {obj.Index} for {obj.ObjectName} is protected from deprecation");
 
             if (obj.Index >= objData.Count)
-                throw new ArgumentOutOfRangeException($"{obj.GetObjectName()} index is out of range", nameof(obj.Index));
+                throw new ArgumentOutOfRangeException($"{obj.ObjectName} index is out of range", nameof(obj.Index));
 
             var changed = !objData[obj.Index].IsDeprecated;
             objData[obj.Index].Deprecate();
@@ -569,7 +569,7 @@ namespace Mocassin.Model.Basic
         {
             // Build and link a new internal object of the replacement type
             if (!TryBuildAndLinkInternalModelObject<T2>(obj, out var newInternal, out var message))
-                return OperationReport.MakeObjectBuildErrorReport($"Register [{obj?.GetObjectName() ?? "Model Object"}]", message);
+                return OperationReport.MakeObjectBuildErrorReport($"Register [{obj?.ObjectName ?? "Model Object"}]", message);
 
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
@@ -592,7 +592,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnNewModelObjects.OnNext(ModelObjectEventArgs.Create((T1) newInternal));
             }
 
-            return InvokeDataOperation($"Register [{newInternal.GetObjectName()}]", Operation, OnSuccess);
+            return InvokeDataOperation($"Register [{newInternal.ObjectName}]", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -631,7 +631,7 @@ namespace Mocassin.Model.Basic
                 EventManager.OnRemovedModelObjects.OnNext(ModelObjectEventArgs.Create((T1) internalObj));
             }
 
-            return InvokeDataOperation($"Remove [{internalObj.GetObjectName()}] ({internalObj.Index})", Operation, OnSuccess);
+            return InvokeDataOperation($"Remove [{internalObj.ObjectName}] ({internalObj.Index})", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -651,7 +651,7 @@ namespace Mocassin.Model.Basic
         {
             // Build and link a temporary internal object with the replacement information
             if (!TryBuildAndLinkInternalModelObject<T2>(newObj, out var tmpObject, out var message))
-                return OperationReport.MakeObjectBuildErrorReport($"Replace [{orgObj?.GetObjectName() ?? "Model Object"}]", message);
+                return OperationReport.MakeObjectBuildErrorReport($"Replace [{orgObj?.ObjectName ?? "Model Object"}]", message);
 
             tmpObject.Index = orgObj.Index;
 
@@ -675,7 +675,7 @@ namespace Mocassin.Model.Basic
                 if (changedObject != null) EventManager.OnChangedModelObjects.OnNext(ModelObjectEventArgs.Create((T1) changedObject));
             }
 
-            return InvokeDataOperation($"Replace [{tmpObject.GetObjectName()}] ({orgObj.Index})", Operation, OnSuccess);
+            return InvokeDataOperation($"Replace [{tmpObject.ObjectName}] ({orgObj.Index})", Operation, OnSuccess);
         }
 
         /// <summary>
@@ -787,7 +787,7 @@ namespace Mocassin.Model.Basic
 
             if(!(ModelObject.BuildInternalObject<T>(obj) is T tmpObj))
             {
-                message = $"Could not convert interface [{obj?.GetObjectName()}] to internal object!";
+                message = $"Could not convert interface [{obj?.ObjectName}] to internal object!";
                 modelObject = null;
                 return false;
             }

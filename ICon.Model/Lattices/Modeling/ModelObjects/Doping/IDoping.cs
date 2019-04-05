@@ -14,17 +14,22 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Information about the doping (particles and sublattice)
         /// </summary>
-        IDopingCombination DopingInfo { get; }
+        IDopingCombination PrimaryDoping { get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
-        IDopingCombination CounterDopingInfo { get; }
+        IDopingCombination CounterDoping { get; }
+
+	    /// <summary>
+	    /// Building Block in which the doping should take place
+	    /// </summary>
+	    IBuildingBlock BuildingBlock { get; set; }
 
         /// <summary>
         /// Doping group ID for simultaneous doping
         /// </summary>
-        int DopingGroup { get; }
+        int Priority { get; }
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied

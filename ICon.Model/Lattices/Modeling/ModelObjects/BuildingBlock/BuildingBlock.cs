@@ -33,7 +33,7 @@ namespace Mocassin.Model.Lattices
 	    /// </summary>
 	    //[DataMember]
 	    //[UseTrackedReferences]
-		//public Matrix2D PopulationInstructions { get; set; }
+		//public List<Matrix2D> PopulationInstructions { get; set; }
 
 		/// <inheritdoc />
 		/// <summary>

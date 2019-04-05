@@ -34,11 +34,8 @@ namespace Mocassin.Model.Transitions
             return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
         }
 
-        /// <inheritdoc />
-        public override string GetObjectName()
-        {
-            return "State Exchange Group";
-        }
+	    /// <inheritdoc />
+	    public override string ObjectName => "State Exchange Group";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)

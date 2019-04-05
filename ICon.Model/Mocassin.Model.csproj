@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
-    <Compile Remove="Lattices\Modeling\Objects\UniquePoolSampler\UniquePoolSampler.cs" />
     <Compile Remove="ProjectServices\Manager\Main\ProjectSettingsData.cs" />
     <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\ISimulationSeriesBase.cs" />
     <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\SimulationSeriesBase.cs" />
@@ -55,6 +54,7 @@
   <ItemGroup>
     <Folder Include="Lattices\Manager\EventHandler\" />
     <Folder Include="Lattices\Manager\Services\Validators\" />
+    <Folder Include="Lattices\Modeling\ModelParameters\" />
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />

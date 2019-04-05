@@ -95,12 +95,12 @@ namespace Mocassin.Model.Lattices
 			var orderedDopings = new Dictionary<int, List<IDoping>>();
 			foreach (var doping in dopings)
 			{
-				if (orderedDopings.ContainsKey(doping.DopingGroup) == false)
+				if (orderedDopings.ContainsKey(doping.Priority) == false)
 				{
-					orderedDopings[doping.DopingGroup] = new List<IDoping>();
+					orderedDopings[doping.Priority] = new List<IDoping>();
 				}
 
-				orderedDopings[doping.DopingGroup].Add(doping);
+				orderedDopings[doping.Priority].Add(doping);
 			}
 
 			return orderedDopings;
@@ -141,16 +141,16 @@ namespace Mocassin.Model.Lattices
 		{
 			LatticeEntry dopedCellEntry = new LatticeEntry()
 			{
-				Particle = doping.DopingInfo.DopedParticle,
-				CellPosition = doping.DopingInfo.UnitCellPosition,
-				Block = doping.DopingInfo.BuildingBlock,
+				Particle = doping.PrimaryDoping.Dopable,
+				CellPosition = doping.PrimaryDoping.UnitCellPosition,
+				Block = doping.BuildingBlock
 			};
 
 			LatticeEntry counterDopedCellEntry = new LatticeEntry()
 			{
-				Particle = doping.CounterDopingInfo.DopedParticle,
-				CellPosition = doping.CounterDopingInfo.UnitCellPosition,
-				Block = doping.CounterDopingInfo.BuildingBlock,
+				Particle = doping.CounterDoping.Dopable,
+				CellPosition = doping.CounterDoping.UnitCellPosition,
+				Block = doping.BuildingBlock
 			};
 
 			if (doping.UseCounterDoping == false)
@@ -159,7 +159,7 @@ namespace Mocassin.Model.Lattices
 
 				ApplyDoping(dopingPool[dopedCellEntry].Entries,
 					dopingParticleCount,
-					doping.DopingInfo);
+					doping.PrimaryDoping);
 			}
 			else
 			{
@@ -170,11 +170,11 @@ namespace Mocassin.Model.Lattices
 
 				ApplyDoping(dopingPool[dopedCellEntry].Entries,
 					dopingParticleCount.Item1,
-					doping.DopingInfo);
+					doping.PrimaryDoping);
 
 				ApplyDoping(dopingPool[counterDopedCellEntry].Entries,
 					dopingParticleCount.Item2,
-					doping.CounterDopingInfo);
+					doping.CounterDoping);
 			}
 		}
 
@@ -204,8 +204,8 @@ namespace Mocassin.Model.Lattices
 		protected (int, int) CalculateDopingCount(int dopableEntries, IDoping doping, double concentration)
 		{
 			// calculate the difference between the atom and the dopand for the doping and counter doping
-			double deltaCharge = Math.Abs(doping.DopingInfo.Dopant.Charge - doping.DopingInfo.DopedParticle.Charge);
-			double deltaCounterCharge = Math.Abs(doping.CounterDopingInfo.Dopant.Charge - doping.CounterDopingInfo.DopedParticle.Charge);
+			double deltaCharge = Math.Abs(doping.PrimaryDoping.Dopant.Charge - doping.PrimaryDoping.Dopable.Charge);
+			double deltaCounterCharge = Math.Abs(doping.CounterDoping.Dopant.Charge - doping.CounterDoping.Dopable.Charge);
 
 			// now calculate the number of atoms which have to be replaced. Tries to avoid charging the lattice in the process,
 			// but also to not deviate from the specified concentration. For the former condition the dopand number has

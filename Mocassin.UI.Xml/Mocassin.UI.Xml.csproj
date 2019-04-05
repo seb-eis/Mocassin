@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="Model\LatticeData\Main\" />
-    <Folder Include="Model\LatticeData\Objects\" />
     <Folder Include="Model\LatticeData\Parameters\" />
     <Folder Include="Model\ParticleData\Parameters\" />
     <Folder Include="Model\SimulationData\Parameters\" />

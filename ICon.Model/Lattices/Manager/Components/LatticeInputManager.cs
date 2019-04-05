@@ -40,18 +40,6 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Tries to set new lattice info if it passes validation (Awaits distribution of affiliated events on operation success)
-        /// </summary>
-        /// <param name="latticeInfo"></param>
-        /// <returns></returns>
-        [DataOperation(DataOperationType.ParameterChange)]
-        protected IOperationReport TrySetLatticeInfo(ILatticeInfo latticeInfo)
-        {
-            var result = DefaultSetModelParameter(latticeInfo, accessor => accessor.Query(data => data.LatticeInfo), true);
-            return result;
-        }
-
-        /// <summary>
         /// Registers a new BuildingBlock to the manager if it passes validation (Awaits distribution of affiliated events in case of operation success)
         /// </summary>
         /// <param name="buildingBlock"></param>

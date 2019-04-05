@@ -36,8 +36,8 @@ namespace Mocassin.Model.Lattices.Validators
         public override IValidationReport Validate(IDopingCombination obj)
         {
             ValidationReport report = new ValidationReport();
-            AddOccupationValidation(obj.Dopant, obj.UnitCellPosition, report);
-            AddOccupationValidation(obj.DopedParticle, obj.UnitCellPosition, report);
+            AddOccupationValidation(obj.Dopable, obj.UnitCellPosition, report);
+            AddOccupationValidation(obj.Dopable, obj.UnitCellPosition, report);
             return report;
         }
 

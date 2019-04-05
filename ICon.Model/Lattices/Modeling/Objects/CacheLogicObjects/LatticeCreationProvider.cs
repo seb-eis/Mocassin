@@ -123,6 +123,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="workLattice"></param>
         /// <param name="blockInfos"></param>
         /// <param name="sublatticeIDs"></param>
+        //TODO: add functionality later on
         //void FillLatticeWithCustomBlocks(LatticeEntry[,,][] workLattice, ReadOnlyListAdapter<IBlockInfo> blockInfos, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs)
         //{
         //    foreach (var blockInfo in blockInfos)
