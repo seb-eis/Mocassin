@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
 
             if (status != ModelValidationStatus.NoErrorsDetected)
             {
-                OnModelError(status);
+                ShowErrorMessageBox(status);
                 return;
             }
 
@@ -57,13 +57,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Action that is called if the execution fails due to model errors
+        ///     Shows an <see cref="MessageBox" /> that contains the status error information if the command execution fails
         /// </summary>
         /// <param name="validationStatus"></param>
-        private void OnModelError(ModelValidationStatus validationStatus)
+        private void ShowErrorMessageBox(ModelValidationStatus validationStatus)
         {
             var message = $"Model of project [{ProjectGetter()?.ProjectName}] contains errors." +
-                          $" Please resolve all model errors before attempting to create customization information!";
+                          " Please resolve all model errors before attempting to create customization information!";
             var caption = $"Model error - [{validationStatus.ToString()}]";
             MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }

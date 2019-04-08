@@ -189,7 +189,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         /// <inheritdoc />
         public override void Dispose()
         {
-            LiveReportSubscription?.Dispose();
+            AsyncDisposeLiveValidation();
             base.Dispose();
         }
 
