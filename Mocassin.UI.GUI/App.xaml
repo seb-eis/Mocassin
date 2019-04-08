@@ -7,6 +7,13 @@
     <ResourceDictionary>
       <s:Boolean x:Key="True">True</s:Boolean>
       <s:Boolean x:Key="False">False</s:Boolean>
+      <Style TargetType="{x:Type Button}" x:Key="NullCommandButtonStyle">
+        <Style.Triggers>
+          <Trigger Property="Command" Value="{x:Null}">
+            <Setter Property="IsEnabled" Value="False"/>
+          </Trigger>
+        </Style.Triggers>
+      </Style>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

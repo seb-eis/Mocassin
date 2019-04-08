@@ -9,74 +9,58 @@
   xmlns:tabCommands="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Commands"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ControlMenuViewModel, IsDesignTimeCreatable=True}"
-  d:DesignHeight="450" d:DesignWidth="800">
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
   <Grid>
-    <Menu
-      FontSize="14">
-      <MenuItem
-        Header="Views">
-        <MenuItem
-          Header="Particle Model">
+    <Menu FontSize="14"
+          Background="Transparent">
+      <MenuItem Header="Views">
+        <MenuItem Header="Particle Model Control">
           <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction
-                Command="{Binding CommandSource}"
-                CommandParameter="{x:Type tabCommands:AddParticleControlTabCommand}" />
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddParticleControlTabCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem
-          Header="Structure Model">
+        <MenuItem Header="Structure Model Control">
           <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction
-                Command="{Binding CommandSource}"
-                CommandParameter="{x:Type tabCommands:AddStructureControlTabCommand}" />
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddStructureControlTabCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem
-          Header="Transition Model">
+        <MenuItem Header="Transition Model Control">
           <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction
-                Command="{Binding CommandSource}"
-                CommandParameter="{x:Type tabCommands:AddTransitionControlTabCommand}" />
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddTransitionControlTabCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem
-          Header="Energy Model">
+        <MenuItem Header="Energy Model Control">
           <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction
-                Command="{Binding CommandSource}"
-                CommandParameter="{x:Type tabCommands:AddEnergyControlTabCommand}" />
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddEnergyControlTabCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem
-          Header="New Simulation Model View">
+        <MenuItem Header="Simulation Model Control">
           <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction
-                Command="{Binding CommandSource}"
-                CommandParameter="{x:Type tabCommands:AddSimulationControlTabCommand}" />
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddSimulationControlTabCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem
-          Header="Lattice Model">
+        <MenuItem Header="Lattice Model Control">
           <i:Interaction.Triggers>
             <!--
             <i:EventTrigger 
@@ -89,6 +73,15 @@
           </i:Interaction.Triggers>
         </MenuItem>
         <Separator />
+        
+        <MenuItem Header="Model Customization Control">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddCustomizationControlTabCommand}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </MenuItem>
       </MenuItem>
     </Menu>
   </Grid>

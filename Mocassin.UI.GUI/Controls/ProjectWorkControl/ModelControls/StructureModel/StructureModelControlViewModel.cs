@@ -8,13 +8,10 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel"/> that controls <see cref="StructureModelControlView"/>
+    ///     The <see cref="ProjectGraphControlViewModel"/> that controls <see cref="StructureModelControlView"/>
     /// </summary>
-    public class StructureModelControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class StructureModelControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="CellPositionControlViewModel"/> that controls wyckoff positions
         /// </summary>
@@ -34,13 +31,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ParameterControlViewModel.ChangeContentSource(contentSource);
             PositionControlViewModel.ChangeContentSource(contentSource);

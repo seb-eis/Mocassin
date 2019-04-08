@@ -20,10 +20,10 @@ namespace Mocassin.Framework.Operations
         public bool IsError { get; protected set; }
 
         /// <inheritdoc />
-        public bool HasValidationReport => ValidationReport != null;
+        public bool HasValidationError => ValidationReport != null && ValidationReport.GetWarnings().Any(x => x.IsCritical);
 
         /// <inheritdoc />
-        public bool HasRelevantConflictReport => ConflictReport != null && ConflictReport.GetWarnings().Count() != 0;
+        public bool HasUnsolvedConflict => ConflictReport != null && ConflictReport.GetWarnings().Any(x => x.IsCritical);
 
         /// <summary>
         ///     Flag that indicates if the operation has caused on demand data to expire

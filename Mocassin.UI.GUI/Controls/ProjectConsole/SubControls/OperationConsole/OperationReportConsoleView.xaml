@@ -17,10 +17,20 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <DockPanel Grid.Row="0">
-      <TextBlock Text="{Binding ReportSourceName, StringFormat=Reporter - {0:s}}" />
-      <TextBlock Text="  Errors Only" />
+    <DockPanel Grid.Row="0" 
+               HorizontalAlignment="Left">
+      <TextBlock Text="Target: " 
+                 VerticalAlignment="Center"/>
+      <ComboBox ItemsSource="{Binding ProjectGraphs}"
+                SelectedItem="{Binding SelectedProjectGraph}"
+                DisplayMemberPath="ProjectName"/>
+      <TextBlock Text="Show errors only: " 
+                 VerticalAlignment="Center"/>
       <CheckBox IsChecked="{Binding IsErrorContentFiltered}" 
+                VerticalAlignment="Center" />
+      <TextBlock Text="Disable content change auto-update" 
+                 VerticalAlignment="Center"/>
+      <CheckBox IsChecked="{Binding ValidatorViewModel.IsIgnoreContentChange}" 
                 VerticalAlignment="Center" />
     </DockPanel>
     <DataGrid Grid.Row="1"
@@ -60,16 +70,16 @@
         <DataGridTextColumn Header="Operation"
                             Width="Auto"
                             Binding="{Binding OperationDescription, Mode=OneWay}" />
-        <DataGridCheckBoxColumn Header="OK"
+        <DataGridCheckBoxColumn Header="Ok"
                                 Width="Auto"
                                 Binding="{Binding IsGood, Mode=OneWay}" />
         <DataGridCheckBoxColumn Header="Validation Error"
                                 Width="Auto"
-                                Binding="{Binding HasValidationReport, Mode=OneWay}" />        
-        <DataGridCheckBoxColumn Header="Conflict Solved"
+                                Binding="{Binding HasValidationError, Mode=OneWay}" />        
+        <DataGridCheckBoxColumn Header="Unsolved Conflict"
                                 Width="Auto"
-                                Binding="{Binding HasRelevantConflictReport, Mode=OneWay}" />
-        <DataGridCheckBoxColumn Header="Exception"
+                                Binding="{Binding HasUnsolvedConflict, Mode=OneWay}" />
+        <DataGridCheckBoxColumn Header="Caught Exception"
                                 Width="Auto"
                                 Binding="{Binding IsError, Mode=OneWay}" />
 

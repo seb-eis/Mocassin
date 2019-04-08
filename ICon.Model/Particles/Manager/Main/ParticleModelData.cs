@@ -44,8 +44,9 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public override void ResetToDefault()
         {
-            Particles = new List<Particle> {Particle.CreateEmpty()};
-            ParticleSets = new List<ParticleSet> {ParticleSet.CreateEmpty()};
+            ResetAllIndexedData();
+            Particles.Add(Particle.CreateEmpty());
+            ParticleSets.Add(ParticleSet.CreateEmpty());
         }
     }
 }

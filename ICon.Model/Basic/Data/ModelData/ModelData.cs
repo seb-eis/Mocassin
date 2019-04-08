@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Reactive.Disposables;
 using System.Reflection;
 
@@ -131,14 +132,20 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        ///     Replaces all index data by new containers of their type (Containers require a parameter-less constructor)
+        ///     Replaces all null index data by new containers of their type or cleans the affiliated lists (Containers require a
+        ///     parameter-less constructor and have to implement <see cref="IList" />)
         /// </summary>
         protected void ResetAllIndexedData()
         {
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             foreach (var propertyInfo in GetType().GetProperties(flags))
             {
-                if (propertyInfo.GetCustomAttribute(typeof(IndexedModelDataAttribute)) is IndexedModelDataAttribute)
+                if (!(propertyInfo.GetCustomAttribute(typeof(IndexedModelDataAttribute)) is IndexedModelDataAttribute))
+                    continue;
+
+                if (propertyInfo.GetValue(this) is IList collection) 
+                    collection.Clear();
+                else
                     propertyInfo.SetValue(this, Activator.CreateInstance(propertyInfo.PropertyType));
             }
         }

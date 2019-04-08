@@ -165,6 +165,13 @@ namespace Mocassin.Model.ModelProject
             return ActiveManagers;
         }
 
+        /// <inheritdoc />
+        public void ResetProject()
+        {
+            foreach (var modelManager in GetAllManagers()) 
+                modelManager.InputPort.ResetManager().Wait();   
+        }
+
         /// <summary>
         ///     Factory to create new project services interface from data object
         /// </summary>
@@ -172,8 +179,7 @@ namespace Mocassin.Model.ModelProject
         /// <returns></returns>
         public static ModelProject Create(ProjectSettings settings)
         {
-            if (settings == null) 
-                throw new ArgumentNullException(nameof(settings));
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
 
             var structureSettings = settings.GetModuleSettings<MocassinStructureSettings>();
 

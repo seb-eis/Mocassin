@@ -46,17 +46,29 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
             ProjectLibraryChangeSubscription = projectControl.ProjectLibraryChangeNotification
                 .Subscribe(OnProjectLibraryChanged);
+
+            SwitchLibraryEntityChangeSubscription(ProjectControl.OpenProjectLibrary);
         }
 
         /// <summary>
         ///     Action that is executed when the <see cref="IMocassinProjectLibrary" /> changes
         /// </summary>
-        /// <param name="newProjectLibrary"></param>
-        private void OnProjectLibraryChanged(IMocassinProjectLibrary newProjectLibrary)
+        /// <param name="projectLibrary"></param>
+        private void OnProjectLibraryChanged(IMocassinProjectLibrary projectLibrary)
+        {
+            SwitchLibraryEntityChangeSubscription(projectLibrary);
+            OnProjectLibraryChangedInternal(projectLibrary);
+        }
+
+        /// <summary>
+        ///     Switches the current library entity change subscription to the passed library or deletes the subscription if the
+        ///     library is null
+        /// </summary>
+        /// <param name="projectLibrary"></param>
+        private void SwitchLibraryEntityChangeSubscription(IMocassinProjectLibrary projectLibrary)
         {
             ProjectEntityChangeSubscription?.Dispose();
-            ProjectEntityChangeSubscription = newProjectLibrary?.StateChangedNotification.Subscribe(OnProjectContentChanged);
-            OnProjectLibraryChangedInternal(newProjectLibrary);
+            ProjectEntityChangeSubscription = projectLibrary?.StateChangedNotification.Subscribe(OnProjectContentChanged);
         }
 
         /// <summary>

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Model;
 
@@ -26,12 +28,19 @@ namespace Mocassin.UI.GUI.Logic.Validation
     }
 
     /// <summary>
-    ///     A <see cref="IDisposable" /> live validator for <see cref="ProjectModelGraph" /> instances that provides affiliated
-    ///     update events
+    ///     A <see cref="PrimaryControlViewModel" /> live validator for <see cref="ProjectModelGraph" /> instances that
+    ///     provides affiliated
+    ///     update events and supports continuous validation cycles
     /// </summary>
-    public class ModelLiveValidator : IDisposable
+    public class ModelValidatorViewModel : PrimaryControlViewModel
     {
         private readonly object lockObject = new object();
+        private bool isIgnoreContentChange;
+
+        /// <summary>
+        ///     Get the <see cref="IModelProject"/> interface that provides the validation functionality
+        /// </summary>
+        private IModelProject ModelProject { get; }
 
         /// <summary>
         ///     Get or set a boolean value if the validator is disposed
@@ -64,11 +73,6 @@ namespace Mocassin.UI.GUI.Logic.Validation
         public ProjectModelGraph ModelGraph { get; }
 
         /// <summary>
-        ///     Get the <see cref="IMocassinProjectControl" /> that the validator is hooked to
-        /// </summary>
-        private IMocassinProjectControl ProjectControl { get; }
-
-        /// <summary>
         ///     Gee the <see cref="IObservable{T}" /> for changes in the set of <see cref="IOperationReport" /> instances
         /// </summary>
         public IObservable<IEnumerable<IOperationReport>> ReportsChangeNotification => ReportSetChangedEvent.AsObservable();
@@ -84,17 +88,33 @@ namespace Mocassin.UI.GUI.Logic.Validation
         public TimeSpan ValidationInterval { get; set; } = TimeSpan.FromSeconds(5);
 
         /// <summary>
-        ///     Creates new <see cref="ModelLiveValidator" /> for the passed <see cref="ProjectModelGraph" /> and
+        ///     Get the <see cref="AsyncRunValidationCommand"/> to start a single validation cycle
+        /// </summary>
+        public AsyncRunValidationCommand RunValidationCommand { get; }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the validation system ignores received content change notifications
+        /// </summary>
+        public bool IsIgnoreContentChange
+        {
+            get => isIgnoreContentChange;
+            set => SetProperty(ref isIgnoreContentChange, value);
+        }
+
+        /// <summary>
+        ///     Creates new <see cref="ModelValidatorViewModel" /> for the passed <see cref="ProjectModelGraph" /> and
         ///     <see cref="IMocassinProjectControl" />
         /// </summary>
         /// <param name="modelGraph"></param>
         /// <param name="projectControl"></param>
-        public ModelLiveValidator(ProjectModelGraph modelGraph, IMocassinProjectControl projectControl)
+        public ModelValidatorViewModel(ProjectModelGraph modelGraph, IMocassinProjectControl projectControl)
+            : base(projectControl)
         {
-            ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
             ModelGraph = modelGraph ?? throw new ArgumentNullException(nameof(modelGraph));
             ReportSetChangedEvent = new ReactiveEvent<IEnumerable<IOperationReport>>();
             ModelValidationStatusChangedEvent = new ReactiveEvent<ModelValidationStatus>();
+            RunValidationCommand = new AsyncRunValidationCommand(this);
+            ModelProject = ProjectControl.CreateModelProject();
         }
 
         /// <summary>
@@ -133,14 +153,15 @@ namespace Mocassin.UI.GUI.Logic.Validation
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public override void Dispose()
         {
             StopContinuousValidation();
             DisposeInternal();
+            base.Dispose();
         }
 
         /// <summary>
-        ///     Internal <see cref="Dispose"/> implementation
+        ///     Internal <see cref="Dispose" /> implementation
         /// </summary>
         private void DisposeInternal()
         {
@@ -159,40 +180,76 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private void RunModelValidationCycle(CancellationToken cancellationToken)
         {
             var lastCheck = DateTime.Now;
-            while (!cancellationToken.IsCancellationRequested 
+            while (!cancellationToken.IsCancellationRequested
                    && (ReportSetChangedEvent.HasObservers || ModelValidationStatusChangedEvent.HasObservers))
             {
                 lastCheck = WaitForNextValidation(lastCheck);
-
-                var modelProject = ProjectControl.CreateModelProject();
-                if (!TryPrepareModelInput(out var inputObjects))
-                {
-                    ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelNotReady);
-                    continue;
-                }
-
-                if (!TryPushModelInput(modelProject, inputObjects, out var reports))
-                {
-                    ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.FatalException);
-                    continue;
-                }
-
-                ReportSetChangedEvent.OnNext(reports);
-                if (reports.Any(x => !x.IsGood))
-                {
-                    ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelRejected);
-                    continue;
-                }
-
-                if (!TryGenerateModelCustomization(modelProject, out var customization))
-                {
-                    ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationNotCreatable);
-                    continue;
-                }
-
-                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.NoErrorsDetected);
+                RunValidation();
                 lastCheck = DateTime.Now;
             }
+        }
+
+        /// <summary>
+        ///     Performs a single validation cycle run on the internally set <see cref="ProjectModelGraph"/>
+        /// </summary>
+        public void RunValidation()
+        {
+            ModelProject.ResetProject();
+            if (!TryPrepareModelInput(out var inputObjects))
+            {
+                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelNotReady);
+                return;
+            }
+
+            if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
+            {
+                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.FatalException);
+                return;
+            }
+
+            ReportSetChangedEvent.OnNext(reports);
+            if (reports.Any(x => !x.IsGood))
+            {
+                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelRejected);
+                return;
+            }
+
+            if (!TryGenerateModelCustomization(ModelProject, out var customization))
+            {
+                ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationNotCreatable);
+                return;
+            }
+
+            ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.NoErrorsDetected);
+        }
+
+        /// <summary>
+        ///     Tries to create a new <see cref="ProjectCustomizationGraph"/> for the current <see cref="ProjectModelGraph"/>
+        /// </summary>
+        /// <param name="customization"></param>
+        /// <returns></returns>
+        public ModelValidationStatus TryCreateCustomization(out ProjectCustomizationGraph customization)
+        {
+            ModelProject.ResetProject();
+            customization = null;
+            if (!TryPrepareModelInput(out var inputObjects))
+            {
+                return ModelValidationStatus.ModelNotReady;
+            }
+
+            if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
+            {
+                return ModelValidationStatus.FatalException;
+            }
+
+            if (reports.Any(x => !x.IsGood))
+            {
+                return ModelValidationStatus.ModelRejected;
+            }
+
+            return !TryGenerateModelCustomization(ModelProject, out customization) 
+                ? ModelValidationStatus.CustomizationNotCreatable 
+                : ModelValidationStatus.NoErrorsDetected;
         }
 
         /// <summary>
@@ -267,6 +324,13 @@ namespace Mocassin.UI.GUI.Logic.Validation
                 customization = null;
                 return false;
             }
+        }
+
+        /// <inheritdoc />
+        protected override async void OnProjectContentChangedInternal()
+        {
+            if (IsIgnoreContentChange) return;
+            await RunValidationCommand.ExecuteAsync(null);
         }
     }
 }

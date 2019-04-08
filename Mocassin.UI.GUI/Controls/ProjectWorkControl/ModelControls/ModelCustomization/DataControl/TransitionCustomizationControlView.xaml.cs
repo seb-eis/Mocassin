@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.SubControls.Base.Items
+namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl
 {
     /// <summary>
-    /// Interaktionslogik für BasicModelContentControlView.xaml
+    /// Interaktionslogik für TransitionCustomizationControlView.xaml
     /// </summary>
-    public partial class BasicModelContentControlView : UserControl
+    public partial class TransitionCustomizationControlView : UserControl
     {
-        public BasicModelContentControlView()
+        public TransitionCustomizationControlView()
         {
             InitializeComponent();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
@@ -8,12 +7,13 @@ using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content;
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {
     /// <summary>
-    ///     Base class for <see cref="ProjectControlCommand" /> implementations to add default layout model control tabs
+    ///     Bas class for <see cref="AddWorkTabCommand" /> implementations that use the
+    ///     <see cref="BasicCustomizationContentControlView" /> layout
     /// </summary>
-    public class AddDefaultLayoutControlTabCommand : AddWorkTabCommand
+    public class AddDefaultCustomizationControlTabCommand : AddWorkTabCommand
     {
         /// <inheritdoc />
-        protected AddDefaultLayoutControlTabCommand(IMocassinProjectControl projectControl)
+        protected AddDefaultCustomizationControlTabCommand(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
         }
@@ -57,18 +57,19 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         protected override string GetTabName()
         {
-            return "Control";
+            return "Customization Control";
         }
 
         /// <inheritdoc />
         protected sealed override ViewModelBase GetViewModel()
         {
-            var viewModel = new BasicModelContentControlViewModel(ProjectControl)
+            var viewModel = new BasicCustomizationContentControlViewModel(ProjectControl)
             {
                 DataContentControl = GetDataControl(),
                 InfoContentControl = GetInfoControl(),
                 VisualizerContentControl = GetInfoControl(),
-                SelectedProjectGraph = null
+                SelectedProjectGraph = null,
+                SelectedCustomizationGraph = null
             };
             return viewModel;
         }
@@ -76,7 +77,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         protected sealed override UserControl GetUserControl()
         {
-            return new BasicModelContentControlView();
+            return new BasicCustomizationContentControlView();
         }
     }
 }

@@ -4,17 +4,10 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.EnergyModel;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.ParticleModel;
-using Mocassin.UI.Xml.SimulationModel;
-using Mocassin.UI.Xml.StructureModel;
-using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.ProjectLibrary
 {
@@ -25,27 +18,32 @@ namespace Mocassin.UI.Xml.ProjectLibrary
     public interface IMocassinProjectLibrary : IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}"/> of <see cref="MocassinProjectGraph"/> objects stored in the library
+        ///     Get a boolean flag if the context is disposed
+        /// </summary>
+        bool IsDisposed { get; }
+
+        /// <summary>
+        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="MocassinProjectGraph" /> objects stored in the library
         /// </summary>
         DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; }
 
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}"/> of <see cref="ProjectModelGraph"/> objects stored in the library
+        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="ProjectModelGraph" /> objects stored in the library
         /// </summary>
         DbSet<ProjectModelGraph> ProjectModelGraphs { get; }
 
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}"/> of <see cref="ProjectCustomizationGraph"/> objects stored in the library
+        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="ProjectCustomizationGraph" /> objects stored in the library
         /// </summary>
         DbSet<ProjectCustomizationGraph> ProjectCustomizationGraphs { get; }
 
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}"/> of <see cref="ProjectJobTranslationGraph"/> objects stored in the library
+        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="ProjectJobTranslationGraph" /> objects stored in the library
         /// </summary>
         DbSet<ProjectJobTranslationGraph> ProjectJobTranslationGraphs { get; }
 
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}"/> of <see cref="MocassinProjectBuildGraph"/> objects stored in the library
+        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="MocassinProjectBuildGraph" /> objects stored in the library
         /// </summary>
         DbSet<MocassinProjectBuildGraph> MocassinProjectBuildGraphs { get; }
 
@@ -80,8 +78,25 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         bool HasUnsavedChanges();
 
         /// <summary>
-        ///     Get a <see cref="IObservable{T}"/> that informs that an internal change in the library happened
+        ///     Get a <see cref="IObservable{T}" /> that informs that an internal change in the library happened
         /// </summary>
         IObservable<Unit> StateChangedNotification { get; }
+
+        /// <summary>
+        ///     Get a hash value for the entire project content
+        /// </summary>
+        /// <returns></returns>
+        int GetProjectHash();
+
+        /// <summary>
+        ///     Checks if the contents of the library have changed since the last check and triggers affiliated events
+        /// </summary>
+        bool CheckForContentChange();
+
+        /// <summary>
+        ///     Async checks if the contents of the library have changed since the last check and triggers affiliated events if required
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> CheckForContentChangeAsync();
     }
 }

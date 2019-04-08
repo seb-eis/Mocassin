@@ -8,20 +8,17 @@
              xmlns:commands="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Commands"
              d:DataContext="{d:DesignInstance local:ProjectMenuViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
   <Grid>
-    <Menu
-      FontSize="14">
-      <MenuItem
-        Header="Project">
-        <MenuItem
-          Header="Live Validation">
+    <Menu FontSize="14"
+          Background="Transparent">
+      <MenuItem Header="Project">
+        <MenuItem Header="Model Validation Console">
           <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction
-                Command="{Binding CommandSource}"
-                CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}" />
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}" />
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
