@@ -22,30 +22,12 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
-        /// Get lattice info
-        /// </summary>
-        /// <returns></returns>
-        public ILatticeInfo GetLatticeInfo()
-        {
-            return Data.LatticeInfo;
-        }
-
-        /// <summary>
         /// Get read only list of used dopings
         /// </summary>
         /// <returns></returns>
         public ReadOnlyListAdapter<IDoping> GetDopings()
         {
             return ReadOnlyListAdapter<IDoping>.FromEnumerable(Data.Dopings);
-        }
-
-        /// <summary>
-        /// Get read only list of block infos
-        /// </summary>
-        /// <returns></returns>
-        public ReadOnlyListAdapter<IBlockInfo> GetBlockInfos()
-        {
-            return ReadOnlyListAdapter<IBlockInfo>.FromEnumerable(Data.BlockInfos);
         }
 
         /// <summary>

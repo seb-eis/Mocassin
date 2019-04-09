@@ -17,25 +17,11 @@ namespace Mocassin.Model.Lattices
     public class LatticeModelData : ModelData<ILatticeDataPort>
     {
         /// <summary>
-        /// Informations about the lattice, such as the extent of the super cell
-        /// </summary>
-        [DataMember]
-        [ModelParameter(typeof(ILatticeInfo))]
-        public LatticeInfo LatticeInfo { get; set; }
-
-        /// <summary>
         /// Default building block (index = 0) and custom building blocks of lattice
         /// </summary>
         [DataMember]
         [IndexedModelData(typeof(IBuildingBlock))]
         public List<BuildingBlock> BuildingBlocks { get; set; }
-
-        /// <summary>
-        /// List of building block information (origin and extent)
-        /// </summary>
-        [DataMember]
-        [IndexedModelData(typeof(IBlockInfo))]
-        public List<BlockInfo> BlockInfos { get; set; }
 
         /// <summary>
         /// List of doping combinations (dopant, doped element, unitcell position)

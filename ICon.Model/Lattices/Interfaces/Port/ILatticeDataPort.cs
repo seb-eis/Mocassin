@@ -14,11 +14,6 @@ namespace Mocassin.Model.Lattices
     /// </summary>
     public interface ILatticeDataPort : IModelDataPort
     {
-        /// <summary>
-        /// Get super cell dimensions
-        /// </summary>
-        /// <returns></returns>
-        ILatticeInfo GetLatticeInfo();
 
         /// <summary>
         /// Get read only list of used dopings
@@ -37,12 +32,6 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         /// <returns></returns>
         ReadOnlyListAdapter<IBuildingBlock> GetBuildingBlocks();
-
-        /// <summary>
-        /// Get read only list of block infos
-        /// </summary>
-        /// <returns></returns>
-        ReadOnlyListAdapter<IBlockInfo> GetBlockInfos();
 
     }
 }

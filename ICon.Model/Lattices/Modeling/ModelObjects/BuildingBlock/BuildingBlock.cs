@@ -21,11 +21,19 @@ namespace Mocassin.Model.Lattices
     {
         /// <inheritdoc />
         /// <summary>
-        /// The list interface of unit cell entries
+        /// The occupation of the building block
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
         public List<IParticle> CellEntries { get; set; }
+
+	    /// <inheritdoc />
+	    /// <summary>
+	    /// The population instructions to fill the super cell
+	    /// </summary>
+	    //[DataMember]
+	    //[UseTrackedReferences]
+		//public List<Matrix2D> PopulationInstructions { get; set; }
 
 		/// <inheritdoc />
 		/// <summary>
@@ -43,6 +51,7 @@ namespace Mocassin.Model.Lattices
             if (CastIfNotDeprecated<IBuildingBlock>(modelObject) is var casted)
             {
                 CellEntries = casted.CellEntries;
+	            //PopulationInstructions = casted.PopulationInstructions;
                 return this;
             }
             return null;
