@@ -58,8 +58,7 @@ namespace Mocassin.Model.Basic
         {
             lock (AccessLock)
             {
-                if (IsDeprecated) 
-                    Recalculate();
+                if (IsDeprecated)  Recalculate();
 
                 return Data;
             }

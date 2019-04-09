@@ -7,14 +7,11 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="UnstableEnvironmentControlView" /> that controls
+    ///     The <see cref="ProjectGraphControlViewModel" /> for the <see cref="UnstableEnvironmentControlView" /> that controls
     ///     unstable environments
     /// </summary>
-    public class UnstableEnvironmentControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class UnstableEnvironmentControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="UnstableEnvironmentGridControlViewModel" /> that controls unstable environment data grid
         /// </summary>
@@ -28,13 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             EnvironmentGridControlViewModel.ChangeContentSource(contentSource);

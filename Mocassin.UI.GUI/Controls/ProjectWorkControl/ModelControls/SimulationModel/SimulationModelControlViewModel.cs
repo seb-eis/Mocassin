@@ -8,14 +8,11 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="SimulationModelControlView" /> that controls simulation
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="SimulationModelControlView" /> that controls simulation
     ///     base definitions
     /// </summary>
-    public class SimulationModelControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class SimulationModelControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="MetropolisSimulationControlViewModel" /> that controls metropolis simulation base definitions
         /// </summary>
@@ -35,13 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             MetropolisSimulationViewModel.ChangeContentSource(contentSource);

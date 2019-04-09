@@ -1,5 +1,4 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl;
 using Mocassin.UI.Xml.Main;
@@ -8,10 +7,10 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="TransitionModelControlView" /> that controls
+    ///     The <see cref="ProjectGraphControlViewModel" /> for the <see cref="TransitionModelControlView" /> that controls
     ///     transition definition
     /// </summary>
-    public class TransitionModelControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class TransitionModelControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
         ///     Get the <see cref="DataControl.AbstractTransitionControlViewModel" /> that controls transition abstraction
@@ -22,9 +21,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         ///     Get the <see cref="DataControl.TransitionControlViewModel" /> that controls transition definition
         /// </summary>
         public TransitionControlViewModel TransitionControlViewModel { get; }
-
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <inheritdoc />
         public TransitionModelControlViewModel(IMocassinProjectControl projectControl)
@@ -41,13 +37,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             TransitionControlViewModel.ChangeContentSource(contentSource);

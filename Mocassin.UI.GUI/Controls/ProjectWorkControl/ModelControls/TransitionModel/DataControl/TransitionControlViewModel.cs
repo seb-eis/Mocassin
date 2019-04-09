@@ -8,14 +8,11 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="TransitionControlView" /> that controls transition
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="TransitionControlView" /> that controls transition
     ///     definition
     /// </summary>
-    public class TransitionControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class TransitionControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="MetropolisTransitionGridControlViewModel " /> that controls metropolis transition definitions
         /// </summary>
@@ -35,13 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             MetropolisTransitionGridViewModel.ChangeContentSource(contentSource);

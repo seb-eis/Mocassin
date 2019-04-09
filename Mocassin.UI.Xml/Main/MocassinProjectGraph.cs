@@ -57,19 +57,27 @@ namespace Mocassin.UI.Xml.Main
         public List<MocassinProjectBuildGraph> ProjectBuildGraphs { get; set; }
 
         /// <summary>
+        ///     Create empty <see cref="MocassinProjectGraph"/>
+        /// </summary>
+        public MocassinProjectGraph()
+        {
+            ProjectCustomizationGraphs = new List<ProjectCustomizationGraph>();
+            ProjectJobTranslationGraphs = new List<ProjectJobTranslationGraph>();
+            ProjectBuildGraphs = new List<MocassinProjectBuildGraph>();
+        }
+
+        /// <summary>
         ///     Creates a new empty default <see cref="MocassinProjectGraph" />
         /// </summary>
         /// <returns></returns>
         public static MocassinProjectGraph CreateNew()
         {
+            var guid = Guid.NewGuid().ToString();
             return new MocassinProjectGraph
             {
-                ProjectGuid = Guid.NewGuid().ToString(),
-                ProjectName = "New Project Graph",
-                ProjectModelGraph = ProjectModelGraph.CreateNew(),
-                ProjectCustomizationGraphs = new List<ProjectCustomizationGraph>(),
-                ProjectJobTranslationGraphs = new List<ProjectJobTranslationGraph>(),
-                ProjectBuildGraphs = new List<MocassinProjectBuildGraph>()
+                ProjectGuid = guid,
+                ProjectName = $"Project {guid}",
+                ProjectModelGraph = ProjectModelGraph.CreateNew()
             };
         }
     }

@@ -9,14 +9,11 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="AbstractTransitionControlView" /> that controls
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="AbstractTransitionControlView" /> that controls
     ///     transition abstraction data
     /// </summary>
-    public class AbstractTransitionControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class AbstractTransitionControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="ExchangePairGridControlViewModel" /> that controls the collection of
         ///     <see cref="StateExchangePairGraph" /> instances
@@ -45,13 +42,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             ExchangePairGridViewModel.ChangeContentSource(contentSource);

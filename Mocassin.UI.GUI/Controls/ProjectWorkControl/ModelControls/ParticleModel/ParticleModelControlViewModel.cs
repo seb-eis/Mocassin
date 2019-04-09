@@ -10,10 +10,10 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="ParticleModelControlView" /> that controls
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="ParticleModelControlView" /> that controls
     ///     <see cref="ParticleModelGraph" /> creation and manipulation
     /// </summary>
-    public class ParticleModelControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class ParticleModelControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
         ///     Get the <see cref="ViewModelBase" /> for the <see cref="ParticleGraph" /> data control
@@ -25,9 +25,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         ///     control
         /// </summary>
         public ParticleSetControlViewModel ParticleSetControlViewModel { get; }
-
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <inheritdoc />
         public ParticleModelControlViewModel(IMocassinProjectControl projectControl)
@@ -44,17 +41,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             ParticleControlViewModel.ChangeContentSource(contentSource);
             ParticleSetControlViewModel.ChangeContentSource(contentSource);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            ChangeContentSource(contentSource as MocassinProjectGraph);
         }
     }
 }

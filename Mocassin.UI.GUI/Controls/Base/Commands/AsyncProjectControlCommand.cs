@@ -5,10 +5,10 @@ using Mocassin.UI.GUI.Base.DataContext;
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {
     /// <summary>
-    ///     Base class for <see cref="ParameterlessCommand"/> implementations that target the main <see cref="IMocassinProjectControl"/>
+    ///     Base class for <see cref="AsyncCommand"/> implementations that target the main <see cref="IMocassinProjectControl"/>
     ///     that ensures that potential context change events are triggered before checking execution
     /// </summary>
-    public abstract class ProjectControlCommand : ParameterlessCommand
+    public abstract class AsyncProjectControlCommand : AsyncCommand
     {
         /// <summary>
         ///     Get the access to the <see cref="IMocassinProjectControl"/> main project control
@@ -19,23 +19,23 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         ///     Creates new <see cref="ProjectControlCommand"/> that targets the passed <see cref="IMocassinProjectControl"/>
         /// </summary>
         /// <param name="projectControl"></param>
-        protected ProjectControlCommand(IMocassinProjectControl projectControl)
+        protected AsyncProjectControlCommand(IMocassinProjectControl projectControl)
         {
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
         }
 
         /// <inheritdoc />
-        public sealed override bool CanExecute()
+        protected sealed override bool CanExecuteInternal(object parameter)
         {
             ProjectControl.OpenProjectLibrary?.CheckForContentChange();
-            return base.CanExecute() && CanExecuteInternal();
+            return CanExecuteInternal();
         }
 
         /// <summary>
-        ///     Internal implementation of can execute check
+        ///     Parameterless internal version of <see cref="CanExecuteInternal(object)"/>
         /// </summary>
         /// <returns></returns>
-        public virtual bool CanExecuteInternal()
+        protected virtual bool CanExecuteInternal()
         {
             return true;
         }
@@ -45,7 +45,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
     ///     Base class for <see cref="Command{T}"/> implementations that target the main <see cref="IMocassinProjectControl"/>
     ///     that ensures that potential context change events are triggered before checking execution
     /// </summary>
-    public abstract class ProjectControlCommand<T> : Command<T>
+    public abstract class AsyncProjectControlCommand<T> : AsyncCommand<T>
     {
         /// <summary>
         ///     Get the access to the <see cref="IMocassinProjectControl"/> main project control
@@ -56,24 +56,15 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         ///     Creates new <see cref="ProjectControlCommand{T}"/> that targets the passed <see cref="IMocassinProjectControl"/>
         /// </summary>
         /// <param name="projectControl"></param>
-        protected ProjectControlCommand(IMocassinProjectControl projectControl)
+        protected AsyncProjectControlCommand(IMocassinProjectControl projectControl)
         {
             ProjectControl = projectControl ?? throw new ArgumentNullException(nameof(projectControl));
         }
 
         /// <inheritdoc />
-        public sealed override bool CanExecute(T parameter)
+        public override bool CanExecuteInternal(T parameter)
         {
             ProjectControl.OpenProjectLibrary?.CheckForContentChange();
-            return base.CanExecute(parameter) && CanExecuteInternal(parameter);
-        }
-
-        /// <summary>
-        ///     Internal implementation of can execute check
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool CanExecuteInternal(T parameter)
-        {
             return true;
         }
     }

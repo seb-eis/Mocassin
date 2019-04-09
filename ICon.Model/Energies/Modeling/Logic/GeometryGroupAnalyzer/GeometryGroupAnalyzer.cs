@@ -13,6 +13,14 @@ using Mocassin.Symmetry.SpaceGroups;
 namespace Mocassin.Model.Energies
 {
     /// <summary>
+    ///     Enum that informs about validity of group geometry
+    /// </summary>
+    public enum GroupGeometryValidity
+    {
+        IsValid, ContainsNonExistentPositions, ContainsFilteredPositions, ContainsUnstablePositions
+    }
+
+    /// <summary>
     ///     Grouping analyzer that handles calculations and permutation generation for grouping definitions
     /// </summary>
     public class GeometryGroupAnalyzer
@@ -28,7 +36,7 @@ namespace Mocassin.Model.Energies
         public ISpaceGroupService SpaceGroupService { get; }
 
         /// <summary>
-        ///     Generates new grouping analyzer that uses the passed unit cell provider and space group service for geoemtric
+        ///     Generates new grouping analyzer that uses the passed unit cell provider and space group service for geometric
         ///     analysis
         /// </summary>
         /// <param name="unitCellProvider"></param>
@@ -106,22 +114,26 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Determines if the passed group interaction contains any pair interactions that are filtered by the passed set of
-        ///     interaction filters
+        ///     Determines the <see cref="GroupGeometryValidity"/> of the passed <see cref="IGroupInteraction"/> in the context of the passed <see cref="IInteractionFilter"/> set
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public bool GroupContainsFilteredPairs(IGroupInteraction groupInteraction, IEnumerable<IInteractionFilter> filters)
+        public GroupGeometryValidity CheckGroupGeometryValidity(IGroupInteraction groupInteraction, IEnumerable<IInteractionFilter> filters)
         {         
             var partnerPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
+            if (partnerPositions.Any(x => x == null)) return GroupGeometryValidity.ContainsNonExistentPositions;
+            if (partnerPositions.Any(x => !x.IsValidAndStable())) return GroupGeometryValidity.ContainsUnstablePositions;
+
             var distances = groupInteraction.GetBaseGeometry()
                 .Select(vector => vector - groupInteraction.CenterUnitCellPosition.Vector)
                 .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
                 .ToList();
 
-            return filters
-                .Any(x => distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterUnitCellPosition, partnerPositions[i])).Any());
+            return filters.Any(x =>
+                distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterUnitCellPosition, partnerPositions[i])).Any())
+                ? GroupGeometryValidity.ContainsFilteredPositions
+                : GroupGeometryValidity.IsValid;
         }
 
         /// <summary>

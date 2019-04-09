@@ -13,10 +13,10 @@ using Mocassin.UI.Xml.StructureModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="StructureParameterControlView" /> that controls unique
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="StructureParameterControlView" /> that controls unique
     ///     structure model parameters
     /// </summary>
-    public class StructureParameterControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class StructureParameterControlViewModel : ProjectGraphControlViewModel
     {
         private static IList<ISpaceGroup> spaceGroups;
         private StructureModelGraph modelGraph;
@@ -86,16 +86,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (ContentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; set; }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             ModelGraph = ContentSource?.ProjectModelGraph?.StructureModelGraph;

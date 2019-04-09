@@ -8,14 +8,11 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for <see cref="EnergyModelControlView" /> that controls the energy model
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="EnergyModelControlView" /> that controls the energy model
     ///     definition
     /// </summary>
-    public class EnergyModelControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public class EnergyModelControlViewModel : ProjectGraphControlViewModel
     {
-        /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
-
         /// <summary>
         ///     Get the <see cref="EnergyParameterControlViewModel" /> that controls the stable environment settings
         /// </summary>
@@ -41,13 +38,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
             ParameterControlViewModel.ChangeContentSource(contentSource);

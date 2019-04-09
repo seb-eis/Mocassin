@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
-using Mocassin.Framework.Events;
+﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
@@ -70,7 +68,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <summary>
         ///     Action that is invoked if the selected <see cref="MocassinProjectGraph" /> changes
         /// </summary>
-        private void OnProjectGraphSelectionChanged()
+        protected void OnProjectGraphSelectionChanged()
         {
             NotifyGraphSelectionChanged(DataContentControl);
             NotifyGraphSelectionChanged(VisualizerContentControl);
@@ -78,13 +76,34 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
+        ///     Action that is invoked if any selected <see cref="object" /> has changed
+        /// </summary>
+        /// <param name="value"></param>
+        protected void OnSelectionChanged(object value)
+        {
+            NotifySelectionChanged(DataContentControl, value);
+            NotifySelectionChanged(VisualizerContentControl, value);
+            NotifySelectionChanged(InfoContentControl, value);
+        }
+
+        /// <summary>
         ///     Tries to notify a <see cref="ContentControl" /> about a change in the selected <see cref="MocassinProjectGraph" />
         /// </summary>
         /// <param name="contentControl"></param>
-        private void NotifyGraphSelectionChanged(ContentControl contentControl)
+        protected void NotifyGraphSelectionChanged(ContentControl contentControl)
         {
-            if (contentControl.DataContext is IContentSupplier<MocassinProjectGraph> contentSupplier)
-                contentSupplier.ChangeContentSource(SelectedProjectGraph);
+            (contentControl.DataContext as IContentSupplier<MocassinProjectGraph>)?.ChangeContentSource(SelectedProjectGraph);
+        }
+
+        /// <summary>
+        ///     Notifies the passed <see cref="ContentControl" /> about a selection change if it implement
+        ///     <see cref="IContentSupplier" />
+        /// </summary>
+        /// <param name="contentControl"></param>
+        /// <param name="value"></param>
+        protected void NotifySelectionChanged(ContentControl contentControl, object value)
+        {
+            (contentControl.DataContext as IContentSupplier)?.ChangeContentSource(value);
         }
     }
 }
