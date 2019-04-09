@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 test.moc
+test2.moc

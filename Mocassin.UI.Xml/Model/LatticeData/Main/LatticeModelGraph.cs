@@ -19,26 +19,26 @@ namespace Mocassin.UI.Xml.LatticeModel
 	    /// <summary>
 	    ///     The list of defines building blocks
 	    /// </summary>
-	    [XmlArray("BuildingBlock")]
+	    [XmlArray("BuildingBlocks")]
 	    [XmlArrayItem("BuildingBlock")]
         public List<BuildingBlockGraph> BuildingBlocks { get; set; }
 
 	    /// <summary>
 	    ///     The list of defines dopings
 	    /// </summary>
-	    [XmlArray("Doping")]
+	    [XmlArray("Dopings")]
 	    [XmlArrayItem("Doping")]
 		public List<DopingGraph> Dopings { get; set; }
 		
 	    /// <summary>
 	    ///     The list of defines doping combinations
 	    /// </summary>
-	    [XmlArray("DopingCombination")]
+	    [XmlArray("DopingCombinations")]
 	    [XmlArrayItem("DopingCombination")]
 	    public List<DopingCombinationGraph> DopingCombination { get; set; }
 
         /// <summary>
-        ///     Creates new <see cref="EnergyModelGraph"/> with empty component lists
+        ///     Creates new <see cref="LatticeModelGraph"/> with empty component lists
         /// </summary>
         public LatticeModelGraph()
         {
@@ -56,7 +56,9 @@ namespace Mocassin.UI.Xml.LatticeModel
         /// <inheritdoc />
         public override IEnumerable<IModelObject> GetInputObjects()
         {
-	        yield break;
+	        return BuildingBlocks.Select(x => x.GetInputObject()).Cast<IModelObject>()
+		        .Concat(DopingCombination.Select(x => x.GetInputObject()))
+		        .Concat(Dopings.Select(x => x.GetInputObject()));
         }
     }
 }
