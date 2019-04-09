@@ -27,6 +27,18 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <summary>
+        /// Validate a lattice info in terms of conflicts with basic limitations
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="dataReader"></param>
+        /// <returns></returns>
+        [ValidationOperation(ValidationType.Parameter)]
+        protected IValidationReport ValidateStructureInfo(ILatticeInfo info, IDataReader<ILatticeDataPort> dataReader)
+        {
+            return new LatticeInfoValidator(ModelProject, Settings, dataReader).Validate(info);
+        }
+
+        /// <summary>
         /// Validate a BuildingBlock in terms of conflicts with basic limitations
         /// </summary>
         /// <param name="buildingBlock"></param>
@@ -38,6 +50,17 @@ namespace Mocassin.Model.Lattices
             return new BuildingBlockValidator(ModelProject, Settings, dataReader).Validate(buildingBlock);
         }
 
+        /// <summary>
+        /// Validate a BlockInfo in terms of conflicts with basic limitations
+        /// </summary>
+        /// <param name="blockInfo"></param>
+        /// <param name="dataReader"></param>
+        /// <returns></returns>
+        [ValidationOperation(ValidationType.Object)]
+        protected IValidationReport ValidateBlockInfo(IBlockInfo blockInfo, IDataReader<ILatticeDataPort> dataReader)
+        {
+            return new BlockInfoValidator(ModelProject, Settings, dataReader).Validate(blockInfo);
+        }
 
         /// <summary>
         /// Validate a DopingCombination in terms of conflicts with basic limitations and ParticleSets of UnitcellPosition

@@ -18,20 +18,26 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
-        public IDopingCombination PrimaryDoping { set; get; }
+        public IDopingCombination DopingInfo { set; get; }
 
         /// <summary>
         /// Information about the counter doping (particles and sublattice)
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
-        public IDopingCombination CounterDoping { set; get; }
+        public IDopingCombination CounterDopingInfo { set; get; }
 
-	    /// <summary>
-	    /// Building Block in which the doping should take place
-	    /// </summary>
-	    [DataMember]
-	    public IBuildingBlock BuildingBlock { get; set; }
+        /// <summary>
+        /// Counter doping multiplier
+        /// </summary>
+        [DataMember]
+        public double CounterDopingMultiplier { get; set; }
+
+        /// <summary>
+        /// Flag that indicates whether the custom CounterDopingMultiplier is used
+        /// </summary>
+        [DataMember]
+        public bool UseCustomMultiplier { get; set; }
 
         /// <summary>
         /// Flag to indicate whether a counter doping should be applied
@@ -43,7 +49,7 @@ namespace Mocassin.Model.Lattices
         /// Doping Group for simutaneous doping
         /// </summary>
         [DataMember]
-        public int Priority { get; set; }
+        public int DopingGroup { get; set; }
 
 		/// <summary>
 		/// Get the type name string
@@ -60,10 +66,12 @@ namespace Mocassin.Model.Lattices
         {
             if (CastIfNotDeprecated<IDoping>(obj) is var doping)
             {
-                PrimaryDoping = doping.PrimaryDoping;
-                CounterDoping = doping.CounterDoping;
+                DopingInfo = doping.DopingInfo;
+                CounterDopingInfo = doping.CounterDopingInfo;
+                CounterDopingMultiplier = doping.CounterDopingMultiplier;
+                UseCustomMultiplier = doping.UseCustomMultiplier;
                 UseCounterDoping = doping.UseCounterDoping;
-                Priority = doping.Priority;
+                DopingGroup = doping.DopingGroup;
                 return this;
             }
             return null;

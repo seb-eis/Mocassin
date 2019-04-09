@@ -52,9 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Lattices\Manager\EventHandler\" />
-    <Folder Include="Lattices\Manager\Services\Validators\" />
-    <Folder Include="Lattices\Modeling\ModelParameters\" />
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
     <Folder Include="Particles\Modeling\Logic\" />
