@@ -40,8 +40,8 @@ namespace Mocassin.UI.Xml.LatticeModel
 		/// <summary>
 		/// Flag to indicate if a counter doping should be used
 		/// </summary>
-		[XmlAttribute("BuildingBlock")]
-		[JsonProperty("BuildingBlock")]
+		[XmlAttribute("UseCounterDoping")]
+		[JsonProperty("UseCounterDoping")]
 		public bool UseCounterDoping { get; set; }
 
 		/// <summary>
