@@ -291,6 +291,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -427,6 +431,7 @@
     <Compile Include="Base\Commands\ParameterlessAsyncCommand.cs" />
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
+    <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
     <Compile Include="Base\Converter\IndexToEnumConverter.cs" />
     <Compile Include="Base\Converter\UniqueLookupConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
@@ -558,6 +563,11 @@
       <DependentUpon>TransitionCustomizationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\KineticRuleSetKineticRuleSetControlVmConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlView.xaml.cs">
+      <DependentUpon>KineticRuleSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlView.xaml.cs">
       <DependentUpon>ModelCustomizationControlView.xaml</DependentUpon>
     </Compile>
@@ -736,7 +746,6 @@
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />

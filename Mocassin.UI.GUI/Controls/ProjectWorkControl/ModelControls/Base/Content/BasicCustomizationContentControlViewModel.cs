@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands;
 using Mocassin.UI.Xml.Customization;
@@ -12,6 +13,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class BasicCustomizationContentControlViewModel : BasicModelContentControlViewModel
     {
+        private IEnumerable<ProjectCustomizationGraph> customizationGraphs;
         private ProjectCustomizationGraph selectedCustomizationGraph;
 
         /// <summary>
@@ -28,9 +30,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Get the <see cref="IList{T}"/> of <see cref="ProjectCustomizationGraph"/> instances that can currently be selected
+        ///     Get the <see cref="IEnumerable{T}"/> of <see cref="ProjectCustomizationGraph"/> instances that can currently be selected
         /// </summary>
-        public IList<ProjectCustomizationGraph> CustomizationGraphs => SelectedProjectGraph?.ProjectCustomizationGraphs;
+        public IEnumerable<ProjectCustomizationGraph> CustomizationGraphs
+        {
+            get => customizationGraphs;
+            set => SetProperty(ref customizationGraphs, value);
+        }
 
         /// <summary>
         ///     Get the <see cref="AddCustomizationCommand"/> to create a new <see cref="ProjectCustomizationGraph"/> on the current project
@@ -53,7 +59,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private void OnCustomizationSourceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(SelectedProjectGraph)) return;
-            OnPropertyChanged(nameof(CustomizationGraphs));
+            SelectedCustomizationGraph = null;
+            CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
+        }
+
+        /// <inheritdoc />
+        protected override void OnProjectContentChangedInternal()
+        {
+            CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs.ToList();
         }
     }
 }

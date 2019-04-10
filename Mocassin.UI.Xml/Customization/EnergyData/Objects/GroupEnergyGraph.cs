@@ -5,6 +5,7 @@ using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -48,17 +49,19 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new serializable <see cref="GroupEnergyGraph" /> by pulling the required data from the passed
-        ///     <see cref="GroupEnergyEntry" /> context
+        ///     <see cref="GroupEnergyEntry" /> context and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="energyEntry"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static GroupEnergyGraph Create(in GroupEnergyEntry energyEntry)
+        public static GroupEnergyGraph Create(in GroupEnergyEntry energyEntry, ProjectModelGraph parent)
         {
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
             var obj = new GroupEnergyGraph
             {
                 CenterParticleKey = energyEntry.CenterParticle.Key,
                 Energy = energyEntry.Energy,
-                OccupationState = OccupationStateGraph.Create(energyEntry.GroupOccupation)
+                OccupationState = OccupationStateGraph.Create(energyEntry.GroupOccupation, parent.ParticleModelGraph.Particles)
             };
 
             return obj;

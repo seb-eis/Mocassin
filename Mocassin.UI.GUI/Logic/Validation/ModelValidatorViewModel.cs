@@ -316,7 +316,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
         {
             try
             {
-                customization = ProjectCustomizationGraph.Create(modelProject);
+                customization = ProjectCustomizationGraph.Create(modelProject, ModelGraph);
                 return true;
             }
             catch (Exception)

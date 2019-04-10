@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
+using Mocassin.UI.Xml.Model;
 using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Customization
@@ -83,13 +84,15 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new <see cref="EnergyModelCustomizationGraph" /> by transforming all defined data in the passed
-        ///     <see cref="IEnergySetterProvider" /> into serializable data formats
+        ///     <see cref="IEnergySetterProvider" /> into serializable data formats referencing the <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="energySetterProvider"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static EnergyModelCustomizationGraph Create(IEnergySetterProvider energySetterProvider)
+        public static EnergyModelCustomizationGraph Create(IEnergySetterProvider energySetterProvider, ProjectModelGraph parent)
         {
             if (energySetterProvider == null) throw new ArgumentNullException(nameof(energySetterProvider));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var obj = new EnergyModelCustomizationGraph
             {
@@ -105,7 +108,7 @@ namespace Mocassin.UI.Xml.Customization
 
                 GroupEnergyParameterSets = energySetterProvider
                     .GetGroupEnergySetters()
-                    .Select(GroupEnergySetGraph.Create)
+                    .Select(x => GroupEnergySetGraph.Create(x, parent))
                     .ToList()
             };
 

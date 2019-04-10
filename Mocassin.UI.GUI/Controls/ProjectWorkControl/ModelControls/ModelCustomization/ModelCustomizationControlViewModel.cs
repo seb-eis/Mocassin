@@ -1,6 +1,7 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl;
+using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization
@@ -36,6 +37,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             ContentSource = contentSource;
             EnergyCustomizationViewModel.ChangeContentSource(null);
             TransitionCustomizationViewModel.ChangeContentSource(null);
+        }
+
+        /// <inheritdoc />
+        public override void ChangeContentSource(object contentSource)
+        {
+            if (contentSource is ProjectCustomizationGraph customizationGraph)
+            {
+                EnergyCustomizationViewModel.ChangeContentSource(customizationGraph);
+                TransitionCustomizationViewModel.ChangeContentSource(customizationGraph);
+                return;
+            }
+
+            base.ChangeContentSource(contentSource);
         }
     }
 }

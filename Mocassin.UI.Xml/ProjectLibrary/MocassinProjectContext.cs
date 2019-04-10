@@ -73,7 +73,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             {
                 unchecked
                 {
-                    result += projectGraph.ToJson().GetHashCode();   
+                    result += projectGraph.ToJson().GetHashCode();
                 }
             }
 

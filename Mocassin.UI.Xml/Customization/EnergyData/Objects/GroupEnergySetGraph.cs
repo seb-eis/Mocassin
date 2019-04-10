@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -61,13 +62,15 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new serializable <see cref="GroupEnergySetGraph" /> by pulling all data defined in the passed
-        ///     <see cref="IGroupEnergySetter" /> context
+        ///     <see cref="IGroupEnergySetter" /> context and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="energySetter"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static GroupEnergySetGraph Create(IGroupEnergySetter energySetter)
+        public static GroupEnergySetGraph Create(IGroupEnergySetter energySetter, ProjectModelGraph parent)
         {
             if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var obj = new GroupEnergySetGraph
             {
@@ -75,7 +78,7 @@ namespace Mocassin.UI.Xml.Customization
                 BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorGraph3D.Create(x)).ToList(),
                 GroupInteractionKey = energySetter.GroupInteraction.Key,
                 CenterUnitCellPositionKey = energySetter.GroupInteraction.CenterUnitCellPosition.Key,
-                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyGraph.Create(x)).ToList()
+                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyGraph.Create(x, parent)).ToList()
             };
 
             obj.EnergyEntries.Sort();
