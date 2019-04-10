@@ -21,7 +21,7 @@
 #define let var
 #else
 // Macro that defines the const auto type
-#define let const var
+#define let var const
 #endif
 
 /*Arg count macro from Roland Illig and Laurent Deniau*/

@@ -395,7 +395,7 @@ static inline int32_t getNumberOfMobiles(SCONTEXT_PARAM)
 // Get the number of selectable particles from the db lattice meta info
 static inline int32_t getNumberOfSelectables(SCONTEXT_PARAM)
 {
-    return getDbLatticeInfo(SCONTEXT)->MobileParticleCount;
+    return getDbLatticeInfo(SCONTEXT)->SelectParticleCount;
 }
 
 // Get the jump count mapping that assigns each [positionId][particleId] combination its jump count
