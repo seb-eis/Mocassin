@@ -53,7 +53,7 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new <see cref="KineticRuleSetGraph" /> by pulling all data from the passed
-        ///     <see cref="IKineticRuleSetter" /> and <see cref="ProjectModelGraph"/> PARENT
+        ///     <see cref="IKineticRuleSetter" /> and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="ruleSetter"></param>
         /// <param name="parent"></param>

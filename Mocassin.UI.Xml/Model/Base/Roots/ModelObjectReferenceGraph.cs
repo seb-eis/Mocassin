@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Newtonsoft.Json;
@@ -43,6 +44,20 @@ namespace Mocassin.UI.Xml.Base
         {
             get => TargetGraph?.Name ?? base.Name; 
             set => base.Name = value;
+        }
+
+        /// <inheritdoc />
+        public ModelObjectReferenceGraph()
+        {
+        }
+
+        /// <summary>
+        ///     Creates new <see cref="ModelObjectReferenceGraph{T}"/> that targets the passed graph
+        /// </summary>
+        /// <param name="targetGraph"></param>
+        public ModelObjectReferenceGraph(ModelObjectGraph targetGraph)
+        {
+            TargetGraph = targetGraph ?? throw new ArgumentNullException(nameof(targetGraph));
         }
 
         /// <inheritdoc />

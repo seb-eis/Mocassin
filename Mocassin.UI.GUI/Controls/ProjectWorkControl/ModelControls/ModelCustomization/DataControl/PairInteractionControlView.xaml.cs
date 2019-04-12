@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl
 {
     /// <summary>
-    /// Interaktionslogik für EnergyCustomizationControlView.xaml
+    /// Interaktionslogik für PairInteractionControlView.xaml
     /// </summary>
-    public partial class EnergyCustomizationControlView : UserControl
+    public partial class PairInteractionControlView : UserControl
     {
-        public EnergyCustomizationControlView()
+        public PairInteractionControlView()
         {
             InitializeComponent();
         }

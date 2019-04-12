@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -18,16 +18,16 @@ namespace Mocassin.UI.Xml.Customization
     public class PairEnergySetGraph : ProjectObjectGraph, IComparable<PairEnergySetGraph>
     {
         /// <summary>
-        ///     Get or set the center wyckoff key of the interaction
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center wyckoff position
         /// </summary>
-        [XmlAttribute("From")]
-        public string CenterUnitCellPositionKey { get; set; }
+        [XmlElement("CenterPosition")]
+        public ModelObjectReferenceGraph<UnitCellPosition> CenterPosition { get; set; }
 
         /// <summary>
-        ///     Get or set the partner wyckoff key of the interaction
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the partner wyckoff position
         /// </summary>
-        [XmlAttribute("To")]
-        public string PartnerUnitCellPositionKey { get; set; }
+        [XmlElement("PartnerPosition")]
+        public ModelObjectReferenceGraph<UnitCellPosition> PartnerPosition { get; set; }
 
         /// <summary>
         ///     Get or set the distance in [Ang]
@@ -74,23 +74,34 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new serializable <see cref="PairEnergySetGraph" /> by pulling all data defined in the passed
-        ///     <see cref="IPairEnergySetter" /> context
+        ///     <see cref="IPairEnergySetter" /> context and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="energySetter"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static PairEnergySetGraph Create(IPairEnergySetter energySetter)
+        public static PairEnergySetGraph Create(IPairEnergySetter energySetter, ProjectModelGraph parent)
         {
             if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+            var centerPosition =
+                parent.StructureModelGraph.UnitCellPositions.SingleOrDefault(x => x.Key == energySetter.PairInteraction.Position0.Key)
+                ?? throw new InvalidOperationException("Parent does not contain requested center wyckoff position");
+
+            var partnerPosition =
+                parent.StructureModelGraph.UnitCellPositions.SingleOrDefault(x => x.Key == energySetter.PairInteraction.Position1.Key)
+                ?? throw new InvalidOperationException("Parent does not contain requested partner wyckoff position");
 
             var obj = new PairEnergySetGraph
             {
+                Name = $"Pair.Collection.{energySetter.PairInteraction.Index}",
                 PairInteractionIndex = energySetter.PairInteraction.Index,
-                CenterUnitCellPositionKey = energySetter.PairInteraction.Position0.Key,
-                PartnerUnitCellPositionKey = energySetter.PairInteraction.Position1.Key,
+                CenterPosition = new ModelObjectReferenceGraph<UnitCellPosition>(centerPosition),
+                PartnerPosition = new ModelObjectReferenceGraph<UnitCellPosition>(partnerPosition),
                 Distance = energySetter.PairInteraction.Distance,
                 StartVector = VectorGraph3D.Create(energySetter.PairInteraction.Position0.Vector),
                 EndVector = VectorGraph3D.Create(energySetter.PairInteraction.GetSecondPositionVector()),
-                PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyGraph.Create(x)).ToList()
+                PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyGraph.Create(x, parent)).ToList()
             };
 
             obj.PairEnergyEntries.Sort();
@@ -108,11 +119,13 @@ namespace Mocassin.UI.Xml.Customization
             if (distanceComparison != 0) return distanceComparison;
 
             var centerUnitCellPositionKeyComparison =
-                string.Compare(CenterUnitCellPositionKey, other.CenterUnitCellPositionKey, StringComparison.Ordinal);
+                string.Compare(CenterPosition.Key, other.CenterPosition.Key, StringComparison.Ordinal);
+
             if (centerUnitCellPositionKeyComparison != 0) return centerUnitCellPositionKeyComparison;
 
             var partnerUnitCellPositionKeyComparison =
-                string.Compare(PartnerUnitCellPositionKey, other.PartnerUnitCellPositionKey, StringComparison.Ordinal);
+                string.Compare(PartnerPosition.Key, other.PartnerPosition.Key, StringComparison.Ordinal);
+
             return partnerUnitCellPositionKeyComparison != 0
                 ? distanceComparison
                 : PairInteractionIndex.CompareTo(other.PairInteractionIndex);

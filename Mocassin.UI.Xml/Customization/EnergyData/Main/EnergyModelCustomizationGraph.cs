@@ -98,12 +98,12 @@ namespace Mocassin.UI.Xml.Customization
             {
                 StablePairEnergyParameterSets = energySetterProvider
                     .GetStablePairEnergySetters()
-                    .Select(PairEnergySetGraph.Create)
+                    .Select(x => PairEnergySetGraph.Create(x, parent))
                     .ToList(),
 
                 UnstablePairEnergyParameterSets = energySetterProvider
                     .GetUnstablePairEnergySetters()
-                    .Select(PairEnergySetGraph.Create)
+                    .Select(x => PairEnergySetGraph.Create(x, parent))
                     .ToList(),
 
                 GroupEnergyParameterSets = energySetterProvider

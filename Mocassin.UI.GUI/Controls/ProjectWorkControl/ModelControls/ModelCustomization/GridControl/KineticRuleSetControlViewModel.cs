@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Mocassin.UI.Base.Commands.UiCommands;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -11,7 +12,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     /// </summary>
     public sealed class KineticRuleSetControlViewModel : CollectionControlViewModel<KineticRuleGraph>
     {
-        public UpdateTextBoxSourceCommand UpdateTextBoxSourceCommand { get; }
+        /// <summary>
+        ///     Get the <see cref="KineticRuleSetGraph"/> that the view model targets
+        /// </summary>
+        public KineticRuleSetGraph KineticRuleSet { get; }
 
         /// <summary>
         ///     Create new <see cref="KineticRuleSetControlViewModel"/> for the passed <see cref="KineticRuleGraph"/>
@@ -19,9 +23,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         /// <param name="kineticRuleSet"></param>
         public KineticRuleSetControlViewModel(KineticRuleSetGraph kineticRuleSet)
         {
-            if (kineticRuleSet == null) throw new ArgumentNullException(nameof(kineticRuleSet));
-            UpdateTextBoxSourceCommand = new UpdateTextBoxSourceCommand();
+            KineticRuleSet = kineticRuleSet ?? throw new ArgumentNullException(nameof(kineticRuleSet));
             SetCollection(kineticRuleSet.KineticRules);
+            SelectedCollectionItem = DataCollection?.FirstOrDefault();
         }
     }
 }

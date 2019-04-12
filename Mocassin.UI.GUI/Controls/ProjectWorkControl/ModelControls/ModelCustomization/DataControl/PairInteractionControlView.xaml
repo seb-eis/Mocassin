@@ -1,0 +1,50 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl.PairInteractionControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl"
+  xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
+  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.Adapter"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:PairInteractionControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+    <DataGrid ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              Background="Transparent"
+              ColumnWidth="*"
+              HorizontalScrollBarVisibility="Disabled"
+              RowDetailsVisibilityMode="VisibleWhenSelected">
+
+      <DataGrid.RowDetailsTemplate>
+        <DataTemplate DataType="{x:Type customization:PairEnergySetGraph}">
+          <gridControl:PairEnergySetControlView DataContext="{Binding Converter={adapter:PairEnergySetPairEnergySetViewModelConverter}}"/>
+        </DataTemplate>
+      </DataGrid.RowDetailsTemplate>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name" 
+                            Binding="{Binding Name}"/>
+
+        <DataGridTextColumn Header="Center Wyckoff" 
+                            Binding="{Binding CenterPosition.Name}"
+                            IsReadOnly="True"/>
+
+        <DataGridTextColumn Header="Partner Wyckoff" 
+                            Binding="{Binding PartnerPosition.Name}"
+                            IsReadOnly="True"/>
+
+        <DataGridTextColumn Header="Distance [Ang]"
+                            Binding="{Binding Distance}"
+                            IsReadOnly="True"/>
+      </DataGrid.Columns>
+
+    </DataGrid>
+  </Grid>
+</UserControl>

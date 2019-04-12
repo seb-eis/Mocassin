@@ -14,20 +14,26 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="EnergyCustomizationControlViewModel" />
-        /// </summary>
-        public EnergyCustomizationControlViewModel EnergyCustomizationViewModel { get; }
-
-        /// <summary>
         ///     Get the <see cref="TransitionCustomizationControlViewModel" />
         /// </summary>
         public TransitionCustomizationControlViewModel TransitionCustomizationViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the stable pair interactions
+        /// </summary>
+        public PairInteractionControlViewModel StablePairInteractionViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the unstable pair interactions
+        /// </summary>
+        public PairInteractionControlViewModel UnstablePairInteractionViewModel { get; }
 
         /// <inheritdoc />
         public ModelCustomizationControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            EnergyCustomizationViewModel = new EnergyCustomizationControlViewModel(projectControl);
+            StablePairInteractionViewModel = new PairInteractionControlViewModel(x => x?.EnergyModelCustomization?.StablePairEnergyParameterSets);
+            UnstablePairInteractionViewModel = new PairInteractionControlViewModel(x => x?.EnergyModelCustomization?.UnstablePairEnergyParameterSets);
             TransitionCustomizationViewModel = new TransitionCustomizationControlViewModel(projectControl);
         }
 
@@ -35,8 +41,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            EnergyCustomizationViewModel.ChangeContentSource(null);
             TransitionCustomizationViewModel.ChangeContentSource(null);
+            StablePairInteractionViewModel.ChangeContentSource(null);
+            UnstablePairInteractionViewModel.ChangeContentSource(null);
+
         }
 
         /// <inheritdoc />
@@ -44,8 +52,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         {
             if (contentSource is ProjectCustomizationGraph customizationGraph)
             {
-                EnergyCustomizationViewModel.ChangeContentSource(customizationGraph);
                 TransitionCustomizationViewModel.ChangeContentSource(customizationGraph);
+                StablePairInteractionViewModel.ChangeContentSource(customizationGraph);
+                UnstablePairInteractionViewModel.ChangeContentSource(customizationGraph);
                 return;
             }
 

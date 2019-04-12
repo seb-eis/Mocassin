@@ -15,20 +15,21 @@
 
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0"
-              Header="Particle Definitions">
+      <GroupBox Grid.Row="0" 
+                Header="Particle Definitions">
 
-      <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" />
-    </GroupBox>
+        <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" />
+      </GroupBox>
 
-    <GroupBox Grid.Row="1"
-              Header="Occupation Definitions">
+      <GroupBox Grid.Row="1" 
+                Header="Occupation Definitions">
 
-      <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" />
-    </GroupBox>
+        <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" />
+      </GroupBox>
+
   </Grid>
 </UserControl>
