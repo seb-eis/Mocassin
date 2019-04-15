@@ -58,19 +58,22 @@
         <Run Text="Transition rule for the" />
         <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
              Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="transition. The behavior flags" />
+        <Run Text="transition with behavior flags" />
         <Run Text="{Binding SelectedCollectionItem.RuleFlags, Mode=OneWay}"
              Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="are set. Symmetry reduced state change behavior is" />
+        <Run Text="set. Symmetry reduced state change behavior (State-0)" />
         <Run Text="{Binding SelectedCollectionItem.StartState, Mode=OneWay}"
              Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="=>" />
-        <Run Text="{Binding SelectedCollectionItem.StartState, Mode=OneWay}"
+        <Run Text="(State-1)" />
+        <Run Text="{Binding SelectedCollectionItem.TransitionState, Mode=OneWay}"
              Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="=>" />
-        <Run Text="{Binding SelectedCollectionItem.StartState, Mode=OneWay}"
+        <Run Text="(State-2)" />
+        <Run Text="{Binding SelectedCollectionItem.FinalState, Mode=OneWay}"
              Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="and may contain inverses." />
+        <Run Text="has" />
+        <Run Text="{Binding SelectedCollectionItem.DependencyRuleCount, Mode=OneWay}"
+             Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="dependency rule." />
       </TextBlock>
     </GroupBox>
 

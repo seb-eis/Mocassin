@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
@@ -51,6 +53,12 @@ namespace Mocassin.UI.Xml.Customization
         public OccupationStateGraph FinalState { get; set; }
 
         /// <summary>
+        ///     Get or set the number of dependency rules
+        /// </summary>
+        [XmlElement("DependencyRuleCount")]
+        public int DependencyRuleCount { get; set; }
+
+        /// <summary>
         ///     Creates a new serializable <see cref="KineticRuleGraph" /> by pulling the required data from the passed
         ///     <see cref="IKineticRule" /> and <see cref="ProjectModelGraph"/> parent
         /// </summary>
@@ -65,6 +73,7 @@ namespace Mocassin.UI.Xml.Customization
             var obj = new KineticRuleGraph
             {
                 Name = $"Rule.{rule.Index}",
+                DependencyRuleCount = rule.GetDependentRules().Count(),
                 RuleIndex = rule.Index,
                 AttemptFrequency = rule.AttemptFrequency,
                 FinalState = OccupationStateGraph.Create(rule.GetFinalStateOccupation(), parent.ParticleModelGraph.Particles),

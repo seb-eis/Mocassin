@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
@@ -75,13 +76,13 @@ namespace Mocassin.UI.Xml.Customization
         /// <inheritdoc />
         public override string ToString()
         {
-            var result = "";
+            var builder = new StringBuilder(200);
             foreach (var particle in Particles)
             {
-                result += $"[{particle.Name}]";
+                builder.Append($"[{particle.Name}]");
             }
 
-            return result;
+            return builder.ToString();
         }
     }
 }

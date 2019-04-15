@@ -14,19 +14,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="TransitionCustomizationControlViewModel" />
+        ///     Get the <see cref="TransitionCustomizationControlViewModel" /> that controls the transition customization
         /// </summary>
         public TransitionCustomizationControlViewModel TransitionCustomizationViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the stable pair interactions
+        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the stable pair interaction customization
         /// </summary>
         public PairInteractionControlViewModel StablePairInteractionViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the unstable pair interactions
+        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the unstable pair interaction customization
         /// </summary>
         public PairInteractionControlViewModel UnstablePairInteractionViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="GroupInteractionControlViewModel"/> that controls the group interaction customization
+        /// </summary>
+        public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
 
         /// <inheritdoc />
         public ModelCustomizationControlViewModel(IMocassinProjectControl projectControl)
@@ -35,6 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             StablePairInteractionViewModel = new PairInteractionControlViewModel(x => x?.EnergyModelCustomization?.StablePairEnergyParameterSets);
             UnstablePairInteractionViewModel = new PairInteractionControlViewModel(x => x?.EnergyModelCustomization?.UnstablePairEnergyParameterSets);
             TransitionCustomizationViewModel = new TransitionCustomizationControlViewModel(projectControl);
+            GroupInteractionViewModel = new GroupInteractionControlViewModel();
         }
 
         /// <inheritdoc />
@@ -44,6 +50,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             TransitionCustomizationViewModel.ChangeContentSource(null);
             StablePairInteractionViewModel.ChangeContentSource(null);
             UnstablePairInteractionViewModel.ChangeContentSource(null);
+            GroupInteractionViewModel.ChangeContentSource(null);
 
         }
 
@@ -55,6 +62,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
                 TransitionCustomizationViewModel.ChangeContentSource(customizationGraph);
                 StablePairInteractionViewModel.ChangeContentSource(customizationGraph);
                 UnstablePairInteractionViewModel.ChangeContentSource(customizationGraph);
+                GroupInteractionViewModel.ChangeContentSource(customizationGraph);
                 return;
             }
 

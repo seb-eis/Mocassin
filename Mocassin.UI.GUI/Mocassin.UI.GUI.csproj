@@ -311,11 +311,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -587,6 +595,10 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicCustomizationContentControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml.cs">
+      <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlView.xaml.cs">
       <DependentUpon>PairInteractionControlView.xaml</DependentUpon>
     </Compile>
@@ -595,8 +607,13 @@
       <DependentUpon>TransitionCustomizationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\GroupEnergySetGroupEnergySetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\KineticRuleSetKineticRuleSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\PairEnergySetPairEnergySetViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlView.xaml.cs">
+      <DependentUpon>GroupEnergySetControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\KineticRuleSetControlView.xaml.cs">
       <DependentUpon>KineticRuleSetControlView.xaml</DependentUpon>
     </Compile>
