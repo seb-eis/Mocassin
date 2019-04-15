@@ -56,6 +56,12 @@ namespace Mocassin.Model.Particles
             return Name == other.Name && Symbol == other.Symbol && comparer.Compare(Charge, other.Charge) == 0;
         }
 
+        /// <inheritdoc />
+        public string GetIonString()
+        {
+            return Math.Abs(Charge) < 1e-10 ? Symbol : $"{Symbol}{(Charge < 0 ? $"{Math.Abs(Charge):#.-}" : $"{Charge:#.+}")}";
+        }
+
         /// <summary>
         ///     Creates a void particle, this particle represents an active by context unavailable particle and should always have
         ///     the index 0 in a particle manager

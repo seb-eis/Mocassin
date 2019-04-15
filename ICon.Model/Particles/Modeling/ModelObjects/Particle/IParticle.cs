@@ -43,5 +43,11 @@ namespace Mocassin.Model.Particles
         /// <param name="comparer"></param>
         /// <returns></returns>
         bool EqualsInModelProperties(IParticle other, IComparer<double> comparer);
+
+        /// <summary>
+        ///     Get the <see cref="IParticle"/> as a typical ion description <see cref="string"/> used in chemistry
+        /// </summary>
+        /// <returns></returns>
+        string GetIonString();
     }
 }

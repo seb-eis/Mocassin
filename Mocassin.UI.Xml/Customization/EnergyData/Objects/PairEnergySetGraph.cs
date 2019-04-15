@@ -85,12 +85,10 @@ namespace Mocassin.UI.Xml.Customization
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var centerPosition =
-                parent.StructureModelGraph.UnitCellPositions.SingleOrDefault(x => x.Key == energySetter.PairInteraction.Position0.Key)
-                ?? throw new InvalidOperationException("Parent does not contain requested center wyckoff position");
+                parent.StructureModelGraph.UnitCellPositions.Single(x => x.Key == energySetter.PairInteraction.Position0.Key);
 
             var partnerPosition =
-                parent.StructureModelGraph.UnitCellPositions.SingleOrDefault(x => x.Key == energySetter.PairInteraction.Position1.Key)
-                ?? throw new InvalidOperationException("Parent does not contain requested partner wyckoff position");
+                parent.StructureModelGraph.UnitCellPositions.Single(x => x.Key == energySetter.PairInteraction.Position1.Key);
 
             var obj = new PairEnergySetGraph
             {

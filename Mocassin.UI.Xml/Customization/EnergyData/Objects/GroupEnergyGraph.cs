@@ -66,7 +66,7 @@ namespace Mocassin.UI.Xml.Customization
 
             var obj = new GroupEnergyGraph
             {
-                Name = $"Group.{GetShortDescription(energyEntry.CenterParticle, energyEntry.GroupOccupation)}",
+                Name = GetOccupationIonString(energyEntry.CenterParticle, energyEntry.GroupOccupation),
                 CenterParticle = new ModelObjectReferenceGraph<Particle>(centerParticle),
                 Energy = energyEntry.Energy,
                 OccupationState = OccupationStateGraph.Create(energyEntry.GroupOccupation, parent.ParticleModelGraph.Particles)
@@ -96,14 +96,12 @@ namespace Mocassin.UI.Xml.Customization
         /// <param name="center"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public static string GetShortDescription(IParticle center, IOccupationState state)
+        public static string GetOccupationIonString(IParticle center, IOccupationState state)
         {
-            string FormatCharge(double charge) => charge < 0 ? $"{Math.Abs(charge):#.-}" : $"{charge:#.+}";
-
             var builder = new StringBuilder(100);
             foreach (var particle in center.AsSingleton().Concat(state))
             {
-                builder.Append($"[{particle.Symbol}{FormatCharge(particle.Charge)}]");
+                builder.Append($"[{particle.GetIonString()}]");
             }
 
             return builder.ToString();

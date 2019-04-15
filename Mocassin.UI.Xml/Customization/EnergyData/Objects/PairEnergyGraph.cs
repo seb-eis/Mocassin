@@ -102,15 +102,12 @@ namespace Mocassin.UI.Xml.Customization
 
             var (key0, key1) = (energyEntry.ParticlePair.Particle0.Key, energyEntry.ParticlePair.Particle1.Key);
 
-            var centerParticle = parent.ParticleModelGraph.Particles.SingleOrDefault(x => x.Key == key0)
-                                 ?? throw new InvalidOperationException("Parent model does not contain the center particle");
-
-            var partnerParticle = parent.ParticleModelGraph.Particles.SingleOrDefault(x => x.Key == key1)
-                                  ?? throw new InvalidOperationException("Parent model does not contain the center particle");;
+            var centerParticle = parent.ParticleModelGraph.Particles.Single(x => x.Key == key0);
+            var partnerParticle = parent.ParticleModelGraph.Particles.Single(x => x.Key == key1);
 
             var obj = new PairEnergyGraph
             {
-                Name = $"Pair.[{centerParticle.Name}-{partnerParticle.Name}]",
+                Name = $"[{energyEntry.ParticlePair.Particle0.GetIonString()}][{energyEntry.ParticlePair.Particle1.GetIonString()}]",
                 CenterParticle = new ModelObjectReferenceGraph<Particle>(centerParticle),
                 PartnerParticle = new ModelObjectReferenceGraph<Particle>(partnerParticle),
                 Energy = energyEntry.Energy
