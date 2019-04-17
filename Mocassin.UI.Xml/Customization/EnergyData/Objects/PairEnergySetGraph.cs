@@ -92,7 +92,7 @@ namespace Mocassin.UI.Xml.Customization
 
             var obj = new PairEnergySetGraph
             {
-                Name = $"Pair.Collection.{energySetter.PairInteraction.Index}",
+                Name = $"Pair.Energy.Set.{energySetter.PairInteraction.Index}",
                 PairInteractionIndex = energySetter.PairInteraction.Index,
                 CenterPosition = new ModelObjectReferenceGraph<UnitCellPosition>(centerPosition),
                 PartnerPosition = new ModelObjectReferenceGraph<UnitCellPosition>(partnerPosition),

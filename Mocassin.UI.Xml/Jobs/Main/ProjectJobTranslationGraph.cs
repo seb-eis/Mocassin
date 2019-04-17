@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
@@ -40,6 +41,16 @@ namespace Mocassin.UI.Xml.Jobs
         [XmlArrayItem("JobPackage")]
         [NotMapped]
         public List<MmcJobPackageDescriptionGraph> MmcJobPackageDescriptions { get; set; }
+
+        /// <summary>
+        ///     Creates new <see cref="ProjectJobTranslationGraph"/> with empty <see cref="JobPackageDescriptionGraph"/> collections
+        /// </summary>
+        public ProjectJobTranslationGraph()
+        {
+            KmcJobPackageDescriptions = new List<KmcJobPackageDescriptionGraph>();
+            MmcJobPackageDescriptions = new List<MmcJobPackageDescriptionGraph>();
+            Key = Guid.NewGuid().ToString();
+        }
 
         /// <summary>
         ///     Get the sequence of <see cref="IJobCollection" /> objects defined in the object

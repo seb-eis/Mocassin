@@ -311,6 +311,38 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -512,6 +544,7 @@
       <DependentUpon>NoContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Base\Commands\AddDefaultCustomizationControlTabCommand.cs" />
+    <Compile Include="Controls\Base\Commands\AddDefaultJobTranslationControlTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AddDefaultLayoutControlTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AsyncProjectControlCommand.cs" />
@@ -551,6 +584,7 @@
     <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddCustomizationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddEnergyControlTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddJobTranslationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddSimulationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
@@ -593,8 +627,43 @@
       <DependentUpon>BasicCustomizationContentControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicCustomizationContentControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml.cs">
+      <DependentUpon>BasicJobTranslationContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobTranslationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml.cs">
+      <DependentUpon>KmcJobPackageControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlView.xaml.cs">
+      <DependentUpon>MmcJobPackageControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobPackageKmcJobDescriptionSetViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobDescriptionKmcJobDescriptionViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlView.xaml.cs">
+      <DependentUpon>BaseJobDescriptionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlView.xaml.cs">
+      <DependentUpon>KmcJobDescriptionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionSetControlView.xaml.cs">
+      <DependentUpon>KmcJobDescriptionSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlView.xaml.cs">
+      <DependentUpon>MmcJobDescriptionControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml.cs">
+      <DependentUpon>JobTranslationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml.cs">
       <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
     </Compile>
@@ -799,7 +868,8 @@
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\InfoControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />

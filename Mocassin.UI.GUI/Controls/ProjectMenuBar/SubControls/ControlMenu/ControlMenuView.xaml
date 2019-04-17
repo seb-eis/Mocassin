@@ -82,6 +82,16 @@
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
+
+        <MenuItem Header="Job Translation Control">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddJobTranslationControlTabCommand}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </MenuItem>
+
       </MenuItem>
     </Menu>
   </Grid>

@@ -11,7 +11,8 @@ using Mocassin.Model.Translator.Optimization;
 namespace Mocassin.UI.Xml.Jobs
 {
     /// <summary>
-    ///     Adapter class to provide <see cref="JobPackageDescriptionGraph" /> data as a <see cref="IJobCollection" /> object for the
+    ///     Adapter class to provide <see cref="JobPackageDescriptionGraph" /> data as a <see cref="IJobCollection" /> object
+    ///     for the
     ///     database creation system
     /// </summary>
     public class JobCollectionAdapter : IJobCollection
@@ -27,7 +28,8 @@ namespace Mocassin.UI.Xml.Jobs
         private ISimulation Simulation { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="JobPackageDescriptionGraph" /> that is used as a <see cref="JobPackageDescriptionGraph" /> source
+        ///     Get the <see cref="JobPackageDescriptionGraph" /> that is used as a <see cref="JobPackageDescriptionGraph" />
+        ///     source
         /// </summary>
         private JobPackageDescriptionGraph JobPackageDescription { get; set; }
 
@@ -57,7 +59,9 @@ namespace Mocassin.UI.Xml.Jobs
         public IEnumerable<JobConfiguration> GetJobConfigurations()
         {
             BaseConfiguration.LatticeConfiguration = new LatticeConfiguration {SizeA = 10, SizeB = 10, SizeC = 10};
-            var jobCount = JobPackageDescription.JobCountPerConfig is null ? Simulation.JobCount : int.Parse(JobPackageDescription.JobCountPerConfig);
+            var jobCount = JobPackageDescription.JobCountPerConfig is null
+                ? Simulation.JobCount
+                : int.Parse(JobPackageDescription.JobCountPerConfig);
             return JobPackageDescription.GetConfigurations().SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration), jobCount));
         }
 
@@ -85,24 +89,24 @@ namespace Mocassin.UI.Xml.Jobs
         ///     <see cref="KmcJobPackageDescriptionGraph" />
         /// </summary>
         /// <param name="modelProject"></param>
-        /// <param name="JobPackageDescription"></param>
+        /// <param name="jobPackageDescription"></param>
         /// <returns></returns>
-        public static JobCollectionAdapter Create(IModelProject modelProject, KmcJobPackageDescriptionGraph JobPackageDescription)
+        public static JobCollectionAdapter Create(IModelProject modelProject, KmcJobPackageDescriptionGraph jobPackageDescription)
         {
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
-            if (JobPackageDescription == null) throw new ArgumentNullException(nameof(JobPackageDescription));
+            if (jobPackageDescription == null) throw new ArgumentNullException(nameof(jobPackageDescription));
 
-            var simulation = modelProject.DataTracker.FindObjectByKey<IKineticSimulation>(JobPackageDescription.SimulationKey)
+            var simulation = modelProject.DataTracker.FindObjectByKey<IKineticSimulation>(jobPackageDescription.Simulation.Key)
                              ?? throw new InvalidOperationException("Kinetic simulation key does not exist in the model");
-            var baseConfig = (JobPackageDescription.JobBaseDescription ?? new KmcJobDescriptionGraph()).ToInternal(simulation);
-            var random = new PcgRandom32(JobPackageDescription.RngSeed ?? simulation.CustomRngSeed);
+            var baseConfig = (jobPackageDescription.JobBaseDescription ?? new KmcJobDescriptionGraph()).ToInternal(simulation);
+            var random = new PcgRandom32(jobPackageDescription.RngSeed ?? simulation.CustomRngSeed);
 
             var obj = new JobCollectionAdapter
             {
                 ModelProject = modelProject,
                 Simulation = simulation,
                 BaseConfiguration = baseConfig,
-                JobPackageDescription = JobPackageDescription,
+                JobPackageDescription = jobPackageDescription,
                 Random = random
             };
 
@@ -121,7 +125,7 @@ namespace Mocassin.UI.Xml.Jobs
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
             if (jobPackageDescription == null) throw new ArgumentNullException(nameof(jobPackageDescription));
 
-            var simulation = modelProject.DataTracker.FindObjectByKey<IMetropolisSimulation>(jobPackageDescription.SimulationKey)
+            var simulation = modelProject.DataTracker.FindObjectByKey<IMetropolisSimulation>(jobPackageDescription.Simulation.Key)
                              ?? throw new InvalidOperationException("Metropolis simulation key does not exist in the model");
             var baseConfig = (jobPackageDescription.JobBaseDescription ?? new MmcJobDescriptionGraph()).ToInternal(simulation);
             var random = new PcgRandom32(jobPackageDescription.RngSeed ?? simulation.CustomRngSeed);

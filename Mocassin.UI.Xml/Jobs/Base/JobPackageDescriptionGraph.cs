@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.SimulationModel;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Jobs
 {
@@ -13,12 +16,6 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public abstract class JobPackageDescriptionGraph : ProjectObjectGraph
     {
-        /// <summary>
-        ///     Get or set the key of the <see cref="Mocassin.Model.Simulations.ISimulation" /> that the collection is for
-        /// </summary>
-        [XmlAttribute("BaseSimulation")]
-        public string SimulationKey { get; set; }
-
         /// <summary>
         ///     Get or set an rng seed string to overwrite the one defined in the affiliated
         ///     <see cref="Mocassin.Model.Simulations.ISimulation" />
@@ -38,6 +35,13 @@ namespace Mocassin.UI.Xml.Jobs
         [XmlArray("ManualOptimizers")]
         [XmlArrayItem(typeof(SelectionOptimizerGraph), ElementName = "SelectionOptimizer")]
         public List<ManualOptimizerGraph> ManualOptimizers { get; set; }
+
+        /// <inheritdoc />
+        protected JobPackageDescriptionGraph()
+        {
+            ManualOptimizers = new List<ManualOptimizerGraph>();
+            RngSeed = Guid.NewGuid().ToString();
+        }
 
         /// <summary>
         ///     Creates a <see cref="IJobCollection" /> for simulation database creation in the context of the passed

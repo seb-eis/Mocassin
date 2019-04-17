@@ -63,13 +63,11 @@ namespace Mocassin.UI.Xml.Customization
             if (ruleSetter == null) throw new ArgumentNullException(nameof(ruleSetter));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
-            var transitionGraph =
-                parent.TransitionModelGraph.KineticTransitions.SingleOrDefault(x => x.Key == ruleSetter.KineticTransition.Key);
-            if  (transitionGraph == null) throw new ArgumentException("Parent graph does not contain a matching transition key", nameof(parent));
+            var transitionGraph = parent.TransitionModelGraph.KineticTransitions.Single(x => x.Key == ruleSetter.KineticTransition.Key);
 
             var obj = new KineticRuleSetGraph
             {
-                Name = $"Rule.Collection.{transitionGraph}",
+                Name = $"Kinetic.Rule.Set.{transitionGraph}",
                 TransitionIndex = ruleSetter.KineticTransition.Index,
                 Transition = new ModelObjectReferenceGraph<KineticTransition> {TargetGraph = transitionGraph},
                 KineticRules = ruleSetter.KineticRules.Select(x => KineticRuleGraph.Create(x, parent)).ToList()

@@ -41,7 +41,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         /// <returns></returns>
         public string GetBaseGeometryDescription(GroupEnergySetGraph groupEnergySet)
         {
-            var builder = new StringBuilder(500);
+            var builder = new StringBuilder(250);
             foreach (var vector in groupEnergySet.BaseGeometry)
             {
                 builder.Append(vector);

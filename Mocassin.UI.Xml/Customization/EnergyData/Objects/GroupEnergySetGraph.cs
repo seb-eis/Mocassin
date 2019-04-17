@@ -81,7 +81,7 @@ namespace Mocassin.UI.Xml.Customization
 
             var obj = new GroupEnergySetGraph
             {
-                Name = $"Group.Energy.Collection.{energySetter.GroupInteraction.Index}",
+                Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
                 GroupInteractionIndex = energySetter.GroupInteraction.Index,
                 BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorGraph3D.Create(x)).ToList(),
                 GroupInteraction = new ModelObjectReferenceGraph<GroupInteraction>(groupInteraction),

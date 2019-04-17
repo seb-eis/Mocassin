@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -11,7 +12,7 @@ namespace Mocassin.UI.Xml.Base
     ///     instances
     /// </summary>
     [XmlRoot]
-    public class ModelObjectReferenceGraph<T> : ModelObjectGraph where T : ModelObject, new()
+    public class ModelObjectReferenceGraph<T> : ModelObjectGraph, IEquatable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
     {
         [XmlIgnore]
         [NotMapped]
@@ -64,6 +65,28 @@ namespace Mocassin.UI.Xml.Base
         protected override ModelObject GetModelObjectInternal()
         {
             return new T {Key = TargetGraph?.Key ?? Key};
+        }
+
+        /// <inheritdoc />
+        public bool Equals(ModelObjectReferenceGraph<T> other)
+        {
+            if (other == null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Key == other.Key || ReferenceEquals(TargetGraph, other.TargetGraph);
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ModelObjectReferenceGraph<T>);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1207054110;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TargetGraph?.Key);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            return hashCode;
         }
     }
 }
