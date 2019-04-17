@@ -66,7 +66,7 @@
               <RowDefinition Height="*" />
               <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--
+
             <Expander Grid.Row="0"
                       Header="Collection Overwrites (Level 1)">
               <Expander.ToolTip>
@@ -74,17 +74,17 @@
                   <Run Text="Level 1 definitions will overwrite the base simulation (level 0) default fallback values" />
                 </TextBlock>
               </Expander.ToolTip>
-              <gridControl:KmcJobDescriptionControlView
-                DataContext="{Binding JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
+              <gridControl:MmcJobDescriptionControlView
+                DataContext="{Binding JobBaseDescription, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
             </Expander>
 
             <Expander Grid.Row="1"
                       Header="Job Descriptions (Level 2)" MaxHeight="300">
-              <gridControl:KmcJobDescriptionSetControlView
-                DataContext="{Binding Converter={adapter:KmcJobPackageKmcJobDescriptionSetViewModelConverter}}" />
+              <gridControl:MmcJobDescriptionSetControlView
+                DataContext="{Binding Converter={adapter:MmcJobPackageMmcJobDescriptionSetViewModelConverter}}" />
             </Expander>
             <Separator Grid.Row="2"/>
-                        -->
+
           </Grid>
         </DataTemplate>
       </DataGrid.RowDetailsTemplate>

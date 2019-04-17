@@ -339,6 +339,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -644,6 +648,8 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobPackageKmcJobDescriptionSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobDescriptionKmcJobDescriptionViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobDescriptionMmcJobDescriptionViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobPackageMmcJobDescriptionSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlView.xaml.cs">
       <DependentUpon>BaseJobDescriptionControlView.xaml</DependentUpon>
     </Compile>
@@ -660,6 +666,10 @@
       <DependentUpon>MmcJobDescriptionControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlView.xaml.cs">
+      <DependentUpon>MmcJobDescriptionSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml.cs">
       <DependentUpon>JobTranslationControlView.xaml</DependentUpon>
     </Compile>
