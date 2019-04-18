@@ -375,6 +375,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\LocalProjectDeployControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\ProjectBuildingControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -619,6 +631,7 @@
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectManager\ProjectManagerViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\Commands\AddLiveOperationConsoleCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\Commands\AddProjectDeploymentTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ProjectMenu\ProjectMenuView.xaml.cs">
       <DependentUpon>ProjectMenuView.xaml</DependentUpon>
     </Compile>
@@ -705,6 +718,19 @@
       <DependentUpon>ModelCustomizationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Objects\LocalProjectDeployData.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlView.xaml.cs">
+      <DependentUpon>ProjectBuildGraphControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\LocalProjectDeployControlView.xaml.cs">
+      <DependentUpon>LocalProjectDeployControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\LocalProjectDeployControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\ProjectBuildingControlView.xaml.cs">
+      <DependentUpon>ProjectBuildingControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\ProjectBuildingControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ProjectWorkTabControlView.xaml.cs">
       <DependentUpon>ProjectWorkTabControlView.xaml</DependentUpon>
     </Compile>
@@ -885,7 +911,7 @@
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\GridControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectGraph\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\VisualControl\" />
