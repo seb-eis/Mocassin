@@ -31,7 +31,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [XmlAttribute("Name")]
         [JsonProperty("Name")]
-        [NotMapped]
+        [Column("Name")]
         public virtual string Name { get; set; }
 
         /// <summary>

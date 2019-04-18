@@ -28,6 +28,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the <see cref="Mocassin.UI.Xml.Model.ProjectModelGraph" />
         /// </summary>
         [XmlElement("ProjectModelGraph")]
+        [JsonIgnore]
         public ProjectModelGraph ProjectModelGraph { get; set; }
 
         /// <summary>
@@ -42,6 +43,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the <see cref="Mocassin.UI.Xml.Customization.ProjectCustomizationGraph" />
         /// </summary>
         [XmlElement("ProjectCustomizationGraph")]
+        [JsonIgnore]
         public ProjectCustomizationGraph ProjectCustomizationGraph { get; set; }
 
         /// <summary>
@@ -56,6 +58,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the <see cref="Mocassin.UI.Xml.Jobs.ProjectJobTranslationGraph" />
         /// </summary>
         [XmlElement("ProjectJobTranslationGraph")]
+        [JsonIgnore]
         public ProjectJobTranslationGraph ProjectJobTranslationGraph { get; set; }
 
         /// <summary>

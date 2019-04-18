@@ -69,7 +69,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         public int GetProjectHash()
         {
             var result = 517;
-            foreach (var projectGraph in MocassinProjectGraphs)
+            foreach (var projectGraph in MocassinProjectGraphs.Local)
             {
                 unchecked
                 {

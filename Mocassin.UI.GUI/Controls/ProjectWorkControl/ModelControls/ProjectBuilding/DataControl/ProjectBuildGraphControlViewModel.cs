@@ -1,4 +1,6 @@
-﻿using Mocassin.UI.GUI.Base.DataContext;
+﻿using System.Linq;
+using Mocassin.UI.Base.Commands;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
 
@@ -15,11 +17,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// </summary>
         public CollectionControlViewModel<MocassinProjectBuildGraph> ProjectBuildCollectionViewModel { get; }
 
+        public RelayCommand AutoAssignBuildModelContextCommand { get; }
+
         /// <inheritdoc />
         public ProjectBuildGraphControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             ProjectBuildCollectionViewModel = new CollectionControlViewModel<MocassinProjectBuildGraph>();
+            AutoAssignBuildModelContextCommand = MakeAutoAssignBuildModelContextCommand();
         }
 
         /// <inheritdoc />
@@ -27,6 +32,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             ContentSource = contentSource;
             ProjectBuildCollectionViewModel.SetCollection(ContentSource?.ProjectBuildGraphs);
+        }
+
+        public RelayCommand MakeAutoAssignBuildModelContextCommand()
+        {
+            void Execute()
+            {
+                ContentSource.ProjectBuildGraphs.Last().Parent = ContentSource;
+                ContentSource.ProjectBuildGraphs.Last().ProjectModelGraph = ContentSource?.ProjectModelGraph;
+            }
+
+            bool CanExecute()
+            {
+                return ContentSource?.ProjectBuildGraphs?.LastOrDefault() != null;
+            }
+
+            return new RelayCommand(Execute, CanExecute);
         }
     }
 }

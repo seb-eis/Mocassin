@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Comman
         /// <inheritdoc />
         protected override ContentControl GetDataControl()
         {
-            return new ProjectBuildingControlView {DataContext = new ProjectBuildGraphControlViewModel(ProjectControl)};
+            return new ProjectBuildingControlView {DataContext = new ProjectBuildingControlViewModel(ProjectControl)};
         }
 
         /// <inheritdoc />

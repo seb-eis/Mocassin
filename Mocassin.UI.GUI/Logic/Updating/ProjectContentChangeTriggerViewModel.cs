@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
@@ -11,7 +10,7 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Logic.Updating
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel"/> that continuously checks the active project library for content changes
+    ///     The <see cref="PrimaryControlViewModel" /> that continuously checks the active project library for content changes
     /// </summary>
     public sealed class ProjectContentChangeTriggerViewModel : PrimaryControlViewModel
     {
@@ -55,10 +54,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// </summary>
         private void RunChangeCheck()
         {
-            if (ProjectControl.OpenProjectLibrary?.IsDisposed != true)
-            {
-                ProjectControl.OpenProjectLibrary?.CheckForContentChange();
-            }
+            if (ProjectControl.OpenProjectLibrary?.IsDisposed != true) ProjectControl.OpenProjectLibrary?.CheckForContentChange();
         }
 
         /// <summary>
