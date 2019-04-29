@@ -62,5 +62,19 @@ namespace Mocassin.UI.Xml.Jobs
             return MmcJobPackageDescriptions.Select(x => x.ToInternal(modelProject))
                 .Concat(KmcJobPackageDescriptions.Select(x => x.ToInternal(modelProject)));
         }
+
+        /// <summary>
+        ///     Calculates the total number simulation configurations of the object defined within the context of the passed <see cref="IModelProject"/>
+        /// </summary>
+        /// <param name="modelProject"></param>
+        /// <returns></returns>
+        public int GetTotalJobCount(IModelProject modelProject)
+        {
+            if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
+            return KmcJobPackageDescriptions
+                .Cast<JobPackageDescriptionGraph>()
+                .Concat(MmcJobPackageDescriptions)
+                .Sum(x => x.GetTotalJobCount(modelProject));
+        }
     }
 }

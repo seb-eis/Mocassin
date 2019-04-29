@@ -56,5 +56,11 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         /// <returns></returns>
         public abstract IEnumerable<JobDescriptionGraph> GetConfigurations();
+
+        /// <summary>
+        ///     Calculate the total number of executable simulations in the context of the passed <see cref="IModelProject"/> defined by the package
+        /// </summary>
+        /// <returns></returns>
+        public abstract int GetTotalJobCount(IModelProject modelProject);
     }
 }

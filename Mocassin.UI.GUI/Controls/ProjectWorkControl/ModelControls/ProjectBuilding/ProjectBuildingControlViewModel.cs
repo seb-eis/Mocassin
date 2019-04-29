@@ -35,6 +35,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             ContentSource = contentSource;
             BuildGraphControlViewModel.ChangeContentSource(contentSource);
+            LocalDeployControlViewModel.ChangeContentSource(contentSource);
         }
     }
 }

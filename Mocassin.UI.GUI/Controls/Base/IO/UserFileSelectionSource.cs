@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Input;
 using Microsoft.Win32;
 using Mocassin.Framework.Extensions;
+using Mocassin.UI.Base.Commands;
 
 namespace Mocassin.UI.GUI.Controls.Base.IO
 {
@@ -57,12 +59,21 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Creates a new <see cref="UserFileSelectionSource"/> tailored to poject files
+        ///     Creates a new <see cref="UserFileSelectionSource"/> tailored to project files
         /// </summary>
         /// <returns></returns>
         public static UserFileSelectionSource CreateForProjectFiles()
         {
             return new UserFileSelectionSource(("Project file", "moc"));
+        }
+
+        /// <summary>
+        ///     Creates  a new <see cref="UserFileSelectionSource"/> tailored to simulation databases
+        /// </summary>
+        /// <returns></returns>
+        public static UserFileSelectionSource CreateForJobDbFiles()
+        {
+            return new UserFileSelectionSource(("Simulation library", "msl"));
         }
 
         /// <summary>

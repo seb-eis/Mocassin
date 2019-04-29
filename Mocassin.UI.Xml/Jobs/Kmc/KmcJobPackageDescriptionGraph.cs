@@ -53,5 +53,24 @@ namespace Mocassin.UI.Xml.Jobs
         {
             return JobConfigurations.AsEnumerable();
         }
+
+        /// <inheritdoc />
+        public override int GetTotalJobCount(IModelProject modelProject)
+        {
+            if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
+            return JobConfigurations.Count * GetJobCountPerConfig(modelProject);
+        }
+
+        /// <summary>
+        ///     Get the actual job count per configuration form the first priority level that defines value
+        /// </summary>
+        /// <param name="modelProject"></param>
+        /// <returns></returns>
+        public int GetJobCountPerConfig(IModelProject modelProject)
+        {
+            return int.TryParse(JobCountPerConfig, out var count)
+                ? count
+                : modelProject.DataTracker.FindObjectByKey<IMetropolisSimulation>(Simulation.Key).JobCount;
+        }
     }
 }
