@@ -62,14 +62,11 @@
 
         <MenuItem Header="Lattice Model Control">
           <i:Interaction.Triggers>
-            <!--
-            <i:EventTrigger 
+            <i:EventTrigger
               EventName="Click">
-              <i:InvokeCommandAction 
-               Command="{Binding CommandSource}"
-                                    
-                CommandParameter="{x:Type tabCommands:AddSimulationControlTabCommand}" />
-            </i:EventTrigger>-->
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type tabCommands:AddLatticeControlTabCommand}" />
+            </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
         <Separator />

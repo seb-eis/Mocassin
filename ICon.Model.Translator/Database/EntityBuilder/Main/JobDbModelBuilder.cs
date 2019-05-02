@@ -245,6 +245,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             EnergyDbEntityBuilder = EnergyDbEntityBuilder ?? new EnergyDbEntityBuilder(ProjectModelContext);
             StructureDbEntityBuilder = StructureDbEntityBuilder ?? new StructureDbEntityBuilder(ProjectModelContext);
             TransitionDbEntityBuilder = TransitionDbEntityBuilder ?? new TransitionDbEntityBuilder(ProjectModelContext);
+	        LatticeDbEntityBuilder = LatticeDbEntityBuilder ?? new LatticeDbEntityBuilder(ProjectModelContext);
         }
     }
 }

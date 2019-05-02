@@ -33,8 +33,13 @@ namespace Mocassin.Model.Lattices
 	    /// <returns></returns>
 	    public ILatticeCreationProvider GetLatticeCreationProvider()
 	    {
-		    return new LatticeCreationProvider(ModelProject.GetManager<LatticeManager>().QueryPort, 
-			    ModelProject.GetManager<StructureManager>().QueryPort, ModelProject.Settings);
+		    return GetResultFromCache(CreateLatticeProvider);
+	    }
+
+		[CacheMethodResult]
+	    protected ILatticeCreationProvider CreateLatticeProvider()
+	    {
+			return new LatticeCreationProvider(ModelProject);
 	    }
 
     }

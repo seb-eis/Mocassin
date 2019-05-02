@@ -22,6 +22,11 @@ namespace Mocassin.UI.Xml.LatticeModel
 		[XmlArrayItem("Particle")]
 	    public List<ModelObjectReferenceGraph<Particle>> ParticleList { get; set; }
 
+	    public BuildingBlockGraph()
+	    {
+			ParticleList = new List<ModelObjectReferenceGraph<Particle>>();
+	    }
+
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()
         {

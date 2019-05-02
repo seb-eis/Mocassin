@@ -1,4 +1,9 @@
-﻿namespace Mocassin.Model.Translator.Jobs
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Lattices;
+
+namespace Mocassin.Model.Translator.Jobs
 {
     /// <summary>
     ///     A lattice configuration for a simulation job that carries lattice build instructions
@@ -20,6 +25,11 @@
         /// </summary>
         public int SizeC { get; set; }
 
+		/// <summary>
+		///		Get or set the doping concentrations
+		/// </summary>
+		public IDictionary<IDoping, double> DopingConcentrations { get; set; }
+
         /// <summary>
         ///     Copies the information to another lattice configuration
         /// </summary>
@@ -29,6 +39,12 @@
             latticeConfiguration.SizeA = SizeA;
             latticeConfiguration.SizeB = SizeB;
             latticeConfiguration.SizeC = SizeC;
+	        latticeConfiguration.DopingConcentrations = new Dictionary<IDoping, double>(DopingConcentrations);
         }
+
+	    public DataIntVector3D GetIntVector3D()
+	    {
+			return new DataIntVector3D(SizeA, SizeB, SizeC);
+	    }
     }
 }

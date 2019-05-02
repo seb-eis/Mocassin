@@ -4,6 +4,7 @@ using Mocassin.Symmetry.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {
@@ -17,7 +18,8 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         /// <param name="simulationSeries"></param>
         /// <returns></returns>
-        // TODO: delete if no longer needed
-        //List<SupercellAdapter<IParticle>> ConstructLattices(ISimulationSeriesBase simulationSeries);
+        byte[,,,] BuildLattice(DataIntVector3D sizeVector, IDictionary<IDoping, double> dopings, Random rng);
+
+		
     }
 }

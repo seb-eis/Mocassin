@@ -64,14 +64,14 @@ namespace Mocassin.Model.Lattices
         /// <param name="latticePort"></param>
         /// <param name="structurePort"></param>
         /// <param name="settingsData"></param>
-        public LatticeCreationProvider(ILatticeQueryPort latticePort, IStructureQueryPort structurePort, ProjectSettings settingsData)
+        public LatticeCreationProvider(IModelProject modelProject)
             {
-                DefaultBlock = latticePort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
-                SublatticeIDs = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
-                VectorEncoder = structurePort.Query(port => port.GetVectorEncoder());
-                Dopings = latticePort.Query(port => port.GetDopings());
-	            DopingTolerance = settingsData.DopingToleranceSetting;
-                DoubleCompareTolerance = settingsData.CommonNumericSettings.RangeValue;
+                DefaultBlock = modelProject.GetManager<LatticeManager>().QueryPort.Query(port => port.GetBuildingBlocks()).Single(x => x.Index == 0);
+                SublatticeIDs = modelProject.GetManager<StructureManager>().QueryPort.Query(port => port.GetExtendedIndexToPositionDictionary());
+                VectorEncoder = modelProject.GetManager<StructureManager>().QueryPort.Query(port => port.GetVectorEncoder());
+                Dopings = modelProject.GetManager<LatticeManager>().QueryPort.Query(port => port.GetDopings());
+	            DopingTolerance = modelProject.Settings.DopingToleranceSetting;
+                DoubleCompareTolerance = modelProject.Settings.CommonNumericSettings.RangeValue;
             }
 
         /// <summary>
@@ -79,25 +79,25 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         /// <param name="bluePrint"></param>
         /// <returns></returns>
-        public List<SupercellAdapter<IParticle>> ConstructLattices(int numberOfLattices, int randomSeed, DataVector3D size, IDictionary<IDoping, double> dopingConcentrations)
-        {
-	        PcgRandom32 randomGenerator = new PcgRandom32(randomSeed);
-
-            List<SupercellAdapter<IParticle>> lattices = new List<SupercellAdapter<IParticle>>();
-		
-            for (int i = 0; i < numberOfLattices; i++)
-            {
-                LatticeEntry[,,][] workLattice = GenerateDefaultLattice(DefaultBlock, SublatticeIDs, size);
-	
-                var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, randomGenerator);
-	
-                dopingExecuter.DopeLattice(workLattice, Dopings, dopingConcentrations);
-	
-	            lattices.Add(Translate(workLattice, VectorEncoder));
-            }
-		
-            return lattices;
-        }
+        //public List<SupercellAdapter<IParticle>> ConstructLattices(int numberOfLattices, int randomSeed, DataVector3D size, IDictionary<IDoping, double> dopingConcentrations)
+        //{
+	    //    PcgRandom32 randomGenerator = new PcgRandom32(randomSeed);
+		//
+        //    List<SupercellAdapter<IParticle>> lattices = new List<SupercellAdapter<IParticle>>();
+		//
+        //    for (int i = 0; i < numberOfLattices; i++)
+        //    {
+        //        LatticeEntry[,,][] workLattice = GenerateDefaultLattice(DefaultBlock, SublatticeIDs, size);
+		//
+        //        var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, randomGenerator);
+		//
+        //        dopingExecuter.DopeLattice(workLattice, Dopings, dopingConcentrations);
+		//
+	    //        lattices.Add(Translate(workLattice, VectorEncoder));
+        //    }
+		//
+        //    return lattices;
+        //}
 
         /// <summary>
         /// Generate a default lattice with user defined size and the BuildingBlocks with index 0 
@@ -106,9 +106,9 @@ namespace Mocassin.Model.Lattices
         /// <param name="sublatticeIDs"></param>
         /// <param name="latticeSize"></param>
         /// <returns></returns>
-        LatticeEntry[,,][] GenerateDefaultLattice(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataVector3D latticeSize)
+        LatticeEntry[,,][] GenerateDefaultLattice(IBuildingBlock buildingBlock, IReadOnlyDictionary<int, IUnitCellPosition> sublatticeIDs, DataIntVector3D latticeSize)
         {
-            LatticeEntry[,,][] workLattice = new LatticeEntry[(int) latticeSize.A, (int) latticeSize.B, (int) latticeSize.C][];
+            LatticeEntry[,,][] workLattice = new LatticeEntry[latticeSize.A, latticeSize.B, latticeSize.C][];
 
             Func<LatticeEntry[]> func = delegate () { return CreateWorkCell(buildingBlock, sublatticeIDs); };
 
@@ -181,28 +181,60 @@ namespace Mocassin.Model.Lattices
         /// Translates the WorkLattice to a SupercellWrapper
         /// </summary>
         /// <param name="workLattice"></param>
-        /// <param name="encoder"></param>
         /// <returns></returns>
-        public SupercellAdapter<IParticle> Translate(LatticeEntry[,,][] workLattice, IUnitCellVectorEncoder encoder)
+        public byte[,,,] Translate(LatticeEntry[,,][] workLattice)
         {
 
-            IParticle[][] particlesLineratized = new IParticle[workLattice.GetLength(0) * workLattice.GetLength(1) * workLattice.GetLength(2)][];
+            //IParticle[][] particlesLineratized = new IParticle[workLattice.GetLength(0) * workLattice.GetLength(1) * workLattice.GetLength(2)][];
+			//
+            //int counter = 0;
+            //foreach (var item in workLattice)
+            //{
+            //    IParticle[] entries = new IParticle[item.Length];
+            //    for (int p = 0; p < item.Length; p++)
+            //    {
+            //        entries[p] = item[p].Particle;
+            //    }
+            //    particlesLineratized[counter] = entries;
+            //    counter++;
+            //}
+			//
+            //var particlesMultiDim = new IParticle[workLattice.GetLength(0), workLattice.GetLength(1), workLattice.GetLength(2)][].Populate(particlesLineratized);
+			//
+            //return new SupercellAdapter<IParticle>(particlesMultiDim, encoder);
 
-            int counter = 0;
-            foreach (var item in workLattice)
-            {
-                IParticle[] entries = new IParticle[item.Length];
-                for (int p = 0; p < item.Length; p++)
-                {
-                    entries[p] = item[p].Particle;
-                }
-                particlesLineratized[counter] = entries;
-                counter++;
-            }
 
-            var particlesMultiDim = new IParticle[workLattice.GetLength(0), workLattice.GetLength(1), workLattice.GetLength(2)][].Populate(particlesLineratized);
+	        byte[,,,] byteLattice = new byte[workLattice.GetLength(0), workLattice.GetLength(1), workLattice.GetLength(2), workLattice[0,0,0].GetLength(0)];
+	        for (int x = 0; x < workLattice.GetLength(0); x++)
+	        {
+		        for (int y = 0; y < workLattice.GetLength(1); y++)
+		        {
+			        for (int z = 0; z < workLattice.GetLength(2); z++)
+			        {
+						for (int p = 0; p < workLattice[x,y,z].GetLength(0); p++)
+						{
+							byteLattice[x, y, z, p] = (byte) workLattice[x, y, z][p].Particle.Index;
+						}
+			        }
+		        }
+	        }
 
-            return new SupercellAdapter<IParticle>(particlesMultiDim, encoder);
+	        return byteLattice;
+
         }
+
+	    /// <inheritdoc />
+	    public byte[,,,] BuildLattice(DataIntVector3D sizeVector, IDictionary<IDoping, double> dopings, Random rng)
+	    {
+
+
+		    LatticeEntry[,,][] workLattice = GenerateDefaultLattice(DefaultBlock, SublatticeIDs, sizeVector);
+
+		    var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, rng);
+
+		    dopingExecuter.DopeLattice(workLattice, Dopings, dopings);
+
+		    return Translate(workLattice);
+	    }
     }
 }
