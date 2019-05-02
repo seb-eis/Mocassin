@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Mocassin.Framework.Messaging;
 using Mocassin.Model.ModelProject;
-using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
@@ -35,7 +33,7 @@ namespace Mocassin.UI.GUI.Base.DataContext
         IMocassinProjectLibrary OpenProjectLibrary { get; }
 
         /// <summary>
-        ///     Get a <see cref="IModelProject"/> that does not support input but provides the internal services
+        ///     Get a <see cref="IModelProject" /> that does not support input but provides the internal services
         /// </summary>
         IModelProject ServiceModelProject { get; }
 
@@ -93,15 +91,20 @@ namespace Mocassin.UI.GUI.Base.DataContext
         void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
 
         /// <summary>
-        ///     Get a <see cref="IList{T}"/> of loaded plugin <see cref="Assembly"/> instances
+        ///     Get a <see cref="IList{T}" /> of loaded plugin <see cref="Assembly" /> instances
         /// </summary>
         /// <returns></returns>
         IEnumerable<Assembly> PluginAssemblies { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="IModelProject"/> interface with all internally defined settings and capabilities
+        ///     Creates a new <see cref="IModelProject" /> interface with all internally defined settings and capabilities
         /// </summary>
         /// <returns></returns>
         IModelProject CreateModelProject();
+
+        /// <summary>
+        ///     Stops and disposes all services of the project control to prepare for application shutdown
+        /// </summary>
+        void DisposeServices();
     }
 }

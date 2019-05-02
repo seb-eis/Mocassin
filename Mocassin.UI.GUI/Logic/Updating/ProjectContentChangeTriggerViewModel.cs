@@ -45,8 +45,8 @@ namespace Mocassin.UI.GUI.Logic.Updating
         {
             CheckTriggeredEvent = new ReactiveEvent<Unit>();
             CancellationSource = new CancellationTokenSource();
+            CheckTriggerNotification.Subscribe(x => RunChangeCheck(), () => CancellationSource.Cancel());
             TriggerTask = Task.Run(() => RunTriggerLoop(CancellationSource.Token));
-            CheckTriggerNotification.Subscribe(x => RunChangeCheck());
         }
 
         /// <summary>
@@ -65,18 +65,21 @@ namespace Mocassin.UI.GUI.Logic.Updating
         {
             var isStop = false;
             CheckTriggerNotification.Subscribe(x => { }, e => { }, () => { isStop = true; });
+
+            Task<Unit> triggerEventTask = null;
             while (!isStop && !cancellationToken.IsCancellationRequested)
             {
                 Thread.Sleep(CheckInterval);
-                CheckTriggeredEvent.OnNextAsync(Unit.Default);
+                if (!(triggerEventTask ?? Task.CompletedTask).IsCompleted) continue;
+                triggerEventTask = CheckTriggeredEvent.OnNextAsync(Unit.Default);
             }
         }
 
         /// <inheritdoc />
-        public override async void Dispose()
+        public override void Dispose()
         {
             CheckTriggeredEvent.OnCompleted();
-            await TriggerTask;
+            TriggerTask.Wait();
             base.Dispose();
         }
     }
