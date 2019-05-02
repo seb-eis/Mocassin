@@ -137,9 +137,9 @@ namespace Mocassin.Model.ModelProject
                 },
                 GeometryNumericSettings = new MocassinNumericSettings
                 {
-                    FactorValue = 1.0e-2,
-                    RangeValue = 1.0e-3,
-                    UlpValue = 50
+                    FactorValue = 1.0e-6,
+                    RangeValue = 1.0e-10,
+                    UlpValue = 10
                 },
                 ConcurrencySettings = new MocassinConcurrencySettings
                 {
@@ -157,8 +157,8 @@ namespace Mocassin.Model.ModelProject
                 {
                     SpaceGroupDbPath =
                         $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Program/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
-                    VectorTolerance = 1.0e-6,
-                    ParameterTolerance = 1.0e-6
+                    VectorTolerance = 1.0e-10,
+                    ParameterTolerance = 1.0e-10
                 },
 	            DopingToleranceSetting = 1.0e-4
             };

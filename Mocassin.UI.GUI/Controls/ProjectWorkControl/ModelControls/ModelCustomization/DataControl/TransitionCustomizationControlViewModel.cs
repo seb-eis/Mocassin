@@ -10,16 +10,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     /// </summary>
     public class TransitionCustomizationControlViewModel : CustomizationGraphControlViewModel
     {
+        /// <summary>
+        ///     Get the <see cref="CollectionControlViewModel{T}" /> for the customizable <see cref="KineticRuleSetGraph" />
+        ///     instances
+        /// </summary>
+        public CollectionControlViewModel<KineticRuleSetGraph> KineticRuleSetCollectionViewModel { get; }
+
         /// <inheritdoc />
         public TransitionCustomizationControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
+            KineticRuleSetCollectionViewModel = new CollectionControlViewModel<KineticRuleSetGraph>();
         }
 
         /// <inheritdoc />
         public override void ChangeContentSource(ProjectCustomizationGraph contentSource)
         {
             ContentSource = contentSource;
+            KineticRuleSetCollectionViewModel.SetCollection(contentSource?.TransitionModelCustomization?.KineticTransitionParameterSets);
         }
     }
 }

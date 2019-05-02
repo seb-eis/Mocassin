@@ -14,6 +14,7 @@
     <Menu FontSize="14"
           Background="Transparent">
       <MenuItem Header="Project">
+
         <MenuItem Header="Model Validation Console">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
@@ -22,6 +23,16 @@
             </i:EventTrigger>
           </i:Interaction.Triggers>
         </MenuItem>
+
+        <MenuItem Header="Project Deployment">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:InvokeCommandAction Command="{Binding CommandSource}"
+                                     CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </MenuItem>
+
       </MenuItem>
     </Menu>
   </Grid>

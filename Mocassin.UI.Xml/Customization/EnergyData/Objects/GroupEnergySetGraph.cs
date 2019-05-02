@@ -4,7 +4,9 @@ using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -16,16 +18,16 @@ namespace Mocassin.UI.Xml.Customization
     public class GroupEnergySetGraph : ProjectObjectGraph, IComparable<GroupEnergySetGraph>
     {
         /// <summary>
-        ///     Get or set the key of the group interaction
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> of the group interaction that the graph is based upon
         /// </summary>
-        [XmlAttribute("Group")]
-        public string GroupInteractionKey { get; set; }
+        [XmlElement("GroupInteraction")]
+        public ModelObjectReferenceGraph<GroupInteraction> GroupInteraction { get; set; }
 
         /// <summary>
-        ///     Get or set the key of the center unit cell position
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> of the center position that the graph is based upon
         /// </summary>
-        [XmlAttribute("Around")]
-        public string CenterUnitCellPositionKey { get; set; }
+        [XmlElement("CenterPosition")]
+        public ModelObjectReferenceGraph<UnitCellPosition> CenterPosition { get; set; }
 
         /// <summary>
         ///     Get or set the base geometry list of the surroundings
@@ -61,21 +63,30 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new serializable <see cref="GroupEnergySetGraph" /> by pulling all data defined in the passed
-        ///     <see cref="IGroupEnergySetter" /> context
+        ///     <see cref="IGroupEnergySetter" /> context and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="energySetter"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static GroupEnergySetGraph Create(IGroupEnergySetter energySetter)
+        public static GroupEnergySetGraph Create(IGroupEnergySetter energySetter, ProjectModelGraph parent)
         {
             if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+            var groupInteraction = 
+                parent.EnergyModelGraph.GroupInteractions.Single(x => x.Key == energySetter.GroupInteraction.Key);
+
+            var centerPosition =
+                parent.StructureModelGraph.UnitCellPositions.Single(x => x.Key == energySetter.GroupInteraction.CenterUnitCellPosition.Key);
 
             var obj = new GroupEnergySetGraph
             {
+                Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
                 GroupInteractionIndex = energySetter.GroupInteraction.Index,
                 BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorGraph3D.Create(x)).ToList(),
-                GroupInteractionKey = energySetter.GroupInteraction.Key,
-                CenterUnitCellPositionKey = energySetter.GroupInteraction.CenterUnitCellPosition.Key,
-                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyGraph.Create(x)).ToList()
+                GroupInteraction = new ModelObjectReferenceGraph<GroupInteraction>(groupInteraction),
+                CenterPosition = new ModelObjectReferenceGraph<UnitCellPosition>(centerPosition),
+                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyGraph.Create(x, parent)).ToList()
             };
 
             obj.EnergyEntries.Sort();
@@ -88,10 +99,10 @@ namespace Mocassin.UI.Xml.Customization
             if (ReferenceEquals(this, other)) return 0;
             if (other is null) return 1;
 
-            var groupInteractionKeyComparison = string.Compare(GroupInteractionKey, other.GroupInteractionKey, StringComparison.Ordinal);
+            var groupInteractionKeyComparison = string.Compare(GroupInteraction?.Key, other.GroupInteraction?.Key, StringComparison.Ordinal);
             return groupInteractionKeyComparison != 0
                 ? groupInteractionKeyComparison
-                : string.Compare(CenterUnitCellPositionKey, other.CenterUnitCellPositionKey, StringComparison.Ordinal);
+                : string.Compare(CenterPosition?.Key, other.CenterPosition?.Key, StringComparison.Ordinal);
         }
     }
 }

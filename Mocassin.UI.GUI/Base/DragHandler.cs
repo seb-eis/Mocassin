@@ -26,9 +26,9 @@ namespace Mocassin.UI.GUI.Base
         public Func<TElement, IDataObject> PackerFunction { get; set; }
 
         /// <summary>
-        ///     Get or set the allowed <see cref="DragDropEffects" />, defaults to copy behavior
+        ///     Get or set the allowed <see cref="DragDropEffects" />, defaults to all behavior
         /// </summary>
-        public DragDropEffects AllowedEffects { get; set; } = DragDropEffects.Copy;
+        public DragDropEffects AllowedEffects { get; set; } = DragDropEffects.Link;
 
         /// <summary>
         ///     Creates new <see cref="DragHandler{TElement}" /> with the provided packer <see cref="Func{TResult}" /> and

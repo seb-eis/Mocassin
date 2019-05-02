@@ -23,6 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
             ProjectControl.ProjectManagerViewModel.CloseProjectLibraryCommand.Execute(null);
             if (ProjectControl.OpenProjectLibrary != null) return;
 
+            ProjectControl.DisposeServices();
             Application.Current.Shutdown();
         }
 

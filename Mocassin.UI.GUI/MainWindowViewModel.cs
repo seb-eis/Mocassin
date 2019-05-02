@@ -64,6 +64,9 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public IEnumerable<Assembly> PluginAssemblies { get; }
 
+        /// <summary>
+        ///     Get or set the <see cref="ProjectContentChangeTriggerViewModel"/> that periodically triggers the project content change
+        /// </summary>
         public ProjectContentChangeTriggerViewModel ChangeTriggerViewModel { get; set; }
 
         /// <inheritdoc />
@@ -129,6 +132,12 @@ namespace Mocassin.UI.GUI
             var modelProject = CreateServiceModelProject();
             foreach (var factory in GetModelManagerFactories()) modelProject.CreateAndRegister(factory);
             return modelProject;
+        }
+
+        /// <inheritdoc />
+        public void DisposeServices()
+        {
+            ChangeTriggerViewModel?.Dispose();
         }
 
         /// <summary>

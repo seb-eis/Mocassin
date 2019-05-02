@@ -45,19 +45,19 @@ namespace Mocassin.UI.Xml.Jobs
 
             var obj = new KmcJobConfiguration
             {
-                PreRunMcsp = PreRunMcsp is null 
+                PreRunMcsp = string.IsNullOrWhiteSpace(PreRunMcsp)
                     ? kmcBaseSimulation.PreRunMcsp
                     : int.Parse(PreRunMcsp),
 
-                BaseFrequency = MaxAttemptFrequency is null
+                BaseFrequency = string.IsNullOrWhiteSpace(MaxAttemptFrequency)
                     ? kmcBaseSimulation.Transitions.SelectMany(x => x.GetTransitionRules()).Max(rule => rule.AttemptFrequency)
                     : double.Parse(MaxAttemptFrequency),
 
-                FixedNormalizationFactor = NormalizationProbability is null
+                FixedNormalizationFactor = string.IsNullOrWhiteSpace(NormalizationProbability)
                     ? 1.0 / kmcBaseSimulation.NormalizationProbability
                     : 1.0 / double.Parse(NormalizationProbability),
 
-                ElectricFieldModulus = ElectricFieldModulus is null
+                ElectricFieldModulus = string.IsNullOrWhiteSpace(ElectricFieldModulus)
                     ? kmcBaseSimulation.ElectricFieldMagnitude
                     : double.Parse(ElectricFieldModulus)
             };
@@ -73,19 +73,19 @@ namespace Mocassin.UI.Xml.Jobs
 
             var obj = new KmcJobConfiguration
             {
-                PreRunMcsp = PreRunMcsp is null 
+                PreRunMcsp = string.IsNullOrWhiteSpace(PreRunMcsp)
                     ? kmcBaseConfig.PreRunMcsp
                     : int.Parse(PreRunMcsp),
 
-                BaseFrequency = MaxAttemptFrequency is null
+                BaseFrequency = string.IsNullOrWhiteSpace(MaxAttemptFrequency)
                     ? kmcBaseConfig.BaseFrequency
                     : double.Parse(MaxAttemptFrequency),
 
-                FixedNormalizationFactor = NormalizationProbability is null
+                FixedNormalizationFactor = string.IsNullOrWhiteSpace(NormalizationProbability)
                     ? kmcBaseConfig.FixedNormalizationFactor
                     : 1.0 / double.Parse(NormalizationProbability),
 
-                ElectricFieldModulus = ElectricFieldModulus is null
+                ElectricFieldModulus = string.IsNullOrWhiteSpace(ElectricFieldModulus)
                     ? kmcBaseConfig.ElectricFieldModulus
                     : double.Parse(ElectricFieldModulus)
             };

@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -58,20 +59,23 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Create a new <see cref="ProjectCustomizationGraph" /> by pulling all data from the passed
-        ///     <see cref="IModelProject" />
+        ///     <see cref="IModelProject" /> and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="modelProject"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static ProjectCustomizationGraph Create(IModelProject modelProject)
+        public static ProjectCustomizationGraph Create(IModelProject modelProject, ProjectModelGraph parent)
         {
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
             var energySetterProvider = modelProject.GetManager<IEnergyManager>().QueryPort.Query(x => x.GetEnergySetterProvider());
             var ruleSetterProvider = modelProject.GetManager<ITransitionManager>().QueryPort.Query(x => x.GetRuleSetterProvider());
 
             var obj = new ProjectCustomizationGraph
             {
-                EnergyModelCustomization = EnergyModelCustomizationGraph.Create(energySetterProvider),
-                TransitionModelCustomization = TransitionModelCustomizationEntity.Create(ruleSetterProvider)
+                EnergyModelCustomization = EnergyModelCustomizationGraph.Create(energySetterProvider, parent),
+                TransitionModelCustomization = TransitionModelCustomizationEntity.Create(ruleSetterProvider, parent)
             };
 
             return obj;

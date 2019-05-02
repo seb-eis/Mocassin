@@ -32,12 +32,6 @@ namespace Mocassin.UI.Xml.Jobs
         public string TimeLimit { get; set; }
 
         /// <summary>
-        ///     Get or set the random number generator seed as a string
-        /// </summary>
-        [XmlAttribute("RngSeed")]
-        public string RngSeed { get; set; }
-
-        /// <summary>
         ///     Get or set the temperature value in [K] as a string
         /// </summary>
         [XmlAttribute("Temperature")]
@@ -63,18 +57,16 @@ namespace Mocassin.UI.Xml.Jobs
                 ? 0
                 : (SimulationJobInfoFlags) Enum.Parse(typeof(SimulationJobInfoFlags), JobInfoFlags);
 
-            obj.TargetMcsp = TargetMcsp is null
+            obj.TargetMcsp = string.IsNullOrWhiteSpace(TargetMcsp)
                 ? baseSimulation.TargetMcsp
                 : int.Parse(TargetMcsp);
 
-            obj.TimeLimit = (TimeLimit is null ? baseSimulation.SaveRunTimeLimit.Ticks : ParseTimeString(TimeLimit).Ticks) /
-                            TimeSpan.TicksPerSecond;
-
-            obj.Temperature = Temperature is null
+            obj.TimeLimit = (long) (ParseTimeString(TimeLimit)?.TotalSeconds ?? baseSimulation.SaveRunTimeLimit.TotalSeconds);
+            obj.Temperature = string.IsNullOrWhiteSpace(Temperature)
                 ? baseSimulation.Temperature
                 : double.Parse(Temperature);
 
-            obj.MinimalSuccessRate = MinimalSuccessRate is null
+            obj.MinimalSuccessRate = string.IsNullOrWhiteSpace(MinimalSuccessRate)
                 ? baseSimulation.LowerSuccessRateLimit
                 : double.Parse(MinimalSuccessRate);
 
@@ -93,23 +85,21 @@ namespace Mocassin.UI.Xml.Jobs
 
             obj.LatticeConfiguration = baseConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
-            obj.JobInfoFlags |= JobInfoFlags is null
+            obj.JobInfoFlags |= string.IsNullOrWhiteSpace(JobInfoFlags)
                 ? baseConfiguration.JobInfoFlags
                 : (SimulationJobInfoFlags) Enum.Parse(typeof(SimulationJobInfoFlags), JobInfoFlags);
 
-            obj.TargetMcsp = TargetMcsp is null
+            obj.TargetMcsp = string.IsNullOrWhiteSpace(TargetMcsp)
                 ? baseConfiguration.TargetMcsp
                 : int.Parse(TargetMcsp);
 
-            obj.TimeLimit = TimeLimit is null
-                ? baseConfiguration.TimeLimit
-                : ParseTimeString(TimeLimit).Ticks / TimeSpan.TicksPerSecond;
+            obj.TimeLimit = (long) (ParseTimeString(TimeLimit)?.TotalSeconds ?? baseConfiguration.TimeLimit);
 
-            obj.Temperature = Temperature is null
+            obj.Temperature = string.IsNullOrWhiteSpace(Temperature)
                 ? baseConfiguration.Temperature
                 : double.Parse(Temperature);
 
-            obj.MinimalSuccessRate = MinimalSuccessRate is null
+            obj.MinimalSuccessRate = string.IsNullOrWhiteSpace(MinimalSuccessRate)
                 ? baseConfiguration.MinimalSuccessRate
                 : double.Parse(MinimalSuccessRate);
 
@@ -139,19 +129,18 @@ namespace Mocassin.UI.Xml.Jobs
         /// <param name="s"></param>
         /// <param name="defaultHours"></param>
         /// <returns></returns>
-        protected static TimeSpan ParseTimeString(string s, int defaultHours = 24)
+        public static TimeSpan? ParseTimeString(string s, int defaultHours = 24)
         {
             if (TimeSpan.TryParse(s, out var timeLimit)) return timeLimit;
             try
             {
                 timeLimit = XmlConvert.ToTimeSpan(s);
+                return timeLimit;
             }
             catch (Exception)
             {
-                timeLimit = TimeSpan.FromHours(defaultHours);
+                return null;
             }
-
-            return timeLimit;
         }
     }
 }

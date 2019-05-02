@@ -1,10 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -16,10 +20,10 @@ namespace Mocassin.UI.Xml.Customization
     public class GroupEnergyGraph : ProjectObjectGraph, IComparable<GroupEnergyGraph>
     {
         /// <summary>
-        ///     Get or set the center particle key
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> of the <see cref="Particle"/> that describes the center occupation
         /// </summary>
-        [XmlAttribute("Center")]
-        public string CenterParticleKey { get; set; }
+        [XmlElement("CenterParticle")]
+        public ModelObjectReferenceGraph<Particle> CenterParticle { get; set; }
 
         /// <summary>
         ///     Get or set the energy value in [eV]
@@ -42,23 +46,30 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public GroupEnergyEntry ToInternal(IModelProject modelProject)
         {
-            var centerParticle = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticleKey);
+            var centerParticle = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key);
             return new GroupEnergyEntry(centerParticle, OccupationState.ToInternal(modelProject), Energy);
         }
 
         /// <summary>
         ///     Creates a new serializable <see cref="GroupEnergyGraph" /> by pulling the required data from the passed
-        ///     <see cref="GroupEnergyEntry" /> context
+        ///     <see cref="GroupEnergyEntry" /> context and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="energyEntry"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static GroupEnergyGraph Create(in GroupEnergyEntry energyEntry)
+        public static GroupEnergyGraph Create(in GroupEnergyEntry energyEntry, ProjectModelGraph parent)
         {
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+            var centerKey = energyEntry.CenterParticle.Key;
+            var centerParticle = parent.ParticleModelGraph.Particles.Single(x => x.Key == centerKey);
+
             var obj = new GroupEnergyGraph
             {
-                CenterParticleKey = energyEntry.CenterParticle.Key,
+                Name = GetOccupationIonString(energyEntry.CenterParticle, energyEntry.GroupOccupation),
+                CenterParticle = new ModelObjectReferenceGraph<Particle>(centerParticle),
                 Energy = energyEntry.Energy,
-                OccupationState = OccupationStateGraph.Create(energyEntry.GroupOccupation)
+                OccupationState = OccupationStateGraph.Create(energyEntry.GroupOccupation, parent.ParticleModelGraph.Particles)
             };
 
             return obj;
@@ -73,10 +84,27 @@ namespace Mocassin.UI.Xml.Customization
             if (other is null)
                 return 1;
 
-            var centerParticleKeyComparison = string.Compare(CenterParticleKey, other.CenterParticleKey, StringComparison.Ordinal);
+            var centerParticleKeyComparison = string.Compare(CenterParticle?.Key, other.CenterParticle?.Key, StringComparison.Ordinal);
             return centerParticleKeyComparison != 0
                 ? centerParticleKeyComparison
                 : Energy.CompareTo(other.Energy);
+        }
+
+        /// <summary>
+        ///     Creates a short <see cref="string"/> description for a <see cref="IOccupationState"/> interface and center <see cref="IParticle"/>
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public static string GetOccupationIonString(IParticle center, IOccupationState state)
+        {
+            var builder = new StringBuilder(100);
+            foreach (var particle in center.AsSingleton().Concat(state))
+            {
+                builder.Append($"[{particle.GetIonString()}]");
+            }
+
+            return builder.ToString();
         }
     }
 }

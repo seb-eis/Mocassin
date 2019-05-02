@@ -44,19 +44,19 @@ namespace Mocassin.UI.Xml.Jobs
 
             var obj = new MmcJobConfiguration
             {
-                AbortTolerance = BreakTolerance is null
+                AbortTolerance = string.IsNullOrWhiteSpace(BreakTolerance)
                     ? mmcBaseSimulation.RelativeBreakTolerance
                     : double.Parse(BreakTolerance),
 
-                AbortSampleLength = BreakSampleLength is null
+                AbortSampleLength = string.IsNullOrWhiteSpace(BreakSampleLength)
                     ? mmcBaseSimulation.BreakSampleLength
                     : int.Parse(BreakSampleLength),
 
-                AbortSampleInterval = BreakSampleInterval is null
+                AbortSampleInterval = string.IsNullOrWhiteSpace(BreakSampleInterval)
                     ? mmcBaseSimulation.BreakSampleIntervalMcs
                     : int.Parse(BreakSampleInterval),
 
-                AbortSequenceLength = ResultSampleMcs is null
+                AbortSequenceLength = string.IsNullOrWhiteSpace(ResultSampleMcs)
                     ? mmcBaseSimulation.ResultSampleMcs
                     : int.Parse(ResultSampleMcs)
             };
@@ -72,19 +72,19 @@ namespace Mocassin.UI.Xml.Jobs
 
             var obj = new MmcJobConfiguration
             {
-                AbortTolerance = BreakTolerance is null
+                AbortTolerance = string.IsNullOrWhiteSpace(BreakTolerance)
                     ? mmcJobConfiguration.AbortTolerance
                     : double.Parse(BreakTolerance),
 
-                AbortSampleLength = BreakSampleLength is null
+                AbortSampleLength = string.IsNullOrWhiteSpace(BreakSampleLength)
                     ? mmcJobConfiguration.AbortSampleLength
                     : int.Parse(BreakSampleLength),
 
-                AbortSampleInterval = BreakSampleInterval is null
+                AbortSampleInterval = string.IsNullOrWhiteSpace(BreakSampleInterval)
                     ? mmcJobConfiguration.AbortSampleInterval
                     : int.Parse(BreakSampleInterval),
 
-                AbortSequenceLength = ResultSampleMcs is null
+                AbortSequenceLength = string.IsNullOrWhiteSpace(ResultSampleMcs)
                     ? mmcJobConfiguration.AbortSequenceLength
                     : int.Parse(ResultSampleMcs)
             };

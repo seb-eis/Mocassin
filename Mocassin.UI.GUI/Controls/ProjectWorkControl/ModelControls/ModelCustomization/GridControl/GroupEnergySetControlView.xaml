@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.GroupEnergySetControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
+             d:DataContext="{d:DesignInstance local:GroupEnergySetControlViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
+
+  <UserControl.Resources>
+    <Style TargetType="{x:Type Run}" x:Key="ModelObjectRunStyle">
+      <Setter Property="Foreground" Value="Blue" />
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+  </UserControl.Resources>
+
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="2*" />
+    </Grid.ColumnDefinitions>
+
+    <GroupBox Grid.Row="0"
+              Grid.Column="0"
+              Header="Permutation Selection">
+
+      <ComboBox ItemsSource="{Binding DataCollection}"
+                SelectedItem="{Binding SelectedCollectionItem}"
+                DisplayMemberPath="Name" />
+    </GroupBox>
+    <GroupBox Header="Interaction Energy [eV]"
+              Grid.Row="1"
+              Grid.Column="0">
+      <TextBox Text="{Binding SelectedCollectionItem.Energy}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter"
+                      Command="{StaticResource UpdateTextBoxSourceCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+        </TextBox.InputBindings>
+      </TextBox>
+    </GroupBox>
+    <GroupBox Grid.Row="0"
+              Grid.Column="1"
+              Grid.RowSpan="2"
+              Header="Description">
+
+      <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
+        <Run Text="Group interaction for" />
+        <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
+             Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="occupying the" />
+        <Run Text="{Binding Path=GroupEnergySet.CenterPosition.Name, Mode=OneWay}"
+             Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="center position. Surrounding symmetry reduced reference geometry" />
+        <Run Text="{Binding BaseGeometryDescription, Mode=OneWay}"
+             Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="is occupied by the particle sequence" />
+        <Run Text="{Binding SelectedCollectionItem.OccupationState, Mode=OneWay}"
+             Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="in order of appearance." />
+      </TextBlock>
+    </GroupBox>
+
+  </Grid>
+</UserControl>

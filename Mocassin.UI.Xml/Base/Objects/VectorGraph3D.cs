@@ -52,5 +52,11 @@ namespace Mocassin.UI.Xml.Base
         {
             return new VectorGraph3D {A = vector.Coordinates.A, B = vector.Coordinates.B, C = vector.Coordinates.C};
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"({A.ToString(DefaultCultureInfo)}, {B.ToString(DefaultCultureInfo)}, {C.ToString(DefaultCultureInfo)})";
+        }
     }
 }

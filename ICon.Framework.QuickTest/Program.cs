@@ -38,8 +38,8 @@ namespace Mocassin.Framework.QuickTest
             try
             {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                var package = TestXmlInputSystem();
-                TestParameterSets(package);
+                var package = TestXmlInputSystem(out var modelGraph);
+                TestParameterSets(package, modelGraph);
                 var jobCollections = TestJobSystem(package);
                 TestDbCreation(package, jobCollections);
             }
@@ -51,7 +51,7 @@ namespace Mocassin.Framework.QuickTest
             ExitOnKeyPress("Finished successfully...");
         }
 
-        private static ManagerPackage TestXmlInputSystem()
+        private static ManagerPackage TestXmlInputSystem(out ProjectModelGraph modelGraph)
         {
             var filePath = _basePath + _baseFile + ".Input.xml";
 
@@ -80,13 +80,14 @@ namespace Mocassin.Framework.QuickTest
             }
 
             Console.WriteLine("Model project input system done!");
+            modelGraph = data;
             return package;
         }
 
-        private static void TestParameterSets(ManagerPackage package)
+        private static void TestParameterSets(ManagerPackage package, ProjectModelGraph modelGraph)
         {
             var filePath = _basePath + _baseFile + ".Custom.xml";
-            var customizationData = ProjectCustomizationGraph.Create(package.ModelProject);
+            var customizationData = ProjectCustomizationGraph.Create(package.ModelProject, modelGraph);
             if (!File.Exists(filePath))
             {
                 var outTest = XmlStreamService.TrySerialize(Console.OpenStandardOutput(), customizationData, out var exception);

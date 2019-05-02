@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.SimulationModel;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Jobs
 {
@@ -13,12 +16,6 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public abstract class JobPackageDescriptionGraph : ProjectObjectGraph
     {
-        /// <summary>
-        ///     Get or set the key of the <see cref="Mocassin.Model.Simulations.ISimulation" /> that the collection is for
-        /// </summary>
-        [XmlAttribute("BaseSimulation")]
-        public string SimulationKey { get; set; }
-
         /// <summary>
         ///     Get or set an rng seed string to overwrite the one defined in the affiliated
         ///     <see cref="Mocassin.Model.Simulations.ISimulation" />
@@ -33,11 +30,18 @@ namespace Mocassin.UI.Xml.Jobs
         public string JobCountPerConfig { get; set; }
 
         /// <summary>
-        ///     Get or set the list of <see cref="ManualOptimizerGraph" /> objects
+        ///     Get or set the list of <see cref="SelectionOptimizerGraph" /> objects
         /// </summary>
-        [XmlArray("ManualOptimizers")]
-        [XmlArrayItem(typeof(SelectionOptimizerGraph), ElementName = "SelectionOptimizer")]
-        public List<ManualOptimizerGraph> ManualOptimizers { get; set; }
+        [XmlArray("SelectionOptimizers")]
+        [XmlArrayItem("SelectionOptimizer")]
+        public List<SelectionOptimizerGraph> SelectionOptimizers { get; set; }
+
+        /// <inheritdoc />
+        protected JobPackageDescriptionGraph()
+        {
+            SelectionOptimizers = new List<SelectionOptimizerGraph>();
+            RngSeed = Guid.NewGuid().ToString();
+        }
 
         /// <summary>
         ///     Creates a <see cref="IJobCollection" /> for simulation database creation in the context of the passed
@@ -48,9 +52,24 @@ namespace Mocassin.UI.Xml.Jobs
         public abstract IJobCollection ToInternal(IModelProject modelProject);
 
         /// <summary>
-        ///     Get the sequence of defined <see cref="JobDescriptionGraph" /> objects of the collection
+        ///     Get the sequence of defined <see cref="ManualOptimizerGraph"/> objects pof the package
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<ManualOptimizerGraph> GetManualOptimizers()
+        {
+            return SelectionOptimizers;
+        }
+
+        /// <summary>
+        ///     Get the sequence of defined <see cref="JobDescriptionGraph" /> objects of the package
         /// </summary>
         /// <returns></returns>
         public abstract IEnumerable<JobDescriptionGraph> GetConfigurations();
+
+        /// <summary>
+        ///     Calculate the total number of executable simulations in the context of the passed <see cref="IModelProject"/> defined by the package
+        /// </summary>
+        /// <returns></returns>
+        public abstract int GetTotalJobCount(IModelProject modelProject);
     }
 }

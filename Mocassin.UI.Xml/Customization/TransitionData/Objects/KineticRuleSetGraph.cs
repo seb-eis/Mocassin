@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -16,10 +17,10 @@ namespace Mocassin.UI.Xml.Customization
     public class KineticRuleSetGraph : ProjectObjectGraph
     {
         /// <summary>
-        ///     Get or set the key of the affiliated <see cref="IKineticTransition" />
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> for the affiliated <see cref="KineticTransition"/> 
         /// </summary>
-        [XmlAttribute("Transition")]
-        public string TransitionKey { get; set; }
+        [XmlElement("Transition")]
+        public ModelObjectReferenceGraph<KineticTransition> Transition { get; set; }
 
         /// <summary>
         ///     Get or set the transition index of the affiliated <see cref="IKineticTransition" />
@@ -52,19 +53,24 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new <see cref="KineticRuleSetGraph" /> by pulling all data from the passed
-        ///     <see cref="IKineticRuleSetter" />
+        ///     <see cref="IKineticRuleSetter" /> and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="ruleSetter"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static KineticRuleSetGraph Create(IKineticRuleSetter ruleSetter)
+        public static KineticRuleSetGraph Create(IKineticRuleSetter ruleSetter, ProjectModelGraph parent)
         {
             if (ruleSetter == null) throw new ArgumentNullException(nameof(ruleSetter));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+            var transitionGraph = parent.TransitionModelGraph.KineticTransitions.Single(x => x.Key == ruleSetter.KineticTransition.Key);
 
             var obj = new KineticRuleSetGraph
             {
+                Name = $"Kinetic.Rule.Set.{transitionGraph}",
                 TransitionIndex = ruleSetter.KineticTransition.Index,
-                TransitionKey = ruleSetter.KineticTransition.Key,
-                KineticRules = ruleSetter.KineticRules.Select(KineticRuleGraph.Create).ToList()
+                Transition = new ModelObjectReferenceGraph<KineticTransition> {TargetGraph = transitionGraph},
+                KineticRules = ruleSetter.KineticRules.Select(x => KineticRuleGraph.Create(x, parent)).ToList()
             };
 
             return obj;

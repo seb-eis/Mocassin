@@ -31,7 +31,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [XmlAttribute("Name")]
         [JsonProperty("Name")]
-        [NotMapped]
+        [Column("Name")]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Mocassin.UI.Xml.Base
         /// <returns></returns>
         public string ToJson(JsonSerializerSettings serializerSettings = null)
         {
-            return JsonConvert.SerializeObject(this, serializerSettings ?? GetDefaultSerializerSettings());
+            return JsonConvert.SerializeObject(this, serializerSettings ?? GetDefaultJsonSerializerSettings());
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Mocassin.UI.Xml.Base
         public void FromJson(string json, JsonSerializerSettings serializerSettings = null)
         {
             if (json == null) throw new ArgumentNullException(nameof(json));
-            JsonConvert.PopulateObject(json, this, serializerSettings ?? GetDefaultSerializerSettings());
+            JsonConvert.PopulateObject(json, this, serializerSettings ?? GetDefaultJsonSerializerSettings());
         }
 
         /// <summary>
@@ -100,14 +100,15 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Get the default <see cref="JsonSerializerSettings" /> for json conversion
+        ///     Get the default <see cref="JsonSerializerSettings" /> for json serialization
         /// </summary>
         /// <returns></returns>
-        protected virtual JsonSerializerSettings GetDefaultSerializerSettings()
+        protected virtual JsonSerializerSettings GetDefaultJsonSerializerSettings()
         {
             return new JsonSerializerSettings
             {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects, 
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Culture = DefaultCultureInfo
             };
         }

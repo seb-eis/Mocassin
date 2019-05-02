@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
@@ -42,6 +43,16 @@ namespace Mocassin.UI.Xml.Jobs
         public List<MmcJobPackageDescriptionGraph> MmcJobPackageDescriptions { get; set; }
 
         /// <summary>
+        ///     Creates new <see cref="ProjectJobTranslationGraph"/> with empty <see cref="JobPackageDescriptionGraph"/> collections
+        /// </summary>
+        public ProjectJobTranslationGraph()
+        {
+            KmcJobPackageDescriptions = new List<KmcJobPackageDescriptionGraph>();
+            MmcJobPackageDescriptions = new List<MmcJobPackageDescriptionGraph>();
+            Key = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
         ///     Get the sequence of <see cref="IJobCollection" /> objects defined in the object
         /// </summary>
         /// <param name="modelProject"></param>
@@ -50,6 +61,20 @@ namespace Mocassin.UI.Xml.Jobs
         {
             return MmcJobPackageDescriptions.Select(x => x.ToInternal(modelProject))
                 .Concat(KmcJobPackageDescriptions.Select(x => x.ToInternal(modelProject)));
+        }
+
+        /// <summary>
+        ///     Calculates the total number simulation configurations of the object defined within the context of the passed <see cref="IModelProject"/>
+        /// </summary>
+        /// <param name="modelProject"></param>
+        /// <returns></returns>
+        public int GetTotalJobCount(IModelProject modelProject)
+        {
+            if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
+            return KmcJobPackageDescriptions
+                .Cast<JobPackageDescriptionGraph>()
+                .Concat(MmcJobPackageDescriptions)
+                .Sum(x => x.GetTotalJobCount(modelProject));
         }
     }
 }

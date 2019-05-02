@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl
+namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
     /// <summary>
-    /// Interaktionslogik für EnergyCustomizationControlView.xaml
+    /// Interaktionslogik für KmcJobDescriptionSetControlView.xaml
     /// </summary>
-    public partial class EnergyCustomizationControlView : UserControl
+    public partial class KmcJobDescriptionSetControlView : UserControl
     {
-        public EnergyCustomizationControlView()
+        public KmcJobDescriptionSetControlView()
         {
             InitializeComponent();
         }

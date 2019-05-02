@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
+using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -49,23 +53,32 @@ namespace Mocassin.UI.Xml.Customization
         public OccupationStateGraph FinalState { get; set; }
 
         /// <summary>
+        ///     Get or set the number of dependency rules
+        /// </summary>
+        [XmlElement("DependencyRuleCount")]
+        public int DependencyRuleCount { get; set; }
+
+        /// <summary>
         ///     Creates a new serializable <see cref="KineticRuleGraph" /> by pulling the required data from the passed
-        ///     <see cref="IKineticRule" /> model object interface
+        ///     <see cref="IKineticRule" /> and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="rule"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static KineticRuleGraph Create(IKineticRule rule)
+        public static KineticRuleGraph Create(IKineticRule rule, ProjectModelGraph parent)
         {
-            if (rule == null) 
-                throw new ArgumentNullException(nameof(rule));
+            if (rule == null) throw new ArgumentNullException(nameof(rule));
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var obj = new KineticRuleGraph
             {
+                Name = $"Rule.{rule.Index}",
+                DependencyRuleCount = rule.GetDependentRules().Count(),
                 RuleIndex = rule.Index,
                 AttemptFrequency = rule.AttemptFrequency,
-                FinalState = OccupationStateGraph.Create(rule.GetFinalStateOccupation()),
-                StartState = OccupationStateGraph.Create(rule.GetStartStateOccupation()),
-                TransitionState = OccupationStateGraph.Create(rule.GetTransitionStateOccupation()),
+                FinalState = OccupationStateGraph.Create(rule.GetFinalStateOccupation(), parent.ParticleModelGraph.Particles),
+                StartState = OccupationStateGraph.Create(rule.GetStartStateOccupation(), parent.ParticleModelGraph.Particles),
+                TransitionState = OccupationStateGraph.Create(rule.GetTransitionStateOccupation(), parent.ParticleModelGraph.Particles),
                 RuleFlags = rule.MovementFlags.ToString()
             };
 

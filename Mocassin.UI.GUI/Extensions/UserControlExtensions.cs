@@ -23,5 +23,18 @@ namespace Mocassin.UI.GUI.Extensions
             itemsControl.Items.Refresh();
             e.Handled = true;
         }
+
+        /// <summary>
+        ///     Extension to <see cref="IObjectDropAcceptor"/> drag over relay to data context
+        /// </summary>
+        /// <param name="userControl"></param>
+        /// <param name="itemsControl"></param>
+        /// <param name="e"></param>
+        public static void RelayDragOverToContext(this UserControl userControl, ItemsControl itemsControl, DragEventArgs e)
+        {
+            if (!(userControl.DataContext is IObjectDropAcceptor acceptor)) return;
+            e.Effects = acceptor.HandleDropAddCommand.CanExecute(e.Data) ? DragDropEffects.Link : DragDropEffects.None;
+            e.Handled = true;
+        }
     }
 }

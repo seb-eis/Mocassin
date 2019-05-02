@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -14,16 +16,16 @@ namespace Mocassin.UI.Xml.Customization
     public class PairEnergyGraph : ProjectObjectGraph, IComparable<PairEnergyGraph>
     {
         /// <summary>
-        ///     Get or set the center particle key
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center particle
         /// </summary>
-        [XmlAttribute("From")]
-        public string CenterParticleKey { get; set; }
+        [XmlAttribute("CenterParticle")]
+        public ModelObjectReferenceGraph<Particle> CenterParticle { get; set; }
 
         /// <summary>
-        ///     Get or set the partner particle key
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center particle
         /// </summary>
-        [XmlAttribute("To")]
-        public string PartnerParticleKey { get; set; }
+        [XmlAttribute("PartnerParticle")]
+        public ModelObjectReferenceGraph<Particle> PartnerParticle { get; set; }
 
         /// <summary>
         ///     Get or set the energy value in [eV]
@@ -63,8 +65,8 @@ namespace Mocassin.UI.Xml.Customization
         {
             var particlePair = new SymmetricParticlePair
             {
-                Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticleKey),
-                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticleKey)
+                Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key),
+                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key)
             };
 
             return new PairEnergyEntry(particlePair, Energy);
@@ -80,8 +82,8 @@ namespace Mocassin.UI.Xml.Customization
         {
             var particlePair = new AsymmetricParticlePair
             {
-                Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticleKey),
-                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticleKey)
+                Particle0 = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key),
+                Particle1 = modelProject.DataTracker.FindObjectByKey<IParticle>(PartnerParticle.Key)
             };
 
             return new PairEnergyEntry(particlePair, Energy);
@@ -89,16 +91,25 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new serializable <see cref="PairEnergyGraph" /> by pulling the required data from the passed
-        ///     <see cref="PairEnergyEntry" />
+        ///     <see cref="PairEnergyEntry" /> and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="energyEntry"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        public static PairEnergyGraph Create(in PairEnergyEntry energyEntry)
+        public static PairEnergyGraph Create(in PairEnergyEntry energyEntry, ProjectModelGraph parent)
         {
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+
+            var (key0, key1) = (energyEntry.ParticlePair.Particle0.Key, energyEntry.ParticlePair.Particle1.Key);
+
+            var centerParticle = parent.ParticleModelGraph.Particles.Single(x => x.Key == key0);
+            var partnerParticle = parent.ParticleModelGraph.Particles.Single(x => x.Key == key1);
+
             var obj = new PairEnergyGraph
             {
-                CenterParticleKey = energyEntry.ParticlePair.Particle0.Key,
-                PartnerParticleKey = energyEntry.ParticlePair.Particle1.Key,
+                Name = $"[{energyEntry.ParticlePair.Particle0.GetIonString()}][{energyEntry.ParticlePair.Particle1.GetIonString()}]",
+                CenterParticle = new ModelObjectReferenceGraph<Particle>(centerParticle),
+                PartnerParticle = new ModelObjectReferenceGraph<Particle>(partnerParticle),
                 Energy = energyEntry.Energy
             };
 
@@ -114,11 +125,11 @@ namespace Mocassin.UI.Xml.Customization
             if (other is null)
                 return 1;
 
-            var centerParticleKeyComparison = string.Compare(CenterParticleKey, other.CenterParticleKey, StringComparison.Ordinal);
+            var centerParticleKeyComparison = string.Compare(CenterParticle.Key, other.CenterParticle.Key, StringComparison.Ordinal);
             if (centerParticleKeyComparison != 0)
                 return centerParticleKeyComparison;
 
-            var partnerParticleKeyComparison = string.Compare(PartnerParticleKey, other.PartnerParticleKey, StringComparison.Ordinal);
+            var partnerParticleKeyComparison = string.Compare(PartnerParticle.Key, other.PartnerParticle.Key, StringComparison.Ordinal);
             return partnerParticleKeyComparison != 0
                 ? partnerParticleKeyComparison
                 : Energy.CompareTo(other.Energy);

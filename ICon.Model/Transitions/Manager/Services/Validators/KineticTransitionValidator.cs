@@ -88,6 +88,7 @@ namespace Mocassin.Model.Transitions.Validators
             var unitCellPositions = transition.GetGeometrySequence().Select(x => unitCellProvider.GetEntryValueAt(x)).ToList();
 
             AddExchangeGroupGeometryValidation(unitCellPositions, transition.AbstractTransition.GetStateExchangeGroups().ToList(), report);
+            if (!report.IsGood) return false;
 
             if (!unitCellPositions[0].IsValidAndStable() || !unitCellPositions[unitCellPositions.Count - 1].IsValidAndStable())
             {
@@ -146,12 +147,19 @@ namespace Mocassin.Model.Transitions.Validators
             var details = new List<string>();
             for (var i = 0; i < unitCellPositions.Count; i++)
             {
+                if (unitCellPositions[i] == null)
+                {
+                    var detail1 = $"Position at geometry step ({i}) does not exist in the defined unit cell.";
+                    details.Add(detail1);
+                    continue;
+                }
+
                 if ((unitCellPositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup) ||
                     (unitCellPositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup))
                     continue;
 
-                var detail = $"Exchange group and position at geometry step ({i}) do not match in stability";
-                details.Add(detail);
+                var detail2 = $"Exchange group and position at geometry step ({i}) do not match in stability";
+                details.Add(detail2);
             }
 
             if (details.Count == 0)
