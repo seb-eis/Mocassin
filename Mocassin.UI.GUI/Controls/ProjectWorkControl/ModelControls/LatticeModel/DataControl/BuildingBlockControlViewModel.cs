@@ -4,9 +4,7 @@ using System.Linq;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
-using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.LatticeModel;
@@ -14,83 +12,87 @@ using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl
 {
-	public class BuildingBlockControlViewModel : ProjectGraphControlViewModel
-	{
-		private bool canBeUsed;
-		private IModelProject ModelProject { get; }
+    public class BuildingBlockControlViewModel : ProjectGraphControlViewModel
+    {
+        private bool canBeUsed;
+        private IModelProject ModelProject { get; }
 
-		public CollectionControlViewModel<BuildingBlockGraph> BuildingBlockCollectionViewModel { get; }
+        public CollectionControlViewModel<BuildingBlockGraph> BuildingBlockCollectionViewModel { get; }
 
-		public IReadOnlyDictionary<int, IUnitCellPosition> PositionDictionary { get; set; }
+        public IReadOnlyDictionary<int, IUnitCellPosition> PositionDictionary { get; set; }
 
-		public bool CanBeUsed
-		{
-			get => canBeUsed;
-			set => SetProperty(ref canBeUsed, value);
-		}
+        public bool CanBeUsed
+        {
+            get => canBeUsed;
+            set => SetProperty(ref canBeUsed, value);
+        }
 
-		/// <inheritdoc />
-		public BuildingBlockControlViewModel(IMocassinProjectControl projectControl)
-			: base(projectControl)
-		{
-			BuildingBlockCollectionViewModel = new CollectionControlViewModel<BuildingBlockGraph>();
-			ModelProject = projectControl.CreateModelProject();
-		}
+        /// <inheritdoc />
+        public BuildingBlockControlViewModel(IMocassinProjectControl projectControl)
+            : base(projectControl)
+        {
+            BuildingBlockCollectionViewModel = new CollectionControlViewModel<BuildingBlockGraph>();
+            ModelProject = projectControl.CreateModelProject();
+        }
 
-		/// <inheritdoc />
-		public override void ChangeContentSource(MocassinProjectGraph contentSource)
-		{
-			ContentSource = contentSource;
-			BuildingBlockCollectionViewModel.SetCollection(ContentSource?.ProjectModelGraph?.LatticeModelGraph?.BuildingBlocks);
-			if (!TryPrepareModelProject())
-			{
-				SendCallInfoMessage("Cannot access invalid model");
-				CanBeUsed = false;
-			}
+        /// <inheritdoc />
+        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        {
+            ContentSource = contentSource;
+            BuildingBlockCollectionViewModel.SetCollection(ContentSource?.ProjectModelGraph?.LatticeModelGraph?.BuildingBlocks);
+            if (contentSource == null) return;
 
-			CanBeUsed = true;
-		}
+            if (!TryPrepareModelProject())
+            {
+                SendCallInfoMessage("Cannot access invalid model");
+                CanBeUsed = false;
+            }
 
-		private bool TryPrepareModelProject()
-		{
-			ModelProject.ResetProject();
-			var particleData = ContentSource?.ProjectModelGraph?.ParticleModelGraph?.GetInputObjects();
-			var structureData = ContentSource?.ProjectModelGraph?.StructureModelGraph?.GetInputParameters();
-			var structureObjects = ContentSource?.ProjectModelGraph?.StructureModelGraph?.GetInputObjects();
+            CanBeUsed = true;
+        }
 
-			if (particleData == null || structureData == null || structureObjects == null) return false;
+        private bool TryPrepareModelProject()
+        {
+            ModelProject.ResetProject();
+            var particleData = ContentSource?.ProjectModelGraph?.ParticleModelGraph?.GetInputObjects();
+            var structureData = ContentSource?.ProjectModelGraph?.StructureModelGraph?.GetInputParameters();
+            var structureObjects = ContentSource?.ProjectModelGraph?.StructureModelGraph?.GetInputObjects();
 
-			try
-			{
-				var sequence = particleData.Cast<object>().Concat(structureData).Concat(structureObjects);
-				var reports = ModelProject.InputPipeline.PushToProject(sequence);
-				PositionDictionary = ModelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetExtendedIndexToPositionDictionary());
-				if (reports.All(x => x.IsGood)) return true;
-			}
-			catch (Exception)
-			{
-				SendCallErrorMessage(new InvalidOperationException("Cannot define building block for invalid model"));
-			}
-			return false;
-		}
+            if (particleData == null || structureData == null || structureObjects == null) return false;
 
-		private BuildingBlockGraph CreateDefaultBuildingBlock()
-		{
-			var result = new BuildingBlockGraph();
+            try
+            {
+                var sequence = particleData.Cast<object>().Concat(structureData).Concat(structureObjects);
+                var reports = ModelProject.InputPipeline.PushToProject(sequence);
+                PositionDictionary = ModelProject.GetManager<IStructureManager>().QueryPort
+                    .Query(x => x.GetExtendedIndexToPositionDictionary());
+                if (reports.All(x => x.IsGood)) return true;
+            }
+            catch (Exception)
+            {
+                SendCallErrorMessage(new InvalidOperationException("Cannot define building block for invalid model"));
+            }
 
-			foreach (var keyValuePair in PositionDictionary)
-			{
-				var obj = GetParticleReferenceObject(keyValuePair.Value.OccupationSet.GetParticles().First());
-				result.ParticleList.Add(obj);
-			}
+            return false;
+        }
 
-			return result;
-		}
+        private BuildingBlockGraph CreateDefaultBuildingBlock()
+        {
+            var result = new BuildingBlockGraph();
 
-		private ModelObjectReferenceGraph<Particle> GetParticleReferenceObject(IParticle particle)
-		{
-			var objectGraph = ContentSource.ProjectModelGraph.ParticleModelGraph.ParticleSets.First(x => x.Key == particle.Key);
-			return new ModelObjectReferenceGraph<Particle> {TargetGraph = objectGraph};
-		}
-	}
+            foreach (var keyValuePair in PositionDictionary)
+            {
+                var obj = GetParticleReferenceObject(keyValuePair.Value.OccupationSet.GetParticles().First());
+                result.ParticleList.Add(obj);
+            }
+
+            return result;
+        }
+
+        private ModelObjectReferenceGraph<Particle> GetParticleReferenceObject(IParticle particle)
+        {
+            var objectGraph = ContentSource.ProjectModelGraph.ParticleModelGraph.ParticleSets.First(x => x.Key == particle.Key);
+            return new ModelObjectReferenceGraph<Particle> {TargetGraph = objectGraph};
+        }
+    }
 }

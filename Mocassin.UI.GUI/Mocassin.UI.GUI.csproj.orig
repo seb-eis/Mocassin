@@ -311,9 +311,28 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml">
-      <Generator>MSBuild:Compile</Generator>
+<<<<<<< HEAD
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\EnergyCustomizationControlView.xaml">
+=======
+    <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml">
       <SubType>Designer</SubType>
@@ -351,27 +370,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlView.xaml">
+>>>>>>> s.eisele@dev
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -620,8 +624,11 @@
     <Compile Include="Controls\ProjectConsole\SubControls\OperationConsole\OperationReportConsoleViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddCustomizationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddEnergyControlTabCommand.cs" />
+<<<<<<< HEAD
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddLatticeControlTabCommand.cs" />
+=======
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddJobTranslationControlTabCommand.cs" />
+>>>>>>> s.eisele@dev
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddParticleControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddSimulationControlTabCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\ControlMenu\Commands\AddStructureControlTabCommand.cs" />
@@ -672,6 +679,26 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobTranslationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
+<<<<<<< HEAD
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlView.xaml.cs">
+      <DependentUpon>BuildingBlockControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlView.xaml.cs">
+      <DependentUpon>DopingCombinationControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlView.xaml.cs">
+      <DependentUpon>DopingControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml.cs">
+      <DependentUpon>LatticeModelControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\EnergyCustomizationControlView.xaml.cs">
+      <DependentUpon>EnergyCustomizationControlView.xaml</DependentUpon>
+=======
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml.cs">
       <DependentUpon>KmcJobPackageControlView.xaml</DependentUpon>
     </Compile>
@@ -713,28 +740,13 @@
       <DependentUpon>JobTranslationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlView.xaml.cs">
-      <DependentUpon>BuildingBlockControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\BuildingBlockControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlView.xaml.cs">
-      <DependentUpon>DopingCombinationControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingCombinationControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlView.xaml.cs">
-      <DependentUpon>DopingControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml.cs">
-      <DependentUpon>LatticeModelControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlView.xaml.cs">
       <DependentUpon>GroupInteractionControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\GroupInteractionControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlView.xaml.cs">
       <DependentUpon>PairInteractionControlView.xaml</DependentUpon>
+>>>>>>> s.eisele@dev
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\PairInteractionControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlView.xaml.cs">
@@ -946,9 +958,15 @@
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
+<<<<<<< HEAD
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\" />
+=======
     <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\" />
+>>>>>>> s.eisele@dev
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />

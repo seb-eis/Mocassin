@@ -20,7 +20,7 @@ namespace Mocassin.Model.Lattices.Validators
         /// <summary>
         /// Creates new validator with the provided project services, settings object and data reader
         /// </summary>
-        /// <param name="projectServices"></param>
+        /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
         public DopingCombinationValidator(IModelProject modelProject, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader)
@@ -35,8 +35,8 @@ namespace Mocassin.Model.Lattices.Validators
         /// <returns></returns>
         public override IValidationReport Validate(IDopingCombination obj)
         {
-            ValidationReport report = new ValidationReport();
-            AddOccupationValidation(obj.Dopable, obj.UnitCellPosition, report);
+            var report = new ValidationReport();
+            AddOccupationValidation(obj.Dopant, obj.UnitCellPosition, report);
             AddOccupationValidation(obj.Dopable, obj.UnitCellPosition, report);
             return report;
         }

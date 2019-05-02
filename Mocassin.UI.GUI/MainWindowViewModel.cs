@@ -150,6 +150,7 @@ namespace Mocassin.UI.GUI
             {
                 new ParticleManagerFactory(),
                 new StructureManagerFactory(),
+                new LatticeManagerFactory(),
                 new TransitionManagerFactory(),
                 new EnergyManagerFactory(),
                 new SimulationManagerFactory()

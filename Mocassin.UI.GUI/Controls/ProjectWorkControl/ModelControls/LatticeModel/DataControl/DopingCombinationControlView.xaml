@@ -4,9 +4,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
+             xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+             d:DataContext="{d:DesignInstance local:DopingCombinationControlViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
+
+  <Grid>
+    <DataGrid ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              HorizontalScrollBarVisibility="Disabled"
+              Background="Transparent">
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}"/>
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePositions}"
+                                                 SelectedItemBinding="{Binding UnitCellPosition}"
+                                                 DisplayMemberPath="Name"/>
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Dopant"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableDopantParticles}"
+                                                 SelectedItemBinding="{Binding Dopant}"
+                                                 DisplayMemberPath="Name"/>
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Dopable"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableDopableParticles}"
+                                                 SelectedItemBinding="{Binding Dopable}"
+                                                 DisplayMemberPath="Name"/>
+
+      </DataGrid.Columns>
+
+    </DataGrid>
     </Grid>
 </UserControl>

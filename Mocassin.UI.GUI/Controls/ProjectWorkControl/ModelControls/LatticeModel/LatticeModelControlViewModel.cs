@@ -9,11 +9,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 	{
 		public BuildingBlockControlViewModel BlockControlViewModel { get; }
 
+        public DopingCombinationControlViewModel DopingCombinationViewModel { get; }
+
+        public DopingControlViewModel DopingViewModel { get; }
+
 		/// <inheritdoc />
 		public LatticeModelControlViewModel(IMocassinProjectControl projectControl)
 			: base(projectControl)
 		{
 			BlockControlViewModel = new BuildingBlockControlViewModel(projectControl);
+            DopingCombinationViewModel = new DopingCombinationControlViewModel();
+            DopingViewModel = new DopingControlViewModel();
 		}
 
 		/// <inheritdoc />
@@ -21,6 +27,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 		{
 			ContentSource = contentSource;
 			BlockControlViewModel.ChangeContentSource(contentSource);
+            DopingCombinationViewModel.ChangeContentSource(contentSource);
+            DopingViewModel.ChangeContentSource(contentSource);
 		}
 	}
 }

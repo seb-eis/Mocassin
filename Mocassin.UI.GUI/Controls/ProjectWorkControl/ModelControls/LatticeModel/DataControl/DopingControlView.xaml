@@ -1,12 +1,47 @@
-﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl.DopingControlView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl.DopingControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
+  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  d:DataContext="{d:DesignInstance local:DopingControlViewModel, IsDesignTimeCreatable=True}"
+  mc:Ignorable="d"
+  d:DesignHeight="450" d:DesignWidth="800"
+  Background="Transparent">
+  <Grid>
+    <DataGrid ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              HorizontalScrollBarVisibility="Disabled"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              Background="Transparent">
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
+
+        <DataGridCheckBoxColumn Header="Use Counter Doping"
+                                Binding="{Binding UseCounterDoping}" />
+
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Priority}" />
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Primary Doping"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePrimaryDopingCombinations}"
+                                                 SelectedItemBinding="{Binding PrimaryDoping}" />
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Counter Doping"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableCounterDopingCombinations}"
+                                                 SelectedItemBinding="{Binding CounterDoping}" />
+
+        <comboBox:BindableDataGridComboBoxColumn Header="Building Block"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableBuildingBlocks}"
+                                                 SelectedItemBinding="{Binding BuildingBlock}" />
+
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
 </UserControl>
