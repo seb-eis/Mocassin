@@ -1,0 +1,26 @@
+﻿using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl;
+using Mocassin.UI.Xml.Main;
+
+namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
+{
+	public class LatticeModelControlViewModel : ProjectGraphControlViewModel
+	{
+		public BuildingBlockControlViewModel BlockControlViewModel { get; }
+
+		/// <inheritdoc />
+		public LatticeModelControlViewModel(IMocassinProjectControl projectControl)
+			: base(projectControl)
+		{
+			BlockControlViewModel = new BuildingBlockControlViewModel(projectControl);
+		}
+
+		/// <inheritdoc />
+		public override void ChangeContentSource(MocassinProjectGraph contentSource)
+		{
+			ContentSource = contentSource;
+			BlockControlViewModel.ChangeContentSource(contentSource);
+		}
+	}
+}
