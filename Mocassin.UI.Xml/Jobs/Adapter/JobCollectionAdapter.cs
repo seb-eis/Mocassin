@@ -52,10 +52,13 @@ namespace Mocassin.UI.Xml.Jobs
         /// <inheritdoc />
         public IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers()
         {
-            return JobPackageDescription.ManualOptimizers.Select(x => x.ToInternal(ModelProject));
+            return JobPackageDescription.GetManualOptimizers().Select(x => x.ToInternal(ModelProject));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Get the sequence of <see cref="JobConfiguration"/> instances of the <see cref="IJobCollection"/>
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<JobConfiguration> GetJobConfigurations()
         {
             BaseConfiguration.LatticeConfiguration = new LatticeConfiguration {SizeA = 10, SizeB = 10, SizeC = 10};

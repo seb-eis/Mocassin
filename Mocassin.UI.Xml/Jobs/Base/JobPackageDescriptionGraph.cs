@@ -30,16 +30,16 @@ namespace Mocassin.UI.Xml.Jobs
         public string JobCountPerConfig { get; set; }
 
         /// <summary>
-        ///     Get or set the list of <see cref="ManualOptimizerGraph" /> objects
+        ///     Get or set the list of <see cref="SelectionOptimizerGraph" /> objects
         /// </summary>
-        [XmlArray("ManualOptimizers")]
-        [XmlArrayItem(typeof(SelectionOptimizerGraph), ElementName = "SelectionOptimizer")]
-        public List<ManualOptimizerGraph> ManualOptimizers { get; set; }
+        [XmlArray("SelectionOptimizers")]
+        [XmlArrayItem("SelectionOptimizer")]
+        public List<SelectionOptimizerGraph> SelectionOptimizers { get; set; }
 
         /// <inheritdoc />
         protected JobPackageDescriptionGraph()
         {
-            ManualOptimizers = new List<ManualOptimizerGraph>();
+            SelectionOptimizers = new List<SelectionOptimizerGraph>();
             RngSeed = Guid.NewGuid().ToString();
         }
 
@@ -52,7 +52,16 @@ namespace Mocassin.UI.Xml.Jobs
         public abstract IJobCollection ToInternal(IModelProject modelProject);
 
         /// <summary>
-        ///     Get the sequence of defined <see cref="JobDescriptionGraph" /> objects of the collection
+        ///     Get the sequence of defined <see cref="ManualOptimizerGraph"/> objects pof the package
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<ManualOptimizerGraph> GetManualOptimizers()
+        {
+            return SelectionOptimizers;
+        }
+
+        /// <summary>
+        ///     Get the sequence of defined <see cref="JobDescriptionGraph" /> objects of the package
         /// </summary>
         /// <returns></returns>
         public abstract IEnumerable<JobDescriptionGraph> GetConfigurations();

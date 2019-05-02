@@ -343,6 +343,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\SelectionOptimizerSetControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -659,6 +663,7 @@
       <DependentUpon>MmcJobPackageControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\MmcJobPackageControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\JobPackageDescriptionSelectionOptimizerSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobPackageKmcJobDescriptionSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobDescriptionKmcJobDescriptionViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobDescriptionMmcJobDescriptionViewModelConverter.cs" />
@@ -683,6 +688,10 @@
       <DependentUpon>MmcJobDescriptionSetControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\MmcJobDescriptionSetControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\SelectionOptimizerSetControlView.xaml.cs">
+      <DependentUpon>SelectionOptimizerSetControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\SelectionOptimizerSetControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\JobTranslationControlView.xaml.cs">
       <DependentUpon>JobTranslationControlView.xaml</DependentUpon>
     </Compile>

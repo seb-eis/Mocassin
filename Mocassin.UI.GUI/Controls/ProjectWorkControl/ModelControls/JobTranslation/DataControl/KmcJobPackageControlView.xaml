@@ -64,26 +64,53 @@
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto" />
               <RowDefinition Height="*" />
+              <RowDefinition Height="*" />
               <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Expander Grid.Row="0"
                       Header="Collection Overwrites (Level 1)">
+
               <Expander.ToolTip>
                 <TextBlock TextWrapping="Wrap" TextAlignment="Justify" MaxWidth="250">
                   <Run Text="Level 1 definitions will overwrite the base simulation (level 0) default fallback values" />
                 </TextBlock>
               </Expander.ToolTip>
+
               <gridControl:KmcJobDescriptionControlView
                 DataContext="{Binding JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
             </Expander>
 
             <Expander Grid.Row="1"
+                      Header="Selection Optimizers">
+
+              <Expander.ToolTip>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" MaxWidth="250">
+                  <Run Text="Selection optimizers provide a mechanism to manually remove the auto-set SELECTABLE flag of particles." />
+                  <Run Text="This may drastically improve simulation performance depending on the actual super-cell configuration." />
+                  <LineBreak/>
+                  <Run Text="Warning: Misuse of this feature will cause invalid simulation results. Use with caution." />
+                </TextBlock>
+              </Expander.ToolTip>
+
+              <gridControl:SelectionOptimizerSetControlView>
+                <gridControl:SelectionOptimizerSetControlView.DataContext>
+                  <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
+                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                             Path="DataContext.ContentSource.Parent"/>
+                    <Binding/>
+                  </MultiBinding>
+                </gridControl:SelectionOptimizerSetControlView.DataContext>
+              </gridControl:SelectionOptimizerSetControlView>
+
+            </Expander>
+
+            <Expander Grid.Row="2"
                       Header="Job Descriptions (Level 2)" MaxHeight="300">
               <gridControl:KmcJobDescriptionSetControlView
                 DataContext="{Binding Converter={adapter:KmcJobPackageKmcJobDescriptionSetViewModelConverter}}" />
             </Expander>
-            <Separator Grid.Row="2"/>
+            <Separator Grid.Row="3" />
           </Grid>
         </DataTemplate>
       </DataGrid.RowDetailsTemplate>

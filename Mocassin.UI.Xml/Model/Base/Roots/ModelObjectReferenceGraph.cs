@@ -81,11 +81,11 @@ namespace Mocassin.UI.Xml.Base
             return Equals(obj as ModelObjectReferenceGraph<T>);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             var hashCode = 1207054110;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TargetGraph?.Key);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             return hashCode;
         }
     }

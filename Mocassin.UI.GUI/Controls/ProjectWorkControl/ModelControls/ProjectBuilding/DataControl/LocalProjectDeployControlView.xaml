@@ -11,13 +11,33 @@
   Background="Transparent">
 
   <Grid>
-    <StackPanel>
-      <Button Content="Select target" Command="{Binding GetFileSelectionCommand}"/>
-      <TextBox Text="{Binding FilePath}" IsReadOnly="True"/>
-      <ComboBox ItemsSource="{Binding ProjectBuildGraphCollectionViewModel.DataCollection}"
-                SelectedItem="{Binding ProjectBuildGraphCollectionViewModel.SelectedCollectionItem}"
-                DisplayMemberPath="Name"/>
-      <Button Content="Write data" Command="{Binding WriteDatabaseCommand}"/>
-    </StackPanel>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="9*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Button Grid.Column="0" Margin="2,2,2,2"
+            Grid.Row="0"
+            Content="Open"
+            Command="{Binding GetFileSelectionCommand}" />
+
+    <TextBox Grid.Column="1"  Margin="2,2,2,2"
+             Grid.Row="0" 
+             Text="{Binding FilePath}" />
+
+    <Button Grid.Column="0" Margin="2,2,2,2"
+            Grid.Row="1" 
+            Content="Deploy" 
+            Command="{Binding WriteDatabaseCommand}" />
+
+    <ComboBox Grid.Column="1"  Margin="2,2,2,2"
+              Grid.Row="1" 
+              ItemsSource="{Binding ProjectBuildGraphCollectionViewModel.DataCollection}"
+              SelectedItem="{Binding ProjectBuildGraphCollectionViewModel.SelectedCollectionItem}"
+              DisplayMemberPath="Name" />
   </Grid>
 </UserControl>

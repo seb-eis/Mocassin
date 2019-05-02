@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -67,6 +68,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             async Task Execute()
             {
                 var builder = new MocassinSimulationLibraryBuilder();
+                builder.LibraryBuildStatusNotifications.Subscribe(x => { }, e => SendCallErrorMessage(e));
                 await Task.Run(() => builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
                     ProjectControl.CreateModelProject()));
                 SendCallInfoMessage($"Wrote simulation library to {FilePath}");
