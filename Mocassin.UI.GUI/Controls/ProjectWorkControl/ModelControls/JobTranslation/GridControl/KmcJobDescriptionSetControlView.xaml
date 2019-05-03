@@ -37,7 +37,7 @@
 
       <DataGrid.RowDetailsTemplate>
         <DataTemplate DataType="{x:Type jobs:KmcJobDescriptionGraph}">
-          <StackPanel>
+          <StackPanel MaxHeight="250">
             <local:KmcJobDescriptionControlView
               DataContext="{Binding Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
             <local:DopingValueControlView>

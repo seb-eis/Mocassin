@@ -28,8 +28,19 @@
 
       <DataGrid.RowDetailsTemplate>
         <DataTemplate DataType="{x:Type jobs:MmcJobDescriptionGraph}">
-          <local:MmcJobDescriptionControlView
-            DataContext="{Binding Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
+          <StackPanel MaxHeight="250">
+            <local:MmcJobDescriptionControlView
+              DataContext="{Binding Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
+            <local:DopingValueControlView>
+              <local:DopingValueControlView.DataContext>
+                <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
+                  <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                           Path="DataContext.ProjectGraph"/>
+                  <Binding Path="LatticeConfiguration"/>
+                </MultiBinding>
+              </local:DopingValueControlView.DataContext>
+            </local:DopingValueControlView>
+          </StackPanel>
         </DataTemplate>
       </DataGrid.RowDetailsTemplate>
 
