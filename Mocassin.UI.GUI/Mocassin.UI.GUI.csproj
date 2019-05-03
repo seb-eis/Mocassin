@@ -363,6 +363,10 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
@@ -725,6 +729,12 @@
       <DependentUpon>DopingControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\Adapter\BuildingBlockBuildingBlockContentViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\Adapter\UnitCellPositionOccupationListConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlView.xaml.cs">
+      <DependentUpon>BuildingBlockContentControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\LatticeModelControlView.xaml.cs">
       <DependentUpon>LatticeModelControlView.xaml</DependentUpon>
     </Compile>
@@ -948,7 +958,6 @@
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />

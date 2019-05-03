@@ -6,6 +6,8 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
   xmlns:latticeModel="clr-namespace:Mocassin.UI.Xml.LatticeModel;assembly=Mocassin.UI.Xml"
+  xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl"
+  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl.Adapter"
   d:DataContext="{d:DesignInstance local:BuildingBlockControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -23,9 +25,15 @@
 
       <DataGrid.RowDetailsTemplate>
         <DataTemplate DataType="{x:Type latticeModel:BuildingBlockGraph}">
-          <Expander>
-            <TextBlock Text="Hallo"/>
-          </Expander>
+          <gridControl:BuildingBlockContentControlView MaxHeight="150">
+            <gridControl:BuildingBlockContentControlView.DataContext>
+              <MultiBinding Converter="{adapter:BuildingBlockBuildingBlockContentViewModelConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                         Path="DataContext" />
+                <Binding />
+              </MultiBinding>
+            </gridControl:BuildingBlockContentControlView.DataContext>
+          </gridControl:BuildingBlockContentControlView>
         </DataTemplate>
       </DataGrid.RowDetailsTemplate>
 
