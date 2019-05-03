@@ -60,6 +60,7 @@ namespace Mocassin.Model.Lattices
             if (!(CastIfNotDeprecated<IDoping>(obj) is var doping)) return null;
             PrimaryDoping = doping.PrimaryDoping;
             CounterDoping = doping.CounterDoping;
+            BuildingBlock = doping.BuildingBlock;
             UseCounterDoping = doping.UseCounterDoping;
             Priority = doping.Priority;
             return this;

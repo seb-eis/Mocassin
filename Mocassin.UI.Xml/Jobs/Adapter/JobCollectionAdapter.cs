@@ -61,11 +61,12 @@ namespace Mocassin.UI.Xml.Jobs
         /// <returns></returns>
         public IEnumerable<JobConfiguration> GetJobConfigurations()
         {
-            BaseConfiguration.LatticeConfiguration = new LatticeConfiguration {SizeA = 10, SizeB = 10, SizeC = 10};
             var jobCount = JobPackageDescription.JobCountPerConfig is null
                 ? Simulation.JobCount
                 : int.Parse(JobPackageDescription.JobCountPerConfig);
-            return JobPackageDescription.GetConfigurations().SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration), jobCount));
+
+            return JobPackageDescription.GetConfigurations()
+                .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject), jobCount));
         }
 
         /// <summary>
@@ -101,6 +102,7 @@ namespace Mocassin.UI.Xml.Jobs
 
             var simulation = modelProject.DataTracker.FindObjectByKey<IKineticSimulation>(jobPackageDescription.Simulation.Key)
                              ?? throw new InvalidOperationException("Kinetic simulation key does not exist in the model");
+
             var baseConfig = (jobPackageDescription.JobBaseDescription ?? new KmcJobDescriptionGraph()).ToInternal(simulation);
             var random = new PcgRandom32(jobPackageDescription.RngSeed ?? simulation.CustomRngSeed);
 

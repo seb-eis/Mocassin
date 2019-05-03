@@ -26,7 +26,7 @@
         <DataGridCheckBoxColumn Header="Use Counter Doping"
                                 Binding="{Binding UseCounterDoping}" />
 
-        <DataGridTextColumn Header="Name"
+        <DataGridTextColumn Header="Priority"
                             Binding="{Binding Priority}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Primary Doping"

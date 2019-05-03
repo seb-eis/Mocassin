@@ -8,6 +8,7 @@ using Mocassin.Model.Basic;
 using Moccasin.Model.ProjectServices;
 using Moccasin.Model;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Lattices.Validators
@@ -51,13 +52,15 @@ namespace Mocassin.Model.Lattices.Validators
 
             var occupationList = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
 
-            for (int i = 0; i < occupationList.Count; i++)
+            for (var i = 0; i < occupationList.Count; i++)
             {
-                if (occupationList[i].OccupationSet.GetParticles().Contains(buildingBlock.CellEntries[i]) == false)
-                {
-                    var detail0 = $"A Particle cannot be placed at the specified position";
-                    report.AddWarning(WarningMessage.CreateCritical(this, detail0));
-                }
+                if (occupationList[i].IsValidAndUnstable() && buildingBlock.CellEntries[i].IsEmpty) continue;
+
+                if (occupationList[i].OccupationSet.GetParticles().Contains(buildingBlock.CellEntries[i])) 
+                    continue;
+
+                var detail0 = $"A Particle cannot be placed at the specified position";
+                report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }
     }

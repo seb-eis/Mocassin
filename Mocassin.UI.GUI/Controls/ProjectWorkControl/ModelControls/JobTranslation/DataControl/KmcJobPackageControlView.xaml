@@ -107,8 +107,16 @@
 
             <Expander Grid.Row="2"
                       Header="Job Descriptions (Level 2)" MaxHeight="300">
-              <gridControl:KmcJobDescriptionSetControlView
-                DataContext="{Binding Converter={adapter:KmcJobPackageKmcJobDescriptionSetViewModelConverter}}" />
+
+              <gridControl:KmcJobDescriptionSetControlView>
+                <gridControl:KmcJobDescriptionSetControlView.DataContext>
+                  <MultiBinding Converter="{adapter:KmcJobPackageKmcJobDescriptionSetViewModelConverter}">
+                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                             Path="DataContext.ContentSource.Parent"/>
+                    <Binding/>
+                  </MultiBinding>
+                </gridControl:KmcJobDescriptionSetControlView.DataContext>
+              </gridControl:KmcJobDescriptionSetControlView>
             </Expander>
             <Separator Grid.Row="3" />
           </Grid>

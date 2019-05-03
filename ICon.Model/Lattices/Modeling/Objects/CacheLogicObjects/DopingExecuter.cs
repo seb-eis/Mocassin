@@ -162,7 +162,7 @@ namespace Mocassin.Model.Lattices
 					doping.PrimaryDoping);
 			}
 			else
-			{
+            {
 				(int, int) dopingParticleCount = CalculateDopingCount(
 													dopingPool[dopedCellEntry].OriginalSize,
 													doping,

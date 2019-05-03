@@ -327,6 +327,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\DopingValueControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -687,12 +691,17 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\JobPackageDescriptionSelectionOptimizerSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobPackageKmcJobDescriptionSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\KmcJobDescriptionKmcJobDescriptionViewModelConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\LatticeConfigurationDopingValueControlViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobDescriptionMmcJobDescriptionViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\Adapter\MmcJobPackageMmcJobDescriptionSetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlView.xaml.cs">
       <DependentUpon>BaseJobDescriptionControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\BaseJobDescriptionControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\DopingValueControlView.xaml.cs">
+      <DependentUpon>DopingValueControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\DopingValueControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\GridControl\KmcJobDescriptionControlView.xaml.cs">
       <DependentUpon>KmcJobDescriptionControlView.xaml</DependentUpon>
     </Compile>
@@ -730,7 +739,6 @@
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\DataControl\DopingControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\Adapter\BuildingBlockBuildingBlockContentViewModelConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\Adapter\UnitCellPositionOccupationListConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\LatticeModel\GridControl\BuildingBlockContentControlView.xaml.cs">
       <DependentUpon>BuildingBlockContentControlView.xaml</DependentUpon>
     </Compile>

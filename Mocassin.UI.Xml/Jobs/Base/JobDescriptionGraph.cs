@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.Xml.Serialization;
+using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.Xml.Base;
@@ -44,6 +45,18 @@ namespace Mocassin.UI.Xml.Jobs
         public string MinimalSuccessRate { get; set; }
 
         /// <summary>
+        ///     Get or set the <see cref="LatticeConfigurationGraph"/> of the job
+        /// </summary>
+        [XmlElement("LatticeConfiguration")]
+        public LatticeConfigurationGraph LatticeConfiguration { get; set; }
+
+        /// <inheritdoc />
+        protected JobDescriptionGraph()
+        {
+            LatticeConfiguration = new LatticeConfigurationGraph();
+        }
+
+        /// <summary>
         ///     Creates a <see cref="JobConfiguration" /> populated with specified properties using defaults from the passed
         ///     <see cref="ISimulation" /> where required
         /// </summary>
@@ -78,9 +91,12 @@ namespace Mocassin.UI.Xml.Jobs
         ///     base <see cref="JobConfiguration" /> where required
         /// </summary>
         /// <param name="baseConfiguration"></param>
+        /// <param name="modelProject"></param>
         /// <returns></returns>
-        public JobConfiguration ToInternal(JobConfiguration baseConfiguration)
+        public JobConfiguration ToInternal(JobConfiguration baseConfiguration, IModelProject modelProject)
         {
+            if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
+
             var obj = GetPreparedInternal(baseConfiguration);
 
             obj.LatticeConfiguration = baseConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
@@ -102,6 +118,8 @@ namespace Mocassin.UI.Xml.Jobs
             obj.MinimalSuccessRate = string.IsNullOrWhiteSpace(MinimalSuccessRate)
                 ? baseConfiguration.MinimalSuccessRate
                 : double.Parse(MinimalSuccessRate);
+
+            obj.LatticeConfiguration = LatticeConfiguration.ToInternal(modelProject);
 
             return obj;
         }
