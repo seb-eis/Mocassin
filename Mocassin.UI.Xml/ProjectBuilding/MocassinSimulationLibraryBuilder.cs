@@ -22,6 +22,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     /// </summary>
     public enum LibraryBuildStatus
     {
+        Unknown,
         BuildProcessStarted,
         PreparingModelProject,
         ModelProjectPreparationError,
@@ -44,6 +45,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     /// </summary>
     public class MocassinSimulationLibraryBuilder
     {
+        private object lockObject = new object();
         private int BuildCounter { get; set; }
 
         /// <summary>
@@ -222,7 +224,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
 
             try
             {
-                BuildCounter = 0;
+                BuildCounter = 1;
                 var totalJobCount = jobTranslation.GetTotalJobCount(modelContext.ModelProject);
                 var buildTasks = jobTranslation.ToInternals(modelContext.ModelProject)
                     .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount).BuildJobPackageModelAsync(jobs))
@@ -279,7 +281,13 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             int totalJobCount)
         {
             var builder = new JobDbEntityBuilder(modelContext);
-            builder.WhenJobIsBuild.Subscribe(x => JobBuildCounterEvent.OnNext((BuildCounter++, totalJobCount)));
+            builder.WhenJobIsBuild.Subscribe(x =>
+            {
+                lock (lockObject)
+                {
+                    JobBuildCounterEvent.OnNext((BuildCounter++, totalJobCount));     
+                } 
+            });
 
             foreach (var optimizer in jobCollection.GetPostBuildOptimizers()) builder.AddPostBuildOptimizer(optimizer);
 

@@ -18,6 +18,7 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
     <Button Grid.Column="0" Margin="2,2,2,2"
@@ -25,19 +26,31 @@
             Content="Open"
             Command="{Binding GetFileSelectionCommand}" />
 
-    <TextBox Grid.Column="1"  Margin="2,2,2,2"
-             Grid.Row="0" 
+    <TextBox Grid.Column="1" Margin="2,2,2,2"
+             Grid.Row="0"
              Text="{Binding FilePath}" />
 
     <Button Grid.Column="0" Margin="2,2,2,2"
-            Grid.Row="1" 
-            Content="Deploy" 
+            Grid.Row="1"
+            Content="Deploy"
             Command="{Binding WriteDatabaseCommand}" />
 
-    <ComboBox Grid.Column="1"  Margin="2,2,2,2"
-              Grid.Row="1" 
+    <ComboBox Grid.Column="1" Margin="2,2,2,2"
+              Grid.Row="1"
               ItemsSource="{Binding ProjectBuildGraphCollectionViewModel.DataCollection}"
               SelectedItem="{Binding ProjectBuildGraphCollectionViewModel.SelectedCollectionItem}"
               DisplayMemberPath="Name" />
+    <ProgressBar Grid.Row="2" Grid.Column="1" Minimum="0" Margin="2,2,2,2"
+                 Maximum="{Binding MaxJobs}"
+                 Value="{Binding DoneJobs}" />
+    <TextBlock Grid.Row="2" Grid.Column="1" Margin="2,2,2,2">
+      <Run Text="Status:" />
+      <Run Text="{Binding BuildStatus}" />
+      <Run Text="(" />
+      <Run Text="{Binding DoneJobs}" />
+      <Run Text="of" />
+      <Run Text="{Binding MaxJobs}" />
+      <Run Text="Jobs)" />
+    </TextBlock>
   </Grid>
 </UserControl>

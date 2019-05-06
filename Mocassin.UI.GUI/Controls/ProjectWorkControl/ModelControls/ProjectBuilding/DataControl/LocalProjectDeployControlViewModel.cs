@@ -19,6 +19,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
     {
         private string filePath;
         private readonly UserFileSelectionSource fileSelectionSource;
+        private int maxJobs;
+        private int doneJobs;
+        private LibraryBuildStatus buildStatus;
 
         /// <summary>
         ///     Get the <see cref="CollectionControlViewModel{T}"/> for all selectable <see cref="MocassinProjectBuildGraph"/> instances
@@ -30,6 +33,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// </summary>
         public ICommand GetFileSelectionCommand { get; }
 
+        /// <summary>
+        ///     Get the <see cref="ICommand"/> to write the translation database to the selected file target
+        /// </summary>
         public ICommand WriteDatabaseCommand { get; }
 
         /// <summary>
@@ -39,6 +45,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             get => filePath;
             set => SetProperty(ref filePath, value);
+        }
+
+        public int MaxJobs
+        {
+            get => maxJobs;
+            set => SetProperty(ref maxJobs, value);
+        }
+
+        public int DoneJobs
+        {
+            get => doneJobs;
+            set => SetProperty(ref doneJobs, value);
+        }
+
+        public LibraryBuildStatus BuildStatus
+        {
+            get => buildStatus;
+            set => SetProperty(ref buildStatus, value);
         }
 
         /// <inheritdoc />
@@ -68,7 +92,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             async Task Execute()
             {
                 var builder = new MocassinSimulationLibraryBuilder();
-                builder.LibraryBuildStatusNotifications.Subscribe(x => { }, e => SendCallErrorMessage(e));
+                builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, e => SendCallErrorMessage(e));
+                builder.JobBuildCounterNotifications.Subscribe(x => 
+                { 
+                    MaxJobs = x.Total;
+                    DoneJobs = x.Done;
+                });
                 await Task.Run(() => builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
                     ProjectControl.CreateModelProject()));
                 SendCallInfoMessage($"Wrote simulation library to {FilePath}");

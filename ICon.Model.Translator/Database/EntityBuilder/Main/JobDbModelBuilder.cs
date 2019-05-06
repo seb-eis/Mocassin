@@ -74,7 +74,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var jobModelTasks = GetJobModelBuildTasks(simulationModel, jobCollection);
             Task.WhenAll(jobModelTasks).Wait();
 
-            packageModel.JobModels = jobModelTasks.Select(x => x.Result).ToList();
+            packageModel.JobModels = new List<SimulationJobModel>(jobModelTasks.Count);
+            packageModel.JobModels.AddRange(jobModelTasks.Select(x => x.Result));
 
             LinkPackageModel(packageModel);
             RunPostBuildOptimizers(packageModel, jobCollection);
@@ -109,6 +110,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             {
                 jobConfiguration.JobId = index++;
                 var jobModel = GetJobModel(simulationModel, jobConfiguration);
+                JobIsBuildEvent.OnNext(jobConfiguration.JobId);
                 yield return jobModel;
             }
         }
