@@ -210,20 +210,45 @@ namespace Mocassin.Model.Lattices
 			// now calculate the number of atoms which have to be replaced. Tries to avoid charging the lattice in the process,
 			// but also to not deviate from the specified concentration. For the former condition the dopand number has
 			// to be dividable by the counter doping charge
-			int dopingNumber = (int) Math.Round(dopableEntries * concentration);
-			int correctedDopingNumber = (int) Math.Round(CalculateClosestDividable(dopingNumber, deltaCounterCharge));
-			if ((dopingNumber - correctedDopingNumber) / (double) dopingNumber > DopingTolerance)
+			var dopingNumber = Math.Round(dopableEntries * concentration);
+			var correctedDopingNumber = CalculateCloseDividable((int) dopingNumber, deltaCounterCharge);
+			if (Math.Abs(dopingNumber - correctedDopingNumber) / (double) dopingNumber < DopingTolerance)
 			{
-				correctedDopingNumber = dopingNumber;
+				dopingNumber = correctedDopingNumber;
 			}
 
-			int counterDopingNumber = correctedDopingNumber * (int) Math.Round(deltaCharge / deltaCounterCharge);
-			return (correctedDopingNumber, counterDopingNumber);
+			int counterDopingNumber = (int) Math.Round( correctedDopingNumber * deltaCharge / deltaCounterCharge);
+			dopingNumber = Math.Round(dopingNumber);
+			return ((int) dopingNumber, counterDopingNumber);
 		}
 
-		protected double CalculateClosestDividable(int number, double denominator)
+		/// <summary>
+		/// Calculate a close dividable of a given denominator to a given number
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="denominator"></param>
+		/// <returns></returns>
+		protected double CalculateCloseDividable(int number, double denominator)
 		{
-			return number + (denominator - (number % denominator));
+			// Check if number is already dividable by denominator
+			var comparer = NumericComparer.CreateRanged(1e-5);
+			if (comparer.Compare(number % denominator, 0.0) == 0)
+			{
+				return number;
+			}
+
+			// calculate dividables by two methods
+			var convertedPositive = number + (denominator - (number % denominator));
+			var convertedNegative = number - number % denominator;
+
+			// check which dividable is closer to the original number
+			if (Math.Abs(convertedPositive - number) > Math.Abs(convertedNegative - number))
+			{
+				return convertedNegative;
+			}
+
+			return convertedPositive;
+
 		}
 	}
 }

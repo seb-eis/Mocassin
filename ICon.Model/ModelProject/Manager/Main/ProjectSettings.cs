@@ -160,7 +160,7 @@ namespace Mocassin.Model.ModelProject
                     VectorTolerance = 1.0e-10,
                     ParameterTolerance = 1.0e-10
                 },
-	            DopingToleranceSetting = 1.0e-4
+	            DopingToleranceSetting = 5.0e-3
             };
 
             settings.LookupAndAddModuleSettings(Assembly.GetExecutingAssembly());
