@@ -418,7 +418,7 @@ static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
     let counters = getMainCycleCounters(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
 
-    return_if(metaData->ProgramRunTime == 0, false);
+    return_if(metaData->ProgramRunTime == 0 || metaData->SimulatedTime == 0, false);
 
     metaData->SuccessRate = counters->McsCount / metaData->ProgramRunTime;
     metaData->CycleRate = counters->CycleCount / metaData->ProgramRunTime;

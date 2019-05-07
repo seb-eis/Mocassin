@@ -64,7 +64,7 @@ error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
     return_if(*result == NULL, ERR_MEMALLOCATION);
 
     error |= (strncpy(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
-    error |= (strncat(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strncat(*result, rhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
     return error;
 }
 
