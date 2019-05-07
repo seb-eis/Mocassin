@@ -9,7 +9,7 @@ cat > mocassinBuild.job << endOfScript
 module load python/3.6.0
 module load cmake/3.13.2
 #SBATCH --job-name=mocassin.build
-#SBATCH --output=mocassin.build_%j.log
+#SBATCH --output=mocassin.build_%J.log
 #SBATCH --time=0-01:00:00
 #SBATCH --mem-per-cpu=2048
 #SBATCH --ntasks 4

@@ -490,8 +490,13 @@ static void InvokeEnvironmentLinkClusterUpdates(SCONTEXT_PARAM, const Environmen
         let workCluster = getActiveWorkCluster(SCONTEXT);
 
         UpdateClusterState(clusterTable, clusterLink, workCluster, newParticleId);
-        for (byte_t i = 0; getActiveParticleUpdateIdAt(SCONTEXT, i) != PARTICLE_NULL; i++)
-            InvokeDeltaOfActiveCluster(SCONTEXT, i);
+
+        for (byte_t i = 0;; i++)
+        {
+            let updateParticleId = getActiveParticleUpdateIdAt(SCONTEXT, i);
+            if (updateParticleId == PARTICLE_NULL) break;
+            InvokeDeltaOfActiveCluster(SCONTEXT, updateParticleId);
+        }
 
         SetClusterStateBackup(getActiveWorkCluster(SCONTEXT));
     }
@@ -500,8 +505,12 @@ static void InvokeEnvironmentLinkClusterUpdates(SCONTEXT_PARAM, const Environmen
 // Invokes all link updates defined on the passed environment link with the passed particle information
 static void InvokeEnvironmentLinkUpdates(SCONTEXT_PARAM, const EnvironmentLink_t *restrict environmentLink, const byte_t oldParticleId, const byte_t newParticleId)
 {
-    for (byte_t i = 0; getActiveParticleUpdateIdAt(SCONTEXT, i) != PARTICLE_NULL; i++)
-        InvokeDeltaOfActivePair(SCONTEXT, i, oldParticleId, newParticleId);
+    for (byte_t i = 0;; i++)
+    {
+        let updateParticleId = getActiveParticleUpdateIdAt(SCONTEXT, i);
+        if (updateParticleId == PARTICLE_NULL) break;
+        InvokeDeltaOfActivePair(SCONTEXT, updateParticleId, oldParticleId, newParticleId);
+    }
 
     InvokeEnvironmentLinkClusterUpdates(SCONTEXT, environmentLink, newParticleId);
 }

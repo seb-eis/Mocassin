@@ -62,9 +62,10 @@ class MocassinJobRunner:
             executionPath = self.MakeJobDirectory(split[0], i)
             stdRedirect = "{0}/stdout.log".format(executionPath)
             args = [executionPath, "-dbPath", dbPath, "-dbQuery", str(i), "-stdRedirect", stdRedirect]
+            print("Running: {}".format(args))
             threads.append(self.RunSimulatorAsThread(args))
         for thread in threads:
             thread.join()
 
 runner = MocassinJobRunner()
-runner.RunMultiple(sys.argv[1:], os.path.expandvars("$HOME/Mocassin/icc_test/Ceria.db"))
+runner.RunMultiple(sys.argv[1:], os.path.expandvars("$HOME/Mocassin/icc_test/ceria.msl"))
