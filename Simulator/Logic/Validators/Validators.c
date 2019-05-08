@@ -32,6 +32,13 @@ error_t ValidateIsValidFilePath(char const * value)
     return ERR_OK;
 }
 
+error_t ValidateIsDiretoryPath(char const * value)
+{
+    return_if(ValidateStringNotNullOrEmpty(value) != ERR_OK, ERR_VALIDATION);
+    return_if (!IsAccessibleDirectory(value), ERR_VALIDATION);
+    return ERR_OK;
+}
+
 // Validates the database string format to be #JobId
 error_t ValidateDatabaseQueryString(char const* value)
 {

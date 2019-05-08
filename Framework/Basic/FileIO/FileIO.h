@@ -11,6 +11,7 @@
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 #include <stdio.h>
+#include <dirent.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -34,6 +35,9 @@ typedef FILE file_t;
 
 // Check if a file name points to an existing file that can be accessed
 bool_t IsAccessibleFile(const char* restrict fileName);
+
+// Check if a file name points to an existing directory that can be accessed
+bool_t IsAccessibleDirectory(const char* restrict dirName);
 
 // Calculates the size of a file. Returns the number of bytes or MC_FILE_ERROR on failure
 cerror_t CalculateFileSize(file_t *restrict fileStream);

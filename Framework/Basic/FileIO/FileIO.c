@@ -28,6 +28,18 @@ bool_t IsAccessibleFile(const char* restrict fileName)
     return access(fileName, F_OK) == 0;
 }
 
+bool_t IsAccessibleDirectory(const char* restrict dirName)
+{
+    var dir = opendir(dirName);
+    if (dir)
+    {
+        closedir(dir);
+        return true;
+    }
+
+    return false;
+}
+
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
 {
     return_if(fileStream == NULL, ERR_STREAM);

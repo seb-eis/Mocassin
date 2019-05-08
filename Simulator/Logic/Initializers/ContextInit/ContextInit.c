@@ -494,10 +494,10 @@ static error_t TryLoadSimulationState(SCONTEXT_PARAM)
 {
     error_t error;
 
-    if ((error = TryLoadStateFromFile(SCONTEXT, FILE_MAINSTATE)) == ERR_OK)
+    if ((error = TryLoadStateFromFile(SCONTEXT, getMainRunStateFile(SCONTEXT))) == ERR_OK)
         return error;
 
-    error = TryLoadStateFromFile(SCONTEXT, FILE_PRERSTATE);
+    error = TryLoadStateFromFile(SCONTEXT, getPreRunStateFile(SCONTEXT));
     return error;
 }
 

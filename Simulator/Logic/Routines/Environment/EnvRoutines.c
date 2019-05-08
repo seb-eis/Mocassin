@@ -579,6 +579,7 @@ static void DistributeEnvironmentUpdate(SCONTEXT_PARAM, EnvironmentState_t *rest
     {
         SetActiveWorkEnvironment(SCONTEXT, environmentLink);
         let workEnvironment = getActiveWorkEnvironment(SCONTEXT);
+
         SetActiveWorkPairTable(SCONTEXT, workEnvironment, environmentLink);
         InvokeEnvironmentLinkUpdates(SCONTEXT, environmentLink, environment->ParticleId, newParticleId);
     }

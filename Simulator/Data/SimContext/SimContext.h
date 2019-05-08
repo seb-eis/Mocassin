@@ -377,14 +377,23 @@ typedef struct PhysicalInfo
 } PhysicalInfo_t;
 
 // Type for the file string information
-// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
 typedef struct FileInfo
 {
     // The database query string for data loading
     char const* JobDbQuery;
 
-    // The program execution path
-    char const* ExecutionPath;
+    // The executable path
+    char const* ExecutablePath;
+
+    // The full path to the used prerun state file
+    char const* PrerunStateFile;
+
+    // The full path to the used main run state file
+    char const* MainStateFile;
+
+    // The path to the used IO directory
+    char const* IODirectoryPath;
 
     // The job database path
     char const* JobDbPath;
@@ -425,7 +434,7 @@ typedef struct Flp64Buffer
 } Flp64Buffer_t;
 
 // Type for the simulation dynamic model
-// Layout@ggc_x86_64 => 168@[56,24,32,16,24,16]
+// Layout@ggc_x86_64 => 192@[80,24,32,16,24,16]
 typedef struct DynamicModel
 {
     // The simulation file information
@@ -516,5 +525,6 @@ static inline SimulationContext_t ctor_SimulationContext()
 {
     SimulationContext_t context;
     memset(&context, 0, sizeof(SimulationContext_t));
+    context.DynamicModel.FileInfo.IODirectoryPath = ".";
     return context;
 }

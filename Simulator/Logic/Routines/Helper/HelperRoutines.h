@@ -75,9 +75,16 @@ static inline byte_t GetMaxParticleUpdateId(EnvironmentDefinition_t *restrict en
 // Get the highest index of a particle occupation on the passed environment model
 static inline byte_t GetEnvironmentMaxParticleId(EnvironmentDefinition_t *restrict envDef)
 {
+    return_if(envDef->PositionParticleIds[0] == PARTICLE_NULL, PARTICLE_NULL);
+
+    byte_t maxId = 0;
     for(byte_t i = 0;; i++)
-        if(envDef->PositionParticleIds[i] == PARTICLE_NULL)
-            return (i == 0) ? (byte_t) PARTICLE_NULL : envDef->PositionParticleIds[i-1];
+    {
+        if(envDef->PositionParticleIds[i] != PARTICLE_NULL)
+            maxId = getMaxOfTwo(maxId, envDef->PositionParticleIds[i]);
+        else
+            return maxId;
+    }
 }
 
 // Check if the job info has the passed flags set to true

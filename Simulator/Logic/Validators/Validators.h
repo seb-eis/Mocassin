@@ -27,5 +27,8 @@ error_t ValidateStringNotNullOrEmpty(char const * value);
 // Validates that a string is a valid file path
 error_t ValidateIsValidFilePath(char const * value);
 
+// Validates that a string is a valid directory path
+error_t ValidateIsDiretoryPath(char const * value);
+
 // Validates the database query string
 error_t ValidateDatabaseQueryString(char const* value);

@@ -694,7 +694,7 @@ static inline void setCommandArguments(SCONTEXT_PARAM, const int32_t argc, char 
 // Set the program run path on the simulation context
 static inline void setProgramRunPath(SCONTEXT_PARAM, char const * value)
 {
-    getFileInformation(SCONTEXT)->ExecutionPath = value;
+    getFileInformation(SCONTEXT)->ExecutablePath = value;
 }
 
 // Set the database load string in the simulation context
@@ -709,10 +709,28 @@ static inline void setDatabasePath(SCONTEXT_PARAM, char const * value)
     getFileInformation(SCONTEXT)->JobDbPath = value;
 }
 
+// Set the IO directory path on the simulation context
+static inline void setIODirectoryPath(SCONTEXT_PARAM, char const * value)
+{
+    getFileInformation(SCONTEXT)->IODirectoryPath = value;
+}
+
 // Sets the path string of the output plugin on the simulation context
 static inline void setOutputPluginPath(SCONTEXT_PARAM, char const * path)
 {
     getFileInformation(SCONTEXT)->OutputPluginPath = path;
+}
+
+//  Get the main run state file target from the simulation context
+static inline const char* getMainRunStateFile(SCONTEXT_PARAM)
+{
+    return getFileInformation(SCONTEXT)->MainStateFile;
+}
+
+//  Get the prerun state file target from the simulation context
+static inline const char* getPreRunStateFile(SCONTEXT_PARAM)
+{
+    return getFileInformation(SCONTEXT)->PrerunStateFile;
 }
 
 // Sets the symbol string of the output plugin on the simulation context

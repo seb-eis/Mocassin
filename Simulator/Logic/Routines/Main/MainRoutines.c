@@ -551,7 +551,9 @@ error_t SaveSimulationState(SCONTEXT_PARAM)
 {
     return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_SKIPSAVE), ERR_OK);
     let stateBuffer = getMainStateBuffer(SCONTEXT);
-    let targetFile = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN) ? FILE_PRERSTATE : FILE_MAINSTATE;
+    let targetFile = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN)
+            ? getPreRunStateFile(SCONTEXT)
+            : getMainRunStateFile(SCONTEXT);
 
     return SIMERROR = SaveWriteBufferToFile(targetFile, FMODE_BINARY_W, stateBuffer);
 }
