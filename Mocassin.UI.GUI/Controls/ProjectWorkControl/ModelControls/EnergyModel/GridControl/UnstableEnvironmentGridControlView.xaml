@@ -21,6 +21,7 @@
       AutoGenerateColumns="False"
       VerticalScrollBarVisibility="Auto"
       CanUserAddRows="False"
+      CanUserDeleteRows="False"
       Background="Transparent"
       ColumnWidth="*"
       PreviewKeyDown="UnstableEnvironmentDataGrid_OnPreviewKeyDown">

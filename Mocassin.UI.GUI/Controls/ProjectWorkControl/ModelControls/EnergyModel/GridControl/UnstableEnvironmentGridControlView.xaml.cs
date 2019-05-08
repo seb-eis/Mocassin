@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using DataGrid = System.Windows.Controls.DataGrid;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl
 {
     /// <summary>
-    /// Interaktionslogik für UnstableEnvironmentGridControlView.xaml
+    ///     Interaktionslogik für UnstableEnvironmentGridControlView.xaml
     /// </summary>
     public partial class UnstableEnvironmentGridControlView : UserControl
     {
@@ -28,9 +15,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
         private void UnstableEnvironmentDataGrid_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (!(sender is DataGrid dataGrid) || !(dataGrid.DataContext is UnstableEnvironmentGridControlViewModel context)) 
+            if (!(sender is DataGrid dataGrid) || !(dataGrid.DataContext is UnstableEnvironmentGridControlViewModel context))
                 return;
             if (e.Key != Key.F5) return;
+
+            // Workaround for AddItem/EditingItem DeferRefresh exception by enforcing cancel of currently active row edit
+            dataGrid.CancelEdit(DataGridEditingUnit.Row);
 
             context.SynchronizeEnvironmentCollectionCommand.Execute(null);
             dataGrid.Items.Refresh();
