@@ -9,6 +9,7 @@ class MocassinJobRunner:
 
     def __init__(self):
         self.ExecutableName = "Mocassin.Simulator"
+        self.DbPath = ""
         self.Executable = "./{0}".format(self.ExecutableName)
 
     def GetBaseSearchPath(self):
@@ -54,18 +55,25 @@ class MocassinJobRunner:
         thread.start()
         return thread
 
-    def RunMultiple(self, sequence, dbPath):
+    def RunMultiple(self, sequence):
         print("Start sequence is: {0}".format(sequence))
         threads = []
-        split = self.SplitFilenameIntoPathAndName(dbPath)
+        split = self.SplitFilenameIntoPathAndName(self.DbPath)
         for i in sequence:
             executionPath = self.MakeJobDirectory(split[0], i)
-            stdRedirect = "{0}/stdout.log".format(executionPath)
-            args = [executionPath, "-dbPath", dbPath, "-dbQuery", str(i), "-stdRedirect", stdRedirect]
+            stdRedirect = "stdout.log".format(executionPath)
+            args = [executionPath, "-dbPath", self.DbPath, "-dbQuery", str(i), "-ioPath", executionPath, "-stdRedirect", stdRedirect]
             print("Running: {}".format(args))
             threads.append(self.RunSimulatorAsThread(args))
         for thread in threads:
             thread.join()
 
+    def SetDatabasePath(self, path):
+        dbPath = os.path.expandvars(path)
+        if not os.path.exists(dbPath):
+            raise Exception("{0} is not a file".format(dbPath))
+        self.DbPath = dbPath
+
 runner = MocassinJobRunner()
-runner.RunMultiple(sys.argv[1:], os.path.expandvars("$HOME/Mocassin/icc_test/ceria.msl"))
+runner.SetDatabasePath(sys.argv[1])
+runner.RunMultiple(sys.argv[2:])

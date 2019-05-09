@@ -19,7 +19,7 @@ static void setStdoutRedirection(SCONTEXT_PARAM, const char* filePath)
     char* tmp = NULL;
     char* tmp1 = NULL;
 
-    var error = ConcatStrings(fileInfo->IODirectoryPath, "\\", &tmp);
+    var error = ConcatStrings(fileInfo->IODirectoryPath, "/", &tmp);
     error_assert(error, "Stream redirection of stdout failed on target building");
 
     error = ConcatStrings(tmp, filePath, &tmp1);
@@ -141,11 +141,11 @@ static error_t BuildAndSetFileTargets(SCONTEXT_PARAM)
     var fileInfo = getFileInformation(SCONTEXT);
     char* tmp = NULL;
 
-    error = ConcatStrings(fileInfo->IODirectoryPath, "\\" FILE_MAINSTATE, &tmp);
+    error = ConcatStrings(fileInfo->IODirectoryPath, "/" FILE_MAINSTATE, &tmp);
     return_if(error, error);
     fileInfo->MainStateFile = tmp;
 
-    error = ConcatStrings(fileInfo->IODirectoryPath, "\\" FILE_PRERSTATE, &tmp);
+    error = ConcatStrings(fileInfo->IODirectoryPath, "/" FILE_PRERSTATE, &tmp);
     return_if(error, error);
     fileInfo->PrerunStateFile = tmp;
 
