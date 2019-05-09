@@ -71,9 +71,10 @@ class MocassinJobRunner:
     def SetDatabasePath(self, path):
         dbPath = os.path.expandvars(path)
         if not os.path.exists(dbPath):
-            raise Exception("{0} is not a file".format(dbPath))
+            raise Exception("Db path does not point to a file")
         self.DbPath = dbPath
 
 runner = MocassinJobRunner()
 runner.SetDatabasePath(sys.argv[1])
+runner.FindExecutable()
 runner.RunMultiple(sys.argv[2:])
