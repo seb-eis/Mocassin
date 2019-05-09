@@ -50,8 +50,11 @@ typedef struct ParticleMobilityData
     // The total conductivity in [S/m]
     double      TotalConductivity;
 
-    // The total diffusion coefficient in [m^2/s]
-    double      DiffusionCoefficient;
+    //   The actual migration rate in [Hz]
+    double      MigrationRate;
+
+    // The total diffusion coefficient components in [m^2/s] in (x,y,z) direction
+    Vector3_t   DiffusionCoefficient;
 
     // The mobility vector in [m^2/(V s)]
     Vector3_t   MobilityVector;

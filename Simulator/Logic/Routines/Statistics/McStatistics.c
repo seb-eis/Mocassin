@@ -161,10 +161,17 @@ static inline Vector3_t TransformSquaredFractionalToCartesian(Vector3_t *vector,
     return result;
 }
 
-// Get the diffusion coefficient from mean square displacement and time information
-static inline double CalculateDiffusionCoefficient(const Vector3_t* vectorR2, const double time)
+// Get the diffusion coefficient component vector from mean square displacement and time information
+static inline Vector3_t CalculateDiffusionCoefficient(const Vector3_t* vectorR2, const double time)
 {
-    return (1.0 /(6.0 * time)) * (vectorR2->A + vectorR2->B + vectorR2->C);
+    var factor = 0.5 / time;
+    return (Vector3_t) {.A = factor * vectorR2->A, .B = factor * vectorR2->B, .C = factor * vectorR2->C};
+}
+
+// Calculates the average actual migration rate per particle in [Hz]
+static inline double CalculateAverageMigrationRate(double simulatedTime, int64_t steps, int64_t particleCount)
+{
+    return (double) steps / (simulatedTime * (double) particleCount);
 }
 
 void PopulateMobilityData(SCONTEXT_PARAM, ParticleMobilityData_t *restrict data)
@@ -188,6 +195,7 @@ void PopulateMobilityData(SCONTEXT_PARAM, ParticleMobilityData_t *restrict data)
     vector3ScalarOp(data->MeanMoveR1, count, /=);
     vector3ScalarOp(data->MeanMoveR2, count, /=);
 
+    data->MigrationRate = CalculateAverageMigrationRate(simulatedTime, data->ParticleStatistics->CounterCollection->McsCount, count);
     data->DiffusionCoefficient = CalculateDiffusionCoefficient(&data->MeanMoveR2, simulatedTime);
     data->MobilityVector = CalculateMobilityVector(SCONTEXT, &data->MeanMoveR1, &meta->NormElectricFieldVector);
     data->TotalMobility = CalculateFieldProjectedMobility(SCONTEXT, &data->MeanMoveR1, &meta->NormElectricFieldVector);

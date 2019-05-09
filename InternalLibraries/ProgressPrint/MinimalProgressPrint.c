@@ -58,15 +58,18 @@ void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream)
 
         let moveR1 = mobilityData.EnsembleMoveR1;
         let moveR2 = mobilityData.EnsembleMoveR2;
+        let dCoef = mobilityData.DiffusionCoefficient;
         let counters = statisticsData.CounterCollection;
 
         fprintf(fstream, "\n");
         fprintf(fstream, "P (%i) Counters     => " FORMAT_I64(012)" S "FORMAT_I64(012)" R "FORMAT_I64(012)" B "FORMAT_I64(012)" UE "FORMAT_I64(012)" US\n", i,
                 counters->McsCount, counters->RejectionCount, counters->SiteBlockingCount, counters->UnstableEndCount, counters->UnstableStartCount);
-        fprintf(fstream, "P (%i) Mobility     => %.10e %s %.10e %s %.10e %s\n", i,
-                mobilityData.DiffusionCoefficient, "m^2 s^-1     ",
+        fprintf(fstream, "P (%i) Mobility     => %.10e %s %.10e %s\n", i,
                 mobilityData.TotalMobility,        "m^2 V^-1 s^-1",
                 mobilityData.TotalConductivity,    "S m^-1");
+
+        fprintf(fstream, "P (%i) Diff. Coefficient   => %.10e %.10e %.10e %s\n", i,
+                dCoef.A, dCoef.B, dCoef.C, "m^2 s^-1");
 
         fprintf(fstream, "P (%i) Ensemble R   => %.10e %.10e %.10e %s\n", i,
                 moveR1.A, moveR1.B, moveR1.C, "m");

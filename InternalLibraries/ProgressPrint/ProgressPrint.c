@@ -95,14 +95,17 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Conductivity => Field direction", "S m^-1",
             data->TotalConductivity);
 
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Mobility => Average migration rate", "Hz",
+            data->MigrationRate);
+
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Mobility => Field direction", "m^2 V^-1 s^-1",
             data->TotalMobility);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Mobility => Components", "m^2 V^-1 s^-1",
             data->MobilityVector.A, data->MobilityVector.B, data->MobilityVector.C);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Movement => Diffusion coefficient", "m^2 s^-1",
-            data->DiffusionCoefficient);
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Diffusion coefficient", "m^2 s^-1",
+            data->DiffusionCoefficient.A, data->DiffusionCoefficient.B, data->DiffusionCoefficient.C);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Movement => Ensemble R", "m^2",
             data->EnsembleMoveR1.A, data->EnsembleMoveR1.B, data->EnsembleMoveR1.C);
