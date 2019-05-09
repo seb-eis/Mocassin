@@ -156,7 +156,7 @@ namespace Mocassin.Model.ModelProject
                 SymmetrySettings = new MocassinSymmetrySettings
                 {
                     SpaceGroupDbPath =
-                        $"{Environment.GetEnvironmentVariable("USERPROFILE")}/source/repos/ICon.Program/ICon.Framework.Symmetry/SpaceGroups/SpaceGroups.db",
+                        $"{Environment.GetEnvironmentVariable("USERPROFILE")}/Documents/Mocassin/Mocassin.Symmetry.db",
                     VectorTolerance = 1.0e-10,
                     ParameterTolerance = 1.0e-10
                 },
