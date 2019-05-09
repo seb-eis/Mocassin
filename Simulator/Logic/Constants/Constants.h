@@ -91,10 +91,10 @@
 
 /* File and writemode definitions */
 
-#define FILE_MAINSTATE   "./run.mcs"
-#define FILE_PRERSTATE   "./prerun.mcs"
-#define FILE_STDOUTLOG   "./stdout.log"
-#define FILE_STDERRLOG   "./stderr.log"
+#define FILE_MAINSTATE   "run.mcs"
+#define FILE_PRERSTATE   "prerun.mcs"
+#define FILE_STDOUTLOG   "stdout.log"
+#define FILE_STDERRLOG   "stderr.log"
 #define FMODE_BINARY_R   "rb"
 #define FMODE_BINARY_W   "wb"
 #define FMODE_NORMAL_R   "r"

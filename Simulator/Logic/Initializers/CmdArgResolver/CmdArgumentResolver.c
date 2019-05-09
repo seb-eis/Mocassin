@@ -15,7 +15,17 @@
 // Tries to redirect the stdout stream to a file stream
 static void setStdoutRedirection(SCONTEXT_PARAM, const char* filePath)
 {
-    let error = freopen(filePath, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
+    var fileInfo = getFileInformation(SCONTEXT);
+    char* tmp = NULL;
+    char* tmp1 = NULL;
+
+    var error = ConcatStrings(fileInfo->IODirectoryPath, "/", &tmp);
+    error_assert(error, "Stream redirection of stdout failed on target building");
+
+    error = ConcatStrings(tmp, filePath, &tmp1);
+    error_assert(error, "Stream redirection of stdout failed on target building");
+
+    error = freopen(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
     error_assert(error, "Stream redirection of stdout to a file returned a null stream");
 }
 
@@ -25,7 +35,8 @@ static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
     static const CmdArgResolver_t resolvers[] =
     {
         { "-dbPath",    (FValidator_t) ValidateIsValidFilePath,       (FCmdCallback_t) setDatabasePath },
-        { "-dbQuery",   (FValidator_t) ValidateDatabaseQueryString,   (FCmdCallback_t) setDatabaseLoadString }
+        { "-dbQuery",   (FValidator_t) ValidateDatabaseQueryString,   (FCmdCallback_t) setDatabaseLoadString },
+        { "-ioPath",    (FValidator_t) ValidateIsDiretoryPath,        (FCmdCallback_t) setIODirectoryPath}
     };
 
     static const CmdArgLookup_t resolverTable =
@@ -124,6 +135,23 @@ static error_t ResolveAndSetOptionalCmdArguments(SCONTEXT_PARAM)
     return ERR_OK;
 }
 
+static error_t BuildAndSetFileTargets(SCONTEXT_PARAM)
+{
+    error_t error;
+    var fileInfo = getFileInformation(SCONTEXT);
+    char* tmp = NULL;
+
+    error = ConcatStrings(fileInfo->IODirectoryPath, "/" FILE_MAINSTATE, &tmp);
+    return_if(error, error);
+    fileInfo->MainStateFile = tmp;
+
+    error = ConcatStrings(fileInfo->IODirectoryPath, "/" FILE_PRERSTATE, &tmp);
+    return_if(error, error);
+    fileInfo->PrerunStateFile = tmp;
+
+    return ERR_OK;
+}
+
 void ResolveCommandLineArguments(SCONTEXT_PARAM, const int32_t argCount, char const * const * argValues)
 {
     error_t error;
@@ -136,4 +164,7 @@ void ResolveCommandLineArguments(SCONTEXT_PARAM, const int32_t argCount, char co
 
     error = ResolveAndSetOptionalCmdArguments(SCONTEXT);
     error_assert(error, "Failed to resolve optional command line arguments.");
+
+    error = BuildAndSetFileTargets(SCONTEXT);
+    error_assert(error, "Failed to build required file targets.");
 }

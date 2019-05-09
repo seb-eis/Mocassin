@@ -28,6 +28,18 @@ bool_t IsAccessibleFile(const char* restrict fileName)
     return access(fileName, F_OK) == 0;
 }
 
+bool_t IsAccessibleDirectory(const char* restrict dirName)
+{
+    var dir = opendir(dirName);
+    if (dir)
+    {
+        closedir(dir);
+        return true;
+    }
+
+    return false;
+}
+
 error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer)
 {
     return_if(fileStream == NULL, ERR_STREAM);
@@ -64,7 +76,7 @@ error_t ConcatStrings(const char* lhs, const char* rhs, char** result)
     return_if(*result == NULL, ERR_MEMALLOCATION);
 
     error |= (strncpy(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
-    error |= (strncat(*result, lhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
+    error |= (strncat(*result, rhs, bufferSize) != NULL) ? ERR_OK : ERR_BUFFEROVERFLOW;
     return error;
 }
 

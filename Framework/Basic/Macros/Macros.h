@@ -16,10 +16,11 @@
 // Macro that defines the variable auto type
 #define var __auto_type
 
-// Macro that defines the const auto type
 #ifdef __INTEL_COMPILER
+// Macro that defines the const auto type to var on the intel compiler
 #define let var
 #else
+// Macro that defines the const auto type
 #define let var const
 #endif
 

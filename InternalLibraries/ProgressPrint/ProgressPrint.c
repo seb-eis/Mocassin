@@ -156,7 +156,8 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
     SecondsToISO8601TimeSpan(etaBuffer, remainingRunTimeEta);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCOM_FORMAT, MC_OUTPRC_FORMAT), "Status => Completion", "",
-            stateHeaderData->Mcs, cycleCounters->TotalSimulationGoalMcsCount, getPercent(stateHeaderData->Mcs, cycleCounters->TotalSimulationGoalMcsCount));
+            stateHeaderData->Mcs, cycleCounters->TotalSimulationGoalMcsCount,
+            getPercent(stateHeaderData->Mcs, cycleCounters->TotalSimulationGoalMcsCount));
 
     let preRunMcs = getMinOfTwo(cycleCounters->McsCount, cycleCounters->PrerunGoalMcs);
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCOM_FORMAT, MC_OUTPRC_FORMAT), "Status => Pre run completion", "",
@@ -208,7 +209,7 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
 
 void PrintFullSimulationStatistics(SCONTEXT_PARAM, FILE *fstream, const bool_t onlyMobiles)
 {
-    fprintf(fstream, "\n\nn== Simulation statistics status ==\n\n");
+    fprintf(fstream, "\n\n=== Simulation statistics status ===\n\n");
     PrintRunStatisticsMetaInfo(SCONTEXT, fstream);
     PrintParticleInformation(SCONTEXT, fstream, onlyMobiles);
     fflush(fstream);
@@ -221,7 +222,7 @@ static void PrintCopyrightInfo(file_t* fstream)
     fprintf(fstream, "Copyright     - [1] Helmholtz Institute Muenster, HIMS, IEK-12 Juelich Research Center, Germany\n");
     fprintf(fstream, "              - [2] Institute Of Physical Chemistry, RWTH Aachen University, Germany\n");
     fprintf(fstream, "SQLite C/C++  - https://www.sqlite.org/copyright.html\n\n");
-    fprintf(fstream, "Note          - Software is in beta state and provided as is. Please report errors to the contacts!\n");
+    fprintf(fstream, "Note          - Software is in alpha state and provided as is. Please report errors to the contacts!\n");
     fprintf(fstream, "Contacts      - s.eisele@fz-juelich.de, arnold@pc.rwth-aachen.de\n");
     fflush(fstream);
 }
@@ -250,7 +251,11 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => State loaded", "", stateLoaded);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Execution path", "", executionPath);
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Executable", "", executionPath);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Main state", "", getMainRunStateFile(SCONTEXT));
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Pre-Run state", "", getPreRunStateFile(SCONTEXT));
 
     fflush(fstream);
     for (int32_t i = 1; i < cmdArgs->Count; i=i+2)

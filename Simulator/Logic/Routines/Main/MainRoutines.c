@@ -418,7 +418,7 @@ static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
     let counters = getMainCycleCounters(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
 
-    return_if(metaData->ProgramRunTime == 0, false);
+    return_if(metaData->ProgramRunTime == 0 || metaData->SimulatedTime == 0, false);
 
     metaData->SuccessRate = counters->McsCount / metaData->ProgramRunTime;
     metaData->CycleRate = counters->CycleCount / metaData->ProgramRunTime;
@@ -551,7 +551,9 @@ error_t SaveSimulationState(SCONTEXT_PARAM)
 {
     return_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_SKIPSAVE), ERR_OK);
     let stateBuffer = getMainStateBuffer(SCONTEXT);
-    let targetFile = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN) ? FILE_PRERSTATE : FILE_MAINSTATE;
+    let targetFile = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN)
+            ? getPreRunStateFile(SCONTEXT)
+            : getMainRunStateFile(SCONTEXT);
 
     return SIMERROR = SaveWriteBufferToFile(targetFile, FMODE_BINARY_W, stateBuffer);
 }
