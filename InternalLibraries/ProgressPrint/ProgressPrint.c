@@ -218,14 +218,15 @@ void PrintFullSimulationStatistics(SCONTEXT_PARAM, FILE *fstream, const bool_t o
     fflush(fstream);
 }
 
-//  Prints the simulation copyright information
+//  Prints the simulation copyright and basic data information
 static void PrintCopyrightInfo(file_t* fstream)
 {
     fprintf(fstream, "Authors       - Sebastian Eisele [1], John Arnold [2]\n");
     fprintf(fstream, "Copyright     - [1] Helmholtz Institute Muenster, HIMS, IEK-12 Juelich Research Center, Germany\n");
     fprintf(fstream, "              - [2] Institute Of Physical Chemistry, RWTH Aachen University, Germany\n");
     fprintf(fstream, "SQLite C/C++  - https://www.sqlite.org/copyright.html\n\n");
-    fprintf(fstream, "Note          - Software is in alpha state and provided as is. Please report errors to the contacts!\n");
+    fprintf(fstream, "Notes         - Software is in alpha state and provided as is. Please report errors to the contacts!\n");
+    fprintf(fstream, "              - Metric space of output is euclidean!\n");
     fprintf(fstream, "Contacts      - s.eisele@fz-juelich.de, arnold@pc.rwth-aachen.de\n");
     fflush(fstream);
 }
@@ -295,16 +296,47 @@ void PrintContextResetNotice(SCONTEXT_PARAM, file_t *fstream)
     fflush(fstream);
 }
 
+#define STATE_FLG_PRERUN        1
+#define STATE_FLG_CONTINUE      1 << 1
+#define STATE_FLG_COMPLETED     1 << 2
+#define STATE_FLG_TIMEOUT       1 << 3
+#define STATE_FLG_SIMABORT      1 << 4
+#define STATE_FLG_CONDABORT     1 << 5
+#define STATE_FLG_RATEABORT     1 << 6
+#define STATE_FLG_FIRSTCYCLE    1 << 7
+#define STATE_FLG_INITIALIZED   1 << 8
+#define STATE_FLG_SIMERROR      1 << 9
+#define STATE_FLG_PRERUN_RESET  1 << 10
+#define STATE_FLG_ENERGYABORT   1 << 11
+
+//  Prints all set state flags of the context as a readable string to the passed file-stream
+static void PrintStatusFlagCollection(SCONTEXT_PARAM, file_t* fstream)
+{
+    debug_assert(fstream = NULL && SCONTEXT != NULL);
+
+    let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
+    fprintf(fstream, "Abort-flags: ");
+
+    if (flagsAreTrue(STATE_FLG_COMPLETED, flags)) fprintf(fstream, "ABORT_REASON_COMPLETED ");
+    if (flagsAreTrue(STATE_FLG_TIMEOUT, flags)) fprintf(fstream, "ABORT_REASON_TIMEOUT ");
+    if (flagsAreTrue(STATE_FLG_CONDABORT, flags)) fprintf(fstream, "ABORT_REASON_CONDITION ");
+    if (flagsAreTrue(STATE_FLG_RATEABORT, flags)) fprintf(fstream, "ABORT_REASON_SUCCESSRATE ");
+    if (flagsAreTrue(STATE_FLG_ENERGYABORT, flags)) fprintf(fstream, "ABORT_REASON_LATTICEENERGY ");
+    fprintf(fstream, "\n");
+    fflush(fstream);
+}
+
 void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream)
 {
     char buffer[100];
-    let waitTime = 10;
+    let waitTime = 1;
     let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
     SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(SCONTEXT)->ProgramRunTime);
 
-    PrintFullSimulationStatistics(SCONTEXT, stdout, true);
-    fprintf(stdout, "Main routine reached end @ %s  (ERR=0x%08x, FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
-    fprintf(stdout, "Auto termination in %i seconds...", waitTime);
-    fflush(stdout);
+    PrintFullSimulationStatistics(SCONTEXT, fstream, true);
+    fprintf(fstream, "Main routine reached end @ %s  (ERR_CODE=0x%08x, STATE_FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
+    PrintStatusFlagCollection(SCONTEXT, fstream);
+    fprintf(fstream, "Auto termination in %i seconds...", waitTime);
+    fflush(fstream);
     sleep(waitTime);
 }

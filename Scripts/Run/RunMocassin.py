@@ -61,9 +61,9 @@ class MocassinJobRunner:
         split = self.SplitFilenameIntoPathAndName(self.DbPath)
         for i in sequence:
             executionPath = self.MakeJobDirectory(split[0], i)
-            stdRedirect = "stdout.log".format(executionPath)
+            stdRedirect = "stdout.log";
             args = [executionPath, "-dbPath", self.DbPath, "-dbQuery", str(i), "-ioPath", executionPath, "-stdRedirect", stdRedirect]
-            print("Running: {}".format(args))
+            print("Running: {}".format(args), flush=True)
             threads.append(self.RunSimulatorAsThread(args))
         for thread in threads:
             thread.join()
