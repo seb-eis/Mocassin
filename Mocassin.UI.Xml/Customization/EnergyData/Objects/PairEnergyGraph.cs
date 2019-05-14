@@ -18,13 +18,13 @@ namespace Mocassin.UI.Xml.Customization
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center particle
         /// </summary>
-        [XmlAttribute("CenterParticle")]
+        [XmlElement("CenterParticle")]
         public ModelObjectReferenceGraph<Particle> CenterParticle { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center particle
         /// </summary>
-        [XmlAttribute("PartnerParticle")]
+        [XmlElement("PartnerParticle")]
         public ModelObjectReferenceGraph<Particle> PartnerParticle { get; set; }
 
         /// <summary>

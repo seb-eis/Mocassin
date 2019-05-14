@@ -91,7 +91,7 @@ namespace Mocassin.Model.Translator
         public string Description { get; set; }
 
         /// <summary>
-        ///     The full model project xml definition
+        ///     The full model project XML definition
         /// </summary>
         [Column("ProjectXml")]
         public string ProjectXml { get; set; }

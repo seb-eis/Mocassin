@@ -15,21 +15,21 @@ namespace Mocassin.UI.Xml.LatticeModel
         /// <summary>
         ///     The doping which is applied
         /// </summary>
-        [XmlAttribute("PrimaryDoping")]
+        [XmlElement("PrimaryDoping")]
         [JsonProperty("PrimaryDoping")]
         public ModelObjectReferenceGraph<DopingCombination> PrimaryDoping { get; set; }
 
         /// <summary>
         ///     The doping to compensate the primary doping
         /// </summary>
-        [XmlAttribute("CounterDoping")]
+        [XmlElement("CounterDoping")]
         [JsonProperty("CounterDoping")]
         public ModelObjectReferenceGraph<DopingCombination> CounterDoping { get; set; }
 
         /// <summary>
         ///     The building block in which the doping is used
         /// </summary>
-        [XmlAttribute("BuildingBlock")]
+        [XmlElement("BuildingBlock")]
         [JsonProperty("BuildingBlock")]
         public ModelObjectReferenceGraph<BuildingBlock> BuildingBlock { get; set; }
 

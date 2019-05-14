@@ -34,6 +34,8 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         LibraryPreparationError,
         BuildingLibrary,
         LibraryBuildingError,
+        AddingLibraryMetaData,
+        MetaDataAddError,
         SavingLibraryContents,
         LibraryContentSavingError,
         BuildProcessCompleted
@@ -102,6 +104,8 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             if (!TryBuildModelContext(modelProject, out var modelContext))
                 return null;
             if (!TryBuildLibraryContent(modelContext, projectBuildGraph.ProjectJobTranslationGraph, out var jobPackageModels))
+                return null;
+            if (!TryAddBuildMetaData(jobPackageModels, projectBuildGraph))
                 return null;
             if (!TrySaveLibraryContents(libraryContext, jobPackageModels))
                 return null;
@@ -264,6 +268,34 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             catch (Exception e)
             {
                 BuildStatusEvent.OnNext(LibraryBuildStatus.LibraryContentSavingError);
+                BuildStatusEvent.OnError(e);
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///     Tries to add all meta information of the <see cref="MocassinProjectBuildGraph"/> to the prepared set of <see cref="SimulationJobPackageModel"/> instances
+        /// </summary>
+        /// <param name="jobPackageModels"></param>
+        /// <param name="buildGraph"></param>
+        /// <returns></returns>
+        private bool TryAddBuildMetaData(IEnumerable<SimulationJobPackageModel> jobPackageModels, MocassinProjectBuildGraph buildGraph)
+        {
+            BuildStatusEvent.OnNext(LibraryBuildStatus.AddingLibraryMetaData);
+
+            try
+            {
+                var buildXml = buildGraph.ToXml();
+                foreach (var packageModel in jobPackageModels)
+                {
+                    packageModel.ProjectXml = buildXml;
+                    packageModel.ProjectGuid = buildGraph.ProjectModelGraph.Key;
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                BuildStatusEvent.OnNext(LibraryBuildStatus.MetaDataAddError);
                 BuildStatusEvent.OnError(e);
                 return false;
             }

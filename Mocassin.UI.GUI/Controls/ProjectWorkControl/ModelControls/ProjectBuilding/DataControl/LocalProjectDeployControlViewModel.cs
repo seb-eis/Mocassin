@@ -47,18 +47,27 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             set => SetProperty(ref filePath, value);
         }
 
+        /// <summary>
+        ///     Get or set the maximum number of jobs
+        /// </summary>
         public int MaxJobs
         {
             get => maxJobs;
             set => SetProperty(ref maxJobs, value);
         }
 
+        /// <summary>
+        ///     Get or set the maximum number of translated jobs
+        /// </summary>
         public int DoneJobs
         {
             get => doneJobs;
             set => SetProperty(ref doneJobs, value);
         }
 
+        /// <summary>
+        ///     Get or set the current <see cref="LibraryBuildStatus"/>
+        /// </summary>
         public LibraryBuildStatus BuildStatus
         {
             get => buildStatus;
@@ -82,7 +91,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             ProjectBuildGraphCollectionViewModel.SetCollection(contentSource?.ProjectBuildGraphs);
         }
 
-        private ICommand GetWriteDatabaseCommand()
+        /// <summary>
+        ///     Builds an <see cref="AsyncRelayCommand"/> to create and write the job database
+        /// </summary>
+        /// <returns></returns>
+        private AsyncRelayCommand GetWriteDatabaseCommand()
         {
             bool CanExecute()
             {
@@ -98,6 +111,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                     MaxJobs = x.Total;
                     DoneJobs = x.Done;
                 });
+
                 await Task.Run(() => builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
                     ProjectControl.CreateModelProject()));
                 SendCallInfoMessage($"Wrote simulation library to {FilePath}");

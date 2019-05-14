@@ -22,7 +22,7 @@ namespace Mocassin.UI.Xml.StructureModel
         /// <summary>
         ///     Get or set the literal name of the space group
         /// </summary>
-        [XmlAttribute("Name")]
+        [XmlAttribute("Literal")]
         public string Literal { get; set; }
 
         /// <summary>
