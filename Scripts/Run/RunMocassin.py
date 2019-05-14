@@ -4,6 +4,7 @@ import subprocess as subprocess
 import threading as threading
 import sys as sys
 import glob as glob
+import time as time
 
 class MocassinJobRunner:
 
@@ -65,8 +66,10 @@ class MocassinJobRunner:
             args = [executionPath, "-dbPath", self.DbPath, "-dbQuery", str(i), "-ioPath", executionPath, "-stdRedirect", stdRedirect]
             print("Running: {}".format(args), flush=True)
             threads.append(self.RunSimulatorAsThread(args))
+        print("All Started at: {}".format(time.asctime()))
         for thread in threads:
             thread.join()
+        print("All joined at: {}".format(time.asctime()))
 
     def SetDatabasePath(self, path):
         dbPath = os.path.expandvars(path)

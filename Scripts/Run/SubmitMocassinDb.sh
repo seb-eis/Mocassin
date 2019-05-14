@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 runScript="$HOME/Mocassin/Simulator/Scripts/Run/RunMocassin.py"
 dbPath=$1
-scriptName=".mocjob.sh"
+scriptName=".mocjob_db.sh"
 jobCount=0
 shift 1
 jobSequence=$(sqlite3 $dbPath "select Id from JobModels")
@@ -22,4 +22,4 @@ chmod 770 $scriptName
 rehash
 echo Jobcount: \\t $jobCount
 echo JobIds: \\t $jobSequence
-sbatch --time=0-01:00:00 --ntasks=$jobCount --mem-per-cpu=1024M --output=mocjob.log $scriptName
+sbatch --time=0-01:00:00 --ntasks=1 --nodes=1 --cpus-per-task=$jobCount --mem-per-cpu=3800M --output=mocjob_db.log $scriptName

@@ -26,6 +26,7 @@
 #define INFO_FLG_MMC        1 << 1  // Flag that marks a job as KMC
 #define INFO_FLG_USEPRERUN  1 << 2  // Flag that marks a job to contain pre-run
 #define INFO_FLG_SKIPSAVE   1 << 3  // Flag that marks a job as unsaved with no state saving
+#define INFO_FLG_DUALDOF    1 << 4  // Flag that marks a job as non-optimized with twice the actually existing degrees of freedom
 
 /* Main state flag values */
 

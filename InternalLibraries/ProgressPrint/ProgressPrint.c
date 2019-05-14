@@ -317,11 +317,11 @@ static void PrintStatusFlagCollection(SCONTEXT_PARAM, file_t* fstream)
     let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
     fprintf(fstream, "Abort-flags: ");
 
-    if (flagsAreTrue(STATE_FLG_COMPLETED, flags)) fprintf(fstream, "ABORT_REASON_COMPLETED ");
-    if (flagsAreTrue(STATE_FLG_TIMEOUT, flags)) fprintf(fstream, "ABORT_REASON_TIMEOUT ");
-    if (flagsAreTrue(STATE_FLG_CONDABORT, flags)) fprintf(fstream, "ABORT_REASON_CONDITION ");
-    if (flagsAreTrue(STATE_FLG_RATEABORT, flags)) fprintf(fstream, "ABORT_REASON_SUCCESSRATE ");
-    if (flagsAreTrue(STATE_FLG_ENERGYABORT, flags)) fprintf(fstream, "ABORT_REASON_LATTICEENERGY ");
+    if (flagsAreTrue(flags, STATE_FLG_COMPLETED)) fprintf(fstream, "ABORT_REASON_COMPLETED ");
+    if (flagsAreTrue(flags, STATE_FLG_TIMEOUT)) fprintf(fstream, "ABORT_REASON_TIMEOUT ");
+    if (flagsAreTrue(flags, STATE_FLG_CONDABORT)) fprintf(fstream, "ABORT_REASON_CONDITION ");
+    if (flagsAreTrue(flags, STATE_FLG_RATEABORT)) fprintf(fstream, "ABORT_REASON_SUCCESSRATE ");
+    if (flagsAreTrue(flags, STATE_FLG_ENERGYABORT)) fprintf(fstream, "ABORT_REASON_LATTICEENERGY ");
     fprintf(fstream, "\n");
     fflush(fstream);
 }

@@ -79,8 +79,9 @@ static inline double GetCurrentTimeStepPerJumpAttempt(SCONTEXT_PARAM)
     let factors = getPhysicalFactors(SCONTEXT);
     let header = getDbModelJobHeaderAsKMC(SCONTEXT);
     let pool = getJumpSelectionPool(SCONTEXT);
+    let dofFactor = (getDbModelJobInfo(SCONTEXT)->JobFlags & INFO_FLG_DUALDOF) ? 2.0 : 1.0;
 
-    return factors->TotalJumpNormalization / (header->AttemptFrequencyModulus * (double) pool->SelectableJumpCount);
+    return dofFactor * factors->TotalJumpNormalization / (header->AttemptFrequencyModulus * (double) pool->SelectableJumpCount);
 }
 
 // Calculates the basic normalization factor from the max jump probability
