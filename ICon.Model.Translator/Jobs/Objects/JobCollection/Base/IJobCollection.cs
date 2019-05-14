@@ -16,7 +16,7 @@ namespace Mocassin.Model.Translator.Jobs
         ISimulation GetSimulation();
 
         /// <summary>
-        /// Get the set of defined <see cref="IPostBuildOptimizer"/> for the translation operation
+        ///     Get the set of defined <see cref="IPostBuildOptimizer"/> for the translation operation
         /// </summary>
         IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers();
     }

@@ -170,6 +170,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="simulationModel"></param>
         protected void SetSimulationJobInfoFlags(SimulationJobModel jobModel, ISimulationModel simulationModel)
         {
+            const long dofFlag = (long) SimulationJobInfoFlags.UseDualDofCorrection;
             const long kmcFlag = (long) SimulationJobInfoFlags.KmcSimulation;
             const long mmcFlag = (long) SimulationJobInfoFlags.MmcSimulation;
             const long preFlag = (long) SimulationJobInfoFlags.UsePrerun;
@@ -178,6 +179,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             {
                 case IKineticSimulationModel _:
                     var header = ((InteropObject<CKmcJobHeader>) jobModel.JobHeader).Structure;
+                    jobModel.JobInfo.Structure.JobFlags |= dofFlag;
                     jobModel.JobInfo.Structure.JobFlags |= kmcFlag;
                     jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & mmcFlag;
                     jobModel.JobInfo.Structure.JobFlags |= header.PreRunMcsp == 0 ? 0 : preFlag;
@@ -229,14 +231,19 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Calls all attached <see cref="IPostBuildOptimizer"/> and additionally defined ones of <see cref="IJobCollection"/>
+        ///     Calls all attached <see cref="IPostBuildOptimizer" /> and additionally defined ones of
+        ///     <see cref="IJobCollection" /> and removes invalidated <see cref="SimulationJobInfoFlags" />
         /// </summary>
         /// <param name="packageModel"></param>
         /// <param name="jobCollection"></param>
         protected void RunPostBuildOptimizers(SimulationJobPackageModel packageModel, IJobCollection jobCollection)
         {
-            foreach (var optimizer in PostBuildOptimizers.Concat(jobCollection.GetPostBuildOptimizers()))
-                optimizer.Run(ProjectModelContext, packageModel);
+            var removedFlags = PostBuildOptimizers
+                .Concat(jobCollection.GetPostBuildOptimizers())
+                .Aggregate(SimulationJobInfoFlags.None, (current, optimizer) => current | optimizer.Run(ProjectModelContext, packageModel));
+
+            foreach (var jobModel in packageModel.JobModels)
+                jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & (long) removedFlags;
         }
 
         /// <summary>

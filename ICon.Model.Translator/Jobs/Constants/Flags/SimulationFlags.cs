@@ -8,10 +8,37 @@ namespace Mocassin.Model.Translator.Jobs
     [Flags]
     public enum SimulationJobInfoFlags
     {
+        /// <summary>
+        ///     Marks nothing
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        ///     Marks simulation as a KMC job
+        /// </summary>
         KmcSimulation = 1,
+
+        /// <summary>
+        ///     Marks a simulation as an MMC job
+        /// </summary>
         MmcSimulation = 1 << 1,
+
+        /// <summary>
+        ///     Marks a simulation to use a pre-run routine
+        /// </summary>
         UsePrerun = 1 << 2,
-        SkipSaving = 1 << 3
+
+        /// <summary>
+        ///     Marks a simulation to skip the binary state save process
+        /// </summary>
+        SkipSaving = 1 << 3,
+
+        /// <summary>
+        ///     Marks a simulation to correct the dual-definition of degrees of freedom (Only relevant to KMC time-stepping calculation)
+        /// </summary>
+        /// <remarks> In a completely unoptimized simulation every degree of freedom exists twice in the system which causes invalid time calculation</remarks>
+        UseDualDofCorrection =  1 << 4
+
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 using System.Linq;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
+using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 
 namespace Mocassin.Model.Translator.Optimization
@@ -28,16 +29,20 @@ namespace Mocassin.Model.Translator.Optimization
         public IList<(IParticle, IUnitCellPosition)> RemoveCombinations { get; set; }
 
         /// <inheritdoc />
-        public void Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
+        public SimulationJobInfoFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
         {
             ModelContext = modelContext;
             JobPackage = jobPackage;
 
+            var isReducedMask = false;
             foreach (var environmentDefinition in jobPackage.SimulationStructureModel.EnvironmentDefinitions)
             {
-                var optimizedSet = GetOptimizedSelectionParticles(environmentDefinition);
-                environmentDefinition.SelectionParticleMask = optimizedSet.AsLong();
+                var optimizedSetMask = GetOptimizedSelectionParticles(environmentDefinition).AsLong();
+                isReducedMask |= optimizedSetMask == environmentDefinition.SelectionParticleMask;
+                environmentDefinition.SelectionParticleMask = optimizedSetMask;
             }
+
+            return isReducedMask ? SimulationJobInfoFlags.UseDualDofCorrection : SimulationJobInfoFlags.None;
         }
 
         /// <summary>
