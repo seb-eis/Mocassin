@@ -7,12 +7,12 @@ using System.Windows;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("Mocassin.UI.GUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Mocassin Model Builder")]
+[assembly: AssemblyDescription("Model Builder for the Monte Carlo Simulation Software MOCASSIN")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Mocassin.UI.GUI")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("HIMS, Juelich Research Center IEK-12")]
+[assembly: AssemblyProduct("Mocassin")]
+[assembly: AssemblyCopyright("Copyright Sebastian Eisele © 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -53,3 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("en")]
+

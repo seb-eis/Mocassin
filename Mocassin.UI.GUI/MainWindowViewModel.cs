@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Forms;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
 using Mocassin.Model.DataManagement;
@@ -25,6 +27,8 @@ namespace Mocassin.UI.GUI
     /// </summary>
     public class MainWindowViewModel : ViewModelBase, IMocassinProjectControl
     {
+        private string windowDescription;
+
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> for changes in the open <see cref="IMocassinProjectLibrary" />
         /// </summary>
@@ -63,6 +67,15 @@ namespace Mocassin.UI.GUI
 
         /// <inheritdoc />
         public IEnumerable<Assembly> PluginAssemblies { get; }
+
+        /// <summary>
+        ///     Get or set the window description <see cref="string"/>
+        /// </summary>
+        public string WindowDescription
+        {
+            get => windowDescription;
+            set => SetProperty(ref windowDescription, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="ProjectContentChangeTriggerViewModel"/> that periodically triggers the project content change
@@ -115,6 +128,7 @@ namespace Mocassin.UI.GUI
             ProjectWorkTabControlViewModel = new ProjectWorkTabControlViewModel(this);
             ProjectManagerViewModel = new ProjectManagerViewModel(this);
             ServiceModelProject = CreateServiceModelProject();
+            WindowDescription = MakeWindowDescription();
         }
 
         /// <summary>
@@ -156,6 +170,16 @@ namespace Mocassin.UI.GUI
                 new SimulationManagerFactory()
             };
             return factories;
+        }
+
+        /// <summary>
+        ///     Builds the window description string <see cref="string"/>
+        /// </summary>
+        /// <returns></returns>
+        public string MakeWindowDescription()
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            return version.ToString();
         }
     }
 }
