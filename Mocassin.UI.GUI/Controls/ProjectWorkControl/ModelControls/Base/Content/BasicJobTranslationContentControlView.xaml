@@ -55,10 +55,18 @@
 
         <GroupBox.ContextMenu>
           <ContextMenu>
-            <MenuItem Header="Add job translation">
+            <MenuItem Header="New translation">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                   <i:InvokeCommandAction Command="{Binding AddJobTranslationCommand}"/>
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="Delete translation">
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                  <i:InvokeCommandAction Command="{Binding DeleteTranslationCommand}" 
+                                         CommandParameter="{Binding SelectedJobTranslationGraph}"/>
                 </i:EventTrigger>
               </i:Interaction.Triggers>
             </MenuItem>

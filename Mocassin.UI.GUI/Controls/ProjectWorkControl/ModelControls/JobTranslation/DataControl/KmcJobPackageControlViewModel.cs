@@ -31,12 +31,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is ProjectJobTranslationGraph jobTranslation) ChangeContentSource(jobTranslation);
-        }
-
-        /// <inheritdoc />
         public void ChangeContentSource(ProjectJobTranslationGraph contentSource)
         {
             ContentSource = contentSource;

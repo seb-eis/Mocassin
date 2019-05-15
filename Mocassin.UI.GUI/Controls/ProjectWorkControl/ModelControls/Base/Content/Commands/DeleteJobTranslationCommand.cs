@@ -2,16 +2,16 @@
 using System.Threading.Tasks;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
-using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectCustomizationGraph" /> from a
+    ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectJobTranslationGraph" /> from a
     ///     <see cref="MocassinProjectGraph" />
     /// </summary>
-    public class DeleteCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationGraph>
+    public class DeleteJobTranslationCommand : AsyncProjectControlCommand<ProjectJobTranslationGraph>
     {
         /// <summary>
         ///     The getter delegate for the target <see cref="MocassinProjectGraph" />
@@ -24,8 +24,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private Action OnRemovalAction { get; }
 
         /// <inheritdoc />
-        public DeleteCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
-            Action onRemovalAction = null)
+        public DeleteJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
+            Action onRemovalAction)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
@@ -33,16 +33,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectCustomizationGraph parameter)
+        public override bool CanExecuteInternal(ProjectJobTranslationGraph parameter)
         {
             if (parameter == null || ProjectGetter() == null) return false;
-            return base.CanExecuteInternal(parameter) && ProjectGetter().ProjectCustomizationGraphs.Contains(parameter);
+            return base.CanExecuteInternal(parameter) && ProjectGetter().ProjectJobTranslationGraphs.Contains(parameter);
         }
 
         /// <inheritdoc />
-        public override async Task ExecuteAsync(ProjectCustomizationGraph parameter)
+        public override async Task ExecuteAsync(ProjectJobTranslationGraph parameter)
         {
-            var isRemoved = await Task.Run(() => ProjectGetter().ProjectCustomizationGraphs.Remove(parameter));
+            var isRemoved = await Task.Run(() => ProjectGetter().ProjectJobTranslationGraphs.Remove(parameter));
             if (isRemoved) OnRemovalAction?.Invoke();
         }
     }

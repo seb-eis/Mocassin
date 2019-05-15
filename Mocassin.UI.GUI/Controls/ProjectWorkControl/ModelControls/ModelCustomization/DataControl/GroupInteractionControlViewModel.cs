@@ -16,12 +16,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public ProjectCustomizationGraph ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is ProjectCustomizationGraph customizationGraph) ChangeContentSource(customizationGraph);
-        }
-
-        /// <inheritdoc />
         public void ChangeContentSource(ProjectCustomizationGraph contentSource)
         {
             ContentSource = contentSource;

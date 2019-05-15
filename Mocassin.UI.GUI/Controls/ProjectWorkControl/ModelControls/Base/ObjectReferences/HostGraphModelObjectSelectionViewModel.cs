@@ -90,12 +90,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
             DataCollection = GetTargetCollection(HostObject);
         }
 
-        /// <inheritdoc />
-        public virtual void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
         /// <summary>
         ///     Extract the <see cref="IReadOnlyCollection{T}" /> of reference <see cref="ModelObjectGraph" /> from the passed
         ///     <see cref="MocassinProjectGraph" />

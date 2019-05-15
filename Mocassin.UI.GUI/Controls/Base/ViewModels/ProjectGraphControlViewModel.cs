@@ -20,12 +20,6 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <inheritdoc />
-        public virtual void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
         public abstract void ChangeContentSource(MocassinProjectGraph contentSource);
     }
 }

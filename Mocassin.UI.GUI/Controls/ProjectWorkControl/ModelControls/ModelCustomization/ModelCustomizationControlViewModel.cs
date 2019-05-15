@@ -1,4 +1,5 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl;
 using Mocassin.UI.Xml.Customization;
@@ -11,8 +12,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     ///     model
     ///     translation data customization
     /// </summary>
-    public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel
+    public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectCustomizationGraph>
     {
+        /// <summary>
+        ///     Get or set the <see cref="ProjectCustomizationGraph"/> that serves as the current content source
+        /// </summary>
+        private ProjectCustomizationGraph CustomizationContentSource { get; set; }
+
         /// <summary>
         ///     Get the <see cref="TransitionCustomizationControlViewModel" /> that controls the transition customization
         /// </summary>
@@ -32,6 +38,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         ///     Get the <see cref="GroupInteractionControlViewModel"/> that controls the group interaction customization
         /// </summary>
         public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
+
+        /// <inheritdoc />
+        ProjectCustomizationGraph IContentSupplier<ProjectCustomizationGraph>.ContentSource => CustomizationContentSource;
 
         /// <inheritdoc />
         public ModelCustomizationControlViewModel(IMocassinProjectControl projectControl)
@@ -55,18 +64,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(object contentSource)
+        void IContentSupplier<ProjectCustomizationGraph>.ChangeContentSource(ProjectCustomizationGraph contentSource)
         {
-            if (contentSource is ProjectCustomizationGraph customizationGraph)
-            {
-                TransitionCustomizationViewModel.ChangeContentSource(customizationGraph);
-                StablePairInteractionViewModel.ChangeContentSource(customizationGraph);
-                UnstablePairInteractionViewModel.ChangeContentSource(customizationGraph);
-                GroupInteractionViewModel.ChangeContentSource(customizationGraph);
-                return;
-            }
-
-            base.ChangeContentSource(contentSource);
+            TransitionCustomizationViewModel.ChangeContentSource(contentSource);
+            StablePairInteractionViewModel.ChangeContentSource(contentSource);
+            UnstablePairInteractionViewModel.ChangeContentSource(contentSource);
+            GroupInteractionViewModel.ChangeContentSource(contentSource);
+            CustomizationContentSource = contentSource;
         }
     }
 }

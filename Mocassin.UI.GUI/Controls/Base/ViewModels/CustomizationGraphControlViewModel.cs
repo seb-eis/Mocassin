@@ -20,12 +20,6 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is ProjectCustomizationGraph customizationGraph) ChangeContentSource(customizationGraph);
-        }
-
-        /// <inheritdoc />
         public abstract void ChangeContentSource(ProjectCustomizationGraph contentSource);
     }
 }

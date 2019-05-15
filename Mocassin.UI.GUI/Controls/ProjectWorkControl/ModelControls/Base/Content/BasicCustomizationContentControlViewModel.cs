@@ -39,15 +39,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Get the <see cref="AddCustomizationCommand"/> to create a new <see cref="ProjectCustomizationGraph"/> on the current project
+        ///     Get the <see cref="AddNewCustomizationCommand"/> to create a new <see cref="ProjectCustomizationGraph"/> on the current project
         /// </summary>
         public AddNewCustomizationCommand AddCustomizationCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="DeleteCustomizationCommand"/> to delete a <see cref="ProjectCustomizationGraph"/> from the current project
+        /// </summary>
+        public DeleteCustomizationCommand DeleteCustomizationCommand { get; }
 
         /// <inheritdoc />
         public BasicCustomizationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph);
+            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, NullSelectionIfUnknown);
             PropertyChanged += OnCustomizationSourceChanged;
         }
 
@@ -67,6 +73,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         protected override void OnProjectContentChangedInternal()
         {
             CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs.ToList();
+        }
+
+        /// <summary>
+        ///     Nulls the currently selected <see cref="ProjectCustomizationGraph"/> if the source list no longer contains the entry
+        /// </summary>
+        protected void NullSelectionIfUnknown()
+        {
+            if (!CustomizationGraphs.Contains(SelectedCustomizationGraph)) SelectedCustomizationGraph = null;
         }
     }
 }

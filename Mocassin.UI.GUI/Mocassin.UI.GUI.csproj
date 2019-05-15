@@ -691,6 +691,7 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobTranslationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteJobTranslationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml.cs">
       <DependentUpon>KmcJobPackageControlView.xaml</DependentUpon>
     </Compile>

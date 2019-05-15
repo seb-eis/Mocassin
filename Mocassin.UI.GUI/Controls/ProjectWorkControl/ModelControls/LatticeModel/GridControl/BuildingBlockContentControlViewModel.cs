@@ -47,12 +47,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (ContentSource is BuildingBlockGraph buildingBlock) ChangeContentSource(buildingBlock);
-        }
-
-        /// <inheritdoc />
         public void ChangeContentSource(BuildingBlockGraph contentSource)
         {
             ContentSource = contentSource;

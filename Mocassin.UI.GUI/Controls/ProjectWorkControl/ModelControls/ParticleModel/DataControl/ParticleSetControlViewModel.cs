@@ -22,11 +22,5 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
             var modelGraph = contentSource?.ProjectModelGraph?.ParticleModelGraph;
             DataCollection = modelGraph?.ParticleSets;
         }
-
-        /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
     }
 }

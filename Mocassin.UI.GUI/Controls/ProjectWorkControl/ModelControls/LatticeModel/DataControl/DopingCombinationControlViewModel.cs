@@ -42,12 +42,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
             GetSelectableDopableParticles(SelectedCollectionItem);
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (contentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;

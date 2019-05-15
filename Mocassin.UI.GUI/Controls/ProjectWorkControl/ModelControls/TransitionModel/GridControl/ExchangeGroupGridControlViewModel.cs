@@ -17,12 +17,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(object contentSource)
-        {
-            if (ContentSource is MocassinProjectGraph projectGraph) ChangeContentSource(projectGraph);
-        }
-
-        /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;

@@ -1,5 +1,6 @@
 ﻿using System;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.DataControl;
 using Mocassin.UI.Xml.Jobs;
@@ -11,8 +12,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     ///     The <see cref="PrimaryControlViewModel" /> for <see cref="JobTranslationControlView" /> that supplies content for
     ///     manipulation <see cref="ProjectJobTranslationGraph" /> instances
     /// </summary>
-    public class JobTranslationControlViewModel : ProjectGraphControlViewModel
+    public class JobTranslationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectJobTranslationGraph>
     {
+        /// <summary>
+        ///     Get or set the current <see cref="ProjectJobTranslationGraph"/> that serves as a content source
+        /// </summary>
+        private ProjectJobTranslationGraph JobTranslationContentSource { get; set; }
+
         /// <summary>
         ///     Get the <see cref="KmcJobPackageControlViewModel"/> that controls the <see cref="KmcJobPackageDescriptionGraph"/> collection
         /// </summary>
@@ -22,6 +28,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         ///     Get the <see cref="MmcJobPackageControlViewModel"/> that controls the <see cref="MmcJobPackageDescriptionGraph"/> collection
         /// </summary>
         public MmcJobPackageControlViewModel MmcJobPackageViewModel { get; }
+
+        /// <inheritdoc />
+        ProjectJobTranslationGraph IContentSupplier<ProjectJobTranslationGraph>.ContentSource => JobTranslationContentSource;
 
         /// <inheritdoc />
         public JobTranslationControlViewModel(IMocassinProjectControl projectControl)
@@ -40,15 +49,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(object contentSource)
+        void IContentSupplier<ProjectJobTranslationGraph>.ChangeContentSource(ProjectJobTranslationGraph contentSource)
         {
-            if (contentSource is ProjectJobTranslationGraph jobTranslation)
-            {
-                KmcJobPackageViewModel.ChangeContentSource(jobTranslation);
-                MmcJobPackageViewModel.ChangeContentSource(jobTranslation);
-                return;
-            }
-            base.ChangeContentSource(contentSource);
+            KmcJobPackageViewModel.ChangeContentSource(contentSource);
+            MmcJobPackageViewModel.ChangeContentSource(contentSource);
+            JobTranslationContentSource = contentSource;
         }
     }
 }

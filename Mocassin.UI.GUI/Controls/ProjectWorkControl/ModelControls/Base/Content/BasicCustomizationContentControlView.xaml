@@ -56,10 +56,18 @@
 
         <GroupBox.ContextMenu>
           <ContextMenu>
-            <MenuItem Header="Add customization">
+            <MenuItem Header="New customization">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                   <i:InvokeCommandAction Command="{Binding AddCustomizationCommand}"/>
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+            </MenuItem>
+            <MenuItem Header="Delete customization">
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                  <i:InvokeCommandAction Command="{Binding DeleteCustomizationCommand}"
+                                         CommandParameter="{Binding SelectedCustomizationGraph}"/>
                 </i:EventTrigger>
               </i:Interaction.Triggers>
             </MenuItem>

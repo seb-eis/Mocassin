@@ -40,16 +40,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Get the <see cref="AddJobTranslationCommand" /> to create a new <see cref="ProjectJobTranslationGraph" /> on the
+        ///     Get the <see cref="AddNewJobTranslationCommand" /> to create a new <see cref="ProjectJobTranslationGraph" /> on the
         ///     current project
         /// </summary>
         public AddNewJobTranslationCommand AddJobTranslationCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="DeleteJobTranslationCommand"/> to remove a <see cref="ProjectJobTranslationGraph"/> from the current project
+        /// </summary>
+        public DeleteJobTranslationCommand DeleteTranslationCommand { get; }
 
         /// <inheritdoc />
         public BasicJobTranslationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph);
+            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, NullSelectionIfUnknown);
             PropertyChanged += OnCustomizationSourceChanged;
         }
 
@@ -69,6 +75,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         protected override void OnProjectContentChangedInternal()
         {
             JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs.ToList();
+        }
+
+        /// <summary>
+        ///     Nulls the currently selected <see cref="ProjectJobTranslationGraph"/> if the source list no longer contains the entry
+        /// </summary>
+        protected void NullSelectionIfUnknown()
+        {
+            if (!JobTranslationGraphs.Contains(SelectedJobTranslationGraph)) SelectedJobTranslationGraph = null;
         }
     }
 }

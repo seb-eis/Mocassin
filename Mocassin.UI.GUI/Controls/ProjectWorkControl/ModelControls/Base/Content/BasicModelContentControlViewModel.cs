@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
@@ -76,10 +77,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Action that is invoked if any selected <see cref="object" /> has changed
+        ///     Action that is invoked if a selected object of type <see cref="T" /> has changed
         /// </summary>
         /// <param name="value"></param>
-        protected void OnSelectionChanged(object value)
+        protected void OnSelectionChanged<T>(T value)
         {
             NotifySelectionChanged(DataContentControl, value);
             NotifySelectionChanged(VisualizerContentControl, value);
@@ -96,14 +97,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Notifies the passed <see cref="ContentControl" /> about a selection change if it implement
-        ///     <see cref="IContentSupplier" />
+        ///     Notifies the passed <see cref="ContentControl" /> about a selection change if it implements
+        ///     the generic <see cref="IContentSupplier{T}" /> interface
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="contentControl"></param>
         /// <param name="value"></param>
-        protected void NotifySelectionChanged(ContentControl contentControl, object value)
+        protected void NotifySelectionChanged<T>(ContentControl contentControl, T value)
         {
-            (contentControl.DataContext as IContentSupplier)?.ChangeContentSource(value);
+            (contentControl.DataContext as IContentSupplier<T>)?.ChangeContentSource(value);
         }
     }
 }
