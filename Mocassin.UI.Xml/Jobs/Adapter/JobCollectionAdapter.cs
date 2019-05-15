@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Random;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
@@ -66,7 +67,8 @@ namespace Mocassin.UI.Xml.Jobs
                 : int.Parse(JobPackageDescription.JobCountPerConfig);
 
             return JobPackageDescription.GetConfigurations()
-                .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject), jobCount));
+                .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject), jobCount))
+                .Action(x => x.CollectionName = JobPackageDescription.Name);
         }
 
         /// <summary>
@@ -84,6 +86,7 @@ namespace Mocassin.UI.Xml.Jobs
                 Random.NextBytes(buffer);
                 result.RngStateSeed = BitConverter.ToInt64(buffer, 0);
                 result.RngIncreaseSeed = BitConverter.ToInt64(buffer, 8) | 1;
+                result.JobId = i;
                 yield return result;
             }
         }

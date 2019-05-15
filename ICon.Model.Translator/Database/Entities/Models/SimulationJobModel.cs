@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 
 namespace Mocassin.Model.Translator
 {
@@ -46,10 +47,9 @@ namespace Mocassin.Model.Translator
         public SimulationLatticeModel SimulationLatticeModel { get; set; }
 
         /// <summary>
-        ///     The job number in the simulation package
+        ///     The meta data navigation property
         /// </summary>
-        [Column("JobNumber")]
-        public int JobNumber { get; set; }
+        public JobMetaDataEntity JobMetaData { get; set; }
 
         /// <summary>
         ///     The simulation package context id

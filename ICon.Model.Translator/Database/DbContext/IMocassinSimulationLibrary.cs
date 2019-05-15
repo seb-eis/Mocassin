@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 
 namespace Mocassin.Model.Translator
 {
@@ -63,14 +64,9 @@ namespace Mocassin.Model.Translator
         DbSet<JumpDirectionEntity> JumpDirections { get; }
 
         /// <summary>
-        ///     The database set for all entities that support storing as a blob
+        ///     Database set for all job meta information
         /// </summary>
-        DbSet<BlobEntityBase> Blobs { get; }
-
-        /// <summary>
-        ///     Database set for sqlite load queries. Describes how the simulator pulls data from the database
-        /// </summary>
-        DbSet<SqliteQueryEntity> SqliteQueries { get; }
+        DbSet<JobMetaDataEntity> JobMetaData { get; }
 
         /// <summary>
         ///     Save the changes to the interop db context

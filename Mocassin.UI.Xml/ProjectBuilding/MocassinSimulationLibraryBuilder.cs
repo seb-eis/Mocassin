@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.SQLiteCore;
@@ -286,10 +287,12 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             try
             {
                 var buildXml = buildGraph.ToXml();
+                var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 foreach (var packageModel in jobPackageModels)
                 {
                     packageModel.ProjectXml = buildXml;
                     packageModel.ProjectGuid = buildGraph.ProjectModelGraph.Key;
+                    packageModel.ModelSystemVersion = version;
                 }
                 return true;
             }

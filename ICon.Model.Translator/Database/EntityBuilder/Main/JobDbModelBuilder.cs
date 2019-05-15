@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Extensions;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
 using Mocassin.Model.Translator.Optimization;
@@ -153,14 +154,37 @@ namespace Mocassin.Model.Translator.EntityBuilder
         {
             var result = new SimulationJobModel
             {
-                JobNumber = jobConfiguration.JobId,
                 JobInfo = jobConfiguration.GetInteropJobInfo(),
                 JobHeader = jobConfiguration.GetInteropJobHeader(),
+                JobMetaData = GetJobMetaDataEntity(jobConfiguration),
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
+            result.JobMetaData.JobModel = result;
             SetSimulationJobInfoFlags(result, simulationModel);
             return result;
+        }
+
+        /// <summary>
+        ///     Get a <see cref="JobMetaDataEntity"/> for the passed <see cref="JobConfiguration"/>
+        /// </summary>
+        /// <param name="jobConfiguration"></param>
+        /// <returns></returns>
+        protected JobMetaDataEntity GetJobMetaDataEntity(JobConfiguration jobConfiguration)
+        {
+            var entity = new JobMetaDataEntity
+            {
+                JobCollectionName = jobConfiguration.CollectionName,
+                JobConfigName = jobConfiguration.ConfigName,
+                JobIndex = jobConfiguration.JobId,
+                Temperature = jobConfiguration.Temperature,
+                MainRunMcsp = jobConfiguration.TargetMcsp,
+                TimeLimit = jobConfiguration.TimeLimit,
+                DopingInfo = jobConfiguration.LatticeConfiguration.GetDopingString(),
+                LatticeInfo = jobConfiguration.LatticeConfiguration.GetSizeString()
+            };
+
+            return entity;
         }
 
         /// <summary>
@@ -243,7 +267,10 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 .Aggregate(SimulationJobInfoFlags.None, (current, optimizer) => current | optimizer.Run(ProjectModelContext, packageModel));
 
             foreach (var jobModel in packageModel.JobModels)
+            {
                 jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & (long) removedFlags;
+                jobModel.JobMetaData.FlagValues = ((SimulationJobInfoFlags) jobModel.JobInfo.Structure.JobFlags).ToString();
+            }
         }
 
         /// <summary>

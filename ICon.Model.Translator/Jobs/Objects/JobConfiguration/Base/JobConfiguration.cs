@@ -41,14 +41,24 @@
         public double MinimalSuccessRate { get; set; }
 
         /// <summary>
-        ///     Get or set the job id
+        ///     Get or set the job lattice configuration
+        /// </summary>
+        public LatticeConfiguration LatticeConfiguration { get; set; }
+
+        /// <summary>
+        ///     Get or set an id for the job
         /// </summary>
         public int JobId { get; set; }
 
         /// <summary>
-        ///     Get or set the job lattice configuration
+        ///     Get or set the source job collection name
         /// </summary>
-        public LatticeConfiguration LatticeConfiguration { get; set; }
+        public string CollectionName { get; set; }
+
+        /// <summary>
+        ///     Get or set the source configuration name
+        /// </summary>
+        public string ConfigName { get; set; }
 
         /// <summary>
         ///     Copies all data to the passed job configuration
@@ -67,6 +77,8 @@
             jobConfiguration.TargetMcsp = TargetMcsp;
             jobConfiguration.Temperature = Temperature;
             jobConfiguration.TimeLimit = TimeLimit;
+            jobConfiguration.ConfigName = ConfigName;
+            jobConfiguration.CollectionName = CollectionName;
         }
 
         /// <summary>

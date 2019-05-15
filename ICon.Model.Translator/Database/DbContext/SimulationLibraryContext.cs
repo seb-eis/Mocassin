@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 
 namespace Mocassin.Model.Translator
 {
@@ -16,11 +17,6 @@ namespace Mocassin.Model.Translator
         ///     List of actions performed on model building
         /// </summary>
         private static IList<Action<ModelBuilder>> ModelBuildActions { get; set; }
-
-        /// <summary>
-        ///     The database filename
-        /// </summary>
-        private string DbFilename { get; }
 
         /// <inheritdoc />
         public DbSet<SimulationJobPackageModel> SimulationPackages { get; set; }
@@ -56,10 +52,7 @@ namespace Mocassin.Model.Translator
         public DbSet<JumpDirectionEntity> JumpDirections { get; set; }
 
         /// <inheritdoc />
-        public DbSet<BlobEntityBase> Blobs { get; set; }
-
-        /// <inheritdoc />
-        public DbSet<SqliteQueryEntity> SqliteQueries { get; set; }
+        public DbSet<JobMetaDataEntity> JobMetaData { get; set; }
 
         /// <inheritdoc />
         public SimulationLibraryContext(string optionsBuilderParameterString)
@@ -74,11 +67,7 @@ namespace Mocassin.Model.Translator
 
             using (var marshalService = new MarshalService())
             {
-                foreach (var item in Blobs)
-                    item.ChangeStateToBinary(marshalService);
-
                 PerformActionOnInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalService));
-
                 return base.SaveChanges();
             }
         }
@@ -89,53 +78,9 @@ namespace Mocassin.Model.Translator
             await base.SaveChangesAsync(cancellationToken);
             using (var marshalService = new MarshalService())
             {
-                foreach (var item in Blobs)
-                    item.ChangeStateToBinary(marshalService);
-
                 await PerformActionOnInteropEntitiesAsync(a => a.ChangePropertyStatesToBinaries(marshalService), cancellationToken);
-
                 return await base.SaveChangesAsync(cancellationToken);
             }
-        }
-
-        /// <inheritdoc />
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            RedirectBinaryObjects(modelBuilder);
-            base.OnModelCreating(modelBuilder);
-        }
-
-        /// <summary>
-        ///     Detects and redirects all blob entities on model creation to the blobs database set
-        /// </summary>
-        /// <param name="modelBuilder"></param>
-        private void RedirectBinaryObjects(ModelBuilder modelBuilder)
-        {
-            if (ModelBuildActions == null)
-                ModelBuildActions = CreateRedirectionDelegates();
-
-            foreach (var item in ModelBuildActions)
-                item.Invoke(modelBuilder);
-        }
-
-
-        /// <summary>
-        ///     Searches all db set for inheritance from interop binary object and creates redirects to the binary object table
-        /// </summary>
-        /// <returns></returns>
-        private List<Action<ModelBuilder>> CreateRedirectionDelegates()
-        {
-            var list = new List<Action<ModelBuilder>>();
-            foreach (var dbSetProperty in GetDbSetPropertyInfos())
-            {
-                foreach (var property in dbSetProperty.PropertyType.GetGenericArguments()[0].GetProperties())
-                {
-                    if (typeof(BlobEntityBase).IsAssignableFrom(property.PropertyType))
-                        list.Add(builder => builder.Entity(property.PropertyType).ToTable(nameof(Blobs)));
-                }
-            }
-
-            return list;
         }
 
         /// <summary>

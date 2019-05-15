@@ -83,6 +83,8 @@ namespace Mocassin.UI.Xml.Jobs
                 ? baseSimulation.LowerSuccessRateLimit
                 : double.Parse(MinimalSuccessRate);
 
+            obj.ConfigName = Name;
+
             return obj;
         }
 
@@ -120,6 +122,7 @@ namespace Mocassin.UI.Xml.Jobs
                 : double.Parse(MinimalSuccessRate);
 
             obj.LatticeConfiguration = LatticeConfiguration.ToInternal(modelProject);
+            obj.ConfigName = Name;
 
             return obj;
         }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
+using System.Linq;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Lattices;
 
@@ -42,9 +44,32 @@ namespace Mocassin.Model.Translator.Jobs
 	        latticeConfiguration.DopingConcentrations = new Dictionary<IDoping, double>(DopingConcentrations);
         }
 
+        /// <summary>
+        ///     Get the size as an <see cref="DataIntVector3D"/>
+        /// </summary>
+        /// <returns></returns>
 	    public DataIntVector3D GetIntVector3D()
 	    {
 			return new DataIntVector3D(SizeA, SizeB, SizeC);
 	    }
+
+        /// <summary>
+        ///     Get set size as a default formatted <see cref="string"/>
+        /// </summary>
+        /// <returns></returns>
+        public string GetSizeString()
+        {
+            return $"{SizeA},{SizeB},{SizeC}";
+        }
+
+        /// <summary>
+        ///     Get the set dopings as a default formatted <see cref="string"/>
+        /// </summary>
+        /// <returns></returns>
+        public string GetDopingString()
+        {
+            return DopingConcentrations
+                .Aggregate("", (current, item) => current + $"[{item.Key.Index}@{item.Value.ToString(CultureInfo.InvariantCulture)}]");
+        }
     }
 }
