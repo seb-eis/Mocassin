@@ -279,7 +279,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
                 return true;
             }
             catch (Exception)
-            {
+            {               
                 inputObjects = null;
                 return false;
             }

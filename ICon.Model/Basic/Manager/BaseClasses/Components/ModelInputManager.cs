@@ -9,7 +9,6 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Framework.Processing;
 using Mocassin.Framework.Reflection;
-using Mocassin.Model.Energies.Handler;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.Basic
@@ -573,7 +572,7 @@ namespace Mocassin.Model.Basic
 
 
             bool Operation(DataAccessor<TData> accessor, OperationReport report)
-            {   
+            {
                 report.SetValidationReport(
                     ModelProject.ValidationServices.ValidateObject(newInternal, accessor.AsReader(DataReaderSource)));
 
@@ -773,19 +772,20 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        /// Tries to build and link an internal <see cref="ModelObject"/> from the passed <see cref="IModelObject"/> interface
+        ///     Tries to build and link an internal <see cref="ModelObject" /> from the passed <see cref="IModelObject" />
+        ///     interface
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="modelObject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public bool TryBuildAndLinkInternalModelObject<T>(IModelObject obj, out T modelObject, out string message) 
+        public bool TryBuildAndLinkInternalModelObject<T>(IModelObject obj, out T modelObject, out string message)
             where T : ModelObject, new()
         {
             message = null;
 
-            if(!(ModelObject.BuildInternalObject<T>(obj) is T tmpObj))
+            if (!(ModelObject.BuildInternalObject<T>(obj) is T tmpObj))
             {
                 message = $"Could not convert interface [{obj?.ObjectName}] to internal object!";
                 modelObject = null;
@@ -808,19 +808,20 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        /// Tries to build and link an internal <see cref="ModelParameter"/> from the passed <see cref="IModelParameter"/> interface
+        ///     Tries to build and link an internal <see cref="ModelParameter" /> from the passed <see cref="IModelParameter" />
+        ///     interface
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="modelObject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public bool TryBuildAndLinkInternalModelParameter<T>(IModelParameter obj, out T modelObject, out string message) 
+        public bool TryBuildAndLinkInternalModelParameter<T>(IModelParameter obj, out T modelObject, out string message)
             where T : ModelParameter, new()
         {
             message = null;
 
-            if(!(ModelParameter.BuildInternalObject<T>(obj) is T tmpObj))
+            if (!(ModelParameter.BuildInternalObject<T>(obj) is T tmpObj))
             {
                 message = $"Could not convert interface [{obj?.GetParameterName()}] to internal parameter!";
                 modelObject = null;

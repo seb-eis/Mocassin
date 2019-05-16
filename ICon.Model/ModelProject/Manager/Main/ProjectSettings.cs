@@ -131,14 +131,14 @@ namespace Mocassin.Model.ModelProject
             {
                 CommonNumericSettings = new MocassinNumericSettings
                 {
-                    FactorValue = 1.0e-6,
-                    RangeValue = 1.0e-10,
+                    FactorValue = 1.0e-3,
+                    RangeValue = 1.0e-3,
                     UlpValue = 10
                 },
                 GeometryNumericSettings = new MocassinNumericSettings
                 {
-                    FactorValue = 1.0e-6,
-                    RangeValue = 1.0e-10,
+                    FactorValue = 1.0e-3,
+                    RangeValue = 1.0e-3,
                     UlpValue = 10
                 },
                 ConcurrencySettings = new MocassinConcurrencySettings
@@ -157,8 +157,8 @@ namespace Mocassin.Model.ModelProject
                 {
                     SpaceGroupDbPath =
                         $"{Environment.GetEnvironmentVariable("USERPROFILE")}/Documents/Mocassin/Mocassin.Symmetry.db",
-                    VectorTolerance = 1.0e-10,
-                    ParameterTolerance = 1.0e-10
+                    VectorTolerance = 1.0e-3,
+                    ParameterTolerance = 1.0e-3
                 },
 	            DopingToleranceSetting = 5.0e-3
             };

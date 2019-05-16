@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
+using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 
 namespace Mocassin.Model.DataManagement
@@ -89,7 +90,9 @@ namespace Mocassin.Model.DataManagement
         public void LinkModelObject(object obj)
         {
             if (_objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))
+            {
                 linker(obj);
+            }
             else
             {
                 linker = MakeLinker(obj.GetType(), obj);
@@ -162,7 +165,7 @@ namespace Mocassin.Model.DataManagement
                         linkers.Add(MakeLinkDelegate(property));
                         break;
                     case ReferenceLevel.Content:
-                        HandleContentLinkableProperty(property.GetValue(obj));
+                        linkers.Add(x => LinkContent(property.GetValue(x)));
                         break;
                     default:
                         throw new NotSupportedException("Linking flag is currently not supported by the tracker");
@@ -183,7 +186,7 @@ namespace Mocassin.Model.DataManagement
         ///     content linkable objects
         /// </summary>
         /// <param name="propertyValue"></param>
-        protected void HandleContentLinkableProperty(object propertyValue)
+        protected void LinkContent(object propertyValue)
         {
             if (propertyValue is IList list)
             {
