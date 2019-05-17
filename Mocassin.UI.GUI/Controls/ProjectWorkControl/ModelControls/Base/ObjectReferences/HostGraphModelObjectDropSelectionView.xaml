@@ -22,6 +22,7 @@
       AllowDrop="True"
       GridLinesVisibility="None"
       VerticalScrollBarVisibility="Auto"
+      CanUserAddRows="False"
       Drop="HostGrid_OnDrop"
       DragOver="HostGrid_OnDragOver">
 
