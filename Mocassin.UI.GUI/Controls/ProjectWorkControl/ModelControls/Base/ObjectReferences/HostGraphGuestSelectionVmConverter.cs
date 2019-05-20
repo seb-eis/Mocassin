@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Markup;
+using Mocassin.UI.GUI.Base.Converter;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Main;
@@ -9,21 +8,15 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl
 {
     /// <summary>
-    ///     Base class for <see cref="IMultiValueConverter" /> implementations that wrap <see cref="ModelObjectGraph" /> into
+    ///     Base class for <see cref="MultiValueConverter" /> implementations that wrap <see cref="ModelObjectGraph" /> into
     ///     host view models for model object references
     /// </summary>
     /// <typeparam name="THost"></typeparam>
-    public abstract class HostGraphGuestSelectionVmConverter<THost> : MarkupExtension, IMultiValueConverter
+    public abstract class HostGraphGuestSelectionVmConverter<THost> : MultiValueConverter
         where THost : ModelObjectGraph
     {
         /// <inheritdoc />
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
-
-        /// <inheritdoc />
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(values[0] is IContentSupplier<MocassinProjectGraph> contentSupplier)) return null;
             if (!(values[1] is THost graph)) return null;
@@ -31,12 +24,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
             var viewModel = CreateSelectionViewModel(graph);
             viewModel.ChangeContentSource(contentSupplier.ContentSource);
             return viewModel;
-        }
-
-        /// <inheritdoc />
-        public virtual object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>

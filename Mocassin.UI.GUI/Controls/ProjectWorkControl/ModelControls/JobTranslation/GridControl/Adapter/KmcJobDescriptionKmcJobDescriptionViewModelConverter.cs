@@ -1,34 +1,21 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Markup;
+using Mocassin.UI.GUI.Base.Converter;
 using Mocassin.UI.Xml.Jobs;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="IValueConverter" /> to convert <see cref="KmcJobDescriptionGraph" /> instances into
+    ///     The <see cref="ValueConverter" /> to convert <see cref="KmcJobDescriptionGraph" /> instances into
     ///     <see cref="KmcJobDescriptionControlViewModel" /> instances
     /// </summary>
-    public class KmcJobDescriptionKmcJobDescriptionViewModelConverter : MarkupExtension, IValueConverter
+    public class KmcJobDescriptionKmcJobDescriptionViewModelConverter : ValueConverter
     {
         /// <inheritdoc />
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
-
-        /// <inheritdoc />
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is KmcJobDescriptionGraph jobDescription) return new KmcJobDescriptionControlViewModel(jobDescription);
             return null;
-        }
-
-        /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
         }
     }
 }

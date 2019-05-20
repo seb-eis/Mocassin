@@ -1,32 +1,23 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Markup;
+using Mocassin.UI.GUI.Base.Converter;
 using Mocassin.UI.Xml.EnergyModel;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl.Adapter
 {
-    public class UnstableEnvironmentInteractionFilterVmConverter : MarkupExtension, IMultiValueConverter
+    /// <summary>
+    ///     <see cref="MultiValueConverter" /> that wraps <see cref="UnstableEnvironmentGraph" /> instances into
+    ///     <see cref="InteractionFilterGridControlViewModel" /> instances
+    /// </summary>
+    public class UnstableEnvironmentInteractionFilterVmConverter : MultiValueConverter
     {
         /// <inheritdoc />
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
-
-        /// <inheritdoc />
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values.Length != 2) throw new InvalidOperationException("Two conversion objects expected");
 
             return MakeViewModel(values[0] as MocassinProjectGraph, values[1] as UnstableEnvironmentGraph);
-        }
-
-        /// <inheritdoc />
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>

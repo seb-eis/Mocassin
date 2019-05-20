@@ -560,7 +560,7 @@
     <Compile Include="Base\Commands\RelayCommand.cs" />
     <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
     <Compile Include="Base\Converter\IndexToEnumConverter.cs" />
-    <Compile Include="Base\Converter\UniqueLookupConverter.cs" />
+    <Compile Include="Base\Converter\MultiValueConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
     <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />
@@ -932,7 +932,6 @@
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\WelcomeControl\WelcomeControlViewModel.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
-    <Compile Include="Helper\DataGridExtensions.cs" />
     <Compile Include="Helper\TypeSearchExtensions.cs" />
     <Compile Include="Logic\Updating\ProjectContentChangeTriggerViewModel.cs" />
     <Compile Include="Logic\Validation\AsyncRunValidationCommand.cs" />
@@ -983,7 +982,6 @@
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\GridControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectGraph\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\InfoControl\" />
