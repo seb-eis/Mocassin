@@ -6,10 +6,17 @@ using Mocassin.Model.Translator.ModelContext;
 
 namespace Mocassin.Model.Translator.EntityBuilder
 {
+    /// <inheritdoc cref="Mocassin.Model.Translator.EntityBuilder.ILatticeDbEntityBuilder" />
     public class LatticeDbEntityBuilder : DbEntityBuilder, ILatticeDbEntityBuilder
     {
+        /// <summary>
+        ///     Get or set the used <see cref="Random" /> number source
+        /// </summary>
         public Random Rng { get; set; }
 
+        /// <summary>
+        ///     Get or set the <see cref="ILatticeCreationProvider" />
+        /// </summary>
         public ILatticeCreationProvider LatticeCreationProvider { get; set; }
 
         /// <inheritdoc />
@@ -27,6 +34,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
             return simulationLatticeModel;
         }
 
+        /// <summary>
+        ///     Builds the <see cref="SimulationLatticeModel" /> for the passed <see cref="ISimulationModel" /> and
+        ///     <see cref="LatticeConfiguration" />
+        /// </summary>
+        /// <param name="latticeConfiguration"></param>
+        /// <param name="simulationModel"></param>
+        /// <returns></returns>
         public SimulationLatticeModel BuildLatticeModelEntity(LatticeConfiguration latticeConfiguration, ISimulationModel simulationModel)
         {
             var rawLattice = LatticeCreationProvider.BuildLattice(latticeConfiguration.GetIntVector3D(),
@@ -35,6 +49,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
             return new SimulationLatticeModel {Lattice = interopLattice};
         }
 
+        /// <summary>
+        ///     Builds the <see cref="CLatticeInfo" /> interop object for the passed set of <see cref="LatticeEntity" /> and
+        ///     <see cref="ISimulationModel" />
+        /// </summary>
+        /// <param name="latticeEntity"></param>
+        /// <param name="simulationModel"></param>
+        /// <returns></returns>
         public InteropObject<CLatticeInfo> GetLatticeInfoEntity(LatticeEntity latticeEntity, ISimulationModel simulationModel)
         {
             var latticeDimensions = latticeEntity.GetDimensions();
@@ -42,10 +63,14 @@ namespace Mocassin.Model.Translator.EntityBuilder
             {
                 SizeVector = new CVector4(latticeDimensions[0], latticeDimensions[1], latticeDimensions[2], latticeDimensions[3])
             };
+
             CountNumberOfMobiles(latticeEntity, ref latticeInfo, simulationModel);
             return InteropObject.Create(latticeInfo);
         }
 
+        /// <summary>
+        ///     Initializes the missing build components of the entity builder
+        /// </summary>
         private void InitializeBuildComponents()
         {
             LatticeCreationProvider = ModelContext.ModelProject.GetManager<ILatticeManager>().QueryPort
@@ -53,6 +78,13 @@ namespace Mocassin.Model.Translator.EntityBuilder
             Rng = new PcgRandom32();
         }
 
+        /// <summary>
+        ///     Counts the number of mobiles and maximum number of selectable atoms the passed <see cref="LatticeEntity" />
+        ///     contains and writes the to the passed <see cref="CLatticeInfo" /> reference
+        /// </summary>
+        /// <param name="latticeEntity"></param>
+        /// <param name="latticeInfo"></param>
+        /// <param name="simulationModel"></param>
         private void CountNumberOfMobiles(LatticeEntity latticeEntity, ref CLatticeInfo latticeInfo, ISimulationModel simulationModel)
         {
             var mobileDictionary = simulationModel.SimulationEncodingModel.PositionIndexToMobilityTypesSet;

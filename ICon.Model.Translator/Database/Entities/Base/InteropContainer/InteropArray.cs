@@ -179,9 +179,7 @@ namespace Mocassin.Model.Translator
             HeaderByteCount = GetHeaderSize();
 
             Values = new T[array.Length];
-            var index = 0;
-            foreach (T item in array)
-                Values[index++] = item;
+            Buffer.BlockCopy(array, 0, Values, 0, array.Length * Marshal.SizeOf(default(T)));
         }
 
         /// <summary>

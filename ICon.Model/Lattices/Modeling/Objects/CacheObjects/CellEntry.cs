@@ -9,7 +9,7 @@ namespace Mocassin.Model.Lattices
     /// <summary>
     /// Temporary Object for lattice creation
     /// </summary>
-    public class CellEntry
+    public struct CellEntry
     {
         /// <summary>
         /// Particle information on cell entry position

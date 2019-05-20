@@ -186,10 +186,10 @@ namespace Mocassin.Model.Lattices
 		/// <param name="doping"></param>
 		protected void ApplyDoping(List<LatticeEntry> dopableCellEntries, int dopingParticleCount, IDopingCombination doping)
 		{
-			List<int> dopedEntriesIndex = dopableCellEntries.SelectRandomIndex(dopingParticleCount, RandomGenerator).ToList();
-
+            var dopedEntriesIndex = new List<int>(dopingParticleCount);
+			dopedEntriesIndex.AddRange(dopableCellEntries.SelectRandomIndex(dopingParticleCount, RandomGenerator));
 			for (int index = dopedEntriesIndex.Count - 1; index >= 0; index--)
-			{
+            {
 				dopableCellEntries[dopedEntriesIndex[index]].Particle = doping.Dopant;
 				dopableCellEntries.RemoveAt(dopedEntriesIndex[index]);
 			}
