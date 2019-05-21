@@ -90,9 +90,9 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<int, IUnitCellPosition> GetExtendedIndexToPositionDictionary()
+        public IReadOnlyList<IUnitCellPosition> GetExtendedIndexToPositionList()
         {
-            return GetResultFromCache(CreateExtendedIndexToPositionDictionary);
+            return GetResultFromCache(CreateExtendedIndexToPositionList);
         }
 
         /// <inheritdoc />
@@ -202,18 +202,19 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected SortedDictionary<int, IUnitCellPosition> CreateExtendedIndexToPositionDictionary()
+        protected List<IUnitCellPosition> CreateExtendedIndexToPositionList()
         {
-            var result = new SortedDictionary<int, IUnitCellPosition>();
+            var encodedExtendedPositionLists = GetEncodedExtendedPositionLists();
             var ucpList = ModelProject
                 .GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetUnitCellPositions());
 
             var index = 0;
-            foreach (var extendedList in GetEncodedExtendedPositionLists())
+            var result = encodedExtendedPositionLists.SelectMany(x => x).Select(x => default(IUnitCellPosition)).ToList();
+            foreach (var positionList in encodedExtendedPositionLists)
             {
-                foreach (var vector in extendedList)
-                    result.Add(vector.P, ucpList[index]);
+                foreach (var vector in positionList)
+                    result[vector.P] = ucpList[index];
 
                 index++;
             }
@@ -238,7 +239,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IUnitCellProvider<IUnitCellPosition> CreateFullUnitCellProvider()
         {
-            return CellWrapperFactory.CreateUnitCell(GetExtendedIndexToPositionDictionary().Values.ToList(), GetVectorEncoder());
+            return CellWrapperFactory.CreateUnitCell(GetExtendedIndexToPositionList().ToList(), GetVectorEncoder());
         }
 
         /// <summary>

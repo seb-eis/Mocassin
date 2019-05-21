@@ -87,12 +87,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="simulationModel"></param>
         private void CountNumberOfMobiles(LatticeEntity latticeEntity, ref CLatticeInfo latticeInfo, ISimulationModel simulationModel)
         {
-            var mobileDictionary = simulationModel.SimulationEncodingModel.PositionIndexToMobilityTypesSet;
+            var positionIndexToMobilityTypesSet = simulationModel.SimulationEncodingModel.PositionIndexToMobilityTypesSet;
             for (var atomIndex = 0; atomIndex < latticeEntity.Length;)
             {
                 for (var positionIndex = 0; positionIndex < latticeInfo.SizeVector.D; positionIndex++)
                 {
-                    var mobilityTypes = mobileDictionary[positionIndex];
+                    var mobilityTypes = positionIndexToMobilityTypesSet[positionIndex];
                     var elementIndex = latticeEntity.Values[atomIndex];
                     atomIndex++;
 

@@ -81,10 +81,10 @@ namespace Mocassin.Model.Structures
         SetList<FractionalPosition> GetExtendedPositionList(in CrystalVector4D vector);
 
         /// <summary>
-        ///     Get read only dictionary that assigns each extended position index the correct unit cell position interface
+        ///     Get read only list that assigns each extended position index the correct unit cell position interface
         /// </summary>
         /// <returns></returns>
-        IReadOnlyDictionary<int, IUnitCellPosition> GetExtendedIndexToPositionDictionary();
+        IReadOnlyList<IUnitCellPosition> GetExtendedIndexToPositionList();
 
         /// <summary>
         ///     Get a sorted unique list of all the wyckoff extension of the position dummy at the specified index

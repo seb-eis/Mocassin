@@ -50,7 +50,7 @@ namespace Mocassin.Model.Lattices.Validators
         {
             var structurePort = ModelProject.GetManager<IStructureManager>().QueryPort;
 
-            var occupationList = structurePort.Query(port => port.GetExtendedIndexToPositionDictionary());
+            var occupationList = structurePort.Query(port => port.GetExtendedIndexToPositionList());
 
             for (var i = 0; i < occupationList.Count; i++)
             {

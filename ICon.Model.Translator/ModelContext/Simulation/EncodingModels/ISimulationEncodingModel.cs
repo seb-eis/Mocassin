@@ -34,10 +34,10 @@ namespace Mocassin.Model.Translator.ModelContext
         IDictionary<ITransitionRuleModel, double> TransitionRuleToElectricFieldFactors { get; set; }
 
         /// <summary>
-        ///     Dictionary that maps the position index to a mobility type set that contains the kind of mobility for each particle
+        ///     List that maps the position index to a mobility type set that contains the kind of mobility for each particle
         ///     index
         /// </summary>
-        IDictionary<int, MobilityType[]> PositionIndexToMobilityTypesSet { get; set; }
+        IList<MobilityType[]> PositionIndexToMobilityTypesSet { get; set; }
 
         /// <summary>
         ///     Dictionary that maps the transition mapping models onto their affiliated direction-related electric field factor

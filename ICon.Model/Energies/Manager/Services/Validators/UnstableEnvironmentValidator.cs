@@ -143,8 +143,8 @@ namespace Mocassin.Model.Energies.Validators
         protected long ApproximatePairInteractionCount(IUnstableEnvironment envInfo)
         {
             long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
-                .Query(port => port.GetExtendedIndexToPositionDictionary())
-                .Count(entry => entry.Value.Status == PositionStatus.Stable);
+                .Query(port => port.GetExtendedIndexToPositionList())
+                .Count(entry => entry.Status == PositionStatus.Stable);
 
             var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetVectorEncoder())

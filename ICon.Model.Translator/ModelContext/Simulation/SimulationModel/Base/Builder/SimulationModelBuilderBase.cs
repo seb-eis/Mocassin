@@ -300,13 +300,13 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the mapping dictionary that assigns each possible position index its set of mobility information
+        /// Creates the mapping list that assigns each possible position index its set of mobility information
         /// </summary>
         /// <param name="jumpModels"></param>
         /// <returns></returns>
-        protected IDictionary<int, MobilityType[]> GetPositionIndexToMobilitySetMapping(IEnumerable<ILocalJumpModel> jumpModels)
+        protected IList<MobilityType[]> GetPositionIndexToMobilitySetMapping(IEnumerable<ILocalJumpModel> jumpModels)
         {
-            var result = new Dictionary<int, MobilityType[]>();
+            var result = new List<MobilityType[]>();
 
             var particleCount = ModelProject.GetManager<IParticleManager>().QueryPort
                 .Query(port => port.GetParticles().Count);
@@ -316,7 +316,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
             for (var i = 0; i < positionCount; i++)
             {
-                result.Add(i, new MobilityType[particleCount]);
+                result.Add(new MobilityType[particleCount]);
             }
 
             foreach (var jumpModel in jumpModels)
