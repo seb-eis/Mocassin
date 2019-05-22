@@ -6,18 +6,109 @@
              xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands">
   <Application.Resources>
     <ResourceDictionary>
-      <s:Boolean x:Key="True">True</s:Boolean>
-      <s:Boolean x:Key="False">False</s:Boolean>
+      <s:Boolean x:Key="Bool.True">True</s:Boolean>
+      <s:Boolean x:Key="Bool.False">False</s:Boolean>
 
-      <uiCommands:UpdateTextBoxSourceCommand x:Key="UpdateTextBoxSourceCommand"/>
+      <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
 
-      <Style TargetType="{x:Type Button}" x:Key="NullCommandButtonStyle">
+      <Style TargetType="{x:Type Button}" 
+             x:Key="App.Style.Button.NullCommand">
         <Style.Triggers>
           <Trigger Property="Command" Value="{x:Null}">
-            <Setter Property="IsEnabled" Value="False"/>
+            <Setter Property="IsEnabled" Value="False" />
           </Trigger>
         </Style.Triggers>
       </Style>
+
+      <Style TargetType="{x:Type Run}" 
+             x:Key="App.Style.Run.Keyword">
+        <Setter Property="Foreground" Value="Blue" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" 
+             x:Key="App.Style.Run.Important">
+        <Setter Property="FontStyle" Value="Italic" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" 
+             x:Key="App.Style.Run.ModelObject">
+        <Setter Property="Foreground" Value="ForestGreen" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" 
+             x:Key="App.Style.Run.Property">
+        <Setter Property="Foreground" Value="OrangeRed" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type ToolTip}" 
+             x:Key="App.Style.ToolTip.Default">
+        <Setter Property="MaxWidth" Value="500" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}" 
+             x:Key="App.Style.ToolTip.TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Justify" />
+      </Style>
+
+      <Style TargetType="Border" x:Key="App.Style.Border.Box">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftTopBorder">
+        <Setter Property="BorderThickness" Value="2,2,0,0"/>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightTopBorder">
+        <Setter Property="BorderThickness" Value="0,2,2,0"/>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftBorder">
+        <Setter Property="BorderThickness" Value="2,0,0,0"/>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
+        <Setter Property="BorderThickness" Value="0,0,2,0"/>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+      </Style>
+
+      <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
+
+      <s:String x:Key="App.String.Particle">[Particle]</s:String>
+      <s:String x:Key="App.String.Particle.Charge">[Particle.Charge]</s:String>
+      <s:String x:Key="App.String.Particle.Symbol">[Particle.Symbol]</s:String>
+      <s:String x:Key="App.String.Particle.Vacancy">[Particle.Vacancy]</s:String>
+      <s:String x:Key="App.String.Particle.Void">[Particle.Void]</s:String>
+
+      <s:String x:Key="App.String.ParticleSet">[ParticleSet]</s:String>
+      <s:String x:Key="App.String.ParticleSet.Particles">[ParticleSet.Particles]</s:String>
+
+      <s:String x:Key="App.String.UnitCellPosition">[UnitCellPosition]</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.A">[UnitCellPosition.A]</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.B">[UnitCellPosition.B]</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.C">[UnitCellPosition.C]</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.Occupation">[UnitCellPosition.Occupation]</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.Stability">[UnitCellPosition.Stability]</s:String>
+
+      <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2"/>
+      <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4"/>
+      <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0"/>
+      <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0"/>
+
+      <ToolTip x:Key="App.ToolTip.ModelSelection">
+        <TextBlock Text="Model"/>
+      </ToolTip>
+
+      <ToolTip x:Key="App.ToolTip.ProjectSelection">
+        <TextBlock Text="Project"/>
+      </ToolTip>
 
     </ResourceDictionary>
   </Application.Resources>

@@ -13,23 +13,119 @@
   Width="Auto" Height="Auto"
   Background="Transparent">
 
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.Particle" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}"/>
+          <Run Text="objects describe the existing occupation states for positions within your model." />
+          <Run Text="The implicitly existing object" />
+          <Run Text="{StaticResource App.String.Particle.Void}" Style="{StaticResource App.Style.Run.ModelObject}"/>
+          <Run Text="- the 'nothing' state - is the default state for unstable positions and cannot be added/removed manually." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}"/>
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.Particle.Symbol}" Style="{StaticResource App.Style.Run.Property}"/>
+          <LineBreak/>
+          <Run Text="Enforces mass conversion between different charge states of the same element." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.Particle.Vacancy}" Style="{StaticResource App.Style.Run.Property}"/>
+          <LineBreak/>
+          <Run Text="Allow/Disallow vacant behavior, which is required for transitions with physical ion movement." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.Particle.Charge}" Style="{StaticResource App.Style.Run.Property}"/>
+          <LineBreak/>
+          <Run Text="Set the charge of the particle in [eV]." />
+          <Run Text="Values can be defined absolute or relative to a default state, the later is recommended for polarons." />
+          <Run Text="Unless polarons localized at vacancies are required, vacant sites should have a charge of 0 eV." />
+        </TextBlock>
+
+      </StackPanel>
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.ParticleSet" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ParticleSet}" Style="{StaticResource App.Style.Run.ModelObject}"/>
+          <Run Text="objects describe groupings of" />
+          <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}"/>
+          <Run Text="objects to from distinct occupation option sets." />
+          <Run Text="When used sd unstable/transition position occupation, the" />
+          <Run Text="{StaticResource App.String.Particle.Void}" Style="{StaticResource App.Style.Run.ModelObject}"/>
+          <Run Text="state is implicitly included. Add objects by drag &amp; drop." />
+          <LineBreak />
+        </TextBlock>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}"/>
+          <LineBreak />
+        </TextBlock>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ParticleSet.Particles}" Style="{StaticResource App.Style.Run.Property}"/>
+          <LineBreak />
+          <Run Text="Set of" />
+          <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}"/>
+          <Run Text="objects that belong to the occupation options. The first object in the list defines the default value." />
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
+  </UserControl.Resources>
+
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-      <GroupBox Grid.Row="0" 
-                Header="Particle Definitions">
+    <TabControl Grid.Row="0">
+      <TabItem Header="Particles &amp; ParticleSets">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
 
-        <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}" />
-      </GroupBox>
+          <GroupBox Grid.Row="0"
+                    Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Particles]" />
+                <Run Text="[?]" ToolTip="{StaticResource ToolTip.Particle}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
 
-      <GroupBox Grid.Row="1" 
-                Header="Occupation Definitions">
+            <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}"
+                                             Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          </GroupBox>
 
-        <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}" />
-      </GroupBox>
+          <GroupBox Grid.Row="1"
+                    Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Occupation Sets]" />
+                <Run Text="[?]" ToolTip="{StaticResource ToolTip.ParticleSet}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}"
+                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          </GroupBox>
+
+        </Grid>
+      </TabItem>
+    </TabControl>
 
   </Grid>
 </UserControl>

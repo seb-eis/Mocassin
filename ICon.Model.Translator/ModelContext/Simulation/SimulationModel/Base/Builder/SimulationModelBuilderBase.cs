@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
@@ -300,7 +299,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        /// Creates the mapping list that assigns each possible position index its set of mobility information
+        ///     Creates the mapping list that assigns each possible position index its set of mobility information
         /// </summary>
         /// <param name="jumpModels"></param>
         /// <returns></returns>
@@ -314,10 +313,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var positionCount = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetLinearizedExtendedPositionCount());
 
-            for (var i = 0; i < positionCount; i++)
-            {
-                result.Add(new MobilityType[particleCount]);
-            }
+            for (var i = 0; i < positionCount; i++) result.Add(new MobilityType[particleCount]);
 
             foreach (var jumpModel in jumpModels)
             {

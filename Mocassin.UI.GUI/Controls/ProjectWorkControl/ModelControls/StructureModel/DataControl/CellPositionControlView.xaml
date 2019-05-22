@@ -15,74 +15,166 @@
 
   <UserControl.Resources>
 
-    <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type system:Enum}" x:Key="StabilityEnumValues">
+    <ObjectDataProvider MethodName="GetValues"
+                        ObjectType="{x:Type system:Enum}"
+                        x:Key="StabilityEnumValues">
       <ObjectDataProvider.MethodParameters>
         <x:Type TypeName="structures:PositionStatus" />
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
+    <ToolTip x:Key="ToolTip.Wyckoff" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
 
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.UnitCellPosition}" Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects describe the symmetry reduced positions of your unit cell." />
+          <Run Text="Both stable wyckoff positions and unstable migration positions of your model have to be defined." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.UnitCellPosition.A}" Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Set the fractional vector component in A direction of the unit cell [0..1)" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.UnitCellPosition.B}" Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Set the fractional vector component in B direction of the unit cell [0..1)" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.UnitCellPosition.C}" Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Set the fractional vector component in C direction of the unit cell [0..1)" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.UnitCellPosition.Occupation}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Set the" />
+          <Run Text="{StaticResource App.String.ParticleSet}" Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="that describes the possible occupation states of the position and symmetry equivalents." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.UnitCellPosition.Stability}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Defines the stability - stable or unstable - of your position." />
+          <Run Text="Meta-stability is as an implicit result of the energetic landscape and cannot be set explicitly." />
+          <LineBreak />
+        </TextBlock>
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.ExtendedPositions" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="The extension list shows all symmetry equivalent positions of the currently selected" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}" Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="ordered by their fractional position in the unit cell." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
   </UserControl.Resources>
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
-              VerticalContentAlignment="Stretch"
-              VerticalScrollBarVisibility="Auto"
-              AutoGenerateColumns="False"
-              ColumnWidth="*"
-              RowDetailsVisibilityMode="VisibleWhenSelected"
-              Background="Transparent">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <GroupBox Grid.Row="0"
+              Name="PositionContentControl"
+              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Wyckoff Positions]" />
+          <Run Text="[?]" ToolTip="{StaticResource ToolTip.Wyckoff}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
 
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate>
-          <DataGrid
-            ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectedVectorExpansion}"
-            VerticalContentAlignment="Stretch"
-            MaxHeight="100"
-            Background="Transparent"
-            AutoGenerateColumns="False"
-            IsReadOnly="True"
-            ColumnWidth="*"
-            VerticalScrollBarVisibility="Auto"
-            GridLinesVisibility="None">
+      <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
+                ItemsSource="{Binding DataCollection}"
+                SelectedItem="{Binding SelectedCollectionItem}"
+                VerticalContentAlignment="Stretch"
+                VerticalScrollBarVisibility="Auto"
+                AutoGenerateColumns="False"
+                ColumnWidth="*"
+                Background="Transparent">
 
-            <DataGrid.Columns>
-              <DataGridTextColumn Binding="{Binding A}"
-                                  Width="Auto" />
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name"
+                              Binding="{Binding Name}" />
 
-              <DataGridTextColumn Binding="{Binding B}"
-                                  Width="Auto" />
+          <DataGridTextColumn Header="A"
+                              Binding="{Binding A}" />
 
-              <DataGridTextColumn Binding="{Binding C}"
-                                  Width="Auto" />
-            </DataGrid.Columns>
-          </DataGrid>
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
+          <DataGridTextColumn Header="B"
+                              Binding="{Binding B}" />
 
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+          <DataGridTextColumn Header="C"
+                              Binding="{Binding C}" />
 
-        <DataGridTextColumn Header="A"
-                            Binding="{Binding A}" />
+          <DataGridComboBoxColumn Header="Stability"
+                                  ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
+                                  SelectedItemBinding="{Binding PositionStatus}" />
 
-        <DataGridTextColumn Header="B"
-                            Binding="{Binding B}" />
+          <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
+                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.OccupationSetOptions}"
+                                                   SelectedValuePath="Key"
+                                                   DisplayMemberPath="Name"
+                                                   SelectedValueBinding="{Binding OccupationKey}" />
+        </DataGrid.Columns>
+      </DataGrid>
 
-        <DataGridTextColumn Header="C"
-                            Binding="{Binding C}" />
+    </GroupBox>
 
-        <DataGridComboBoxColumn Header="Stability"
-                                ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
-                                SelectedItemBinding="{Binding PositionStatus}" />
+    <GroupBox Grid.Row="1"
+              Name="ExpansionContentControl"
+              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.OccupationSetOptions}"
-                                                 SelectedValuePath="Key"
-                                                 DisplayMemberPath="Name"
-                                                 SelectedValueBinding="{Binding OccupationKey}" />
-      </DataGrid.Columns>
-    </DataGrid>
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Equivalent Positions]" />
+          <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+
+      <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
+                ItemsSource="{Binding SelectedVectorExpansion}"
+                VerticalContentAlignment="Stretch"
+                Background="Transparent"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                ColumnWidth="*"
+                VerticalScrollBarVisibility="Auto">
+
+        <DataGrid.Columns>
+          <DataGridTextColumn Binding="{Binding A}" />
+
+          <DataGridTextColumn Binding="{Binding B}" />
+
+          <DataGridTextColumn Binding="{Binding C}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </GroupBox>
   </Grid>
 </UserControl>

@@ -19,19 +19,33 @@
     </Grid.RowDefinitions>
     <DockPanel Grid.Row="0" 
                HorizontalAlignment="Left">
-      <TextBlock Text="Target: " 
-                 VerticalAlignment="Center"/>
+      <TextBlock Text="Source:" 
+                 VerticalAlignment="Center"
+                 Margin="{StaticResource App.Margin.HorizontalStack}"/>
+
       <ComboBox ItemsSource="{Binding ProjectGraphs}"
                 SelectedItem="{Binding SelectedProjectGraph}"
-                DisplayMemberPath="ProjectName"/>
-      <TextBlock Text="Show errors only: " 
-                 VerticalAlignment="Center"/>
+                DisplayMemberPath="ProjectName"
+                Margin="{StaticResource App.Margin.HorizontalStack}"
+                ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
+                VerticalAlignment="Center"/>
+
+      <TextBlock Text="Error filtered:" 
+                 VerticalAlignment="Center"
+                 Margin="{StaticResource App.Margin.HorizontalStack}"/>
+
       <CheckBox IsChecked="{Binding IsErrorContentFiltered}" 
-                VerticalAlignment="Center" />
-      <TextBlock Text="Disable content change auto-update" 
-                 VerticalAlignment="Center"/>
+                VerticalAlignment="Center" 
+                Margin="{StaticResource App.Margin.HorizontalStack}"/>
+
+      <TextBlock Text="Ignore incoming updates:" 
+                 VerticalAlignment="Center"
+                 Margin="{StaticResource App.Margin.HorizontalStack}"/>
+
       <CheckBox IsChecked="{Binding ValidatorViewModel.IsIgnoreContentChange}" 
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center" 
+                Margin="{StaticResource App.Margin.HorizontalStack}"/>
+
     </DockPanel>
     <DataGrid Grid.Row="1"
               Name="ReportDataGrid"
@@ -46,10 +60,10 @@
 
       <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseEnter">
-          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}" CommandParameter="{StaticResource True}"/>
+          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}" CommandParameter="{StaticResource Bool.True}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="MouseLeave">
-          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}" CommandParameter="{StaticResource False}"/>
+          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}" CommandParameter="{StaticResource Bool.False}"/>
         </i:EventTrigger>
       </i:Interaction.Triggers>
 

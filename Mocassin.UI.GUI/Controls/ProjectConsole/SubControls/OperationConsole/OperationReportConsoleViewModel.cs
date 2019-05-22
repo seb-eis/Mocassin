@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Mocassin.Framework.Operations;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -25,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         /// <summary>
         ///     Get a dummy <see cref="MocassinProjectGraph" /> that serves as a stop dummy for the live validation
         /// </summary>
-        public static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "[None]"};
+        public static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "[No Project]"};
 
         private readonly object lockObject = new object();
         private bool isErrorContentFiltered;
@@ -127,8 +126,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
             {
                 if (IsSoftUpdateStop && !ignoreSoftStop)
                 {
-                    AttachToPropertyChange(() => DisplayReports(reports, true), 
-                        (bool x) => !x, 
+                    AttachToPropertyChange(() => DisplayReports(reports, true),
+                        (bool x) => !x,
                         nameof(IsSoftUpdateStop));
                     return;
                 }
@@ -170,7 +169,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         }
 
         /// <summary>
-        ///     Starts a <see cref="Task" /> that awaits disposal of the current <see cref="ModelValidatorViewModel" /> and affiliated
+        ///     Starts a <see cref="Task" /> that awaits disposal of the current <see cref="ModelValidatorViewModel" /> and
+        ///     affiliated
         ///     subscription
         /// </summary>
         private void AsyncDisposeLiveValidation()

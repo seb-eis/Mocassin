@@ -41,7 +41,7 @@
       <TextBox Text="{Binding SelectedCollectionItem.Energy}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter"
-                      Command="{StaticResource UpdateTextBoxSourceCommand}"
+                      Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>

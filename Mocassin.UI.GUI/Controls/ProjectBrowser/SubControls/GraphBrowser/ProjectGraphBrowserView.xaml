@@ -10,8 +10,12 @@
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
-    <TreeView ItemsSource="{Binding ProjectGraphs}">
-
-    </TreeView>
+    <ListView ItemsSource="{Binding ProjectGraphs}">
+      <ListView.ItemTemplate>
+        <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
+          <TextBlock Text="{Binding ProjectGuid, StringFormat=Project [{0}]}"/>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
   </Grid>
 </UserControl>

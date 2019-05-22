@@ -13,19 +13,17 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0"
-              Header="Unit Cell Geometry">
+    <TabControl Grid.Row="0">
 
-      <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" />
-    </GroupBox>
+      <TabItem Header="Geometry &amp; Space Group">
+        <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" />
+      </TabItem>
 
-    <GroupBox Grid.Row="1"
-              Header="Wyckoff Positions">
-
-      <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" />
-    </GroupBox>
+      <TabItem Header="Positions">
+        <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" />
+      </TabItem>
+    </TabControl>
   </Grid>
 </UserControl>

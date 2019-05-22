@@ -28,21 +28,20 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="4*" />
-      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
     <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                        DataContext="{Binding ProjectMenuBarViewModel}" />
 
-    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0"
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"
                                        DataContext="{Binding ProjectBrowserViewModel}" />
 
     <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="1"
                                                   DataContext="{Binding ProjectWorkTabControlViewModel}" />
 
-    <projectConsole:ProjectConsoleTabControlView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+    <projectConsole:ProjectConsoleTabControlView Grid.Row="2" Grid.Column="1"
                                                  DataContext="{Binding ProjectConsoleTabControlViewModel}" />
 
     <projectStatusBar:ProjectStatusBarView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
