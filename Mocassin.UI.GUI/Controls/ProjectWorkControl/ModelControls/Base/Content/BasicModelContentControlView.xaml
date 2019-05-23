@@ -62,7 +62,7 @@
               ExpandDirection="Right">
 
       <Expander.Header>
-        <TextBlock Text="Model Data Controls">
+        <TextBlock Text="Data Viewer">
           <TextBlock.LayoutTransform>
             <RotateTransform Angle="-90" />
           </TextBlock.LayoutTransform>

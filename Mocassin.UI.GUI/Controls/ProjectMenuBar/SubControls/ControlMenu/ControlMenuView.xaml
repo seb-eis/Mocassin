@@ -14,8 +14,8 @@
   <Grid>
     <Menu FontSize="14"
           Background="Transparent">
-      <MenuItem Header="Views">
-        <MenuItem Header="Particle Model Control">
+      <MenuItem Header="Model">
+        <MenuItem Header="Particle control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -24,7 +24,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Structure Model Control">
+        <MenuItem Header="Structure control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -33,7 +33,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Transition Model Control">
+        <MenuItem Header="Transition control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -42,7 +42,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Energy Model Control">
+        <MenuItem Header="Energy control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -51,7 +51,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Simulation Model Control">
+        <MenuItem Header="Simulation control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -60,7 +60,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Lattice Model Control">
+        <MenuItem Header="Lattice control">
           <i:Interaction.Triggers>
             <i:EventTrigger
               EventName="Click">
@@ -71,7 +71,7 @@
         </MenuItem>
         <Separator />
         
-        <MenuItem Header="Model Customization Control">
+        <MenuItem Header="Model customization control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -80,7 +80,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Job Translation Control">
+        <MenuItem Header="Model job control">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"

@@ -29,13 +29,13 @@
         <DataGridTextColumn Binding="{Binding Name}" 
                             Header="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Acceptor State"
+        <comboBox:BindableDataGridComboBoxColumn Header="Acceptor"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name"
                                                  SelectedValueBinding="{Binding AcceptorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
+        <comboBox:BindableDataGridComboBoxColumn Header="Donor"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name"

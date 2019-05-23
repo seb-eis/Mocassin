@@ -87,8 +87,10 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <TabControl Grid.Row="0">
-      <TabItem Header="Particles &amp; ParticleSets">
+    <TabControl Grid.Row="0"
+                Style="{StaticResource App.Style.TabControl}">
+      <TabItem Header="Particles &amp; Particle Sets" 
+               Style="{StaticResource App.Style.TabItem}">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*" />

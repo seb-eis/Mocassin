@@ -184,8 +184,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         protected SetList<Fractional3D> CreatePositionSetList(Fractional3D vector)
         {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.GetOperations().Count);
-            foreach (var operation in LoadedGroup.GetOperations())
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
+            foreach (var operation in LoadedGroup.Operations)
                 results.Add(operation.ApplyWithTrim(vector));
 
             results.List.TrimExcess();
@@ -201,8 +201,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         protected SetList<Fractional3D> CreatePositionSetList(double a, double b, double c)
         {
-            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.GetOperations().Count);
-            foreach (var operation in LoadedGroup.GetOperations())
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
+            foreach (var operation in LoadedGroup.Operations)
                 results.Add(operation.ApplyWithTrim(a, b, c));
 
             results.List.TrimExcess();
@@ -218,9 +218,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         protected SetList<TSource> CreatePositionSetList<TSource>(TSource vector) where TSource : struct, IFractional3D<TSource>
         {
             var results = new SetList<TSource>(VectorComparer.ToCompatibleComparer<TSource>(),
-                LoadedGroup.GetOperations().Count);
+                LoadedGroup.Operations.Count);
 
-            foreach (var operation in LoadedGroup.GetOperations())
+            foreach (var operation in LoadedGroup.Operations)
                 results.Add(operation.ApplyWithTrim(vector));
 
             results.List.TrimExcess();
@@ -246,7 +246,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
             var result = new SetList<Fractional3D[]>(comparer);
 
-            foreach (var operation in LoadedGroup.GetOperations())
+            foreach (var operation in LoadedGroup.Operations)
                 result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray()));
 
             return result;
@@ -255,7 +255,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IList<Fractional3D[]> GetAllWyckoffSequences(IEnumerable<Fractional3D> refSequence)
         {
-            return LoadedGroup.GetOperations()
+            return LoadedGroup.Operations
                 .Select(operation => refSequence.Select(vector => operation.ApplyUntrimmed(vector)).ToArray())
                 .ToList();
         }
@@ -284,7 +284,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public ISymmetryOperation CreateOperationToTarget(in Fractional3D source, in Fractional3D target)
         {
-            foreach (var operation in LoadedGroup.GetOperations())
+            foreach (var operation in LoadedGroup.Operations)
             {
                 var vector = operation.ApplyWithTrim(source, out var trimVector);
                 if (Comparer.Compare(vector, target) == 0) 
@@ -315,7 +315,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var operationComparer = Comparer<ISymmetryOperation>.Create((a, b) => string.Compare(a.Literal, b.Literal, StringComparison.Ordinal));
             var dictionary = new SortedDictionary<Fractional3D, SetList<ISymmetryOperation>>(VectorComparer);
 
-            foreach (var operation in LoadedGroup.GetOperations())
+            foreach (var operation in LoadedGroup.Operations)
             {
                 var vector = operation.ApplyWithTrim(sourceVector);
                 if (!dictionary.ContainsKey(vector))
@@ -330,8 +330,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection)
         {
-            var result = new List<ISymmetryOperation>(LoadedGroup.GetOperations().Count);
-            foreach (var operation in LoadedGroup.GetOperations())
+            var result = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
+            foreach (var operation in LoadedGroup.Operations)
             {
                 var untrimmedVector = operation.ApplyUntrimmed(sourceVector);
                 if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) != 0)

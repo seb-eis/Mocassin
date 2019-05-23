@@ -43,7 +43,7 @@
 
         </DataGridTextColumn>
 
-        <DataGridCheckBoxColumn Header="Association"
+        <DataGridCheckBoxColumn Header="Association Flag"
                                 Binding="{Binding IsAssociation}"/>
 
         <DataGridTemplateColumn Header="Exchange Groups">

@@ -35,6 +35,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         int CrystalSystemIndex { get; }
 
         /// <summary>
+        ///     Gets the sequence of <see cref="ISymmetryOperation"/> operations defined in the <see cref="ISpaceGroup"/>
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyList<ISymmetryOperation> Operations { get; }
+
+        /// <summary>
         ///     Get a <see cref="IEnumerable{T}"/> of the operation strings
         /// </summary>
         IEnumerable<string> OperationLiterals { get; }
@@ -44,11 +50,5 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <returns></returns>
         SpaceGroupEntry GetGroupEntry();
-
-        /// <summary>
-        ///     Gets the sequence of <see cref="ISymmetryOperation"/> operations defined in the <see cref="ISpaceGroup"/>
-        /// </summary>
-        /// <returns></returns>
-        IReadOnlyList<ISymmetryOperation> GetOperations();
     }
 }

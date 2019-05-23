@@ -39,6 +39,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         public int CrystalSystemIndex { get; set; }
 
         /// <inheritdoc />
+        public IReadOnlyList<ISymmetryOperation> Operations => BaseSymmetryOperations.AsReadOnly();
+
+        /// <inheritdoc />
         public IEnumerable<string> OperationLiterals => BaseSymmetryOperations?.Select(x => x.Literal);
 
         /// <summary>
@@ -90,12 +93,6 @@ namespace Mocassin.Symmetry.SpaceGroups
         public SpaceGroupEntry GetGroupEntry()
         {
             return new SpaceGroupEntry(Index, Literal, Specifier);
-        }
-
-        /// <inheritdoc />
-        public IReadOnlyList<ISymmetryOperation> GetOperations()
-        {
-            return BaseSymmetryOperations;
         }
 
         /// <summary>

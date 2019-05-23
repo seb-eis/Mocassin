@@ -79,6 +79,20 @@
         <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
       </Style>
 
+      <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
+        <Style.Triggers>
+          <Trigger Property="IsReadOnly" Value="True">
+            <Setter Property="Opacity" Value=".5" />
+          </Trigger>
+          <Trigger Property="IsReadOnly" Value="False">
+            <Setter Property="Opacity" Value="1" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type TabControl}" x:Key="App.Style.TabControl"/>
+      <Style TargetType="{x:Type TabItem}" x:Key="App.Style.TabItem"/>
+
       <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
 
       <s:String x:Key="App.String.Particle">[Particle]</s:String>
@@ -96,6 +110,33 @@
       <s:String x:Key="App.String.UnitCellPosition.C">[UnitCellPosition.C]</s:String>
       <s:String x:Key="App.String.UnitCellPosition.Occupation">[UnitCellPosition.Occupation]</s:String>
       <s:String x:Key="App.String.UnitCellPosition.Stability">[UnitCellPosition.Stability]</s:String>
+
+      <s:String x:Key="App.String.SpaceGroup">[SpaceGroup]</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Index">[SpaceGroup.Index]</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Literal">[SpaceGroup.Literal]</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Info">[SpaceGroup.Info]</s:String>
+      <s:String x:Key="App.String.SpaceGroup.System">[SpaceGroup.System]</s:String>
+
+      <s:String x:Key="App.String.CellParameters">[CellParameters]</s:String>
+      <s:String x:Key="App.String.CellParameters.Name">[CellParameters.Name]</s:String>
+      <s:String x:Key="App.String.CellParameters.A">[CellParameters.a]</s:String>
+      <s:String x:Key="App.String.CellParameters.B">[CellParameters.b]</s:String>
+      <s:String x:Key="App.String.CellParameters.C">[CellParameters.c]</s:String>
+      <s:String x:Key="App.String.CellParameters.Alpha">[CellParameters.&#x3B1;]</s:String>
+      <s:String x:Key="App.String.CellParameters.Beta">[CellParameters.&#x3B2;]</s:String>
+      <s:String x:Key="App.String.CellParameters.Gamma">[CellParameters.&#x3B3;]</s:String>
+
+      <s:String x:Key="App.String.StateExchangePair">[StateExchangePair]</s:String>
+      <s:String x:Key="App.String.StateExchangePair.AcceptorState">[StateExchangePair.Acceptor]</s:String>
+      <s:String x:Key="App.String.StateExchangePair.DonorState">[StateExchangePair.Donor]</s:String>
+
+      <s:String x:Key="App.String.StateExchangeGroup">[StateExchangeGroup]</s:String>
+      <s:String x:Key="App.String.StateExchangeGroup.StateExchangePairs">[StateExchangeGroup.StateExchangePairs]</s:String>
+
+      <s:String x:Key="App.String.AbstractTransition">[AbstractTransition]</s:String>
+      <s:String x:Key="App.String.AbstractTransition.Connection">[AbstractTransition.Connection]</s:String>
+      <s:String x:Key="App.String.AbstractTransition.AssociationFlag">[AbstractTransition.AssociationFlag]</s:String>
+      <s:String x:Key="App.String.AbstractTransition.StateExchangeGroups">[AbstractTransition.StateExchangeGroups]</s:String>
 
       <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2"/>
       <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4"/>

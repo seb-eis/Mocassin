@@ -10,23 +10,23 @@
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition
-        Height="3*" />
 
-      <RowDefinition
-        Height="2*" />
+    <TabControl Style="{StaticResource App.Style.TabControl}">
 
-    </Grid.RowDefinitions>
+      <TabItem Header="State Changes &amp; Transition Abstraction"
+               Style="{StaticResource App.Style.TabItem}">
 
-    <dataControl:AbstractTransitionControlView
-      Grid.Row="0"
-      DataContext="{Binding AbstractTransitionControlViewModel}" />
+        <dataControl:AbstractTransitionControlView DataContext="{Binding AbstractTransitionControlViewModel}" />
+      </TabItem>
 
-    <dataControl:TransitionControlView
-      Grid.Row="1"
-      DataContext="{Binding TransitionControlViewModel}" />
+      <TabItem Header="KMC Transitions &amp; MMC Exchanges"
+               Style="{StaticResource App.Style.TabItem}">
+
+        <dataControl:TransitionControlView DataContext="{Binding TransitionControlViewModel}" />
+      </TabItem>
+    </TabControl>
 
   </Grid>
 </UserControl>

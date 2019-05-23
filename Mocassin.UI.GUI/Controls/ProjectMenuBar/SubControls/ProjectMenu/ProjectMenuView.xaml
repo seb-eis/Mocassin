@@ -13,9 +13,9 @@
   <Grid>
     <Menu FontSize="14"
           Background="Transparent">
-      <MenuItem Header="Project">
+      <MenuItem Header="Services">
 
-        <MenuItem Header="Model Validation Console">
+        <MenuItem Header="Model validation">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"
@@ -24,7 +24,7 @@
           </i:Interaction.Triggers>
         </MenuItem>
 
-        <MenuItem Header="Project Deployment">
+        <MenuItem Header="Simulation deployment">
           <i:Interaction.Triggers>
             <i:EventTrigger EventName="Click">
               <i:InvokeCommandAction Command="{Binding CommandSource}"

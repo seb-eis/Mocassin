@@ -85,8 +85,7 @@
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="The extension list shows all symmetry equivalent positions of the currently selected" />
           <Run Text="{StaticResource App.String.UnitCellPosition}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="ordered by their fractional position in the unit cell." />
-          <LineBreak />
+          <Run Text="ordered by their fractional position in the unit cell. The data is read-only." />
         </TextBlock>
 
       </StackPanel>

@@ -29,8 +29,8 @@
     <ProductName>Mocassin Model Builder</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
-    <ApplicationRevision>11</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -559,7 +559,7 @@
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
     <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
-    <Compile Include="Base\Converter\IndexToEnumConverter.cs" />
+    <Compile Include="Base\Converter\Int32ToEnumConverter.cs" />
     <Compile Include="Base\Converter\MultiValueConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
@@ -1020,12 +1020,12 @@
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>Bool.False</Visible>
+      <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6.1 %28x86 und x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>Bool.False</Visible>
+      <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>

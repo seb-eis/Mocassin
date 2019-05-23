@@ -12,39 +12,33 @@
   d:DataContext="{d:DesignInstance local:ExchangeGroupGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+
   <Grid>
-    <DataGrid
-      Name="ExchangeGroupDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      Background="Transparent"
-      VerticalAlignment="Stretch"
-      VerticalContentAlignment="Stretch"
-      AutoGenerateColumns="False"
-      ColumnWidth="*"
-      VerticalScrollBarVisibility="Auto"
-      PreviewMouseLeftButtonDown="ExchangeGroupDataGrid_OnPreviewMouseLeftButtonDown"
-      PreviewMouseLeftButtonUp="ExchangeGroupDataGrid_OnPreviewMouseLeftButtonUp"
-      PreviewMouseMove="ExchangeGroupDataGrid_OnPreviewMouseMove">
+    <DataGrid Name="ExchangeGroupDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              Background="Transparent"
+              VerticalAlignment="Stretch"
+              VerticalContentAlignment="Stretch"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              VerticalScrollBarVisibility="Auto"
+              PreviewMouseLeftButtonDown="ExchangeGroupDataGrid_OnPreviewMouseLeftButtonDown"
+              PreviewMouseLeftButtonUp="ExchangeGroupDataGrid_OnPreviewMouseLeftButtonUp"
+              PreviewMouseMove="ExchangeGroupDataGrid_OnPreviewMouseMove">
 
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
 
-        <DataGridTemplateColumn
-          Header="Exchange Pairs">
+        <DataGridTemplateColumn Header="Exchange Pairs">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type transitionModel:StateExchangeGroupGraph}">
+            <DataTemplate DataType="{x:Type transitionModel:StateExchangeGroupGraph}">
               <gridControl:HostGraphModelObjectDropSelectionView>
                 <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
-                  <MultiBinding
-                    Converter="{adapter:ExchangeGroupExchangePairSelectionVmConverter}">
-                    <Binding
-                      RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-
-                      Path="DataContext" />
+                  <MultiBinding Converter="{adapter:ExchangeGroupExchangePairSelectionVmConverter}">
+                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                             Path="DataContext" />
                     <Binding />
                   </MultiBinding>
                 </gridControl:HostGraphModelObjectDropSelectionView.DataContext>

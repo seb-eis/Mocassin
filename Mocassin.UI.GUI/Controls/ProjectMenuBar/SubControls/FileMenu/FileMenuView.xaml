@@ -16,7 +16,7 @@
           Background="Transparent">
       <MenuItem Header="_File">
         <MenuItem Header="_New">
-          <MenuItem Header="New Project Library">
+          <MenuItem Header="Create project library">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <i:InvokeCommandAction Command="{Binding CommandSource}" 
@@ -24,7 +24,7 @@
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </MenuItem>
-          <MenuItem Header="New Project Graph">
+          <MenuItem Header="Add model project">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <i:InvokeCommandAction Command="{Binding CommandSource}"
