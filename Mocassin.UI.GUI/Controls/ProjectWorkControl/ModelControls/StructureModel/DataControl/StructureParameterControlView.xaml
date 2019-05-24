@@ -175,7 +175,8 @@
                   VerticalAlignment="Stretch"
                   HorizontalAlignment="Stretch"
                   VerticalScrollBarVisibility="Auto"
-                  SelectionChanged="SpaceGroupDataGrid_OnSelectionChanged">
+                  SelectionChanged="SpaceGroupDataGrid_OnSelectionChanged"
+                  Background="Transparent">
 
           <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Index}"
@@ -198,7 +199,8 @@
                   ColumnWidth="*"
                   GridLinesVisibility="None"
                   VerticalScrollBarVisibility="Auto"
-                  ItemsSource="{Binding SelectedSpaceGroup.Operations}">
+                  ItemsSource="{Binding SelectedSpaceGroup.Operations}"
+                  Background="Transparent">
 
           <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Literal}">

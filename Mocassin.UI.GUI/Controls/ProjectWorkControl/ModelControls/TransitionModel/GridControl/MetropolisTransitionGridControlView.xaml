@@ -11,44 +11,39 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid
-      Name="TransitionDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      Background="Transparent"
-      VerticalAlignment="Stretch"
-      VerticalContentAlignment="Stretch"
-      VerticalScrollBarVisibility="Auto"
-      AutoGenerateColumns="False"
-      ColumnWidth="*"
-      Sorting="TransitionDataGrid_OnSorting">
+    <DataGrid Name="TransitionDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              Background="Transparent"
+              VerticalAlignment="Stretch"
+              VerticalContentAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              Sorting="TransitionDataGrid_OnSorting">
 
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
 
 
-        <comboBox:BindableDataGridComboBoxColumn
-          Header="Abstract"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
-          SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
-          SelectedValuePath="Key"
-          DisplayMemberPath="Name" />
+        <comboBox:BindableDataGridComboBoxColumn Header="Abstract"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
+                                                 SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
+                                                 SelectedValuePath="Key"
+                                                 DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn
-          Header="Wyckoff-1"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.FirstWyckoffOptions}"
-          SelectedValueBinding="{Binding FirstUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
-          SelectedValuePath="Key"
-          DisplayMemberPath="Name" />
+        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff-1"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.FirstWyckoffOptions}"
+                                                 SelectedValueBinding="{Binding FirstUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
+                                                 SelectedValuePath="Key"
+                                                 DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn
-          Header="Wyckoff-2"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SecondWyckoffOptions}"
-          SelectedValueBinding="{Binding SecondUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
-          SelectedValuePath="Key"
-          DisplayMemberPath="Name" />
+        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff-2"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SecondWyckoffOptions}"
+                                                 SelectedValueBinding="{Binding SecondUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
+                                                 SelectedValuePath="Key"
+                                                 DisplayMemberPath="Name" />
 
       </DataGrid.Columns>
     </DataGrid>

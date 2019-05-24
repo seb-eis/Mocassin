@@ -20,13 +20,14 @@
               VerticalContentAlignment="Stretch"
               VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"
-              ColumnWidth="*">
+              ColumnWidth="*"
+              Background="Transparent">
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name"
                             Binding="{Binding Name}" />
 
-        <DataGridTextColumn Header="Connection"
+        <DataGridTextColumn Header="Connection Pattern"
                             Binding="{Binding ConnectorString}">
 
           <DataGridTextColumn.ElementStyle>

@@ -19,12 +19,15 @@
     <TabControl ItemsSource="{Binding ObservableItems}"
                 SelectedItem="{Binding SelectedTab}"
                 FontSize="{Binding HeaderFontSize}"
-                TabStripPlacement="{Binding TabStripPlacement}">
+                TabStripPlacement="{Binding TabStripPlacement}"
+                Style="{StaticResource App.Style.TabControl}">
+
       <TabControl.Resources>
         <DataTemplate DataType="{x:Type local:CloseableUserControlTabItem}">
           <TextBlock Text="{Binding TabName}" Style="{StaticResource TabHeaderStyle}">
             <TextBlock.InputBindings>
               <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CloseTabCommand}" />
+              <MouseBinding MouseAction="MiddleClick" Command="{Binding CloseTabCommand}"/>
             </TextBlock.InputBindings>
           </TextBlock>
         </DataTemplate>

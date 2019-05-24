@@ -98,7 +98,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates a 64 long code for the simulation from the passed set of int values
+        ///     Creates a 64 bit long code for the simulation from the passed set of int values
         /// </summary>
         /// <param name="values"></param>
         /// <param name="buffer"></param>

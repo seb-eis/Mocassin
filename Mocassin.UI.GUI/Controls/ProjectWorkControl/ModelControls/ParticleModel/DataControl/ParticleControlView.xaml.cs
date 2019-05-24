@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
 
         private void InitializeDragHandlers()
         {
-            ParticleDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem));
+            ParticleDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
         }
 
         private void ParticleDataGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

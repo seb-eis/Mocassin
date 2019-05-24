@@ -15,7 +15,6 @@
         Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
-        Background="WhiteSmoke"
         WindowState="Maximized"
         Closing="MainWindow_OnClosing">
 

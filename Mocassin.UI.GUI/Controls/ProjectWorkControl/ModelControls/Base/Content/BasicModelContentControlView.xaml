@@ -22,26 +22,23 @@
     </Grid.RowDefinitions>
 
     <Grid Grid.Column="0"
-          HorizontalAlignment="Stretch"
           Grid.Row="0"
           Grid.ColumnSpan="2">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="2*" />
       </Grid.ColumnDefinitions>
 
       <Expander Grid.Column="0" ExpandDirection="Right" Visibility="Hidden" />
-      <WrapPanel Grid.Column="1">
-        <TextBlock Margin="{StaticResource App.Margin.HorizontalStack}" 
-                   Text="Source:" 
-                   VerticalAlignment="Center"/>
+      <DockPanel Grid.Column="1">
+        <TextBlock Margin="{StaticResource App.Margin.HorizontalStack}"
+                   Text="Target:"
+                   VerticalAlignment="Center" />
         <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
                   SelectedItem="{Binding SelectedProjectGraph}"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Stretch"
-                  ToolTip="{StaticResource App.ToolTip.ModelSelection}">
+                  ToolTip="{StaticResource App.ToolTip.ModelSelection}"
+                  Style="{StaticResource App.Style.ComboBox}">
 
           <ComboBox.ItemTemplate>
             <DataTemplate>
@@ -49,7 +46,7 @@
             </DataTemplate>
           </ComboBox.ItemTemplate>
         </ComboBox>
-      </WrapPanel>
+      </DockPanel>
     </Grid>
 
 
@@ -69,12 +66,9 @@
         </TextBlock>
       </Expander.Header>
 
-      <Border Style="{StaticResource App.Style.Border.Box}">
-        <ContentPresenter Margin="{StaticResource App.Margin.Default}"
-                          Content="{Binding DataContentControl}"
-                          VerticalAlignment="Stretch"
-                          HorizontalAlignment="Stretch" />
-      </Border>
+      <ContentPresenter Content="{Binding DataContentControl}"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch" />
     </Expander>
 
     <Expander Grid.Row="1"
@@ -92,8 +86,7 @@
       </Expander.Header>
 
       <Border Style="{StaticResource App.Style.Border.Box}">
-        <ContentPresenter Margin="{StaticResource App.Margin.Default}"
-                          Content="{Binding VisualizerContentControl}"
+        <ContentPresenter Content="{Binding VisualizerContentControl}"
                           VerticalAlignment="Stretch"
                           HorizontalAlignment="Stretch" />
       </Border>
@@ -114,8 +107,7 @@
       </Expander.Header>
 
       <Border Style="{StaticResource App.Style.Border.Box}">
-        <ContentPresenter Margin="{StaticResource App.Margin.Default}"
-                          Content="{Binding InfoContentControl}"
+        <ContentPresenter Content="{Binding InfoContentControl}"
                           VerticalAlignment="Stretch"
                           HorizontalAlignment="Stretch" />
       </Border>

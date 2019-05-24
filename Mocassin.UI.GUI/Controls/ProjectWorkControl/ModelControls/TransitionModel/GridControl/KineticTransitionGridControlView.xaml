@@ -12,47 +12,38 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid
-      Name="TransitionDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      VerticalAlignment="Stretch"
-      VerticalContentAlignment="Stretch"
-      VerticalScrollBarVisibility="Auto"
-      ColumnWidth="*"
-      AutoGenerateColumns="False"
-      Background="Transparent">
+    <DataGrid Name="TransitionDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              VerticalAlignment="Stretch"
+              VerticalContentAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
+              ColumnWidth="*"
+              AutoGenerateColumns="False"
+              Background="Transparent">
 
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name}" />
-        <comboBox:BindableDataGridComboBoxColumn
-          Header="Abstract"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
-          SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="Key" />
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
+        <comboBox:BindableDataGridComboBoxColumn Header="Abstract"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
+                                                 SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
+                                                 DisplayMemberPath="Name"
+                                                 SelectedValuePath="Key" />
 
-        <DataGridTemplateColumn
-          Header="Geometry (A,B,C)">
+        <DataGridTemplateColumn Header="Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type transitionModel:KineticTransitionGraph}">
-              <DataGrid
-                ItemsSource="{Binding PositionVectors}"
-                AutoGenerateColumns="False"
-                ColumnWidth="*">
+            <DataTemplate DataType="{x:Type transitionModel:KineticTransitionGraph}">
+              <DataGrid ItemsSource="{Binding PositionVectors}"
+                        AutoGenerateColumns="False"
+                        ColumnWidth="*">
 
                 <DataGrid.Columns>
-                  <DataGridTextColumn
-                    Binding="{Binding A, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+                  <DataGridTextColumn Binding="{Binding A}" />
 
-                  <DataGridTextColumn
-                    Binding="{Binding B, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+                  <DataGridTextColumn Binding="{Binding B}" />
 
-                  <DataGridTextColumn
-                    Binding="{Binding C, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+                  <DataGridTextColumn Binding="{Binding C}" />
 
                 </DataGrid.Columns>
               </DataGrid>

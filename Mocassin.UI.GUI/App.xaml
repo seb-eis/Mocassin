@@ -11,7 +11,7 @@
 
       <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
 
-      <Style TargetType="{x:Type Button}" 
+      <Style TargetType="{x:Type Button}"
              x:Key="App.Style.Button.NullCommand">
         <Style.Triggers>
           <Trigger Property="Command" Value="{x:Null}">
@@ -20,63 +20,63 @@
         </Style.Triggers>
       </Style>
 
-      <Style TargetType="{x:Type Run}" 
+      <Style TargetType="{x:Type Run}"
              x:Key="App.Style.Run.Keyword">
         <Setter Property="Foreground" Value="Blue" />
         <Setter Property="FontWeight" Value="Bold" />
       </Style>
 
-      <Style TargetType="{x:Type Run}" 
+      <Style TargetType="{x:Type Run}"
              x:Key="App.Style.Run.Important">
         <Setter Property="FontStyle" Value="Italic" />
       </Style>
 
-      <Style TargetType="{x:Type Run}" 
+      <Style TargetType="{x:Type Run}"
              x:Key="App.Style.Run.ModelObject">
         <Setter Property="Foreground" Value="ForestGreen" />
         <Setter Property="FontWeight" Value="Bold" />
       </Style>
 
-      <Style TargetType="{x:Type Run}" 
+      <Style TargetType="{x:Type Run}"
              x:Key="App.Style.Run.Property">
         <Setter Property="Foreground" Value="OrangeRed" />
         <Setter Property="FontWeight" Value="Bold" />
       </Style>
 
-      <Style TargetType="{x:Type ToolTip}" 
+      <Style TargetType="{x:Type ToolTip}"
              x:Key="App.Style.ToolTip.Default">
         <Setter Property="MaxWidth" Value="500" />
       </Style>
 
-      <Style TargetType="{x:Type TextBlock}" 
+      <Style TargetType="{x:Type TextBlock}"
              x:Key="App.Style.ToolTip.TextBlock">
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="TextAlignment" Value="Justify" />
       </Style>
 
       <Style TargetType="Border" x:Key="App.Style.Border.Box">
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+        <Setter Property="BorderThickness" Value=".5" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
       </Style>
 
       <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftTopBorder">
-        <Setter Property="BorderThickness" Value="2,2,0,0"/>
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="2,2,0,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
       </Style>
 
       <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightTopBorder">
-        <Setter Property="BorderThickness" Value="0,2,2,0"/>
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,2,2,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
       </Style>
 
       <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftBorder">
-        <Setter Property="BorderThickness" Value="2,0,0,0"/>
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="2,0,0,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
       </Style>
 
       <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
-        <Setter Property="BorderThickness" Value="0,0,2,0"/>
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,2,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
       </Style>
 
       <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
@@ -90,8 +90,19 @@
         </Style.Triggers>
       </Style>
 
-      <Style TargetType="{x:Type TabControl}" x:Key="App.Style.TabControl"/>
-      <Style TargetType="{x:Type TabItem}" x:Key="App.Style.TabItem"/>
+      <Style TargetType="{x:Type TabItem}" x:Key="App.Style.TabItem">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type TabControl}" x:Key="App.Style.TabControl">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource App.Style.TabItem}" />
+      </Style>
+
+
+      <Style TargetType="{x:Type ComboBox}" x:Key="App.Style.ComboBox">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
 
       <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
 
@@ -134,21 +145,21 @@
       <s:String x:Key="App.String.StateExchangeGroup.StateExchangePairs">[StateExchangeGroup.StateExchangePairs]</s:String>
 
       <s:String x:Key="App.String.AbstractTransition">[AbstractTransition]</s:String>
-      <s:String x:Key="App.String.AbstractTransition.Connection">[AbstractTransition.Connection]</s:String>
+      <s:String x:Key="App.String.AbstractTransition.Connection">[AbstractTransition.ConnectionPattern]</s:String>
       <s:String x:Key="App.String.AbstractTransition.AssociationFlag">[AbstractTransition.AssociationFlag]</s:String>
       <s:String x:Key="App.String.AbstractTransition.StateExchangeGroups">[AbstractTransition.StateExchangeGroups]</s:String>
 
-      <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2"/>
-      <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4"/>
-      <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0"/>
-      <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0"/>
+      <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
+      <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />
+      <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0" />
 
       <ToolTip x:Key="App.ToolTip.ModelSelection">
-        <TextBlock Text="Model"/>
+        <TextBlock Text="Model" />
       </ToolTip>
 
       <ToolTip x:Key="App.ToolTip.ProjectSelection">
-        <TextBlock Text="Project"/>
+        <TextBlock Text="Project" />
       </ToolTip>
 
     </ResourceDictionary>

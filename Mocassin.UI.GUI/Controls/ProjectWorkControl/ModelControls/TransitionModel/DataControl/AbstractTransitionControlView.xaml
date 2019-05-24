@@ -127,44 +127,56 @@
       <Run Text="Each position involved in a transition is assigned a" />
       <Run Text="{StaticResource App.String.StateExchangeGroup}" 
            Style="{StaticResource App.Style.Run.ModelObject}" />
-      <Run Text="to describe allowed changes and connection flags for consecutive members describe their interaction." />
+      <Run Text="to describe allowed changes and connection flags for consecutive members describe if they exchange information or not." />
       <LineBreak />
-      <Run Text="Keep in mind: All model input has to be done symmetry reduced and is expanded to P1 using your " Style="{StaticResource App.Style.Run.Important}"/>
-      <Run Text="{StaticResource App.String.SpaceGroup}" Style="{StaticResource App.Style.Run.ModelObject}" />
-      <Run Text="choice. Inversely, geometric and permutation analysis/searches will yield only symmetry reduced results." Style="{StaticResource App.Style.Run.Important}" />
+      <LineBreak />
+      <Run Text="Keep in mind: This is the third step of movement abstraction which contains the 1D behavior basis of transitions." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="Think about what state changes apply to the positions of your transition and if the positions can exchange information or not." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="For example, a basic oxygen vacancy mechanism has the position stability sequence [Stable,Unstable,Stable]." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="The attached sequence of required state change options is ['Vc,O','Void,O','Vc,O']." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="If we describe information exchange, oxygen is passed from position (1) to (2) (State 0 to 1) and then from (2) to (3) (State 1 to 2) or vise-versa." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="Therefore, the linking of position (1) to (2) and (2) to (3) both require the 'Dynamic' connection flag." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="Form this, two co-dependent options emerge that actually change the state of the lattice - oxygen can move from (1) to a vacancy at (3) or the other way around." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+    </TextBlock>
+
+    <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+      <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" 
+           Style="{StaticResource App.Style.Run.Important}" />
       <LineBreak />
     </TextBlock>
 
     <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-      <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}" Style="{StaticResource App.Style.Run.Important}" />
+      <Run Text="{StaticResource App.String.AbstractTransition.Connection}" 
+           Style="{StaticResource App.Style.Run.Property}" />
+      <LineBreak />
+      <Run Text="Set the regex interpreted connection description string. Requires (#Positions - 1) occurrences of the words 'Dynamic' or 'Static' in the correct order." />
       <LineBreak />
     </TextBlock>
 
     <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-      <Run Text="{StaticResource App.String.SpaceGroup.Index}" Style="{StaticResource App.Style.Run.Property}" />
+      <Run Text="{StaticResource App.String.AbstractTransition.AssociationFlag}" 
+           Style="{StaticResource App.Style.Run.Property}" />
       <LineBreak />
-      <Run Text="The index/id of the group within the international table of space groups." />
-      <LineBreak />
-    </TextBlock>
-
-    <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-      <Run Text="{StaticResource App.String.SpaceGroup.Literal}" Style="{StaticResource App.Style.Run.Property}" />
-      <LineBreak />
-      <Run Text="The string representation/name of the group." />
+      <Run Text="Advanced behavior flag for complex movements that defines if the 'dissociative' (default) or 'associative' case should be generated." />
+      <Run Text="Has no effect unless the abstract describes a multi-atom KMC transition (e.g. oxygen-proton vehicle mechanism)." />
       <LineBreak />
     </TextBlock>
 
     <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-      <Run Text="{StaticResource App.String.SpaceGroup.Info}" Style="{StaticResource App.Style.Run.Property}" />
+      <Run Text="{StaticResource App.String.AbstractTransition.StateExchangeGroups}" 
+           Style="{StaticResource App.Style.Run.Property}" />
       <LineBreak />
-      <Run Text="Additional symmetry information for groups with multiple axis or origin choices." />
-      <LineBreak />
-    </TextBlock>
-
-    <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-      <Run Text="{StaticResource App.String.SpaceGroup.System}" Style="{StaticResource App.Style.Run.Property}" />
-      <LineBreak />
-      <Run Text="The crystal system that the space group belongs to." />
+      <Run Text="Set the " />
+      <Run Text="{StaticResource App.String.StateExchangeGroup}" 
+           Style="{StaticResource App.Style.Run.ModelObject}" />
+      <Run Text="for each involved position in the required order." />
       <LineBreak />
     </TextBlock>
 

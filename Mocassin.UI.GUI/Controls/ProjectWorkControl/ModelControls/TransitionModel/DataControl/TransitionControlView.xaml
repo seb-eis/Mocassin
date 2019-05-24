@@ -10,28 +10,175 @@
   d:DataContext="{d:DesignInstance local:TransitionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.MetropolisTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
+          <Run Text="Each change is formed by two" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects, describing donor and acceptor state. The" />
+          <Run Text="{StaticResource App.String.Particle.Void}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
+          <LineBreak />
+          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is valid here."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.KineticTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
+          <Run Text="Each change is formed by two" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects, describing donor and acceptor state. The" />
+          <Run Text="{StaticResource App.String.Particle.Void}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
+          <LineBreak />
+          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is valid here."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+  </UserControl.Resources>
+
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition
-        Width="*" />
-      <ColumnDefinition
-        Width="*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <GroupBox
-      Grid.Column="0"
-      Header="Metropolis Transitions">
+    <GroupBox Grid.Column="0"
+              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-      <gridControl:MetropolisTransitionGridControlView
-        DataContext="{Binding MetropolisTransitionGridViewModel}" />
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Metropolis Transitions (MMC)]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.MetropolisTransitions}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+
+      <gridControl:MetropolisTransitionGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
+                                                       DataContext="{Binding MetropolisTransitionGridViewModel}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Column="1"
-      Header="Kinetic Transitions">
+    <GroupBox Grid.Column="1"
+              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-      <gridControl:KineticTransitionGridControlView
-        DataContext="{Binding KineticTransitionGridViewModel}" />
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Kinetic Transitions (KMC)]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.KineticTransitions}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+      <gridControl:KineticTransitionGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
+                                                    DataContext="{Binding KineticTransitionGridViewModel}" />
     </GroupBox>
 
   </Grid>

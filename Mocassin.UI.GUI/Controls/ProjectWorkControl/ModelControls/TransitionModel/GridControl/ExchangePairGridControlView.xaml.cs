@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 
         private void InitializeDragDropHandlers()
         {
-            ExchangePairDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem));
+            ExchangePairDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
         }
 
         private void ExchangePairDataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
