@@ -52,6 +52,11 @@ namespace Mocassin.Model.Translator
         public JobMetaDataEntity JobMetaData { get; set; }
 
         /// <summary>
+        ///     The result data navigation property
+        /// </summary>
+        public JobResultDataEntity JobResultData { get; set; }
+
+        /// <summary>
         ///     The simulation package context id
         /// </summary>
         [Column("PackageId")]
@@ -97,12 +102,6 @@ namespace Mocassin.Model.Translator
         /// </summary>
         [Column("JobHeader")]
         public byte[] JobHeaderBinary { get; set; }
-
-        /// <summary>
-        ///     Simulation state blob conversion backing property
-        /// </summary>
-        [Column("SimulationState")]
-        public byte[] SimulationState { get; set; }
 
         /// <summary>
         ///     The job info object that describes the job specifications

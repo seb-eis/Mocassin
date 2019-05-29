@@ -156,10 +156,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 JobInfo = jobConfiguration.GetInteropJobInfo(),
                 JobHeader = jobConfiguration.GetInteropJobHeader(),
                 JobMetaData = GetJobMetaDataEntity(jobConfiguration),
+                JobResultData = new JobResultDataEntity(),
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
             result.JobMetaData.JobModel = result;
+            result.JobResultData.JobModel = result;
             SetSimulationJobInfoFlags(result, simulationModel);
             return result;
         }

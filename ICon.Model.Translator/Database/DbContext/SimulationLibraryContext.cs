@@ -13,11 +13,6 @@ namespace Mocassin.Model.Translator
     /// <inheritdoc cref="IMocassinSimulationLibrary" />
     public sealed class SimulationLibraryContext : SqLiteContext<SimulationLibraryContext>, IMocassinSimulationLibrary
     {
-        /// <summary>
-        ///     List of actions performed on model building
-        /// </summary>
-        private static IList<Action<ModelBuilder>> ModelBuildActions { get; set; }
-
         /// <inheritdoc />
         public DbSet<SimulationJobPackageModel> SimulationPackages { get; set; }
 
@@ -55,6 +50,9 @@ namespace Mocassin.Model.Translator
         public DbSet<JobMetaDataEntity> JobMetaData { get; set; }
 
         /// <inheritdoc />
+        public DbSet<JobResultDataEntity> JobResultData { get; set; }
+
+        /// <inheritdoc />
         public SimulationLibraryContext(string optionsBuilderParameterString)
             : base(optionsBuilderParameterString)
         {
@@ -62,9 +60,7 @@ namespace Mocassin.Model.Translator
 
         /// <inheritdoc cref="IMocassinSimulationLibrary.SaveChanges" />
         public override int SaveChanges()
-        {
-            base.SaveChanges();
-
+        {        
             using (var marshalService = new MarshalService())
             {
                 PerformActionOnInteropEntities(a => a.ChangePropertyStatesToBinaries(marshalService));
@@ -75,12 +71,7 @@ namespace Mocassin.Model.Translator
         /// <inheritdoc />
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await base.SaveChangesAsync(cancellationToken);
-            using (var marshalService = new MarshalService())
-            {
-                await PerformActionOnInteropEntitiesAsync(a => a.ChangePropertyStatesToBinaries(marshalService), cancellationToken);
-                return await base.SaveChangesAsync(cancellationToken);
-            }
+            return await Task.Run(SaveChanges, cancellationToken);
         }
 
         /// <summary>
@@ -89,37 +80,16 @@ namespace Mocassin.Model.Translator
         /// <param name="action"></param>
         private void PerformActionOnInteropEntities(Action<InteropEntityBase> action)
         {
-            foreach (var dbSetProperty in GetDbSetPropertyInfos())
+            foreach (var propertyInfo in GetDbSetPropertyInfos())
             {
-                if (!typeof(InteropEntityBase).IsAssignableFrom(dbSetProperty.PropertyType.GetGenericArguments()[0]))
-                    continue;
+                if (!typeof(InteropEntityBase).IsAssignableFrom(propertyInfo.PropertyType.GetGenericArguments()[0])) continue;
 
-                foreach (var item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this))
-                    action(item);
+                var dbSet = propertyInfo.GetValue(this);
+                var local = dbSet?.GetType().GetProperty("Local")?.GetValue(dbSet) 
+                            ?? throw new InvalidOperationException("Could not get local view of interop entity database set");
+
+                foreach (var item in (IEnumerable<InteropEntityBase>) local) action(item);
             }
-        }
-
-        /// <summary>
-        ///     Performs the passed action on all properties of database set entries that are interop entities asynchronously
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="cancellationToken"></param>
-        private Task PerformActionOnInteropEntitiesAsync(Action<InteropEntityBase> action, CancellationToken cancellationToken = default)
-        {
-            var operationTasks = new List<Task>();
-            foreach (var dbSetProperty in GetDbSetPropertyInfos())
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    return Task.FromCanceled(cancellationToken);
-
-                if (!typeof(InteropEntityBase).IsAssignableFrom(dbSetProperty.PropertyType.GetGenericArguments()[0]))
-                    continue;
-
-                operationTasks.AddRange(from item in (IEnumerable<InteropEntityBase>) dbSetProperty.GetValue(this)
-                    select Task.Run(() => action(item), cancellationToken));
-            }
-
-            return Task.WhenAll(operationTasks);
         }
 
         /// <summary>

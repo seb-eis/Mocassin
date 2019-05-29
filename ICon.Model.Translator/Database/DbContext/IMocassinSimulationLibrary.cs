@@ -69,6 +69,11 @@ namespace Mocassin.Model.Translator
         DbSet<JobMetaDataEntity> JobMetaData { get; }
 
         /// <summary>
+        ///     Database set for all job result information
+        /// </summary>
+        DbSet<JobResultDataEntity> JobResultData { get; }
+
+        /// <summary>
         ///     Save the changes to the interop db context
         /// </summary>
         /// <returns></returns>
