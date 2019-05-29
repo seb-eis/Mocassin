@@ -1,3 +1,13 @@
+# Shared memory execution wrapper for MOCASSIN simulator with recursive binary lookup
+# Requires full database path as first argument
+# Further arguments are treated as to be executed job context ids
+# Example usage : python3.6 RunMocassin.py $HOME/Test/example.moc 1 2 3 4
+# will start a shared memory process with 4 threads executing job context ids 1 2 3 and 4 from the source database
+# IMPORTANT:    -Does currently not work correctly with relative database paths and the windows operating system
+#               -Parallel execution with shared memory has a scaling limit of cores per computer/node
+#               -This is not an MPI wrapper, all cores have to belong to the same physical computer (node)
+#               -Mixing short and long jobs is not recommended as the interpreter awaits all threads before returning
+
 import os as os
 import re as re
 import subprocess as subprocess

@@ -312,7 +312,7 @@ void PrintContextResetNotice(SCONTEXT_PARAM, file_t *fstream)
 //  Prints all set state flags of the context as a readable string to the passed file-stream
 static void PrintStatusFlagCollection(SCONTEXT_PARAM, file_t* fstream)
 {
-    debug_assert(fstream = NULL && SCONTEXT != NULL);
+    debug_assert(fstream == NULL && SCONTEXT != NULL);
 
     let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
     fprintf(fstream, "Abort-flags: ");

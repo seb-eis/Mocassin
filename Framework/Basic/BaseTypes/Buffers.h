@@ -233,6 +233,6 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
     )
 
 // Get a boolean value indicating if the passed index set is out of the array access range
-#define array_IndicesAreOutOfRange(ARRAY, ...) ((array_Rank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY)))
+#define array_IndicesAreOutOfRange(ARRAY, ...) ((array_Rank(ARRAY) != __VA_NARG(__VA_ARGS__)) || (&array_Get(ARRAY, __VA_ARGS__) > span_Back(ARRAY))|| (&array_Get(ARRAY, __VA_ARGS__) < span_Front(ARRAY)))
 
 /* */

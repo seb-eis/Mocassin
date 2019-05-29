@@ -26,11 +26,12 @@ static error_t PrepareJumpPathForLinkSearch(SCONTEXT_PARAM, const Vector4_t*rest
 {
     return_if(jumpStatusVector->D != jumpDirection->ObjectId, ERR_ARGUMENT);
 
+    let latticeSizes = getLatticeSizeVector(SCONTEXT);
     JUMPPATH[0] = getEnvironmentStateByIds(SCONTEXT, jumpStatusVector->A, jumpStatusVector->B, jumpStatusVector->C, jumpDirection->PositionId);
     for (int32_t i = 1; i < jumpDirection->JumpLength; i++)
     {
         let relVector = &span_Get(jumpDirection->JumpSequence, i-1);
-        let targetVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, getLatticeSizeVector(SCONTEXT));
+        let targetVector = AddAndTrimVector4(&JUMPPATH[0]->PositionVector, relVector, latticeSizes);
         JUMPPATH[i] = getEnvironmentStateByVector4(SCONTEXT, &targetVector);
     }
 

@@ -59,6 +59,9 @@ if (WIN32)
     set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
 
 elseif (UNIX)
+    # Set the linker flasg to use origin linking
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath -Wl,$ORIGIN")
+
     # Advanced gnu compiler settings
     if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
         message(STATUS "** Compiling with GNU settings **")
