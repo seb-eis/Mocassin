@@ -11,6 +11,7 @@
   d:DataContext="{d:DesignInstance local:KineticTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+
   <Grid>
     <DataGrid Name="TransitionDataGrid"
               ItemsSource="{Binding DataCollection}"
@@ -31,7 +32,7 @@
                                                  DisplayMemberPath="Name"
                                                  SelectedValuePath="Key" />
 
-        <DataGridTemplateColumn Header="Geometry (A,B,C)">
+        <DataGridTemplateColumn Header="Path Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:KineticTransitionGraph}">
               <DataGrid ItemsSource="{Binding PositionVectors}"

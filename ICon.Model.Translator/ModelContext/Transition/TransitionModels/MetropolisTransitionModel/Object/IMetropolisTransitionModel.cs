@@ -31,9 +31,9 @@ namespace Mocassin.Model.Translator.ModelContext
         IList<IMetropolisRuleModel> RuleModels { get; set; }
 
         /// <summary>
-        ///     Creates an inverse transition model
+        ///     Creates a geometric inversion of this transition model
         /// </summary>
         /// <returns></returns>
-        IMetropolisTransitionModel CreateInverse();
+        IMetropolisTransitionModel CreateGeometricInversion();
     }
 }

@@ -33,14 +33,11 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var transitionModel in resultModels)
             {
-                var inverseModel = CreateTransitionModelInversion(transitionModel);
-                if (transitionModel != inverseModel)
-                {
-                    inverseModel.ModelId = index++;
-                    inverseModels.Add(transitionModel.InverseTransitionModel);
-                }
+                var inverseModel = CreateGeometricModelInversion(transitionModel);
+                if (transitionModel == inverseModel) continue;
 
-                transitionModel.InverseTransitionModel = inverseModel;
+                inverseModel.ModelId = index++;
+                inverseModels.Add(transitionModel.InverseTransitionModel);
             }
 
             resultModels.AddRange(inverseModels);
@@ -73,13 +70,19 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <returns></returns>
-        protected IMetropolisTransitionModel CreateTransitionModelInversion(IMetropolisTransitionModel transitionModel)
+        protected IMetropolisTransitionModel CreateGeometricModelInversion(IMetropolisTransitionModel transitionModel)
         {
-            if (transitionModel.Transition.MappingsContainInversion()) return transitionModel;
+            if (transitionModel.Transition.MappingsContainInversion())
+            {
+                transitionModel.InverseTransitionModel = transitionModel;
+                return transitionModel;
+            }
 
-            var inverseModel = transitionModel.CreateInverse();
+            var inverseModel = transitionModel.CreateGeometricInversion();
+            transitionModel.InverseTransitionModel = inverseModel;
+
             CreateAndAddMappingModelInversions(transitionModel, inverseModel);
-            CreateAndAddRuleModelInversions(transitionModel, inverseModel);
+            AddGeometricRuleModelInversions(transitionModel, inverseModel);
 
             return inverseModel;
         }
@@ -92,7 +95,8 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void CreateAndAddMappingModels(IMetropolisTransitionModel transitionModel)
         {
             var transitionManager = ModelProject.GetManager<ITransitionManager>();
-            var mappings = transitionManager.QueryPort.Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
+            var mappings = transitionManager.QueryPort
+                .Query(port => port.GetMetropolisMappingList(transitionModel.Transition.Index));
 
             transitionModel.MappingModels = mappings
                 .Select(mapping => CreateMappingModel(mapping, transitionModel))
@@ -122,10 +126,10 @@ namespace Mocassin.Model.Translator.ModelContext
             };
 
             if (!vectorEncoder.TryDecode(mappingModel.StartVector4D, out Fractional3D startVector3D))
-                throw new InvalidOperationException("Data inconsistency during model generation. 4D to 3D vector conversion failed");
+                throw new InvalidOperationException("Data inconsistency. 4D to 3D vector conversion failed!");
 
             if (!vectorEncoder.TryDecode(mappingModel.EndVector4D, out Fractional3D endVector3D))
-                throw new InvalidOperationException("Data inconsistency during model generation. 4D to 3D vector conversion failed");
+                throw new InvalidOperationException("Data inconsistency. 4D to 3D vector conversion failed!");
 
             mappingModel.StartVector3D = startVector3D;
             mappingModel.EndVector3D = endVector3D;
@@ -140,7 +144,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="inverseModel"></param>
         protected void CreateAndAddMappingModelInversions(IMetropolisTransitionModel originalModel, IMetropolisTransitionModel inverseModel)
         {
-            var inverseMappings = originalModel.MappingModels.Select(CreateAndLinkInverseModel).ToList();
+            var inverseMappings = originalModel.MappingModels.Select(CreateAndLinkGeometricInversion).ToList();
             inverseModel.MappingModels = inverseMappings;
         }
 
@@ -149,9 +153,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <returns></returns>
-        protected IMetropolisMappingModel CreateAndLinkInverseModel(IMetropolisMappingModel mappingModel)
+        protected IMetropolisMappingModel CreateAndLinkGeometricInversion(IMetropolisMappingModel mappingModel)
         {
-            var inverseModel = mappingModel.CreateInverse();
+            var inverseModel = mappingModel.CreateGeometricInversion();
             mappingModel.InverseMapping = inverseModel;
             return inverseModel;
         }
@@ -187,7 +191,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 .Select(CreateRuleModel)
                 .ToList();
 
-            CreateCodesAndLinkInverseRuleModels(ruleModels);
+            CreateCodesAndLinkRuleModelInversions(ruleModels);
 
             transitionModel.RuleModels = ruleModels;
         }
@@ -209,21 +213,21 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="originalModel"></param>
         /// <param name="inverseModel"></param>
-        protected void CreateAndAddRuleModelInversions(IMetropolisTransitionModel originalModel, IMetropolisTransitionModel inverseModel)
+        protected void AddGeometricRuleModelInversions(IMetropolisTransitionModel originalModel, IMetropolisTransitionModel inverseModel)
         {
-            var inverseModels = originalModel.RuleModels.Select(CreateAndLinkInverseModel).ToList();
+            var inverseModels = originalModel.RuleModels.Select(CreateAndLinkGeometricInversion).ToList();
             inverseModel.RuleModels = inverseModels;
         }
 
         /// <summary>
         ///     Creates a single inverted metropolis rule model and sets both inverted mappings to the appropriate value
         /// </summary>
-        /// <param name="ruleModel"></param>
+        /// <param name="originalModel"></param>
         /// <returns></returns>
-        protected IMetropolisRuleModel CreateAndLinkInverseModel(IMetropolisRuleModel ruleModel)
+        protected IMetropolisRuleModel CreateAndLinkGeometricInversion(IMetropolisRuleModel originalModel)
         {
-            var inverseModel = ruleModel.CreateInverse();
-            ruleModel.InverseRuleModel = inverseModel;
+            var inverseModel = originalModel.CreateGeometricInversion();
+            originalModel.InverseRuleModel = inverseModel;
             return inverseModel;
         }
     }

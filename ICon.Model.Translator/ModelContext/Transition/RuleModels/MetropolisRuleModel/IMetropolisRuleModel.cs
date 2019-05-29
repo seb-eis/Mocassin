@@ -22,6 +22,6 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates a raw inverted version of this rule model
         /// </summary>
         /// <returns></returns>
-        IMetropolisRuleModel CreateInverse();
+        IMetropolisRuleModel CreateGeometricInversion();
     }
 }

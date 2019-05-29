@@ -62,9 +62,9 @@ namespace Mocassin.Model.Translator.ModelContext
         bool LinkIfInverseMatch(IKineticMappingModel inverseModel);
 
         /// <summary>
-        ///     Creates the inverted version of the mapping model
+        ///     Creates the geometric inversion of the mapping model
         /// </summary>
         /// <returns></returns>
-        IKineticMappingModel CreateInverse();
+        IKineticMappingModel CreateGeometricInversion();
     }
 }

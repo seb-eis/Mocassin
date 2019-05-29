@@ -26,16 +26,16 @@
 
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" 
-                              Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
+                              Binding="{Binding Name}"/>
           
           <DataGridTextColumn Header="Symbol" 
-                              Binding="{Binding Symbol, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
+                              Binding="{Binding Symbol}"/>
 
           <DataGridTextColumn Header="Charge"
-                              Binding="{Binding Charge, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
+                              Binding="{Binding Charge}"/>
 
           <DataGridCheckBoxColumn Header="Vacancy" 
-                                  Binding="{Binding IsVacancy, UpdateSourceTrigger=PropertyChanged}"/>
+                                  Binding="{Binding IsVacancy}"/>
 
         </DataGrid.Columns>
       </DataGrid>

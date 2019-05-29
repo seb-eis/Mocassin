@@ -13,16 +13,14 @@
 
   <Grid>
 
-    <TabControl Style="{StaticResource App.Style.TabControl}">
+    <TabControl>
 
-      <TabItem Header="State Changes &amp; Transition Abstraction"
-               Style="{StaticResource App.Style.TabItem}">
+      <TabItem Header="State Changes &amp; Transition Abstraction">
 
         <dataControl:AbstractTransitionControlView DataContext="{Binding AbstractTransitionControlViewModel}" />
       </TabItem>
 
-      <TabItem Header="KMC Transitions &amp; MMC Exchanges"
-               Style="{StaticResource App.Style.TabItem}">
+      <TabItem Header="KMC Transitions &amp; MMC Exchanges">
 
         <dataControl:TransitionControlView DataContext="{Binding TransitionControlViewModel}" />
       </TabItem>

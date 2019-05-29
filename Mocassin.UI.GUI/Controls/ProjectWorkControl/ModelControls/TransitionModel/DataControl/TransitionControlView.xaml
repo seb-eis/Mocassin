@@ -16,33 +16,17 @@
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair}"
+          <Run Text="{StaticResource App.String.MetropolisTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
-          <Run Text="Each change is formed by two" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="objects describe time and space independent exchanges between positions." />
+          <Run Text="They are the basic building blocks of Metropolis Monte Carlo (MMC) simulations." />
+          <Run Text="Each transition is defined through two exchanging" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects, describing donor and acceptor state. The" />
-          <Run Text="{StaticResource App.String.Particle.Void}"
+          <Run Text="objects and and an assigned" />
+          <Run Text="{StaticResource App.String.AbstractTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
-          <LineBreak />
-          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="{StaticResource App.String.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is valid here."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
-               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="restricts the set of possible permutations." />
           <LineBreak />
         </TextBlock>
 
@@ -53,25 +37,44 @@
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+          <Run Text="{StaticResource App.String.MetropolisTransition.Abstract}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
-          <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="Set the" />
+          <Run Text="{StaticResource App.String.AbstractTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <Run Text="that defines the set of allowed changes. Changes not supported by the assigned" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects will not occur during simulation." />
           <LineBreak />
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+          <Run Text="{StaticResource App.String.MetropolisTransition.FirstWyckoff}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
-          <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="Set the first" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <Run Text="involved. Exchange options will be limited by the first" />
+          <Run Text="{StaticResource App.String.StateExchangeGroup}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="of the assign abstract." />
           <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.MetropolisTransition.FirstWyckoff}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Set the second" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="involved. Exchange options will be limited by the second" />
+          <Run Text="{StaticResource App.String.StateExchangeGroup}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="of the assign abstract." />
         </TextBlock>
 
       </StackPanel>
@@ -81,33 +84,14 @@
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair}"
+          <Run Text="{StaticResource App.String.KineticsTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
-          <Run Text="Each change is formed by two" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="objects describe time and space dependent exchanges between positions." />
+          <Run Text="They are the basic building blocks of Kinetic Monte Carlo (KMC) simulations." />
+          <Run Text="Each transition is defined through one reference transition path geometry and a" />
+          <Run Text="{StaticResource App.String.AbstractTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects, describing donor and acceptor state. The" />
-          <Run Text="{StaticResource App.String.Particle.Void}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
-          <LineBreak />
-          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="{StaticResource App.String.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="is valid here."
-               Style="{StaticResource App.Style.Run.Important}" />
-          <Run
-            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
-            Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
-               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="restricts the set of possible permutations." />
           <LineBreak />
         </TextBlock>
 
@@ -118,25 +102,28 @@
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+          <Run Text="{StaticResource App.String.KineticsTransition.Abstract}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
-          <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="Set the" />
+          <Run Text="{StaticResource App.String.AbstractTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <Run Text="that defines the set of allowed changes. Changes not supported by the" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects of the assigned path geometry will not occur." />
           <LineBreak />
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+          <Run Text="{StaticResource App.String.KineticsTransition.PathGeometry}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
-          <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="Set a reference path geometry for the transition which defines the spatial component of KMC." />
+          <Run Text="The order of the position vectors has to match the order of" />
+          <Run Text="{StaticResource App.String.StateExchangeGroup}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
-          <LineBreak />
+          <Run Text="objects in the attached abstract." />
         </TextBlock>
 
       </StackPanel>

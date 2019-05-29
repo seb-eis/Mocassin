@@ -119,17 +119,13 @@
                 Background="Transparent">
 
         <DataGrid.Columns>
-          <DataGridTextColumn Header="Name"
-                              Binding="{Binding Name}" />
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-          <DataGridTextColumn Header="A"
-                              Binding="{Binding A}" />
+          <DataGridTextColumn Header="A" Binding="{Binding A}" />
 
-          <DataGridTextColumn Header="B"
-                              Binding="{Binding B}" />
+          <DataGridTextColumn Header="B" Binding="{Binding B}" />
 
-          <DataGridTextColumn Header="C"
-                              Binding="{Binding C}" />
+          <DataGridTextColumn Header="C" Binding="{Binding C}" />
 
           <DataGridComboBoxColumn Header="Stability"
                                   ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
@@ -145,8 +141,7 @@
 
     </GroupBox>
 
-    <GroupBox Grid.Row="1"
-              Name="ExpansionContentControl"
+    <GroupBox Grid.Row="1" Name="ExpansionContentControl"
               Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
       <GroupBox.Header>
@@ -167,11 +162,11 @@
                 VerticalScrollBarVisibility="Auto">
 
         <DataGrid.Columns>
-          <DataGridTextColumn Binding="{Binding A}" />
+          <DataGridTextColumn Header="A" Binding="{Binding A}" />
 
-          <DataGridTextColumn Binding="{Binding B}" />
+          <DataGridTextColumn Header="B" Binding="{Binding B}" />
 
-          <DataGridTextColumn Binding="{Binding C}" />
+          <DataGridTextColumn Header="C" Binding="{Binding C}" />
         </DataGrid.Columns>
       </DataGrid>
     </GroupBox>

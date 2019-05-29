@@ -37,8 +37,7 @@
                    VerticalAlignment="Center" />
         <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
                   SelectedItem="{Binding SelectedProjectGraph}"
-                  ToolTip="{StaticResource App.ToolTip.ModelSelection}"
-                  Style="{StaticResource App.Style.ComboBox}">
+                  ToolTip="{StaticResource App.ToolTip.ModelSelection}">
 
           <ComboBox.ItemTemplate>
             <DataTemplate>

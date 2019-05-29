@@ -56,7 +56,7 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates all inversion links and simulation codes for a prepared list of rule models
         /// </summary>
         /// <param name="ruleModels"></param>
-        protected void CreateCodesAndLinkInverseRuleModels(IReadOnlyList<ITransitionRuleModel> ruleModels)
+        protected void CreateCodesAndLinkRuleModelInversions(IReadOnlyList<ITransitionRuleModel> ruleModels)
         {
             CreateAllCodesOnRuleModels(ruleModels);
 

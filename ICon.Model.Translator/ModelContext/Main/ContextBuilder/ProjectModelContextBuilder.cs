@@ -46,12 +46,12 @@ namespace Mocassin.Model.Translator.ModelContext
                 ModelProject = ModelProject
             };
 
-            StartComponentBuildProcess();
+            await BuildContextComponents();
 
-            projectModelContext.EnergyModelContext = await EnergyModelContextBuilder.BuildTask;
-            projectModelContext.SimulationModelContext = await SimulationModelContextBuilder.BuildTask;
-            projectModelContext.TransitionModelContext = await TransitionModelContextBuilder.BuildTask;
-            projectModelContext.StructureModelContext = await StructureModelContextBuilder.BuildTask;
+            projectModelContext.EnergyModelContext = EnergyModelContextBuilder.BuildTask.Result;
+            projectModelContext.SimulationModelContext = SimulationModelContextBuilder.BuildTask.Result;
+            projectModelContext.TransitionModelContext = TransitionModelContextBuilder.BuildTask.Result;
+            projectModelContext.StructureModelContext = StructureModelContextBuilder.BuildTask.Result;
 
             await ProjectModelContextLinker.LinkContextComponents(this);
             await BuildLinkDependentComponents();
@@ -63,14 +63,19 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Creates all context components independently and awaits their completion
         /// </summary>
         /// <returns></returns>
-        protected void StartComponentBuildProcess()
+        protected Task BuildContextComponents()
         {
-            UseDefaultsForNullComponents();
+            SetUnknownBuildSystemsToDefault();
 
-            EnergyModelContextBuilder.BuildContext();
-            StructureModelContextBuilder.BuildContext();
-            TransitionModelContextBuilder.BuildContext();
-            SimulationModelContextBuilder.BuildContext();
+            var tasks = new Task[]
+            {
+                EnergyModelContextBuilder.BuildContext(),
+                StructureModelContextBuilder.BuildContext(),
+                TransitionModelContextBuilder.BuildContext(),
+                SimulationModelContextBuilder.BuildContext(),
+            };
+
+            return Task.WhenAll(tasks);
         }
 
         /// <summary>
@@ -91,7 +96,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Set all builder components that are null to a default build system
         /// </summary>
-        protected void UseDefaultsForNullComponents()
+        protected void SetUnknownBuildSystemsToDefault()
         {
             StructureModelContextBuilder = StructureModelContextBuilder ?? new StructureModelContextBuilder(this);
             EnergyModelContextBuilder = EnergyModelContextBuilder ?? new EnergyModelContextBuilder(this);

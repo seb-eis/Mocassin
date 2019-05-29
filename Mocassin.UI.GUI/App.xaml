@@ -6,10 +6,95 @@
              xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands">
   <Application.Resources>
     <ResourceDictionary>
-      <s:Boolean x:Key="Bool.True">True</s:Boolean>
-      <s:Boolean x:Key="Bool.False">False</s:Boolean>
+      <!-- Always on styles -->
+      <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
 
-      <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
+      <Style TargetType="{x:Type TabControl}">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type Button}">
+        <Setter Property="Cursor" Value="Hand" />
+      </Style>
+
+
+      <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+
+      <Style TargetType="{x:Type DataGrid}">
+        <Setter Property="HeadersVisibility" Value="Column" />
+      </Style>
+
+      <Style TargetType="{x:Type Thumb}" x:Key="App.Style.ColumnHeader.ThumbStyle">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type Thumb}">
+              <Rectangle Width="1" Stroke="Transparent" Cursor="SizeWE" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BackgroundBorder" BorderThickness="0,0,0,2"
+                        Background="Transparent"
+                        BorderBrush="Black"
+                        Grid.ColumnSpan="2" />
+                <ContentPresenter Grid.Column="0" Margin="6,3,6,3" VerticalAlignment="Center" />
+                <Path x:Name="SortArrow" Visibility="Collapsed" Data="M 0,0 L 1,0 0.5,1 z" Stretch="Fill"
+                      Grid.Column="1" Width="8" Height="6" Fill="Black" Margin="0,0,8,0"
+                      VerticalAlignment="Center" RenderTransformOrigin="0.5, 0.4" />
+                <Rectangle Grid.Column="0" Width="1" Fill="#EEEEEE" HorizontalAlignment="Right" Grid.ColumnSpan="2" />
+                <Rectangle Grid.Column="0" Width="1" Margin="0,0,1,0" Fill="#DDDDDD" HorizontalAlignment="Right" Grid.ColumnSpan="2" />
+                <Thumb x:Name="PART_LeftHeaderGripper"  Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource App.Style.ColumnHeader.ThumbStyle}" />
+                <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" HorizontalAlignment="Right"
+                       Style="{StaticResource App.Style.ColumnHeader.ThumbStyle}" />
+              </Grid>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                  <Setter TargetName="BackgroundBorder" Property="Background" Value="LightGray" />
+                  <Setter TargetName="BackgroundBorder" Property="BorderBrush" Value="Orange" />
+                </Trigger>
+                <Trigger Property="SortDirection" Value="Ascending">
+                  <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                  <Setter TargetName="SortArrow" Property="RenderTransform">
+                    <Setter.Value>
+                      <RotateTransform Angle="180" />
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+                <Trigger Property="SortDirection" Value="Descending">
+                  <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="DisplayIndex" Value="0">
+                  <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+
+      </Style>
+
+      <!-- Styles with keys -->
 
       <Style TargetType="{x:Type Button}"
              x:Key="App.Style.Button.NullCommand">
@@ -90,19 +175,12 @@
         </Style.Triggers>
       </Style>
 
-      <Style TargetType="{x:Type TabItem}" x:Key="App.Style.TabItem">
-        <Setter Property="Background" Value="Transparent" />
-      </Style>
+      <!-- Static objects -->
 
-      <Style TargetType="{x:Type TabControl}" x:Key="App.Style.TabControl">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource App.Style.TabItem}" />
-      </Style>
+      <s:Boolean x:Key="Bool.True">True</s:Boolean>
+      <s:Boolean x:Key="Bool.False">False</s:Boolean>
 
-
-      <Style TargetType="{x:Type ComboBox}" x:Key="App.Style.ComboBox">
-        <Setter Property="Background" Value="Transparent" />
-      </Style>
+      <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
 
       <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
 
@@ -148,6 +226,21 @@
       <s:String x:Key="App.String.AbstractTransition.Connection">[AbstractTransition.ConnectionPattern]</s:String>
       <s:String x:Key="App.String.AbstractTransition.AssociationFlag">[AbstractTransition.AssociationFlag]</s:String>
       <s:String x:Key="App.String.AbstractTransition.StateExchangeGroups">[AbstractTransition.StateExchangeGroups]</s:String>
+
+      <s:String x:Key="App.String.MetropolisTransition">[MetropolisTransition]</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.Abstract">[MetropolisTransition.Abstract]</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.FirstWyckoff">[MetropolisTransition.FirstWyckoff]</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.SecondWyckoff">[MetropolisTransition.SecondWyckoff]</s:String>
+
+      <s:String x:Key="App.String.KineticsTransition">[KineticTransition]</s:String>
+      <s:String x:Key="App.String.KineticsTransition.Abstract">[KineticTransition.Abstract]</s:String>
+      <s:String x:Key="App.String.KineticsTransition.PathGeometry">[KineticTransition.PathGeometry]</s:String>
+
+      <s:String x:Key="App.String.StableEnvironment">[StableEnvironment]</s:String>
+      <s:String x:Key="App.String.StableEnvironment.CutoffRange">[CutoffRange]</s:String>
+      <s:String x:Key="App.String.StableEnvironment.InteractionFilter">[SymmetricInteractionFilter]</s:String>
+
+      <s:String x:Key="App.String.SymmetricPairInteraction">[SymmetricPairInteraction]</s:String>
 
       <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
       <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />

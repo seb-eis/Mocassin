@@ -5,7 +5,6 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl"
-  xmlns:spaceGroups="clr-namespace:Mocassin.Symmetry.SpaceGroups;assembly=Mocassin.Symmetry"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:crystalSystems="clr-namespace:Mocassin.Symmetry.CrystalSystems;assembly=Mocassin.Symmetry"
   d:DataContext="{d:DesignInstance local:StructureParameterControlViewModel, IsDesignTimeCreatable = True}"

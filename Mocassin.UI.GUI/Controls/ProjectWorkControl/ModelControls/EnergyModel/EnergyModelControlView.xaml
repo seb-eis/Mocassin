@@ -10,35 +10,185 @@
   d:DataContext="{d:DesignInstance local:EnergyModelControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800">
 
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.UnstableEnvironment" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
+          <Run Text="Each change is formed by two" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects, describing donor and acceptor state. The" />
+          <Run Text="{StaticResource App.String.Particle.Void}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
+          <LineBreak />
+          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is valid here."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.GroupInteractions" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects describe the basic possible changes of position occupations within your cell." />
+          <Run Text="Each change is formed by two" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects, describing donor and acceptor state. The" />
+          <Run Text="{StaticResource App.String.Particle.Void}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is a special acceptor for transition state changes from 'nothing' to 'something'." />
+          <LineBreak />
+          <Run Text="Keep in mind: These objects are the first part of MOCASSINS's movement abstraction system."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="For Example, in an oxygen vacancy mechanism, the start position 'vacancy' state changes to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="The end position will change from 'oxygen' to 'vacancy', so the same"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="{StaticResource App.String.StateExchangePair}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="is valid here."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="During transition however, the 'nothing' state of the unstable position will temporary change to an 'oxygen'."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="So, for KMC this change has to be defined as well, while for MMC the first is sufficient."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+  </UserControl.Resources>
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition
-        Height="2*" />
-      <RowDefinition
-        Height="3*" />
-      <RowDefinition
-        Height="3*" />
-    </Grid.RowDefinitions>
+    <TabControl>
+      <TabItem Header="Environment Ranges &amp; Filters">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-    <GroupBox
-      Grid.Row="0"
-      Header="Stable Environments">
-      <dataControl:EnergyParameterControlView
-        DataContext="{Binding ParameterControlViewModel}" />
-    </GroupBox>
+          <dataControl:EnergyParameterControlView Grid.Column="0"
+                                                  DataContext="{Binding ParameterControlViewModel}"
+                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
 
-    <GroupBox
-      Grid.Row="1"
-      Header="Unstable Environments">
-      <dataControl:UnstableEnvironmentControlView
-        DataContext="{Binding UnstableEnvironmentViewModel}" />
-    </GroupBox>
+          <GroupBox Grid.Column="1"
+                    Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-    <GroupBox
-      Grid.Row="2"
-      Header="Interaction Groups">
-      <dataControl:GroupInteractionControlView
-        DataContext="{Binding GroupInteractionViewModel}" />
-    </GroupBox>
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Unstable Environments]" />
+                <Run Text="[?]"
+                     ToolTip="{StaticResource ToolTip.UnstableEnvironment}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:UnstableEnvironmentControlView DataContext="{Binding UnstableEnvironmentViewModel}"
+                                                        Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          </GroupBox>
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="Advanced Options">
+        <GroupBox Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+
+          <GroupBox.Header>
+            <TextBlock>
+              <Run Text="[Interaction Groups]" />
+              <Run Text="[?]"
+                   ToolTip="{StaticResource ToolTip.GroupInteractions}"
+                   Style="{StaticResource App.Style.Run.Keyword}" />
+            </TextBlock>
+          </GroupBox.Header>
+
+          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
+                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        </GroupBox>
+      </TabItem>
+    </TabControl>
   </Grid>
 </UserControl>

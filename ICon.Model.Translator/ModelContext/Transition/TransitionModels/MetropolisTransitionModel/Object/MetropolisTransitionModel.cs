@@ -33,7 +33,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IMetropolisTransitionModel CreateInverse()
+        public IMetropolisTransitionModel CreateGeometricInversion()
         {
             return new MetropolisTransitionModel
             {

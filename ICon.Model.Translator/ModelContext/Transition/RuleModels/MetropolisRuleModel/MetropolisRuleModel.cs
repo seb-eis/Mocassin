@@ -50,7 +50,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IMetropolisRuleModel CreateInverse()
+        public IMetropolisRuleModel CreateGeometricInversion()
         {
             var inverseModel = new MetropolisRuleModel
             {

@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.ViewModels.JsonBrowser;
@@ -13,9 +13,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
     /// </summary>
     public class ProjectLibraryBrowserViewModel : PrimaryControlViewModel
     {
-        /// <summary>
-        ///     The <see cref="JsonBrowserViewModel" /> backing field
-        /// </summary>
         private JsonBrowserViewModel jsonBrowserViewModel;
 
         /// <summary>
@@ -28,23 +25,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             private set => SetProperty(ref jsonBrowserViewModel, value);
         }
 
+        /// <summary>
+        ///     Get a <see cref="AsyncRelayCommand" /> to rebuild the JSON tree view for the project
+        /// </summary>
+        public RelayCommand RebuildProjectTreeViewCommand { get; }
+
         /// <inheritdoc />
         public ProjectLibraryBrowserViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             JsonBrowserViewModel = new JsonBrowserViewModel();
-        }
-
-        /// <inheritdoc />
-        protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
-        {
-            SendToDispatcher(RebuildProjectTreeView);
-        }
-
-        /// <inheritdoc />
-        protected override void OnProjectContentChangedInternal()
-        {
-            SendToDispatcher(RebuildProjectTreeView);
+            RebuildProjectTreeViewCommand = new RelayCommand(RebuildProjectTreeView);
         }
 
         /// <summary>
@@ -52,13 +43,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// </summary>
         private void RebuildProjectTreeView()
         {
-            if (ProjectControl.ProjectGraphs == null)
-            {
-                JsonBrowserViewModel.SetRootViewToNoContent();
-                return;
-            }
+            ExecuteOnDispatcher(() => JsonBrowserViewModel.SetRootViewToNoContent());
+            if (ProjectControl.ProjectGraphs == null) return;
 
-            JsonBrowserViewModel.SetActiveTreeView(ProjectControl.ProjectGraphs, "Project Graphs");
+            ExecuteOnDispatcher(() => JsonBrowserViewModel.SetActiveTreeView(ProjectControl.ProjectGraphs, "Project Graphs"));
+        }
+
+        /// <inheritdoc />
+        protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
+        {
+            SendToDispatcher(() => JsonBrowserViewModel.SetRootViewToNoContent());
         }
     }
 }

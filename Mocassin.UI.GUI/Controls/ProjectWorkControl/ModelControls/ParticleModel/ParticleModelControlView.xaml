@@ -5,7 +5,6 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel"
-  xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.DataControl"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ParticleModelControlViewModel, IsDesignTimeCreatable = True}"
@@ -87,10 +86,8 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <TabControl Grid.Row="0"
-                Style="{StaticResource App.Style.TabControl}">
-      <TabItem Header="Particles &amp; Particle Sets" 
-               Style="{StaticResource App.Style.TabItem}">
+    <TabControl Grid.Row="0">
+      <TabItem Header="Particles &amp; Particle Sets" >
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*" />

@@ -43,10 +43,10 @@ namespace Mocassin.Model.Translator.ModelContext
         IList<int> AbstractMovement { get; set; }
 
         /// <summary>
-        ///     Creates an inverse kinetic transition model of the current
+        ///     Creates the geometric inversion of this rule model
         /// </summary>
         /// <returns></returns>
-        IKineticTransitionModel CreateInverse();
+        IKineticTransitionModel CreateGeometricInverse();
 
         /// <summary>
         ///     Check if the mapping set contains its own inversions

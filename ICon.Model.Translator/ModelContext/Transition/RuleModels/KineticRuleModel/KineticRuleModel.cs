@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Extensions;
@@ -45,16 +46,16 @@ namespace Mocassin.Model.Translator.ModelContext
         public Matrix2D ChargeTransportMatrix { get; set; }
 
         /// <inheritdoc />
-        public IKineticRuleModel CreateInverse()
+        public IKineticRuleModel CreateGeometricInversion()
         {
             var inverseModel = new KineticRuleModel
             {
-                RuleDirectionValue = -RuleDirectionValue,
+                RuleDirectionValue = RuleDirectionValue,
                 IsSourceInversion = true,
                 InverseRuleModel = this,
-                TransitionModel = TransitionModel,
+                TransitionModel = TransitionModel.InverseTransitionModel ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
                 TransitionState = TransitionState.Reverse().ToList(),
-                TransitionStateCode = TransitionStateCode.InvertBytes(),
+                TransitionStateCode = MakeInvertedStateCode(TransitionState),
                 ChargeTransportMatrix = GetInvertedTransportMatrix(),
                 KineticRule = KineticRule
             };
@@ -98,6 +99,21 @@ namespace Mocassin.Model.Translator.ModelContext
             for (var i = 0; i < result.Cols; i++) 
                 result[0, i] = ChargeTransportMatrix[0, result.Cols - i - 1];
 
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates an inverted state code for the passed <see cref="IParticle"/> sequence
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        protected long MakeInvertedStateCode(IList<IParticle> state)
+        {
+            var bytes = new byte[8];
+            var index = 0;
+            for (var i = state.Count - 1; i >= 0; i--) bytes[index++] = (byte) state[i].Index;
+
+            var result = BitConverter.ToInt64(bytes, 0);
             return result;
         }
     }

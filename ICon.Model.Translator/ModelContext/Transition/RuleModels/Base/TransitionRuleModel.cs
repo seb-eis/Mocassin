@@ -87,7 +87,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IList<int> GetEndIndexingDeltaInversion()
         {
-            return EndIndexingDeltas.Reverse().Select(a => -a).ToList();
+            var result = EndIndexingDeltas.Reverse().Select(a => -a).ToList();
+            return result;
         }
 
         /// <summary>

@@ -50,10 +50,10 @@ namespace Mocassin.Model.Translator.ModelContext
         CrystalVector4D EndVector4D { get; set; }
 
         /// <summary>
-        ///     Create a new inverted version of this metropolis mapping model
+        ///     Create a new geometric inversion of this metropolis mapping model
         /// </summary>
         /// <returns></returns>
-        IMetropolisMappingModel CreateInverse();
+        IMetropolisMappingModel CreateGeometricInversion();
 
         /// <summary>
         ///     Links this and the passed mapping model together if they describe inverse mappings. Returns false if they do not

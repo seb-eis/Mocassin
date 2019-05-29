@@ -36,14 +36,11 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var transitionModel in resultModels)
             {
-                var inverseModel = CreateTransitionModelInversion(transitionModel);
-                if (transitionModel != inverseModel)
-                {
-                    inverseModel.ModelId = index++;
-                    inverseModels.Add(transitionModel.InverseTransitionModel);
-                }
+                var inverseModel = CreateGeometricModelInversion(transitionModel);
+                if (transitionModel == inverseModel) continue;
 
-                transitionModel.InverseTransitionModel = inverseModel;
+                inverseModel.ModelId = index++;
+                inverseModels.Add(inverseModel);
             }
 
             resultModels.AddRange(inverseModels);
@@ -154,7 +151,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 .Action(ruleModel => ruleModel.TransitionModel = transitionModel)
                 .ToList();
 
-            CreateCodesAndLinkInverseRuleModels(ruleModels);
+            CreateCodesAndLinkRuleModelInversions(ruleModels);
             AddRuleDirectionInformation(ruleModels);
             transitionModel.RuleModels = ruleModels;
         }
@@ -373,14 +370,19 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <returns></returns>
-        protected IKineticTransitionModel CreateTransitionModelInversion(IKineticTransitionModel transitionModel)
+        protected IKineticTransitionModel CreateGeometricModelInversion(IKineticTransitionModel transitionModel)
         {
             if (transitionModel.MappingsContainInversion())
+            {
+                transitionModel.InverseTransitionModel = transitionModel;
                 return transitionModel;
+            }
 
-            var inverseModel = transitionModel.CreateInverse();
-            CreateAndAddMappingModelInversions(transitionModel, inverseModel);
-            CreateAndAddRuleModelInversions(transitionModel, inverseModel);
+            var inverseModel = transitionModel.CreateGeometricInverse();
+            transitionModel.InverseTransitionModel = inverseModel;
+
+            AddGeometricMappingModelInversions(transitionModel, inverseModel);
+            AddGeometricRuleModelInversions(transitionModel, inverseModel);
 
             return inverseModel;
         }
@@ -390,9 +392,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="inverseModel"></param>
-        protected void CreateAndAddRuleModelInversions(IKineticTransitionModel transitionModel, IKineticTransitionModel inverseModel)
+        protected void AddGeometricRuleModelInversions(IKineticTransitionModel transitionModel, IKineticTransitionModel inverseModel)
         {
-            var inverseModels = transitionModel.RuleModels.Select(CreateAndLinkInverseModel).ToList();
+            var inverseModels = transitionModel.RuleModels.Select(CreateAndLinkGeometricInversion).ToList();
             inverseModel.RuleModels = inverseModels;
         }
 
@@ -401,9 +403,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <param name="inverseModel"></param>
-        protected void CreateAndAddMappingModelInversions(IKineticTransitionModel transitionModel, IKineticTransitionModel inverseModel)
+        protected void AddGeometricMappingModelInversions(IKineticTransitionModel transitionModel, IKineticTransitionModel inverseModel)
         {
-            var inverseModels = transitionModel.MappingModels.Select(CreateAndLinkInverseModel).ToList();
+            var inverseModels = transitionModel.MappingModels.Select(CreateAndLinkGeometricInversion).ToList();
             inverseModel.MappingModels = inverseModels;
         }
 
@@ -412,9 +414,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="ruleModel"></param>
         /// <returns></returns>
-        protected IKineticRuleModel CreateAndLinkInverseModel(IKineticRuleModel ruleModel)
+        protected IKineticRuleModel CreateAndLinkGeometricInversion(IKineticRuleModel ruleModel)
         {
-            var inverseModel = ruleModel.CreateInverse();
+            var inverseModel = ruleModel.CreateGeometricInversion();
             ruleModel.InverseRuleModel = inverseModel;
             return inverseModel;
         }
@@ -424,9 +426,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <returns></returns>
-        protected IKineticMappingModel CreateAndLinkInverseModel(IKineticMappingModel mappingModel)
+        protected IKineticMappingModel CreateAndLinkGeometricInversion(IKineticMappingModel mappingModel)
         {
-            var inverseModel = mappingModel.CreateInverse();
+            var inverseModel = mappingModel.CreateGeometricInversion();
             mappingModel.InverseMapping = inverseModel;
             return inverseModel;
         }

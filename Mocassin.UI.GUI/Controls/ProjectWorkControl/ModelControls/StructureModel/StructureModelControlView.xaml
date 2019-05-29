@@ -15,17 +15,14 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <TabControl Grid.Row="0"
-                Style="{StaticResource App.Style.TabControl}">
+    <TabControl Grid.Row="0">
 
-      <TabItem Header="Geometry &amp; Space Group"
-               Style="{StaticResource App.Style.TabItem}">
+      <TabItem Header="Geometry &amp; Space Group">
 
         <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" />
       </TabItem>
 
-      <TabItem Header="Positions"
-               Style="{StaticResource App.Style.TabItem}">
+      <TabItem Header="Positions">
 
         <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" />
       </TabItem>

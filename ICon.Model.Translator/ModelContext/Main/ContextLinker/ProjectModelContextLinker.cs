@@ -115,7 +115,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var simulationModel in SimulationModelContext.KineticSimulationModels)
             {
                 simulationModel.TransitionModels = simulationModel.TransitionModels
-                    .Select(a => transitionModels.Single(b => b.Transition == a.Transition))
+                    .SelectMany(a => transitionModels.Where(b => b.Transition == a.Transition))
                     .ToList();
             }
         }
@@ -126,10 +126,16 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected async Task SetContextBuildResults()
         {
-            StructureModelContext = await ProjectModelContextBuilder.StructureModelContextBuilder.BuildTask;
-            EnergyModelContext = await ProjectModelContextBuilder.EnergyModelContextBuilder.BuildTask;
-            TransitionModelContext = await ProjectModelContextBuilder.TransitionModelContextBuilder.BuildTask;
-            SimulationModelContext = await ProjectModelContextBuilder.SimulationModelContextBuilder.BuildTask;
+            await Task.WhenAll(
+                ProjectModelContextBuilder.StructureModelContextBuilder.BuildTask,
+                ProjectModelContextBuilder.EnergyModelContextBuilder.BuildTask,
+                ProjectModelContextBuilder.TransitionModelContextBuilder.BuildTask,
+                ProjectModelContextBuilder.SimulationModelContextBuilder.BuildTask);
+
+            StructureModelContext = ProjectModelContextBuilder.StructureModelContextBuilder.BuildTask.Result;
+            EnergyModelContext = ProjectModelContextBuilder.EnergyModelContextBuilder.BuildTask.Result;
+            TransitionModelContext = ProjectModelContextBuilder.TransitionModelContextBuilder.BuildTask.Result;
+            SimulationModelContext = ProjectModelContextBuilder.SimulationModelContextBuilder.BuildTask.Result;
         }
     }
 }

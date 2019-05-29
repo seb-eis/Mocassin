@@ -41,9 +41,9 @@ namespace Mocassin.Model.Translator.ModelContext
         Matrix2D ChargeTransportMatrix { get; set; }
 
         /// <summary>
-        ///     Creates a raw inverted version of this rule model
+        ///     Creates a raw geometry inversion of this rule model
         /// </summary>
         /// <returns></returns>
-        IKineticRuleModel CreateInverse();
+        IKineticRuleModel CreateGeometricInversion();
     }
 }

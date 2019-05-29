@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Transitions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -59,17 +59,18 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IKineticMappingModel CreateInverse()
+        public IKineticMappingModel CreateGeometricInversion()
         {
-            return new KineticMappingModel
+            var result = new KineticMappingModel
             {
-                TransitionModel = TransitionModel,
-                Mapping = Mapping.CreateInverse(),
+                TransitionModel = TransitionModel.InverseTransitionModel ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
+                Mapping = Mapping.CreateGeometricInversion(),
                 InverseMapping = this,
-                TransitionSequence3D = GetInverseTransitionSequence3D(),
-                TransitionSequence4D = GetInverseTransitionSequence4D(),
-                PositionMovementMatrix = GetInverseMovementMatrix()
+                TransitionSequence3D = GetGeometricInversionTransitionSequence3D(),
+                TransitionSequence4D = GetGeometricInversionTransitionSequence4D(),
+                PositionMovementMatrix = GetGeometricInversionMovementMatrix()
             };
+            return result;
         }
 
         /// <inheritdoc />
@@ -101,29 +102,40 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Gets an inverted version of the fractional transition sequence
         /// </summary>
         /// <returns></returns>
-        protected IList<Fractional3D> GetInverseTransitionSequence3D()
+        protected IList<Fractional3D> GetGeometricInversionTransitionSequence3D()
         {
-            return TransitionSequence3D.Reverse().Select(a => a * -1).ToList();
+            var result = new List<Fractional3D>(TransitionSequence3D.Count);
+            var lastId = PositionSequence3D.Count - 1;
+
+            for (var i = lastId - 1; i >= 0; i--)
+                result.Add(PositionSequence3D[i] - PositionSequence3D[lastId]);
+
+            return result;
         }
 
         /// <summary>
         ///     Gets an inverted version of the encoded transition sequence
         /// </summary>
         /// <returns></returns>
-        protected IList<CrystalVector4D> GetInverseTransitionSequence4D()
+        protected IList<CrystalVector4D> GetGeometricInversionTransitionSequence4D()
         {
-            return TransitionSequence4D.Reverse().Select(a => a * -1).ToList();
+            var result = new List<CrystalVector4D>(TransitionSequence4D.Count);
+            var lastId = PositionSequence4D.Count - 1;
+
+            for (var i = lastId - 1; i >= 0; i--)
+                result.Add(PositionSequence4D[i] - PositionSequence4D[lastId]);
+
+            return result;
         }
 
         /// <summary>
         ///     Get an inverted version of the movement matrix
         /// </summary>
         /// <returns></returns>
-        protected Matrix2D GetInverseMovementMatrix()
+        protected Matrix2D GetGeometricInversionMovementMatrix()
         {
-            var reversed = PositionMovementMatrix.GetRowReversed();
-            reversed.ScalarMultiply(-1);
-            return reversed;
+            var result = PositionMovementMatrix.GetRowReversed();
+            return result;
         }
     }
 }

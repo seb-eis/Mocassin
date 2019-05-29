@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Transitions;
 
@@ -57,13 +58,14 @@ namespace Mocassin.Model.Translator.ModelContext
         public bool InverseIsSet => InverseMapping != null;
 
         /// <inheritdoc />
-        public IMetropolisMappingModel CreateInverse()
+        public IMetropolisMappingModel CreateGeometricInversion()
         {
             return new MetropolisMappingModel
             {
-                TransitionModel = TransitionModel,
+                TransitionModel = TransitionModel.InverseTransitionModel 
+                                  ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
                 IsSourceInversion = true,
-                Mapping = Mapping,
+                Mapping = Mapping.CreateGeometricInversion(),
                 InverseMapping = this,
                 StartVector3D = EndVector3D,
                 EndVector3D = StartVector3D,

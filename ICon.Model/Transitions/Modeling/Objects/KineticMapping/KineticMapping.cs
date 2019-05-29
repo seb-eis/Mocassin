@@ -91,7 +91,7 @@ namespace Mocassin.Model.Transitions
         ///     Creates an inverted kinetic mapping
         /// </summary>
         /// <returns></returns>
-        public KineticMapping CreateInverse()
+        public KineticMapping CreateGeometricInversion()
         {
             var inverseEncodedPath = EncodedPath.Reverse().ToArray();
             var inverseFractionalPath = FractionalPath.Reverse().ToArray();

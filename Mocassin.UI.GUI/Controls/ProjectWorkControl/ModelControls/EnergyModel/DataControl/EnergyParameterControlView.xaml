@@ -5,36 +5,127 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl"
-  xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:EnergyParameterControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800">
+
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.CutoffRange" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StableEnvironment.CutoffRange}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <Run Text="is a property of the unique" />
+          <Run Text="{StaticResource App.String.StableEnvironment}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="object. It defines the maximum radius MOCASSIN uses when sampling for" />
+          <Run Text="{StaticResource App.String.SymmetricPairInteraction}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects around" />
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="instances defined as 'stable'." />
+          <LineBreak />
+          <Run Text="Keep in mind: All pair interactions around 'stable' positions have implicit symmetric (A-B = B-A)' behavior."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="You cannot overwrite this behavior or define discrete cutoff ranges for each 'stable' position."
+               Style="{StaticResource App.Style.Run.Important}" />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.InteractionFilters" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StableEnvironment.InteractionFilter}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects allow to exclude specific" />
+          <Run Text="{StaticResource App.String.SymmetricPairInteraction}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects between two 'stable' wyckoff positions from the interaction sampling." />
+          <LineBreak />
+          <Run Text="Keep in mind: The behavior is symmetric, A-B and B-A cannot be removed independently."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="Keep in mind: If you remove an A-B interaction, the B-A interaction will be removed as well."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the" />
+          <Run Text="{StaticResource App.String.Particle}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+  </UserControl.Resources>
   <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition
-        Width="1*" />
-      <ColumnDefinition
-        Width="3*" />
-    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-    <GroupBox
-      Grid.Column="0"
-      Header="Interaction Radius [Ang]"
-      Height="Auto"
-      VerticalAlignment="Top">
+    <GroupBox Grid.Row="0" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-      <TextBox
-        Text="{Binding InteractionRadius, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Interaction Cutoff Range]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.CutoffRange}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+
+      <TextBox Text="{Binding InteractionRadius}" Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}" />
+        </TextBox.InputBindings>
+      </TextBox>
 
     </GroupBox>
 
-    <GroupBox
-      Grid.Column="1"
-      Header="Interaction Filters">
+    <GroupBox Grid.Row="1" Style="{StaticResource App.Style.GroupBox.LeftBorder}"  >
 
-      <gridControl:InteractionFilterGridControlView
-        DataContext="{Binding InteractionFilterGridViewModel}" />
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Interaction Filters]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.InteractionFilters}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+
+      <gridControl:InteractionFilterGridControlView DataContext="{Binding InteractionFilterGridViewModel}"
+                                                    Margin="{StaticResource App.Margin.GroupBoxContent}"
+                                                    VerticalAlignment="Top"/>
 
     </GroupBox>
   </Grid>

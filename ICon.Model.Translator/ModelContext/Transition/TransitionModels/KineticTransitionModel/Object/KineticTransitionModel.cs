@@ -40,7 +40,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public IKineticTransitionModel CreateInverse()
+        public IKineticTransitionModel CreateGeometricInverse()
         {
             return new KineticTransitionModel
             {

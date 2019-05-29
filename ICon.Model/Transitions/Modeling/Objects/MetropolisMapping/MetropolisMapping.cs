@@ -37,7 +37,7 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Compares two metropolis mappings by their position idnices
+        ///     Compares two metropolis mappings by their position indices
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -53,6 +53,16 @@ namespace Mocassin.Model.Transitions
         public bool Equals(MetropolisMapping other)
         {
             return PositionIndex0 == other.PositionIndex0 && PositionIndex1 == other.PositionIndex1;
+        }
+
+        /// <summary>
+        ///     Creates the geometric inversion of the <see cref="MetropolisMapping"/>
+        /// </summary>
+        /// <returns></returns>
+        public MetropolisMapping CreateGeometricInversion()
+        {
+            var result = new MetropolisMapping(Transition, PositionIndex1, PositionIndex0);
+            return result;
         }
     }
 }
