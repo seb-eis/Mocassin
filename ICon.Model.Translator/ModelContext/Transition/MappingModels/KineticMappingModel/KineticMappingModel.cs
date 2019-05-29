@@ -40,6 +40,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public int PathLength => Mapping.PathLength;
 
         /// <inheritdoc />
+        public ITransitionMappingModel InverseMappingBase => InverseMapping;
+
+        /// <inheritdoc />
         /// <remarks> This value cannot be set for a kinetic transition </remarks>
         public CrystalVector4D StartVector4D
         {
@@ -50,7 +53,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public bool LinkIfInverseMatch(IKineticMappingModel inverseModel)
         {
-            if (!PositionMovementMatrix.GetRowReversed().Equals(inverseModel.PositionMovementMatrix))
+            if (!GetGeometricInversionMovementMatrix().Equals(inverseModel.PositionMovementMatrix))
                 return false;
 
             InverseMapping = inverseModel;

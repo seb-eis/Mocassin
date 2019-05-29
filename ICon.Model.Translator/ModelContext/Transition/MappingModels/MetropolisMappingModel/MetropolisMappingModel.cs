@@ -27,6 +27,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public int PathLength => 2;
 
         /// <inheritdoc />
+        public ITransitionMappingModel InverseMappingBase => InverseMapping;
+
+        /// <inheritdoc />
         /// <remarks> Coordinates (0,0,0,P) are always in the original unit cell </remarks>
         public CrystalVector4D StartVector4D { get; set; }
 

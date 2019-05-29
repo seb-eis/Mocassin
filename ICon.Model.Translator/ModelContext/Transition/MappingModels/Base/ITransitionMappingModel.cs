@@ -14,6 +14,11 @@ namespace Mocassin.Model.Translator.ModelContext
         int PathLength { get; }
 
         /// <summary>
+        ///     Get the inverse <see cref="ITransitionMappingModel"/>
+        /// </summary>
+        ITransitionMappingModel InverseMappingBase { get; }
+
+        /// <summary>
         ///     Defines the start vector of the mapping in encoded 4D crystal coordinates
         /// </summary>
         CrystalVector4D StartVector4D { get; set; }

@@ -53,6 +53,12 @@ namespace Mocassin.Model.Translator
         public int ObjectId { get; set; }
 
         /// <summary>
+        ///     The object id of the inverse direction in the simulation context
+        /// </summary>
+        [Column("InvObjectId")]
+        public int InvObjectId { get; set; }
+
+        /// <summary>
         ///     The position id the jump direction in the simulation context is valid for
         /// </summary>
         [Column("PositionId")]

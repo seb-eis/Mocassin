@@ -45,10 +45,34 @@ namespace Mocassin.Model.Translator.Database.Entities.Other.Meta
         public double Temperature { get; set; }
 
         /// <summary>
+        ///     Get or set the electric field modulus in [V/m]
+        /// </summary>
+        [Column("ElectricFieldModulus")]
+        public double ElectricFieldModulus { get; set; }
+
+        /// <summary>
+        ///     Get or set the base frequency in [Hz]
+        /// </summary>
+        [Column("BaseFrequency")]
+        public double BaseFrequency { get; set; }
+
+        /// <summary>
         ///     Get or set the main run target MCSP
         /// </summary>
         [Column("Mcsp")]
         public long MainRunMcsp { get; set; }
+
+        /// <summary>
+        ///     Get or set the pre-run run target MCSP
+        /// </summary>
+        [Column("PreRunMcsp")]
+        public long PreRunMcsp { get; set; }
+
+        /// <summary>
+        ///     Get or set the fixed manual normalization
+        /// </summary>
+        [Column("NormFactor")]
+        public double NormalizationFactor { get; set; }
 
         /// <summary>
         ///     Get or set the time limit in seconds

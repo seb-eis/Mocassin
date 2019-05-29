@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Extensions;
@@ -16,12 +15,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
     public class JobDbEntityBuilder : IJobDbEntityBuilder
     {
         /// <summary>
-        ///     Get the set of <see cref="IPostBuildOptimizer"/> interfaces registered with the builder
+        ///     Get the set of <see cref="IPostBuildOptimizer" /> interfaces registered with the builder
         /// </summary>
         private HashSet<IPostBuildOptimizer> PostBuildOptimizers { get; }
 
         /// <summary>
-        /// Get the <see cref="ReactiveEvent{TSubject}"/> that is called on finished jobs
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> that is called on finished jobs
         /// </summary>
         private ReactiveEvent<int> JobIsBuildEvent { get; }
 
@@ -166,7 +165,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Get a <see cref="JobMetaDataEntity"/> for the passed <see cref="JobConfiguration"/>
+        ///     Get a <see cref="JobMetaDataEntity" /> for the passed <see cref="JobConfiguration" />
         /// </summary>
         /// <param name="jobConfiguration"></param>
         /// <returns></returns>
@@ -184,7 +183,25 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 LatticeInfo = jobConfiguration.LatticeConfiguration.GetSizeString()
             };
 
+            AddKineticMetaData(entity, jobConfiguration);
+
             return entity;
+        }
+
+        /// <summary>
+        ///     Adds meta information to the passed <see cref="JobMetaDataEntity" /> specific to <see cref="KmcJobConfiguration" />
+        ///     if possible
+        /// </summary>
+        /// <param name="jobMetaData"></param>
+        /// <param name="jobConfiguration"></param>
+        protected void AddKineticMetaData(JobMetaDataEntity jobMetaData, JobConfiguration jobConfiguration)
+        {
+            var kmcConfig = jobConfiguration as KmcJobConfiguration;
+
+            jobMetaData.ElectricFieldModulus = kmcConfig?.ElectricFieldModulus ?? double.NaN;
+            jobMetaData.BaseFrequency = kmcConfig?.BaseFrequency ?? double.NaN;
+            jobMetaData.NormalizationFactor = kmcConfig?.FixedNormalizationFactor ?? double.NaN;
+            jobMetaData.PreRunMcsp = kmcConfig?.PreRunMcsp ?? -1;
         }
 
         /// <summary>
@@ -281,7 +298,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             EnergyDbEntityBuilder = EnergyDbEntityBuilder ?? new EnergyDbEntityBuilder(ProjectModelContext);
             StructureDbEntityBuilder = StructureDbEntityBuilder ?? new StructureDbEntityBuilder(ProjectModelContext);
             TransitionDbEntityBuilder = TransitionDbEntityBuilder ?? new TransitionDbEntityBuilder(ProjectModelContext);
-	        LatticeDbEntityBuilder = LatticeDbEntityBuilder ?? new LatticeDbEntityBuilder(ProjectModelContext);
+            LatticeDbEntityBuilder = LatticeDbEntityBuilder ?? new LatticeDbEntityBuilder(ProjectModelContext);
         }
     }
 }

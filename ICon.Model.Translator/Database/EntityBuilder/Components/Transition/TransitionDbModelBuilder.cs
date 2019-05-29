@@ -147,6 +147,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 PositionId = mappingModel.StartVector4D.P,
                 CollectionId = simulationModel.SimulationEncodingModel.TransitionModelToJumpCollectionId[mappingModel.GetTransitionModel()],
                 ObjectId = simulationModel.SimulationEncodingModel.TransitionMappingToJumpDirectionId[mappingModel],
+                InvObjectId = simulationModel.SimulationEncodingModel.TransitionMappingToJumpDirectionId[mappingModel.InverseMappingBase],
                 FieldProjectionFactor = simulationModel.SimulationEncodingModel.TransitionMappingToElectricFieldFactors[mappingModel],
                 JumpSequence = GetJumpSequenceEntity(mappingModel.GetTransitionSequence()),
                 MovementSequence = GetMovementSequenceEntity(mappingModel)
