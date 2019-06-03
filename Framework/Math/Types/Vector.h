@@ -73,7 +73,7 @@ static inline Vector3_t SubtractVector3(const Vector3_t *lhs, const Vector3_t *r
 // Performs a multiplication of the vector with a scalar and returns the resulting vector
 static inline Vector3_t ScalarMultiplyVector3(const Vector3_t *lhs, double rhs)
 {
-	return (Vector3_t) { lhs->A* rhs, lhs->A * rhs, lhs->C * rhs };
+	return (Vector3_t) { lhs->A* rhs, lhs->B * rhs, lhs->C * rhs };
 }
 
 // Performs a division of the vector with a scalar and returns the resulting vector
