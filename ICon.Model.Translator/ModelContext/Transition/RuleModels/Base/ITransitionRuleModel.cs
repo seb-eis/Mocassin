@@ -78,18 +78,18 @@ namespace Mocassin.Model.Translator.ModelContext
         void CopyInversionDataToModel(ITransitionRuleModel ruleModel);
 
         /// <summary>
-        ///     Links this and the passed rule model together if they are an inversion match
+        ///     Links this and the passed rule model together if they are a logic inversion match
         /// </summary>
         /// <param name="ruleModel"></param>
         /// <returns></returns>
-        bool LinkIfInverseMatch(ITransitionRuleModel ruleModel);
+        bool LinkIfLogicalInversions(ITransitionRuleModel ruleModel);
 
         /// <summary>
-        ///     Checks if the passed rule model is the inverse of this one
+        ///     Checks if the passed rule model is the logical inverse (not geometric) of the passed rule model
         /// </summary>
         /// <param name="ruleModel"></param>
         /// <returns></returns>
-        bool IsInverse(ITransitionRuleModel ruleModel);
+        bool IsLogicalInverse(ITransitionRuleModel ruleModel);
 
         /// <summary>
         ///     Get a particle set that contains all particles that are not immobile in the context of the rule

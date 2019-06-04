@@ -78,7 +78,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public bool LinkIfInverseMatch(IMetropolisMappingModel mappingModel)
+        public bool LinkIfGeometricInversion(IMetropolisMappingModel mappingModel)
         {
             if (Mapping.Transition != mappingModel.Mapping.Transition || !StartVector4D.Equals(mappingModel.EndVector4D))
                 return false;

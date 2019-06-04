@@ -6,7 +6,94 @@
              xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands">
   <Application.Resources>
     <ResourceDictionary>
-      <!-- Always on styles -->
+      <!-- System color overwrites -->
+
+      <!-- Styles with keys -->
+
+      <Style TargetType="{x:Type Button}"
+             x:Key="App.Style.Button.NullCommand">
+        <Style.Triggers>
+          <Trigger Property="Command" Value="{x:Null}">
+            <Setter Property="IsEnabled" Value="False" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type Run}"
+             x:Key="App.Style.Run.Keyword">
+        <Setter Property="Foreground" Value="Blue" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}"
+             x:Key="App.Style.Run.Important">
+        <Setter Property="FontStyle" Value="Italic" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}"
+             x:Key="App.Style.Run.ModelObject">
+        <Setter Property="Foreground" Value="ForestGreen" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}"
+             x:Key="App.Style.Run.Property">
+        <Setter Property="Foreground" Value="OrangeRed" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type ToolTip}"
+             x:Key="App.Style.ToolTip.Default">
+        <Setter Property="MaxWidth" Value="500" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}"
+             x:Key="App.Style.ToolTip.TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Justify" />
+      </Style>
+
+      <Style TargetType="Border" x:Key="App.Style.Border.Box">
+        <Setter Property="BorderThickness" Value=".5" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftTopBorder">
+        <Setter Property="BorderThickness" Value="2,2,0,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightTopBorder">
+        <Setter Property="BorderThickness" Value="0,2,2,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftBorder">
+        <Setter Property="BorderThickness" Value="2,0,0,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
+        <Setter Property="BorderThickness" Value="0,0,2,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
+        <Style.Triggers>
+          <Trigger Property="IsReadOnly" Value="True">
+            <Setter Property="Opacity" Value=".5" />
+          </Trigger>
+          <Trigger Property="IsReadOnly" Value="False">
+            <Setter Property="Opacity" Value="1" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+            <!-- Always on styles -->
+      <Style TargetType="{x:Type UserControl}">
+        <Setter Property="Background" Value="Transparent"/>
+      </Style>
+
       <Style TargetType="{x:Type TabItem}">
         <Setter Property="Background" Value="Transparent" />
       </Style>
@@ -94,77 +181,7 @@
 
       </Style>
 
-      <!-- Styles with keys -->
-
-      <Style TargetType="{x:Type Button}"
-             x:Key="App.Style.Button.NullCommand">
-        <Style.Triggers>
-          <Trigger Property="Command" Value="{x:Null}">
-            <Setter Property="IsEnabled" Value="False" />
-          </Trigger>
-        </Style.Triggers>
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.Keyword">
-        <Setter Property="Foreground" Value="Blue" />
-        <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.Important">
-        <Setter Property="FontStyle" Value="Italic" />
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.ModelObject">
-        <Setter Property="Foreground" Value="ForestGreen" />
-        <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.Property">
-        <Setter Property="Foreground" Value="OrangeRed" />
-        <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type ToolTip}"
-             x:Key="App.Style.ToolTip.Default">
-        <Setter Property="MaxWidth" Value="500" />
-      </Style>
-
-      <Style TargetType="{x:Type TextBlock}"
-             x:Key="App.Style.ToolTip.TextBlock">
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="TextAlignment" Value="Justify" />
-      </Style>
-
-      <Style TargetType="Border" x:Key="App.Style.Border.Box">
-        <Setter Property="BorderThickness" Value=".5" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftTopBorder">
-        <Setter Property="BorderThickness" Value="2,2,0,0" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightTopBorder">
-        <Setter Property="BorderThickness" Value="0,2,2,0" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.LeftBorder">
-        <Setter Property="BorderThickness" Value="2,0,0,0" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
-        <Setter Property="BorderThickness" Value="0,0,2,0" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
+      <Style TargetType="{x:Type TextBox}">
         <Style.Triggers>
           <Trigger Property="IsReadOnly" Value="True">
             <Setter Property="Opacity" Value=".5" />
@@ -174,6 +191,8 @@
           </Trigger>
         </Style.Triggers>
       </Style>
+
+      <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource App.Style.GroupBox.LeftBorder}"/>
 
       <!-- Static objects -->
 
@@ -238,9 +257,28 @@
 
       <s:String x:Key="App.String.StableEnvironment">[StableEnvironment]</s:String>
       <s:String x:Key="App.String.StableEnvironment.CutoffRange">[CutoffRange]</s:String>
-      <s:String x:Key="App.String.StableEnvironment.InteractionFilter">[SymmetricInteractionFilter]</s:String>
+      <s:String x:Key="App.String.InteractionFilter">[InteractionFilter]</s:String>
+      <s:String x:Key="App.String.InteractionFilter.StartRadius">[InteractionFilter.StartRadius]</s:String>
+      <s:String x:Key="App.String.InteractionFilter.EndRadius">[InteractionFilter.EndRadius]</s:String>
+      <s:String x:Key="App.String.InteractionFilter.CenterWyckoff">[InteractionFilter.CenterWyckoff]</s:String>
+      <s:String x:Key="App.String.InteractionFilter.PartnerWyckoff">[InteractionFilter.PartnerWyckoff]</s:String>
 
       <s:String x:Key="App.String.SymmetricPairInteraction">[SymmetricPairInteraction]</s:String>
+
+      <s:String x:Key="App.String.UnstableEnvironment">[UnstableEnvironment]</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.CenterWyckoff">[UnstableEnvironment.Center]</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.InteractionFilters">[UnstableEnvironment.InteractionFilters]</s:String>
+
+      <s:String x:Key="App.String.GroupInteraction">[GroupInteraction]</s:String>
+      <s:String x:Key="App.String.GroupInteraction.CenterWyckoff">[GroupInteraction.Center]</s:String>
+      <s:String x:Key="App.String.GroupInteraction.Geometry">[GroupInteraction.Geometry]</s:String>
+
+      <s:String x:Key="App.String.MetropolisSimulation">[MetropolisSimulation]</s:String>
+      <s:String x:Key="App.String.MetropolisSimulation.Transitions">[MetropolisSimulation.Transitions]</s:String>
+
+      <s:String x:Key="App.String.KineticSimulation">[KineticSimulation]</s:String>
+      <s:String x:Key="App.String.KineticSimulation.Transitions">[KineticSimulation.Transitions]</s:String>
+
 
       <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
       <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />

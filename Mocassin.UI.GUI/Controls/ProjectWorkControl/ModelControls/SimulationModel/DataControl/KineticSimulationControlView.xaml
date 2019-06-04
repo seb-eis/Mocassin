@@ -13,92 +13,193 @@
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800">
 
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.KineticSimulations" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.KineticSimulation}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects define the basis for your KMC simulation project deployment." />
+          <Run Text="They group sets of" />
+          <Run Text="{StaticResource App.String.KineticsTransition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects to define what can happen within the lattice during simulation." />
+          <LineBreak />
+          <Run
+            Text="Keep in mind: Settings you define here can be overwritten later on and serve as global fallback values."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="It is recommended to use the automatic default values if global overrides are not required."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.KineticSimulation.Transitions}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the set of attached" />
+          <Run Text="{StaticResource App.String.KineticsTransition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects that define the possible set of selectable changes." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.GeneralSettings" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Defines the global overrides for general simulation settings that exist for both KMC and MMC." />
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.KineticSettings">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Defines the global overrides for simulation settings that exist only for KMC." />
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
+  </UserControl.Resources>
+
   <Grid>
-    <DataGrid
-      Name="SimulationDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      Background="Transparent"
-      ColumnWidth="*"
-      AutoGenerateColumns="False"
-      VerticalScrollBarVisibility="Auto"
-      HorizontalScrollBarVisibility="Auto">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="2*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate 
-          DataType="{x:Type simulationModel:KineticSimulationGraph}">
+    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Kinetic Simulation Bases]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.KineticSimulations}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
 
-          <gridControl:SimulationBaseControlView 
-            DataContext="{Binding}"/>
+      <DataGrid Name="SimulationDataGrid"
+                ItemsSource="{Binding DataCollection}"
+                SelectedItem="{Binding SelectedCollectionItem}"
+                Background="Transparent"
+                ColumnWidth="*"
+                AutoGenerateColumns="False"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto">
 
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name"
+                              Binding="{Binding Name}" />
 
-      <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Width="Auto"
-          Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+          <DataGridTemplateColumn Header="Transitions">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate DataType="{x:Type simulationModel:KineticSimulationGraph}">
+                <hosting:HostGraphModelObjectBoxSelectionView>
+                  <hosting:HostGraphModelObjectBoxSelectionView.DataContext>
+                    <MultiBinding Converter="{adapter:KineticSimulationTransitionSelectionVmConverter}">
+                      <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                               Path="DataContext" />
+                      <Binding />
+                    </MultiBinding>
+                  </hosting:HostGraphModelObjectBoxSelectionView.DataContext>
+                </hosting:HostGraphModelObjectBoxSelectionView>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
 
-        <DataGridTextColumn
-          Header="Prerun-MCSP"
-          Width="Auto"
-          Binding="{Binding PreRunMcsp, UpdateSourceTrigger=PropertyChanged,Delay=500}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </GroupBox>
 
-        <DataGridTextColumn
-          Header="Normalization"
-          Width="Auto"
-          Binding="{Binding NormalizationProbability, UpdateSourceTrigger=PropertyChanged,Delay=500}" />
+    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[General Settings]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.GeneralSettings}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedCollectionItem}" />
+    </GroupBox>
 
-        <DataGridTemplateColumn
-          Header="E-Field Vector (A,B,C)"
-          Width="Auto">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type simulationModel:KineticSimulationGraph}">
-              <DockPanel
-                VerticalAlignment="Top"
-                Dock="Top">
-                <TextBox
-                  Text="{Binding ElectricFieldVector.A, UpdateSourceTrigger=PropertyChanged, Delay=500, StringFormat={}{0:0.00}}" />
+    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[General Settings]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.GeneralSettings}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
 
-                <TextBox
-                  Text="{Binding ElectricFieldVector.B, UpdateSourceTrigger=PropertyChanged, Delay=500, StringFormat={}{0:0.00}}"/>
+      <Grid>
 
-                <TextBox
-                  Text="{Binding ElectricFieldVector.C, UpdateSourceTrigger=PropertyChanged, Delay=500, StringFormat={}{0:0.00}}"/>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-              </DockPanel>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
+        <GroupBox Grid.Row="0"
+                  Grid.Column="0"
+                  Header="Pre-run length [MCSP]">
+          <TextBox Text="{Binding SelectedCollectionItem.PreRunMcsp}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        </GroupBox>
 
-        <DataGridTextColumn
-          Header="E-Field Modulus [V/m]"
-          Width="Auto"
-          Binding="{Binding ElectricFieldMagnitude, UpdateSourceTrigger=PropertyChanged,Delay=500}" />
+        <GroupBox Grid.Row="0"
+                  Grid.Column="1"
+                  Header="Normalization probability">
+          <TextBox Text="{Binding SelectedCollectionItem.NormalizationProbability}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        </GroupBox>
 
-        <DataGridTemplateColumn
-          Header="Transitions">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type simulationModel:KineticSimulationGraph}">
-              <hosting:HostGraphModelObjectBoxSelectionView>
-                <hosting:HostGraphModelObjectBoxSelectionView.DataContext>
-                  <MultiBinding 
-                    Converter="{adapter:KineticSimulationTransitionSelectionVmConverter}">
-                    <Binding 
-                      RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                      Path="DataContext"/>
-                    <Binding/>
-                  </MultiBinding>
-                </hosting:HostGraphModelObjectBoxSelectionView.DataContext>
-              </hosting:HostGraphModelObjectBoxSelectionView>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
+        <GroupBox Grid.Row="0"
+                  Grid.Column="2"
+                  Header="Electric field modulus [V/m]">
+          <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldMagnitude}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+        </GroupBox>
 
-      </DataGrid.Columns>
-    </DataGrid>
+        <GroupBox Grid.Row="1"
+                  Grid.Column="0"
+                  Header="Electric field vector (A,B,C)">
+          <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.A, StringFormat={}{0:0.00}}"
+                     Grid.Column="0"/>
+            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.B, StringFormat={}{0:0.00}}"
+                     Grid.Column="1"/>
+            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.C, StringFormat={}{0:0.00}}"
+                     Grid.Column="2"/>
+          </Grid>
+        </GroupBox>
+
+      </Grid>
+    </GroupBox>
+
   </Grid>
+
 </UserControl>

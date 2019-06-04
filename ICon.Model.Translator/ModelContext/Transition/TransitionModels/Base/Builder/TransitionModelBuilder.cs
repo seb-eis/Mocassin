@@ -53,10 +53,10 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates all inversion links and simulation codes for a prepared list of rule models
+        ///     Creates all logic inversion links and simulation codes for a prepared list of rule models
         /// </summary>
         /// <param name="ruleModels"></param>
-        protected void CreateCodesAndLinkRuleModelInversions(IReadOnlyList<ITransitionRuleModel> ruleModels)
+        protected void CreateCodesAndLinkLogicRuleInversions(IReadOnlyList<ITransitionRuleModel> ruleModels)
         {
             CreateAllCodesOnRuleModels(ruleModels);
 
@@ -70,7 +70,7 @@ namespace Mocassin.Model.Translator.ModelContext
                     if (ruleModels[j].InverseIsSet)
                         continue;
 
-                    if (ruleModels[i].LinkIfInverseMatch(ruleModels[j]))
+                    if (ruleModels[i].LinkIfLogicalInversions(ruleModels[j]))
                         break;
                 }
             }

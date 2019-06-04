@@ -15,85 +15,185 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <Style
-      TargetType="{x:Type TextBlock}"
-      x:Key="ReadOnlyBlockStyle">
-      <Setter
-        Property="Opacity"
-        Value=".5" />
-    </Style>
+    <ToolTip x:Key="ToolTip.MetropolisSimulations" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.MetropolisSimulation}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects define the basis for your MMC simulation project deployment." />
+          <Run Text="They group sets of" />
+          <Run Text="{StaticResource App.String.MetropolisTransition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects to define what can happen within the lattice during simulation." />
+          <LineBreak />
+          <Run
+            Text="Keep in mind: Settings you define here can be overwritten later on and serve as global fallback values."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="It is recommended to use the automatic default values if global overrides are not required."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.MetropolisSimulation.Transitions}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the set of attached" />
+          <Run Text="{StaticResource App.String.MetropolisTransition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects that define the possible set of selectable changes." />
+          <LineBreak />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.GeneralSettings" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Defines the global overrides for general simulation settings that exist for both KMC and MMC." />
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.MetropolisSettings">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Defines the global overrides for simulation settings that exist only for MMC." />
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
   </UserControl.Resources>
 
   <Grid>
-    <DataGrid
-      Name="SimulationDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      AutoGenerateColumns="False"
-      VerticalScrollBarVisibility="Auto"
-      Background="Transparent"
-      ColumnWidth="*">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="2*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate
-          DataType="{x:Type simulationModel:MetropolisSimulationGraph}">
-          <gridControl:SimulationBaseControlView
-            DataContext="{Binding}" />
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Metropolis Simulation Bases]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.MetropolisSimulations}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+      <DataGrid Grid.Column="0"
+                Margin="{StaticResource App.Margin.GroupBoxContent}"
+                Name="SimulationDataGrid"
+                ItemsSource="{Binding DataCollection}"
+                SelectedItem="{Binding SelectedCollectionItem}"
+                AutoGenerateColumns="False"
+                VerticalScrollBarVisibility="Auto"
+                Background="Transparent"
+                ColumnWidth="*">
 
-      <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Width="Auto"
-          Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name"
+                              Binding="{Binding Name}" />
 
-        <DataGridTextColumn
-          Header="Abort Tolerance"
-          Width="Auto"
-          Binding="{Binding RelativeBreakTolerance, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+          <DataGridTemplateColumn Header="Transitions">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate DataType="{x:Type simulationModel:MetropolisSimulationGraph}">
+                <hosting:HostGraphModelObjectBoxSelectionView>
+                  <hosting:HostGraphModelObjectBoxSelectionView.DataContext>
+                    <MultiBinding Converter="{adapter:MetropolisSimulationTransitionSelectionVmConverter}">
+                      <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                               Path="DataContext" />
+                      <Binding />
+                    </MultiBinding>
+                  </hosting:HostGraphModelObjectBoxSelectionView.DataContext>
+                </hosting:HostGraphModelObjectBoxSelectionView>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
 
-        <DataGridTextColumn
-          Header="Abort Sample Size [Mcs]"
-          Width="Auto"
-          Binding="{Binding BreakSampleLength, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+        </DataGrid.Columns>
 
-        <DataGridTextColumn
-          Header="Abort Test Interval [Mcs]"
-          Width="Auto"
-          IsReadOnly="True"
-          Binding="{Binding BreakSampleLength, UpdateSourceTrigger=PropertyChanged, Delay=500}"
-          ElementStyle="{StaticResource ReadOnlyBlockStyle}"/>
+      </DataGrid>
+    </GroupBox>
 
-        <DataGridTextColumn
-          Header="Result Samples [Mcs]"
-          Width="Auto"
-          IsReadOnly="True"
-          Binding="{Binding BreakSampleLength, UpdateSourceTrigger=PropertyChanged, Delay=500}" 
-          ElementStyle="{StaticResource ReadOnlyBlockStyle}"/>
+    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
 
-        <DataGridTemplateColumn
-          Header="Transitions">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type simulationModel:KineticSimulationGraph}">
-              <hosting:HostGraphModelObjectBoxSelectionView>
-                <hosting:HostGraphModelObjectBoxSelectionView.DataContext>
-                  <MultiBinding
-                    Converter="{adapter:MetropolisSimulationTransitionSelectionVmConverter}">
-                    <Binding
-                      RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                      Path="DataContext" />
-                    <Binding />
-                  </MultiBinding>
-                </hosting:HostGraphModelObjectBoxSelectionView.DataContext>
-              </hosting:HostGraphModelObjectBoxSelectionView>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[General Settings]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.GeneralSettings}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
 
-      </DataGrid.Columns>
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedCollectionItem}"
+                                             Margin="{StaticResource App.Margin.GroupBoxContent}" />
+    </GroupBox>
 
-    </DataGrid>
+    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="[Metropolis Settings]" />
+          <Run Text="[?]"
+               ToolTip="{StaticResource ToolTip.MetropolisSettings}"
+               Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+
+      <Grid>
+
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0"
+                  Grid.Column="0"
+                  Header="Rel. Break tolerance">
+          <TextBox Text="{Binding SelectedCollectionItem.RelativeBreakTolerance}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        </GroupBox>
+
+        <GroupBox Grid.Row="0"
+                  Grid.Column="1"
+                  Header="Break check sample [MCS]">
+          <TextBox Text="{Binding SelectedCollectionItem.BreakSampleLength}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        </GroupBox>
+
+        <GroupBox Grid.Row="0"
+                  Grid.Column="2"
+                  Header="Break check interval [MCS]">
+          <TextBox Text="{Binding SelectedCollectionItem.BreakSampleIntervalMcs}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}"
+                   IsReadOnly="True" />
+        </GroupBox>
+
+        <GroupBox Grid.Row="1"
+                  Grid.Column="0"
+                  Header="Result sample size [MCS]">
+          <TextBox Text="{Binding SelectedCollectionItem.ResultSampleMcs}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}"
+                   IsReadOnly="True" />
+        </GroupBox>
+      </Grid>
+    </GroupBox>
   </Grid>
 </UserControl>

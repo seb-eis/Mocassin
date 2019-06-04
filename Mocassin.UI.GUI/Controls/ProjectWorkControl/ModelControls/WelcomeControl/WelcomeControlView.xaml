@@ -16,7 +16,7 @@
     </Style>
   </UserControl.Resources>
   <Grid>
-    <Image Source="C:\Users\hims-user\source\repos\ICon.Program\Mocassin.UI.GUI\Resources\Icons\MocassinLogoRound3.png" Opacity=".25" />
+    <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity=".25" />
     <TextBlock Style="{StaticResource WelcomeMessageStyle}" Text="Monte Carlo for Solid State Ionics">
       <TextBlock.Effect>
         <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".5" BlurRadius="4" />

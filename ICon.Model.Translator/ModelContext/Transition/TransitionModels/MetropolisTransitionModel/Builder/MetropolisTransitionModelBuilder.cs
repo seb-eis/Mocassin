@@ -173,7 +173,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 for (var j = i; j < mappingModels.Count; j++)
                 {
                     if (mappingModels[j].InverseIsSet) continue;
-                    if (mappingModels[i].LinkIfInverseMatch(mappingModels[j])) break;
+                    if (mappingModels[i].LinkIfGeometricInversion(mappingModels[j])) break;
                 }
             }
 
@@ -191,7 +191,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 .Select(CreateRuleModel)
                 .ToList();
 
-            CreateCodesAndLinkRuleModelInversions(ruleModels);
+            CreateCodesAndLinkLogicRuleInversions(ruleModels);
 
             transitionModel.RuleModels = ruleModels;
         }
@@ -215,7 +215,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="inverseModel"></param>
         protected void AddGeometricRuleModelInversions(IMetropolisTransitionModel originalModel, IMetropolisTransitionModel inverseModel)
         {
-            var inverseModels = originalModel.RuleModels.Select(CreateAndLinkGeometricInversion).ToList();
+            var inverseModels = originalModel.RuleModels.Select(CreateGeometricInversion).ToList();
+            CreateCodesAndLinkLogicRuleInversions(inverseModels);
             inverseModel.RuleModels = inverseModels;
         }
 
@@ -224,10 +225,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// </summary>
         /// <param name="originalModel"></param>
         /// <returns></returns>
-        protected IMetropolisRuleModel CreateAndLinkGeometricInversion(IMetropolisRuleModel originalModel)
+        protected IMetropolisRuleModel CreateGeometricInversion(IMetropolisRuleModel originalModel)
         {
             var inverseModel = originalModel.CreateGeometricInversion();
-            originalModel.InverseRuleModel = inverseModel;
             return inverseModel;
         }
     }

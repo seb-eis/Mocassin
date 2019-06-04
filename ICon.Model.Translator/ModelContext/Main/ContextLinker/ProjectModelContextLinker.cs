@@ -101,7 +101,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var simulationModel in SimulationModelContext.MetropolisSimulationModels)
             {
                 simulationModel.TransitionModels = simulationModel.TransitionModels
-                    .Select(a => transitionModels.Single(b => b.Transition == a.Transition))
+                    .SelectMany(a => transitionModels.Where(b => b.Transition == a.Transition))
                     .ToList();
             }
         }

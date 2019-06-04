@@ -13,50 +13,46 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid
-      Name="UnstableEnvironmentDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      VerticalAlignment="Stretch"
-      AutoGenerateColumns="False"
-      VerticalScrollBarVisibility="Auto"
-      CanUserAddRows="False"
-      CanUserDeleteRows="False"
-      Background="Transparent"
-      ColumnWidth="*"
-      PreviewKeyDown="UnstableEnvironmentDataGrid_OnPreviewKeyDown">
+    <DataGrid Name="UnstableEnvironmentDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              VerticalAlignment="Stretch"
+              AutoGenerateColumns="False"
+              VerticalScrollBarVisibility="Auto"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              Background="Transparent"
+              ColumnWidth="*"
+              PreviewKeyDown="UnstableEnvironmentDataGrid_OnPreviewKeyDown">
+
+      <DataGrid.ContextMenu>
+        <ContextMenu Name="GridContextMenu">
+          <MenuItem Name="RefreshMenuItem" Header="Refresh" Click="RefreshMenuItem_OnClick"/>
+        </ContextMenu>
+      </DataGrid.ContextMenu>
 
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}" 
-          Width="Auto"/>
+        <DataGridTextColumn Header="Name"
+                            Binding="{Binding Name}" />
 
-        <comboBox:BindableDataGridComboBoxColumn
-          Header="Center"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.UnstablePositionOptions}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="Key"
-          SelectedValueBinding="{Binding UnitCellPositionKey}"
-          IsReadOnly="True" 
-          Width="Auto"/>
+        <comboBox:BindableDataGridComboBoxColumn Header="Center"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.UnstablePositionOptions}"
+                                                 DisplayMemberPath="Name"
+                                                 SelectedValuePath="Key"
+                                                 SelectedValueBinding="{Binding UnitCellPositionKey}"
+                                                 IsReadOnly="True"/>
 
-        <DataGridTextColumn
-          Header="Radius [Ang]"
-          Binding="{Binding MaxInteractionRange, UpdateSourceTrigger=PropertyChanged, Delay=500}" 
-          Width="Auto"/>
+        <DataGridTextColumn Header="Radius [&#x212b;]"
+                            Binding="{Binding MaxInteractionRange}" />
 
-        <DataGridTemplateColumn 
-          Header="Filters">
+        <DataGridTemplateColumn Header="Filters">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type energyModel:UnstableEnvironmentGraph}">
               <local:InteractionFilterGridControlView>
                 <local:InteractionFilterGridControlView.DataContext>
-                  <MultiBinding
-                    Converter="{adapter:UnstableEnvironmentInteractionFilterVmConverter}">
-                    <Binding
-                      RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                      Path="DataContext.ContentSource" />
+                  <MultiBinding Converter="{adapter:UnstableEnvironmentInteractionFilterVmConverter}">
+                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
+                             Path="DataContext.ContentSource" />
                     <Binding />
                   </MultiBinding>
                 </local:InteractionFilterGridControlView.DataContext>

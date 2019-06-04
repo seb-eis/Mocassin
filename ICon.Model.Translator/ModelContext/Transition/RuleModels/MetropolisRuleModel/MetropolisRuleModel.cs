@@ -1,4 +1,5 @@
-﻿using Mocassin.Model.Particles;
+﻿using Mocassin.Framework.Extensions;
+using Mocassin.Model.Particles;
 using Mocassin.Model.Transitions;
 
 namespace Mocassin.Model.Translator.ModelContext
@@ -28,9 +29,9 @@ namespace Mocassin.Model.Translator.ModelContext
         public IMetropolisRuleModel InverseRuleModel { get; set; }
 
         /// <inheritdoc />
-        public override bool LinkIfInverseMatch(ITransitionRuleModel ruleModel)
+        public override bool LinkIfLogicalInversions(ITransitionRuleModel ruleModel)
         {
-            if (!IsInverse(ruleModel))
+            if (!IsLogicalInverse(ruleModel))
                 return false;
 
             var inverseRuleModel = (IMetropolisRuleModel) ruleModel;
@@ -40,13 +41,16 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public override bool IsInverse(ITransitionRuleModel ruleModel)
+        public override bool IsLogicalInverse(ITransitionRuleModel ruleModel)
         {
             if (!(ruleModel is IMetropolisRuleModel inverseRuleModel))
                 return false;
 
-            return StartStateCode == inverseRuleModel.FinalStateCode &&
-                   AbstractTransition == inverseRuleModel.AbstractTransition;
+            if (inverseRuleModel.AbstractTransition != AbstractTransition)
+                return false;
+
+            return StartState.LexicographicCompare(inverseRuleModel.FinalState) == 0 &&
+                   FinalState.LexicographicCompare(inverseRuleModel.StartState) == 0;
         }
 
         /// <inheritdoc />
@@ -55,7 +59,6 @@ namespace Mocassin.Model.Translator.ModelContext
             var inverseModel = new MetropolisRuleModel
             {
                 IsSourceInversion = true,
-                InverseRuleModel = this,
                 MetropolisRule = MetropolisRule
             };
 

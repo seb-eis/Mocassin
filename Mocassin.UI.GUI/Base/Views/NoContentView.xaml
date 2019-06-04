@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.Views"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Width="Auto" Height="Auto">
@@ -16,8 +15,7 @@
     </Style>
   </UserControl.Resources>
   <Grid>
-    <Image Source="C:\Users\hims-user\source\repos\ICon.Program\Mocassin.UI.GUI\Resources\Icons\MocassinLogoRound3.png"
-           Opacity=".25" />
+    <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity=".25" />
     <TextBlock Style="{StaticResource ShadowTextStyle}" Text="[MOCASSIN]">
       <TextBlock.Effect>
         <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".5" BlurRadius="4" />

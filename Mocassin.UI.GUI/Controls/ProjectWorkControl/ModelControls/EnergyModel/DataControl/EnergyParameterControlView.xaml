@@ -41,16 +41,16 @@
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StableEnvironment.InteractionFilter}"
+          <Run Text="{StaticResource App.String.InteractionFilter}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects allow to exclude specific" />
+          <Run Text="objects allow specific" />
           <Run Text="{StaticResource App.String.SymmetricPairInteraction}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects between two 'stable' wyckoff positions from the interaction sampling." />
+          <Run Text="objects between two 'stable' wyckoff positions to be excluded during interaction sampling." />
           <LineBreak />
           <Run Text="Keep in mind: The behavior is symmetric, A-B and B-A cannot be removed independently."
                Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="Keep in mind: If you remove an A-B interaction, the B-A interaction will be removed as well."
+          <Run Text="Therefore, the definition order for filter center and partner position is arbitrary."
                Style="{StaticResource App.Style.Run.Important}" />
           <LineBreak />
         </TextBlock>
@@ -62,24 +62,40 @@
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.AcceptorState}"
+          <Run Text="{StaticResource App.String.InteractionFilter.CenterWyckoff}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
           <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the acceptor state of an exchange (e.g. 'vacancy', 'nothing',...)." />
+          <Run Text="which is used as the filter center." />
           <LineBreak />
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.StateExchangePair.DonorState}"
+          <Run Text="{StaticResource App.String.InteractionFilter.PartnerWyckoff}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
           <Run Text="Define the" />
-          <Run Text="{StaticResource App.String.Particle}"
+          <Run Text="{StaticResource App.String.UnitCellPosition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="describing the donor state of an exchange (e.g. 'ion', 'polaron',...)." />
+          <Run Text="which is used as the filter partner." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.InteractionFilter.PartnerWyckoff}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the lower radius in [&#x212b;] for the hollow filter sphere." />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.InteractionFilter.EndRadius}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the upper radius in [&#x212b;] for the hollow filter sphere." />
           <LineBreak />
         </TextBlock>
 

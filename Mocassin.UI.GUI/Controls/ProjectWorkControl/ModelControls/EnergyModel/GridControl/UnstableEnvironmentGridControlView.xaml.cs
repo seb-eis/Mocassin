@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl
@@ -24,6 +25,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
             context.SynchronizeEnvironmentCollectionCommand.Execute(null);
             dataGrid.Items.Refresh();
+            e.Handled = true;
+        }
+
+        private void RefreshMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!(UnstableEnvironmentDataGrid.DataContext is UnstableEnvironmentGridControlViewModel context)) return;
+
+            // Workaround for AddItem/EditingItem DeferRefresh exception by enforcing cancel of currently active row edit
+            UnstableEnvironmentDataGrid.CancelEdit(DataGridEditingUnit.Row);
+
+            context.SynchronizeEnvironmentCollectionCommand.Execute(null);
+            UnstableEnvironmentDataGrid.Items.Refresh();
             e.Handled = true;
         }
     }

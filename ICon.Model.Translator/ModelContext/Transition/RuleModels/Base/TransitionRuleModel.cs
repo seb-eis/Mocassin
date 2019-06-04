@@ -49,19 +49,19 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public void CopyInversionDataToModel(ITransitionRuleModel ruleModel)
         {
-            ruleModel.FinalState = StartState.ToList();
-            ruleModel.StartState = FinalState.ToList();
+            ruleModel.FinalState = FinalState.Reverse().ToList();
+            ruleModel.StartState = StartState.Reverse().ToList();
             ruleModel.EndIndexingDeltas = GetEndIndexingDeltaInversion();
-            ruleModel.FinalStateCode = StartStateCode;
-            ruleModel.StartStateCode = FinalStateCode;
+            ruleModel.FinalStateCode = MakeInvertedStateCode(FinalState);
+            ruleModel.StartStateCode = MakeInvertedStateCode(StartState);
             ruleModel.FinalTrackerOrderCode = CreateInvertedTrackerOrderCode(ruleModel.EndIndexingDeltas);
         }
 
         /// <inheritdoc />
-        public abstract bool LinkIfInverseMatch(ITransitionRuleModel ruleModel);
+        public abstract bool LinkIfLogicalInversions(ITransitionRuleModel ruleModel);
 
         /// <inheritdoc />
-        public abstract bool IsInverse(ITransitionRuleModel ruleModel);
+        public abstract bool IsLogicalInverse(ITransitionRuleModel ruleModel);
 
         /// <inheritdoc />
         public IParticleSet GetMobileParticles()
@@ -104,6 +104,21 @@ namespace Mocassin.Model.Translator.ModelContext
                 bytes[i] -= (byte) (EndIndexingDeltas[i] - invertedEndIndexingDeltas[i]);
 
             return BitConverter.ToInt64(bytes, 0);
+        }
+
+        /// <summary>
+        ///     Creates an inverted state code for the passed <see cref="IParticle"/> sequence
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        protected long MakeInvertedStateCode(IList<IParticle> state)
+        {
+            var bytes = new byte[8];
+            var index = 0;
+            for (var i = state.Count - 1; i >= 0; i--) bytes[index++] = (byte) state[i].Index;
+
+            var result = BitConverter.ToInt64(bytes, 0);
+            return result;
         }
     }
 }

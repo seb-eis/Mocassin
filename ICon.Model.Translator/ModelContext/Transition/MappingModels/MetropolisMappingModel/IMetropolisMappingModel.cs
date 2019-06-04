@@ -57,10 +57,10 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <summary>
         ///     Links this and the passed mapping model together if they describe inverse mappings. Returns false if they do not
-        ///     match
+        ///     match (Logical and geometric inversion is identical for MMC mappings)
         /// </summary>
         /// <param name="mappingModel"></param>
         /// <returns></returns>
-        bool LinkIfInverseMatch(IMetropolisMappingModel mappingModel);
+        bool LinkIfGeometricInversion(IMetropolisMappingModel mappingModel);
     }
 }

@@ -151,7 +151,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 .Action(ruleModel => ruleModel.TransitionModel = transitionModel)
                 .ToList();
 
-            CreateCodesAndLinkRuleModelInversions(ruleModels);
+            CreateCodesAndLinkLogicRuleInversions(ruleModels);
             AddRuleDirectionInformation(ruleModels);
             transitionModel.RuleModels = ruleModels;
         }
@@ -358,7 +358,7 @@ namespace Mocassin.Model.Translator.ModelContext
                     if (mappingModels[j].InverseIsSet)
                         continue;
 
-                    if (mappingModels[i].LinkIfInverseMatch(mappingModels[j]))
+                    if (mappingModels[i].LinkIfGeometricInversion(mappingModels[j]))
                         break;
                 }
             }
@@ -394,7 +394,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="inverseModel"></param>
         protected void AddGeometricRuleModelInversions(IKineticTransitionModel transitionModel, IKineticTransitionModel inverseModel)
         {
-            var inverseModels = transitionModel.RuleModels.Select(CreateAndLinkGeometricInversion).ToList();
+            var inverseModels = transitionModel.RuleModels.Select(CreateGeometricInversion).ToList();
+            CreateCodesAndLinkLogicRuleInversions(inverseModels);
             inverseModel.RuleModels = inverseModels;
         }
 
@@ -410,14 +411,13 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Creates the inverse kinetic transition rule model and links it to the source model
+        ///     Creates the geometric inversion of the passed kinetic transition rule model
         /// </summary>
         /// <param name="ruleModel"></param>
         /// <returns></returns>
-        protected IKineticRuleModel CreateAndLinkGeometricInversion(IKineticRuleModel ruleModel)
+        protected IKineticRuleModel CreateGeometricInversion(IKineticRuleModel ruleModel)
         {
             var inverseModel = ruleModel.CreateGeometricInversion();
-            ruleModel.InverseRuleModel = inverseModel;
             return inverseModel;
         }
 

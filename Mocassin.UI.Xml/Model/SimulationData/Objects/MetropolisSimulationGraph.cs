@@ -17,7 +17,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         ///     Get or set the relative break tolerance value
         /// </summary>
         [XmlAttribute("BreakTolerance")]
-        public double RelativeBreakTolerance { get; set; } = 0.0001;
+        public double RelativeBreakTolerance { get; set; }
 
         /// <summary>
         ///     Get or set the sample length for the break

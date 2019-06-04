@@ -12,29 +12,17 @@
   Background="Transparent">
 
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition
-        Height="*" />
-      <RowDefinition
-        Height="*" />
-    </Grid.RowDefinitions>
 
-    <GroupBox
-      Grid.Row="0"
-      Header="Metropolis Simulation Bases">
+    <TabControl>
+      <TabItem Header="Metropolis Simulations (MMC)">
+        <dataControl:MetropolisSimulationControlView DataContext="{Binding MetropolisSimulationViewModel}"
+                                                     Margin="{StaticResource App.Margin.GroupBoxContent}" />
+      </TabItem>
+      <TabItem Header="Kinetic Simulations (KMC)">
 
-      <dataControl:MetropolisSimulationControlView
-        DataContext="{Binding MetropolisSimulationViewModel}" />
-
-    </GroupBox>
-
-    <GroupBox
-      Grid.Row="1"
-      Header="Kinetic Simulation Bases">
-
-      <dataControl:KineticSimulationControlView
-        DataContext="{Binding KineticSimulationViewModel}" />
-
-    </GroupBox>
+        <dataControl:KineticSimulationControlView DataContext="{Binding KineticSimulationViewModel}"
+                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
+      </TabItem>
+    </TabControl>
   </Grid>
 </UserControl>

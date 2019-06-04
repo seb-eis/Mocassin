@@ -50,10 +50,10 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var inverseModel = new KineticRuleModel
             {
-                RuleDirectionValue = RuleDirectionValue,
+                RuleDirectionValue = -RuleDirectionValue,
                 IsSourceInversion = true,
-                InverseRuleModel = this,
-                TransitionModel = TransitionModel.InverseTransitionModel ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
+                TransitionModel = TransitionModel.InverseTransitionModel 
+                                  ?? throw new InvalidOperationException("Inverse transition model is unknown!"),
                 TransitionState = TransitionState.Reverse().ToList(),
                 TransitionStateCode = MakeInvertedStateCode(TransitionState),
                 ChargeTransportMatrix = GetInvertedTransportMatrix(),
@@ -64,10 +64,9 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public override bool LinkIfInverseMatch(ITransitionRuleModel ruleModel)
+        public override bool LinkIfLogicalInversions(ITransitionRuleModel ruleModel)
         {
-            if (!IsInverse(ruleModel))
-                return false;
+            if (!IsLogicalInverse(ruleModel)) return false;
 
             var inverseRuleModel = (IKineticRuleModel) ruleModel;
             InverseRuleModel = inverseRuleModel;
@@ -76,7 +75,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public override bool IsInverse(ITransitionRuleModel ruleModel)
+        public override bool IsLogicalInverse(ITransitionRuleModel ruleModel)
         {
             if (!(ruleModel is IKineticRuleModel inverseRuleModel))
                 return false;
@@ -99,21 +98,6 @@ namespace Mocassin.Model.Translator.ModelContext
             for (var i = 0; i < result.Cols; i++) 
                 result[0, i] = ChargeTransportMatrix[0, result.Cols - i - 1];
 
-            return result;
-        }
-
-        /// <summary>
-        ///     Creates an inverted state code for the passed <see cref="IParticle"/> sequence
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        protected long MakeInvertedStateCode(IList<IParticle> state)
-        {
-            var bytes = new byte[8];
-            var index = 0;
-            for (var i = state.Count - 1; i >= 0; i--) bytes[index++] = (byte) state[i].Index;
-
-            var result = BitConverter.ToInt64(bytes, 0);
             return result;
         }
     }

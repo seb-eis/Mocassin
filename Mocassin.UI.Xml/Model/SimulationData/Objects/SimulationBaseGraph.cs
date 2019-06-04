@@ -41,13 +41,13 @@ namespace Mocassin.UI.Xml.SimulationModel
         ///     Get or set the hard run limit as a time span
         /// </summary>
         [XmlAttribute("TimeLimit")]
-        public string SaveRunTimeLimit { get; set; } = "PT24H";
+        public string SaveRunTimeLimit { get; set; } = "P1Y";
 
         /// <summary>
         ///     Get or set the hard lower success rate limit in [Hz]
         /// </summary>
         [XmlAttribute("MinSuccessRate")]
-        public double LowerSuccessRateLimit { get; set; } = 1;
+        public double LowerSuccessRateLimit { get; set; }
 
         /// <summary>
         ///     Get or set the basic job count multiplier

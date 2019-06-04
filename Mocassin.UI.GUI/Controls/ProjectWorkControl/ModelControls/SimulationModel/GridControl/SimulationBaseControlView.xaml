@@ -12,112 +12,81 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <Style TargetType="{x:Type TextBox}" x:Key="ReadOnlyBoxStyle">
-      <Style.Triggers>
-        <Trigger Property="IsReadOnly" Value="True">
-          <Setter Property="Opacity" Value=".5" />
-        </Trigger>
-        <Trigger Property="IsReadOnly" Value="False">
-          <Setter Property="Opacity" Value="1" />
-        </Trigger>
-      </Style.Triggers>
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+      <Setter Property="Margin" Value="{StaticResource App.Margin.GroupBoxContent}"/>
     </Style>
+
+    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource App.Style.GroupBox.LeftBorder}"/>
   </UserControl.Resources>
 
   <Grid>
 
     <Grid.ColumnDefinitions>
-      <ColumnDefinition
-        Width="*" />
-      <ColumnDefinition
-        Width="*" />
-      <ColumnDefinition
-        Width="*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
     <Grid.RowDefinitions>
-      <RowDefinition
-        Height="*" />
-      <RowDefinition
-        Height="*" />
-      <RowDefinition
-        Height="*" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox
-      Grid.Row="0"
-      Grid.Column="0"
-      Header="Temperature [K]">
-      <TextBox
-        Text="{Binding Temperature, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="0"
+              Grid.Column="0"
+              Header="Temperature [K]">
+      <TextBox Text="{Binding Temperature}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="0"
-      Grid.Column="1"
-      Header="Steps per Particle (MCSP)">
-      <TextBox
-        Text="{Binding TargetMcsp, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="0"
+              Grid.Column="1"
+              Header="Steps per Particle (MCSP)">
+      <TextBox Text="{Binding TargetMcsp}"/>
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="0"
-      Grid.Column="2"
-      Header="Simulation Blocks">
-      <TextBox
-        Text="{Binding SimulationBlockCount, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="0"
+              Grid.Column="2"
+              Header="Simulation Blocks">
+      <TextBox Text="{Binding SimulationBlockCount}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="1"
-      Grid.Column="0"
-      Header="Custom Rng Seed">
-      <TextBox
-        Text="{Binding CustomRngSeed, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="1"
+              Grid.Column="0"
+              Header="Custom Rng Seed">
+      <TextBox Text="{Binding CustomRngSeed}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="1"
-      Grid.Column="1"
-      Header="Time Limit (ISO8601)">
-      <TextBox
-        Text="{Binding SaveRunTimeLimit, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="1"
+              Grid.Column="1"
+              Header="Time Limit (ISO8601)">
+      <TextBox Text="{Binding SaveRunTimeLimit}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="1"
-      Grid.Column="2"
-      Header="Minimal Success Rate [Steps/s]">
-      <TextBox
-        Text="{Binding LowerSuccessRateLimit, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="1"
+              Grid.Column="2"
+              Header="Minimal Success Rate [Steps/s]">
+      <TextBox Text="{Binding LowerSuccessRateLimit}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="2"
-      Grid.Column="0"
-      Header="Job Multiplier">
-      <TextBox
-        Text="{Binding JobCount, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="2"
+              Grid.Column="0"
+              Header="Job Multiplier">
+      <TextBox Text="{Binding JobCount}" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="2"
-      Grid.Column="1"
-      Header="Object ID">
-      <TextBox
-        Style="{StaticResource ReadOnlyBoxStyle}"
-        Text="{Binding Key, UpdateSourceTrigger=PropertyChanged, Delay=500}"
-        IsReadOnly="True"/>
+    <GroupBox Grid.Row="2"
+              Grid.Column="1"
+              Header="Object ID">
+      <TextBox Text="{Binding Key}"
+               IsReadOnly="True" />
     </GroupBox>
 
-    <GroupBox
-      Grid.Row="2"
-      Grid.Column="2"
-      Header="Name">
-      <TextBox
-        Style="{StaticResource ReadOnlyBoxStyle}"
-        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}"
-        IsReadOnly="True"/>
+    <GroupBox Grid.Row="2"
+              Grid.Column="2"
+              Header="Name">
+      <TextBox Text="{Binding Name}"
+               IsReadOnly="True" />
     </GroupBox>
 
   </Grid>
