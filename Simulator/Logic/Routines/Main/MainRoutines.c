@@ -711,7 +711,7 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     plugins->OnSetJumpProbabilities(SCONTEXT);
 
     // Unstable end: Do not advance system, update counter and simulated time
-    if (energyInfo->CompareS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
+    if (energyInfo->RawS2toS0Probability == INFINITY)
     {
         KMC_OnJumpIsToUnstableState(SCONTEXT);
         return;
