@@ -97,21 +97,22 @@ Vector3_t GetGlobalTrackerEnsembleShift(SCONTEXT_PARAM, JumpCollection_t *jumpCo
 // Get a mobility vector component in [m^2 / (V s)]
 static double GetMobilityVectorComponent(SCONTEXT_PARAM, const double displacement, const double normField)
 {
-    if (fabs(normField) < 0.0001)
-        return 0;
+    if (fabs(normField) < 0.0001) return 0;
 
-    let component = displacement / (normField * getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus * getMainStateMetaData(SCONTEXT)->SimulatedTime);
+    let simulatedTime = getMainStateMetaData(SCONTEXT)->SimulatedTime;
+    let fieldModulus = getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus;
+    let component = displacement / (normField * fieldModulus * simulatedTime);
     return component;
 }
 
 double CalculateFieldProjectedMobility(SCONTEXT_PARAM, const Vector3_t *displacement, const Vector3_t *normFieldVector)
 {
-    let moveProj = CalcVector3Projection(displacement, normFieldVector);
-    let normProj = CalcVector3Normalization(&moveProj);
-    let fieldVec = ScalarMultiplyVector3(normFieldVector, getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus);
-    let projLength = CalcVector3Length(&moveProj);
+    let displacementProjection = CalcVector3Projection(displacement, normFieldVector);
+    let time = getMainStateMetaData(SCONTEXT)->SimulatedTime;
+    let fieldModulus = getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus;
+    let projectionFieldProduct = CalcVector3DotProduct(&displacementProjection, normFieldVector);
 
-    let result = projLength / (CalcVector3DotProduct(&normProj, &fieldVec) * getMainStateMetaData(SCONTEXT)->SimulatedTime);
+    let result = projectionFieldProduct / (time * fieldModulus);
     return result;
 }
 
@@ -165,13 +166,23 @@ static inline Vector3_t TransformSquaredFractionalToCartesian(Vector3_t *vector,
 static inline Vector3_t CalculateDiffusionCoefficient(const Vector3_t* vectorR2, const double time)
 {
     var factor = 0.5 / time;
-    return (Vector3_t) {.A = factor * vectorR2->A, .B = factor * vectorR2->B, .C = factor * vectorR2->C};
+    return ScalarMultiplyVector3(vectorR2, factor);
 }
 
 // Calculates the average actual migration rate per particle in [Hz]
 static inline double CalculateAverageMigrationRate(double simulatedTime, int64_t steps, int64_t particleCount)
 {
     return (double) steps / (simulatedTime * (double) particleCount);
+}
+
+Vector3_t CalculateNernstEinsteinConductivity(SCONTEXT_PARAM, const Vector3_t *diffusionVector, const byte_t particleId, const double particleDensity)
+{
+    let charge = getDbStructureModelMetaData(SCONTEXT)->ParticleCharges[particleId] * NATCONST_ELMCHARGE;
+    let tempFactor = getDbModelJobInfo(SCONTEXT)->Temperature * NATCONST_BLOTZMANN * NATCONST_ELMCHARGE;
+    let factor = charge * charge * particleDensity / tempFactor;
+
+    let result = ScalarMultiplyVector3(diffusionVector, factor);
+    return result;
 }
 
 void PopulateMobilityData(SCONTEXT_PARAM, ParticleMobilityData_t *restrict data)
@@ -199,8 +210,10 @@ void PopulateMobilityData(SCONTEXT_PARAM, ParticleMobilityData_t *restrict data)
     data->DiffusionCoefficient = CalculateDiffusionCoefficient(&data->MeanMoveR2, simulatedTime);
     data->MobilityVector = CalculateMobilityVector(SCONTEXT, &data->MeanMoveR1, &meta->NormElectricFieldVector);
     data->TotalMobility = CalculateFieldProjectedMobility(SCONTEXT, &data->MeanMoveR1, &meta->NormElectricFieldVector);
+    data->NernstEinsteinConductivity = CalculateNernstEinsteinConductivity(SCONTEXT, &data->DiffusionCoefficient, id, density);
 
     data->TotalConductivity = CalculateTotalConductivity(data->TotalMobility, meta->ParticleCharges[id], density);
+    data->TotalConductivityPerCharge = CalculateTotalConductivity(data->TotalMobility, 1, density);
 }
 
 void PopulateParticleStatistics(SCONTEXT_PARAM, ParticleStatistics_t *restrict statistics)

@@ -50,11 +50,17 @@ typedef struct ParticleMobilityData
     // The total conductivity in [S/m]
     double      TotalConductivity;
 
+    // The normalized conductivity per positive charge number [S/(m*z)]
+    double      TotalConductivityPerCharge;
+
     //   The actual migration rate in [Hz]
     double      MigrationRate;
 
     // The total diffusion coefficient components in [m^2/s] in (x,y,z) direction
     Vector3_t   DiffusionCoefficient;
+
+    // The conductivity components in [S/m] as calculated using the Stokes-Einstein relation (Fluctuation dissipation theorem)
+    Vector3_t   NernstEinsteinConductivity;
 
     // The mobility vector in [m^2/(V s)]
     Vector3_t   MobilityVector;
@@ -172,6 +178,10 @@ Vector3_t GetGlobalTrackerEnsembleShift(SCONTEXT_PARAM, JumpCollection_t *jumpCo
 
 // Calculates a mobility vector in [m^2/(V s)] using the provided mean displacement and normalized field vector
 Vector3_t CalculateMobilityVector(SCONTEXT_PARAM, const Vector3_t *displacement, const Vector3_t *normFieldVector);
+
+// Calculates the conductivity components (x,y,z) for the passed particle id in [S/m] from diffusion components and particle density
+// using the fluctuation dissipation theorem
+Vector3_t CalculateNernstEinsteinConductivity(SCONTEXT_PARAM, const Vector3_t *diffusionVector, byte_t particleId, double particleDensity);
 
 // Calculates the total mobility in [m^2/(V s)] using the provided mean displacement and normalized field vector
 double CalculateFieldProjectedMobility(SCONTEXT_PARAM, const Vector3_t *displacement, const Vector3_t *normFieldVector);

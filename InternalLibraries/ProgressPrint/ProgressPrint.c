@@ -95,6 +95,12 @@ static void PrintParticleMobility(const ParticleMobilityData_t* restrict data, f
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Conductivity => Field direction", "S m^-1",
             data->TotalConductivity);
 
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Conductivity => Normalized (z=+1)", "S m^-1",
+            data->TotalConductivityPerCharge);
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTVEC_FORMAT), "Conductivity => FDT components", "S m^-1",
+            data->NernstEinsteinConductivity.A, data->NernstEinsteinConductivity.B, data->NernstEinsteinConductivity.C);
+
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTF64_FORMAT), "Mobility => Average migration rate", "Hz",
             data->MigrationRate);
 

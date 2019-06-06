@@ -704,7 +704,9 @@ static error_t ConvertElectricFieldFactorsToInternalUnits(SCONTEXT_PARAM)
     let jumpDirections = getJumpDirections(SCONTEXT);
     let physicalFactors = getPhysicalFactors(SCONTEXT);
     let jobHeader = getDbModelJobHeaderAsKMC(SCONTEXT);
-    let factor = physicalFactors->EnergyFactorEvToKt * jobHeader->ElectricFieldModulus;
+
+    // Note: Correction by 0.5 as only half of the potential energy can actually affect the migration barrier!
+    let factor = 0.5 * physicalFactors->EnergyFactorEvToKt * jobHeader->ElectricFieldModulus;
 
     return_if(!isfinite(factor) || (factor <  0), ERR_DATACONSISTENCY);
 
