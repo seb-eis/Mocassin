@@ -107,12 +107,11 @@ static double GetMobilityVectorComponent(SCONTEXT_PARAM, const double displaceme
 
 double CalculateFieldProjectedMobility(SCONTEXT_PARAM, const Vector3_t *displacement, const Vector3_t *normFieldVector)
 {
-    let displacementProjection = CalcVector3Projection(displacement, normFieldVector);
     let time = getMainStateMetaData(SCONTEXT)->SimulatedTime;
     let fieldModulus = getDbModelJobHeaderAsKMC(SCONTEXT)->ElectricFieldModulus;
-    let projectionFieldProduct = CalcVector3DotProduct(&displacementProjection, normFieldVector);
+    let displacementFieldProduct = CalcVector3DotProduct(displacement, normFieldVector);
 
-    let result = projectionFieldProduct / (time * fieldModulus);
+    let result = displacementFieldProduct / (time * fieldModulus);
     return result;
 }
 
