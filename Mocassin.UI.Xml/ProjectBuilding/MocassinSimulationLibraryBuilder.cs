@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator;
@@ -24,6 +25,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     public enum LibraryBuildStatus
     {
         Unknown,
+        BuildProcessCompleted,
         BuildProcessStarted,
         PreparingModelProject,
         ModelProjectPreparationError,
@@ -39,7 +41,6 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         MetaDataAddError,
         SavingLibraryContents,
         LibraryContentSavingError,
-        BuildProcessCompleted
     }
 
     /// <summary>
@@ -48,7 +49,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     /// </summary>
     public class MocassinSimulationLibraryBuilder
     {
-        private object lockObject = new object();
+        private readonly object lockObject = new object();
         private int BuildCounter { get; set; }
 
         /// <summary>
@@ -229,13 +230,11 @@ namespace Mocassin.UI.Xml.ProjectBuilding
 
             try
             {
-                BuildCounter = 1;
+                BuildCounter = 0;
                 var totalJobCount = jobTranslation.GetTotalJobCount(modelContext.ModelProject);
-                var buildTasks = jobTranslation.ToInternals(modelContext.ModelProject)
-                    .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount).BuildJobPackageModelAsync(jobs))
+                jobPackageModels = jobTranslation.ToInternals(modelContext.ModelProject)
+                    .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount).BuildJobPackageModel(jobs))
                     .ToList();
-
-                jobPackageModels = buildTasks.Select(x => x.Result).ToList();
 
                 return true;
             }
@@ -318,10 +317,8 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             var builder = new JobDbEntityBuilder(modelContext);
             builder.WhenJobIsBuild.Subscribe(x =>
             {
-                lock (lockObject)
-                {
-                    JobBuildCounterEvent.OnNext((BuildCounter++, totalJobCount));     
-                } 
+                lock (lockObject) BuildCounter++;
+                JobBuildCounterEvent.OnNext((BuildCounter, totalJobCount));
             });
 
             foreach (var optimizer in jobCollection.GetPostBuildOptimizers()) builder.AddPostBuildOptimizer(optimizer);

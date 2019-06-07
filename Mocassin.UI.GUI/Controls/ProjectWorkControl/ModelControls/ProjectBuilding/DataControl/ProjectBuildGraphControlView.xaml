@@ -28,7 +28,7 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged,Delay=500}" />
+                            Binding="{Binding Name}" />
 
         <DataGridTextColumn Header="Model Source"
                             Binding="{Binding ProjectModelGraph.Key}"

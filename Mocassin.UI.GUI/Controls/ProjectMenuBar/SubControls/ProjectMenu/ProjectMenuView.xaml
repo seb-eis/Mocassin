@@ -15,23 +15,11 @@
           Background="Transparent">
       <MenuItem Header="Services">
 
-        <MenuItem Header="Model validation">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Model validation" Command="{Binding CommandSource}" 
+                  CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}"/>
 
-        <MenuItem Header="Simulation deployment">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Simulation services" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}"/>
 
       </MenuItem>
     </Menu>

@@ -11,21 +11,55 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.DeployInstruction" />
+    <ToolTip x:Key="ToolTip.LocalDeployment" />
+  </UserControl.Resources>
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+    <TabControl>
 
-    <GroupBox Grid.Row="0"
-              Header="Build Instructions">
-      <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}" />
-    </GroupBox>
+      <TabItem Header="Simulation Creation">
+        <Grid>
 
-    <GroupBox Grid.Row="1"
-              Header="Local Deployment">
-      <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}" />
-    </GroupBox>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+
+          <GroupBox Grid.Column="0" Grid.RowSpan="2">
+
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Translation Instruction]" />
+                <Run Text="[?]" ToolTip="{StaticResource ToolTip.DeployInstruction}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}"
+                                                      Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          </GroupBox>
+
+          <GroupBox Grid.Row="0" Grid.Column="1">
+
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Local Deploy Service]" />
+                <Run Text="[?]" ToolTip="{StaticResource ToolTip.LocalDeployment}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}"
+                                                       Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          </GroupBox>
+        </Grid>
+      </TabItem>
+    </TabControl>
 
   </Grid>
 </UserControl>

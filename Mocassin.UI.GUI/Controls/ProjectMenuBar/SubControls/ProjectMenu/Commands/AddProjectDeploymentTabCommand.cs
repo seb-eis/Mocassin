@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Comman
         /// <inheritdoc />
         protected override string GetTabName()
         {
-            return "Project Deployment";
+            return "Simulation Services";
         }
     }
 }

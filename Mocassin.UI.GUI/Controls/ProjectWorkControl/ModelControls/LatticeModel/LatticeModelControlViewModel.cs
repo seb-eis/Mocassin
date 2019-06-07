@@ -5,6 +5,9 @@ using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 {
+    /// <summary>
+    ///     The <see cref="ProjectGraphControlViewModel"/> for 
+    /// </summary>
 	public class LatticeModelControlViewModel : ProjectGraphControlViewModel
 	{
 		public BuildingBlockControlViewModel BlockControlViewModel { get; }

@@ -791,6 +791,8 @@
       <DependentUpon>ModelCustomizationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\ModelCustomizationControlViewModel.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Converter\BuildStatusVisibilityConverter.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Converter\BuildStatusIsIndeterminateConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\Objects\LocalProjectDeployData.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\DataControl\ProjectBuildGraphControlView.xaml.cs">
       <DependentUpon>ProjectBuildGraphControlView.xaml</DependentUpon>

@@ -5,6 +5,8 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl.Converter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:LocalProjectDeployControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -13,44 +15,54 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="9*" />
+      <ColumnDefinition Width="1*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <Button Grid.Column="0" Margin="2,2,2,2"
-            Grid.Row="0"
+    <Button Margin="{StaticResource App.Margin.Default}" Grid.Row="0" Grid.Column="0"
             Content="Open"
-            Command="{Binding GetFileSelectionCommand}" />
+            Command="{Binding GetFileSelectionCommand}"
+            ToolTip="Open file selection dialog" />
 
-    <TextBox Grid.Column="1" Margin="2,2,2,2"
-             Grid.Row="0"
-             Text="{Binding FilePath}" />
+    <Button Margin="{StaticResource App.Margin.Default}" Grid.Row="0" Grid.Column="1"
+            Content="Start Deploy"
+            Command="{Binding WriteDatabaseCommand}"
+            ToolTip="Start deploy process" />
 
-    <Button Grid.Column="0" Margin="2,2,2,2"
-            Grid.Row="1"
-            Content="Deploy"
-            Command="{Binding WriteDatabaseCommand}" />
+    <TextBox Margin="{StaticResource App.Margin.Default}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+             Text="{Binding FilePath}"
+             ToolTip="Deploy target file" />
 
-    <ComboBox Grid.Column="1" Margin="2,2,2,2"
-              Grid.Row="1"
+
+    <ComboBox Margin="{StaticResource App.Margin.Default}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
               ItemsSource="{Binding ProjectBuildGraphCollectionViewModel.DataCollection}"
               SelectedItem="{Binding ProjectBuildGraphCollectionViewModel.SelectedCollectionItem}"
-              DisplayMemberPath="Name" />
-    <ProgressBar Grid.Row="2" Grid.Column="1" Minimum="0" Margin="2,2,2,2"
+              DisplayMemberPath="Name"
+              ToolTip="Deploy instruction" />
+
+    <views:LoadingSpinerView Visibility="{Binding BuildStatus, Converter={converter:BuildStatusVisibilityConverter}}"
+                             Margin="{StaticResource App.Margin.Default}" 
+                             Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"
+                             Background="White"
+                             Opacity="0.75"/>
+
+    <ProgressBar Margin="{StaticResource App.Margin.Default}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                  Maximum="{Binding MaxJobs}"
-                 Value="{Binding DoneJobs}" />
-    <TextBlock Grid.Row="2" Grid.Column="1" Margin="2,2,2,2">
-      <Run Text="Status:" />
-      <Run Text="{Binding BuildStatus}" />
-      <Run Text="(" />
+                 Value="{Binding DoneJobs}"
+                 IsIndeterminate="{Binding BuildStatus, Converter={converter:BuildStatusIsIndeterminateConverter}}"/>
+
+    <TextBlock Margin="{StaticResource App.Margin.Default}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+               ToolTip="Deploy progress"
+               TextAlignment="Center">
       <Run Text="{Binding DoneJobs}" />
-      <Run Text="of" />
+      <Run Text="/" />
       <Run Text="{Binding MaxJobs}" />
-      <Run Text="Jobs)" />
+      <Run Text="{Binding BuildStatus, StringFormat=[Status: {0}]}" />
     </TextBlock>
   </Grid>
 </UserControl>

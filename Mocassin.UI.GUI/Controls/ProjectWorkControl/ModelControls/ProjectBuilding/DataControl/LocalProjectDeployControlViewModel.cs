@@ -106,15 +106,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             {
                 var builder = new MocassinSimulationLibraryBuilder();
                 builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, e => SendCallErrorMessage(e));
-                builder.JobBuildCounterNotifications.Subscribe(x => 
-                { 
+                builder.JobBuildCounterNotifications.Subscribe(x =>
+                {
+                    var div = x.Total / 100;
+                    div = div == 0 ? 1 : div;
+                    if (!(x.Done == 1 || x.Done == x.Total || x.Done % div == 0)) return;
                     MaxJobs = x.Total;
                     DoneJobs = x.Done;
                 });
 
-                await Task.Run(() => builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
+                var result = await Task.Run(() =>
+                    builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
                     ProjectControl.CreateModelProject()));
-                SendCallInfoMessage($"Wrote simulation library to {FilePath}");
+
+                if (result != null)  SendCallInfoMessage($"Simulations deployed @ {FilePath}");
             }
             return new AsyncRelayCommand(Execute, CanExecute);
         }
