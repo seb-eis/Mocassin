@@ -9,26 +9,89 @@
              d:DataContext="{d:DesignInstance local:LatticeModelControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
+
+  <UserControl.Resources>
+    <ToolTip x:Key="ToolTip.BuildingBlocks" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Define the basic building blocks of your lattice. Currently only the default block can be used!"/>
+          <Run Text="The default occupation ist automatically set to the first entry of the affiliated wyckoff occupation option list."/>
+        </TextBlock>
+      </StackPanel>
+
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.Doping" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Define how actual dopings are applied to a building block."/>
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.DopingCombination" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Define how the components of a doping are applied to the building bock."/>
+        </TextBlock>
+      </StackPanel>
+    </ToolTip>
+  </UserControl.Resources>
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+    <TabControl>
 
-    <GroupBox Grid.Row="0"
-              Header="Building Block Definitions">
-      <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}" />
-    </GroupBox>
+      <TabItem Header="Building Blocks">
+        <GroupBox>
+          <GroupBox.Header>
+            <TextBlock>
+              <Run Text="[Building Blocks]" />
+              <Run Text="[?]"
+                   ToolTip="{StaticResource ToolTip.BuildingBlocks}"
+                   Style="{StaticResource App.Style.Run.Keyword}" />
+            </TextBlock>
+          </GroupBox.Header>
 
-    <GroupBox Grid.Row="1"
-              Header="Doping Combination Definitions">
-      <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}" />
-    </GroupBox>
+          <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}"
+                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+        </GroupBox>
+      </TabItem>
 
-    <GroupBox Grid.Row="2"
-              Header="Doping Definitions">
-      <dataControl:DopingControlView DataContext="{Binding DopingViewModel}" />
-    </GroupBox>
+      <TabItem Header="Block Doping">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"></RowDefinition>
+          </Grid.RowDefinitions>
+
+          <GroupBox Grid.Row="0">
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Doping Pairs]" />
+                <Run Text="[?]"
+                     ToolTip="{StaticResource ToolTip.DopingCombination}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}"
+                                                      Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          </GroupBox>
+
+          <GroupBox Grid.Row="1">
+            <GroupBox.Header>
+              <TextBlock>
+                <Run Text="[Doping]" />
+                <Run Text="[?]"
+                     ToolTip="{StaticResource ToolTip.Doping}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:DopingControlView DataContext="{Binding DopingViewModel}"
+                                           Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          </GroupBox>
+
+        </Grid>
+      </TabItem>
+
+    </TabControl>
   </Grid>
 </UserControl>

@@ -196,7 +196,7 @@
 
     <GroupBox Grid.Row="0" 
               Grid.Column="0"
-              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+              Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
@@ -213,7 +213,7 @@
 
     <GroupBox Grid.Row="0" 
               Grid.Column="1" 
-              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+              Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
@@ -231,7 +231,7 @@
     <GroupBox Grid.Row="1" 
               Grid.Column="0" 
               Grid.ColumnSpan="2" 
-              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+              Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>

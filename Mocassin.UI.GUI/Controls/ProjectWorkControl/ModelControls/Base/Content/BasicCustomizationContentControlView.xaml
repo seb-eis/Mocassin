@@ -3,7 +3,6 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content"
   d:DataContext="{d:DesignInstance local:BasicCustomizationContentControlViewModel, IsDesignTimeCreatable=True}"
@@ -11,34 +10,34 @@
   Background="Transparent"
   d:DesignHeight="450" d:DesignWidth="800">
 
-  <Grid
-    Margin="2,2,2,2">
+  <Grid Margin="{StaticResource App.Margin.Default}">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="16*" />
-      <ColumnDefinition Width="10*" />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="80*" />
-      <RowDefinition Height="60*" />
+      <RowDefinition Height="2*" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <Grid Grid.Row="0" Grid.Column="0">
+    <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
       <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="1*" />
         <ColumnDefinition Width="1*" />
         <ColumnDefinition Width="1*" />
       </Grid.ColumnDefinitions>
 
-      <GroupBox Grid.Row="0"
-                Grid.Column="0"
-                Header="Model Selection"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch">
-
+      <Expander Grid.Column="0" ExpandDirection="Right" Visibility="Hidden" />
+      <DockPanel Grid.Column="1">
+        <TextBlock Margin="{StaticResource App.Margin.HorizontalStack}"
+                   Text="Target:"
+                   VerticalAlignment="Center" />
         <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
                   SelectedItem="{Binding SelectedProjectGraph}"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch">
+                  ToolTip="{StaticResource App.ToolTip.ModelSelection}"
+                  Margin="{StaticResource App.Margin.HorizontalStack}">
 
           <ComboBox.ItemTemplate>
             <DataTemplate>
@@ -46,76 +45,87 @@
             </DataTemplate>
           </ComboBox.ItemTemplate>
         </ComboBox>
-      </GroupBox>
-
-      <GroupBox Grid.Row="0"
-                Grid.Column="1"
-                Header="Customization Selection"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch">
-
-        <GroupBox.ContextMenu>
+      </DockPanel>
+      <ComboBox Grid.Column="2"
+                ItemsSource="{Binding CustomizationGraphs}"
+                SelectedItem="{Binding SelectedCustomizationGraph}"
+                ToolTip="{StaticResource App.ToolTip.CustomizationSelection}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Key, StringFormat=Customization: {0}}" />
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+        <ComboBox.ContextMenu>
           <ContextMenu>
-            <MenuItem Header="New customization">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                  <i:InvokeCommandAction Command="{Binding AddCustomizationCommand}"/>
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </MenuItem>
-            <MenuItem Header="Delete customization">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                  <i:InvokeCommandAction Command="{Binding DeleteCustomizationCommand}"
-                                         CommandParameter="{Binding SelectedCustomizationGraph}"/>
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </MenuItem>
+            <MenuItem Header="New" Command="{Binding AddCustomizationCommand}" />
+            <MenuItem Header="Delete" Command="{Binding DeleteCustomizationCommand}" CommandParameter="{Binding SelectedCustomizationGraph}" />
           </ContextMenu>
-        </GroupBox.ContextMenu>
-
-        <ComboBox ItemsSource="{Binding CustomizationGraphs}"
-                  SelectedItem="{Binding SelectedCustomizationGraph}"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch">
-
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Key, StringFormat=Customization: {0}}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-      </GroupBox>
+        </ComboBox.ContextMenu>
+      </ComboBox>
     </Grid>
 
-    <GroupBox Grid.Row="1"
+
+    <Expander Grid.Row="1"
               Grid.Column="0"
               Grid.RowSpan="2"
-              Header="Data Control"
               VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch">
+              HorizontalAlignment="Stretch"
+              IsExpanded="True"
+              ExpandDirection="Right">
+
+      <Expander.Header>
+        <TextBlock Text="Data Viewer">
+          <TextBlock.LayoutTransform>
+            <RotateTransform Angle="-90" />
+          </TextBlock.LayoutTransform>
+        </TextBlock>
+      </Expander.Header>
 
       <ContentPresenter Content="{Binding DataContentControl}"
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Stretch" />
-    </GroupBox>
+    </Expander>
 
-    <GroupBox Grid.Row="0"
+    <Expander Grid.Row="1"
               Grid.Column="1"
-              Grid.RowSpan="2"
-              Header="Visualization">
+              ExpandDirection="Left"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
 
-      <ContentPresenter Content="{Binding VisualizerContentControl}"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch" />
-    </GroupBox>
-    <GroupBox Grid.Row="2"
+      <Expander.Header>
+        <TextBlock Text="Content Viewer">
+          <TextBlock.LayoutTransform>
+            <RotateTransform Angle="-90" />
+          </TextBlock.LayoutTransform>
+        </TextBlock>
+      </Expander.Header>
+
+      <Border Style="{StaticResource App.Style.Border.Box}">
+        <ContentPresenter Content="{Binding VisualizerContentControl}"
+                          VerticalAlignment="Stretch"
+                          HorizontalAlignment="Stretch" />
+      </Border>
+
+    </Expander>
+    <Expander Grid.Row="2"
               Grid.Column="1"
-              Header="Information">
+              ExpandDirection="Left"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
 
-      <ContentPresenter Content="{Binding InfoContentControl}"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch" />
-    </GroupBox>
+      <Expander.Header>
+        <TextBlock Text="Information Viewer">
+          <TextBlock.LayoutTransform>
+            <RotateTransform Angle="-90" />
+          </TextBlock.LayoutTransform>
+        </TextBlock>
+      </Expander.Header>
+
+      <Border Style="{StaticResource App.Style.Border.Box}">
+        <ContentPresenter Content="{Binding InfoContentControl}"
+                          VerticalAlignment="Stretch"
+                          HorizontalAlignment="Stretch" />
+      </Border>
+    </Expander>
   </Grid>
 </UserControl>

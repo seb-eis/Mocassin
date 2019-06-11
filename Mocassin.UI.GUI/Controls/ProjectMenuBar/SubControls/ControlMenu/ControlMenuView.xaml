@@ -15,79 +15,30 @@
     <Menu FontSize="14"
           Background="Transparent">
       <MenuItem Header="Model">
-        <MenuItem Header="Particle control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddParticleControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Particle control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddParticleControlTabCommand}" />
 
-        <MenuItem Header="Structure control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddStructureControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Structure control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddStructureControlTabCommand}" />
 
-        <MenuItem Header="Transition control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddTransitionControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Transition control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddTransitionControlTabCommand}" />
 
-        <MenuItem Header="Energy control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddEnergyControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Energy control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddEnergyControlTabCommand}" />
 
-        <MenuItem Header="Simulation control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddSimulationControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Simulation control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddSimulationControlTabCommand}" />
 
-        <MenuItem Header="Lattice control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger
-              EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddLatticeControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Lattice control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddLatticeControlTabCommand}" />
         <Separator />
-        
-        <MenuItem Header="Model customization control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddCustomizationControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
 
-        <MenuItem Header="Model job control">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type tabCommands:AddJobTranslationControlTabCommand}" />
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="Model customization control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddCustomizationControlTabCommand}" />
+
+        <MenuItem Header="Model job control" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type tabCommands:AddJobTranslationControlTabCommand}" />
 
       </MenuItem>
     </Menu>

@@ -49,7 +49,6 @@
           <Run Text="{StaticResource App.String.MetropolisTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="objects that define the possible set of selectable changes." />
-          <LineBreak />
         </TextBlock>
 
       </StackPanel>
@@ -81,7 +80,7 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
@@ -126,7 +125,7 @@
       </DataGrid>
     </GroupBox>
 
-    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
@@ -141,7 +140,7 @@
                                              Margin="{StaticResource App.Margin.GroupBoxContent}" />
     </GroupBox>
 
-    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
@@ -152,7 +151,7 @@
         </TextBlock>
       </GroupBox.Header>
 
-      <Grid>
+      <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />

@@ -16,26 +16,23 @@
               HorizontalScrollBarVisibility="Hidden"
               ColumnWidth="*"
               AutoGenerateColumns="False"
-              CanUserAddRows="False">
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              Background="Transparent">
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-        <DataGridTextColumn Header="Wyckoff"
-                            Binding="{Binding WyckoffPosition.Name}"
+        <DataGridTextColumn Header="Wyckoff" Binding="{Binding WyckoffPosition.Name}"
                             IsReadOnly="True" />
 
-        <DataGridTextColumn Header="A"
-                            Binding="{Binding Vector.A}"
+        <DataGridTextColumn Header="A" Binding="{Binding Vector.A}"
                             IsReadOnly="True" />
 
-        <DataGridTextColumn Header="B"
-                            Binding="{Binding Vector.B}"
+        <DataGridTextColumn Header="B" Binding="{Binding Vector.B}"
                             IsReadOnly="True" />
 
-        <DataGridTextColumn Header="C"
-                            Binding="{Binding Vector.C}"
+        <DataGridTextColumn Header="C" Binding="{Binding Vector.C}"
                             IsReadOnly="True" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Occupation"

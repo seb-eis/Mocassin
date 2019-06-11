@@ -109,7 +109,7 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Row="0" Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
@@ -128,7 +128,7 @@
 
     </GroupBox>
 
-    <GroupBox Grid.Row="1" Style="{StaticResource App.Style.GroupBox.LeftBorder}"  >
+    <GroupBox Grid.Row="1" Style="{StaticResource App.Style.GroupBox.NoBorder}"  >
 
       <GroupBox.Header>
         <TextBlock>

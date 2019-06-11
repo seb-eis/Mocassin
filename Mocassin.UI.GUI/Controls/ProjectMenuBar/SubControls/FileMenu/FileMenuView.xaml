@@ -12,60 +12,24 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
   <Grid>
-    <Menu FontSize="14" 
+    <Menu FontSize="14"
           Background="Transparent">
       <MenuItem Header="_File">
         <MenuItem Header="_New">
-          <MenuItem Header="Create project library">
-            <i:Interaction.Triggers>
-              <i:EventTrigger EventName="Click">
-                <i:InvokeCommandAction Command="{Binding CommandSource}" 
-                                       CommandParameter="{x:Type fileCommands:ShowProjectCreationDialogCommand}" />
-              </i:EventTrigger>
-            </i:Interaction.Triggers>
-          </MenuItem>
-          <MenuItem Header="Add model project">
-            <i:Interaction.Triggers>
-              <i:EventTrigger EventName="Click">
-                <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                       CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}"/>
-              </i:EventTrigger>
-            </i:Interaction.Triggers>
-          </MenuItem>
+          <MenuItem Header="Create project library" Command="{Binding CommandSource}"
+                    CommandParameter="{x:Type fileCommands:ShowProjectCreationDialogCommand}" />
+          <MenuItem Header="Add model project" Command="{Binding CommandSource}"
+                    CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}" />
         </MenuItem>
-        <MenuItem Header="_Open">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type fileCommands:ShowProjectLoadingDialogCommand}"/>
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
-        <MenuItem Header="_Close">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type projectCommands:CloseProjectLibraryCommand}"/>
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
-        <MenuItem Header="_Save">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type projectCommands:SaveProjectLibraryChangesCommand}"/>
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="_Open" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type fileCommands:ShowProjectLoadingDialogCommand}" />
+        <MenuItem Header="_Close" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type projectCommands:CloseProjectLibraryCommand}" />
+        <MenuItem Header="_Save" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type projectCommands:SaveProjectLibraryChangesCommand}" />
         <Separator />
-        <MenuItem Header="_Exit">
-          <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Click">
-              <i:InvokeCommandAction Command="{Binding CommandSource}"
-                                     CommandParameter="{x:Type fileCommands:SaveExitProgramCommand}"/>
-            </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </MenuItem>
+        <MenuItem Header="_Exit" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type fileCommands:SaveExitProgramCommand}" />
       </MenuItem>
     </Menu>
   </Grid>

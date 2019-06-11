@@ -18,9 +18,9 @@
     </Grid.RowDefinitions>
     <DockPanel Grid.Row="0" 
                HorizontalAlignment="Left">
-      <TextBlock Text="Source:" 
-                 VerticalAlignment="Center"
-                 Margin="{StaticResource App.Margin.HorizontalStack}"/>
+      <TextBlock VerticalAlignment="Center"
+                 Margin="{StaticResource App.Margin.HorizontalStack}"
+                 ToolTip="Target model"/>
 
       <ComboBox ItemsSource="{Binding ProjectGraphs}"
                 SelectedItem="{Binding SelectedProjectGraph}"

@@ -16,7 +16,7 @@
       <Setter Property="Margin" Value="{StaticResource App.Margin.GroupBoxContent}"/>
     </Style>
 
-    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource App.Style.GroupBox.LeftBorder}"/>
+    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource App.Style.GroupBox.NoBorder}"/>
   </UserControl.Resources>
 
   <Grid>

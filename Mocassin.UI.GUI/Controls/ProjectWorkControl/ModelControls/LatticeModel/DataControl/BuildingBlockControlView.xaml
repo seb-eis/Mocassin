@@ -14,35 +14,34 @@
   Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding BuildingBlockCollectionViewModel.DataCollection}"
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <DataGrid Grid.Column="0"
+              Name="BlockDataGrid"
+              ItemsSource="{Binding BuildingBlockCollectionViewModel.DataCollection}"
               SelectedItem="{Binding BuildingBlockCollectionViewModel.SelectedCollectionItem}"
               AutoGenerateColumns="False"
               ColumnWidth="*"
-              HorizontalScrollBarVisibility="Disabled"
+              HorizontalScrollBarVisibility="Auto"
               CanUserAddRows="True"
-              Background="Transparent"
-              RowDetailsVisibilityMode="VisibleWhenSelected">
-
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate DataType="{x:Type latticeModel:BuildingBlockGraph}">
-          <gridControl:BuildingBlockContentControlView MaxHeight="150">
-            <gridControl:BuildingBlockContentControlView.DataContext>
-              <MultiBinding Converter="{adapter:BuildingBlockBuildingBlockContentViewModelConverter}">
-                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                         Path="DataContext" />
-                <Binding />
-              </MultiBinding>
-            </gridControl:BuildingBlockContentControlView.DataContext>
-          </gridControl:BuildingBlockContentControlView>
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
+              Background="Transparent">
 
       <DataGrid.Columns>
-
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
-
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
       </DataGrid.Columns>
+
     </DataGrid>
+    <gridControl:BuildingBlockContentControlView Grid.Column="1">
+      <gridControl:BuildingBlockContentControlView.DataContext>
+        <MultiBinding Converter="{adapter:BuildingBlockBuildingBlockContentViewModelConverter}">
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                   Path="DataContext" />
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                   Path="DataContext.BuildingBlockCollectionViewModel.SelectedCollectionItem" />
+        </MultiBinding>
+      </gridControl:BuildingBlockContentControlView.DataContext>
+    </gridControl:BuildingBlockContentControlView>
   </Grid>
 </UserControl>

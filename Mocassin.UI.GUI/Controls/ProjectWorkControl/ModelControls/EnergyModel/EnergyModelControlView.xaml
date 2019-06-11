@@ -123,7 +123,7 @@
                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
 
           <GroupBox Grid.Column="1"
-                    Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+                    Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
             <GroupBox.Header>
               <TextBlock>
@@ -141,7 +141,7 @@
       </TabItem>
 
       <TabItem Header="Advanced Options">
-        <GroupBox Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+        <GroupBox Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
           <GroupBox.Header>
             <TextBlock>

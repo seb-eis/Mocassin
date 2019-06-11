@@ -5,77 +5,56 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
-  xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:KineticRuleSetControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
-  <UserControl.Resources>
-    <Style TargetType="{x:Type Run}" x:Key="ModelObjectRunStyle">
-      <Setter Property="Foreground" Value="Blue" />
-      <Setter Property="FontWeight" Value="Bold" />
-    </Style>
-  </UserControl.Resources>
-
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="2*" />
-    </Grid.ColumnDefinitions>
 
-    <GroupBox Grid.Row="0"
-              Grid.Column="0"
-              Header="Transition Rule Selection">
+    <ComboBox Grid.Row="0"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              DisplayMemberPath="Name"
+              ToolTip="Rule book entry" />
+    <GroupBox Grid.Row="1" Header="Rule description">
 
-      <ComboBox ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
-                DisplayMemberPath="Name" />
+      <TextBlock TextWrapping="Wrap" TextAlignment="Justify"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <Run Text="Transition rule for the" />
+        <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.ModelObject}" />
+        <Run Text="transition with behavior flags" />
+        <Run Text="{Binding SelectedCollectionItem.RuleFlags, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="set. Symmetry reduced state change behavior (State-0)" />
+        <Run Text="{Binding SelectedCollectionItem.StartState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="(State-1)" />
+        <Run Text="{Binding SelectedCollectionItem.TransitionState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="(State-2)" />
+        <Run Text="{Binding SelectedCollectionItem.FinalState, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="has" />
+        <Run Text="{Binding SelectedCollectionItem.DependencyRuleCount, Mode=OneWay}"
+             Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="dependency rule." />
+      </TextBlock>
     </GroupBox>
-    <GroupBox Header="Attempt Frequency [Hz]"
-              Grid.Row="1"
-              Grid.Column="0">
-      <TextBox Text="{Binding SelectedCollectionItem.AttemptFrequency, StringFormat={}{0:e13}}">
+    <GroupBox Header="Attempt Frequency [Hz]" Grid.Row="2">
+      <TextBox Text="{Binding SelectedCollectionItem.AttemptFrequency, StringFormat={}{0:e13}}"
+               Margin="{StaticResource App.Margin.GroupBoxContent}">
         <TextBox.InputBindings>
-          <KeyBinding Key="Enter"
-                      Command="{StaticResource App.Command.UpdateTextBoxSource}"
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
         </TextBox.InputBindings>
       </TextBox>
     </GroupBox>
-    <GroupBox Grid.Row="0"
-              Grid.Column="1"
-              Grid.RowSpan="2"
-              Header="Description">
-
-      <TextBlock TextWrapping="Wrap"
-                 TextAlignment="Justify">
-
-        <Run Text="Transition rule for the" />
-        <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="transition with behavior flags" />
-        <Run Text="{Binding SelectedCollectionItem.RuleFlags, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="set. Symmetry reduced state change behavior (State-0)" />
-        <Run Text="{Binding SelectedCollectionItem.StartState, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="(State-1)" />
-        <Run Text="{Binding SelectedCollectionItem.TransitionState, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="(State-2)" />
-        <Run Text="{Binding SelectedCollectionItem.FinalState, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="has" />
-        <Run Text="{Binding SelectedCollectionItem.DependencyRuleCount, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
-        <Run Text="dependency rule." />
-      </TextBlock>
-    </GroupBox>
-
   </Grid>
 </UserControl>

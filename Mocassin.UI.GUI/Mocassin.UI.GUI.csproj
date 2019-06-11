@@ -562,6 +562,7 @@
     <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
     <Compile Include="Base\Converter\Int32ToEnumConverter.cs" />
     <Compile Include="Base\Converter\MultiValueConverter.cs" />
+    <Compile Include="Base\Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />
     <Compile Include="Base\DataContext\IObjectDropAcceptor.cs" />
     <Compile Include="Base\DataContext\IMocassinProjectControl.cs" />

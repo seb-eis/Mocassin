@@ -48,7 +48,6 @@
           <Run Text="{StaticResource App.String.KineticsTransition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="objects that define the possible set of selectable changes." />
-          <LineBreak />
         </TextBlock>
 
       </StackPanel>
@@ -81,7 +80,7 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.NoBorder}">
       <GroupBox.Header>
         <TextBlock>
           <Run Text="[Kinetic Simulation Bases]" />
@@ -92,6 +91,7 @@
       </GroupBox.Header>
 
       <DataGrid Name="SimulationDataGrid"
+                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding DataCollection}"
                 SelectedItem="{Binding SelectedCollectionItem}"
                 Background="Transparent"
@@ -124,7 +124,7 @@
       </DataGrid>
     </GroupBox>
 
-    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.NoBorder}">
       <GroupBox.Header>
         <TextBlock>
           <Run Text="[General Settings]" />
@@ -133,20 +133,21 @@
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedCollectionItem}" />
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedCollectionItem}"
+                                             Margin="{StaticResource App.Margin.GroupBoxContent}"/>
     </GroupBox>
 
-    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.NoBorder}">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[General Settings]" />
+          <Run Text="[Kinetic Settings]" />
           <Run Text="[?]"
-               ToolTip="{StaticResource ToolTip.GeneralSettings}"
+               ToolTip="{StaticResource ToolTip.KineticSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
 
-      <Grid>
+      <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />

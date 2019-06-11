@@ -10,23 +10,107 @@
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+  <UserControl.Resources>
+        <ToolTip x:Key="ToolTip.KineticRules" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
 
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.KineticSimulation}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects define the basis for your KMC simulation project deployment." />
+          <Run Text="They group sets of" />
+          <Run Text="{StaticResource App.String.KineticsTransition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects to define what can happen within the lattice during simulation." />
+          <LineBreak />
+          <Run
+            Text="Keep in mind: Settings you define here can be overwritten later on and serve as global fallback values."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run Text="It is recommended to use the automatic default values if global overrides are not required."
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.ToolTip.PropertyInfo}"
+               Style="{StaticResource App.Style.Run.Important}" />
+          <LineBreak />
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="{StaticResource App.String.KineticSimulation.Transitions}"
+               Style="{StaticResource App.Style.Run.Property}" />
+          <LineBreak />
+          <Run Text="Define the set of attached" />
+          <Run Text="{StaticResource App.String.KineticsTransition}"
+               Style="{StaticResource App.Style.Run.ModelObject}" />
+          <Run Text="objects that define the possible set of selectable changes." />
+        </TextBlock>
+
+      </StackPanel>
+
+    </ToolTip>
+  </UserControl.Resources>
   <Grid>
     <TabControl>
-      <TabItem Header="Rules (Kinetic)">
-        <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}"/>
+      <TabItem Header="Transition Rules (Kinetic)">
+        <GroupBox>
+          <GroupBox.Header>
+            <TextBlock>
+              <Run Text="[Kinetic Transition Rule Settings]" />
+              <Run Text="[?]"
+                   ToolTip="{StaticResource ToolTip.KineticRules}"
+                   Style="{StaticResource App.Style.Run.Keyword}" />
+            </TextBlock>
+          </GroupBox.Header>
+          <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}"
+                                                          Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+        </GroupBox>
       </TabItem>
 
       <TabItem Header="Pair Energies (Stable)">
-        <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"/>
+        <GroupBox>
+          <GroupBox.Header>
+            <TextBlock>
+              <Run Text="[Stable Pair Energy Settings]" />
+              <Run Text="[?]"
+                   ToolTip="{StaticResource ToolTip.KineticRules}"
+                   Style="{StaticResource App.Style.Run.Keyword}" />
+            </TextBlock>
+          </GroupBox.Header>
+        <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"
+                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+        </GroupBox>
       </TabItem>
 
       <TabItem Header="Pair Energies (Unstable)">
-        <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"/>
+        <GroupBox>
+          <GroupBox.Header>
+            <TextBlock>
+              <Run Text="[Unstable Pair Energy Settings]" />
+              <Run Text="[?]"
+                   ToolTip="{StaticResource ToolTip.KineticRules}"
+                   Style="{StaticResource App.Style.Run.Keyword}" />
+            </TextBlock>
+          </GroupBox.Header>
+        <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"
+                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+        </GroupBox>
       </TabItem>
 
       <TabItem Header="Group Energies (All)">
-        <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"/>
+        <GroupBox>
+          <GroupBox.Header>
+            <TextBlock>
+              <Run Text="[Group Energy Settings]" />
+              <Run Text="[?]"
+                   ToolTip="{StaticResource ToolTip.KineticRules}"
+                   Style="{StaticResource App.Style.Run.Keyword}" />
+            </TextBlock>
+          </GroupBox.Header>
+        <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
+                                                 Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+        </GroupBox>
       </TabItem>
     </TabControl>
   

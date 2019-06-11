@@ -100,7 +100,7 @@
     </Grid.RowDefinitions>
     <GroupBox Grid.Row="0"
               Name="PositionContentControl"
-              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+              Style="{StaticResource App.Style.GroupBox.NoBorder}">
       <GroupBox.Header>
         <TextBlock>
           <Run Text="[Wyckoff Positions]" />
@@ -142,7 +142,7 @@
     </GroupBox>
 
     <GroupBox Grid.Row="1" Name="ExpansionContentControl"
-              Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+              Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>

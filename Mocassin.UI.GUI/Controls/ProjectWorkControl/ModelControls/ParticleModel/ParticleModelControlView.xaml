@@ -95,7 +95,7 @@
           </Grid.RowDefinitions>
 
           <GroupBox Grid.Row="0"
-                    Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+                    Style="{StaticResource App.Style.GroupBox.NoBorder}">
             <GroupBox.Header>
               <TextBlock>
                 <Run Text="[Particles]" />
@@ -109,7 +109,7 @@
           </GroupBox>
 
           <GroupBox Grid.Row="1"
-                    Style="{StaticResource App.Style.GroupBox.LeftBorder}">
+                    Style="{StaticResource App.Style.GroupBox.NoBorder}">
             <GroupBox.Header>
               <TextBlock>
                 <Run Text="[Occupation Sets]" />

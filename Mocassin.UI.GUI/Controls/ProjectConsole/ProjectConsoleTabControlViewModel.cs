@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
         public ProjectConsoleTabControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            TabControlViewModel = new UserControlTabControlViewModel {TabStripPlacement = Dock.Bottom};
+            TabControlViewModel = new UserControlTabControlViewModel {TabStripPlacement = Dock.Top};
             MessageConsoleViewModel = new MessageConsoleViewModel(projectControl);
             TabControlViewModel.AddNonClosableTab("Notifications", MessageConsoleViewModel, new MessageConsoleView());
             TabControlViewModel.SetActiveTabByIndex(0);
