@@ -15,7 +15,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     creation system
     /// </summary>
     [XmlRoot("DatabaseCreationInstruction")]
-    public class ProjectJobTranslationGraph : MocassinProjectChildEntity<MocassinProjectGraph>
+    public sealed class ProjectJobTranslationGraph : MocassinProjectChildEntity<MocassinProjectGraph>
     {
         /// <summary>
         ///     Get or set a key for the customization
@@ -50,6 +50,7 @@ namespace Mocassin.UI.Xml.Jobs
             KmcJobPackageDescriptions = new List<KmcJobPackageDescriptionGraph>();
             MmcJobPackageDescriptions = new List<MmcJobPackageDescriptionGraph>();
             Key = Guid.NewGuid().ToString();
+            Name = $"Jobs {Key}";
         }
 
         /// <summary>

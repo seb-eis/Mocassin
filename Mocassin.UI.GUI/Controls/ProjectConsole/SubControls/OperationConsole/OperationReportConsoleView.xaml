@@ -6,6 +6,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:OperationReportConsoleViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -16,36 +17,16 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <DockPanel Grid.Row="0" 
-               HorizontalAlignment="Left">
-      <TextBlock VerticalAlignment="Center"
-                 Margin="{StaticResource App.Margin.HorizontalStack}"
-                 ToolTip="Target model"/>
+    <ComboBox Grid.Row="0"
+              ItemsSource="{Binding ProjectGraphs}"
+              SelectedItem="{Binding SelectedProjectGraph}"
+              Margin="{StaticResource App.Margin.VerticalStack}"
+              ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
+              VerticalAlignment="Center"
+              IsEditable="True"
+              DisplayMemberPath="ProjectName"
+              Visibility="{Binding ElementName=ShowSelectionCheckMenuItem, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
 
-      <ComboBox ItemsSource="{Binding ProjectGraphs}"
-                SelectedItem="{Binding SelectedProjectGraph}"
-                DisplayMemberPath="ProjectName"
-                Margin="{StaticResource App.Margin.HorizontalStack}"
-                ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
-                VerticalAlignment="Center"/>
-
-      <TextBlock Text="Error filtered:" 
-                 VerticalAlignment="Center"
-                 Margin="{StaticResource App.Margin.HorizontalStack}"/>
-
-      <CheckBox IsChecked="{Binding IsErrorContentFiltered}" 
-                VerticalAlignment="Center" 
-                Margin="{StaticResource App.Margin.HorizontalStack}"/>
-
-      <TextBlock Text="Ignore incoming updates:" 
-                 VerticalAlignment="Center"
-                 Margin="{StaticResource App.Margin.HorizontalStack}"/>
-
-      <CheckBox IsChecked="{Binding ValidatorViewModel.IsIgnoreContentChange}" 
-                VerticalAlignment="Center" 
-                Margin="{StaticResource App.Margin.HorizontalStack}"/>
-
-    </DockPanel>
     <DataGrid Grid.Row="1"
               Name="ReportDataGrid"
               ItemsSource="{Binding OperationCollectionViewModel.ObservableItems}"
@@ -53,47 +34,53 @@
               AutoGenerateColumns="False"
               IsReadOnly="True"
               VerticalScrollBarVisibility="Auto"
-              RowDetailsVisibilityMode="VisibleWhenSelected"
               GridLinesVisibility="None"
               Background="Transparent">
 
       <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseEnter">
-          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}" CommandParameter="{StaticResource Bool.True}"/>
+          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}"
+                                 CommandParameter="{StaticResource Bool.True}" />
         </i:EventTrigger>
         <i:EventTrigger EventName="MouseLeave">
-          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}" CommandParameter="{StaticResource Bool.False}"/>
+          <i:InvokeCommandAction Command="{Binding SoftUpdateStopCommand}"
+                                 CommandParameter="{StaticResource Bool.False}" />
         </i:EventTrigger>
       </i:Interaction.Triggers>
+
+      <DataGrid.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Deactivate auto-updates" IsCheckable="True"
+                    IsChecked="{Binding ValidatorViewModel.IsIgnoreContentChange}" />
+          <MenuItem Header="Show errors only" IsCheckable="True"
+                    IsChecked="{Binding IsErrorContentFiltered}" />
+          <MenuItem Header="Show target selection" IsCheckable="True" IsChecked="True"
+                    Name="ShowSelectionCheckMenuItem"/>
+        </ContextMenu>
+      </DataGrid.ContextMenu>
 
       <DataGrid.RowStyle>
         <Style TargetType="DataGridRow">
           <Setter Property="ToolTip">
             <Setter.Value>
-              <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding}" TextWrapping="Wrap" />
             </Setter.Value>
           </Setter>
         </Style>
       </DataGrid.RowStyle>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Time Stamp"
-                            Width="Auto"
+        <DataGridTextColumn Header="Time" Width="Auto"
                             Binding="{Binding TimeStamp, Mode=OneWay}" />
-        <DataGridTextColumn Header="Operation"
-                            Width="Auto"
+        <DataGridTextColumn Header="Operation" Width="Auto"
                             Binding="{Binding OperationDescription, Mode=OneWay}" />
-        <DataGridCheckBoxColumn Header="Accepted"
-                                Width="Auto"
+        <DataGridCheckBoxColumn Header="Accepted" Width="Auto"
                                 Binding="{Binding IsGood, Mode=OneWay}" />
-        <DataGridCheckBoxColumn Header="Invalid"
-                                Width="Auto"
-                                Binding="{Binding HasValidationError, Mode=OneWay}" />        
-        <DataGridCheckBoxColumn Header="Conflict"
-                                Width="Auto"
+        <DataGridCheckBoxColumn Header="Invalid" Width="Auto"
+                                Binding="{Binding HasValidationError, Mode=OneWay}" />
+        <DataGridCheckBoxColumn Header="Conflict" Width="Auto"
                                 Binding="{Binding HasUnsolvedConflict, Mode=OneWay}" />
-        <DataGridCheckBoxColumn Header="Exception"
-                                Width="Auto"
+        <DataGridCheckBoxColumn Header="Exception" Width="Auto"
                                 Binding="{Binding IsError, Mode=OneWay}" />
 
       </DataGrid.Columns>

@@ -8,25 +8,27 @@
   xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.Adapter"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:PairInteractionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="100*" />
+    </Grid.ColumnDefinitions>
+    <DataGrid Grid.Column="0"
+              ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
+              CanUserDeleteRows="False"
               Background="Transparent"
               ColumnWidth="*"
               HorizontalScrollBarVisibility="Disabled"
               RowDetailsVisibilityMode="VisibleWhenSelected">
-
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate DataType="{x:Type customization:PairEnergySetGraph}">
-          <gridControl:PairEnergySetControlView DataContext="{Binding Converter={adapter:PairEnergySetPairEnergySetViewModelConverter}}"/>
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" 
@@ -46,5 +48,7 @@
       </DataGrid.Columns>
 
     </DataGrid>
+    <gridControl:PairEnergySetControlView Grid.Column="2" DataContext="{Binding SelectedCollectionItem, Converter={adapter:PairEnergySetPairEnergySetViewModelConverter}}"
+                                          Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
   </Grid>
 </UserControl>

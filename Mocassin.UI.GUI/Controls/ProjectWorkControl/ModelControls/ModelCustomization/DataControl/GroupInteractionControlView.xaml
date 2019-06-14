@@ -8,12 +8,19 @@
   xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.Adapter"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   d:DataContext="{d:DesignInstance local:GroupInteractionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100*" />
+        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="100*" />
+      </Grid.ColumnDefinitions>
+    <DataGrid Grid.Column="0"
+              ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
@@ -22,18 +29,11 @@
               HorizontalScrollBarVisibility="Disabled"
               RowDetailsVisibilityMode="VisibleWhenSelected">
 
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate DataType="{x:Type customization:GroupEnergySetGraph}">
-          <gridControl:GroupEnergySetControlView
-            DataContext="{Binding Converter={adapter:GroupEnergySetGroupEnergySetViewModelConverter}}" />
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
-
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name"
                             Binding="{Binding Name}" />
 
-        <DataGridTextColumn Header="Group Interaction"
+        <DataGridTextColumn Header="Source group"
                             Binding="{Binding GroupInteraction.Name}"
                             IsReadOnly="True" />
 
@@ -43,5 +43,8 @@
       </DataGrid.Columns>
 
     </DataGrid>
+    <gridControl:GroupEnergySetControlView Grid.Column="2"
+      DataContext="{Binding SelectedCollectionItem, Converter={adapter:GroupEnergySetGroupEnergySetViewModelConverter}}"
+      Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
   </Grid>
 </UserControl>

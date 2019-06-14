@@ -21,14 +21,13 @@
               ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               DisplayMemberPath="Name"
-              ToolTip="Rule book entry" />
-    <GroupBox Grid.Row="1" Header="Rule description">
-
+              ToolTip="Rule entry"/>
+    <GroupBox Grid.Row="1" Header="[Rule description]" Margin="0,10,0,0">
       <TextBlock TextWrapping="Wrap" TextAlignment="Justify"
                  Margin="{StaticResource App.Margin.GroupBoxContent}">
         <Run Text="Transition rule for the" />
         <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
-             Style="{StaticResource App.Style.Run.ModelObject}" />
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="transition with behavior flags" />
         <Run Text="{Binding SelectedCollectionItem.RuleFlags, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
@@ -47,14 +46,19 @@
         <Run Text="dependency rule." />
       </TextBlock>
     </GroupBox>
-    <GroupBox Header="Attempt Frequency [Hz]" Grid.Row="2">
-      <TextBox Text="{Binding SelectedCollectionItem.AttemptFrequency, StringFormat={}{0:e13}}"
-               Margin="{StaticResource App.Margin.GroupBoxContent}">
-        <TextBox.InputBindings>
-          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
-        </TextBox.InputBindings>
-      </TextBox>
+    <GroupBox Header="[Rule settings]" Grid.Row="2" Margin="{StaticResource App.Margin.GroupBoxContentLarge}">
+        <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <GroupBox Header="Attempt frequency per degree of freedom [Hz]">
+            <TextBox Name="FrequencyTextBox"
+                     Margin="{StaticResource App.Margin.GroupBoxContent}"
+                     Text="{Binding SelectedCollectionItem.AttemptFrequency, StringFormat={}{0:e13}}">
+              <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                            CommandParameter="{Binding ElementName=FrequencyTextBox}" />
+              </TextBox.InputBindings>
+            </TextBox>
+          </GroupBox>
+        </StackPanel>
     </GroupBox>
   </Grid>
 </UserControl>

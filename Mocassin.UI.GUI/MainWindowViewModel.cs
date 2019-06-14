@@ -87,13 +87,14 @@ namespace Mocassin.UI.GUI
         public ProjectContentChangeTriggerViewModel ChangeTriggerViewModel { get; set; }
 
         /// <inheritdoc />
-        public void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
+        public void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
         {
             OpenProjectLibrary?.Dispose();
             ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
             OpenProjectLibrary = projectLibrary;
             ProjectLibraryChangedEvent.OnNext(projectLibrary);
             ChangeTriggerViewModel = ChangeTriggerViewModel ?? new ProjectContentChangeTriggerViewModel(this);
+            WindowDescription = MakeWindowDescription();
         }
 
         /// <inheritdoc />
@@ -186,7 +187,7 @@ namespace Mocassin.UI.GUI
         public string MakeWindowDescription()
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            return version.ToString();
+            return $"[{version}]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
         }
 
         /// <summary>

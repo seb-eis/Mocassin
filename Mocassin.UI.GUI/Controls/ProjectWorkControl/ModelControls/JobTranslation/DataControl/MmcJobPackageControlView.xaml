@@ -9,120 +9,100 @@
   xmlns:jobs="clr-namespace:Mocassin.UI.Xml.Jobs;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   d:DataContext="{d:DesignInstance local:MmcJobPackageControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
-              AutoGenerateColumns="False"
-              HorizontalScrollBarVisibility="Disabled"
-              Background="Transparent"
-              ColumnWidth="*"
-              RowDetailsVisibilityMode="VisibleWhenSelected"
-              GridLinesVisibility="All">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="100*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-      <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+    <GroupBox Grid.Row="0" Grid.Column="0"
+              Visibility="{Binding ContentSource, Converter={converter:NullToVisibilityConverter}}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text=">> Job collections -" />
+          <Run Text="{Binding ContentSource.Key, StringFormat={}{0}, TargetNullValue=???]}" />
+          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
+      <DataGrid ItemsSource="{Binding DataCollection}"
+                SelectedItem="{Binding SelectedCollectionItem}"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                ColumnWidth="*">
 
-        <DataGridTextColumn
-          Binding="{Binding RngSeed, UpdateSourceTrigger=PropertyChanged,Delay=500}">
-          <DataGridTextColumn.HeaderTemplate>
-            <DataTemplate>
-              <TextBlock Text="Random Number Generator Seed">
-                <TextBlock.ToolTip>
-                  <TextBlock
-                    Text="Warning: Setting this value to null causes all translation sequences to use the base simulation default seed!"
-                    TextAlignment="Justify"
-                    TextWrapping="Wrap"
-                    MaxWidth="250" />
-                </TextBlock.ToolTip>
-              </TextBlock>
-            </DataTemplate>
-          </DataGridTextColumn.HeaderTemplate>
-        </DataGridTextColumn>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+          <DataGridTextColumn Header="RNG Seed" Binding="{Binding RngSeed}" />
+          <DataGridTextColumn Header="Job Multiplier" Binding="{Binding JobCountPerConfig}" />
+          <comboBox:BindableDataGridComboBoxColumn Header="Simulation Base"
+                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableSimulations}"
+                                                   SelectedValueBinding="{Binding Simulation}"
+                                                   SelectedValuePath="."
+                                                   DisplayMemberPath="Name" />
 
-        <DataGridTextColumn
-          Header="Job Multiplier (Level 1)"
-          Binding="{Binding JobCountPerConfig, UpdateSourceTrigger=PropertyChanged,Delay=500}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </GroupBox>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Base-Simulation (Level 0)"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableSimulations}"
-                                                 SelectedValueBinding="{Binding Simulation}"
-                                                 SelectedValuePath="."
-                                                 DisplayMemberPath="Name" />
+    <GroupBox Grid.Row="1" Grid.Column="0"
+              Visibility="{Binding SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}"
+              Name="CollectionSettingsGroupBox">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text=">> Collection settings -" />
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0}, TargetNullValue=???}" />
+          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
 
-      </DataGrid.Columns>
+      <gridControl:MmcJobDescriptionControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
+                                                DataContext="{Binding SelectedCollectionItem.JobBaseDescription, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
+    </GroupBox>
 
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate DataType="{x:Type jobs:MmcJobPackageDescriptionGraph}">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="*" />
-              <RowDefinition Height="*" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <GroupBox Grid.Row="2" Grid.Column="0"
+              Visibility="{Binding ElementName=CollectionSettingsGroupBox, Path=Visibility}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text=">> Collection selection optimizers -" />
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0}, TargetNullValue=???}" />
+          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}" />
+        </TextBlock>
+      </GroupBox.Header>
 
-            <Expander Grid.Row="0"
-                      Header="Collection Overwrites (Level 1)">
-              <Expander.ToolTip>
-                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" MaxWidth="250">
-                  <Run Text="Level 1 definitions will overwrite the base simulation (level 0) default fallback values" />
-                </TextBlock>
-              </Expander.ToolTip>
-              <gridControl:MmcJobDescriptionControlView
-                DataContext="{Binding JobBaseDescription, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
-            </Expander>
+      <gridControl:SelectionOptimizerSetControlView Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <gridControl:SelectionOptimizerSetControlView.DataContext>
+          <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                     Path="DataContext.ContentSource.Parent" />
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                     Path="DataContext.SelectedCollectionItem" />
+          </MultiBinding>
+        </gridControl:SelectionOptimizerSetControlView.DataContext>
+      </gridControl:SelectionOptimizerSetControlView>
+    </GroupBox>
 
-            <Expander Grid.Row="1"
-                      Header="Selection Optimizers">
-
-              <Expander.ToolTip>
-                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" MaxWidth="250">
-                  <Run Text="Selection optimizers provide a mechanism to manually remove the auto-set SELECTABLE flag of particles." />
-                  <Run Text="This may drastically improve simulation performance depending on the actual super-cell configuration." />
-                  <LineBreak/>
-                  <Run Text="Warning: Misuse of this feature will cause invalid simulation results. Use with caution." />
-                </TextBlock>
-              </Expander.ToolTip>
-
-              <gridControl:SelectionOptimizerSetControlView>
-                <gridControl:SelectionOptimizerSetControlView.DataContext>
-                  <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
-                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                             Path="DataContext.ContentSource.Parent"/>
-                    <Binding/>
-                  </MultiBinding>
-                </gridControl:SelectionOptimizerSetControlView.DataContext>
-              </gridControl:SelectionOptimizerSetControlView>
-
-            </Expander>
-
-            <Expander Grid.Row="2"
-                      Header="Job Descriptions (Level 2)" MaxHeight="300">
-
-              <gridControl:KmcJobDescriptionSetControlView>
-                <gridControl:KmcJobDescriptionSetControlView.DataContext>
-                  <MultiBinding Converter="{adapter:MmcJobPackageMmcJobDescriptionSetViewModelConverter}">
-                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                             Path="DataContext.ContentSource.Parent"/>
-                    <Binding/>
-                  </MultiBinding>
-                </gridControl:KmcJobDescriptionSetControlView.DataContext>
-              </gridControl:KmcJobDescriptionSetControlView>
-
-            </Expander>
-            <Separator Grid.Row="3"/>
-
-          </Grid>
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
-
-    </DataGrid>
+    <gridControl:MmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
+                                                 Visibility="{Binding ElementName=CollectionSettingsGroupBox, Path=Visibility}">
+      <gridControl:MmcJobDescriptionSetControlView.DataContext>
+        <MultiBinding Converter="{adapter:MmcJobPackageMmcJobDescriptionSetViewModelConverter}">
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                   Path="DataContext.ContentSource.Parent" />
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                   Path="DataContext.SelectedCollectionItem" />
+        </MultiBinding>
+      </gridControl:MmcJobDescriptionSetControlView.DataContext>
+    </gridControl:MmcJobDescriptionSetControlView>
   </Grid>
 </UserControl>

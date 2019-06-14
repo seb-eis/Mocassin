@@ -10,8 +10,14 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
     /// </summary>
     public abstract class ProjectGraphControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
     {
+        private MocassinProjectGraph contentSource;
+
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProjectGraph ContentSource
+        {
+            get => contentSource;
+            protected set => SetProperty(ref contentSource, value);
+        }
 
         /// <inheritdoc />
         protected ProjectGraphControlViewModel(IMocassinProjectControl projectControl)

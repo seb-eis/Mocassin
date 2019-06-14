@@ -77,6 +77,7 @@ namespace Mocassin.UI.Xml.Customization
                 EnergyModelCustomization = EnergyModelCustomizationGraph.Create(energySetterProvider, parent),
                 TransitionModelCustomization = TransitionModelCustomizationEntity.Create(ruleSetterProvider, parent)
             };
+            obj.Name = $"Customization {obj.Key}";
 
             return obj;
         }

@@ -27,25 +27,23 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="1*" />
-        <ColumnDefinition Width="2*" />
       </Grid.ColumnDefinitions>
 
       <Expander Grid.Column="0" ExpandDirection="Right" Visibility="Hidden" />
-      <DockPanel Grid.Column="1">
-        <TextBlock Margin="{StaticResource App.Margin.HorizontalStack}"
-                   Text="Target:"
-                   VerticalAlignment="Center" />
-        <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-                  SelectedItem="{Binding SelectedProjectGraph}"
-                  ToolTip="{StaticResource App.ToolTip.ModelSelection}">
-
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding ProjectGuid, StringFormat=Model: {0}}"/>
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-      </DockPanel>
+      <ComboBox Grid.Column="1"
+                ItemsSource="{Binding ProjectControl.ProjectGraphs}"
+                SelectedItem="{Binding SelectedProjectGraph}"
+                ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
+                Text="{Binding SelectedProjectGraph.Name}"
+                DisplayMemberPath="Name"
+                IsEditable="True"
+                IsTextSearchEnabled="{Binding ElementName=ProjectBoxSearchToggle, Path=IsChecked}">
+        <ComboBox.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}" IsCheckable="True" Name="ProjectBoxSearchToggle"/>
+          </ContextMenu>
+        </ComboBox.ContextMenu>
+      </ComboBox>
     </Grid>
 
 

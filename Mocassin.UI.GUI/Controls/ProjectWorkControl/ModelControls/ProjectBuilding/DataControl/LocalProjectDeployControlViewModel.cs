@@ -24,22 +24,23 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         private LibraryBuildStatus buildStatus;
 
         /// <summary>
-        ///     Get the <see cref="CollectionControlViewModel{T}"/> for all selectable <see cref="MocassinProjectBuildGraph"/> instances
+        ///     Get the <see cref="CollectionControlViewModel{T}" /> for all selectable <see cref="MocassinProjectBuildGraph" />
+        ///     instances
         /// </summary>
         public CollectionControlViewModel<MocassinProjectBuildGraph> ProjectBuildGraphCollectionViewModel { get; }
 
         /// <summary>
-        ///     Get a <see cref="ICommand"/> to request a file selection through the <see cref="UserFileSelectionSource"/>
+        ///     Get a <see cref="ICommand" /> to request a file selection through the <see cref="UserFileSelectionSource" />
         /// </summary>
         public ICommand GetFileSelectionCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ICommand"/> to write the translation database to the selected file target
+        ///     Get the <see cref="ICommand" /> to write the translation database to the selected file target
         /// </summary>
         public ICommand WriteDatabaseCommand { get; }
 
         /// <summary>
-        ///     Get or set the file name <see cref="string"/> that is used for project building
+        ///     Get or set the file name <see cref="string" /> that is used for project building
         /// </summary>
         public string FilePath
         {
@@ -66,7 +67,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Get or set the current <see cref="LibraryBuildStatus"/>
+        ///     Get or set the current <see cref="LibraryBuildStatus" />
         /// </summary>
         public LibraryBuildStatus BuildStatus
         {
@@ -75,10 +76,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <inheritdoc />
-        public LocalProjectDeployControlViewModel(IMocassinProjectControl projectControl)
+        public LocalProjectDeployControlViewModel(IMocassinProjectControl projectControl,
+            CollectionControlViewModel<MocassinProjectBuildGraph> projectBuildGraphCollectionViewModel)
             : base(projectControl)
         {
-            ProjectBuildGraphCollectionViewModel = new CollectionControlViewModel<MocassinProjectBuildGraph>();
+            ProjectBuildGraphCollectionViewModel = projectBuildGraphCollectionViewModel;
             fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles();
             GetFileSelectionCommand = new RelayCommand(() => FilePath = fileSelectionSource.GetFileSelection());
             WriteDatabaseCommand = GetWriteDatabaseCommand();
@@ -92,14 +94,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Builds an <see cref="AsyncRelayCommand"/> to create and write the job database
+        ///     Builds an <see cref="AsyncRelayCommand" /> to create and write the job database
         /// </summary>
         /// <returns></returns>
         private AsyncRelayCommand GetWriteDatabaseCommand()
         {
             bool CanExecute()
             {
-                return !string.IsNullOrWhiteSpace(filePath) && ProjectBuildGraphCollectionViewModel.SelectedCollectionItem != null;
+                return !string.IsNullOrWhiteSpace(filePath) 
+                       && ProjectBuildGraphCollectionViewModel.SelectedCollectionItem?.ProjectCustomizationGraph != null
+                       && ProjectBuildGraphCollectionViewModel.SelectedCollectionItem.ProjectJobTranslationGraph != null;
             }
 
             async Task Execute()
@@ -117,10 +121,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
 
                 var result = await Task.Run(() =>
                     builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
-                    ProjectControl.CreateModelProject()));
+                        ProjectControl.CreateModelProject()));
 
-                if (result != null)  SendCallInfoMessage($"Simulations deployed @ {FilePath}");
+                if (result != null) SendCallInfoMessage($"Simulations deployed @ {FilePath}");
             }
+
             return new AsyncRelayCommand(Execute, CanExecute);
         }
     }

@@ -94,25 +94,24 @@
   </UserControl.Resources>
 
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-    <GroupBox Grid.Row="0"
-              Name="PositionContentControl"
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <GroupBox Grid.Column="0" Name="PositionContentControl"
               Style="{StaticResource App.Style.GroupBox.NoBorder}">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Wyckoff Positions]" />
+          <Run Text=">> Wyckoff Positions" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.Wyckoff}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
 
-      <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
+      <DataGrid Name="PositionDataGrid"
+                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding DataCollection}"
                 SelectedItem="{Binding SelectedCollectionItem}"
-                VerticalContentAlignment="Stretch"
                 VerticalScrollBarVisibility="Auto"
                 AutoGenerateColumns="False"
                 ColumnWidth="*"
@@ -120,19 +119,19 @@
 
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-
-          <DataGridTextColumn Header="A" Binding="{Binding A}" />
-
-          <DataGridTextColumn Header="B" Binding="{Binding B}" />
-
-          <DataGridTextColumn Header="C" Binding="{Binding C}" />
+          <DataGridTextColumn Header="A"
+                              Binding="{Binding A,Converter={StaticResource App.Converter.StringExpressionToValue}}" />
+          <DataGridTextColumn Header="B"
+                              Binding="{Binding B,Converter={StaticResource App.Converter.StringExpressionToValue}}" />
+          <DataGridTextColumn Header="C"
+                              Binding="{Binding C,Converter={StaticResource App.Converter.StringExpressionToValue}}" />
 
           <DataGridComboBoxColumn Header="Stability"
                                   ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
                                   SelectedItemBinding="{Binding PositionStatus}" />
 
           <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
-                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.OccupationSetOptions}"
+                                                   ItemsSource="{Binding ElementName=PositionDataGrid, Path=DataContext.OccupationSetOptions}"
                                                    SelectedValuePath="Key"
                                                    DisplayMemberPath="Name"
                                                    SelectedValueBinding="{Binding OccupationKey}" />
@@ -141,12 +140,12 @@
 
     </GroupBox>
 
-    <GroupBox Grid.Row="1" Name="ExpansionContentControl"
+    <GroupBox Grid.Column="1" Name="ExpansionContentControl"
               Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Equivalent Positions]" />
+          <Run Text=">> Equivalent positions" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
@@ -154,7 +153,6 @@
 
       <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding SelectedVectorExpansion}"
-                VerticalContentAlignment="Stretch"
                 Background="Transparent"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
@@ -163,9 +161,7 @@
 
         <DataGrid.Columns>
           <DataGridTextColumn Header="A" Binding="{Binding A}" />
-
           <DataGridTextColumn Header="B" Binding="{Binding B}" />
-
           <DataGridTextColumn Header="C" Binding="{Binding C}" />
         </DataGrid.Columns>
       </DataGrid>

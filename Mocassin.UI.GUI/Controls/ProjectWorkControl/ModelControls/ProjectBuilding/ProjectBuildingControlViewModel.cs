@@ -27,7 +27,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             : base(projectControl)
         {
             BuildGraphControlViewModel = new ProjectBuildGraphControlViewModel(projectControl);
-            LocalDeployControlViewModel = new LocalProjectDeployControlViewModel(projectControl);
+            LocalDeployControlViewModel =
+                new LocalProjectDeployControlViewModel(projectControl, BuildGraphControlViewModel.ProjectBuildCollectionViewModel);
         }
 
         /// <inheritdoc />

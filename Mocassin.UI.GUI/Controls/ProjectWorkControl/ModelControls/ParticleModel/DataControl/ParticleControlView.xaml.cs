@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Mocassin.UI.GUI.Base;
@@ -28,17 +29,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
 
         private void ParticleDataGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ParticleDataGridDragHandler.RegisterDragStartPoint(sender as DataGrid, e);
+            ParticleDataGridDragHandler.RegisterDragStartPoint(ParticleDataGrid, e);
         }
 
         private void ParticleDataGrid_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ParticleDataGridDragHandler.DeleteDragStartPoint(sender as DataGrid, e);
+            ParticleDataGridDragHandler.DeleteDragStartPoint(ParticleDataGrid, e);
         }
 
         private void ParticleDataGrid_OnPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            ParticleDataGridDragHandler.TryDoDragDrop(sender as DataGrid, e);
+            ParticleDataGridDragHandler.TryDoDragDrop(ParticleDataGrid, e);
         }
     }
 }

@@ -12,18 +12,22 @@
   Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
+    <DataGrid Name="HostDataGrid"
+              ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               AutoGenerateColumns="False"
               ColumnWidth="*"
               GridLinesVisibility="None"
+              HeadersVisibility="None"
+              BorderThickness="0"
+              AlternatingRowBackground="Transparent"
               VerticalScrollBarVisibility="Auto">
 
       <DataGrid.Columns>
         <comboBox:BindableDataGridComboBoxColumn
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableReferences}"
+          ItemsSource="{Binding ElementName=HostDataGrid, Path=DataContext.SelectableReferences}"
           DisplayMemberPath="Name"
-          SelectedItemBinding="{Binding TargetGraph}" />
+          SelectedItemBinding="{Binding TargetGraph}"/>
       </DataGrid.Columns>
 
     </DataGrid>

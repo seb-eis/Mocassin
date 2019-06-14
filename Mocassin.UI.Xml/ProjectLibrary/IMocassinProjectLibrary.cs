@@ -23,6 +23,11 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         bool IsDisposed { get; }
 
         /// <summary>
+        ///     Get a <see cref="string"/> that describes the data source (e.g. file location)
+        /// </summary>
+        string SourceName { get; }
+
+        /// <summary>
         ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="MocassinProjectGraph" /> objects stored in the library
         /// </summary>
         DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; }

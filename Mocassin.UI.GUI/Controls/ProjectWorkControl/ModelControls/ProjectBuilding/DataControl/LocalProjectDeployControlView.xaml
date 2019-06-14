@@ -21,15 +21,14 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <Button Margin="{StaticResource App.Margin.Default}" Grid.Row="0" Grid.Column="0"
+    <Button Margin="2,0,2,2" Grid.Row="0" Grid.Column="0"
             Content="Open"
             Command="{Binding GetFileSelectionCommand}"
-            ToolTip="Open file selection dialog" />
+            ToolTip="Open file dialog" />
 
-    <Button Margin="{StaticResource App.Margin.Default}" Grid.Row="0" Grid.Column="1"
+    <Button Margin="2,0,2,2" Grid.Row="0" Grid.Column="1"
             Content="Start Deploy"
             Command="{Binding WriteDatabaseCommand}"
             ToolTip="Start deploy process" />
@@ -38,25 +37,18 @@
              Text="{Binding FilePath}"
              ToolTip="Deploy target file" />
 
-
-    <ComboBox Margin="{StaticResource App.Margin.Default}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-              ItemsSource="{Binding ProjectBuildGraphCollectionViewModel.DataCollection}"
-              SelectedItem="{Binding ProjectBuildGraphCollectionViewModel.SelectedCollectionItem}"
-              DisplayMemberPath="Name"
-              ToolTip="Deploy instruction" />
-
     <views:LoadingSpinerView Visibility="{Binding BuildStatus, Converter={converter:BuildStatusVisibilityConverter}}"
                              Margin="{StaticResource App.Margin.Default}" 
                              Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"
                              Background="White"
                              Opacity="0.75"/>
 
-    <ProgressBar Margin="{StaticResource App.Margin.Default}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+    <ProgressBar Margin="{StaticResource App.Margin.Default}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                  Maximum="{Binding MaxJobs}"
                  Value="{Binding DoneJobs}"
                  IsIndeterminate="{Binding BuildStatus, Converter={converter:BuildStatusIsIndeterminateConverter}}"/>
 
-    <TextBlock Margin="{StaticResource App.Margin.Default}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+    <TextBlock Margin="{StaticResource App.Margin.Default}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                ToolTip="Deploy progress"
                TextAlignment="Center">
       <Run Text="{Binding DoneJobs}" />

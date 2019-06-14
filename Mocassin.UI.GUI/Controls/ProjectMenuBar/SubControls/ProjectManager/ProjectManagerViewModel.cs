@@ -69,7 +69,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         {
             if (TryCloseProjectLibrary(ProjectControl.OpenProjectLibrary))
             {
-                ProjectControl.SetOpenProjectLibrary(null);
+                ProjectControl.ChangeOpenProjectLibrary(null);
                 SendCallInfoMessage("Project closed!");
             }
             else
@@ -183,14 +183,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
                 TryCloseProjectLibrary(ProjectControl.OpenProjectLibrary);
                 newProjectLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(filePath, dropCreate);
                 LoadLibraryContents(newProjectLibrary);
-                ProjectControl.SetOpenProjectLibrary(newProjectLibrary);
+                ProjectControl.ChangeOpenProjectLibrary(newProjectLibrary);
                 OpenDatabaseFilePath = filePath;
                 exception = null;
             }
             catch (Exception e)
             {
                 ForceCloseProjectLibrary(newProjectLibrary);
-                ProjectControl.SetOpenProjectLibrary(null);
+                ProjectControl.ChangeOpenProjectLibrary(null);
                 OpenDatabaseFilePath = "";
                 exception = new InvalidOperationException("Internal error on project loading!", e);
             }

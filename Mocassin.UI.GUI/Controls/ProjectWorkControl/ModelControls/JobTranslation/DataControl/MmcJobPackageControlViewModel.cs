@@ -15,10 +15,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     public class MmcJobPackageControlViewModel : CollectionControlViewModel<MmcJobPackageDescriptionGraph>,
         IContentSupplier<ProjectJobTranslationGraph>
     {
+        private ProjectJobTranslationGraph contentSource;
         private IEnumerable<ModelObjectReferenceGraph<MetropolisSimulation>> selectableSimulations;
 
         /// <inheritdoc />
-        public ProjectJobTranslationGraph ContentSource { get; protected set; }
+        public ProjectJobTranslationGraph ContentSource
+        {
+            get => contentSource;
+            set => SetProperty(ref contentSource, value);
+        }
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReferenceGraph{T}" /> instances that describe the

@@ -26,39 +26,40 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="1*" />
         <ColumnDefinition Width="1*" />
-        <ColumnDefinition Width="1*" />
       </Grid.ColumnDefinitions>
 
       <Expander Grid.Column="0" ExpandDirection="Right" Visibility="Hidden" />
-      <DockPanel Grid.Column="1">
-        <TextBlock Margin="{StaticResource App.Margin.HorizontalStack}"
-                   Text="Target:"
-                   VerticalAlignment="Center" />
-        <ComboBox ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-                  SelectedItem="{Binding SelectedProjectGraph}"
-                  ToolTip="{StaticResource App.ToolTip.ModelSelection}"
-                  Margin="{StaticResource App.Margin.HorizontalStack}">
+      <ComboBox Grid.Column="1"
+                Margin="{StaticResource App.Margin.HorizontalStack}"
+                ItemsSource="{Binding ProjectControl.ProjectGraphs}"
+                SelectedItem="{Binding SelectedProjectGraph}"
+                ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
+                Text="{Binding SelectedProjectGraph.ProjectName}"
+                DisplayMemberPath="Name"
+                IsEditable="True"
+                IsTextSearchEnabled="{Binding ElementName=ProjectBoxSearchToggle, Path=IsChecked}">
+        <ComboBox.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}" IsCheckable="True" Name="ProjectBoxSearchToggle"/>
+          </ContextMenu>
+        </ComboBox.ContextMenu>
+      </ComboBox>
 
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding ProjectGuid, StringFormat=Model: {0}}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-      </DockPanel>
       <ComboBox Grid.Column="2"
                 ItemsSource="{Binding CustomizationGraphs}"
                 SelectedItem="{Binding SelectedCustomizationGraph}"
-                ToolTip="{StaticResource App.ToolTip.CustomizationSelection}">
-        <ComboBox.ItemTemplate>
-          <DataTemplate>
-            <TextBlock Text="{Binding Key, StringFormat=Customization: {0}}" />
-          </DataTemplate>
-        </ComboBox.ItemTemplate>
+                ToolTip="{StaticResource App.ToolTip.CustomizationSelection}"
+                Text="{Binding SelectedCustomizationGraph.Name}"
+                DisplayMemberPath="Name"
+                IsEditable="True"
+                IsTextSearchEnabled="{Binding ElementName=CustomizationBoxSearchToggle, Path=IsChecked}">
         <ComboBox.ContextMenu>
           <ContextMenu>
-            <MenuItem Header="New" Command="{Binding AddCustomizationCommand}" />
-            <MenuItem Header="Delete" Command="{Binding DeleteCustomizationCommand}" CommandParameter="{Binding SelectedCustomizationGraph}" />
+            <MenuItem Header="New item" Command="{Binding AddCustomizationCommand}" />
+            <MenuItem Header="Delete item"
+                      Command="{Binding DeleteCustomizationCommand}"
+                      CommandParameter="{Binding SelectedCustomizationGraph}" />
+            <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}" IsCheckable="True" Name="CustomizationBoxSearchToggle"/>
           </ContextMenu>
         </ComboBox.ContextMenu>
       </ComboBox>

@@ -88,7 +88,7 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ///     Sets a new <see cref="IMocassinProjectLibrary" /> as the open library
         /// </summary>
         /// <param name="projectLibrary"></param>
-        void SetOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
+        void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary);
 
         /// <summary>
         ///     Get a <see cref="IList{T}" /> of loaded plugin <see cref="Assembly" /> instances

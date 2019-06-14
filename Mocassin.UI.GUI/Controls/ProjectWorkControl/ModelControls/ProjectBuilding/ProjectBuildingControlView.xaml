@@ -6,19 +6,30 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   d:DataContext="{d:DesignInstance local:ProjectBuildingControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.DeployInstruction" />
-    <ToolTip x:Key="ToolTip.LocalDeployment" />
+    <ToolTip x:Key="ToolTip.DeployInstruction" Style="{StaticResource App.Style.ToolTip.Default}">
+      <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+        <Run Text="Define a full translation group through a project, customization and job source." />
+      </TextBlock>
+    </ToolTip>
+    <ToolTip x:Key="ToolTip.LocalDeployment" Style="{StaticResource App.Style.ToolTip.Default}">
+      <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+        <Run Text="Automatic deploy of simulation databases to your local machine." />
+        <Run Text="The time and memory requirements primarily depend on the simulation count and lattice sizes." />
+        <Run Text="System uses all available cores and the system's responsiveness may be influenced." />
+      </TextBlock>
+    </ToolTip>
   </UserControl.Resources>
   <Grid>
     <TabControl>
 
-      <TabItem Header="Simulation Creation">
+      <TabItem Header="Parametrization &amp; Deploy">
         <Grid>
 
           <Grid.RowDefinitions>
@@ -26,15 +37,17 @@
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="100*" />
           </Grid.ColumnDefinitions>
 
-          <GroupBox Grid.Column="0" Grid.RowSpan="2">
-
+          <GroupBox Grid.Column="0" Grid.RowSpan="2" Name="BuildGraphControlGroupBox"
+                    Visibility="{Binding ContentSource, Converter={converter:NullToVisibilityConverter}}">
             <GroupBox.Header>
               <TextBlock>
-                <Run Text="[Translation Instruction]" />
+                <Run Text=">> Translation groups -" />
+                <Run Text="{Binding ContentSource.ProjectName, TargetNullValue=???}" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.DeployInstruction}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
@@ -44,11 +57,13 @@
                                                       Margin="{StaticResource App.Margin.GroupBoxContent}" />
           </GroupBox>
 
-          <GroupBox Grid.Row="0" Grid.Column="1">
-
+          <GroupBox Grid.Row="0" Grid.Column="2"
+                    Visibility="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}">
             <GroupBox.Header>
               <TextBlock>
-                <Run Text="[Local Deploy Service]" />
+                <Run Text=">> Deploy to localhost -" />
+                <Run
+                  Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedCollectionItem.Name, TargetNullValue=???}" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.LocalDeployment}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>

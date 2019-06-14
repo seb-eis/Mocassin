@@ -11,7 +11,7 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <UserControl.Resources>
-        <ToolTip x:Key="ToolTip.KineticRules" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="ToolTip.KineticRules" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -64,7 +64,7 @@
             </TextBlock>
           </GroupBox.Header>
           <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}"
-                                                          Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+                                                          Margin="{StaticResource App.Margin.GroupBoxContent}" />
         </GroupBox>
       </TabItem>
 
@@ -78,8 +78,8 @@
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
           </GroupBox.Header>
-        <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"
-                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"
+                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
         </GroupBox>
       </TabItem>
 
@@ -93,8 +93,8 @@
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
           </GroupBox.Header>
-        <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"
-                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"
+                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
         </GroupBox>
       </TabItem>
 
@@ -108,11 +108,11 @@
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
           </GroupBox.Header>
-        <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
-                                                 Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
+                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
         </GroupBox>
       </TabItem>
     </TabControl>
-  
+
   </Grid>
 </UserControl>

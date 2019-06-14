@@ -6,6 +6,7 @@ using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Model;
+using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Main
 {
@@ -24,8 +25,13 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set a name for the project
         /// </summary>
-        [XmlAttribute("ProjectName")]
-        public string ProjectName { get; set; }
+        [XmlIgnore]
+        [JsonIgnore]
+        public string ProjectName
+        {
+            get => Name;
+            set => Name = value;
+        }
 
         /// <summary>
         ///     Get or set the <see cref="Xml.Model.ProjectModelGraph" /> that defines the reference information

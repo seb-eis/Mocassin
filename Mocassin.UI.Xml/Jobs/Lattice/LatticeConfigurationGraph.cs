@@ -27,7 +27,7 @@ namespace Mocassin.UI.Xml.Jobs
 
         public LatticeConfigurationGraph()
         {
-            SizeA = SizeB = SizeC = 1;
+            SizeA = SizeB = SizeC = 10;
             DopingValues = new List<DopingValueGraph>();
         }
 

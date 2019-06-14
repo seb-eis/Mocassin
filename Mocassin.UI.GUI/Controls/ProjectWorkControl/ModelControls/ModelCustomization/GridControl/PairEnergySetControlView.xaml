@@ -10,70 +10,57 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
-  <UserControl.Resources>
-    <Style TargetType="{x:Type Run}" x:Key="ModelObjectRunStyle">
-      <Setter Property="Foreground" Value="Blue" />
-      <Setter Property="FontWeight" Value="Bold" />
-    </Style>
-  </UserControl.Resources>
-
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="2*" />
-    </Grid.ColumnDefinitions>
 
-    <GroupBox Grid.Row="0"
-              Grid.Column="0"
-              Header="Permutation Selection">
+    <ComboBox ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              DisplayMemberPath="Name"
+              ToolTip="Permutation" />
 
-      <ComboBox ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
-                DisplayMemberPath="Name" />
-    </GroupBox>
-    <GroupBox Header="Interaction Energy [eV]"
-              Grid.Row="1"
-              Grid.Column="0">
-      <TextBox Text="{Binding SelectedCollectionItem.Energy}">
-        <TextBox.InputBindings>
-          <KeyBinding Key="Enter"
-                      Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
-        </TextBox.InputBindings>
-      </TextBox>
-    </GroupBox>
-    <GroupBox Grid.Row="0"
-              Grid.Column="1"
-              Grid.RowSpan="2"
-              Header="Description">
+    <GroupBox Grid.Row="1" Header="[Interaction description]" Margin="0,10,0,0">
 
-      <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
+      <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="{StaticResource App.Margin.GroupBoxContent}">
         <Run Text="Pair interaction between" />
         <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
         <Run Text="{Binding Path=PairEnergySet.CenterPosition.Name, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="center position and" />
         <Run Text="{Binding SelectedCollectionItem.PartnerParticle.Name, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
         <Run Text="{Binding PairEnergySet.PartnerPosition.Name, Mode=OneWay}"
-             Style="{StaticResource ModelObjectRunStyle}" />
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="partner position at a distance of" />
         <Run Text="{Binding PairEnergySet.Distance, Mode=OneWay, StringFormat={}{0:##.###}}"
-             Style="{StaticResource ModelObjectRunStyle}" />
+             Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="&#x212B;. Symmetry reduced geometry is described by the starting point" />
-        <Run Text="{Binding PairEnergySet.StartVector, Mode=OneWay}" Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="{Binding PairEnergySet.StartVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="and the end point" />
-        <Run Text="{Binding PairEnergySet.EndVector, Mode=OneWay}" Style="{StaticResource ModelObjectRunStyle}" />
+        <Run Text="{Binding PairEnergySet.EndVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in the fractional coordinate context." />
       </TextBlock>
     </GroupBox>
 
+    <GroupBox Grid.Row="2" Header="[Permutation settings]" Margin="{StaticResource App.Margin.GroupBoxContentLarge}">
+      <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <GroupBox Header="Interaction energy [eV]">
+          <TextBox Text="{Binding SelectedCollectionItem.Energy}" Name="EnergyTextBox"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter"
+                          Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                          CommandParameter="{Binding ElementName=EnergyTextBox}" />
+            </TextBox.InputBindings>
+          </TextBox>
+        </GroupBox>
+      </StackPanel>
+    </GroupBox>
   </Grid>
 </UserControl>

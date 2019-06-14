@@ -134,26 +134,22 @@
     </ToolTip>
   </UserControl.Resources>
   <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
+    <GroupBox Grid.Row="0">
 
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Space Group]" />
+          <Run Text=">> Space group" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.SpaceGroup}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
-      <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
 
+      <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="2*" />
           <ColumnDefinition Width="*" />
@@ -170,23 +166,14 @@
                   SelectedItem="{Binding SelectedSpaceGroup}"
                   IsReadOnly="True"
                   AutoGenerateColumns="False"
-                  GridLinesVisibility="None"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch"
                   VerticalScrollBarVisibility="Auto"
                   SelectionChanged="SpaceGroupDataGrid_OnSelectionChanged"
                   Background="Transparent">
 
           <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Index}"
-                                Header="Space Group" />
-
-            <DataGridTextColumn Binding="{Binding Literal}"
-                                Header="Name" />
-
-            <DataGridTextColumn Binding="{Binding Specifier}"
-                                Header="Info" />
-
+            <DataGridTextColumn Binding="{Binding Index}" Header="Space Group" />
+            <DataGridTextColumn Binding="{Binding Literal}" Header="Name" />
+            <DataGridTextColumn Binding="{Binding Specifier}" Header="Info" />
             <DataGridTextColumn
               Binding="{Binding CrystalSystemIndex, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}"
               Header="System" />
@@ -196,7 +183,6 @@
         <DataGrid Grid.Row="0" Grid.Column="1"
                   AutoGenerateColumns="False"
                   ColumnWidth="*"
-                  GridLinesVisibility="None"
                   VerticalScrollBarVisibility="Auto"
                   ItemsSource="{Binding SelectedSpaceGroup.Operations}"
                   Background="Transparent">
@@ -205,15 +191,18 @@
             <DataGridTextColumn Binding="{Binding Literal}">
               <DataGridTextColumn.HeaderTemplate>
                 <DataTemplate>
-                  <DockPanel
-                    DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.SelectedSpaceGroup}">
-                    <TextBlock Text="{Binding Literal, StringFormat=Selected [{0}]}" />
-                    <TextBlock Text=" (" />
-                    <TextBlock Text="{Binding Operations.Count, StringFormat={}{0} Operations/}" />
-                    <TextBlock
-                      Text="{Binding CrystalSystemIndex, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" />
-                    <TextBlock Text="{Binding Specifier, StringFormat=/{0})}" />
-                  </DockPanel>
+                  <TextBlock DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
+                    <Run Text="{Binding Index, Mode=OneWay, StringFormat={}#{0}}"/>
+                    <Run Text=">>" />
+                    <Run Text="{Binding Literal, Mode=OneWay}" />
+                    <Run Text=">>" />
+                    <Run
+                      Text="{Binding CrystalSystemIndex, Mode=OneWay, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" />
+                    <Run Text=">>" />
+                    <Run Text="{Binding Specifier, Mode=OneWay}" />
+                    <Run Text=">>" />
+                    <Run Text="{Binding Operations.Count, Mode=OneWay, StringFormat={}#Op. {0}}" />
+                  </TextBlock>
                 </DataTemplate>
               </DataGridTextColumn.HeaderTemplate>
             </DataGridTextColumn>
@@ -222,89 +211,66 @@
       </Grid>
     </GroupBox>
 
-    <GroupBox Grid.Row="1"
-              Grid.Column="0"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
+    <GroupBox Grid.Row="1" Grid.Column="0">
 
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Cell Parameters]" />
+          <Run Text=">> Unit cell parameters" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.Parameters}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
 
-      <StackPanel VerticalAlignment="Stretch"
-                  Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
 
-        <GroupBox Header="Structure name"
-                  Style="{StaticResource App.Style.GroupBox.NoBorder}">
+        <GroupBox Header="Structure name:">
           <TextBox Text="{Binding StructureInfo.Name}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+                   Margin="{StaticResource App.Margin.GroupBoxContent}"
+                   HorizontalAlignment="Left"
+                   Width="{Binding ElementName=CellParameterATextBox, Path=ActualWidth}"/>
         </GroupBox>
 
         <Grid DataContext="{Binding ParameterSetter}">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
 
           <StackPanel Grid.Column="0">
-            <GroupBox Header="Parameter 'a' [&#x212b;]"
-                      Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
-              <TextBox Style="{StaticResource App.Style.TextBox.GreyOutIfReadOnly}"
+            <GroupBox Header="Cell parameter 'a' [&#x212b;]:">
+              <TextBox Name="CellParameterATextBox"
                        Margin="{StaticResource App.Margin.GroupBoxContent}"
-                       Text="{Binding ParamA, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+                       Text="{Binding ParamA, Converter={StaticResource App.Converter.StringExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyParamA}" />
-
             </GroupBox>
-            <GroupBox Header="Parameter 'b' [&#x212b;]"
-                      Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
-              <TextBox Style="{StaticResource App.Style.TextBox.GreyOutIfReadOnly}"
-                       Margin="{StaticResource App.Margin.GroupBoxContent}"
-                       Text="{Binding ParamB, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+            <GroupBox Header="Cell parameter 'b' [&#x212b;]:">
+              <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
+                       Text="{Binding ParamB, Converter={StaticResource App.Converter.StringExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyParamB}" />
-
             </GroupBox>
-            <GroupBox Header="Parameter 'c' [&#x212b;]"
-                      Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
-              <TextBox Style="{StaticResource App.Style.TextBox.GreyOutIfReadOnly}"
-                       Margin="{StaticResource App.Margin.GroupBoxContent}"
-                       Text="{Binding ParamC, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+            <GroupBox Header="Cell parameter 'c' [&#x212b;]:">
+              <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
+                       Text="{Binding ParamC, Converter={StaticResource App.Converter.StringExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyParamC}" />
-
             </GroupBox>
           </StackPanel>
           <StackPanel Grid.Column="1">
-            <GroupBox Header="Angle &#x3B1; [°]"
-                      Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
-              <TextBox Style="{StaticResource App.Style.TextBox.GreyOutIfReadOnly}"
-                       Margin="{StaticResource App.Margin.GroupBoxContent}"
-                       Text="{Binding Alpha, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+            <GroupBox Header="Angle &#x3B1; [°]:">
+              <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
+                       Text="{Binding Alpha, Converter={StaticResource App.Converter.StringExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyAlpha}" />
-
             </GroupBox>
-            <GroupBox Header="Angle &#x3B2; [°]"
-                      Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
-              <TextBox Style="{StaticResource App.Style.TextBox.GreyOutIfReadOnly}"
-                       Margin="{StaticResource App.Margin.GroupBoxContent}"
-                       Text="{Binding Beta, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+            <GroupBox Header="Angle &#x3B2; [°]:">
+              <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
+                       Text="{Binding Beta, Converter={StaticResource App.Converter.StringExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyBeta}" />
-
             </GroupBox>
-            <GroupBox Header="Angle &#x3B3; [°]"
-                      Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
-              <TextBox Style="{StaticResource App.Style.TextBox.GreyOutIfReadOnly}"
-                       Margin="{StaticResource App.Margin.GroupBoxContent}"
-                       Text="{Binding Gamma, UpdateSourceTrigger=PropertyChanged, Delay=500}"
+            <GroupBox Header="Angle &#x3B3; [°]:">
+              <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
+                       Text="{Binding Gamma, Converter={StaticResource App.Converter.StringExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyGamma}" />
-
             </GroupBox>
           </StackPanel>
         </Grid>

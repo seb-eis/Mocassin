@@ -5,14 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser"
              xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
+             xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
-    <ListView ItemsSource="{Binding ProjectGraphs}">
+    <ListView ItemsSource="{Binding ProjectGraphs}" BorderThickness="0">
       <ListView.ItemTemplate>
         <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
-          <TextBlock Text="{Binding ProjectGuid, StringFormat=Project [{0}]}"/>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="10"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <views:BlurredLogoWithTextView Grid.Column="0" Width="25" Height="25" DataContext="P"/>
+            <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center"/>
+          </Grid>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>

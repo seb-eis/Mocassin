@@ -19,8 +19,7 @@
               ColumnWidth="*">
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePositions}"

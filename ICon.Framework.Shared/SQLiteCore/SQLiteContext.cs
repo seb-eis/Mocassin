@@ -18,6 +18,11 @@ namespace Mocassin.Framework.SQLiteCore
         public string OptionsBuilderParameterString { get; internal set; }
 
         /// <summary>
+        ///     Get or set the file name <see cref="string"/> of the database
+        /// </summary>
+        public string FileName { get; internal set; }
+
+        /// <summary>
         ///     Creates a new context with the provided options builder string parameter and ensures that the database is created
         /// </summary>
         /// <param name="optionsBuilderParameterString"></param>
@@ -44,6 +49,8 @@ namespace Mocassin.Framework.SQLiteCore
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
 
             var context = (T1) Activator.CreateInstance(typeof(T1), $"Filename={filePath}");
+            context.FileName = filePath;
+
             if (dropCreate)
             {
                 context.Database.EnsureDeleted();

@@ -33,6 +33,9 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             }
         }
 
+        /// <inheritdoc />
+        public string SourceName => FileName;
+
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> that relays internal state change events
         /// </summary>

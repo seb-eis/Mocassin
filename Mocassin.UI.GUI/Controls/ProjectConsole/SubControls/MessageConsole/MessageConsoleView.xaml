@@ -12,8 +12,8 @@
 
   <Grid>
     <DataGrid ItemsSource="{Binding ObservableItems}"
-              IsReadOnly="True"
               SelectedItem="{Binding SelectedMessage}"
+              IsReadOnly="True"
               AutoGenerateColumns="False"
               GridLinesVisibility="None"
               Background="Transparent"
@@ -22,18 +22,16 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp}" />
         <DataGridTextColumn Header="Type" Binding="{Binding ShortInfo}" />
-        <DataGridTemplateColumn Header="Information">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type messaging:PushMessage}">
-              <TreeView Background="Transparent"
-                        BorderThickness="0">
-                <TreeViewItem ItemsSource="{Binding DetailSequence}"
-                              Header="Details"/>
-              </TreeView>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
       </DataGrid.Columns>
+      <DataGrid.RowStyle>
+        <Style TargetType="{x:Type DataGridRow}">
+          <Setter Property="ToolTip">
+            <Setter.Value>
+              <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </DataGrid.RowStyle>
     </DataGrid>
   </Grid>
 

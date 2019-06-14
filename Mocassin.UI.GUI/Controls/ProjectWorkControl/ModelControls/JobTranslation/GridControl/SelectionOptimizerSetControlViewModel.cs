@@ -83,9 +83,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> GetSelectableUnitCellPositionReferences(
             SelectionOptimizerGraph current)
         {
-            // ToDo: Change filter to remove duplicates and redundant definitions
             var baseCollection = ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<UnitCellPosition>(x));
+            return baseCollection
+                ?.Where(x => x.PositionStatus == PositionStatus.Stable)
+                .Select(x => new ModelObjectReferenceGraph<UnitCellPosition>(x));
         }
     }
 }

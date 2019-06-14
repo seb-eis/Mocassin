@@ -12,26 +12,27 @@
   Background="Transparent">
 
   <Grid>
-    <DataGrid
-      Name="HostGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      AutoGenerateColumns="False"
-      ColumnWidth="*"
-      AllowDrop="True"
-      GridLinesVisibility="None"
-      VerticalScrollBarVisibility="Auto"
-      CanUserAddRows="False"
-      Drop="HostGrid_OnDrop"
-      DragOver="HostGrid_OnDragOver">
+    <DataGrid Name="HostGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              AllowDrop="True"
+              GridLinesVisibility="None"
+              VerticalScrollBarVisibility="Auto"
+              HeadersVisibility="None"
+              BorderThickness="0"
+              CanUserAddRows="False"
+              Background="Transparent"
+              Drop="HostGrid_OnDrop"
+              DragOver="HostGrid_OnDragOver"
+              AlternatingRowBackground="Transparent">
 
       <DataGrid.Columns>
         <DataGridTemplateColumn>
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type base:ModelObjectGraph}">
-              <TextBlock
-                Text="{Binding Name}" />
+            <DataTemplate DataType="{x:Type base:ModelObjectGraph}">
+              <TextBlock Text="{Binding Name}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

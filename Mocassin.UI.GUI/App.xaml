@@ -3,9 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d"
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
-             xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands">
+             xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands"
+             xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter">
   <Application.Resources>
     <ResourceDictionary>
+      <!-- Converters -->
+      <BooleanToVisibilityConverter x:Key="App.Converter.BooleanToVisibility"/>
+      <converter:StringExpressionToValueConverter x:Key="App.Converter.StringExpressionToValue"/>
       <!-- System color overwrites -->
 
       <!-- Styles with keys -->
@@ -58,39 +62,7 @@
         <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
       </Style>
 
-      <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
       <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.NoBorder">
-        <Setter Property="Template">
-          <Setter.Value>
-            <ControlTemplate TargetType="{x:Type GroupBox}">
-              <Grid>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="*" />
-                  <RowDefinition Height="4" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
-                  <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border x:Name="Header"
-                        Padding="2,0,0,0"
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="0"
->
-                  <ContentPresenter ContentSource="Header"
-                                    RecognizesAccessKey="True" />
-                </Border>
-                <ContentPresenter Grid.Row="2"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    Margin="{TemplateBinding Padding}" />
-              </Grid>
-            </ControlTemplate>
-          </Setter.Value>
-        </Setter>
         <Setter Property="BorderThickness" Value="0,0,0,0" />
         <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
       </Style>
@@ -158,6 +130,9 @@
 
       <Style TargetType="{x:Type DataGrid}">
         <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="RowBackground" Value="Transparent"/>
+        <Setter Property="AlternatingRowBackground" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"/>
       </Style>
 
       <Style TargetType="{x:Type Thumb}" x:Key="App.Style.ColumnHeader.ThumbStyle">
@@ -325,22 +300,26 @@
 
       <s:String x:Key="App.String.BuildingBlock">[BuildingBlock]</s:String>
 
+      <s:String x:Key="App.String.ComboBox.SearchModeToggle">Text search mode</s:String>
+
 
       <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
       <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />
       <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.VerticalStackLarge" Bottom="10" Top="0" Left="0" Right="0" />
       <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0" />
+      <Thickness x:Key="App.Margin.GroupBoxContentLarge" Bottom="0" Top="10" Left="2" Right="0" />
 
       <ToolTip x:Key="App.ToolTip.ModelSelection">
         <TextBlock Text="Model" />
       </ToolTip>
 
       <ToolTip x:Key="App.ToolTip.CustomizationSelection">
-        <TextBlock Text="Model customization" />
+        <TextBlock Text="Customization" />
       </ToolTip>
 
       <ToolTip x:Key="App.ToolTip.JobTranslationSelection">
-        <TextBlock Text="Model job translation" />
+        <TextBlock Text="Translation" />
       </ToolTip>
 
       <ToolTip x:Key="App.ToolTip.ProjectSelection">

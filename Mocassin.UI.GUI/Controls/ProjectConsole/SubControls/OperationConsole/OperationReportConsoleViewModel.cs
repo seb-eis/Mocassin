@@ -24,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         /// <summary>
         ///     Get a dummy <see cref="MocassinProjectGraph" /> that serves as a stop dummy for the live validation
         /// </summary>
-        public static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "[No Project]"};
+        public static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "Empty"};
 
         private readonly object lockObject = new object();
         private bool isErrorContentFiltered;

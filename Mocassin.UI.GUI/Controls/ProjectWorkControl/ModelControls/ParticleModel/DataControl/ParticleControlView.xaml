@@ -3,42 +3,39 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.DataControl"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:ParticleControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <Grid>
-      <DataGrid Name="ParticleDataGrid" 
-                ItemsSource="{Binding DataCollection}" 
-                SelectedItem="{Binding SelectedCollectionItem}"
-                AutoGenerateColumns="False" 
-                ColumnWidth="*"
-                VerticalAlignment="Stretch" 
-                VerticalScrollBarVisibility="Auto"
-                Background="Transparent"
-                PreviewMouseLeftButtonDown="ParticleDataGrid_OnPreviewMouseLeftButtonDown"
-                PreviewMouseLeftButtonUp="ParticleDataGrid_OnPreviewMouseLeftButtonUp"
-                PreviewMouseMove="ParticleDataGrid_OnPreviewMouseMove">
+    <DataGrid Name="ParticleDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              Background="Transparent"
+              HeadersVisibility="All">
 
-        <DataGrid.Columns>
-          <DataGridTextColumn Header="Name" 
-                              Binding="{Binding Name}"/>
-          
-          <DataGridTextColumn Header="Symbol" 
-                              Binding="{Binding Symbol}"/>
-
-          <DataGridTextColumn Header="Charge"
-                              Binding="{Binding Charge}"/>
-
-          <DataGridCheckBoxColumn Header="Vacancy" 
-                                  Binding="{Binding IsVacancy}"/>
-
-        </DataGrid.Columns>
-      </DataGrid>
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:BlurredLogoWithTextView Width="25" Height="25" DataContext=""
+                                         PreviewMouseLeftButtonDown="ParticleDataGrid_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="ParticleDataGrid_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="ParticleDataGrid_OnPreviewMouseMove"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" />
+        <DataGridTextColumn Header="Charge" 
+                            Binding="{Binding Charge, Converter={StaticResource App.Converter.StringExpressionToValue}}" />
+        <DataGridCheckBoxColumn Header="Vacancy" Binding="{Binding IsVacancy}" />
+      </DataGrid.Columns>
+    </DataGrid>
 
   </Grid>
 </UserControl>

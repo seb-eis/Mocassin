@@ -5,54 +5,79 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
-  xmlns:jobs="clr-namespace:Mocassin.UI.Xml.Jobs;assembly=Mocassin.UI.Xml"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   d:DataContext="{d:DesignInstance local:KmcJobDescriptionSetControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
-              AutoGenerateColumns="False"
-              ColumnWidth="*"
-              HorizontalScrollBarVisibility="Disabled"
-              RowDetailsVisibilityMode="VisibleWhenSelected"
-              GridLinesVisibility="All">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+    <GroupBox Grid.Row="0" Visibility="{Binding Converter={converter:NullToVisibilityConverter}}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text=">> Job configurations -"/>
+          <Run Text="{Binding KmcJobPackage.Name, StringFormat={}{0}, TargetNullValue=???]}"/>
+          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
+        </TextBlock>
+      </GroupBox.Header>
 
-        <DataGridTextColumn Header="Size A"
-                            Binding="{Binding LatticeConfiguration.SizeA}"/>
+      <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
+                ItemsSource="{Binding DataCollection}"
+                SelectedItem="{Binding SelectedCollectionItem}"
+                AutoGenerateColumns="False"
+                ColumnWidth="*"
+                Background="Transparent">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+          <DataGridTextColumn Header="Cell size A" Binding="{Binding LatticeConfiguration.SizeA}" />
+          <DataGridTextColumn Header="Cell size B" Binding="{Binding LatticeConfiguration.SizeB}" />
+          <DataGridTextColumn Header="Cell size C" Binding="{Binding LatticeConfiguration.SizeC}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </GroupBox>
 
-        <DataGridTextColumn Header="Size B"
-                            Binding="{Binding LatticeConfiguration.SizeB}"/>
+    <GroupBox Grid.Row="1"  Visibility="{Binding SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}"
+              Name="ConfigurationSettingsGroupBox">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text=">> Configuration settings -"/>
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0}, TargetNullValue=???}"/>
+          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
+        </TextBlock>
+      </GroupBox.Header>
 
-        <DataGridTextColumn Header="Size C"
-                            Binding="{Binding LatticeConfiguration.SizeC}"/>
-      </DataGrid.Columns>
+      <local:KmcJobDescriptionControlView
+        DataContext="{Binding SelectedCollectionItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"
+        Margin="{StaticResource App.Margin.GroupBoxContent}" />
+    </GroupBox>
 
-      <DataGrid.RowDetailsTemplate>
-        <DataTemplate DataType="{x:Type jobs:KmcJobDescriptionGraph}">
-          <StackPanel MaxHeight="250">
-            <local:KmcJobDescriptionControlView
-              DataContext="{Binding Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
-            <local:DopingValueControlView>
-              <local:DopingValueControlView.DataContext>
-                <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
-                  <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}"
-                           Path="DataContext.ProjectGraph"/>
-                  <Binding Path="LatticeConfiguration"/>
-                </MultiBinding>
-              </local:DopingValueControlView.DataContext>
-            </local:DopingValueControlView>
-          </StackPanel>
-        </DataTemplate>
-      </DataGrid.RowDetailsTemplate>
+    <GroupBox Grid.Row="2" Visibility="{Binding ElementName=ConfigurationSettingsGroupBox, Path=Visibility}">
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text=">> Configuration lattice doping -"/>
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0}, TargetNullValue=???}"/>
+          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
+        </TextBlock>
+      </GroupBox.Header>
 
-    </DataGrid>
+      <local:DopingValueControlView Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <local:DopingValueControlView.DataContext>
+          <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                     Path="DataContext.ProjectGraph" />
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                     Path="DataContext.SelectedCollectionItem.LatticeConfiguration" />
+          </MultiBinding>
+        </local:DopingValueControlView.DataContext>
+      </local:DopingValueControlView>
+    </GroupBox>
+
   </Grid>
 </UserControl>
