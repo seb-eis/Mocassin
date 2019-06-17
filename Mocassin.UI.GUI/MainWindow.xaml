@@ -18,7 +18,6 @@
         WindowState="Maximized"
         Closing="MainWindow_OnClosing">
 
-
   <Grid Margin="5,5,5,5">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />

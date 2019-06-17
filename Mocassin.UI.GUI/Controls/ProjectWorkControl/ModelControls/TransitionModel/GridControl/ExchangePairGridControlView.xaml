@@ -6,6 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ExchangePairGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -20,22 +21,30 @@
               VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"
               ColumnWidth="*"
-              Sorting="ExchangePairDataGrid_OnSorting"
-              PreviewMouseLeftButtonDown="ExchangePairDataGrid_OnPreviewMouseLeftButtonDown"
-              PreviewMouseLeftButtonUp="ExchangePairDataGrid_OnPreviewMouseLeftButtonUp"
-              PreviewMouseMove="ExchangePairDataGrid_OnPreviewMouseMove">
+              Sorting="ExchangePairDataGrid_OnSorting">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding Name}" 
-                            Header="Name" />
+        <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Acceptor"
+        <comboBox:BindableDataGridComboBoxColumn Header="Acceptor state"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name"
                                                  SelectedValueBinding="{Binding AcceptorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Donor"
+        <comboBox:BindableDataGridComboBoxColumn Header="Donor state"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name"

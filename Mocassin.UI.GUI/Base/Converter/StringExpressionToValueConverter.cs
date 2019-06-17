@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 
@@ -11,7 +10,7 @@ namespace Mocassin.UI.GUI.Base.Converter
 {
     /// <summary>
     ///     A <see cref="ValueConverter" /> that converts <see cref="object" /> into <see cref="string" /> values with backward
-    ///     conversion trough lambda evaluation
+    ///     conversion trough CSharpScript interface (Warning: Memory leaks, loaded assemblies cannot be unloaded again)
     /// </summary>
     public class StringExpressionToValueConverter : ValueConverter
     {
@@ -35,7 +34,6 @@ namespace Mocassin.UI.GUI.Base.Converter
                 .ToList();
 
             DefaultScriptImports = new List<string> {"System", "System.Math", "System.Linq"};
-            Task.Run(() => GetEvaluation("2*2", typeof(int)));
         }
 
         /// <inheritdoc />

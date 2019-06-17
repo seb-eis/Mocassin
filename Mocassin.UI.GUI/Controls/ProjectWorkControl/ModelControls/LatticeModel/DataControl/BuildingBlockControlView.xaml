@@ -8,6 +8,7 @@
   xmlns:latticeModel="clr-namespace:Mocassin.UI.Xml.LatticeModel;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:BuildingBlockControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -16,24 +17,32 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <DataGrid Grid.Column="0"
-              Name="BlockDataGrid"
+    <DataGrid Name="BuildingBlockDataGrid" Grid.Column="0"
               ItemsSource="{Binding BuildingBlockCollectionViewModel.DataCollection}"
               SelectedItem="{Binding BuildingBlockCollectionViewModel.SelectedCollectionItem}"
               AutoGenerateColumns="False"
-              ColumnWidth="*"
-              HorizontalScrollBarVisibility="Auto"
-              CanUserAddRows="True"
-              Background="Transparent">
-
+              ColumnWidth="*">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                     Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                     Height="{StaticResource App.Size.RowHeaderLogo}"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
       </DataGrid.Columns>
 
     </DataGrid>
-    <gridControl:BuildingBlockContentControlView Grid.Column="1">
+    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="&#x2794;" FontSize="20" FontWeight="Bold"/>
+    <gridControl:BuildingBlockContentControlView Grid.Column="2">
       <gridControl:BuildingBlockContentControlView.DataContext>
         <MultiBinding Converter="{adapter:BuildingBlockBuildingBlockContentViewModelConverter}">
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"

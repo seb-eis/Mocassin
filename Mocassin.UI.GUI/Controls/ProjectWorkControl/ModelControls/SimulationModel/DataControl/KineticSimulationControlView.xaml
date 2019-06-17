@@ -9,6 +9,7 @@
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl"
   xmlns:hosting="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:KineticSimulationControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800">
@@ -80,10 +81,10 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource App.Style.GroupBox.NoBorder}">
+    <GroupBox Grid.Column="0" Grid.RowSpan="3">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Kinetic Simulation Bases]" />
+          <Run Text=">> Kinetic simulation bases" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSimulations}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -94,15 +95,22 @@
                 Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding DataCollection}"
                 SelectedItem="{Binding SelectedCollectionItem}"
-                Background="Transparent"
                 ColumnWidth="*"
-                AutoGenerateColumns="False"
-                VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Auto">
+                AutoGenerateColumns="False">
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                       Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                       Height="{StaticResource App.Size.RowHeaderLogo}"
+                                       PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                       PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                       PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                       Cursor="Hand"/>
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
 
         <DataGrid.Columns>
-          <DataGridTextColumn Header="Name"
-                              Binding="{Binding Name}" />
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
           <DataGridTemplateColumn Header="Transitions">
             <DataGridTemplateColumn.CellTemplate>
@@ -124,10 +132,11 @@
       </DataGrid>
     </GroupBox>
 
-    <GroupBox Grid.Column="1" Grid.Row="0" Style="{StaticResource App.Style.GroupBox.NoBorder}">
+    <GroupBox Grid.Column="1" Grid.Row="0">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[General Settings]" />
+          <Run Text=">> General settings" />
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat=>> {0}}"/>
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.GeneralSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -137,10 +146,11 @@
                                              Margin="{StaticResource App.Margin.GroupBoxContent}"/>
     </GroupBox>
 
-    <GroupBox Grid.Column="1" Grid.Row="1" Style="{StaticResource App.Style.GroupBox.NoBorder}">
+    <GroupBox Grid.Column="1" Grid.Row="1">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Kinetic Settings]" />
+          <Run Text=">> Kinetic settings" />
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat=>> {0}}"/>
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -159,25 +169,36 @@
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0"
-                  Grid.Column="0"
-                  Header="Pre-run length [MCSP]">
-          <TextBox Text="{Binding SelectedCollectionItem.PreRunMcsp}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Pre-run length [MCSP]">
+          <TextBox Text="{Binding SelectedCollectionItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}" >
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+            </TextBox.InputBindings>
+          </TextBox>
         </GroupBox>
 
-        <GroupBox Grid.Row="0"
-                  Grid.Column="1"
-                  Header="Normalization probability">
-          <TextBox Text="{Binding SelectedCollectionItem.NormalizationProbability}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Normalization probability">
+          <TextBox Text="{Binding SelectedCollectionItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+            </TextBox.InputBindings>
+          </TextBox>
         </GroupBox>
 
         <GroupBox Grid.Row="0"
                   Grid.Column="2"
                   Header="Electric field modulus [V/m]">
-          <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldMagnitude}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+          <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+            </TextBox.InputBindings>
+          </TextBox>
         </GroupBox>
 
         <GroupBox Grid.Row="1"
@@ -189,12 +210,27 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.A, StringFormat={}{0:0.00}}"
-                     Grid.Column="0"/>
-            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.B, StringFormat={}{0:0.00}}"
-                     Grid.Column="1"/>
-            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.C, StringFormat={}{0:0.00}}"
-                     Grid.Column="2"/>
+            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.A, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+                     Grid.Column="0">
+              <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+              </TextBox.InputBindings>
+            </TextBox>
+            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.B, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+                     Grid.Column="1">
+              <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+              </TextBox.InputBindings>
+            </TextBox>
+            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.C, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+                     Grid.Column="2">
+              <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+              </TextBox.InputBindings>
+            </TextBox>
           </Grid>
         </GroupBox>
 

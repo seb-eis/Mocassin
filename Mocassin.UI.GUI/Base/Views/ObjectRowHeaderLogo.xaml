@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Base.Views.ObjectRowHeaderLogo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
+
+  <UserControl.Resources>
+    <Style TargetType="{x:Type TextBlock}" x:Key="ShadowTextStyle">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </UserControl.Resources>
+  <Grid>
+    <Border Opacity=".75" Width="20" Height="20" CornerRadius="50" 
+            BorderBrush="Black" BorderThickness="0"
+            Padding="0,0,0,1">
+      <Border.Background>
+        <RadialGradientBrush GradientOrigin=".25,.25">
+          <GradientStop Color="LightBlue" Offset="0.0" />
+          <GradientStop Color="Blue" Offset="0.5" />
+          <GradientStop Color="Black" Offset="1.0" />
+        </RadialGradientBrush>
+      </Border.Background>
+
+      <TextBlock Style="{StaticResource ShadowTextStyle}" Text="{Binding TargetNullValue=M}">
+        <TextBlock.Effect>
+          <DropShadowEffect ShadowDepth="1" Direction="330" Color="Black" Opacity="1" BlurRadius="4" />
+        </TextBlock.Effect>
+      </TextBlock>
+    </Border>
+  </Grid>
+</UserControl>

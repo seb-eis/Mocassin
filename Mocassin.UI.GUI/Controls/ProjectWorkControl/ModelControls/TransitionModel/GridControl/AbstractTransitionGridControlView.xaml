@@ -8,6 +8,7 @@
   xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:AbstractTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -16,38 +17,45 @@
     <DataGrid Name="AbstractTransitionDataGrid"
               ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
-              VerticalAlignment="Stretch"
-              VerticalContentAlignment="Stretch"
               VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"
               ColumnWidth="*"
               Background="Transparent">
 
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
-        <DataGridTextColumn Header="Connection Pattern"
-                            Binding="{Binding ConnectorString}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+
+        <DataGridTextColumn Header="Connection pattern" Binding="{Binding ConnectorString}">
 
           <DataGridTextColumn.ElementStyle>
-            <Style TargetType="TextBlock">
+            <Style TargetType="{x:Type TextBlock}">
               <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
           </DataGridTextColumn.ElementStyle>
 
           <DataGridTextColumn.EditingElementStyle>
-            <Style TargetType="TextBox">
+            <Style TargetType="{x:Type TextBox}">
               <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
           </DataGridTextColumn.EditingElementStyle>
 
         </DataGridTextColumn>
 
-        <DataGridCheckBoxColumn Header="Association Flag"
-                                Binding="{Binding IsAssociation}"/>
+        <DataGridCheckBoxColumn Header="Association flag" Binding="{Binding IsAssociation}"/>
 
-        <DataGridTemplateColumn Header="Exchange Groups">
+        <DataGridTemplateColumn Header="Change group chain">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionGraph}">
               <gridControl:HostGraphModelObjectDropSelectionView>

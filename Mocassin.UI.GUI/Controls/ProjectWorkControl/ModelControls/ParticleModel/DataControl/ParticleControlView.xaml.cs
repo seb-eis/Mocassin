@@ -12,9 +12,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
     public partial class ParticleControlView : UserControl
     {
         /// <summary>
-        ///     Get or set the <see cref="DragHandler{TElement}"/> for the particle <see cref="DataGrid"/>
+        ///     Get or set the <see cref="DragHandler{TElement}"/> for the row header
         /// </summary>
-        private DragHandler<DataGrid> ParticleDataGridDragHandler { get; set; }
+        private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 
         public ParticleControlView()
         {
@@ -24,22 +24,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
 
         private void InitializeDragHandlers()
         {
-            ParticleDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
+            RowHeaderDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
         }
 
-        private void ParticleDataGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ParticleDataGridDragHandler.RegisterDragStartPoint(ParticleDataGrid, e);
+            RowHeaderDragHandler.RegisterDragStartPoint(ParticleDataGrid, e);
         }
 
-        private void ParticleDataGrid_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ParticleDataGridDragHandler.DeleteDragStartPoint(ParticleDataGrid, e);
+            RowHeaderDragHandler.DeleteDragStartPoint(ParticleDataGrid, e);
         }
 
-        private void ParticleDataGrid_OnPreviewMouseMove(object sender, MouseEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            ParticleDataGridDragHandler.TryDoDragDrop(ParticleDataGrid, e);
+            RowHeaderDragHandler.TryDoDragDrop(ParticleDataGrid, e);
         }
     }
 }

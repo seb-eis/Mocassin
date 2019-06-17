@@ -6,46 +6,48 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:InteractionFilterGridControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <Grid>
-    <DataGrid
-      Name="FilterDataGrid"
+    <DataGrid Name="FilterDataGrid"
       ItemsSource="{Binding DataCollection}"
       SelectedItem="{Binding SelectedCollectionItem}"
-      VerticalAlignment="Stretch"
       AutoGenerateColumns="False"
-      VerticalScrollBarVisibility="Auto"
-      Background="Transparent"
-      ColumnWidth="*"
-      MaxHeight="150">
+      ColumnWidth="*">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                     Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                     Height="{StaticResource App.Size.RowHeaderLogo}"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name}" />
-
-        <DataGridTextColumn
-          Header="Start [&#x212b;]"
-          Binding="{Binding StartRadius}" />
-
-        <DataGridTextColumn
-          Header="End [&#x212b;]"
-          Binding="{Binding EndRadius}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Min radius [&#x212b;]" 
+                            Binding="{Binding StartRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+        <DataGridTextColumn Header="Max radius [&#x212b;]" 
+                            Binding="{Binding EndRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn
           Header="Center"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CenterWyckoffOptions}"
+          ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.CenterWyckoffOptions}"
           DisplayMemberPath="Name"
           SelectedValuePath="Key"
           SelectedValueBinding="{Binding CenterUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}" />
 
         <comboBox:BindableDataGridComboBoxColumn
           Header="Partner"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.PartnerWyckoffOptions}"
+          ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.PartnerWyckoffOptions}"
           DisplayMemberPath="Name"
           SelectedValuePath="Key"
           SelectedValueBinding="{Binding PartnerUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}" />

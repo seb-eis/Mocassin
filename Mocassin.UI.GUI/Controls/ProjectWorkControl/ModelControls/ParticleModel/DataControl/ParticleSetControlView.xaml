@@ -8,18 +8,31 @@
   xmlns:particleModel="clr-namespace:Mocassin.UI.Xml.ParticleModel;assembly=Mocassin.UI.Xml"
   xmlns:hosting="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:particleGridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.GridControl"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:ParticleSetControlViewModel, IsDesignTimeCreatable = True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
+    <DataGrid Name="ParticleSetDataGrid"
+              ItemsSource="{Binding DataCollection}"
               AutoGenerateColumns="False"
               ColumnWidth="*"
               SelectedItem="{Binding SelectedCollectionItem}"
-              Background="Transparent"
-              VerticalScrollBarVisibility="Auto">
+              Background="Transparent">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />

@@ -34,7 +34,7 @@
                 ItemsSource="{Binding ProjectControl.ProjectGraphs}"
                 SelectedItem="{Binding SelectedProjectGraph}"
                 ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
-                Text="{Binding SelectedProjectGraph.ProjectName}"
+                Text="{Binding SelectedProjectGraph.Name}"
                 DisplayMemberPath="Name"
                 IsEditable="True"
                 IsTextSearchEnabled="{Binding ElementName=ProjectBoxSearchToggle, Path=IsChecked}">

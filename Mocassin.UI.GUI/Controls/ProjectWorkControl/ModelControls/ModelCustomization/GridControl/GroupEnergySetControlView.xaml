@@ -5,6 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:GroupEnergySetControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -15,17 +16,21 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
     <ComboBox Grid.Row="0" ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
+              Margin="{StaticResource App.Margin.VerticalStackLarge}"
               DisplayMemberPath="Name"
-              ToolTip="Permutation" />
+              ToolTip="Search permutation"
+              IsTextSearchEnabled="True"
+              IsEditable="True"/>
 
-    <GroupBox Grid.Row="1" Header="[Permutation description]" Margin="0,10,0,0">
-
-      <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="{StaticResource App.Margin.GroupBoxContent}">
+    <Border Grid.Row="1" Margin="{StaticResource App.Margin.VerticalStackLarge}">
+      <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
+        <Run Text="Description:" />
+        <LineBreak/>
         <Run Text="Group interaction for" />
         <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
@@ -40,21 +45,30 @@
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in order of appearance." />
       </TextBlock>
-    </GroupBox>
+    </Border>
 
-    <GroupBox Header="[Permutation settings]" Grid.Row="2" Margin="{StaticResource App.Margin.GroupBoxContentLarge}">
-      <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
-        <GroupBox Header="Interaction energy [eV]">
-          <TextBox Text="{Binding SelectedCollectionItem.Energy}" Name="EnergyTextBox"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}">
-            <TextBox.InputBindings>
-              <KeyBinding Key="Enter"
-                          Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding ElementName=EnergyTextBox}" />
-            </TextBox.InputBindings>
-          </TextBox>
-        </GroupBox>
-      </StackPanel>
-    </GroupBox>
+    <DataGrid Name="PermutationsDataGrid" Grid.Row="2"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              ColumnWidth="*"
+              CanUserDeleteRows="False"
+              CanUserAddRows="False"
+              AutoGenerateColumns="False">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo DataContext="D" />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Binding="{Binding Name}" Header="Name"
+                            IsReadOnly="True"/>
+        <DataGridTextColumn Binding="{Binding CenterParticle.Name}" Header="Center" 
+                            IsReadOnly="True" />
+        <DataGridTextColumn
+          Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          Header="Energy [eV]" />
+      </DataGrid.Columns>
+    </DataGrid>
   </Grid>
 </UserControl>

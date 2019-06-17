@@ -168,6 +168,9 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="NCalc, Version=3.5.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoreCLR-NCalc.2.2.59\lib\net45\NCalc.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -285,7 +288,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Base\Views\BlurredLogoWithTextView.xaml">
+    <Page Include="Base\Views\ObjectRowHeaderLogo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -582,6 +585,7 @@
     <Compile Include="Base\Commands\ParameterlessCommand.cs" />
     <Compile Include="Base\Commands\RelayCommand.cs" />
     <Compile Include="Base\Commands\UiCommands\UpdateTextBoxSourceCommand.cs" />
+    <Compile Include="Base\Converter\NumericExpressionToValueConverter.cs" />
     <Compile Include="Base\Converter\StringExpressionToValueConverter.cs" />
     <Compile Include="Base\Converter\Int32ToEnumConverter.cs" />
     <Compile Include="Base\Converter\MultiValueConverter.cs" />
@@ -621,8 +625,8 @@
     <Compile Include="Base\Views\LoadingSpinerView.xaml.cs">
       <DependentUpon>LoadingSpinerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Base\Views\BlurredLogoWithTextView.xaml.cs">
-      <DependentUpon>BlurredLogoWithTextView.xaml</DependentUpon>
+    <Compile Include="Base\Views\ObjectRowHeaderLogo.xaml.cs">
+      <DependentUpon>ObjectRowHeaderLogo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\Views\NoContentView.xaml.cs">
       <DependentUpon>NoContentView.xaml</DependentUpon>

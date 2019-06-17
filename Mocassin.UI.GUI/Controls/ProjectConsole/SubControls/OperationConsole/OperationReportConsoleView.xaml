@@ -33,9 +33,12 @@
               SelectedItem="{Binding SelectedReport}"
               AutoGenerateColumns="False"
               IsReadOnly="True"
-              VerticalScrollBarVisibility="Auto"
-              GridLinesVisibility="None"
-              Background="Transparent">
+              GridLinesVisibility="None">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo DataContext="#"/> 
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <i:Interaction.Triggers>
         <i:EventTrigger EventName="MouseEnter">

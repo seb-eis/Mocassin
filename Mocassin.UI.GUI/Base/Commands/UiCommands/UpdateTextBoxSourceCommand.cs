@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Mocassin.UI.Base.Commands.UiCommands
 {
@@ -13,6 +14,7 @@ namespace Mocassin.UI.Base.Commands.UiCommands
         {
             if (parameter == null) return;        
             BindingOperations.GetBindingExpression(parameter, TextBox.TextProperty)?.UpdateSource();
+            Keyboard.ClearFocus();
         }
     }
 }

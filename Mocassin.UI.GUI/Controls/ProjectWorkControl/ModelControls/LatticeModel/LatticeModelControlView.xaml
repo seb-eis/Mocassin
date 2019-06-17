@@ -42,7 +42,7 @@
         <GroupBox>
           <GroupBox.Header>
             <TextBlock>
-              <Run Text="[Building Blocks]" />
+              <Run Text=">> Lattice building blocks" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.BuildingBlocks}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
@@ -58,13 +58,13 @@
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
 
           <GroupBox Grid.Row="0">
             <GroupBox.Header>
               <TextBlock>
-                <Run Text="[Doping Pairs]" />
+                <Run Text=">> Position occupation changes" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.DopingCombination}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
@@ -78,7 +78,7 @@
           <GroupBox Grid.Row="1">
             <GroupBox.Header>
               <TextBlock>
-                <Run Text="[Doping]" />
+                <Run Text=">> Doping definitions" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.Doping}"
                      Style="{StaticResource App.Style.Run.Keyword}" />

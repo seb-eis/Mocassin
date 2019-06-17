@@ -137,28 +137,23 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <GroupBox Grid.Column="0"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
+    <GroupBox Grid.Column="0">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Metropolis Transitions (MMC)]" />
+          <Run Text=">> Metropolis transitions (MMC)" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.MetropolisTransitions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
-
       <gridControl:MetropolisTransitionGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
                                                        DataContext="{Binding MetropolisTransitionGridViewModel}" />
     </GroupBox>
 
-    <GroupBox Grid.Column="1"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
+    <GroupBox Grid.Column="1">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Kinetic Transitions (KMC)]" />
+          <Run Text=">> Kinetic Transitions (KMC)" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticTransitions}"
                Style="{StaticResource App.Style.Run.Keyword}" />

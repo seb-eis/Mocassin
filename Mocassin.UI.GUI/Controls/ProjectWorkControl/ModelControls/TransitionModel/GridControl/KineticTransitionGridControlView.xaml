@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:KineticTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -16,34 +17,45 @@
     <DataGrid Name="TransitionDataGrid"
               ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
-              VerticalAlignment="Stretch"
-              VerticalContentAlignment="Stretch"
-              VerticalScrollBarVisibility="Auto"
               ColumnWidth="*"
               AutoGenerateColumns="False"
               Background="Transparent">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
-        <comboBox:BindableDataGridComboBoxColumn Header="Abstract"
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+        <comboBox:BindableDataGridComboBoxColumn Header="State change chain"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
                                                  SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  DisplayMemberPath="Name"
                                                  SelectedValuePath="Key" />
 
-        <DataGridTemplateColumn Header="Path Geometry (A,B,C)">
+        <DataGridTemplateColumn Header="Binding geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:KineticTransitionGraph}">
               <DataGrid ItemsSource="{Binding PositionVectors}"
                         AutoGenerateColumns="False"
-                        ColumnWidth="*">
+                        ColumnWidth="*"
+                        HeadersVisibility="Row">
+                <DataGrid.RowHeaderTemplate>
+                  <DataTemplate>
+                    <views:ObjectRowHeaderLogo DataContext="D"/>
+                  </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
 
                 <DataGrid.Columns>
                   <DataGridTextColumn Binding="{Binding A}" />
-
                   <DataGridTextColumn Binding="{Binding B}" />
-
                   <DataGridTextColumn Binding="{Binding C}" />
 
                 </DataGrid.Columns>

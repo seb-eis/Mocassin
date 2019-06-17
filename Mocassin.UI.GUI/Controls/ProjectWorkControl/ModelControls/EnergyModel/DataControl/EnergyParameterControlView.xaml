@@ -106,33 +106,34 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="1*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
+    <GroupBox Grid.Row="0">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Interaction Cutoff Range]" />
+          <Run Text=">> Interaction cutoff range" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.CutoffRange}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
 
-      <TextBox Text="{Binding InteractionRadius}" Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <TextBox Name="CutoffTextBox"
+               Text="{Binding InteractionRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+               Margin="{StaticResource App.Margin.GroupBoxContent}">
         <TextBox.InputBindings>
-          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}" />
+          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                      CommandParameter="{Binding ElementName=CutoffTextBox}"/>
         </TextBox.InputBindings>
       </TextBox>
 
     </GroupBox>
 
-    <GroupBox Grid.Row="1" Style="{StaticResource App.Style.GroupBox.NoBorder}"  >
-
+    <GroupBox Grid.Row="1">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Interaction Filters]" />
+          <Run Text=">> Primary interaction filters" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.InteractionFilters}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -140,8 +141,7 @@
       </GroupBox.Header>
 
       <gridControl:InteractionFilterGridControlView DataContext="{Binding InteractionFilterGridViewModel}"
-                                                    Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                                    VerticalAlignment="Top"/>
+                                                    Margin="{StaticResource App.Margin.GroupBoxContent}"/>
 
     </GroupBox>
   </Grid>

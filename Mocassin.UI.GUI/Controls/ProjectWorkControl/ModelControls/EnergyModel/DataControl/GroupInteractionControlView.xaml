@@ -7,55 +7,57 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:energyModel="clr-namespace:Mocassin.UI.Xml.EnergyModel;assembly=Mocassin.UI.Xml"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:GroupInteractionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid
-      Name="GroupInteractionDataGrid"
-      ItemsSource="{Binding DataCollection}"
-      SelectedItem="{Binding SelectedCollectionItem}"
-      VerticalAlignment="Stretch"
-      VerticalScrollBarVisibility="Auto"
-      AutoGenerateColumns="False"
-      ColumnWidth="*"
-      Background="Transparent">
+    <DataGrid Name="GroupInteractionDataGrid"
+              ItemsSource="{Binding DataCollection}"
+              SelectedItem="{Binding SelectedCollectionItem}"
+              VerticalAlignment="Stretch"
+              VerticalScrollBarVisibility="Auto"
+              AutoGenerateColumns="False"
+              ColumnWidth="*"
+              Background="Transparent">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                     Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                     Height="{StaticResource App.Size.RowHeaderLogo}"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Header="Name"
-          Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
         <comboBox:BindableDataGridComboBoxColumn
           Header="Center"
-          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.WyckoffOptions}"
+          ItemsSource="{Binding ElementName=GroupInteractionDataGrid, Path=DataContext.WyckoffOptions}"
           DisplayMemberPath="Name"
           SelectedValuePath="Key"
-          SelectedValueBinding="{Binding CenterUnitCellPositionKey}"/>
+          SelectedValueBinding="{Binding CenterUnitCellPositionKey}" />
 
-        <DataGridTemplateColumn
-          Header="Geometry (A,B,C)">
+        <DataGridTemplateColumn Header="Surrounding geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate
-              DataType="{x:Type energyModel:GroupInteractionGraph}">
-              <DataGrid
-                ItemsSource="{Binding GroupGeometry}"
-                AutoGenerateColumns="False"
-                ColumnWidth="*"
-                VerticalScrollBarVisibility="Auto"
-                MaxHeight="100">
-
+            <DataTemplate DataType="{x:Type energyModel:GroupInteractionGraph}">
+              <DataGrid ItemsSource="{Binding GroupGeometry}"
+                        AutoGenerateColumns="False"
+                        ColumnWidth="*"
+                        HeadersVisibility="None">
                 <DataGrid.Columns>
                   <DataGridTextColumn
-                    Binding="{Binding A, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
-
+                    Binding="{Binding A, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                   <DataGridTextColumn
-                    Binding="{Binding B, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
-
+                    Binding="{Binding B, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                   <DataGridTextColumn
-                    Binding="{Binding C, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
-
+                    Binding="{Binding C, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                 </DataGrid.Columns>
               </DataGrid>
             </DataTemplate>

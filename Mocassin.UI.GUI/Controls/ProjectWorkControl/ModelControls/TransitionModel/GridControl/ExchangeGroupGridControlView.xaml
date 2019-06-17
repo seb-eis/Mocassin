@@ -8,6 +8,7 @@
   xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ExchangeGroupGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -21,17 +22,25 @@
               VerticalAlignment="Stretch"
               VerticalContentAlignment="Stretch"
               AutoGenerateColumns="False"
-              ColumnWidth="*"
-              VerticalScrollBarVisibility="Auto"
-              PreviewMouseLeftButtonDown="ExchangeGroupDataGrid_OnPreviewMouseLeftButtonDown"
-              PreviewMouseLeftButtonUp="ExchangeGroupDataGrid_OnPreviewMouseLeftButtonUp"
-              PreviewMouseMove="ExchangeGroupDataGrid_OnPreviewMouseMove">
+              ColumnWidth="*">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name"
                             Binding="{Binding Name}" />
 
-        <DataGridTemplateColumn Header="Exchange Pairs">
+        <DataGridTemplateColumn Header="State change pairs">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:StateExchangeGroupGraph}">
               <gridControl:HostGraphModelObjectDropSelectionView>

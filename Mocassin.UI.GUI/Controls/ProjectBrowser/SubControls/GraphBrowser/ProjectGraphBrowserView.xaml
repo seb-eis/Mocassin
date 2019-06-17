@@ -19,8 +19,25 @@
               <ColumnDefinition Width="10"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <views:BlurredLogoWithTextView Grid.Column="0" Width="25" Height="25" DataContext="P"/>
-            <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center"/>
+            <views:ObjectRowHeaderLogo Grid.Column="0" DataContext="P" Margin="5,10,5,10"/>
+
+            <TextBox Name="ProjectNameTextBox" MinWidth="50"
+                     Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" 
+                     Background="Transparent" BorderThickness="0">
+              <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                  <Style.Triggers>
+                    <Trigger Property="IsKeyboardFocused" Value="True">
+                      <Setter Property="FontStyle" Value="Italic"/>
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </TextBox.Style>
+              <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                            CommandParameter="{Binding ElementName=ProjectNameTextBox}"/>
+              </TextBox.InputBindings>
+            </TextBox>
           </Grid>
         </DataTemplate>
       </ListView.ItemTemplate>

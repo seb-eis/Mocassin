@@ -6,6 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:MetropolisTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -15,31 +16,39 @@
               ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               Background="Transparent"
-              VerticalAlignment="Stretch"
-              VerticalContentAlignment="Stretch"
-              VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"
               ColumnWidth="*"
               Sorting="TransitionDataGrid_OnSorting">
 
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-
-        <comboBox:BindableDataGridComboBoxColumn Header="Abstract"
+        <comboBox:BindableDataGridComboBoxColumn Header="State change chain"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
                                                  SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff-1"
+        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff 1"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.FirstWyckoffOptions}"
                                                  SelectedValueBinding="{Binding FirstUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff-2"
+        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff 2"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SecondWyckoffOptions}"
                                                  SelectedValueBinding="{Binding SecondUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  SelectedValuePath="Key"

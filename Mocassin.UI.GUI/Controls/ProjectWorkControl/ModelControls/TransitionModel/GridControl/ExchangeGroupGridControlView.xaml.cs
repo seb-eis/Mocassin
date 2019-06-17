@@ -11,9 +11,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
     public partial class ExchangeGroupGridControlView : UserControl
     {
         /// <summary>
-        ///     Get or set the <see cref="DragHandler{TElement}" /> for drag events on the exchange group grid
+        ///     Get or set the <see cref="DragHandler{TElement}" /> for the row header
         /// </summary>
-        private DragHandler<DataGrid> ExchangeGroupDataGridDragHandler { get; set; }
+        private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 
         public ExchangeGroupGridControlView()
         {
@@ -23,22 +23,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 
         private void InitializeDragHandlers()
         {
-            ExchangeGroupDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
+            RowHeaderDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
         }
 
-        private void ExchangeGroupDataGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ExchangeGroupDataGridDragHandler.RegisterDragStartPoint(sender as DataGrid, e);
+            RowHeaderDragHandler.RegisterDragStartPoint(ExchangeGroupDataGrid, e);
         }
 
-        private void ExchangeGroupDataGrid_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ExchangeGroupDataGridDragHandler.DeleteDragStartPoint(sender as DataGrid, e);
+            RowHeaderDragHandler.DeleteDragStartPoint(ExchangeGroupDataGrid, e);
         }
 
-        private void ExchangeGroupDataGrid_OnPreviewMouseMove(object sender, MouseEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            ExchangeGroupDataGridDragHandler.TryDoDragDrop(sender as DataGrid, e);
+            RowHeaderDragHandler.TryDoDragDrop(ExchangeGroupDataGrid, e);
         }
     }
 }

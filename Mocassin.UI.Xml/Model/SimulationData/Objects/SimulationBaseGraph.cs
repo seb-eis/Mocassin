@@ -66,7 +66,7 @@ namespace Mocassin.UI.Xml.SimulationModel
                 }
                 catch (Exception)
                 {
-                    timeLimit = TimeSpan.FromHours(24);
+                    timeLimit = TimeSpan.FromDays(365);
                 }
             }
 

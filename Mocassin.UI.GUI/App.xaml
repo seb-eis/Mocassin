@@ -9,7 +9,7 @@
     <ResourceDictionary>
       <!-- Converters -->
       <BooleanToVisibilityConverter x:Key="App.Converter.BooleanToVisibility"/>
-      <converter:StringExpressionToValueConverter x:Key="App.Converter.StringExpressionToValue"/>
+      <converter:NumericExpressionToValueConverter x:Key="App.Converter.NumericExpressionToValue"/>
       <!-- System color overwrites -->
 
       <!-- Styles with keys -->
@@ -129,9 +129,10 @@
       </Style>
 
       <Style TargetType="{x:Type DataGrid}">
-        <Setter Property="HeadersVisibility" Value="Column" />
-        <Setter Property="GridLinesVisibility" Value="None"/>
-        <Setter Property="RowBackground" Value="Transparent"/>
+        <Setter Property="HeadersVisibility" Value="All" />
+        <Setter Property="GridLinesVisibility" Value="All"/>
+        <Setter Property="RowBackground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="AlternatingRowBackground" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"/>
       </Style>
 
@@ -217,6 +218,7 @@
 
       <s:Boolean x:Key="Bool.True">True</s:Boolean>
       <s:Boolean x:Key="Bool.False">False</s:Boolean>
+      <s:Double x:Key="App.Size.RowHeaderLogo">25</s:Double>
 
       <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
 

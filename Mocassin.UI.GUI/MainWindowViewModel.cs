@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Resources;
 using System.Windows.Forms;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
@@ -22,7 +20,6 @@ using Mocassin.UI.GUI.Logic.Updating;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
-using Application = System.Windows.Application;
 
 namespace Mocassin.UI.GUI
 {
@@ -73,7 +70,7 @@ namespace Mocassin.UI.GUI
         public IEnumerable<Assembly> PluginAssemblies { get; }
 
         /// <summary>
-        ///     Get or set the window description <see cref="string"/>
+        ///     Get or set the window description <see cref="string" />
         /// </summary>
         public string WindowDescription
         {
@@ -82,7 +79,8 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Get or set the <see cref="ProjectContentChangeTriggerViewModel"/> that periodically triggers the project content change
+        ///     Get or set the <see cref="ProjectContentChangeTriggerViewModel" /> that periodically triggers the project content
+        ///     change
         /// </summary>
         public ProjectContentChangeTriggerViewModel ChangeTriggerViewModel { get; set; }
 
@@ -139,7 +137,7 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Creates <see cref="IModelProject"/> that supplies access to most model services with the custom project config.
+        ///     Creates <see cref="IModelProject" /> that supplies access to most model services with the custom project config.
         /// </summary>
         /// <returns></returns>
         /// <remarks>Will return a default config project if the</remarks>
@@ -163,7 +161,8 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}"/> of known <see cref="IModelManagerFactory"/> that can be used to register services to <see cref="IModelProject"/> interface
+        ///     Get the <see cref="IEnumerable{T}" /> of known <see cref="IModelManagerFactory" /> that can be used to register
+        ///     services to <see cref="IModelProject" /> interface
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IModelManagerFactory> GetModelManagerFactories()
@@ -181,7 +180,7 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Builds the window description string <see cref="string"/>
+        ///     Builds the window description string <see cref="string" />
         /// </summary>
         /// <returns></returns>
         public string MakeWindowDescription()
@@ -191,7 +190,7 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Loads the <see cref="ProjectSettings"/> from the file lookup location defined in App.xaml
+        ///     Loads the <see cref="ProjectSettings" /> from the file lookup location defined in App.xaml
         /// </summary>
         /// <returns></returns>
         public ProjectSettings LoadProjectSettings()
@@ -214,7 +213,8 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Ensures that all application resources that can be modified are deployed into their target location. An optional overwrite flag can enforce recreation
+        ///     Ensures that all application resources that can be modified are deployed into their target location. An optional
+        ///     overwrite flag can enforce recreation
         /// </summary>
         /// <param name="isOverwrite"></param>
         public void EnsureResourcesCreated(bool isOverwrite)
@@ -236,7 +236,8 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Ensures that the default project settings config is deployed to the config directory with optional enforced overwrite
+        ///     Ensures that the default project settings config is deployed to the config directory with optional enforced
+        ///     overwrite
         /// </summary>
         /// <param name="isOverwrite"></param>
         public void EnsureProjectConfigCreated(bool isOverwrite)

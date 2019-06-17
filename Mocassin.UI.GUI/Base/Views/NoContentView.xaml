@@ -16,7 +16,7 @@
   </UserControl.Resources>
   <Grid>
     <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity=".25" />
-    <TextBlock Style="{StaticResource ShadowTextStyle}" Text="[MOCASSIN]">
+    <TextBlock Style="{StaticResource ShadowTextStyle}" Text="Empty">
       <TextBlock.Effect>
         <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".5" BlurRadius="4" />
       </TextBlock.Effect>

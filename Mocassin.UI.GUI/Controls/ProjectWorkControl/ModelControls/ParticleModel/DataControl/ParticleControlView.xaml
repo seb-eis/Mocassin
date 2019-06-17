@@ -17,23 +17,26 @@
               SelectedItem="{Binding SelectedCollectionItem}"
               AutoGenerateColumns="False"
               ColumnWidth="*"
-              Background="Transparent"
-              HeadersVisibility="All">
+              Background="Transparent">
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:BlurredLogoWithTextView Width="25" Height="25" DataContext=""
-                                         PreviewMouseLeftButtonDown="ParticleDataGrid_OnPreviewMouseLeftButtonDown"
-                                         PreviewMouseLeftButtonUp="ParticleDataGrid_OnPreviewMouseLeftButtonUp"
-                                         PreviewMouseMove="ParticleDataGrid_OnPreviewMouseMove"/>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                         Height="{StaticResource App.Size.RowHeaderLogo}"
+                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                         Cursor="Hand"/>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
+
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
         <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" />
         <DataGridTextColumn Header="Charge" 
-                            Binding="{Binding Charge, Converter={StaticResource App.Converter.StringExpressionToValue}}" />
-        <DataGridCheckBoxColumn Header="Vacancy" Binding="{Binding IsVacancy}" />
+                            Binding="{Binding Charge, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+        <DataGridCheckBoxColumn Header="Vacancy flag" Binding="{Binding IsVacancy}" />
       </DataGrid.Columns>
     </DataGrid>
 

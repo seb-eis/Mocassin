@@ -5,34 +5,44 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
              xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+             xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
              d:DataContext="{d:DesignInstance local:DopingCombinationControlViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
 
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
+    <DataGrid Name="DopingCombinationDataGrid"
+              ItemsSource="{Binding DataCollection}"
               SelectedItem="{Binding SelectedCollectionItem}"
               AutoGenerateColumns="False"
-              ColumnWidth="*"
-              HorizontalScrollBarVisibility="Disabled"
-              Background="Transparent">
+              ColumnWidth="*">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                     Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                     Height="{StaticResource App.Size.RowHeaderLogo}"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand"/>
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}"/>
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePositions}"
                                                  SelectedItemBinding="{Binding UnitCellPosition}"
                                                  DisplayMemberPath="Name"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Dopant"
+        <comboBox:BindableDataGridComboBoxColumn Header="Dopant particle"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableDopantParticles}"
                                                  SelectedItemBinding="{Binding Dopant}"
                                                  DisplayMemberPath="Name"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Dopable"
+        <comboBox:BindableDataGridComboBoxColumn Header="Replaced particle"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableDopableParticles}"
                                                  SelectedItemBinding="{Binding Dopable}"
                                                  DisplayMemberPath="Name"/>

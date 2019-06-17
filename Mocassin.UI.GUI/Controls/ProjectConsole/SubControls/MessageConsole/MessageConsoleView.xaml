@@ -6,6 +6,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole"
   xmlns:messaging="clr-namespace:Mocassin.Framework.Messaging;assembly=Mocassin.Framework"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:MessageConsoleViewModel, IsDesignTimeCreatable=True}"
   Height="Auto" Width="Auto">
@@ -16,9 +17,12 @@
               IsReadOnly="True"
               AutoGenerateColumns="False"
               GridLinesVisibility="None"
-              Background="Transparent"
-              VerticalScrollBarVisibility="Auto"
               ColumnWidth="*">
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo DataContext="#"/> 
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
       <DataGrid.Columns>
         <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp}" />
         <DataGridTextColumn Header="Type" Binding="{Binding ShortInfo}" />

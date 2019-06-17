@@ -11,9 +11,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
     public partial class ExchangePairGridControlView : UserControl
     {
         /// <summary>
-        ///     Get or set the <see cref="DragHandler{TElement}"/> for the exchange pair <see cref="DataGrid"/>
+        ///     Get or set the <see cref="DragHandler{TElement}"/> for the row header
         /// </summary>
-        private DragHandler<DataGrid> ExchangePairDataGridDragHandler { get; set; }
+        private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
 
         public ExchangePairGridControlView()
         {
@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 
         private void InitializeDragDropHandlers()
         {
-            ExchangePairDataGridDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
+            RowHeaderDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
         }
 
         private void ExchangePairDataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
@@ -31,19 +31,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             ExchangePairDataGrid.SelectedItem = null;
         }
 
-        private void ExchangePairDataGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ExchangePairDataGridDragHandler.RegisterDragStartPoint(sender as DataGrid, e);
+            RowHeaderDragHandler.RegisterDragStartPoint(ExchangePairDataGrid, e);
         }
 
-        private void ExchangePairDataGrid_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ExchangePairDataGridDragHandler.DeleteDragStartPoint(sender as DataGrid, e);
+            RowHeaderDragHandler.DeleteDragStartPoint(ExchangePairDataGrid, e);
         }
 
-        private void ExchangePairDataGrid_OnPreviewMouseMove(object sender, MouseEventArgs e)
+        private void RowHeaderLogo_OnPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            ExchangePairDataGridDragHandler.TryDoDragDrop(sender as DataGrid, e);
+            RowHeaderDragHandler.TryDoDragDrop(ExchangePairDataGrid, e);
         }
     }
 }

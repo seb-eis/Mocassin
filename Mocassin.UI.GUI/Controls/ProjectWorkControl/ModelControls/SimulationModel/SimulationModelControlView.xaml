@@ -14,11 +14,11 @@
   <Grid>
 
     <TabControl>
-      <TabItem Header="Metropolis Simulations (MMC)">
+      <TabItem Header="Metropolis Bases (MMC)">
         <dataControl:MetropolisSimulationControlView DataContext="{Binding MetropolisSimulationViewModel}"
                                                      Margin="{StaticResource App.Margin.GroupBoxContent}" />
       </TabItem>
-      <TabItem Header="Kinetic Simulations (KMC)">
+      <TabItem Header="Kinetic Bases (KMC)">
 
         <dataControl:KineticSimulationControlView DataContext="{Binding KineticSimulationViewModel}"
                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />

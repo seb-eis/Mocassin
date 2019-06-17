@@ -18,8 +18,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
     public class UnstableEnvironmentGridControlViewModel : CollectionControlViewModel<UnstableEnvironmentGraph>,
         IContentSupplier<MocassinProjectGraph>
     {
+        private MocassinProjectGraph contentSource;
+
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProjectGraph ContentSource
+        {
+            get => contentSource;
+            protected set => SetProperty(ref contentSource, value);
+        }
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> sequence of all available unstable <see cref="UnitCellPositionGraph" />

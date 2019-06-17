@@ -82,7 +82,7 @@ namespace Mocassin.UI.Xml.Main
             return new MocassinProjectGraph
             {
                 ProjectGuid = guid,
-                ProjectName = $"Project {guid}",
+                ProjectName = "New project",
                 ProjectModelGraph = ProjectModelGraph.CreateNew()
             };
         }

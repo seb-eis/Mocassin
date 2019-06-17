@@ -194,13 +194,10 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" 
-              Grid.Column="0"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
+    <GroupBox Grid.Row="0" Grid.Column="0">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[State Exchange Pairs]" />
+          <Run Text=">> Local state changes" />
           <Run Text="[?]" 
                ToolTip="{StaticResource ToolTip.StateExchangePair}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -211,13 +208,10 @@
                                                DataContext="{Binding ExchangePairGridViewModel}" />
     </GroupBox>
 
-    <GroupBox Grid.Row="0" 
-              Grid.Column="1" 
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
+    <GroupBox Grid.Row="0" Grid.Column="1">
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[State Exchange Groups]" />
+          <Run Text=">> Local state change groups" />
           <Run Text="[?]" 
                ToolTip="{StaticResource ToolTip.StateExchangeGroup}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -228,14 +222,10 @@
                                                 DataContext="{Binding ExchangeGroupGridViewModel}" /> 
     </GroupBox>
 
-    <GroupBox Grid.Row="1" 
-              Grid.Column="0" 
-              Grid.ColumnSpan="2" 
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
-
+    <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
       <GroupBox.Header>
         <TextBlock>
-          <Run Text="[Abstract Transitions]" />
+          <Run Text=">> State change chaining" />
           <Run Text="[?]" 
                ToolTip="{StaticResource AbstractTransition}"
                Style="{StaticResource App.Style.Run.Keyword}" />

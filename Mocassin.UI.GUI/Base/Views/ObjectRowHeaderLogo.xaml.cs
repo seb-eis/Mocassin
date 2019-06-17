@@ -3,11 +3,11 @@
 namespace Mocassin.UI.GUI.Base.Views
 {
     /// <summary>
-    ///     Interaktionslogik für BlurredLogoWithTextView.xaml
+    ///     Interaktionslogik für ObjectRowHeaderLogo.xaml
     /// </summary>
-    public partial class BlurredLogoWithTextView : UserControl
+    public partial class ObjectRowHeaderLogo : UserControl
     {
-        public BlurredLogoWithTextView()
+        public ObjectRowHeaderLogo()
         {
             InitializeComponent();
         }

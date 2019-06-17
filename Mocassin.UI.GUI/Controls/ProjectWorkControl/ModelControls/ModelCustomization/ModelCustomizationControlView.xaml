@@ -57,7 +57,7 @@
         <GroupBox>
           <GroupBox.Header>
             <TextBlock>
-              <Run Text="[Kinetic Transition Rule Settings]" />
+              <Run Text=">> Kinetic rule settings" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
@@ -72,7 +72,7 @@
         <GroupBox>
           <GroupBox.Header>
             <TextBlock>
-              <Run Text="[Stable Pair Energy Settings]" />
+              <Run Text=">> Pair energy settings" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
@@ -87,7 +87,7 @@
         <GroupBox>
           <GroupBox.Header>
             <TextBlock>
-              <Run Text="[Unstable Pair Energy Settings]" />
+              <Run Text=">> Pair energy settings" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
@@ -102,7 +102,7 @@
         <GroupBox>
           <GroupBox.Header>
             <TextBlock>
-              <Run Text="[Group Energy Settings]" />
+              <Run Text=">> Group energy settings" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />

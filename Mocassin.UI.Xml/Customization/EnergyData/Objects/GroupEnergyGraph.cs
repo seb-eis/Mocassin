@@ -37,7 +37,6 @@ namespace Mocassin.UI.Xml.Customization
         [XmlElement("Surroundings")]
         public OccupationStateGraph OccupationState { get; set; }
 
-
         /// <summary>
         ///     Get the contained information as a <see cref="GroupEnergyEntry" /> entry that is valid in the context of the passed
         ///     <see cref="IModelProject" /> and describes an occupation permutation an <see cref="IGroupInteraction" />

@@ -111,7 +111,7 @@
   </UserControl.Resources>
   <Grid>
     <TabControl>
-      <TabItem Header="Environment Ranges &amp; Filters">
+      <TabItem Header="Environment Ranges &amp; Interaction Filters">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -122,12 +122,11 @@
                                                   DataContext="{Binding ParameterControlViewModel}"
                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
 
-          <GroupBox Grid.Column="1"
-                    Style="{StaticResource App.Style.GroupBox.NoBorder}">
+          <GroupBox Grid.Column="1">
 
             <GroupBox.Header>
               <TextBlock>
-                <Run Text="[Unstable Environments]" />
+                <Run Text=">> Unstable position environments" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.UnstableEnvironment}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
@@ -145,7 +144,7 @@
 
           <GroupBox.Header>
             <TextBlock>
-              <Run Text="[Interaction Groups]" />
+              <Run Text=">> Multi-position interactions" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.GroupInteractions}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
