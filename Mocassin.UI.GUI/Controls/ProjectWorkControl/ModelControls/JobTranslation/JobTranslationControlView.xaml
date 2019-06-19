@@ -13,11 +13,11 @@
   <Grid>
     <TabControl>
 
-      <TabItem Header="MMC Job Packages (Metropolis)">
+      <TabItem Header="Metroplis Job Packages">
         <dataControl:MmcJobPackageControlView DataContext="{Binding MmcJobPackageViewModel}"/>
       </TabItem>
 
-      <TabItem Header="KMC Job Packages (Kinetic)">
+      <TabItem Header="Kinetic Job Packages">
         <dataControl:KmcJobPackageControlView DataContext="{Binding KmcJobPackageViewModel}"/>
       </TabItem>
 

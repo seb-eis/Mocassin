@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:KmcJobDescriptionSetControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -21,19 +22,33 @@
 
     <GroupBox Grid.Row="0" Visibility="{Binding Converter={converter:NullToVisibilityConverter}}">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Job configurations -"/>
-          <Run Text="{Binding KmcJobPackage.Name, StringFormat={}{0}, TargetNullValue=???]}"/>
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="{Binding KmcJobPackage.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="Job configurations definitions:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
       </GroupBox.Header>
 
-      <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
+      <DataGrid Name="JobConfigurationsDataGrid"
+                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding DataCollection}"
                 SelectedItem="{Binding SelectedCollectionItem}"
                 AutoGenerateColumns="False"
                 ColumnWidth="*"
                 Background="Transparent">
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
+                                       Width="{StaticResource App.Size.RowHeaderLogo}" 
+                                       Height="{StaticResource App.Size.RowHeaderLogo}"
+                                       DataContext="J"
+                                       PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                       PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                       PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                       Cursor="Hand"/>
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
+
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
           <DataGridTextColumn Header="Cell size A" Binding="{Binding LatticeConfiguration.SizeA}" />
@@ -46,9 +61,9 @@
     <GroupBox Grid.Row="1"  Visibility="{Binding SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}"
               Name="ConfigurationSettingsGroupBox">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Configuration settings -"/>
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0}, TargetNullValue=???}"/>
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="Configuration settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
       </GroupBox.Header>
@@ -60,9 +75,9 @@
 
     <GroupBox Grid.Row="2" Visibility="{Binding ElementName=ConfigurationSettingsGroupBox, Path=Visibility}">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Configuration lattice doping -"/>
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0}, TargetNullValue=???}"/>
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="Block doping settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
       </GroupBox.Header>

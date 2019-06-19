@@ -274,7 +274,7 @@
 
       <s:Boolean x:Key="Bool.True">True</s:Boolean>
       <s:Boolean x:Key="Bool.False">False</s:Boolean>
-      <s:Double x:Key="App.Size.RowHeaderLogo">25</s:Double>
+      <s:Double x:Key="App.Size.RowHeaderLogo">20</s:Double>
 
       <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
 

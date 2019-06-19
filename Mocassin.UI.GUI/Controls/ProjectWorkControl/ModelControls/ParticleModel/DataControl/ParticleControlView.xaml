@@ -21,20 +21,20 @@
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
-                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
-                                         Height="{StaticResource App.Size.RowHeaderLogo}"
-                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
-                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
-                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                         Cursor="Hand"/>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     Width="{StaticResource App.Size.RowHeaderLogo}"
+                                     Height="{StaticResource App.Size.RowHeaderLogo}"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
         <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" />
-        <DataGridTextColumn Header="Charge" 
+        <DataGridTextColumn Header="Charge"
                             Binding="{Binding Charge, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
         <DataGridCheckBoxColumn Header="Vacancy flag" Binding="{Binding IsVacancy}" />
       </DataGrid.Columns>

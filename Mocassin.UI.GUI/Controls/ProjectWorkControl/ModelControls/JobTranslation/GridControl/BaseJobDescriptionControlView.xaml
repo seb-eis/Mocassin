@@ -18,27 +18,47 @@
     </Grid.ColumnDefinitions>
 
     <StackPanel Grid.Column="0">
-      <GroupBox Header="Temperature [K]">
-        <TextBox Text="{Binding Temperature, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}" />
+      <GroupBox Header="Temperature [K]:">
+        <TextBox Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
 
-      <GroupBox Header="Steps per particle">
-        <TextBox Text="{Binding TargetMcsp, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}" />
+      <GroupBox Header="Steps per particle:">
+        <TextBox Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
     </StackPanel>
     <StackPanel Grid.Column="1">
-      <GroupBox Header="Time limit (dd.hh:mm:ss)">
+      <GroupBox Header="Time limit (dd.hh:mm:ss):">
         <TextBox
           Text="{Binding TimeLimit, StringFormat={}{0:dd\\.hh\\:mm\\:ss}, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-          Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
 
-      <GroupBox Header="Minimal success rate [Hz]">
+      <GroupBox Header="Minimal success rate [Hz]:">
         <TextBox
-          Text="{Binding MinimalSuccessRate, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-          Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          Text="{Binding MinimalSuccessRate, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+          Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
     </StackPanel>
   </Grid>

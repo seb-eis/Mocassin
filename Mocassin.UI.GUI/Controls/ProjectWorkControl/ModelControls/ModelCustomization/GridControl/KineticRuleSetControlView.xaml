@@ -75,7 +75,7 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
-        <DataGridTextColumn Binding="{Binding DependencyRuleCount}" Header="Hidden rules"
+        <DataGridTextColumn Binding="{Binding DependencyRuleCount}" Header="Hidden rule count"
                             IsReadOnly="True"/>
         <DataGridTextColumn
           Binding="{Binding AttemptFrequency, Converter={StaticResource App.Converter.NumericExpressionToValue}}"

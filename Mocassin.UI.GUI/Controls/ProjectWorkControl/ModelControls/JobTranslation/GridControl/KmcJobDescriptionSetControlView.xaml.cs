@@ -1,28 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Mocassin.UI.GUI.Base;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
     /// <summary>
-    /// Interaktionslogik für KmcJobDescriptionSetControlView.xaml
+    ///     Interaktionslogik für KmcJobDescriptionSetControlView.xaml
     /// </summary>
     public partial class KmcJobDescriptionSetControlView : UserControl
     {
+        /// <summary>
+        ///     Get or set the <see cref="DragHandler{TElement}"/> for the row header
+        /// </summary>
+        private DragHandler<DataGrid> RowHeaderDragHandler { get; set; }
+
         public KmcJobDescriptionSetControlView()
         {
+            InitializeDragHandlers();
             InitializeComponent();
+        }
+
+        private void InitializeDragHandlers()
+        {
+            RowHeaderDragHandler = new DragHandler<DataGrid>(x => new DataObject(x.SelectedItem ?? new object()));
+        }
+
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RowHeaderDragHandler.RegisterDragStartPoint(JobConfigurationsDataGrid, e);
+        }
+
+        private void RowHeaderLogo_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            RowHeaderDragHandler.DeleteDragStartPoint(JobConfigurationsDataGrid, e);
+        }
+
+        private void RowHeaderLogo_OnPreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            RowHeaderDragHandler.TryDoDragDrop(JobConfigurationsDataGrid, e);
         }
     }
 }

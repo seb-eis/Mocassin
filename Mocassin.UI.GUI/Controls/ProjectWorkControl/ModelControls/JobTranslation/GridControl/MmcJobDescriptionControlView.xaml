@@ -23,25 +23,45 @@
     <local:BaseJobDescriptionControlView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
                                          DataContext="{Binding}" />
     <StackPanel Grid.Column="0" Grid.Row="1">
-      <GroupBox Header="Energy fluctuation break tolerance">
-        <TextBox Text="{Binding BreakTolerance, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+      <GroupBox Header="Energy fluctuation break tolerance:">
+        <TextBox Text="{Binding BreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
 
-      <GroupBox Header="Break sample size">
-        <TextBox Text="{Binding BreakSampleLength, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+      <GroupBox Header="Break sample size:">
+        <TextBox Text="{Binding BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
         </GroupBox>
     </StackPanel>
     <StackPanel Grid.Column="1" Grid.Row="1">
-      <GroupBox Header="Break sample interval"  Opacity=".5" ToolTip="Currently no effect!">
-        <TextBox Text="{Binding BreakSampleInterval, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+      <GroupBox Header="Break sample interval:"  Opacity=".5" ToolTip="Currently no effect!">
+        <TextBox Text="{Binding BreakSampleInterval, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
 
-      <GroupBox Header="Result sample size" Opacity=".5" ToolTip="Currently no effect!">
-        <TextBox Text="{Binding ResultSampleMcs, Converter={converter:StringToNullableConverter}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}"/>
+      <GroupBox Header="Result sample size:" Opacity=".5" ToolTip="Currently no effect!">
+        <TextBox Text="{Binding ResultSampleMcs, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
       </GroupBox>
     </StackPanel>
   </Grid>
