@@ -143,8 +143,8 @@
     <GroupBox Grid.Row="0">
 
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Space group" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Space group selection:"/>
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.SpaceGroup}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
@@ -187,9 +187,7 @@
         <DataGrid Grid.Row="0" Grid.Column="1"
                   AutoGenerateColumns="False"
                   ColumnWidth="*"
-                  VerticalScrollBarVisibility="Auto"
-                  ItemsSource="{Binding SelectedSpaceGroup.Operations}"
-                  Background="Transparent">
+                  ItemsSource="{Binding SelectedSpaceGroup.Operations}">
           <DataGrid.RowHeaderTemplate>
             <DataTemplate>
               <views:ObjectRowHeaderLogo DataContext="I"/>
@@ -202,14 +200,14 @@
                 <DataTemplate>
                   <TextBlock DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
                     <Run Text="{Binding Index, Mode=OneWay, StringFormat={}#{0}}"/>
-                    <Run Text=">>" />
+                    <Run Text="&#x2794;" />
                     <Run Text="{Binding Literal, Mode=OneWay}" />
-                    <Run Text=">>" />
+                    <Run Text="&#x2794;" />
                     <Run
                       Text="{Binding CrystalSystemIndex, Mode=OneWay, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" />
-                    <Run Text=">>" />
+                    <Run Text="&#x2794;" />
                     <Run Text="{Binding Specifier, Mode=OneWay}" />
-                    <Run Text=">>" />
+                    <Run Text="&#x2794;" />
                     <Run Text="{Binding Operations.Count, Mode=OneWay, StringFormat={}#Op. {0}}" />
                   </TextBlock>
                 </DataTemplate>
@@ -223,8 +221,8 @@
     <GroupBox Grid.Row="1" Grid.Column="0">
 
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Unit cell parameters" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Cell parameter settings:" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.Parameters}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>

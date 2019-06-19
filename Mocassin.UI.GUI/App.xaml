@@ -57,6 +57,11 @@
         <Setter Property="TextAlignment" Value="Justify" />
       </Style>
 
+      <Style TargetType="{x:Type TextBlock}"
+             x:Key="App.Style.ContentHeaderTextBlock">
+        <Setter Property="FontWeight" Value="DemiBold"/>
+      </Style>
+
       <Style TargetType="Border" x:Key="App.Style.Border.Box">
         <Setter Property="BorderThickness" Value=".5" />
         <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
@@ -101,13 +106,44 @@
               <ControlTemplate.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                   <Setter TargetName="Border" Property="Background"
-                          Value="{x:Static SystemColors.InactiveSelectionHighlightBrush}" />
+                          Value="{x:Static SystemColors.InactiveCaptionBrush}" />
                 </Trigger>
                 <Trigger SourceName="Border" Property="IsMouseOver" Value="True">
-                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.MenuHighlightBrush}" />
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
                 </Trigger>
                 <Trigger Property="IsFocused" Value="True">
-                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.MenuHighlightBrush}" />
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style TargetType="{x:Type TabItem}" x:Key="App.Style.RotatedTabItemLeft">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type TabItem}">
+              <Border Margin="-3,-2,-1,2" Name="Border">
+                <Grid Name="Grid" Margin="0,10,0,10">
+                  <ContentPresenter Name="ContentSite" ContentSource="Header">
+                    <ContentPresenter.LayoutTransform>
+                      <RotateTransform Angle="270"/>
+                    </ContentPresenter.LayoutTransform>
+                  </ContentPresenter>
+                </Grid>
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                  <Setter TargetName="Border" Property="Background"
+                          Value="{x:Static SystemColors.InactiveCaptionBrush}" />
+                </Trigger>
+                <Trigger SourceName="Border" Property="IsMouseOver" Value="True">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
+                </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                  <Setter TargetName="Border" Property="Background" Value="{x:Static SystemColors.ActiveCaptionBrush}" />
                 </Trigger>
               </ControlTemplate.Triggers>
             </ControlTemplate>
@@ -117,6 +153,14 @@
 
       <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="Transparent" />
+        <Style.Triggers>
+          <Trigger Property="TabStripPlacement" Value="Top">
+            <Setter Property="BorderThickness" Value="1,2,1,1"/>
+          </Trigger>
+          <Trigger Property="TabStripPlacement" Value="Left">
+            <Setter Property="BorderThickness" Value="2,1,1,1"/>
+          </Trigger>
+        </Style.Triggers>
       </Style>
 
       <Style TargetType="{x:Type Button}">
@@ -134,6 +178,18 @@
         <Setter Property="RowBackground" Value="White"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="AlternatingRowBackground" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"/>
+      </Style>
+
+      <Style TargetType="{x:Type DataGridCell}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGridCell}">
+              <Grid Background="{TemplateBinding Background}">
+                <ContentPresenter VerticalAlignment="Center" Margin="2,2,2,2"/>
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
       </Style>
 
       <Style TargetType="{x:Type Thumb}" x:Key="App.Style.ColumnHeader.ThumbStyle">
@@ -224,85 +280,86 @@
 
       <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
 
-      <s:String x:Key="App.String.Particle">[Particle]</s:String>
-      <s:String x:Key="App.String.Particle.Charge">[Particle.Charge]</s:String>
-      <s:String x:Key="App.String.Particle.Symbol">[Particle.Symbol]</s:String>
-      <s:String x:Key="App.String.Particle.Vacancy">[Particle.Vacancy]</s:String>
-      <s:String x:Key="App.String.Particle.Void">[Particle.Void]</s:String>
+      <s:String x:Key="App.String.Particle">Particle</s:String>
+      <s:String x:Key="App.String.Particle.Charge">Charge</s:String>
+      <s:String x:Key="App.String.Particle.Symbol">Symbol</s:String>
+      <s:String x:Key="App.String.Particle.Vacancy">Vacancy Flag</s:String>
+      <s:String x:Key="App.String.Particle.Void">Void-Particle</s:String>
 
       <s:String x:Key="App.String.ParticleSet">[ParticleSet]</s:String>
       <s:String x:Key="App.String.ParticleSet.Particles">[ParticleSet.Particles]</s:String>
 
-      <s:String x:Key="App.String.UnitCellPosition">[UnitCellPosition]</s:String>
-      <s:String x:Key="App.String.UnitCellPosition.A">[UnitCellPosition.A]</s:String>
-      <s:String x:Key="App.String.UnitCellPosition.B">[UnitCellPosition.B]</s:String>
-      <s:String x:Key="App.String.UnitCellPosition.C">[UnitCellPosition.C]</s:String>
-      <s:String x:Key="App.String.UnitCellPosition.Occupation">[UnitCellPosition.Occupation]</s:String>
-      <s:String x:Key="App.String.UnitCellPosition.Stability">[UnitCellPosition.Stability]</s:String>
+      <s:String x:Key="App.String.UnitCellPosition">Wyckoff Position</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.A">Coordinate 'A'</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.B">Coordinate 'B'</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.C">Coordinate 'C'</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.Occupation">Occupation Set</s:String>
+      <s:String x:Key="App.String.UnitCellPosition.Stability">Stability</s:String>
 
-      <s:String x:Key="App.String.SpaceGroup">[SpaceGroup]</s:String>
-      <s:String x:Key="App.String.SpaceGroup.Index">[SpaceGroup.Index]</s:String>
-      <s:String x:Key="App.String.SpaceGroup.Literal">[SpaceGroup.Literal]</s:String>
-      <s:String x:Key="App.String.SpaceGroup.Info">[SpaceGroup.Info]</s:String>
-      <s:String x:Key="App.String.SpaceGroup.System">[SpaceGroup.System]</s:String>
+      <s:String x:Key="App.String.SpaceGroup">Space Group</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Index">Index</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Literal">Literal</s:String>
+      <s:String x:Key="App.String.SpaceGroup.Info">Information</s:String>
+      <s:String x:Key="App.String.SpaceGroup.System">Crystal System</s:String>
 
-      <s:String x:Key="App.String.CellParameters">[CellParameters]</s:String>
-      <s:String x:Key="App.String.CellParameters.Name">[CellParameters.Name]</s:String>
-      <s:String x:Key="App.String.CellParameters.A">[CellParameters.a]</s:String>
-      <s:String x:Key="App.String.CellParameters.B">[CellParameters.b]</s:String>
-      <s:String x:Key="App.String.CellParameters.C">[CellParameters.c]</s:String>
-      <s:String x:Key="App.String.CellParameters.Alpha">[CellParameters.&#x3B1;]</s:String>
-      <s:String x:Key="App.String.CellParameters.Beta">[CellParameters.&#x3B2;]</s:String>
-      <s:String x:Key="App.String.CellParameters.Gamma">[CellParameters.&#x3B3;]</s:String>
+      <s:String x:Key="App.String.CellParameters">Unit Cell Parameters</s:String>
+      <s:String x:Key="App.String.CellParameters.Name">Structure Name</s:String>
+      <s:String x:Key="App.String.CellParameters.A">Cell Parameter 'a'</s:String>
+      <s:String x:Key="App.String.CellParameters.B">Cell Parameter 'b'</s:String>
+      <s:String x:Key="App.String.CellParameters.C">Cell Parameter 'c'</s:String>
+      <s:String x:Key="App.String.CellParameters.Alpha">Cell Parameter &#x3B1;</s:String>
+      <s:String x:Key="App.String.CellParameters.Beta">Cell Parameters &#x3B2;</s:String>
+      <s:String x:Key="App.String.CellParameters.Gamma">Cell Parameters &#x3B3;</s:String>
 
-      <s:String x:Key="App.String.StateExchangePair">[StateExchangePair]</s:String>
-      <s:String x:Key="App.String.StateExchangePair.AcceptorState">[StateExchangePair.Acceptor]</s:String>
-      <s:String x:Key="App.String.StateExchangePair.DonorState">[StateExchangePair.Donor]</s:String>
+      <s:String x:Key="App.String.StateExchangePair">State Change</s:String>
+      <s:String x:Key="App.String.StateExchangePair.AcceptorState">Acceptor State</s:String>
+      <s:String x:Key="App.String.StateExchangePair.DonorState">Donor State</s:String>
 
-      <s:String x:Key="App.String.StateExchangeGroup">[StateExchangeGroup]</s:String>
-      <s:String x:Key="App.String.StateExchangeGroup.StateExchangePairs">[StateExchangeGroup.StateExchangePairs]</s:String>
+      <s:String x:Key="App.String.StateExchangeGroup">State Change Group</s:String>
+      <s:String x:Key="App.String.StateExchangeGroup.StateExchangePairs">State Changes</s:String>
 
-      <s:String x:Key="App.String.AbstractTransition">[AbstractTransition]</s:String>
-      <s:String x:Key="App.String.AbstractTransition.Connection">[AbstractTransition.ConnectionPattern]</s:String>
-      <s:String x:Key="App.String.AbstractTransition.AssociationFlag">[AbstractTransition.AssociationFlag]</s:String>
-      <s:String x:Key="App.String.AbstractTransition.StateExchangeGroups">[AbstractTransition.StateExchangeGroups]</s:String>
+      <s:String x:Key="App.String.AbstractTransition">State Change Chain</s:String>
+      <s:String x:Key="App.String.AbstractTransition.Connection">Connection Pattern</s:String>
+      <s:String x:Key="App.String.AbstractTransition.AssociationFlag">Association Flag</s:String>
+      <s:String x:Key="App.String.AbstractTransition.StateExchangeGroups">State Change Group Chain</s:String>
 
-      <s:String x:Key="App.String.MetropolisTransition">[MetropolisTransition]</s:String>
-      <s:String x:Key="App.String.MetropolisTransition.Abstract">[MetropolisTransition.Abstract]</s:String>
-      <s:String x:Key="App.String.MetropolisTransition.FirstWyckoff">[MetropolisTransition.FirstWyckoff]</s:String>
-      <s:String x:Key="App.String.MetropolisTransition.SecondWyckoff">[MetropolisTransition.SecondWyckoff]</s:String>
+      <s:String x:Key="App.String.MetropolisTransition">Metropolis Transition</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.Abstract">State Change Chain</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.FirstWyckoff">1. Wyckoff Position</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.SecondWyckoff">2. Wyckoff Position</s:String>
 
-      <s:String x:Key="App.String.KineticsTransition">[KineticTransition]</s:String>
-      <s:String x:Key="App.String.KineticsTransition.Abstract">[KineticTransition.Abstract]</s:String>
-      <s:String x:Key="App.String.KineticsTransition.PathGeometry">[KineticTransition.PathGeometry]</s:String>
+      <s:String x:Key="App.String.KineticsTransition">Kinetic Transition</s:String>
+      <s:String x:Key="App.String.KineticsTransition.Abstract">State Change Chain</s:String>
+      <s:String x:Key="App.String.KineticsTransition.PathGeometry">Path Geometry Binding</s:String>
 
-      <s:String x:Key="App.String.StableEnvironment">[StableEnvironment]</s:String>
-      <s:String x:Key="App.String.StableEnvironment.CutoffRange">[CutoffRange]</s:String>
-      <s:String x:Key="App.String.InteractionFilter">[InteractionFilter]</s:String>
-      <s:String x:Key="App.String.InteractionFilter.StartRadius">[InteractionFilter.StartRadius]</s:String>
-      <s:String x:Key="App.String.InteractionFilter.EndRadius">[InteractionFilter.EndRadius]</s:String>
-      <s:String x:Key="App.String.InteractionFilter.CenterWyckoff">[InteractionFilter.CenterWyckoff]</s:String>
-      <s:String x:Key="App.String.InteractionFilter.PartnerWyckoff">[InteractionFilter.PartnerWyckoff]</s:String>
+      <s:String x:Key="App.String.StableEnvironment">Regular Environment</s:String>
+      <s:String x:Key="App.String.StableEnvironment.CutoffRange">Cutoff Radius</s:String>
+      <s:String x:Key="App.String.InteractionFilter">Hollow Sphere Interaction Filter</s:String>
+      <s:String x:Key="App.String.InteractionFilter.StartRadius">Min Filter Radius</s:String>
+      <s:String x:Key="App.String.InteractionFilter.EndRadius">Max Filter Radius</s:String>
+      <s:String x:Key="App.String.InteractionFilter.CenterWyckoff">Center Wyckoff</s:String>
+      <s:String x:Key="App.String.InteractionFilter.PartnerWyckoff">Partner Wyckoff</s:String>
 
-      <s:String x:Key="App.String.SymmetricPairInteraction">[SymmetricPairInteraction]</s:String>
+      <s:String x:Key="App.String.SymmetricPairInteraction">Regular Pair Interaction</s:String>
 
-      <s:String x:Key="App.String.UnstableEnvironment">[UnstableEnvironment]</s:String>
-      <s:String x:Key="App.String.UnstableEnvironment.CenterWyckoff">[UnstableEnvironment.Center]</s:String>
-      <s:String x:Key="App.String.UnstableEnvironment.InteractionFilters">[UnstableEnvironment.InteractionFilters]</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment">Transition Environment</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.CenterWyckoff">Center Wyckoff</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.InteractionFilters">Hollow Sphere Interaction Filter</s:String>
 
-      <s:String x:Key="App.String.GroupInteraction">[GroupInteraction]</s:String>
-      <s:String x:Key="App.String.GroupInteraction.CenterWyckoff">[GroupInteraction.Center]</s:String>
-      <s:String x:Key="App.String.GroupInteraction.Geometry">[GroupInteraction.Geometry]</s:String>
+      <s:String x:Key="App.String.GroupInteraction">Interaction Group</s:String>
+      <s:String x:Key="App.String.GroupInteraction.CenterWyckoff">Center Wyckoff</s:String>
+      <s:String x:Key="App.String.GroupInteraction.Geometry">Surrounding Geometry</s:String>
 
-      <s:String x:Key="App.String.MetropolisSimulation">[MetropolisSimulation]</s:String>
-      <s:String x:Key="App.String.MetropolisSimulation.Transitions">[MetropolisSimulation.Transitions]</s:String>
+      <s:String x:Key="App.String.MetropolisSimulation">Metropolis Simulation Base</s:String>
+      <s:String x:Key="App.String.MetropolisSimulation.Transitions">Transitions</s:String>
 
-      <s:String x:Key="App.String.KineticSimulation">[KineticSimulation]</s:String>
-      <s:String x:Key="App.String.KineticSimulation.Transitions">[KineticSimulation.Transitions]</s:String>
+      <s:String x:Key="App.String.KineticSimulation">Kinetic Simulation Base</s:String>
+      <s:String x:Key="App.String.KineticSimulation.Transitions">Transitions</s:String>
 
-      <s:String x:Key="App.String.BuildingBlock">[BuildingBlock]</s:String>
+      <s:String x:Key="App.String.BuildingBlock">Cell Building Block</s:String>
 
-      <s:String x:Key="App.String.ComboBox.SearchModeToggle">Text search mode</s:String>
+      <s:String x:Key="App.String.ComboBox.SearchModeToggle">Enable search mode</s:String>
+      <s:String x:Key="App.String.DropLocationText">Drop to add...</s:String>
 
 
       <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />

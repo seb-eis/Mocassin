@@ -83,8 +83,8 @@
 
     <GroupBox Grid.Column="0" Grid.RowSpan="3">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Kinetic simulation bases" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Kinetic simulation base definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSimulations}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -134,9 +134,9 @@
 
     <GroupBox Grid.Column="1" Grid.Row="0">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> General settings" />
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat=>> {0}}"/>
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="General base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.GeneralSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -148,9 +148,9 @@
 
     <GroupBox Grid.Column="1" Grid.Row="1">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Kinetic settings" />
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat=>> {0}}"/>
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="Kinetic base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -169,7 +169,7 @@
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Pre-run length [MCSP]">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Relaxation steps per particle:">
           <TextBox Text="{Binding SelectedCollectionItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}" >
             <TextBox.InputBindings>
@@ -179,7 +179,7 @@
           </TextBox>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="1" Header="Normalization probability">
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Normalization probability:">
           <TextBox Text="{Binding SelectedCollectionItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}">
             <TextBox.InputBindings>
@@ -191,7 +191,7 @@
 
         <GroupBox Grid.Row="0"
                   Grid.Column="2"
-                  Header="Electric field modulus [V/m]">
+                  Header="Electric field modulus [V/m]:">
           <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}">
             <TextBox.InputBindings>
@@ -203,7 +203,7 @@
 
         <GroupBox Grid.Row="1"
                   Grid.Column="0"
-                  Header="Electric field vector (A,B,C)">
+                  Header="Electric field vector (A,B,C):">
           <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>

@@ -6,17 +6,80 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser"
   xmlns:jsonBrowser="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.JsonBrowser"
+  xmlns:base="clr-namespace:Mocassin.UI.Xml.Base;assembly=Mocassin.UI.Xml"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ProjectLibraryBrowserViewModel, IsDesignTimeCreatable = True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Height="Auto" Width="Auto">
 
   <Grid>
-    <Grid.ContextMenu>
-      <ContextMenu>
-        <MenuItem Header="Rebuild tree" Command="{Binding RebuildProjectTreeViewCommand}" />
-      </ContextMenu>
-    </Grid.ContextMenu>
-    <jsonBrowser:JsonBrowserView DataContext="{Binding JsonBrowserViewModel}" />
+    <TabControl TabStripPlacement="Left" Margin="-2,-3,0,-3" BorderThickness="2,0,0,0">
+      <TabItem Name="TreeViewerTab" Header="Tree Viewer" Style="{StaticResource App.Style.RotatedTabItemLeft}"
+               AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
+        <TabItem.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="View project tree" ToolTip="Warning: UI thread blocking action!"
+                      ItemsSource="{Binding ProjectControl.ProjectGraphs}">
+              <MenuItem.ItemContainerStyle>
+                <Style TargetType="{x:Type MenuItem}">
+                  <Setter Property="Command"
+                          Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectTreeViewCommand}" />
+                  <Setter Property="CommandParameter"
+                          Value="{Binding}" />
+                  <Setter Property="Header" Value="{Binding Path=Name}" />
+                </Style>
+              </MenuItem.ItemContainerStyle>
+            </MenuItem>
+          </ContextMenu>
+        </TabItem.ContextMenu>
+        <jsonBrowser:JsonBrowserView DataContext="{Binding JsonBrowserViewModel}"/>
+      </TabItem>
+
+      <TabItem Name="XmlViewerTab" Header="Xml Viewer" Style="{StaticResource App.Style.RotatedTabItemLeft}"
+               AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
+        <TabItem.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="View project Xml"
+                      ItemsSource="{Binding ProjectControl.ProjectGraphs}">
+              <MenuItem.ItemContainerStyle>
+                <Style TargetType="{x:Type MenuItem}">
+                  <Setter Property="Command"
+                          Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectXmlCommand}" />
+                  <Setter Property="CommandParameter"
+                          Value="{Binding}" />
+                  <Setter Property="Header" Value="{Binding Path=Name}" />
+                </Style>
+              </MenuItem.ItemContainerStyle>
+            </MenuItem>
+          </ContextMenu>
+        </TabItem.ContextMenu>
+        <TextBox Text="{Binding ObjectXml, UpdateSourceTrigger=PropertyChanged}"
+                 MaxWidth="500" BorderThickness="0"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+      </TabItem>
+
+      <TabItem Name="JsonViewerTab" Header="Json Viewer" Style="{StaticResource App.Style.RotatedTabItemLeft}"
+               AllowDrop="True" DragOver="UIElement_OnDragOver" Drop="UIElement_OnDrop">
+        <TabItem.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="View project Json"
+                      ItemsSource="{Binding ProjectControl.ProjectGraphs}">
+              <MenuItem.ItemContainerStyle>
+                <Style TargetType="{x:Type MenuItem}">
+                  <Setter Property="Command"
+                          Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetObjectJsonCommand}" />
+                  <Setter Property="CommandParameter"
+                          Value="{Binding}" />
+                  <Setter Property="Header" Value="{Binding Path=Name}" />
+                </Style>
+              </MenuItem.ItemContainerStyle>
+            </MenuItem>
+          </ContextMenu>
+        </TabItem.ContextMenu>
+        <TextBox Text="{Binding ObjectJson, UpdateSourceTrigger=PropertyChanged}"
+                 MaxWidth="500" BorderThickness="0"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+      </TabItem>
+    </TabControl>
   </Grid>
 </UserControl>

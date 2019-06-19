@@ -111,7 +111,7 @@
   </UserControl.Resources>
   <Grid>
     <TabControl>
-      <TabItem Header="Environment Ranges &amp; Interaction Filters">
+      <TabItem Header="Environment Ranges &amp; Filters">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -125,8 +125,8 @@
           <GroupBox Grid.Column="1">
 
             <GroupBox.Header>
-              <TextBlock>
-                <Run Text=">> Unstable position environments" />
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="Transition environment settings:" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.UnstableEnvironment}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
@@ -143,8 +143,8 @@
         <GroupBox Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
           <GroupBox.Header>
-            <TextBlock>
-              <Run Text=">> Multi-position interactions" />
+            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+              <Run Text="Interaction group definitions:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.GroupInteractions}"
                    Style="{StaticResource App.Style.Run.Keyword}" />

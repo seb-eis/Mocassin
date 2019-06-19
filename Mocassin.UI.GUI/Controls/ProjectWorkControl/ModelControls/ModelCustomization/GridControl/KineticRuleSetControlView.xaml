@@ -28,7 +28,7 @@
 
     <Border Grid.Row="1" Margin="{StaticResource App.Margin.VerticalStackLarge}">
       <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
-        <Run Text="Description:" />
+        <Run Text="Description:" FontWeight="DemiBold" />
         <LineBreak/>
         <Run Text="Auto-generated transition rule for the" />
         <Run Text="{Binding KineticRuleSet.Transition.Name, Mode=OneWay}"
@@ -54,6 +54,9 @@
         <Run Text="(State-2) &#x2794;" />
         <Run Text="{Binding SelectedCollectionItem.FinalState, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
+        <LineBreak/>
+        <LineBreak/>
+        <Run Text="Content grid:" FontWeight="DemiBold"/>
       </TextBlock>
     </Border>
 

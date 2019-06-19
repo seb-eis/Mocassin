@@ -33,17 +33,17 @@
         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePositions}"
+                                                 ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectablePositions}"
                                                  SelectedItemBinding="{Binding UnitCellPosition}"
                                                  DisplayMemberPath="Name"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Dopant particle"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableDopantParticles}"
+                                                 ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectableDopantParticles}"
                                                  SelectedItemBinding="{Binding Dopant}"
                                                  DisplayMemberPath="Name"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Replaced particle"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableDopableParticles}"
+        <comboBox:BindableDataGridComboBoxColumn Header="Original particle"
+                                                 ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectableDopableParticles}"
                                                  SelectedItemBinding="{Binding Dopable}"
                                                  DisplayMemberPath="Name"/>
 

@@ -32,22 +32,20 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-
         <DataGridCheckBoxColumn Header="Balance exchanges" Binding="{Binding UseCounterDoping}" />
-
         <DataGridTextColumn Header="Priority level" 
                             Binding="{Binding Priority, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Primary exchange"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePrimaryDopingCombinations}"
+                                                 ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectablePrimaryDopingCombinations}"
                                                  SelectedItemBinding="{Binding PrimaryDoping}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Dependent exchange"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableCounterDopingCombinations}"
+                                                 ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableCounterDopingCombinations}"
                                                  SelectedItemBinding="{Binding CounterDoping}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Building block binding"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableBuildingBlocks}"
+                                                 ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableBuildingBlocks}"
                                                  SelectedItemBinding="{Binding BuildingBlock}" />
 
       </DataGrid.Columns>

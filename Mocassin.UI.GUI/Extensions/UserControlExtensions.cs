@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Extensions
     public static class UserControlExtensions
     {
         /// <summary>
-        ///     Extension to <see cref="IObjectDropAcceptor"/> drop event relay to data context
+        ///     Extension to <see cref="IObjectDropAcceptor"/> drop event relay to data context. The <see cref="ItemsControl"/> will be refreshed if not null
         /// </summary>
         /// <param name="userControl"></param>
         /// <param name="itemsControl"></param>
@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Extensions
         {
             if (!(userControl.DataContext is IObjectDropAcceptor acceptor) || !acceptor.HandleDropAddCommand.CanExecute(e.Data)) return;
             acceptor.HandleDropAddCommand.Execute(e.Data);
-            itemsControl.Items.Refresh();
+            itemsControl?.Items.Refresh();
             e.Handled = true;
         }
 

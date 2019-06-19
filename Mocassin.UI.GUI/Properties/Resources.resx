@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DataObjectFormatKey_ViewFormat_Json" xml:space="preserve">
+    <value>ViewFormat_Json</value>
+  </data>
+  <data name="DataObjectFormatKey_ViewFormat_Tree" xml:space="preserve">
+    <value>ViewFormat_Tree</value>
+  </data>
+  <data name="DataObjectFormatKey_ViewFormat_Xml" xml:space="preserve">
+    <value>ViewFormat_Xml</value>
+  </data>
   <data name="Filename_Project_Default_Configuration" xml:space="preserve">
     <value>Mocassin.Project.Settings.Global.xml</value>
   </data>

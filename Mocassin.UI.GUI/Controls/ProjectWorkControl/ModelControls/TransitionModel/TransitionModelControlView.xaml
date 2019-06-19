@@ -20,7 +20,7 @@
         <dataControl:AbstractTransitionControlView DataContext="{Binding AbstractTransitionControlViewModel}" />
       </TabItem>
 
-      <TabItem Header="KMC Transitions &amp; MMC Exchanges">
+      <TabItem Header="KMC &amp; MMC Transitions Bases">
 
         <dataControl:TransitionControlView DataContext="{Binding TransitionControlViewModel}" />
       </TabItem>

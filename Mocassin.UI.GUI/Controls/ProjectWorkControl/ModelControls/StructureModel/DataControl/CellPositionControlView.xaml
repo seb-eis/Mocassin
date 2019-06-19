@@ -102,8 +102,8 @@
     <GroupBox Grid.Column="0" Name="PositionContentControl"
               Style="{StaticResource App.Style.GroupBox.NoBorder}">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Wyckoff positions" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Wyckoff position definitions:" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.Wyckoff}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
@@ -114,8 +114,7 @@
                 ItemsSource="{Binding DataCollection}"
                 SelectedItem="{Binding SelectedCollectionItem}"
                 AutoGenerateColumns="False"
-                ColumnWidth="*"
-                Background="Transparent">
+                ColumnWidth="*">
 
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
@@ -156,8 +155,8 @@
               Style="{StaticResource App.Style.GroupBox.NoBorder}">
 
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Equivalent positions" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Equivalent cell positions:" />
           <Run Text="{Binding SelectedVectorExpansion.Count, Mode=OneWay, StringFormat=>> #{0}}" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -166,7 +165,6 @@
 
       <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding SelectedVectorExpansion}"
-                Background="Transparent"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
                 ColumnWidth="*">

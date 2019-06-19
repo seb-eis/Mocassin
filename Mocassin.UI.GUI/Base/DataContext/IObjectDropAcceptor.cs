@@ -10,7 +10,7 @@ namespace Mocassin.UI.GUI.Base.DataContext
     public interface IObjectDropAcceptor
     {
         /// <summary>
-        ///     Gte the <see cref="Command{T}"/> that handles the dropped <see cref="IDataObject"/>
+        ///     Get the <see cref="Command{T}"/> that handles the dropped <see cref="IDataObject"/>
         /// </summary>
         Command<IDataObject> HandleDropAddCommand { get; }
     }

@@ -28,7 +28,7 @@
 
     <Border Grid.Row="1" Margin="{StaticResource App.Margin.VerticalStackLarge}">
       <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
-        <Run Text="Description:" />
+        <Run Text="Description:" FontWeight="DemiBold"/>
         <LineBreak/>
         <Run Text="Pair interaction between" />
         <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
@@ -50,6 +50,9 @@
         <Run Text="and the end point" />
         <Run Text="{Binding PairEnergySet.EndVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in the fractional coordinate context." />
+        <LineBreak/>
+        <LineBreak/>
+        <Run Text="Content grid:" FontWeight="DemiBold"/>
       </TextBlock>
     </Border>
 

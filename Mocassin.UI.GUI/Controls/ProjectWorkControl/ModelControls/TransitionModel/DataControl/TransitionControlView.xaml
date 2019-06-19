@@ -139,8 +139,8 @@
 
     <GroupBox Grid.Column="0">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Metropolis transitions (MMC)" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Metropolis transition definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.MetropolisTransitions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -152,8 +152,8 @@
 
     <GroupBox Grid.Column="1">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Kinetic Transitions (KMC)" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Kinetic transition definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticTransitions}"
                Style="{StaticResource App.Style.Run.Keyword}" />

@@ -84,10 +84,10 @@
         </TextBlock>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="{StaticResource App.String.InteractionFilter.PartnerWyckoff}"
+          <Run Text="{StaticResource App.String.InteractionFilter.StartRadius}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
-          <Run Text="Define the lower radius in [&#x212b;] for the hollow filter sphere." />
+          <Run Text="Define the start radius in [&#x212b;] for the hollow filter sphere." />
           <LineBreak />
         </TextBlock>
 
@@ -95,7 +95,7 @@
           <Run Text="{StaticResource App.String.InteractionFilter.EndRadius}"
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
-          <Run Text="Define the upper radius in [&#x212b;] for the hollow filter sphere." />
+          <Run Text="Define the end radius in [&#x212b;] for the hollow filter sphere." />
           <LineBreak />
         </TextBlock>
 
@@ -111,8 +111,8 @@
 
     <GroupBox Grid.Row="0">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Interaction cutoff range" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Regular environment cutoff radius:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.CutoffRange}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -132,8 +132,8 @@
 
     <GroupBox Grid.Row="1">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Primary interaction filters" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="Regular interaction filters:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.InteractionFilters}"
                Style="{StaticResource App.Style.Run.Keyword}" />

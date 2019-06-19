@@ -127,7 +127,7 @@
       <Run Text="Each position involved in a transition is assigned a" />
       <Run Text="{StaticResource App.String.StateExchangeGroup}" 
            Style="{StaticResource App.Style.Run.ModelObject}" />
-      <Run Text="to describe allowed changes and connection flags for consecutive members describe if they exchange information or not." />
+      <Run Text="to describe allowed changes. Connection flags for consecutive members describe if they exchange information or not." />
       <LineBreak />
       <LineBreak />
       <Run Text="Keep in mind: This is the third step of movement abstraction which contains the 1D behavior basis of transitions." 
@@ -144,6 +144,7 @@
            Style="{StaticResource App.Style.Run.Important}"/>
       <Run Text="Form this, two co-dependent options emerge that actually change the state of the lattice - oxygen can move from (1) to a vacancy at (3) or the other way around." 
            Style="{StaticResource App.Style.Run.Important}"/>
+      <LineBreak/>
     </TextBlock>
 
     <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -196,8 +197,8 @@
 
     <GroupBox Grid.Row="0" Grid.Column="0">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Local state changes" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="State changes definitions:" />
           <Run Text="[?]" 
                ToolTip="{StaticResource ToolTip.StateExchangePair}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -210,8 +211,8 @@
 
     <GroupBox Grid.Row="0" Grid.Column="1">
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> Local state change groups" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="State change groupings:" />
           <Run Text="[?]" 
                ToolTip="{StaticResource ToolTip.StateExchangeGroup}"
                Style="{StaticResource App.Style.Run.Keyword}" />
@@ -224,8 +225,8 @@
 
     <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
       <GroupBox.Header>
-        <TextBlock>
-          <Run Text=">> State change chaining" />
+        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="State change chains definitions:" />
           <Run Text="[?]" 
                ToolTip="{StaticResource AbstractTransition}"
                Style="{StaticResource App.Style.Run.Keyword}" />

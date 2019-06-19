@@ -166,10 +166,10 @@ namespace Mocassin.Framework.Xml
         public static string Serialize(object obj, Encoding encoding, XmlEventHandlers eventHandlers = null)
         {
             encoding = encoding ?? Encoding.UTF8;
-            var stream = new MemoryStream();
-            var serializer = GetSerializer(obj.GetType(), eventHandlers);
+            var stream = new MemoryStream(1000000);
             try
             {
+                var serializer = GetSerializer(obj.GetType(), eventHandlers);
                 serializer.Serialize(stream, obj);
             }
             catch (Exception)

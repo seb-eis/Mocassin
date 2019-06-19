@@ -86,7 +86,7 @@
 
   <Grid>
     <TabControl>
-      <TabItem Header="Particles &amp; Particle Sets">
+      <TabItem Header="Particles &amp; Occupation Sets">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -95,8 +95,8 @@
 
           <GroupBox Grid.Column="0">
             <GroupBox.Header>
-              <TextBlock>
-                <Run Text=">> Particles" TextDecorations="" />
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="Particle definitions:" TextDecorations="" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.Particle}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
@@ -108,8 +108,8 @@
 
           <GroupBox Grid.Column="1">
             <GroupBox.Header>
-              <TextBlock>
-                <Run Text=">> Occupation option sets" />
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="Occupation set definitions:" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.ParticleSet}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>

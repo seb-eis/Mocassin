@@ -61,6 +61,33 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ViewFormat_Json ähnelt.
+        /// </summary>
+        public static string DataObjectFormatKey_ViewFormat_Json {
+            get {
+                return ResourceManager.GetString("DataObjectFormatKey_ViewFormat_Json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ViewFormat_Tree ähnelt.
+        /// </summary>
+        public static string DataObjectFormatKey_ViewFormat_Tree {
+            get {
+                return ResourceManager.GetString("DataObjectFormatKey_ViewFormat_Tree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ViewFormat_Xml ähnelt.
+        /// </summary>
+        public static string DataObjectFormatKey_ViewFormat_Xml {
+            get {
+                return ResourceManager.GetString("DataObjectFormatKey_ViewFormat_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Mocassin.Project.Settings.Global.xml ähnelt.
         /// </summary>
         public static string Filename_Project_Default_Configuration {

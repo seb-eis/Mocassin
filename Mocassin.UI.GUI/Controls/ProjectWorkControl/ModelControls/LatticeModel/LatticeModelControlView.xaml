@@ -30,7 +30,7 @@
     <ToolTip x:Key="ToolTip.DopingCombination" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-          <Run Text="Define how the components of a doping are applied to the building bock."/>
+          <Run Text="Define how one particle can replace another on which position."/>
         </TextBlock>
       </StackPanel>
     </ToolTip>
@@ -41,8 +41,8 @@
       <TabItem Header="Building Blocks">
         <GroupBox>
           <GroupBox.Header>
-            <TextBlock>
-              <Run Text=">> Lattice building blocks" />
+            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+              <Run Text="Building block definitions:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.BuildingBlocks}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
@@ -63,8 +63,8 @@
 
           <GroupBox Grid.Row="0">
             <GroupBox.Header>
-              <TextBlock>
-                <Run Text=">> Position occupation changes" />
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="Occupation change definitions:" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.DopingCombination}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
@@ -77,8 +77,8 @@
 
           <GroupBox Grid.Row="1">
             <GroupBox.Header>
-              <TextBlock>
-                <Run Text=">> Doping definitions" />
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="Doping definitions:" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.Doping}"
                      Style="{StaticResource App.Style.Run.Keyword}" />

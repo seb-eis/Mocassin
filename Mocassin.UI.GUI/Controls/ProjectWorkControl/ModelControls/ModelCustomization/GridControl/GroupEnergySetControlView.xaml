@@ -29,7 +29,7 @@
 
     <Border Grid.Row="1" Margin="{StaticResource App.Margin.VerticalStackLarge}">
       <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
-        <Run Text="Description:" />
+        <Run Text="Description:" FontWeight="DemiBold"/>
         <LineBreak/>
         <Run Text="Group interaction for" />
         <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
@@ -44,6 +44,9 @@
         <Run Text="{Binding SelectedCollectionItem.OccupationState, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in order of appearance." />
+        <LineBreak/>
+        <LineBreak/>
+        <Run Text="Content grid:" FontWeight="DemiBold"/>
       </TextBlock>
     </Border>
 

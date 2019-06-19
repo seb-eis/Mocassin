@@ -50,6 +50,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         {
             var builder = new JsonTreeViewBuilder();
             RootViewItems = builder.ConvertToTreeView(obj, rootName ?? DefaultRootName, SerializerSettings).AsSingleton();
+            foreach (var item in RootViewItems) item.IsExpanded = true;
         }
 
         /// <summary>
@@ -61,6 +62,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         {
             var builder = new JsonTreeViewBuilder();
             RootViewItems = builder.ConvertToTreeView(json, rootName ?? DefaultRootName, SerializerSettings).AsSingleton();
+            foreach (var item in RootViewItems) item.IsExpanded = true;
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         {
             TabControlViewModel = new UserControlTabControlViewModel();
             TabControlViewModel.AddNonClosableTab("Projects", new ProjectGraphBrowserViewModel(projectControl), new ProjectGraphBrowserView());
-            TabControlViewModel.AddNonClosableTab("JSON Browser", new ProjectLibraryBrowserViewModel(projectControl), new ProjectLibraryBrowserView());
+            TabControlViewModel.AddNonClosableTab("Data Viewer", new ProjectLibraryBrowserViewModel(projectControl), new ProjectLibraryBrowserView());
             TabControlViewModel.SetActiveTabByIndex(0);
         }
     }
