@@ -26,9 +26,6 @@ file(GLOB_RECURSE SIMULATOR_HEADER ./Simulator/*.c)
 add_executable(Mocassin.Simulator ./Main/main.c)
 set_target_properties(Mocassin.Simulator PROPERTIES C_STANDARD 11)
 
-add_executable(Mocassin.JumpStatPrinter ./Utility/JumpStatPrint.c)
-set_target_properties(Mocassin.JumpStatPrinter PROPERTIES C_STANDARD 11)
-
 add_library(simulator SHARED ${SIMULATOR_SOURCE})
 set_target_properties(simulator PROPERTIES C_STANDARD 11)
 
@@ -48,6 +45,10 @@ set_target_properties(framework PROPERTIES C_STANDARD 11)
 add_library(progressprint.minimal SHARED InternalLibraries/Interfaces/ProgressPrint.h InternalLibraries/ProgressPrint/MinimalProgressPrint.c
             Simulator/Logic/Routines/Statistics/McStatistics.c Simulator/Logic/Routines/Statistics/McStatistics.h)
 set_target_properties(progressprint.minimal PROPERTIES PUBLIC_HEADER InternalLibraries/Interfaces/ProgressPrint.h C_STANDARD 11)
+
+# Utility executables
+add_executable(Utility.JumpHistogramPrinter ./Utility/JumpStatPrint.c)
+set_target_properties(Utility.JumpHistogramPrinter PROPERTIES C_STANDARD 11)
 
 # Compiler settings
 if (WIN32)
@@ -84,14 +85,17 @@ elseif (UNIX)
     endif()
 endif ()
 
-# Link settings
+# Link main libraries and simulator
 
 target_link_libraries(jobloader sqlite3 framework)
 target_link_libraries(progressprint framework)
 target_link_libraries(simulator framework progressprint)
 target_link_libraries(progressprint.minimal framework simulator)
 target_link_libraries(Mocassin.Simulator jobloader progressprint framework simulator)
-target_link_libraries(Mocassin.JumpStatPrinter framework simulator)
+
+# Utility executable links
+
+target_link_libraries(Utility.JumpHistogramPrinter framework simulator)
 
 # Profiling flags
 #target_compile_options(Mocassin.Simulator PUBLIC -pg)

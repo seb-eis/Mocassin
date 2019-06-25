@@ -48,15 +48,16 @@ static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAM, const b
 static inline void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double energy)
 {
     // Handle the correct counter id generation and overflow cases
+    if (energy < jumpHistogram->MinValue)
+    {
+        ++jumpHistogram->UnderflowCount;
+        return;
+    }
+
     let counterId = (int32_t) round((energy - jumpHistogram->MinValue) / jumpHistogram->Stepping);
     if (counterId >= STATE_JUMPSTAT_SIZE)
     {
         ++jumpHistogram->OverflowCount;
-        return;
-    }
-    if (counterId < 0)
-    {
-        ++jumpHistogram->UnderflowCount;
         return;
     }
 
