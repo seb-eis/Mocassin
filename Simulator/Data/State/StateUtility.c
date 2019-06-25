@@ -259,6 +259,7 @@ void ExtractAndPrintJumpHistograms(char const *stateFileName, char const* outFil
     SimulationState_t simulationState;
     var error = LoadContextFreeSimulationState(stateFileName,&simulationState);
     error_assert(error, "Could not load the requested file as a simulation state!");
+    error_assert(span_Length(simulationState.Buffer) != 0 ? ERR_OK : ERR_FILE, "The loaded state is empty!");
 
     var fstream = fopen(outFileName, "w");
     error = PrintFormattedJumpHistograms(&simulationState, fstream);

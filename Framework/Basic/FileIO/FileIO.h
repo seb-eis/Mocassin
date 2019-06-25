@@ -48,10 +48,10 @@ error_t WriteBufferToStream(file_t* restrict fileStream, const Buffer_t* restric
 // Print any array of bytes to the target stream in hexadecimal unsigned bytes with the provided number of bytes per line
 error_t WriteBufferHexToStream(file_t* restrict fileStream, const Buffer_t* restrict buffer, size_t bytesPerLine);
 
-// Loads a file as binary into the memory. Size is auto determined. The file has to be opened in "rb" mode
+// Loads a file as binary into the provided buffer. The file has to be opened in "rb" mode and the buffer
 error_t LoadBufferFromStream(file_t* restrict fileStream, Buffer_t* restrict buffer);
 
-// Loads the contents of the provided file as binary into memory and creates the buffer access struct. Returna MC_NO_ERROR on success or error-code otherwise
+// Loads the contents of the provided file as binary into memory and creates the buffer access struct. Returns ERR_OK on success or error-code otherwise
 error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict outBuffer);
 
 // Binary write of the provided buffer to the file. Supports file modes "wb" and "ab"

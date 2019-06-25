@@ -124,10 +124,7 @@ error_t LoadBufferFromFile(const char* restrict fileName, Buffer_t* restrict out
         return ERR_STREAM;
 
     if (span_Length(*outBuffer) != (size_t)bufferSize)
-    {
-        delete_Span(*outBuffer);
         *outBuffer = new_Span(*outBuffer, (size_t)bufferSize);
-    }
 
     error = LoadBufferFromStream(fileStream, outBuffer);
     fclose(fileStream);
