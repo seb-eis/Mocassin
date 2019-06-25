@@ -3,6 +3,7 @@
 #include "Simulator/Data/SimContext/ContextAccess.h"
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
+#include "Simulator/Data/State/StateUtility.h"
 
 int main(int argc, char const * const *argv)
 {

@@ -187,6 +187,7 @@ static inline void KMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
     var counters = getActiveCounters(SCONTEXT);
 
     ++counters->UnstableEndCount;
+    AddCurrentJumpDataToHistograms(SCONTEXT);
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
 }
 
@@ -236,6 +237,7 @@ static inline void KMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAM)
     var counters = getActiveCounters(SCONTEXT);
     ++counters->RejectionCount;
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
+    AddCurrentJumpDataToHistograms(SCONTEXT);
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking

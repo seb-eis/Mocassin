@@ -47,15 +47,20 @@ static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAM, const b
 // Adds an occurred energy value to the passed histogram by increasing the correct counter value
 static inline void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double energy)
 {
-    // Handle the over and underflow cases
-    if (energy > jumpHistogram->MaxValue)
+    // Handle the correct counter id generation and overflow cases
+    let counterId = (int32_t) round((energy - jumpHistogram->MinValue) / jumpHistogram->Stepping);
+    if (counterId >= STATE_JUMPSTAT_SIZE)
+    {
         ++jumpHistogram->OverflowCount;
-
-    if (energy < jumpHistogram->MinValue)
+        return;
+    }
+    if (counterId < 0)
+    {
         ++jumpHistogram->UnderflowCount;
+        return;
+    }
 
-    // Handle the calculation of the correct counter id
-    let counterId = (int32_t) round(energy / jumpHistogram->Stepping);
+    // Handle the correct insert
     ++jumpHistogram->CountBuffer[counterId];
 }
 
@@ -67,16 +72,19 @@ static inline void UpdatePathEnvironmentJumpStatistics(SCONTEXT_PARAM, const byt
     var jumpStatistic = getJumpStatisticAt(SCONTEXT, getActiveJumpCollection(SCONTEXT)->ObjectId, JUMPPATH[pathId]->ParticleId);
 
     // Handle edge energy
-    AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyInfo->S0Energy * toEvFactor);
+    let energyS1 = energyInfo->S1Energy * toEvFactor;
+    AddEnergyValueToJumpHistogram(&jumpStatistic->EdgeEnergyHistogram, energyS1);
 
     // Handle conformation influence depending on prefix
-    if (energyInfo->ConformationDeltaEnergy < 0.0)
-        AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyInfo->ConformationDeltaEnergy) * toEvFactor);
+    let energyConf = energyInfo->ConformationDeltaEnergy * toEvFactor;
+    if (energyConf < 0.0)
+        AddEnergyValueToJumpHistogram(&jumpStatistic->NegConfEnergyHistogram, fabs(energyConf));
     else
-        AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyInfo->ConformationDeltaEnergy * toEvFactor);
+        AddEnergyValueToJumpHistogram(&jumpStatistic->PosConfEnergyHistogram, energyConf);
 
     // Handle the total energy value
-    AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, energyInfo->S0toS2DeltaEnergy * toEvFactor);
+    let totEnergy = energyInfo->S0toS2DeltaEnergy * toEvFactor;
+    AddEnergyValueToJumpHistogram(&jumpStatistic->TotalEnergyHistogram, totEnergy);
 }
 
 // Updates all tracking data (movement and jump statistics) affiliated with the passed path id in the current cycle context
@@ -88,6 +96,15 @@ static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAM, const byte_
     // ToDo: Optimize this to lookup the required globalTrackerId only once (Needed for movement and jump statistics)
     UpdatePathEnvironmentMovementTracking(SCONTEXT, pathId);
     UpdatePathEnvironmentJumpStatistics(SCONTEXT, pathId);
+}
+
+void AddCurrentJumpDataToHistograms(SCONTEXT_PARAM)
+{
+    for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
+    {
+        continue_if(!JUMPPATH[pathId]->IsMobile);
+        UpdatePathEnvironmentJumpStatistics(SCONTEXT, pathId);
+    }
 }
 
 void AdvanceTransitionTrackingSystem(SCONTEXT_PARAM)

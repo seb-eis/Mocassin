@@ -16,6 +16,9 @@
 // Updates the tracking system on the simulation state after a successful KMC transition with the current data
 void AdvanceTransitionTrackingSystem(SCONTEXT_PARAM);
 
+// Updates the jump histogram data after a KMC jump attempt without advancing to the next state
+void AddCurrentJumpDataToHistograms(SCONTEXT_PARAM);
+
 // Initializes the jump statistics system on the passed simulation context
 error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAM);
 
