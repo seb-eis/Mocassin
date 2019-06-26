@@ -23,6 +23,12 @@ typedef void (*FCmdCallback_t)(void* obj, char const * value);
 // Defines a validator function for an arbitrary pointer
 typedef error_t (*FValidator_t)(void const * value);
 
+// Defines a general command function that has a set of string arguments as parameters
+typedef void (*FCmdFunction_t)(const int argc, const char*const* argv);
+
+//   Defines the type for named command functions
+typedef struct NamedCmdFunction {char const* Name; FCmdFunction_t Callback; } NamedCmdFunction_t;
+
 // Defines a command line argument lookup with expected value in the validator and a callback function for the affiliated value
 typedef struct CmdArgResolver { char const * KeyArgument; const FValidator_t ValueValidator; const FCmdCallback_t ValueCallback; } CmdArgResolver_t;
 

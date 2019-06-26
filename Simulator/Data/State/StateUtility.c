@@ -135,7 +135,7 @@ StateRestoreCallbacks_t GetStateRestoreCallbackCollection()
 }
 
 
-error_t CreateSimulationStateAccessToBuffer(Buffer_t* buffer, SimulationState_t* simulationState)
+error_t RestoreSimulationStateAccessToBuffer(Buffer_t *buffer, SimulationState_t *simulationState)
 {
     simulationState->Buffer = *buffer;
     cpp_foreach(callback, GetStateRestoreCallbackCollection())
@@ -146,123 +146,13 @@ error_t CreateSimulationStateAccessToBuffer(Buffer_t* buffer, SimulationState_t*
     return ERR_OK;
 }
 
-error_t LoadContextFreeSimulationState(char const *fileName, SimulationState_t *simulationState)
+error_t LoadContextFreeSimulationStateFromFile(char const *fileName, SimulationState_t *simulationState)
 {
     Buffer_t stateBuffer;
 
     var error = LoadBufferFromFile(fileName, &stateBuffer);
     return_if(error,error);
 
-    error = CreateSimulationStateAccessToBuffer(&stateBuffer, simulationState);
+    error = RestoreSimulationStateAccessToBuffer(&stateBuffer, simulationState);
     return error;
-}
-
-static void PrintJumpHistrogramHeader(SimulationState_t* simulationState, file_t* fstream)
-{
-    let format = "%-10s-%i\t";
-    var index = 0;
-
-    cpp_foreach(histogram, simulationState->JumpStatistics)
-    {
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "edge_count", index);
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "posconf_count", index);
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "negconf_count", index);
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "total_count", index++);
-        fflush(fstream);
-    }
-    fprintf(fstream, "\n");
-}
-
-static void PrintJumpHistogramOverflows(SimulationState_t* simulationState, file_t* fstream)
-{
-    let tokFormat = "%-12s\t";
-    let cntFormat = FORMAT_I64(12) "\t";
-    let lowerToken = "below_min";
-    let upperToken = "above_max";
-
-    cpp_foreach(histrogram, simulationState->JumpStatistics)
-    {
-        fprintf(fstream, tokFormat, lowerToken);
-        fprintf(fstream, cntFormat, histrogram->EdgeEnergyHistogram.UnderflowCount);
-
-        fprintf(fstream, tokFormat, lowerToken);
-        fprintf(fstream, cntFormat, histrogram->PosConfEnergyHistogram.UnderflowCount);
-
-        fprintf(fstream, tokFormat, lowerToken);
-        fprintf(fstream, cntFormat, histrogram->NegConfEnergyHistogram.UnderflowCount);
-
-        fprintf(fstream, tokFormat, lowerToken);
-        fprintf(fstream, cntFormat, histrogram->TotalEnergyHistogram.UnderflowCount);
-        fflush(fstream);
-    }
-    fprintf(fstream, "\n");
-
-    cpp_foreach(histrogram, simulationState->JumpStatistics)
-    {
-        fprintf(fstream, tokFormat, upperToken);
-        fprintf(fstream, cntFormat, histrogram->EdgeEnergyHistogram.OverflowCount);
-
-        fprintf(fstream, tokFormat, upperToken);
-        fprintf(fstream, cntFormat, histrogram->PosConfEnergyHistogram.OverflowCount);
-
-        fprintf(fstream, tokFormat, upperToken);
-        fprintf(fstream, cntFormat, histrogram->NegConfEnergyHistogram.OverflowCount);
-
-        fprintf(fstream, tokFormat, upperToken);
-        fprintf(fstream, cntFormat, histrogram->TotalEnergyHistogram.OverflowCount);
-        fflush(fstream);
-    }
-    fprintf(fstream, "\n");
-}
-
-static void PrintJumpHistogramContent(SimulationState_t* simulationState, file_t* fstream)
-{
-    let flpFormat = "%+.6e\t";
-    let cntFormat = FORMAT_I64(12) "\t";
-    for (var i = 0; i < STATE_JUMPSTAT_SIZE; i++)
-    {
-        cpp_foreach(histrogram, simulationState->JumpStatistics)
-        {
-            fprintf(fstream, flpFormat, histrogram->EdgeEnergyHistogram.Stepping * (double) i);
-            fprintf(fstream, cntFormat, histrogram->EdgeEnergyHistogram.CountBuffer[i]);
-
-            fprintf(fstream, flpFormat, histrogram->PosConfEnergyHistogram.Stepping * (double) i);
-            fprintf(fstream, cntFormat, histrogram->PosConfEnergyHistogram.CountBuffer[i]);
-
-            fprintf(fstream, flpFormat, -1 * histrogram->NegConfEnergyHistogram.Stepping * (double) i);
-            fprintf(fstream, cntFormat, histrogram->NegConfEnergyHistogram.CountBuffer[i]);
-
-            fprintf(fstream, flpFormat, histrogram->TotalEnergyHistogram.Stepping * (double) i);
-            fprintf(fstream, cntFormat, histrogram->TotalEnergyHistogram.CountBuffer[i]);
-            fflush(fstream);
-        }
-        fprintf(fstream, "\n");
-    }
-}
-
-error_t PrintFormattedJumpHistograms(SimulationState_t* simulationState, file_t* fstream)
-{
-    return_if(fstream == NULL || simulationState == NULL, ERR_NULLPOINTER);
-
-    PrintJumpHistrogramHeader(simulationState,fstream);
-    PrintJumpHistogramOverflows(simulationState,fstream);
-    PrintJumpHistogramContent(simulationState,fstream);
-    return ERR_OK;
-}
-
-void ExtractAndPrintJumpHistograms(char const *stateFileName, char const* outFileName)
-{
-    SimulationState_t simulationState;
-    var error = LoadContextFreeSimulationState(stateFileName,&simulationState);
-    error_assert(error, "Could not load the requested file as a simulation state!");
-    error_assert(span_Length(simulationState.Buffer) != 0 ? ERR_OK : ERR_FILE, "The loaded state is empty!");
-
-    var fstream = fopen(outFileName, "w");
-    error = PrintFormattedJumpHistograms(&simulationState, fstream);
-    fclose(fstream);
-    error_assert(error, "Failed to write the data to the target file!");
 }

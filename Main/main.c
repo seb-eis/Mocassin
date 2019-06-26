@@ -1,3 +1,13 @@
+//////////////////////////////////////////
+// Project: C Monte Carlo Simulator		//
+// File:	main.c          		    //
+// Author:	Sebastian Eisele			//
+//			Workgroup Martin, IPC       //
+//			RWTH Aachen University      //
+//			© 2018 Sebastian Eisele     //
+// Short:   Main simulation entry point //
+//////////////////////////////////////////
+
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
 #include "InternalLibraries/Interfaces/JobLoader.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"

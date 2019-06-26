@@ -10,8 +10,8 @@ class MocassinBuilder:
     def __init__(self):
         self.Arguments = {}
         self.ArgRegex = re.compile(r"(?P<argName>.+)=\"(?P<argValue>.*)\"")
-        self.ConfigFileName="Mocassin.config"
-        self.ExeName="Mocassin.Simulator"
+        self.ConfigFileName = "Mocassin.config"
+        self.ExeName = "Mocassin.Simulator"
 
     def GetOsHomeDirectory(self):
         if os.name == "nt":
@@ -149,21 +149,10 @@ class MocassinBuilder:
             print("Copying: {0}".format(filename))
             shutil.copy(filename, targetDir)
 
-        exeName = "{0}/{1}".format(buildDir, self.ExeName)
-        if os.path.isfile(exeName):
-            print("Copying : {0}".format(exeName))
-            shutil.copy(exeName, targetDir)
-            return
-
-        exeName += ".exe"
-        if os.path.isfile(exeName):
-            print("Copying : {0}".format(exeName))
-            shutil.copy(exeName, targetDir)
-            return
-
-        raise Exception("The compiled executable was not found, has an invalid name or file extension!")
-
-
+        for pattern in self.Arguments["copyPatterns"].split(';'):
+            for filename in glob.iglob("{0}/{1}".format(buildDir, pattern), recursive=True):
+                print("Copying: {0}".format(filename))
+                shutil.copy(filename, targetDir)
 
     def Run(self, cfgFile):
         self.ReadConfigFromFile(cfgFile)
