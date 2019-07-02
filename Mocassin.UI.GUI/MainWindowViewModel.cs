@@ -149,34 +149,13 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public IModelProject CreateModelProject()
         {
-            var modelProject = ModelProject.Create(ServiceModelProject.Settings);
-            foreach (var factory in GetModelManagerFactories()) modelProject.CreateAndRegister(factory);
-            return modelProject;
+            return ModelProjectFactory.Create(ServiceModelProject.Settings);
         }
 
         /// <inheritdoc />
         public void DisposeServices()
         {
             ChangeTriggerViewModel?.Dispose();
-        }
-
-        /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> of known <see cref="IModelManagerFactory" /> that can be used to register
-        ///     services to <see cref="IModelProject" /> interface
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<IModelManagerFactory> GetModelManagerFactories()
-        {
-            var factories = new List<IModelManagerFactory>
-            {
-                new ParticleManagerFactory(),
-                new StructureManagerFactory(),
-                new LatticeManagerFactory(),
-                new TransitionManagerFactory(),
-                new EnergyManagerFactory(),
-                new SimulationManagerFactory()
-            };
-            return factories;
         }
 
         /// <summary>

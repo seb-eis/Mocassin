@@ -87,6 +87,15 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
+        public IEnumerable<TObject> EnumerateObjects<TObject>() where TObject : IModelObject
+        {
+            if (typeof(TObject) == typeof(IModelObject))
+                    throw new InvalidOperationException("Lookup of unspecified model object interface is ambiguous");
+
+            return FindObjectList(typeof(TObject)).Cast<TObject>();
+        }
+
+        /// <inheritdoc />
         public void LinkModelObject(object obj)
         {
             if (_objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))

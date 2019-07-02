@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Shared\Mocassin.Framework.csproj" />
+    <ProjectReference Include="..\ICon.Framework.Symmetry\Mocassin.Symmetry.csproj" />
+    <ProjectReference Include="..\ICon.Model.Translator\Mocassin.Model.Translator.csproj" />
+    <ProjectReference Include="..\ICon.Model\Mocassin.Model.csproj" />
+    <ProjectReference Include="..\Mocassin.Tools.UAccess\Mocassin.Tools.UAccess.csproj" />
+    <ProjectReference Include="..\Mocassin.UI.Xml\Mocassin.UI.Xml.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Grouping\" />
+    <Folder Include="Filter\" />
+  </ItemGroup>
+
+</Project>

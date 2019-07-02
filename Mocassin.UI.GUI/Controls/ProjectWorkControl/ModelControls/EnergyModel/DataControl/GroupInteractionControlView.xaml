@@ -50,7 +50,14 @@
               <DataGrid ItemsSource="{Binding GroupGeometry}"
                         AutoGenerateColumns="False"
                         ColumnWidth="*"
-                        HeadersVisibility="None">
+                        HeadersVisibility="Row">
+
+                <DataGrid.RowHeaderTemplate>
+                  <DataTemplate>
+                    <views:ObjectRowHeaderLogo DataContext="D"/>
+                  </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
+
                 <DataGrid.Columns>
                   <DataGridTextColumn
                     Binding="{Binding A, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />

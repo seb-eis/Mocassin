@@ -80,7 +80,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static Fractional3D operator +(Fractional3D lhs, Fractional3D rhs)
+        public static Fractional3D operator +(in Fractional3D lhs, in Fractional3D rhs)
         {
             return new Fractional3D(lhs.A + rhs.A, lhs.B + rhs.B, lhs.C + rhs.C);
         }
@@ -91,7 +91,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static Fractional3D operator *(Fractional3D lhs, double rhs)
+        public static Fractional3D operator *(in Fractional3D lhs, double rhs)
         {
             return new Fractional3D(lhs.A * rhs, lhs.B * rhs, lhs.C * rhs);
         }
@@ -102,7 +102,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static Fractional3D operator -(Fractional3D lhs, Fractional3D rhs)
+        public static Fractional3D operator -(in Fractional3D lhs, in Fractional3D rhs)
         {
             return new Fractional3D(lhs.A - rhs.A, lhs.B - rhs.B, lhs.C - rhs.C);
         }
@@ -113,7 +113,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static Fractional3D operator +(Fractional3D lhs, IFractional3D rhs)
+        public static Fractional3D operator +(in Fractional3D lhs, IFractional3D rhs)
         {
             return new Fractional3D(lhs.A + rhs.A, lhs.B + rhs.B, lhs.C + rhs.C);
         }
@@ -124,7 +124,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns></returns>
-        public static Fractional3D operator -(Fractional3D lhs, IFractional3D rhs)
+        public static Fractional3D operator -(in Fractional3D lhs, IFractional3D rhs)
         {
             return new Fractional3D(lhs.A - rhs.A, lhs.B - rhs.B, lhs.C - rhs.C);
         }

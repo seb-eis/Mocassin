@@ -15,11 +15,6 @@ namespace Mocassin.Model.Particles
         double Charge { get; }
 
         /// <summary>
-        ///     The name of the particle
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     The short description symbol
         /// </summary>
         string Symbol { get; }

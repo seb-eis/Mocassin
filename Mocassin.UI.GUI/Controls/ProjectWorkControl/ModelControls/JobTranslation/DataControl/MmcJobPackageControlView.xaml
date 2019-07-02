@@ -28,8 +28,7 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Grid.Column="0"
-              Visibility="{Binding ContentSource, Converter={converter:NullToVisibilityConverter}}">
+    <GroupBox Grid.Row="0" Grid.Column="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="Job collection definitions:" />
@@ -71,7 +70,6 @@
     </GroupBox>
 
     <GroupBox Grid.Row="1" Grid.Column="0"
-              Visibility="{Binding SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}"
               Name="CollectionSettingsGroupBox">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
@@ -85,8 +83,7 @@
                                                 DataContext="{Binding SelectedCollectionItem.JobBaseDescription, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
     </GroupBox>
 
-    <GroupBox Grid.Row="2" Grid.Column="0"
-              Visibility="{Binding ElementName=CollectionSettingsGroupBox, Path=Visibility}">
+    <GroupBox Grid.Row="2" Grid.Column="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
@@ -107,8 +104,7 @@
       </gridControl:SelectionOptimizerSetControlView>
     </GroupBox>
 
-    <gridControl:MmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
-                                                 Visibility="{Binding ElementName=CollectionSettingsGroupBox, Path=Visibility}">
+    <gridControl:MmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3">
       <gridControl:MmcJobDescriptionSetControlView.DataContext>
         <MultiBinding Converter="{adapter:MmcJobPackageMmcJobDescriptionSetViewModelConverter}">
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"

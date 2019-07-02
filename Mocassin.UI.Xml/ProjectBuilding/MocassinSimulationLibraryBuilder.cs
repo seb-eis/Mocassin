@@ -19,7 +19,7 @@ using Mocassin.UI.Xml.Model;
 namespace Mocassin.UI.Xml.ProjectBuilding
 {
     /// <summary>
-    ///     The enumeration to signal about the current status of the <see cref="IMocassinSimulationLibrary" /> building
+    ///     The enumeration to signal about the current status of the <see cref="ISimulationLibrary" /> building
     ///     process
     /// </summary>
     public enum LibraryBuildStatus
@@ -45,7 +45,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
 
     /// <summary>
     ///     Build system that translates <see cref="MocassinProjectBuildGraph" /> instances into
-    ///     <see cref="IMocassinSimulationLibrary" /> interfaces
+    ///     <see cref="ISimulationLibrary" /> interfaces
     /// </summary>
     public class MocassinSimulationLibraryBuilder
     {
@@ -85,14 +85,14 @@ namespace Mocassin.UI.Xml.ProjectBuilding
 
         /// <summary>
         ///     Executes a full translation cycle of a <see cref="MocassinProjectBuildGraph" /> into a
-        ///     <see cref="IMocassinSimulationLibrary" /> using the passed file path <see cref="string" /> and
+        ///     <see cref="ISimulationLibrary" /> using the passed file path <see cref="string" /> and
         ///     <see cref="IModelProject" /> interface
         /// </summary>
         /// <param name="projectBuildGraph"></param>
         /// <param name="filePath"></param>
         /// <param name="modelProject"></param>
         /// <returns></returns>
-        public IMocassinSimulationLibrary BuildLibrary(MocassinProjectBuildGraph projectBuildGraph, string filePath,
+        public ISimulationLibrary BuildLibrary(MocassinProjectBuildGraph projectBuildGraph, string filePath,
             IModelProject modelProject)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessStarted);
@@ -179,7 +179,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             try
             {
                 var builder = new ProjectModelContextBuilder(modelProject);
-                modelContext = builder.BuildNewContext().Result;
+                modelContext = builder.BuildContextAsync().Result;
                 return true;
             }
             catch (Exception e)
@@ -192,25 +192,25 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         }
 
         /// <summary>
-        ///     Tries to prepare a new <see cref="SimulationLibraryContext" /> using th provided file path <see cref="string" />
+        ///     Tries to prepare a new <see cref="SimulationDbContext" /> using th provided file path <see cref="string" />
         /// </summary>
         /// <param name="filePath"></param>
-        /// <param name="libraryContext"></param>
+        /// <param name="dbContext"></param>
         /// <returns></returns>
-        private bool TryPrepareLibraryContext(string filePath, out SimulationLibraryContext libraryContext)
+        private bool TryPrepareLibraryContext(string filePath, out SimulationDbContext dbContext)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.PreparingLibrary);
 
             try
             {
-                libraryContext = SqLiteContext.OpenDatabase<SimulationLibraryContext>(filePath, true);
+                dbContext = SqLiteContext.OpenDatabase<SimulationDbContext>(filePath, true);
                 return true;
             }
             catch (Exception e)
             {
                 BuildStatusEvent.OnNext(LibraryBuildStatus.LibraryPreparationError);
                 BuildStatusEvent.OnError(e);
-                libraryContext = null;
+                dbContext = null;
                 return false;
             }
         }
@@ -249,20 +249,20 @@ namespace Mocassin.UI.Xml.ProjectBuilding
 
         /// <summary>
         ///     Tries to save an <see cref="IEnumerable{T}" /> sequence of <see cref="SimulationJobPackageModel" /> instances to
-        ///     the passed <see cref="SimulationLibraryContext" />
+        ///     the passed <see cref="SimulationDbContext" />
         /// </summary>
-        /// <param name="libraryContext"></param>
+        /// <param name="dbContext"></param>
         /// <param name="jobPackageModels"></param>
         /// <returns></returns>
-        private bool TrySaveLibraryContents(SimulationLibraryContext libraryContext,
+        private bool TrySaveLibraryContents(SimulationDbContext dbContext,
             IEnumerable<SimulationJobPackageModel> jobPackageModels)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.SavingLibraryContents);
 
             try
             {
-                libraryContext.AddRange(jobPackageModels);
-                libraryContext.SaveChanges();
+                dbContext.AddRange(jobPackageModels);
+                dbContext.SaveChanges();
                 return true;
             }
             catch (Exception e)

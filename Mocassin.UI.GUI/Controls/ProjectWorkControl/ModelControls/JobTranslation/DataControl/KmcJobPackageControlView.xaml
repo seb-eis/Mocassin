@@ -27,7 +27,7 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Grid.Column="0" Visibility="{Binding ContentSource, Converter={converter:NullToVisibilityConverter}}">
+    <GroupBox Grid.Row="0" Grid.Column="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="Job collection definitions:"/>
@@ -70,8 +70,7 @@
       </DataGrid>
     </GroupBox>
 
-    <GroupBox Grid.Row="1" Grid.Column="0" Visibility="{Binding SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}"
-              Name="CollectionSettingsGroupBox">
+    <GroupBox Grid.Row="1" Grid.Column="0" Name="CollectionSettingsGroupBox">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
@@ -84,8 +83,7 @@
                                                 DataContext="{Binding SelectedCollectionItem.JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
     </GroupBox>
 
-    <GroupBox Grid.Row="2" Grid.Column="0"
-              Visibility="{Binding ElementName=CollectionSettingsGroupBox, Path=Visibility}">
+    <GroupBox Grid.Row="2" Grid.Column="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
@@ -106,8 +104,7 @@
       </gridControl:SelectionOptimizerSetControlView>
     </GroupBox>
 
-    <gridControl:KmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
-                                                 Visibility="{Binding ElementName=CollectionSettingsGroupBox, Path=Visibility}">
+    <gridControl:KmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3">
       <gridControl:KmcJobDescriptionSetControlView.DataContext>
         <MultiBinding Converter="{adapter:KmcJobPackageKmcJobDescriptionSetViewModelConverter}">
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"

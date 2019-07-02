@@ -1,0 +1,192 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.ModelProject;
+using Mocassin.Model.Transitions.ConflictHandling;
+using Mocassin.Model.Translator;
+using Mocassin.Model.Translator.ModelContext;
+using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Main;
+
+namespace Mocassin.Tools.Evaluation.Context
+{
+    /// <summary>
+    ///     Context for a evaluation of contents and results provided by <see cref="ISimulationLibrary" /> interfaces
+    /// </summary>
+    public class MslEvaluationContext : IDisposable
+    {
+        /// <summary>
+        ///     Get a <see cref="Dictionary{TKey,TValue}" /> that caches <see cref="IProjectModelContext" /> instances for each job
+        ///     packaged context id
+        /// </summary>
+        private Dictionary<int, IProjectModelContext> ProjectContextCache { get; }
+
+        /// <summary>
+        ///     Get a <see cref="Dictionary{TKey,TValue}" /> that caches <see cref="ISimulationModel" /> getters for each job
+        ///     packaged context id
+        /// </summary>
+        private Dictionary<int, ISimulationModel> SimulationModelCache { get; }
+
+        /// <summary>
+        ///     Get the provider <see cref="Func{TResult}" /> that supplies <see cref="IModelProject" /> instances
+        /// </summary>
+        public Func<IModelProject> ModelProjectProvider { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ReadOnlyDbContext" /> that supplies read only access to the database contents
+        /// </summary>
+        public ReadOnlyDbContext DataContext { get; }
+
+        /// <summary>
+        ///     Get the <see cref="IMarshalService"/> to handle marshalling of interop objects
+        /// </summary>
+        public IMarshalService MarshalService { get; }
+
+        /// <summary>
+        ///     Creates new <see cref="MslEvaluationContext" /> for a <see cref="SimulationDbContext" /> that used the
+        ///     passed <see cref="IModelProject" /> provider
+        /// </summary>
+        /// <param name="simulationLibrary"></param>
+        /// <param name="modelProjectProvider"></param>
+        protected MslEvaluationContext(SimulationDbContext simulationLibrary, Func<IModelProject> modelProjectProvider)
+        {
+            DataContext = simulationLibrary?.AsReadOnly() ?? throw new ArgumentNullException(nameof(simulationLibrary));
+            ModelProjectProvider = modelProjectProvider ?? throw new ArgumentNullException(nameof(modelProjectProvider));
+            ProjectContextCache = new Dictionary<int, IProjectModelContext>();
+            SimulationModelCache = new Dictionary<int, ISimulationModel>();
+            MarshalService = new MarshalService();
+        }
+
+        /// <summary>
+        ///     Get a <see cref="IQueryable{T}" /> for queries against the <see cref="SimulationJobModel" /> set of the context
+        ///     without any includes
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<SimulationJobModel> BasicJobSet()
+        {
+            return DataContext.Set<SimulationJobModel>();
+        }
+
+        /// <summary>
+        ///     Get a <see cref="IQueryable{T}" /> for queries against the <see cref="SimulationJobModel" /> set of the context
+        ///     with package, meta data and result entities included where at least the run state binary exists
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<SimulationJobModel> EvaluationJobSet()
+        {
+            return BasicJobSet().Include(x => x.SimulationJobPackageModel)
+                .Include(x => x.JobMetaData)
+                .Include(x => x.JobResultData)
+                .Where(x => x.JobResultData.SimulationStateBinary != null);
+        }
+
+        /// <summary>
+        ///     Restores the <see cref="IProjectModelContext" /> from a passed project xml <see cref="string" />
+        /// </summary>
+        /// <param name="projectXml"></param>
+        /// <returns></returns>
+        public IProjectModelContext RestoreProjectModelContext(string projectXml)
+        {
+            var projectGraph = ProjectObjectGraph.CreateFromXml<MocassinProjectBuildGraph>(projectXml);
+            var modelProject = ModelProjectProvider.Invoke();
+            modelProject.InputPipeline.PushToProject(projectGraph.ProjectModelGraph.GetInputSequence());
+            var builder = new ProjectModelContextBuilder(modelProject);
+            return builder.BuildContextAsync().Result;
+        }
+
+        /// <summary>
+        ///     Takes an <see cref="IQueryable{T}" /> of <see cref="SimulationJobPackageModel" /> and builds the sequence of
+        ///     <see cref="IProjectModelContext" /> instances
+        /// </summary>
+        /// <param name="jobPackageModels"></param>
+        /// <returns></returns>
+        public IQueryable<IProjectModelContext> RestoreProjectModelContext(IQueryable<SimulationJobPackageModel> jobPackageModels)
+        {
+            return jobPackageModels
+                .Include(x => x.ProjectXml)
+                .Select(x => RestoreProjectModelContext(x.ProjectXml));
+        }
+
+        /// <summary>
+        ///     Get the <see cref="IProjectModelContext" /> that belongs to the passed <see cref="SimulationJobPackageModel" />
+        ///     context id with an optional boolean flag to enforce recreation of the cached context
+        /// </summary>
+        /// <param name="contextId"></param>
+        /// <returns></returns>
+        public IProjectModelContext GetProjectModelContext(int contextId)
+        {
+            if (ProjectContextCache.TryGetValue(contextId, out var context)) return context;
+
+            var queryObjects = DataContext.Set<SimulationJobPackageModel>().Where(x => x.Id == contextId);
+            context = RestoreProjectModelContext(queryObjects).Single();
+            ProjectContextCache[contextId] = context;
+            return context;
+        }
+
+        /// <summary>
+        ///     Get the <see cref="IProjectModelContext" /> that belongs to the passed <see cref="SimulationJobPackageModel" />
+        /// </summary>
+        /// <param name="packageModel"></param>
+        /// <returns></returns>
+        public IProjectModelContext GetProjectModelContext(SimulationJobPackageModel packageModel)
+        {
+            if (packageModel == null) throw new ArgumentNullException(nameof(packageModel));
+            return GetProjectModelContext(packageModel.Id);
+        }
+
+        /// <summary>
+        ///     Get the <see cref="IProjectModelContext" /> that belongs to the passed <see cref="SimulationJobModel" />
+        /// </summary>
+        /// <param name="jobModel"></param>
+        /// <returns></returns>
+        public IProjectModelContext GetProjectModelContext(SimulationJobModel jobModel)
+        {
+            if (jobModel == null) throw new ArgumentNullException(nameof(jobModel));
+            return GetProjectModelContext(jobModel.SimulationPackageId);
+        }
+
+        /// <summary>
+        ///     Get the <see cref="ISimulationModel" /> that belongs to the passed <see cref="SimulationJobModel" />
+        ///     from the matching <see cref="IProjectModelContext" />
+        /// </summary>
+        /// <param name="jobModel"></param>
+        /// <returns></returns>
+        public ISimulationModel GetSimulationModel(SimulationJobModel jobModel)
+        {
+            var modelContext = GetProjectModelContext(jobModel);
+            if (SimulationModelCache.TryGetValue(jobModel.SimulationPackageId, out var result))
+                return result;
+
+            var buildGraph = ProjectObjectGraph.CreateFromXml<MocassinProjectBuildGraph>(jobModel.SimulationJobPackageModel.ProjectXml);
+            var simulation = buildGraph.ProjectJobTranslationGraph.ToInternals(modelContext.ModelProject).First().GetSimulation();
+            var simulationModel = modelContext.SimulationModelContext.FindSimulationModel(simulation);
+            SimulationModelCache[jobModel.SimulationPackageId] = simulationModel;
+            return simulationModel;
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="MslEvaluationContext" /> for the passed simulation database filename and
+        ///     <see cref="IModelProject" /> provider function
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="modelProjectProvider"></param>
+        /// <returns></returns>
+        public static MslEvaluationContext Create(string filename, Func<IModelProject> modelProjectProvider)
+        {
+            if (filename == null) throw new ArgumentNullException(nameof(filename));
+            if (modelProjectProvider == null) throw new ArgumentNullException(nameof(modelProjectProvider));
+
+            var context = SqLiteContext.OpenDatabase<SimulationDbContext>(filename);
+            return new MslEvaluationContext(context, modelProjectProvider);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            DataContext.Dispose();
+            MarshalService.Dispose();
+        }
+    }
+}

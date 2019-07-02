@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
@@ -46,5 +47,12 @@ namespace Mocassin.Model.DataManagement
         /// <param name="key"></param>
         /// <returns>The found model object or null if none was found</returns>
         TObject FindObjectByKey<TObject>(string key) where TObject : IModelObject;
+
+        /// <summary>
+        ///     Enumerates the internal model objects of requested type
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <returns></returns>
+        IEnumerable<TObject> EnumerateObjects<TObject>() where TObject : IModelObject;
     }
 }

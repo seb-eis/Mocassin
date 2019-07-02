@@ -38,10 +38,7 @@ namespace Mocassin.Model.Simulations
         /// <param name="report"></param>
         protected virtual void AddStringValidations(ISimulation simulation, ValidationReport report)
         {
-            if (!Settings.Naming.ParseValue(simulation.Name, out var warnings))
-                report.AddWarnings(warnings);
-
-            if (!Settings.Seeding.ParseValue(simulation.CustomRngSeed, out warnings))
+            if (!Settings.Seeding.ParseValue(simulation.CustomRngSeed, out var warnings))
                 report.AddWarnings(warnings);
         }
 

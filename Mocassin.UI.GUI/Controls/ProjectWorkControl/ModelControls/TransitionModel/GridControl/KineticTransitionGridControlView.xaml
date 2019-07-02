@@ -8,6 +8,7 @@
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:transitionModel="clr-namespace:Mocassin.UI.Xml.TransitionModel;assembly=Mocassin.UI.Xml"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:KineticTransitionGridControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -54,9 +55,9 @@
                 </DataGrid.RowHeaderTemplate>
 
                 <DataGrid.Columns>
-                  <DataGridTextColumn Binding="{Binding A}" />
-                  <DataGridTextColumn Binding="{Binding B}" />
-                  <DataGridTextColumn Binding="{Binding C}" />
+                  <DataGridTextColumn Binding="{Binding A, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  <DataGridTextColumn Binding="{Binding B, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  <DataGridTextColumn Binding="{Binding C, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
                 </DataGrid.Columns>
               </DataGrid>

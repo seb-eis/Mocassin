@@ -70,15 +70,11 @@ namespace Mocassin.Model.Transitions.Validators
             if (Settings.TransitionCount.ParseValue(transition.StateCount, out var warnings) != 0)
                 report.AddWarnings(warnings);
 
-            if (transition.StateCount != transition.ConnectorCount + 1)
-            {
-                var detail0 = $"The transition ({transition.StateCount}) base positions but ({transition.ConnectorCount}) connector steps";
-                var detail1 = $"The expected number of connector steps is ({transition.StateCount - 1})";
-                report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
-            }
+            if (transition.StateCount == transition.ConnectorCount + 1) return;
 
-            if (!Settings.Naming.ParseValue(transition.Name, out warnings))
-                report.AddWarnings(warnings);
+            var detail0 = $"The transition ({transition.StateCount}) base positions but ({transition.ConnectorCount}) connector steps";
+            var detail1 = $"The expected number of connector steps is ({transition.StateCount - 1})";
+            report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
         }
 
         /// <summary>

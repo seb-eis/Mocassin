@@ -11,11 +11,6 @@ namespace Mocassin.Model.Simulations
     public interface ISimulation : IModelObject
     {
         /// <summary>
-        ///     Get the user defined identifier for this simulation
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     The user defined custom random number generator seed for lattice creation
         /// </summary>
         string CustomRngSeed { get; }

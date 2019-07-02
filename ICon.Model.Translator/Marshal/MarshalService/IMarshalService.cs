@@ -6,7 +6,7 @@ namespace Mocassin.Model.Translator
     /// <summary>
     ///     Represents a marshal service provider that handles conversion between structures and byte array representations
     /// </summary>
-    public interface IMarshalService
+    public interface IMarshalService : IDisposable
     {
         /// <summary>
         ///     Translates the bytes starting at the provided buffer offset to the defined structure

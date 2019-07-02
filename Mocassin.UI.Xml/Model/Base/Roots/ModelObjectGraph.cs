@@ -36,6 +36,7 @@ namespace Mocassin.UI.Xml.Base
         {
             var obj = GetModelObjectInternal();
             obj.Key = Key ?? Guid.NewGuid().ToString();
+            obj.Name = Name;
             obj.Index = -1;
             return obj;
         }

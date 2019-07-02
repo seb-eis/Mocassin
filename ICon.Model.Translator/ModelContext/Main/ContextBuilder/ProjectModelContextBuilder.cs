@@ -39,7 +39,7 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <inheritdoc />
-        public async Task<IProjectModelContext> BuildNewContext()
+        public async Task<IProjectModelContext> BuildContextAsync()
         {
             var projectModelContext = new ProjectModelContext
             {

@@ -22,6 +22,11 @@
         string Key { get; }
 
         /// <summary>
+        ///     Get the literal name of the model object
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         ///     Deprecates object
         /// </summary>
         void Deprecate();

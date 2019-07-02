@@ -13,10 +13,6 @@ namespace Mocassin.Model.Simulations
     {
         /// <inheritdoc />
         [DataMember]
-        public string Name { get; set; }
-
-        /// <inheritdoc />
-        [DataMember]
         public string CustomRngSeed { get; set; }
 
         /// <inheritdoc />

@@ -9,10 +9,6 @@ namespace Mocassin.Model.Transitions
     [DataContract(Name = "AbstractTransition")]
     public class AbstractTransition : ModelObject, IAbstractTransition
     {
-        /// <inheritdoc />
-        [DataMember]
-        public string Name { get; set; }
-
         /// <summary>
         ///     List of affiliated state change group for each step
         /// </summary>

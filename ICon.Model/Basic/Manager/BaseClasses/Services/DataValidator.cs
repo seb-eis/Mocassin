@@ -79,7 +79,7 @@ namespace Mocassin.Model.Basic
                 if (!item.Equals(obj)) 
                     continue;
 
-                var detail = $"The provided {obj.ObjectName} is a duplicate to the existing object with index ({item.Index})";
+                var detail = $"The provided {obj} is a duplicate to the existing object ({item.Index}) {item}";
                 report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail));
             }
         }

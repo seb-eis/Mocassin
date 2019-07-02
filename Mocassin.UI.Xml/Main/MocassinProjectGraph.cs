@@ -48,7 +48,7 @@ namespace Mocassin.UI.Xml.Main
 
         /// <summary>
         ///     Get or set the list of <see cref="ProjectJobTranslationGraph" /> that defines
-        ///     <see cref="IMocassinSimulationLibrary" /> build instructions
+        ///     <see cref="ISimulationLibrary" /> build instructions
         /// </summary>
         [XmlArray("DbCreationInstructions")]
         [XmlArrayItem("DbCreationInstruction")]

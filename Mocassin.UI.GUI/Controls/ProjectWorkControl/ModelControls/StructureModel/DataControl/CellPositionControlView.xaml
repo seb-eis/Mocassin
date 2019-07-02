@@ -156,8 +156,9 @@
 
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Equivalent cell positions:" />
-          <Run Text="{Binding SelectedVectorExpansion.Count, Mode=OneWay, StringFormat=>> #{0}}" />
+          <Run Text="{Binding SelectedVectorExpansion.Count, Mode=OneWay, StringFormat= #{0}}" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>

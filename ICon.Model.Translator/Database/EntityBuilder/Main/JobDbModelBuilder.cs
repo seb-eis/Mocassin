@@ -96,7 +96,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Creates an indexed set of simulation job models for the passed simulation model with the passed sequence of job
+        ///     Creates a set of simulation job models for the passed simulation model with the passed sequence of job
         ///     configurations
         /// </summary>
         /// <param name="simulationModel"></param>
@@ -108,9 +108,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var index = 0;
             foreach (var jobConfiguration in jobConfigurations)
             {
-                jobConfiguration.JobId = index++;
                 var jobModel = GetJobModel(simulationModel, jobConfiguration);
-                JobIsBuildEvent.OnNext(jobConfiguration.JobId);
+                JobIsBuildEvent.OnNext(++index);
                 yield return jobModel;
             }
         }
@@ -130,11 +129,10 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var index = 1;
             foreach (var jobConfiguration in jobConfigurations)
             {
-                jobConfiguration.JobId = index++;
                 var jobModelTask = Task.Run(() =>
                 {
                     var jobModel = GetJobModel(simulationModel, jobConfiguration);
-                    JobIsBuildEvent.OnNext(jobConfiguration.JobId);
+                    JobIsBuildEvent.OnNext(index++);
                     return jobModel;
                 });
                 result.Add(jobModelTask);
@@ -175,11 +173,11 @@ namespace Mocassin.Model.Translator.EntityBuilder
         {
             var entity = new JobMetaDataEntity
             {
-                JobCollectionName = jobConfiguration.CollectionName,
-                JobConfigName = jobConfiguration.ConfigName,
+                CollectionName = jobConfiguration.CollectionName,
+                ConfigName = jobConfiguration.ConfigName,
                 JobIndex = jobConfiguration.JobId,
                 Temperature = jobConfiguration.Temperature,
-                MainRunMcsp = jobConfiguration.TargetMcsp,
+                Mcsp = jobConfiguration.TargetMcsp,
                 TimeLimit = jobConfiguration.TimeLimit,
                 DopingInfo = jobConfiguration.LatticeConfiguration.GetDopingString(),
                 LatticeInfo = jobConfiguration.LatticeConfiguration.GetSizeString()
@@ -288,7 +286,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             foreach (var jobModel in packageModel.JobModels)
             {
                 jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & (long) removedFlags;
-                jobModel.JobMetaData.FlagValues = ((SimulationJobInfoFlags) jobModel.JobInfo.Structure.JobFlags).ToString();
+                jobModel.JobMetaData.FlagString = ((SimulationJobInfoFlags) jobModel.JobInfo.Structure.JobFlags).ToString();
             }
         }
 

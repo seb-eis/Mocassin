@@ -21,7 +21,7 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Visibility="{Binding Converter={converter:NullToVisibilityConverter}}">
+    <GroupBox Grid.Row="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding MmcJobPackage.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
@@ -59,8 +59,7 @@
       </DataGrid>
     </GroupBox>
 
-    <GroupBox Grid.Row="1"  Visibility="{Binding SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}"
-              Name="ConfigurationSettingsGroupBox">
+    <GroupBox Grid.Row="1" Name="ConfigurationSettingsGroupBox">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
@@ -74,7 +73,7 @@
         Margin="{StaticResource App.Margin.GroupBoxContent}" />
     </GroupBox>
 
-    <GroupBox Grid.Row="2" Visibility="{Binding ElementName=ConfigurationSettingsGroupBox, Path=Visibility}">
+    <GroupBox Grid.Row="2">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>

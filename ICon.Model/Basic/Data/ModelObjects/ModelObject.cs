@@ -20,6 +20,10 @@ namespace Mocassin.Model.Basic
         [DataMember]
         public string Key { get; set; }
 
+        /// <inheritdoc />
+        [DataMember]
+        public string Name { get; set; }
+
         /// <summary>
         /// Construct new model object that has an invalid index
         /// </summary>
@@ -43,12 +47,12 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        ///     Basic string representation with name and json format serialization values
+        ///     Basic string representation with name
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{ObjectName}\n{JsonConvert.SerializeObject(this, Formatting.Indented)}";
+            return $"{ObjectName}:{Name}";
         }
 
 		/// <inheritdoc />
@@ -62,11 +66,10 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public static T1 BuildInternalObject<T1>(IModelObject obj) where T1 : ModelObject, new()
         {
-            var internalObj = new T1().PopulateFrom(obj) as T1;
-            if (internalObj != null)
-            {
-                internalObj.Key = obj.Key;
-            }
+            if (!(new T1().PopulateFrom(obj) is T1 internalObj)) return null;
+
+            internalObj.Key = obj.Key;
+            internalObj.Name = obj.Name;
 
             return internalObj;
         }

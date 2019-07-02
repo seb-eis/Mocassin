@@ -10,8 +10,8 @@ using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 
 namespace Mocassin.Model.Translator
 {
-    /// <inheritdoc cref="IMocassinSimulationLibrary" />
-    public sealed class SimulationLibraryContext : SqLiteContext<SimulationLibraryContext>, IMocassinSimulationLibrary
+    /// <inheritdoc cref="ISimulationLibrary" />
+    public sealed class SimulationDbContext : SqLiteContext<SimulationDbContext>, ISimulationLibrary
     {
         /// <inheritdoc />
         public DbSet<SimulationJobPackageModel> SimulationPackages { get; set; }
@@ -53,12 +53,12 @@ namespace Mocassin.Model.Translator
         public DbSet<JobResultDataEntity> JobResultData { get; set; }
 
         /// <inheritdoc />
-        public SimulationLibraryContext(string optionsBuilderParameterString)
+        public SimulationDbContext(string optionsBuilderParameterString)
             : base(optionsBuilderParameterString)
         {
         }
 
-        /// <inheritdoc cref="IMocassinSimulationLibrary.SaveChanges" />
+        /// <inheritdoc cref="ISimulationLibrary.SaveChanges" />
         public override int SaveChanges()
         {        
             using (var marshalService = new MarshalService())

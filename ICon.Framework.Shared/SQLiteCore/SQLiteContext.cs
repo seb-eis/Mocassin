@@ -38,17 +38,26 @@ namespace Mocassin.Framework.SQLiteCore
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DbContext" /> of type <see cref="T1" /> using the provided file path and ensures that the
+        ///     Get a <see cref="ReadOnlyDbContext"/> of the current
+        /// </summary>
+        /// <returns></returns>
+        public ReadOnlyDbContext AsReadOnly()
+        {
+            return new ReadOnlyDbContext(this);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="DbContext" /> of type <see cref="TContext" /> using the provided file path and ensures that the
         ///     database is created if requested (Note: No overwrite warning is provided!)
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="dropCreate"></param>
         /// <returns></returns>
-        public static T1 OpenDatabase<T1>(string filePath, bool dropCreate = false) where T1 : SqLiteContext
+        public static TContext OpenDatabase<TContext>(string filePath, bool dropCreate = false) where TContext : SqLiteContext
         {
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
 
-            var context = (T1) Activator.CreateInstance(typeof(T1), $"Filename={filePath}");
+            var context = (TContext) Activator.CreateInstance(typeof(TContext), $"Filename={filePath}");
             context.FileName = filePath;
 
             if (dropCreate)
@@ -58,7 +67,7 @@ namespace Mocassin.Framework.SQLiteCore
             }
 
             if (!context.GetService<IRelationalDatabaseCreator>().Exists())
-                throw new InvalidEnumArgumentException("The database does not exist or the provided file is in an invalid format!");
+                throw new InvalidEnumArgumentException("The database does not exist!");
 
             return context;
         }

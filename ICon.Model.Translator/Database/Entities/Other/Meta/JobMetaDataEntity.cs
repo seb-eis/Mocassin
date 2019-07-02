@@ -24,13 +24,13 @@ namespace Mocassin.Model.Translator.Database.Entities.Other.Meta
         ///     Get or set the source job collection name
         /// </summary>
         [Column("CollectionName")]
-        public string JobCollectionName { get; set; }
+        public string CollectionName { get; set; }
 
         /// <summary>
         ///     Get or set the job configuration name
         /// </summary>
         [Column("ConfigName")]
-        public string JobConfigName { get; set; }
+        public string ConfigName { get; set; }
 
         /// <summary>
         ///     Get or set the relative job index due to job multiplication
@@ -60,7 +60,7 @@ namespace Mocassin.Model.Translator.Database.Entities.Other.Meta
         ///     Get or set the main run target MCSP
         /// </summary>
         [Column("Mcsp")]
-        public long MainRunMcsp { get; set; }
+        public long Mcsp { get; set; }
 
         /// <summary>
         ///     Get or set the pre-run run target MCSP
@@ -84,7 +84,7 @@ namespace Mocassin.Model.Translator.Database.Entities.Other.Meta
         ///     Get or set the job flags
         /// </summary>
         [Column("Flags")]
-        public string FlagValues { get; set; }
+        public string FlagString { get; set; }
 
         /// <summary>
         ///     Get or set a doping information <see cref="string"/>

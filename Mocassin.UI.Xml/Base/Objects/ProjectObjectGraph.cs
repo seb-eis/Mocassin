@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml.Serialization;
 using Mocassin.Framework.Xml;
@@ -58,6 +59,20 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
+        ///     Creates a <see cref="ProjectObjectGraph"/> from an xml representation
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xml"></param>
+        /// <param name="xmlEventHandlers"></param>
+        /// <returns></returns>
+        public static T CreateFromXml<T>(string xml, XmlEventHandlers xmlEventHandlers = null) where T : ProjectObjectGraph
+        {
+            if (xml == null) throw new ArgumentNullException(nameof(xml));
+            var obj = (T) XmlStreamService.Deserialize(xml, typeof(T), xmlEventHandlers);
+            return obj;
+        }
+
+        /// <summary>
         ///     Converts the <see cref="ProjectObjectGraph" /> to a json representation
         /// </summary>
         /// <param name="serializerSettings"></param>
@@ -76,6 +91,19 @@ namespace Mocassin.UI.Xml.Base
         {
             if (json == null) throw new ArgumentNullException(nameof(json));
             JsonConvert.PopulateObject(json, this, serializerSettings ?? GetDefaultJsonSerializerSettings());
+        }
+
+        /// <summary>
+        ///     Populates the <see cref="ProjectObjectGraph" /> from its json representation
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="serializerSettings"></param>
+        public static T CreateFromJson<T>(string json, JsonSerializerSettings serializerSettings = null) where  T : ProjectObjectGraph, new()
+        {
+            if (json == null) throw new ArgumentNullException(nameof(json));
+            var obj = new T();
+            obj.FromJson(json, serializerSettings);
+            return obj;
         }
 
         /// <summary>

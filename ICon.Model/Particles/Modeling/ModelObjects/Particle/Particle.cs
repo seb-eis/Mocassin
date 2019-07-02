@@ -20,10 +20,6 @@ namespace Mocassin.Model.Particles
 
         /// <inheritdoc />
         [DataMember]
-        public string Name { get; set; }
-
-        /// <inheritdoc />
-        [DataMember]
         public string Symbol { get; set; }
 
         /// <inheritdoc />

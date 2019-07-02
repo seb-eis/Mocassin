@@ -20,11 +20,6 @@ namespace Mocassin.Model.Transitions
         int ConnectorCount { get; }
 
         /// <summary>
-        ///     The name of the transition description
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     Flag if the abstract transition can only describe a metropolis exchange (State count is 2)
         /// </summary>
         bool IsMetropolis { get; }

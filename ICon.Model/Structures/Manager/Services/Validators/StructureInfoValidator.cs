@@ -22,19 +22,7 @@ namespace Mocassin.Model.Structures.Validators
         {
             var report = new ValidationReport();
             AddGenericContentEqualityValidation(DataReader.Access.GetStructureInfo(), obj, report);
-            AddNameValidation(obj, report);
             return report;
-        }
-
-        /// <summary>
-        ///     Validates the structure name and adds the results to the validation report
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="report"></param>
-        private void AddNameValidation(IStructureInfo info, ValidationReport report)
-        {
-            if (!Settings.Naming.ParseValue(info.Name, out var warnings))
-                report.AddWarnings(warnings);
         }
     }
 }

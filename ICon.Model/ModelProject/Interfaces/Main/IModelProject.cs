@@ -91,6 +91,12 @@ namespace Mocassin.Model.ModelProject
         IModelManager CreateAndRegister(IModelManagerFactory factory);
 
         /// <summary>
+        ///     Creates and registers multiple managers that are created by the provided factories
+        /// </summary>
+        /// <param name="factories"></param>
+        void CreateAndRegisterMany(IEnumerable<IModelManagerFactory> factories);
+
+        /// <summary>
         ///     Registers a new manager with the project services, overwrites existing one of same interface type if present
         /// </summary>
         /// <param name="manager"></param>

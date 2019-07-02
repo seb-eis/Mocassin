@@ -101,7 +101,14 @@ namespace Mocassin.Model.ModelProject
         {
             return DataTracker.CreateAndRegister(this, factory);
         }
-        
+
+        /// <inheritdoc />
+        public void CreateAndRegisterMany(IEnumerable<IModelManagerFactory> factories)
+        {
+            if (factories == null) throw new ArgumentNullException(nameof(factories));
+            foreach (var item in factories) CreateAndRegister(item);
+        }
+
         /// <inheritdoc />
         public void RegisterManager(IModelManager manager)
         {

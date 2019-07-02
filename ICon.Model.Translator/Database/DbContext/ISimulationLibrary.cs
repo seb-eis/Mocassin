@@ -4,9 +4,9 @@ using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 namespace Mocassin.Model.Translator
 {
     /// <summary>
-    ///     Represents a translator database context for interop operations with the unmanaged simulation program
+    ///     Provides an interface for accessing simulation libraries
     /// </summary>
-    public interface IMocassinSimulationLibrary
+    public interface ISimulationLibrary
     {
         /// <summary>
         ///     Database set for translated simulation packages
