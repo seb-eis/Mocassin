@@ -8,7 +8,7 @@ namespace Mocassin.Tools.Evaluation.Context
     /// <summary>
     ///     Provides a context for evaluation of the results of a single <see cref="SimulationJobModel" />
     /// </summary>
-    public class JobResultContext : IEquatable<JobResultContext>
+    public class JobContext : IEquatable<JobContext>
     {
         /// <summary>
         ///     Get the <see cref="MslEvaluationContext" /> that the job belongs to
@@ -28,7 +28,7 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <summary>
         ///     Get a boolean flag indicating if the context reads the primary or secondary (pre-run) state
         /// </summary>
-        public bool IsReadingPrimary { get; private set; }
+        public bool IsReadingPrimaryState { get; private set; }
 
         /// <summary>
         ///     Get the <see cref="IProjectModelContext"/> of this job
@@ -41,39 +41,48 @@ namespace Mocassin.Tools.Evaluation.Context
         public ISimulationModel SimulationModel => EvaluationContext.GetSimulationModel(JobModel);
 
         /// <summary>
-        ///     Creates new <see cref="JobResultContext" /> for the passed <see cref="SimulationJobModel" /> and
+        ///     Get the id of the context in its data source collection
+        /// </summary>
+        public int DataId { get; }
+
+        /// <summary>
+        ///     Creates new <see cref="JobContext" /> for the passed <see cref="SimulationJobModel" /> and
         ///     <see cref="MslEvaluationContext" />
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="evaluationContext"></param>
-        private JobResultContext(SimulationJobModel jobModel, MslEvaluationContext evaluationContext)
+        /// <param name="dataId"></param>
+        private JobContext(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId)
         {
             JobModel = jobModel ?? throw new ArgumentNullException(nameof(jobModel));
             EvaluationContext = evaluationContext ?? throw new ArgumentNullException(nameof(evaluationContext));
+            DataId = dataId;
         }
 
         /// <summary>
-        ///     Creates a new <see cref="JobResultContext" /> that targets the primary results of the passed
+        ///     Creates a new <see cref="JobContext" /> that targets the primary results of the passed
         ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext"/>
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="evaluationContext"></param>
+        /// <param name="dataId"></param>
         /// <returns></returns>
-        public static JobResultContext CreatePrimary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext)
+        public static JobContext CreatePrimary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId)
         {
-            return CreateInternal(jobModel, evaluationContext, false);
+            return CreateInternal(jobModel, evaluationContext, dataId, false);
         }
 
         /// <summary>
-        ///     Creates a new <see cref="JobResultContext" /> that targets the secondary results of the passed
+        ///     Creates a new <see cref="JobContext" /> that targets the secondary results of the passed
         ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext"/>
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="evaluationContext"></param>
+        /// <param name="dataId"></param>
         /// <returns></returns>
-        public static JobResultContext CreateSecondary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext)
+        public static JobContext CreateSecondary(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId)
         {
-            return CreateInternal(jobModel, evaluationContext, true);
+            return CreateInternal(jobModel, evaluationContext, dataId, true);
         }
 
         /// <summary>
@@ -90,32 +99,33 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <summary>
-        ///     Creates a new <see cref="JobResultContext" /> for a <see cref="SimulationJobModel" /> with a flag if the
+        ///     Creates a new <see cref="JobContext" /> for a <see cref="SimulationJobModel" /> with a flag if the
         ///     secondary state should be targeted
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="evaluationContext"></param>
+        /// <param name="dataId"></param>
         /// <param name="useSecondaryState"></param>
         /// <returns></returns>
-        private static JobResultContext CreateInternal(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, bool useSecondaryState)
+        private static JobContext CreateInternal(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId, bool useSecondaryState)
         {
             if (jobModel.JobResultData == null)
                 throw new InvalidOperationException("Result data is null on passed job model");
-            var evalContext = new JobResultContext(jobModel, evaluationContext);
+            var evalContext = new JobContext(jobModel, evaluationContext, dataId);
 
             if (useSecondaryState)
                 evalContext.SwitchMcsTargetInternal(jobModel.JobResultData.SimulationPreRunStateBinary);
             else
             {
                 evalContext.SwitchMcsTargetInternal(jobModel.JobResultData.SimulationStateBinary);
-                evalContext.IsReadingPrimary = true;
+                evalContext.IsReadingPrimaryState = true;
             }
 
             return evalContext;
         }
 
         /// <inheritdoc />
-        public bool Equals(JobResultContext other)
+        public bool Equals(JobContext other)
         {
             return JobModel.Equals(other?.JobModel);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions.ConflictHandling;
 using Mocassin.Model.Translator;
@@ -80,6 +81,20 @@ namespace Mocassin.Tools.Evaluation.Context
                 .Include(x => x.JobMetaData)
                 .Include(x => x.JobResultData)
                 .Where(x => x.JobResultData.SimulationStateBinary != null);
+        }
+
+        /// <summary>
+        ///     Loads the passed <see cref="SimulationJobModel"/> instances and prepares a set of <see cref="JobContext"/> for evaluation
+        /// </summary>
+        /// <param name="jobModels"></param>
+        /// <param name="targetSecondaryState"></param>
+        /// <returns></returns>
+        public IList<JobContext> LoadJobContexts(IQueryable<SimulationJobModel> jobModels, bool targetSecondaryState = false)
+        {
+            var index = 0;
+            return targetSecondaryState
+                ? jobModels.AsEnumerable().Select(x => JobContext.CreateSecondary(x, this, index++)).ToList() 
+                : jobModels.AsEnumerable().Select(x => JobContext.CreatePrimary(x, this, index++)).ToList();
         }
 
         /// <summary>
@@ -180,6 +195,17 @@ namespace Mocassin.Tools.Evaluation.Context
 
             var context = SqLiteContext.OpenDatabase<SimulationDbContext>(filename);
             return new MslEvaluationContext(context, modelProjectProvider);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="MslEvaluationContext" /> for the passed simulation database filename that
+        ///     uses the default <see cref="IModelProject" /> provider function
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static MslEvaluationContext Create(string filename)
+        {
+            return Create(filename, ModelProjectFactory.CreateDefault);
         }
 
         /// <inheritdoc />

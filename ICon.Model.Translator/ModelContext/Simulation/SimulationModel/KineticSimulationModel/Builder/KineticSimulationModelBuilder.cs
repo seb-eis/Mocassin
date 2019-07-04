@@ -32,9 +32,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public void BuildLinkingDependentComponents(IEnumerable<IKineticSimulationModel> simulationModels)
         {
-            var indexing = (0, 0);
             foreach (var simulationModel in simulationModels)
             {
+                var indexing = (0, 0);
                 simulationModel.MappingAssignMatrix =
                     CreateMappingAssignMatrix<IKineticMappingModel, IKineticTransitionModel>(simulationModel.TransitionModels);
 

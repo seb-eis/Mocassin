@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Mocassin.Model.DataManagement;
 using Mocassin.Tools.Evaluation.Context;
-using Mocassin.Tools.Evaluation.Extensions;
 using Mocassin.Tools.Evaluation.Selection;
+using Mocassin.Tools.Evaluation.Selection.Counting.Selectors;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -13,22 +12,17 @@ namespace Mocassin.Framework.QuickTest
         private static void Main(string[] args)
         {
             var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Filled.msl";
-            var evalContext = MslEvaluationContext.Create(mslFilename, ModelProjectFactory.CreateDefault);
+            var evalContext = MslEvaluationContext.Create(mslFilename);
             var watch = Stopwatch.StartNew();
 
-            var query = evalContext.EvaluationJobSet()
-                .Where(x => x.JobMetaData.CollectionName == "T.Sampling" && x.JobMetaData.Temperature == 1000);
+            var data = evalContext.EvaluationJobSet();
 
-            var selector1 = new EnsembleMovementSelector();
-            var selector2 = new SquaredEnsembleMovementSelector();
-            var jobContextSet = query.LoadResultContexts(evalContext);
-            DisplayWatch(watch);
-            var results1 = selector1.MapResults(jobContextSet);
-            DisplayWatch(watch);
-            var results2 = selector2.MapResults(jobContextSet);
-            DisplayWatch(watch);
+            var jobContexts = evalContext.LoadJobContexts(data);
 
+            var countQuery = new ParticleCountQuery(jobContexts);
+            var r1Query = new EnsembleMovementQuery(jobContexts) {ParticleCountSource = countQuery};
 
+            DisplayWatch(watch);
             ExitOnKeyPress("Finished successfully...");
         }
 
