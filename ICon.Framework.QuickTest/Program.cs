@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Mocassin.Tools.Evaluation.Context;
-using Mocassin.Tools.Evaluation.Selection;
-using Mocassin.Tools.Evaluation.Selection.Counting.Selectors;
+using Mocassin.Tools.Evaluation.Queries;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -13,14 +13,35 @@ namespace Mocassin.Framework.QuickTest
         {
             var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Filled.msl";
             var evalContext = MslEvaluationContext.Create(mslFilename);
-            var watch = Stopwatch.StartNew();
-
             var data = evalContext.EvaluationJobSet();
+            var evaluable = evalContext.MakeEvaluable(data);
 
-            var jobContexts = evalContext.LoadJobContexts(data);
+            var watch = Stopwatch.StartNew();
+            
+            var evaluation = new ParticleCountEvaluation(evaluable);
+            var result = evaluation.Results;
 
-            var countQuery = new ParticleCountQuery(jobContexts);
-            var r1Query = new EnsembleMovementQuery(jobContexts) {ParticleCountSource = countQuery};
+            var table = new DataTable();
+            var column = new DataColumn("Name");
+            table.Columns.Add(column);
+            for (var i = 0; i < result.First().Count; i++)
+            {
+                table.Columns.Add(new DataColumn($"Particle_{i}", i.GetType()));
+            }
+
+            foreach (var item in evaluable)
+            {
+                var row = table.NewRow();
+                row["Name"] = item.FullConfigName;
+                var index = 0;
+                foreach (var i in result[item.DataId])
+                {
+                    row[$"Particle_{index++}"] = i;
+                }
+
+                table.Rows.Add(row);
+            }
+            
 
             DisplayWatch(watch);
             ExitOnKeyPress("Finished successfully...");

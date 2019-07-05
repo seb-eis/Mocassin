@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;
-using Mocassin.Model.Transitions.ConflictHandling;
 using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.ModelContext;
+using Mocassin.Tools.Evaluation.Queries;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Main;
 
@@ -41,7 +41,7 @@ namespace Mocassin.Tools.Evaluation.Context
         public ReadOnlyDbContext DataContext { get; }
 
         /// <summary>
-        ///     Get the <see cref="IMarshalService"/> to handle marshalling of interop objects
+        ///     Get the <see cref="IMarshalService" /> to handle marshalling of interop objects
         /// </summary>
         public IMarshalService MarshalService { get; }
 
@@ -84,17 +84,20 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <summary>
-        ///     Loads the passed <see cref="SimulationJobModel"/> instances and prepares a set of <see cref="JobContext"/> for evaluation
+        ///     Loads the passed <see cref="SimulationJobModel" /> instances and prepares a <see cref="IEvaluableJobCollection" /> for
+        ///     usage with the query system
         /// </summary>
         /// <param name="jobModels"></param>
         /// <param name="targetSecondaryState"></param>
         /// <returns></returns>
-        public IList<JobContext> LoadJobContexts(IQueryable<SimulationJobModel> jobModels, bool targetSecondaryState = false)
+        public IEvaluableJobCollection MakeEvaluable(IQueryable<SimulationJobModel> jobModels, bool targetSecondaryState = false)
         {
             var index = 0;
-            return targetSecondaryState
-                ? jobModels.AsEnumerable().Select(x => JobContext.CreateSecondary(x, this, index++)).ToList() 
+            var contextSet = targetSecondaryState
+                ? jobModels.AsEnumerable().Select(x => JobContext.CreateSecondary(x, this, index++)).ToList()
                 : jobModels.AsEnumerable().Select(x => JobContext.CreatePrimary(x, this, index++)).ToList();
+
+            return new EvaluableJobCollection(contextSet);
         }
 
         /// <summary>

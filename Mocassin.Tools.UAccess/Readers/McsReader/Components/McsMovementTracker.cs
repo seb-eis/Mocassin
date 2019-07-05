@@ -7,7 +7,7 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
     ///     Simulation state movement tracker struct that stores a fractional movement information within the 'C' simulation state
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 24, Pack = 8)]
-    public readonly struct McsMovementTracker
+    public readonly struct McsMovementTracker : IFractional3D
     {
         /// <summary>
         ///     Get the 'A' component of the tracker (Fractional coordinate context)
@@ -26,6 +26,18 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         /// </summary>
         [MarshalAs(UnmanagedType.R8)]
         public readonly double C;
+
+        /// <inheritdoc />
+        double IFractional3D.A => A;
+
+        /// <inheritdoc />
+        double IFractional3D.B => B;
+
+        /// <inheritdoc />
+        double IFractional3D.C => C;
+
+        /// <inheritdoc />
+        Coordinates<double, double, double> IVector3D.Coordinates => new Coordinates<double, double, double>(A,B,C);
 
         /// <summary>
         ///     Get the contents of the <see cref="McsMovementTracker"/> as a <see cref="Fractional3D"/> vector type

@@ -2,12 +2,12 @@
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 
-namespace Mocassin.Tools.Evaluation.Selection
+namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
     ///     Struct that describes the movement of a <see cref="IParticle"/> ensemble in cartesian coordinates
     /// </summary>
-    public readonly struct EnsembleMovement
+    public readonly struct EnsembleDisplacement
     {
         /// <summary>
         ///     Get a boolean flag if the displacement is squared
@@ -34,7 +34,7 @@ namespace Mocassin.Tools.Evaluation.Selection
         /// </summary>
         public bool IsMean => EnsembleSize == 1;
 
-        public EnsembleMovement(bool isSquared, int ensembleSize, IParticle particle, Cartesian3D vector) : this()
+        public EnsembleDisplacement(bool isSquared, int ensembleSize, IParticle particle, Cartesian3D vector) : this()
         {
             if (ensembleSize == 0) throw new ArgumentException("Ensemble size cannot be 0", nameof(ensembleSize));
             IsSquared = isSquared;
@@ -44,12 +44,12 @@ namespace Mocassin.Tools.Evaluation.Selection
         }
 
         /// <summary>
-        ///     Get the mean <see cref="EnsembleMovement"/> of the current
+        ///     Get an <see cref="EnsembleDisplacement"/> of the current that contains 1 particles and represents the mean behavior
         /// </summary>
         /// <returns></returns>
-        public EnsembleMovement AsMean()
+        public EnsembleDisplacement AsMean()
         {
-            return new EnsembleMovement(IsSquared, 1, Particle, Vector / EnsembleSize);
+            return new EnsembleDisplacement(IsSquared, 1, Particle, Vector / EnsembleSize);
         }
     }
 }

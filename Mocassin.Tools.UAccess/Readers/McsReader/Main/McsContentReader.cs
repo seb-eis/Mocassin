@@ -70,7 +70,7 @@ namespace Mocassin.Tools.UAccess.Readers
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsMovementTracker" /> that store the global tracking system
         ///     results
         /// </summary>
-        public ReadOnlySpan<McsMovementTracker> GetGlobalMovementTrackers()
+        public ReadOnlySpan<McsMovementTracker> GetGlobalTrackers()
         {
             return BinaryReader.ReadArea<McsMovementTracker>(Header.GlobalTrackerDataOffset, Header.MobileTrackerDataOffset);
         }
@@ -79,7 +79,7 @@ namespace Mocassin.Tools.UAccess.Readers
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsMovementTracker" /> that store the mobile tracking system
         ///     results
         /// </summary>
-        public ReadOnlySpan<McsMovementTracker> GetMobileMovementTrackers()
+        public ReadOnlySpan<McsMovementTracker> GetMobileTrackers()
         {
             return BinaryReader.ReadArea<McsMovementTracker>(Header.MobileTrackerDataOffset, Header.StaticTrackerDataOffset);
         }
@@ -88,7 +88,7 @@ namespace Mocassin.Tools.UAccess.Readers
         ///     Get a <see cref="ReadOnlySpan{T}" /> of <see cref="McsMovementTracker" /> that store the static tracking system
         ///     results
         /// </summary>
-        public ReadOnlySpan<McsMovementTracker> GetStaticMovementTrackers()
+        public ReadOnlySpan<McsMovementTracker> GetStaticTrackers()
         {
             return BinaryReader.ReadArea<McsMovementTracker>(Header.StaticTrackerDataOffset, Header.MobileTrackerIndexingDataOffset);
         }

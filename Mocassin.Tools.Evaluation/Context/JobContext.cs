@@ -31,12 +31,12 @@ namespace Mocassin.Tools.Evaluation.Context
         public bool IsReadingPrimaryState { get; private set; }
 
         /// <summary>
-        ///     Get the <see cref="IProjectModelContext"/> of this job
+        ///     Get the <see cref="IProjectModelContext" /> of this job
         /// </summary>
         public IProjectModelContext ModelContext => EvaluationContext.GetProjectModelContext(JobModel);
 
         /// <summary>
-        ///     Get the <see cref="ISimulationModel"/> of this job
+        ///     Get the <see cref="ISimulationModel" /> of this job
         /// </summary>
         public ISimulationModel SimulationModel => EvaluationContext.GetSimulationModel(JobModel);
 
@@ -44,6 +44,11 @@ namespace Mocassin.Tools.Evaluation.Context
         ///     Get the id of the context in its data source collection
         /// </summary>
         public int DataId { get; }
+
+        /// <summary>
+        ///     Get the auto generated full config name
+        /// </summary>
+        public string FullConfigName { get; }
 
         /// <summary>
         ///     Creates new <see cref="JobContext" /> for the passed <see cref="SimulationJobModel" /> and
@@ -57,11 +62,12 @@ namespace Mocassin.Tools.Evaluation.Context
             JobModel = jobModel ?? throw new ArgumentNullException(nameof(jobModel));
             EvaluationContext = evaluationContext ?? throw new ArgumentNullException(nameof(evaluationContext));
             DataId = dataId;
+            FullConfigName = MakeFullConfigName(jobModel);
         }
 
         /// <summary>
         ///     Creates a new <see cref="JobContext" /> that targets the primary results of the passed
-        ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext"/>
+        ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext" />
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="evaluationContext"></param>
@@ -74,7 +80,7 @@ namespace Mocassin.Tools.Evaluation.Context
 
         /// <summary>
         ///     Creates a new <see cref="JobContext" /> that targets the secondary results of the passed
-        ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext"/>
+        ///     <see cref="SimulationJobModel" /> within the specified <see cref="MslEvaluationContext" />
         /// </summary>
         /// <param name="jobModel"></param>
         /// <param name="evaluationContext"></param>
@@ -107,7 +113,8 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <param name="dataId"></param>
         /// <param name="useSecondaryState"></param>
         /// <returns></returns>
-        private static JobContext CreateInternal(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId, bool useSecondaryState)
+        private static JobContext CreateInternal(SimulationJobModel jobModel, MslEvaluationContext evaluationContext, int dataId,
+            bool useSecondaryState)
         {
             if (jobModel.JobResultData == null)
                 throw new InvalidOperationException("Result data is null on passed job model");
@@ -128,6 +135,18 @@ namespace Mocassin.Tools.Evaluation.Context
         public bool Equals(JobContext other)
         {
             return JobModel.Equals(other?.JobModel);
+        }
+
+        /// <summary>
+        ///     Creates a name for a <see cref="SimulationJobModel" /> based on the meta information that can be used to identify
+        ///     multiplied jobs
+        /// </summary>
+        /// <param name="jobModel"></param>
+        /// <returns></returns>
+        private string MakeFullConfigName(SimulationJobModel jobModel)
+        {
+            if (JobModel.JobMetaData == null) return null;
+            return $"{jobModel.JobMetaData.CollectionName}:{jobModel.JobMetaData.ConfigName}";
         }
     }
 }

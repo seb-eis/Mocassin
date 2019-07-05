@@ -4,26 +4,26 @@ using Mocassin.Model.Particles;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Extensions;
 
-namespace Mocassin.Tools.Evaluation.Selection.Counting.Selectors
+namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Counts the occurrences of al <see cref="IParticle"/> instances in a <see cref="JobContext"/>
+    ///     Query to extract the counts of <see cref="IParticle" /> instances in a <see cref="JobContext" /> lattice
     /// </summary>
-    public class ParticleCountQuery : JobContextQuery<int[]>
+    public class ParticleCountEvaluation : JobEvaluation<IReadOnlyList<int>>
     {
         /// <inheritdoc />
-        public ParticleCountQuery(IEnumerable<JobContext> jobContexts)
-            : base(jobContexts)
+        public ParticleCountEvaluation(IEvaluableJobCollection jobCollection)
+            : base(jobCollection)
         {
         }
 
         /// <inheritdoc />
-        public override int[] Execute(JobContext context)
+        protected override IReadOnlyList<int> GetValue(JobContext context)
         {
             var counts = new int[context.ModelContext.GetModelObjects<IParticle>().Count()];
             foreach (var id in context.McsReader.GetLattice()) counts[id]++;
 
-            return counts;
+            return counts.ToList().AsReadOnly();
         }
     }
 }

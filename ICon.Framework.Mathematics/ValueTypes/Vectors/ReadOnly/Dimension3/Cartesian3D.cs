@@ -180,5 +180,14 @@ namespace Mocassin.Mathematics.ValueTypes
         {
             return Math.Sqrt(X * X + Y * Y + Z * Z);
         }
+
+        /// <summary>
+        ///     Get a <see cref="Cartesian3D"/> where each component is squared
+        /// </summary>
+        /// <returns></returns>
+        public Cartesian3D GetSquared()
+        {
+            return new Cartesian3D(X * X, Y * Y, Z * Z);
+        }
     }
 }
