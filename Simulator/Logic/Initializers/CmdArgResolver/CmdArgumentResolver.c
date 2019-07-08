@@ -12,8 +12,8 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Simulator/Logic/Validators/Validators.h"
 
-// Tries to redirect the stdout stream to a file stream
-static void setStdoutRedirection(SCONTEXT_PARAM, const char* filePath)
+// Tries to redirect the stdout and stderr stream to file streams (stdout is selectable, stderr defaults to stderr.log)
+static void setStdoutRedirection(SCONTEXT_PARAM, const char* stdoutFile)
 {
     var fileInfo = getFileInformation(SCONTEXT);
     char* tmp = NULL;
@@ -21,12 +21,20 @@ static void setStdoutRedirection(SCONTEXT_PARAM, const char* filePath)
 
     var error = ConcatStrings(fileInfo->IODirectoryPath, "/", &tmp);
     error_assert(error, "Stream redirection of stdout failed on target building");
-
-    error = ConcatStrings(tmp, filePath, &tmp1);
+    error = ConcatStrings(tmp, stdoutFile, &tmp1);
     error_assert(error, "Stream redirection of stdout failed on target building");
-
     error = freopen(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
     error_assert(error, "Stream redirection of stdout to a file returned a null stream");
+
+    free(tmp1);
+
+    error = ConcatStrings(tmp, "stderr.log", &tmp1);
+    error_assert(error, "Stream redirection of stderr failed on target building");
+    error = freopen(tmp1, "a", stderr) != NULL ? ERR_OK : ERR_STREAM;
+    error_assert(error, "Stream redirection of stderr to a file returned a null stream");
+
+    free(tmp);
+    free(tmp1);
 }
 
 // Get the collection of resolvers for essential cmd arguments

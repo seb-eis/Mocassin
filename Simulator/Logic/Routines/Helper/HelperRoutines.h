@@ -117,7 +117,7 @@ static inline byte_t GetMaxParticleId(SCONTEXT_PARAM)
 {
     int32_t dimensions[2];
     GetArrayDimensions((VoidArray_t*) getJumpCountMapping(SCONTEXT), &dimensions[0]);
-    return (byte_t) dimensions[1];
+    return (byte_t) dimensions[1] - 1;
 }
 
 // Get the number of unit cells in the lattice

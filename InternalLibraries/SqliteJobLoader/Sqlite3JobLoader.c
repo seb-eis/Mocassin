@@ -11,7 +11,7 @@
 #include <Simulator/Data/Database/DbModel.h>
 #include "Sqlite3JobLoader.h"
 
-void LoadSimulationDbModelToContext(SCONTEXT_PARAM)
+void JobLoader_LoadDatabaseModelToContext(SCONTEXT_PARAM)
 {
     int32_t jobContextId = -1;
     if (sscanf(getFileInformation(SCONTEXT)->JobDbQuery, "%i", &jobContextId) != 1)

@@ -2,19 +2,20 @@
 
 static void PrintJumpHistogramHeader(SimulationState_t* simulationState, file_t* fstream)
 {
-    let format = "%-10s-%i\t";
+    let format = "%+10s-%i\t";
+    let energyTag = "SampleEng";
     var index = 0;
 
     cpp_foreach(histogram, simulationState->JumpStatistics)
     {
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "edge_count", index);
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "posconf_count", index);
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "negconf_count", index);
-        fprintf(fstream, format, "sample_energy", index);
-        fprintf(fstream, format, "total_count", index++);
+        fprintf(fstream, format, energyTag, index);
+        fprintf(fstream, format, "EEdgeCnt", index);
+        fprintf(fstream, format, energyTag, index);
+        fprintf(fstream, format, "PConfCnt", index);
+        fprintf(fstream, format, energyTag, index);
+        fprintf(fstream, format, "NConfCnt", index);
+        fprintf(fstream, format, energyTag, index);
+        fprintf(fstream, format, "TotalCnt", index++);
         fflush(fstream);
     }
     fprintf(fstream, "\n");
@@ -24,8 +25,8 @@ static void PrintJumpHistogramOverflows(SimulationState_t* simulationState, file
 {
     let tokFormat = "%-12s\t";
     let cntFormat = FORMAT_I64(12) "\t";
-    let lowerToken = "below_min";
-    let upperToken = "above_max";
+    let lowerToken = "Below_MinVal";
+    let upperToken = "Above_MaxVal";
 
     cpp_foreach(histrogram, simulationState->JumpStatistics)
     {
@@ -64,7 +65,7 @@ static void PrintJumpHistogramOverflows(SimulationState_t* simulationState, file
 
 static void PrintJumpHistogramContent(SimulationState_t* simulationState, file_t* fstream)
 {
-    let flpFormat = "%+.6e\t";
+    let flpFormat = "%+.5e\t";
     let cntFormat = FORMAT_I64(12) "\t";
     for (var i = 0; i < STATE_JUMPSTAT_SIZE; i++)
     {

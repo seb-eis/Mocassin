@@ -38,7 +38,8 @@ const char* ErrorCodeToString(error_t errCode)
             { ERR_NOTIMPLEMENTED,   "Function is not implemented.\n\t\t(Expected reason: Currently not supported feature)" },
             { ERR_NULLPOINTER,      "Function argument is null.\n\t\t(Expected reason: Implementation error/corrupted model data)" },
             { ERR_ARGUMENT,         "Function argument is invalid.\n\t\t(Expected reason: Implementation error)" },
-            { ERR_DEBUGASSERT,      "Debug assertion failed." }
+            { ERR_DEBUGASSERT,      "Debug assertion failed." },
+            { ERR_ALREADYCOMPLETED, "Done MCS is greater that target MCS count.\n\t\t(Expected reason: Simulation is already done!)"}
     };
 
     c_foreach(error, errTable)

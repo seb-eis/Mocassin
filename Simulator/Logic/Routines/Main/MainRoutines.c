@@ -51,7 +51,7 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
 {
     runtime_assertion(!StateFlagsAreSet(SCONTEXT, STATE_FLG_SIMERROR), SIMERROR, "Cannot start main simulation routine, state error flag is set.");
 
-    PrintJobStartInfo(SCONTEXT, stdout);
+    ProgressPrint_OnSimulationStart(SCONTEXT, stdout);
     if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
     {
         if (StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN))
@@ -87,7 +87,7 @@ error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
         abortFlag = KMC_CheckAbortConditions(SCONTEXT);
-        PrintFullSimulationStatistics(SCONTEXT, stdout, true);
+        ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
     return KMC_FinishPreRun(SCONTEXT);
 }
@@ -100,7 +100,7 @@ error_t KMC_FinishPreRun(SCONTEXT_PARAM)
     setMainStateFlags(SCONTEXT, STATE_FLG_PRERUN_RESET);
     unSetMainStateFlags(SCONTEXT, STATE_FLG_PRERUN);
 
-    PrintContextResetNotice(SCONTEXT, stdout);
+    ProgressPrint_OnContextReset(SCONTEXT, stdout);
     return ERR_OK;
 }
 
@@ -117,7 +117,7 @@ error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
         abortFlag = KMC_CheckAbortConditions(SCONTEXT);
-        PrintFullSimulationStatistics(SCONTEXT, stdout, true);
+        ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
     return KMC_FinishMainRoutine(SCONTEXT);
 }
@@ -146,7 +146,7 @@ error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
         error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
 
         abortFlag = MMC_CheckAbortConditions(SCONTEXT);
-        PrintFullSimulationStatistics(SCONTEXT, stdout, true);
+        ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
     return MMC_FinishMainRoutine(SCONTEXT);
 }

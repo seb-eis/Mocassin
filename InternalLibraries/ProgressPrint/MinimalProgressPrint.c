@@ -12,38 +12,37 @@
 #include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
 
-void PrintFullSimulationStatistics(SCONTEXT_PARAM, file_t *fstream, bool_t onlyMobiles)
+void ProgressPrint_OnBlockFinish(SCONTEXT_PARAM, file_t *fstream, bool_t onlyMobiles)
 {
-    let counters = getMainCycleCounters(SCONTEXT);
-    fprintf(fstream, "P " FORMAT_I64(012) "/" FORMAT_I64(012)"\n", counters->McsCount, counters->TotalSimulationGoalMcsCount);
+    fprintf(fstream, ".");
     fflush(fstream);
 }
 
-void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnSimulationStart(SCONTEXT_PARAM, file_t *fstream)
 {
-    fprintf(fstream, "Job started!\n");
+    fprintf(fstream, "[START]");
     fflush(fstream);
 }
 
-void PrintContextResetNotice(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnContextReset(SCONTEXT_PARAM, file_t *fstream)
 {
-    fprintf(fstream, "\nPre-run completed!\n");
+    fprintf(fstream, "[MAIN-RUN]");
     fflush(fstream);
 }
 
-void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream)
+void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream)
 {
     let meta = getDbStructureModelMetaData(SCONTEXT);
     let stateMeta = getMainStateMetaData(SCONTEXT);
     let energyBuffer = getLatticeEnergyBuffer(SCONTEXT);
 
-    fprintf(fstream, "\n");
-    fprintf(fstream, "Engergy => %.10e %s %.10e %s %.10e %s\n",
-            stateMeta->LatticeEnergy,  "eV", energyBuffer->CurrentSum, "eV", energyBuffer->LastSum, "eV");
-    fprintf(fstream, "Time    => %.10e %s %.10e %s\n",
-            stateMeta->SimulatedTime, "s ", stateMeta->ProgramRunTime, "s ");
-    fprintf(fstream, "Rates   => %.10e %s %.10e %s\n",
-            stateMeta->CycleRate, "Hz", stateMeta->SuccessRate, "Hz");
+    fprintf(fstream, "[DONE]:\n");
+    fprintf(fstream, "LatticeEnergy:%+.10e[eV]|EnergyBufferSum:%+.10e[eV]|LastBufferSum:%+.10e[eV]\n",
+            stateMeta->LatticeEnergy,  energyBuffer->CurrentSum, energyBuffer->LastSum);
+    fprintf(fstream, "SimulatedTime:%+.10e[s]|ProgramRunTime:%+.10e[s]\n",
+            stateMeta->SimulatedTime, stateMeta->ProgramRunTime);
+    fprintf(fstream, "CycleRate:%+.10e[Hz]|McsRate:%+.10e[Hz]\n",
+            stateMeta->CycleRate, "Hz", stateMeta->SuccessRate);
 
     for (byte_t i = 1; isfinite(meta->ParticleCharges[i]);++i)
     {
@@ -61,21 +60,13 @@ void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream)
         let dCoef = mobilityData.DiffusionCoefficient;
         let counters = statisticsData.CounterCollection;
 
-        fprintf(fstream, "\n");
-        fprintf(fstream, "P (%i) Counters     => " FORMAT_I64(012)" S "FORMAT_I64(012)" R "FORMAT_I64(012)" B "FORMAT_I64(012)" UE "FORMAT_I64(012)" US\n", i,
+        fprintf(fstream, "P:%i:Counters(Success:"FORMAT_I64(012)"|Reject:"FORMAT_I64(012)"|Block:"FORMAT_I64(012)"|EndUnstable:"FORMAT_I64(012)"|StartUnstable:"FORMAT_I64(012)")\n", i,
                 counters->McsCount, counters->RejectionCount, counters->SiteBlockingCount, counters->UnstableEndCount, counters->UnstableStartCount);
-        fprintf(fstream, "P (%i) Mobility     => %.10e %s %.10e %s\n", i,
-                mobilityData.TotalMobility,        "m^2 V^-1 s^-1",
-                mobilityData.TotalConductivity,    "S m^-1");
-
-        fprintf(fstream, "P (%i) Diff. Coefficient   => %.10e %.10e %.10e %s\n", i,
-                dCoef.A, dCoef.B, dCoef.C, "m^2 s^-1");
-
-        fprintf(fstream, "P (%i) Ensemble R   => %.10e %.10e %.10e %s\n", i,
-                moveR1.A, moveR1.B, moveR1.C, "m");
-        fprintf(fstream, "P (%i) Ensemble R^2 => %.10e %.10e %.10e %s\n", i,
-                moveR2.A, moveR2.B, moveR2.C, "m");
+        fprintf(fstream, "P:%i:Mobility:%+.10e[m^2 V^-1 s^-1]\n", i, mobilityData.TotalMobility);
+        fprintf(fstream, "P:%i:Conductivity:%+.10e[S m^-1]\n", i, mobilityData.TotalConductivity);
+        fprintf(fstream, "P:%i:DiffusionC(x:%.10e|y:%+.10e|z:%+.10e)[m^2 s^-1]\n", i, dCoef.A, dCoef.B, dCoef.C);
+        fprintf(fstream, "P:%i:EnsembleR1(x:%+.10e|y:%+.10e|z:%+.10e)[m]\n", i, moveR1.A, moveR1.B, moveR1.C);
+        fprintf(fstream, "P:%i:EnsembleR2(x:%+.10e|y:%+.10e|z:%+.10e)[m]\n", i, moveR2.A, moveR2.B, moveR2.C);
     }
-    fprintf(fstream, "\nJob done!\n");
     fflush(fstream);
 }

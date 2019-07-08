@@ -20,13 +20,13 @@ int main(int argc, char const * const *argv)
 
     ResolveCommandLineArguments(&SCONTEXT, argc, argv);
 
-    LoadSimulationDbModelToContext(&SCONTEXT);
+    JobLoader_LoadDatabaseModelToContext(&SCONTEXT);
 
     PrepareForMainRoutine(&SCONTEXT);
 
     StartMainSimulationRoutine(&SCONTEXT);
 
-    PrintFinishNotice(&SCONTEXT, stdout);
+    ProgressPrint_OnSimulationFinish(&SCONTEXT, stdout);
 
     #if defined(MC_AWAIT_TERMINATION_OK)
         getchar();

@@ -216,7 +216,7 @@ static void PrintRunStatisticsMetaInfo(SCONTEXT_PARAM, FILE* fstream)
 
 }
 
-void PrintFullSimulationStatistics(SCONTEXT_PARAM, FILE *fstream, const bool_t onlyMobiles)
+void ProgressPrint_OnBlockFinish(SCONTEXT_PARAM, FILE *fstream, bool_t onlyMobiles)
 {
     fprintf(fstream, "\n\n=== Simulation statistics status ===\n\n");
     PrintRunStatisticsMetaInfo(SCONTEXT, fstream);
@@ -278,7 +278,7 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
     fflush(fstream);
 }
 
-void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnSimulationStart(SCONTEXT_PARAM, file_t *fstream)
 {
 
     fprintf(fstream, "=== MOCASSIN SIMULATION START NOTIFICATION ===\n\n");
@@ -290,15 +290,15 @@ void PrintJobStartInfo(SCONTEXT_PARAM, file_t *fstream)
     PrintGeneralJobInfo(SCONTEXT, fstream);
 
     fprintf(fstream, "=== MOCASSIN SIMULATION START STATE STATUS ===\n\n");
-    PrintFullSimulationStatistics(SCONTEXT, fstream, false);
+    ProgressPrint_OnBlockFinish(SCONTEXT, fstream, false);
     fprintf(fstream, "==============================================\n\n");
     fflush(fstream);
 }
 
-void PrintContextResetNotice(SCONTEXT_PARAM, file_t *fstream)
+void ProgressPrint_OnContextReset(SCONTEXT_PARAM, file_t *fstream)
 {
     fprintf(fstream, "\n\n=== MOCASSIN PRE-RUN COMPLETION NOTIFICATION ===\n\n");
-    PrintFullSimulationStatistics(SCONTEXT, fstream, true);
+    ProgressPrint_OnBlockFinish(SCONTEXT, fstream, true);
     fflush(fstream);
 }
 
@@ -332,14 +332,14 @@ static void PrintStatusFlagCollection(SCONTEXT_PARAM, file_t* fstream)
     fflush(fstream);
 }
 
-void PrintFinishNotice(SCONTEXT_PARAM, file_t* fstream)
+void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream)
 {
     char buffer[100];
     let waitTime = 1;
     let flags = getMainStateHeader(SCONTEXT)->Data->Flags;
     SecondsToISO8601TimeSpan(buffer, (int64_t) getMainStateMetaData(SCONTEXT)->ProgramRunTime);
 
-    PrintFullSimulationStatistics(SCONTEXT, fstream, true);
+    ProgressPrint_OnBlockFinish(SCONTEXT, fstream, true);
     fprintf(fstream, "Main routine reached end @ %s  (ERR_CODE=0x%08x, STATE_FLAGS=0x%08x)\n", buffer, SIMERROR, flags);
     PrintStatusFlagCollection(SCONTEXT, fstream);
     fprintf(fstream, "Auto termination in %i seconds...", waitTime);

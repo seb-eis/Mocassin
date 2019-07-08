@@ -122,6 +122,9 @@ typedef int64_t cerror_t;
 // Defines error for cases where a debug assertion fails
 #define ERR_DEBUGASSERT 19
 
+// Defines the error code for cases where a simulation is started that is already completed
+#define ERR_ALREADYCOMPLETED 10
+
 // Defines the default error display with code and message
 #define error_display(__CODE, __MSG) ErrorToStdout(__CODE, __FUNCTION__, __LINE__, __MSG)
 

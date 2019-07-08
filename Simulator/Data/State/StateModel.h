@@ -19,7 +19,7 @@
 typedef Vector3_t Tracker_t;
 
 // Type for the state header information
-// Layout@ggc_x86_64 => 48@[8,8,8,4,4,4,4,4,4,4,4,4,{4}]
+// Layout@ggc_x86_64 => 56@[8,8,4,4,4,4,4,4,4,4,4,{4}]
 typedef struct StateHeaderData
 {
     // The number of successful steps
@@ -106,7 +106,7 @@ typedef struct StateCounterCollection
 typedef Span_t(StateCounterCollection_t, CountersState) CountersState_t;
 
 // Type for the state meta information
-// Layout@ggc_x86_64 => 72@[8,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
 typedef struct StateMetaData
 {
     // The simulated time span of the system [seconds]
@@ -151,7 +151,7 @@ typedef struct StateMetaInfo
 } StateMetaInfo_t;
 
 // Type for the jump histogram type that stores a energy value occurrence statistic
-// Layout@ggc_x86_64 => 32+1000*8@[8,8,8,8,1000*8]
+// Layout@ggc_x86_64 => 40+1000*8@[8,8,8,8,1000*8]
 typedef struct JumpHistogram
 {
     // The minimal energy value of the histogram

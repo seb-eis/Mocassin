@@ -268,10 +268,13 @@ static EnvironmentState_t* PullEnvStateByInteraction(SCONTEXT_PARAM, Environment
 // Writes the current environment occupation of the passed environment state to the passed occupation buffer
 static error_t WriteEnvOccupationToBuffer(SCONTEXT_PARAM, EnvironmentState_t* environment, Buffer_t* restrict occupationBuffer)
 {
-    for (int32_t i = 0; i < getEnvironmentPairDefinitionCount(environment); i++)
+    let pairCount = getEnvironmentPairDefinitionCount(environment);
+
+    for (int32_t i = 0; i < pairCount; i++)
     {
-        span_Get(*occupationBuffer, i) = PullEnvStateByInteraction(SCONTEXT, environment, i)->ParticleId;
-        return_if(span_Get(*occupationBuffer,i) == PARTICLE_VOID, ERR_DATACONSISTENCY);
+        let targetEnvironment = PullEnvStateByInteraction(SCONTEXT, environment, i);
+        return_if(targetEnvironment->ParticleId == PARTICLE_VOID, ERR_DATACONSISTENCY);
+        span_Get(*occupationBuffer, i) = targetEnvironment->ParticleId;
     }
 
     return ERR_OK;

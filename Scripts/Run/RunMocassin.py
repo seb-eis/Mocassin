@@ -15,6 +15,7 @@ import threading as threading
 import sys as sys
 import glob as glob
 import time as time
+import asyncio as asyncio
 
 class MocassinJobRunner:
 
@@ -52,7 +53,7 @@ class MocassinJobRunner:
         return match.group("pathName"), match.group("fileName")
 
     def MakeJobDirectory(self, basePath, id):
-        jobDir = "{0:s}/Job{1:04d}".format(basePath, int(id))
+        jobDir = "{0:s}/Job{1:05d}".format(basePath, int(id))
         if not os.path.exists(jobDir):
             os.makedirs(jobDir)
         return jobDir
@@ -72,7 +73,7 @@ class MocassinJobRunner:
         split = self.SplitFilenameIntoPathAndName(self.DbPath)
         for i in sequence:
             executionPath = self.MakeJobDirectory(split[0], i)
-            stdRedirect = "stdout.log";
+            stdRedirect = "stdout.log"
             args = [executionPath, "-dbPath", self.DbPath, "-dbQuery", str(i), "-ioPath", executionPath, "-stdRedirect", stdRedirect]
             print("Running: {}".format(args), flush=True)
             threads.append(self.RunSimulatorAsThread(args))
