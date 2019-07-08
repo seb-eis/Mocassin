@@ -42,7 +42,7 @@ void ProgressPrint_OnSimulationFinish(SCONTEXT_PARAM, file_t *fstream)
     fprintf(fstream, "SimulatedTime:%+.10e[s]|ProgramRunTime:%+.10e[s]\n",
             stateMeta->SimulatedTime, stateMeta->ProgramRunTime);
     fprintf(fstream, "CycleRate:%+.10e[Hz]|McsRate:%+.10e[Hz]\n",
-            stateMeta->CycleRate, "Hz", stateMeta->SuccessRate);
+            stateMeta->CycleRate, stateMeta->SuccessRate);
 
     for (byte_t i = 1; isfinite(meta->ParticleCharges[i]);++i)
     {
