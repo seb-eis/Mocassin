@@ -6,10 +6,22 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
+  xmlns:jobs="clr-namespace:Mocassin.Model.Translator.Jobs;assembly=Mocassin.Model.Translator"
   d:DataContext="{d:DesignInstance local:BaseJobDescriptionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
+
+  <UserControl.Resources>
+    <ObjectDataProvider MethodName="GetValues"
+                        ObjectType="{x:Type system:Enum}"
+                        x:Key="FlagValues">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="jobs:SimulationExecutionOverwriteFlags" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </UserControl.Resources>
 
   <Grid>
     <Grid.ColumnDefinitions>
@@ -30,6 +42,22 @@
 
       <GroupBox Header="Steps per particle:">
         <TextBox Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox.InputBindings>
+            <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+          </TextBox.InputBindings>
+        </TextBox>
+      </GroupBox>
+
+      <GroupBox Header="Execution flags:">
+        <GroupBox.ToolTip>
+          <StackPanel>
+            <TextBlock Text="Possible flag values:"></TextBlock>
+            <ListView ItemsSource="{Binding Source={StaticResource FlagValues}}" Background="Transparent"/>
+          </StackPanel>
+        </GroupBox.ToolTip>
+        <TextBox Text="{Binding ExecutionFlags, Converter={StaticResource App.Converter.EnumToString}, TargetNullValue=...}"
                  Margin="{StaticResource App.Margin.GroupBoxContent}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"

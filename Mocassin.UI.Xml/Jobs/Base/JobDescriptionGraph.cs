@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.Jobs
         ///     Get or set additional job info flags
         /// </summary>
         [XmlAttribute("JobFlags")]
-        public string JobInfoFlags { get; set; }
+        public string ExecutionFlags { get; set; }
 
         /// <summary>
         ///     The number of target MCSP as a string
@@ -66,9 +66,9 @@ namespace Mocassin.UI.Xml.Jobs
         {
             var obj = GetPreparedInternal(baseSimulation);
 
-            obj.JobInfoFlags |= JobInfoFlags is null
-                ? 0
-                : (SimulationJobInfoFlags) Enum.Parse(typeof(SimulationJobInfoFlags), JobInfoFlags);
+            obj.ExecutionFlags |= ExecutionFlags is null
+                ? SimulationExecutionFlags.None
+                : (SimulationExecutionFlags) Enum.Parse(typeof(SimulationExecutionOverwriteFlags), ExecutionFlags);
 
             obj.TargetMcsp = string.IsNullOrWhiteSpace(TargetMcsp)
                 ? baseSimulation.TargetMcsp
@@ -94,18 +94,20 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         /// <param name="baseConfiguration"></param>
         /// <param name="modelProject"></param>
+        /// <param name="configIndex"></param>
         /// <returns></returns>
-        public JobConfiguration ToInternal(JobConfiguration baseConfiguration, IModelProject modelProject)
+        public JobConfiguration ToInternal(JobConfiguration baseConfiguration, IModelProject modelProject, int configIndex)
         {
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
 
             var obj = GetPreparedInternal(baseConfiguration);
+            obj.ConfigIndex = configIndex;
 
             obj.LatticeConfiguration = baseConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
-            obj.JobInfoFlags |= string.IsNullOrWhiteSpace(JobInfoFlags)
-                ? baseConfiguration.JobInfoFlags
-                : (SimulationJobInfoFlags) Enum.Parse(typeof(SimulationJobInfoFlags), JobInfoFlags);
+            obj.ExecutionFlags |= string.IsNullOrWhiteSpace(ExecutionFlags)
+                ? baseConfiguration.ExecutionFlags
+                : (SimulationExecutionFlags) Enum.Parse(typeof(SimulationExecutionFlags), ExecutionFlags);
 
             obj.TargetMcsp = string.IsNullOrWhiteSpace(TargetMcsp)
                 ? baseConfiguration.TargetMcsp

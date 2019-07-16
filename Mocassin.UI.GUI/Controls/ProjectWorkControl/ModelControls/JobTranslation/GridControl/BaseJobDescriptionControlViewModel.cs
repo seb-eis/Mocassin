@@ -17,14 +17,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         private JobDescriptionGraph JobDescription { get; }
 
         /// <summary>
-        ///     Get or set the <see cref="SimulationJobInfoFlags" /> of the targeted <see cref="JobDescriptionGraph" />
+        ///     Get or set the <see cref="SimulationExecutionOverwriteFlags" /> of the targeted <see cref="JobDescriptionGraph" />
         /// </summary>
-        public SimulationJobInfoFlags? JobInfoFlags
+        public SimulationExecutionOverwriteFlags? ExecutionFlags
         {
-            get => Enum.TryParse<SimulationJobInfoFlags>(JobDescription.JobInfoFlags, out var x) ? x : (SimulationJobInfoFlags?) null;
+            get => Enum.TryParse<SimulationExecutionOverwriteFlags>(JobDescription.ExecutionFlags, out var x) 
+                ? x 
+                : (SimulationExecutionOverwriteFlags?) null;
             set
             {
-                JobDescription.JobInfoFlags = value?.ToString();
+                JobDescription.ExecutionFlags = value?.ToString();
                 OnPropertyChanged();
             }
         }

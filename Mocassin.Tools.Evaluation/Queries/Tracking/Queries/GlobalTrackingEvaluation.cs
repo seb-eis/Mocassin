@@ -17,8 +17,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<IReadOnlyList<int>> ParticleCountEvaluation { get; set; }
 
         /// <inheritdoc />
-        public GlobalTrackingEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public GlobalTrackingEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 
@@ -46,8 +46,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            if (ParticleCountEvaluation == null) ParticleCountEvaluation = new ParticleCountEvaluation(JobCollection);
-            if (!ParticleCountEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (ParticleCountEvaluation == null) ParticleCountEvaluation = new ParticleCountEvaluation(JobSet);
+            if (!ParticleCountEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Particle count evaluation does not have the same data source.");
         }
     }

@@ -45,6 +45,9 @@ namespace Mocassin.UI.Xml.Jobs
         private Random Random { get; set; }
 
         /// <inheritdoc />
+        public int CollectionId { get; set; }
+
+        /// <inheritdoc />
         public ISimulation GetSimulation()
         {
             return Simulation;
@@ -66,8 +69,9 @@ namespace Mocassin.UI.Xml.Jobs
                 ? Simulation.JobCount
                 : int.Parse(JobPackageDescription.JobCountPerConfig);
 
+            var configIndex = 0;
             return JobPackageDescription.GetConfigurations()
-                .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject), jobCount))
+                .SelectMany(x => ExpandToJobCount(x.ToInternal(BaseConfiguration, ModelProject, configIndex++), jobCount))
                 .Action(x => x.CollectionName = JobPackageDescription.Name);
         }
 
@@ -86,7 +90,7 @@ namespace Mocassin.UI.Xml.Jobs
                 Random.NextBytes(buffer);
                 result.RngStateSeed = BitConverter.ToInt64(buffer, 0);
                 result.RngIncreaseSeed = BitConverter.ToInt64(buffer, 8) | 1;
-                result.JobId = i;
+                result.JobIndex = i;
                 yield return result;
             }
         }

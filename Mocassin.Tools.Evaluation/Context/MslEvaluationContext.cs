@@ -18,6 +18,8 @@ namespace Mocassin.Tools.Evaluation.Context
     /// </summary>
     public class MslEvaluationContext : IDisposable
     {
+        private readonly object lockObject = new object();
+
         /// <summary>
         ///     Get a <see cref="Dictionary{TKey,TValue}" /> that caches <see cref="IProjectModelContext" /> instances for each job
         ///     packaged context id
@@ -84,20 +86,33 @@ namespace Mocassin.Tools.Evaluation.Context
         }
 
         /// <summary>
-        ///     Loads the passed <see cref="SimulationJobModel" /> instances and prepares a <see cref="IEvaluableJobCollection" /> for
+        ///     Loads the passed <see cref="SimulationJobModel" /> instances and prepares a <see cref="IEvaluableJobSet" /> for
         ///     usage with the query system
         /// </summary>
         /// <param name="jobModels"></param>
         /// <param name="targetSecondaryState"></param>
         /// <returns></returns>
-        public IEvaluableJobCollection MakeEvaluable(IQueryable<SimulationJobModel> jobModels, bool targetSecondaryState = false)
+        public IEvaluableJobSet MakeEvaluableSet(IQueryable<SimulationJobModel> jobModels, bool targetSecondaryState = false)
         {
             var index = 0;
             var contextSet = targetSecondaryState
                 ? jobModels.AsEnumerable().Select(x => JobContext.CreateSecondary(x, this, index++)).ToList()
                 : jobModels.AsEnumerable().Select(x => JobContext.CreatePrimary(x, this, index++)).ToList();
 
-            return new EvaluableJobCollection(contextSet);
+            var evaluableSet = new EvaluableJobSet(contextSet);
+            foreach (var jobContext in evaluableSet) EnsureModelContextCreated(jobContext);
+
+            return evaluableSet;
+        }
+
+        /// <summary>
+        ///     Ensures that the <see cref="IProjectModelContext"/> for the passed <see cref="JobContext"/> is loaded into the caching system
+        /// </summary>
+        /// <param name="jobContext"></param>
+        public void EnsureModelContextCreated(JobContext jobContext)
+        {
+            GetProjectModelContext(jobContext.JobModel.SimulationPackageId);
+            GetSimulationModel(jobContext.JobModel);
         }
 
         /// <summary>
@@ -137,10 +152,26 @@ namespace Mocassin.Tools.Evaluation.Context
         {
             if (ProjectContextCache.TryGetValue(contextId, out var context)) return context;
 
-            var queryObjects = DataContext.Set<SimulationJobPackageModel>().Where(x => x.Id == contextId);
-            context = RestoreProjectModelContext(queryObjects).Single();
-            ProjectContextCache[contextId] = context;
-            return context;
+            var packageModel = LoadJobPackageModel(contextId);
+            var context2 = RestoreProjectModelContext(packageModel.ProjectXml);
+            lock (lockObject)
+            {
+                ProjectContextCache[contextId] = context2;   
+            }
+            return context2;
+        }
+
+        /// <summary>
+        ///     Get a <see cref="SimulationJobPackageModel"/> by context id from the database
+        /// </summary>
+        /// <param name="contextId"></param>
+        /// <returns></returns>
+        public SimulationJobPackageModel LoadJobPackageModel(int contextId)
+        {
+            lock (lockObject)
+            {
+                return DataContext.Set<SimulationJobPackageModel>().Single(x => x.Id == contextId);
+            }
         }
 
         /// <summary>
@@ -174,13 +205,16 @@ namespace Mocassin.Tools.Evaluation.Context
         public ISimulationModel GetSimulationModel(SimulationJobModel jobModel)
         {
             var modelContext = GetProjectModelContext(jobModel);
-            if (SimulationModelCache.TryGetValue(jobModel.SimulationPackageId, out var result))
-                return result;
+            if (SimulationModelCache.TryGetValue(jobModel.SimulationPackageId, out var result)) return result;
 
             var buildGraph = ProjectObjectGraph.CreateFromXml<MocassinProjectBuildGraph>(jobModel.SimulationJobPackageModel.ProjectXml);
             var simulation = buildGraph.ProjectJobTranslationGraph.ToInternals(modelContext.ModelProject).First().GetSimulation();
             var simulationModel = modelContext.SimulationModelContext.FindSimulationModel(simulation);
-            SimulationModelCache[jobModel.SimulationPackageId] = simulationModel;
+
+            lock (lockObject)
+            {
+                SimulationModelCache[jobModel.SimulationPackageId] = simulationModel;   
+            }
             return simulationModel;
         }
 

@@ -7,7 +7,7 @@ using Mocassin.Tools.Evaluation.Extensions;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Query to extract <see cref="EnsembleMetaData" /> from a <see cref="IEvaluableJobCollection" />
+    ///     Query to extract <see cref="EnsembleMetaData" /> from a <see cref="IEvaluableJobSet" />
     /// </summary>
     public class EnsembleMetaEvaluation : JobEvaluation<IReadOnlyList<EnsembleMetaData>>
     {
@@ -22,8 +22,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<LatticeMetaData> LatticeMetaEvaluation { get; set; }
 
         /// <inheritdoc />
-        public EnsembleMetaEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public EnsembleMetaEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 
@@ -47,12 +47,12 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            ParticleCountEvaluation = ParticleCountEvaluation ?? new ParticleCountEvaluation(JobCollection);
-            LatticeMetaEvaluation = LatticeMetaEvaluation ?? new LatticeMetaEvaluation(JobCollection);
+            ParticleCountEvaluation = ParticleCountEvaluation ?? new ParticleCountEvaluation(JobSet);
+            LatticeMetaEvaluation = LatticeMetaEvaluation ?? new LatticeMetaEvaluation(JobSet);
 
-            if (!ParticleCountEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (!ParticleCountEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Particle count evaluation is not compatible.");
-            if (!ParticleCountEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (!ParticleCountEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Lattice meta evaluation is not compatible.");
 
             base.PrepareForExecution();

@@ -6,7 +6,7 @@ using Mocassin.Tools.Evaluation.Queries.Base;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Query that extracts <see cref="TransitionMobility" /> data from a <see cref="IEvaluableJobCollection" />
+    ///     Query that extracts <see cref="TransitionMobility" /> data from a <see cref="IEvaluableJobSet" />
     /// </summary>
     public class TransitionMobilityEvaluation : JobEvaluation<IReadOnlyList<TransitionMobility>>
     {
@@ -21,8 +21,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<IReadOnlyList<EnsembleMetaData>> EnsembleMetaEvaluation { get; set; }
 
         /// <inheritdoc />
-        public TransitionMobilityEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public TransitionMobilityEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 
@@ -53,12 +53,12 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            GlobalTrackerEvaluation = GlobalTrackerEvaluation ?? new GlobalTrackingEvaluation(JobCollection);
-            EnsembleMetaEvaluation = EnsembleMetaEvaluation ?? new EnsembleMetaEvaluation(JobCollection);
+            GlobalTrackerEvaluation = GlobalTrackerEvaluation ?? new GlobalTrackingEvaluation(JobSet);
+            EnsembleMetaEvaluation = EnsembleMetaEvaluation ?? new EnsembleMetaEvaluation(JobSet);
 
-            if (!GlobalTrackerEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (!GlobalTrackerEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Global tracker evaluation is not compatible.");
-            if (!EnsembleMetaEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (!EnsembleMetaEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Ensemble meta evaluation evaluation is not compatible.");
             base.PrepareForExecution();
         }

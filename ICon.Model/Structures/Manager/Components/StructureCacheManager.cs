@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
@@ -108,9 +109,28 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
+        public IReadOnlyList<SetList<int>> GetWyckoffIndexingLists()
+        {
+            return GetResultFromCache(CreateWyckoffIndexingSets);
+        }
+
+        /// <inheritdoc />
         public int GetLinearizedExtendedPositionCount()
         {
             return GetLinearizedExtendedPositionList()?.Count ?? 0;
+        }
+
+        /// <summary>
+        ///     Creates the wyckoff position indexing lists
+        /// </summary>
+        /// <returns></returns>
+        [CacheMethodResult]
+        protected ReadOnlyCollection<SetList<int>> CreateWyckoffIndexingSets()
+        {
+            var positionSets = GetEncodedExtendedPositionLists();
+            var result = new List<SetList<int>>(positionSets.Count);
+            result.AddRange(positionSets.Select(item => item.Select(x => x.P).ToSetList()));
+            return result.AsReadOnly();
         }
 
         /// <summary>

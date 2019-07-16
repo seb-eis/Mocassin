@@ -96,42 +96,38 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Creates a set of simulation job models for the passed simulation model with the passed sequence of job
-        ///     configurations
+        ///     Creates a set of <see cref="SimulationJobModel"/> from a <see cref="ISimulationModel"/> and <see cref="IJobCollection"/>
         /// </summary>
         /// <param name="simulationModel"></param>
-        /// <param name="jobConfigurations"></param>
+        /// <param name="jobCollection"></param>
         /// <returns></returns>
-        protected IEnumerable<SimulationJobModel> GetJobModels(ISimulationModel simulationModel,
-            IEnumerable<JobConfiguration> jobConfigurations)
+        protected IEnumerable<SimulationJobModel> GetJobModels(ISimulationModel simulationModel, IJobCollection jobCollection)
         {
             var index = 0;
-            foreach (var jobConfiguration in jobConfigurations)
+            foreach (var jobConfiguration in jobCollection)
             {
-                var jobModel = GetJobModel(simulationModel, jobConfiguration);
+                var jobModel = GetJobModel(simulationModel, jobConfiguration, jobCollection);
                 JobIsBuildEvent.OnNext(++index);
                 yield return jobModel;
             }
         }
 
         /// <summary>
-        ///     Get a list interface of job model build tasks for the passed simulation model with the passed job configuration
-        ///     sequence
+        ///     Creates a set of <see cref="SimulationJobModel"/> build <see cref="Task"/> instances from a <see cref="ISimulationModel"/> and <see cref="IJobCollection"/>
         /// </summary>
         /// <param name="simulationModel"></param>
-        /// <param name="jobConfigurations"></param>
+        /// <param name="jobCollection"></param>
         /// <returns></returns>
-        protected IList<Task<SimulationJobModel>> GetJobModelBuildTasks(ISimulationModel simulationModel,
-            IEnumerable<JobConfiguration> jobConfigurations)
+        protected IList<Task<SimulationJobModel>> GetJobModelBuildTasks(ISimulationModel simulationModel, IJobCollection jobCollection)
         {
             var result = new List<Task<SimulationJobModel>>();
 
             var index = 1;
-            foreach (var jobConfiguration in jobConfigurations)
+            foreach (var jobConfiguration in jobCollection)
             {
                 var jobModelTask = Task.Run(() =>
                 {
-                    var jobModel = GetJobModel(simulationModel, jobConfiguration);
+                    var jobModel = GetJobModel(simulationModel, jobConfiguration, jobCollection);
                     JobIsBuildEvent.OnNext(index++);
                     return jobModel;
                 });
@@ -142,18 +138,20 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Get a new job model database object for the passed simulation model and specified job configuration
+        ///     Get a new job model database object for the <see cref="ISimulationModel" /> using the provided
+        ///     <see cref="JobConfiguration" /> and <see cref="IJobCollection" />
         /// </summary>
         /// <param name="simulationModel"></param>
         /// <param name="jobConfiguration"></param>
+        /// <param name="jobCollection"></param>
         /// <returns></returns>
-        protected SimulationJobModel GetJobModel(ISimulationModel simulationModel, JobConfiguration jobConfiguration)
+        protected SimulationJobModel GetJobModel(ISimulationModel simulationModel, JobConfiguration jobConfiguration, IJobCollection jobCollection)
         {
             var result = new SimulationJobModel
             {
                 JobInfo = jobConfiguration.GetInteropJobInfo(),
                 JobHeader = jobConfiguration.GetInteropJobHeader(),
-                JobMetaData = GetJobMetaDataEntity(jobConfiguration),
+                JobMetaData = GetJobMetaDataEntity(jobConfiguration, jobCollection),
                 JobResultData = new JobResultDataEntity(),
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
@@ -165,17 +163,20 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Get a <see cref="JobMetaDataEntity" /> for the passed <see cref="JobConfiguration" />
+        ///     Get a <see cref="JobMetaDataEntity" /> for the passed <see cref="JobConfiguration" /> 
         /// </summary>
         /// <param name="jobConfiguration"></param>
+        /// <param name="jobCollection"></param>
         /// <returns></returns>
-        protected JobMetaDataEntity GetJobMetaDataEntity(JobConfiguration jobConfiguration)
+        protected JobMetaDataEntity GetJobMetaDataEntity(JobConfiguration jobConfiguration, IJobCollection jobCollection)
         {
             var entity = new JobMetaDataEntity
             {
                 CollectionName = jobConfiguration.CollectionName,
                 ConfigName = jobConfiguration.ConfigName,
-                JobIndex = jobConfiguration.JobId,
+                JobIndex = jobConfiguration.JobIndex,
+                ConfigIndex = jobConfiguration.ConfigIndex,
+                CollectionIndex = jobCollection.CollectionId,
                 Temperature = jobConfiguration.Temperature,
                 Mcsp = jobConfiguration.TargetMcsp,
                 TimeLimit = jobConfiguration.TimeLimit,
@@ -211,10 +212,10 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="simulationModel"></param>
         protected void SetSimulationJobInfoFlags(SimulationJobModel jobModel, ISimulationModel simulationModel)
         {
-            const long dofFlag = (long) SimulationJobInfoFlags.UseDualDofCorrection;
-            const long kmcFlag = (long) SimulationJobInfoFlags.KmcSimulation;
-            const long mmcFlag = (long) SimulationJobInfoFlags.MmcSimulation;
-            const long preFlag = (long) SimulationJobInfoFlags.UsePrerun;
+            const long dofFlag = (long) SimulationExecutionFlags.UseDualDofCorrection;
+            const long kmcFlag = (long) SimulationExecutionFlags.KmcSimulation;
+            const long mmcFlag = (long) SimulationExecutionFlags.MmcSimulation;
+            const long preFlag = (long) SimulationExecutionFlags.UsePrerun;
 
             switch (simulationModel)
             {
@@ -273,7 +274,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
         /// <summary>
         ///     Calls all attached <see cref="IPostBuildOptimizer" /> and additionally defined ones of
-        ///     <see cref="IJobCollection" /> and removes invalidated <see cref="SimulationJobInfoFlags" />
+        ///     <see cref="IJobCollection" /> and removes invalidated <see cref="SimulationExecutionFlags" />
         /// </summary>
         /// <param name="packageModel"></param>
         /// <param name="jobCollection"></param>
@@ -281,12 +282,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
         {
             var removedFlags = PostBuildOptimizers
                 .Concat(jobCollection.GetPostBuildOptimizers())
-                .Aggregate(SimulationJobInfoFlags.None, (current, optimizer) => current | optimizer.Run(ProjectModelContext, packageModel));
+                .Aggregate(SimulationExecutionFlags.None, (current, optimizer) => current | optimizer.Run(ProjectModelContext, packageModel));
 
             foreach (var jobModel in packageModel.JobModels)
             {
                 jobModel.JobInfo.Structure.JobFlags -= jobModel.JobInfo.Structure.JobFlags & (long) removedFlags;
-                jobModel.JobMetaData.FlagString = ((SimulationJobInfoFlags) jobModel.JobInfo.Structure.JobFlags).ToString();
+                jobModel.JobMetaData.FlagString = ((SimulationExecutionFlags) jobModel.JobInfo.Structure.JobFlags).ToString();
             }
         }
 

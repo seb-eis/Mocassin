@@ -50,7 +50,7 @@ namespace Mocassin.UI.Xml.Jobs
             KmcJobPackageDescriptions = new List<KmcJobPackageDescriptionGraph>();
             MmcJobPackageDescriptions = new List<MmcJobPackageDescriptionGraph>();
             Key = Guid.NewGuid().ToString();
-            Name = $"Jobs {Key}";
+            Name = "New translation set";
         }
 
         /// <summary>
@@ -60,8 +60,11 @@ namespace Mocassin.UI.Xml.Jobs
         /// <returns></returns>
         public IEnumerable<IJobCollection> ToInternals(IModelProject modelProject)
         {
-            return MmcJobPackageDescriptions.Select(x => x.ToInternal(modelProject))
-                .Concat(KmcJobPackageDescriptions.Select(x => x.ToInternal(modelProject)));
+            var index = 0;
+            foreach (var item in MmcJobPackageDescriptions.Concat(KmcJobPackageDescriptions.Cast<JobPackageDescriptionGraph>()))
+            {
+                yield return item.ToInternal(modelProject, index++);
+            }
         }
 
         /// <summary>

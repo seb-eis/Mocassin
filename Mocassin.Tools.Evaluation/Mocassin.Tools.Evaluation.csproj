@@ -21,6 +21,7 @@
     <Folder Include="DataTables\" />
     <Folder Include="Grouping\Base\" />
     <Folder Include="Grouping\Result\" />
+    <Folder Include="Queries\Special\Result\" />
   </ItemGroup>
 
 </Project>

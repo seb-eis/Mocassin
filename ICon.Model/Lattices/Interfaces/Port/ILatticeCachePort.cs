@@ -9,6 +9,6 @@ namespace Mocassin.Model.Lattices
     /// </summary>
     public interface ILatticeCachePort : IModelCachePort
     {
-	    ILatticeCreationProvider GetLatticeCreationProvider();
+	    IDopedLatticeSource GetLatticeCreationProvider();
     }
 }

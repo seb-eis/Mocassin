@@ -12,8 +12,8 @@ namespace Mocassin.Tools.Evaluation.Queries
     public class ParticleCountEvaluation : JobEvaluation<IReadOnlyList<int>>
     {
         /// <inheritdoc />
-        public ParticleCountEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public ParticleCountEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 

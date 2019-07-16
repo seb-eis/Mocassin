@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Queries;
+using Mocassin.Tools.Evaluation.Queries.Base;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -11,37 +14,28 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Filled.msl";
+            //var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Filled.msl";
+            var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Onsager.msl";
             var evalContext = MslEvaluationContext.Create(mslFilename);
-            var data = evalContext.EvaluationJobSet();
-            var evaluable = evalContext.MakeEvaluable(data);
+            var data = evalContext.EvaluationJobSet().Where(x => x.JobMetaData.ConfigName == "T1000");
+            var evaluableSet = evalContext.MakeEvaluableSet(data);
 
             var watch = Stopwatch.StartNew();
-            
-            var evaluation = new ParticleCountEvaluation(evaluable);
-            var result = evaluation.Results;
+            var onsagerEval = new CubicOnsagerEvaluation(evaluableSet);
 
-            var table = new DataTable();
-            var column = new DataColumn("Name");
-            table.Columns.Add(column);
-            for (var i = 0; i < result.First().Count; i++)
+            var q2 = Math.Pow(Equations.Constants.ElementalCharge * 2, 2);
+            var histogram = new int[10000];
+            var step = 0.01;
+
+            foreach (var item in onsagerEval)
             {
-                table.Columns.Add(new DataColumn($"Particle_{i}", i.GetType()));
+                var cond = item[1, 1] * q2 / 1.602e-19;
+                var index = (int) (cond / step);
+                histogram[index]++;
             }
 
-            foreach (var item in evaluable)
-            {
-                var row = table.NewRow();
-                row["Name"] = item.FullConfigName;
-                var index = 0;
-                foreach (var i in result[item.DataId])
-                {
-                    row[$"Particle_{index++}"] = i;
-                }
-
-                table.Rows.Add(row);
-            }
-            
+            File.AppendAllLines(@"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\onsager_cond",
+                histogram.Select(x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
 
             DisplayWatch(watch);
             ExitOnKeyPress("Finished successfully...");

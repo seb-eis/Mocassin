@@ -5,13 +5,13 @@ using Mocassin.Tools.Evaluation.Extensions;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Query to extract the <see cref="StaticTrackerResult" /> set from a <see cref="IEvaluableJobCollection" />
+    ///     Query to extract the <see cref="StaticTrackerResult" /> set from a <see cref="IEvaluableJobSet" />
     /// </summary>
     public class StaticTrackingEvaluation : JobEvaluation<IReadOnlyList<StaticTrackerResult>>
     {
         /// <inheritdoc />
-        public StaticTrackingEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public StaticTrackingEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 

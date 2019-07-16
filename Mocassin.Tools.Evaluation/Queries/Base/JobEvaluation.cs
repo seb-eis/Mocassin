@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Mocassin.Tools.Evaluation.Context;
 
 namespace Mocassin.Tools.Evaluation.Queries
@@ -12,27 +13,33 @@ namespace Mocassin.Tools.Evaluation.Queries
     /// <typeparam name="T"></typeparam>
     public abstract class JobEvaluation<T> : IJobEvaluation<T>
     {
-        private IReadOnlyList<T> results;
+        private readonly object lockObject = new object();
+        private Task<IReadOnlyList<T>> ResultTask { get; set; }
 
         /// <inheritdoc />
-        public IEvaluableJobCollection JobCollection { get; }
+        public IEvaluableJobSet JobSet { get; }
 
         /// <inheritdoc />
-        public IReadOnlyList<T> Results => results ?? (results = Execute());
+        public IReadOnlyList<T> Result => ResultTask?.Result ?? InvokeAsync().Result;
 
         /// <inheritdoc />
-        public int Count => Results.Count;
+        public int Count => Result.Count;
 
         /// <inheritdoc />
-        public T this[int index] => Results[index];
+        public T this[int index] => Result[index];
 
         /// <summary>
-        ///     Creates a new <see cref="JobEvaluation{T}" /> for the passed <see cref="IEvaluableJobCollection" /> data source
+        ///     Get or set a boolean flag if the system should created results in parallel
         /// </summary>
-        /// <param name="jobCollection"></param>
-        protected JobEvaluation(IEvaluableJobCollection jobCollection)
+        public bool ExecuteParallel { get; set; }
+
+        /// <summary>
+        ///     Creates a new <see cref="JobEvaluation{T}" /> for the passed <see cref="IEvaluableJobSet" /> data source
+        /// </summary>
+        /// <param name="jobSet"></param>
+        protected JobEvaluation(IEvaluableJobSet jobSet)
         {
-            JobCollection = jobCollection ?? throw new ArgumentNullException(nameof(jobCollection));
+            JobSet = jobSet ?? throw new ArgumentNullException(nameof(jobSet));
         }
 
         /// <summary>
@@ -44,14 +51,51 @@ namespace Mocassin.Tools.Evaluation.Queries
         protected abstract T GetValue(JobContext jobContext);
 
         /// <summary>
-        ///     Executes the query and generates the results
+        ///     Get the query result task or generates and invokes the task if required
         /// </summary>
         /// <returns></returns>
-        protected virtual IReadOnlyList<T> Execute()
+        private Task<IReadOnlyList<T>> InvokeAsync()
         {
-            if (results != null) return results;
-            PrepareForExecution();
-            return JobCollection.Select(GetValue).ToList().AsReadOnly();
+            lock (lockObject)
+            {
+                if (ResultTask != null) return ResultTask;
+                return ResultTask = ExecuteParallel ? ExecuteParallelAsync() : ExecuteSequentialAsync();
+            }
+        }
+
+        /// <summary>
+        ///     Executes the query async and sequential
+        /// </summary>
+        /// <returns></returns>
+        private Task<IReadOnlyList<T>> ExecuteSequentialAsync()
+        {
+            IReadOnlyList<T> ExecuteLocal()
+            {
+                PrepareForExecution();
+                var resultList = new List<T>(JobSet.Count);
+                resultList.AddRange(JobSet.Select(GetValue));
+                return resultList.AsReadOnly();
+            }
+            return Task.Run(ExecuteLocal);
+        }
+
+        /// <summary>
+        ///     Executes the query async and in parallel
+        /// </summary>
+        /// <returns></returns>
+        private Task<IReadOnlyList<T>> ExecuteParallelAsync()
+        {
+            IReadOnlyList<T> ExecuteLocal()
+            {
+                PrepareForExecution();
+                var resultList = new List<T>(JobSet.Count);
+                var taskList = new List<Task<T>>(JobSet.Count);
+                taskList.AddRange(JobSet.Select(x => Task.Run(() => GetValue(x))));
+                Task.WhenAll(taskList).Wait();
+                resultList.AddRange(taskList.Select(x => x.Result));
+                return resultList.AsReadOnly();
+            }
+            return Task.Run(ExecuteLocal);
         }
 
         /// <summary>
@@ -73,7 +117,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
         {
-            return Results.GetEnumerator();
+            return Result.GetEnumerator();
         }
 
         /// <inheritdoc />

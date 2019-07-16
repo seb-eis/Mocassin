@@ -29,7 +29,7 @@
     <ProductName>Mocassin Model Builder</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -589,6 +589,7 @@
     <Compile Include="Base\Converter\StringExpressionToValueConverter.cs" />
     <Compile Include="Base\Converter\Int32ToEnumConverter.cs" />
     <Compile Include="Base\Converter\MultiValueConverter.cs" />
+    <Compile Include="Base\Converter\EnumToStringConverter.cs" />
     <Compile Include="Base\Converter\StringToNullableConverter.cs" />
     <Compile Include="Base\Converter\NullToVisibilityConverter.cs" />
     <Compile Include="Base\Converter\ValueConverter.cs" />

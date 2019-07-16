@@ -32,6 +32,12 @@ namespace Mocassin.Model.Lattices
         [UseTrackedReferences]
         public IUnitCellPosition UnitCellPosition { get; set; }
 
+        /// <inheritdoc />
+        public double GetChargeDelta()
+        {
+            return Dopant.Charge - Dopable.Charge;
+        }
+
         /// <summary>
         ///     Get the type name string
         /// </summary>

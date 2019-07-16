@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 
@@ -54,5 +53,12 @@ namespace Mocassin.Model.DataManagement
         /// <typeparam name="TObject"></typeparam>
         /// <returns></returns>
         IEnumerable<TObject> EnumerateObjects<TObject>() where TObject : IModelObject;
+
+        /// <summary>
+        ///     Get the number of <see cref="IModelObject" /> of specified type known by the data tracker
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <returns></returns>
+        int ObjectCount<TObject>() where TObject : IModelObject;
     }
 }

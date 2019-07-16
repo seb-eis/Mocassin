@@ -96,6 +96,12 @@ namespace Mocassin.Model.DataManagement
         }
 
         /// <inheritdoc />
+        public int ObjectCount<TObject>() where TObject : IModelObject
+        {
+            return FindObjectList(typeof(TObject)).Count;
+        }
+
+        /// <inheritdoc />
         public void LinkModelObject(object obj)
         {
             if (_objectLinkerDictionary.TryGetValue(obj.GetType(), out var linker))

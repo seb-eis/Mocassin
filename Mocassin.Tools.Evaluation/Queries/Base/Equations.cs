@@ -1,4 +1,7 @@
-﻿using Mocassin.Mathematics.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Tools.Evaluation.Queries.Base
@@ -17,6 +20,11 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             ///     The elemental charge in [C]
             /// </summary>
             public static double ElementalCharge = 1.602176634e-19;
+
+            /// <summary>
+            ///     The boltzmann constant in [eV/K]
+            /// </summary>
+            public static double BlotzmannEv = 8.617333262145e-5;
         }
 
         /// <summary>
@@ -74,7 +82,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <returns></returns>
             public static double MeanSquareToCoefficient(double shift, double time)
             {
-                return shift / (2*time);
+                return shift / (2 * time);
             }
 
             /// <summary>
@@ -85,9 +93,42 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <returns></returns>
             public static (double X, double Y, double Z) MeanSquareToCoefficient(in Cartesian3D vector, double time)
             {
-                return (MeanSquareToCoefficient(vector.X, time), 
-                        MeanSquareToCoefficient(vector.Y, time),
-                        MeanSquareToCoefficient(vector.Z, time));
+                return (MeanSquareToCoefficient(vector.X, time),
+                    MeanSquareToCoefficient(vector.Y, time),
+                    MeanSquareToCoefficient(vector.Z, time));
+            }
+        }
+
+        public static class Statistics
+        {
+            /// <summary>
+            ///     Calculates the average values with standard deviation of a value sequence using a selector and
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="source"></param>
+            /// <param name="selector"></param>
+            /// <returns></returns>
+            public static (double Average, double Deviation) Average<T>(IEnumerable<T> source, Func<T, double> selector)
+            {
+                var values = source.Select(selector).ToList();
+                var average = values.Sum() / values.Count;
+                var deviation = Math.Sqrt(values.Sum(x => Math.Pow(x - average, 2)) / (values.Count - 1));
+                return (average, deviation);
+            }
+
+            /// <summary>
+            ///     Calculates an onsager coefficient utilizing the Kubo-Green formalism for cubic systems
+            /// </summary>
+            /// <param name="lhs"></param>
+            /// <param name="rhs"></param>
+            /// <param name="volume"></param>
+            /// <param name="time"></param>
+            /// <param name="temperature"></param>
+            /// <returns></returns>
+            public static double CubicOnsagerKuboGreen(in Cartesian3D lhs, in Cartesian3D rhs, double volume, double time,
+                double temperature)
+            {
+                return lhs.GetLength() * rhs.GetLength() / (6 * volume * temperature * time * Constants.BlotzmannEv);
             }
         }
     }

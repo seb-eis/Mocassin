@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Tools.Evaluation.Context;
@@ -20,9 +22,19 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<IReadOnlyList<int>> ParticleCountEvaluation { get; set; }
 
         /// <summary>
-        ///     Get or set a boolean flag that indicates if the selector yields the mean result
+        ///     Get or set a boolean flag if the evaluation should return the mean result
         /// </summary>
         public bool YieldMeanResult { get; set; }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the evaluation should also yield immobile species
+        /// </summary>
+        public bool YieldImmobile { get; set; }
+
+        /// <summary>
+        ///     Get or set a <see cref="IComparer{T}"/> for <see cref="Cartesian3D"/> for the evaluation
+        /// </summary>
+        public IComparer<Cartesian3D> VectorComparer { get; set; }
 
         /// <summary>
         ///     Boolean flag if the result is squared
@@ -30,8 +42,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         public virtual bool IsSquared => false;
 
         /// <inheritdoc />
-        public EnsembleDisplacementEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public EnsembleDisplacementEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 
@@ -47,9 +59,11 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            if (ParticleCountEvaluation == null) ParticleCountEvaluation = new ParticleCountEvaluation(JobCollection);
-            if (!ParticleCountEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (ParticleCountEvaluation == null) ParticleCountEvaluation = new ParticleCountEvaluation(JobSet);
+            if (!ParticleCountEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Particle count evaluation does not have the same data source.");
+            if (VectorComparer == null)
+                VectorComparer = new VectorComparer3D<Cartesian3D>(NumericComparer.CreateRanged(0));
         }
 
         /// <summary>
@@ -82,14 +96,15 @@ namespace Mocassin.Tools.Evaluation.Queries
         {
             var result = new List<EnsembleDisplacement>(vectors.Length);
             var particleCounts = ParticleCountEvaluation[context.DataId];
-
             for (var i = 0; i < vectors.Length; i++)
             {
+                if (!YieldImmobile && VectorComparer.Compare(vectors[i], new Cartesian3D()) == 0) continue;
                 var particle = context.ModelContext.ModelProject.DataTracker.FindObjectByIndex<IParticle>(i);
                 var data = new EnsembleDisplacement(IsSquared, particleCounts[i], particle, vectors[i]);
                 result.Add(YieldMeanResult ? data.AsMean() : data);
             }
 
+            result.TrimExcess();
             return result;
         }
     }

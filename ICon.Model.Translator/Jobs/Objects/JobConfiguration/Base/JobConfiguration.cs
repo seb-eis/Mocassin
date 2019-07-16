@@ -8,7 +8,7 @@
         /// <summary>
         ///     Get or set additional job info flags
         /// </summary>
-        public SimulationJobInfoFlags JobInfoFlags { get; set; }
+        public SimulationExecutionFlags ExecutionFlags { get; set; }
 
         /// <summary>
         ///     Get or set the target mcsp of the job
@@ -46,9 +46,14 @@
         public LatticeConfiguration LatticeConfiguration { get; set; }
 
         /// <summary>
-        ///     Get or set an id for the job
+        ///     Get or set the local index for the job in the config
         /// </summary>
-        public int JobId { get; set; }
+        public int JobIndex { get; set; }
+
+        /// <summary>
+        ///     Get or set the index for the parent config
+        /// </summary>
+        public int ConfigIndex { get; set; }
 
         /// <summary>
         ///     Get or set the source job collection name
@@ -69,8 +74,9 @@
             jobConfiguration.LatticeConfiguration = jobConfiguration.LatticeConfiguration ?? new LatticeConfiguration();
 
             LatticeConfiguration.CopyTo(jobConfiguration.LatticeConfiguration);
-            jobConfiguration.JobInfoFlags = JobInfoFlags;
-            jobConfiguration.JobId = JobId;
+            jobConfiguration.ExecutionFlags = ExecutionFlags;
+            jobConfiguration.JobIndex = JobIndex;
+            jobConfiguration.ConfigIndex = ConfigIndex;
             jobConfiguration.MinimalSuccessRate = MinimalSuccessRate;
             jobConfiguration.RngIncreaseSeed = RngIncreaseSeed;
             jobConfiguration.RngStateSeed = RngStateSeed;
@@ -91,9 +97,9 @@
             {
                 Structure = new CJobInfo
                 {
-                    JobFlags = (long) JobInfoFlags,
+                    JobFlags = (long) ExecutionFlags,
                     MinimalSuccessRate = MinimalSuccessRate,
-                    ObjectId = JobId,
+                    ObjectId = JobIndex,
                     RngIncreaseSeed = RngIncreaseSeed,
                     RngStateSeed = RngStateSeed,
                     StatusFlags = default,

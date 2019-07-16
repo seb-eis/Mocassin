@@ -29,7 +29,7 @@ namespace Mocassin.Model.Translator.Optimization
         public IList<(IParticle, IUnitCellPosition)> RemoveCombinations { get; set; }
 
         /// <inheritdoc />
-        public SimulationJobInfoFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
+        public SimulationExecutionFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
         {
             ModelContext = modelContext;
             JobPackage = jobPackage;
@@ -42,7 +42,7 @@ namespace Mocassin.Model.Translator.Optimization
                 environmentDefinition.SelectionParticleMask = optimizedSetMask;
             }
 
-            return isReducedMask ? SimulationJobInfoFlags.UseDualDofCorrection : SimulationJobInfoFlags.None;
+            return isReducedMask ? SimulationExecutionFlags.UseDualDofCorrection : SimulationExecutionFlags.None;
         }
 
         /// <summary>

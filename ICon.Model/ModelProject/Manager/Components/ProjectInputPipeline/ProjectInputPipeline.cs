@@ -66,18 +66,18 @@ namespace Mocassin.Model.ModelProject
         public IOperationReport PushToProject(IModelObject modelObject)
         {
             var func = GetInputDelegate(modelObject);
-            return func != null
-                ? func(modelObject).Result
-                : GetNotSupportedOperationReport(modelObject);
+            if (func == null) return GetNotSupportedOperationReport(modelObject);
+            var task = func(modelObject);
+            return task.Result;
         }
 
         /// <inheritdoc />
         public IOperationReport PushToProject(IModelParameter modelParameter)
         {
             var func = GetInputDelegate(modelParameter);
-            return func != null
-                ? func(modelParameter).Result
-                : GetNotSupportedOperationReport(modelParameter);
+            if (func == null) return GetNotSupportedOperationReport(modelParameter);
+            var task = func(modelParameter);
+            return task.Result;
         }
 
         /// <summary>

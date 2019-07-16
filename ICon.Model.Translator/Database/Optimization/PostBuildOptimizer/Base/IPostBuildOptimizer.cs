@@ -11,10 +11,10 @@ namespace Mocassin.Model.Translator.Optimization
     {
         /// <summary>
         ///     Optimizes the completely build passed simulation job package data in the context of the model project and returns
-        ///     the set of invalidated <see cref="SimulationJobInfoFlags" />
+        ///     the set of invalidated <see cref="SimulationExecutionFlags" />
         /// </summary>
         /// <param name="modelContext"></param>
         /// <param name="jobPackage"></param>
-        SimulationJobInfoFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage);
+        SimulationExecutionFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage);
     }
 }

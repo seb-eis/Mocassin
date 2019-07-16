@@ -31,9 +31,10 @@ namespace Mocassin.Tools.Evaluation.Queries
         }
 
         /// <inheritdoc />
-        public MobileTrackingEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public MobileTrackingEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
+            ExecuteParallel = true;
         }
     }
 }

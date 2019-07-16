@@ -9,7 +9,7 @@ namespace Mocassin.Tools.Evaluation.Context
     /// <summary>
     ///     Represents an read only collection of <see cref="JobContexts" /> that can be used with job contexts queries
     /// </summary>
-    public class EvaluableJobCollection : IEvaluableJobCollection
+    public class EvaluableJobSet : IEvaluableJobSet
     {
         /// <summary>
         ///     The wrapped list of <see cref="JobContext" /> instances
@@ -20,7 +20,7 @@ namespace Mocassin.Tools.Evaluation.Context
         public MslEvaluationContext EvaluationContext { get; }
 
         /// <inheritdoc />
-        public bool CompatibleTo(IEvaluableJobCollection other)
+        public bool CompatibleTo(IEvaluableJobSet other)
         {
             return ReferenceEquals(EvaluationContext, other?.EvaluationContext);
         }
@@ -43,7 +43,7 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <inheritdoc />
         public JobContext this[int index] => JobContexts[index];
 
-        public EvaluableJobCollection(IList<JobContext> jobContexts)
+        public EvaluableJobSet(IList<JobContext> jobContexts)
         {
             JobContexts = jobContexts ?? throw new ArgumentNullException(nameof(jobContexts));
             EvaluationContext = JobContexts[0].EvaluationContext;
@@ -51,7 +51,7 @@ namespace Mocassin.Tools.Evaluation.Context
                 throw new ArgumentException("Job context set cannot have more than one evaluation context.");
         }
 
-        public EvaluableJobCollection(IEnumerable<JobContext> jobContexts)
+        public EvaluableJobSet(IEnumerable<JobContext> jobContexts)
             : this(jobContexts?.ToList())
         {
         }

@@ -99,6 +99,12 @@ namespace Mocassin.Model.Structures
         IList<SetList<Fractional3D>> GetExtendedDummyPositionLists();
 
         /// <summary>
+        ///     Get a 2D list set that assigns each wyckoff position its set of position indices in the unit cell
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyList<SetList<int>> GetWyckoffIndexingLists();
+
+        /// <summary>
         ///     Get the number of existing positions if all unit cell positions are extended by the currently set space group
         /// </summary>
         /// <returns></returns>

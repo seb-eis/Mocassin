@@ -1,35 +1,33 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mocassin.Framework.Messaging;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
-using Moccasin.Model.ProjectServices;
-using Mocassin.Framework.Messaging;
 
 namespace Mocassin.Model.Lattices.Validators
 {
     /// <summary>
-    /// Validator for new DopingCombination model objects that checks for consistency and compatibility with existing data and general object constraints
+    ///     Validator for new DopingCombination model objects that checks for consistency and compatibility with existing data
+    ///     and general object constraints
     /// </summary>
     public class DopingCombinationValidator : DataValidator<IDopingCombination, MocassinLatticeSettings, ILatticeDataPort>
     {
         /// <summary>
-        /// Creates new validator with the provided project services, settings object and data reader
+        ///     Creates new validator with the provided project services, settings object and data reader
         /// </summary>
         /// <param name="modelProject"></param>
         /// <param name="settings"></param>
         /// <param name="dataReader"></param>
-        public DopingCombinationValidator(IModelProject modelProject, MocassinLatticeSettings settings, IDataReader<ILatticeDataPort> dataReader)
+        public DopingCombinationValidator(IModelProject modelProject, MocassinLatticeSettings settings,
+            IDataReader<ILatticeDataPort> dataReader)
             : base(modelProject, settings, dataReader)
         {
         }
 
         /// <summary>
-        /// Validate a new DopingCombination object in terms of consistency and compatibility with existing data
+        ///     Validate a new DopingCombination object in terms of consistency and compatibility with existing data
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -42,7 +40,7 @@ namespace Mocassin.Model.Lattices.Validators
         }
 
         /// <summary>
-        /// Validate matching particles and unit cell positions
+        ///     Validate matching particles and unit cell positions
         /// </summary>
         /// <param name="particle"></param>
         /// <param name="position"></param>
@@ -51,7 +49,7 @@ namespace Mocassin.Model.Lattices.Validators
         {
             if (position.OccupationSet.GetParticles().Contains(particle) == false)
             {
-                var detail0 = $"A Particle cannot be placed at the specified position";
+                var detail0 = "A Particle cannot be placed at the specified position";
                 report.AddWarning(WarningMessage.CreateCritical(this, detail0));
             }
         }

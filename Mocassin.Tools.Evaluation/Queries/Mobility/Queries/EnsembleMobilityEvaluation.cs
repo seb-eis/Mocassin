@@ -7,7 +7,7 @@ using Mocassin.Tools.Evaluation.Queries.Base;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Query to extract the <see cref="EnsembleMobility" /> data from an <see cref="IEvaluableJobCollection" />
+    ///     Query to extract the <see cref="EnsembleMobility" /> data from an <see cref="IEvaluableJobSet" />
     /// </summary>
     public class EnsembleMobilityEvaluation : JobEvaluation<IReadOnlyList<EnsembleMobility>>
     {
@@ -22,8 +22,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<IReadOnlyList<EnsembleMetaData>> EnsembleMetaEvaluation { get; set; }
 
         /// <inheritdoc />
-        public EnsembleMobilityEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public EnsembleMobilityEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 
@@ -52,12 +52,12 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            EnsembleDisplacementEvaluation = EnsembleDisplacementEvaluation ?? new EnsembleDisplacementEvaluation(JobCollection);
-            EnsembleMetaEvaluation = EnsembleMetaEvaluation ?? new EnsembleMetaEvaluation(JobCollection);
+            EnsembleDisplacementEvaluation = EnsembleDisplacementEvaluation ?? new EnsembleDisplacementEvaluation(JobSet);
+            EnsembleMetaEvaluation = EnsembleMetaEvaluation ?? new EnsembleMetaEvaluation(JobSet);
 
-            if (!EnsembleDisplacementEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (!EnsembleDisplacementEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Ensemble displacement evaluation is not compatible.");
-            if (!EnsembleMetaEvaluation.JobCollection.CompatibleTo(JobCollection))
+            if (!EnsembleMetaEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("Ensemble meta evaluation is not compatible.");
             base.PrepareForExecution();
         }

@@ -19,5 +19,10 @@ namespace Mocassin.Model.Translator.Jobs
         ///     Get the set of defined <see cref="IPostBuildOptimizer"/> for the translation operation
         /// </summary>
         IEnumerable<IPostBuildOptimizer> GetPostBuildOptimizers();
+
+        /// <summary>
+        ///     Get the id of the collection in its current context
+        /// </summary>
+        int CollectionId { get; }
     }
 }

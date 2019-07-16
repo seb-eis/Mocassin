@@ -27,6 +27,9 @@ namespace Mocassin.Model.Translator.Jobs
         public IList<IPostBuildOptimizer> PostBuildOptimizers { get; set; }
 
         /// <inheritdoc />
+        public int CollectionId { get; set; }
+
+        /// <inheritdoc />
         public ISimulation GetSimulation()
         {
             return Simulation;

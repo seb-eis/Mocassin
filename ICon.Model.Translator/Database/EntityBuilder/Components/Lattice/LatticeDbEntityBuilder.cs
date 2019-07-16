@@ -15,9 +15,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public Random Rng { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="ILatticeCreationProvider" />
+        ///     Get or set the <see cref="IDopedLatticeSource" />
         /// </summary>
-        public ILatticeCreationProvider LatticeCreationProvider { get; set; }
+        public IDopedLatticeSource DopedLatticeSource { get; set; }
 
         /// <inheritdoc />
         public LatticeDbEntityBuilder(IProjectModelContext modelContext)
@@ -43,7 +43,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         public SimulationLatticeModel BuildLatticeModelEntity(LatticeConfiguration latticeConfiguration, ISimulationModel simulationModel)
         {
-            var rawLattice = LatticeCreationProvider.BuildLattice(latticeConfiguration.GetIntVector3D(),
+            var rawLattice = DopedLatticeSource.BuildByteLattice(latticeConfiguration.GetIntVector3D(),
                 latticeConfiguration.DopingConcentrations, Rng);
             var interopLattice = new LatticeEntity(rawLattice);
             return new SimulationLatticeModel {Lattice = interopLattice};
@@ -73,7 +73,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// </summary>
         private void InitializeBuildComponents()
         {
-            LatticeCreationProvider = ModelContext.ModelProject.GetManager<ILatticeManager>().QueryPort
+            DopedLatticeSource = ModelContext.ModelProject.GetManager<ILatticeManager>().QueryPort
                 .Query(x => x.GetLatticeCreationProvider());
             Rng = new PcgRandom32();
         }

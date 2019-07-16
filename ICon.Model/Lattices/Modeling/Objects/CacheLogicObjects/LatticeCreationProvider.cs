@@ -20,7 +20,7 @@ namespace Mocassin.Model.Lattices
     ///     ordered in a supercell.
     ///     This WorkLattice is then doped with the DopingExecuter and finally translated to a SuperCellWrapper.
     /// </remarks>
-    public class LatticeCreationProvider : ILatticeCreationProvider
+    public class LatticeCreationProvider : IDopedLatticeSource
     {
         /// <summary>
         ///     The default block which is used to fill spaces not defined by custom blocks (default block is the one with Index =
@@ -147,13 +147,13 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <inheritdoc />
-        public byte[,,,] BuildLattice(DataIntVector3D sizeVector, IDictionary<IDoping, double> dopings, Random rng)
+        public byte[,,,] BuildByteLattice(DataIntVector3D sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng)
         {
             var workLattice = GenerateDefaultLattice(DefaultBlock, PositionIndexToCellPositionList, sizeVector);
 
             var dopingExecuter = new DopingExecuter(DoubleCompareTolerance, DopingTolerance, rng);
 
-            dopingExecuter.DopeLattice(workLattice, Dopings, dopings);
+            dopingExecuter.DopeLattice(workLattice, Dopings, dopingDictionary);
 
             return Translate(workLattice);
         }

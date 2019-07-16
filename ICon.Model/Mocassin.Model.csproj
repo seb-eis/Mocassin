@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
-    <Compile Remove="ProjectServices\Manager\Main\ProjectSettingsData.cs" />
     <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\ISimulationSeriesBase.cs" />
     <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\SimulationSeriesBase.cs" />
     <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />

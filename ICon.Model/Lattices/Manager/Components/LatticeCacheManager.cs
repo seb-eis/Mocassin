@@ -31,15 +31,17 @@ namespace Mocassin.Model.Lattices
 	    /// Get provider for generating a lattice with the model data
 	    /// </summary>
 	    /// <returns></returns>
-	    public ILatticeCreationProvider GetLatticeCreationProvider()
+	    public IDopedLatticeSource GetLatticeCreationProvider()
 	    {
 		    return GetResultFromCache(CreateLatticeProvider);
 	    }
 
 		[CacheMethodResult]
-	    protected ILatticeCreationProvider CreateLatticeProvider()
+	    protected IDopedLatticeSource CreateLatticeProvider()
 	    {
-			return new LatticeCreationProvider(ModelProject);
+			//return new LatticeCreationProvider(ModelProject);
+            var baseBlock = ModelProject.GetManager<ILatticeManager>().QueryPort.Query(x => x.GetBuildingBlocks().First());
+            return new DopedLatticeSource(ModelProject, baseBlock);
 	    }
 
     }

@@ -10,6 +10,7 @@
       <!-- Converters -->
       <BooleanToVisibilityConverter x:Key="App.Converter.BooleanToVisibility"/>
       <converter:NumericExpressionToValueConverter x:Key="App.Converter.NumericExpressionToValue"/>
+      <converter:EnumToStringConverter x:Key="App.Converter.EnumToString"/>
       <!-- System color overwrites -->
 
       <!-- Styles with keys -->

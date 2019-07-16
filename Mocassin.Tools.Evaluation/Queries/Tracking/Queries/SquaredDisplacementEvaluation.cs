@@ -20,8 +20,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         public IJobEvaluation<IReadOnlyList<MobileTrackerResult>> MobileTrackingEvaluation { get; set; }
 
         /// <inheritdoc />
-        public SquaredDisplacementEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public SquaredDisplacementEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 
@@ -37,8 +37,8 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override void PrepareForExecution()
         {
-            MobileTrackingEvaluation = MobileTrackingEvaluation ?? new MobileTrackingEvaluation(JobCollection);
-            if (!MobileTrackingEvaluation.JobCollection.CompatibleTo(JobCollection))
+            MobileTrackingEvaluation = MobileTrackingEvaluation ?? new MobileTrackingEvaluation(JobSet);
+            if (!MobileTrackingEvaluation.JobSet.CompatibleTo(JobSet))
                 throw new InvalidOperationException("The mobile tracking evaluation is not compatible");
 
             base.PrepareForExecution();

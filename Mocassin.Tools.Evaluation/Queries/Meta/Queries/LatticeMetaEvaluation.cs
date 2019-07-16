@@ -7,13 +7,13 @@ using Mocassin.Tools.Evaluation.Extensions;
 namespace Mocassin.Tools.Evaluation.Queries
 {
     /// <summary>
-    ///     Query to extract the <see cref="LatticeMetaData" /> from a <see cref="IEvaluableJobCollection" />
+    ///     Query to extract the <see cref="LatticeMetaData" /> from a <see cref="IEvaluableJobSet" />
     /// </summary>
     public class LatticeMetaEvaluation : JobEvaluation<LatticeMetaData>
     {
         /// <inheritdoc />
-        public LatticeMetaEvaluation(IEvaluableJobCollection jobCollection)
-            : base(jobCollection)
+        public LatticeMetaEvaluation(IEvaluableJobSet jobSet)
+            : base(jobSet)
         {
         }
 

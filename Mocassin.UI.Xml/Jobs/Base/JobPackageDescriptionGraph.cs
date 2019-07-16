@@ -45,11 +45,12 @@ namespace Mocassin.UI.Xml.Jobs
 
         /// <summary>
         ///     Creates a <see cref="IJobCollection" /> for simulation database creation in the context of the passed
-        ///     <see cref="IModelProject" />
+        ///     <see cref="IModelProject" /> and assigns the passed collection id
         /// </summary>
         /// <param name="modelProject"></param>
+        /// <param name="collectionId"></param>
         /// <returns></returns>
-        public abstract IJobCollection ToInternal(IModelProject modelProject);
+        public abstract IJobCollection ToInternal(IModelProject modelProject, int collectionId);
 
         /// <summary>
         ///     Get the sequence of defined <see cref="ManualOptimizerGraph"/> objects pof the package

@@ -42,10 +42,12 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <inheritdoc />
-        public override IJobCollection ToInternal(IModelProject modelProject)
+        public override IJobCollection ToInternal(IModelProject modelProject, int collectionId)
         {
             if (modelProject == null) throw new ArgumentNullException(nameof(modelProject));
-            return JobCollectionAdapter.Create(modelProject, this);
+            var result = JobCollectionAdapter.Create(modelProject, this);
+            result.CollectionId = collectionId;
+            return result;
         }
 
         /// <inheritdoc />

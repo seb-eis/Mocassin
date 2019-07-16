@@ -33,10 +33,22 @@ namespace Mocassin.Model.Translator.Database.Entities.Other.Meta
         public string ConfigName { get; set; }
 
         /// <summary>
-        ///     Get or set the relative job index due to job multiplication
+        ///     Get or set the relative job index due to job multiplication in the configuration
         /// </summary>
         [Column("JobIndex")]
         public int JobIndex { get; set; }
+
+        /// <summary>
+        ///     Get or set the config index in the collection
+        /// </summary>
+        [Column("ConfigIndex")]
+        public int ConfigIndex { get; set; }
+
+        /// <summary>
+        ///     Get or set the job collection index
+        /// </summary>
+        [Column("CollectionIndex")]
+        public int CollectionIndex { get; set; }
 
         /// <summary>
         ///     Get or set the thermodynamic temperature

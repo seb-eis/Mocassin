@@ -7,7 +7,7 @@ namespace Mocassin.Tools.Evaluation.Queries
     ///     Represents a collection of <see cref="JobContext" /> instances that can be evaluated using
     ///     <see cref="JobEvaluation{T}" /> implementations
     /// </summary>
-    public interface IEvaluableJobCollection : IReadOnlyList<JobContext>
+    public interface IEvaluableJobSet : IReadOnlyList<JobContext>
     {
         /// <summary>
         ///     Get the <see cref="MslEvaluationContext" /> of the queryable
@@ -16,10 +16,10 @@ namespace Mocassin.Tools.Evaluation.Queries
         MslEvaluationContext EvaluationContext { get; }
 
         /// <summary>
-        ///     Checks if the <see cref="IEvaluableJobCollection"/> is compatible
+        ///     Checks if the <see cref="IEvaluableJobSet"/> is compatible
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        bool CompatibleTo(IEvaluableJobCollection other);
+        bool CompatibleTo(IEvaluableJobSet other);
     }
 }
