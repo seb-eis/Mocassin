@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
-    ///     Generic base <see cref="ViewModelBase" /> for views that provide <see cref="ICollection{T}"/> interfaces
+    ///     Generic base <see cref="ViewModelBase" /> for views that provide <see cref="ICollection{T}" /> interfaces
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class CollectionControlViewModel<T> : ViewModelBase
@@ -31,13 +33,43 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <summary>
-        ///     Set a new <see cref="ICollection{T}"/> for the view model
+        ///     Set a new <see cref="ICollection{T}" /> for the view model
         /// </summary>
         /// <param name="collection"></param>
         public virtual void SetCollection(ICollection<T> collection)
         {
             DataCollection = collection;
             SelectedCollectionItem = default;
+        }
+
+        /// <summary>
+        ///     Resynchronizes the view model with potential subscribers by force resetting the internal properties
+        /// </summary>
+        public void Resynchronize()
+        {
+            var selectedItem = SelectedCollectionItem;
+            var collection = DataCollection;
+            ExecuteOnDispatcher(() => SetCollection(null));
+            ExecuteOnDispatcher(() =>
+            {
+                SetCollection(collection);
+                SelectedCollectionItem = selectedItem;
+            });
+        }
+
+        /// <summary>
+        ///     Duplicates an item from the collection and appends the items to the end of the collection
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="duplicator"></param>
+        /// <param name="count"></param>
+        public void DuplicateItem(T item, Func<T, T> duplicator, int count = 1)
+        {
+            if (!DataCollection.Contains(item)) throw new InvalidOperationException("Item is not part of the collection.");
+            var tempList = new List<T>(count);
+            for (var i = 0; i < count; i++) tempList.Add(duplicator(item));
+            DataCollection.AddMany(tempList);
+            Resynchronize();
         }
     }
 }

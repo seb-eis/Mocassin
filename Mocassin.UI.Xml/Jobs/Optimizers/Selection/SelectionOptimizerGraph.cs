@@ -14,7 +14,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     up simulation
     /// </summary>
     [XmlRoot("SelectionOptimizer")]
-    public class SelectionOptimizerGraph : ManualOptimizerGraph
+    public class SelectionOptimizerGraph : ManualOptimizerGraph, IDuplicable<SelectionOptimizerGraph>
     {
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> to the <see cref="UnitCellPosition"/> that the optimizer targets
@@ -37,6 +37,23 @@ namespace Mocassin.UI.Xml.Jobs
             {
                 RemoveCombinations = new List<(IParticle, IUnitCellPosition)> {(particle, unitCellPosition)}
             };
+        }
+
+        /// <inheritdoc />
+        public SelectionOptimizerGraph Duplicate()
+        {
+            return new SelectionOptimizerGraph
+            {
+                Name = Name,
+                StartUnitCellPosition = StartUnitCellPosition.Duplicate(),
+                RemovedParticle = RemovedParticle.Duplicate()
+            };
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

@@ -110,23 +110,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             {
                 var builder = new MocassinSimulationLibraryBuilder();
                 builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, e => SendCallErrorMessage(e));
-                builder.JobBuildCounterNotifications.Subscribe(x =>
-                {
-                    var div = x.Total / 100;
-                    div = div == 0 ? 1 : div;
-                    if (!(x.Done == 1 || x.Done == x.Total || x.Done % div == 0)) return;
-                    MaxJobs = x.Total;
-                    DoneJobs = x.Done;
-                });
+                builder.JobBuildCounterNotifications.Subscribe(UpdateBuildCountsOnMayorStep);
 
-                var result = await Task.Run(() =>
-                    builder.BuildLibrary(ProjectBuildGraphCollectionViewModel.SelectedCollectionItem, FilePath,
-                        ProjectControl.CreateModelProject()));
-
+                var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedCollectionItem;
+                var result = await Task.Run(() => builder.BuildLibrary(buildGraph, FilePath, ProjectControl.CreateModelProject()));
                 if (result != null) SendCallInfoMessage($"Simulations deployed @ {FilePath}");
             }
 
             return new AsyncRelayCommand(Execute, CanExecute);
+        }
+
+        /// <summary>
+        ///     Updates the build counter values if the passed set of done and total counts describes a mayor step
+        /// </summary>
+        /// <param name="counts"></param>
+        private void UpdateBuildCountsOnMayorStep((int, int) counts)
+        {
+            var (done, total) = counts;
+            var div = total / 100;
+            div = div == 0 ? 1 : div;
+            if (!(done == 1 || done == total || done % div == 0)) return;
+            MaxJobs = total;
+            DoneJobs = done;
         }
     }
 }

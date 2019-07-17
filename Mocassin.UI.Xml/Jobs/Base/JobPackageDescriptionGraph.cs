@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator.Jobs;
@@ -72,5 +73,16 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         /// <returns></returns>
         public abstract int GetTotalJobCount(IModelProject modelProject);
+
+        /// <summary>
+        ///     Copies internal data to the passed <see cref="JobPackageDescriptionGraph"/>. The nam
+        /// </summary>
+        /// <param name="package"></param>
+        protected void CopyBaseDataFrom(JobPackageDescriptionGraph package)
+        {
+            Name = package.Name;
+            JobCountPerConfig = package.JobCountPerConfig;
+            SelectionOptimizers = package.SelectionOptimizers.Select(x => x.Duplicate()).ToList();
+        }
     }
 }

@@ -12,7 +12,9 @@ namespace Mocassin.UI.Xml.Base
     ///     instances
     /// </summary>
     [XmlRoot]
-    public class ModelObjectReferenceGraph<T> : ModelObjectGraph, IEquatable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
+    public sealed class ModelObjectReferenceGraph<T> : ModelObjectGraph,
+        IEquatable<ModelObjectReferenceGraph<T>>,
+        IDuplicable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
     {
         [XmlIgnore]
         [NotMapped]
@@ -76,6 +78,12 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
+        public ModelObjectReferenceGraph<T> Duplicate()
+        {
+            return new ModelObjectReferenceGraph<T>(TargetGraph);
+        }
+
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             return Equals(obj as ModelObjectReferenceGraph<T>);
@@ -87,6 +95,12 @@ namespace Mocassin.UI.Xml.Base
             var hashCode = 1207054110;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TargetGraph?.Key);
             return hashCode;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

@@ -42,6 +42,18 @@
                 AutoGenerateColumns="False"
                 Background="Transparent"
                 ColumnWidth="*">
+        <DataGrid.ContextMenu>
+          <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget.DataContext}">
+            <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedCollectionItem}">
+              <MenuItem.Header>
+                <WrapPanel>
+                  <TextBlock Text="Make duplicates: "/>
+                  <TextBox Text="{Binding Path=DuplicateCount, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                </WrapPanel>
+              </MenuItem.Header>
+            </MenuItem>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
             <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 

@@ -29,7 +29,7 @@
     <ProductName>Mocassin Model Builder</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
-    <ApplicationRevision>7</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -638,6 +638,7 @@
     <Compile Include="Controls\Base\Commands\AddWorkTabCommand.cs" />
     <Compile Include="Controls\Base\Commands\AsyncProjectControlCommand.cs" />
     <Compile Include="Controls\Base\Commands\AutoProjectCommandSource.cs" />
+    <Compile Include="Controls\Base\Commands\DuplicateCollectionItemCommand.cs" />
     <Compile Include="Controls\Base\Commands\ProjectControlCommandDictionary.cs" />
     <Compile Include="Controls\Base\Commands\ProjectControlCommand.cs" />
     <Compile Include="Controls\Base\Interfaces\IContentSupplier.cs" />

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Model.Simulations;
+using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Base;
@@ -15,6 +16,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     public class MmcJobPackageControlViewModel : CollectionControlViewModel<MmcJobPackageDescriptionGraph>,
         IContentSupplier<ProjectJobTranslationGraph>
     {
+        private int duplicateCount;
         private ProjectJobTranslationGraph contentSource;
         private IEnumerable<ModelObjectReferenceGraph<MetropolisSimulation>> selectableSimulations;
 
@@ -33,6 +35,32 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         {
             get => selectableSimulations;
             set => SetProperty(ref selectableSimulations, value);
+        }
+
+        /// <summary>
+        ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
+        /// </summary>
+        public DuplicateCollectionItemCommand<MmcJobPackageDescriptionGraph> DuplicateItemCommand { get; }
+
+        /// <summary>
+        ///     Get or set the duplicate count if the duplicate command is executed
+        /// </summary>
+        public int DuplicateCount
+        {
+            get => duplicateCount;
+            set => SetProperty(ref duplicateCount, value > 0 ? value : 1);
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="MmcJobPackageControlViewModel"/>
+        /// </summary>
+        public MmcJobPackageControlViewModel()
+        {
+            duplicateCount = 1;
+            DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobPackageDescriptionGraph>(this)
+            {
+                CountProvider = () => DuplicateCount
+            };
         }
 
         /// <inheritdoc />

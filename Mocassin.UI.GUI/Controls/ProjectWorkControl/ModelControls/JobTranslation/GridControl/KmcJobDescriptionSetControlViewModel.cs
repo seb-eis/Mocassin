@@ -16,6 +16,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// </summary>
         public KmcJobPackageDescriptionGraph KmcJobPackage { get; }
 
+        /// <summary>
+        ///     Get the parent <see cref="MocassinProjectGraph" />
+        /// </summary>
         public MocassinProjectGraph ProjectGraph { get; }
 
         /// <summary>

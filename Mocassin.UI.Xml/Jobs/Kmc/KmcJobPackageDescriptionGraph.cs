@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     Serializable data object for storage and provision of <see cref="KmcJobCollection" /> objects
     /// </summary>
     [XmlRoot("KmcJobCollection")]
-    public class KmcJobPackageDescriptionGraph : JobPackageDescriptionGraph
+    public class KmcJobPackageDescriptionGraph : JobPackageDescriptionGraph, IDuplicable<KmcJobPackageDescriptionGraph>
     {
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the target <see cref="KineticSimulation" />
@@ -73,6 +73,25 @@ namespace Mocassin.UI.Xml.Jobs
             return int.TryParse(JobCountPerConfig, out var count)
                 ? count
                 : modelProject.DataTracker.FindObjectByKey<IKineticSimulation>(Simulation.Key).JobCount;
+        }
+
+        /// <inheritdoc />
+        public KmcJobPackageDescriptionGraph Duplicate()
+        {
+            var copyObj = new KmcJobPackageDescriptionGraph
+            {
+                Simulation = Simulation?.Duplicate(),
+                JobBaseDescription = (KmcJobDescriptionGraph) JobBaseDescription.DeepCopy(),
+                JobConfigurations = JobConfigurations.Select(x => x.DeepCopy()).Cast<KmcJobDescriptionGraph>().ToList()
+            };
+            copyObj.CopyBaseDataFrom(this);
+            return copyObj;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

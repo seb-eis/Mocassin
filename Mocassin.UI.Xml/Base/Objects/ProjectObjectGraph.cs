@@ -112,9 +112,13 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         /// <see cref="referencesHandling" />
         /// <returns></returns>
-        public ProjectObjectGraph DeepCopy(PreserveReferencesHandling referencesHandling = PreserveReferencesHandling.Objects)
+        public virtual ProjectObjectGraph DeepCopy(PreserveReferencesHandling referencesHandling = PreserveReferencesHandling.Objects)
         {
-            var settings = new JsonSerializerSettings {PreserveReferencesHandling = referencesHandling};
+            var settings = new JsonSerializerSettings 
+            {
+                PreserveReferencesHandling = referencesHandling,
+                TypeNameHandling = TypeNameHandling.Auto
+            };
             return (ProjectObjectGraph) JsonConvert.DeserializeObject(ToJson(), GetType(), settings);
         }
 

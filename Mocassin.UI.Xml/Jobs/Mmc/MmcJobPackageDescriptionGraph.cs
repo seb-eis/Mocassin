@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
@@ -14,7 +13,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     Serializable data object for storage and provision of <see cref="MmcJobCollection" /> objects
     /// </summary>
     [XmlRoot("MmcJobCollection")]
-    public class MmcJobPackageDescriptionGraph : JobPackageDescriptionGraph
+    public class MmcJobPackageDescriptionGraph : JobPackageDescriptionGraph, IDuplicable<MmcJobPackageDescriptionGraph>
     {
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the target <see cref="MetropolisSimulation" />
@@ -74,6 +73,25 @@ namespace Mocassin.UI.Xml.Jobs
             return int.TryParse(JobCountPerConfig, out var count)
                 ? count
                 : modelProject.DataTracker.FindObjectByKey<IMetropolisSimulation>(Simulation.Key).JobCount;
+        }
+
+        /// <inheritdoc />
+        public MmcJobPackageDescriptionGraph Duplicate()
+        {
+            var copyObj = new MmcJobPackageDescriptionGraph
+            {
+                Simulation = Simulation?.Duplicate(),
+                JobBaseDescription = (MmcJobDescriptionGraph) JobBaseDescription.DeepCopy(),
+                JobConfigurations = JobConfigurations.Select(x => x.DeepCopy()).Cast<MmcJobDescriptionGraph>().ToList()
+            };
+            copyObj.CopyBaseDataFrom(this);
+            return copyObj;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }
