@@ -56,7 +56,7 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         /// <param name="startIndex"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public ReadOnlySpan<T> ReadLength<T>(int startIndex, int length) where T : struct
+        public ReadOnlySpan<T> ReadLengthAs<T>(int startIndex, int length) where T : struct
         {
             if (startIndex < 0 || startIndex + length > Binary.Length)
                 throw new InvalidOperationException("Access to buffer is out of range.");
@@ -71,24 +71,16 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         }
 
         /// <summary>
-        ///     Gets a <see cref="ReadOnlySpan{T}" /> to a value area of the internal buffer defined by the passed start and end index
+        ///     Gets a <see cref="ReadOnlySpan{T}" /> to a value area of the internal buffer defined by the passed start and end
+        ///     index
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="startIndex"></param>
         /// <param name="endIndex"></param>
         /// <returns></returns>
-        public ReadOnlySpan<T> ReadArea<T>(int startIndex, int endIndex) where T : struct
+        public ReadOnlySpan<T> ReadAreaAs<T>(int startIndex, int endIndex) where T : struct
         {
-            if (startIndex < 0 || endIndex > Binary.Length)
-                throw new InvalidOperationException("Access to buffer is out of range.");
-
-            unsafe
-            {
-                fixed (void* ptr = &Binary[startIndex])
-                {
-                    return new ReadOnlySpan<T>(ptr, (endIndex - startIndex) / Marshal.SizeOf<T>());
-                }
-            }
+            return ReadLengthAs<T>(startIndex, endIndex - startIndex);
         }
     }
 }

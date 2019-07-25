@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
 {
     /// <summary>
-    ///     Simulation jump histogram struct that contains energy histogram data from a 'C' Simulator state file
+    ///     Simulation jump histogram struct that contains the jump occurence sampling. Layout 'C' Simulator state file
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 8040, Pack = 8)]
     public unsafe struct McsJumpHistogram

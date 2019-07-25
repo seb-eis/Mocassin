@@ -46,7 +46,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ref McsMetaData GetMetaData()
         {
-            return ref BinaryReader.ReadAs<McsMetaData>(GetHeader().MetaDataOffset);
+            return ref BinaryReader.ReadAs<McsMetaData>(GetHeader().MetaOffset);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<byte> GetLattice()
         {
-            return BinaryReader.ReadArea<byte>(Header.LatticeDataOffset, Header.CounterDataOffset);
+            return BinaryReader.ReadAreaAs<byte>(Header.LatticeOffset, Header.CountersOffset);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsCycleCounter> GetCycleCounters()
         {
-            return BinaryReader.ReadArea<McsCycleCounter>(Header.CounterDataOffset, Header.GlobalTrackerDataOffset);
+            return BinaryReader.ReadAreaAs<McsCycleCounter>(Header.CountersOffset, Header.GlobalTrackerOffset);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> GetGlobalTrackers()
         {
-            return BinaryReader.ReadArea<McsMovementTracker>(Header.GlobalTrackerDataOffset, Header.MobileTrackerDataOffset);
+            return BinaryReader.ReadAreaAs<McsMovementTracker>(Header.GlobalTrackerOffset, Header.MobileTrackerOffset);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> GetMobileTrackers()
         {
-            return BinaryReader.ReadArea<McsMovementTracker>(Header.MobileTrackerDataOffset, Header.StaticTrackerDataOffset);
+            return BinaryReader.ReadAreaAs<McsMovementTracker>(Header.MobileTrackerOffset, Header.StaticTrackerOffset);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> GetStaticTrackers()
         {
-            return BinaryReader.ReadArea<McsMovementTracker>(Header.StaticTrackerDataOffset, Header.MobileTrackerIndexingDataOffset);
+            return BinaryReader.ReadAreaAs<McsMovementTracker>(Header.StaticTrackerOffset, Header.MobileTrackerIndexingOffset);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<int> GetMobileTrackerMapping()
         {
-            return BinaryReader.ReadArea<int>(Header.MobileTrackerIndexingDataOffset, Header.JumpStatisticDataOffset);
+            return BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsJumpStatistic> GetJumpStatistics()
         {
-            return BinaryReader.ReadArea<McsJumpStatistic>(Header.JumpStatisticDataOffset, BinaryReader.BinaryLength);
+            return BinaryReader.ReadAreaAs<McsJumpStatistic>(Header.JumpStatisticsOffset, BinaryReader.BinaryLength);
         }
 
         /// <summary>

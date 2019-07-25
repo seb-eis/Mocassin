@@ -433,7 +433,7 @@ namespace Mocassin.Model.Transitions
 
                 var movement = rule.GetMovementDescription().ToList();
                 var zipped = rule.GetStartStateOccupation().Zip(rule.GetFinalStateOccupation(), (a, b) => (a, b)).ToList();
-                for (var i = 0; i < movement.Count - 1; i = i + 2)
+                for (var i = 0; i < movement.Count - 1; i += 2)
                     moveType |= GetStepMovementType(zipped[movement[i]], zipped[movement[i + 1]]);
 
                 if (IsIntersticialyLikeMovement(movement))

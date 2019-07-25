@@ -11,73 +11,61 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         /// <summary>
         ///     Get the number of performed monte carlo steps
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)]
-        public readonly long McsCount;
+        [MarshalAs(UnmanagedType.I8)] public readonly long McsCount;
 
         /// <summary>
         ///     Get the number of performed simulation cycles
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)]
-        public readonly long CycleCount;
+        [MarshalAs(UnmanagedType.I8)] public readonly long CycleCount;
 
         /// <summary>
         ///     Get set simulation flags
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int Flags;
+        [MarshalAs(UnmanagedType.I4)] public readonly int Flags;
 
         /// <summary>
         ///     Get the byte offset for the start of the meta data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int MetaDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int MetaOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the lattice data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int LatticeDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int LatticeOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the counter data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int CounterDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int CountersOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the global tracker data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int GlobalTrackerDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int GlobalTrackerOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the mobile tracker data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int MobileTrackerDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int MobileTrackerOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the static tracker data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int StaticTrackerDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int StaticTrackerOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the mobile tracker indexing data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int MobileTrackerIndexingDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int MobileTrackerIndexingOffset;
 
         /// <summary>
         ///     Get the byte offset for the start of the jump statistics data block
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int JumpStatisticDataOffset;
+        [MarshalAs(UnmanagedType.I4)] public readonly int JumpStatisticsOffset;
 
         /// <summary>
         ///     Explicit padding to 56 bytes
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
-        public readonly int _padding;
+        [MarshalAs(UnmanagedType.I4)] private readonly int padding;
     }
 }

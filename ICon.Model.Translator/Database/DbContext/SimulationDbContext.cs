@@ -68,12 +68,6 @@ namespace Mocassin.Model.Translator
             }
         }
 
-        /// <inheritdoc />
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return await Task.Run(SaveChanges, cancellationToken);
-        }
-
         /// <summary>
         ///     Performs the passed action on all properties of database set entries that are interop entities
         /// </summary>
