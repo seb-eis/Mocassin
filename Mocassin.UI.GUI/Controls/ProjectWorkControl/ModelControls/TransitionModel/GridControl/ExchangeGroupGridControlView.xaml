@@ -16,8 +16,8 @@
 
   <Grid>
     <DataGrid Name="ExchangeGroupDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               Background="Transparent"
               VerticalAlignment="Stretch"
               VerticalContentAlignment="Stretch"

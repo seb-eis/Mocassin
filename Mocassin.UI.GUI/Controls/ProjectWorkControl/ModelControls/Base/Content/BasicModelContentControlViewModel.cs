@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
@@ -17,8 +16,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     {
         private MocassinProjectGraph selectedProjectGraph;
         private ContentControl dataContentControl;
-        private ContentControl visualizerContentControl;
-        private ContentControl infoContentControl;
 
         /// <summary>
         ///     Get or set the selected <see cref="MocassinProjectGraph" />
@@ -42,24 +39,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             set => SetProperty(ref dataContentControl, value);
         }
 
-        /// <summary>
-        ///     Get or set the <see cref="ContentControl" /> for data visualization
-        /// </summary>
-        public ContentControl VisualizerContentControl
-        {
-            get => visualizerContentControl ?? new NoContentView();
-            set => SetProperty(ref visualizerContentControl, value);
-        }
-
-        /// <summary>
-        ///     Get or set the <see cref="ContentControl" /> for data info
-        /// </summary>
-        public ContentControl InfoContentControl
-        {
-            get => infoContentControl ?? new NoContentView();
-            set => SetProperty(ref infoContentControl, value);
-        }
-
         /// <inheritdoc />
         public BasicModelContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
@@ -72,8 +51,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         protected void OnProjectGraphSelectionChanged()
         {
             NotifyGraphSelectionChanged(DataContentControl);
-            NotifyGraphSelectionChanged(VisualizerContentControl);
-            NotifyGraphSelectionChanged(InfoContentControl);
         }
 
         /// <summary>
@@ -83,8 +60,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         protected void OnSelectionChanged<T>(T value)
         {
             NotifySelectionChanged(DataContentControl, value);
-            NotifySelectionChanged(VisualizerContentControl, value);
-            NotifySelectionChanged(InfoContentControl, value);
         }
 
         /// <summary>

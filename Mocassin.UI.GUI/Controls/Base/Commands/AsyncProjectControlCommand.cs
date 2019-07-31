@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         protected sealed override bool CanExecuteInternal(object parameter)
         {
-            ProjectControl.OpenProjectLibrary?.CheckForContentChange();
+            ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
             return CanExecuteInternal();
         }
 
@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         public override bool CanExecuteInternal(T parameter)
         {
-            ProjectControl.OpenProjectLibrary?.CheckForContentChange();
+            ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
             return true;
         }
     }

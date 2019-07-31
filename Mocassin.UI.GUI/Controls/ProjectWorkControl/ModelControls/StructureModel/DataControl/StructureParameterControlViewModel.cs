@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Mocassin.Symmetry.CrystalSystems;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.Adapter;
 using Mocassin.UI.Xml.Main;
@@ -13,7 +10,8 @@ using Mocassin.UI.Xml.StructureModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="StructureParameterControlView" /> that controls unique
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="StructureParameterControlView" /> that controls
+    ///     unique
     ///     structure model parameters
     /// </summary>
     public class StructureParameterControlViewModel : ProjectGraphControlViewModel
@@ -25,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         private StructureInfoGraph structureInfo;
 
         /// <summary>
-        ///     Get or set the current <see cref="StructureModelGraph"/>
+        ///     Get or set the current <see cref="StructureModelGraph" />
         /// </summary>
         public StructureModelGraph ModelGraph
         {
@@ -34,14 +32,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get or set the selected <see cref="ISpaceGroup"/>
+        ///     Get or set the selected <see cref="ISpaceGroup" />
         /// </summary>
         public ISpaceGroup SelectedSpaceGroup
         {
             get => selectedSpaceGroup;
             set
             {
-                SetProperty(ref selectedSpaceGroup,value);
+                SetProperty(ref selectedSpaceGroup, value);
                 ModelGraph?.SpaceGroupInfo?.PopulateFrom(value?.GetGroupEntry());
                 ParameterSetter = CreateParameterSetter(value);
                 SpaceGroupService.LoadGroup(value ?? SpaceGroups.First());
@@ -49,7 +47,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get or set the <see cref="CrystalParameterSetter"/> to manipulate the crystal parameters
+        ///     Get or set the <see cref="CrystalParameterSetter" /> to manipulate the crystal parameters
         /// </summary>
         public CrystalParameterSetter ParameterSetter
         {
@@ -58,7 +56,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get or set the <see cref="StructureInfoGraph"/> that controls misc information
+        ///     Get or set the <see cref="StructureInfoGraph" /> that controls misc information
         /// </summary>
         public StructureInfoGraph StructureInfo
         {
@@ -67,12 +65,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get a <see cref="IReadOnlyList{T}"/> of all available <see cref="ISpaceGroup"/> instances
+        ///     Get a <see cref="IReadOnlyList{T}" /> of all available <see cref="ISpaceGroup" /> instances
         /// </summary>
         public IList<ISpaceGroup> SpaceGroups { get; }
 
         /// <summary>
-        ///     Get the local <see cref="ISpaceGroupService"/> of the control
+        ///     Get the local <see cref="ISpaceGroupService" /> of the control
         /// </summary>
         public ISpaceGroupService SpaceGroupService { get; }
 
@@ -95,7 +93,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Finds the <see cref="ISpaceGroup"/> that matches the passed <see cref="SpaceGroupEntry"/>
+        ///     Finds the <see cref="ISpaceGroup" /> that matches the passed <see cref="SpaceGroupEntry" />
         /// </summary>
         /// <param name="spaceGroupEntry"></param>
         /// <returns></returns>
@@ -111,7 +109,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Creates a <see cref="CrystalParameterSetter"/> for the current <see cref="MocassinProjectGraph"/> using the provided <see cref="ISpaceGroup"/>
+        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProjectGraph" /> using the
+        ///     provided <see cref="ISpaceGroup" />
         /// </summary>
         /// <param name="spaceGroup"></param>
         /// <returns></returns>

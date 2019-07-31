@@ -33,26 +33,6 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; }
 
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="ProjectModelGraph" /> objects stored in the library
-        /// </summary>
-        DbSet<ProjectModelGraph> ProjectModelGraphs { get; }
-
-        /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="ProjectCustomizationGraph" /> objects stored in the library
-        /// </summary>
-        DbSet<ProjectCustomizationGraph> ProjectCustomizationGraphs { get; }
-
-        /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="ProjectJobTranslationGraph" /> objects stored in the library
-        /// </summary>
-        DbSet<ProjectJobTranslationGraph> ProjectJobTranslationGraphs { get; }
-
-        /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="MocassinProjectBuildGraph" /> objects stored in the library
-        /// </summary>
-        DbSet<MocassinProjectBuildGraph> MocassinProjectBuildGraphs { get; }
-
-        /// <summary>
         ///     Adds the given <see cref="TEntity" /> objects to the <see cref="IMocassinProjectLibrary" />
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -83,25 +63,25 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         bool HasUnsavedChanges();
 
         /// <summary>
-        ///     Get a <see cref="IObservable{T}" /> that informs that an internal change in the library happened
+        ///     Get a <see cref="IObservable{T}" /> that informs that a model change happened in the library
         /// </summary>
-        IObservable<Unit> StateChangedNotification { get; }
+        IObservable<Unit> ModelChangedNotification { get; }
 
         /// <summary>
         ///     Get a hash value for the entire project content
         /// </summary>
         /// <returns></returns>
-        int GetProjectHash();
+        int GetProjectModelHash();
 
         /// <summary>
         ///     Checks if the contents of the library have changed since the last check and triggers affiliated events
         /// </summary>
-        bool CheckForContentChange();
+        bool CheckForModelChanges();
 
         /// <summary>
         ///     Async checks if the contents of the library have changed since the last check and triggers affiliated events if required
         /// </summary>
         /// <returns></returns>
-        Task<bool> CheckForContentChangeAsync();
+        Task<bool> CheckForModelChangesAsync();
     }
 }

@@ -10,14 +10,13 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
   <Grid>
-    <Menu FontSize="14"
-          Background="Transparent">
+    <Menu Background="Transparent">
       <MenuItem Header="Services">
 
-        <MenuItem Header="Model validation" Command="{Binding CommandSource}" 
+        <MenuItem Header="Model validator" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:AddLiveOperationConsoleCommand}"/>
 
-        <MenuItem Header="Simulation services" Command="{Binding CommandSource}"
+        <MenuItem Header="Model translation" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type commands:AddProjectDeploymentTabCommand}"/>
 
       </MenuItem>

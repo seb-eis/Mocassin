@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
             : base(projectControl)
         {
             TabControlViewModel = new UserControlTabControlViewModel();
-            TabControlViewModel.AddNonClosableTab("Welcome", new WelcomeControlViewModel(projectControl), new WelcomeControlView());
+            TabControlViewModel.AddCloseableTab("Welcome", new WelcomeControlViewModel(projectControl), new WelcomeControlView());
             TabControlViewModel.SetActiveTabByIndex(0);
         }
     }

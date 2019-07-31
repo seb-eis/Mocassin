@@ -36,8 +36,8 @@
       </GroupBox.Header>
       <DataGrid Name="JobCollectionsDataGrid"
                 Margin="{StaticResource App.Margin.GroupBoxContent}"
-                ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
                 Background="Transparent"
                 ColumnWidth="*">
@@ -85,20 +85,20 @@
     <GroupBox Grid.Row="1" Grid.Column="0" Name="CollectionSettingsGroupBox">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Collection settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
       </GroupBox.Header>
 
       <gridControl:KmcJobDescriptionControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                                DataContext="{Binding SelectedCollectionItem.JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
+                                                DataContext="{Binding SelectedItem.JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
     </GroupBox>
 
     <GroupBox Grid.Row="2" Grid.Column="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Collection selection optimizers:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>

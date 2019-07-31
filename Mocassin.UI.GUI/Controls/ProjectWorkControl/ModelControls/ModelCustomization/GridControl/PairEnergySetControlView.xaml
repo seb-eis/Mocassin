@@ -18,8 +18,8 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <ComboBox Grid.Row="0" ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+    <ComboBox Grid.Row="0" ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               Margin="{StaticResource App.Margin.VerticalStackLarge}"
               DisplayMemberPath="Name"
               ToolTip="Search permutation"
@@ -31,13 +31,13 @@
         <Run Text="Description:" FontWeight="DemiBold"/>
         <LineBreak/>
         <Run Text="Pair interaction between" />
-        <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
         <Run Text="{Binding Path=PairEnergySet.CenterPosition.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="center position and" />
-        <Run Text="{Binding SelectedCollectionItem.PartnerParticle.Name, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.PartnerParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
         <Run Text="{Binding PairEnergySet.PartnerPosition.Name, Mode=OneWay}"
@@ -57,8 +57,8 @@
     </Border>
 
     <DataGrid Name="PermutationsDataGrid" Grid.Row="2"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               ColumnWidth="*"
               CanUserDeleteRows="False"
               CanUserAddRows="False"

@@ -122,6 +122,11 @@ namespace Mocassin.UI.GUI
         public MainWindowViewModel(IEnumerable<Assembly> pluginAssemblies)
         {
             PluginAssemblies = pluginAssemblies ?? new Assembly[0];
+
+            EnsureResourcesCreated(false);
+            ServiceModelProject = CreateServiceModelProject();
+            WindowDescription = MakeWindowDescription();
+
             ProjectLibraryChangedEvent = new ReactiveEvent<IMocassinProjectLibrary>();
             PushMessageSystem = new AsyncMessageSystem();
             ProjectMenuBarViewModel = new ProjectMenuBarViewModel(this);
@@ -130,10 +135,6 @@ namespace Mocassin.UI.GUI
             ProjectConsoleTabControlViewModel = new ProjectConsoleTabControlViewModel(this);
             ProjectWorkTabControlViewModel = new ProjectWorkTabControlViewModel(this);
             ProjectManagerViewModel = new ProjectManagerViewModel(this);
-
-            EnsureResourcesCreated(false);
-            ServiceModelProject = CreateServiceModelProject();
-            WindowDescription = MakeWindowDescription();
         }
 
         /// <summary>

@@ -4,7 +4,8 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands"
-             xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter">
+             xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+             xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib">
   <Application.Resources>
     <ResourceDictionary>
       <!-- Converters -->
@@ -12,6 +13,14 @@
       <converter:NumericExpressionToValueConverter x:Key="App.Converter.NumericExpressionToValue"/>
       <converter:EnumToStringConverter x:Key="App.Converter.EnumToString"/>
       <!-- System color overwrites -->
+
+      <!-- Margins -->
+      <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
+      <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />
+      <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.VerticalStackLarge" Bottom="10" Top="0" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0" />
+      <Thickness x:Key="App.Margin.GroupBoxContentLarge" Bottom="0" Top="10" Left="2" Right="0" />
 
       <!-- Styles with keys -->
 
@@ -258,7 +267,16 @@
 
       </Style>
 
+      <Style TargetType="{x:Type Menu}">
+        <Setter Property="FontSize" Value="14"/>
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="14"/>
+      </Style>
+
       <Style TargetType="{x:Type TextBox}">
+        <Setter Property="FontSize" Value="14"/>
         <Style.Triggers>
           <Trigger Property="IsReadOnly" Value="True">
             <Setter Property="Opacity" Value=".5" />
@@ -270,6 +288,19 @@
       </Style>
 
       <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource App.Style.GroupBox.NoBorder}"/>
+
+      <Style TargetType="{x:Type ComboBox}" x:Key="App.Style.ColorSelectionComboBox">
+        <Setter Property="ItemTemplate">
+          <Setter.Value>
+            <DataTemplate DataType="{x:Type reflection:PropertyInfo}">
+              <StackPanel Orientation="Horizontal">
+                <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="{StaticResource App.Margin.HorizontalStack}"/>
+                <TextBlock Text="{Binding Name}"/>
+              </StackPanel>
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
 
       <!-- Static objects -->
 
@@ -361,14 +392,6 @@
 
       <s:String x:Key="App.String.ComboBox.SearchModeToggle">Enable search mode</s:String>
       <s:String x:Key="App.String.DropLocationText">Drop to add...</s:String>
-
-
-      <Thickness x:Key="App.Margin.Default" Bottom="2" Top="2" Left="2" Right="2" />
-      <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />
-      <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0" />
-      <Thickness x:Key="App.Margin.VerticalStackLarge" Bottom="10" Top="0" Left="0" Right="0" />
-      <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0" />
-      <Thickness x:Key="App.Margin.GroupBoxContentLarge" Bottom="0" Top="10" Left="2" Right="0" />
 
       <ToolTip x:Key="App.ToolTip.ModelSelection">
         <TextBlock Text="Model" />

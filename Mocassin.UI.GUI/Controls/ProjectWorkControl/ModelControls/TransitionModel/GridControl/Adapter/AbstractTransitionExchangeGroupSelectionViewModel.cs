@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             : base(hostObject, false)
         {
             HandleDropAddCommand = GetDropAddObjectCommand<StateExchangeGroupGraph>();
-            DataCollection = GetTargetCollection(hostObject);
+            Items = GetTargetCollection(hostObject);
         }
 
         /// <inheritdoc />

@@ -68,7 +68,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         private void SwitchLibraryEntityChangeSubscription(IMocassinProjectLibrary projectLibrary)
         {
             ProjectEntityChangeSubscription?.Dispose();
-            ProjectEntityChangeSubscription = projectLibrary?.StateChangedNotification.Subscribe(OnProjectContentChanged);
+            ProjectEntityChangeSubscription = projectLibrary?.ModelChangedNotification.Subscribe(OnProjectContentChanged);
         }
 
         /// <summary>

@@ -22,8 +22,8 @@
     </Grid.RowDefinitions>
 
     <DataGrid Grid.Row="0" Name="UnstableEnvironmentDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               CanUserDeleteRows="False"

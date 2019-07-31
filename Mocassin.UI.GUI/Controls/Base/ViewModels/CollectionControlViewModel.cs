@@ -11,25 +11,25 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
     /// <typeparam name="T"></typeparam>
     public class CollectionControlViewModel<T> : ViewModelBase
     {
-        private T selectedCollectionItem;
-        private ICollection<T> dataCollection;
+        private T selectedItem;
+        private ICollection<T> items;
 
         /// <summary>
         ///     Get or set the <see cref="ICollection{T}" /> fo
         /// </summary>
-        public ICollection<T> DataCollection
+        public ICollection<T> Items
         {
-            get => dataCollection;
-            set => SetProperty(ref dataCollection, value);
+            get => items;
+            set => SetProperty(ref items, value);
         }
 
         /// <summary>
         ///     Get or set the selected collection item <see cref="T" />
         /// </summary>
-        public T SelectedCollectionItem
+        public T SelectedItem
         {
-            get => selectedCollectionItem;
-            set => SetProperty(ref selectedCollectionItem, value);
+            get => selectedItem;
+            set => SetProperty(ref selectedItem, value);
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <param name="collection"></param>
         public virtual void SetCollection(ICollection<T> collection)
         {
-            DataCollection = collection;
-            SelectedCollectionItem = default;
+            Items = collection;
+            SelectedItem = default;
         }
 
         /// <summary>
@@ -47,13 +47,13 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         public void Resynchronize()
         {
-            var selectedItem = SelectedCollectionItem;
-            var collection = DataCollection;
+            var itemBackup = SelectedItem;
+            var itemsBackup = Items;
             ExecuteOnDispatcher(() => SetCollection(null));
             ExecuteOnDispatcher(() =>
             {
-                SetCollection(collection);
-                SelectedCollectionItem = selectedItem;
+                SetCollection(itemsBackup);
+                SelectedItem = itemBackup;
             });
         }
 
@@ -65,10 +65,10 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <param name="count"></param>
         public void DuplicateItem(T item, Func<T, T> duplicator, int count = 1)
         {
-            if (!DataCollection.Contains(item)) throw new InvalidOperationException("Item is not part of the collection.");
+            if (!Items.Contains(item)) throw new InvalidOperationException("Item is not part of the collection.");
             var tempList = new List<T>(count);
             for (var i = 0; i < count; i++) tempList.Add(duplicator(item));
-            DataCollection.AddMany(tempList);
+            Items.AddMany(tempList);
             Resynchronize();
         }
     }

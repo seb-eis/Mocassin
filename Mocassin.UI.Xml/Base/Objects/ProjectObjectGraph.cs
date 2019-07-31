@@ -87,7 +87,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         /// <param name="json"></param>
         /// <param name="serializerSettings"></param>
-        public void FromJson(string json, JsonSerializerSettings serializerSettings = null)
+        public virtual void FromJson(string json, JsonSerializerSettings serializerSettings = null)
         {
             if (json == null) throw new ArgumentNullException(nameof(json));
             JsonConvert.PopulateObject(json, this, serializerSettings ?? GetDefaultJsonSerializerSettings());

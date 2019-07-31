@@ -31,7 +31,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         [XmlIgnore]
         [JsonIgnore]
-        [Column("JsonData")]
+        [NotMapped]
         public virtual string Json
         {
             get => ToJson();

@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         {
             PairEnergySet = pairEnergySet ?? throw new ArgumentNullException(nameof(pairEnergySet));
             SetCollection(pairEnergySet.PairEnergyEntries);
-            SelectedCollectionItem = DataCollection?.FirstOrDefault();
+            SelectedItem = Items?.FirstOrDefault();
         }
     }
 }

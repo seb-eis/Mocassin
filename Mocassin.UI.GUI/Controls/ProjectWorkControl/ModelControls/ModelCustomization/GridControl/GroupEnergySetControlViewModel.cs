@@ -30,7 +30,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         {
             GroupEnergySet = groupEnergySet ?? throw new ArgumentNullException(nameof(groupEnergySet));
             SetCollection(GroupEnergySet.EnergyEntries);
-            SelectedCollectionItem = DataCollection?.FirstOrDefault();
+            SelectedItem = Items?.FirstOrDefault();
             BaseGeometryDescription = GetBaseGeometryDescription(groupEnergySet);
         }
 

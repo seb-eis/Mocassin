@@ -21,8 +21,8 @@
         <ColumnDefinition Width="100*" />
       </Grid.ColumnDefinitions>
     <DataGrid Name="GroupEnergySetDataGrid" Grid.Column="0"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               ColumnWidth="*">
@@ -51,7 +51,7 @@
 
     </DataGrid>
     <gridControl:GroupEnergySetControlView Grid.Column="2"
-      DataContext="{Binding SelectedCollectionItem, Converter={adapter:GroupEnergySetGroupEnergySetViewModelConverter}}"
+      DataContext="{Binding SelectedItem, Converter={adapter:GroupEnergySetGroupEnergySetViewModelConverter}}"
       Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
   </Grid>
 </UserControl>

@@ -14,8 +14,8 @@
   Background="Transparent">
   <Grid>
     <DataGrid Name="BuildGraphDataGrid"
-              ItemsSource="{Binding ProjectBuildCollectionViewModel.DataCollection}"
-              SelectedItem="{Binding ProjectBuildCollectionViewModel.SelectedCollectionItem}"
+              ItemsSource="{Binding ProjectBuildCollectionViewModel.Items}"
+              SelectedItem="{Binding ProjectBuildCollectionViewModel.SelectedItem}"
               AutoGenerateColumns="False"
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>

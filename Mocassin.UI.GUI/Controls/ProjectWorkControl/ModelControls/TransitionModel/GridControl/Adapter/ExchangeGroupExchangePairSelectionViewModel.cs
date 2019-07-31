@@ -18,7 +18,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public ExchangeGroupExchangePairSelectionViewModel(StateExchangeGroupGraph hostObject)
             : base(hostObject, true)
         {
-            DataCollection = GetTargetCollection(hostObject);
+            Items = GetTargetCollection(hostObject);
             HandleDropAddCommand = GetDropAddObjectCommand<StateExchangePairGraph>();
         }
 

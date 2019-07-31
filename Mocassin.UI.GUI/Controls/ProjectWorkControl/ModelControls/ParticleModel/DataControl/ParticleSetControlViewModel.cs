@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         {
             ContentSource = contentSource;
             var modelGraph = contentSource?.ProjectModelGraph?.ParticleModelGraph;
-            DataCollection = modelGraph?.ParticleSets;
+            Items = modelGraph?.ParticleSets;
         }
     }
 }

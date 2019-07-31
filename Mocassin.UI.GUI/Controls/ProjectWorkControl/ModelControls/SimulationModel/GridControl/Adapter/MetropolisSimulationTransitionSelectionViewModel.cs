@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         public MetropolisSimulationTransitionSelectionViewModel(MetropolisSimulationGraph hostObject)
             : base(hostObject, true)
         {
-            DataCollection = GetTargetCollection(hostObject);
+            Items = GetTargetCollection(hostObject);
             HandleDropAddCommand = GetDropAddObjectCommand<MetropolisSimulationGraph>();
         }
 

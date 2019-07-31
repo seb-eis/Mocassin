@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         public KineticSimulationTransitionSelectionViewModel(KineticSimulationGraph hostObject)
             : base(hostObject, true)
         {
-            DataCollection = GetTargetCollection(hostObject);
+            Items = GetTargetCollection(hostObject);
             HandleDropAddCommand = GetDropAddObjectCommand<KineticTransitionGraph>();
         }
 

@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         {
             KineticRuleSet = kineticRuleSet ?? throw new ArgumentNullException(nameof(kineticRuleSet));
             SetCollection(kineticRuleSet.KineticRules);
-            SelectedCollectionItem = DataCollection?.FirstOrDefault();
+            SelectedItem = Items?.FirstOrDefault();
         }
     }
 }

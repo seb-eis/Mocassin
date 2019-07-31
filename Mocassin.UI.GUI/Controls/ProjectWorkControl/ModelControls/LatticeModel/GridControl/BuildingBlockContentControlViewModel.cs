@@ -34,7 +34,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         ///     selectable in the context of currently selected <see cref="CellPositionGraph" />
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableOccupationParticles =>
-            GetSelectableOccupationParticles(SelectedCollectionItem);
+            GetSelectableOccupationParticles(SelectedItem);
 
         /// <summary>
         ///     Creates new <see cref="BuildingBlockContentControlViewModel" /> that targets the provided

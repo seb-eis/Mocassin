@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Translator;
 using Mocassin.UI.Xml.Base;
@@ -31,6 +32,18 @@ namespace Mocassin.UI.Xml.Main
         {
             get => Name;
             set => Name = value;
+        }
+
+        /// <summary>
+        ///     Get or set the contents of the object by a json string representation
+        /// </summary>
+        [XmlIgnore]
+        [JsonIgnore]
+        [Column("ProjectJson")]
+        public virtual string Json
+        {
+            get => ToJson();
+            set => FromJson(value);
         }
 
         /// <summary>
@@ -85,6 +98,25 @@ namespace Mocassin.UI.Xml.Main
                 ProjectName = "New project",
                 ProjectModelGraph = ProjectModelGraph.CreateNew()
             };
+        }
+
+
+        /// <inheritdoc />
+        public override void FromJson(string json, JsonSerializerSettings serializerSettings = null)
+        {
+            base.FromJson(json, serializerSettings);
+            RestoreParentReferences();
+        }
+
+        /// <summary>
+        ///     Restores the internal parent references that is not covered though the JSON serialization
+        /// </summary>
+        private void RestoreParentReferences()
+        {
+            ProjectModelGraph.Parent = this;
+            foreach (var item in ProjectCustomizationGraphs) item.Parent = this;
+            foreach (var item in ProjectJobTranslationGraphs) item.Parent = this;
+            foreach (var item in ProjectBuildGraphs) item.Parent = this;
         }
     }
 }

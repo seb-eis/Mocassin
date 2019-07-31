@@ -15,8 +15,8 @@
 
   <Grid>
     <DataGrid Name="HostDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               Visibility="{Binding Converter={converter:NullToVisibilityConverter}, ConverterParameter=Collapsed}"
               AutoGenerateColumns="False"
               ColumnWidth="*"

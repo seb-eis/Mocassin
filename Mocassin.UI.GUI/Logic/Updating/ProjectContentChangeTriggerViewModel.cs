@@ -54,7 +54,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// </summary>
         private void RunChangeCheck()
         {
-            if (ProjectControl.OpenProjectLibrary?.IsDisposed != true) ProjectControl.OpenProjectLibrary?.CheckForContentChange();
+            if (ProjectControl.OpenProjectLibrary?.IsDisposed != true) ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
         }
 
         /// <summary>

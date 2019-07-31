@@ -93,8 +93,8 @@
       </GroupBox.Header>
       <DataGrid Name="SimulationDataGrid"
                 Margin="{StaticResource App.Margin.GroupBoxContent}"
-                ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
                 ColumnWidth="*">
         <DataGrid.RowHeaderTemplate>
@@ -136,7 +136,7 @@
     <GroupBox Grid.Column="1" Grid.Row="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="General base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.GeneralSettings}"
@@ -144,14 +144,14 @@
         </TextBlock>
       </GroupBox.Header>
 
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedCollectionItem}"
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"
                                              Margin="{StaticResource App.Margin.GroupBoxContent}" />
     </GroupBox>
 
     <GroupBox Grid.Column="1" Grid.Row="1">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Metropolis base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.MetropolisSettings}"
@@ -172,7 +172,7 @@
         </Grid.RowDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Rel. energy break tolerance:">
-          <TextBox Text="{Binding SelectedCollectionItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          <TextBox Text="{Binding SelectedItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
@@ -182,7 +182,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="1" Header="Break check sample [MCS]:">
-          <TextBox Text="{Binding SelectedCollectionItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          <TextBox Text="{Binding SelectedItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
@@ -192,13 +192,13 @@
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="2" Header="Break check interval [MCS]:">
-          <TextBox Text="{Binding SelectedCollectionItem.BreakSampleIntervalMcs}"
+          <TextBox Text="{Binding SelectedItem.BreakSampleIntervalMcs}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}"
                    IsReadOnly="True" />
         </GroupBox>
 
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Result sample size [MCS]:">
-          <TextBox Text="{Binding SelectedCollectionItem.ResultSampleMcs}"
+          <TextBox Text="{Binding SelectedItem.ResultSampleMcs}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}"
                    IsReadOnly="True" />
         </GroupBox>

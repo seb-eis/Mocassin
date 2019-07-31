@@ -24,7 +24,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         ///     Get the possible set of <see cref="AbstractTransitionGraph" /> instances for the currently selected
         ///     <see cref="KineticTransitionGraph" />
         /// </summary>
-        public IEnumerable<AbstractTransitionGraph> AbstractTransitionOptions => GetAbstractOptions(SelectedCollectionItem);
+        public IEnumerable<AbstractTransitionGraph> AbstractTransitionOptions => GetAbstractOptions(SelectedItem);
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)

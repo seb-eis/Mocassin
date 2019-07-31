@@ -1,4 +1,5 @@
-﻿using Mocassin.Mathematics.Coordinates;
+﻿using System.Collections.Generic;
+using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis

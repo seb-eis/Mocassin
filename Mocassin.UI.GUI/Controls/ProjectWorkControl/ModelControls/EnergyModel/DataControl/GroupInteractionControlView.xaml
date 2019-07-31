@@ -14,8 +14,8 @@
   Background="Transparent">
   <Grid>
     <DataGrid Name="GroupInteractionDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               VerticalAlignment="Stretch"
               VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"

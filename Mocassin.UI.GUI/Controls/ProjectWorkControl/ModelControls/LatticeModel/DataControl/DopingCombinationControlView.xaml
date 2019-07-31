@@ -13,8 +13,8 @@
 
   <Grid>
     <DataGrid Name="DopingCombinationDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               AutoGenerateColumns="False"
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>

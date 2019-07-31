@@ -16,8 +16,8 @@
 
   <Grid>
     <DataGrid Name="TransitionDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               ColumnWidth="*"
               AutoGenerateColumns="False"
               Background="Transparent">

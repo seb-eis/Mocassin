@@ -52,7 +52,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             if (BaseParticleOptions == null) yield break;
             foreach (var particleGraph in BaseParticleOptions)
             {
-                if (!PairIsAlreadyDefined(DataCollection, particleGraph.Key, SelectedCollectionItem?.AcceptorParticleKey))
+                if (!PairIsAlreadyDefined(Items, particleGraph.Key, SelectedItem?.AcceptorParticleKey))
                     yield return particleGraph;
             }
         }
@@ -68,7 +68,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             if (BaseParticleOptions == null) yield break;
             foreach (var particleGraph in BaseParticleOptions)
             {
-                if (!PairIsAlreadyDefined(DataCollection, SelectedCollectionItem?.DonorParticleKey, particleGraph.Key))
+                if (!PairIsAlreadyDefined(Items, SelectedItem?.DonorParticleKey, particleGraph.Key))
                     yield return particleGraph;
             }
 
@@ -87,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         {
             return donorKey == acceptorKey 
                    || defined != null && defined
-                       .Where(x => x != SelectedCollectionItem)
+                       .Where(x => x != SelectedItem)
                        .Any(x => x.AcceptorParticleKey == acceptorKey && x.DonorParticleKey == donorKey);
         }
     }

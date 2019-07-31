@@ -237,17 +237,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         }
 
         /// <summary>
-        ///     Calls load on all <see cref="DbSet{TEntity}" /> of the passed <see cref="IMocassinProjectLibrary" />
+        ///     Calls load on all <see cref="DbSet{TEntity}" /> of the passed <see cref="IMocassinProjectLibrary" /> and restores
+        ///     the parent references
         /// </summary>
         /// <param name="projectLibrary"></param>
         private void LoadLibraryContents(IMocassinProjectLibrary projectLibrary)
         {
-            if (projectLibrary == null) return;
-            projectLibrary.MocassinProjectGraphs.Load();
-            projectLibrary.ProjectModelGraphs.Load();
-            projectLibrary.MocassinProjectBuildGraphs.Load();
-            projectLibrary.ProjectCustomizationGraphs.Load();
-            projectLibrary.ProjectJobTranslationGraphs.Load();
+            projectLibrary?.MocassinProjectGraphs.Load();
         }
 
         /// <summary>

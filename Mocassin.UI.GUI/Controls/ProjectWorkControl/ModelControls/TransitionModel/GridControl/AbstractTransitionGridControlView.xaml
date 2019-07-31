@@ -15,8 +15,8 @@
   Background="Transparent">
   <Grid>
     <DataGrid Name="AbstractTransitionDataGrid"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               VerticalScrollBarVisibility="Auto"
               AutoGenerateColumns="False"
               ColumnWidth="*"

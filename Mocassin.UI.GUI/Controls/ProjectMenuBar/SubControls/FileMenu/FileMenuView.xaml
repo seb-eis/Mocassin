@@ -12,13 +12,12 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
   <Grid>
-    <Menu FontSize="14"
-          Background="Transparent">
+    <Menu Background="Transparent">
       <MenuItem Header="_File">
         <MenuItem Header="_New">
-          <MenuItem Header="Create project library" Command="{Binding CommandSource}"
+          <MenuItem Header="New project library" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type fileCommands:ShowProjectCreationDialogCommand}" />
-          <MenuItem Header="Add model project" Command="{Binding CommandSource}"
+          <MenuItem Header="New project" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}" />
         </MenuItem>
         <MenuItem Header="_Open" Command="{Binding CommandSource}"

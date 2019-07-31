@@ -25,21 +25,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         ///     <see cref="UnitCellPosition" /> instances
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> SelectablePositions =>
-            GetSelectablePositions(SelectedCollectionItem);
+            GetSelectablePositions(SelectedItem);
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable dopant
         ///     <see cref="Particle" /> instances
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableDopantParticles =>
-            GetSelectableDopantParticles(SelectedCollectionItem);
+            GetSelectableDopantParticles(SelectedItem);
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable dopable
         ///     <see cref="Particle" /> instances
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableDopableParticles =>
-            GetSelectableDopableParticles(SelectedCollectionItem);
+            GetSelectableDopableParticles(SelectedItem);
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)

@@ -43,7 +43,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         /// </summary>
         public UnstableEnvironmentGridControlViewModel()
         {
-            SynchronizeEnvironmentCollectionCommand = new RelayCommand(() => EnsureEnvironmentToPositionSync(DataCollection));
+            SynchronizeEnvironmentCollectionCommand = new RelayCommand(() => EnsureEnvironmentToPositionSync(Items));
         }
 
         /// <inheritdoc />

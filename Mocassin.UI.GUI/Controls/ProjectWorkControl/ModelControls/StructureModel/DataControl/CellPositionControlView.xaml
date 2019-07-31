@@ -111,8 +111,8 @@
 
       <DataGrid Name="PositionDataGrid"
                 Margin="{StaticResource App.Margin.GroupBoxContent}"
-                ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
                 ColumnWidth="*">
 
@@ -156,7 +156,7 @@
 
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Equivalent cell positions:" />
           <Run Text="{Binding SelectedVectorExpansion.Count, Mode=OneWay, StringFormat= #{0}}" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"

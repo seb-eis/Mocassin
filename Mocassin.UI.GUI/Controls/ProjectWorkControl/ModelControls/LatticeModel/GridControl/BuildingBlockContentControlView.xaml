@@ -12,8 +12,8 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
   <Grid>
-    <DataGrid ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+    <DataGrid ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               ColumnWidth="*"
               AutoGenerateColumns="False"
               CanUserAddRows="False"

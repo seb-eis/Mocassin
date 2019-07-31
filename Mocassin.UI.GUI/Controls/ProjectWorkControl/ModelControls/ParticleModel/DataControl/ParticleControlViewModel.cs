@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            DataCollection = contentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
+            Items = contentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
         }
     }
 }

@@ -22,19 +22,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         ///     Get the possible set of <see cref="AbstractTransitionGraph" /> instances for the currently selected
         ///     <see cref="MetropolisTransitionGraph" />
         /// </summary>
-        public IEnumerable<AbstractTransitionGraph> AbstractTransitionOptions => GetAbstractOptions(SelectedCollectionItem);
+        public IEnumerable<AbstractTransitionGraph> AbstractTransitionOptions => GetAbstractOptions(SelectedItem);
 
         /// <summary>
         ///     Get the possible set of <see cref="UnitCellPositionGraph" /> instances for the currently selected
         ///     <see cref="MetropolisTransitionGraph" /> for exchanging the first key
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> FirstWyckoffOptions => GetWyckoffOptions(SelectedCollectionItem, false);
+        public IEnumerable<UnitCellPositionGraph> FirstWyckoffOptions => GetWyckoffOptions(SelectedItem, false);
 
         /// <summary>
         ///     Get the possible set of <see cref="UnitCellPositionGraph" /> instances for the currently selected
         ///     <see cref="MetropolisTransitionGraph" /> for exchanging the second key
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> SecondWyckoffOptions => GetWyckoffOptions(SelectedCollectionItem, true);
+        public IEnumerable<UnitCellPositionGraph> SecondWyckoffOptions => GetWyckoffOptions(SelectedItem, true);
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)
@@ -63,7 +63,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
             foreach (var transitionGraph in source.Where(x => x.StateExchangeGroups.Count == 2))
             {
                 option.AbstractTransitionKey = transitionGraph.Key;
-                if (current == null || option.Equals(current) || !DataCollection.Where(x => x.Key != current.Key).Contains(option))
+                if (current == null || option.Equals(current) || !Items.Where(x => x.Key != current.Key).Contains(option))
                     yield return transitionGraph;
             }
         }
@@ -94,7 +94,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
                 else
                     option.FirstUnitCellPositionKey = positionGraph.Key;
 
-                if (current == null || option.Equals(current) || !DataCollection.Where(x => x.Key != current.Key).Contains(option))
+                if (current == null || option.Equals(current) || !Items.Where(x => x.Key != current.Key).Contains(option))
                     yield return positionGraph;
             }
         }

@@ -18,8 +18,8 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <ComboBox Grid.Row="0" ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+    <ComboBox Grid.Row="0" ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               Margin="{StaticResource App.Margin.VerticalStackLarge}"
               DisplayMemberPath="Name"
               ToolTip="Search rule entry"
@@ -35,24 +35,24 @@
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="transition" />
         <Run Text="set. State change behavior is flagged with" />
-        <Run Text="{Binding SelectedCollectionItem.RuleFlags, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.RuleFlags, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="and describes" />
-        <Run Text="{Binding SelectedCollectionItem.DependencyRuleCount, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.DependencyRuleCount, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="hidden rule(s) that will receive the same settings." />
         <Run Text="The reference state change behavior is:" />
         <LineBreak/>
         <Run Text="(State-0) &#x2794;" />
-        <Run Text="{Binding SelectedCollectionItem.StartState, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.StartState, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <LineBreak/>
         <Run Text="(State-1) &#x2794;" />
-        <Run Text="{Binding SelectedCollectionItem.TransitionState, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.TransitionState, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <LineBreak/>
         <Run Text="(State-2) &#x2794;" />
-        <Run Text="{Binding SelectedCollectionItem.FinalState, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.FinalState, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <LineBreak/>
         <LineBreak/>
@@ -61,8 +61,8 @@
     </Border>
 
     <DataGrid Name="PermutationsDataGrid" Grid.Row="2"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               ColumnWidth="*"
               CanUserDeleteRows="False"
               CanUserAddRows="False"

@@ -264,10 +264,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         public SetList<Fractional3D[]> GetAllWyckoffOriginSequences(IEnumerable<Fractional3D> refSequence)
         {
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
-            return new SetList<Fractional3D[]>(comparer)
+            var list = new SetList<Fractional3D[]>(comparer)
             {
                 GetAllWyckoffSequences(refSequence).Select(sequence => ShiftFirstToOrigin(sequence, 1.0e-10).ToArray())
             };
+
+            return list;
         }
 
         /// <inheritdoc />
@@ -292,6 +294,45 @@ namespace Mocassin.Symmetry.SpaceGroups
             }
 
             return null;
+        }
+
+        /// <inheritdoc />
+        public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end)
+        {
+            var equalityComparer = VectorComparer.ValueComparer.ToEqualityComparer();
+            var (aMin, bMin, cMin) = (
+                MocassinMath.FloorToInt(start.A, equalityComparer), 
+                MocassinMath.FloorToInt(start.B, equalityComparer), 
+                MocassinMath.FloorToInt(start.C, equalityComparer));
+            var (aMax, bMax, cMax) = (
+                MocassinMath.FloorToInt(end.A, equalityComparer), 
+                MocassinMath.FloorToInt(end.B, equalityComparer), 
+                MocassinMath.FloorToInt(end.C, equalityComparer));
+
+            var basePositions = GetAllWyckoffPositions(source);
+            var result = new List<Fractional3D>();
+            for (var a = aMin; a <= aMax; a++)
+            {
+                for (var b = bMin; b <= bMax; b++)
+                {
+                    for (var c = cMin; c <= cMax; c++)
+                    {
+                        foreach (var entry in basePositions)
+                        {
+                            var vector = entry + new Fractional3D(a,b,c);
+                            if (VectorComparer.ValueComparer.Compare(vector.A, start.A) < 0) continue;
+                            if (VectorComparer.ValueComparer.Compare(vector.B, start.B) < 0) continue;
+                            if (VectorComparer.ValueComparer.Compare(vector.C, start.C) < 0) continue;
+                            if (VectorComparer.ValueComparer.Compare(vector.A, end.A) > 0) continue;
+                            if (VectorComparer.ValueComparer.Compare(vector.B, end.B) > 0) continue;
+                            if (VectorComparer.ValueComparer.Compare(vector.C, end.C) > 0) continue;
+                            result.Add(vector);
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

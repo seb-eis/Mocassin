@@ -16,10 +16,10 @@
 
   <Grid>
     <DataGrid Name="ParticleSetDataGrid"
-              ItemsSource="{Binding DataCollection}"
+              ItemsSource="{Binding Items}"
               AutoGenerateColumns="False"
               ColumnWidth="*"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              SelectedItem="{Binding SelectedItem}"
               Background="Transparent">
 
       <DataGrid.RowHeaderTemplate>

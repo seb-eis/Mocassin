@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.Visualizer.DataControl.Viewport3DView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.Visualizer.DataControl"
+             xmlns:h="http://helix-toolkit.org/wpf"
+             xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance local:Viewport3DViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <h:HelixViewport3D ItemsSource="{Binding Visuals}" ShowCoordinateSystem="True" Grid.Column="0" Grid.ColumnSpan="2" />
+    <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down">
+      <Expander.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Clear visual" Command="{Binding ClearVisualCommand}"/>
+          <MenuItem Header="Update visual" Command="{Binding UpdateVisualCommand}"/>
+          <Separator/>
+          <MenuItem Header="Auto update visual" IsCheckable="True" IsChecked="{Binding IsAutoUpdating}"/>
+        </ContextMenu>
+      </Expander.ContextMenu>
+      <Grid>
+        <DataGrid ItemsSource="{Binding VisualGroups}" CanUserAddRows="False" CanUserDeleteRows="False"
+                  AutoGenerateColumns="False" Background="White">
+          <DataGrid.RowHeaderTemplate>
+            <DataTemplate>
+              <views:ObjectRowHeaderLogo DataContext="V"/>
+            </DataTemplate>
+          </DataGrid.RowHeaderTemplate>
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+            <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}" />
+            <DataGridCheckBoxColumn Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" Header="Visible" />
+          </DataGrid.Columns>
+        </DataGrid>
+      </Grid>
+    </Expander>
+  </Grid>
+</UserControl>

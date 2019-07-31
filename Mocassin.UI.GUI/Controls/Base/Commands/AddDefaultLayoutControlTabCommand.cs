@@ -19,24 +19,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         }
 
         /// <summary>
-        ///     Get the <see cref="ContentControl" /> for the visualization control <see cref="ContentPresenter" />
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ContentControl GetVisualizerControl()
-        {
-            return GetNoContentControl();
-        }
-
-        /// <summary>
-        ///     Get the <see cref="ContentControl" /> for the info control <see cref="ContentPresenter" />
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ContentControl GetInfoControl()
-        {
-            return GetNoContentControl();
-        }
-
-        /// <summary>
         ///     Get the <see cref="ContentControl" /> for the data control <see cref="ContentPresenter" />
         /// </summary>
         /// <returns></returns>
@@ -66,8 +48,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
             var viewModel = new BasicModelContentControlViewModel(ProjectControl)
             {
                 DataContentControl = GetDataControl(),
-                InfoContentControl = GetInfoControl(),
-                VisualizerContentControl = GetInfoControl(),
                 SelectedProjectGraph = null
             };
             return viewModel;

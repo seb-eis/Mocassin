@@ -23,21 +23,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         ///     primary <see cref="DopingCombination" />
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<DopingCombination>> SelectablePrimaryDopingCombinations =>
-            GetSelectablePrimaryDopingCombinations(SelectedCollectionItem);
+            GetSelectablePrimaryDopingCombinations(SelectedItem);
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
         ///     counter <see cref="DopingCombination" />
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<DopingCombination>> SelectableCounterDopingCombinations =>
-            GetSelectableCounterDopingCombinations(SelectedCollectionItem);
+            GetSelectableCounterDopingCombinations(SelectedItem);
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
         ///     <see cref="BuildingBlock" />
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<BuildingBlock>> SelectableBuildingBlocks =>
-            GetSelectableBuildingBlocks(SelectedCollectionItem);
+            GetSelectableBuildingBlocks(SelectedItem);
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)

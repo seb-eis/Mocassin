@@ -19,8 +19,8 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <ComboBox Grid.Row="0" ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+    <ComboBox Grid.Row="0" ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               Margin="{StaticResource App.Margin.VerticalStackLarge}"
               DisplayMemberPath="Name"
               ToolTip="Search permutation"
@@ -32,7 +32,7 @@
         <Run Text="Description:" FontWeight="DemiBold"/>
         <LineBreak/>
         <Run Text="Group interaction for" />
-        <Run Text="{Binding SelectedCollectionItem.CenterParticle.Name, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
         <Run Text="{Binding Path=GroupEnergySet.CenterPosition.Name, Mode=OneWay}"
@@ -41,7 +41,7 @@
         <Run Text="{Binding BaseGeometryDescription, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="is occupied by the particle sequence" />
-        <Run Text="{Binding SelectedCollectionItem.OccupationState, Mode=OneWay}"
+        <Run Text="{Binding SelectedItem.OccupationState, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in order of appearance." />
         <LineBreak/>
@@ -51,8 +51,8 @@
     </Border>
 
     <DataGrid Name="PermutationsDataGrid" Grid.Row="2"
-              ItemsSource="{Binding DataCollection}"
-              SelectedItem="{Binding SelectedCollectionItem}"
+              ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}"
               ColumnWidth="*"
               CanUserDeleteRows="False"
               CanUserAddRows="False"

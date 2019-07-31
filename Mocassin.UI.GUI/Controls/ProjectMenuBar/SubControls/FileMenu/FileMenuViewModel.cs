@@ -1,7 +1,6 @@
 ﻿using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu
 {

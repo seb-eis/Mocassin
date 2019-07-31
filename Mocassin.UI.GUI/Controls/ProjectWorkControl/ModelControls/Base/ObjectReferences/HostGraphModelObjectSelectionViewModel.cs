@@ -74,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         /// <returns></returns>
         public virtual IEnumerable<ModelObjectGraph> FilterReferences(IReadOnlyCollection<ModelObjectGraph> baseCollection)
         {
-            if (!IsDuplicateFiltered || SelectedCollectionItem == null) return baseCollection;
+            if (!IsDuplicateFiltered || SelectedItem == null) return baseCollection;
 
             var targetCollection = GetTargetCollection(HostObject);
             return targetCollection == null
@@ -87,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         {
             ContentSource = contentSource;
             ReferenceObjectGraphs = GetSourceCollection(ContentSource);
-            DataCollection = GetTargetCollection(HostObject);
+            Items = GetTargetCollection(HostObject);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
             void Execute(IDataObject obj)
             {
                 if (!(obj.GetData(typeof(TGraph)) is TGraph graph)) return;
-                DataCollection.Add(new ModelObjectReferenceGraph<TModelObject> {Key = graph.Key, TargetGraph = graph});
+                Items.Add(new ModelObjectReferenceGraph<TModelObject> {Key = graph.Key, TargetGraph = graph});
             }
 
             bool CanExecute(IDataObject obj)

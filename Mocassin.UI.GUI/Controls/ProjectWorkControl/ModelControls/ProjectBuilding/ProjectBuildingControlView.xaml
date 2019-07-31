@@ -57,11 +57,11 @@
           </GroupBox>
 
           <GroupBox Grid.Row="0" Grid.Column="2"
-                    Visibility="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedCollectionItem, Converter={converter:NullToVisibilityConverter}}">
+                    Visibility="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem, Converter={converter:NullToVisibilityConverter}}">
             <GroupBox.Header>
               <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
                 <Run
-                  Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}" />
+                  Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}" />
                 <Run Text="Deploy to localhost:" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.LocalDeployment}"
                      Style="{StaticResource App.Style.Run.Keyword}" />

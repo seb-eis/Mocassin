@@ -31,8 +31,8 @@
 
       <DataGrid Name="JobConfigurationsDataGrid"
                 Margin="{StaticResource App.Margin.GroupBoxContent}"
-                ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
                 ColumnWidth="*"
                 Background="Transparent">
@@ -61,21 +61,21 @@
     <GroupBox Grid.Row="1" Name="ConfigurationSettingsGroupBox">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Configuration settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
       </GroupBox.Header>
 
       <local:KmcJobDescriptionControlView
-        DataContext="{Binding SelectedCollectionItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"
+        DataContext="{Binding SelectedItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"
         Margin="{StaticResource App.Margin.GroupBoxContent}" />
     </GroupBox>
 
     <GroupBox Grid.Row="2">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Block doping settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>

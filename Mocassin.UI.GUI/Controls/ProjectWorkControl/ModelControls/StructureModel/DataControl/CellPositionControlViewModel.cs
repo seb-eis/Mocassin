@@ -57,7 +57,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         {
             ContentSource = contentSource;
             var modelGraph = contentSource?.ProjectModelGraph?.StructureModelGraph;
-            DataCollection = modelGraph?.UnitCellPositions;
+            Items = modelGraph?.UnitCellPositions;
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// <param name="args"></param>
         private void UpdateVectorsOnSelectionChange(object sender, PropertyChangedEventArgs args)
         {
-            if (args.PropertyName != nameof(SelectedCollectionItem)) return;
-            SelectedVectorExpansion = GetExpandedVectorCollection(SelectedCollectionItem);
+            if (args.PropertyName != nameof(SelectedItem)) return;
+            SelectedVectorExpansion = GetExpandedVectorCollection(SelectedItem);
         }
     }
 }

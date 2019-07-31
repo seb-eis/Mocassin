@@ -5,10 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.SQLiteCore;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.ProjectLibrary
 {
@@ -45,19 +42,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         public DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; set; }
 
         /// <inheritdoc />
-        public DbSet<ProjectModelGraph> ProjectModelGraphs { get; set; }
-
-        /// <inheritdoc />
-        public DbSet<ProjectCustomizationGraph> ProjectCustomizationGraphs { get; set; }
-
-        /// <inheritdoc />
-        public DbSet<ProjectJobTranslationGraph> ProjectJobTranslationGraphs { get; set; }
-
-        /// <inheritdoc />
-        public DbSet<MocassinProjectBuildGraph> MocassinProjectBuildGraphs { get; set; }
-
-        /// <inheritdoc />
-        public IObservable<Unit> StateChangedNotification => StateChangedEvent.AsObservable();
+        public IObservable<Unit> ModelChangedNotification => StateChangedEvent.AsObservable();
 
         /// <inheritdoc />
         public MocassinProjectContext(string optionsBuilderParameterString)
@@ -69,14 +54,14 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         }
 
         /// <inheritdoc />
-        public int GetProjectHash()
+        public int GetProjectModelHash()
         {
             var result = 517;
             foreach (var projectGraph in MocassinProjectGraphs.Local)
             {
                 unchecked
                 {
-                    result += projectGraph.ToJson().GetHashCode();
+                    result += projectGraph.ProjectModelGraph.ToJson().GetHashCode();
                 }
             }
 
@@ -84,12 +69,12 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         }
 
         /// <inheritdoc />
-        public bool CheckForContentChange()
+        public bool CheckForModelChanges()
         {
             if (IsDisposed || !HasUnsavedChanges()) return false;
             lock (lockObject)
             {
-                var hash = GetProjectHash();
+                var hash = GetProjectModelHash();
                 if (hash != lastHash) StateChangedEvent.OnNext(Unit.Default);
                 lastHash = hash;
                 return lastHash != hash;
@@ -97,9 +82,9 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         }
 
         /// <inheritdoc />
-        public Task<bool> CheckForContentChangeAsync()
+        public Task<bool> CheckForModelChangesAsync()
         {
-            return Task.Run(CheckForContentChange);
+            return Task.Run(CheckForModelChanges);
         }
 
         /// <inheritdoc />

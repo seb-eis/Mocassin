@@ -102,8 +102,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             bool CanExecute()
             {
                 return !string.IsNullOrWhiteSpace(filePath) 
-                       && ProjectBuildGraphCollectionViewModel.SelectedCollectionItem?.ProjectCustomizationGraph != null
-                       && ProjectBuildGraphCollectionViewModel.SelectedCollectionItem.ProjectJobTranslationGraph != null;
+                       && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationGraph != null
+                       && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobTranslationGraph != null;
             }
 
             async Task Execute()
@@ -112,7 +112,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, e => SendCallErrorMessage(e));
                 builder.JobBuildCounterNotifications.Subscribe(UpdateBuildCountsOnMayorStep);
 
-                var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedCollectionItem;
+                var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedItem;
                 var result = await Task.Run(() => builder.BuildLibrary(buildGraph, FilePath, ProjectControl.CreateModelProject()));
                 if (result != null) SendCallInfoMessage($"Simulations deployed @ {FilePath}");
             }

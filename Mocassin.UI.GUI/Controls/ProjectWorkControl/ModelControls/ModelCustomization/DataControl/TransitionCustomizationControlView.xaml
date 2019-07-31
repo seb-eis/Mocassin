@@ -21,8 +21,8 @@
       <ColumnDefinition Width="100*" />
     </Grid.ColumnDefinitions>
     <DataGrid Name="KineticRuleSetDataGrid" Grid.Column="0"
-              ItemsSource="{Binding KineticRuleSetCollectionViewModel.DataCollection}"
-              SelectedItem="{Binding KineticRuleSetCollectionViewModel.SelectedCollectionItem}"
+              ItemsSource="{Binding KineticRuleSetCollectionViewModel.Items}"
+              SelectedItem="{Binding KineticRuleSetCollectionViewModel.SelectedItem}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               CanUserDeleteRows="False"
@@ -48,7 +48,7 @@
     </DataGrid>
 
     <gridControl:KineticRuleSetControlView Grid.Column="2"
-                                           DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedCollectionItem, Converter={adapter:KineticRuleSetKineticRuleSetViewModelConverter}}" 
+                                           DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedItem, Converter={adapter:KineticRuleSetKineticRuleSetViewModelConverter}}" 
                                            Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
   </Grid>
 </UserControl>

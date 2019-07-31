@@ -167,5 +167,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="target"></param>
         /// <returns></returns>
         ISymmetryOperation CreateOperationToTarget(in Fractional3D source, in Fractional3D target);
+
+        /// <summary>
+        ///     Gets all symmetry equivalent positions to the source that are within the limits of the edges of a cuboid
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end);
     }
 }

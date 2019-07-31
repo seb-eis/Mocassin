@@ -31,14 +31,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         ///     selectable in the current state of the object
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableParticles =>
-            GetSelectableParticleReferences(SelectedCollectionItem);
+            GetSelectableParticleReferences(SelectedItem);
 
         /// <summary>
         ///     Get the sequence of <see cref="ModelObjectReferenceGraph{T}" /> instances of <see cref="UnitCellPosition" /> that
         ///     are selectable in the current state of the object
         /// </summary>
         public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> SelectablePositions =>
-            GetSelectableUnitCellPositionReferences(SelectedCollectionItem);
+            GetSelectableUnitCellPositionReferences(SelectedItem);
 
         /// <summary>
         ///     Creates new <see cref="SelectionOptimizerSetControlViewModel" />
@@ -58,7 +58,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            SelectedCollectionItem = null;
+            SelectedItem = null;
         }
 
         /// <summary>

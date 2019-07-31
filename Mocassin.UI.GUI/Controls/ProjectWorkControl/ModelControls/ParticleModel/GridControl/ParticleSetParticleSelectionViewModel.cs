@@ -18,7 +18,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
         public ParticleSetParticleSelectionViewModel(ParticleSetGraph hostObject)
             : base(hostObject, true)
         {
-            DataCollection = GetTargetCollection(hostObject);
+            Items = GetTargetCollection(hostObject);
             HandleDropAddCommand = GetDropAddObjectCommand<ParticleGraph>();
         }
 

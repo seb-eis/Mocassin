@@ -93,8 +93,8 @@
 
       <DataGrid Name="SimulationDataGrid"
                 Margin="{StaticResource App.Margin.GroupBoxContent}"
-                ItemsSource="{Binding DataCollection}"
-                SelectedItem="{Binding SelectedCollectionItem}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
                 ColumnWidth="*"
                 AutoGenerateColumns="False">
         <DataGrid.RowHeaderTemplate>
@@ -135,21 +135,21 @@
     <GroupBox Grid.Column="1" Grid.Row="0">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="General base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.GeneralSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
       </GroupBox.Header>
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedCollectionItem}"
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"
                                              Margin="{StaticResource App.Margin.GroupBoxContent}"/>
     </GroupBox>
 
     <GroupBox Grid.Column="1" Grid.Row="1">
       <GroupBox.Header>
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedCollectionItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Kinetic base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSettings}"
@@ -170,7 +170,7 @@
         </Grid.RowDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Relaxation steps per particle:">
-          <TextBox Text="{Binding SelectedCollectionItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          <TextBox Text="{Binding SelectedItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}" >
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
@@ -180,7 +180,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="1" Header="Normalization probability:">
-          <TextBox Text="{Binding SelectedCollectionItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          <TextBox Text="{Binding SelectedItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
@@ -192,7 +192,7 @@
         <GroupBox Grid.Row="0"
                   Grid.Column="2"
                   Header="Electric field modulus [V/m]:">
-          <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          <TextBox Text="{Binding SelectedItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                    Margin="{StaticResource App.Margin.GroupBoxContent}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
@@ -210,21 +210,21 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.A, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+            <TextBox Text="{Binding SelectedItem.ElectricFieldVector.A, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
                      Grid.Column="0">
               <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
               </TextBox.InputBindings>
             </TextBox>
-            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.B, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+            <TextBox Text="{Binding SelectedItem.ElectricFieldVector.B, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
                      Grid.Column="1">
               <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
               </TextBox.InputBindings>
             </TextBox>
-            <TextBox Text="{Binding SelectedCollectionItem.ElectricFieldVector.C, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
+            <TextBox Text="{Binding SelectedItem.ElectricFieldVector.C, Converter={StaticResource App.Converter.NumericExpressionToValue}, StringFormat={}{0:0.0000}}"
                      Grid.Column="2">
               <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"

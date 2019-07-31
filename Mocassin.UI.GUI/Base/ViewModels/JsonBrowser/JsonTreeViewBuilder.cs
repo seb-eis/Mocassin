@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,6 +13,8 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
     /// </summary>
     public class JsonTreeViewBuilder
     {
+        private static Regex CapitalRegex { get; } = new Regex(@"(?:([a-z]{1})([A-Z0-9]))");
+
         /// <summary>
         ///     Converts the given <see cref="object"/>  to a <see cref="TreeViewItem"/> using the <see cref="JsonConvert"/> system
         /// </summary>
@@ -84,7 +87,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         {
             foreach (var jProperty in jObject.Properties())
             {
-                var treeView = new TreeViewItem {Header = jProperty.Name};
+                var treeView = new TreeViewItem {Header = CreateBaseHeader(jProperty.Name)};
                 parentViewItem.Items.Add(treeView);
                 AddToTreeView(jProperty.Value, treeView);
             }
@@ -117,8 +120,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
             switch (jToken)
             {
                 case JValue jValue:
-                    var valueStr = $"{jValue.ToString(CultureInfo.InvariantCulture)}";
-                    parentViewItem.Header = $"{parentViewItem.Header} : \"{valueStr}\"";
+                    parentViewItem.Header = CreateHeaderWithValue(jValue, parentViewItem);
                     return;
 
                 case JArray jArray:
@@ -143,6 +145,27 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         {
             var item = new TreeViewItem {Header = $"Exception : {e?.Message ?? "Unknown"}"};
             return item;
+        }
+
+        /// <summary>
+        ///     Creates the header <see cref="string"/> for the passed <see cref="JValue"/> and <see cref="TreeViewItem"/> parent
+        /// </summary>
+        /// <param name="jValue"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static string CreateHeaderWithValue(JValue jValue, TreeViewItem parent)
+        {
+            return $"{parent.Header} : \"{jValue.ToString(CultureInfo.InvariantCulture)}\"";
+        }
+
+        /// <summary>
+        ///     Creates the base header of an item
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string CreateBaseHeader(string name)
+        {
+            return CapitalRegex.Replace(name, x => $"{x.Groups[1]} {x.Groups[2]}");
         }
     }
 }
