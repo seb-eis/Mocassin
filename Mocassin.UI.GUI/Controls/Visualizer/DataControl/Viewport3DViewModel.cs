@@ -120,6 +120,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
+        ///     Clears the visual groups
+        /// </summary>
+        public void ClearVisualGroups()
+        {
+            ExecuteOnDispatcher(() => VisualGroups.Clear());
+            ClearVisual();
+        }
+
+        /// <summary>
         ///     Adds a new <see cref="IVisualGroupViewModel"/> to the view port
         /// </summary>
         /// <param name="visualGroup"></param>
@@ -129,7 +138,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             if (VisualGroups.Contains(visualGroup)) return;
 
             visualGroup.PropertyChanged += AutoUpdateVisualInternal;
-            VisualGroups.Add(visualGroup);
+            ExecuteOnDispatcher(() => VisualGroups.Add(visualGroup));
         }
 
         /// <summary>

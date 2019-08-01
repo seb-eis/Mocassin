@@ -44,7 +44,7 @@
                 ColumnWidth="*">
         <DataGrid.ContextMenu>
           <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget.DataContext}">
-            <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedCollectionItem}">
+            <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedItem}">
               <MenuItem.Header>
                 <WrapPanel>
                   <TextBlock Text="Make duplicates: "/>
@@ -110,7 +110,7 @@
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
                      Path="DataContext.ContentSource.Parent" />
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
-                     Path="DataContext.SelectedCollectionItem" />
+                     Path="DataContext.SelectedItem" />
           </MultiBinding>
         </gridControl:SelectionOptimizerSetControlView.DataContext>
       </gridControl:SelectionOptimizerSetControlView>
@@ -122,7 +122,7 @@
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
                    Path="DataContext.ContentSource.Parent" />
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
-                   Path="DataContext.SelectedCollectionItem" />
+                   Path="DataContext.SelectedItem" />
         </MultiBinding>
       </gridControl:MmcJobDescriptionSetControlView.DataContext>
     </gridControl:MmcJobDescriptionSetControlView>

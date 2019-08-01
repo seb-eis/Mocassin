@@ -67,7 +67,7 @@
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
                      Path="DataContext.ContentSource" />
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
-                     Path="DataContext.SelectedCollectionItem" />
+                     Path="DataContext.SelectedItem" />
           </MultiBinding>
         </local:InteractionFilterGridControlView.DataContext>
       </local:InteractionFilterGridControlView>

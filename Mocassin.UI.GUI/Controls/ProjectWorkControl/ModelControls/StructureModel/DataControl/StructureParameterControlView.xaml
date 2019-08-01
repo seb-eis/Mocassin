@@ -250,34 +250,64 @@
               <TextBox Name="CellParameterATextBox"
                        Margin="{StaticResource App.Margin.GroupBoxContent}"
                        Text="{Binding ParamA, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                       IsReadOnly="{Binding IsReadOnlyParamA}" />
+                       IsReadOnly="{Binding IsReadOnlyParamA}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                </TextBox.InputBindings>
+              </TextBox>
             </GroupBox>
             <GroupBox Header="Cell parameter 'b' [&#x212b;]:">
               <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
                        Text="{Binding ParamB, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                       IsReadOnly="{Binding IsReadOnlyParamB}" />
+                       IsReadOnly="{Binding IsReadOnlyParamB}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                </TextBox.InputBindings>
+              </TextBox>
             </GroupBox>
             <GroupBox Header="Cell parameter 'c' [&#x212b;]:">
               <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
                        Text="{Binding ParamC, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                       IsReadOnly="{Binding IsReadOnlyParamC}" />
+                       IsReadOnly="{Binding IsReadOnlyParamC}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                </TextBox.InputBindings>
+              </TextBox>
             </GroupBox>
           </StackPanel>
           <StackPanel Grid.Column="1">
             <GroupBox Header="Angle &#x3B1; [°]:">
               <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
                        Text="{Binding Alpha, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                       IsReadOnly="{Binding IsReadOnlyAlpha}" />
+                       IsReadOnly="{Binding IsReadOnlyAlpha}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                </TextBox.InputBindings>
+              </TextBox>
             </GroupBox>
             <GroupBox Header="Angle &#x3B2; [°]:">
               <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
                        Text="{Binding Beta, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                       IsReadOnly="{Binding IsReadOnlyBeta}" />
+                       IsReadOnly="{Binding IsReadOnlyBeta}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                </TextBox.InputBindings>
+              </TextBox>
             </GroupBox>
             <GroupBox Header="Angle &#x3B3; [°]:">
               <TextBox Margin="{StaticResource App.Margin.GroupBoxContent}"
                        Text="{Binding Gamma, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                       IsReadOnly="{Binding IsReadOnlyGamma}" />
+                       IsReadOnly="{Binding IsReadOnlyGamma}">
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                </TextBox.InputBindings>
+              </TextBox>
             </GroupBox>
           </StackPanel>
         </Grid>

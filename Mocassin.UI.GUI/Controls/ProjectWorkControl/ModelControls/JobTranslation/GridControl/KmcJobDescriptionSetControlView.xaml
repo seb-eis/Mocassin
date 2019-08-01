@@ -87,7 +87,7 @@
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
                      Path="DataContext.ProjectGraph" />
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
-                     Path="DataContext.SelectedCollectionItem.LatticeConfiguration" />
+                     Path="DataContext.SelectedItem.LatticeConfiguration" />
           </MultiBinding>
         </local:DopingValueControlView.DataContext>
       </local:DopingValueControlView>

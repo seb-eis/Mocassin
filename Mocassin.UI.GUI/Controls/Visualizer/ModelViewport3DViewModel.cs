@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -29,6 +31,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
     /// </summary>
     public class ModelViewport3DViewModel : ProjectGraphControlViewModel
     {
+        /// <summary>
+        ///     Get or set a boolean flag if the viewport is synchronized with the model data
+        /// </summary>
+        private bool IsSynchronizedWithModel { get; set; }
+
         /// <summary>
         ///     Get the <see cref="IModelProject" /> the visualizer uses for utility functions
         /// </summary>
@@ -71,20 +78,28 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             UtilityProject = projectControl.CreateModelProject();
             VisualViewModel = new Viewport3DViewModel();
             ModelObjectViewModels = new ObservableCollectionViewModel<ModelObject3DViewModel>();
-            UpdateObjectViewModelsCommand = new RelayCommand(UpdateObjectViewModels);
+            UpdateObjectViewModelsCommand = new RelayCommand(SynchronizeWithModel);
             RefreshVisualGroupsCommand = new RelayCommand(RefreshVisualGroups);
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override async void ChangeContentSource(MocassinProjectGraph contentSource)
         {
-            VisualViewModel.ClearVisual();
             ContentSource = contentSource;
-            PrepareUtilityProject(contentSource);
-
             if (ContentSource == null) return;
+            await ExecuteIfConstantContentSource(RefreshVisualContent, TimeSpan.FromMilliseconds(250), true);
+        }
 
-            UpdateObjectViewModels();
+        /// <summary>
+        ///     Executes a full visual content update of the view model
+        /// </summary>
+        private void RefreshVisualContent()
+        {
+            IsSynchronizedWithModel = false;
+            VisualViewModel.ClearVisual();
+            SynchronizeWithModel();
+            RefreshVisualGroups();
+            VisualViewModel.UpdateVisual();
         }
 
         /// <summary>
@@ -144,7 +159,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public void RefreshVisualGroups()
         {
             if (ContentSource == null) return;
-            VisualViewModel.VisualGroups.Clear();
+
+            VisualViewModel.ClearVisualGroups();
+            SynchronizeWithModel();
+
             foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
                 VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name);
             foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
@@ -246,6 +264,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             sequences.RemoveDuplicates(new EqualityCompareAdapter<Fractional3D[]>(IsEqual, x => x.Length));
         }
 
+        /// <summary>
+        ///     Synchronizes the viewport system with the model
+        /// </summary>
+        private void SynchronizeWithModel()
+        {
+            if (ContentSource != null && !IsSynchronizedWithModel)
+            {
+                PrepareUtilityProject(ContentSource);
+                UpdateObjectViewModels();
+            }
+
+            IsSynchronizedWithModel = true;
+        }
+
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
@@ -256,7 +288,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         protected override void OnProjectContentChangedInternal()
         {
             base.OnProjectContentChangedInternal();
-            UpdateObjectViewModels();
+            IsSynchronizedWithModel = false;
         }
     }
 }

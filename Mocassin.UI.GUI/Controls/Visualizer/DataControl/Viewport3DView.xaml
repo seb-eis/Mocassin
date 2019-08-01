@@ -9,37 +9,72 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:Viewport3DViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
-
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <h:HelixViewport3D ItemsSource="{Binding Visuals}" ShowCoordinateSystem="True" Grid.Column="0" Grid.ColumnSpan="2" />
-    <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down">
+    <h:HelixViewport3D ItemsSource="{Binding Visuals}" ShowCoordinateSystem="True" Grid.Column="1" />
+    <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
+      <Expander.Header>
+        <TextBlock Text="3D Viewer Settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" 
+                   Visibility="{Binding ElementName=SettingsExpander, Path=IsExpanded, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
+      </Expander.Header>
       <Expander.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="Clear visual" Command="{Binding ClearVisualCommand}"/>
-          <MenuItem Header="Update visual" Command="{Binding UpdateVisualCommand}"/>
-          <Separator/>
-          <MenuItem Header="Auto update visual" IsCheckable="True" IsChecked="{Binding IsAutoUpdating}"/>
+          <MenuItem Header="Clear visual" Command="{Binding ClearVisualCommand}" />
+          <MenuItem Header="Update visual" Command="{Binding UpdateVisualCommand}" />
+          <Separator />
+          <MenuItem Header="Auto update visual" IsCheckable="True" IsChecked="{Binding IsAutoUpdating}" />
         </ContextMenu>
       </Expander.ContextMenu>
-      <Grid>
-        <DataGrid ItemsSource="{Binding VisualGroups}" CanUserAddRows="False" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" Background="White">
-          <DataGrid.RowHeaderTemplate>
-            <DataTemplate>
-              <views:ObjectRowHeaderLogo DataContext="V"/>
-            </DataTemplate>
-          </DataGrid.RowHeaderTemplate>
-          <DataGrid.Columns>
-            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-            <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}" />
-            <DataGridCheckBoxColumn Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" Header="Visible" />
-          </DataGrid.Columns>
-        </DataGrid>
-      </Grid>
+      <Border>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <GroupBox Grid.Row="0">
+            <GroupBox.Header>
+              <TextBlock Text="Viewer actions:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
+            </GroupBox.Header>
+            <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
+              <Button Content="Clear visual" Command="{Binding ClearVisualCommand}"
+                      Margin="{StaticResource App.Margin.VerticalStack}" />
+              <Button Content="Update visual" Command="{Binding UpdateVisualCommand}"
+                      Margin="{StaticResource App.Margin.VerticalStack}" />
+              <DockPanel Margin="0,5">
+                <TextBlock Text="Update mode:" Margin="0,0,10,0" />
+                <RadioButton IsChecked="{Binding IsAutoUpdating}" Name="AutoUpdateRadioButton" Content="Auto"
+                             Margin="0,2,10,0"
+                             VerticalContentAlignment="Center" />
+                <RadioButton Content="Manual" VerticalContentAlignment="Center" Margin="0,2,10,0" />
+              </DockPanel>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Grid.Row="1">
+            <GroupBox.Header>
+              <TextBlock Text="Object layers:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
+            </GroupBox.Header>
+            <DataGrid ItemsSource="{Binding VisualGroups}" CanUserAddRows="False" CanUserDeleteRows="False"
+                      Margin="{StaticResource App.Margin.GroupBoxContent}"
+                      AutoGenerateColumns="False">
+              <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                  <views:ObjectRowHeaderLogo DataContext="V" />
+                </DataTemplate>
+              </DataGrid.RowHeaderTemplate>
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}" />
+                <DataGridCheckBoxColumn Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}"
+                                        Header="Visible" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </GroupBox>
+        </Grid>
+      </Border>
     </Expander>
   </Grid>
 </UserControl>

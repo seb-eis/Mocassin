@@ -110,7 +110,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         /// <returns></returns>
         public List<CellPositionGraph> CreateDefaultCellPositionList()
         {
-            if (UnitCellProvider == null) throw new InvalidOperationException("Cannot create default list for invalid model");
+            if (UnitCellProvider == null) 
+                throw new InvalidOperationException("Cannot create default list for invalid model");
 
             var result = new List<CellPositionGraph>(UnitCellProvider.CellSizeInfo.D);
 

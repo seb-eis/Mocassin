@@ -13,7 +13,7 @@
              d:DataContext="{d:DesignInstance local:ModelViewport3DViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
   <UserControl.Resources>
-    <objects:ColorToPropertyConverter x:Key="ColorConverter"/>
+    <objects:ColorToPropertyConverter x:Key="ColorConverter" />
     <ObjectDataProvider x:Key="ColorProvider" ObjectInstance="{x:Type Colors}" MethodName="GetProperties" />
   </UserControl.Resources>
   <Grid>
@@ -21,39 +21,53 @@
       <TabItem Header="3D Viewer">
         <dataControl:Viewport3DView DataContext="{Binding VisualViewModel}" />
       </TabItem>
-      <TabItem Header="Object Settings">
+      <TabItem Header="Model Data Settings">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
           </Grid.ColumnDefinitions>
-          <DataGrid ItemsSource="{Binding ModelObjectViewModels.ObservableItems}" CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    AutoGenerateColumns="False"
-                    ColumnWidth="*">
-            <DataGrid.ContextMenu>
-              <ContextMenu>
-                <MenuItem Header="Generate visuals" Command="{Binding RefreshVisualGroupsCommand}"/>
-                <MenuItem Header="Update" Command="{Binding UpdateObjectViewModelsCommand}" />
-              </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.RowHeaderTemplate>
-              <DataTemplate>
-                <views:ObjectRowHeaderLogo DataContext="V"/>
-              </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-            <DataGrid.Columns>
-              <DataGridTextColumn Header="Source object" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
-              <DataGridTextColumn Header="Scaling"
-                                  Binding="{Binding ObjectScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-              <DataGridComboBoxColumn Header="Color" 
-                                      ItemsSource="{Binding Source={StaticResource ColorProvider}}"
-                                      SelectedValueBinding="{Binding ObjectColor, Converter={StaticResource ColorConverter}, ConverterParameter={StaticResource ColorProvider}}"
-                                      SelectedValuePath="."
-                                      ElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"
-                                      EditingElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"/>
-            </DataGrid.Columns>
-          </DataGrid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <GroupBox Grid.Row="0" Grid.Column="0">
+            <GroupBox.Header>
+              <TextBlock Text="Quick actions:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+            </GroupBox.Header>
+            <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
+              <Button Command="{Binding UpdateObjectViewModelsCommand}" Content="Update object list" Margin="{StaticResource App.Margin.VerticalStack}" />
+              <Button Command="{Binding RefreshVisualGroupsCommand}" Content="Generate visual objects" Margin="{StaticResource App.Margin.VerticalStack}" />
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <GroupBox.Header>
+              <TextBlock Text="Visual objects:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+            </GroupBox.Header>
+            <DataGrid ItemsSource="{Binding ModelObjectViewModels.ObservableItems}" CanUserAddRows="False"
+                      Margin="{StaticResource App.Margin.GroupBoxContent}"
+                      CanUserDeleteRows="False"
+                      AutoGenerateColumns="False"
+                      ColumnWidth="*">
+              <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                  <views:ObjectRowHeaderLogo DataContext="V" />
+                </DataTemplate>
+              </DataGrid.RowHeaderTemplate>
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Scaling"
+                                    Binding="{Binding ObjectScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                <DataGridComboBoxColumn Header="Color"
+                                        ItemsSource="{Binding Source={StaticResource ColorProvider}}"
+                                        SelectedValueBinding="{Binding ObjectColor, Converter={StaticResource ColorConverter}, ConverterParameter={StaticResource ColorProvider}}"
+                                        SelectedValuePath="."
+                                        ElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"
+                                        EditingElementStyle="{StaticResource App.Style.ColorSelectionComboBox}" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </GroupBox>
         </Grid>
       </TabItem>
     </TabControl>

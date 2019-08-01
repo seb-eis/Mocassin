@@ -48,7 +48,7 @@
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
                    Path="DataContext" />
           <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
-                   Path="DataContext.BuildingBlockCollectionViewModel.SelectedCollectionItem" />
+                   Path="DataContext.BuildingBlockCollectionViewModel.SelectedItem" />
         </MultiBinding>
       </gridControl:BuildingBlockContentControlView.DataContext>
     </gridControl:BuildingBlockContentControlView>
