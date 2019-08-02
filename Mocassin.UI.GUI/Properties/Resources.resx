@@ -142,4 +142,10 @@
   <data name="Symmetry_Database_Default" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Mocassin.Symmetry.db;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Viewer3D_Error_Box_Caption" xml:space="preserve">
+    <value>3D Viewer - Error</value>
+  </data>
+  <data name="Viewer3D_Error_Visual_Generation" xml:space="preserve">
+    <value>An exception occured during generation of the 3D model. This is most likley caused by ill defined geometry in one or more of the data sources.</value>
+  </data>
 </root>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -18,6 +20,7 @@ using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Extensions;
+using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
@@ -160,15 +163,34 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             if (ContentSource == null) return;
 
-            VisualViewModel.ClearVisualGroups();
-            SynchronizeWithModel();
+            try
+            {
+                VisualViewModel.ClearVisualGroups();
+                SynchronizeWithModel();
 
-            foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
-                VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name);
-            foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
-                VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name);
+                foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
+                    VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name);
+                foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
+                    VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name);
 
-            if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
+                if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
+            }
+            catch (Exception e)
+            {
+                OnRenderError(e);
+            }
+        }
+
+        /// <summary>
+        ///     Action to call to inform about an exception in the render process
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="callMemberName"></param>
+        private void OnRenderError(Exception e, [CallerMemberName] string callMemberName = null)
+        {
+            SendCallErrorMessage(e, callMemberName);
+            MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation, 
+                Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         /// <summary>

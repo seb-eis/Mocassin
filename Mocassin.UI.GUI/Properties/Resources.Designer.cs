@@ -133,5 +133,23 @@ namespace Mocassin.UI.GUI.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 3D Viewer - Error ähnelt.
+        /// </summary>
+        public static string Viewer3D_Error_Box_Caption {
+            get {
+                return ResourceManager.GetString("Viewer3D_Error_Box_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die An exception occured during generation of the 3D model. This is most likley caused by ill defined geometry in one or more of the data sources. ähnelt.
+        /// </summary>
+        public static string Viewer3D_Error_Visual_Generation {
+            get {
+                return ResourceManager.GetString("Viewer3D_Error_Visual_Generation", resourceCulture);
+            }
+        }
     }
 }
