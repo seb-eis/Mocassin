@@ -195,6 +195,8 @@ namespace Mocassin.UI.GUI.Logic.Validation
         /// </summary>
         public void RunValidation()
         {
+            if (ModelProject == null) return;
+
             ModelProject.ResetProject();
             if (!TryPrepareModelInput(out var inputObjects))
             {

@@ -53,7 +53,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             : base(projectControl)
         {
             AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph);
-            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, NullSelectionIfUnknown);
+            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, ReloadSelectionSource);
             PropertyChanged += OnCustomizationSourceChanged;
         }
 
@@ -65,8 +65,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private void OnCustomizationSourceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(SelectedProjectGraph)) return;
-            SelectedCustomizationGraph = null;
-            CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
+            ReloadSelectionSource();
         }
 
         /// <inheritdoc />
@@ -76,11 +75,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Nulls the currently selected <see cref="ProjectCustomizationGraph"/> if the source list no longer contains the entry
+        ///     Nulls the currently selected <see cref="ProjectCustomizationGraph"/> and reloads the option list
         /// </summary>
-        protected void NullSelectionIfUnknown()
+        protected void ReloadSelectionSource()
         {
-            if (!CustomizationGraphs.Contains(SelectedCustomizationGraph)) SelectedCustomizationGraph = null;
+            SelectedCustomizationGraph = null;
+            CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
         }
     }
 }

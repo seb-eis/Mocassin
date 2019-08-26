@@ -55,7 +55,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             : base(projectControl)
         {
             AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph);
-            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, NullSelectionIfUnknown);
+            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, ReloadSelectionSource);
             PropertyChanged += OnCustomizationSourceChanged;
         }
 
@@ -67,8 +67,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private void OnCustomizationSourceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(SelectedProjectGraph)) return;
-            SelectedJobTranslationGraph = null;
-            JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
+            ReloadSelectionSource();
         }
 
         /// <inheritdoc />
@@ -78,11 +77,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Nulls the currently selected <see cref="ProjectJobTranslationGraph"/> if the source list no longer contains the entry
+        ///     Nulls the currently selected <see cref="ProjectJobTranslationGraph"/> and reloads the option list
         /// </summary>
-        protected void NullSelectionIfUnknown()
+        protected void ReloadSelectionSource()
         {
-            if (!JobTranslationGraphs.Contains(SelectedJobTranslationGraph)) SelectedJobTranslationGraph = null;
+            SelectedJobTranslationGraph = null;
+            JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
         }
     }
 }
