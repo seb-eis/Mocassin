@@ -76,7 +76,7 @@ namespace Mocassin.UI.Xml.Main
         public List<MocassinProjectBuildGraph> ProjectBuildGraphs { get; set; }
 
         /// <summary>
-        ///     Create empty <see cref="MocassinProjectGraph"/>
+        ///     Create empty <see cref="MocassinProjectGraph" />
         /// </summary>
         public MocassinProjectGraph()
         {
@@ -109,14 +109,19 @@ namespace Mocassin.UI.Xml.Main
         }
 
         /// <summary>
-        ///     Restores the internal parent references that is not covered though the JSON serialization
+        ///     Restores the internal parent references and other missing references that are not covered though the JSON
+        ///     serialization
         /// </summary>
         private void RestoreParentReferences()
         {
             ProjectModelGraph.Parent = this;
             foreach (var item in ProjectCustomizationGraphs) item.Parent = this;
             foreach (var item in ProjectJobTranslationGraphs) item.Parent = this;
-            foreach (var item in ProjectBuildGraphs) item.Parent = this;
+            foreach (var item in ProjectBuildGraphs)
+            {
+                item.Parent = this;
+                item.RestoreBuildReferences();
+            }
         }
     }
 }

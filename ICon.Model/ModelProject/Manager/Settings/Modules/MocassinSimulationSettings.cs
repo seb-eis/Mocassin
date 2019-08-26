@@ -159,7 +159,7 @@ namespace Mocassin.Model.ModelProject
             TerminationSuccessRate = new ValueSetting<double>("Lower Termination Success Rate", 0, 10, int.MaxValue, int.MaxValue);
             EnergySetCount = new ValueSetting<int>("Energy Set Count", 0, 0, 10, 100);
             TransitionCount = new ValueSetting<int>("Transitions per Simulation", 1, 5, 10, 100);
-            Seeding = new StringSetting("Seed String", "^[.]{0,100}$", true);
+            Seeding = new StringSetting("Seed String", "^.{0,100}$", true);
         }
     }
 }

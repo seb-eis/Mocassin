@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
@@ -68,5 +69,17 @@ namespace Mocassin.UI.Xml.Main
         [JsonIgnore]
         [ForeignKey(nameof(ProjectJobTranslationGraph))]
         public int ProjectJobTranslationGraphId { get; set; }
+
+        /// <summary>
+        ///     Restores the build object references not covered by the JSON serialization
+        /// </summary>
+        public void RestoreBuildReferences()
+        {
+            ProjectModelGraph = Parent?.ProjectModelGraph;
+            ProjectCustomizationGraph = Parent?.ProjectCustomizationGraphs
+                .SingleOrDefault(x => x.ContextId == ProjectCustomizationGraphId);
+            ProjectJobTranslationGraph = Parent?.ProjectJobTranslationGraphs
+                .SingleOrDefault(x => x.ContextId == ProjectJobTranslationGraphId);
+        }
     }
 }

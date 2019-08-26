@@ -17,6 +17,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// </summary>
         public CollectionControlViewModel<MocassinProjectBuildGraph> ProjectBuildCollectionViewModel { get; }
 
+        /// <summary>
+        ///     Automatically assigns the current content source to the last build collection entry
+        /// </summary>
         public RelayCommand AutoAssignBuildModelContextCommand { get; }
 
         /// <inheritdoc />
@@ -34,6 +37,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             ProjectBuildCollectionViewModel.SetCollection(ContentSource?.ProjectBuildGraphs);
         }
 
+        /// <summary>
+        ///     Creates a new <see cref="RelayCommand" /> that automatically assigns the correct model graph to the last building
+        ///     entry
+        /// </summary>
+        /// <returns></returns>
         public RelayCommand MakeAutoAssignBuildModelContextCommand()
         {
             void Execute()
