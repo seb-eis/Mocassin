@@ -66,7 +66,8 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <summary>
-        ///     Builds the update particle id buffer for a position id that fits the provided simulation encoding model
+        ///     Builds the update particle id buffer for a position id that fits the provided simulation encoding model and removes
+        ///     always 0 energy entries from the update process
         /// </summary>
         /// <param name="positionId"></param>
         /// <param name="encodingModel"></param>
@@ -78,13 +79,33 @@ namespace Mocassin.Model.Translator.EntityBuilder
             (byte particleId, byte bufferId) = (0, 0);
             foreach (var mobilityType in encodingModel.PositionIndexToMobilityTypesSet[positionId])
             {
-                if (mobilityType != MobilityType.Immobile)
+                if (mobilityType != MobilityType.Immobile && ParticlePositionPairHasNonZeroEnergies(positionId, particleId))
                     buffer[bufferId++] = particleId;
 
                 particleId++;
             }
 
             return InteropObject.Create(new CByteBuffer64 {Buffer = buffer});
+        }
+
+        /// <summary>
+        ///     Checks if a position id and particle id combination has any non zero energy entries in affiliated pair or group tables
+        /// </summary>
+        /// <param name="positionId"></param>
+        /// <param name="particleId"></param>
+        /// <returns></returns>
+        protected bool ParticlePositionPairHasNonZeroEnergies(int positionId, byte particleId)
+        {
+            var comparer = ModelContext.ModelProject.CommonNumeric.RangeComparer;
+            var environmentModel = ModelContext.StructureModelContext.PositionModels[positionId].EnvironmentModel;
+
+            if (environmentModel.PairInteractionModels.Select(x => x.PairEnergyModel)
+                .Any(energyModel => energyModel.EnergyEntries.Any(x =>
+                    x.ParticlePair.Particle0.Index == particleId && comparer.Compare(x.Energy, 0.0) != 0)))
+                return true;
+
+            return environmentModel.GroupInteractionModels.Select(x => x.GroupEnergyModel).Any(energyModel =>
+                energyModel.EnergyEntries.Any(x => x.CenterParticle.Index == particleId && comparer.Compare(x.Energy, 0.0) != 0));
         }
 
         /// <summary>

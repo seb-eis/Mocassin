@@ -70,7 +70,7 @@
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
           <DataGridTextColumn Header="RNG Seed" Binding="{Binding RngSeed}" />
-          <DataGridTextColumn Header="Job Multiplier" Binding="{Binding JobCountPerConfig}" />
+          <DataGridTextColumn Header="Job Multiplier" Binding="{Binding JobCountPerConfig, Converter={StaticResource App.Converter.NumericExpressionToValue}}"/>
           <comboBox:BindableDataGridComboBoxColumn Header="Simulation Base"
                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableSimulations}"
                                                    SelectedValueBinding="{Binding Simulation}"

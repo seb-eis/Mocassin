@@ -201,7 +201,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
             jobMetaData.ElectricFieldModulus = kmcConfig?.ElectricFieldModulus ?? 0;
             jobMetaData.BaseFrequency = kmcConfig?.BaseFrequency ?? 0;
-            jobMetaData.NormalizationFactor = kmcConfig?.FixedNormalizationFactor ?? 1;
+            jobMetaData.NormalizationFactor = kmcConfig?.FixedNormalizationFactor ?? 1.0;
             jobMetaData.PreRunMcsp = kmcConfig?.PreRunMcsp ?? 0;
         }
 

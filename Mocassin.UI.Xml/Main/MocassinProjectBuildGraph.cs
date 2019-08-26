@@ -15,6 +15,10 @@ namespace Mocassin.UI.Xml.Main
     [XmlRoot("MocassinProjectBuild")]
     public class MocassinProjectBuildGraph : MocassinProjectChildEntity<MocassinProjectGraph>
     {
+        private ProjectJobTranslationGraph projectJobTranslationGraph;
+        private ProjectCustomizationGraph projectCustomizationGraph;
+        private ProjectModelGraph projectModelGraph;
+
         /// <inheritdoc />
         [NotMapped]
         [XmlIgnore]
@@ -30,45 +34,60 @@ namespace Mocassin.UI.Xml.Main
         /// </summary>
         [XmlElement("ProjectModelGraph")]
         [JsonIgnore]
-        public ProjectModelGraph ProjectModelGraph { get; set; }
+        public ProjectModelGraph ProjectModelGraph
+        {
+            get => projectModelGraph;
+            set 
+            { 
+                projectModelGraph = value;
+                ModelKey = value?.Key;
+            }
+        }
 
         /// <summary>
-        ///     Get or set the context id of the <see cref="ProjectModelGraph" />
+        ///     Get or set the key of the <see cref="ProjectModelGraph" />
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        [ForeignKey(nameof(ProjectModelGraph))]
-        public int ProjectModelGraphId { get; set; }
+        public string ModelKey { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="Mocassin.UI.Xml.Customization.ProjectCustomizationGraph" />
         /// </summary>
         [XmlElement("ProjectCustomizationGraph")]
         [JsonIgnore]
-        public ProjectCustomizationGraph ProjectCustomizationGraph { get; set; }
+        public ProjectCustomizationGraph ProjectCustomizationGraph
+        {
+            get => projectCustomizationGraph;
+            set 
+            { 
+                projectCustomizationGraph = value;
+                CustomizationKey = value?.Key;
+            }
+        }
 
         /// <summary>
-        ///     Get or set the context id of the <see cref="ProjectCustomizationGraph" />
+        ///     Get or set the key of the <see cref="ProjectCustomizationGraph" />
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        [ForeignKey(nameof(ProjectCustomizationGraph))]
-        public int ProjectCustomizationGraphId { get; set; }
+        public string CustomizationKey { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="Mocassin.UI.Xml.Jobs.ProjectJobTranslationGraph" />
         /// </summary>
         [XmlElement("ProjectJobTranslationGraph")]
         [JsonIgnore]
-        public ProjectJobTranslationGraph ProjectJobTranslationGraph { get; set; }
+        public ProjectJobTranslationGraph ProjectJobTranslationGraph
+        {
+            get => projectJobTranslationGraph;
+            set 
+            { 
+                projectJobTranslationGraph = value;
+                JobTranslationKey = value?.Key;
+            }
+        }
 
         /// <summary>
-        ///     Get or set the context id of the <see cref="ProjectJobTranslationGraph" />
+        ///     Get or set the key of the <see cref="ProjectJobTranslationGraph" />
         /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        [ForeignKey(nameof(ProjectJobTranslationGraph))]
-        public int ProjectJobTranslationGraphId { get; set; }
+        public string JobTranslationKey { get; set; }
 
         /// <summary>
         ///     Restores the build object references not covered by the JSON serialization
@@ -77,9 +96,9 @@ namespace Mocassin.UI.Xml.Main
         {
             ProjectModelGraph = Parent?.ProjectModelGraph;
             ProjectCustomizationGraph = Parent?.ProjectCustomizationGraphs
-                .SingleOrDefault(x => x.ContextId == ProjectCustomizationGraphId);
+                .SingleOrDefault(x => x.Key == CustomizationKey);
             ProjectJobTranslationGraph = Parent?.ProjectJobTranslationGraphs
-                .SingleOrDefault(x => x.ContextId == ProjectJobTranslationGraphId);
+                .SingleOrDefault(x => x.Key == JobTranslationKey);
         }
     }
 }

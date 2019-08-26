@@ -9,21 +9,14 @@ namespace Mocassin.UI.Xml.Base
     /// </summary>
     /// <typeparam name="TParent"></typeparam>
     [XmlRoot]
-    public abstract class MocassinProjectChildEntity<TParent> : MocassinProjectEntity where TParent : class
+    public abstract class MocassinProjectChildEntity<TParent> : ProjectObjectGraph where TParent : class
     {
-        /// <summary>
-        ///     Get or set the context id of the parent entity
-        /// </summary>
-        [XmlIgnore]
-        [JsonIgnore]
-        public int ParentId { get; set; }
-
         /// <summary>
         ///     Get or set the parent navigation property
         /// </summary>
         [XmlIgnore]
         [JsonIgnore]
-        [ForeignKey(nameof(ParentId))]
+        [NotMapped]
         public TParent Parent { get; set; }
 
         /// <summary>

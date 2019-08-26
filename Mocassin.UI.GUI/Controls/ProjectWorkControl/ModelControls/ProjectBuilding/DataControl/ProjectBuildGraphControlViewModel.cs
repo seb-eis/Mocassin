@@ -47,7 +47,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             void Execute()
             {
                 ContentSource.ProjectBuildGraphs.Last().Parent = ContentSource;
-                ContentSource.ProjectBuildGraphs.Last().ProjectModelGraph = ContentSource?.ProjectModelGraph;
+                ContentSource.ProjectBuildGraphs.Last().ProjectModelGraph = ContentSource.ProjectModelGraph;
             }
 
             bool CanExecute()

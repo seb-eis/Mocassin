@@ -50,6 +50,7 @@ namespace Mocassin.UI.Xml.Main
         ///     Get or set the <see cref="Xml.Model.ProjectModelGraph" /> that defines the reference information
         /// </summary>
         [XmlElement("ProjectModelGraph")]
+        [NotMapped]
         public ProjectModelGraph ProjectModelGraph { get; set; }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace Mocassin.UI.Xml.Main
         /// </summary>
         [XmlArray("ModelCustomizations")]
         [XmlArrayItem("ModelCustomization")]
+        [NotMapped]
         public List<ProjectCustomizationGraph> ProjectCustomizationGraphs { get; set; }
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace Mocassin.UI.Xml.Main
         /// </summary>
         [XmlArray("DbCreationInstructions")]
         [XmlArrayItem("DbCreationInstruction")]
+        [NotMapped]
         public List<ProjectJobTranslationGraph> ProjectJobTranslationGraphs { get; set; }
 
         /// <summary>
@@ -73,6 +76,7 @@ namespace Mocassin.UI.Xml.Main
         /// </summary>
         [XmlArray("BuildGraphs")]
         [XmlArrayItem("BuildGraph")]
+        [NotMapped]
         public List<MocassinProjectBuildGraph> ProjectBuildGraphs { get; set; }
 
         /// <summary>

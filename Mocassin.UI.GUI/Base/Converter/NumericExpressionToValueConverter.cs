@@ -24,13 +24,24 @@ namespace Mocassin.UI.GUI.Base.Converter
             if (code == "null" || code == "Null") return null;
             try
             {
-                return new Expression(code).Evaluate();
+                var converted = new Expression(RemoveLeadingPlusSign(code)).Evaluate();
+                return targetType == typeof(string) ? converted?.ToString() : converted;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return null;
             }
+        }
+
+        /// <summary>
+        ///     Removes a leading "+" sign from the string if existent, else returns the original
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        private static string RemoveLeadingPlusSign(string code)
+        {
+            return code[0] != '+' ? code : code.Substring(1, code.Length - 1);
         }
     }
 }
