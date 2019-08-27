@@ -445,13 +445,14 @@ static inline int32_t SearchClusterCodeIdInTable(const ClusterTable_t *restrict 
     return LinearSearchClusterCodeId(clusterTable, code);
 }
 
-// Get the delta energy value for the passed pair information
 #if defined(OPT_USE_3D_PAIRTABLES)
+// Get the delta energy value for the passed pair information (Pair delta table version)
 static inline double GetPairEnergyDelta(const PairDeltaTable_t *restrict pairTable, const byte_t mainId, const byte_t oldId,const byte_t newId)
 {
     return array_Get(*pairTable, oldId, newId, mainId);
 }
 #else
+// Get the delta energy value for the passed pair information (Pair table version)
 static inline double GetPairEnergyDelta(const PairTable_t *restrict pairTable, const byte_t mainId, const byte_t oldId,const byte_t newId)
 {
     let oldEnergy = getPairEnergyAt(pairTable, mainId, oldId);
