@@ -549,6 +549,57 @@ static error_t CopyDefaultMobileTrackersToMainState(SCONTEXT_PARAM)
     return (trackerId == getNumberOfMobiles(SCONTEXT)) ? ERR_OK : ERR_DATACONSISTENCY;
 }
 
+// Constructs a pair delta table from the passed pair table. Access is [OrgPartner][NewPartner][CenterId]
+static error_t ConstructPairDeltaTable(const PairTable_t* restrict pairTable, PairDeltaTable_t* restrict target)
+{
+    // Note: The function abuses the fact that stable pair tables have to have the same dimensions for both center & partner
+
+    int32_t dimensions[2];
+    GetArrayDimensions((VoidArray_t*) &pairTable->EnergyTable, dimensions);
+
+    let maxCenterId = dimensions[0];
+    let maxPartnerId = dimensions[1];
+    PairDeltaTable_t deltaTable = new_Array(deltaTable, maxPartnerId, maxPartnerId, maxCenterId);
+
+    for (int32_t orgPartnerId = 0; orgPartnerId < maxPartnerId; orgPartnerId++)
+    {
+        for (int32_t newPartnerId = 0; newPartnerId < maxPartnerId; newPartnerId++)
+        {
+            if (orgPartnerId == newPartnerId) continue;
+            for (int32_t centerId = 0; centerId < maxCenterId; centerId++)
+            {
+                let oldEnergy = array_Get(pairTable->EnergyTable, centerId, orgPartnerId);
+                let newEnergy = array_Get(pairTable->EnergyTable, centerId, newPartnerId);
+                let deltaEnergy = newEnergy - oldEnergy;
+                array_Get(deltaTable, orgPartnerId, newPartnerId, centerId) = deltaEnergy;
+            }
+        }
+    }
+
+    *target = deltaTable;
+    return ERR_OK;
+}
+
+// Generates and sets the set of 3D pair delta tables on the passed context
+static error_t GenerateAndSetPairDeltaTables(SCONTEXT_PARAM)
+{
+    error_t error = ERR_OK;
+    let pairTables = getPairEnergyTables(SCONTEXT);
+    let tableCount = span_Length(*pairTables);
+    PairDeltaTables_t deltaTables = new_Span(deltaTables, tableCount);
+
+    for (int32_t i = 0; i < tableCount; i++)
+    {
+        let pairTable = &span_Get(*pairTables, i);
+        let deltaTable = &span_Get(deltaTables, i);
+        error = ConstructPairDeltaTable(pairTable, deltaTable);
+        return_if(error, error);
+    }
+
+    getDynamicModel(SCONTEXT)->PairDeltaTables = deltaTables;
+    return ERR_OK;
+}
+
 // Sets all default flags on a new state when none could be loaded from file
 static void SetMainStateFlagsToStartConditions(SCONTEXT_PARAM)
 {
@@ -572,6 +623,11 @@ static error_t SyncMainStateToDatabaseModel(SCONTEXT_PARAM)
     return_if(error, error);
 
     error = InitJumpStatisticsTrackingSystem(SCONTEXT);
+    return_if(error,error);
+
+    #if defined(OPT_USE_3D_PAIRTABLES)
+    error = GenerateAndSetPairDeltaTables(SCONTEXT);
+    #endif
     SetMainStateFlagsToStartConditions(SCONTEXT);
 
     return error;
@@ -677,7 +733,7 @@ static void SyncSelectionPoolWithDynamicModel(SCONTEXT_PARAM)
     }
 }
 
-// Converts all energy values in pair and cluster tables from [eV] to units of [kT]
+// Converts all energy values in pair, cluster tables, and delta tables (if enabled) from [eV] to units of [kT]
 static error_t ConvertEnergyTablesToInternalUnits(SCONTEXT_PARAM)
 {
     let pairTables = getPairEnergyTables(SCONTEXT);
@@ -692,6 +748,13 @@ static error_t ConvertEnergyTablesToInternalUnits(SCONTEXT_PARAM)
     cpp_foreach(table, *clusterTables)
         cpp_foreach(value, table->EnergyTable)
             *value *= factor;
+
+    #if defined(OPT_USE_3D_PAIRTABLES)
+    let deltaTables = getPairDeltaTables(SCONTEXT);
+    cpp_foreach(table, *deltaTables)
+        cpp_foreach(value, *table)
+            *value *= factor;
+    #endif
 
     return ERR_OK;
 }

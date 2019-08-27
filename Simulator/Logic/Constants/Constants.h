@@ -13,6 +13,7 @@
 /* Optimization toggle defines */
 
 #define OPT_LINK_ONLY_MOBILES
+//#define OPT_USE_3D_PAIRTABLES
 
 /* State buffer constants and default values */
 

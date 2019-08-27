@@ -433,8 +433,16 @@ typedef struct Flp64Buffer
     
 } Flp64Buffer_t;
 
+// Array type for 3D pair energy delta tables [Original][New][Partner]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(double, 3, PairDeltaTable) PairDeltaTable_t;
+
+// Span type for 3D pair energy delta table sets [TableId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Span_t(PairDeltaTable_t, PairDeltaTables) PairDeltaTables_t;
+
 // Type for the simulation dynamic model
-// Layout@ggc_x86_64 => 192@[80,24,32,16,24,16]
+// Layout@ggc_x86_64 => 208@[80,24,32,16,24,16,16]
 typedef struct DynamicModel
 {
     // The simulation file information
@@ -454,6 +462,9 @@ typedef struct DynamicModel
 
     // The jump status array
     JumpStatusArray_t       JumpStatusArray;
+
+    // The pair delta 3D table span. Access by [TableId][OriginalParticleId][NewParticleId][CenterParticleId]
+    PairDeltaTables_t       PairDeltaTables;
 
 } DynamicModel_t;
 

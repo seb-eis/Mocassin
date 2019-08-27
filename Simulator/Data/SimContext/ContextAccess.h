@@ -469,6 +469,21 @@ static inline ClusterTable_t* getClusterEnergyTableAt(SCONTEXT_PARAM, const int3
     return &span_Get(*getClusterEnergyTables(SCONTEXT), clusterTableId);
 }
 
+#if defined(OPT_USE_3D_PAIRTABLES)
+// Get the pair delta tables from the passed context. Access by [TableId][OriginalParticleId][NewParticleId][CenterParticleId]
+static inline PairDeltaTables_t* getPairDeltaTables(SCONTEXT_PARAM)
+{
+    return &getDynamicModel(SCONTEXT)->PairDeltaTables;
+}
+
+// Get the pair delta table from the passed context that belongs to the passed table id. Access by [OriginalParticleId][NewParticleId][CenterParticleId]
+static inline PairDeltaTable_t* getPairDeltaTableAt(SCONTEXT_PARAM, const int32_t pairTableId)
+{
+    debug_assert(!span_IndexIsOutOfRange(*getPairDeltaTables(SCONTEXT), pairTableId));
+    return &span_Get(*getPairDeltaTables(SCONTEXT), pairTableId);
+}
+#endif
+
 /* Main state getter/setter */
 
 // Get the buffer access to the main state binary
