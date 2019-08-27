@@ -16,6 +16,14 @@
 #include "Simulator/Data/Database/DbModel.h"
 #include "Simulator/Data/State/StateModel.h"
 
+// Array type for 3D pair energy delta tables [Original][New][Partner]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(double, 3, PairDeltaTable) PairDeltaTable_t;
+
+// Span type for 3D pair energy delta table sets [TableId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Span_t(PairDeltaTable_t, PairDeltaTables) PairDeltaTables_t;
+
 // Type for cluster links
 // Layout@ggc_x86_64 => 2@[1,1]
 typedef struct ClusterLink
@@ -291,8 +299,13 @@ typedef struct CycleState
     // The pointer to the current work cluster
     ClusterState_t*             WorkCluster;
 
+    #if defined(OPT_USE_3D_PAIRTABLES)
+    // The pointer to the current pair delta table
+    PairDeltaTable_t*           WorkPairTable;
+    #else
     // The pointer to the current pair table
     PairTable_t*                WorkPairTable;
+    #endif
 
     // The pointer to the current work cluster table
     ClusterTable_t*             WorkClusterTable;
@@ -432,14 +445,6 @@ typedef struct Flp64Buffer
     double  CurrentSum;
     
 } Flp64Buffer_t;
-
-// Array type for 3D pair energy delta tables [Original][New][Partner]
-// Layout@ggc_x86_64 => 24@[8,8,8]
-typedef Array_t(double, 3, PairDeltaTable) PairDeltaTable_t;
-
-// Span type for 3D pair energy delta table sets [TableId]
-// Layout@ggc_x86_64 => 24@[8,8,8]
-typedef Span_t(PairDeltaTable_t, PairDeltaTables) PairDeltaTables_t;
 
 // Type for the simulation dynamic model
 // Layout@ggc_x86_64 => 208@[80,24,32,16,24,16,16]

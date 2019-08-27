@@ -12,8 +12,11 @@
 
 /* Optimization toggle defines */
 
+// Optimizes the linking process to ignore immobile positions (Major impact)
 #define OPT_LINK_ONLY_MOBILES
-//#define OPT_USE_3D_PAIRTABLES
+
+// Optimizes the pair table system to use 1x 3D lookup instead of 2x 2D lookups per delta value (Minor impact)
+#define OPT_USE_3D_PAIRTABLES
 
 /* State buffer constants and default values */
 

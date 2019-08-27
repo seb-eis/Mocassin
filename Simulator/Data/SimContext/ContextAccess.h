@@ -263,34 +263,10 @@ static inline EnvironmentState_t* getActiveWorkEnvironment(SCONTEXT_PARAM)
     return getCycleState(SCONTEXT)->WorkEnvironment;
 }
 
-// Set the currently active work environment
-static inline void setActiveWorkEnvironment(SCONTEXT_PARAM, EnvironmentState_t* value)
-{
-    getCycleState(SCONTEXT)->WorkEnvironment = value;
-}
-
 // Get the currently active work cluster
 static inline ClusterState_t* getActiveWorkCluster(SCONTEXT_PARAM)
 {
     return getCycleState(SCONTEXT)->WorkCluster;
-}
-
-// Set the currently active work cluster
-static inline void setActiveWorkCluster(SCONTEXT_PARAM, ClusterState_t* value)
-{
-    getCycleState(SCONTEXT)->WorkCluster = value;
-}
-
-// Get the currently active pair energy table
-static inline PairTable_t* getActivePairTable(SCONTEXT_PARAM)
-{
-    return getCycleState(SCONTEXT)->WorkPairTable;
-}
-
-// Set the currently active pair energy table
-static inline void setActivePairTable(SCONTEXT_PARAM, PairTable_t* value)
-{
-    getCycleState(SCONTEXT)->WorkPairTable = value;
 }
 
 // Get the currently active cluster energy table
@@ -299,11 +275,19 @@ static inline ClusterTable_t* getActiveClusterTable(SCONTEXT_PARAM)
     return getCycleState(SCONTEXT)->WorkClusterTable;
 }
 
-// Set the currently active cluster energy table
-static inline void setActiveClusterTable(SCONTEXT_PARAM, ClusterTable_t* value)
+#if defined(OPT_USE_3D_PAIRTABLES)
+// Get the currently active pair energy delta table
+static inline PairDeltaTable_t* getActivePairTable(SCONTEXT_PARAM)
 {
-    getCycleState(SCONTEXT)->WorkClusterTable = value;
+    return getCycleState(SCONTEXT)->WorkPairTable;
 }
+#else
+// Get the currently active pair energy table
+static inline PairTable_t* getActivePairTable(SCONTEXT_PARAM)
+{
+    return getCycleState(SCONTEXT)->WorkPairTable;
+}
+#endif
 
 /* Database model getter/setter */
 

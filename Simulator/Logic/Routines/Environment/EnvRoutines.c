@@ -425,7 +425,11 @@ static inline void SetActiveWorkCluster(SCONTEXT_PARAM, EnvironmentState_t *rest
 static inline void SetActiveWorkPairTable(SCONTEXT_PARAM, EnvironmentState_t *restrict environment, EnvironmentLink_t *restrict environmentLink)
 {
     let pairDefinition = getEnvironmentPairDefinitionAt(environment, environmentLink->TargetPairId);
+    #if defined(OPT_USE_3D_PAIRTABLES)
+    SCONTEXT->CycleState.WorkPairTable = getPairDeltaTableAt(SCONTEXT, pairDefinition->EnergyTableId);
+    #else
     SCONTEXT->CycleState.WorkPairTable = getPairEnergyTableAt(SCONTEXT, pairDefinition->EnergyTableId);
+    #endif
 }
 
 // Set the active work cluster energy table by environment and cluster link
@@ -442,12 +446,19 @@ static inline int32_t SearchClusterCodeIdInTable(const ClusterTable_t *restrict 
 }
 
 // Get the delta energy value for the passed pair information
+#if defined(OPT_USE_3D_PAIRTABLES)
+static inline double GetPairEnergyDelta(const PairDeltaTable_t *restrict pairTable, const byte_t mainId, const byte_t oldId,const byte_t newId)
+{
+    return array_Get(*pairTable, oldId, newId, mainId);
+}
+#else
 static inline double GetPairEnergyDelta(const PairTable_t *restrict pairTable, const byte_t mainId, const byte_t oldId,const byte_t newId)
 {
     let oldEnergy = getPairEnergyAt(pairTable, mainId, oldId);
     let newEnergy = getPairEnergyAt(pairTable, mainId, newId);
     return newEnergy - oldEnergy;
 }
+#endif
 
 // Get the cluster delta energy for the passed cluster information
 static inline double GetClusterEnergyDelta(const ClusterTable_t *restrict clusterTable, const ClusterState_t *restrict cluster, const byte_t particleId)
