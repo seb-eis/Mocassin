@@ -75,14 +75,14 @@ namespace Mocassin.UI.Xml.Jobs
         public abstract int GetTotalJobCount(IModelProject modelProject);
 
         /// <summary>
-        ///     Copies internal data to the passed <see cref="JobPackageDescriptionGraph"/>. The nam
+        ///     Copies internal data to the passed <see cref="JobPackageDescriptionGraph"/>
         /// </summary>
-        /// <param name="package"></param>
-        protected void CopyBaseDataFrom(JobPackageDescriptionGraph package)
+        /// <param name="other"></param>
+        protected void CopyBaseDataTo(JobPackageDescriptionGraph other)
         {
-            Name = package.Name;
-            JobCountPerConfig = package.JobCountPerConfig;
-            SelectionOptimizers = package.SelectionOptimizers.Select(x => x.Duplicate()).ToList();
+            other.Name = Name;
+            other.JobCountPerConfig = JobCountPerConfig;
+            other.SelectionOptimizers = SelectionOptimizers.Select(x => x.Duplicate()).ToList();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
+using Mocassin.UI.Xml.Base;
 
 namespace Mocassin.UI.Xml.Jobs
 {
@@ -10,7 +11,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     system
     /// </summary>
     [XmlRoot("MmcJobConfig")]
-    public class MmcJobDescriptionGraph : JobDescriptionGraph
+    public class MmcJobDescriptionGraph : JobDescriptionGraph, IDuplicable<MmcJobDescriptionGraph>
     {
         /// <summary>
         ///     Get or set the abort tolerance value as a string
@@ -90,6 +91,26 @@ namespace Mocassin.UI.Xml.Jobs
             };
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public MmcJobDescriptionGraph Duplicate()
+        {
+            var result = new MmcJobDescriptionGraph
+            {
+                BreakTolerance = BreakTolerance,
+                BreakSampleInterval = BreakSampleInterval,
+                BreakSampleLength = BreakSampleLength,
+                ResultSampleMcs = ResultSampleMcs
+            };
+            CopyBaseDataTo(result);
+            return result;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

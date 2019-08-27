@@ -78,14 +78,14 @@ namespace Mocassin.UI.Xml.Jobs
         /// <inheritdoc />
         public KmcJobPackageDescriptionGraph Duplicate()
         {
-            var copyObj = new KmcJobPackageDescriptionGraph
+            var result = new KmcJobPackageDescriptionGraph
             {
                 Simulation = Simulation?.Duplicate(),
-                JobBaseDescription = (KmcJobDescriptionGraph) JobBaseDescription.DeepCopy(),
-                JobConfigurations = JobConfigurations.Select(x => x.DeepCopy()).Cast<KmcJobDescriptionGraph>().ToList()
+                JobBaseDescription = JobBaseDescription.Duplicate(),
+                JobConfigurations = JobConfigurations.Select(x => x.Duplicate()).ToList()
             };
-            copyObj.CopyBaseDataFrom(this);
-            return copyObj;
+            CopyBaseDataTo(result);
+            return result;
         }
 
         /// <inheritdoc />

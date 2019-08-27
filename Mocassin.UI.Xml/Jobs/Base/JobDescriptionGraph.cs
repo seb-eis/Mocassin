@@ -130,6 +130,20 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <summary>
+        ///     Copies the base data of the <see cref="JobDescriptionGraph"/> to the target
+        /// </summary>
+        /// <param name="other"></param>
+        protected void CopyBaseDataTo(JobDescriptionGraph other)
+        {
+            other.ExecutionFlags = ExecutionFlags;
+            other.MinimalSuccessRate = MinimalSuccessRate;
+            other.TargetMcsp = TargetMcsp;
+            other.Temperature = Temperature;
+            other.TimeLimit = TimeLimit;
+            other.LatticeConfiguration = LatticeConfiguration.Duplicate();
+        }
+
+        /// <summary>
         ///     Get a prepared <see cref="JobConfiguration" /> that has all values of the implementing type set using the defaults
         ///     from the passed <see cref="ISimulation" /> where required
         /// </summary>

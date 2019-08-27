@@ -12,7 +12,7 @@ namespace Mocassin.UI.Xml.Base
     ///     instances
     /// </summary>
     [XmlRoot]
-    public sealed class ModelObjectReferenceGraph<T> : ModelObjectGraph,
+    public sealed class ModelObjectReferenceGraph<T> :
         IEquatable<ModelObjectReferenceGraph<T>>,
         IDuplicable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
     {
@@ -20,6 +20,20 @@ namespace Mocassin.UI.Xml.Base
         [NotMapped]
         [JsonIgnore]
         private ModelObjectGraph targetGraph;
+
+        /// <summary>
+        ///     Get or set the key of the reference
+        /// </summary>
+        [JsonIgnore]
+        [XmlAttribute("Key")]
+        public string Key { get; set; }
+
+        /// <summary>
+        ///     Get the name of the object reference
+        /// </summary>
+        [JsonIgnore]
+        [XmlIgnore]
+        public string Name => TargetGraph?.Name ?? "TargetNull";
 
         /// <summary>
         ///     Get or set the reference target <see cref="ModelObjectGraph" />. Only serialized in JSON mode with reference
@@ -38,17 +52,6 @@ namespace Mocassin.UI.Xml.Base
             }
         }
 
-
-        /// <inheritdoc />
-        [XmlAttribute("Name")]
-        [JsonProperty("Name")]
-        [NotMapped]
-        public override string Name
-        {
-            get => TargetGraph?.Name ?? base.Name; 
-            set => base.Name = value;
-        }
-
         /// <inheritdoc />
         public ModelObjectReferenceGraph()
         {
@@ -63,8 +66,11 @@ namespace Mocassin.UI.Xml.Base
             TargetGraph = targetGraph ?? throw new ArgumentNullException(nameof(targetGraph));
         }
 
-        /// <inheritdoc />
-        protected override ModelObject GetModelObjectInternal()
+        /// <summary>
+        ///     Get the internal model object
+        /// </summary>
+        /// <returns></returns>
+        public ModelObject GetInputObject()
         {
             return new T {Key = TargetGraph?.Key ?? Key};
         }

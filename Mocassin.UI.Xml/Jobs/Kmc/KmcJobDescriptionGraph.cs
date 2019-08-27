@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
+using Mocassin.UI.Xml.Base;
 
 namespace Mocassin.UI.Xml.Jobs
 {
@@ -11,7 +12,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     system
     /// </summary>
     [XmlRoot("KmcJobConfig")]
-    public class KmcJobDescriptionGraph : JobDescriptionGraph
+    public class KmcJobDescriptionGraph : JobDescriptionGraph, IDuplicable<KmcJobDescriptionGraph>
     {
         /// <summary>
         ///     Get or set the pre run monte carlo steps per particle as a string
@@ -91,6 +92,26 @@ namespace Mocassin.UI.Xml.Jobs
             };
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public KmcJobDescriptionGraph Duplicate()
+        {
+            var result = new KmcJobDescriptionGraph
+            {
+                ElectricFieldModulus = ElectricFieldModulus,
+                PreRunMcsp = PreRunMcsp,
+                NormalizationProbability = NormalizationProbability,
+                MaxAttemptFrequency = MaxAttemptFrequency
+            };
+            CopyBaseDataTo(result);
+            return result;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

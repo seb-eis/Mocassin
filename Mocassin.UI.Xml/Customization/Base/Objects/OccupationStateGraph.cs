@@ -79,7 +79,7 @@ namespace Mocassin.UI.Xml.Customization
             var builder = new StringBuilder(200);
             foreach (var particle in Particles)
             {
-                builder.Append($"[{particle.Name}]");
+                builder.Append($"[{particle?.TargetGraph?.Name ?? "Error@Ref"}]");
             }
 
             return builder.ToString();
