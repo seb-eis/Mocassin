@@ -12,11 +12,14 @@
 
 /* Optimization toggle defines */
 
-// Optimizes the linking process to ignore immobile positions (Major impact)
+// Optimizes the linking process to ignore immobile positions (Major perf. impact, lattice de-synchronizes)
 #define OPT_LINK_ONLY_MOBILES
 
-// Optimizes the pair table system to use 1x 3D lookup instead of 2x 2D lookups per delta value (Minor impact)
+// Optimizes the pair table system to use 1x 3D lookup instead of 2x 2D lookups per delta value (Minor perf. impact)
 #define OPT_USE_3D_PAIRTABLES
+
+// Optimizes the accept/reject system by using an IEEE754 based EXP approximation (Major perf. impact, minor precision impact)
+#define OPT_APPROXIMATE_EXP
 
 /* State buffer constants and default values */
 

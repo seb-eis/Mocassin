@@ -20,6 +20,7 @@
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
+#include "Framework/Math/Random/Approx.h"
 
 // Advances the block counters of the main loop to the next step goal
 static inline void AdvanceMainCycleCounterToNextStepGoal(SCONTEXT_PARAM)
@@ -699,7 +700,7 @@ void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
     energyInfo->S0toS2DeltaEnergy = energyInfo->S1Energy + energyInfo->ConformationDeltaEnergy + energyInfo->ElectricFieldEnergy;
     energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->ConformationDeltaEnergy - energyInfo->ElectricFieldEnergy;
 
-    energyInfo->RawS0toS2Probability = exp(-energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = CalculateExpResult(-energyInfo->S0toS2DeltaEnergy);
     energyInfo->RawS2toS0Probability = (energyInfo->S2toS0DeltaEnergy < 0.0) ? INFINITY : 0.0;
 
     energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability * GetCurrentProbabilityPreFactor(SCONTEXT);
@@ -781,7 +782,7 @@ void MMC_SetJumpProbabilities(SCONTEXT_PARAM)
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = exp(-energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = CalculateExpResult(-energyInfo->S0toS2DeltaEnergy);
     energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
