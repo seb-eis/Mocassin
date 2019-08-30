@@ -33,6 +33,19 @@ namespace Mocassin.Model.Translator
         public int ClusterEnergyTableCount { get; set; }
 
         /// <summary>
+        ///     Defect background blob conversion backing property
+        /// </summary>
+        [Column("DefectBackground")]
+        public byte[] DefectBackgroundBinary { get; set; }
+
+        /// <summary>
+        ///     Get or set the <see cref="DefectBackgroundEntity"/> that stores the 2D structure defect background
+        /// </summary>
+        [NotMapped]
+        [OwnedBlobProperty(nameof(DefectBackgroundBinary))]
+        public DefectBackgroundEntity DefectBackground { get; set; }
+
+        /// <summary>
         ///     The list of affiliated pair energy table entities
         /// </summary>
         public List<PairEnergyTableEntity> PairEnergyTables { get; set; }

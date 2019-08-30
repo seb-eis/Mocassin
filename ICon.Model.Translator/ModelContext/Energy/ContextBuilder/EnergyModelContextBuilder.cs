@@ -30,11 +30,13 @@ namespace Mocassin.Model.Translator.ModelContext
             var groupInteractions = manager.QueryPort.Query(port => port.GetGroupInteractions());
             var allPairs = symmetricPairs.Cast<IPairInteraction>().Concat(asymmetricPairs);
 
+            var defects = manager.QueryPort.Query(x => x.GetStableEnvironmentInfo().GetDefectEnergies().ToList());
             var pairTask = Task.Run(() => PairEnergyModelBuilder.BuildModels(allPairs));
             var groupTask = Task.Run(() => GroupEnergyModelBuilder.BuildModels(groupInteractions));
 
             modelContext.PairEnergyModels = pairTask.Result;
             modelContext.GroupEnergyModels = groupTask.Result;
+            modelContext.DefectEnergies = defects;
             return modelContext;
         }
 

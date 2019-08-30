@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
+using Mocassin.Model.Structures;
 using Mocassin.Model.Translator.ModelContext;
 
 namespace Mocassin.Model.Translator.EntityBuilder
@@ -19,6 +20,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         public SimulationEnergyModel BuildModel(ISimulationModel simulationModel)
         {
             var energyModel = CreateNewModel();
+            energyModel.DefectBackground = GetDefectBackgroundEntity(simulationModel.SimulationEncodingModel);
             LinkModel(energyModel);
             return energyModel;
         }
@@ -121,6 +123,27 @@ namespace Mocassin.Model.Translator.EntityBuilder
             {
                 entity.SimulationEnergyModel = simulationEnergyModel;
             }
+        }
+
+        /// <summary>
+        ///     Get the <see cref="DefectBackgroundEntity"/> for the current <see cref="IProjectModelContext"/> and passed <see cref="ISimulationEncodingModel"/>
+        /// </summary>
+        /// <returns></returns>
+        public DefectBackgroundEntity GetDefectBackgroundEntity(ISimulationEncodingModel encodingModel)
+        {
+            var defects = ModelContext.EnergyModelContext.DefectEnergies;
+            var ucpList = ModelContext.ModelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetExtendedIndexToPositionList());
+            var array = new double[encodingModel.JumpCountMappingTable.GetLength(0),encodingModel.JumpCountMappingTable.GetLength(1)];
+
+            for (var positionId = 0; positionId < ucpList.Count; positionId++)
+            {
+                foreach (var defect in defects.Where(x => x.UnitCellPosition.Index == ucpList[positionId].Index))
+                {
+                    array[positionId, defect.Particle.Index] = defect.Energy;
+                }
+            }
+
+            return new DefectBackgroundEntity(array);
         }
 
         /// <summary>

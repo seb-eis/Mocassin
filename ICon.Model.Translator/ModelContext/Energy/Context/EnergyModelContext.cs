@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mocassin.Model.Energies;
 
 namespace Mocassin.Model.Translator.ModelContext
 {
@@ -10,5 +11,8 @@ namespace Mocassin.Model.Translator.ModelContext
 
         /// <inheritdoc />
         public IList<IGroupEnergyModel> GroupEnergyModels { get; set; }
+
+        /// <inheritdoc />
+        public IList<IDefectEnergy> DefectEnergies { get; set; }
     }
 }
