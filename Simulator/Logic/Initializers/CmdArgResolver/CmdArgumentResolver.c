@@ -65,7 +65,8 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
         { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setOutputPluginSymbol },
         { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
         { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
-        { "-stdRedirect",     (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection}
+        { "-stdRedirect",     (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
+        { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode},
     };
 
     static const CmdArgLookup_t resolverTable =

@@ -347,10 +347,27 @@ static error_t AddEnvClusterEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_
     return ERR_OK;
 }
 
+// Adds the static environment background energies defined as defect table and lattice background to the passed environment state energies
+static void AddStaticEnvBackgroundStateEnergies(SCONTEXT_PARAM, EnvironmentState_t* restrict environment)
+{
+    let cellBackground = getDefectBackground(SCONTEXT);
+    let latticeBackground = getLatticeEnergyBackground(SCONTEXT);
+
+    for (size_t j = 0; environment->EnvironmentDefinition->PositionParticleIds[j] != PARTICLE_NULL; j++)
+    {
+        let vector = environment->PositionVector;
+        let particleId = environment->EnvironmentDefinition->PositionParticleIds[j];
+        let cellEntry = array_Get(*cellBackground, vector.D, particleId);
+        let latticeEntry = latticeBackground->Begin == NULL ? 0.0 : array_Get(*latticeBackground, vecCoorSet4(vector), particleId);
+        span_Get(environment->EnergyStates, particleId) += cellEntry + latticeEntry;
+    }
+}
+
 // Sets the environment state energy buffers to the value that results from the passed occupation buffer entries
 static error_t SetEnvStateEnergyByOccupation(SCONTEXT_PARAM, EnvironmentState_t* restrict environment, Buffer_t* restrict occupationBuffer)
 {
     NullEnvironmentStateBuffers(environment);
+    AddStaticEnvBackgroundStateEnergies(SCONTEXT, environment);
     AddEnvPairEnergyByOccupation(SCONTEXT, environment, occupationBuffer);
     return AddEnvClusterEnergyByOccupation(SCONTEXT, environment, occupationBuffer);
 }

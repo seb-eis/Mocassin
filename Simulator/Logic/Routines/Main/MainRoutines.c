@@ -406,7 +406,6 @@ static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
     metaData->TimePerBlock = (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
     metaData->ProgramRunTime += (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
 
-
     var blockEta = metaData->TimePerBlock + metaData->ProgramRunTime;
     runInfo->PreviousBlockFinishClock = newClock;
 
@@ -690,6 +689,11 @@ void KMC_SetJumpProperties(SCONTEXT_PARAM)
     KMC_SetStateEnergies(SCONTEXT);
 }
 
+static inline double GetExpResult(SCONTEXT_PARAM, const double exponent)
+{
+    return SCONTEXT->UseExpApproximation ? Exp_Fast32_Rms(exponent) : exp(exponent);
+}
+
 void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
 {
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
@@ -700,7 +704,7 @@ void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
     energyInfo->S0toS2DeltaEnergy = energyInfo->S1Energy + energyInfo->ConformationDeltaEnergy + energyInfo->ElectricFieldEnergy;
     energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->ConformationDeltaEnergy - energyInfo->ElectricFieldEnergy;
 
-    energyInfo->RawS0toS2Probability = CalculateExpResult(-energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = GetExpResult(SCONTEXT, -energyInfo->S0toS2DeltaEnergy);
     energyInfo->RawS2toS0Probability = (energyInfo->S2toS0DeltaEnergy < 0.0) ? INFINITY : 0.0;
 
     energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability * GetCurrentProbabilityPreFactor(SCONTEXT);
@@ -711,7 +715,14 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     let plugins = getPluginCollection(SCONTEXT);
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
 
-    plugins->OnSetJumpProbabilities(SCONTEXT);
+    if (plugins->OnSetJumpProbabilities == NULL)
+    {
+        KMC_SetJumpProbabilities(SCONTEXT);
+    }
+    else
+    {
+        plugins->OnSetJumpProbabilities(SCONTEXT);
+    }
 
     // Unstable end: Do not advance system, update counter and simulated time
     if (energyInfo->RawS2toS0Probability == INFINITY)
@@ -782,7 +793,7 @@ void MMC_SetJumpProbabilities(SCONTEXT_PARAM)
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
-    energyInfo->RawS0toS2Probability = CalculateExpResult(-energyInfo->S0toS2DeltaEnergy);
+    energyInfo->RawS0toS2Probability = GetExpResult(SCONTEXT, -energyInfo->S0toS2DeltaEnergy);
     energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
@@ -791,7 +802,14 @@ void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     let plugins = getPluginCollection(SCONTEXT);
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
 
-    plugins->OnSetJumpProbabilities(SCONTEXT);
+    if (plugins->OnSetJumpProbabilities == NULL)
+    {
+        MMC_SetJumpProbabilities(SCONTEXT);
+    }
+    else
+    {
+        plugins->OnSetJumpProbabilities(SCONTEXT);
+    }
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDouble(SCONTEXT);

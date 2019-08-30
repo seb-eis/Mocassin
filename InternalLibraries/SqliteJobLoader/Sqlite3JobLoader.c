@@ -123,7 +123,7 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
 
 static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    let localQuery = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
+    let localQuery = "select NumOfPairTables, NumOfClusterTables, DefectBackground from EnergyModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
@@ -137,6 +137,8 @@ static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbMo
 
     model->PairTables = new_Span(model->PairTables, pairTableCount);
     model->ClusterTables = new_Span(model->ClusterTables, clusterTableCount);
+
+    model->DefectBackground = array_FromBlob(model->DefectBackground, sqlite3_column_blob(sqlStatement, 2));
 
     error = sqlite3_finalize(sqlStatement);
     return error;
@@ -393,7 +395,7 @@ error_t PopulateDbModelFromDatabase(DbModel_t *dbModel, const char *dbFile, int3
 
     error = InvokeOnLoadedOperations(dbModel, GetOnLoadedOperations());
 
-    error_assert(sqlite3_close(db), "Failed to close the database file");
+    error_assert(sqlite3_close(db), "Failed to close the database file.");
     return error;
 }
 

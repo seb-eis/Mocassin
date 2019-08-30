@@ -446,18 +446,14 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAM)
     return ERR_USEDEFAULT;
 }
 
-// Sets the energy plugin function to the internal default function
+// Sets the energy plugin function to the internal default (NULL)
 static inline void SetEnergyPluginFunctionToDefault(SCONTEXT_PARAM)
 {
     var plugins = getPluginCollection(SCONTEXT);
-
-    if (JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC))
-        plugins->OnSetJumpProbabilities = (FPlugin_t) KMC_SetJumpProbabilities;
-    else
-        plugins->OnSetJumpProbabilities = (FPlugin_t) MMC_SetJumpProbabilities;
+    plugins->OnSetJumpProbabilities = NULL;
 }
 
-// Set the output plugin function to the internal default
+// Set the output plugin function to the internal default (NULL)
 static inline void SetOutputPluginFunctionToDefault(SCONTEXT_PARAM)
 {
     var plugins = getPluginCollection(SCONTEXT);
@@ -733,11 +729,13 @@ static void SyncSelectionPoolWithDynamicModel(SCONTEXT_PARAM)
     }
 }
 
-// Converts all energy values in pair, cluster tables, and delta tables (if enabled) from [eV] to units of [kT]
+// Converts all energy values in pair, cluster tables, and delta tables (if enabled) & others from [eV] to units of [kT]
 static error_t ConvertEnergyTablesToInternalUnits(SCONTEXT_PARAM)
 {
     let pairTables = getPairEnergyTables(SCONTEXT);
     let clusterTables = getClusterEnergyTables(SCONTEXT);
+    let defectBackground = getDefectBackground(SCONTEXT);
+    let latticeBackground = getLatticeEnergyBackground(SCONTEXT);
     let factor = getPhysicalFactors(SCONTEXT)->EnergyFactorEvToKt;
     return_if(!isfinite(factor) || (factor <  0), ERR_DATACONSISTENCY);
 
@@ -748,6 +746,12 @@ static error_t ConvertEnergyTablesToInternalUnits(SCONTEXT_PARAM)
     cpp_foreach(table, *clusterTables)
         cpp_foreach(value, table->EnergyTable)
             *value *= factor;
+
+    cpp_foreach(value, *defectBackground)
+        *value *= factor;
+
+    cpp_foreach(value, *latticeBackground)
+        *value *= factor;
 
     #if defined(OPT_USE_3D_PAIRTABLES)
     let deltaTables = getPairDeltaTables(SCONTEXT);

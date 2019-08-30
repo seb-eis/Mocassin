@@ -103,5 +103,5 @@ target_link_libraries(utility framework simulator sqlite3)
 target_link_libraries(Mocassin.Utility utility)
 
 # Profiling flags
-#target_compile_options(Mocassin.Simulator PUBLIC -pg)
-#target_link_options(Mocassin.Simulator PUBLIC -pg)
+#target_compile_options(Mocassin.Simulator PUBLIC -pg -no-pie)
+#target_link_options(Mocassin.Simulator PUBLIC -pg -no-pie)

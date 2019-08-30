@@ -504,7 +504,7 @@ typedef struct CmdArguments
 } CmdArguments_t;
 
 // Type for the full simulation context that provides access to all simulation data structures
-// Layout@ggc_x86_64 => 32@[4,]
+// Layout@ggc_x86_64
 typedef struct SimulationContext
 {
     // The main simulation state. Stores the result collections
@@ -533,14 +533,18 @@ typedef struct SimulationContext
 
     // Current main error code of the simulation
     error_t             ErrorCode;
+
+    // Indicates if the simulation should approximate EXP
+    bool_t              UseExpApproximation;
     
 } SimulationContext_t;
 
-// Construct a new raw simulation context struct
+// Construct a new raw simulation context struct with relative path as IO and math.h exp as exp function
 static inline SimulationContext_t ctor_SimulationContext()
 {
     SimulationContext_t context;
     memset(&context, 0, sizeof(SimulationContext_t));
     context.DynamicModel.FileInfo.IODirectoryPath = ".";
+    context.UseExpApproximation = false;
     return context;
 }

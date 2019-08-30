@@ -17,30 +17,6 @@
 #include "ExternalLibraries/sqlite3.h"
 #include "InternalLibraries/Interfaces/JobLoader.h"
 
-/*
- * How to use the SqliteReader:
- * Use the "AssignDatabaseModel" to assign your DatabaseModel object. You need to provide the database location
- * and the project ID. Every other function is only for internal usage. If an error occurs at any instance the
- * operation stops and a SQLITE3 error number (always positive) or a custom error number (always negative) is returned.
- *
- * How the SqliteReader works internally:
- * When the "PopulateDbModelFromDatabase" function is called, the provided database is accessed and the required data is
- * fetched from the database by the provided Project ID. This is accomplished in three steps:
- * 1) The IDs of the parent objects are fetched from the database. The parent objects are the member variables within
- *    the database object, e.g. the Structure object.
- * 2) The member variables of the parent objects are assigned in case of simple types or BLOBs. These can be easily read
- *    from the database. In case of child objects (spans) memory is allocated.
- * 3) The member variables of the child objects are assigned. Child objects are spans within the parent objects, which
- *    have to be fetched from different sql tables than the parent objects.
- *
- * For a new parent or child objects, define a new assignment function and update the macros PARENT_OPERATIONS and/or
- * CHILD_OPARTIONS. Add the object that should be assigned and the new assignment function. Mind that within the
- * assignment function you also need to provide the SQL command to fetch the data you need.
- *
- * The functions AssignParentObjects and AssignChildObjects automatically assign the objects with the described macros.
- *
- */
-
 // Macros for sql query fetching from database
 #define ID_POS_IN_SQLSTMT 1
 

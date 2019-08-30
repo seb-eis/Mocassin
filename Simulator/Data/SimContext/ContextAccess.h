@@ -433,6 +433,18 @@ static inline PairTables_t* getPairEnergyTables(SCONTEXT_PARAM)
     return &getDbEnergyModel(SCONTEXT)->PairTables;
 }
 
+//  Get the defect background that defines a defect energy foreach [PositionId][ParticleId] combination
+static inline DefectBackground_t* getDefectBackground(SCONTEXT_PARAM)
+{
+    return &getDbEnergyModel(SCONTEXT)->DefectBackground;
+}
+
+//  Get the energy background that defines a defect energy foreach [A,B,C,D,ParticleId]] lattice option
+static inline EnergyBackground_t* getLatticeEnergyBackground(SCONTEXT_PARAM)
+{
+    return &getDbLatticeModel(SCONTEXT)->EnergyBackground;
+}
+
 // Get the pair energy table at the specified [pairTableId]
 static inline PairTable_t* getPairEnergyTableAt(SCONTEXT_PARAM, const int32_t pairTableId)
 {
@@ -719,6 +731,13 @@ static inline void setOutputPluginPath(SCONTEXT_PARAM, char const * path)
 {
     getFileInformation(SCONTEXT)->OutputPluginPath = path;
 }
+
+// Sets the Exp mode to exact (false) or approximated (true)
+static inline void setEnableFastExpMode(SCONTEXT_PARAM, char const * value)
+{
+    SCONTEXT->UseExpApproximation = (strcmp(value, "true") == 0) ? 1 : 0;
+}
+
 
 //  Get the main run state file target from the simulation context
 static inline const char* getMainRunStateFile(SCONTEXT_PARAM)

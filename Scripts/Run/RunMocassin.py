@@ -74,7 +74,7 @@ class MocassinJobRunner:
         for i in sequence:
             executionPath = self.MakeJobDirectory(split[0], i)
             stdRedirect = "stdout.log"
-            args = [executionPath, "-dbPath", self.DbPath, "-dbQuery", str(i), "-ioPath", executionPath, "-stdRedirect", stdRedirect]
+            args = [executionPath, "-dbPath", self.DbPath, "-dbQuery", str(i), "-ioPath", executionPath, "-stdRedirect", stdRedirect, "-fexp", "false"]
             print("Running: {}".format(args), flush=True)
             threads.append(self.RunSimulatorAsThread(args))
         print("All Started at: {}".format(time.asctime()))

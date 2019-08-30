@@ -214,8 +214,12 @@ typedef Span_t(PairTable_t, PairTables) PairTables_t;
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(ClusterTable_t, ClusterTables) ClusterTables_t;
 
+// Type for the double 2D rectangular energy defect access [positionId][particleId]
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef Array_t(double, 2, DefectBackground) DefectBackground_t;
+
 // Type for the energy model
-// Layout@ggc_x86_64 => 32@[16,16]
+// Layout@ggc_x86_64 => 48@[16,16,16]
 typedef struct EnergyModel
 {
     // The collection of pair energy tables.
@@ -225,7 +229,11 @@ typedef struct EnergyModel
     // The collection of cluster energy tables
     // Access by [TableId] of a cluster interaction
     ClusterTables_t     ClusterTables;
-    
+
+    //  The defect energy background 2D array
+    // Access by [PositionId][ParticleId]
+    DefectBackground_t  DefectBackground;
+
 } EnergyModel_t;
 
 /* Transition model */
@@ -486,7 +494,7 @@ typedef struct JobModel
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Array_t(byte_t, 4, Lattice) Lattice_t;
 
-// Type for the double 5D rectangular energy background access
+// Type for the double 5D rectangular energy background access [a][b][c][positionId][particleId]
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Array_t(double, 5, EnergyBackground) EnergyBackground_t;
 
@@ -528,7 +536,7 @@ typedef struct LatticeModel
 /* Database model */
 
 // Type for the database model context
-// Layout@ggc_x86_64 => 320@[80,72,56,32,80]
+// Layout@ggc_x86_64 => 336@[80,72,56,48,80]
 typedef struct DbModel
 {
     // The lattice model

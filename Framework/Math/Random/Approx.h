@@ -20,24 +20,57 @@
 typedef union SchraudolphExpUnion
 {
     double Value;
+    int64_t nl;
     struct {int32_t j, i; } n;
 } SchraudolphExpUnion_t;
 
-// Exp approximation using the Nicol N. Schraudolph approach with c = 60801 for minimized mean root error
-static inline double ApproxExp_Schraudolph_RMS(const double exponent)
+// IEEE754 based fast approximation of exp(x) with lowest possible root mean error
+static inline double Exp_Fast32_Rms(const double exponent)
 {
     const int32_t correction = 60801;
+    const int32_t biasfactor = 1072693248;
+    const double expfactor = 1048576 / M_LN2;
     SchraudolphExpUnion_t approx = {0};
-    return (approx.n.i = (1048576/M_LN2) * exponent + (1072693248 - correction), approx.Value);
+    return (approx.n.i = expfactor * exponent + (biasfactor - correction), approx.Value);
 }
 
-//  Calculates the result of the exponential function where a
-static inline double CalculateExpResult(const double exponent)
+// IEEE754 based fast approximation of exp(x) with lowest possible mean error
+static inline double Exp_Fast32_Mean(const double exponent)
 {
-    #if defined(OPT_APPROXIMATE_EXP)
-    return ApproxExp_Schraudolph_RMS(exponent);
-    #else
-    return exp(exponent);
-    #endif
+    const int32_t correction = 68243;
+    const int32_t biasfactor = 1072693248;
+    const double expfactor = 1048576 / M_LN2;
+    SchraudolphExpUnion_t approx = {0};
+    return (approx.n.i = expfactor * exponent + (biasfactor - correction), approx.Value);
+}
+
+// IEEE754 based fast approximation of exp(x) with lowest possible max error greater exact value
+static inline double Exp_Fast32_Upper(const double exponent)
+{
+    const int32_t correction = 90253;
+    const int32_t biasfactor = 1072693248;
+    const double expfactor = 1048576 / M_LN2;
+    SchraudolphExpUnion_t approx = {0};
+    return (approx.n.i = expfactor * exponent + (biasfactor - correction), approx.Value);
+}
+
+// IEEE754 based fast approximation of exp(x) with lowest possible max error below exact value
+static inline double Exp_Fast32_Lower(const double exponent)
+{
+    const int32_t correction = -1;
+    const int32_t biasfactor = 1072693248;
+    const double expfactor = 1048576 / M_LN2;
+    SchraudolphExpUnion_t approx = {0};
+    return (approx.n.i = expfactor * exponent + (biasfactor - correction), approx.Value);
+}
+
+// IEEE754 based fast approximation of exp(x) with equal max error on both upper and lower side
+static inline double Exp_Fast32_Tight(const double exponent)
+{
+    const int32_t correction = 45799;
+    const int32_t biasfactor = 1072693248;
+    const double expfactor = 1048576 / M_LN2;
+    SchraudolphExpUnion_t approx = {0};
+    return (approx.n.i = expfactor * exponent + (biasfactor - correction), approx.Value);
 }
 
