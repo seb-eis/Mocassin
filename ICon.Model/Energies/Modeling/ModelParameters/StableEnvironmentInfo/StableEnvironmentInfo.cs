@@ -21,10 +21,23 @@ namespace Mocassin.Model.Energies
         [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
         public List<SymmetricInteractionFilter> InteractionFilters { get; set; }
 
+        /// <summary>
+        ///     Get or set the list of defect energy entries
+        /// </summary>
+        [DataMember]
+        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
+        public List<DefectEnergy> DefectEnergies { get; set; }
+
         /// <inheritdoc />
         public IEnumerable<IInteractionFilter> GetInteractionFilters()
         {
             return (InteractionFilters ?? new List<SymmetricInteractionFilter>()).AsEnumerable();
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<IDefectEnergy> GetDefectEnergies()
+        {
+            return (DefectEnergies ?? new List<DefectEnergy>()).AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -41,6 +54,7 @@ namespace Mocassin.Model.Energies
 
             MaxInteractionRange = info.MaxInteractionRange;
             InteractionFilters = info.GetInteractionFilters().Select(SymmetricInteractionFilter.FromInterface).ToList();
+            DefectEnergies = info.GetDefectEnergies().Select(DefectEnergy.FromInterface).ToList();
             return this;
 
         }
@@ -56,6 +70,12 @@ namespace Mocassin.Model.Energies
                 if (!info.GetInteractionFilters().Contains(interactionFilter))
                     return false;
             }
+
+            foreach (var defectEnergy in DefectEnergies)
+            {
+                if (!info.GetDefectEnergies().Contains(defectEnergy))
+                    return false;
+            }
             return MaxInteractionRange.IsAlmostEqualByRange(info.MaxInteractionRange);
         }
 
@@ -65,7 +85,12 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public static StableEnvironmentInfo CreateDefault()
         {
-            return new StableEnvironmentInfo {InteractionFilters = new List<SymmetricInteractionFilter>(0), MaxInteractionRange = 1.0};
+            return new StableEnvironmentInfo
+            {
+                InteractionFilters = new List<SymmetricInteractionFilter>(0), 
+                DefectEnergies = new List<DefectEnergy>(0),
+                MaxInteractionRange = 1.0
+            };
         }
     }
 }

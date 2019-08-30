@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
+using Mocassin.Framework.Xml;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Extensions;
@@ -32,6 +33,7 @@ namespace Mocassin.Model.Energies.Validators
             AddGenericContentEqualityValidation(obj, DataReader.Access.GetStableEnvironmentInfo(), report);
             AddInteractionRangeValidation(obj, report);
             AddInteractionFilterValidation(obj, report);
+            AddDefectBackgroundValidation(obj, report);
             return report;
         }
 
@@ -43,7 +45,7 @@ namespace Mocassin.Model.Energies.Validators
         /// <param name="report"></param>
         protected void AddInteractionRangeValidation(IStableEnvironmentInfo envInfo, ValidationReport report)
         {
-            var expectedPositionCount = ApproximateMaxInteractionsInInfluenceSphere(envInfo);
+            var expectedPositionCount = ApproximateWorstCaseInteractionCount(envInfo);
             if (Settings.PositionsPerStable.ParseValue(expectedPositionCount, out var warnings) != 0) report.AddWarnings(warnings);
         }
 
@@ -69,7 +71,7 @@ namespace Mocassin.Model.Energies.Validators
                 .ToList().RemoveDuplicatesAndGetRemovedIndices((a, b) => a.IsEqualFilter(b));
 
             var details = duplicateIndices
-                .Select(index => $"Filter ({index}) is a duplicate of previous filter definition")
+                .Select(index => $"Filter ({index}) is a duplicate of previous filter definition.")
                 .ToList();
 
             if (details.Count == 0)
@@ -109,12 +111,12 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        ///     Approximates how many interactions a radial search will produce in the worst case though the pair interaction
+        ///     Approximates how many interactions a radial search will produce in the worst case through the pair interaction
         ///     density of the unit cell
         /// </summary>
         /// <param name="envInfo"></param>
         /// <returns></returns>
-        protected long ApproximateMaxInteractionsInInfluenceSphere(IStableEnvironmentInfo envInfo)
+        protected long ApproximateWorstCaseInteractionCount(IStableEnvironmentInfo envInfo)
         {
             long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
                                               .Query(port => port.GetLinearizedExtendedPositionList())
@@ -127,6 +129,36 @@ namespace Mocassin.Model.Energies.Validators
                 .GetCellVolume();
 
             return (long) Math.Ceiling(interactionPerUnitCell * MocassinMath.GetSphereVolume(envInfo.MaxInteractionRange) / unitCellVolume);
+        }
+
+        /// <summary>
+        ///     Validates the collection of <see cref="DefectEnergy"/> energies  in the <see cref="IStableEnvironmentInfo"/> and adds the results to the report
+        /// </summary>
+        /// <param name="envInfo"></param>
+        /// <param name="report"></param>
+        protected void AddDefectBackgroundValidation(IStableEnvironmentInfo envInfo, ValidationReport report)
+        {
+            var details = new List<string>();
+            foreach (var defectEnergy in envInfo.GetDefectEnergies())
+            {
+                if (envInfo.GetDefectEnergies().SkipWhile(x => x != defectEnergy).Count(x => x.Equals(defectEnergy)) != 1)
+                {
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has multiple definitions.");
+                }
+
+                if (!defectEnergy.UnitCellPosition.IsValidAndStable())
+                {
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] (unstable) has no effect.");
+                }
+
+                if (defectEnergy.UnitCellPosition.IsValidAndStable() && defectEnergy.Particle.IsEmpty)
+                {
+                    details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.UnitCellPosition}] (stable) has no effect.");
+                }
+            }
+
+            if (details.Count != 0)
+                report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, details.ToArray()));
         }
     }
 }

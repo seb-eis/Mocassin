@@ -29,7 +29,7 @@
     <ProductName>Mocassin Model Builder</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
-    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -358,6 +358,10 @@
     <Page Include="Controls\ProjectWorkControl\ModelControls\Base\Content\BasicJobTranslationContentControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml">
       <SubType>Designer</SubType>
@@ -747,6 +751,10 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\AddNewJobTranslationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DeleteJobTranslationCommand.cs" />
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlView.xaml.cs">
+      <DependentUpon>DefectEnergyControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\DataControl\DefectEnergyControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\DataControl\KmcJobPackageControlView.xaml.cs">
       <DependentUpon>KmcJobPackageControlView.xaml</DependentUpon>
     </Compile>

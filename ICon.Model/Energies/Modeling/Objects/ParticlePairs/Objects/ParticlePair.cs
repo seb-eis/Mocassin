@@ -34,7 +34,7 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return (1 << Particle0.Index) + (1 << Particle1.Index);
+            return Particle0.Index + Particle1.Index;
         }
 
         /// <summary>

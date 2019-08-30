@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mocassin.Framework.Extensions;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 

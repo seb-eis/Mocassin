@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Energies;
 using Mocassin.UI.Xml.Base;
+using Mocassin.UI.Xml.Customization;
 
 namespace Mocassin.UI.Xml.EnergyModel
 {
@@ -27,11 +28,18 @@ namespace Mocassin.UI.Xml.EnergyModel
         public List<InteractionFilterGraph> InteractionFilters { get; set; }
 
         /// <summary>
+        ///     Get or set the <see cref="DefectBackgroundGraph"/> for stable environments
+        /// </summary>
+        [XmlElement("DefectBackground")]
+        public DefectBackgroundGraph DefectBackground { get; set; }
+
+        /// <summary>
         ///     Creates new <see cref="StableEnvironmentGraph" /> with empty component lists
         /// </summary>
         public StableEnvironmentGraph()
         {
             InteractionFilters = new List<InteractionFilterGraph>();
+            DefectBackground = new DefectBackgroundGraph();
         }
 
         /// <inheritdoc />
@@ -40,7 +48,8 @@ namespace Mocassin.UI.Xml.EnergyModel
             var obj = new StableEnvironmentInfo
             {
                 MaxInteractionRange = MaxInteractionRange,
-                InteractionFilters = InteractionFilters.Select(x => x.AsSymmetric()).ToList()
+                InteractionFilters = InteractionFilters.Select(x => x.AsSymmetric()).ToList(),
+                DefectEnergies = DefectBackground.AsDefectList()
             };
             return obj;
         }

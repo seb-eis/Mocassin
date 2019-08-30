@@ -73,6 +73,7 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public static SymmetricInteractionFilter FromInterface(IInteractionFilter interactionFilter)
         {
+            if (interactionFilter == null) throw new ArgumentNullException(nameof(interactionFilter));
             return new SymmetricInteractionFilter
             {
                 StartRadius = interactionFilter.StartRadius,

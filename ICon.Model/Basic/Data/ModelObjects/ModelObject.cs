@@ -52,7 +52,7 @@ namespace Mocassin.Model.Basic
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{ObjectName}:{Name}";
+            return $"{ObjectName}:{Name ?? "??"}";
         }
 
 		/// <inheritdoc />

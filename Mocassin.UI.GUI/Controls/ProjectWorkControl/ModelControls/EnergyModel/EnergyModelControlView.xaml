@@ -107,6 +107,16 @@
 
       </StackPanel>
 
+      </ToolTip>
+      <ToolTip x:Key="ToolTip.DefectEnergies" Style="{StaticResource App.Style.ToolTip.Default}">
+      <StackPanel>
+
+        <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
+          <Run Text="Define background defect energy values for your structure." />
+        </TextBlock>
+
+      </StackPanel>
+
     </ToolTip>
   </UserControl.Resources>
   <Grid>
@@ -140,7 +150,12 @@
       </TabItem>
 
       <TabItem Header="Advanced Options">
-        <GroupBox Style="{StaticResource App.Style.GroupBox.NoBorder}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <GroupBox Grid.Column="0">
 
           <GroupBox.Header>
             <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
@@ -154,6 +169,22 @@
           <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
                                                    Margin="{StaticResource App.Margin.GroupBoxContent}" />
         </GroupBox>
+
+          <GroupBox Grid.Column="1">
+
+            <GroupBox.Header>
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="Position defect definitions:" />
+                <Run Text="[?]"
+                     ToolTip="{StaticResource ToolTip.DefectEnergies}"
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+
+            <dataControl:DefectEnergyControlView DataContext="{Binding DefectEnergyViewModel}"
+                                                 Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          </GroupBox>
+        </Grid>
       </TabItem>
     </TabControl>
   </Grid>

@@ -1,0 +1,48 @@
+﻿<UserControl
+  x:Class="Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl.DefectEnergyControlView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance local:DefectEnergyControlViewModel, IsDesignTimeCreatable=True}"
+  d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <DataGrid Name="DefectEnergiesDataGrid"
+              ItemsSource="{Binding DefectEnergiesControlViewModel.Items}"
+              SelectedItem="{Binding DefectEnergiesControlViewModel.SelectedItem}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              ColumnWidth="*"
+              Background="Transparent">
+
+      <DataGrid.RowHeaderTemplate>
+        <DataTemplate>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     Width="{StaticResource App.Size.RowHeaderLogo}"
+                                     Height="{StaticResource App.Size.RowHeaderLogo}"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
+        </DataTemplate>
+      </DataGrid.RowHeaderTemplate>
+
+      <DataGrid.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Update defect list" Command="{Binding UpdateDefectCollectionCommand}" />
+        </ContextMenu>
+      </DataGrid.ContextMenu>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Particle" Binding="{Binding Particle.Name}" IsReadOnly="True" />
+        <DataGridTextColumn Header="Wyckoff" Binding="{Binding UnitCellPosition.Name}" IsReadOnly="True" />
+        <DataGridTextColumn Header="Energy"
+                            Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

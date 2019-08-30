@@ -15,9 +15,15 @@ namespace Mocassin.Model.Energies
         double MaxInteractionRange { get; }
 
         /// <summary>
-        ///     Get all interaction filters defined for the stable environments
+        ///     Get all <see cref="IInteractionFilter"/> defined for the stable environments
         /// </summary>
         /// <returns></returns>
         IEnumerable<IInteractionFilter> GetInteractionFilters();
+
+        /// <summary>
+        ///     Get all <see cref="IDefectEnergy"/> entries for stable positions
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IDefectEnergy> GetDefectEnergies();
     }
 }

@@ -28,6 +28,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
         /// </summary>
         public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
 
+        /// <summary>
+        ///     Get the <see cref="DefectEnergyControlViewModel"/> that controls the background defect energy set
+        /// </summary>
+        public DefectEnergyControlViewModel DefectEnergyViewModel { get; }
+
         /// <inheritdoc />
         public EnergyModelControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
@@ -35,6 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
             ParameterControlViewModel = new EnergyParameterControlViewModel(projectControl);
             UnstableEnvironmentViewModel = new UnstableEnvironmentControlViewModel(projectControl);
             GroupInteractionViewModel = new GroupInteractionControlViewModel();
+            DefectEnergyViewModel = new DefectEnergyControlViewModel(projectControl);
         }
 
         /// <inheritdoc />
@@ -44,6 +50,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel
             ParameterControlViewModel.ChangeContentSource(contentSource);
             UnstableEnvironmentViewModel.ChangeContentSource(contentSource);
             GroupInteractionViewModel.ChangeContentSource(contentSource);
+            DefectEnergyViewModel.ChangeContentSource(contentSource);
         }
 
         /// <inheritdoc />
