@@ -38,15 +38,18 @@
 
         <comboBox:BindableDataGridComboBoxColumn Header="Primary exchange"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectablePrimaryDopingCombinations}"
-                                                 SelectedItemBinding="{Binding PrimaryDoping}" />
+                                                 SelectedItemBinding="{Binding PrimaryDoping}"
+                                                 DisplayMemberPath="Name"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Dependent exchange"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableCounterDopingCombinations}"
-                                                 SelectedItemBinding="{Binding CounterDoping}" />
+                                                 SelectedItemBinding="{Binding CounterDoping}"
+                                                 DisplayMemberPath="Name"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Building block binding"
                                                  ItemsSource="{Binding ElementName=DopingDataGrid, Path=DataContext.SelectableBuildingBlocks}"
-                                                 SelectedItemBinding="{Binding BuildingBlock}" />
+                                                 SelectedItemBinding="{Binding BuildingBlock}"
+                                                 DisplayMemberPath="Name"/>
 
       </DataGrid.Columns>
     </DataGrid>
