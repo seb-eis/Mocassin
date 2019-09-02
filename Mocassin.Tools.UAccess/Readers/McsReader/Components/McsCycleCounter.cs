@@ -10,9 +10,9 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
     public readonly struct McsCycleCounter
     {
         /// <summary>
-        ///     Get the total number of cycles
+        ///     Get the number of skipped cycles (Non-zero only if frequency optimization is enabled)
         /// </summary>
-        [MarshalAs(UnmanagedType.I8)] public readonly long CycleCount;
+        [MarshalAs(UnmanagedType.I8)] public readonly long SkipCount;
 
         /// <summary>
         ///     Get the number of successful cycles

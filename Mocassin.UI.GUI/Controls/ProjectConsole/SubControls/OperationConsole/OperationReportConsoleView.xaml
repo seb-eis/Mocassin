@@ -33,7 +33,8 @@
               SelectedItem="{Binding SelectedReport}"
               AutoGenerateColumns="False"
               IsReadOnly="True"
-              GridLinesVisibility="None">
+              GridLinesVisibility="None"
+              ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
           <views:ObjectRowHeaderLogo DataContext="#"/> 
@@ -75,7 +76,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Time" Width="Auto"
                             Binding="{Binding TimeStamp, Mode=OneWay}" />
-        <DataGridTextColumn Header="Operation" Width="Auto"
+        <DataGridTextColumn Header="Operation information"
                             Binding="{Binding OperationDescription, Mode=OneWay}" />
         <DataGridCheckBoxColumn Header="Accepted" Width="Auto"
                                 Binding="{Binding IsGood, Mode=OneWay}" />

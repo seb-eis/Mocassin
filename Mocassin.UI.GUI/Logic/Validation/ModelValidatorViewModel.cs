@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using Mocassin.Framework.Events;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.GUI.Logic.Validation
@@ -35,11 +34,12 @@ namespace Mocassin.UI.GUI.Logic.Validation
     /// </summary>
     public class ModelValidatorViewModel : PrimaryControlViewModel
     {
+        private bool isValidating;
         private readonly object lockObject = new object();
         private bool isIgnoreContentChange;
 
         /// <summary>
-        ///     Get the <see cref="IModelProject"/> interface that provides the validation functionality
+        ///     Get the <see cref="IModelProject" /> interface that provides the validation functionality
         /// </summary>
         private IModelProject ModelProject { get; }
 
@@ -47,6 +47,27 @@ namespace Mocassin.UI.GUI.Logic.Validation
         ///     Get or set a boolean value if the validator is disposed
         /// </summary>
         private bool IsDisposed { get; set; }
+
+        /// <summary>
+        ///     Get or set a boolean flag informing if a validation is in progress
+        /// </summary>
+        private bool IsValidating
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    return isValidating;
+                }
+            }
+            set
+            {
+                lock (lockObject)
+                {
+                    isValidating = value;
+                }
+            }
+        }
 
         /// <summary>
         ///     The <see cref="ReactiveEvent{TSubject}" /> for changes in the <see cref="IOperationReport" /> set
@@ -89,7 +110,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
         public TimeSpan ValidationInterval { get; set; } = TimeSpan.FromSeconds(5);
 
         /// <summary>
-        ///     Get the <see cref="AsyncRunValidationCommand"/> to start a single validation cycle
+        ///     Get the <see cref="AsyncRunValidationCommand" /> to start a single validation cycle
         /// </summary>
         public AsyncRunValidationCommand RunValidationCommand { get; }
 
@@ -191,22 +212,26 @@ namespace Mocassin.UI.GUI.Logic.Validation
         }
 
         /// <summary>
-        ///     Performs a single validation cycle run on the internally set <see cref="ProjectModelGraph"/>
+        ///     Performs a single validation cycle run on the internally set <see cref="ProjectModelGraph" />
         /// </summary>
         public void RunValidation()
         {
-            if (ModelProject == null) return;
+            if (IsValidating || ModelProject == null) return;
 
+            IsValidating = true;
             ModelProject.ResetProject();
+
             if (!TryPrepareModelInput(out var inputObjects))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelNotReady);
+                IsValidating = false;
                 return;
             }
 
             if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.FatalException);
+                IsValidating = false;
                 return;
             }
 
@@ -214,20 +239,23 @@ namespace Mocassin.UI.GUI.Logic.Validation
             if (reports.Any(x => !x.IsGood))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.ModelRejected);
+                IsValidating = false;
                 return;
             }
 
             if (!TryGenerateModelCustomization(ModelProject, out var customization))
             {
                 ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.CustomizationNotCreatable);
+                IsValidating = false;
                 return;
             }
 
             ModelValidationStatusChangedEvent.OnNext(ModelValidationStatus.NoErrorsDetected);
+            IsValidating = false;
         }
 
         /// <summary>
-        ///     Tries to create a new <see cref="ProjectCustomizationGraph"/> for the current <see cref="ProjectModelGraph"/>
+        ///     Tries to create a new <see cref="ProjectCustomizationGraph" /> for the current <see cref="ProjectModelGraph" />
         /// </summary>
         /// <param name="customization"></param>
         /// <returns></returns>
@@ -235,23 +263,14 @@ namespace Mocassin.UI.GUI.Logic.Validation
         {
             ModelProject.ResetProject();
             customization = null;
-            if (!TryPrepareModelInput(out var inputObjects))
-            {
-                return ModelValidationStatus.ModelNotReady;
-            }
+            if (!TryPrepareModelInput(out var inputObjects)) return ModelValidationStatus.ModelNotReady;
 
-            if (!TryPushModelInput(ModelProject, inputObjects, out var reports))
-            {
-                return ModelValidationStatus.FatalException;
-            }
+            if (!TryPushModelInput(ModelProject, inputObjects, out var reports)) return ModelValidationStatus.FatalException;
 
-            if (reports.Any(x => !x.IsGood))
-            {
-                return ModelValidationStatus.ModelRejected;
-            }
+            if (reports.Any(x => !x.IsGood)) return ModelValidationStatus.ModelRejected;
 
-            return !TryGenerateModelCustomization(ModelProject, out customization) 
-                ? ModelValidationStatus.CustomizationNotCreatable 
+            return !TryGenerateModelCustomization(ModelProject, out customization)
+                ? ModelValidationStatus.CustomizationNotCreatable
                 : ModelValidationStatus.NoErrorsDetected;
         }
 
@@ -278,10 +297,10 @@ namespace Mocassin.UI.GUI.Logic.Validation
             try
             {
                 inputObjects = ModelGraph.GetInputSequence().ToList();
-                return true;
+                return inputObjects.All(x => x != null);
             }
             catch (Exception)
-            {               
+            {
                 inputObjects = null;
                 return false;
             }

@@ -10,7 +10,19 @@
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
-    <ListView ItemsSource="{Binding ProjectGraphs}" BorderThickness="0">
+    <ListView ItemsSource="{Binding ProjectGraphs}" SelectedItem="{Binding SelectedProject}" BorderThickness="0">
+      <ListView.ContextMenu>
+        <ContextMenu Visibility="{Binding SelectedProject, Converter={StaticResource App.Converter.NullToVisibility}}">
+          <MenuItem Command="{Binding DeleteSelectedProjectCommand}">
+            <MenuItem.Header>
+              <TextBlock>
+                <Run Text="Delete project:"/>
+                <Run Text="{Binding SelectedProject.ProjectName}"/>
+              </TextBlock>
+            </MenuItem.Header>
+          </MenuItem>
+        </ContextMenu>
+      </ListView.ContextMenu>
       <ListView.ItemTemplate>
         <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
           <Grid>

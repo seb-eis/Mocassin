@@ -155,10 +155,15 @@ namespace Mocassin.Model.Energies.Validators
                 {
                     details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.UnitCellPosition}] (stable) has no effect.");
                 }
+
+                if (double.IsInfinity(defectEnergy.Energy) || double.IsNaN(defectEnergy.Energy))
+                {
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has an infinity/NaN energy value.");
+                }
             }
 
             if (details.Count != 0)
-                report.AddWarning(ModelMessageSource.CreateRedundantContentWarning(this, details.ToArray()));
+                report.AddWarning(ModelMessageSource.CreateNotRecommendedWarning(this, details.ToArray()));
         }
     }
 }

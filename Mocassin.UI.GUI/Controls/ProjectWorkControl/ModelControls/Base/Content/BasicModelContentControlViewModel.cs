@@ -1,10 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Base.Views;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
 {
@@ -81,6 +83,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         protected void NotifySelectionChanged<T>(ContentControl contentControl, T value)
         {
             (contentControl.DataContext as IContentSupplier<T>)?.ChangeContentSource(value);
+        }
+
+        /// <inheritdoc />
+        protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
+        {
+            ExecuteOnDispatcher(() => SelectedProjectGraph = null);
+            base.OnProjectLibraryChangedInternal(newProjectLibrary);
+        }
+
+        /// <inheritdoc />
+        protected override void OnProjectContentChangedInternal()
+        {
+            if (!ProjectControl.ProjectGraphs.Contains(SelectedProjectGraph)) ExecuteOnDispatcher(() => SelectedProjectGraph = null);
+            base.OnProjectContentChangedInternal();
         }
     }
 }
