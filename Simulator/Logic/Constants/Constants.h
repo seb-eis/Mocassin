@@ -9,6 +9,7 @@
 //////////////////////////////////////////
 
 #pragma once
+#include "float.h"
 
 /* Optimization toggle defines */
 
@@ -18,8 +19,11 @@
 // Optimizes the pair table system to use 1x 3D lookup instead of 2x 2D lookups per delta value (Minor perf. impact)
 #define OPT_USE_3D_PAIRTABLES
 
-// Optimizes the accept/reject system by using an IEEE754 based EXP approximation (Major perf. impact, minor precision impact)
-#define OPT_APPROXIMATE_EXP
+// Optimizes the accept/reject system by using pre-rejection checks for frequency factors (Major perf. impact for multi-frequency simulations)
+#define OPT_PRECHECK_FREQUENCY
+
+// Set the upper threshold frequency factor [0;1]. The check will be skipped for values above
+#define OPT_FRQPRECHECK_LIMIT (1.0 - DBL_EPSILON)
 
 /* State buffer constants and default values */
 

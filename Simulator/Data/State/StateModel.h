@@ -81,8 +81,8 @@ typedef Span_t(Tracker_t, TrackerState) TrackersState_t;
 // Layout@ggc_x86_64 => 48@[8,8,8,8,8,8]
 typedef struct StateCounterCollection
 {
-    // Counter for simulation cycles
-    int64_t CycleCount;
+    // Counter for simulation cycle skips
+    int64_t SkipCount;
 
     // Counter for successful cycles
     int64_t McsCount;

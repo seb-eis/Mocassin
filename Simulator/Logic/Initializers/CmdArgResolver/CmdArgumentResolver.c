@@ -12,6 +12,18 @@
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 #include "Simulator/Logic/Validators/Validators.h"
 
+// Checks if the set of command arguments contains the build call flag and terminates the execution if true
+static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAM)
+{
+    let args = getCommandArguments(SCONTEXT);
+    for (int32_t i = 1; i < args->Count; i++)
+    {
+        if (strcmp("--bcall", args->Values[i]) != 0) continue;
+        fprintf(stdout, "Build call flag detected, terminating now!");
+        exit(ERR_OK);
+    }
+}
+
 // Tries to redirect the stdout and stderr stream to file streams (stdout is selectable, stderr defaults to stderr.log)
 static void setStdoutRedirection(SCONTEXT_PARAM, const char* stdoutFile)
 {
@@ -42,9 +54,9 @@ static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
 {
     static const CmdArgResolver_t resolvers[] =
     {
-        { "-dbPath",    (FValidator_t) ValidateIsValidFilePath,       (FCmdCallback_t) setDatabasePath },
-        { "-dbQuery",   (FValidator_t) ValidateDatabaseQueryString,   (FCmdCallback_t) setDatabaseLoadString },
-        { "-ioPath",    (FValidator_t) ValidateIsDiretoryPath,        (FCmdCallback_t) setIODirectoryPath}
+        { "-dbPath",  (FValidator_t) ValidateIsValidFilePath,     (FCmdCallback_t) setDatabasePath },
+        { "-jobId",   (FValidator_t) ValidateDatabaseQueryString, (FCmdCallback_t) setDatabaseLoadString },
+        { "-ioPath",  (FValidator_t) ValidateIsDiretoryPath,      (FCmdCallback_t) setIODirectoryPath}
     };
 
     static const CmdArgLookup_t resolverTable =
@@ -65,8 +77,8 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
         { "-outPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setOutputPluginSymbol },
         { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
         { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
-        { "-stdRedirect",     (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
-        { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode},
+        { "-stdout",          (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
+        { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode}
     };
 
     static const CmdArgLookup_t resolverTable =
@@ -109,6 +121,8 @@ static error_t ResolveAndSetEssentialCmdArguments(SCONTEXT_PARAM)
     error_t error;
     let resolverTable = getEssentialCmdArgsResolverTable();
     var unresolved = span_Length(*resolverTable);
+
+    TerminateOnSetBuildCallFlag(SCONTEXT);
 
     for (int32_t i = 1; i < getCommandArguments(SCONTEXT)->Count; i++)
     {

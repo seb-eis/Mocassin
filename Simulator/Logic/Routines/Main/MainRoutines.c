@@ -37,6 +37,13 @@ static inline void SetRuntimeInfoToCurrent(SCONTEXT_PARAM)
     runInfo->PreviousBlockFinishClock = runInfo->MainRoutineStartClock;
 }
 
+// Sets the required active counter collection on the passed context
+static inline void SetActiveCounterCollection(SCONTEXT_PARAM)
+{
+    var cycleState = getCycleState(SCONTEXT);
+    cycleState->ActiveCounterCollection = getMainStateCounterAt(SCONTEXT, JUMPPATH[0]->ParticleId);
+}
+
 void PrepareForMainRoutine(SCONTEXT_PARAM)
 {
     let cycleCounters = getMainCycleCounters(SCONTEXT);
@@ -249,6 +256,26 @@ static inline void KMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
 }
 
+// Action that is called if a KMC jump is pre-skipped due to failed attempt frequency test
+static inline void KMC_OnJumpIsFrequencySkipped(SCONTEXT_PARAM)
+{
+    SetActiveCounterCollection(SCONTEXT);
+    let counters = getActiveCounters(SCONTEXT);
+    ++counters->SkipCount;
+    AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
+}
+
+// Pre-check of the attempt frequency factor using another double roll [0;1]
+static inline bool_t KMC_PrecheckAttemptFrequencyFactor(SCONTEXT_PARAM)
+{
+    #if defined(OPT_PRECHECK_FREQUENCY)
+    let jumpRule = getActiveJumpRule(SCONTEXT);
+    return (jumpRule->FrequencyFactor < OPT_FRQPRECHECK_LIMIT) && (jumpRule->FrequencyFactor < GetNextRandomDouble(SCONTEXT));
+    #else
+    return true;
+    #endif
+}
+
 error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
@@ -261,6 +288,13 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
 
             if (KMC_TrySetActiveJumpRule(SCONTEXT))
             {
+                #if defined(OPT_PRECHECK_FREQUENCY)
+                if (KMC_PrecheckAttemptFrequencyFactor(SCONTEXT))
+                {
+                    KMC_OnJumpIsFrequencySkipped(SCONTEXT);
+                    continue;
+                }
+                #endif
                 KMC_SetJumpProperties(SCONTEXT);
                 KMC_OnEnergeticJumpEvaluation(SCONTEXT);
             }
@@ -286,6 +320,13 @@ error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
 
             if (KMC_TrySetActiveJumpRule(SCONTEXT))
             {
+                #if defined(OPT_PRECHECK_FREQUENCY)
+                if (KMC_PrecheckAttemptFrequencyFactor(SCONTEXT))
+                {
+                    KMC_OnJumpIsFrequencySkipped(SCONTEXT);
+                    continue;
+                }
+                #endif
                 KMC_SetJumpProperties(SCONTEXT);
                 KMC_OnEnergeticJumpEvaluation(SCONTEXT);
             }
@@ -609,12 +650,6 @@ static inline void SetActivePathStartEnvironment(SCONTEXT_PARAM)
     JUMPPATH[0] = getEnvironmentStateAt(SCONTEXT, selectionInfo->EnvironmentId);
     SetCodeByteAt(&cycleState->ActiveStateCode, 0, JUMPPATH[0]->ParticleId);
     JUMPPATH[0]->PathId = 0;
-}
-
-static inline void SetActiveCounterCollection(SCONTEXT_PARAM)
-{
-    var cycleState = getCycleState(SCONTEXT);
-    cycleState->ActiveCounterCollection = getMainStateCounterAt(SCONTEXT, JUMPPATH[0]->ParticleId);
 }
 
 // Sets the active jump status for the currently selected KMC on the context

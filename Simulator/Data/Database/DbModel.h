@@ -20,17 +20,6 @@
 // Type for encoding state occupations with 64 bits (8 Particles max)
 typedef int64_t OccupationCode64_t;
 
-// Type for encoding state occupations with 128 bits (16 particles max)
-typedef struct OccupationCode128
-{
-    // First code part, contains occupation particles 0-7
-    int64_t CodePart0;
-
-    // First code part, contains occupation particles 8-15
-    int64_t CodePart1;
-
-} OccupationCode128_t;
-
 // Type for 1D index mappings
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(int32_t, IdMappingSpan) IdMappingSpan_t;
@@ -192,17 +181,17 @@ typedef struct ClusterTable
 
     // The energy table of the cluster.
     // Access by [TableId,OccCodId]
-    EnergyTable_t   EnergyTable;
+    EnergyTable_t           EnergyTable;
 
     // The object id
-    int32_t         ObjectId;
+    int32_t                 ObjectId;
 
     // The particle table mapping. Assigns each particle id its valid sub table in the cluster table
     // Access by [ParticleId]
-    byte_t          ParticleTableMapping[PARTICLE_IDLIMIT];
+    byte_t                  ParticleTableMapping[PARTICLE_IDLIMIT];
 
     // Padding
-    int32_t         Padding:32;
+    int32_t                 Padding:32;
     
 } ClusterTable_t;
 
@@ -303,13 +292,13 @@ typedef struct JumpRule
     OccupationCode64_t   StateCode2;
 
     // The attempt frequency factor that describes the fraction of the frequency modulus that is applied
-    double      FrequencyFactor;
+    double               FrequencyFactor;
 
     // The electric field rule factor that encodes direction
-    double      ElectricFieldFactor;
+    double               ElectricFieldFactor;
 
     // The tracker order code that encodes the tracker reordering
-    byte_t      TrackerOrderCode[JUMPS_JUMPLENGTH_MAX];
+    byte_t               TrackerOrderCode[JUMPS_JUMPLENGTH_MAX];
     
 } JumpRule_t;
 

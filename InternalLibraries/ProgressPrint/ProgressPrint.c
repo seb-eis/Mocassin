@@ -42,7 +42,7 @@ static inline int64_t GetRemainingRunTimeEta(SCONTEXT_PARAM)
 // Get the total cycle count of a state counter collection
 static inline int64_t  GetCounterCollectionCycleCount(const StateCounterCollection_t* restrict counters)
 {
-    return counters->McsCount + counters->RejectionCount
+    return counters->McsCount + counters->RejectionCount + counters->SkipCount
            + counters->UnstableEndCount + counters->UnstableStartCount
            + counters->SiteBlockingCount;
 }
@@ -73,6 +73,9 @@ static void PrintParticleStatistics(const ParticleStatistics_t* restrict statist
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTI64_FORMAT, MC_OUTPRC_FORMAT), "Cycles => Success", "",
             counters->McsCount, getPercent(counters->McsCount, totalCycles));
+
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTI64_FORMAT, MC_OUTPRC_FORMAT), "Cycles => Skipped", "",
+            counters->SkipCount, getPercent(counters->SkipCount, totalCycles));
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTI64_FORMAT, MC_OUTPRC_FORMAT), "Cycles => Rejected", "",
             counters->RejectionCount, getPercent(counters->RejectionCount, totalCycles));

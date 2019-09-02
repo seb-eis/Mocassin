@@ -130,9 +130,13 @@ static inline double GetCurrentElectricFieldJumpInfluence(SCONTEXT_PARAM)
 static inline double GetCurrentProbabilityPreFactor(SCONTEXT_PARAM)
 {
     let factors = getPhysicalFactors(SCONTEXT);
-    let jumpRule = getActiveJumpRule(SCONTEXT);
 
+    #if defined (OPT_PRECHECK_FREQUENCY)
+    return factors->TotalJumpNormalization;
+    #else
+    let jumpRule = getActiveJumpRule(SCONTEXT);
     return factors->TotalJumpNormalization * jumpRule->FrequencyFactor;
+    #endif
 }
 
 // Updates the time stepping per jump to the current value

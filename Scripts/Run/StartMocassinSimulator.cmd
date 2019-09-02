@@ -13,4 +13,4 @@ echo Value is %jobId%
 set /p cmdArgs=Enter additional command argument pairs:
 echo Value is: %cmdArgs%
 
-START %simulator% -dbPath %dbPath% -dbQuery %jobId% -ioPath %ioPath% %cmdArgs%
+START %simulator% -dbPath %dbPath% -jobId %jobId% -ioPath %ioPath% %cmdArgs%
