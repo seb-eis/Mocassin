@@ -23,6 +23,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private LightSetup lightSetup;
         private Visual3D selectedVisual;
         private bool isAutoUpdating;
+        private bool isVisualCubeActive;
+        private bool isCoordinateSystemActive;
 
         /// <summary>
         ///     Get the default light setup for the visual collection
@@ -68,6 +70,24 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         {
             get => isAutoUpdating;
             set => SetProperty(ref isAutoUpdating, value);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the visual cube is active
+        /// </summary>
+        public bool IsVisualCubeActive
+        {
+            get => isVisualCubeActive;
+            set => SetProperty(ref isVisualCubeActive, value);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the coordinate system visual is active
+        /// </summary>
+        public bool IsCoordinateSystemActive
+        {
+            get => isCoordinateSystemActive;
+            set => SetProperty(ref isCoordinateSystemActive, value);
         }
 
         /// <summary>

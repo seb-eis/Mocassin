@@ -61,9 +61,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
         protected void DeleteProjectWithConfirmation(MocassinProjectGraph project)
         {
             if (project == null) return;
-            var caption = $"Confirmation - Delete project!";
-            var message =
-                $"Are you sure you want to delete the project '{project.ProjectName}' (ID = {project.ProjectGuid}) and all affiliated content? This action is irreversible as soon as the project is saved!";
+            const string caption = "Confirmation - Delete project!";
+            var message = $"Are you sure you want to delete the project '{project.ProjectName}' (ID = {project.ProjectGuid}) and all affiliated content?";
             var result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes) return;
 

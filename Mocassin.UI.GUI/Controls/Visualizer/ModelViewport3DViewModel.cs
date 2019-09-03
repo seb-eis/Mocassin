@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -189,7 +188,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private void OnRenderError(Exception e, [CallerMemberName] string callMemberName = null)
         {
             SendCallErrorMessage(e, callMemberName);
-            MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation, 
+            MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation,
                 Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
@@ -266,6 +265,34 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minA"></param>
+        /// <param name="minB"></param>
+        /// <param name="minC"></param>
+        /// <param name="maxA"></param>
+        /// <param name="maxB"></param>
+        /// <param name="maxC"></param>
+        /// <returns></returns>
+        private IEnumerable<LinesVisual3D> EnumerateCellFrameLines(int minA, int minB, int minC, int maxA, int maxB, int maxC)
+        {
+            var basePoints = GetCellFrameBasePointPairs();
+            for (var a = 0; a <= maxA; a++)
+            {
+                for (var b = 0; b <= maxB; b++)
+                {
+                    for (var c = 0; c < maxC; c++)
+                    {
+                        foreach (var (start,end) in basePoints)
+                        {
+                            yield break;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         ///     Removes the inverse duplicate entries form a list of <see cref="Fractional3D" /> sequences
         /// </summary>
         /// <param name="sequences"></param>
@@ -311,6 +338,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             base.OnProjectContentChangedInternal();
             IsSynchronizedWithModel = false;
+        }
+
+        /// <summary>
+        ///     Returns the 3 point pairs that describe the translation invariant edge lines of a unit cell [0,1)
+        /// </summary>
+        /// <returns></returns>
+        private static (Fractional3D, Fractional3D)[] GetCellFrameBasePointPairs()
+        {
+            return new[]
+            {
+                (new Fractional3D(0, 0, 0), new Fractional3D(1, 0, 0)),
+                (new Fractional3D(0, 0, 0), new Fractional3D(0, 1, 0)),
+                (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
+            };
         }
     }
 }
