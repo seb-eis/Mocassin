@@ -163,7 +163,7 @@
         <DataGrid Name="SpaceGroupDataGrid"
                   Grid.Row="0" Grid.Column="0"
                   ColumnWidth="*"
-                  ItemsSource="{Binding SpaceGroups}"
+                  ItemsSource="{Binding SpaceGroups, Mode=OneTime}"
                   SelectedItem="{Binding SelectedSpaceGroup}"
                   IsReadOnly="True"
                   AutoGenerateColumns="False"
@@ -175,11 +175,11 @@
           </DataGrid.RowHeaderTemplate>
 
           <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Index}" Header="Group number" />
-            <DataGridTextColumn Binding="{Binding Literal}" Header="Name" />
-            <DataGridTextColumn Binding="{Binding Specifier}" Header="Info" />
+            <DataGridTextColumn Binding="{Binding Index, Mode=OneTime}" Header="Group number" />
+            <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}" Header="Name" />
+            <DataGridTextColumn Binding="{Binding Specifier, Mode=OneTime}" Header="Info" />
             <DataGridTextColumn
-              Binding="{Binding CrystalSystemIndex, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}"
+              Binding="{Binding CrystalSystemIndex, Mode=OneTime, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}"
               Header="System" />
 
           </DataGrid.Columns>
@@ -187,7 +187,7 @@
         <DataGrid Grid.Row="0" Grid.Column="1"
                   AutoGenerateColumns="False"
                   ColumnWidth="*"
-                  ItemsSource="{Binding SelectedSpaceGroup.Operations}">
+                  ItemsSource="{Binding CurrentSymmetryOperations}">
           <DataGrid.RowHeaderTemplate>
             <DataTemplate>
               <views:ObjectRowHeaderLogo DataContext="I"/>
@@ -195,20 +195,20 @@
           </DataGrid.RowHeaderTemplate>
 
           <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Literal}">
+            <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}">
               <DataGridTextColumn.HeaderTemplate>
                 <DataTemplate>
                   <TextBlock DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
-                    <Run Text="{Binding Index, Mode=OneWay, StringFormat={}#{0}}"/>
+                    <Run Text="{Binding Index, Mode=OneTime, StringFormat={}#{0}}"/>
                     <Run Text="&#x2794;" />
-                    <Run Text="{Binding Literal, Mode=OneWay}" />
+                    <Run Text="{Binding Literal, Mode=OneTime}" />
                     <Run Text="&#x2794;" />
                     <Run
-                      Text="{Binding CrystalSystemIndex, Mode=OneWay, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" />
+                      Text="{Binding CrystalSystemIndex, Mode=OneTime, Converter={converter:Int32ToEnumConverter}, ConverterParameter={x:Type crystalSystems:CrystalSystemId}}" />
                     <Run Text="&#x2794;" />
-                    <Run Text="{Binding Specifier, Mode=OneWay}" />
+                    <Run Text="{Binding Specifier, Mode=OneTime}" />
                     <Run Text="&#x2794;" />
-                    <Run Text="{Binding Operations.Count, Mode=OneWay, StringFormat={}#Op. {0}}" />
+                    <Run Text="{Binding Operations.Count, Mode=OneTime, StringFormat={}#Op. {0}}" />
                   </TextBlock>
                 </DataTemplate>
               </DataGridTextColumn.HeaderTemplate>

@@ -43,8 +43,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
                 ModelGraph?.SpaceGroupInfo?.PopulateFrom(value?.GetGroupEntry());
                 ParameterSetter = CreateParameterSetter(value);
                 SpaceGroupService.LoadGroup(value ?? SpaceGroups.First());
+                OnPropertyChanged(nameof(CurrentSymmetryOperations));
             }
         }
+
+        /// <summary>
+        ///     Get the <see cref="IEnumerable{T}"/> of the current <see cref="ISymmetryOperation"/> collection
+        /// </summary>
+        public IEnumerable<ISymmetryOperation> CurrentSymmetryOperations => SelectedSpaceGroup?.Operations;
 
         /// <summary>
         ///     Get or set the <see cref="CrystalParameterSetter" /> to manipulate the crystal parameters

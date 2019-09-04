@@ -67,7 +67,7 @@
         <Style TargetType="DataGridRow">
           <Setter Property="ToolTip">
             <Setter.Value>
-              <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+              <TextBlock Text="{Binding Mode=OneTime}" TextWrapping="Wrap" />
             </Setter.Value>
           </Setter>
         </Style>
@@ -75,17 +75,17 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Time" Width="Auto"
-                            Binding="{Binding TimeStamp, Mode=OneWay}" />
+                            Binding="{Binding TimeStamp, Mode=OneTime}" />
         <DataGridTextColumn Header="Operation information"
-                            Binding="{Binding OperationDescription, Mode=OneWay}" />
+                            Binding="{Binding OperationDescription, Mode=OneTime}" />
         <DataGridCheckBoxColumn Header="Accepted" Width="Auto"
-                                Binding="{Binding IsGood, Mode=OneWay}" />
+                                Binding="{Binding IsGood, Mode=OneTime}" />
         <DataGridCheckBoxColumn Header="Invalid" Width="Auto"
-                                Binding="{Binding HasValidationError, Mode=OneWay}" />
+                                Binding="{Binding HasValidationError, Mode=OneTime}" />
         <DataGridCheckBoxColumn Header="Conflict" Width="Auto"
-                                Binding="{Binding HasUnsolvedConflict, Mode=OneWay}" />
+                                Binding="{Binding HasUnsolvedConflict, Mode=OneTime}" />
         <DataGridCheckBoxColumn Header="Exception" Width="Auto"
-                                Binding="{Binding IsError, Mode=OneWay}" />
+                                Binding="{Binding IsError, Mode=OneTime}" />
 
       </DataGrid.Columns>
     </DataGrid>

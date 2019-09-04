@@ -99,6 +99,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         public virtual void Dispose()
         {
             ProjectLibraryChangeSubscription?.Dispose();
+            ProjectEntityChangeSubscription?.Dispose();
         }
 
         /// <summary>
@@ -166,7 +167,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         ///     Creates a new <see cref="WarningMessage" /> which informs about a warning in the calling method and distributes it
         ///     through the main <see cref="IPushMessageSystem" />
         /// </summary>
-        /// <param name="detais"></param>
+        /// <param name="detail"></param>
         /// <param name="callMemberName"></param>
         protected void SendCallWarningMessage(string detail, [CallerMemberName] string callMemberName = default)
         {

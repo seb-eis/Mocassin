@@ -42,6 +42,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         public void Dispose()
         {
             (ViewModel as IDisposable)?.Dispose();
+            (UserControl as IDisposable)?.Dispose();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media.Media3D;
 
@@ -7,7 +8,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     /// <summary>
     ///     Represents a view model for groups of of <see cref="Visual3D" /> instances
     /// </summary>
-    public interface IVisualGroupViewModel : INotifyPropertyChanged
+    public interface IVisualGroupViewModel : INotifyPropertyChanged, IDisposable
     {
         /// <summary>
         ///     Get or set a boolean flag if the group is visible

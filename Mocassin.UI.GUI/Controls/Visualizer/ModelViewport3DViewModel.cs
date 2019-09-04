@@ -9,7 +9,6 @@ using HelixToolkit.Wpf;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.SpaceGroups;
@@ -60,7 +59,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public Viewport3DViewModel VisualViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ModelRenderResourcesViewModel"/> that manages the user defined render resources
+        ///     Get the <see cref="ModelRenderResourcesViewModel" /> that manages the user defined render resources
         /// </summary>
         public ModelRenderResourcesViewModel RenderResourcesViewModel { get; }
 
@@ -175,13 +174,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 VisualViewModel.ClearVisualGroups();
                 SynchronizeWithModel();
 
-                VisualViewModel.AddVisualGroup(CreateCellFrameLineVisual().AsSingleton(), Resources.DisplayName_ModelViewport_CellFrameLayer);
+                VisualViewModel.AddVisualGroup(CreateCellFrameLineVisual().AsSingleton(),
+                    Resources.DisplayName_ModelViewport_CellFrameLayer);
 
                 foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
                     VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
 
                 foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
-                    VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name,  GetModelObjectViewModel(item).IsVisible);
+                    VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
 
                 if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
             }
@@ -317,11 +317,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the current render range information
+        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the current render range
+        ///     information
         /// </summary>
         private LinesVisual3D CreateCellFrameLineVisual()
         {
-            var (minA, minB, minC, maxA, maxB, maxC) = RenderResourcesViewModel.GetFlooredRenderArea(UtilityProject.CommonNumeric.RangeComparer);
+            var (minA, minB, minC, maxA, maxB, maxC) =
+                RenderResourcesViewModel.GetFlooredRenderArea(UtilityProject.CommonNumeric.RangeComparer);
             return CreateCellFrameLineVisual(minA, minB, minC, maxA, maxB, maxC);
         }
 
@@ -335,9 +337,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             bool IsEqual(Fractional3D[] lhs, Fractional3D[] rhs)
             {
                 for (var (i, j) = (0, rhs.Length - 1); i < rhs.Length; (i, j) = (i + 1, j - 1))
-                {
-                    if (comparer.Compare(lhs[i], rhs[j]) != 0) return false;
-                }
+                    if (comparer.Compare(lhs[i], rhs[j]) != 0)
+                        return false;
 
                 return true;
             }
@@ -370,6 +371,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             base.OnProjectContentChangedInternal();
             IsSynchronizedWithModel = false;
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            VisualViewModel.Dispose();
+            base.Dispose();
         }
     }
 }

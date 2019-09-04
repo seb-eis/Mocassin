@@ -56,7 +56,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         {
             AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph);
             DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, ReloadSelectionSource);
-            PropertyChanged += OnCustomizationSourceChanged;
+            PropertyChanged += OnTranslationSourceChanged;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnCustomizationSourceChanged(object sender, PropertyChangedEventArgs e)
+        private void OnTranslationSourceChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(SelectedProjectGraph)) return;
             ReloadSelectionSource();
@@ -83,6 +83,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         {
             SelectedJobTranslationGraph = null;
             JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            PropertyChanged -= OnTranslationSourceChanged;
+            base.Dispose();
         }
     }
 }

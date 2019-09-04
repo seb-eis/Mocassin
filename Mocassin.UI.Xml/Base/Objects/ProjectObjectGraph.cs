@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -10,22 +11,37 @@ using Newtonsoft.Json;
 namespace Mocassin.UI.Xml.Base
 {
     /// <summary>
-    ///     Base class for all serializable project object graphs that support xml and json serialization
+    ///     Base class for all JSON/Xml serializable project objects with a dummy INotifyPropertyChanged implementation for the WPF binding infrastructure
     /// </summary>
+    /// <remarks> INotifyPropertyChanged is implemented as a dummy to prevent WPF from using PropertyDescriptor type bindings, which causes memory leaks </remarks>
     [XmlRoot]
-    public abstract class ProjectObjectGraph
+    public abstract class ProjectObjectGraph : INotifyPropertyChanged
     {
+        /// <summary>
+        ///     Property changed event (Dummy)
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        ///     Notify about a property change (Dummy)
+        /// </summary>
+        /// <param name="propertyName"></param>
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         /// <summary>
         ///     Specifies the default serialization encoding
         /// </summary>
         [JsonIgnore]
-        public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+        public static Encoding DefaultEncoding => Encoding.UTF8;
 
         /// <summary>
         ///     Specifies the default culture info for serialization
         /// </summary>
         [JsonIgnore]
-        public static CultureInfo DefaultCultureInfo { get; set; } = CultureInfo.InvariantCulture;
+        public static CultureInfo DefaultCultureInfo => CultureInfo.InvariantCulture;
 
         /// <summary>
         ///     Get or set a display name for the object graph
@@ -59,7 +75,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Creates a <see cref="ProjectObjectGraph"/> from an xml representation
+        ///     Creates a <see cref="ProjectObjectGraph" /> from an xml representation
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="xml"></param>
@@ -98,7 +114,7 @@ namespace Mocassin.UI.Xml.Base
         /// </summary>
         /// <param name="json"></param>
         /// <param name="serializerSettings"></param>
-        public static T CreateFromJson<T>(string json, JsonSerializerSettings serializerSettings = null) where  T : ProjectObjectGraph, new()
+        public static T CreateFromJson<T>(string json, JsonSerializerSettings serializerSettings = null) where T : ProjectObjectGraph, new()
         {
             if (json == null) throw new ArgumentNullException(nameof(json));
             var obj = new T();
@@ -114,7 +130,7 @@ namespace Mocassin.UI.Xml.Base
         /// <returns></returns>
         public virtual ProjectObjectGraph DeepCopy(PreserveReferencesHandling referencesHandling = PreserveReferencesHandling.All)
         {
-            var settings = new JsonSerializerSettings 
+            var settings = new JsonSerializerSettings
             {
                 PreserveReferencesHandling = referencesHandling,
                 TypeNameHandling = TypeNameHandling.Auto

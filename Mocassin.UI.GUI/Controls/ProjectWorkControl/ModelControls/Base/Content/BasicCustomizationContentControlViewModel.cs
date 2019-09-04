@@ -82,5 +82,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             SelectedCustomizationGraph = null;
             CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
         }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            PropertyChanged -= OnCustomizationSourceChanged;
+            base.Dispose();
+        }
     }
 }

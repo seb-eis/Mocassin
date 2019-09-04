@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media.Media3D;
 using Mocassin.UI.GUI.Base.ViewModels;
 
@@ -11,11 +12,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     public class VisualGroupViewModel<T> : ViewModelBase, IVisualGroupViewModel where T : Visual3D
     {
         private string name;
-        private ICollection<T> visuals;
+        private IList<Visual3D> visuals;
         private bool isVisible;
 
         /// <inheritdoc />
-        public int ItemCount => Visuals.Count;
+        public int ItemCount => visuals?.Count ?? 0;
 
         /// <inheritdoc />
         public IEnumerable<Visual3D> Items => Visuals;
@@ -32,12 +33,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// <summary>
         ///     Get or set the <see cref="ICollection{T}" /> of visual elements
         /// </summary>
-        public ICollection<T> Visuals
+        public IEnumerable<Visual3D> Visuals
         {
             get => visuals;
             set
             {
-                SetProperty(ref visuals, value);
+                SetProperty(ref visuals, value?.ToList());
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(ItemCount));
             }
@@ -50,6 +51,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         {
             get => name;
             set => SetProperty(ref name, value);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            visuals?.Clear();
+            Visuals = null;
         }
     }
 }

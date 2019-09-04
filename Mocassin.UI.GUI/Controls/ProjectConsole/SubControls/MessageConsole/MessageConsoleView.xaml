@@ -24,14 +24,14 @@
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp}" />
-        <DataGridTextColumn Header="Type" Binding="{Binding ShortInfo}" />
+        <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp, Mode=OneTime}" />
+        <DataGridTextColumn Header="Type" Binding="{Binding ShortInfo, Mode=OneTime}" />
       </DataGrid.Columns>
       <DataGrid.RowStyle>
         <Style TargetType="{x:Type DataGridRow}">
           <Setter Property="ToolTip">
             <Setter.Value>
-              <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding Mode=OneTime}" TextWrapping="Wrap"/>
             </Setter.Value>
           </Setter>
         </Style>

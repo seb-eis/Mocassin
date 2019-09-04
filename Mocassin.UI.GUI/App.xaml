@@ -295,8 +295,8 @@
           <Setter.Value>
             <DataTemplate DataType="{x:Type reflection:PropertyInfo}">
               <StackPanel Orientation="Horizontal">
-                <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="{StaticResource App.Margin.HorizontalStack}"/>
-                <TextBlock Text="{Binding Name}"/>
+                <Rectangle Fill="{Binding Name, Mode=OneTime}" Width="16" Height="16" Margin="{StaticResource App.Margin.HorizontalStack}"/>
+                <TextBlock Text="{Binding Name, Mode=OneTime}"/>
               </StackPanel>
             </DataTemplate>
           </Setter.Value>

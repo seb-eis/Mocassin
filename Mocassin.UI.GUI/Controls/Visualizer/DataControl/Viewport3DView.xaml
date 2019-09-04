@@ -16,7 +16,8 @@
     </Grid.ColumnDefinitions>
     <h:HelixViewport3D ItemsSource="{Binding Visuals}" Grid.Column="1"
                        ShowCoordinateSystem="{Binding IsCoordinateSystemActive}"
-                       ShowViewCube="{Binding IsVisualCubeActive}"/>
+                       ShowViewCube="{Binding IsVisualCubeActive}"
+                       Name="HelixViewport3D"/>
     <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
       <Expander.Header>
         <TextBlock Text="3D Viewer Settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" 

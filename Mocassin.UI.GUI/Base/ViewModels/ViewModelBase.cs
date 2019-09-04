@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,6 +39,23 @@ namespace Mocassin.UI.GUI.Base.ViewModels
             if (Equals(backingField, value)) return;
 
             backingField = value;
+            OnPropertyChanged(propertyName);
+        }
+
+        /// <summary>
+        ///     Forwards a property set using a <see cref="PropertyInfo"/> and a target <see cref="object"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyInfo"></param>
+        /// <param name="target"></param>
+        /// <param name="value"></param>
+        /// <param name="propertyName"></param>
+        protected void SetProperty<T>(PropertyInfo propertyInfo, object target, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (target == null) return;
+            if (Equals((T) propertyInfo.GetValue(target), value)) return;
+
+            propertyInfo.SetValue(target, value);
             OnPropertyChanged(propertyName);
         }
 

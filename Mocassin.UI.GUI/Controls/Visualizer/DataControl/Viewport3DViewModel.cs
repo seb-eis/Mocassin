@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -18,7 +17,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
     ///     A <see cref="ViewModelBase" /> instance that manages a <see cref="Visual3D" /> collection an affiliated data for a
     ///     <see cref="HelixViewport3D" />
     /// </summary>
-    public class Viewport3DViewModel : ViewModelBase
+    public class Viewport3DViewModel : ViewModelBase, IDisposable
     {
         private LightSetup lightSetup;
         private Visual3D selectedVisual;
@@ -135,7 +134,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             ClearVisual();
             ExecuteOnDispatcher(() =>
             {
-                foreach (var visualGroup in VisualGroups.Where(x => x.IsVisible)) Visuals.AddMany(visualGroup.Items);
+                foreach (var visualGroup in VisualGroups.Where(x => x.IsVisible && x.Items != null)) Visuals.AddMany(visualGroup.Items);
             });
         }
 
@@ -144,12 +143,17 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public void ClearVisualGroups()
         {
+            foreach (var visualGroup in VisualGroups.Where(x => x != null))
+            {
+                visualGroup.Dispose();
+                visualGroup.PropertyChanged -= AutoUpdateVisualInternal;
+            }
             ExecuteOnDispatcher(() => VisualGroups.Clear());
             ClearVisual();
         }
 
         /// <summary>
-        ///     Adds a new <see cref="IVisualGroupViewModel"/> to the view port
+        ///     Adds a new <see cref="IVisualGroupViewModel" /> to the view port
         /// </summary>
         /// <param name="visualGroup"></param>
         public void AddVisualGroup(IVisualGroupViewModel visualGroup)
@@ -162,7 +166,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Adds a sequence of <see cref="Visual3D"/> objects as a new named <see cref="IVisualGroupViewModel"/>
+        ///     Adds a sequence of <see cref="Visual3D" /> objects as a new named <see cref="IVisualGroupViewModel" />
         /// </summary>
         /// <param name="visuals"></param>
         /// <param name="name"></param>
@@ -171,7 +175,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         {
             var visualGroup = new VisualGroupViewModel<T>
             {
-                IsVisible = isVisible, Name = name ?? "New group", Visuals = visuals.ToList()
+                IsVisible = isVisible, Name = name ?? "New group", Visuals = visuals
             };
             AddVisualGroup(visualGroup);
         }
@@ -239,6 +243,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                     Radius = radius
                 };
             }
+
             return GeneratorInternal;
         }
 
@@ -259,11 +264,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                     SideLength = sideLength
                 };
             }
+
             return GeneratorInternal;
         }
 
         /// <summary>
-        ///     Get a generator delegate for creating <see cref="ArrowVisual3D" /> from start <see cref="Point3D" /> to end <see cref="Point3D" />
+        ///     Get a generator delegate for creating <see cref="ArrowVisual3D" /> from start <see cref="Point3D" /> to end
+        ///     <see cref="Point3D" />
         /// </summary>
         /// <param name="diameter"></param>
         /// <param name="fillBrush"></param>
@@ -280,11 +287,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                     Diameter = diameter
                 };
             }
+
             return GeneratorInternal;
         }
 
         /// <summary>
-        ///     Get a generator delegate for creating <see cref="ArrowVisual3D" /> from start <see cref="Point3D" /> and direction <see cref="Vector3D" />
+        ///     Get a generator delegate for creating <see cref="ArrowVisual3D" /> from start <see cref="Point3D" /> and direction
+        ///     <see cref="Vector3D" />
         /// </summary>
         /// <param name="diameter"></param>
         /// <param name="fillBrush"></param>
@@ -301,6 +310,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                     Diameter = diameter
                 };
             }
+
             return GeneratorInternal;
         }
 
@@ -312,6 +322,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private void AutoUpdateVisualInternal(object sender, PropertyChangedEventArgs args)
         {
             if (IsAutoUpdating) UpdateVisual();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            foreach (var visualGroup in VisualGroups) visualGroup?.Dispose();
+            VisualGroups.Clear();
+            Visuals.Clear();
         }
     }
 }

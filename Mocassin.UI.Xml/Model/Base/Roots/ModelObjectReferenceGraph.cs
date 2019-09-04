@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Newtonsoft.Json;
@@ -11,11 +13,25 @@ namespace Mocassin.UI.Xml.Base
     ///     Generic serializable class to store and provide key based references to specific <see cref="ModelObject" />
     ///     instances
     /// </summary>
+    /// <remarks> INotifyPropertyChanged is implemented as a dummy to prevent WPF from using PropertyDescriptor type bindings, which causes memory leaks </remarks>
     [XmlRoot]
-    public sealed class ModelObjectReferenceGraph<T> :
+    public sealed class ModelObjectReferenceGraph<T> : INotifyPropertyChanged,
         IEquatable<ModelObjectReferenceGraph<T>>,
         IDuplicable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
     {
+        /// <summary>
+        ///     Property changed event (Dummy)
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        ///     Property changed event rise (Dummy)
+        /// </summary>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         [XmlIgnore]
         [NotMapped]
         [JsonIgnore]

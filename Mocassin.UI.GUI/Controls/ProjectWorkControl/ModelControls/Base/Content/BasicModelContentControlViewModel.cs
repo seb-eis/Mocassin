@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
@@ -20,6 +21,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private ContentControl dataContentControl;
 
         /// <summary>
+        ///     Stores a reference to the content control data context it implements <see cref="IDisposable"/>
+        /// </summary>
+        private IDisposable DataContextDisposable { get; set; }
+
+        /// <summary>
         ///     Get or set the selected <see cref="MocassinProjectGraph" />
         /// </summary>
         public MocassinProjectGraph SelectedProjectGraph
@@ -38,7 +44,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public ContentControl DataContentControl
         {
             get => dataContentControl ?? new NoContentView();
-            set => SetProperty(ref dataContentControl, value);
+            set
+            {
+                SetProperty(ref dataContentControl, value);
+                DataContextDisposable?.Dispose();
+                DataContextDisposable = value?.DataContext as IDisposable;
+            }
         }
 
         /// <inheritdoc />
@@ -97,6 +108,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         {
             if (!ProjectControl.ProjectGraphs.Contains(SelectedProjectGraph)) ExecuteOnDispatcher(() => SelectedProjectGraph = null);
             base.OnProjectContentChangedInternal();
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            DataContextDisposable?.Dispose();
+            base.Dispose();
         }
     }
 }

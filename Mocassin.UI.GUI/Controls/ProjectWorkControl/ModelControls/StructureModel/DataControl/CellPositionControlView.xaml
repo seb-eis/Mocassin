@@ -158,7 +158,7 @@
         <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Equivalent cell positions:" />
-          <Run Text="{Binding SelectedVectorExpansion.Count, Mode=OneWay, StringFormat= #{0}}" />
+          <Run Text="{Binding SelectedVectorExpansion.Count, Mode=OneTime, StringFormat= #{0}}" />
           <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
@@ -176,9 +176,9 @@
         </DataGrid.RowHeaderTemplate>
 
         <DataGrid.Columns>
-          <DataGridTextColumn Header="A" Binding="{Binding A}" />
-          <DataGridTextColumn Header="B" Binding="{Binding B}" />
-          <DataGridTextColumn Header="C" Binding="{Binding C}" />
+          <DataGridTextColumn Header="A" Binding="{Binding A, Mode=OneTime}" />
+          <DataGridTextColumn Header="B" Binding="{Binding B, Mode=OneTime}" />
+          <DataGridTextColumn Header="C" Binding="{Binding C, Mode=OneTime}" />
         </DataGrid.Columns>
       </DataGrid>
     </GroupBox>
