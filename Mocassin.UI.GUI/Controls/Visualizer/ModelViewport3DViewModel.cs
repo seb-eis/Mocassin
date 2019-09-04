@@ -9,6 +9,7 @@ using HelixToolkit.Wpf;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.SpaceGroups;
@@ -59,6 +60,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public Viewport3DViewModel VisualViewModel { get; }
 
         /// <summary>
+        ///     Get the <see cref="ModelRenderResourcesViewModel"/> that manages the user defined render resources
+        /// </summary>
+        public ModelRenderResourcesViewModel RenderResourcesViewModel { get; }
+
+        /// <summary>
         ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ModelObject3DViewModel" />
         /// </summary>
         public ObservableCollectionViewModel<ModelObject3DViewModel> ModelObjectViewModels { get; }
@@ -80,6 +86,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             UtilityProject = projectControl.CreateModelProject();
             VisualViewModel = new Viewport3DViewModel();
             ModelObjectViewModels = new ObservableCollectionViewModel<ModelObject3DViewModel>();
+            RenderResourcesViewModel = new ModelRenderResourcesViewModel();
             UpdateObjectViewModelsCommand = new RelayCommand(SynchronizeWithModel);
             RefreshVisualGroupsCommand = new RelayCommand(RefreshVisualGroups);
         }
@@ -99,6 +106,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             IsSynchronizedWithModel = false;
             VisualViewModel.ClearVisual();
+            RenderResourcesViewModel.ChangeDataSource(ContentSource?.Resources);
             SynchronizeWithModel();
             RefreshVisualGroups();
             VisualViewModel.UpdateVisual();
@@ -167,10 +175,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 VisualViewModel.ClearVisualGroups();
                 SynchronizeWithModel();
 
+                VisualViewModel.AddVisualGroup(CreateCellFrameLineVisual().AsSingleton(), Resources.DisplayName_ModelViewport_CellFrameLayer);
+
                 foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
-                    VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name);
+                    VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
+
                 foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
-                    VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name);
+                    VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name,  GetModelObjectViewModel(item).IsVisible);
 
                 if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
             }
@@ -200,11 +211,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private IEnumerable<SphereVisual3D> EnumeratePositionVisuals(UnitCellPositionGraph positionGraph)
         {
             var graphViewModel = GetModelObjectViewModel(positionGraph);
-            var vector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
-            var cellPositions = SpaceGroupService.GetPositionsInCuboid(vector, new Fractional3D(), new Fractional3D(1, 1, 1));
+            var sourceVector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
+            var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var cellPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, startVector, endVector);
 
-            var brush = new SolidColorBrush(graphViewModel.ObjectColor);
-            var generator = VisualViewModel.CreateSphereGenerator(graphViewModel.ObjectScaling, brush);
+            var brush = new SolidColorBrush(graphViewModel.Color);
+            var generator = VisualViewModel.CreateSphereGenerator(graphViewModel.Scaling, brush);
             foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()))
             {
                 var visual = VisualViewModel.CreateVisual(center, generator);
@@ -225,8 +237,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var sequences = SpaceGroupService.GetAllWyckoffOriginSequences(vectorSequence);
             RemoveInverseSequences(sequences, SpaceGroupService.Comparer);
 
-            var brush = new SolidColorBrush(graphViewModel.ObjectColor);
-            var generator = VisualViewModel.CreateDirectionArrowGenerator(graphViewModel.ObjectScaling, brush);
+            var brush = new SolidColorBrush(graphViewModel.Color);
+            var generator = VisualViewModel.CreateDirectionArrowGenerator(graphViewModel.Scaling, brush);
             foreach (var sequence in sequences)
             {
                 for (var i = 1; i < sequence.Length; i++)
@@ -265,7 +277,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        /// 
+        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the given size information
         /// </summary>
         /// <param name="minA"></param>
         /// <param name="minB"></param>
@@ -274,22 +286,43 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <param name="maxB"></param>
         /// <param name="maxC"></param>
         /// <returns></returns>
-        private IEnumerable<LinesVisual3D> EnumerateCellFrameLines(int minA, int minB, int minC, int maxA, int maxB, int maxC)
+        private LinesVisual3D CreateCellFrameLineVisual(int minA, int minB, int minC, int maxA, int maxB, int maxC)
         {
-            var basePoints = GetCellFrameBasePointPairs();
-            for (var a = 0; a <= maxA; a++)
+            var baseLinePairs = new[]
             {
-                for (var b = 0; b <= maxB; b++)
+                (new Fractional3D(0, 0, 0), new Fractional3D(1, 0, 0)),
+                (new Fractional3D(0, 0, 0), new Fractional3D(0, 1, 0)),
+                (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
+            };
+
+            var points3D = new Point3DCollection();
+            for (var a = minA; a <= maxA; a++)
+            {
+                for (var b = minC; b <= maxB; b++)
                 {
-                    for (var c = 0; c < maxC; c++)
+                    for (var c = minC; c <= maxC; c++)
                     {
-                        foreach (var (start,end) in basePoints)
+                        var shift = new Fractional3D(a, b, c);
+                        foreach (var (startVector, endVector) in baseLinePairs.Select(x => (x.Item1 + shift, x.Item2 + shift)))
                         {
-                            yield break;
+                            if (endVector.A > maxA || endVector.B > maxB || endVector.C > maxC) continue;
+                            points3D.Add(VectorTransformer.ToCartesian(startVector).AsPoint3D());
+                            points3D.Add(VectorTransformer.ToCartesian(endVector).AsPoint3D());
                         }
                     }
                 }
             }
+
+            return new LinesVisual3D {Points = points3D};
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the current render range information
+        /// </summary>
+        private LinesVisual3D CreateCellFrameLineVisual()
+        {
+            var (minA, minB, minC, maxA, maxB, maxC) = RenderResourcesViewModel.GetFlooredRenderArea(UtilityProject.CommonNumeric.RangeComparer);
+            return CreateCellFrameLineVisual(minA, minB, minC, maxA, maxB, maxC);
         }
 
         /// <summary>
@@ -303,8 +336,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 for (var (i, j) = (0, rhs.Length - 1); i < rhs.Length; (i, j) = (i + 1, j - 1))
                 {
-                    if (comparer.Compare(lhs[i], rhs[j]) != 0)
-                        return false;
+                    if (comparer.Compare(lhs[i], rhs[j]) != 0) return false;
                 }
 
                 return true;
@@ -338,20 +370,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             base.OnProjectContentChangedInternal();
             IsSynchronizedWithModel = false;
-        }
-
-        /// <summary>
-        ///     Returns the 3 point pairs that describe the translation invariant edge lines of a unit cell [0,1)
-        /// </summary>
-        /// <returns></returns>
-        private static (Fractional3D, Fractional3D)[] GetCellFrameBasePointPairs()
-        {
-            return new[]
-            {
-                (new Fractional3D(0, 0, 0), new Fractional3D(1, 0, 0)),
-                (new Fractional3D(0, 0, 0), new Fractional3D(0, 1, 0)),
-                (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
-            };
         }
     }
 }

@@ -126,6 +126,9 @@
   <data name="DataObjectFormatKey_ViewFormat_Xml" xml:space="preserve">
     <value>ViewFormat_Xml</value>
   </data>
+  <data name="DisplayName_ModelViewport_CellFrameLayer" xml:space="preserve">
+    <value>Cell.Boundaries</value>
+  </data>
   <data name="Filename_Project_Default_Configuration" xml:space="preserve">
     <value>Mocassin.Project.Settings.Global.xml</value>
   </data>
@@ -138,6 +141,18 @@
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Mocassin_Logo_Round" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\mocassinlogoround3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ResourceKey_ModelObject_RenderColor" xml:space="preserve">
+    <value>Render_Color</value>
+  </data>
+  <data name="ResourceKey_ModelObject_RenderScaling" xml:space="preserve">
+    <value>Render_Scaling</value>
+  </data>
+  <data name="ResourceKey_ModelObject_RenderVisibilityFlag" xml:space="preserve">
+    <value>Render_Visibility_Flag</value>
+  </data>
+  <data name="ResourceKey_ModelViewport_RenderArea" xml:space="preserve">
+    <value>Model_Viewport_Render_Area</value>
   </data>
   <data name="Symmetry_Database_Default" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Mocassin.Symmetry.db;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

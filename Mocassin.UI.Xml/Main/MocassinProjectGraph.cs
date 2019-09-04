@@ -80,6 +80,13 @@ namespace Mocassin.UI.Xml.Main
         public List<MocassinProjectBuildGraph> ProjectBuildGraphs { get; set; }
 
         /// <summary>
+        ///     Get or set the <see cref="ResourcesGraph"/> for the project
+        /// </summary>
+        [NotMapped]
+        [XmlIgnore]
+        public ResourcesGraph Resources { get; set; }
+
+        /// <summary>
         ///     Create empty <see cref="MocassinProjectGraph" />
         /// </summary>
         public MocassinProjectGraph()
@@ -87,6 +94,7 @@ namespace Mocassin.UI.Xml.Main
             ProjectCustomizationGraphs = new List<ProjectCustomizationGraph>();
             ProjectJobTranslationGraphs = new List<ProjectJobTranslationGraph>();
             ProjectBuildGraphs = new List<MocassinProjectBuildGraph>();
+            Resources = new ResourcesGraph();
         }
 
         /// <summary>

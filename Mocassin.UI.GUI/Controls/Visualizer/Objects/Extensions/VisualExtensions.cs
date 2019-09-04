@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 
@@ -26,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Converts a <see cref="string"/> to a <see cref="Color"/> if in the  ARGB #FFFFFFFF format
+        ///     Tries to convert a <see cref="string"/> to a <see cref="Color"/> if in the  ARGB #FFFFFFFF format
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -53,6 +54,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
             var b = byte.Parse(match.Groups["b"].Value, numberStyle);
             color = Color.FromArgb(a, r, g, b);
             return true;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="string" /> to a <see cref="Color" /> if in the ARGB #FFFFFFFF format (With option to suppress conversion errors)
+        ///     use a default over an exception on parsing error
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="noException"></param>
+        /// <returns></returns>
+        public static Color ParseArgbHex(string str, bool noException = true)
+        {
+            if (TryParseArgbHex(str, out var color)) return color;
+            if (noException) return Color.FromArgb(byte.MaxValue, 0, 0, 0);
+            throw new FormatException("Invalid color format.");
         }
     }
 }

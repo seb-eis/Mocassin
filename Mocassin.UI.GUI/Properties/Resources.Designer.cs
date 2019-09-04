@@ -88,6 +88,15 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cell.Boundaries ähnelt.
+        /// </summary>
+        public static string DisplayName_ModelViewport_CellFrameLayer {
+            get {
+                return ResourceManager.GetString("DisplayName_ModelViewport_CellFrameLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Mocassin.Project.Settings.Global.xml ähnelt.
         /// </summary>
         public static string Filename_Project_Default_Configuration {
@@ -121,6 +130,42 @@ namespace Mocassin.UI.GUI.Properties {
             get {
                 object obj = ResourceManager.GetObject("Mocassin_Logo_Round", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Render_Color ähnelt.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderColor {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Render_Scaling ähnelt.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderScaling {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderScaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Render_Visibility_Flag ähnelt.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderVisibilityFlag {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderVisibilityFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Model_Viewport_Render_Area ähnelt.
+        /// </summary>
+        public static string ResourceKey_ModelViewport_RenderArea {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelViewport_RenderArea", resourceCulture);
             }
         }
         

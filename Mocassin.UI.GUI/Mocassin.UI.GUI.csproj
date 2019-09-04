@@ -26,10 +26,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
-    <ProductName>Mocassin Model Builder</ProductName>
+    <ProductName>Mocassin</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
-    <ApplicationRevision>14</ApplicationRevision>
+    <ApplicationRevision>15</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -78,6 +78,8 @@
     <Prefer32Bit>true</Prefer32Bit>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>891FEFAE322DFEBA8EB4B22EB5031CCE2EE5371B</ManifestCertificateThumbprint>
@@ -86,7 +88,7 @@
     <ManifestKeyFile>Mocassin.UI.GUI_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -103,6 +105,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HelixToolkit.Wpf, Version=2.8.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
@@ -1013,8 +1018,9 @@
     <Compile Include="Controls\Visualizer\Objects\Base\IVisualGroupViewModel.cs" />
     <Compile Include="Controls\Visualizer\Objects\Base\VisualGroupViewModel.cs" />
     <Compile Include="Controls\Visualizer\Objects\Extensions\VisualExtensions.cs" />
-    <Compile Include="Controls\Visualizer\Objects\Format\ColorToPropertyConverter.cs" />
-    <Compile Include="Controls\Visualizer\Objects\Format\ModelObject3DViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\ColorToPropertyConverter.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\ModelObject3DViewModel.cs" />
+    <Compile Include="Controls\Visualizer\DataControl\ModelRenderResourcesViewModel.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Helper\TypeSearchExtensions.cs" />
@@ -1045,7 +1051,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Mocassin.UI.GUI_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
