@@ -227,17 +227,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Get a generator delegate for creating <see cref="SphereVisual3D" /> around a center <see cref="Point3D" />
+        ///     Get a generator delegate for creating <see cref="SphereVisual3D" /> around a center <see cref="Point3D" /> with the specified mesh quality factor
         /// </summary>
         /// <param name="radius"></param>
         /// <param name="fillBrush"></param>
+        /// <param name="meshQuality"></param>
         /// <returns></returns>
-        public Func<Point3D, SphereVisual3D> CreateSphereGenerator(double radius, Brush fillBrush)
+        public Func<Point3D, SphereVisual3D> CreateSphereGenerator(double radius, Brush fillBrush, double meshQuality)
         {
             SphereVisual3D GeneratorInternal(Point3D center)
             {
                 return new SphereVisual3D
                 {
+                    PhiDiv = (int) ((int) SphereVisual3D.PhiDivProperty.DefaultMetadata.DefaultValue * meshQuality),
+                    ThetaDiv = (int) ((int) SphereVisual3D.ThetaDivProperty.DefaultMetadata.DefaultValue  * meshQuality),
                     Center = center,
                     Fill = fillBrush,
                     Radius = radius
@@ -274,13 +277,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         /// <param name="diameter"></param>
         /// <param name="fillBrush"></param>
+        /// <param name="meshQuality"></param>
         /// <returns></returns>
-        public Func<(Point3D Start, Point3D End), ArrowVisual3D> CreatePointToPointArrowGenerator(double diameter, Brush fillBrush)
+        public Func<(Point3D Start, Point3D End), ArrowVisual3D> CreatePointToPointArrowGenerator(double diameter, Brush fillBrush, double meshQuality)
         {
             ArrowVisual3D GeneratorInternal((Point3D, Point3D) points)
             {
                 return new ArrowVisual3D
                 {
+                    ThetaDiv = (int) ((int) ArrowVisual3D.ThetaDivProperty.DefaultMetadata.DefaultValue  * meshQuality),
                     Point1 = points.Item1,
                     Point2 = points.Item2,
                     Fill = fillBrush,
@@ -297,13 +302,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         /// <param name="diameter"></param>
         /// <param name="fillBrush"></param>
+        /// <param name="meshQuality"></param>
         /// <returns></returns>
-        public Func<(Point3D Start, Vector3D Dir), ArrowVisual3D> CreateDirectionArrowGenerator(double diameter, Brush fillBrush)
+        public Func<(Point3D Start, Vector3D Dir), ArrowVisual3D> CreateDirectionArrowGenerator(double diameter, Brush fillBrush, double meshQuality)
         {
             ArrowVisual3D GeneratorInternal((Point3D, Vector3D) data)
             {
                 return new ArrowVisual3D
                 {
+                    ThetaDiv = (int) ((int) ArrowVisual3D.ThetaDivProperty.DefaultMetadata.DefaultValue  * meshQuality),
                     Point1 = data.Item1,
                     Direction = data.Item2,
                     Fill = fillBrush,

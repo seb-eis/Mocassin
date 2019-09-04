@@ -134,6 +134,15 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Render_MeshQuality ähnelt.
+        /// </summary>
+        public static string ResourceKey_ModelObject_MeshQuality {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_MeshQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Render_Color ähnelt.
         /// </summary>
         public static string ResourceKey_ModelObject_RenderColor {

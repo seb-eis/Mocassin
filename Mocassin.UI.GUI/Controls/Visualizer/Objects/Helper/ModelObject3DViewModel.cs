@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Media;
+using Mocassin.Framework.Constraints;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
@@ -14,8 +15,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         private static string ResourceKey_Color => Resources.ResourceKey_ModelObject_RenderColor;
         private static string ResourceKey_Scaling => Resources.ResourceKey_ModelObject_RenderScaling;
         private static string ResourceKey_IsVisible => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
+        private static string ResourceKey_MeshQuality => Resources.ResourceKey_ModelObject_MeshQuality;
         private static Color ResourceDefault_Color => Colors.Gray;
-        private static double ResourceDefault_Scaling => 1.0;
+        private static double ResourceDefault_Scaling => Settings.Default.Default_Render_Mesh_Scaling;
+        private static double ResourceDefault_MeshQuality => Settings.Default.Default_Render_Mesh_Quality;
 
         /// <summary>
         ///     Get the <see cref="ModelObjectGraph" /> that the formatting is valid for
@@ -46,6 +49,21 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
             set
             {
                 ObjectGraph.Resources.SetResource(ResourceKey_Scaling, value);
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        ///     Get or set the quality of the used object mesh as a fraction of the internal default
+        /// </summary>
+        public double MeshQuality
+        {
+            get => ObjectGraph.Resources.TryGetResource(ResourceKey_MeshQuality, out double x) ? x : ResourceDefault_MeshQuality;
+            set
+            {
+                var tmp = ValueConstraint<double>.EnsureLimit(value, Settings.Default.Limit_Render_MeshQuality_Lower,
+                    Settings.Default.Limit_Render_MeshQuality_Upper);
+                ObjectGraph.Resources.SetResource(ResourceKey_MeshQuality, tmp);
                 OnPropertyChanged();
             }
         }

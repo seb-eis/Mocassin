@@ -68,5 +68,20 @@ namespace Mocassin.Framework.Constraints
         {
             return $"{(MinIsIncluded ? "[" : "(")}{MinValue.ToString()},{MaxValue.ToString()}{(MaxIsIncluded ? "]" : ")")})";
         }
+
+        /// <summary>
+        ///     Forces the limits onto the passed value. Returns either the value itself or the closest set boundary
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="upper"></param>
+        /// <param name="lower"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static TSource EnsureLimit(TSource value, TSource lower, TSource upper, IComparer<TSource> comparer = null)
+        {
+            comparer = comparer ?? Comparer<TSource>.Default;
+            if (comparer.Compare(value, lower) < 0) return lower;
+            return comparer.Compare(value, upper) > 0 ? upper : value;
+        }
     }
 }

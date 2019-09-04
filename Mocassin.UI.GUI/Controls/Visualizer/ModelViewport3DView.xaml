@@ -129,6 +129,8 @@
                 <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Scaling"
                                     Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                <DataGridTextColumn Header="Mesh quality" 
+                                    Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                 <DataGridComboBoxColumn Header="Color"
                                         ItemsSource="{Binding Source={StaticResource ColorProvider}}"
                                         SelectedValueBinding="{Binding Color, Converter={StaticResource ColorConverter}, ConverterParameter={StaticResource ColorProvider}}"

@@ -216,7 +216,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var cellPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, startVector, endVector);
 
             var brush = new SolidColorBrush(graphViewModel.Color);
-            var generator = VisualViewModel.CreateSphereGenerator(graphViewModel.Scaling, brush);
+            var generator = VisualViewModel.CreateSphereGenerator(graphViewModel.Scaling, brush, graphViewModel.MeshQuality);
             foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()))
             {
                 var visual = VisualViewModel.CreateVisual(center, generator);
@@ -235,10 +235,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var vectorSequence = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C));
 
             var sequences = SpaceGroupService.GetAllWyckoffOriginSequences(vectorSequence);
+
+            RemoveNegativeDirectionSequences(sequences);
             RemoveInverseSequences(sequences, SpaceGroupService.Comparer);
 
             var brush = new SolidColorBrush(graphViewModel.Color);
-            var generator = VisualViewModel.CreateDirectionArrowGenerator(graphViewModel.Scaling, brush);
+            var generator = VisualViewModel.CreateDirectionArrowGenerator(graphViewModel.Scaling, brush, graphViewModel.MeshQuality);
             foreach (var sequence in sequences)
             {
                 for (var i = 1; i < sequence.Length; i++)
@@ -344,6 +346,19 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             }
 
             sequences.RemoveDuplicates(new EqualityCompareAdapter<Fractional3D[]>(IsEqual, x => x.Length));
+        }
+
+        /// <summary>
+        ///     Removes the negative direction entries form a list of <see cref="Fractional3D" /> sequences
+        /// </summary>
+        /// <param name="sequences"></param>
+        private void RemoveNegativeDirectionSequences(IList<Fractional3D[]> sequences)
+        {
+            for (var i = sequences.Count - 1; i >= 0; i--)
+            {
+                var vector = sequences[i][sequences[i].Length - 1];
+                if (vector.A < 0 || vector.B < 0 || vector.C < 0) sequences.RemoveAt(i);
+            }
         }
 
         /// <summary>
