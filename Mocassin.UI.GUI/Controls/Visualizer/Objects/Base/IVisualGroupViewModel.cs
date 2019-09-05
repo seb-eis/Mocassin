@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media.Media3D;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
-    ///     Represents a view model for groups of of <see cref="Visual3D" /> instances
+    ///     Represents a view model for a <see cref="ModelVisual3D" />
     /// </summary>
     public interface IVisualGroupViewModel : INotifyPropertyChanged, IDisposable
     {
@@ -26,8 +25,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         int ItemCount { get; }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> of <see cref="Visual3D" /> items
+        ///     Get the <see cref="ModelVisual3D" /> of the group
         /// </summary>
-        IEnumerable<Visual3D> Items { get; }
+        ModelVisual3D ModelVisual { get; }
     }
 }

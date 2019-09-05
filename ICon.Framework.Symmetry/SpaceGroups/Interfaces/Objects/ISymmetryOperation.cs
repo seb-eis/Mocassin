@@ -19,7 +19,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         double TrimTolerance { get; }
 
         /// <summary>
-        ///     Get the linearized 12 entry operations array
+        ///     Get the linearized 12 entry operations array, the entries are ordered as row_1_column_1, row_1_column_2,...
         /// </summary>
         /// <returns></returns>
         double[] GetOperationsArray();

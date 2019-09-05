@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -11,6 +12,7 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
+using Mocassin.Model.Structures;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -52,6 +54,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         ///     Get the active <see cref="ISpaceGroupService" /> matching the model content source
         /// </summary>
         private ISpaceGroupService SpaceGroupService => UtilityProject.SpaceGroupService;
+
+        /// <summary>
+        ///     Get a <see cref="IList{T}"/> of the loaded space groups operations as <see cref="Transform3D"/>
+        /// </summary>
+        private IList<Transform3D> GroupTransforms3D { get; set; }
 
         /// <summary>
         ///     Get the <see cref="Viewport3DViewModel" /> that manages the visual objects
@@ -124,6 +131,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var cellData = projectGraph.ProjectModelGraph.StructureModelGraph.CellParameters.GetInputObject();
             UtilityProject.InputPipeline.PushToProject(spaceGroupData);
             UtilityProject.InputPipeline.PushToProject(cellData);
+            GroupTransforms3D = SpaceGroupService.LoadedGroup.Operations
+                .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem))
+                .ToList();
         }
 
         /// <summary>
@@ -178,10 +188,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                     Resources.DisplayName_ModelViewport_CellFrameLayer);
 
                 foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
-                    VisualViewModel.AddVisualGroup(EnumeratePositionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
+                    VisualViewModel.AddVisualGroup(CreatePositionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
 
                 foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
-                    VisualViewModel.AddVisualGroup(EnumerateTransitionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
+                    VisualViewModel.AddVisualGroup(CreateTransitionVisuals(item), item.Name, GetModelObjectViewModel(item).IsVisible);
 
                 if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
             }
@@ -204,79 +214,64 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Enumerates the <see cref="SphereVisual3D" /> objects for a <see cref="UnitCellPositionGraph" />
+        ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> objects for a <see cref="UnitCellPositionGraph" />
         /// </summary>
         /// <param name="positionGraph"></param>
         /// <returns></returns>
-        private IEnumerable<SphereVisual3D> EnumeratePositionVisuals(UnitCellPositionGraph positionGraph)
+        private IList<MeshGeometryVisual3D> CreatePositionVisuals(UnitCellPositionGraph positionGraph)
         {
-            var graphViewModel = GetModelObjectViewModel(positionGraph);
+            var objectViewModel = GetModelObjectViewModel(positionGraph);
             var sourceVector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
             var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
             var cellPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, startVector, endVector);
 
-            var brush = new SolidColorBrush(graphViewModel.Color);
-            var generator = VisualViewModel.CreateSphereGenerator(graphViewModel.Scaling, brush, graphViewModel.MeshQuality);
+            var phiDiv = (int) (Settings.Default.Default_Render_Sphere_PhiDiv * objectViewModel.MeshQuality);
+            var thetaDiv = (int) (Settings.Default.Default_Render_Sphere_ThetaDiv * objectViewModel.MeshQuality);
+            var diameter = objectViewModel.Scaling;
+            var visualFactory = VisualViewModel.GetSphereVisualFactory(diameter, thetaDiv, phiDiv);
+
+            var result = new List<MeshGeometryVisual3D>(cellPositions.Count);
             foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()))
             {
-                var visual = VisualViewModel.CreateVisual(center, generator);
-                yield return visual;
+                var visual = VisualViewModel.CreateVisual(center, visualFactory);
+                result.Add(visual);
             }
+
+            var alpha = positionGraph.PositionStatus == PositionStatus.Unstable ? Settings.Default.Default_Render_UnstablePosition_Alpha : (byte) 255;
+            VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color.ChangeAlpha(alpha)));
+            return result;
         }
 
         /// <summary>
-        ///     Enumerates the <see cref="ArrowVisual3D" /> objects for a <see cref="KineticTransitionGraph" />
+        ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> objects for a <see cref="KineticTransitionGraph" />
         /// </summary>
         /// <param name="transitionGraph"></param>
         /// <returns></returns>
-        private IEnumerable<ArrowVisual3D> EnumerateTransitionVisuals(KineticTransitionGraph transitionGraph)
+        private IList<MeshGeometryVisual3D> CreateTransitionVisuals(KineticTransitionGraph transitionGraph)
         {
-            var graphViewModel = GetModelObjectViewModel(transitionGraph);
-            var vectorSequence = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C));
+            var objectViewModel = GetModelObjectViewModel(transitionGraph);
+            var pathPoints = transitionGraph.PositionVectors
+                .Select(x => VectorTransformer.ToCartesian(new Fractional3D(x.A, x.B, x.C)).AsPoint3D())
+                .ToList();
 
-            var sequences = SpaceGroupService.GetAllWyckoffOriginSequences(vectorSequence);
+            var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
+            var thetaDiv = (int) (Settings.Default.Default_Render_Arrow_ThetaDiv * objectViewModel.MeshQuality);
+            var diameter = objectViewModel.Scaling;
 
-            RemoveNegativeDirectionSequences(sequences);
-            RemoveInverseSequences(sequences, SpaceGroupService.Comparer);
-
-            var brush = new SolidColorBrush(graphViewModel.Color);
-            var generator = VisualViewModel.CreateDirectionArrowGenerator(graphViewModel.Scaling, brush, graphViewModel.MeshQuality);
-            foreach (var sequence in sequences)
-            {
-                for (var i = 1; i < sequence.Length; i++)
+            var result = new List<MeshGeometryVisual3D>(GroupTransforms3D.Count);
+            for (var i = 0; i < pathPoints.Count-1; i++)
+            {    
+                var visualFactory = VisualViewModel.GetArrowVisualFactory(diameter, pathPoints[i], pathPoints[i+1], headLength, thetaDiv);
+                foreach (var transform3D in GroupTransforms3D)
                 {
-                    var point1 = VectorTransformer.ToCartesian(sequence[i - 1]).AsPoint3D();
-                    var point2 = VectorTransformer.ToCartesian(sequence[i]).AsPoint3D();
-                    var direction = CreateDirectionWithPositionCorrection(point1, point2);
-                    var visual = VisualViewModel.CreateVisual((point1, direction), generator);
-                    yield return visual;
+                    result.Add(VisualViewModel.CreateVisual(transform3D, visualFactory));
                 }
             }
+            
+            VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color));
+            return result;
         }
 
-        /// <summary>
-        ///     Calculates the corrected direction <see cref="Vector3D" /> under consideration of existing positions spheres
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
-        private Vector3D CreateDirectionWithPositionCorrection(in Point3D start, in Point3D end)
-        {
-            var direction = end - start;
-            var length = direction.Length;
-            direction.Normalize();
-
-            var positionVisuals = VisualViewModel.VisualGroups.SelectMany(x => x.Items).Where(x => x is SphereVisual3D);
-            var endVector = new Fractional3D(end.X, end.Y, end.Z);
-
-            foreach (var visual in positionVisuals.Cast<SphereVisual3D>())
-            {
-                var centerVector = new Fractional3D(visual.Center.X, visual.Center.Y, visual.Center.Z);
-                if (SpaceGroupService.Comparer.Compare(endVector, centerVector) == 0) return (length - visual.Radius) * direction;
-            }
-
-            return length * direction;
-        }
 
         /// <summary>
         ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the given size information
@@ -327,38 +322,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var (minA, minB, minC, maxA, maxB, maxC) =
                 RenderResourcesViewModel.GetFlooredRenderArea(UtilityProject.CommonNumeric.RangeComparer);
             return CreateCellFrameLineVisual(minA, minB, minC, maxA, maxB, maxC);
-        }
-
-        /// <summary>
-        ///     Removes the inverse duplicate entries form a list of <see cref="Fractional3D" /> sequences
-        /// </summary>
-        /// <param name="sequences"></param>
-        /// <param name="comparer"></param>
-        private void RemoveInverseSequences(IList<Fractional3D[]> sequences, IComparer<Fractional3D> comparer)
-        {
-            bool IsEqual(Fractional3D[] lhs, Fractional3D[] rhs)
-            {
-                for (var (i, j) = (0, rhs.Length - 1); i < rhs.Length; (i, j) = (i + 1, j - 1))
-                    if (comparer.Compare(lhs[i], rhs[j]) != 0)
-                        return false;
-
-                return true;
-            }
-
-            sequences.RemoveDuplicates(new EqualityCompareAdapter<Fractional3D[]>(IsEqual, x => x.Length));
-        }
-
-        /// <summary>
-        ///     Removes the negative direction entries form a list of <see cref="Fractional3D" /> sequences
-        /// </summary>
-        /// <param name="sequences"></param>
-        private void RemoveNegativeDirectionSequences(IList<Fractional3D[]> sequences)
-        {
-            for (var i = sequences.Count - 1; i >= 0; i--)
-            {
-                var vector = sequences[i][sequences[i].Length - 1];
-                if (vector.A < 0 || vector.B < 0 || vector.C < 0) sequences.RemoveAt(i);
-            }
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public double Limit_Render_MeshQuality_Upper {
             get {
                 return ((double)(this["Limit_Render_MeshQuality_Upper"]));
@@ -104,6 +104,66 @@ namespace Mocassin.UI.GUI.Properties {
             }
             set {
                 this["Default_Render_Mesh_Scaling"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int Default_Render_Sphere_ThetaDiv {
+            get {
+                return ((int)(this["Default_Render_Sphere_ThetaDiv"]));
+            }
+            set {
+                this["Default_Render_Sphere_ThetaDiv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int Default_Render_Sphere_PhiDiv {
+            get {
+                return ((int)(this["Default_Render_Sphere_PhiDiv"]));
+            }
+            set {
+                this["Default_Render_Sphere_PhiDiv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int Default_Render_Arrow_ThetaDiv {
+            get {
+                return ((int)(this["Default_Render_Arrow_ThetaDiv"]));
+            }
+            set {
+                this["Default_Render_Arrow_ThetaDiv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public double Default_Render_Arrow_HeadLength {
+            get {
+                return ((double)(this["Default_Render_Arrow_HeadLength"]));
+            }
+            set {
+                this["Default_Render_Arrow_HeadLength"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("64")]
+        public byte Default_Render_UnstablePosition_Alpha {
+            get {
+                return ((byte)(this["Default_Render_UnstablePosition_Alpha"]));
+            }
+            set {
+                this["Default_Render_UnstablePosition_Alpha"] = value;
             }
         }
     }
