@@ -172,7 +172,7 @@ static error_t GetTransitionModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *
 
 static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
-    let localQuery = "select EnergyBackground, Lattice, LatticeInfo from LatticeModels where Id = ?1";
+    let localQuery = "select Lattice, LatticeInfo, EnergyBackground from LatticeModels where Id = ?1";
     sqlQuery = localQuery;
 
     sqlite3_stmt *sqlStatement = NULL;
@@ -181,9 +181,9 @@ static error_t GetLatticeModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbM
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.LatticeModelId);
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
-    latticeModel->Lattice = array_FromBlob(latticeModel->Lattice, sqlite3_column_blob(sqlStatement, 1));
-    latticeModel->LatticeInfo = *(LatticeInfo_t*) sqlite3_column_blob(sqlStatement, 2);
-    latticeModel->EnergyBackground = array_FromBlob(latticeModel->EnergyBackground, sqlite3_column_blob(sqlStatement, 0));
+    latticeModel->Lattice = array_FromBlob(latticeModel->Lattice, sqlite3_column_blob(sqlStatement, 0));
+    latticeModel->LatticeInfo = *(LatticeInfo_t*) sqlite3_column_blob(sqlStatement, 1);
+    latticeModel->EnergyBackground = array_FromBlob(latticeModel->EnergyBackground, sqlite3_column_blob(sqlStatement, 2));
 
     error = sqlite3_finalize(sqlStatement);
     return error;

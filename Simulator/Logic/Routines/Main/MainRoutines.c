@@ -22,6 +22,13 @@
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
 #include "Framework/Math/Random/Approx.h"
 
+// Calculates the result of the exponential function depending on the settings
+static inline double GetExpResult(SCONTEXT_PARAM, const double exponent)
+{
+    return SCONTEXT->UseExpApproximation ? Exp_Fast32_Rms(exponent) : exp(exponent);
+}
+
+
 // Advances the block counters of the main loop to the next step goal
 static inline void AdvanceMainCycleCounterToNextStepGoal(SCONTEXT_PARAM)
 {
@@ -212,13 +219,28 @@ static inline void KMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
     if (jumpCountHasChanged) UpdateTimeStepPerJumpToCurrent(SCONTEXT);
 }
 
-// Updates the maximum jump probability to a new value if required
-static inline void UpdateMaxJumpProbability(SCONTEXT_PARAM)
+// Updates the maximum jump probability to a new value if required (Skips values above the jump-limit value)
+static inline void UpdateMaxJumpProbabilityBackjumpUnsafe(SCONTEXT_PARAM)
 {
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
-    return_if(energyInfo->RawS0toS2Probability > 1.0);
+
+    return_if(energyInfo->RawS0toS2Probability > MC_CONST_JUMPLIMIT_MAX);
     metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, energyInfo->RawS0toS2Probability);
+}
+
+// Updates the maximum jump probability to a new value if required (Skips values above the jump-limit value & does a backjump check)
+static inline void UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT_PARAM)
+{
+    let energyInfo = getJumpEnergyInfo(SCONTEXT);
+    var metaData = getMainStateMetaData(SCONTEXT);
+
+    return_if(energyInfo->RawS0toS2Probability > MC_CONST_JUMPLIMIT_MAX);
+    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, energyInfo->RawS0toS2Probability);
+
+    // Note: This is a safety check for the backjump to prevent the normalization system from accidentally over-normalizing
+    return_if(energyInfo->S0toS2DeltaEnergy >= energyInfo->S2toS0DeltaEnergy);
+    metaData->RawMaxJumpProbability = getMaxOfTwo(metaData->RawMaxJumpProbability, GetExpResult(SCONTEXT, -energyInfo->S2toS0DeltaEnergy));
 }
 
 // Action for cases where the jump selection has been statistically accepted
@@ -230,7 +252,8 @@ static inline void KMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
     ++activeCounters->McsCount;
     ++cycleCounters->McsCount;
 
-    UpdateMaxJumpProbability(SCONTEXT);
+    UpdateMaxJumpProbabilityBackjumpUnsafe(SCONTEXT);
+
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
     AdvanceTransitionTrackingSystem(SCONTEXT);
     KMC_AdvanceSystemToFinalState(SCONTEXT);
@@ -329,13 +352,14 @@ error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
                 #endif
                 KMC_SetJumpProperties(SCONTEXT);
                 KMC_OnEnergeticJumpEvaluation(SCONTEXT);
+                UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT);
             }
             else
             {
                 KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
-        UpdateTotalJumpNormalization(SCONTEXT);
+        KMC_UpdateTotalJumpNormalization(SCONTEXT);
     }
     return ERR_OK;
 }
@@ -385,7 +409,7 @@ static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
     ++activeCounters->McsCount;
     ++cycleCounters->McsCount;
 
-    UpdateMaxJumpProbability(SCONTEXT);
+    UpdateMaxJumpProbabilityBackjumpUnsafe(SCONTEXT);
     MMC_AdvanceSystemToFinalState(SCONTEXT);
     MMC_UpdateJumpPool(SCONTEXT);
 }
@@ -724,11 +748,6 @@ void KMC_SetJumpProperties(SCONTEXT_PARAM)
     KMC_SetStateEnergies(SCONTEXT);
 }
 
-static inline double GetExpResult(SCONTEXT_PARAM, const double exponent)
-{
-    return SCONTEXT->UseExpApproximation ? Exp_Fast32_Rms(exponent) : exp(exponent);
-}
-
 void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
 {
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
@@ -740,7 +759,9 @@ void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
     energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->ConformationDeltaEnergy - energyInfo->ElectricFieldEnergy;
 
     energyInfo->RawS0toS2Probability = GetExpResult(SCONTEXT, -energyInfo->S0toS2DeltaEnergy);
-    energyInfo->RawS2toS0Probability = (energyInfo->S2toS0DeltaEnergy < 0.0) ? INFINITY : 0.0;
+    energyInfo->RawS2toS0Probability = (energyInfo->S2toS0DeltaEnergy < MC_CONST_JUMPLIMIT_MIN)
+            ? MC_CONST_BACKJUMP_INF
+            : MC_CONST_BACKJUMP_NULL;
 
     energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability * GetCurrentProbabilityPreFactor(SCONTEXT);
 }
@@ -750,6 +771,7 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     let plugins = getPluginCollection(SCONTEXT);
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
 
+    // Use the internal energy function of no plugin is set
     if (plugins->OnSetJumpProbabilities == NULL)
     {
         KMC_SetJumpProbabilities(SCONTEXT);
@@ -760,7 +782,7 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     }
 
     // Unstable end: Do not advance system, update counter and simulated time
-    if (energyInfo->RawS2toS0Probability == INFINITY)
+    if (energyInfo->RawS2toS0Probability == MC_CONST_BACKJUMP_INF)
     {
         KMC_OnJumpIsToUnstableState(SCONTEXT);
         return;
