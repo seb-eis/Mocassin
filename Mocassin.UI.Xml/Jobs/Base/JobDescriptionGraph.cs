@@ -141,6 +141,7 @@ namespace Mocassin.UI.Xml.Jobs
             other.Temperature = Temperature;
             other.TimeLimit = TimeLimit;
             other.LatticeConfiguration = LatticeConfiguration.Duplicate();
+            other.Name = Name;
         }
 
         /// <summary>

@@ -258,16 +258,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var thetaDiv = (int) (Settings.Default.Default_Render_Arrow_ThetaDiv * objectViewModel.MeshQuality);
             var diameter = objectViewModel.Scaling;
 
-            var result = new List<MeshGeometryVisual3D>(GroupTransforms3D.Count);
+            var result = new List<MeshGeometryVisual3D>(GroupTransforms3D.Count * GroupTransforms3D.Count);
+
             for (var i = 0; i < pathPoints.Count-1; i++)
-            {    
+            {
                 var visualFactory = VisualViewModel.GetArrowVisualFactory(diameter, pathPoints[i], pathPoints[i+1], headLength, thetaDiv);
-                foreach (var transform3D in GroupTransforms3D)
-                {
-                    result.Add(VisualViewModel.CreateVisual(transform3D, visualFactory));
-                }
+                result.AddRange(GroupTransforms3D.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
-            
+
             VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color));
             return result;
         }
