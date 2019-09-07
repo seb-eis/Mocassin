@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -13,23 +12,34 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot]
     public abstract class ModelObjectGraph : ProjectObjectGraph
     {
+        private string key;
+        private ResourcesGraph resources;
+
         /// <summary>
         ///     The key of the model object. Has to be unique within the object graph type group
         /// </summary>
         [XmlAttribute("Key")]
         [Column("Key")]
         [JsonProperty("Key")]
-        public string Key { get; set; }
+        public string Key
+        {
+            get => key;
+            set => SetProperty(ref key, value);
+        }
 
         /// <summary>
-        ///     Get or set the <see cref="ResourcesGraph"/> for attached properties
+        ///     Get or set the <see cref="ResourcesGraph" /> for attached properties
         /// </summary>
         [XmlIgnore]
         [NotMapped]
-        public ResourcesGraph Resources { get; set; }
+        public ResourcesGraph Resources
+        {
+            get => resources;
+            set => SetProperty(ref resources, value);
+        }
 
         /// <summary>
-        ///     Creates a new <see cref="ModelObjectGraph"/> with a unique object key
+        ///     Creates a new <see cref="ModelObjectGraph" /> with a unique object key
         /// </summary>
         protected ModelObjectGraph()
         {
@@ -59,8 +69,8 @@ namespace Mocassin.UI.Xml.Base
         /// <inheritdoc />
         public override string ToString()
         {
-            return string.IsNullOrWhiteSpace(Name) 
-                ? $"[{Key}]" 
+            return string.IsNullOrWhiteSpace(Name)
+                ? $"[{Key}]"
                 : Name;
         }
     }

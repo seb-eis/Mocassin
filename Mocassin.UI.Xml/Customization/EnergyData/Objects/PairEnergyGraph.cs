@@ -15,23 +15,39 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("PairEnergyEntry")]
     public class PairEnergyGraph : ProjectObjectGraph, IComparable<PairEnergyGraph>
     {
+        private ModelObjectReferenceGraph<Particle> centerParticle;
+        private ModelObjectReferenceGraph<Particle> partnerParticle;
+        private double energy;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center particle
         /// </summary>
         [XmlElement("CenterParticle")]
-        public ModelObjectReferenceGraph<Particle> CenterParticle { get; set; }
+        public ModelObjectReferenceGraph<Particle> CenterParticle
+        {
+            get => centerParticle;
+            set => SetProperty(ref centerParticle, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center particle
         /// </summary>
         [XmlElement("PartnerParticle")]
-        public ModelObjectReferenceGraph<Particle> PartnerParticle { get; set; }
+        public ModelObjectReferenceGraph<Particle> PartnerParticle
+        {
+            get => partnerParticle;
+            set => SetProperty(ref partnerParticle, value);
+        }
 
         /// <summary>
         ///     Get or set the energy value in [eV]
         /// </summary>
         [XmlAttribute("Energy")]
-        public double Energy { get; set; }
+        public double Energy
+        {
+            get => energy;
+            set => SetProperty(ref energy, value);
+        }
 
         /// <summary>
         ///     Get the contained information as a <see cref="PairEnergyEntry" /> entry that is valid in the context of the passed

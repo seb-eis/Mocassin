@@ -18,6 +18,9 @@ namespace Mocassin.UI.Xml.Main
         private ProjectJobTranslationGraph projectJobTranslationGraph;
         private ProjectCustomizationGraph projectCustomizationGraph;
         private ProjectModelGraph projectModelGraph;
+        private string modelKey;
+        private string customizationKey;
+        private string jobTranslationKey;
 
         /// <inheritdoc />
         [NotMapped]
@@ -37,9 +40,9 @@ namespace Mocassin.UI.Xml.Main
         public ProjectModelGraph ProjectModelGraph
         {
             get => projectModelGraph;
-            set 
-            { 
-                projectModelGraph = value;
+            set
+            {
+                SetProperty(ref projectModelGraph, value);
                 ModelKey = value?.Key;
             }
         }
@@ -47,7 +50,11 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the key of the <see cref="ProjectModelGraph" />
         /// </summary>
-        public string ModelKey { get; set; }
+        public string ModelKey
+        {
+            get => modelKey;
+            set => SetProperty(ref modelKey, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="Mocassin.UI.Xml.Customization.ProjectCustomizationGraph" />
@@ -57,9 +64,9 @@ namespace Mocassin.UI.Xml.Main
         public ProjectCustomizationGraph ProjectCustomizationGraph
         {
             get => projectCustomizationGraph;
-            set 
-            { 
-                projectCustomizationGraph = value;
+            set
+            {
+                SetProperty(ref projectCustomizationGraph, value);
                 CustomizationKey = value?.Key;
             }
         }
@@ -67,7 +74,11 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the key of the <see cref="ProjectCustomizationGraph" />
         /// </summary>
-        public string CustomizationKey { get; set; }
+        public string CustomizationKey
+        {
+            get => customizationKey;
+            set => SetProperty(ref customizationKey, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="Mocassin.UI.Xml.Jobs.ProjectJobTranslationGraph" />
@@ -77,9 +88,9 @@ namespace Mocassin.UI.Xml.Main
         public ProjectJobTranslationGraph ProjectJobTranslationGraph
         {
             get => projectJobTranslationGraph;
-            set 
-            { 
-                projectJobTranslationGraph = value;
+            set
+            {
+                SetProperty(ref projectJobTranslationGraph, value);
                 JobTranslationKey = value?.Key;
             }
         }
@@ -87,7 +98,11 @@ namespace Mocassin.UI.Xml.Main
         /// <summary>
         ///     Get or set the key of the <see cref="ProjectJobTranslationGraph" />
         /// </summary>
-        public string JobTranslationKey { get; set; }
+        public string JobTranslationKey
+        {
+            get => jobTranslationKey;
+            set => SetProperty(ref jobTranslationKey, value);
+        }
 
         /// <summary>
         ///     Restores the build object references not covered by the JSON serialization

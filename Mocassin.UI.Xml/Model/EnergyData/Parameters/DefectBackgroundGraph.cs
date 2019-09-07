@@ -13,12 +13,18 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class DefectBackgroundGraph : ProjectObjectGraph
     {
+        private List<DefectEnergyGraph> defectEnergies;
+
         /// <summary>
         ///     Get or set the list of <see cref="DefectEnergyGraph" /> that describe the defect background
         /// </summary>
         [XmlArray("DefectEnergies")]
         [XmlArrayItem("DefectEnergy")]
-        public List<DefectEnergyGraph> DefectEnergies { get; set; }
+        public List<DefectEnergyGraph> DefectEnergies
+        {
+            get => defectEnergies;
+            set => SetProperty(ref defectEnergies, value);
+        }
 
         /// <summary>
         ///     Create new <see cref="DefectBackgroundGraph" /> with empty defect list

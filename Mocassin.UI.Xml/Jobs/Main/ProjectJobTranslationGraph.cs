@@ -17,12 +17,20 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("DatabaseCreationInstruction")]
     public sealed class ProjectJobTranslationGraph : MocassinProjectChildEntity<MocassinProjectGraph>
     {
+        private string key;
+        private List<KmcJobPackageDescriptionGraph> kmcJobPackageDescriptions;
+        private List<MmcJobPackageDescriptionGraph> mmcJobPackageDescriptions;
+
         /// <summary>
         ///     Get or set a key for the customization
         /// </summary>
         [XmlAttribute("Key")]
         [NotMapped]
-        public string Key { get; set; }
+        public string Key
+        {
+            get => key;
+            set => SetProperty(ref key, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="KmcJobPackageDescriptionGraph" /> that defines
@@ -31,7 +39,11 @@ namespace Mocassin.UI.Xml.Jobs
         [XmlArray("KmcJobPackages")]
         [XmlArrayItem("JobPackage")]
         [NotMapped]
-        public List<KmcJobPackageDescriptionGraph> KmcJobPackageDescriptions { get; set; }
+        public List<KmcJobPackageDescriptionGraph> KmcJobPackageDescriptions
+        {
+            get => kmcJobPackageDescriptions;
+            set => SetProperty(ref kmcJobPackageDescriptions, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="MmcJobPackageDescriptionGraph" /> that defines
@@ -40,10 +52,15 @@ namespace Mocassin.UI.Xml.Jobs
         [XmlArray("MmcJobPackages")]
         [XmlArrayItem("JobPackage")]
         [NotMapped]
-        public List<MmcJobPackageDescriptionGraph> MmcJobPackageDescriptions { get; set; }
+        public List<MmcJobPackageDescriptionGraph> MmcJobPackageDescriptions
+        {
+            get => mmcJobPackageDescriptions;
+            set => SetProperty(ref mmcJobPackageDescriptions, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="ProjectJobTranslationGraph"/> with empty <see cref="JobPackageDescriptionGraph"/> collections
+        ///     Creates new <see cref="ProjectJobTranslationGraph" /> with empty <see cref="JobPackageDescriptionGraph" />
+        ///     collections
         /// </summary>
         public ProjectJobTranslationGraph()
         {
@@ -62,13 +79,12 @@ namespace Mocassin.UI.Xml.Jobs
         {
             var index = 0;
             foreach (var item in MmcJobPackageDescriptions.Concat(KmcJobPackageDescriptions.Cast<JobPackageDescriptionGraph>()))
-            {
                 yield return item.ToInternal(modelProject, index++);
-            }
         }
 
         /// <summary>
-        ///     Calculates the total number simulation configurations of the object defined within the context of the passed <see cref="IModelProject"/>
+        ///     Calculates the total number simulation configurations of the object defined within the context of the passed
+        ///     <see cref="IModelProject" />
         /// </summary>
         /// <param name="modelProject"></param>
         /// <returns></returns>

@@ -18,11 +18,17 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("OccupationState")]
     public class OccupationStateGraph : ProjectObjectGraph
     {
+        private List<ModelObjectReferenceGraph<Particle>> particles;
+
         /// <summary>
         ///     Get or set the list of particles that describe the occupation
         /// </summary>
         [XmlElement("Particle")]
-        public List<ModelObjectReferenceGraph<Particle>> Particles { get; set; }
+        public List<ModelObjectReferenceGraph<Particle>> Particles
+        {
+            get => particles;
+            set => SetProperty(ref particles, value);
+        }
 
         /// <summary>
         ///     Get the object as an <see cref="IOccupationState" /> interface that is valid in the context of the passed
@@ -32,10 +38,10 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public IOccupationState ToInternal(IModelProject modelProject)
         {
-            var particles = Particles.Select(x => modelProject.DataTracker.FindObjectByKey<IParticle>(x.Key)).ToList();
+            var particleList = Particles.Select(x => modelProject.DataTracker.FindObjectByKey<IParticle>(x.Key)).ToList();
             var obj = new OccupationState
             {
-                Particles = particles
+                Particles = particleList
             };
 
             return obj;

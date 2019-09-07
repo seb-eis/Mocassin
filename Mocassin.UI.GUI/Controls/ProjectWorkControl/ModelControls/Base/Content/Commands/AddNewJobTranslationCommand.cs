@@ -16,19 +16,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class AddNewJobTranslationCommand : AsyncProjectControlCommand
     {
+        /// <summary>
+        ///     Get the getter delegate for the <see cref="MocassinProjectGraph"/>
+        /// </summary>
         private Func<MocassinProjectGraph> ProjectGetter { get; }
 
+        /// <summary>
+        ///     Get an <see cref="Action"/> to be executed on success
+        /// </summary>
+        private Action OnSuccessAction { get; }
+
         /// <inheritdoc />
-        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter)
+        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter, Action onSuccessAction)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
+            OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
         public override Task ExecuteAsync(object parameter)
         {
-            return Task.Run(() => TryAddCustomization(ProjectGetter()));
+            return Task.Run(() => TryAddTranslation(ProjectGetter()));
         }
 
         /// <inheritdoc />
@@ -42,19 +51,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         ///     <see cref="MocassinProjectGraph" />
         /// </summary>
         /// <param name="projectGraph"></param>
-        private void TryAddCustomization(MocassinProjectGraph projectGraph)
+        private void TryAddTranslation(MocassinProjectGraph projectGraph)
         {
             if (projectGraph == null) return;
-            var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl);
-            var status = validator.TryCreateCustomization(out var customization);
 
-            if (status != ModelValidationStatus.NoErrorsDetected)
+            using (var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl))
             {
-                ShowErrorMessageBox(status);
-                return;
-            }
+                var status = validator.TryCreateCustomization(out var customization);
 
-            projectGraph.ProjectJobTranslationGraphs.Add(CreateJobTranslation());
+                if (status != ModelValidationStatus.NoErrorsDetected)
+                {
+                    ShowErrorMessageBox(status);
+                    return;
+                }
+                projectGraph.ProjectJobTranslationGraphs.Add(CreateJobTranslation());
+            }
+            OnSuccessAction?.Invoke();
         }
 
         /// <summary>

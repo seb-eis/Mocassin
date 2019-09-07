@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Model;
-using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -16,51 +14,87 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("KineticRule")]
     public class KineticRuleGraph : ProjectObjectGraph
     {
+        private double attemptFrequency;
+        private string ruleFlags;
+        private int ruleIndex;
+        private OccupationStateGraph startState;
+        private OccupationStateGraph transitionState;
+        private OccupationStateGraph finalState;
+        private int dependencyRuleCount;
+
         /// <summary>
         ///     Get or set the attempt frequency value of the rule in [Hz]
         /// </summary>
         [XmlAttribute("AttemptFrequency")]
-        public double AttemptFrequency { get; set; }
+        public double AttemptFrequency
+        {
+            get => attemptFrequency;
+            set => SetProperty(ref attemptFrequency, value);
+        }
 
         /// <summary>
-        /// Get or set the rule flag info string
+        ///     Get or set the rule flag info string
         /// </summary>
         [XmlAttribute("Info")]
-        public string RuleFlags { get; set; }
+        public string RuleFlags
+        {
+            get => ruleFlags;
+            set => SetProperty(ref ruleFlags, value);
+        }
 
         /// <summary>
         ///     Get or set the internal index of the affected rule
         /// </summary>
         [XmlAttribute("AutoId")]
-        public int RuleIndex { get; set; }
+        public int RuleIndex
+        {
+            get => ruleIndex;
+            set => SetProperty(ref ruleIndex, value);
+        }
 
         /// <summary>
         ///     Get or set the occupation state of the start state
         /// </summary>
         [XmlElement("StartState")]
-        public OccupationStateGraph StartState { get; set; }
+        public OccupationStateGraph StartState
+        {
+            get => startState;
+            set => SetProperty(ref startState, value);
+        }
 
         /// <summary>
         ///     Get or set the occupation state of the transition state
         /// </summary>
         [XmlElement("TransitionState")]
-        public OccupationStateGraph TransitionState { get; set; }
+        public OccupationStateGraph TransitionState
+        {
+            get => transitionState;
+            set => SetProperty(ref transitionState, value);
+        }
 
         /// <summary>
         ///     Get or set the occupation state of the final state
         /// </summary>
         [XmlElement("FinalState")]
-        public OccupationStateGraph FinalState { get; set; }
+        public OccupationStateGraph FinalState
+        {
+            get => finalState;
+            set => SetProperty(ref finalState, value);
+        }
 
         /// <summary>
         ///     Get or set the number of dependency rules
         /// </summary>
         [XmlElement("DependencyRuleCount")]
-        public int DependencyRuleCount { get; set; }
+        public int DependencyRuleCount
+        {
+            get => dependencyRuleCount;
+            set => SetProperty(ref dependencyRuleCount, value);
+        }
 
         /// <summary>
         ///     Creates a new serializable <see cref="KineticRuleGraph" /> by pulling the required data from the passed
-        ///     <see cref="IKineticRule" /> and <see cref="ProjectModelGraph"/> parent
+        ///     <see cref="IKineticRule" /> and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="rule"></param>
         /// <param name="parent"></param>

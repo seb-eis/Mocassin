@@ -52,8 +52,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicCustomizationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph);
-            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, ReloadSelectionSource);
+            AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
+            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, () => ReloadSelectionSource());
             PropertyChanged += OnCustomizationSourceChanged;
         }
 
@@ -77,9 +77,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <summary>
         ///     Nulls the currently selected <see cref="ProjectCustomizationGraph"/> and reloads the option list
         /// </summary>
-        protected void ReloadSelectionSource()
+        protected void ReloadSelectionSource(bool nullSelected = true)
         {
-            SelectedCustomizationGraph = null;
+            if (nullSelected) SelectedCustomizationGraph = null;
             CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
         }
 

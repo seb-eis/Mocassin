@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml.Serialization;
 using Mocassin.Framework.Xml;
@@ -11,25 +9,13 @@ using Newtonsoft.Json;
 namespace Mocassin.UI.Xml.Base
 {
     /// <summary>
-    ///     Base class for all JSON/Xml serializable project objects with a dummy INotifyPropertyChanged implementation for the WPF binding infrastructure
+    ///     Base class for all JSON/Xml serializable project objects with a INotifyPropertyChanged implementation for the
+    ///     WPF binding infrastructure
     /// </summary>
-    /// <remarks> INotifyPropertyChanged is implemented as a dummy to prevent WPF from using PropertyDescriptor type bindings, which causes memory leaks </remarks>
     [XmlRoot]
-    public abstract class ProjectObjectGraph : INotifyPropertyChanged
+    public abstract class ProjectObjectGraph : PropertyChangeNotifier
     {
-        /// <summary>
-        ///     Property changed event (Dummy)
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        ///     Notify about a property change (Dummy)
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private string name;
 
         /// <summary>
         ///     Specifies the default serialization encoding
@@ -49,7 +35,11 @@ namespace Mocassin.UI.Xml.Base
         [XmlAttribute("Name")]
         [JsonProperty("Name")]
         [Column("Name")]
-        public virtual string Name { get; set; }
+        public virtual string Name
+        {
+            get => name;
+            set => SetProperty(ref name, value);
+        }
 
         /// <summary>
         ///     Converts the <see cref="ProjectObjectGraph" /> to ist xml representation

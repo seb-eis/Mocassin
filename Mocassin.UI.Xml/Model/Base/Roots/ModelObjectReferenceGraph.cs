@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Newtonsoft.Json;
@@ -13,36 +12,24 @@ namespace Mocassin.UI.Xml.Base
     ///     Generic serializable class to store and provide key based references to specific <see cref="ModelObject" />
     ///     instances
     /// </summary>
-    /// <remarks> INotifyPropertyChanged is implemented as a dummy to prevent WPF from using PropertyDescriptor type bindings, which causes memory leaks </remarks>
     [XmlRoot]
-    public sealed class ModelObjectReferenceGraph<T> : INotifyPropertyChanged,
+    public sealed class ModelObjectReferenceGraph<T> : PropertyChangeNotifier,
         IEquatable<ModelObjectReferenceGraph<T>>,
         IDuplicable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
     {
-        /// <summary>
-        ///     Property changed event (Dummy)
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        ///     Property changed event rise (Dummy)
-        /// </summary>
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        [XmlIgnore]
-        [NotMapped]
-        [JsonIgnore]
         private ModelObjectGraph targetGraph;
+        private string key;
 
         /// <summary>
         ///     Get or set the key of the reference
         /// </summary>
         [JsonIgnore]
         [XmlAttribute("Key")]
-        public string Key { get; set; }
+        public string Key
+        {
+            get => key;
+            set => SetProperty(ref key, value);
+        }
 
         /// <summary>
         ///     Get the name of the object reference
@@ -63,8 +50,11 @@ namespace Mocassin.UI.Xml.Base
             get => targetGraph;
             set
             {
-                targetGraph = value;
+                if (targetGraph != null) targetGraph.PropertyChanged -= RelayTargetNameChange;
+                if (value != null) value.PropertyChanged += RelayTargetNameChange;
+                SetProperty(ref targetGraph, value);
                 Key = value?.Key;
+                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -74,7 +64,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Creates new <see cref="ModelObjectReferenceGraph{T}"/> that targets the passed graph
+        ///     Creates new <see cref="ModelObjectReferenceGraph{T}" /> that targets the passed graph
         /// </summary>
         /// <param name="targetGraph"></param>
         public ModelObjectReferenceGraph(ModelObjectGraph targetGraph)
@@ -123,6 +113,19 @@ namespace Mocassin.UI.Xml.Base
         object IDuplicable.Duplicate()
         {
             return Duplicate();
+        }
+
+        /// <summary>
+        ///     Relays a name change of the <see cref="ProjectObjectGraph"/> target to a name change of this reference
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void RelayTargetNameChange(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(targetGraph.Name))
+            {
+                OnPropertyChanged(nameof(Name));
+            }
         }
     }
 }

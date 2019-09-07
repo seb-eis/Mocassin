@@ -13,19 +13,30 @@ namespace Mocassin.UI.Xml.ParticleModel
     [XmlRoot("ParticleModel")]
     public class ParticleModelGraph : ModelManagerGraph
     {
+        private List<ParticleGraph> particles;
+        private List<ParticleSetGraph> particleSets;
+
         /// <summary>
         ///     The list of defines particles
         /// </summary>
         [XmlArray("Particles")]
         [XmlArrayItem("Particle")]
-        public List<ParticleGraph> Particles { get; set; }
+        public List<ParticleGraph> Particles
+        {
+            get => particles;
+            set => SetProperty(ref particles, value);
+        }
 
         /// <summary>
         ///     The list of defined particle sets
         /// </summary>
         [XmlArray("ParticleSets")]
         [XmlArrayItem("ParticleSet")]
-        public List<ParticleSetGraph> ParticleSets { get; set; }
+        public List<ParticleSetGraph> ParticleSets
+        {
+            get => particleSets;
+            set => SetProperty(ref particleSets, value);
+        }
 
         /// <summary>
         ///     Creates new <see cref="ParticleModelGraph" /> with empty component lists

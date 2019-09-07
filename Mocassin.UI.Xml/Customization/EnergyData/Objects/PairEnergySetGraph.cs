@@ -17,48 +17,84 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot]
     public class PairEnergySetGraph : ProjectObjectGraph, IComparable<PairEnergySetGraph>
     {
+        private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
+        private ModelObjectReferenceGraph<UnitCellPosition> partnerPosition;
+        private double distance;
+        private VectorGraph3D startVector;
+        private VectorGraph3D endVector;
+        private int pairInteractionIndex;
+        private List<PairEnergyGraph> pairEnergyEntries;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center wyckoff position
         /// </summary>
         [XmlElement("CenterPosition")]
-        public ModelObjectReferenceGraph<UnitCellPosition> CenterPosition { get; set; }
+        public ModelObjectReferenceGraph<UnitCellPosition> CenterPosition
+        {
+            get => centerPosition;
+            set => SetProperty(ref centerPosition, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the partner wyckoff position
         /// </summary>
         [XmlElement("PartnerPosition")]
-        public ModelObjectReferenceGraph<UnitCellPosition> PartnerPosition { get; set; }
+        public ModelObjectReferenceGraph<UnitCellPosition> PartnerPosition
+        {
+            get => partnerPosition;
+            set => SetProperty(ref partnerPosition, value);
+        }
 
         /// <summary>
         ///     Get or set the distance in [Ang]
         /// </summary>
         [XmlAttribute("Distance")]
-        public double Distance { get; set; }
+        public double Distance
+        {
+            get => distance;
+            set => SetProperty(ref distance, value);
+        }
 
         /// <summary>
         ///     Get or set the 3D vector of the center
         /// </summary>
         [XmlElement("Center")]
-        public VectorGraph3D StartVector { get; set; }
+        public VectorGraph3D StartVector
+        {
+            get => startVector;
+            set => SetProperty(ref startVector, value);
+        }
 
         /// <summary>
         ///     Get or set the 3D vector of the partner
         /// </summary>
         [XmlElement("Partner")]
-        public VectorGraph3D EndVector { get; set; }
+        public VectorGraph3D EndVector
+        {
+            get => endVector;
+            set => SetProperty(ref endVector, value);
+        }
 
         /// <summary>
         ///     Get or set the index of the pair interaction the data is valid for
         /// </summary>
         [XmlAttribute("AutoId")]
-        public int PairInteractionIndex { get; set; }
+        public int PairInteractionIndex
+        {
+            get => pairInteractionIndex;
+            set => SetProperty(ref pairInteractionIndex, value);
+        }
 
         /// <summary>
         ///     Get or set the pair energy entry permutations for this pair interaction
         /// </summary>
         [XmlArray("Permutations")]
         [XmlArrayItem("Permutation")]
-        public List<PairEnergyGraph> PairEnergyEntries { get; set; }
+        public List<PairEnergyGraph> PairEnergyEntries
+        {
+            get => pairEnergyEntries;
+            set => SetProperty(ref pairEnergyEntries, value);
+        }
 
         /// <summary>
         ///     Set all data on the passed <see cref="IPairEnergySetter" /> and push the values to the affiliated

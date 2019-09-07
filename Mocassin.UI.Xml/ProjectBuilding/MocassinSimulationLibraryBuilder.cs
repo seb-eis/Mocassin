@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Mocassin.Framework.Events;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator;
@@ -40,7 +38,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         AddingLibraryMetaData,
         MetaDataAddError,
         SavingLibraryContents,
-        LibraryContentSavingError,
+        LibraryContentSavingError
     }
 
     /// <summary>
@@ -274,7 +272,8 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         }
 
         /// <summary>
-        ///     Tries to add all meta information of the <see cref="MocassinProjectBuildGraph"/> to the prepared set of <see cref="SimulationJobPackageModel"/> instances
+        ///     Tries to add all meta information of the <see cref="MocassinProjectBuildGraph" /> to the prepared set of
+        ///     <see cref="SimulationJobPackageModel" /> instances
         /// </summary>
         /// <param name="jobPackageModels"></param>
         /// <param name="buildGraph"></param>
@@ -293,6 +292,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
                     packageModel.ProjectGuid = buildGraph.ProjectModelGraph.Key;
                     packageModel.ModelSystemVersion = version;
                 }
+
                 return true;
             }
             catch (Exception e)
@@ -317,7 +317,11 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             var builder = new JobDbEntityBuilder(modelContext);
             builder.WhenJobIsBuild.Subscribe(x =>
             {
-                lock (lockObject) BuildCounter++;
+                lock (lockObject)
+                {
+                    BuildCounter++;
+                }
+
                 JobBuildCounterEvent.OnNext((BuildCounter, totalJobCount));
             });
 

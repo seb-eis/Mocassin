@@ -14,35 +14,61 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot("UnitCellPosition")]
     public class UnitCellPositionGraph : ModelObjectGraph
     {
+        private double a;
+        private double b;
+        private double c;
+        private string occupationKey;
+        private PositionStatus positionStatus;
+
         /// <summary>
         ///     Get or set the coordinate value in A direction in [Ang]
         /// </summary>
         [XmlAttribute("A")]
-        public double A { get; set; }
+        public double A
+        {
+            get => a;
+            set => SetProperty(ref a, value);
+        }
 
         /// <summary>
         ///     Get or set the coordinate value in B direction in [Ang]
         /// </summary>
         [XmlAttribute("B")]
-        public double B { get; set; }
+        public double B
+        {
+            get => b;
+            set => SetProperty(ref b, value);
+        }
 
         /// <summary>
         ///     Get or set the coordinate value in C direction in [Ang]
         /// </summary>
         [XmlAttribute("C")]
-        public double C { get; set; }
+        public double C
+        {
+            get => c;
+            set => SetProperty(ref c, value);
+        }
 
         /// <summary>
         ///     Get or set the occupation set reference key
         /// </summary>
         [XmlAttribute("Occupation")]
-        public string OccupationKey { get; set; }
+        public string OccupationKey
+        {
+            get => occupationKey;
+            set => SetProperty(ref occupationKey, value);
+        }
 
         /// <summary>
         ///     Get or set the position stability status
         /// </summary>
         [XmlAttribute("Stability")]
-        public PositionStatus PositionStatus { get; set; }
+        public PositionStatus PositionStatus
+        {
+            get => positionStatus;
+            set => SetProperty(ref positionStatus, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

@@ -13,29 +13,50 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("MmcJobConfig")]
     public class MmcJobDescriptionGraph : JobDescriptionGraph, IDuplicable<MmcJobDescriptionGraph>
     {
+        private string breakTolerance;
+        private string breakSampleLength;
+        private string breakSampleInterval;
+        private string resultSampleMcs;
+
         /// <summary>
         ///     Get or set the abort tolerance value as a string
         /// </summary>
         [XmlAttribute("BreakTolerance")]
-        public string BreakTolerance { get; set; }
+        public string BreakTolerance
+        {
+            get => breakTolerance;
+            set => SetProperty(ref breakTolerance, value);
+        }
 
         /// <summary>
         ///     Get or set the abort sequence length as a string
         /// </summary>
         [XmlAttribute("BreakSampleLength")]
-        public string BreakSampleLength { get; set; }
+        public string BreakSampleLength
+        {
+            get => breakSampleLength;
+            set => SetProperty(ref breakSampleLength, value);
+        }
 
         /// <summary>
         ///     Get or set the abort sample interval as a string
         /// </summary>
         [XmlAttribute("BreakSampleInterval")]
-        public string BreakSampleInterval { get; set; }
+        public string BreakSampleInterval
+        {
+            get => breakSampleInterval;
+            set => SetProperty(ref breakSampleInterval, value);
+        }
 
         /// <summary>
         ///     Get or set the result sample mcs as a string
         /// </summary>
         [XmlAttribute("ResultSampleMcs")]
-        public string ResultSampleMcs { get; set; }
+        public string ResultSampleMcs
+        {
+            get => resultSampleMcs;
+            set => SetProperty(ref resultSampleMcs, value);
+        }
 
         /// <inheritdoc />
         protected override JobConfiguration GetPreparedInternal(ISimulation baseSimulation)

@@ -11,12 +11,17 @@ namespace Mocassin.UI.Xml.Jobs
     public class DopingValueGraph : ProjectObjectGraph, IDuplicable<DopingValueGraph>
     {
         private double value;
+        private ModelObjectReferenceGraph<Doping> doping;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> for the doping information
         /// </summary>
         [XmlElement("Doping")]
-        public ModelObjectReferenceGraph<Doping> Doping { get; set; }
+        public ModelObjectReferenceGraph<Doping> Doping
+        {
+            get => doping;
+            set => SetProperty(ref doping, value);
+        }
 
         /// <summary>
         ///     Get or set the value for the doping in the range [0;1]
@@ -25,7 +30,7 @@ namespace Mocassin.UI.Xml.Jobs
         public double Value
         {
             get => value;
-            set => this.value = value > 1.0 ? 1.0 : value < 0 ? 0 : value;
+            set => SetProperty(ref this.value, value > 1.0 ? 1.0 : value < 0 ? 0 : value);
         }
 
         /// <inheritdoc />

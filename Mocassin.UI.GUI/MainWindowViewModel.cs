@@ -182,7 +182,7 @@ namespace Mocassin.UI.GUI
             }
             catch (Exception)
             {
-                MessageBox.Show("Your settings file is corrupt, restoring defaults.",
+                MessageBox.Show("Your project settings file is corrupt, restoring defaults.",
                     "Error - Settings",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -199,8 +199,7 @@ namespace Mocassin.UI.GUI
         /// <param name="isOverwrite"></param>
         public void EnsureResourcesCreated(bool isOverwrite)
         {
-            var dir = Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(Resources.Folder_Userprofile_Resources));
-
+            Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(Resources.Folder_Userprofile_Resources));
             EnsureProjectConfigCreated(isOverwrite);
             EnsureSymmetryDatabaseCreated(isOverwrite);
         }

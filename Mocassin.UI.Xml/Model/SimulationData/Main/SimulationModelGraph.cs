@@ -14,22 +14,33 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot("SimulationModel")]
     public class SimulationModelGraph : ModelManagerGraph
     {
+        private List<MetropolisSimulationGraph> metropolisSimulations;
+        private List<KineticSimulationGraph> kineticSimulations;
+
         /// <summary>
         ///     Get or set the list of metropolis simulations
         /// </summary>
         [XmlArray("MetropolisSimulations")]
         [XmlArrayItem("MetropolisSimulation")]
-        public List<MetropolisSimulationGraph> MetropolisSimulations { get; set; }
+        public List<MetropolisSimulationGraph> MetropolisSimulations
+        {
+            get => metropolisSimulations;
+            set => SetProperty(ref metropolisSimulations, value);
+        }
 
         /// <summary>
         ///     Get or set the list of metropolis simulations
         /// </summary>
         [XmlArray("KineticSimulations")]
         [XmlArrayItem("KineticSimulation")]
-        public List<KineticSimulationGraph> KineticSimulations { get; set; }
+        public List<KineticSimulationGraph> KineticSimulations
+        {
+            get => kineticSimulations;
+            set => SetProperty(ref kineticSimulations, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="SimulationModelGraph"/> with empty component lists
+        ///     Creates new <see cref="SimulationModelGraph" /> with empty component lists
         /// </summary>
         public SimulationModelGraph()
         {

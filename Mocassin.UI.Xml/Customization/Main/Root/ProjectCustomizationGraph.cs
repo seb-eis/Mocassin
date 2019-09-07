@@ -15,12 +15,20 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("MocassinModelCustomizationGraph")]
     public class ProjectCustomizationGraph : ModelCustomizationEntity
     {
+        private string key;
+        private EnergyModelCustomizationGraph energyModelCustomization;
+        private TransitionModelCustomizationEntity transitionModelCustomization;
+
         /// <summary>
         ///     Get or set a key for the customization
         /// </summary>
         [XmlAttribute("Key")]
         [NotMapped]
-        public string Key { get; set; }
+        public string Key
+        {
+            get => key;
+            set => SetProperty(ref key, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="EnergyModelCustomizationGraph" /> that stores energy customization data
@@ -28,7 +36,11 @@ namespace Mocassin.UI.Xml.Customization
         [XmlElement("EnergyCustomization")]
         [ModelCustomizationRoot]
         [NotMapped]
-        public EnergyModelCustomizationGraph EnergyModelCustomization { get; set; }
+        public EnergyModelCustomizationGraph EnergyModelCustomization
+        {
+            get => energyModelCustomization;
+            set => SetProperty(ref energyModelCustomization, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="TransitionModelCustomizationEntity" /> that stores transition customization data
@@ -36,7 +48,11 @@ namespace Mocassin.UI.Xml.Customization
         [XmlElement("TransitionCustomization")]
         [ModelCustomizationRoot]
         [NotMapped]
-        public TransitionModelCustomizationEntity TransitionModelCustomization { get; set; }
+        public TransitionModelCustomizationEntity TransitionModelCustomization
+        {
+            get => transitionModelCustomization;
+            set => SetProperty(ref transitionModelCustomization, value);
+        }
 
         /// <summary>
         ///     Creates new <see cref="ProjectCustomizationGraph" /> with auto generated key value
@@ -59,7 +75,7 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Create a new <see cref="ProjectCustomizationGraph" /> by pulling all data from the passed
-        ///     <see cref="IModelProject" /> and <see cref="ProjectModelGraph"/> parent
+        ///     <see cref="IModelProject" /> and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="modelProject"></param>
         /// <param name="parent"></param>

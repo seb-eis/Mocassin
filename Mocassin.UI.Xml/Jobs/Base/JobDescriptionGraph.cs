@@ -14,41 +14,72 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot]
     public abstract class JobDescriptionGraph : ProjectObjectGraph
     {
+        private string executionFlags;
+        private string targetMcsp;
+        private string timeLimit;
+        private string temperature;
+        private string minimalSuccessRate;
+        private LatticeConfigurationGraph latticeConfiguration;
+
         /// <summary>
         ///     Get or set additional job info flags
         /// </summary>
         [XmlAttribute("JobFlags")]
-        public string ExecutionFlags { get; set; }
+        public string ExecutionFlags
+        {
+            get => executionFlags;
+            set => SetProperty(ref executionFlags, value);
+        }
 
         /// <summary>
         ///     The number of target MCSP as a string
         /// </summary>
         [XmlAttribute("TargetMcsp")]
-        public string TargetMcsp { get; set; }
+        public string TargetMcsp
+        {
+            get => targetMcsp;
+            set => SetProperty(ref targetMcsp, value);
+        }
 
         /// <summary>
         ///     Get or set the time limit of the simulation as a string
         /// </summary>
         [XmlAttribute("TimeLimit")]
-        public string TimeLimit { get; set; }
+        public string TimeLimit
+        {
+            get => timeLimit;
+            set => SetProperty(ref timeLimit, value);
+        }
 
         /// <summary>
         ///     Get or set the temperature value in [K] as a string
         /// </summary>
         [XmlAttribute("Temperature")]
-        public string Temperature { get; set; }
+        public string Temperature
+        {
+            get => temperature;
+            set => SetProperty(ref temperature, value);
+        }
 
         /// <summary>
         ///     Get or set the minimal success rate as a string
         /// </summary>
         [XmlAttribute("MinSuccessRate")]
-        public string MinimalSuccessRate { get; set; }
+        public string MinimalSuccessRate
+        {
+            get => minimalSuccessRate;
+            set => SetProperty(ref minimalSuccessRate, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="LatticeConfigurationGraph"/> of the job
         /// </summary>
         [XmlElement("LatticeConfiguration")]
-        public LatticeConfigurationGraph LatticeConfiguration { get; set; }
+        public LatticeConfigurationGraph LatticeConfiguration
+        {
+            get => latticeConfiguration;
+            set => SetProperty(ref latticeConfiguration, value);
+        }
 
         /// <inheritdoc />
         protected JobDescriptionGraph()

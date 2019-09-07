@@ -17,26 +17,42 @@ namespace Mocassin.UI.Xml.ParticleModel
         /// </summary>
         public static readonly ParticleGraph VoidParticle = new ParticleGraph {Key = Particle.CreateEmpty().Key, Name = "Void"};
 
+        private double charge;
+        private string symbol;
+        private bool isVacancy;
+
         /// <summary>
         ///     Get or set the charge value of the particle as a string
         /// </summary>
         [XmlAttribute("Charge")]
         [JsonProperty("Charge")]
-        public double Charge { get; set; }
+        public double Charge
+        {
+            get => charge;
+            set => SetProperty(ref charge, value);
+        }
 
         /// <summary>
         ///     Get or set the symbol of the particle
         /// </summary>
         [XmlAttribute("Symbol")]
         [JsonProperty("Symbol")]
-        public string Symbol { get; set; }
+        public string Symbol
+        {
+            get => symbol;
+            set => SetProperty(ref symbol, value);
+        }
 
         /// <summary>
         ///     Get or set the boolean flag that enables the vacancy behavior of the particle
         /// </summary>
         [XmlAttribute("IsVacancy")]
         [JsonProperty("IsVacancy")]
-        public bool IsVacancy { get; set; }
+        public bool IsVacancy
+        {
+            get => isVacancy;
+            set => SetProperty(ref isVacancy, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

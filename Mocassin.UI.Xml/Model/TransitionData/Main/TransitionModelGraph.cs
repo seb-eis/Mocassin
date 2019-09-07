@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -15,43 +14,69 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("TransitionModel")]
     public class TransitionModelGraph : ModelManagerGraph
     {
+        private List<StateExchangePairGraph> stateExchangePairs;
+        private List<StateExchangeGroupGraph> stateExchangeGroups;
+        private List<AbstractTransitionGraph> abstractTransitions;
+        private List<KineticTransitionGraph> kineticTransitions;
+        private List<MetropolisTransitionGraph> metropolisTransitions;
+
         /// <summary>
         ///     Get or set the list of state exchange input objects
         /// </summary>
         [XmlArray("StateChanges")]
         [XmlArrayItem("StateChange")]
-        public List<StateExchangePairGraph> StateExchangePairs { get; set; }
+        public List<StateExchangePairGraph> StateExchangePairs
+        {
+            get => stateExchangePairs;
+            set => SetProperty(ref stateExchangePairs, value);
+        }
 
         /// <summary>
         ///     Get or set the list of state exchange input objects
         /// </summary>
         [XmlArray("StateChangeGroups")]
         [XmlArrayItem("StateChangeGroup")]
-        public List<StateExchangeGroupGraph> StateExchangeGroups { get; set; }
+        public List<StateExchangeGroupGraph> StateExchangeGroups
+        {
+            get => stateExchangeGroups;
+            set => SetProperty(ref stateExchangeGroups, value);
+        }
 
         /// <summary>
         ///     Get or set the list of abstract transition input objects
         /// </summary>
         [XmlArray("AbstractTransitions")]
         [XmlArrayItem("AbstractTransition")]
-        public List<AbstractTransitionGraph> AbstractTransitions { get; set; }
+        public List<AbstractTransitionGraph> AbstractTransitions
+        {
+            get => abstractTransitions;
+            set => SetProperty(ref abstractTransitions, value);
+        }
 
         /// <summary>
         ///     Get or set the list of kinetic transition input objects
         /// </summary>
         [XmlArray("KineticTransitions")]
         [XmlArrayItem("KineticTransition")]
-        public List<KineticTransitionGraph> KineticTransitions { get; set; }
+        public List<KineticTransitionGraph> KineticTransitions
+        {
+            get => kineticTransitions;
+            set => SetProperty(ref kineticTransitions, value);
+        }
 
         /// <summary>
         ///     Get or set the list of metropolis transition input objects
         /// </summary>
         [XmlArray("MetropolisTransitions")]
         [XmlArrayItem("MetropolisTransition")]
-        public List<MetropolisTransitionGraph> MetropolisTransitions { get; set; }
+        public List<MetropolisTransitionGraph> MetropolisTransitions
+        {
+            get => metropolisTransitions;
+            set => SetProperty(ref metropolisTransitions, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="TransitionModelGraph"/> with empty component lists
+        ///     Creates new <see cref="TransitionModelGraph" /> with empty component lists
         /// </summary>
         public TransitionModelGraph()
         {

@@ -11,13 +11,19 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot]
     public abstract class MocassinProjectChildEntity<TParent> : ProjectObjectGraph where TParent : class
     {
+        private TParent parent;
+
         /// <summary>
         ///     Get or set the parent navigation property
         /// </summary>
         [XmlIgnore]
         [JsonIgnore]
         [NotMapped]
-        public TParent Parent { get; set; }
+        public TParent Parent
+        {
+            get => parent;
+            set => SetProperty(ref parent, value);
+        }
 
         /// <summary>
         ///     Get or set the contents of the object by a json string representation

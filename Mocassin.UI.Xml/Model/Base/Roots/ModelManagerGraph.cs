@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -12,7 +10,7 @@ namespace Mocassin.UI.Xml.Base
     ///     <see cref="Mocassin.Model.Basic.IModelManager" /> input pipelines
     /// </summary>
     [XmlRoot]
-    public abstract class ModelManagerGraph
+    public abstract class ModelManagerGraph : PropertyChangeNotifier
     {
         /// <summary>
         ///     Get the sequence of model input parameters defined in the data root
@@ -27,7 +25,7 @@ namespace Mocassin.UI.Xml.Base
         public abstract IEnumerable<IModelObject> GetInputObjects();
 
         /// <summary>
-        /// Get the complete sequence of model parameters and model objects
+        ///     Get the complete sequence of model parameters and model objects
         /// </summary>
         /// <returns></returns>
         public virtual IEnumerable<object> GetInputSequence()

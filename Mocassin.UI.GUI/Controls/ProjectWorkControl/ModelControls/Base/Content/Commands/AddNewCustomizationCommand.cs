@@ -15,13 +15,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class AddNewCustomizationCommand : AsyncProjectControlCommand
     {
+        /// <summary>
+        ///     Get the getter delegate for the <see cref="MocassinProjectGraph"/>
+        /// </summary>
         private Func<MocassinProjectGraph> ProjectGetter { get; }
 
+        /// <summary>
+        ///     Get an <see cref="Action"/> to be executed on success
+        /// </summary>
+        private Action OnSuccessAction { get; }
+
         /// <inheritdoc />
-        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter)
+        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter, Action onSuccessAction)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
+            OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
@@ -44,16 +53,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private void TryAddCustomization(MocassinProjectGraph projectGraph)
         {
             if (projectGraph == null) return;
-            var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl);
-            var status = validator.TryCreateCustomization(out var customization);
 
-            if (status != ModelValidationStatus.NoErrorsDetected)
+            using (var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl))
             {
-                ShowErrorMessageBox(status);
-                return;
-            }
+                var status = validator.TryCreateCustomization(out var customization);
 
-            projectGraph.ProjectCustomizationGraphs.Add(customization);
+                if (status != ModelValidationStatus.NoErrorsDetected)
+                {
+                    ShowErrorMessageBox(status);
+                    return;
+                }    
+                projectGraph.ProjectCustomizationGraphs.Add(customization);
+            }
+            OnSuccessAction?.Invoke();
         }
 
         /// <summary>

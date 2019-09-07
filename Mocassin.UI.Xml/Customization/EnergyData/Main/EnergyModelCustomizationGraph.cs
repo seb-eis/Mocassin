@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.Xml.Model;
-using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.Customization
 {
@@ -17,26 +15,42 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("EnergyModelCustomization")]
     public class EnergyModelCustomizationGraph : ModelCustomizationEntity
     {
+        private List<PairEnergySetGraph> stablePairEnergyParameterSets;
+        private List<PairEnergySetGraph> unstablePairEnergyParameterSets;
+        private List<GroupEnergySetGraph> groupEnergyParameterSets;
+
         /// <summary>
         ///     Get or set the list of <see cref="Mocassin.Model.Energies.ISymmetricPairInteraction" /> customization data sets
         /// </summary>
         [XmlArray("StablePairEnergySets")]
         [XmlArrayItem("PairEnergySet")]
-        public List<PairEnergySetGraph> StablePairEnergyParameterSets { get; set; }
+        public List<PairEnergySetGraph> StablePairEnergyParameterSets
+        {
+            get => stablePairEnergyParameterSets;
+            set => SetProperty(ref stablePairEnergyParameterSets, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="Mocassin.Model.Energies.IAsymmetricPairInteraction" /> customization data sets
         /// </summary>
         [XmlArray("UnstablePairEnergySets")]
         [XmlArrayItem("PairEnergySet")]
-        public List<PairEnergySetGraph> UnstablePairEnergyParameterSets { get; set; }
+        public List<PairEnergySetGraph> UnstablePairEnergyParameterSets
+        {
+            get => unstablePairEnergyParameterSets;
+            set => SetProperty(ref unstablePairEnergyParameterSets, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="Mocassin.Model.Energies.IGroupInteraction" /> customization data sets
         /// </summary>
         [XmlArray("GroupEnergySets")]
         [XmlArrayItem("GroupEnergySet")]
-        public List<GroupEnergySetGraph> GroupEnergyParameterSets { get; set; }
+        public List<GroupEnergySetGraph> GroupEnergyParameterSets
+        {
+            get => groupEnergyParameterSets;
+            set => SetProperty(ref groupEnergyParameterSets, value);
+        }
 
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)
@@ -84,7 +98,8 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Creates a new <see cref="EnergyModelCustomizationGraph" /> by transforming all defined data in the passed
-        ///     <see cref="IEnergySetterProvider" /> into serializable data formats referencing the <see cref="ProjectModelGraph"/> parent
+        ///     <see cref="IEnergySetterProvider" /> into serializable data formats referencing the
+        ///     <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="energySetterProvider"></param>
         /// <param name="parent"></param>

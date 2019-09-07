@@ -17,21 +17,36 @@ namespace Mocassin.UI.Xml.Main
     [XmlRoot("MocassinProject")]
     public class MocassinProjectGraph : MocassinProjectEntity
     {
+        private string projectGuid;
+        private ProjectModelGraph projectModelGraph;
+        private List<ProjectCustomizationGraph> projectCustomizationGraphs;
+        private List<ProjectJobTranslationGraph> projectJobTranslationGraphs;
+        private List<MocassinProjectBuildGraph> projectBuildGraphs;
+        private ResourcesGraph resources;
+
         /// <summary>
         ///     Get or set a Guid for the project
         /// </summary>
         [XmlAttribute("ProjectGuid")]
-        public string ProjectGuid { get; set; }
+        public string ProjectGuid
+        {
+            get => projectGuid;
+            set => SetProperty(ref projectGuid, value);
+        }
 
         /// <summary>
-        ///     Get or set a name for the project
+        ///     Get or set a name for the project (Alias property)
         /// </summary>
         [XmlIgnore]
         [JsonIgnore]
         public string ProjectName
         {
             get => Name;
-            set => Name = value;
+            set
+            {
+                Name = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -51,7 +66,11 @@ namespace Mocassin.UI.Xml.Main
         /// </summary>
         [XmlElement("ProjectModelGraph")]
         [NotMapped]
-        public ProjectModelGraph ProjectModelGraph { get; set; }
+        public ProjectModelGraph ProjectModelGraph
+        {
+            get => projectModelGraph;
+            set => SetProperty(ref projectModelGraph, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="ProjectCustomizationGraph" /> that defines parameters for auto generated content
@@ -59,7 +78,11 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("ModelCustomizations")]
         [XmlArrayItem("ModelCustomization")]
         [NotMapped]
-        public List<ProjectCustomizationGraph> ProjectCustomizationGraphs { get; set; }
+        public List<ProjectCustomizationGraph> ProjectCustomizationGraphs
+        {
+            get => projectCustomizationGraphs;
+            set => SetProperty(ref projectCustomizationGraphs, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="ProjectJobTranslationGraph" /> that defines
@@ -68,7 +91,11 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("DbCreationInstructions")]
         [XmlArrayItem("DbCreationInstruction")]
         [NotMapped]
-        public List<ProjectJobTranslationGraph> ProjectJobTranslationGraphs { get; set; }
+        public List<ProjectJobTranslationGraph> ProjectJobTranslationGraphs
+        {
+            get => projectJobTranslationGraphs;
+            set => SetProperty(ref projectJobTranslationGraphs, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="MocassinProjectBuildGraph" /> that defines
@@ -77,14 +104,22 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("BuildGraphs")]
         [XmlArrayItem("BuildGraph")]
         [NotMapped]
-        public List<MocassinProjectBuildGraph> ProjectBuildGraphs { get; set; }
+        public List<MocassinProjectBuildGraph> ProjectBuildGraphs
+        {
+            get => projectBuildGraphs;
+            set => SetProperty(ref projectBuildGraphs, value);
+        }
 
         /// <summary>
-        ///     Get or set the <see cref="ResourcesGraph"/> for the project
+        ///     Get or set the <see cref="ResourcesGraph" /> for the project
         /// </summary>
         [NotMapped]
         [XmlIgnore]
-        public ResourcesGraph Resources { get; set; }
+        public ResourcesGraph Resources
+        {
+            get => resources;
+            set => SetProperty(ref resources, value);
+        }
 
         /// <summary>
         ///     Create empty <see cref="MocassinProjectGraph" />

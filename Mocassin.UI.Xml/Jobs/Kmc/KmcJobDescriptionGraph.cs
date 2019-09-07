@@ -14,29 +14,50 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("KmcJobConfig")]
     public class KmcJobDescriptionGraph : JobDescriptionGraph, IDuplicable<KmcJobDescriptionGraph>
     {
+        private string preRunMcsp;
+        private string electricFieldModulus;
+        private string normalizationProbability;
+        private string maxAttemptFrequency;
+
         /// <summary>
         ///     Get or set the pre run monte carlo steps per particle as a string
         /// </summary>
         [XmlAttribute("PrerunMcsp")]
-        public string PreRunMcsp { get; set; }
+        public string PreRunMcsp
+        {
+            get => preRunMcsp;
+            set => SetProperty(ref preRunMcsp, value);
+        }
 
         /// <summary>
         ///     Get or set the modulus of the electric field in [V/m] as a string
         /// </summary>
         [XmlAttribute("ElectricFieldModulus")]
-        public string ElectricFieldModulus { get; set; }
+        public string ElectricFieldModulus
+        {
+            get => electricFieldModulus;
+            set => SetProperty(ref electricFieldModulus, value);
+        }
 
         /// <summary>
         ///     Get or set the fixed normalization probability as a string
         /// </summary>
         [XmlAttribute("NormalizationProbability")]
-        public string NormalizationProbability { get; set; }
+        public string NormalizationProbability
+        {
+            get => normalizationProbability;
+            set => SetProperty(ref normalizationProbability, value);
+        }
 
         /// <summary>
         ///     Get or set the overwrite max attempt frequency in [Hz] as a string
         /// </summary>
         [XmlAttribute("MaxAttemptFrequency")]
-        public string MaxAttemptFrequency { get; set; }
+        public string MaxAttemptFrequency
+        {
+            get => maxAttemptFrequency;
+            set => SetProperty(ref maxAttemptFrequency, value);
+        }
 
         /// <inheritdoc />
         protected override JobConfiguration GetPreparedInternal(ISimulation baseSimulation)

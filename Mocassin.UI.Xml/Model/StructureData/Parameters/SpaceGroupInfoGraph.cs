@@ -13,23 +13,39 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot("SpaceGroup")]
     public class SpaceGroupInfoGraph : ModelParameterGraph
     {
+        private int number;
+        private string literal;
+        private string specifier;
+
         /// <summary>
         ///     Get or set the number of the space group
         /// </summary>
         [XmlAttribute("Number")]
-        public int Number { get; set; }
+        public int Number
+        {
+            get => number;
+            set => SetProperty(ref number, value);
+        }
 
         /// <summary>
         ///     Get or set the literal name of the space group
         /// </summary>
         [XmlAttribute("Literal")]
-        public string Literal { get; set; }
+        public string Literal
+        {
+            get => literal;
+            set => SetProperty(ref literal, value);
+        }
 
         /// <summary>
         ///     Get or set the literal specifier of the space group
         /// </summary>
         [XmlAttribute("Specifier")]
-        public string Specifier { get; set; }
+        public string Specifier
+        {
+            get => specifier;
+            set => SetProperty(ref specifier, value);
+        }
 
         /// <summary>
         ///     Create default space group info object
@@ -67,7 +83,7 @@ namespace Mocassin.UI.Xml.StructureModel
         }
 
         /// <summary>
-        ///     Populates the <see cref="SpaceGroupInfoGraph"/> from the passed <see cref="SpaceGroupEntry"/>
+        ///     Populates the <see cref="SpaceGroupInfoGraph" /> from the passed <see cref="SpaceGroupEntry" />
         /// </summary>
         /// <param name="entry"></param>
         public void PopulateFrom(SpaceGroupEntry entry)

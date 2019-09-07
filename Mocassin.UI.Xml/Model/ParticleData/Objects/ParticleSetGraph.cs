@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
-using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.ParticleModel
 {
@@ -14,11 +13,17 @@ namespace Mocassin.UI.Xml.ParticleModel
     [XmlRoot("ParticleSet")]
     public class ParticleSetGraph : ModelObjectGraph
     {
+        private List<ModelObjectReferenceGraph<Particle>> particles;
+
         /// <summary>
         ///     List of particles contained in the set
         /// </summary>
         [XmlElement("Particle")]
-        public List<ModelObjectReferenceGraph<Particle>> Particles { get; set; }
+        public List<ModelObjectReferenceGraph<Particle>> Particles
+        {
+            get => particles;
+            set => SetProperty(ref particles, value);
+        }
 
         /// <summary>
         ///     creates new <see cref="ParticleSetGraph" /> with empty component lists

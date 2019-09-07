@@ -15,33 +15,54 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("LatticeConfiguration")]
     public class LatticeConfigurationGraph : ProjectObjectGraph, IDuplicable<LatticeConfigurationGraph>
     {
+        private int sizeA;
+        private int sizeB;
+        private int sizeC;
+        private List<DopingValueGraph> dopingValues;
+
         /// <summary>
         ///     Get or set the number of unit cells in 'A' direction
         /// </summary>
         [XmlAttribute("SizeA")]
-        public int SizeA { get; set; }
+        public int SizeA
+        {
+            get => sizeA;
+            set => SetProperty(ref sizeA, value);
+        }
 
         /// <summary>
         ///     Get or set the number of unit cells in 'B' direction
         /// </summary>
         [XmlAttribute("SizeB")]
-        public int SizeB { get; set; }
+        public int SizeB
+        {
+            get => sizeB;
+            set => SetProperty(ref sizeB, value);
+        }
 
         /// <summary>
         ///     Get or set the number of unit cells in 'C' direction
         /// </summary>
         [XmlAttribute("SizeC")]
-        public int SizeC { get; set; }
+        public int SizeC
+        {
+            get => sizeC;
+            set => SetProperty(ref sizeC, value);
+        }
 
         /// <summary>
-        ///     Get or set the list of <see cref="DopingValueGraph"/> information
+        ///     Get or set the list of <see cref="DopingValueGraph" /> information
         /// </summary>
         [XmlArray("DopingValues")]
         [XmlArrayItem("DopingValue")]
-        public List<DopingValueGraph> DopingValues { get; set; }
+        public List<DopingValueGraph> DopingValues
+        {
+            get => dopingValues;
+            set => SetProperty(ref dopingValues, value);
+        }
 
         /// <summary>
-        ///     Creates a new <see cref="LatticeConfigurationGraph"/> with default size
+        ///     Creates a new <see cref="LatticeConfigurationGraph" /> with default size
         /// </summary>
         public LatticeConfigurationGraph()
         {
@@ -50,7 +71,7 @@ namespace Mocassin.UI.Xml.Jobs
         }
 
         /// <summary>
-        ///     Creates an internal <see cref="LatticeConfiguration"/> from the serializable data object
+        ///     Creates an internal <see cref="LatticeConfiguration" /> from the serializable data object
         /// </summary>
         /// <param name="modelProject"></param>
         /// <returns></returns>

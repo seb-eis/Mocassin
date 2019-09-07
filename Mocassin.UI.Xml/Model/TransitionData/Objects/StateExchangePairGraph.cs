@@ -12,17 +12,28 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("StateChange")]
     public class StateExchangePairGraph : ModelObjectGraph
     {
+        private string donorParticleKey;
+        private string acceptorParticleKey;
+
         /// <summary>
         ///     Get or set the donor state particle key
         /// </summary>
         [XmlAttribute("DonorState")]
-        public string DonorParticleKey { get; set; }
+        public string DonorParticleKey
+        {
+            get => donorParticleKey;
+            set => SetProperty(ref donorParticleKey, value);
+        }
 
         /// <summary>
         ///     Get or set the acceptor state particle key
         /// </summary>
         [XmlAttribute("AcceptorState")]
-        public string AcceptorParticleKey { get; set; }
+        public string AcceptorParticleKey
+        {
+            get => acceptorParticleKey;
+            set => SetProperty(ref acceptorParticleKey, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

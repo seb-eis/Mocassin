@@ -16,12 +16,18 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("TransitionModelCustomization")]
     public class TransitionModelCustomizationEntity : ModelCustomizationEntity
     {
+        private List<KineticRuleSetGraph> kineticTransitionParameterSets;
+
         /// <summary>
         ///     Get or set the list of <see cref="KineticRuleSetGraph" /> objects
         /// </summary>
         [XmlArray("KineticTransitionSets")]
         [XmlArrayItem("KineticTransitionSet")]
-        public List<KineticRuleSetGraph> KineticTransitionParameterSets { get; set; }
+        public List<KineticRuleSetGraph> KineticTransitionParameterSets
+        {
+            get => kineticTransitionParameterSets;
+            set => SetProperty(ref kineticTransitionParameterSets, value);
+        }
 
         /// <inheritdoc />
         public override void PushToModel(IModelProject modelProject)

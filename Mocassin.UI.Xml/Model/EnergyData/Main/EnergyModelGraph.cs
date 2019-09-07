@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using Mocassin.Framework.Processing;
 using Mocassin.Model.Basic;
 using Mocassin.UI.Xml.Base;
 
@@ -15,28 +13,44 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot("EnergyModel")]
     public class EnergyModelGraph : ModelManagerGraph
     {
+        private StableEnvironmentGraph stableEnvironment;
+        private List<UnstableEnvironmentGraph> unstableEnvironments;
+        private List<GroupInteractionGraph> groupInteractions;
+
         /// <summary>
         ///     Get or set the stable environment info of the energy model
         /// </summary>
         [XmlElement("StableEnvironmentSetting")]
-        public StableEnvironmentGraph StableEnvironment { get; set; }
+        public StableEnvironmentGraph StableEnvironment
+        {
+            get => stableEnvironment;
+            set => SetProperty(ref stableEnvironment, value);
+        }
 
         /// <summary>
         ///     Get or set the list of unstable environments of the energy model
         /// </summary>
         [XmlArray("UnstableEnvironments")]
         [XmlArrayItem("UnstableEnvironment")]
-        public List<UnstableEnvironmentGraph> UnstableEnvironments { get; set; }
+        public List<UnstableEnvironmentGraph> UnstableEnvironments
+        {
+            get => unstableEnvironments;
+            set => SetProperty(ref unstableEnvironments, value);
+        }
 
         /// <summary>
         ///     Get or set the list of unstable environments of the energy model
         /// </summary>
-        [XmlArray("GroupInteractions")] 
+        [XmlArray("GroupInteractions")]
         [XmlArrayItem("GroupInteraction")]
-        public List<GroupInteractionGraph> GroupInteractions { get; set; }
+        public List<GroupInteractionGraph> GroupInteractions
+        {
+            get => groupInteractions;
+            set => SetProperty(ref groupInteractions, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="EnergyModelGraph"/> with empty component lists
+        ///     Creates new <see cref="EnergyModelGraph" /> with empty component lists
         /// </summary>
         public EnergyModelGraph()
         {

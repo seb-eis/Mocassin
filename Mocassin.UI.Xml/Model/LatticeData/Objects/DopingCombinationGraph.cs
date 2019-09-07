@@ -14,26 +14,42 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot("DopingCombination")]
     public class DopingCombinationGraph : ModelObjectGraph
     {
+        private ModelObjectReferenceGraph<Particle> dopable;
+        private ModelObjectReferenceGraph<Particle> dopant;
+        private ModelObjectReferenceGraph<UnitCellPosition> unitCellPosition;
+
         /// <summary>
         ///     Particle that is replaced by dopant
         /// </summary>
         [XmlElement("Dopable")]
         [JsonProperty("Dopable")]
-        public ModelObjectReferenceGraph<Particle> Dopable { get; set; }
+        public ModelObjectReferenceGraph<Particle> Dopable
+        {
+            get => dopable;
+            set => SetProperty(ref dopable, value);
+        }
 
         /// <summary>
         ///     Particle that is used as dopant
         /// </summary>
         [XmlElement("Dopant")]
         [JsonProperty("Dopant")]
-        public ModelObjectReferenceGraph<Particle> Dopant { get; set; }
+        public ModelObjectReferenceGraph<Particle> Dopant
+        {
+            get => dopant;
+            set => SetProperty(ref dopant, value);
+        }
 
         /// <summary>
         ///     Unit cell position on which the doping is applied
         /// </summary>
         [XmlElement("UnitCellPosition")]
         [JsonProperty("UnitCellPosition")]
-        public ModelObjectReferenceGraph<UnitCellPosition> UnitCellPosition { get; set; }
+        public ModelObjectReferenceGraph<UnitCellPosition> UnitCellPosition
+        {
+            get => unitCellPosition;
+            set => SetProperty(ref unitCellPosition, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

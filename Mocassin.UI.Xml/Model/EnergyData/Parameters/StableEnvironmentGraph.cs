@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Energies;
 using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.Customization;
 
 namespace Mocassin.UI.Xml.EnergyModel
 {
@@ -14,24 +13,40 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot("StableEnvironmentInfo")]
     public class StableEnvironmentGraph : ModelParameterGraph
     {
+        private double maxInteractionRange;
+        private List<InteractionFilterGraph> interactionFilters;
+        private DefectBackgroundGraph defectBackground;
+
         /// <summary>
         ///     Get or set the interaction cutoff range in [Ang]
         /// </summary>
         [XmlAttribute("InteractionRadius")]
-        public double MaxInteractionRange { get; set; }
+        public double MaxInteractionRange
+        {
+            get => maxInteractionRange;
+            set => SetProperty(ref maxInteractionRange, value);
+        }
 
         /// <summary>
         ///     Get or set the list of interaction filters for stable environments
         /// </summary>
         [XmlArray("InteractionFilters")]
         [XmlArrayItem("Filter")]
-        public List<InteractionFilterGraph> InteractionFilters { get; set; }
+        public List<InteractionFilterGraph> InteractionFilters
+        {
+            get => interactionFilters;
+            set => SetProperty(ref interactionFilters, value);
+        }
 
         /// <summary>
-        ///     Get or set the <see cref="DefectBackgroundGraph"/> for stable environments
+        ///     Get or set the <see cref="DefectBackgroundGraph" /> for stable environments
         /// </summary>
         [XmlElement("DefectBackground")]
-        public DefectBackgroundGraph DefectBackground { get; set; }
+        public DefectBackgroundGraph DefectBackground
+        {
+            get => defectBackground;
+            set => SetProperty(ref defectBackground, value);
+        }
 
         /// <summary>
         ///     Creates new <see cref="StableEnvironmentGraph" /> with empty component lists

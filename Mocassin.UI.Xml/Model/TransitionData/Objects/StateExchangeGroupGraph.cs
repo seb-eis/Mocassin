@@ -13,14 +13,20 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("StateChangeGroup")]
     public class StateExchangeGroupGraph : ModelObjectGraph
     {
+        private List<ModelObjectReferenceGraph<StateExchangePair>> stateExchangePairs;
+
         /// <summary>
         ///     Get or set the list of state exchange pairs contained in the exchange group
         /// </summary>
         [XmlElement("StateChange")]
-        public List<ModelObjectReferenceGraph<StateExchangePair>> StateExchangePairs { get; set; }
+        public List<ModelObjectReferenceGraph<StateExchangePair>> StateExchangePairs
+        {
+            get => stateExchangePairs;
+            set => SetProperty(ref stateExchangePairs, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="StateExchangeGroupGraph"/> with empty component lists
+        ///     Creates new <see cref="StateExchangeGroupGraph" /> with empty component lists
         /// </summary>
         public StateExchangeGroupGraph()
         {

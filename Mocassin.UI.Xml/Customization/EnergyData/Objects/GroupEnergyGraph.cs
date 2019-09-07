@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
@@ -19,23 +18,40 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("GroupEnergyEntry")]
     public class GroupEnergyGraph : ProjectObjectGraph, IComparable<GroupEnergyGraph>
     {
+        private ModelObjectReferenceGraph<Particle> centerParticle;
+        private double energy;
+        private OccupationStateGraph occupationState;
+
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> of the <see cref="Particle"/> that describes the center occupation
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> of the <see cref="Particle" /> that describes the center
+        ///     occupation
         /// </summary>
         [XmlElement("CenterParticle")]
-        public ModelObjectReferenceGraph<Particle> CenterParticle { get; set; }
+        public ModelObjectReferenceGraph<Particle> CenterParticle
+        {
+            get => centerParticle;
+            set => SetProperty(ref centerParticle, value);
+        }
 
         /// <summary>
         ///     Get or set the energy value in [eV]
         /// </summary>
         [XmlAttribute("Energy")]
-        public double Energy { get; set; }
+        public double Energy
+        {
+            get => energy;
+            set => SetProperty(ref energy, value);
+        }
 
         /// <summary>
         ///     Get or set the occupation state of the surrounding positions
         /// </summary>
         [XmlElement("Surroundings")]
-        public OccupationStateGraph OccupationState { get; set; }
+        public OccupationStateGraph OccupationState
+        {
+            get => occupationState;
+            set => SetProperty(ref occupationState, value);
+        }
 
         /// <summary>
         ///     Get the contained information as a <see cref="GroupEnergyEntry" /> entry that is valid in the context of the passed
@@ -45,13 +61,13 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public GroupEnergyEntry ToInternal(IModelProject modelProject)
         {
-            var centerParticle = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key);
-            return new GroupEnergyEntry(centerParticle, OccupationState.ToInternal(modelProject), Energy);
+            var center = modelProject.DataTracker.FindObjectByKey<IParticle>(CenterParticle.Key);
+            return new GroupEnergyEntry(center, OccupationState.ToInternal(modelProject), Energy);
         }
 
         /// <summary>
         ///     Creates a new serializable <see cref="GroupEnergyGraph" /> by pulling the required data from the passed
-        ///     <see cref="GroupEnergyEntry" /> context and <see cref="ProjectModelGraph"/> parent
+        ///     <see cref="GroupEnergyEntry" /> context and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="energyEntry"></param>
         /// <param name="parent"></param>
@@ -90,7 +106,8 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Creates a short <see cref="string"/> description for a <see cref="IOccupationState"/> interface and center <see cref="IParticle"/>
+        ///     Creates a short <see cref="string" /> description for a <see cref="IOccupationState" /> interface and center
+        ///     <see cref="IParticle" />
         /// </summary>
         /// <param name="center"></param>
         /// <param name="state"></param>
@@ -98,10 +115,7 @@ namespace Mocassin.UI.Xml.Customization
         public static string GetOccupationIonString(IParticle center, IOccupationState state)
         {
             var builder = new StringBuilder(100);
-            foreach (var particle in center.AsSingleton().Concat(state))
-            {
-                builder.Append($"[{particle.GetIonString()}]");
-            }
+            foreach (var particle in center.AsSingleton().Concat(state)) builder.Append($"[{particle.GetIonString()}]");
 
             return builder.ToString();
         }

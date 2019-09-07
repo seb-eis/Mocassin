@@ -14,27 +14,43 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot("UnstableEnvironment")]
     public class UnstableEnvironmentGraph : ModelObjectGraph
     {
+        private double maxInteractionRange;
+        private string unitCellPositionKey;
+        private List<InteractionFilterGraph> interactionFilters;
+
         /// <summary>
         ///     Get or set the maximum interaction range
         /// </summary>
         [XmlAttribute("InteractionRadius")]
-        public double MaxInteractionRange { get; set; }
+        public double MaxInteractionRange
+        {
+            get => maxInteractionRange;
+            set => SetProperty(ref maxInteractionRange, value);
+        }
 
         /// <summary>
         ///     Get or set the key of the center unit cell position
         /// </summary>
         [XmlAttribute("WyckoffPosition")]
-        public string UnitCellPositionKey { get; set; }
+        public string UnitCellPositionKey
+        {
+            get => unitCellPositionKey;
+            set => SetProperty(ref unitCellPositionKey, value);
+        }
 
         /// <summary>
         ///     Get or set the list of interaction filters of the environment
         /// </summary>
         [XmlArray("InteractionFilters")]
         [XmlArrayItem("Filter")]
-        public List<InteractionFilterGraph> InteractionFilters { get; set; }
+        public List<InteractionFilterGraph> InteractionFilters
+        {
+            get => interactionFilters;
+            set => SetProperty(ref interactionFilters, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="UnstableEnvironmentGraph"/> with empty component lists
+        ///     Creates new <see cref="UnstableEnvironmentGraph" /> with empty component lists
         /// </summary>
         public UnstableEnvironmentGraph()
         {

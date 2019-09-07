@@ -13,23 +13,39 @@ namespace Mocassin.UI.Xml.StructureModel
     [XmlRoot("PositonDummy")]
     public class DummyPositionGraph : ModelObjectGraph
     {
+        private double a;
+        private double b;
+        private double c;
+
         /// <summary>
         ///     Get or set the coordinate value in A direction in [Ang]
         /// </summary>
         [XmlAttribute("A")]
-        public double A { get; set; }
+        public double A
+        {
+            get => a;
+            set => SetProperty(ref a, value);
+        }
 
         /// <summary>
         ///     Get or set the coordinate value in B direction in [Ang]
         /// </summary>
         [XmlAttribute("B")]
-        public double B { get; set; }
+        public double B
+        {
+            get => b;
+            set => SetProperty(ref b, value);
+        }
 
         /// <summary>
         ///     Get or set the coordinate value in C direction in [Ang]
         /// </summary>
         [XmlAttribute("C")]
-        public double C { get; set; }
+        public double C
+        {
+            get => c;
+            set => SetProperty(ref c, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

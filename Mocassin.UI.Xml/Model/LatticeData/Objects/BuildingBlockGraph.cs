@@ -5,7 +5,6 @@ using Mocassin.Model.Basic;
 using Mocassin.Model.Lattices;
 using Mocassin.Model.Particles;
 using Mocassin.UI.Xml.Base;
-using Newtonsoft.Json;
 
 namespace Mocassin.UI.Xml.LatticeModel
 {
@@ -15,27 +14,32 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot("BuildingBlock")]
     public class BuildingBlockGraph : ModelObjectGraph
     {
-		/// <summary>
-		/// List of particles which define the building block
-		/// </summary>
-		[XmlArray("ParticleList")]
-		[XmlArrayItem("Particle")]
-	    public List<ModelObjectReferenceGraph<Particle>> ParticleList { get; set; }
+        private List<ModelObjectReferenceGraph<Particle>> particleList;
 
-	    public BuildingBlockGraph()
-	    {
-			ParticleList = new List<ModelObjectReferenceGraph<Particle>>();
-	    }
+        /// <summary>
+        ///     List of particles which define the building block
+        /// </summary>
+        [XmlArray("ParticleList")]
+        [XmlArrayItem("Particle")]
+        public List<ModelObjectReferenceGraph<Particle>> ParticleList
+        {
+            get => particleList;
+            set => SetProperty(ref particleList, value);
+        }
+
+        public BuildingBlockGraph()
+        {
+            ParticleList = new List<ModelObjectReferenceGraph<Particle>>();
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()
         {
-            var obj = new BuildingBlock()
-	        {
-				CellEntries = ParticleList.Select(x => new Particle(){Key=x.Key}).Cast<IParticle>().ToList()
-	        };
+            var obj = new BuildingBlock
+            {
+                CellEntries = ParticleList.Select(x => new Particle {Key = x.Key}).Cast<IParticle>().ToList()
+            };
             return obj;
         }
-
     }
 }

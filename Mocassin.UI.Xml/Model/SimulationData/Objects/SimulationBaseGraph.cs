@@ -13,47 +13,83 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot]
     public abstract class SimulationBaseGraph : ModelObjectGraph
     {
+        private string customRngSeed;
+        private double temperature = 1000;
+        private int targetMcsp = 1000;
+        private int simulationBlockCount = 100;
+        private string saveRunTimeLimit = "P1Y";
+        private double lowerSuccessRateLimit;
+        private int jobCount = 12;
+
         /// <summary>
         ///     Get or set the custom rng seed for the simulation
         /// </summary>
         [XmlAttribute("RngSeed")]
-        public string CustomRngSeed { get; set; }
+        public string CustomRngSeed
+        {
+            get => customRngSeed;
+            set => SetProperty(ref customRngSeed, value);
+        }
 
         /// <summary>
         ///     Get or set the base simulation temperature in [K]
         /// </summary>
         [XmlAttribute("Temperature")]
-        public double Temperature { get; set; } = 1000;
+        public double Temperature
+        {
+            get => temperature;
+            set => SetProperty(ref temperature, value);
+        }
 
         /// <summary>
         ///     Get or set the target MCSP value
         /// </summary>
         [XmlAttribute("Mcsp")]
-        public int TargetMcsp { get; set; } = 1000;
+        public int TargetMcsp
+        {
+            get => targetMcsp;
+            set => SetProperty(ref targetMcsp, value);
+        }
 
         /// <summary>
         ///     Get or set the number of simulation blocks
         /// </summary>
         [XmlAttribute("SimulationBlocks")]
-        public int SimulationBlockCount { get; set; } = 100;
+        public int SimulationBlockCount
+        {
+            get => simulationBlockCount;
+            set => SetProperty(ref simulationBlockCount, value);
+        }
 
         /// <summary>
         ///     Get or set the hard run limit as a time span
         /// </summary>
         [XmlAttribute("TimeLimit")]
-        public string SaveRunTimeLimit { get; set; } = "P1Y";
+        public string SaveRunTimeLimit
+        {
+            get => saveRunTimeLimit;
+            set => SetProperty(ref saveRunTimeLimit, value);
+        }
 
         /// <summary>
         ///     Get or set the hard lower success rate limit in [Hz]
         /// </summary>
         [XmlAttribute("MinSuccessRate")]
-        public double LowerSuccessRateLimit { get; set; }
+        public double LowerSuccessRateLimit
+        {
+            get => lowerSuccessRateLimit;
+            set => SetProperty(ref lowerSuccessRateLimit, value);
+        }
 
         /// <summary>
         ///     Get or set the basic job count multiplier
         /// </summary>
         [XmlAttribute("JobCount")]
-        public int JobCount { get; set; } = 12;
+        public int JobCount
+        {
+            get => jobCount;
+            set => SetProperty(ref jobCount, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

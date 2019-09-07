@@ -15,24 +15,40 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("KmcJobCollection")]
     public class KmcJobPackageDescriptionGraph : JobPackageDescriptionGraph, IDuplicable<KmcJobPackageDescriptionGraph>
     {
+        private ModelObjectReferenceGraph<KineticSimulation> simulation;
+        private KmcJobDescriptionGraph jobBaseDescription;
+        private List<KmcJobDescriptionGraph> jobConfigurations;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the target <see cref="KineticSimulation" />
         /// </summary>
         [XmlElement("BaseSimulation")]
-        public ModelObjectReferenceGraph<KineticSimulation> Simulation { get; set; }
+        public ModelObjectReferenceGraph<KineticSimulation> Simulation
+        {
+            get => simulation;
+            set => SetProperty(ref simulation, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="KmcJobDescriptionGraph" /> that provides the default values for the config sequence
         /// </summary>
         [XmlElement("JobBaseConfiguration")]
-        public KmcJobDescriptionGraph JobBaseDescription { get; set; }
+        public KmcJobDescriptionGraph JobBaseDescription
+        {
+            get => jobBaseDescription;
+            set => SetProperty(ref jobBaseDescription, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="KmcJobDescriptionGraph" /> objects of the collection
         /// </summary>
         [XmlArray("JobConfigurations")]
         [XmlArrayItem("JobConfiguration")]
-        public List<KmcJobDescriptionGraph> JobConfigurations { get; set; }
+        public List<KmcJobDescriptionGraph> JobConfigurations
+        {
+            get => jobConfigurations;
+            set => SetProperty(ref jobConfigurations, value);
+        }
 
         /// <inheritdoc />
         public KmcJobPackageDescriptionGraph()

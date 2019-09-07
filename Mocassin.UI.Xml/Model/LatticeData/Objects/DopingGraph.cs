@@ -12,40 +12,66 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot("Doping")]
     public class DopingGraph : ModelObjectGraph
     {
+        private ModelObjectReferenceGraph<DopingCombination> primaryDoping;
+        private ModelObjectReferenceGraph<DopingCombination> counterDoping;
+        private ModelObjectReferenceGraph<BuildingBlock> buildingBlock;
+        private bool useCounterDoping;
+        private int priority;
+
         /// <summary>
         ///     The doping which is applied
         /// </summary>
         [XmlElement("PrimaryDoping")]
         [JsonProperty("PrimaryDoping")]
-        public ModelObjectReferenceGraph<DopingCombination> PrimaryDoping { get; set; }
+        public ModelObjectReferenceGraph<DopingCombination> PrimaryDoping
+        {
+            get => primaryDoping;
+            set => SetProperty(ref primaryDoping, value);
+        }
 
         /// <summary>
         ///     The doping to compensate the primary doping
         /// </summary>
         [XmlElement("CounterDoping")]
         [JsonProperty("CounterDoping")]
-        public ModelObjectReferenceGraph<DopingCombination> CounterDoping { get; set; }
+        public ModelObjectReferenceGraph<DopingCombination> CounterDoping
+        {
+            get => counterDoping;
+            set => SetProperty(ref counterDoping, value);
+        }
 
         /// <summary>
         ///     The building block in which the doping is used
         /// </summary>
         [XmlElement("BuildingBlock")]
         [JsonProperty("BuildingBlock")]
-        public ModelObjectReferenceGraph<BuildingBlock> BuildingBlock { get; set; }
+        public ModelObjectReferenceGraph<BuildingBlock> BuildingBlock
+        {
+            get => buildingBlock;
+            set => SetProperty(ref buildingBlock, value);
+        }
 
         /// <summary>
         ///     Flag to indicate if a counter doping should be used
         /// </summary>
         [XmlAttribute("UseCounterDoping")]
         [JsonProperty("UseCounterDoping")]
-        public bool UseCounterDoping { get; set; }
+        public bool UseCounterDoping
+        {
+            get => useCounterDoping;
+            set => SetProperty(ref useCounterDoping, value);
+        }
 
         /// <summary>
         ///     The priority oder in which the doping is applied
         /// </summary>
         [XmlAttribute("Priority")]
         [JsonProperty("Priority")]
-        public int Priority { get; set; }
+        public int Priority
+        {
+            get => priority;
+            set => SetProperty(ref priority, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

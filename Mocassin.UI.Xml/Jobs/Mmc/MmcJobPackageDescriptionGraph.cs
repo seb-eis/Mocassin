@@ -15,24 +15,40 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("MmcJobCollection")]
     public class MmcJobPackageDescriptionGraph : JobPackageDescriptionGraph, IDuplicable<MmcJobPackageDescriptionGraph>
     {
+        private ModelObjectReferenceGraph<MetropolisSimulation> simulation;
+        private MmcJobDescriptionGraph jobBaseDescription;
+        private List<MmcJobDescriptionGraph> jobConfigurations;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the target <see cref="MetropolisSimulation" />
         /// </summary>
         [XmlElement("BaseSimulation")]
-        public ModelObjectReferenceGraph<MetropolisSimulation> Simulation { get; set; }
+        public ModelObjectReferenceGraph<MetropolisSimulation> Simulation
+        {
+            get => simulation;
+            set => SetProperty(ref simulation, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="MmcJobDescriptionGraph" /> that provides the default values for the config sequence
         /// </summary>
         [XmlElement("JobBaseConfiguration")]
-        public MmcJobDescriptionGraph JobBaseDescription { get; set; }
+        public MmcJobDescriptionGraph JobBaseDescription
+        {
+            get => jobBaseDescription;
+            set => SetProperty(ref jobBaseDescription, value);
+        }
 
         /// <summary>
         ///     Get or set the list of <see cref="MmcJobDescriptionGraph" /> objects of the collection
         /// </summary>
         [XmlArray("JobConfigurations")]
         [XmlArrayItem("JobConfiguration")]
-        public List<MmcJobDescriptionGraph> JobConfigurations { get; set; }
+        public List<MmcJobDescriptionGraph> JobConfigurations
+        {
+            get => jobConfigurations;
+            set => SetProperty(ref jobConfigurations, value);
+        }
 
         /// <inheritdoc />
         public MmcJobPackageDescriptionGraph()

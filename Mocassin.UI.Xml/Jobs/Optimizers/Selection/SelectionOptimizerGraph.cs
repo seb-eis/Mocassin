@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
@@ -16,17 +15,30 @@ namespace Mocassin.UI.Xml.Jobs
     [XmlRoot("SelectionOptimizer")]
     public class SelectionOptimizerGraph : ManualOptimizerGraph, IDuplicable<SelectionOptimizerGraph>
     {
-        /// <summary>
-        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> to the <see cref="UnitCellPosition"/> that the optimizer targets
-        /// </summary>
-        [XmlElement("Wyckoff")]
-        public ModelObjectReferenceGraph<UnitCellPosition> StartUnitCellPosition { get; set; }
+        private ModelObjectReferenceGraph<UnitCellPosition> startUnitCellPosition;
+        private ModelObjectReferenceGraph<Particle> removedParticle;
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> to the <see cref="Particle"/> that the optimizers removes
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the <see cref="UnitCellPosition" /> that the
+        ///     optimizer targets
+        /// </summary>
+        [XmlElement("Wyckoff")]
+        public ModelObjectReferenceGraph<UnitCellPosition> StartUnitCellPosition
+        {
+            get => startUnitCellPosition;
+            set => SetProperty(ref startUnitCellPosition, value);
+        }
+
+        /// <summary>
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the <see cref="Particle" /> that the optimizers
+        ///     removes
         /// </summary>
         [XmlElement("Particle")]
-       public ModelObjectReferenceGraph<Particle> RemovedParticle { get; set; }
+        public ModelObjectReferenceGraph<Particle> RemovedParticle
+        {
+            get => removedParticle;
+            set => SetProperty(ref removedParticle, value);
+        }
 
         /// <inheritdoc />
         public override IPostBuildOptimizer ToInternal(IModelProject modelProject)

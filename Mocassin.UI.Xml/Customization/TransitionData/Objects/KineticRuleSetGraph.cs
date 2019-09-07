@@ -16,24 +16,40 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("TransitionModelParametrization")]
     public class KineticRuleSetGraph : ProjectObjectGraph
     {
+        private ModelObjectReferenceGraph<KineticTransition> transition;
+        private int transitionIndex;
+        private List<KineticRuleGraph> kineticRules;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> for the affiliated <see cref="KineticTransition"/> 
         /// </summary>
         [XmlElement("Transition")]
-        public ModelObjectReferenceGraph<KineticTransition> Transition { get; set; }
+        public ModelObjectReferenceGraph<KineticTransition> Transition
+        {
+            get => transition;
+            set => SetProperty(ref transition, value);
+        }
 
         /// <summary>
         ///     Get or set the transition index of the affiliated <see cref="IKineticTransition" />
         /// </summary>
         [XmlAttribute("AutoId")]
-        public int TransitionIndex { get; set; }
+        public int TransitionIndex
+        {
+            get => transitionIndex;
+            set => SetProperty(ref transitionIndex, value);
+        }
 
         /// <summary>
         ///     Get or set the list of affiliated <see cref="KineticRuleGraph" /> objects to customize the rules
         /// </summary>
         [XmlArray("TransitionRules")]
         [XmlArrayItem("TransitionRule")]
-        public List<KineticRuleGraph> KineticRules { get; set; }
+        public List<KineticRuleGraph> KineticRules
+        {
+            get => kineticRules;
+            set => SetProperty(ref kineticRules, value);
+        }
 
         /// <summary>
         ///     Set all data on the passed <see cref="IKineticRuleSetter" /> and push the values to the affiliated

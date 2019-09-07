@@ -13,23 +13,39 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("MetropolisTransition")]
     public class MetropolisTransitionGraph : ModelObjectGraph, IEquatable<MetropolisTransitionGraph>
     {
+        private string abstractTransitionKey;
+        private string firstUnitCellPositionKey;
+        private string secondUnitCellPositionKey;
+
         /// <summary>
         ///     Get or set the abstract transition key for the transition logic
         /// </summary>
         [XmlAttribute("Abstract")]
-        public string AbstractTransitionKey { get; set; }
+        public string AbstractTransitionKey
+        {
+            get => abstractTransitionKey;
+            set => SetProperty(ref abstractTransitionKey, value);
+        }
 
         /// <summary>
         ///     Get or set the unit cell position key for first involved wyckoff position
         /// </summary>
         [XmlAttribute("FirstWyckoff")]
-        public string FirstUnitCellPositionKey { get; set; }
+        public string FirstUnitCellPositionKey
+        {
+            get => firstUnitCellPositionKey;
+            set => SetProperty(ref firstUnitCellPositionKey, value);
+        }
 
         /// <summary>
         ///     Get or set the unit cell position key for second involved wyckoff position
         /// </summary>
         [XmlAttribute("SecondWyckoff")]
-        public string SecondUnitCellPositionKey { get; set; }
+        public string SecondUnitCellPositionKey
+        {
+            get => secondUnitCellPositionKey;
+            set => SetProperty(ref secondUnitCellPositionKey, value);
+        }
 
         /// <inheritdoc />
         protected override ModelObject GetModelObjectInternal()

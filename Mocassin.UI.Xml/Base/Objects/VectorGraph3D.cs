@@ -13,26 +13,42 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot("Vector")]
     public class VectorGraph3D : ProjectObjectGraph
     {
+        private double a;
+        private double b;
+        private double c;
+
         /// <summary>
         ///     Get or set the A coordinate
         /// </summary>
         [XmlAttribute("A")]
         [JsonProperty("A")]
-        public double A { get; set; }
+        public double A
+        {
+            get => a;
+            set => SetProperty(ref a, value);
+        }
 
         /// <summary>
         ///     Get or set the B coordinate
         /// </summary>
         [XmlAttribute("B")]
         [JsonProperty("B")]
-        public double B { get; set; }
+        public double B
+        {
+            get => b;
+            set => SetProperty(ref b, value);
+        }
 
         /// <summary>
         ///     Get or set the C coordinate
         /// </summary>
         [XmlAttribute("C")]
         [JsonProperty("C")]
-        public double C { get; set; }
+        public double C
+        {
+            get => c;
+            set => SetProperty(ref c, value);
+        }
 
         /// <summary>
         ///     Returns the helper object content as a <see cref="Mocassin.Mathematics.ValueTypes.DataVector3D" /> object

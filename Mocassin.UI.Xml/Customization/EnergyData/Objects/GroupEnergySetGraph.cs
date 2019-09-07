@@ -17,37 +17,63 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot]
     public class GroupEnergySetGraph : ProjectObjectGraph, IComparable<GroupEnergySetGraph>
     {
+        private ModelObjectReferenceGraph<GroupInteraction> groupInteraction;
+        private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
+        private List<VectorGraph3D> baseGeometry;
+        private List<GroupEnergyGraph> energyEntries;
+        private int groupInteractionIndex;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> of the group interaction that the graph is based upon
         /// </summary>
         [XmlElement("GroupInteraction")]
-        public ModelObjectReferenceGraph<GroupInteraction> GroupInteraction { get; set; }
+        public ModelObjectReferenceGraph<GroupInteraction> GroupInteraction
+        {
+            get => groupInteraction;
+            set => SetProperty(ref groupInteraction, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> of the center position that the graph is based upon
         /// </summary>
         [XmlElement("CenterPosition")]
-        public ModelObjectReferenceGraph<UnitCellPosition> CenterPosition { get; set; }
+        public ModelObjectReferenceGraph<UnitCellPosition> CenterPosition
+        {
+            get => centerPosition;
+            set => SetProperty(ref centerPosition, value);
+        }
 
         /// <summary>
         ///     Get or set the base geometry list of the surroundings
         /// </summary>
         [XmlArray("BaseGeometry")]
         [XmlArrayItem("Position")]
-        public List<VectorGraph3D> BaseGeometry { get; set; }
+        public List<VectorGraph3D> BaseGeometry
+        {
+            get => baseGeometry;
+            set => SetProperty(ref baseGeometry, value);
+        }
 
         /// <summary>
         ///     Get or set the list of affiliated energy entries
         /// </summary>
         [XmlArray("Permutations")]
         [XmlArrayItem("Permutation")]
-        public List<GroupEnergyGraph> EnergyEntries { get; set; }
+        public List<GroupEnergyGraph> EnergyEntries
+        {
+            get => energyEntries;
+            set => SetProperty(ref energyEntries, value);
+        }
 
         /// <summary>
         /// Get or set the internal index of the interaction
         /// </summary>
         [XmlAttribute("AutoId")]
-        public int GroupInteractionIndex { get; set; }
+        public int GroupInteractionIndex
+        {
+            get => groupInteractionIndex;
+            set => SetProperty(ref groupInteractionIndex, value);
+        }
 
         /// <summary>
         ///     Set all data on the passed <see cref="IGroupEnergySetter" /> and push the values to the affiliated

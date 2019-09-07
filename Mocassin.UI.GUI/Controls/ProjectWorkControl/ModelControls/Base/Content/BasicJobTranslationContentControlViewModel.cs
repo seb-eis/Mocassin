@@ -54,8 +54,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicJobTranslationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph);
-            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, ReloadSelectionSource);
+            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
+            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource());
             PropertyChanged += OnTranslationSourceChanged;
         }
 
@@ -79,9 +79,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <summary>
         ///     Nulls the currently selected <see cref="ProjectJobTranslationGraph"/> and reloads the option list
         /// </summary>
-        protected void ReloadSelectionSource()
+        protected void ReloadSelectionSource(bool nullSelected = true)
         {
-            SelectedJobTranslationGraph = null;
+            if (nullSelected) SelectedJobTranslationGraph = null;
             JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
         }
 

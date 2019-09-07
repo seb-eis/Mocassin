@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.Particles;
@@ -14,26 +13,42 @@ namespace Mocassin.UI.Xml.EnergyModel
     [XmlRoot]
     public class DefectEnergyGraph : ProjectObjectGraph, IComparable<DefectEnergyGraph>
     {
+        private ModelObjectReferenceGraph<Particle> particle;
+        private ModelObjectReferenceGraph<UnitCellPosition> unitCellPosition;
+        private double energy;
+
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> for the defect <see cref="Particle" />
         /// </summary>
         [XmlElement("Particle")]
-        public ModelObjectReferenceGraph<Particle> Particle { get; set; }
+        public ModelObjectReferenceGraph<Particle> Particle
+        {
+            get => particle;
+            set => SetProperty(ref particle, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> for the defect <see cref="UnitCellPosition" />
         /// </summary>
         [XmlElement("Position")]
-        public ModelObjectReferenceGraph<UnitCellPosition> UnitCellPosition { get; set; }
+        public ModelObjectReferenceGraph<UnitCellPosition> UnitCellPosition
+        {
+            get => unitCellPosition;
+            set => SetProperty(ref unitCellPosition, value);
+        }
 
         /// <summary>
         ///     Get or set the energy value in [eV]
         /// </summary>
         [XmlAttribute("Energy")]
-        public double Energy { get; set; }
+        public double Energy
+        {
+            get => energy;
+            set => SetProperty(ref energy, value);
+        }
 
         /// <summary>
-        ///     Get an <see cref="DefectEnergy"/> object for the model input pipeline
+        ///     Get an <see cref="DefectEnergy" /> object for the model input pipeline
         /// </summary>
         /// <returns></returns>
         public DefectEnergy GetInputObject()
@@ -41,7 +56,7 @@ namespace Mocassin.UI.Xml.EnergyModel
             return new DefectEnergy
             {
                 Energy = Energy,
-                Particle = (IParticle) Particle.GetInputObject(), 
+                Particle = (IParticle) Particle.GetInputObject(),
                 UnitCellPosition = (IUnitCellPosition) UnitCellPosition.GetInputObject()
             };
         }

@@ -5,7 +5,6 @@ using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
-using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.Xml.SimulationModel
 {
@@ -15,39 +14,65 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot("KineticSimulation")]
     public class KineticSimulationGraph : SimulationBaseGraph
     {
+        private int preRunMcsp = 100;
+        private double normalizationProbability = 1.0;
+        private double electricFieldMagnitude = 10e6;
+        private VectorGraph3D electricFieldVector = new VectorGraph3D {A = 1};
+        private List<ModelObjectReferenceGraph<KineticTransition>> transitions;
+
         /// <summary>
-        /// Get or set the pre-run mcsp for normalization and relaxation of the lattice
+        ///     Get or set the pre-run mcsp for normalization and relaxation of the lattice
         /// </summary>
         [XmlAttribute("PrerunMcsp")]
-        public int PreRunMcsp { get; set; } = 100;
+        public int PreRunMcsp
+        {
+            get => preRunMcsp;
+            set => SetProperty(ref preRunMcsp, value);
+        }
 
         /// <summary>
         ///     Get or set a custom normalization probability for the simulation
         /// </summary>
         [XmlAttribute("NormalizationProbability")]
-        public double NormalizationProbability { get; set; } = 1.0;
+        public double NormalizationProbability
+        {
+            get => normalizationProbability;
+            set => SetProperty(ref normalizationProbability, value);
+        }
 
         /// <summary>
         ///     Get or set the electric field magnitude in [V/m]
         /// </summary>
         [XmlAttribute("ElectricFieldModulus")]
-        public double ElectricFieldMagnitude { get; set; } = 100e6;
+        public double ElectricFieldMagnitude
+        {
+            get => electricFieldMagnitude;
+            set => SetProperty(ref electricFieldMagnitude, value);
+        }
 
         /// <summary>
         ///     Get or set the electric field direction vector in fractional coordinates
         /// </summary>
         [XmlElement("ElectricFieldVector")]
-        public VectorGraph3D ElectricFieldVector { get; set; } = new VectorGraph3D {A = 1};
+        public VectorGraph3D ElectricFieldVector
+        {
+            get => electricFieldVector;
+            set => SetProperty(ref electricFieldVector, value);
+        }
 
         /// <summary>
         ///     Get or set the list of active kinetic transitions in this kinetic simulation
         /// </summary>
         [XmlArray("Transitions")]
         [XmlArrayItem("Transition")]
-        public List<ModelObjectReferenceGraph<KineticTransition>> Transitions { get; set; }
+        public List<ModelObjectReferenceGraph<KineticTransition>> Transitions
+        {
+            get => transitions;
+            set => SetProperty(ref transitions, value);
+        }
 
         /// <summary>
-        ///     Creates new <see cref="KineticSimulationGraph"/> with empty component lists
+        ///     Creates new <see cref="KineticSimulationGraph" /> with empty component lists
         /// </summary>
         public KineticSimulationGraph()
         {

@@ -13,18 +13,29 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("KineticTransition")]
     public class KineticTransitionGraph : ModelObjectGraph
     {
+        private string abstractTransitionKey;
+        private List<VectorGraph3D> positionVectors;
+
         /// <summary>
         ///     Get or set the abstract transition key for the transition logic
         /// </summary>
         [XmlAttribute("Abstract")]
-        public string AbstractTransitionKey { get; set; }
+        public string AbstractTransitionKey
+        {
+            get => abstractTransitionKey;
+            set => SetProperty(ref abstractTransitionKey, value);
+        }
 
         /// <summary>
         ///     Get or set the geometry sequence of the kinetic transition
         /// </summary>
         [XmlArray("BaseGeometry")]
         [XmlArrayItem("Position")]
-        public List<VectorGraph3D> PositionVectors { get; set; }
+        public List<VectorGraph3D> PositionVectors
+        {
+            get => positionVectors;
+            set => SetProperty(ref positionVectors, value);
+        }
 
         /// <summary>
         ///     Creates new <see cref="KineticTransitionGraph" /> wit empty component lists
