@@ -38,8 +38,8 @@
               <TextBlock Text="Quick actions:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
             </GroupBox.Header>
             <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
-              <Button Command="{Binding UpdateObjectViewModelsCommand}" Content="Update object list" Margin="{StaticResource App.Margin.VerticalStack}" />
-              <Button Command="{Binding RefreshVisualGroupsCommand}" Content="Generate visual objects" Margin="{StaticResource App.Margin.VerticalStack}" />
+              <Button Command="{Binding UpdateObjectViewModelsCommand}" Content="Update object grid" Margin="{StaticResource App.Margin.VerticalStack}" />
+              <Button Command="{Binding RefreshVisualGroupsCommand}" Content="Update visual data" Margin="{StaticResource App.Margin.VerticalStack}" />
             </StackPanel>
           </GroupBox>
           <GroupBox Grid.Row="0" Grid.Column="1">

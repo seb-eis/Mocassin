@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
-using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
@@ -35,6 +33,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
     /// </summary>
     public class ModelViewport3DViewModel : ProjectGraphControlViewModel
     {
+        private bool isRefreshingVisuals;
+
         /// <summary>
         ///     Get or set a boolean flag if the viewport is synchronized with the model data
         /// </summary>
@@ -56,7 +56,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private ISpaceGroupService SpaceGroupService => UtilityProject.SpaceGroupService;
 
         /// <summary>
-        ///     Get a <see cref="IList{T}"/> of the loaded space groups operations as <see cref="Transform3D"/>
+        ///     Get a <see cref="IList{T}" /> of the loaded space groups operations as <see cref="Transform3D" />
         /// </summary>
         private IList<Transform3D> GroupTransforms3D { get; set; }
 
@@ -84,6 +84,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         ///     Get a <see cref="ParameterlessCommand" /> to refresh the visual object layer contents
         /// </summary>
         public ParameterlessCommand RefreshVisualGroupsCommand { get; }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the system is refreshing the visual data
+        /// </summary>
+        public bool IsRefreshingVisuals
+        {
+            get => isRefreshingVisuals;
+            private set => SetProperty(ref isRefreshingVisuals, value);
+        }
 
         /// <inheritdoc />
         public ModelViewport3DViewModel(IMocassinProjectControl projectControl)
@@ -149,12 +158,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             }
 
             var results = new List<ModelObject3DViewModel>(ModelObjectViewModels.ObservableItems.Count);
-
-            foreach (var position in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
-                results.Add(GetModelObjectViewModel(position));
-
-            foreach (var transition in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
-                results.Add(GetModelObjectViewModel(transition));
+            results.AddRange(ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions.Select(GetModelObjectViewModel));
+            results.AddRange(ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions.Select(GetModelObjectViewModel));
 
             ModelObjectViewModels.ClearCollection();
             ModelObjectViewModels.AddCollectionItems(results);
@@ -181,6 +186,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             try
             {
+                IsRefreshingVisuals = true;
                 VisualViewModel.ClearVisualGroups();
                 SynchronizeWithModel();
 
@@ -199,6 +205,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 OnRenderError(e);
             }
+
+            IsRefreshingVisuals = false;
         }
 
         /// <summary>
@@ -237,8 +245,33 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 result.Add(visual);
             }
 
-            var alpha = positionGraph.PositionStatus == PositionStatus.Unstable ? Settings.Default.Default_Render_UnstablePosition_Alpha : (byte) 255;
+            var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
+                ? Settings.Default.Default_Render_UnstablePosition_Alpha
+                : (byte) 255;
             VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color.ChangeAlpha(alpha)));
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates a single <see cref="PointsVisual3D" /> point cloud objects for a <see cref="UnitCellPositionGraph" />
+        /// </summary>
+        /// <param name="positionGraph"></param>
+        /// <returns></returns>
+        private PointsVisual3D CreatePositionVisualPointCloud(UnitCellPositionGraph positionGraph)
+        {
+            var objectViewModel = GetModelObjectViewModel(positionGraph);
+            var sourceVector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
+            var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var cellPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, startVector, endVector);
+
+            var points = new Point3DCollection(cellPositions.Count);
+            foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D())) points.Add(center);
+            var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
+                ? Settings.Default.Default_Render_UnstablePosition_Alpha
+                : (byte) 255;
+
+            var result = new PointsVisual3D
+                {Size = 10 * objectViewModel.Scaling, Color = objectViewModel.Color.ChangeAlpha(alpha), Points = points};
             return result;
         }
 
@@ -260,9 +293,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             var result = new List<MeshGeometryVisual3D>(GroupTransforms3D.Count * GroupTransforms3D.Count);
 
-            for (var i = 0; i < pathPoints.Count-1; i++)
+            for (var i = 0; i < pathPoints.Count - 1; i++)
             {
-                var visualFactory = VisualViewModel.GetArrowVisualFactory(diameter, pathPoints[i], pathPoints[i+1], headLength, thetaDiv);
+                var visualFactory = VisualViewModel.GetArrowVisualFactory(diameter, pathPoints[i], pathPoints[i + 1], headLength, thetaDiv);
                 result.AddRange(GroupTransforms3D.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
 
@@ -283,6 +316,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <returns></returns>
         private LinesVisual3D CreateCellFrameLineVisual(int minA, int minB, int minC, int maxA, int maxB, int maxC)
         {
+            var comparer = UtilityProject.GeometryNumeric.RangeComparer;
             var baseLinePairs = new[]
             {
                 (new Fractional3D(0, 0, 0), new Fractional3D(1, 0, 0)),
@@ -290,17 +324,17 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
             };
 
-            var points3D = new Point3DCollection();
+            var points3D = new Point3DCollection(baseLinePairs.Length * Math.Abs(maxA - minA) * Math.Abs(maxB - minB) * Math.Abs(maxC - minC));
             for (var a = minA; a <= maxA; a++)
             {
-                for (var b = minC; b <= maxB; b++)
+                for (var b = minB; b <= maxB; b++)
                 {
                     for (var c = minC; c <= maxC; c++)
                     {
                         var shift = new Fractional3D(a, b, c);
                         foreach (var (startVector, endVector) in baseLinePairs.Select(x => (x.Item1 + shift, x.Item2 + shift)))
                         {
-                            if (endVector.A > maxA || endVector.B > maxB || endVector.C > maxC) continue;
+                            if (comparer.Compare(endVector.A, maxA) > 0 || comparer.Compare(endVector.B, maxB) > 0 || comparer.Compare(endVector.C, maxC) > 0) continue;
                             points3D.Add(VectorTransformer.ToCartesian(startVector).AsPoint3D());
                             points3D.Add(VectorTransformer.ToCartesian(endVector).AsPoint3D());
                         }

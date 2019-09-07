@@ -21,6 +21,7 @@ namespace Mocassin.Model.Structures.Validators
         public override IValidationReport Validate(ISpaceGroupInfo obj)
         {
             var report = new ValidationReport();
+            if (obj.GroupIndex == 1) return report;
             AddGenericContentEqualityValidation(DataReader.Access.GetSpaceGroupInfo(), obj, report);
             return report;
         }
