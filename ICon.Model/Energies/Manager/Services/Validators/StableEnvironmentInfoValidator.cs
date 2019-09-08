@@ -146,11 +146,6 @@ namespace Mocassin.Model.Energies.Validators
                     details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has multiple definitions.");
                 }
 
-                if (!defectEnergy.UnitCellPosition.IsValidAndStable())
-                {
-                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] (unstable) has no effect.");
-                }
-
                 if (defectEnergy.UnitCellPosition.IsValidAndStable() && defectEnergy.Particle.IsEmpty)
                 {
                     details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.UnitCellPosition}] (stable) has no effect.");

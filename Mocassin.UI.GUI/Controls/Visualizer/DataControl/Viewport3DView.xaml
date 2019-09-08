@@ -17,7 +17,11 @@
     <h:HelixViewport3D ItemsSource="{Binding Visuals}" Grid.Column="1"
                        ShowCoordinateSystem="{Binding IsCoordinateSystemActive}"
                        ShowViewCube="{Binding IsVisualCubeActive}"
-                       Name="HelixViewport3D"/>
+                       Name="HelixViewport3D"
+                       ShowFrameRate="{Binding IsFrameRateCounterActive}"
+                       ShowCameraInfo="{Binding IsCameraInfoActive}"
+                       ShowTriangleCountInfo="{Binding IsRenderInfoActive}" 
+                       LimitFPS="True"/>
     <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
       <Expander.Header>
         <TextBlock Text="3D Viewer Settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" 
@@ -55,12 +59,24 @@
                 <RadioButton Content="Manual" VerticalContentAlignment="Center" Margin="0,2,10,0" />
               </DockPanel>
               <DockPanel>
-                <TextBlock Text="Coordinate helper:" Margin="0,0,10,0" />
+                <TextBlock Text="Show:" Margin="0,0,10,0" />
                 <CheckBox IsChecked="{Binding IsVisualCubeActive}" Name="VisualCubeActiveCheckBox"
                           Content="Cube"
                           Margin="0,2,10,0" VerticalContentAlignment="Center" />
                 <CheckBox IsChecked="{Binding IsCoordinateSystemActive}" Content="Vectors"
                           Name="CoordinateSystemActiveCheckBox"
+                          VerticalContentAlignment="Center" Margin="0,2,10,0" />
+              </DockPanel>
+              <DockPanel>
+                <TextBlock Text="Info:" Margin="0,0,10,0" />
+                <CheckBox IsChecked="{Binding IsFrameRateCounterActive}" Name="ShowFrameRateCheckBox"
+                          Content="Frames"
+                          Margin="0,2,10,0" VerticalContentAlignment="Center" />
+                <CheckBox IsChecked="{Binding IsCameraInfoActive}" Content="Camera"
+                          Name="ShowCameraInfoCheckBox"
+                          VerticalContentAlignment="Center" Margin="0,2,10,0" />
+                <CheckBox IsChecked="{Binding IsRenderInfoActive}" Content="Triangles"
+                          Name="ShowTriangleInfoCheckBox"
                           VerticalContentAlignment="Center" Margin="0,2,10,0" />
               </DockPanel>
             </StackPanel>

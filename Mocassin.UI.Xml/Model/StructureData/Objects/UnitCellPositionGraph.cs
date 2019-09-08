@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.StructureModel
         private double b;
         private double c;
         private string occupationKey;
-        private PositionStatus positionStatus;
+        private PositionStatus positionStatus = PositionStatus.Stable;
 
         /// <summary>
         ///     Get or set the coordinate value in A direction in [Ang]

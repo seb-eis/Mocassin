@@ -236,12 +236,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var phiDiv = (int) (Settings.Default.Default_Render_Sphere_PhiDiv * objectViewModel.MeshQuality);
             var thetaDiv = (int) (Settings.Default.Default_Render_Sphere_ThetaDiv * objectViewModel.MeshQuality);
             var diameter = objectViewModel.Scaling;
-            var visualFactory = VisualViewModel.GetSphereVisualFactory(diameter, thetaDiv, phiDiv);
+            var visualFactory = VisualViewModel.BuildSphereVisualFactory(diameter, thetaDiv, phiDiv);
 
             var result = new List<MeshGeometryVisual3D>(cellPositions.Count);
             foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()))
             {
-                var visual = VisualViewModel.CreateVisual(center, visualFactory);
+                var visual = VisualViewModel.CreateVisual(VisualViewModel.GetOriginOffsetTransform3D(center), visualFactory);
                 result.Add(visual);
             }
 
@@ -295,7 +295,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             for (var i = 0; i < pathPoints.Count - 1; i++)
             {
-                var visualFactory = VisualViewModel.GetArrowVisualFactory(diameter, pathPoints[i], pathPoints[i + 1], headLength, thetaDiv);
+                var visualFactory = VisualViewModel.BuildArrowVisualFactory(diameter, pathPoints[i], pathPoints[i + 1], headLength, thetaDiv);
                 result.AddRange(GroupTransforms3D.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
 

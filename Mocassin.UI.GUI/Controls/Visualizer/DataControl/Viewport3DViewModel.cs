@@ -14,7 +14,8 @@ using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 {
     /// <summary>
-    ///     A <see cref="ViewModelBase" /> instance that manages a <see cref="ModelVisual3D" /> collection an affiliated data for a
+    ///     A <see cref="ViewModelBase" /> instance that manages a <see cref="ModelVisual3D" /> collection an affiliated data
+    ///     for a
     ///     <see cref="HelixViewport3D" />
     /// </summary>
     public class Viewport3DViewModel : ViewModelBase, IDisposable
@@ -24,6 +25,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private bool isAutoUpdating;
         private bool isVisualCubeActive;
         private bool isCoordinateSystemActive;
+        private bool isFrameRateCounterActive;
+        private bool isCameraInfoActive;
+        private bool isRenderInfoActive;
 
         /// <summary>
         ///     Get the default light setup for the visual collection
@@ -90,6 +94,33 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
+        ///     Get or set a boolean flag if the frame-rate counter is active
+        /// </summary>
+        public bool IsFrameRateCounterActive
+        {
+            get => isFrameRateCounterActive;
+            set => SetProperty(ref isFrameRateCounterActive, value);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the render info is active
+        /// </summary>
+        public bool IsRenderInfoActive
+        {
+            get => isRenderInfoActive;
+            set => SetProperty(ref isRenderInfoActive, value);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the camera info is active
+        /// </summary>
+        public bool IsCameraInfoActive
+        {
+            get => isCameraInfoActive;
+            set => SetProperty(ref isCameraInfoActive, value);
+        }
+
+        /// <summary>
         ///     Get a <see cref="ParameterlessCommand" /> to clear the visual data and reset to minimum contents
         /// </summary>
         public ParameterlessCommand ClearVisualCommand { get; }
@@ -149,6 +180,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                 visualGroup.Dispose();
                 visualGroup.PropertyChanged -= AutoUpdateVisualInternal;
             }
+
             ExecuteOnDispatcher(() => VisualGroups.Clear());
             ClearVisual();
         }
@@ -234,17 +266,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         ///     Creates a factory <see cref="Func{T,TResult}" /> to produce <see cref="MeshGeometryVisual3D" /> sharing a common
         ///     <see cref="MeshGeometry3D" /> and a custom <see cref="Transform3D" />
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="meshGeometry"></param>
-        /// <param name="transformFunc"></param>
         /// <returns></returns>
-        public Func<T, MeshGeometryVisual3D> GetMeshVisualFactory<T>(MeshGeometry3D meshGeometry, Func<T, Transform3D> transformFunc)
+        public Func<Transform3D, MeshGeometryVisual3D> BuildMeshVisualFactory(MeshGeometry3D meshGeometry)
         {
-            MeshGeometryVisual3D CreateInternal(T transformParameter)
+            MeshGeometryVisual3D CreateInternal(Transform3D transform)
             {
                 return new MeshGeometryVisual3D
                 {
-                    MeshGeometry = meshGeometry, Transform = transformFunc.Invoke(transformParameter)
+                    MeshGeometry = meshGeometry, Transform = transform
                 };
             }
 
@@ -253,41 +283,42 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 
         /// <summary>
         ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
-        ///     sphere shape sharing a common mesh. Positioning is defined by a center <see cref="Point3D"/>
+        ///     sphere shape sharing a common mesh for multiple <see cref="Transform3D" /> operations
         /// </summary>
         /// <param name="radius"></param>
         /// <param name="thetaDiv"></param>
         /// <param name="phiDiv"></param>
         /// <param name="freezeMesh"></param>
         /// <returns></returns>
-        public Func<Point3D, MeshGeometryVisual3D> GetSphereVisualFactory(double radius, int thetaDiv, int phiDiv, bool freezeMesh = true)
+        public Func<Transform3D, MeshGeometryVisual3D> BuildSphereVisualFactory(double radius, int thetaDiv, int phiDiv,
+            bool freezeMesh = true)
         {
             var meshBuilder = new MeshBuilder();
-            meshBuilder.AddSphere(new Point3D(0,0,0), radius, thetaDiv, phiDiv);
+            meshBuilder.AddSphere(new Point3D(0, 0, 0), radius, thetaDiv, phiDiv);
             var meshGeometry = meshBuilder.ToMesh(freezeMesh);
 
-            return GetMeshVisualFactory<Point3D>(meshGeometry, GetOriginOffsetTransform3D);
+            return BuildMeshVisualFactory(meshGeometry);
         }
 
         /// <summary>
         ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
-        ///     cube shape sharing a common mesh. Positioning is defined by a center <see cref="Point3D"/>
+        ///     cube shape sharing a common mesh for multiple <see cref="Transform3D" /> operations
         /// </summary>
         /// <param name="sideLength"></param>
         /// <param name="freezeMesh"></param>
         /// <returns></returns>
-        public Func<Point3D, MeshGeometryVisual3D> GetCubeVisualFactory(double sideLength, bool freezeMesh = true)
+        public Func<Transform3D, MeshGeometryVisual3D> BuildCubeVisualFactory(double sideLength, bool freezeMesh = true)
         {
             var meshBuilder = new MeshBuilder(false);
             meshBuilder.AddBox(new Point3D(0, 0, 0), sideLength, sideLength, sideLength, BoxFaces.All);
             var meshGeometry = meshBuilder.ToMesh(freezeMesh);
 
-            return GetMeshVisualFactory<Point3D>(meshGeometry, GetOriginOffsetTransform3D);
+            return BuildMeshVisualFactory(meshGeometry);
         }
 
         /// <summary>
         ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
-        ///     arrow shape sharing a common mesh. Positioning is defined by a <see cref="Transform3D"/>
+        ///     arrow shape sharing a common mesh for multiple <see cref="Transform3D" /> operations
         /// </summary>
         /// <param name="diameter"></param>
         /// <param name="headLength"></param>
@@ -296,77 +327,29 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        public Func<Transform3D, MeshGeometryVisual3D> GetArrowVisualFactory(double diameter, in Point3D start,in Point3D end, double headLength, int thetaDiv, bool freezeMesh = true)
+        public Func<Transform3D, MeshGeometryVisual3D> BuildArrowVisualFactory(double diameter, in Point3D start, in Point3D end,
+            double headLength, int thetaDiv, bool freezeMesh = true)
         {
             var meshBuilder = new MeshBuilder();
-            meshBuilder.AddArrow(start,end,diameter, headLength, thetaDiv);
+            meshBuilder.AddArrow(start, end, diameter, headLength, thetaDiv);
             var meshGeometry = meshBuilder.ToMesh(freezeMesh);
 
-            return GetMeshVisualFactory<Transform3D>(meshGeometry, x => x);
+            return BuildMeshVisualFactory(meshGeometry);
         }
 
-        /// <summary>
-        ///     Get a generator delegate for creating <see cref="ArrowVisual3D" /> from start <see cref="Point3D" /> to end
-        ///     <see cref="Point3D" />
-        /// </summary>
-        /// <param name="diameter"></param>
-        /// <param name="fillBrush"></param>
-        /// <param name="meshQuality"></param>
-        /// <returns></returns>
-        public Func<(Point3D Start, Point3D End), ArrowVisual3D> CreatePointToPointArrowGenerator(double diameter, Brush fillBrush, double meshQuality)
-        {
-            ArrowVisual3D GeneratorInternal((Point3D, Point3D) points)
-            {
-                return new ArrowVisual3D
-                {
-                    ThetaDiv = (int) ((int) ArrowVisual3D.ThetaDivProperty.DefaultMetadata.DefaultValue  * meshQuality),
-                    Point1 = points.Item1,
-                    Point2 = points.Item2,
-                    Fill = fillBrush,
-                    Diameter = diameter
-                };
-            }
-
-            return GeneratorInternal;
-        }
 
         /// <summary>
-        ///     Get a generator delegate for creating <see cref="ArrowVisual3D" /> from start <see cref="Point3D" /> and direction
-        ///     <see cref="Vector3D" />
-        /// </summary>
-        /// <param name="diameter"></param>
-        /// <param name="fillBrush"></param>
-        /// <param name="meshQuality"></param>
-        /// <returns></returns>
-        public Func<(Point3D Start, Vector3D Dir), ArrowVisual3D> CreateDirectionArrowGenerator(double diameter, Brush fillBrush, double meshQuality)
-        {
-            ArrowVisual3D GeneratorInternal((Point3D, Vector3D) data)
-            {
-                return new ArrowVisual3D
-                {
-                    ThetaDiv = (int) ((int) ArrowVisual3D.ThetaDivProperty.DefaultMetadata.DefaultValue  * meshQuality),
-                    Point1 = data.Item1,
-                    Direction = data.Item2,
-                    Fill = fillBrush,
-                    Diameter = diameter
-                };
-            }
-
-            return GeneratorInternal;
-        }
-
-        /// <summary>
-        ///     Get a <see cref="TranslateTransform3D"/> to the passed target <see cref="Point3D"/> from the origin (0,0,0)
+        ///     Get a <see cref="TranslateTransform3D" /> to the passed target <see cref="Point3D" /> from the origin (0,0,0)
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public Transform3D GetOriginOffsetTransform3D(Point3D target)
+        public Transform3D GetOriginOffsetTransform3D(in Point3D target)
         {
             return new TranslateTransform3D(target.X, target.Y, target.Z);
         }
 
         /// <summary>
-        ///     Colors a set of <see cref="MeshGeometryVisual3D"/> with the provided brush and optionally freezes the brush
+        ///     Colors a set of <see cref="MeshGeometryVisual3D" /> with the provided brush and optionally freezes the brush
         /// </summary>
         /// <param name="visuals"></param>
         /// <param name="brush"></param>

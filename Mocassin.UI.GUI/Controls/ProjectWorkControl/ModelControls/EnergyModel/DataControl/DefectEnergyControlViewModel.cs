@@ -65,7 +65,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
 
             var oldList = defectBackground.DefectEnergies;
             var newList = new List<DefectEnergyGraph>();
-            foreach (var position in positions.Where(x => x.PositionStatus == PositionStatus.Stable))
+            foreach (var position in positions)
             {
                 var particles = occupations.Single(x => x.Key == position.OccupationKey).Particles;
                 foreach (var particle in particles)
