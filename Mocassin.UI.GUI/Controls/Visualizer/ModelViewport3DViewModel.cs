@@ -56,9 +56,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private ISpaceGroupService SpaceGroupService => UtilityProject.SpaceGroupService;
 
         /// <summary>
-        ///     Get a <see cref="IList{T}" /> of the loaded space groups operations as <see cref="Transform3D" />
+        ///     Get or set <see cref="IList{T}" /> of the position sin the base cuboid (In contrast to a unit cell the =1 values
+        ///     are included)
         /// </summary>
-        private IList<Transform3D> GroupTransforms3D { get; set; }
+        private IList<(Fractional3D Vector, ModelObject3DViewModel ObjectViewModel)> BaseCuboidPositionData { get; set; }
 
         /// <summary>
         ///     Get the <see cref="Viewport3DViewModel" /> that manages the visual objects
@@ -110,7 +111,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public override async void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            if (ContentSource == null) return;
             await ExecuteIfConstantContentSource(RefreshVisualContent, TimeSpan.FromMilliseconds(250), true);
         }
 
@@ -119,6 +119,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// </summary>
         private void RefreshVisualContent()
         {
+            if (ContentSource == null)
+            {
+                VisualViewModel.ClearVisualGroups();
+                ModelObjectViewModels.ClearCollection();
+                IsSynchronizedWithModel = true;
+                return;
+            }
+
             IsSynchronizedWithModel = false;
             VisualViewModel.ClearVisual();
             RenderResourcesViewModel.ChangeDataSource(ContentSource?.Resources);
@@ -140,9 +148,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var cellData = projectGraph.ProjectModelGraph.StructureModelGraph.CellParameters.GetInputObject();
             UtilityProject.InputPipeline.PushToProject(spaceGroupData);
             UtilityProject.InputPipeline.PushToProject(cellData);
-            GroupTransforms3D = SpaceGroupService.LoadedGroup.Operations
-                .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem))
-                .ToList();
         }
 
         /// <summary>
@@ -187,6 +192,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             try
             {
                 IsRefreshingVisuals = true;
+                BaseCuboidPositionData = CreateBaseCuboidPositionData();
                 VisualViewModel.ClearVisualGroups();
                 SynchronizeWithModel();
 
@@ -222,6 +228,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
+        ///     Creates the base cuboid position to view model data for vector hit testing and size correction
+        /// </summary>
+        /// <returns></returns>
+        private IList<(Fractional3D, ModelObject3DViewModel)> CreateBaseCuboidPositionData()
+        {
+            var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
+            return ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions
+                .Select(graph => (new Fractional3D(graph.A, graph.B, graph.C), GetModelObjectViewModel(graph)))
+                .SelectMany(tuple => SpaceGroupService.GetPositionsInCuboid(tuple.Item1, startVector, endVector).Select(vec => (vec, tuple.Item2)))
+                .OrderBy(value => value.vec, SpaceGroupService.Comparer)
+                .ToList();
+        }
+
+        /// <summary>
         ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> objects for a <see cref="UnitCellPositionGraph" />
         /// </summary>
         /// <param name="positionGraph"></param>
@@ -248,6 +268,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
                 ? Settings.Default.Default_Render_UnstablePosition_Alpha
                 : (byte) 255;
+
             VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color.ChangeAlpha(alpha)));
             return result;
         }
@@ -266,12 +287,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             var points = new Point3DCollection(cellPositions.Count);
             foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D())) points.Add(center);
+
             var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
                 ? Settings.Default.Default_Render_UnstablePosition_Alpha
                 : (byte) 255;
 
-            var result = new PointsVisual3D
-                {Size = 10 * objectViewModel.Scaling, Color = objectViewModel.Color.ChangeAlpha(alpha), Points = points};
+            var result = new PointsVisual3D {Size = 10 * objectViewModel.Scaling, Color = objectViewModel.Color.ChangeAlpha(alpha), Points = points};
             return result;
         }
 
@@ -283,38 +304,104 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private IList<MeshGeometryVisual3D> CreateTransitionVisuals(KineticTransitionGraph transitionGraph)
         {
             var objectViewModel = GetModelObjectViewModel(transitionGraph);
-            var pathPoints = transitionGraph.PositionVectors
-                .Select(x => VectorTransformer.ToCartesian(new Fractional3D(x.A, x.B, x.C)).AsPoint3D())
+            var fractionalPath = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
+            var uniqueTransforms = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(fractionalPath, true)
+                .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem))
                 .ToList();
 
             var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
             var thetaDiv = (int) (Settings.Default.Default_Render_Arrow_ThetaDiv * objectViewModel.MeshQuality);
             var diameter = objectViewModel.Scaling;
 
-            var result = new List<MeshGeometryVisual3D>(GroupTransforms3D.Count * GroupTransforms3D.Count);
+            var result = new List<MeshGeometryVisual3D>(uniqueTransforms.Count);
+            var renderArea = RenderResourcesViewModel.GetRenderCuboidVectors();
 
-            for (var i = 0; i < pathPoints.Count - 1; i++)
+            for (var i = 0; i < fractionalPath.Count - 1; i++)
             {
-                var visualFactory = VisualViewModel.BuildArrowVisualFactory(diameter, pathPoints[i], pathPoints[i + 1], headLength, thetaDiv);
-                result.AddRange(GroupTransforms3D.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
+                var (point0, point1) = GetAtomRadiusCorrectedTransitionStepPoints(fractionalPath[i], fractionalPath[i + 1]);
+                var visualFactory = VisualViewModel.BuildDualHeadArrowVisualFactory(diameter, point0, point1, headLength, thetaDiv);
+                var transformEnum = ExtendUnitCellTransformsToRenderArea(uniqueTransforms)
+                    .Where(x => RenderAreaContainsPoint(x.Transform(point1), renderArea.StartVector, renderArea.EndVector));
+                result.AddRange(transformEnum.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
 
             VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color));
             return result;
         }
 
+        /// <summary>
+        ///     Extends a sequence of <see cref="Transform3D"/> for the origin (0,0,0) unit cell to the set for the full render area
+        /// </summary>
+        /// <param name="transforms"></param>
+        /// <returns></returns>
+        private IEnumerable<Transform3D> ExtendUnitCellTransformsToRenderArea(IEnumerable<Transform3D> transforms)
+        {
+            if (!(transforms is IReadOnlyCollection<Transform3D> transformCollection)) transformCollection = transforms.ToList();
+            foreach (var (a, b, c) in EnumerateRenderedCellOffsets(false,true))
+            {
+                if (a == 0 && b == 0 && c == 0)
+                    foreach (var item in transformCollection)
+                        yield return item;
+
+                var shift = VectorTransformer.ToCartesian(new Fractional3D(a, b, c));
+                foreach (var transform in transformCollection)
+                {
+                    var matrix = transform.Value;
+                    matrix.OffsetX += shift.X;
+                    matrix.OffsetY += shift.Y;
+                    matrix.OffsetZ += shift.Z;
+                    var shiftedTransform = new MatrixTransform3D(matrix);
+                    shiftedTransform.Freeze();
+                    yield return shiftedTransform;
+                }
+            }
+        }
 
         /// <summary>
-        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the given size information
+        ///     Translates two <see cref="Fractional3D" /> that describe a transition step into two atom radii corrected
+        ///     <see cref="Point3D" /> for arrow generation
         /// </summary>
-        /// <param name="minA"></param>
-        /// <param name="minB"></param>
-        /// <param name="minC"></param>
-        /// <param name="maxA"></param>
-        /// <param name="maxB"></param>
-        /// <param name="maxC"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
         /// <returns></returns>
-        private LinesVisual3D CreateCellFrameLineVisual(int minA, int minB, int minC, int maxA, int maxB, int maxC)
+        private (Point3D Point0, Point3D Point1) GetAtomRadiusCorrectedTransitionStepPoints(Fractional3D start, Fractional3D end)
+        {
+            var point0 = VectorTransformer.ToCartesian(start).AsPoint3D();
+            var point1 = VectorTransformer.ToCartesian(end).AsPoint3D();
+            var direction = point1 - point0;
+            direction.Normalize();
+
+            var startVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, start) == 0).ObjectViewModel;
+            var endVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, end) == 0).ObjectViewModel;
+            if (startVm != null) point0 += direction * startVm.Scaling;
+            if (endVm != null) point1 -= direction * endVm.Scaling;
+            return (point0, point1);
+        }
+
+        /// <summary>
+        ///     Checks if a <see cref="Point3D" /> lies within the provided fractional render area boundaries
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="renderAreaStart"></param>
+        /// <param name="renderAreaEnd"></param>
+        /// <returns></returns>
+        private bool RenderAreaContainsPoint(in Point3D point, in Fractional3D renderAreaStart, in Fractional3D renderAreaEnd)
+        {
+            var comparer = UtilityProject.GeometryNumeric.RangeComparer;
+            var fractional3D = VectorTransformer.ToFractional(new Cartesian3D(point.X, point.Y, point.Z));
+            if (comparer.Compare(fractional3D.A, renderAreaStart.A) < 0) return false;
+            if (comparer.Compare(fractional3D.B, renderAreaStart.B) < 0) return false;
+            if (comparer.Compare(fractional3D.C, renderAreaStart.C) < 0) return false;
+            if (comparer.Compare(fractional3D.A, renderAreaEnd.A) > 0) return false;
+            if (comparer.Compare(fractional3D.B, renderAreaEnd.B) > 0) return false;
+            if (comparer.Compare(fractional3D.C, renderAreaEnd.C) > 0) return false;
+            return true;
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame of the current render area
+        /// </summary>
+        private LinesVisual3D CreateCellFrameLineVisual()
         {
             var comparer = UtilityProject.GeometryNumeric.RangeComparer;
             var baseLinePairs = new[]
@@ -324,21 +411,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
             };
 
-            var points3D = new Point3DCollection(baseLinePairs.Length * Math.Abs(maxA - minA) * Math.Abs(maxB - minB) * Math.Abs(maxC - minC));
-            for (var a = minA; a <= maxA; a++)
+            var points3D = new Point3DCollection();
+            var max = RenderResourcesViewModel.GetRenderCuboidVectors().EndVector;
+            foreach (var (a, b, c) in EnumerateRenderedCellOffsets(false,true))
             {
-                for (var b = minB; b <= maxB; b++)
+                var shift = new Fractional3D(a, b, c);
+                foreach (var (start, end) in baseLinePairs.Select(x => (x.Item1 + shift, x.Item2 + shift)))
                 {
-                    for (var c = minC; c <= maxC; c++)
-                    {
-                        var shift = new Fractional3D(a, b, c);
-                        foreach (var (startVector, endVector) in baseLinePairs.Select(x => (x.Item1 + shift, x.Item2 + shift)))
-                        {
-                            if (comparer.Compare(endVector.A, maxA) > 0 || comparer.Compare(endVector.B, maxB) > 0 || comparer.Compare(endVector.C, maxC) > 0) continue;
-                            points3D.Add(VectorTransformer.ToCartesian(startVector).AsPoint3D());
-                            points3D.Add(VectorTransformer.ToCartesian(endVector).AsPoint3D());
-                        }
-                    }
+                    if (comparer.Compare(end.A, max.A) > 0 || comparer.Compare(end.B, max.B) > 0 || comparer.Compare(end.C, max.C) > 0) continue;
+                    points3D.Add(VectorTransformer.ToCartesian(start).AsPoint3D());
+                    points3D.Add(VectorTransformer.ToCartesian(end).AsPoint3D());
                 }
             }
 
@@ -346,14 +428,32 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame with the current render range
-        ///     information
+        ///     Enumerates the (x,y,z) cell offsets of the current render area as index tuples with different properties
         /// </summary>
-        private LinesVisual3D CreateCellFrameLineVisual()
+        /// <param name="skipOrigin"></param>
+        /// <param name="includeMax"></param>
+        /// <returns></returns>
+        private IEnumerable<(int A, int B, int C)> EnumerateRenderedCellOffsets(bool skipOrigin = false, bool includeMax = false)
         {
-            var (minA, minB, minC, maxA, maxB, maxC) =
-                RenderResourcesViewModel.GetFlooredRenderArea(UtilityProject.CommonNumeric.RangeComparer);
-            return CreateCellFrameLineVisual(minA, minB, minC, maxA, maxB, maxC);
+            var (minA, minB, minC, maxA, maxB, maxC) = RenderResourcesViewModel.GetFlooredRenderArea(UtilityProject.GeometryNumeric.RangeComparer);
+            if (!includeMax)
+            {
+                maxA--;
+                maxB--;
+                maxC--;
+            }
+
+            for (var a = minA; a <= maxA; a++)
+            {
+                for (var b = minB; b <= maxB; b++)
+                {
+                    for (var c = minC; c <= maxC; c++)
+                    {
+                        if (skipOrigin && a == 0 && b == 0 && c == 0) continue;
+                        yield return (a, b, c);
+                    }
+                }
+            }
         }
 
         /// <summary>

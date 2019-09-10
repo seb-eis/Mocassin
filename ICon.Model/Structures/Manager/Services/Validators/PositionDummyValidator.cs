@@ -61,7 +61,7 @@ namespace Mocassin.Model.Structures.Validators
                 if (item.IsDeprecated) 
                     continue;
 
-                var extended = ModelProject.SpaceGroupService.GetAllWyckoffPositions(item.Vector);
+                var extended = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(item.Vector);
                 if (extended.GetCppLowerBound(position.Vector) == extended.Count) 
                     continue;
 

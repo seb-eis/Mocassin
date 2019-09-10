@@ -36,19 +36,19 @@ namespace Mocassin.Symmetry.SpaceGroups
         public IComparer<Fractional3D> Comparer => VectorComparer;
 
         /// <summary>
-        ///     Creates new <see cref="SpaceGroupService"/> that uses the provided comparer and database file path
+        ///     Creates new <see cref="SpaceGroupService" /> that uses the provided comparer and database file path
         /// </summary>
         /// <param name="dbFilepath"></param>
         /// <param name="comparer"></param>
         public SpaceGroupService(string dbFilepath, IComparer<double> comparer)
-            :this(comparer)
+            : this(comparer)
         {
             if (dbFilepath == null) throw new ArgumentNullException(nameof(dbFilepath));
             ContextProvider = new SpaceGroupContextProvider(dbFilepath);
         }
 
         /// <summary>
-        ///     Creates a new <see cref="SpaceGroupService"/> with the passed comparer that does not have a database connection
+        ///     Creates a new <see cref="SpaceGroupService" /> with the passed comparer that does not have a database connection
         /// </summary>
         /// <param name="comparer"></param>
         public SpaceGroupService(IComparer<double> comparer)
@@ -93,13 +93,15 @@ namespace Mocassin.Symmetry.SpaceGroups
                     .Include(g => g.BaseSymmetryOperations)
                     .SingleOrDefault();
 
-                if (LoadedGroup == null) 
+                if (LoadedGroup == null)
                     LoadedGroup = newGroup;
 
                 if (newGroup != null && !newGroup.GetGroupEntry().Equals(LoadedGroup.GetGroupEntry()))
-                    LoadedGroup = !newGroup.GetGroupEntry().Equals(LoadedGroup.GetGroupEntry()) 
-                        ? newGroup 
+                {
+                    LoadedGroup = !newGroup.GetGroupEntry().Equals(LoadedGroup.GetGroupEntry())
+                        ? newGroup
                         : LoadedGroup;
+                }
             }
 
             return newGroup != null;
@@ -139,42 +141,42 @@ namespace Mocassin.Symmetry.SpaceGroups
             var setList = new SetList<ISpaceGroup>(Comparer<ISpaceGroup>.Default, 274);
             using (var context = ContextProvider.CreateContext())
             {
-                setList.AddMany(context.SpaceGroups.Include(x => x.BaseSymmetryOperations));
+                setList.AddRange(context.SpaceGroups.Include(x => x.BaseSymmetryOperations));
             }
 
             return setList;
         }
 
         /// <inheritdoc />
-        public SetList<Fractional3D> GetAllWyckoffPositions(Fractional3D refVector)
+        public SetList<Fractional3D> GetUnitCellP1PositionExtension(Fractional3D refVector)
         {
             return CreatePositionSetList(refVector);
         }
 
         /// <inheritdoc />
-        public List<SetList<Fractional3D>> GetAllWyckoffPositions(IEnumerable<Fractional3D> refVectors)
+        public List<SetList<Fractional3D>> GetUnitCellP1PositionExtensions(IEnumerable<Fractional3D> refVectors)
         {
             if (refVectors == null)
                 throw new ArgumentNullException(nameof(refVectors));
 
-            return refVectors.Select(GetAllWyckoffPositions).ToList();
+            return refVectors.Select(GetUnitCellP1PositionExtension).ToList();
         }
 
         /// <inheritdoc />
-        public SetList<TSource> GetAllWyckoffPositions<TSource>(TSource refVector)
+        public SetList<TSource> GetUnitCellP1PositionExtension<TSource>(TSource refVector)
             where TSource : struct, IFractional3D<TSource>
         {
             return CreatePositionSetList(refVector);
         }
 
         /// <inheritdoc />
-        public List<SetList<TSource>> GetAllWyckoffPositions<TSource>(IEnumerable<TSource> refVectors)
+        public List<SetList<TSource>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors)
             where TSource : struct, IFractional3D<TSource>
         {
             if (refVectors == null)
                 throw new ArgumentNullException(nameof(refVectors));
 
-            return refVectors.Select(GetAllWyckoffPositions).ToList();
+            return refVectors.Select(GetUnitCellP1PositionExtension).ToList();
         }
 
         /// <summary>
@@ -253,7 +255,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IList<Fractional3D[]> GetAllWyckoffSequences(IEnumerable<Fractional3D> refSequence)
+        public IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence)
         {
             return LoadedGroup.Operations
                 .Select(operation => refSequence.Select(vector => operation.ApplyUntrimmed(vector)).ToArray())
@@ -261,19 +263,50 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public SetList<Fractional3D[]> GetAllWyckoffOriginSequences(IEnumerable<Fractional3D> refSequence)
+        public SetList<Fractional3D[]> GetUnitCellP1PathExtension(IEnumerable<Fractional3D> refSequence)
         {
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
             var list = new SetList<Fractional3D[]>(comparer)
             {
-                GetAllWyckoffSequences(refSequence).Select(sequence => ShiftFirstToOrigin(sequence, 1.0e-10).ToArray())
+                GetFullP1PathExtension(refSequence).Select(sequence => ShiftFirstToOriginCell(sequence, 1.0e-10).ToArray())
             };
 
             return list;
         }
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> ShiftFirstToOrigin(IEnumerable<Fractional3D> source, double tolerance)
+        public IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence, bool filterInverses = false)
+        {
+            if (!(refSequence is IReadOnlyList<Fractional3D> refVectors)) refVectors = refSequence.ToList();
+
+            var operations = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
+            operations.AddRange(LoadedGroup.Operations.Select(x => GetOriginCellShiftedOperations(x.ApplyUntrimmed(refVectors[0]), x, 1.0e-10)));
+
+            var sequences = new SetList<IList<Fractional3D>>(Comparer<IList<Fractional3D>>.Create((a, b) => a.LexicographicCompare(b, VectorComparer)),
+                operations.Count);
+            var filteredOperations = new List<ISymmetryOperation>(LoadedGroup.Operations.Count / 2);
+
+            var transformedVectors = new List<Fractional3D>(refVectors.Count);
+            foreach (var operation in operations)
+            {
+                transformedVectors.Clear();
+                transformedVectors.AddRange(operation.ApplyUntrimmed(refVectors));
+                if (sequences.Contains(transformedVectors)) continue;
+                if (filterInverses)
+                {
+                    transformedVectors.Reverse();
+                    if (sequences.Contains(transformedVectors)) continue;
+                }
+
+                sequences.Add(transformedVectors.ToList());
+                filteredOperations.Add(operation);
+            }
+
+            return filteredOperations;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<Fractional3D> ShiftFirstToOriginCell(IEnumerable<Fractional3D> source, double tolerance)
         {
             if (!(source is IList<Fractional3D> sourceList))
                 sourceList = source.ToList();
@@ -284,12 +317,19 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public ISymmetryOperation CreateOperationToTarget(in Fractional3D source, in Fractional3D target)
+        public ISymmetryOperation GetOriginCellShiftedOperations(in Fractional3D start, ISymmetryOperation operation, double tolerance)
+        {
+            var shift = start.TrimToUnitCell(tolerance) - start;
+            return GetTranslationShiftedOperation(operation, shift);
+        }
+
+        /// <inheritdoc />
+        public ISymmetryOperation GetOperationToTarget(in Fractional3D source, in Fractional3D target)
         {
             foreach (var operation in LoadedGroup.Operations)
             {
                 var vector = operation.ApplyWithTrim(source, out var trimVector);
-                if (Comparer.Compare(vector, target) == 0) 
+                if (Comparer.Compare(vector, target) == 0)
                     return GetTranslationShiftedOperation(operation, trimVector);
             }
 
@@ -300,17 +340,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end)
         {
             var equalityComparer = VectorComparer.ValueComparer.ToEqualityComparer();
-            var (aMin, bMin, cMin) = (
-                MocassinMath.FloorToInt(start.A, equalityComparer), 
-                MocassinMath.FloorToInt(start.B, equalityComparer), 
+            var (aMin, bMin, cMin) = (MocassinMath.FloorToInt(start.A, equalityComparer), MocassinMath.FloorToInt(start.B, equalityComparer),
                 MocassinMath.FloorToInt(start.C, equalityComparer));
-            var (aMax, bMax, cMax) = (
-                MocassinMath.FloorToInt(end.A, equalityComparer), 
-                MocassinMath.FloorToInt(end.B, equalityComparer), 
+            var (aMax, bMax, cMax) = (MocassinMath.FloorToInt(end.A, equalityComparer), MocassinMath.FloorToInt(end.B, equalityComparer),
                 MocassinMath.FloorToInt(end.C, equalityComparer));
 
-            var basePositions = GetAllWyckoffPositions(source);
-            var result = new List<Fractional3D>();
+            var basePositions = GetUnitCellP1PositionExtension(source);
+            var capacity = Math.Abs(aMax - aMin) * Math.Abs(bMax - bMin) * Math.Abs(cMax - cMin);
+            var result = new List<Fractional3D>(capacity * capacity);
             for (var a = aMin; a <= aMax; a++)
             {
                 for (var b = bMin; b <= bMax; b++)
@@ -319,7 +356,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                     {
                         foreach (var entry in basePositions)
                         {
-                            var vector = entry + new Fractional3D(a,b,c);
+                            var vector = entry + new Fractional3D(a, b, c);
                             if (VectorComparer.ValueComparer.Compare(vector.A, start.A) < 0) continue;
                             if (VectorComparer.ValueComparer.Compare(vector.B, start.B) < 0) continue;
                             if (VectorComparer.ValueComparer.Compare(vector.C, start.C) < 0) continue;
@@ -421,7 +458,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public SortedDictionary<Fractional3D, List<Fractional3D>> CreateEnvironmentDictionary(IEnumerable<Fractional3D> refSequence)
+        public SortedDictionary<Fractional3D, List<Fractional3D>> GetEnvironmentDictionary(IEnumerable<Fractional3D> refSequence)
         {
             if (!(refSequence is IList<Fractional3D> refList))
                 refList = refSequence.ToList();

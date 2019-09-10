@@ -64,14 +64,22 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
-        IList<Fractional3D[]> GetAllWyckoffSequences(IEnumerable<Fractional3D> refSequence);
+        IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence);
 
         /// <summary>
-        ///     Gets the filtered and trimmed list of all wyckoff extended sequences that begin in the same origin unit cell
+        ///     Gets the ordered, filtered and trimmed list of all wyckoff extended sequences that begin in the (0,0,0) origin unit cell
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
-        SetList<Fractional3D[]> GetAllWyckoffOriginSequences(IEnumerable<Fractional3D> refSequence);
+        SetList<Fractional3D[]> GetUnitCellP1PathExtension(IEnumerable<Fractional3D> refSequence);
+
+        /// <summary>
+        ///     Gets a minimal set of <see cref="ISymmetryOperation"/> instances required to fully describe the passed vector set in a P1 extended unit cell context (Warning: Removing the inverses is only valid for display purposes)
+        /// </summary>
+        /// <param name="refSequence"></param>
+        /// <param name="filterInverses"></param>
+        /// <returns></returns>
+        IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence, bool filterInverses = false);
 
         /// <summary>
         ///     Gets a sorted list of unique fractional vectors that represent all equivalent wyckoff positions to the original
@@ -79,14 +87,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="refVector"></param>
         /// <returns></returns>
-        SetList<Fractional3D> GetAllWyckoffPositions(Fractional3D refVector);
+        SetList<Fractional3D> GetUnitCellP1PositionExtension(Fractional3D refVector);
 
         /// <summary>
         ///     Get multiple sorted unique lists of wyckoff extended positions that each includes the original reference vector
         /// </summary>
         /// <param name="refVectors"></param>
         /// <returns></returns>
-        List<SetList<Fractional3D>> GetAllWyckoffPositions(IEnumerable<Fractional3D> refVectors);
+        List<SetList<Fractional3D>> GetUnitCellP1PositionExtensions(IEnumerable<Fractional3D> refVectors);
 
         /// <summary>
         ///     Gets a sorted list of unique structs that implement the fractional vector interface that represent all equivalent
@@ -95,8 +103,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <typeparam name="TSource"></typeparam>
         /// <param name="refVector"></param>
         /// <returns></returns>
-        SetList<TSource> GetAllWyckoffPositions<TSource>(TSource refVector) 
-            where TSource : struct, IFractional3D<TSource>;
+        SetList<TSource> GetUnitCellP1PositionExtension<TSource>(TSource refVector) where TSource : struct, IFractional3D<TSource>;
 
         /// <summary>
         ///     Get multiple sorted unique sets of wyckoff positions with the same type as the provided fractional vector type
@@ -104,7 +111,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <typeparam name="TSource"></typeparam>
         /// <param name="refVectors"></param>
         /// <returns></returns>
-        List<SetList<TSource>> GetAllWyckoffPositions<TSource>(IEnumerable<TSource> refVectors)
+        List<SetList<TSource>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors)
             where TSource : struct, IFractional3D<TSource>;
 
         /// <summary>
@@ -112,7 +119,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
-        SortedDictionary<Fractional3D, List<Fractional3D>> CreateEnvironmentDictionary(IEnumerable<Fractional3D> refSequence);
+        SortedDictionary<Fractional3D, List<Fractional3D>> GetEnvironmentDictionary(IEnumerable<Fractional3D> refSequence);
 
         /// <summary>
         ///     Gets a sorted list of all unique space group interfaces the service can provide
@@ -147,8 +154,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <returns></returns>
-        IComparer<T1> GetSpecialVectorComparer<T1>() 
-            where T1 : IVector3D;
+        IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D;
 
         /// <summary>
         ///     Shifts a sequence of fractional vectors in a manner that the first vector in the sequence is in the (0,0,0) origin
@@ -157,7 +163,16 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="source"></param>
         /// <param name="tolerance"></param>
         /// <returns></returns>
-        IEnumerable<Fractional3D> ShiftFirstToOrigin(IEnumerable<Fractional3D> source, double tolerance);
+        IEnumerable<Fractional3D> ShiftFirstToOriginCell(IEnumerable<Fractional3D> source, double tolerance);
+
+        /// <summary>
+        ///     Checks if the passed <see cref="ISymmetryOperation"/> pushes the provided vector outside of the origin cell and returns either the operation itself or a origin shift corrected version
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="operation"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        ISymmetryOperation GetOriginCellShiftedOperations(in Fractional3D start, ISymmetryOperation operation, double tolerance);
 
         /// <summary>
         ///     Creates the first possible operation that transforms the passed source vector onto the target.
@@ -166,7 +181,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        ISymmetryOperation CreateOperationToTarget(in Fractional3D source, in Fractional3D target);
+        ISymmetryOperation GetOperationToTarget(in Fractional3D source, in Fractional3D target);
 
         /// <summary>
         ///     Gets all symmetry equivalent positions to the source that are within the limits of the edges of a cuboid

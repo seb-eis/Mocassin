@@ -67,7 +67,7 @@ namespace Mocassin.Framework.Extensions
         /// <typeparam name="T1"></typeparam>
         /// <param name="collection"></param>
         /// <param name="values"></param>
-        public static void AddMany<T1>(this ICollection<T1> collection, IEnumerable<T1> values)
+        public static void AddRange<T1>(this ICollection<T1> collection, IEnumerable<T1> values)
         {
             foreach (var item in values)
             {

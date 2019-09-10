@@ -286,7 +286,7 @@ namespace Mocassin.Model.Structures
             {
                 return isDeprecated
                     ? new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer)
-                    : ModelProject.SpaceGroupService.GetAllWyckoffPositions(vector);
+                    : ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(vector);
             }
 
             return Create;
@@ -305,7 +305,7 @@ namespace Mocassin.Model.Structures
             {
                 return isDeprecated
                     ? new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>())
-                    : ModelProject.SpaceGroupService.GetAllWyckoffPositions(position);
+                    : ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position);
             }
 
             return Create;

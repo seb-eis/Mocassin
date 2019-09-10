@@ -63,7 +63,7 @@ namespace Mocassin.Model.Transitions
         {
             return geometry
                 .SelectConsecutivePairs((first, second) => Fractional3D.GetMiddle(second, first))
-                .Select(spaceGroupService.GetAllWyckoffPositions)
+                .Select(spaceGroupService.GetUnitCellP1PositionExtension)
                 .ToList();
         }
 

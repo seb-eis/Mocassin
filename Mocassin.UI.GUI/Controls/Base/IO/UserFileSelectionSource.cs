@@ -2,30 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Windows.Input;
 using Microsoft.Win32;
 using Mocassin.Framework.Extensions;
-using Mocassin.UI.Base.Commands;
 
 namespace Mocassin.UI.GUI.Controls.Base.IO
 {
     /// <summary>
-    ///     Adapter that supplies <see cref="OpenFileDialog"/> tailored to for project file selection
+    ///     Adapter that supplies <see cref="OpenFileDialog" /> tailored to for project file selection
     /// </summary>
     public class UserFileSelectionSource
     {
         /// <summary>
-        ///     Get the supported file naming and extension <see cref="string"/> values
+        ///     Get the supported file naming and extension <see cref="string" /> values
         /// </summary>
         public (string Name, string Extension)[] SupportedFileTypes { get; }
 
         /// <summary>
-        ///     Get the project file selection filter <see cref="string"/>
+        ///     Get the project file selection filter <see cref="string" />
         /// </summary>
         public string FileFilter { get; }
 
         /// <summary>
-        ///     Creates a new <see cref="UserFileSelectionSource"/> with the supported file types
+        ///     Creates a new <see cref="UserFileSelectionSource" /> with the supported file types
         /// </summary>
         /// <param name="supportedFileTypes"></param>
         public UserFileSelectionSource(params (string Name, string Extension)[] supportedFileTypes)
@@ -35,7 +33,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Get a file <see cref="string"/> selection from the user
+        ///     Get a file <see cref="string" /> selection from the user
         /// </summary>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
@@ -47,7 +45,8 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Tries to get a file <see cref="string"/> selection from the user. Returns false if the selected file does not exist
+        ///     Tries to get a file <see cref="string" /> selection from the user. Returns false if the selected file does not
+        ///     exist
         /// </summary>
         /// <param name="selected"></param>
         /// <param name="checkFileExists"></param>
@@ -59,7 +58,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Creates a new <see cref="UserFileSelectionSource"/> tailored to project files
+        ///     Creates a new <see cref="UserFileSelectionSource" /> tailored to project files
         /// </summary>
         /// <returns></returns>
         public static UserFileSelectionSource CreateForProjectFiles()
@@ -68,7 +67,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Creates  a new <see cref="UserFileSelectionSource"/> tailored to simulation databases
+        ///     Creates  a new <see cref="UserFileSelectionSource" /> tailored to simulation databases
         /// </summary>
         /// <returns></returns>
         public static UserFileSelectionSource CreateForJobDbFiles()
@@ -77,7 +76,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         }
 
         /// <summary>
-        ///     Converts a set of name and file extension strings into a <see cref="OpenFileDialog"/> selection filter
+        ///     Converts a set of name and file extension strings into a <see cref="OpenFileDialog" /> selection filter
         /// </summary>
         /// <param name="supportedFileTypes"></param>
         /// <returns></returns>

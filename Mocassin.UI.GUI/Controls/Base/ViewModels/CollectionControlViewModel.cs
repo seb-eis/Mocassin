@@ -68,7 +68,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             if (!Items.Contains(item)) throw new InvalidOperationException("Item is not part of the collection.");
             var tempList = new List<T>(count);
             for (var i = 0; i < count; i++) tempList.Add(duplicator(item));
-            Items.AddMany(tempList);
+            Items.AddRange(tempList);
             Resynchronize();
         }
     }

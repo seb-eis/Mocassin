@@ -37,5 +37,10 @@ namespace Mocassin.Model.ModelProject
         ///     The factor based relative double comparer, slow and not able to compare to zero, but usually the most flexible one
         /// </summary>
         NumericComparer RelativeComparer { get; }
+
+        /// <summary>
+        ///     The combined comparer that uses the range comparer for zero checks and the relative factor comparer as a main comparer
+        /// </summary>
+        NumericComparer MainComparer { get; }
     }
 }

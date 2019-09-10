@@ -17,13 +17,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     public static class VisualExtensions
     {
         /// <summary>
-        ///     Get the <see cref="Regex"/> to match the contents of the ARGB color format #FFFFFFFF
+        ///     Get the <see cref="Regex" /> to match the contents of the ARGB color format #FFFFFFFF
         /// </summary>
-        public static Regex ColorRegexArgbHex { get; } = 
+        public static Regex ColorRegexArgbHex { get; } =
             new Regex(@"#(?<a>[a-fA-F0-9]{2})(?<r>[a-fA-F0-9]{2})(?<g>[a-fA-F0-9]{2})(?<b>[a-fA-F0-9]{2})");
 
         /// <summary>
-        ///     Converts a <see cref="Color"/> to a ARGB #FFFFFFFF format
+        ///     Converts a <see cref="Color" /> to a ARGB #FFFFFFFF format
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
@@ -33,9 +33,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Tries to convert a <see cref="string"/> to a <see cref="Color"/> if in the  ARGB #FFFFFFFF format
+        ///     Tries to convert a <see cref="string" /> to a <see cref="Color" /> if in the  ARGB #FFFFFFFF format
         /// </summary>
         /// <param name="str"></param>
+        /// <param name="color"></param>
         /// <returns></returns>
         public static bool TryParseArgbHex(string str, out Color color)
         {
@@ -52,7 +53,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
                 return false;
             }
 
-            const NumberStyles numberStyle = System.Globalization.NumberStyles.HexNumber;
+            const NumberStyles numberStyle = NumberStyles.HexNumber;
 
             var a = byte.Parse(match.Groups["a"].Value, numberStyle);
             var r = byte.Parse(match.Groups["r"].Value, numberStyle);
@@ -63,7 +64,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Converts a <see cref="string" /> to a <see cref="Color" /> if in the ARGB #FFFFFFFF format (With option to suppress conversion errors)
+        ///     Converts a <see cref="string" /> to a <see cref="Color" /> if in the ARGB #FFFFFFFF format (With option to suppress
+        ///     conversion errors)
         ///     use a default over an exception on parsing error
         /// </summary>
         /// <param name="str"></param>
@@ -76,14 +78,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
             throw new FormatException("Invalid color format.");
         }
 
-        public static IEnumerable<Transform3D> ToTransform3D(this IEnumerable<ISymmetryOperation> operations,
-            FractionalCoordinateSystem3D coordinateSystem3D)
-        {
-            yield break;
-        }
-
         /// <summary>
-        ///     Creates a <see cref="Transform3D"/> instance from a <see cref="ISymmetryOperation"/> and <see cref="FractionalCoordinateSystem3D"/>
+        ///     Creates a <see cref="Transform3D" /> instance from a <see cref="ISymmetryOperation" /> and
+        ///     <see cref="FractionalCoordinateSystem3D" />
         ///     that can directly transform cartesian 3D information in cartesian space
         /// </summary>
         /// <param name="operation"></param>
@@ -98,8 +95,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Creates a <see cref="Transform3D"/> instance from a <see cref="ISymmetryOperation"/> and <see cref="FractionalCoordinateSystem3D"/>
-        ///     with a <see cref="Fractional3D"/> offset that can directly transform cartesian coordinates using the space group information
+        ///     Creates a <see cref="Transform3D" /> instance from a <see cref="ISymmetryOperation" /> and
+        ///     <see cref="FractionalCoordinateSystem3D" />
+        ///     with a <see cref="Fractional3D" /> offset that can directly transform cartesian coordinates using the space group
+        ///     information
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="coordinateSystem3D"></param>
@@ -114,7 +113,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Translates a <see cref="ISymmetryOperation"/> (M * v column-layout, 3x4) into the <see cref="Matrix3D"/> equivalent (v * M row-layout, 4x4)
+        ///     Translates a <see cref="ISymmetryOperation" /> (M * v column-layout, 3x4) into the <see cref="Matrix3D" />
+        ///     equivalent (v * M row-layout, 4x4)
         /// </summary>
         /// <param name="operation"></param>
         /// <returns></returns>
@@ -127,7 +127,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
                 M21 = values[1], M22 = values[5], M23 = values[9], M24 = 0,
                 M31 = values[2], M32 = values[6], M33 = values[10], M34 = 0,
                 OffsetX = values[3], OffsetY = values[7], OffsetZ = values[11],
-                M44 = 1,
+                M44 = 1
             };
 
             return result;
@@ -151,14 +151,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
                 M21 = values[1], M22 = values[5], M23 = values[9], M24 = 0,
                 M31 = values[2], M32 = values[6], M33 = values[10], M34 = 0,
                 OffsetX = values[3] + offsetX, OffsetY = values[7] + offsetY, OffsetZ = values[11] + offsetZ,
-                M44 = 1,
+                M44 = 1
             };
 
             return result;
         }
 
         /// <summary>
-        ///     Translates a <see cref="TransformMatrix2D"/> (M * v column-layout, 3x3) into the <see cref="Matrix3D"/> equivalent (v * M row-layout, 4x4)
+        ///     Translates a <see cref="TransformMatrix2D" /> (M * v column-layout, 3x3) into the <see cref="Matrix3D" />
+        ///     equivalent (v * M row-layout, 4x4)
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
@@ -173,6 +174,42 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
                 M44 = 1
             };
 
+            return result;
+        }
+
+        /// <summary>
+        ///     Compares two <see cref="Rect3D"/> using the provided <see cref="IComparer{T}"/> for doubles
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static int Compare(this Rect3D lhs, Rect3D rhs, IComparer<double> comparer)
+        {
+            var compX = comparer.Compare(lhs.X, rhs.X);
+            if (compX != 0) return compX;
+            var compY = comparer.Compare(lhs.Y, rhs.Y);
+            if (compY != 0) return compY;
+            var compZ = comparer.Compare(lhs.Z, rhs.Z);
+            if (compZ != 0) return compZ;
+            var compSizeX = comparer.Compare(lhs.X + lhs.SizeX, rhs.X + rhs.SizeX);
+            if (compSizeX != 0) return compSizeX;
+            var compSizeY = comparer.Compare(lhs.Y + lhs.SizeY, rhs.Y + rhs.SizeY);
+            return compSizeY == 0 ? comparer.Compare(lhs.Z + lhs.SizeZ, rhs.Z + rhs.SizeZ) : compSizeY;
+        }
+
+        /// <summary>
+        ///     Compares the bounding <see cref="Rect3D"/> of two <see cref="MeshGeometryVisual3D"/> instances
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public static int CompareBounds(this MeshGeometryVisual3D lhs, MeshGeometryVisual3D rhs, IComparer<double> comparer)
+        {
+            var lhsBounds = lhs.Transform.TransformBounds(lhs.MeshGeometry.Bounds);
+            var rhsBounds = rhs.Transform.TransformBounds(rhs.MeshGeometry.Bounds);
+            var result = lhsBounds.Compare(rhsBounds, comparer);
             return result;
         }
     }

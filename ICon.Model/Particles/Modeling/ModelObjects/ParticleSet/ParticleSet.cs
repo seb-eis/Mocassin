@@ -112,7 +112,7 @@ namespace Mocassin.Model.Particles
         {
             comparer = comparer ?? Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
             var setList = new SetList<IParticle>(comparer);
-            setList.AddMany(particles);
+            setList.AddRange(particles);
             return new ParticleSet {Particles = setList.ToList()};
         }
     }

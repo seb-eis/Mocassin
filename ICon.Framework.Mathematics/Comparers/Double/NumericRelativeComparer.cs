@@ -31,9 +31,9 @@ namespace Mocassin.Mathematics.Comparers
         }
 
         /// <inheritdoc />
-        public override int Compare(double x, double y)
+        public override int Compare(double lhs, double rhs)
         {
-            return Equals(x, y) ? 0 : x < y ? -1 : 1;
+            return Equals(lhs, rhs) ? 0 : lhs < rhs ? -1 : 1;
         }
 
         /// <inheritdoc />

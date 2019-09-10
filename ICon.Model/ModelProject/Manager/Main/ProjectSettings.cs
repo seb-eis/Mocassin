@@ -131,13 +131,13 @@ namespace Mocassin.Model.ModelProject
             {
                 CommonNumericSettings = new MocassinNumericSettings
                 {
-                    FactorValue = 1.0e-3,
+                    FactorValue = 1.0e-2,
                     RangeValue = 1.0e-3,
                     UlpValue = 10
                 },
                 GeometryNumericSettings = new MocassinNumericSettings
                 {
-                    FactorValue = 1.0e-3,
+                    FactorValue = 1.0e-2,
                     RangeValue = 1.0e-3,
                     UlpValue = 10
                 },

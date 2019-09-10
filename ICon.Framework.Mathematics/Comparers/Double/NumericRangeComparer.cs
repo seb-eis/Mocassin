@@ -9,17 +9,12 @@ namespace Mocassin.Mathematics.Comparers
     public class NumericRangeComparer : NumericComparer
     {
         /// <summary>
-        ///     Shared zero safe flag
-        /// </summary>
-        private const bool ZeroSaveValue = true;
-
-        /// <summary>
         ///     The absolute tolerance range value
         /// </summary>
         public double Range { get; protected set; }
 
         /// <inheritdoc />
-        public override bool IsZeroCompatible => ZeroSaveValue;
+        public override bool IsZeroCompatible => true;
 
         /// <summary>
         ///     Creates a new range comparer with the specified range
@@ -31,9 +26,9 @@ namespace Mocassin.Mathematics.Comparers
         }
 
         /// <inheritdoc />
-        public override int Compare(double x, double y)
+        public override int Compare(double lhs, double rhs)
         {
-            return Equals(x, y) ? 0 : x < y ? -1 : 1;
+            return Equals(lhs, rhs) ? 0 : lhs < rhs ? -1 : 1;
         }
 
         /// <inheritdoc />

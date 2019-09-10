@@ -70,7 +70,7 @@ namespace Mocassin.Model.Transitions
             var end = UnitCellProvider.GetEntryValueAt(geometryList.Last());
 
 
-            foreach (var fractionalSequence in SpaceGroupService.GetAllWyckoffOriginSequences(geometryList))
+            foreach (var fractionalSequence in SpaceGroupService.GetUnitCellP1PathExtension(geometryList))
             {
                 if (VectorEncoder.TryEncode(fractionalSequence.Cast<IFractional3D>(), out var encodedSequence))
                     yield return new KineticMapping(transition, start, end, encodedSequence.ToArray(), fractionalSequence);

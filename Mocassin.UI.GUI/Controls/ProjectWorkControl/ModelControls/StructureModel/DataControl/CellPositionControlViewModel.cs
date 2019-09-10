@@ -70,7 +70,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
             if (positionGraph == null) return new List<Fractional3D>();
             
             var vector = new Fractional3D(positionGraph.A,positionGraph.B,positionGraph.C);
-            return ParameterControlViewModel.SpaceGroupService.GetAllWyckoffPositions(vector);
+            return ParameterControlViewModel.SpaceGroupService.GetUnitCellP1PositionExtension(vector);
         }
 
         /// <summary>

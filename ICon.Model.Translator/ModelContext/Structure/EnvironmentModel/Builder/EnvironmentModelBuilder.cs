@@ -163,11 +163,11 @@ namespace Mocassin.Model.Translator.ModelContext
             var targetInfo = pairModel.TargetPositionInfo;
             var positionPair = new[] {pairInteraction.GetSecondPositionVector(), pairInteraction.Position0.Vector};
             var invertedPair = ModelProject.SpaceGroupService
-                .ShiftFirstToOrigin(positionPair, ModelProject.GeometryNumeric.ComparisonRange)
+                .ShiftFirstToOriginCell(positionPair, ModelProject.GeometryNumeric.ComparisonRange)
                 .ToList();
 
             var operation = ModelProject.SpaceGroupService
-                .CreateOperationToTarget(invertedPair[0], pairInteraction.Position1.Vector);
+                .GetOperationToTarget(invertedPair[0], pairInteraction.Position1.Vector);
 
             targetInfo.Distance = pairInteraction.Distance;
             targetInfo.UnitCellPosition = pairInteraction.Position0;

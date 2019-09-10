@@ -54,10 +54,10 @@ namespace Mocassin.Mathematics.Comparers
         /// <summary>
         ///     Compares two double values with the internally specified information
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
         /// <returns></returns>
-        public abstract override int Compare(double first, double second);
+        public abstract override int Compare(double lhs, double rhs);
 
         /// <inheritdoc />
         public abstract bool Equals(double x, double y);

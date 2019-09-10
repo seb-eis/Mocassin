@@ -70,9 +70,9 @@ namespace Mocassin.Model.Translator.ModelContext
                 .Select(a => a.TargetPositionInfo)
                 .ToList();
 
-            var targetVectors = ModelProject.SpaceGroupService.GetAllWyckoffPositions(environmentModel.UnitCellPosition.Vector);
+            var targetVectors = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(environmentModel.UnitCellPosition.Vector);
             var positionModels = targetVectors
-                .Select(target => ModelProject.SpaceGroupService.CreateOperationToTarget(sourceVector, target))
+                .Select(target => ModelProject.SpaceGroupService.GetOperationToTarget(sourceVector, target))
                 .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
 
             return positionModels;

@@ -61,7 +61,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
         protected void MatchUnitCellPositionsToSpaceGroup(ConflictReport report)
         {
             var currentPositions = DataAccess.Query(data => data.UnitCellPositions.Select(position => position.Vector.AsFractional()));
-            var extendedPositions = ModelProject.SpaceGroupService.GetAllWyckoffPositions(currentPositions);
+            var extendedPositions = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtensions(currentPositions);
 
             var comparer = ModelProject.SpaceGroupService.Comparer.ToEqualityComparer();
 

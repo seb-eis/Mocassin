@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -207,7 +208,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public void AddVisualGroup(IEnumerable<Visual3D> visuals, string name, bool isVisible = true)
         {
             var modelVisual = new ModelVisual3D();
-            modelVisual.Children.AddMany(visuals);
+            modelVisual.Children.AddRange(visuals);
 
             var visualGroup = new VisualGroupViewModel
             {
@@ -318,7 +319,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 
         /// <summary>
         ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
-        ///     arrow shape sharing a common mesh for multiple <see cref="Transform3D" /> operations
+        ///     arrow shape by two points sharing a common mesh for multiple <see cref="Transform3D" /> operations
         /// </summary>
         /// <param name="diameter"></param>
         /// <param name="headLength"></param>
@@ -335,6 +336,59 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             var meshGeometry = meshBuilder.ToMesh(freezeMesh);
 
             return BuildMeshVisualFactory(meshGeometry);
+        }
+
+        /// <summary>
+        ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
+        ///     dual headed arrow shape by two points sharing a common mesh for multiple <see cref="Transform3D" /> operations
+        /// </summary>
+        /// <param name="diameter"></param>
+        /// <param name="headLength"></param>
+        /// <param name="thetaDiv"></param>
+        /// <param name="freezeMesh"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public Func<Transform3D, MeshGeometryVisual3D> BuildDualHeadArrowVisualFactory(double diameter, in Point3D start, in Point3D end,
+            double headLength, int thetaDiv, bool freezeMesh = true)
+        {
+            var meshBuilder = new MeshBuilder();
+            var vector = end - start;
+            var length = vector.Length;
+            var radius = diameter / 2.0;
+            var revolvePoints = new PointCollection
+            {
+                new Point(0.0, 0.0),
+                new Point(diameter * headLength, diameter),
+                new Point(diameter * headLength, radius),
+                new Point(length - diameter * headLength, radius),
+                new Point(length - diameter * headLength, diameter),
+                new Point(length, 0.0)
+            };
+            meshBuilder.AddRevolvedGeometry(revolvePoints, null, start, vector, thetaDiv);
+            var meshGeometry = meshBuilder.ToMesh(freezeMesh);
+
+            return BuildMeshVisualFactory(meshGeometry);
+        }
+
+        /// <summary>
+        ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
+        ///     arrow shape by point and direction sharing a common mesh for multiple <see cref="Transform3D" /> operations
+        /// </summary>
+        /// <param name="diameter"></param>
+        /// <param name="length"></param>
+        /// <param name="headLength"></param>
+        /// <param name="thetaDiv"></param>
+        /// <param name="freezeMesh"></param>
+        /// <param name="start"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        public Func<Transform3D, MeshGeometryVisual3D> BuildArrowVisualFactory(double diameter, in Point3D start, Vector3D direction,
+            double length, double headLength, int thetaDiv, bool freezeMesh = true)
+        {
+            direction.Normalize();
+            var end = start + direction * length;
+            return BuildArrowVisualFactory(diameter, start, end, headLength, thetaDiv, freezeMesh);
         }
 
 

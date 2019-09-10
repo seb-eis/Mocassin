@@ -183,5 +183,21 @@ namespace Mocassin.Mathematics.Extensions
         {
             return first.CreateNew(first.Coordinates.Add(coordinates));
         }
+
+        /// <summary>
+        ///     Generic test wherever a <see cref="IFractional3D"/> lies within abounding cuboid defined by two <see cref="IFractional3D"/> points
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="comparer"></param>
+        /// <returns>-1 if any component is below the lower point, 0 if all are within bounds an +1 if any component is above the upper point</returns>
+        public static int CuboidHitTest<T>(this T value, T start, T end, IComparer<double> comparer) where T : IFractional3D
+        {
+            if (comparer.Compare(value.A, start.A) < 0 || comparer.Compare(value.B, start.B) < 0 || comparer.Compare(value.C, start.C) < 0) return -1;
+            if (comparer.Compare(value.A, end.A) > 0 || comparer.Compare(value.B, end.B) > 0 || comparer.Compare(value.C, end.C) > 0) return 1;
+            return 0;
+        }
     }
 }
