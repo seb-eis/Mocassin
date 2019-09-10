@@ -120,6 +120,27 @@ static error_t GetStructureModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *d
     return  error;
 }
 
+// Compatibility function to enable the system to load older databases without the defect background column
+static error_t GetEnergyModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    let localQuery = "select NumOfPairTables, NumOfClusterTables from EnergyModels where Id = ?1";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+    var model = &dbModel->EnergyModel;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+    sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
+
+    let pairTableCount = sqlite3_column_int(sqlStatement, 0);
+    let clusterTableCount = sqlite3_column_int(sqlStatement, 1);
+
+    model->PairTables = new_Span(model->PairTables, pairTableCount);
+    model->ClusterTables = new_Span(model->ClusterTables, clusterTableCount);
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
 
 static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
@@ -130,6 +151,14 @@ static error_t GetEnergyModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbMo
     var model = &dbModel->EnergyModel;
 
     error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.EnergyModelId);
+
+    // Todo: Remove this compatibility call as soon as it is no longer needed
+    if (error != SQLITE_ROW)
+    {
+        sqlite3_finalize(sqlStatement);
+        return GetEnergyModelFromDb_Deprecated(sqlQuery, db , dbModel);
+    }
+
     sql_FinalizeAndReturnIf(error != SQLITE_ROW, sqlStatement);
 
     let pairTableCount = sqlite3_column_int(sqlStatement, 0);

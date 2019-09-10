@@ -621,9 +621,6 @@ static error_t SyncMainStateToDatabaseModel(SCONTEXT_PARAM)
     error = InitJumpStatisticsTrackingSystem(SCONTEXT);
     return_if(error,error);
 
-    #if defined(OPT_USE_3D_PAIRTABLES)
-    error = GenerateAndSetPairDeltaTables(SCONTEXT);
-    #endif
     SetMainStateFlagsToStartConditions(SCONTEXT);
 
     return error;
@@ -691,6 +688,11 @@ static void PopulateDynamicSimulationModel(SCONTEXT_PARAM)
 {
     var error = SyncDynamicModelToMainState(SCONTEXT);
     error_assert(error, "Data structure synchronization failed (state ==> dynamic model).");
+
+    #if defined(OPT_USE_3D_PAIRTABLES)
+    error = GenerateAndSetPairDeltaTables(SCONTEXT);
+    error_assert(error, "Error on generation of pair delta tables.");
+    #endif
 }
 
 // Synchronizes the cycle counters of the dynamic state with the info from the main simulation state

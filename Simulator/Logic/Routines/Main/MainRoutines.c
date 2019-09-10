@@ -467,14 +467,15 @@ static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
     var runInfo = getRuntimeInformation(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
     var newClock = clock();
+    let deltaClock = newClock - runInfo->PreviousBlockFinishClock;
 
-    metaData->TimePerBlock = (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
-    metaData->ProgramRunTime += (double) (newClock - runInfo->PreviousBlockFinishClock) / CLOCKS_PER_SEC;
+    metaData->TimePerBlock = (double) deltaClock / CLOCKS_PER_SEC;
+    metaData->ProgramRunTime += metaData->TimePerBlock;
 
-    var blockEta = metaData->TimePerBlock + metaData->ProgramRunTime;
+    var nextBlockEtaClock = newClock + deltaClock;
     runInfo->PreviousBlockFinishClock = newClock;
 
-    bool_t isTimeout = (metaData->ProgramRunTime >= jobInfo->TimeLimit) || (blockEta > jobInfo->TimeLimit);
+    bool_t isTimeout = nextBlockEtaClock > (jobInfo->TimeLimit * CLOCKS_PER_SEC);
     return isTimeout;
 }
 

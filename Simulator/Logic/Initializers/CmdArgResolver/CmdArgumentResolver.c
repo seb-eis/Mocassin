@@ -56,7 +56,7 @@ static const CmdArgLookup_t* getEssentialCmdArgsResolverTable()
     {
         { "-dbPath",  (FValidator_t) ValidateIsValidFilePath,     (FCmdCallback_t) setDatabasePath },
         { "-jobId",   (FValidator_t) ValidateDatabaseQueryString, (FCmdCallback_t) setDatabaseLoadString },
-        { "-ioPath",  (FValidator_t) ValidateIsDiretoryPath,      (FCmdCallback_t) setIODirectoryPath}
+        { "-ioPath",  (FValidator_t) ValidateIsDiretoryPath,      (FCmdCallback_t) setIODirectoryPath},
     };
 
     static const CmdArgLookup_t resolverTable =
@@ -78,7 +78,7 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
         { "-engPluginPath",   (FValidator_t)  ValidateIsValidFilePath,     (FCmdCallback_t) setEnergyPluginPath },
         { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
         { "-stdout",          (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
-        { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode}
+        { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode},
     };
 
     static const CmdArgLookup_t resolverTable =
