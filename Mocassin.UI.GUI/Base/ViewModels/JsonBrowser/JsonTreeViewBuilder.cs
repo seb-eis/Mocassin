@@ -165,7 +165,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         /// <returns></returns>
         public static string CreateBaseHeader(string name)
         {
-            return CapitalRegex.Replace(name, x => $"{x.Groups[1]} {x.Groups[2]}");
+            return CapitalRegex.Replace(name, x => $"{x.Groups[1]}_{x.Groups[2]}");
         }
     }
 }

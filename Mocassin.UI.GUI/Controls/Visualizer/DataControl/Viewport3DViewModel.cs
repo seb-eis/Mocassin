@@ -207,14 +207,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="isVisible"></param>
         public void AddVisualGroup(IEnumerable<Visual3D> visuals, string name, bool isVisible = true)
         {
-            var modelVisual = new ModelVisual3D();
-            modelVisual.Children.AddRange(visuals);
-
-            var visualGroup = new VisualGroupViewModel
+            ExecuteOnDispatcher(() =>
             {
-                IsVisible = isVisible, Name = name ?? "New group", ModelVisual = modelVisual
-            };
-            AddVisualGroup(visualGroup);
+                var modelVisual = new ModelVisual3D();
+                modelVisual.Children.AddRange(visuals);
+                var visualGroup = new VisualGroupViewModel
+                {
+                    IsVisible = isVisible, Name = name ?? "New group", ModelVisual = modelVisual
+                };
+                AddVisualGroup(visualGroup);
+            });
         }
 
         /// <summary>
@@ -349,23 +351,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        public Func<Transform3D, MeshGeometryVisual3D> BuildDualHeadArrowVisualFactory(double diameter, in Point3D start, in Point3D end,
+        public Func<Transform3D, MeshGeometryVisual3D> BuildDualHeadedArrowVisualFactory(double diameter, in Point3D start, in Point3D end,
             double headLength, int thetaDiv, bool freezeMesh = true)
         {
             var meshBuilder = new MeshBuilder();
-            var vector = end - start;
-            var length = vector.Length;
-            var radius = diameter / 2.0;
-            var revolvePoints = new PointCollection
-            {
-                new Point(0.0, 0.0),
-                new Point(diameter * headLength, diameter),
-                new Point(diameter * headLength, radius),
-                new Point(length - diameter * headLength, radius),
-                new Point(length - diameter * headLength, diameter),
-                new Point(length, 0.0)
-            };
-            meshBuilder.AddRevolvedGeometry(revolvePoints, null, start, vector, thetaDiv);
+            meshBuilder.AddTwoHeadedArrow(start, end, diameter, headLength, thetaDiv);
             var meshGeometry = meshBuilder.ToMesh(freezeMesh);
 
             return BuildMeshVisualFactory(meshGeometry);
@@ -413,8 +403,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             if (visuals == null) throw new ArgumentNullException(nameof(visuals));
             if (brush == null) throw new ArgumentNullException(nameof(brush));
 
-            if (freezeBrush && brush.CanFreeze) brush.Freeze();
-            foreach (var visual in visuals) visual.Fill = brush;
+            if (freezeBrush && brush.CanFreeze) brush.Dispatcher?.Invoke(() => brush.Freeze());
+            foreach (var visual in visuals) visual.Dispatcher?.Invoke(() => visual.Fill = brush);
         }
 
         /// <summary>

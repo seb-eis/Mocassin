@@ -1015,6 +1015,7 @@
     <Compile Include="Controls\Visualizer\ModelViewport3DViewModel.cs" />
     <Compile Include="Controls\Visualizer\Objects\Base\IVisualGroupViewModel.cs" />
     <Compile Include="Controls\Visualizer\Objects\Base\VisualGroupViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Extensions\MeshBuilderExtensions.cs" />
     <Compile Include="Controls\Visualizer\Objects\Extensions\VisualExtensions.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\ColorToPropertyConverter.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\ModelObject3DViewModel.cs" />

@@ -33,7 +33,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
         /// <summary>
         ///     Get or set the default root name that is used if none is provided
         /// </summary>
-        public string DefaultRootName { get; set; } = "JObject";
+        public string DefaultRootName { get; set; } = "Object";
 
         /// <inheritdoc />
         public JsonBrowserViewModel()

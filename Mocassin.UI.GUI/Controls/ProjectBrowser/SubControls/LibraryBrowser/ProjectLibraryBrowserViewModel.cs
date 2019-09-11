@@ -95,7 +95,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             await ExecuteOnDispatcherAsync(() => JsonBrowserViewModel.SetRootViewToNoContent());
             if (obj == null) return;
 
-            await ExecuteOnDispatcherAsync(() => JsonBrowserViewModel.SetActiveTreeView(obj, "Object Root"));
+            await ExecuteOnDispatcherAsync(() => JsonBrowserViewModel.SetActiveTreeView(obj, "Object_Tree"));
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -77,14 +78,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public ObservableCollectionViewModel<ModelObject3DViewModel> ModelObjectViewModels { get; }
 
         /// <summary>
-        ///     Get a <see cref="ParameterlessCommand" /> to update the model object render data list
+        ///     Get a <see cref="RelayCommand" /> to update the model object render data list
         /// </summary>
-        public ParameterlessCommand UpdateObjectViewModelsCommand { get; }
+        public RelayCommand UpdateObjectViewModelsCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="ParameterlessCommand" /> to refresh the visual object layer contents
+        ///     Get a <see cref="RelayCommand" /> to refresh the visual object layer contents
         /// </summary>
-        public ParameterlessCommand RefreshVisualGroupsCommand { get; }
+        public RelayCommand RefreshVisualGroupsCommand { get; }
 
         /// <summary>
         ///     Get or set a boolean flag if the system is refreshing the visual data
@@ -297,36 +298,45 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> objects for a <see cref="KineticTransitionGraph" />
+        ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> items for visualization of the provided <see cref="KineticTransitionGraph" />
         /// </summary>
         /// <param name="transitionGraph"></param>
         /// <returns></returns>
         private IList<MeshGeometryVisual3D> CreateTransitionVisuals(KineticTransitionGraph transitionGraph)
         {
-            var objectViewModel = GetModelObjectViewModel(transitionGraph);
+            var modelObjectVm = GetModelObjectViewModel(transitionGraph);
             var fractionalPath = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
-            var uniqueTransforms = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(fractionalPath, true)
-                .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem))
-                .ToList();
+            var pathTransforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath);
+            var renderArea = RenderResourcesViewModel.GetRenderCuboidVectors();
 
             var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
-            var thetaDiv = (int) (Settings.Default.Default_Render_Arrow_ThetaDiv * objectViewModel.MeshQuality);
-            var diameter = objectViewModel.Scaling;
+            var thetaDiv = (int) (Settings.Default.Default_Render_Arrow_ThetaDiv * modelObjectVm.MeshQuality);
+            var diameter = modelObjectVm.Scaling;
 
-            var result = new List<MeshGeometryVisual3D>(uniqueTransforms.Count);
-            var renderArea = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var result = new List<MeshGeometryVisual3D>(pathTransforms.Count);
 
             for (var i = 0; i < fractionalPath.Count - 1; i++)
             {
-                var (point0, point1) = GetAtomRadiusCorrectedTransitionStepPoints(fractionalPath[i], fractionalPath[i + 1]);
-                var visualFactory = VisualViewModel.BuildDualHeadArrowVisualFactory(diameter, point0, point1, headLength, thetaDiv);
-                var transformEnum = ExtendUnitCellTransformsToRenderArea(uniqueTransforms)
-                    .Where(x => RenderAreaContainsPoint(x.Transform(point1), renderArea.StartVector, renderArea.EndVector));
+                var (startPoint, endPoint) = GetAtomRadiusCorrectedTransitionStepPoints(fractionalPath[i], fractionalPath[i + 1]);
+                var visualFactory = VisualViewModel.BuildDualHeadedArrowVisualFactory(diameter, startPoint, endPoint, headLength, thetaDiv);
+                var transformEnum = pathTransforms.Where(x => RenderAreaContainsPoint(x.Transform(endPoint), renderArea.StartVector, renderArea.EndVector));
                 result.AddRange(transformEnum.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
 
-            VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color));
+            VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(modelObjectVm.Color));
             return result;
+        }
+
+        /// <summary>
+        ///     Get the extended unique set of <see cref="Transform3D"/> required for P1 extension of the passed path geometry to the render area
+        /// </summary>
+        /// <param name="pathGeometry"></param>
+        /// <returns></returns>
+        private IList<Transform3D> GetVisuallyUniqueP1PathTransformsForRenderArea(IEnumerable<Fractional3D> pathGeometry)
+        {
+            var cellTransforms = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathGeometry, true)
+                .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem));
+            return ExtendUnitCellTransformsToRenderArea(cellTransforms).ToList();
         }
 
         /// <summary>
@@ -424,7 +434,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 }
             }
 
-            return new LinesVisual3D {Points = points3D};
+            points3D.Freeze();
+            var result = ExecuteOnDispatcher(() => new LinesVisual3D {Points = points3D});
+            return result;
         }
 
         /// <summary>

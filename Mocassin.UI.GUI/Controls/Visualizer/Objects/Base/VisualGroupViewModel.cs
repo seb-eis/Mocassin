@@ -52,7 +52,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// <inheritdoc />
         public void Dispose()
         {
-            ModelVisual?.Children?.Clear();
+            ExecuteOnDispatcher(() => ModelVisual?.Children?.Clear());
             ModelVisual = null;
         }
     }

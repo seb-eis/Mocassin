@@ -239,5 +239,18 @@ namespace Mocassin.UI.GUI
         {
             return Environment.ExpandEnvironmentVariables(Resources.Folder_Userprofile_Resources + fileName);
         }
+
+        /// <summary>
+        ///     Handles the app startup program arguments
+        /// </summary>
+        /// <param name="args"></param>
+        public void HandleStartupArguments(string[] args)
+        {
+            if (args.Length == 0) return;
+            if (File.Exists(args[0]) && (Path.GetExtension(args[0]) ?? "").Equals(".moc"))
+            {
+                ProjectManagerViewModel.LoadActiveProjectLibrary(args[0]);
+            }
+        }
     }
 }
