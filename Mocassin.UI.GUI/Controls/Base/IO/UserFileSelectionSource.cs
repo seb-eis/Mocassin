@@ -63,7 +63,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         /// <returns></returns>
         public static UserFileSelectionSource CreateForProjectFiles()
         {
-            return new UserFileSelectionSource(("Project file", "moc"));
+            return new UserFileSelectionSource(("Project file", "mocprj"));
         }
 
         /// <summary>

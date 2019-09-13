@@ -139,12 +139,15 @@ namespace Mocassin.UI.Xml.Main
         public static MocassinProjectGraph CreateNew()
         {
             var guid = Guid.NewGuid().ToString();
-            return new MocassinProjectGraph
+            var project = new MocassinProjectGraph
             {
                 ProjectGuid = guid,
                 ProjectName = "New project",
                 ProjectModelGraph = ProjectModelGraph.CreateNew()
             };
+
+            project.ProjectModelGraph.Parent = project;
+            return project;
         }
 
 

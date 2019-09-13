@@ -31,12 +31,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public MocassinProjectGraph ContentSource { get; protected set; }
 
         /// <summary>
+        ///     Get the number of vectors in the currently selected vector expansion
+        /// </summary>
+        public int SelectedVectorExpansionCount => selectedVectorExpansion?.Count ?? 0;
+
+        /// <summary>
         ///     Get or set a <see cref="IList{T}"/> of the expanded <see cref="Fractional3D"/> of the current graph selection
         /// </summary>
         public IList<Fractional3D> SelectedVectorExpansion
         {
             get => selectedVectorExpansion;
-            private set => SetProperty(ref selectedVectorExpansion, value);
+            private set
+            {
+                SetProperty(ref selectedVectorExpansion, value);
+                OnPropertyChanged(nameof(SelectedVectorExpansionCount));
+            }
         }
 
         /// <inheritdoc />

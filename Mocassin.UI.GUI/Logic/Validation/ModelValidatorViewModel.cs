@@ -351,7 +351,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
         /// <inheritdoc />
         protected override async void OnProjectContentChangedInternal()
         {
-            if (IsIgnoreContentChange) return;
+            if (IsIgnoreContentChange || IsDisposed || RunValidationCommand == null) return;
             await RunValidationCommand.ExecuteAsync(null);
         }
     }

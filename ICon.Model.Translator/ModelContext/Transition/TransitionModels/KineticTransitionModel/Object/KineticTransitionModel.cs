@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Model.Transitions;
@@ -56,8 +57,22 @@ namespace Mocassin.Model.Translator.ModelContext
         public bool MappingsContainInversion()
         {
             if (MappingModels.Count == 0) return false;
-            var checkMapping = MappingModels.First();
-            return checkMapping.Mapping.StartUnitCellPosition == checkMapping.Mapping.EndUnitCellPosition;
+
+            var remaining = MappingModels.Count;
+            for (var i = 0; i < MappingModels.Count; i++)
+            {
+                var relPath = MappingModels[i].PositionSequence4D.Reverse().ToList();
+                for (var j = i+1; j < MappingModels.Count; j++)
+                {
+                    var otherPath = MappingModels[j].PositionSequence4D;
+                    if (relPath.Zip(otherPath, (first, second) => second.P - first.P).Any(value => value != 0))
+                        continue;
+                    remaining -= 2;
+                    break;
+                }
+            }
+
+            return remaining == 0;
         }
 
         /// <inheritdoc />

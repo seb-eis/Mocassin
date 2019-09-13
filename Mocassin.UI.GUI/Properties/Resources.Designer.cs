@@ -97,6 +97,24 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mocassin - Uncaught Exception.
+        /// </summary>
+        public static string Error_Uncaught_Exception_Caption {
+            get {
+                return ResourceManager.GetString("Error_Uncaught_Exception_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unhandled exception occured during execution of the program, the application will log the error and terminate..
+        /// </summary>
+        public static string Error_Uncaught_Exception_Message {
+            get {
+                return ResourceManager.GetString("Error_Uncaught_Exception_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mocassin.Project.Settings.Global.xml.
         /// </summary>
         public static string Filename_Project_Default_Configuration {

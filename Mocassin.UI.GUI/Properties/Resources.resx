@@ -129,6 +129,12 @@
   <data name="DisplayName_ModelViewport_CellFrameLayer" xml:space="preserve">
     <value>Cell.Boundaries</value>
   </data>
+  <data name="Error_Uncaught_Exception_Caption" xml:space="preserve">
+    <value>Mocassin - Uncaught Exception</value>
+  </data>
+  <data name="Error_Uncaught_Exception_Message" xml:space="preserve">
+    <value>An unhandled exception occured during execution of the program, the application will log the error and terminate.</value>
+  </data>
   <data name="Filename_Project_Default_Configuration" xml:space="preserve">
     <value>Mocassin.Project.Settings.Global.xml</value>
   </data>

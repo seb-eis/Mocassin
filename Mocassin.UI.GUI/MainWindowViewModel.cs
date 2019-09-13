@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Deployment.Application;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Mocassin.Framework.Events;
@@ -10,6 +12,7 @@ using Mocassin.Model.DataManagement;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.Base.IO;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
 using Mocassin.UI.GUI.Controls.ProjectConsole;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar;
@@ -165,8 +168,13 @@ namespace Mocassin.UI.GUI
         /// <returns></returns>
         public string MakeWindowDescription()
         {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                var currentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+                return $"[{currentVersion}]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
+            }
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            return $"[{version}]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
+            return $"[{version}, Non-Deploy]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
         }
 
         /// <summary>
@@ -241,15 +249,23 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Handles the app startup program arguments
+        ///     Handles the app startup program arguments, if the they are empty the system tries to get the data from the <see cref="AppDomain"/> activation arguments
         /// </summary>
         /// <param name="args"></param>
-        public void HandleStartupArguments(string[] args)
+        public void OnStartup(string[] args)
         {
-            if (args.Length == 0) return;
-            if (File.Exists(args[0]) && (Path.GetExtension(args[0]) ?? "").Equals(".moc"))
+            var fileSelectionSource = UserFileSelectionSource.CreateForProjectFiles();
+            if (args.Length == 0 && ApplicationDeployment.IsNetworkDeployed)
             {
-                ProjectManagerViewModel.LoadActiveProjectLibrary(args[0]);
+                var activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments?.ActivationData;
+                if (activationData != null) args = activationData;
+            }
+
+            foreach (var item in args)
+            {
+                if (!fileSelectionSource.SupportedFileTypes.Any(x => $".{x.Extension}".Equals(Path.GetExtension(item)))) continue;
+                ProjectManagerViewModel.LoadActiveProjectLibrary(item);
+                return;
             }
         }
     }

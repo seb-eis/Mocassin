@@ -94,7 +94,7 @@ namespace Mocassin.UI.Xml.Model
         }
 
         /// <summary>
-        ///     Creates a new empty default <see cref="ProjectModelGraph"/>
+        ///     Creates a new empty default <see cref="ProjectModelGraph"/> without setting the parent
         /// </summary>
         /// <returns></returns>
         public static ProjectModelGraph CreateNew()

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
+using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
@@ -319,7 +320,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 var (startPoint, endPoint) = GetAtomRadiusCorrectedTransitionStepPoints(fractionalPath[i], fractionalPath[i + 1]);
                 var visualFactory = VisualViewModel.BuildDualHeadedArrowVisualFactory(diameter, startPoint, endPoint, headLength, thetaDiv);
-                var transformEnum = pathTransforms.Where(x => RenderAreaContainsPoint(x.Transform(endPoint), renderArea.StartVector, renderArea.EndVector));
+
+                var transformEnum = pathTransforms
+                    .Select(transform3D => (transform3D, transform3D.Transform(startPoint), transform3D.Transform(endPoint)))
+                    .Where(x => RenderAreaContainsPoint(x.Item2, renderArea.StartVector, renderArea.EndVector))
+                    .Where(x => RenderAreaContainsPoint(x.Item3, renderArea.StartVector, renderArea.EndVector))
+                    .Select(x => x.transform3D);
+
                 result.AddRange(transformEnum.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
 
@@ -374,38 +381,52 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        private (Point3D Point0, Point3D Point1) GetAtomRadiusCorrectedTransitionStepPoints(Fractional3D start, Fractional3D end)
+        private (Point3D Point0, Point3D Point1) GetAtomRadiusCorrectedTransitionStepPoints(in Fractional3D start, in Fractional3D end)
         {
             var point0 = VectorTransformer.ToCartesian(start).AsPoint3D();
             var point1 = VectorTransformer.ToCartesian(end).AsPoint3D();
             var direction = point1 - point0;
             direction.Normalize();
 
-            var startVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, start) == 0).ObjectViewModel;
-            var endVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, end) == 0).ObjectViewModel;
+            var (trimmedStart, trimmedEnd) = (start.TrimToUnitCell(0), end.TrimToUnitCell(0));
+            var startVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, trimmedStart) == 0).ObjectViewModel;
+            var endVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, trimmedEnd) == 0).ObjectViewModel;
             if (startVm != null) point0 += direction * startVm.Scaling;
             if (endVm != null) point1 -= direction * endVm.Scaling;
             return (point0, point1);
         }
 
         /// <summary>
-        ///     Checks if a <see cref="Point3D" /> lies within the provided fractional render area boundaries
+        ///     Checks if a <see cref="Point3D" /> lies within the provided fractional render area boundaries (Optional strict flags to make affiliated tests treat exact edge hits as failures)
         /// </summary>
         /// <param name="point"></param>
         /// <param name="renderAreaStart"></param>
         /// <param name="renderAreaEnd"></param>
+        /// <param name="strictUpper"></param>
+        /// <param name="includeLower"></param>
         /// <returns></returns>
-        private bool RenderAreaContainsPoint(in Point3D point, in Fractional3D renderAreaStart, in Fractional3D renderAreaEnd)
+        private bool RenderAreaContainsPoint(in Point3D point, in Fractional3D renderAreaStart, in Fractional3D renderAreaEnd, bool includeLower = true, bool includeUpper = true)
         {
             var comparer = UtilityProject.GeometryNumeric.RangeComparer;
             var fractional3D = VectorTransformer.ToFractional(new Cartesian3D(point.X, point.Y, point.Z));
-            if (comparer.Compare(fractional3D.A, renderAreaStart.A) < 0) return false;
-            if (comparer.Compare(fractional3D.B, renderAreaStart.B) < 0) return false;
-            if (comparer.Compare(fractional3D.C, renderAreaStart.C) < 0) return false;
-            if (comparer.Compare(fractional3D.A, renderAreaEnd.A) > 0) return false;
-            if (comparer.Compare(fractional3D.B, renderAreaEnd.B) > 0) return false;
-            if (comparer.Compare(fractional3D.C, renderAreaEnd.C) > 0) return false;
-            return true;
+
+            var compValue = comparer.Compare(fractional3D.A, renderAreaStart.A);
+            if (!(includeLower && compValue >= 0 || compValue > 0)) return false;
+
+            compValue = comparer.Compare(fractional3D.B, renderAreaStart.B);
+            if (!(includeLower && compValue >= 0 || compValue > 0)) return false;
+
+            compValue = comparer.Compare(fractional3D.C, renderAreaStart.C);
+            if (!(includeLower && compValue >= 0 || compValue > 0)) return false;
+
+            compValue = comparer.Compare(fractional3D.A, renderAreaEnd.A);
+            if (!(includeUpper && compValue <= 0 || compValue < 0)) return false;
+
+            compValue = comparer.Compare(fractional3D.B, renderAreaEnd.B);
+            if (!(includeUpper && compValue <= 0 || compValue < 0)) return false;
+
+            compValue = comparer.Compare(fractional3D.C, renderAreaEnd.C);
+            return includeUpper && compValue <= 0 || compValue < 0;
         }
 
         /// <summary>

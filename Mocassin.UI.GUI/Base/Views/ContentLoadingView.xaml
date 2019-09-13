@@ -11,6 +11,6 @@
     
     <TextBlock Text="Loading" FontSize="10" Foreground="Black" Opacity=".5" 
                VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    <local:LoadingSpinerView />
+    <local:LoadingSpinnerView />
   </Grid>
 </UserControl>

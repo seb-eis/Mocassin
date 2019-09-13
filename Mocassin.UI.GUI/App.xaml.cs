@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 
@@ -13,13 +15,17 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         protected override void OnStartup(StartupEventArgs e)
         {
-            var viewModel = CreateNewMainWindowViewModel();
-            viewModel.HandleStartupArguments(e.Args);
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-            var mainWindow = CreateNewMainWindow(viewModel);
-            mainWindow.Show();
-
-            base.OnStartup(e);
+            using (var startupWindow = new StartupWindow())
+            {
+                startupWindow.Show();
+                var viewModel = CreateNewMainWindowViewModel();
+                viewModel.OnStartup(e.Args);
+                var mainWindow = CreateNewMainWindow(viewModel);
+                base.OnStartup(e);
+                mainWindow.Show();
+            }
         }
 
         /// <summary>
@@ -55,6 +61,28 @@ namespace Mocassin.UI.GUI
         public List<Assembly> LoadPlugins(string sourceDirectory)
         {
             return null;
+        }
+
+        /// <summary>
+        ///     Action to be called if an unhandled exception event occurs in the <see cref="AppDomain" />
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            if (!args.IsTerminating) return;
+            var time = $"{DateTime.Now:yyyyMMddhmmss}";
+            var logPath = Environment.ExpandEnvironmentVariables($"{GUI.Properties.Resources.Folder_Userprofile_Resources}Crash.{time}.log");
+            var baseMessage = GUI.Properties.Resources.Error_Uncaught_Exception_Message;
+            var caption = GUI.Properties.Resources.Error_Uncaught_Exception_Caption;
+            var exception = args.ExceptionObject as Exception ?? new Exception($"Non exception object thrown {args.ExceptionObject}.");
+            MessageBox.Show($"{baseMessage}\n ({logPath})", caption, MessageBoxButton.OK, MessageBoxImage.Error);
+
+            File.WriteAllText(logPath, $"{sender}\n\n{exception}");
+
+            #if (!DEBUG)
+            Process.GetCurrentProcess().Kill();
+            #endif
         }
     }
 }

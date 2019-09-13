@@ -53,6 +53,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         public bool LinkIfGeometricInversion(IKineticMappingModel inverseModel)
         {
+            if (PositionSequence4D.Select(x => x.P).Zip(inverseModel.PositionSequence4D.Reverse().Select(x => x.P), (x, y) => x - y).Any(x => x != 0))
+                return false;
             if (!GetGeometricInversionMovementMatrix().Equals(inverseModel.PositionMovementMatrix))
                 return false;
 

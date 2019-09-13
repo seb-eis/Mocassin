@@ -37,7 +37,7 @@
              Text="{Binding FilePath}"
              ToolTip="Deploy target file" />
 
-    <views:LoadingSpinerView Visibility="{Binding BuildStatus, Converter={converter:BuildStatusVisibilityConverter}}"
+    <views:LoadingSpinnerView Visibility="{Binding BuildStatus, Converter={converter:BuildStatusVisibilityConverter}}"
                              Margin="{StaticResource App.Margin.Default}" 
                              Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"
                              Background="White"

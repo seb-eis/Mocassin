@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
@@ -36,8 +37,9 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var transitionModel in resultModels)
             {
+                if (TryLinkTransitionModelToExistingSets(transitionModel, resultModels)) continue;
+
                 var inverseModel = CreateGeometricModelInversion(transitionModel);
-                if (transitionModel == inverseModel) continue;
 
                 inverseModel.ModelId = index++;
                 inverseModels.Add(inverseModel);
@@ -51,6 +53,35 @@ namespace Mocassin.Model.Translator.ModelContext
             }
 
             return resultModels;
+        }
+
+        /// <summary>
+        ///     Checks if the user has accidentally defined a <see cref="IKineticTransitionModel"/> that can be used as the inverse
+        /// </summary>
+        /// <param name="transitionModel"></param>
+        /// <param name="models"></param>
+        /// <returns></returns>
+        protected bool TryLinkTransitionModelToExistingSets(IKineticTransitionModel transitionModel, IList<IKineticTransitionModel> models)
+        {
+            if (models.FirstOrDefault(x => x.InverseTransitionModel == transitionModel) != null) return true;
+            if (transitionModel.MappingsContainInversion())
+            {
+                transitionModel.InverseTransitionModel = transitionModel;
+                return true;
+            }
+
+            foreach (var otherModel in models.Where(x => x.InverseTransitionModel == null && x != transitionModel))
+            {
+                var pseudoSet = transitionModel.MappingModels.Concat(otherModel.MappingModels).ToList();
+                var linkSuccess = TryLinkSelfConsistentMappingModels(pseudoSet);
+                if (!linkSuccess) continue;
+
+                transitionModel.InverseTransitionModel = otherModel;
+                otherModel.InverseTransitionModel = transitionModel;
+                return true;
+            }
+
+            return false;
         }
 
 
@@ -242,10 +273,10 @@ namespace Mocassin.Model.Translator.ModelContext
                 .Select(a => CreateMappingModel(a, transitionModel))
                 .ToList();
 
-            if (!transitionModel.MappingsContainInversion())
-                return;
+            if (!transitionModel.MappingsContainInversion()) return;
 
-            LinkSelfConsistentMappingModels(transitionModel.MappingModels);
+            var linkSuccess = TryLinkSelfConsistentMappingModels(transitionModel.MappingModels);
+            if (!linkSuccess) throw new InvalidOperationException("Failed to link a set of kinetic mapping models previously marked as self consistent.");
         }
 
         /// <summary>
@@ -343,11 +374,15 @@ namespace Mocassin.Model.Translator.ModelContext
         }
 
         /// <summary>
-        ///     Links a self consistent set of mapping models (Mappings that contain their own inversions)
+        ///     Links a self consistent set of mapping models (Mappings that contain their own inversions) with an optional option
+        ///     to restore the original linking on failure
         /// </summary>
         /// <param name="mappingModels"></param>
-        protected void LinkSelfConsistentMappingModels(IList<IKineticMappingModel> mappingModels)
+        /// <param name="restoreOriginalOnFailure"></param>
+        protected bool TryLinkSelfConsistentMappingModels(IList<IKineticMappingModel> mappingModels, bool restoreOriginalOnFailure = true)
         {
+            var remaining = mappingModels.Count;
+            var backup = restoreOriginalOnFailure ? mappingModels.Select(x => x.InverseMapping).ToList() : null;
             for (var i = 0; i < mappingModels.Count; i++)
             {
                 if (mappingModels[i].InverseIsSet)
@@ -358,26 +393,26 @@ namespace Mocassin.Model.Translator.ModelContext
                     if (mappingModels[j].InverseIsSet)
                         continue;
 
-                    if (mappingModels[i].LinkIfGeometricInversion(mappingModels[j]))
-                        break;
+                    if (!mappingModels[i].LinkIfGeometricInversion(mappingModels[j])) continue;
+                    remaining -= 2;
+                    break;
                 }
             }
+
+            if (remaining == 0) return true;
+            if (!restoreOriginalOnFailure) return false;
+            for (var i = 0; i < mappingModels.Count; i++) mappingModels[i].InverseMapping = backup[i];
+            return false;
+
         }
 
         /// <summary>
-        ///     Creates an inverse kinetic transition model if required or if the mappings already contain
-        ///     the inversion the original is returned
+        ///     Creates an inverse kinetic transition model for the passed one
         /// </summary>
         /// <param name="transitionModel"></param>
         /// <returns></returns>
         protected IKineticTransitionModel CreateGeometricModelInversion(IKineticTransitionModel transitionModel)
         {
-            if (transitionModel.MappingsContainInversion())
-            {
-                transitionModel.InverseTransitionModel = transitionModel;
-                return transitionModel;
-            }
-
             var inverseModel = transitionModel.CreateGeometricInverse();
             transitionModel.InverseTransitionModel = inverseModel;
 
