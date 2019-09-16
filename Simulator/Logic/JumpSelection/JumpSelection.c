@@ -231,17 +231,19 @@ static inline void MakeEnvironmentPoolEntriesUpdate(SCONTEXT_PARAM, const JumpCo
 bool_t KMC_UpdateJumpPool(SCONTEXT_PARAM)
 {
     let oldSelectableJumpCount = getJumpSelectionPool(SCONTEXT)->SelectableJumpCount;
+    let jumpCountMapping = getJumpCountMapping(SCONTEXT);
 
     for (int32_t i = 0; i < getActiveJumpDirection(SCONTEXT)->JumpLength; i++)
-        MakeEnvironmentPoolEntriesUpdate(SCONTEXT, getJumpCountMapping(SCONTEXT), JUMPPATH[i]);
+        MakeEnvironmentPoolEntriesUpdate(SCONTEXT, jumpCountMapping, JUMPPATH[i]);
 
     return oldSelectableJumpCount != getJumpSelectionPool(SCONTEXT)->SelectableJumpCount;
 }
 
 void MMC_UpdateJumpPool(SCONTEXT_PARAM)
 {
-    MakeEnvironmentPoolEntriesUpdate(SCONTEXT, getJumpCountMapping(SCONTEXT), JUMPPATH[0]);
-    MakeEnvironmentPoolEntriesUpdate(SCONTEXT, getJumpCountMapping(SCONTEXT), JUMPPATH[1]);
+    let jumpCountMapping = getJumpCountMapping(SCONTEXT);
+    MakeEnvironmentPoolEntriesUpdate(SCONTEXT, jumpCountMapping, JUMPPATH[0]);
+    MakeEnvironmentPoolEntriesUpdate(SCONTEXT, jumpCountMapping, JUMPPATH[1]);
 }
 
 void KMC_RollNextJumpSelection(SCONTEXT_PARAM)

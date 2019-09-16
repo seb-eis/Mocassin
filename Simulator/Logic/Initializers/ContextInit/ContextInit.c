@@ -62,7 +62,7 @@ static void AllocateEnvironmentLattice(SCONTEXT_PARAM)
 // Allocates the lattice energy buffer by the passed mmc job header
 static void AllocateEnergyFluctuationAbortBuffer(Flp64Buffer_t *restrict bufferAccess, MmcHeader_t *restrict header)
 {
-    Buffer_t tmp = new_Span(tmp, header->AbortSequenceLength * sizeof(double));
+    Buffer_t tmp = new_Span(tmp, header->AbortSampleLength * sizeof(double));
     *bufferAccess = (Flp64Buffer_t)
     {
         .Begin = (void*) tmp.Begin,

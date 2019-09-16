@@ -141,10 +141,11 @@ static inline bool_t PositionAreInInteractionRange(SCONTEXT_PARAM, const Vector4
     let interactionRange = &getDbStructureModel(SCONTEXT)->InteractionRange;
     let latticeSizes = getLatticeSizeVector(SCONTEXT);
 
-    var result = GetPeriodicPointDistance(vector0->A, vector1->A, latticeSizes->A) <= interactionRange->A;
-    result &= GetPeriodicPointDistance(vector0->B, vector1->B, latticeSizes->B) <= interactionRange->B;
-    result &= GetPeriodicPointDistance(vector0->C, vector1->C, latticeSizes->C) <= interactionRange->C;
-    return result;
+    var result = GetPeriodicPointDistance(vector0->A, vector1->A, latticeSizes->A) > interactionRange->A;
+    return_if(result, false);
+    result = GetPeriodicPointDistance(vector0->B, vector1->B, latticeSizes->B) > interactionRange->B;
+    return_if(result, false);
+    return GetPeriodicPointDistance(vector0->C, vector1->C, latticeSizes->C) <= interactionRange->C;
 }
 
 // Count the number of particles in the simulation lattice that have the provided particle id

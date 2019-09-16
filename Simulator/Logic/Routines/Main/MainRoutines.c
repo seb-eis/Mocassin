@@ -176,12 +176,16 @@ static inline error_t CallOutputPlugin(SCONTEXT_PARAM)
     return SIMERROR;
 }
 
-// Writes the current jump delta energy of an MMC transition to the abort buffer
+// Writes the current jump delta energy of an MMC transition to the abort buffer (If the abort tolerance is equal or below 0, the buffer write is skipped)
 static inline void MMC_WriteJumpEnergyToAbortBuffer(SCONTEXT_PARAM)
 {
+    let header = getDbModelJobHeaderAsMMC(SCONTEXT);
+    return_if(header->AbortTolerance <= 0.0);
+
     var buffer = getLatticeEnergyBuffer(SCONTEXT);
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
     let factors = getPhysicalFactors(SCONTEXT);
+
     if (buffer->End == buffer->CapacityEnd)
     {
         buffer->LastSum = buffer->CurrentSum;
@@ -302,7 +306,7 @@ static inline bool_t KMC_PrecheckAttemptFrequencyFactor(SCONTEXT_PARAM)
 error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
-    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount; counters->CycleCount += counters->CycleCountPerExecutionLoop)
+    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
         for (size_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
         {
@@ -326,6 +330,7 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        counters->CycleCount += counters->CycleCountPerExecutionLoop;
         return_if(KMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
@@ -334,7 +339,7 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
 error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
-    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount; counters->CycleCount += counters->CycleCountPerExecutionLoop)
+    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
         for (size_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
         {
@@ -359,6 +364,7 @@ error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
                 KMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        counters->CycleCount += counters->CycleCountPerExecutionLoop;
         KMC_UpdateTotalJumpNormalization(SCONTEXT);
     }
     return ERR_OK;
@@ -431,7 +437,7 @@ static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
 error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
-    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount; counters->CycleCount += counters->CycleCountPerExecutionLoop)
+    for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
         for (size_t i = 0; i < counters->CycleCountPerExecutionLoop; i++)
         {
@@ -448,6 +454,7 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
                 MMC_OnJumpIsSiteBlocked(SCONTEXT);
             }
         }
+        counters->CycleCount += counters->CycleCountPerExecutionLoop;
         return_if(MMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
@@ -470,6 +477,7 @@ static inline bool_t UpdateAndEvaluateTimeoutAbortCondition(SCONTEXT_PARAM)
     let deltaClock = newClock - runInfo->PreviousBlockFinishClock;
 
     metaData->TimePerBlock = (double) deltaClock / CLOCKS_PER_SEC;
+    metaData->TimePerBlock = (metaData->TimePerBlock <= 0.0) ? (1.0 / CLOCKS_PER_SEC) : metaData->TimePerBlock;
     metaData->ProgramRunTime += metaData->TimePerBlock;
 
     var nextBlockEtaClock = newClock + deltaClock;
@@ -486,7 +494,7 @@ static inline bool_t UpdateAndEvaluateRateAbortConditions(SCONTEXT_PARAM)
     let counters = getMainCycleCounters(SCONTEXT);
     var metaData = getMainStateMetaData(SCONTEXT);
 
-    return_if(metaData->ProgramRunTime == 0 || metaData->SimulatedTime == 0, false);
+    return_if(metaData->ProgramRunTime == 0, false);
 
     metaData->SuccessRate = counters->McsCount / metaData->ProgramRunTime;
     metaData->CycleRate = counters->CycleCount / metaData->ProgramRunTime;
@@ -547,6 +555,9 @@ static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAM)
     let metaData = getMainStateMetaData(SCONTEXT);
     let jobHeader = getDbModelJobHeaderAsMMC(SCONTEXT);
     let abortBuffer = getLatticeEnergyBuffer(SCONTEXT);
+
+    if (jobHeader->AbortTolerance <= 0.0) return false;
+
     let limitFluctuation = fabs(metaData->LatticeEnergy * jobHeader->AbortTolerance);
     let currentFluctuation = abortBuffer->CurrentSum;
 
@@ -836,15 +847,9 @@ void MMC_SetJumpPathProperties(SCONTEXT_PARAM)
     let lattice = getEnvironmentLattice(SCONTEXT);
     var cycleState = getCycleState(SCONTEXT);
 
-    // Get the first environment state pointer (0,0,0,0) and write the offset source state to the unused 3rd path index
-    JUMPPATH[2] = getEnvironmentStateAt(SCONTEXT, selectionInfo->MmcOffsetSourceId);
-    JUMPPATH[1] = getEnvironmentStateAt(SCONTEXT, 0);
-
-    // Advance the pointer by the affiliated block jumps and the relative jump sequence entry
-    JUMPPATH[1] += lattice->Header->Blocks[0] * JUMPPATH[2]->PositionVector.A;
-    JUMPPATH[1] += lattice->Header->Blocks[1] * JUMPPATH[2]->PositionVector.B;
-    JUMPPATH[1] += lattice->Header->Blocks[2] * JUMPPATH[2]->PositionVector.C;
-    JUMPPATH[1] += jumpVector->D;
+    // Translate the offset index into the target environment
+    let offsetVector = &getEnvironmentStateAt(SCONTEXT, selectionInfo->MmcOffsetSourceId)->PositionVector;
+    JUMPPATH[1] = &array_Get(*lattice, offsetVector->A, offsetVector->B, offsetVector->C, jumpVector->D);
 
     // Correct the active state code byte and set the path id of the second environment state
     SetCodeByteAt(&cycleState->ActiveStateCode, 1, JUMPPATH[1]->ParticleId);
@@ -873,14 +878,13 @@ void MMC_SetJumpProbabilities(SCONTEXT_PARAM)
 
 void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
 {
-    let plugins = getPluginCollection(SCONTEXT);
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     MMC_SetJumpProbabilities(SCONTEXT);
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDouble(SCONTEXT);
-    if (energyInfo->NormalizedS0toS2Probability >= random)
+    if (energyInfo->NormalizedS0toS2Probability *.1 >= random)
     {
         MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
         return;
