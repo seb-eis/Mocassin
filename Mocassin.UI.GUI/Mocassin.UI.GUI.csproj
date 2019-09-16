@@ -17,9 +17,9 @@
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\Users\hims-user\Documents\Gitlab\Mocassin.Builds\</PublishUrl>
+    <PublishUrl>\\pc1server\allgemein\Sebastian Eisele\Mocassin\Builds\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -28,10 +28,15 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
     <UpdateUrl>\\pc1server\allgemein\Sebastian Eisele\Mocassin\Builds\</UpdateUrl>
+    <SupportUrl>https://git.rwth-aachen.de/ICon.Project.Team/ICon.Program/issues/23</SupportUrl>
+    <ErrorReportUrl>https://git.rwth-aachen.de/ICon.Project.Team/ICon.Program/issues/22</ErrorReportUrl>
+    <TargetCulture>en</TargetCulture>
     <ProductName>Mocassin</ProductName>
     <PublisherName>Sebastian Eisele, HIMS, Juelich Research Center IEK-12</PublisherName>
     <SuiteName>MOCASSIN</SuiteName>
-    <ApplicationRevision>29</ApplicationRevision>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>32</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

@@ -69,7 +69,7 @@
       </GroupBox.Header>
 
       <local:MmcJobDescriptionControlView
-        DataContext="{Binding SelectedItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"
+        DataContext="{Binding SelectedItem, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}"
         Margin="{StaticResource App.Margin.GroupBoxContent}" />
     </GroupBox>
 
