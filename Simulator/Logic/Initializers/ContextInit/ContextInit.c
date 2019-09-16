@@ -729,6 +729,9 @@ static void SyncSelectionPoolWithDynamicModel(SCONTEXT_PARAM)
         var error = HandleEnvStatePoolRegistration(SCONTEXT, i);
         error_assert(error, "Could not register environment on the jump selection pool.");
     }
+
+    var error = getJumpSelectionPool(SCONTEXT)->SelectableJumpCount == 0 ? ERR_DATACONSISTENCY : ERR_OK;
+    error_assert(error, "Model synchronization yielded an empty transition pool. Are you missing a doping?");
 }
 
 // Converts all energy values in pair, cluster tables, and delta tables (if enabled) & others from [eV] to units of [kT]
