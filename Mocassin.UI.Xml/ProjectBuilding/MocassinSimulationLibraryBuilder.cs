@@ -23,6 +23,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     public enum LibraryBuildStatus
     {
         Unknown,
+        Error,
         BuildProcessCompleted,
         BuildProcessStarted,
         PreparingModelProject,
@@ -128,7 +129,8 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             {
                 modelProject.ResetProject();
                 var reports = modelProject.InputPipeline.PushToProject(projectModel.GetInputSequence());
-                return reports.All(x => x.IsGood);
+                if (reports.Any(x => !x.IsGood)) throw new InvalidOperationException("Translation of invalid model.");
+                return true;
             }
             catch (Exception e)
             {

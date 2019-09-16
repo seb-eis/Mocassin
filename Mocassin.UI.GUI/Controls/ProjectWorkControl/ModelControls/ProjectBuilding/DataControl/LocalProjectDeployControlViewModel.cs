@@ -114,7 +114,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
 
                 var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedItem;
                 var result = await Task.Run(() => builder.BuildLibrary(buildGraph, FilePath, ProjectControl.CreateModelProject()));
-                if (result != null) SendCallInfoMessage($"Simulations deployed @ {FilePath}");
+                if (result != null)
+                {
+                    SendCallInfoMessage($"Simulations deployed @ {FilePath}");
+                    return;
+                }
+                BuildStatus = LibraryBuildStatus.Error;
             }
 
             return new AsyncRelayCommand(Execute, CanExecute);
