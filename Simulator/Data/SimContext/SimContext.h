@@ -184,7 +184,7 @@ typedef struct JumpEnergyInfo
     double RawS2toS0Probability;
 
     // The normalized compare state change probability from S0 to S2
-    double CompareS0toS2Probability;
+    double NormalizedS0toS2Probability;
     
 } JumpEnergyInfo_t;
 
@@ -483,8 +483,8 @@ typedef struct SimulationPlugins
     // The callback plugin function on data outputs
     FPlugin_t OnDataOutput;
 
-    // The callback plugin function on set jump probabilities
-    FPlugin_t OnSetJumpProbabilities;
+    // The callback plugin function for setting the KMC transition energy value
+    FPlugin_t OnSetTransitionStateEnergy;
     
 } SimulationPlugins_t;
 

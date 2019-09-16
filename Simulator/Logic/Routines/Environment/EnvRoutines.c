@@ -15,6 +15,7 @@
 #include "Simulator/Logic/Routines/Helper/HelperRoutines.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
 #include "Framework/Basic/Macros/BinarySearch.h"
+#include "Simulator/Logic/Routines/Statistics/McStatistics.h"
 
 /* Local helper routines */
 
@@ -662,22 +663,26 @@ void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAM)
 
 void KMC_SetStateEnergies(SCONTEXT_PARAM)
 {
-    KMC_SetStartAndTransitionStateEnergies(SCONTEXT);
+    KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT);
     KMC_CreateBackupAndJumpDelta(SCONTEXT);
     KMC_SetFinalStateEnergy(SCONTEXT);
     KMC_LoadJumpDeltaBackup(SCONTEXT);
 }
 
-void KMC_SetStartAndTransitionStateEnergies(SCONTEXT_PARAM)
+void KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT_PARAM)
 {
     let jumpDirection = getActiveJumpDirection(SCONTEXT);
     let jumpRule = getActiveJumpRule(SCONTEXT);
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
     var particleId = GetCodeByteAt(&jumpRule->StateCode0, 0);
 
+    // Set the field influence energy for the jump
+    energyInfo->ElectricFieldEnergy = GetCurrentElectricFieldJumpInfluence(SCONTEXT);
+
     // Set the values of the first entry, the first transition state energy is always zero
     energyInfo->S0Energy = *getPathStateEnergyByIds(SCONTEXT, 0, particleId);
     energyInfo->S1Energy = 0;
+
     // Add all remaining components to start and transition state
     for (byte_t i = 1; i < jumpDirection->JumpLength;i++)
     {

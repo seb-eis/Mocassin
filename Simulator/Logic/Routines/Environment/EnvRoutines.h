@@ -31,13 +31,13 @@ void KMC_CreateBackupAndJumpDelta(SCONTEXT_PARAM);
 // Restores the pre-delta status of the system in KMC by loading the affiliated backups
 void KMC_LoadJumpDeltaBackup(SCONTEXT_PARAM);
 
-// Sets all required state energies for the current KMC transition on the main cycle state
+// Sets all required state energies for the current KMC transition on the main cycle state (S0,S1,S2 & E_Field)
 void KMC_SetStateEnergies(SCONTEXT_PARAM);
 
-// Sets the state energies 0 and 1 for the current KMC transition on the main cycle state
-void KMC_SetStartAndTransitionStateEnergies(SCONTEXT_PARAM);
+// Sets the state energies S0, S1 base and the electric field energy for the current KMC transition on the main cycle state
+void KMC_SetStartTransitionBaseAndFieldEnergyStates(SCONTEXT_PARAM);
 
-// Sets the state energy 2 for the current KMC transition on the main cycle state
+// Sets the state energy S2 for the current KMC transition on the main cycle state
 void KMC_SetFinalStateEnergy(SCONTEXT_PARAM);
 
 // Advances the system to the final state using the currently active KMC transition

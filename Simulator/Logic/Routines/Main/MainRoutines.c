@@ -753,18 +753,31 @@ void KMC_SetJumpProbabilities(SCONTEXT_PARAM)
 {
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
 
-    energyInfo->ElectricFieldEnergy = GetCurrentElectricFieldJumpInfluence(SCONTEXT);
-    energyInfo->ConformationDeltaEnergy = 0.5 * (energyInfo->S2Energy - energyInfo->S0Energy);
+    energyInfo->ConformationDeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
 
-    energyInfo->S0toS2DeltaEnergy = energyInfo->S1Energy + energyInfo->ConformationDeltaEnergy + energyInfo->ElectricFieldEnergy;
-    energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->ConformationDeltaEnergy - energyInfo->ElectricFieldEnergy;
+    energyInfo->S0toS2DeltaEnergy = energyInfo->S1Energy - energyInfo->S0Energy + energyInfo->ElectricFieldEnergy;
+    energyInfo->S2toS0DeltaEnergy = energyInfo->S1Energy - energyInfo->S2Energy - energyInfo->ElectricFieldEnergy;
 
     energyInfo->RawS0toS2Probability = GetExpResult(SCONTEXT, -energyInfo->S0toS2DeltaEnergy);
     energyInfo->RawS2toS0Probability = (energyInfo->S2toS0DeltaEnergy < MC_CONST_JUMPLIMIT_MIN)
             ? MC_CONST_BACKJUMP_INF
             : MC_CONST_BACKJUMP_NULL;
 
-    energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability * GetCurrentProbabilityPreFactor(SCONTEXT);
+    energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability * GetCurrentProbabilityPreFactor(SCONTEXT);
+}
+
+// Default internal S1 calculation function that uses the 0.5 * (S_2 - S_0) interpolation method
+static void KMC_SetTransitionStateEnergyDefault(double* restrict states)
+{
+    states[1] += 0.5 * (states[0] + states[2]);
+}
+
+// Alternate internal S1 calculation function that uses the factor interpolation method with a shift alpha
+static void KMC_SetTransitionStateEnergyAlphaMethod(double* restrict states, const double alpha)
+{
+    let deltaConf = states[2] - states[0];
+    let deltaAbs = fabs(deltaConf);
+    states[1] += states[0] + 0.5 * (deltaConf - deltaAbs) + alpha * deltaAbs;
 }
 
 void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
@@ -773,14 +786,17 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
 
     // Use the internal energy function of no plugin is set
-    if (plugins->OnSetJumpProbabilities == NULL)
+    if (plugins->OnSetTransitionStateEnergy == NULL)
     {
-        KMC_SetJumpProbabilities(SCONTEXT);
+        KMC_SetTransitionStateEnergyDefault(&energyInfo->S0Energy);
     }
     else
     {
-        plugins->OnSetJumpProbabilities(SCONTEXT);
+        plugins->OnSetTransitionStateEnergy(&energyInfo->S0Energy);
     }
+
+    // Calculates the probabilities from the set state energies
+    KMC_SetJumpProbabilities(SCONTEXT);
 
     // Unstable end: Do not advance system, update counter and simulated time
     if (energyInfo->RawS2toS0Probability == MC_CONST_BACKJUMP_INF)
@@ -789,14 +805,14 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
         return;
     }
     // Unstable start: Advance system, update counter but not simulated time, do pool update
-    if (energyInfo->CompareS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
+    if (energyInfo->NormalizedS0toS2Probability > MC_CONST_JUMPLIMIT_MAX)
     {
         KMC_OnJumpIsFromUnstableState(SCONTEXT);
         return;
     }
     // Successful jump: Advance system, update counters and simulated time, do pool update
     let random = GetNextRandomDouble(SCONTEXT);
-    if (energyInfo->CompareS0toS2Probability >= random)
+    if (energyInfo->NormalizedS0toS2Probability >= random)
     {
         KMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
         return;
@@ -852,7 +868,7 @@ void MMC_SetJumpProbabilities(SCONTEXT_PARAM)
 
     energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
     energyInfo->RawS0toS2Probability = GetExpResult(SCONTEXT, -energyInfo->S0toS2DeltaEnergy);
-    energyInfo->CompareS0toS2Probability = energyInfo->RawS0toS2Probability;
+    energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
 void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
@@ -860,18 +876,11 @@ void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     let plugins = getPluginCollection(SCONTEXT);
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
 
-    if (plugins->OnSetJumpProbabilities == NULL)
-    {
-        MMC_SetJumpProbabilities(SCONTEXT);
-    }
-    else
-    {
-        plugins->OnSetJumpProbabilities(SCONTEXT);
-    }
+    MMC_SetJumpProbabilities(SCONTEXT);
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDouble(SCONTEXT);
-    if (energyInfo->CompareS0toS2Probability >= random)
+    if (energyInfo->NormalizedS0toS2Probability >= random)
     {
         MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
         return;

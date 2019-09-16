@@ -433,7 +433,7 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAM)
     var plugins = getPluginCollection(SCONTEXT);
 
     return_if((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyPluginSymbol == NULL), ERR_USEDEFAULT);
-    if ((plugins->OnSetJumpProbabilities = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
+    if ((plugins->OnSetTransitionStateEnergy = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");
@@ -450,7 +450,7 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAM)
 static inline void SetEnergyPluginFunctionToDefault(SCONTEXT_PARAM)
 {
     var plugins = getPluginCollection(SCONTEXT);
-    plugins->OnSetJumpProbabilities = NULL;
+    plugins->OnSetTransitionStateEnergy = NULL;
 }
 
 // Set the output plugin function to the internal default (NULL)
