@@ -79,8 +79,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             (byte particleId, byte bufferId) = (0, 0);
             foreach (var mobilityType in encodingModel.PositionIndexToMobilityTypesSet[positionId])
             {
-                if (mobilityType != MobilityType.Immobile && ParticlePositionPairHasNonZeroEnergies(positionId, particleId))
-                    buffer[bufferId++] = particleId;
+                if (ParticlePositionPairHasNonZeroEnergies(positionId, particleId)) buffer[bufferId++] = particleId;
 
                 particleId++;
             }
