@@ -63,10 +63,12 @@ static error_t BufferJumpLinksOfJumpPath(SCONTEXT_PARAM, const int32_t jumpLengt
 
     for (int32_t receiverPathId = 0; receiverPathId < jumpLength; ++receiverPathId)
     {
+        continue_if(!JUMPPATH[receiverPathId]->IsStable);
+
         let searchEnvId = JUMPPATH[receiverPathId]->EnvironmentId;
         for (int32_t senderPathId = 0; senderPathId < jumpLength; ++senderPathId)
         {
-            continue_if(receiverPathId == senderPathId);
+            continue_if(receiverPathId == senderPathId || !JUMPPATH[senderPathId]->IsStable);
             if (TryGetEnvironmentLinkId(&JUMPPATH[senderPathId]->EnvironmentLinks, searchEnvId, &linkId))
                 outBuffer[(*outCount)++] = (JumpLink_t) { .SenderPathId = senderPathId, .LinkId = linkId };
         }

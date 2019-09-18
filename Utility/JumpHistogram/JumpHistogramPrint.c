@@ -71,16 +71,17 @@ static void PrintJumpHistogramContent(SimulationState_t* simulationState, file_t
     {
         cpp_foreach(histrogram, simulationState->JumpStatistics)
         {
-            fprintf(fstream, flpFormat, histrogram->EdgeEnergyHistogram.Stepping * (double) i);
+            let factor = (double) i;
+            fprintf(fstream, flpFormat, (1.0 / histrogram->EdgeEnergyHistogram.SteppingInverse) * factor);
             fprintf(fstream, cntFormat, histrogram->EdgeEnergyHistogram.CountBuffer[i]);
 
-            fprintf(fstream, flpFormat, histrogram->PosConfEnergyHistogram.Stepping * (double) i);
+            fprintf(fstream, flpFormat, (1.0 / histrogram->PosConfEnergyHistogram.SteppingInverse) * factor);
             fprintf(fstream, cntFormat, histrogram->PosConfEnergyHistogram.CountBuffer[i]);
 
-            fprintf(fstream, flpFormat, -1 * histrogram->NegConfEnergyHistogram.Stepping * (double) i);
+            fprintf(fstream, flpFormat, (-1.0 / histrogram->NegConfEnergyHistogram.SteppingInverse) * factor);
             fprintf(fstream, cntFormat, histrogram->NegConfEnergyHistogram.CountBuffer[i]);
 
-            fprintf(fstream, flpFormat, histrogram->TotalEnergyHistogram.Stepping * (double) i);
+            fprintf(fstream, flpFormat, (1.0 / histrogram->TotalEnergyHistogram.SteppingInverse) * factor);
             fprintf(fstream, cntFormat, histrogram->TotalEnergyHistogram.CountBuffer[i]);
             fflush(fstream);
         }

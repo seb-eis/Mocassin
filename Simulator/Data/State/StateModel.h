@@ -150,7 +150,7 @@ typedef struct StateMetaInfo
     
 } StateMetaInfo_t;
 
-// Type for the jump histogram type that stores a energy value occurrence statistic
+// Type for the fixed size jump histogram type that stores a energy value occurrence statistics in a fixed size buffer
 // Layout@ggc_x86_64 => 40+1000*8@[8,8,8,8,1000*8]
 typedef struct JumpHistogram
 {
@@ -160,8 +160,8 @@ typedef struct JumpHistogram
     // The maximum energy value of the histogram
     double MaxValue;
 
-    // The energy stepping value of the the count buffer
-    double Stepping;
+    // The energy stepping inverse value of the the count buffer
+    double SteppingInverse;
 
     // The counter for occurred cases above the max energy value
     int64_t OverflowCount;

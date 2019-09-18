@@ -24,8 +24,7 @@ static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restri
 {
     int32_t index = 0;
     let numOfCodes = span_Length(clusterTable->OccupationCodes);
-    while ((span_Get(clusterTable->OccupationCodes, index) != occupationCode) && (index < numOfCodes))
-        index++;
+    for (;(span_Get(clusterTable->OccupationCodes, index) != occupationCode) && (index < numOfCodes); index++);
 
     return (index < numOfCodes) ? index : INVALID_INDEX;
 }
@@ -34,7 +33,7 @@ static inline int32_t SaveLinearSearchClusterCodeId(const ClusterTable_t *restri
 static inline int32_t LinearSearchClusterCodeId(const ClusterTable_t *restrict clusterTable, const OccupationCode64_t occupationCode)
 {
     int32_t index = 0;
-    while (span_Get(clusterTable->OccupationCodes, index++) != occupationCode);
+    for (;span_Get(clusterTable->OccupationCodes, index) != occupationCode; index++);
     return index;
 }
 
@@ -120,7 +119,7 @@ static EnvironmentLink_t* GetNextLinkFromTargetEnvironment(SCONTEXT_PARAM, const
     #if defined(OPT_LINK_ONLY_MOBILES)
         return (targetEnvironment->IsMobile) ? targetEnvironment->EnvironmentLinks.End++ : NULL;
     #else
-        return targetEnvironment->EnvironmentLinks.CurrentEnd++;
+        return targetEnvironment->EnvironmentLinks.End++;
     #endif
 }
 
@@ -129,9 +128,9 @@ static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAM, const Enviro
 {
     var targetEnvironment = GetPairDefinitionTargetEnvironment(SCONTEXT, pairDefinition, environment);
 
-    // Immobility OPT Part 1 and 2 - No incoming or outgoing updates for immobiles are required
+    // Immobility OPT Part 1 and 2 - Immobile or unstable targets do not need to provide updates to their surroundings
     #if defined(OPT_LINK_ONLY_MOBILES)
-        return_if(!environment->IsMobile || !targetEnvironment->IsMobile);
+        return_if(!targetEnvironment->IsMobile || !targetEnvironment->IsStable);
     #endif
 
     // Use the uninitialized span access struct to count the elements before allocation!
@@ -142,8 +141,15 @@ static void ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT_PARAM, const Enviro
 static error_t SetAllLinkListCountersToRequiredSize(SCONTEXT_PARAM)
 {
     cpp_foreach(environment, *getEnvironmentLattice(SCONTEXT))
+    {
+        // Immobility OPT Part 1 and 2 - Immobile centers (or unstables in MMC) to not need to receive updates from their surroundings
+        #if defined(OPT_LINK_ONLY_MOBILES)
+            continue_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC) && !environment->IsStable);
+            continue_if(environment->IsStable && !environment->IsMobile);
+        #endif
         cpp_foreach(pairDefinition, environment->EnvironmentDefinition->PairInteractions)
             ResolvePairTargetAndIncreaseLinkCounter(SCONTEXT, environment, pairDefinition);
+    }
 
     return ERR_OK;
 }
@@ -222,7 +228,8 @@ static error_t ConstructPreparedLinkingSystem(SCONTEXT_PARAM)
         // Immobility OPT Part 1 -> Incoming updates are not required, the state energy of immobile particles is not used during mc routine
         // Effect:    Causes all immobile particles to remain at their initial energy state during simulation (can be resynchronized by dynamic lookup)
         #if defined(OPT_LINK_ONLY_MOBILES)
-            continue_if(!environment->IsMobile);
+            continue_if(!environment->IsMobile && environment->IsStable);
+            continue_if(JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC) && !environment->IsStable);
         #endif
 
         error = LinkEnvironmentToSurroundings(SCONTEXT, environment);
@@ -523,6 +530,7 @@ static void InvokeEnvironmentLinkClusterUpdates(SCONTEXT_PARAM, const Environmen
         let workCluster = getActiveWorkCluster(SCONTEXT);
 
         UpdateClusterState(clusterTable, clusterLink, workCluster, newParticleId);
+        continue_if(workCluster->CodeId == workCluster->CodeIdBackup);
 
         for (byte_t i = 0;; i++)
         {
@@ -531,7 +539,7 @@ static void InvokeEnvironmentLinkClusterUpdates(SCONTEXT_PARAM, const Environmen
             InvokeDeltaOfActiveCluster(SCONTEXT, updateParticleId);
         }
 
-        SetClusterStateBackup(getActiveWorkCluster(SCONTEXT));
+        SetClusterStateBackup(workCluster);
     }
 }
 

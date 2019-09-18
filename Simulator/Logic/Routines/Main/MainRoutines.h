@@ -1,6 +1,6 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	EnvRoutines.h        		//
+// File:	MainRoutines.h        		//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
@@ -90,6 +90,12 @@ error_t MMC_FinishMainRoutine(SCONTEXT_PARAM);
 
 /* KMC simulation non-error sub-routines */
 
+// Executes one cycle of the KMC simulation routine with the passed simulation context
+void KMC_ExecuteSimulationCycle(SCONTEXT_PARAM);
+
+// Executes one self optimizing cycle of the KMC simulation routine with the passed simulation context
+void KMC_ExecuteSOPSimulationCycle(SCONTEXT_PARAM);
+
 // Set the next KMC jump selection on the context
 void KMC_SetNextJumpSelection(SCONTEXT_PARAM);
 
@@ -109,6 +115,9 @@ void KMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM);
 void KMC_SetJumpProbabilities(SCONTEXT_PARAM);
 
 /* MMC simulation non-error sub-routines */
+
+// Executes one cycle of the MMC simulation routine with the passed simulation context
+void MMC_ExecuteSimulationCycle(SCONTEXT_PARAM);
 
 // Set the next MMC jump selection on the context
 void MMC_SetNextJumpSelection(SCONTEXT_PARAM);

@@ -1,6 +1,6 @@
 //////////////////////////////////////////
 // Project: C Monte Carlo Simulator		//
-// File:	EnvRoutines.c        		//
+// File:	MainRoutines.c        		//
 // Author:	Sebastian Eisele			//
 //			Workgroup Martin, IPC       //
 //			RWTH Aachen University      //
@@ -142,7 +142,6 @@ error_t MMC_StartPreRunRoutine(SCONTEXT_PARAM)
     return ERR_NOTIMPLEMENTED;
 }
 
-// Start the kinetic monte carlo pre-run routine
 error_t MMC_FinishPreRun(SCONTEXT_PARAM)
 {
     return ERR_NOTIMPLEMENTED;
@@ -163,6 +162,7 @@ error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
         abortFlag = MMC_CheckAbortConditions(SCONTEXT);
         ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
+
     return MMC_FinishMainRoutine(SCONTEXT);
 }
 
@@ -206,7 +206,7 @@ static inline void KMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
     var counters = getActiveCounters(SCONTEXT);
 
     ++counters->UnstableEndCount;
-    AddCurrentJumpDataToHistograms(SCONTEXT);
+    KMC_AddCurrentJumpDataToHistograms(SCONTEXT);
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
 }
 
@@ -216,7 +216,7 @@ static inline void KMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
     var counters = getActiveCounters(SCONTEXT);
 
     ++counters->UnstableStartCount;
-    AdvanceTransitionTrackingSystem(SCONTEXT);
+    KMC_AdvanceTransitionTrackingSystem(SCONTEXT);
     KMC_AdvanceSystemToFinalState(SCONTEXT);
 
     let jumpCountHasChanged = KMC_UpdateJumpPool(SCONTEXT);
@@ -259,7 +259,7 @@ static inline void KMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
     UpdateMaxJumpProbabilityBackjumpUnsafe(SCONTEXT);
 
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
-    AdvanceTransitionTrackingSystem(SCONTEXT);
+    KMC_AdvanceTransitionTrackingSystem(SCONTEXT);
     KMC_AdvanceSystemToFinalState(SCONTEXT);
 
     let jumpCountHasChanged = KMC_UpdateJumpPool(SCONTEXT);
@@ -272,7 +272,7 @@ static inline void KMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAM)
     var counters = getActiveCounters(SCONTEXT);
     ++counters->RejectionCount;
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
-    AddCurrentJumpDataToHistograms(SCONTEXT);
+    KMC_AddCurrentJumpDataToHistograms(SCONTEXT);
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
@@ -303,32 +303,59 @@ static inline bool_t KMC_PrecheckAttemptFrequencyFactor(SCONTEXT_PARAM)
     #endif
 }
 
+void KMC_ExecuteSimulationCycle(SCONTEXT_PARAM)
+{
+    KMC_SetNextJumpSelection(SCONTEXT);
+    KMC_SetJumpPathProperties(SCONTEXT);
+
+    if (KMC_TrySetActiveJumpRule(SCONTEXT))
+    {
+        #if defined(OPT_PRECHECK_FREQUENCY)
+        if (KMC_PrecheckAttemptFrequencyFactor(SCONTEXT))
+        {
+            KMC_OnJumpIsFrequencySkipped(SCONTEXT);
+            return;
+        }
+        #endif
+        KMC_SetJumpProperties(SCONTEXT);
+        KMC_OnEnergeticJumpEvaluation(SCONTEXT);
+        return;
+    }
+
+    KMC_OnJumpIsSiteBlocked(SCONTEXT);
+}
+
+void KMC_ExecuteSOPSimulationCycle(SCONTEXT_PARAM)
+{
+    KMC_SetNextJumpSelection(SCONTEXT);
+    KMC_SetJumpPathProperties(SCONTEXT);
+
+    if (KMC_TrySetActiveJumpRule(SCONTEXT))
+    {
+        #if defined(OPT_PRECHECK_FREQUENCY)
+        if (KMC_PrecheckAttemptFrequencyFactor(SCONTEXT))
+        {
+            KMC_OnJumpIsFrequencySkipped(SCONTEXT);
+            return;
+        }
+        #endif
+        KMC_SetJumpProperties(SCONTEXT);
+        KMC_OnEnergeticJumpEvaluation(SCONTEXT);
+        UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT);
+        return;
+    }
+
+    KMC_OnJumpIsSiteBlocked(SCONTEXT);
+}
+
 error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
-        for (size_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
+        for (int64_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
         {
-            KMC_SetNextJumpSelection(SCONTEXT);
-            KMC_SetJumpPathProperties(SCONTEXT);
-
-            if (KMC_TrySetActiveJumpRule(SCONTEXT))
-            {
-                #if defined(OPT_PRECHECK_FREQUENCY)
-                if (KMC_PrecheckAttemptFrequencyFactor(SCONTEXT))
-                {
-                    KMC_OnJumpIsFrequencySkipped(SCONTEXT);
-                    continue;
-                }
-                #endif
-                KMC_SetJumpProperties(SCONTEXT);
-                KMC_OnEnergeticJumpEvaluation(SCONTEXT);
-            }
-            else
-            {
-                KMC_OnJumpIsSiteBlocked(SCONTEXT);
-            }
+            KMC_ExecuteSimulationCycle(SCONTEXT);
         }
         counters->CycleCount += counters->CycleCountPerExecutionLoop;
         return_if(KMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
@@ -341,28 +368,9 @@ error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
     var counters = getMainCycleCounters(SCONTEXT);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
-        for (size_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
+        for (int64_t i = 0; i < counters->CycleCountPerExecutionLoop; ++i)
         {
-            KMC_SetNextJumpSelection(SCONTEXT);
-            KMC_SetJumpPathProperties(SCONTEXT);
-
-            if (KMC_TrySetActiveJumpRule(SCONTEXT))
-            {
-                #if defined(OPT_PRECHECK_FREQUENCY)
-                if (KMC_PrecheckAttemptFrequencyFactor(SCONTEXT))
-                {
-                    KMC_OnJumpIsFrequencySkipped(SCONTEXT);
-                    continue;
-                }
-                #endif
-                KMC_SetJumpProperties(SCONTEXT);
-                KMC_OnEnergeticJumpEvaluation(SCONTEXT);
-                UpdateMaxJumpProbabilityBackjumpSafe(SCONTEXT);
-            }
-            else
-            {
-                KMC_OnJumpIsSiteBlocked(SCONTEXT);
-            }
+            KMC_ExecuteSOPSimulationCycle(SCONTEXT);
         }
         counters->CycleCount += counters->CycleCountPerExecutionLoop;
         KMC_UpdateTotalJumpNormalization(SCONTEXT);
@@ -390,20 +398,6 @@ error_t KMC_FinishExecutionPhase(SCONTEXT_PARAM)
     SharedCycleBlockFinish(SCONTEXT);
     return SIMERROR;
 }
-
-// Action for cases where the MMC jump selection leads to an unstable end state
-//static inline void MMC_OnJumpIsToUnstableState(SCONTEXT_PARAM)
-//{
-//    var counters = getActiveCounters(SCONTEXT);
-//    ++counters->UnstableEndCount;
-//}
-//
-//// Action for cases where the jump selection enables to leave a currently unstable state
-//static inline void MMC_OnJumpIsFromUnstableState(SCONTEXT_PARAM)
-//{
-//    var counters = getActiveCounters(SCONTEXT);
-//    ++counters->UnstableStartCount;
-//}
 
 // Action for cases where the jump selection has been statistically accepted
 static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
@@ -434,25 +428,29 @@ static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
     ++counters->SiteBlockingCount;
 }
 
+void MMC_ExecuteSimulationCycle(SCONTEXT_PARAM)
+{
+    MMC_SetNextJumpSelection(SCONTEXT);
+    MMC_SetJumpPathProperties(SCONTEXT);
+
+    if (MMC_TrySetActiveJumpRule(SCONTEXT))
+    {
+        MMC_SetJumpProperties(SCONTEXT);
+        MMC_OnEnergeticJumpEvaluation(SCONTEXT);
+        return;
+    }
+
+    MMC_OnJumpIsSiteBlocked(SCONTEXT);
+}
+
 error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
 {
     var counters = getMainCycleCounters(SCONTEXT);
     for (;counters->McsCount < counters->NextExecutionPhaseGoalMcsCount;)
     {
-        for (size_t i = 0; i < counters->CycleCountPerExecutionLoop; i++)
+        for (int64_t i = 0; i < counters->CycleCountPerExecutionLoop; i++)
         {
-            MMC_SetNextJumpSelection(SCONTEXT);
-            MMC_SetJumpPathProperties(SCONTEXT);
-
-            if (MMC_TrySetActiveJumpRule(SCONTEXT))
-            {
-                MMC_SetJumpProperties(SCONTEXT);
-                MMC_OnEnergeticJumpEvaluation(SCONTEXT);
-            }
-            else
-            {
-                MMC_OnJumpIsSiteBlocked(SCONTEXT);
-            }
+            MMC_ExecuteSimulationCycle(SCONTEXT);
         }
         counters->CycleCount += counters->CycleCountPerExecutionLoop;
         return_if(MMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
@@ -884,7 +882,7 @@ void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
 
     // Handle case where the jump is statistically accepted
     let random = GetNextRandomDouble(SCONTEXT);
-    if (energyInfo->NormalizedS0toS2Probability *.1 >= random)
+    if (energyInfo->NormalizedS0toS2Probability >= random)
     {
         MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
         return;

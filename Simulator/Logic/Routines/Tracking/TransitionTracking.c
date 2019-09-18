@@ -44,17 +44,17 @@ static inline void UpdatePathEnvironmentMovementTracking(SCONTEXT_PARAM, const b
     vector3VectorOp(*globalTracker, *moveVector, +=);
 }
 
-// Adds an occurred energy value to the passed histogram by increasing the correct counter value
-static inline void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double energy)
+
+void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHistogram, const double value)
 {
     // Handle the correct counter id generation and overflow cases
-    if (energy < jumpHistogram->MinValue)
+    if (value < jumpHistogram->MinValue)
     {
         ++jumpHistogram->UnderflowCount;
         return;
     }
 
-    let counterId = (int32_t) round((energy - jumpHistogram->MinValue) / jumpHistogram->Stepping);
+    let counterId = (int32_t) round((value - jumpHistogram->MinValue) * jumpHistogram->SteppingInverse);
     if (counterId >= STATE_JUMPSTAT_SIZE)
     {
         ++jumpHistogram->OverflowCount;
@@ -63,6 +63,26 @@ static inline void AddEnergyValueToJumpHistogram(JumpHistogram_t*restrict jumpHi
 
     // Handle the correct insert
     ++jumpHistogram->CountBuffer[counterId];
+}
+
+void AddEnergyValueToDynamicJumpHistogram(DynamicJumpHistogram_t*restrict jumpHistogram, const double value)
+{
+    // Handle the correct counter id generation and overflow cases
+    if (value < jumpHistogram->Header->MinValue)
+    {
+        ++jumpHistogram->Header->UnderflowCount;
+        return;
+    }
+
+    let counterId = (int32_t) round((value - jumpHistogram->Header->MinValue) * jumpHistogram->Header->SteppingInverse);
+    if (counterId >= jumpHistogram->Header->EntryCount)
+    {
+        ++jumpHistogram->Header->OverflowCount;
+        return;
+    }
+
+    // Handle the correct insert
+    ++span_Get(jumpHistogram->Counters, counterId);
 }
 
 // Updates the jump statistics affiliated with the passed environment state in the current simulation cycle context
@@ -99,7 +119,7 @@ static inline void UpdatePathEnvironmentTrackingData(SCONTEXT_PARAM, const byte_
     UpdatePathEnvironmentJumpStatistics(SCONTEXT, pathId);
 }
 
-void AddCurrentJumpDataToHistograms(SCONTEXT_PARAM)
+void KMC_AddCurrentJumpDataToHistograms(SCONTEXT_PARAM)
 {
     for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
     {
@@ -108,7 +128,7 @@ void AddCurrentJumpDataToHistograms(SCONTEXT_PARAM)
     }
 }
 
-void AdvanceTransitionTrackingSystem(SCONTEXT_PARAM)
+void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAM)
 {
     for (byte_t pathId = 0; pathId < getActiveJumpDirection(SCONTEXT)->JumpLength; ++pathId)
         UpdatePathEnvironmentTrackingData(SCONTEXT, pathId);
@@ -138,7 +158,7 @@ static inline void InitJumpHistogramToDefault(JumpHistogram_t*restrict jumpHisto
     jumpHistogram->MaxValue = STATE_JUMPSTAT_EMAX;
     jumpHistogram->UnderflowCount = 0;
     jumpHistogram->OverflowCount = 0;
-    jumpHistogram->Stepping = (STATE_JUMPSTAT_EMAX - STATE_JUMPSTAT_EMIN) / STATE_JUMPSTAT_SIZE;
+    jumpHistogram->SteppingInverse = STATE_JUMPSTAT_SIZE / (STATE_JUMPSTAT_EMAX - STATE_JUMPSTAT_EMIN);
 
     memset(&jumpHistogram->CountBuffer, 0, sizeof(jumpHistogram->CountBuffer));
 }
@@ -159,9 +179,39 @@ error_t InitJumpStatisticsTrackingSystem(SCONTEXT_PARAM)
 {
     if (!StateFlagsAreSet(SCONTEXT, STATE_FLG_INITIALIZED))
     {
-        // ToDo: Implement customization of EMIN and EMAX for the histograms
         InitJumpStatisticSystemToDefault(SCONTEXT);
     }
 
     return ERR_OK;
+}
+
+error_t ChangeDynamicJumpHistogramSamplingAreaByMinMax(DynamicJumpHistogram_t*restrict jumpHistogram, double minValue, double maxValue)
+{
+    return_if(jumpHistogram->Header == NULL || jumpHistogram->Header->EntryCount <= 0, ERR_ARGUMENT);
+    return_if(minValue >= maxValue, ERR_ARGUMENT);
+
+    ResetDynamicJumpHistogramToEmptyState(jumpHistogram);
+    let stepping = (maxValue-minValue) / (double) jumpHistogram->Header->EntryCount;
+    let steppingInv = 1.0 / stepping;
+
+    return_if(!isfinite(stepping) || !isfinite(steppingInv), ERR_ARGUMENT);
+
+    jumpHistogram->Header->MinValue = minValue;
+    jumpHistogram->Header->MaxValue = maxValue;
+    jumpHistogram->Header->Stepping = stepping;
+    jumpHistogram->Header->SteppingInverse = steppingInv;
+
+    return ERR_OK;
+}
+
+error_t ChangeDynamicJumpHistogramSamplingAreaByRange(DynamicJumpHistogram_t*restrict jumpHistogram, double centerValue, double valueRange)
+{
+    return_if(jumpHistogram->Header == NULL || jumpHistogram->Header->EntryCount <= 0, ERR_ARGUMENT);
+    return_if(!isfinite(centerValue) || !isfinite(valueRange), ERR_ARGUMENT);
+    ChangeDynamicJumpHistogramSamplingAreaByMinMax(jumpHistogram, centerValue - valueRange, centerValue + valueRange);
+}
+
+Buffer_t GetDynamicJumpHistogramBufferAccess(DynamicJumpHistogram_t*restrict jumpHistogram)
+{
+    return (Buffer_t) {.Begin = (void*) jumpHistogram->Header, .End = (void*) jumpHistogram->Counters.End};
 }
