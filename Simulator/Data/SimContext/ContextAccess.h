@@ -315,6 +315,12 @@ static inline JobInfo_t* getDbModelJobInfo(SCONTEXT_PARAM)
     return &getDatabaseModel(SCONTEXT)->JobModel.JobInfo;
 }
 
+// Get the custom routine data from the database model data
+static inline RoutineData_t* getCustomRoutineData(SCONTEXT_PARAM)
+{
+    return &getDatabaseModel(SCONTEXT)->JobModel.RoutineData;
+}
+
 // Get the job header from the database model as a KMC header
 static inline KmcHeader_t* getDbModelJobHeaderAsKMC(SCONTEXT_PARAM)
 {

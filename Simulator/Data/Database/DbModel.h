@@ -28,6 +28,18 @@ typedef Span_t(int32_t, IdMappingSpan) IdMappingSpan_t;
 // Layout@ggc_x86_64 => 16@[4,4,4,4]
 typedef Vector4_t InteractionRange_t;
 
+// Type for passing custom routine request and affiliated data
+// Layout@ggc_x86_64 => 32@[16,16]
+typedef struct RoutineData
+{
+    // The lower case GUID/UUID "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx" of ASCII characters
+    char        Guid[40];
+
+    //  The custom routine parameter data span
+    Buffer_t    ParamData;
+
+} RoutineData_t;
+
 /* Structure model */
 
 // Type for pair interaction definitions
@@ -448,32 +460,35 @@ typedef struct JobInfo
 } JobInfo_t;
 
 // Type for the job model
-// Layout@ggc_x86_64 => 40@[4,4,4,4,4,4,8,8]
+// Layout@ggc_x86_64 => 72@[4,4,4,4,4,4,8,8,32]
 typedef struct JobModel
 {
     // The objects database context key
-    int32_t     ContextId;
+    int32_t         ContextId;
 
     // The simulation package context id
-    int32_t     PackageId;
+    int32_t         PackageId;
 
     // The lattice model context id
-    int32_t     LatticeModelId;
+    int32_t         LatticeModelId;
 
     // The structure model context id
-    int32_t     StructureModelId;
+    int32_t         StructureModelId;
 
     // The energy model context id
-    int32_t     EnergyModelId;
+    int32_t         EnergyModelId;
 
     // The transition model context id
-    int32_t     TransitionModelId;
+    int32_t         TransitionModelId;
 
     // The job info object
-    JobInfo_t   JobInfo;
+    JobInfo_t       JobInfo;
 
     // The job header pointer
-    void*       JobHeader;
+    void*           JobHeader;
+
+    // Additional routine data for custom non-standard routines
+    RoutineData_t   RoutineData;
 
 } JobModel_t;
 

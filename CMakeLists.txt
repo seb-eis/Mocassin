@@ -55,6 +55,10 @@ set_target_properties(Mocassin.Utility PROPERTIES C_STANDARD 11)
 add_library(utility SHARED ${UTILITY_SOURCE})
 set_target_properties(utility PROPERTIES C_STANDARD 11)
 
+# Extensions
+add_library(mmcfe.mocext Extensions/Mmcfe/MmcFERoutine.h Extensions/Mmcfe/MmcFERoutine.c)
+set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extensions/Interface/MocsimRoutineExtension.h)
+
 # Compiler settings
 if (WIN32)
     # Compiler settings for windows
@@ -101,6 +105,9 @@ target_link_libraries(Mocassin.Simulator jobloader progressprint framework simul
 # Utility executable links
 target_link_libraries(utility framework simulator sqlite3)
 target_link_libraries(Mocassin.Utility utility)
+
+# Extension links
+target_link_libraries(mmcfe.mocext sqlite3 framework simulator)
 
 # Profiling flags
 #target_compile_options(Mocassin.Simulator PUBLIC -pg -no-pie)

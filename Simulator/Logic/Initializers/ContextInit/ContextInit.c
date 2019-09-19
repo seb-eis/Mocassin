@@ -704,7 +704,7 @@ static error_t SyncMainCycleCountersWithStateStatus(SCONTEXT_PARAM)
     counters->CycleCount = stateHeader->Cycles;
     counters->McsCount = stateHeader->Mcs;
 
-    return (counters->McsCount < counters->TotalSimulationGoalMcsCount) ? ERR_OK : ERR_ALREADYCOMPLETED;
+    return (counters->McsCount <= counters->TotalSimulationGoalMcsCount) ? ERR_OK : ERR_ALREADYCOMPLETED;
 }
 
 // Synchronizes the simulation cycle state to the main simulation state
@@ -713,7 +713,7 @@ static void SyncSimulationCycleStateWithModel(SCONTEXT_PARAM)
     var mainCounters = getMainCycleCounters(SCONTEXT);
 
     var error = SetCycleCounterStateToDefault(SCONTEXT, mainCounters);
-    error_assert(error, "Failed to set default main counter status.");
+    error_assert(error, "Failed to initialize the default counter state.");
 
     error = SyncMainCycleCountersWithStateStatus(SCONTEXT);
     error_assert(error, "Failed to synchronize data structure (state ==> cycle counters).");

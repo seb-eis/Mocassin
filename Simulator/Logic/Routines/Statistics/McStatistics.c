@@ -21,9 +21,11 @@ error_t SetCycleCounterStateToDefault(SCONTEXT_PARAM, CycleCounterState_t *count
     let jobInfo = getDbModelJobInfo(SCONTEXT);
     let mobileCount = getNumberOfMobiles(SCONTEXT);
     let kmcHeader = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_KMC) ? getDbModelJobHeaderAsKMC(SCONTEXT) : NULL;
+    return_if(mobileCount == 0, ERR_NOMOBILES);
 
     counters->PrerunGoalMcs = (kmcHeader != NULL) ? kmcHeader->PreRunMcsp * mobileCount : 0;
     counters->TotalSimulationGoalMcsCount = counters->PrerunGoalMcs + jobInfo->TargetMcsp * mobileCount;
+    return_if(counters->TotalSimulationGoalMcsCount == 0, ERR_DATACONSISTENCY);
 
     let rem = counters->TotalSimulationGoalMcsCount % CYCLE_BLOCKCOUNT;
     if (rem != 0) counters->TotalSimulationGoalMcsCount += CYCLE_BLOCKCOUNT - rem;

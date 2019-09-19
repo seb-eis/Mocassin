@@ -39,7 +39,8 @@ const char* ErrorCodeToString(error_t errCode)
             { ERR_NULLPOINTER,      "Function argument is null.\n\t\t(Expected reason: Implementation error/corrupted model data)" },
             { ERR_ARGUMENT,         "Function argument is invalid.\n\t\t(Expected reason: Implementation error)" },
             { ERR_DEBUGASSERT,      "Debug assertion failed." },
-            { ERR_ALREADYCOMPLETED, "Done MCS is greater that target MCS count.\n\t\t(Expected reason: Simulation is already done!)"}
+            { ERR_ALREADYCOMPLETED, "Done MCS is greater or equal to target MCS.\n\t\t(Expected reason: Simulation is already done!)"},
+            { ERR_NOMOBILES,        "The number of mobile particles is zero.\n\t\t(Expected reason: Missing doping or definition error.)"}
     };
 
     c_foreach(error, errTable)

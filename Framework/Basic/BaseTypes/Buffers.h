@@ -197,6 +197,9 @@ void* ConstructArrayFromBlob(const void *restrict buffer, size_t sizeOfElements,
 // Get the total number of elements in any type of array
 #define array_Length(ARRAY) ((ARRAY).Header->Size)
 
+// Get the total number of bytes that the array occupies
+#define array_ByteCount(ARRAY) (((void*)(ARRAY).End) - ((void*) (ARRAY).Header))
+
 // Get the rank of any type of array
 #define array_Rank(ARRAY) ((ARRAY).Header->Rank)
 
