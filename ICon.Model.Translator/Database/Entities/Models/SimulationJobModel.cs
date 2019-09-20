@@ -98,10 +98,16 @@ namespace Mocassin.Model.Translator
         public byte[] JobInfoBinary { get; set; }
 
         /// <summary>
-        ///     Hob header blob conversion backing property
+        ///     Job header blob conversion backing property
         /// </summary>
         [Column("JobHeader")]
         public byte[] JobHeaderBinary { get; set; }
+
+        /// <summary>
+        ///     Routine data blob conversion backing property
+        /// </summary>
+        [Column("RoutineData")]
+        public byte[] RoutineDataBinary { get; set; }
 
         /// <summary>
         ///     The job info object that describes the job specifications
@@ -116,5 +122,12 @@ namespace Mocassin.Model.Translator
         [NotMapped]
         [InteropProperty(nameof(JobHeaderBinary))]
         public InteropObject JobHeader { get; set; }
+
+        /// <summary>
+        ///     The <see cref="RoutineDataEntity"/> that stores additional information for custom routines
+        /// </summary>
+        [NotMapped]
+        [OwnedBlobProperty(nameof(RoutineDataBinary))]
+        public RoutineDataEntity RoutineData { get; set; }
     }
 }

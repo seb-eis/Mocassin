@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using Mocassin.Tools.Evaluation.Context;
-using Mocassin.Tools.Evaluation.Queries;
-using Mocassin.Tools.Evaluation.Queries.Base;
+using System.Text;
+using System.Threading;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -13,14 +9,8 @@ namespace Mocassin.Framework.QuickTest
     {
         private static void Main(string[] args)
         {
-            //var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Filled.msl";
-            var mslFilename = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\GdCeO.Onsager.msl";
-            var evalContext = MslEvaluationContext.Create(mslFilename);
-            var data = evalContext.EvaluationJobSet().Where(x => x.JobMetaData.ConfigName == "T1000");
-            var evaluableSet = evalContext.MakeEvaluableSet(data);
-
-            var watch = Stopwatch.StartNew();
-            DisplayWatch(watch);
+            var guidStr = "b7f2dded-daf1-40c0-a1a4-ef9b85356af8";
+            var guid = new Guid(guidStr);
             ExitOnKeyPress("Finished successfully...");
         }
 

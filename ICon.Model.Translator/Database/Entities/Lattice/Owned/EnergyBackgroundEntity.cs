@@ -20,8 +20,5 @@
             : base(array)
         {
         }
-
-        /// <inheritdoc />
-        public override string BlobTypeName => "LEB";
     }
 }

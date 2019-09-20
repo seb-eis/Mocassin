@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -80,9 +79,9 @@ namespace Mocassin.UI.GUI
 
             File.WriteAllText(logPath, $"{sender}\n\n{exception}");
 
-            #if (!DEBUG)
+#if (!DEBUG)
             Process.GetCurrentProcess().Kill();
-            #endif
+#endif
         }
     }
 }

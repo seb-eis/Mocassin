@@ -6,11 +6,6 @@
     public abstract class BlobEntityBase : EntityBase
     {
         /// <summary>
-        ///     The blob type name for discrimination in the db blob table
-        /// </summary>
-        public virtual string BlobTypeName { get; protected set; }
-
-        /// <summary>
         ///     The total number of bytes for the blob containing the data and header bytes
         /// </summary>
         public virtual int BlobByteCount { get; protected set; }

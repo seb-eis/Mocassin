@@ -15,8 +15,5 @@
             : base(array)
         {
         }
-
-        /// <inheritdoc />
-        public override string BlobTypeName => "LAT";
     }
 }

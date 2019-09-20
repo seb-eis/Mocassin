@@ -17,8 +17,5 @@ namespace Mocassin.Model.Translator
             : base(array)
         {
         }
-
-        /// <inheritdoc />
-        public override string BlobTypeName => "ENT";
     }
 }

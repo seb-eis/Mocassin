@@ -6,19 +6,51 @@
         xmlns:local="clr-namespace:Mocassin.UI.GUI"
         xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
         mc:Ignorable="d"
-        Title="StartupWindow" Height="250" Width="250"
+        Title="StartupWindow"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None">
   <Grid>
-    <Border Background="Transparent" Width="240" Height="240" VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Border Width="480" Height="250" VerticalAlignment="Center" HorizontalAlignment="Center"
+            BorderBrush="Black" BorderThickness="1">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+          <GradientStop Color="Black" Offset="0" />
+          <GradientStop Color="DarkRed" Offset="0.05" />
+          <GradientStop Color="WhiteSmoke" Offset="0.1" />
+          <GradientStop Color="WhiteSmoke" Offset="0.9" />
+          <GradientStop Color="DarkRed" Offset="0.95" />
+          <GradientStop Color="Black" Offset="1.0" />
+        </LinearGradientBrush>
+      </Border.Background>
       <Grid>
-        <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+               Margin="5,0,0,0" Height="240" Width="240">
           <Image.Effect>
             <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".75" BlurRadius="4" />
           </Image.Effect>
         </Image>
+        <TextBlock Grid.Column="1" FontSize="12" TextAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0">
+          <Run Text="Mocassin Model Builder" FontSize="14" FontWeight="Bold"/>
+          <LineBreak/>
+          <Run Text="Monte Carlo for Solid State Ionics"/>
+          <LineBreak/>
+          <Run Text="Copyright &#169; 2017-2019 Sebastian Eisele"/>
+          <LineBreak/>
+          <LineBreak/>
+          <Run Text="Helmholtz Institute Muenster, HIMS"/>
+          <LineBreak/>
+          <Run Text="Institute of Physical Chemistry, RWTH"/>
+          <LineBreak/>
+          <Run Text="Juelich Research Center, Germany"/>
+        </TextBlock>
+        <TextBlock Grid.Column="1" FontSize="14" TextAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,5" Foreground="Gray"
+                   Text="Loading ..."/>
       </Grid>
     </Border>
   </Grid>

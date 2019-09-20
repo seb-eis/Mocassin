@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Database\Entities\Other\Routines\" />
     <Folder Include="Database\InteropEntities\Energy\C\" />
   </ItemGroup>
 
