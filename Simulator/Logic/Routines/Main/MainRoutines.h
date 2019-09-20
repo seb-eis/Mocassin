@@ -39,6 +39,11 @@ error_t SaveSimulationState(SCONTEXT_PARAM);
 // Starts the main simulation routine including a potential pre-run
 error_t StartMainSimulationRoutine(SCONTEXT_PARAM);
 
+/* Shared routine components */
+
+// Executes a common phase finish that synchronize the simulation state to the execution state, saves the state and calls a potential output plugin
+void MC_DoCommonPhaseFinish(SCONTEXT_PARAM);
+
 /* KMC routine */
 
 // Start the KMC pre run routine
@@ -59,8 +64,8 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM);
 // Finishes a kmc execution phase
 error_t KMC_FinishExecutionPhase(SCONTEXT_PARAM);
 
-// Evaluate the abort conditions for a kmc simulation
-error_t KMC_CheckAbortConditions(SCONTEXT_PARAM);
+// Updates and evaluates the abort conditions for a kmc simulation
+error_t KMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAM);
 
 // Finishes the main kmc routine
 error_t KMC_FinishMainRoutine(SCONTEXT_PARAM);
@@ -82,8 +87,8 @@ error_t MMC_StartMainRoutine(SCONTEXT_PARAM);
 // Finishes the mmc execution phase
 error_t MMC_FinishExecutionPhase(SCONTEXT_PARAM);
 
-// Evaluate the abort condition for an mmc simulation
-error_t MMC_CheckAbortConditions(SCONTEXT_PARAM);
+// Updates and evaluates the abort conditions for a nmc simulation
+error_t MMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAM);
 
 // Finishes the main mmc routine
 error_t MMC_FinishMainRoutine(SCONTEXT_PARAM);
@@ -136,3 +141,14 @@ void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM);
 
 // Set the MMC jump probabilities on the context by the default model calculation
 void MMC_SetJumpProbabilities(SCONTEXT_PARAM);
+
+/* Special MMC simulation non-error sub-routines */
+
+// Executes one cycle of the MMC simulation routine with the passed simulation context (Exp factor is multiplied with alpha)
+void MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT_PARAM, double alpha);
+
+// Set the MMC jump probabilities on the context by the default model calculation (Exp factor is multiplied with alpha)
+void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAM, double alpha);
+
+// Set the MMC jump evaluation results on the context for cases where energetic evaluation is required (Exp factor is multiplied with alpha)
+void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAM, double alpha);

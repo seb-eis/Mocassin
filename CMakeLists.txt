@@ -56,8 +56,8 @@ add_library(utility SHARED ${UTILITY_SOURCE})
 set_target_properties(utility PROPERTIES C_STANDARD 11)
 
 # Extensions
-add_library(mmcfe.mocext Extensions/Mmcfe/MmcFERoutine.h Extensions/Mmcfe/MmcFERoutine.c)
-set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extensions/Interface/MocsimRoutineExtension.h)
+add_library(mmcfe.mocext SHARED Extensions/Mmcfe/MmcFERoutine.h Extensions/Mmcfe/MmcFERoutine.c)
+set_target_properties(mmcfe.mocext PROPERTIES C_STANDARD 11 PUBLIC_HEADER Extensions/Interface/IMocsimExtension.h)
 
 # Compiler settings
 if (WIN32)

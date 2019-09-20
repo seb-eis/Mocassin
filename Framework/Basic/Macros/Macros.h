@@ -113,3 +113,6 @@
 
 // Nulls all fields of a variable
 #define nullStructContent(VARIABLE) memset(&(VARIABLE), 0, sizeof(typeof(VARIABLE)))
+
+// "Stringyfies" the passed macro contents
+#define NAME_OF(MACRO) evalMacro(#MACRO)

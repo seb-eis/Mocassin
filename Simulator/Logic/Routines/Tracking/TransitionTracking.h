@@ -74,6 +74,16 @@ static inline DynamicJumpHistogram_t ctor_DynamicJumpHistogram(const int32_t num
     return result;
 }
 
+// Creates a new dynamic jump histogram by reinterpreting the passed buffer point (Buffer is copied and not freed)
+static inline DynamicJumpHistogram_t ctor_DynamicJumpHistogram_FromBuffer(const void* buffer)
+{
+    if (buffer == NULL) return (DynamicJumpHistogram_t) {0,0,0};
+    let entryCount = ((DynamicJumpHistogramHeader_t*) buffer)->EntryCount;
+    var histogram = ctor_DynamicJumpHistogram(entryCount);
+    memcpy(&histogram.Header, buffer, sizeof(DynamicJumpHistogramHeader_t) + span_ByteCount(histogram.Counters));
+    return histogram;
+}
+
 // Updates the tracking system on the simulation state after a successful KMC transition with the current data
 void KMC_AdvanceTransitionTrackingSystem(SCONTEXT_PARAM);
 

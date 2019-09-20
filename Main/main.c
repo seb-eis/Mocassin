@@ -8,6 +8,7 @@
 // Short:   Main simulation entry point //
 //////////////////////////////////////////
 
+#include "Framework/Basic/DlLoading/RoutineLoading.h"
 #include "InternalLibraries/Interfaces/ProgressPrint.h"
 #include "InternalLibraries/Interfaces/JobLoader.h"
 #include "Simulator/Data/SimContext/ContextAccess.h"
@@ -16,19 +17,22 @@
 
 int main(int argc, char const * const *argv)
 {
+    // General preparations for routine execution
     var SCONTEXT = ctor_SimulationContext();
-
     ResolveCommandLineArguments(&SCONTEXT, argc, argv);
-
     JobLoader_LoadDatabaseModelToContext(&SCONTEXT);
-
     PrepareForMainRoutine(&SCONTEXT);
 
-    StartMainSimulationRoutine(&SCONTEXT);
+    // Load and jump into a custom extension routine if valid data exists
+    var extensionRoutine = MocExt_TryFindExtensionRoutine(getCustomRoutineUuid(&SCONTEXT), NULL);
+    if (extensionRoutine != NULL) return (extensionRoutine(&SCONTEXT), 0);
 
+    // Jump into the usual KMC/MMc system if no extension routine data exist
+    StartMainSimulationRoutine(&SCONTEXT);
     ProgressPrint_OnSimulationFinish(&SCONTEXT, stdout);
 
     #if defined(MC_AWAIT_TERMINATION_OK)
         getchar();
     #endif
+    return 0;
 }

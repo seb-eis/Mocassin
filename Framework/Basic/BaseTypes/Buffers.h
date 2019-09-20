@@ -26,6 +26,9 @@
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(void, VoidSpan) VoidSpan_t;
 
+// Compares two pointers as 16 byte UUID/GUID values
+int32_t CompareUUID(const void* lhs, const void* rhs);
+
 // Allocate a new voi span with the passed number of elements and size of elements
 VoidSpan_t AllocateSpan(size_t numOfElements, size_t sizeOfElement);
 
@@ -150,6 +153,9 @@ void* ConstructVoidList(size_t capacity, size_t sizeOfElement, VoidList_t *restr
 
 // Removes the last entry from the by decreasing the current end without checking for underflow
 #define list_PopBack(LIST) *(--(LIST).End)
+
+// Clears a list by resetting its end to the begin, does not free the list or actually delete any values
+#define list_Clear(LIST) (LIST).End = (LIST.Begin)
 
 // Macro to check if the passed list is full
 #define list_IsFull(LIST) (((LIST).End) == (LIST).CapacityEnd)

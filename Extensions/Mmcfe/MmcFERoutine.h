@@ -11,14 +11,14 @@
 #pragma once
 
 #include "ExternalLibraries/sqlite3.h"
-#include "Extensions/Interface/MocsimRoutineExtension.h"
+#include "Extensions/Interface/IMocsimExtension.h"
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Routines/Tracking/TransitionTracking.h"
 
 /* Routine type definitions */
 
 // Type for storage of MMCFE routine parameters
-// Layout@ggc_x86_64 => 56@[8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 64@[8,8,8,8,8,8,8,8]
 typedef struct MmcfeParams
 {
     // The size of the energy sampling histogram
@@ -32,6 +32,9 @@ typedef struct MmcfeParams
 
     //  The maximum alpha value
     double  AlphaMax;
+
+    //  The current alpha value
+    double  AlphaCurrent;
 
     //  The range of the histogram around the affiliated average energy
     double  HistogramRange;
@@ -48,8 +51,8 @@ typedef struct MmcfeParams
 // Layout@ggc_x86_64 => 108@[24,24,56]
 typedef struct MmcfeLog
 {
-    // The state of the simulation lattice
-    Lattice_t               Lattice;
+    // The linearized state of the simulation lattice
+    LatticeState_t          Lattice;
 
     // The state of the dynamic energy histogram
     DynamicJumpHistogram_t  Histogram;
@@ -67,4 +70,4 @@ void MMCFE_StartRoutine(void* context);
 sqlite3* MMCFE_OpenLogDatabase(const char* dbPath);
 
 // Adds an MMCFE log entry to the passed sqlite3 database connection
-error_t MMCFE_AddLogEntryToDatabase(sqlite3* db, const MmcfeLog_t*restrict logEntry);
+error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry);

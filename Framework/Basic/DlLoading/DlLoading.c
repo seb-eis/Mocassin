@@ -23,12 +23,12 @@
             fflush(stream);
         }
 
-        void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+        void* DlLoading_ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             HMODULE module;
             void* function = NULL;
 
-            if ((module = GetLibraryHandle(libraryPath)) == NULL)
+            if ((module = DlLoading_GetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'LoadLibrary(<FILENAME>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -44,14 +44,14 @@
             return function;
         }
 
-        bool_t UnloadDynamicLibrary(const char* restrict libraryName)
+        bool_t DlLoading_UnloadDynamicLibrary(const char* restrict libraryName)
         {
             HMODULE module = GetModuleHandleA(libraryName);
             return_if(module == NULL, false);
             return (bool_t) FreeLibrary(module);
         }
 
-        LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
+        LIBHANDLE DlLoading_GetLibraryHandle(const char *restrict libraryPath)
         {
             HMODULE module;
             if ((module = GetModuleHandleA(libraryPath)) == NULL)

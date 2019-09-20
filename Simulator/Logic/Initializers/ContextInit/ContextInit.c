@@ -412,7 +412,8 @@ static error_t TryLoadOutputPlugin(SCONTEXT_PARAM)
     var plugins = getPluginCollection(SCONTEXT);
 
     return_if((fileInfo->OutputPluginPath) == NULL || (fileInfo->OutputPluginSymbol == NULL), ERR_USEDEFAULT);
-    if ((plugins->OnDataOutput = ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol, &error)) == NULL)
+    if ((plugins->OnDataOutput = DlLoading_ImportFunction(fileInfo->OutputPluginPath, fileInfo->OutputPluginSymbol,
+                                                          &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during output plugin loading. Using default settings.\n");
@@ -433,7 +434,8 @@ static error_t TryLoadEnergyPlugin(SCONTEXT_PARAM)
     var plugins = getPluginCollection(SCONTEXT);
 
     return_if((fileInfo->EnergyPluginPath) == NULL || (fileInfo->EnergyPluginSymbol == NULL), ERR_USEDEFAULT);
-    if ((plugins->OnSetTransitionStateEnergy = ImportFunction(fileInfo->EnergyPluginPath, fileInfo->EnergyPluginSymbol, &error)) == NULL)
+    if ((plugins->OnSetTransitionStateEnergy = DlLoading_ImportFunction(fileInfo->EnergyPluginPath,
+                                                                        fileInfo->EnergyPluginSymbol, &error)) == NULL)
     {
         #if defined(IGNORE_INVALID_PLUGINS)
             fprintf(stdout, "[IGNORE_INVALID_PLUGINS] Error during energy plugin loading. Using default settings.\n");

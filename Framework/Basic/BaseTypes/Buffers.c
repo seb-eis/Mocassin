@@ -12,6 +12,13 @@
 #include <stdlib.h>
 #include "Framework/Basic/BaseTypes/Buffers.h"
 
+int32_t CompareUUID(const void* lhs, const void* rhs)
+{
+    var comp = compareLhsToRhs(*(int64_t*)lhs, *(int64_t*)rhs);
+    if (comp != 0) return comp;
+    return compareLhsToRhs(*(int64_t*)(lhs+8), *(int64_t*)(rhs+8));
+}
+
 VoidSpan_t AllocateSpan(const size_t numOfElements, const size_t sizeOfElement)
 {
     let numOfBytes = numOfElements*sizeOfElement;

@@ -92,7 +92,7 @@ error_t StartMainSimulationRoutine(SCONTEXT_PARAM)
 
 error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM)
 {
-    var abortFlag = KMC_CheckAbortConditions(SCONTEXT);
+    var abortFlag = KMC_UpdateAndCheckAbortConditions(SCONTEXT);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
         SIMERROR = KMC_EnterSOPExecutionPhase(SCONTEXT);
@@ -101,7 +101,7 @@ error_t KMC_StartPreRunRoutine(SCONTEXT_PARAM)
         SIMERROR = KMC_FinishExecutionPhase(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
-        abortFlag = KMC_CheckAbortConditions(SCONTEXT);
+        abortFlag = KMC_UpdateAndCheckAbortConditions(SCONTEXT);
         ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
     return KMC_FinishPreRun(SCONTEXT);
@@ -122,7 +122,7 @@ error_t KMC_FinishPreRun(SCONTEXT_PARAM)
 // Starts the main kinetic simulation routine
 error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
 {
-    var abortFlag = KMC_CheckAbortConditions(SCONTEXT);
+    var abortFlag = KMC_UpdateAndCheckAbortConditions(SCONTEXT);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
         SIMERROR = KMC_EnterExecutionPhase(SCONTEXT);
@@ -131,7 +131,7 @@ error_t KMC_StartMainRoutine(SCONTEXT_PARAM)
         SIMERROR = KMC_FinishExecutionPhase(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in KMC cycle block finisher execution.");
 
-        abortFlag = KMC_CheckAbortConditions(SCONTEXT);
+        abortFlag = KMC_UpdateAndCheckAbortConditions(SCONTEXT);
         ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
     return KMC_FinishMainRoutine(SCONTEXT);
@@ -150,7 +150,7 @@ error_t MMC_FinishPreRun(SCONTEXT_PARAM)
 // Starts the main metropolis simulation routine
 error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
 {
-    var abortFlag = MMC_CheckAbortConditions(SCONTEXT);
+    var abortFlag = MMC_UpdateAndCheckAbortConditions(SCONTEXT);
     while(abortFlag == STATE_FLG_CONTINUE)
     {
         SIMERROR = MMC_EnterExecutionPhase(SCONTEXT);
@@ -159,7 +159,7 @@ error_t MMC_StartMainRoutine(SCONTEXT_PARAM)
         SIMERROR = MMC_FinishExecutionPhase(SCONTEXT);
         error_assert(SIMERROR, "Simulation abort due to error in MMC cycle block finisher execution.");
 
-        abortFlag = MMC_CheckAbortConditions(SCONTEXT);
+        abortFlag = MMC_UpdateAndCheckAbortConditions(SCONTEXT);
         ProgressPrint_OnBlockFinish(SCONTEXT, stdout, true);
     }
 
@@ -358,7 +358,7 @@ error_t KMC_EnterExecutionPhase(SCONTEXT_PARAM)
             KMC_ExecuteSimulationCycle(SCONTEXT);
         }
         counters->CycleCount += counters->CycleCountPerExecutionLoop;
-        return_if(KMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
+        return_if(KMC_UpdateAndCheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -378,7 +378,7 @@ error_t KMC_EnterSOPExecutionPhase(SCONTEXT_PARAM)
     return ERR_OK;
 }
 
-static void SharedCycleBlockFinish(SCONTEXT_PARAM)
+void MC_DoCommonPhaseFinish(SCONTEXT_PARAM)
 {
     unSetMainStateFlags(SCONTEXT, STATE_FLG_FIRSTCYCLE);
 
@@ -395,7 +395,7 @@ static void SharedCycleBlockFinish(SCONTEXT_PARAM)
 error_t KMC_FinishExecutionPhase(SCONTEXT_PARAM)
 {
     AdvanceMainCycleCounterToNextStepGoal(SCONTEXT);
-    SharedCycleBlockFinish(SCONTEXT);
+    MC_DoCommonPhaseFinish(SCONTEXT);
     return SIMERROR;
 }
 
@@ -453,7 +453,7 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
             MMC_ExecuteSimulationCycle(SCONTEXT);
         }
         counters->CycleCount += counters->CycleCountPerExecutionLoop;
-        return_if(MMC_CheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
+        return_if(MMC_UpdateAndCheckAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, ERR_OK);
     }
     return SIMERROR;
 }
@@ -461,7 +461,7 @@ error_t MMC_EnterExecutionPhase(SCONTEXT_PARAM)
 error_t MMC_FinishExecutionPhase(SCONTEXT_PARAM)
 {
     AdvanceMainCycleCounterToNextStepGoal(SCONTEXT);
-    SharedCycleBlockFinish(SCONTEXT);
+    MC_DoCommonPhaseFinish(SCONTEXT);
     return SIMERROR;
 }
 
@@ -539,7 +539,7 @@ static error_t EvaluatePreRunAbortConditions(SCONTEXT_PARAM)
     return (counters->McsCount >= counters->PrerunGoalMcs) ? STATE_FLG_PRERUN_RESET : STATE_FLG_CONTINUE;
 }
 
-error_t KMC_CheckAbortConditions(SCONTEXT_PARAM)
+error_t KMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAM)
 {
     error_t result = 0;
     result |= EvaluatePreRunAbortConditions(SCONTEXT);
@@ -562,7 +562,7 @@ static inline bool_t MMC_CheckEnergyRelaxationAbortCondition(SCONTEXT_PARAM)
     return (isfinite(currentFluctuation)) ? (limitFluctuation >= fabs(currentFluctuation)) : false;
 }
 
-error_t MMC_CheckAbortConditions(SCONTEXT_PARAM)
+error_t MMC_UpdateAndCheckAbortConditions(SCONTEXT_PARAM)
 {
     return_if(EvaluateGeneralAbortConditions(SCONTEXT) != STATE_FLG_CONTINUE, STATE_FLG_CONDABORT);
 
@@ -885,6 +885,51 @@ void MMC_OnEnergeticJumpEvaluation(SCONTEXT_PARAM)
     if (energyInfo->NormalizedS0toS2Probability >= random)
     {
         MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
+        return;
+    }
+    // Handle case where the jump is statistically rejected
+    MMC_OnJumpIsStatisticallyRejected(SCONTEXT);
+}
+
+/* Special MMC routines with alpha factor */
+
+void MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT_PARAM, const double alpha)
+{
+    MMC_SetNextJumpSelection(SCONTEXT);
+    MMC_SetJumpPathProperties(SCONTEXT);
+
+    if (MMC_TrySetActiveJumpRule(SCONTEXT))
+    {
+        MMC_SetJumpProperties(SCONTEXT);
+        MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT, alpha);
+        return;
+    }
+
+    MMC_OnJumpIsSiteBlocked(SCONTEXT);
+}
+
+void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAM, double alpha)
+{
+    var energyInfo = getJumpEnergyInfo(SCONTEXT);
+
+    energyInfo->S0toS2DeltaEnergy = energyInfo->S2Energy - energyInfo->S0Energy;
+    energyInfo->RawS0toS2Probability = GetExpResult(SCONTEXT, -energyInfo->S0toS2DeltaEnergy * alpha);
+    energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
+}
+
+void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAM, double alpha)
+{
+    let energyInfo = getJumpEnergyInfo(SCONTEXT);
+    var latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
+
+    MMC_SetJumpProbabilities_WithAlpha(SCONTEXT, alpha);
+
+    // Handle case where the jump is statistically accepted
+    let random = GetNextRandomDouble(SCONTEXT);
+    if (energyInfo->NormalizedS0toS2Probability >= random)
+    {
+        MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
+        *latticeEnergy += energyInfo->S2toS0DeltaEnergy;
         return;
     }
     // Handle case where the jump is statistically rejected

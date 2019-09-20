@@ -38,10 +38,10 @@
 #endif
 
 // Wrapper to load or get a dynamic library handle (Linux, Win32) that ensures that no more than one reference count exists
-LIBHANDLE GetLibraryHandle(const char *restrict libraryPath);
+LIBHANDLE DlLoading_GetLibraryHandle(const char *restrict libraryPath);
 
 // Wrapper for the import of a function from a C library with the provided file and export name (Linux, Win32)
-void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error);
+void* DlLoading_ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error);
 
 // Wrapper function to free a previously loaded library (Linux, Win32). Returns true on successful unloading
-bool_t UnloadDynamicLibrary(const char* restrict libraryName);
+bool_t DlLoading_UnloadDynamicLibrary(const char* restrict libraryName);
