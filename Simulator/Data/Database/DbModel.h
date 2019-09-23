@@ -32,8 +32,8 @@ typedef Vector4_t InteractionRange_t;
 // Layout@ggc_x86_64 => 32@[16,16]
 typedef struct RoutineData
 {
-    // The lower case GUID/UUID of the routine as 16 bytes
-    byte_t      Guid[16];
+    // Pointer to the 16 bytes of the routine UUID/GUID
+    byte_t*     Guid;
 
     //  The custom routine parameter data span
     Buffer_t    ParamData;

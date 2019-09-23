@@ -33,8 +33,7 @@ static error_t PrepareSqlStatement(char *sqlQuery, sqlite3 *db, sqlite3_stmt **s
     return error;
 }
 
-
-static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+static error_t GetJobModelFromDb_Deprecated(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
 {
     let localQuery = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader "
                      "from JobModels where Id = ?1";
@@ -56,6 +55,51 @@ static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel
     dbModel->JobModel.JobHeader = malloc(jobHeaderSize);
     dbModel->JobModel.JobInfo.JobHeader = dbModel->JobModel.JobHeader;
     memcpy(dbModel->JobModel.JobHeader, sqlite3_column_blob(sqlStatement, 6), jobHeaderSize);
+
+    error = sqlite3_finalize(sqlStatement);
+    return error;
+}
+
+
+static error_t GetJobModelFromDb(char *sqlQuery, sqlite3 *db, DbModel_t *dbModel)
+{
+    let localQuery = "select StructureModelId, EnergyModelId, TransitionModelId, LatticeModelId, PackageId, JobInfo, JobHeader, RoutineData "
+                     "from JobModels where Id = ?1";
+    sqlQuery = localQuery;
+
+    sqlite3_stmt *sqlStatement = NULL;
+
+    error_t error = PrepareSqlStatement(sqlQuery, db, &sqlStatement, dbModel->JobModel.ContextId);
+    // Todo: Remove this compatibility call as soon as it is no longer needed
+    if (error != SQLITE_ROW)
+    {
+        sqlite3_finalize(sqlStatement);
+        return GetJobModelFromDb_Deprecated(sqlQuery, db , dbModel);
+    }
+
+    dbModel->JobModel.StructureModelId = sqlite3_column_int(sqlStatement, 0);
+    dbModel->JobModel.EnergyModelId = sqlite3_column_int(sqlStatement, 1);
+    dbModel->JobModel.TransitionModelId = sqlite3_column_int(sqlStatement, 2);
+    dbModel->JobModel.LatticeModelId = sqlite3_column_int(sqlStatement, 3);
+    dbModel->JobModel.PackageId = sqlite3_column_int(sqlStatement, 4);
+    dbModel->JobModel.JobInfo = *(JobInfo_t*) sqlite3_column_blob(sqlStatement, 5);
+
+    let jobHeaderSize = (size_t) sqlite3_column_bytes(sqlStatement, 6);
+    dbModel->JobModel.JobHeader = malloc(jobHeaderSize);
+    dbModel->JobModel.JobInfo.JobHeader = dbModel->JobModel.JobHeader;
+    memcpy(dbModel->JobModel.JobHeader, sqlite3_column_blob(sqlStatement, 6), jobHeaderSize);
+
+    let routineDataSize = sqlite3_column_bytes(sqlStatement, 7);
+    if (routineDataSize < 16)
+    {
+        error = sqlite3_finalize(sqlStatement);
+        return error;
+    }
+
+    dbModel->JobModel.RoutineData.Guid = malloc(routineDataSize);
+    dbModel->JobModel.RoutineData.ParamData.End = dbModel->JobModel.RoutineData.Guid + routineDataSize;
+    dbModel->JobModel.RoutineData.ParamData.Begin = dbModel->JobModel.RoutineData.Guid + 16;
+    memcpy(dbModel->JobModel.RoutineData.Guid, sqlite3_column_blob(sqlStatement, 7), routineDataSize);
 
     error = sqlite3_finalize(sqlStatement);
     return error;

@@ -27,13 +27,13 @@
 // Layout@ggc_x86_64 => 16@[4,2,2,8]
 typedef struct moc_uuid
 {
-    int32_t A;
+    uint32_t A;
 
-    int16_t B;
+    uint16_t B;
 
-    int16_t C;
+    uint16_t C;
 
-    int8_t  D[8];
+    uint8_t  D[8];
 
 } moc_uuid_t;
 

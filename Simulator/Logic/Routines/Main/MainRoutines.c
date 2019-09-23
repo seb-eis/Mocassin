@@ -929,7 +929,7 @@ void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAM, double alpha)
     if (energyInfo->NormalizedS0toS2Probability >= random)
     {
         MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
-        *latticeEnergy += energyInfo->S2toS0DeltaEnergy;
+        *latticeEnergy += energyInfo->S0toS2DeltaEnergy;
         return;
     }
     // Handle case where the jump is statistically rejected

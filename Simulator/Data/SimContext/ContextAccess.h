@@ -325,7 +325,7 @@ static inline RoutineData_t* getCustomRoutineData(SCONTEXT_PARAM)
 // Get the custom routine 16 byte uuid from the database model data
 static inline moc_uuid_t* getCustomRoutineUuid(SCONTEXT_PARAM)
 {
-    return (moc_uuid_t*) &getCustomRoutineData(SCONTEXT)->Guid;
+    return (moc_uuid_t*) getCustomRoutineData(SCONTEXT)->Guid;
 }
 
 // Get the job header from the database model as a KMC header

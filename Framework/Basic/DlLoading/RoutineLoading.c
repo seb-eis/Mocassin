@@ -14,8 +14,7 @@ FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, con
 {
     // ToDo: Replace this by an actual lookup system
     let path = "C:\\Users\\hims-user\\source\\repos\\ICon.Simulator\\cmake-build-debug-mingw_x86_64\\libmmcfe.mocext.dll";
-    moc_uuid_t mmcfeGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0xa1, 0xa4, 0xef, 0x9b, 0x85, 0x35, 0x6a, 0xf8}};
-    return MocExt_TryLoadExtensionRoutine(&mmcfeGuid, path);
+    return MocExt_TryLoadExtensionRoutine(routineUuid, path);
 }
 
 FMocExtEntry_t MocExt_TryLoadExtensionRoutine(const moc_uuid_t* routineUuid, const char* libraryPath)

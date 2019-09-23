@@ -49,7 +49,7 @@ static const char* BuildDefaultLogDbFilePath(SCONTEXT_PARAM)
 static error_t TryGetLastDbLogEntry(sqlite3* db, MmcfeLog_t*restrict outLog)
 {
     debug_assert(outLog != NULL);
-    let sqlQuery = "SELECT TOP 1 Id, " MMCFE_PARAMSCOL_NAME " FROM " MMCFE_LOGTABLE_NAME " ORDER BY Id ASC";
+    let sqlQuery = "SELECT Id, " MMCFE_PARAMSCOL_NAME " FROM " MMCFE_LOGTABLE_NAME " ORDER BY Id DESC";
     sqlite3_stmt* sqlStmt;
 
     var error = sqlite3_prepare_v2(db, sqlQuery, -1,&sqlStmt,NULL);
@@ -67,7 +67,7 @@ static error_t TryGetLastDbLogEntry(sqlite3* db, MmcfeLog_t*restrict outLog)
 // Ensures that the log database is actually created an usable, if the database already existed it returns the last log entry
 static error_t EnsureLogDbCreated(sqlite3* db, MmcfeLog_t*restrict outLog)
 {
-    let createQuery = "CREATE TABLE "MMCFE_LOGTABLE_NAME" ("
+    let createQuery = "CREATE TABLE IF NOT EXISTS "MMCFE_LOGTABLE_NAME" ("
                       "Id INTEGER PRIMARY KEY, "
                       MMCFE_TIMECOL_NAME    " TEXT NOT NULL, "
                       MMCFE_LATTICECOL_NAME " BLOB NOT NULL, "
@@ -87,6 +87,7 @@ static error_t EnsureLogDbCreated(sqlite3* db, MmcfeLog_t*restrict outLog)
     return_if(error != SQLITE_DONE, (sqlite3_finalize(sqlStmt), ERR_DATABASE));
 
     error = sqlite3_finalize(sqlStmt);
+
     return error == SQLITE_OK ? ERR_OK : ERR_DATABASE;
 }
 
@@ -109,7 +110,7 @@ sqlite3* MMCFE_OpenLogDb(const char* dbPath, MmcfeLog_t*restrict outLog)
 
 error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
 {
-    let sqlQuery = "INSERT INTO" MMCFE_LOGTABLE_NAME "("
+    let sqlQuery = "INSERT INTO " MMCFE_LOGTABLE_NAME " ("
                    MMCFE_TIMECOL_NAME       ", "
                    MMCFE_LATTICECOL_NAME    ", "
                    MMCFE_HISTOCOL_NAME      ", "
@@ -152,7 +153,7 @@ error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
 }
 
 // Checks if the routine parameters are valid
-static bool_t RoutineParametersAreValid(MmcfeParams_t* restrict params)
+static inline bool_t RoutineParametersAreValid(MmcfeParams_t* restrict params)
 {
     return_if(params->AlphaCount <= 0, false);
     return_if(params->AlphaMax <= params->AlphaMin || params->AlphaMax > 1, false);
@@ -162,12 +163,22 @@ static bool_t RoutineParametersAreValid(MmcfeParams_t* restrict params)
     return true;
 }
 
+// Checks if the routine has already completed
+static inline bool_t RoutineIsAlreadyCompleted(MmcfeParams_t* restrict params)
+{
+    return params->AlphaCurrent >= params->AlphaMax ? true : false;
+}
+
 // Verifies that the MMCFE routine parameter data exists in the context and the right UUID is set
 static error_t TryLoadRoutineParameters(SCONTEXT_PARAM, MmcfeParams_t*restrict outParams)
 {
     let routineData = getCustomRoutineData(SCONTEXT);
-    return_if(CompareUUID(&routineData->Guid, MocExtRoutine_GetUUID()) != 0, ERR_DATACONSISTENCY);
-    return_if(span_Length(routineData->ParamData) != sizeof(MmcfeParams_t), ERR_DATACONSISTENCY);
+
+    let testGuid = MocExtRoutine_GetUUID();
+    return_if(CompareUUID(routineData->Guid, testGuid) != 0, ERR_DATACONSISTENCY);
+
+    let length = span_Length(routineData->ParamData);
+    return_if(length != sizeof(MmcfeParams_t), ERR_DATACONSISTENCY);
 
     return_if(!RoutineParametersAreValid((MmcfeParams_t*) routineData->ParamData.Begin), ERR_DATACONSISTENCY);
 
@@ -197,12 +208,21 @@ static inline void LogCycleOutcome(SCONTEXT_PARAM, MmcfeLog_t*restrict log, cons
     AddEnergyValueToDynamicJumpHistogram(&log->Histogram, energy);
 }
 
+static inline void PrintRoutineProgress(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+{
+    let latticeEnergy = getMainStateMetaData(SCONTEXT)->LatticeEnergy * getPhysicalFactors(SCONTEXT)->EnergyFactorKtToEv;
+    let tempEquiv = getDbModelJobInfo(SCONTEXT)->Temperature / log->ParamsState.AlphaCurrent;
+    fprintf(stdout, "Log entry created: Lattice energy (%f eV) for alpha = %f (T_eq = %f)\n", latticeEnergy, log->ParamsState.AlphaCurrent, tempEquiv);
+    fflush(stdout);
+}
+
 // Finishes one logging phase of the MMCFE routine
 static inline void FinishLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db)
 {
     MMC_UpdateAndCheckAbortConditions(SCONTEXT);
     MC_DoCommonPhaseFinish(SCONTEXT);
     MMCFE_WriteEntryToLogDb(db, log);
+    PrintRoutineProgress(SCONTEXT, log);
 }
 
 // Prepares the MMCFE log for the next execution phase using the provide energy buffer information
@@ -230,6 +250,7 @@ static inline void EnterRelaxationPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
         if (list_IsFull(energyBuffer)) list_Clear(energyBuffer);
     }
 
+    energyBuffer.End = energyBuffer.CapacityEnd;
     PrepareLogForNextLoggingPhase(SCONTEXT, log, &energyBuffer);
     delete_List(energyBuffer);
 }
@@ -237,26 +258,31 @@ static inline void EnterRelaxationPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
 // Enters the logging phase of the MMCFE that produces the histogram data
 static inline void EnterLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db)
 {
+    let factors = getPhysicalFactors(SCONTEXT);
     let latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
 
     for (int64_t i = 0; i < log->ParamsState.LogPhaseCycleCount; i++)
     {
         ExecuteSimulationCycle(SCONTEXT, log);
-        LogCycleOutcome(SCONTEXT, log, *latticeEnergy);
+        LogCycleOutcome(SCONTEXT, log, *latticeEnergy * factors->EnergyFactorKtToEv);
     }
 }
 
 // Enters the actual outer MMCFE routine execution phase that performs the simulation with the provided routine log and database
-static error_t EnterExecutionLoop(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db)
+static error_t EnterExecutionLoop(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db, const bool_t logLoaded)
 {
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
+    if (logLoaded) log->ParamsState.AlphaCurrent += alphaStep;
 
     for (;log->ParamsState.AlphaCurrent <= log->ParamsState.AlphaMax;)
     {
         EnterRelaxationPhase(SCONTEXT, log);
         EnterLoggingPhase(SCONTEXT, log, db);
+        FinishLoggingPhase(SCONTEXT, log, db);
         log->ParamsState.AlphaCurrent += alphaStep;
     }
+
+    return ERR_OK;
 }
 
 // The internal MMCFE routine entry point
@@ -266,10 +292,12 @@ static error_t StartRoutineInternal(SCONTEXT_PARAM)
     MmcfeLog_t routineLog;
     nullStructContent(routineLog);
 
-    let dbPath = BuildDefaultLogDbFilePath(SCONTEXT);
-    var db = MMCFE_OpenLogDb(dbPath, &routineLog);
+    let logPath = BuildDefaultLogDbFilePath(SCONTEXT);
+    var db = MMCFE_OpenLogDb(logPath, &routineLog);
+    return_if(RoutineIsAlreadyCompleted(&routineLog.ParamsState), (sqlite3_close(db), ERR_ALREADYCOMPLETED));
 
-    if (!RoutineParametersAreValid(&routineLog.ParamsState))
+    let logLoaded = RoutineParametersAreValid(&routineLog.ParamsState);
+    if (!logLoaded)
     {
         error = TryLoadRoutineParameters(SCONTEXT, &routineLog.ParamsState);
         return_if(error, error);
@@ -278,8 +306,9 @@ static error_t StartRoutineInternal(SCONTEXT_PARAM)
     error = InitializeRoutineLog(SCONTEXT, &routineLog);
     return_if(error, error);
 
-    error = EnterExecutionLoop(SCONTEXT, &routineLog, db);
-    return error;
+    error = EnterExecutionLoop(SCONTEXT, &routineLog, db, logLoaded);
+    return_if(error, error);
+    return sqlite3_close(db) != SQLITE_OK ? ERR_DATABASE : ERR_OK;
 }
 
 void MMCFE_StartRoutine(void* context)

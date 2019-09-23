@@ -18,7 +18,7 @@
 /* Routine type definitions */
 
 // Type for storage of MMCFE routine parameters
-// Layout@ggc_x86_64 => 64@[8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 56@[4,4,8,8,8,8,8,8]
 typedef struct MmcfeParams
 {
     // The size of the energy sampling histogram

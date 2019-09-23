@@ -249,6 +249,7 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
     let executionPath = cmdArgs->Values[0];
 
     let jobType = JobInfoFlagsAreSet(SCONTEXT, INFO_FLG_MMC) ? "METROPOLIS" : "KINETIC";
+    let routineUuid = getCustomRoutineUuid(SCONTEXT);
     let runType = StateFlagsAreSet(SCONTEXT, STATE_FLG_PRERUN) ? "PRERUN" : "MAIN";
     let stateLoaded = StateFlagsAreSet(SCONTEXT, STATE_FLG_FIRSTCYCLE) ? "FALSE" : "TRUE";
 
@@ -259,6 +260,12 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Runtime limit", "ISO8601", buffer);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Simulation type", "", jobType);
+
+    memset(buffer,0, sizeof(buffer));
+    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", routineUuid->A, routineUuid->B, routineUuid->C,
+            routineUuid->D[0], routineUuid->D[1], routineUuid->D[2], routineUuid->D[3],
+            routineUuid->D[4], routineUuid->D[5], routineUuid->D[6], routineUuid->D[7]);
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Extension info", "", buffer);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Current status", "", runType);
 
