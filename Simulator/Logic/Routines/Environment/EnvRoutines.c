@@ -413,6 +413,7 @@ void ResynchronizeEnvironmentEnergyStatus(SCONTEXT_PARAM)
     {
         error = DynamicLookupEnvironmentStatus(SCONTEXT, envState->EnvironmentId, &occupationBuffer);
         error_assert(error, "Dynamic lookup of environment occupation and energy failed.");
+        continue_if(!envState->IsStable);
         energy += GetEnvironmentStateEnergy(envState);
     }
     metaData->LatticeEnergy = energy * physicalFactors->EnergyFactorKtToEv;

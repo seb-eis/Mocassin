@@ -264,6 +264,7 @@ static inline void KMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
 
     let jumpCountHasChanged = KMC_UpdateJumpPool(SCONTEXT);
     if (jumpCountHasChanged) UpdateTimeStepPerJumpToCurrent(SCONTEXT);
+    SCONTEXT->CycleResult = MC_ACCEPTED_CYCLE;
 }
 
 // Action for cases where the jump selection has been statistically rejected
@@ -273,6 +274,7 @@ static inline void KMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAM)
     ++counters->RejectionCount;
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
     KMC_AddCurrentJumpDataToHistograms(SCONTEXT);
+    SCONTEXT->CycleResult = MC_REJECTED_CYCLE;
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
@@ -281,6 +283,7 @@ static inline void KMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
     var counters = getActiveCounters(SCONTEXT);
     ++counters->SiteBlockingCount;
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
+    SCONTEXT->CycleResult = MC_BLOCKED_CYCLE;
 }
 
 // Action that is called if a KMC jump is pre-skipped due to failed attempt frequency test
@@ -290,6 +293,7 @@ static inline void KMC_OnJumpIsFrequencySkipped(SCONTEXT_PARAM)
     let counters = getActiveCounters(SCONTEXT);
     ++counters->SkipCount;
     AdvanceSimulatedTimeByCurrentStep(SCONTEXT);
+    SCONTEXT->CycleResult = MC_SKIPPED_CYCLE;
 }
 
 // Pre-check of the attempt frequency factor using another double roll [0;1]
@@ -412,6 +416,7 @@ static inline void MMC_OnJumpIsStatisticallyAccepted(SCONTEXT_PARAM)
     UpdateMaxJumpProbabilityBackjumpUnsafe(SCONTEXT);
     MMC_AdvanceSystemToFinalState(SCONTEXT);
     MMC_UpdateJumpPool(SCONTEXT);
+    SCONTEXT->CycleResult = MC_ACCEPTED_CYCLE;
 }
 
 // Action for cases where the jump selection has been statistically rejected
@@ -419,6 +424,7 @@ static inline void MMC_OnJumpIsStatisticallyRejected(SCONTEXT_PARAM)
 {
     var counters = getActiveCounters(SCONTEXT);
     ++counters->RejectionCount;
+    SCONTEXT->CycleResult = MC_REJECTED_CYCLE;
 }
 
 // Action for cases where the jump selection has no valid rule and is site-blocking
@@ -426,6 +432,7 @@ static inline void MMC_OnJumpIsSiteBlocked(SCONTEXT_PARAM)
 {
     var counters = getActiveCounters(SCONTEXT);
     ++counters->SiteBlockingCount;
+    SCONTEXT->CycleResult = MC_BLOCKED_CYCLE;
 }
 
 void MMC_ExecuteSimulationCycle(SCONTEXT_PARAM)
@@ -908,7 +915,7 @@ void MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT_PARAM, const double alpha)
     MMC_OnJumpIsSiteBlocked(SCONTEXT);
 }
 
-void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAM, double alpha)
+void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAM, const double alpha)
 {
     var energyInfo = getJumpEnergyInfo(SCONTEXT);
 
@@ -917,10 +924,9 @@ void MMC_SetJumpProbabilities_WithAlpha(SCONTEXT_PARAM, double alpha)
     energyInfo->NormalizedS0toS2Probability = energyInfo->RawS0toS2Probability;
 }
 
-void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAM, double alpha)
+void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAM, const double alpha)
 {
     let energyInfo = getJumpEnergyInfo(SCONTEXT);
-    var latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
 
     MMC_SetJumpProbabilities_WithAlpha(SCONTEXT, alpha);
 
@@ -929,7 +935,6 @@ void MMC_OnEnergeticJumpEvaluation_WithAlpha(SCONTEXT_PARAM, double alpha)
     if (energyInfo->NormalizedS0toS2Probability >= random)
     {
         MMC_OnJumpIsStatisticallyAccepted(SCONTEXT);
-        *latticeEnergy += energyInfo->S0toS2DeltaEnergy;
         return;
     }
     // Handle case where the jump is statistically rejected

@@ -8,6 +8,7 @@
 // Short:   Basic file IO functions     //
 //////////////////////////////////////////
 
+#pragma once
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 #include <stdio.h>
@@ -32,6 +33,13 @@
 
 // Defines the file stream type
 typedef FILE file_t;
+
+// Defines the string type
+typedef char* string_t;
+
+// Defines the list type for multiple character arrays
+// Layout@ggc_x86_64 => 24@[8,8,8]
+typedef List_t(string_t, StringList) StringList_t;
 
 // Check if a file name points to an existing file that can be accessed
 bool_t IsAccessibleFile(const char* restrict fileName);
@@ -68,3 +76,6 @@ bool_t EnsureFileIsDeleted(char const * restrict filePath);
 
 // Clears the pending stdint input buffer
 void ClearStdintBuffer();
+
+// Creates  a list of all files in the passed root path that match a pattern (With optional flag for search of subdirectories)
+error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList);

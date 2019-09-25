@@ -9,11 +9,13 @@
 //////////////////////////////////////////
 
 #include "Extensions/Mmcfe/MmcFERoutine.h"
+#include "InternalLibraries/Interfaces/ProgressPrint.h"
+#include "Framework/Math/Random/Approx.h"
 #include <math.h>
 
 #define MMCFE_RELAXBUFFER_SIZE  100000
 #define MMCFE_LOGTABLE_NAME     "LogEntries"
-#define MMCFE_LATTICECOL_NAME   "Lattice"
+#define MMCFE_STATECOL_NAME     "State"
 #define MMCFE_PARAMSCOL_NAME    "ParamState"
 #define MMCFE_HISTOCOL_NAME     "Histogram"
 #define MMCFE_TIMECOL_NAME      "TimeStamp"
@@ -23,8 +25,8 @@
 
 const moc_uuid_t* MocExtRoutine_GetUUID()
 {
-    const static moc_uuid_t mmcfeGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0xa1, 0xa4, 0xef, 0x9b, 0x85, 0x35, 0x6a, 0xf8}};
-    return &mmcfeGuid;
+    const static moc_uuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0xa1, 0xa4, 0xef, 0x9b, 0x85, 0x35, 0x6a, 0xf8}};
+    return &routineGuid;
 }
 
 FMocExtEntry_t MocExtRoutine_GetEntryPoint()
@@ -70,7 +72,7 @@ static error_t EnsureLogDbCreated(sqlite3* db, MmcfeLog_t*restrict outLog)
     let createQuery = "CREATE TABLE IF NOT EXISTS "MMCFE_LOGTABLE_NAME" ("
                       "Id INTEGER PRIMARY KEY, "
                       MMCFE_TIMECOL_NAME    " TEXT NOT NULL, "
-                      MMCFE_LATTICECOL_NAME " BLOB NOT NULL, "
+                      MMCFE_STATECOL_NAME   " BLOB NOT NULL, "
                       MMCFE_HISTOCOL_NAME   " BLOB NOT NULL, "
                       MMCFE_PARAMSCOL_NAME  " BLOB NOT NULL, "
                       MMCFE_ALPHACOL_NAME   " REAL NOT NULL);";
@@ -112,7 +114,7 @@ error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
 {
     let sqlQuery = "INSERT INTO " MMCFE_LOGTABLE_NAME " ("
                    MMCFE_TIMECOL_NAME       ", "
-                   MMCFE_LATTICECOL_NAME    ", "
+                   MMCFE_STATECOL_NAME    ", "
                    MMCFE_HISTOCOL_NAME      ", "
                    MMCFE_PARAMSCOL_NAME     ", "
                    MMCFE_ALPHACOL_NAME      ") "
@@ -127,10 +129,10 @@ error_t MMCFE_WriteEntryToLogDb(sqlite3* db, const MmcfeLog_t*restrict logEntry)
     error = sqlite3_bind_text(sqlStmt, 1, timeStamp, -1, NULL);
     return_if(error != SQLITE_OK, (sqlite3_finalize(sqlStmt), ERR_DATABASE));
 
-    let latticeByteCount = span_ByteCount(logEntry->Lattice);
-    return_if(latticeByteCount > INT32_MAX, ERR_DATABASE);
+    let stateByteCount = span_ByteCount(logEntry->StateBuffer);
+    return_if(stateByteCount > INT32_MAX, ERR_DATABASE);
 
-    error = sqlite3_bind_blob(sqlStmt, 2, logEntry->Lattice.Begin, latticeByteCount, NULL);
+    error = sqlite3_bind_blob(sqlStmt, 2, logEntry->StateBuffer.Begin, stateByteCount, NULL);
     return_if(error != SQLITE_OK, (sqlite3_finalize(sqlStmt), ERR_DATABASE));
 
     let histogramByteCount = (void*) logEntry->Histogram.Counters.End - (void*) logEntry->Histogram.Header;
@@ -166,7 +168,7 @@ static inline bool_t RoutineParametersAreValid(MmcfeParams_t* restrict params)
 // Checks if the routine has already completed
 static inline bool_t RoutineIsAlreadyCompleted(MmcfeParams_t* restrict params)
 {
-    return params->AlphaCurrent >= params->AlphaMax ? true : false;
+    return (params->AlphaCurrent >= params->AlphaMax && params->LogPhaseCycleCount != 0) ? true : false;
 }
 
 // Verifies that the MMCFE routine parameter data exists in the context and the right UUID is set
@@ -191,28 +193,85 @@ static error_t InitializeRoutineLog(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
 {
     debug_assert(log != NULL);
 
-    log->Lattice = *getMainStateLattice(SCONTEXT);
+    log->StateBuffer = getSimulationState(SCONTEXT)->Buffer;
     log->Histogram = ctor_DynamicJumpHistogram(log->ParamsState.HistogramSize);
     return ERR_OK;
 }
 
-// Executes a single simulation cycle of the MMCFE Routine
-static inline void ExecuteSimulationCycle(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+// Executes simulation cycles till the next log relevant event (Either accepted or rejected cycle, site blocks are skipped)
+static inline void CycleSimulationTillNextLogEvent(SCONTEXT_PARAM, const MmcfeLog_t*restrict log, double* latticeEnergy)
 {
-    MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT, log->ParamsState.AlphaCurrent);
+    var counters = getMainCycleCounters(SCONTEXT);
+
+    // Cycle till the next accepted or rejected case
+    for (int32_t test = MC_BLOCKED_CYCLE; test == MC_BLOCKED_CYCLE; test = SCONTEXT->CycleResult)
+    {
+        MMC_ExecuteSimulationCycle_WithAlpha(SCONTEXT, log->ParamsState.AlphaCurrent);
+    }
+
+    // Update energy if required and count the cycle
+    if (SCONTEXT->CycleResult == MC_ACCEPTED_CYCLE)
+    {
+        let factors = getPhysicalFactors(SCONTEXT);
+        let jumpInfo = getJumpEnergyInfo(SCONTEXT);
+        *latticeEnergy += factors->EnergyFactorKtToEv * jumpInfo->S0toS2DeltaEnergy;
+    }
+    counters->CycleCount++;
 }
 
-// Logs a cycle outcome of the MMCFE routine to the routine log
-static inline void LogCycleOutcome(SCONTEXT_PARAM, MmcfeLog_t*restrict log, const double energy)
+// Performs the log action of a cycle outcome and writes the new data to the routine log
+static inline void LogCycleOutcome(SCONTEXT_PARAM, MmcfeLog_t*restrict log, const double latticeEnergy)
 {
-    AddEnergyValueToDynamicJumpHistogram(&log->Histogram, energy);
+    AddEnergyValueToDynamicJumpHistogram(&log->Histogram, latticeEnergy);
 }
 
+// Calculates the expected average cycle rate for the remaining simulation alpha values
+static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+{
+    // Estimation info:
+    // Estimates the average cycle rate using the fact that the success rate can be expressed as f(a) = k_0(a) * f(0)*exp(k_1 * a)
+    // where the factor k_1 is the logarithm of the average best-rate/worst-rate scenario in MMC (~11)
+    // and the factor k_0(a) is an exponential correction for the bias when calculating f(0) with the current average cycle rate
+    // Routine uses the quotient: 11
+
+    let meta = getMainStateMetaData(SCONTEXT);
+    let logValue = 2.398;
+    let frqIntegral = 4.1703;
+    let frqFactor = exp(-logValue * log->ParamsState.AlphaCurrent);
+    let expCorrection = exp(-log->ParamsState.AlphaCurrent);
+    let baseCycleRate = meta->CycleRate * frqFactor * (1.398 + (1.0-pow(expCorrection, logValue)) * logValue);
+
+    return frqIntegral * baseCycleRate;
+}
+
+// Calculates an estimated time till completion of the routine using the current log data
+static int64_t CalculateRuntimeEtaInSeconds(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
+{
+    let meta = getMainStateMetaData(SCONTEXT);
+    let cycleCountPerBlock = log->ParamsState.RelaxPhaseCycleCount + log->ParamsState.LogPhaseCycleCount;
+    let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
+    let remainingAlphaCount = (int32_t) round((log->ParamsState.AlphaMax - log->ParamsState.AlphaCurrent) / alphaStep);
+
+    let avgCycleRate = CalculateExpectedAverageCycleRate(SCONTEXT, log);
+    return (cycleCountPerBlock * remainingAlphaCount) / (int64_t) avgCycleRate;
+}
+
+// Prints the progress of the MMCFE routine
 static inline void PrintRoutineProgress(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
 {
-    let latticeEnergy = getMainStateMetaData(SCONTEXT)->LatticeEnergy * getPhysicalFactors(SCONTEXT)->EnergyFactorKtToEv;
+    let meta = getMainStateMetaData(SCONTEXT);
+    let peakEnergy = FindDynamicJumpHistogramMaxValue(&log->Histogram);
     let tempEquiv = getDbModelJobInfo(SCONTEXT)->Temperature / log->ParamsState.AlphaCurrent;
-    fprintf(stdout, "Log entry created: Lattice energy (%f eV) for alpha = %f (T_eq = %f)\n", latticeEnergy, log->ParamsState.AlphaCurrent, tempEquiv);
+
+    char stampBuffer[TIME_ISO8601_BYTECOUNT], runBuffer[TIME_ISO8601_BYTECOUNT], etaBuffer[TIME_ISO8601_BYTECOUNT];
+    GetCurrentTimeStampISO8601UTC(stampBuffer);
+    SecondsToISO8601TimeSpan(runBuffer, meta->ProgramRunTime);
+    let timeEta = CalculateRuntimeEtaInSeconds(SCONTEXT, log);
+    SecondsToISO8601TimeSpan(etaBuffer, timeEta);
+
+    fprintf(stdout, "MMCFE  => Logtime: %s [  ] (Runtime = %s, ETA = %s)\n", stampBuffer, runBuffer, etaBuffer);
+    fprintf(stdout, "MMCFE  => Lograte: %+.6e [Hz] (Succesrate = %+.6e [Hz])\n", meta->CycleRate, meta->SuccessRate);
+    fprintf(stdout, "MMCFE  => Log created for E_latt = %+.6e [eV], Alpha = %+.2e, T_eq = %.2f [K]\n\n", peakEnergy, log->ParamsState.AlphaCurrent, tempEquiv);
     fflush(stdout);
 }
 
@@ -228,11 +287,9 @@ static inline void FinishLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, s
 // Prepares the MMCFE log for the next execution phase using the provide energy buffer information
 static inline void PrepareLogForNextLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, const Flp64Buffer_t*restrict engBuffer)
 {
-    let physFactors = getPhysicalFactors(SCONTEXT);
     var avgEnergy = 0.0;
     cpp_foreach(item, *engBuffer) avgEnergy+= *item;
     avgEnergy /= (double) list_Capacity(*engBuffer);
-    avgEnergy *= physFactors->EnergyFactorKtToEv;
 
     ChangeDynamicJumpHistogramSamplingAreaByRange(&log->Histogram, avgEnergy, log->ParamsState.HistogramRange);
 }
@@ -241,11 +298,12 @@ static inline void PrepareLogForNextLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*rest
 static inline void EnterRelaxationPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
 {
     let latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
-    Flp64Buffer_t energyBuffer = new_List(energyBuffer, getMaxOfTwo(MMCFE_RELAXBUFFER_SIZE, log->ParamsState.RelaxPhaseCycleCount));
+    let bufferSize = log->ParamsState.RelaxPhaseCycleCount > MMCFE_RELAXBUFFER_SIZE ? MMCFE_RELAXBUFFER_SIZE : log->ParamsState.RelaxPhaseCycleCount;
+    Flp64Buffer_t energyBuffer = new_List(energyBuffer, bufferSize);
 
     for (int64_t i = 0; i < log->ParamsState.RelaxPhaseCycleCount; i++)
     {
-        ExecuteSimulationCycle(SCONTEXT, log);
+        CycleSimulationTillNextLogEvent(SCONTEXT, log, latticeEnergy);
         list_PushBack(energyBuffer, *latticeEnergy);
         if (list_IsFull(energyBuffer)) list_Clear(energyBuffer);
     }
@@ -256,15 +314,14 @@ static inline void EnterRelaxationPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
 }
 
 // Enters the logging phase of the MMCFE that produces the histogram data
-static inline void EnterLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlite3*restrict db)
+static inline void EnterLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*restrict log)
 {
-    let factors = getPhysicalFactors(SCONTEXT);
     let latticeEnergy = &getMainStateMetaData(SCONTEXT)->LatticeEnergy;
 
     for (int64_t i = 0; i < log->ParamsState.LogPhaseCycleCount; i++)
     {
-        ExecuteSimulationCycle(SCONTEXT, log);
-        LogCycleOutcome(SCONTEXT, log, *latticeEnergy * factors->EnergyFactorKtToEv);
+        CycleSimulationTillNextLogEvent(SCONTEXT, log, latticeEnergy);
+        LogCycleOutcome(SCONTEXT, log, *latticeEnergy);
     }
 }
 
@@ -274,10 +331,12 @@ static error_t EnterExecutionLoop(SCONTEXT_PARAM, MmcfeLog_t*restrict log, sqlit
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     if (logLoaded) log->ParamsState.AlphaCurrent += alphaStep;
 
-    for (;log->ParamsState.AlphaCurrent <= log->ParamsState.AlphaMax;)
+    MMC_UpdateAndCheckAbortConditions(SCONTEXT);
+
+    for (;log->ParamsState.AlphaCurrent <= log->ParamsState.AlphaMax + 1.0e-6;)
     {
         EnterRelaxationPhase(SCONTEXT, log);
-        EnterLoggingPhase(SCONTEXT, log, db);
+        EnterLoggingPhase(SCONTEXT, log);
         FinishLoggingPhase(SCONTEXT, log, db);
         log->ParamsState.AlphaCurrent += alphaStep;
     }
@@ -308,6 +367,7 @@ static error_t StartRoutineInternal(SCONTEXT_PARAM)
 
     error = EnterExecutionLoop(SCONTEXT, &routineLog, db, logLoaded);
     return_if(error, error);
+
     return sqlite3_close(db) != SQLITE_OK ? ERR_DATABASE : ERR_OK;
 }
 

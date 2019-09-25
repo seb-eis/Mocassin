@@ -721,6 +721,12 @@ static inline void setProgramRunPath(SCONTEXT_PARAM, char const * value)
     getFileInformation(SCONTEXT)->ExecutablePath = value;
 }
 
+// Set the program extension lookup path on the simulation context
+static inline void setExtensionLookupPath(SCONTEXT_PARAM, char const * value)
+{
+    getFileInformation(SCONTEXT)->ExtensionLookupPath = value;
+}
+
 // Set the database load string in the simulation context
 static inline void setDatabaseLoadString(SCONTEXT_PARAM, char const * value)
 {

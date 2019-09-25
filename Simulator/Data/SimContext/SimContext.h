@@ -16,6 +16,27 @@
 #include "Simulator/Data/Database/DbModel.h"
 #include "Simulator/Data/State/StateModel.h"
 
+// Marks the "no result yet" cycle outcome case
+#define MC_UNFINISHED_CYCLE     0
+
+// Marks the "statistically accepted" cycle outcome case
+#define MC_ACCEPTED_CYCLE       1
+
+// Marks the "statistically rejected" cycle outcome case
+#define MC_REJECTED_CYCLE       2
+
+// Marks the "site blocked" cycle outcome case
+#define MC_BLOCKED_CYCLE        3
+
+// Marks the "start state is unstable" cycle outcome case
+#define MC_STARTUNSTABLE_CYCLE  4
+
+// Marks the "end state is unstable" cycle outcome case
+#define MC_ENDUNSTABLE_CYCLE    5
+
+// Marks the "skipped due to jump frequency" cycle outcome case
+#define MC_SKIPPED_CYCLE        6
+
 // Array type for 3D pair energy delta tables [Original][New][Partner]
 // Layout@ggc_x86_64 => 24@[8,8,8]
 typedef Array_t(double, 3, PairDeltaTable) PairDeltaTable_t;
@@ -390,7 +411,7 @@ typedef struct PhysicalInfo
 } PhysicalInfo_t;
 
 // Type for the file string information
-// Layout@ggc_x86_64 => 80@[8,8,8,8,8,8,8,8,8,8]
+// Layout@ggc_x86_64 => 88@[8,8,8,8,8,8,8,8,8,8,8]
 typedef struct FileInfo
 {
     // The database query string for data loading
@@ -422,6 +443,9 @@ typedef struct FileInfo
 
     // The energy plugin search symbol
     char const* EnergyPluginSymbol;
+
+    // The path where the system should look for extension routines
+    char const* ExtensionLookupPath;
     
 } FileInfo_t;
 
@@ -534,6 +558,9 @@ typedef struct SimulationContext
     // Current main error code of the simulation
     error_t             ErrorCode;
 
+    // Stores the last cycle outcome type (accepted, rejected, blocked, skipped, start unstable, end unstable)
+    int32_t             CycleResult;
+
     // Indicates if the simulation should approximate EXP
     bool_t              UseExpApproximation;
     
@@ -545,6 +572,5 @@ static inline SimulationContext_t ctor_SimulationContext()
     SimulationContext_t context;
     memset(&context, 0, sizeof(SimulationContext_t));
     context.DynamicModel.FileInfo.IODirectoryPath = ".";
-    context.UseExpApproximation = false;
     return context;
 }

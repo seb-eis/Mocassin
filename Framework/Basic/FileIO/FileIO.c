@@ -9,6 +9,7 @@
 //////////////////////////////////////////
 
 #include "Framework/Basic/FileIO/FileIO.h"
+#include <dirent.h>
 
 cerror_t CalculateFileSize(file_t *restrict fileStream)
 {
@@ -25,7 +26,7 @@ cerror_t CalculateFileSize(file_t *restrict fileStream)
 
 bool_t IsAccessibleFile(const char* restrict fileName)
 {
-    return access(fileName, F_OK) == 0;
+    return access(fileName, F_OK) == 0 && !IsAccessibleDirectory(fileName);
 }
 
 bool_t IsAccessibleDirectory(const char* restrict dirName)
@@ -160,4 +161,59 @@ void ClearStdintBuffer()
 {
     int32_t c;
     while ((c = getchar()) != '\n' && c != EOF) {};
+}
+
+static error_t SaveAddStringEntryToList(StringList_t*restrict list, char * value, bool_t createCopy)
+{
+    var insertValue = createCopy ? strdup(value) : value;
+
+    if (!list_IsFull(*list))
+    {
+        list_PushBack(*list, insertValue);
+        return ERR_OK;
+    }
+
+    var count = list_Capacity(*list);
+    StringList_t newList = new_List(newList, 2 * count);
+    memcpy(newList.Begin, list->Begin, count * sizeof(char*));
+    newList.End += count;
+    list_PushBack(newList, insertValue);
+    delete_List(*list);
+    *list = newList;
+    return ERR_OK;
+}
+
+error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t includeSubdirs, StringList_t*restrict outList)
+{
+    *outList = new_List(*outList, 10);
+
+    char buffer[260];
+    DIR * directory = opendir(root);
+    struct dirent* direntry;
+    return_if(directory == NULL, ERR_FILE);
+
+    var error = ERR_OK;
+    for (;(direntry = readdir(directory)) != NULL;)
+    {
+        continue_if(strcmp(direntry->d_name, ".") == 0 || strcmp(direntry->d_name, "..") == 0);
+
+        sprintf(buffer, "%s\\%s", root, direntry->d_name);
+        if (IsAccessibleFile(buffer) && pattern != NULL && strstr(buffer, pattern) != NULL)
+        {
+            SaveAddStringEntryToList(outList, buffer, true);
+            memset(buffer, 0, sizeof(buffer));
+            continue;
+        }
+        if (includeSubdirs && IsAccessibleDirectory(buffer))
+        {
+            StringList_t subList;
+            error = ListAllFilesByPattern(buffer, pattern, includeSubdirs, &subList);
+            cpp_foreach(item, subList) SaveAddStringEntryToList(outList, *item, false);
+            delete_List(subList);
+        }
+        memset(buffer, 0, sizeof(buffer));
+    }
+
+    closedir(directory);
+    return error;
 }

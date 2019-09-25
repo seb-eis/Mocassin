@@ -79,6 +79,7 @@ static const CmdArgLookup_t* getOptionalCmdArgsResolverTable()
         { "-engPluginSymbol", (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setEnergyPluginSymbol },
         { "-stdout",          (FValidator_t)  ValidateStringNotNullOrEmpty,(FCmdCallback_t) setStdoutRedirection},
         { "-fexp",            (FValidator_t)  ValidateAsTrue,              (FCmdCallback_t) setEnableFastExpMode},
+        { "-extDir",          (FValidator_t)  ValidateIsDiretoryPath,      (FCmdCallback_t) setExtensionLookupPath}
     };
 
     static const CmdArgLookup_t resolverTable =

@@ -51,8 +51,8 @@ typedef struct MmcfeParams
 // Layout@ggc_x86_64 => 108@[24,24,56]
 typedef struct MmcfeLog
 {
-    // The linearized state of the simulation lattice
-    LatticeState_t          Lattice;
+    // The simulation state buffer
+    Buffer_t                StateBuffer;
 
     // The state of the dynamic energy histogram
     DynamicJumpHistogram_t  Histogram;

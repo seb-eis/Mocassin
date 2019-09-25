@@ -211,7 +211,32 @@ error_t ChangeDynamicJumpHistogramSamplingAreaByRange(DynamicJumpHistogram_t*res
     ChangeDynamicJumpHistogramSamplingAreaByMinMax(jumpHistogram, centerValue - valueRange, centerValue + valueRange);
 }
 
-Buffer_t GetDynamicJumpHistogramBufferAccess(DynamicJumpHistogram_t*restrict jumpHistogram)
+double CalculateDynamicJumpHistogramMeanEnergy(const DynamicJumpHistogram_t*restrict jumpHistogram)
 {
-    return (Buffer_t) {.Begin = (void*) jumpHistogram->Header, .End = (void*) jumpHistogram->Counters.End};
+    double samplingSum = 0.0;
+    int64_t totalCount = 0;
+
+    for (int64_t i = 0; i < jumpHistogram->Header->EntryCount; i++)
+    {
+        let count = span_Get(jumpHistogram->Counters, i);
+        let sampleEnergy = jumpHistogram->Header->MinValue + (double) i * jumpHistogram->Header->Stepping;
+        samplingSum += count * sampleEnergy;
+        totalCount += count;
+    }
+
+    return samplingSum / (double) totalCount;
+}
+
+double FindDynamicJumpHistogramMaxValue(const DynamicJumpHistogram_t*restrict jumpHistogram)
+{
+    int64_t maxEntry = 0, id = 0;
+    for (int64_t i = 0; i < jumpHistogram->Header->EntryCount; i++)
+    {
+        let counter = span_Get(jumpHistogram->Counters, i);
+        if (counter < maxEntry) continue;
+        maxEntry = counter;
+        id = i;
+    }
+
+    return jumpHistogram->Header->MinValue + (double) id * jumpHistogram->Header->Stepping;
 }

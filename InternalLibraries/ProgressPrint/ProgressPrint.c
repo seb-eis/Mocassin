@@ -271,7 +271,7 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => State loaded", "", stateLoaded);
 
-    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Executable", "", executionPath);
+    fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Execution path", "", executionPath);
 
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTCMD_FORMAT), "CMD => Main state", "", getMainRunStateFile(SCONTEXT));
 

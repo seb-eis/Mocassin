@@ -108,5 +108,8 @@ error_t ChangeDynamicJumpHistogramSamplingAreaByMinMax(DynamicJumpHistogram_t*re
 // Changes the sampling area settings of a dynamic jump histogram by definition of the center value and valueRange (Implicit reset to empty state)
 error_t ChangeDynamicJumpHistogramSamplingAreaByRange(DynamicJumpHistogram_t*restrict jumpHistogram, double centerValue, double valueRange);
 
-// Creates a buffer access struct for the passed dynamic jump histogram
-Buffer_t GetDynamicJumpHistogramBufferAccess(DynamicJumpHistogram_t*restrict jumpHistogram);
+// Calculates the mean energy value of the passed dynamic jump histogram
+double CalculateDynamicJumpHistogramMeanEnergy(const DynamicJumpHistogram_t*restrict jumpHistogram);
+
+// Finds the energy value with the highest number of counts in the provided histogram
+double FindDynamicJumpHistogramMaxValue(const DynamicJumpHistogram_t*restrict jumpHistogram);

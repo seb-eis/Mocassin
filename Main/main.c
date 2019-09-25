@@ -15,8 +15,6 @@
 #include "Simulator/Logic/Routines/Main/MainRoutines.h"
 #include "Simulator/Logic/Initializers/CmdArgResolver/CmdArgumentResolver.h"
 
-#define MC_AWAIT_TERMINATION_OK
-
 int main(int argc, char const * const *argv)
 {
     // General preparations for routine execution
@@ -26,14 +24,16 @@ int main(int argc, char const * const *argv)
     PrepareForMainRoutine(&SCONTEXT);
 
     // Load and jump into a custom extension routine if valid data exists
-    var extensionRoutine = MocExt_TryFindExtensionRoutine(getCustomRoutineUuid(&SCONTEXT), NULL);
-    if (extensionRoutine != NULL)
+    var routine = MocExt_TryFindExtensionRoutine(getCustomRoutineUuid(&SCONTEXT), getFileInformation(&SCONTEXT)->ExtensionLookupPath);
+    if (routine != NULL)
     {
         ProgressPrint_OnSimulationStart(&SCONTEXT, stdout);
-        return (extensionRoutine(&SCONTEXT), 0);
+        fprintf(stdout, "\nINFO  => Regular progress prints may be suppressed in custom routines.\n");
+        fflush(stdout);
+        return (routine(&SCONTEXT), 0);
     }
 
-    // Jump into the usual KMC/MMc system if no extension routine data exist
+    // Jump into the usual KMC/MMM system if no extension routine data exist
     StartMainSimulationRoutine(&SCONTEXT);
     ProgressPrint_OnSimulationFinish(&SCONTEXT, stdout);
 

@@ -8,13 +8,29 @@
 // Short:   Routine library loader      //
 //////////////////////////////////////////
 
+
 #include "Framework/Basic/DlLoading/RoutineLoading.h"
+#include "Framework/Basic/FileIO/FileIO.h"
 
 FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, const char* searchPath)
 {
-    // ToDo: Replace this by an actual lookup system
-    let path = "C:\\Users\\hims-user\\source\\repos\\ICon.Simulator\\cmake-build-debug-mingw_x86_64\\libmmcfe.mocext.dll";
-    return MocExt_TryLoadExtensionRoutine(routineUuid, path);
+    return_if(searchPath == NULL || !IsAccessibleDirectory(searchPath), NULL);
+
+    StringList_t libList;
+    FMocExtEntry_t entryFunc = NULL;
+
+    if (ListAllFilesByPattern(searchPath, MOCEXT_EXTROUTINE_LIBNAME, true, &libList) == ERR_OK)
+    {
+        cpp_foreach(item, libList)
+        {
+            entryFunc = MocExt_TryLoadExtensionRoutine(routineUuid, *item);
+            break_if(entryFunc != NULL);
+        }
+    }
+
+    cpp_foreach(item, libList) free(*item);
+    delete_List(libList);
+    return entryFunc;
 }
 
 FMocExtEntry_t MocExt_TryLoadExtensionRoutine(const moc_uuid_t* routineUuid, const char* libraryPath)
