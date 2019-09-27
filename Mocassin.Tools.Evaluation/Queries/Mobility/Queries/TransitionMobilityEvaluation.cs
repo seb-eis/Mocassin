@@ -33,7 +33,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var metaData = EnsembleMetaEvaluation[jobContext.DataId];
             var normField = jobContext.SimulationModel.NormalizedElectricFieldVector;
             var fieldModulus = jobContext.JobModel.JobMetaData.ElectricFieldModulus;
-            var time = jobContext.McsReader.GetMetaData().SimulatedTime;
+            var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
 
             var result = new List<TransitionMobility>(globalTrackerResults.Count);
 

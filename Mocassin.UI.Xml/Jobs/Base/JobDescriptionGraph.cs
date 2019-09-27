@@ -20,6 +20,7 @@ namespace Mocassin.UI.Xml.Jobs
         private string temperature;
         private string minimalSuccessRate;
         private LatticeConfigurationGraph latticeConfiguration;
+        private string instruction;
 
         /// <summary>
         ///     Get or set additional job info flags
@@ -81,6 +82,16 @@ namespace Mocassin.UI.Xml.Jobs
             set => SetProperty(ref latticeConfiguration, value);
         }
 
+        /// <summary>
+        ///     Get or set a <see cref="string"/> that describes additional instructions
+        /// </summary>
+        [XmlElement("Instruction")]
+        public string Instruction
+        {
+            get => instruction;
+            set => SetProperty(ref instruction, value);
+        }
+
         /// <inheritdoc />
         protected JobDescriptionGraph()
         {
@@ -114,6 +125,7 @@ namespace Mocassin.UI.Xml.Jobs
                 ? baseSimulation.LowerSuccessRateLimit
                 : double.Parse(MinimalSuccessRate);
 
+            obj.Instruction = Instruction;
             obj.ConfigName = Name;
 
             return obj;
@@ -154,6 +166,10 @@ namespace Mocassin.UI.Xml.Jobs
                 ? baseConfiguration.MinimalSuccessRate
                 : double.Parse(MinimalSuccessRate);
 
+            obj.Instruction = string.IsNullOrWhiteSpace(Instruction)
+                ? baseConfiguration.Instruction
+                : Instruction;
+
             obj.LatticeConfiguration = LatticeConfiguration.ToInternal(modelProject);
             obj.ConfigName = Name;
 
@@ -173,6 +189,7 @@ namespace Mocassin.UI.Xml.Jobs
             other.TimeLimit = TimeLimit;
             other.LatticeConfiguration = LatticeConfiguration.Duplicate();
             other.Name = Name;
+            other.Instruction = Instruction;
         }
 
         /// <summary>

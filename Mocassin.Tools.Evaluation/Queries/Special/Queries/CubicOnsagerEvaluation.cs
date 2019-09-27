@@ -57,7 +57,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var displacements = DisplacementEvaluation[jobContext.DataId];
             var volume = LatticeMetaEvaluation[jobContext.DataId].Volume;
             var temperature = jobContext.JobModel.JobMetaData.Temperature;
-            var time = jobContext.McsReader.GetMetaData().SimulatedTime;
+            var time = jobContext.McsReader.ReadMetaData().SimulatedTime;
             
             if (displacements.First().IsSquared) throw new InvalidOperationException("Cannot use squared displacements.");
 

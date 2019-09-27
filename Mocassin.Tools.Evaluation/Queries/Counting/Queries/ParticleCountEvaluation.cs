@@ -21,7 +21,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         protected override IReadOnlyList<int> GetValue(JobContext context)
         {
             var counts = new int[context.ModelContext.GetModelObjects<IParticle>().Count()];
-            foreach (var id in context.McsReader.GetLattice()) counts[id]++;
+            foreach (var id in context.McsReader.ReadLattice()) counts[id]++;
 
             return counts.ToList().AsReadOnly();
         }

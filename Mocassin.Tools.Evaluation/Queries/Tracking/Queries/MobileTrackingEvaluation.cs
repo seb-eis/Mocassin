@@ -13,9 +13,9 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <inheritdoc />
         protected override IReadOnlyList<MobileTrackerResult> GetValue(JobContext context)
         {
-            var lattice = context.McsReader.GetLattice();
-            var trackerMapping = context.McsReader.GetMobileTrackerMapping();
-            var trackerData = context.McsReader.GetMobileTrackers();
+            var lattice = context.McsReader.ReadLattice();
+            var trackerMapping = context.McsReader.ReadMobileTrackerMapping();
+            var trackerData = context.McsReader.ReadMobileTrackers();
             var result = new List<MobileTrackerResult>(trackerMapping.Length);
             var vectorTransformer = context.ModelContext.GetUnitCellVectorEncoder().Transformer;
 

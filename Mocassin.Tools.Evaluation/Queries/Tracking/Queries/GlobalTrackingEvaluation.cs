@@ -26,7 +26,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         protected override IReadOnlyList<GlobalTrackerResult> GetValue(JobContext context)
         {
             var globalTrackerModels = context.SimulationModel.SimulationTrackingModel.GlobalTrackerModels;
-            var trackingData = context.McsReader.GetGlobalTrackers();
+            var trackingData = context.McsReader.ReadGlobalTrackers();
             var result = new List<GlobalTrackerResult>(globalTrackerModels.Count);
             var vectorTransformer = context.ModelContext.GetUnitCellVectorEncoder().Transformer;
 

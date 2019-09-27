@@ -31,9 +31,6 @@
         </Grid.ColumnDefinitions>
         <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity="1" VerticalAlignment="Center" HorizontalAlignment="Left"
                Margin="5,0,0,0" Height="240" Width="240">
-          <Image.Effect>
-            <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".75" BlurRadius="4" />
-          </Image.Effect>
         </Image>
         <TextBlock Grid.Column="1" FontSize="12" TextAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0">
           <Run Text="Mocassin Model Builder" FontSize="14" FontWeight="Bold"/>

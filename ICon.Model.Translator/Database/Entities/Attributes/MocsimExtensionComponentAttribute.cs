@@ -6,7 +6,7 @@ namespace Mocassin.Model.Translator
     ///     Attribute to uniquely mark classes as components for specific Mocassin simulation extensions
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class MocsimExtensionAttribute : Attribute
+    public class MocsimExtensionComponentAttribute : Attribute
     {
         /// <summary>
         ///     Get the <see cref="Guid"/> that identifies the simulator extension
@@ -14,11 +14,18 @@ namespace Mocassin.Model.Translator
         public Guid ExtensionGuid { get; }
 
         /// <summary>
-        ///     Creates new <see cref="MocsimExtensionAttribute"/> from a guid <see cref="string"/>
+        ///     Get the extension alias <see cref="string"/>
+        /// </summary>
+        public string ExtensionAlias { get; }
+
+        /// <summary>
+        ///     Creates new <see cref="MocsimExtensionComponentAttribute"/> from a guid and alias <see cref="string"/>
         /// </summary>
         /// <param name="guidStr"></param>
-        public MocsimExtensionAttribute(string guidStr)
+        /// <param name="extensionAlias"></param>
+        public MocsimExtensionComponentAttribute(string guidStr, string extensionAlias)
         {
+            ExtensionAlias = extensionAlias ?? throw new ArgumentNullException(nameof(extensionAlias));
             ExtensionGuid = new Guid(guidStr);
         }
     }

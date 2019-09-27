@@ -98,8 +98,8 @@
           </Trigger>
         </Style.Triggers>
       </Style>
-
-            <!-- Always on styles -->
+      
+      <!-- Always on styles -->
       <Style TargetType="{x:Type UserControl}">
         <Setter Property="Background" Value="Transparent"/>
       </Style>

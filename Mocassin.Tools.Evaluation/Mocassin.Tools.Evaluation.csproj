@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Filter\Base\" />
-    <Folder Include="DataTables\" />
     <Folder Include="Grouping\Base\" />
     <Folder Include="Grouping\Result\" />
     <Folder Include="Queries\Special\Result\" />

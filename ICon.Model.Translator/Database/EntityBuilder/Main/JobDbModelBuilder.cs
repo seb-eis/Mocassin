@@ -156,6 +156,12 @@ namespace Mocassin.Model.Translator.EntityBuilder
                 SimulationLatticeModel = LatticeDbEntityBuilder.BuildModel(simulationModel, jobConfiguration.LatticeConfiguration)
             };
 
+            if (jobConfiguration.Instruction == null) result.RoutineData = RoutineDataEntity.CreateEmpty();
+            if (jobConfiguration.Instruction != null && RoutineDataEntity.TryParse(jobConfiguration.Instruction, out var routineData))
+            {
+                result.RoutineData = routineData ?? throw new InvalidOperationException("Failed to parse attached routine instruction.");
+            }
+
             result.JobMetaData.JobModel = result;
             result.JobResultData.JobModel = result;
             SetSimulationJobInfoFlags(result, simulationModel);

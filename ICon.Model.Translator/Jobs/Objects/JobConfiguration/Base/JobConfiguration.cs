@@ -66,6 +66,11 @@
         public string ConfigName { get; set; }
 
         /// <summary>
+        ///     Get or set the attached instruction string
+        /// </summary>
+        public string Instruction { get; set; }
+
+        /// <summary>
         ///     Copies all data to the passed job configuration
         /// </summary>
         /// <param name="jobConfiguration"></param>
@@ -85,6 +90,7 @@
             jobConfiguration.TimeLimit = TimeLimit;
             jobConfiguration.ConfigName = ConfigName;
             jobConfiguration.CollectionName = CollectionName;
+            jobConfiguration.Instruction = Instruction;
         }
 
         /// <summary>

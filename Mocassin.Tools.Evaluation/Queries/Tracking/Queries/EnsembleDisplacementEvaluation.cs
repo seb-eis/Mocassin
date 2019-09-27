@@ -73,7 +73,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         /// <param name="context"></param>
         protected virtual void GetMovementVectors(Cartesian3D[] vectors, JobContext context)
         {
-            var trackers = context.McsReader.GetGlobalTrackers();
+            var trackers = context.McsReader.ReadGlobalTrackers();
             var trackingModel = context.EvaluationContext.GetSimulationModel(context.JobModel).SimulationTrackingModel;
             var vectorTransformer = context.ModelContext.GetUnitCellVectorEncoder().Transformer;
 

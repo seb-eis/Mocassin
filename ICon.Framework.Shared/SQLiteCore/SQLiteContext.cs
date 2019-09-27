@@ -18,7 +18,7 @@ namespace Mocassin.Framework.SQLiteCore
         public string OptionsBuilderParameterString { get; internal set; }
 
         /// <summary>
-        ///     Get or set the file name <see cref="string"/> of the database
+        ///     Get or set the file name <see cref="string" /> of the database
         /// </summary>
         public string FileName { get; internal set; }
 
@@ -38,7 +38,7 @@ namespace Mocassin.Framework.SQLiteCore
         }
 
         /// <summary>
-        ///     Get a <see cref="ReadOnlyDbContext"/> of the current
+        ///     Get a <see cref="ReadOnlyDbContext" /> of the current
         /// </summary>
         /// <returns></returns>
         public ReadOnlyDbContext AsReadOnly()
@@ -47,7 +47,8 @@ namespace Mocassin.Framework.SQLiteCore
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DbContext" /> of type <see cref="TContext" /> using the provided file path and ensures that the
+        ///     Creates a new <see cref="DbContext" /> of type <see cref="TContext" /> using the provided file path and ensures
+        ///     that the
         ///     database is created if requested (Note: No overwrite warning is provided!)
         /// </summary>
         /// <param name="filePath"></param>
@@ -70,6 +71,17 @@ namespace Mocassin.Framework.SQLiteCore
                 throw new InvalidEnumArgumentException("The database does not exist!");
 
             return context;
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="DbContext" /> of type <see cref="TContext" /> for the provided database filepath and
+        ///     returns a <see cref="ReadOnlyDbContext" />
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static ReadOnlyDbContext OpenDatabaseAsReadOnly<TContext>(string filePath) where TContext : SqLiteContext
+        {
+            return OpenDatabase<TContext>(filePath).AsReadOnly();
         }
     }
 

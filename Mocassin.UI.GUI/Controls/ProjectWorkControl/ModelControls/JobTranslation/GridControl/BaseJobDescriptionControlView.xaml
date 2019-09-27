@@ -31,21 +31,23 @@
 
     <StackPanel Grid.Column="0">
       <GroupBox Header="Temperature [K]:">
-        <TextBox Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <TextBox
+          Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+          Margin="{StaticResource App.Margin.GroupBoxContent}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </GroupBox>
 
       <GroupBox Header="Steps per particle:">
-        <TextBox Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <TextBox
+          Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
+          Margin="{StaticResource App.Margin.GroupBoxContent}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </GroupBox>
@@ -53,15 +55,16 @@
       <GroupBox Header="Execution flags:">
         <GroupBox.ToolTip>
           <StackPanel>
-            <TextBlock Text="Possible flag values:"></TextBlock>
-            <ListView ItemsSource="{Binding Source={StaticResource FlagValues}}" Background="Transparent"/>
+            <TextBlock Text="Possible flag values:" />
+            <ListView ItemsSource="{Binding Source={StaticResource FlagValues}}" Background="Transparent" />
           </StackPanel>
         </GroupBox.ToolTip>
-        <TextBox Text="{Binding ExecutionFlags, Converter={StaticResource App.Converter.EnumToString}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <TextBox
+          Text="{Binding ExecutionFlags, Converter={StaticResource App.Converter.EnumToString}, TargetNullValue=...}"
+          Margin="{StaticResource App.Margin.GroupBoxContent}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </GroupBox>
@@ -73,7 +76,7 @@
           Margin="{StaticResource App.Margin.GroupBoxContent}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
       </GroupBox>
@@ -84,9 +87,61 @@
           Margin="{StaticResource App.Margin.GroupBoxContent}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
+      </GroupBox>
+
+      <GroupBox>
+        <GroupBox.Header>
+          <TextBlock>
+            <Run Text="Instructions:"/>
+            <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"
+                 ToolTip="Attaches a string instruction for the build system (e.g. custom routine)"/>
+          </TextBlock>
+        </GroupBox.Header>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <TextBox Name="InstructionTextBox" Grid.Column="0"
+                   Text="{Binding SingleLineInstruction, Mode=OneWay, TargetNullValue=...}"
+                   Margin="{StaticResource App.Margin.GroupBoxContent}"
+                   IsReadOnly="True">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+            </TextBox.InputBindings>
+          </TextBox>
+          <ToggleButton Grid.Column="0" Name="DropToggleButton"
+                        Height="{Binding ElementName=InstructionTextBox, Path=ActualHeight}"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                        HorizontalContentAlignment="Center" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+                        Width="16"
+                        Background="White"
+                        ToolTip="Toggle edit">
+            <ToggleButton.Content>
+              <Path Stroke="Gray" Fill="Black">
+                <Path.Data>
+                  <PathGeometry Figures="M 4,0 L 8,0 4,8 0,0 4,0" />
+                </Path.Data>
+              </Path>
+            </ToggleButton.Content>
+          </ToggleButton>
+          <Popup Grid.Column="0" StaysOpen="True" IsOpen="{Binding ElementName=DropToggleButton, Path=IsChecked}"
+                 HorizontalOffset="2" AllowsTransparency="True">
+            <Grid>
+              <Border Margin="0,0,5,5" Background="AliceBlue">
+                <TextBox Text="{Binding Instruction}"
+                         Width="{Binding ElementName=InstructionTextBox, Path=ActualWidth}" Height="300"
+                         TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" />
+                <Border.Effect>
+                  <DropShadowEffect ShadowDepth="4" Direction="290" Color="Black" Opacity=".5" BlurRadius="4" />
+                </Border.Effect>
+              </Border>
+            </Grid>
+          </Popup>
+        </Grid>
       </GroupBox>
     </StackPanel>
   </Grid>

@@ -7,6 +7,7 @@ namespace Mocassin.Model.Translator
     ///     Non generic base class for all wrapped interop objects that can switch between object and binary unmanaged
     ///     representation
     /// </summary>
+    [NotMapped]
     public abstract class InteropObject
     {
         /// <summary>
@@ -85,6 +86,27 @@ namespace Mocassin.Model.Translator
         public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalService marshalService)
         {
             _structure = marshalService.GetStructure<T>(sourceBuffer, offset);
+        }
+    }
+
+    /// <summary>
+    ///     Represents an interop object that has no bytes
+    /// </summary>
+    public sealed class EmptyInteropObject : InteropObject
+    {
+        /// <inheritdoc />
+        public override int ByteCount => 0;
+
+        /// <inheritdoc />
+        public override void ToBinary(byte[] targetBuffer, int offset, IMarshalService marshalService)
+        {
+            return;
+        }
+
+        /// <inheritdoc />
+        public override void FromBinary(byte[] sourceBuffer, int offset, IMarshalService marshalService)
+        {
+            return;
         }
     }
 }

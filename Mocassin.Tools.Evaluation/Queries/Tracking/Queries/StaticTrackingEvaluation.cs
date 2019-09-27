@@ -20,7 +20,7 @@ namespace Mocassin.Tools.Evaluation.Queries
         {
             var trackerModels = jobContext.SimulationModel.SimulationTrackingModel.StaticTrackerModels;
             var trackerCountPerCell = jobContext.SimulationModel.SimulationTrackingModel.StaticTrackerCount;
-            var trackingData = jobContext.McsReader.GetStaticTrackers();
+            var trackingData = jobContext.McsReader.ReadStaticTrackers();
             var result = new List<StaticTrackerResult>(trackingData.Length);
             var vectorTransformer = jobContext.ModelContext.GetUnitCellVectorEncoder().Transformer;
 

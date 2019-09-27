@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Documents;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.Xml.Jobs;
@@ -82,6 +83,25 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        ///     Get or set the instruction <see cref="string"/> on the <see cref="JobDescriptionGraph" />
+        /// </summary>
+        public string Instruction
+        {
+            get => string.IsNullOrWhiteSpace(JobDescription.Instruction) ? null : JobDescription.Instruction;
+            set
+            {
+                JobDescription.Instruction = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SingleLineInstruction));
+            }
+        }
+
+        /// <summary>
+        ///     Get a read only single line <see cref="string"/> of the <see cref="Instruction"/> <see cref="string"/>
+        /// </summary>
+        public string SingleLineInstruction => Instruction?.Replace(Environment.NewLine, " ");
 
         /// <summary>
         ///     Creates new <see cref="BaseJobDescriptionControlViewModel" /> for the passed <see cref="JobDescriptionGraph" />

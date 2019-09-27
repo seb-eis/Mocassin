@@ -12,21 +12,21 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         /// <summary>
         ///     Get the byte array buffer that is accessed
         /// </summary>
-        private byte[] Binary { get; }
+        private byte[] Bytes { get; }
 
         /// <summary>
         ///     Get the length of the accessed binary content
         /// </summary>
-        public int BinaryLength => Binary.Length;
+        public int ByteCount => Bytes.Length;
 
         /// <summary>
         ///     Creates a new <see cref="BinaryStructureReader" /> for the provided byte array
         /// </summary>
-        /// <param name="binary"></param>
-        public BinaryStructureReader(byte[] binary)
+        /// <param name="bytes"></param>
+        public BinaryStructureReader(byte[] bytes)
         {
-            Binary = binary ?? throw new ArgumentNullException(nameof(binary));
-            if (binary.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(binary));
+            Bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
+            if (bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
         }
 
         /// <summary>
@@ -37,12 +37,12 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         /// <returns></returns>
         public ref T ReadAs<T>(int startIndex) where T : struct
         {
-            if (startIndex < 0 || startIndex + Marshal.SizeOf<T>() > Binary.Length)
+            if (startIndex < 0 || startIndex + Marshal.SizeOf<T>() > Bytes.Length)
                 throw new InvalidOperationException("Access to buffer is out of range.");
 
             unsafe
             {
-                fixed (void* ptr = &Binary[startIndex])
+                fixed (void* ptr = &Bytes[startIndex])
                 {
                     return ref Unsafe.AsRef<T>(ptr);
                 }
@@ -58,12 +58,12 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         /// <returns></returns>
         public ReadOnlySpan<T> ReadLengthAs<T>(int startIndex, int length) where T : struct
         {
-            if (startIndex < 0 || startIndex + length > Binary.Length)
+            if (startIndex < 0 || startIndex + length > Bytes.Length)
                 throw new InvalidOperationException("Access to buffer is out of range.");
 
             unsafe
             {
-                fixed (void* ptr = &Binary[startIndex])
+                fixed (void* ptr = &Bytes[startIndex])
                 {
                     return new ReadOnlySpan<T>(ptr, length / Marshal.SizeOf<T>());
                 }
