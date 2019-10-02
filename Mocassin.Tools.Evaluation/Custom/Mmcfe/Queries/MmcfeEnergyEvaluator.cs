@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Extensions;
 using Mocassin.Tools.Evaluation.Queries.Base;
 using Mocassin.Tools.UAccess.Readers;
 
@@ -43,8 +44,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                     sumI += counter * expFactor;
                 }
 
+                if (double.IsNaN(sumI) || double.IsInfinity(sumI)) throw new InvalidOperationException("Calculation is numerically unstable.");
+
                 integralJ += sumJ == 0 ? 0 : Math.Log(sumJ, Math.E);
-                integralI += sumI == 0 ? 0 : Math.Log(sumI, Math.E);
+                integralI += sumI < double.Epsilon ? 0 : Math.Log(sumI, Math.E);
                 var (innerEnergy, freeEnergy) = (CalculateInnerEnergy(reader, minSampleCount), -temperature * Equations.Constants.BlotzmannEv * (integralJ - integralI));
                 result.Add(new MmcfeEnergyState(routineParams.AlphaCurrent, temperature / routineParams.AlphaCurrent, freeEnergy, innerEnergy));
             }
