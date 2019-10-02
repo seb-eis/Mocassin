@@ -243,7 +243,7 @@ static void PrintCopyrightInfo(file_t* fstream)
 // Prints the general job information to a stream
 static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
 {
-    char buffer[100];
+    char buffer[100], extName[9];
     let jobInfo = getDbModelJobInfo(SCONTEXT);
     let cmdArgs = getCommandArguments(SCONTEXT);
     let executionPath = cmdArgs->Values[0];
@@ -262,7 +262,9 @@ static void PrintGeneralJobInfo(SCONTEXT_PARAM, file_t *fstream)
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Simulation type", "", jobType);
 
     memset(buffer,0, sizeof(buffer));
-    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", routineUuid->A, routineUuid->B, routineUuid->C,
+    memcpy(extName,routineUuid->D,8);
+    extName[8]=0;
+    sprintf(buffer, "%s [%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x]", extName, routineUuid->A, routineUuid->B, routineUuid->C,
             routineUuid->D[0], routineUuid->D[1], routineUuid->D[2], routineUuid->D[3],
             routineUuid->D[4], routineUuid->D[5], routineUuid->D[6], routineUuid->D[7]);
     fprintf(fstream, MC_DEFAULT_FORMAT(MC_OUTSTR_FORMAT), "Job => Extension info", "", buffer);

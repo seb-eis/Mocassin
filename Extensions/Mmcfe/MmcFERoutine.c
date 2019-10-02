@@ -25,7 +25,7 @@
 
 const moc_uuid_t* MocExtRoutine_GetUUID()
 {
-    const static moc_uuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0xa1, 0xa4, 0xef, 0x9b, 0x85, 0x35, 0x6a, 0xf8}};
+    const static moc_uuid_t routineGuid = {.A = 0xb7f2dded, .B =0xdaf1, .C =0x40c0, .D = {0x4d, 0x4d, 0x43, 0x46, 0x45, 0x00, 0x00, 0x00}};
     return &routineGuid;
 }
 
@@ -228,11 +228,9 @@ static inline void LogCycleOutcome(SCONTEXT_PARAM, MmcfeLog_t*restrict log, cons
 // Calculates the expected average cycle rate for the remaining simulation alpha values
 static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
 {
-    // Estimation info:
     // Estimates the average cycle rate using the fact that the success rate can be expressed as f(a) = k_0(a) * f(0)*exp(k_1 * a)
-    // where the factor k_1 is the logarithm of the average best-rate/worst-rate scenario in MMC (~11)
-    // and the factor k_0(a) is an exponential correction for the bias when calculating f(0) with the current average cycle rate
-    // Routine uses the quotient: 11
+    // where the factor k_1 is the logarithm of the average best-rate/worst-rate scenario in MMC (approx. 11)
+    // and the factor k_0(a) is an arbitrary exponential correction for the increasing rate bias when calculating f(0)
 
     let meta = getMainStateMetaData(SCONTEXT);
     let logValue = 2.398;
@@ -241,13 +239,12 @@ static double CalculateExpectedAverageCycleRate(SCONTEXT_PARAM, const MmcfeLog_t
     let expCorrection = exp(-log->ParamsState.AlphaCurrent);
     let baseCycleRate = meta->CycleRate * frqFactor * (1.398 + (1.0-pow(expCorrection, logValue)) * logValue);
 
-    return frqIntegral * baseCycleRate;
+    return frqIntegral * baseCycleRate * 1.5;
 }
 
 // Calculates an estimated time till completion of the routine using the current log data
 static int64_t CalculateRuntimeEtaInSeconds(SCONTEXT_PARAM, const MmcfeLog_t*restrict log)
 {
-    let meta = getMainStateMetaData(SCONTEXT);
     let cycleCountPerBlock = log->ParamsState.RelaxPhaseCycleCount + log->ParamsState.LogPhaseCycleCount;
     let alphaStep = (log->ParamsState.AlphaMax - log->ParamsState.AlphaMin) / log->ParamsState.AlphaCount;
     let remainingAlphaCount = (int32_t) round((log->ParamsState.AlphaMax - log->ParamsState.AlphaCurrent) / alphaStep);
@@ -290,7 +287,7 @@ static inline void PrepareLogForNextLoggingPhase(SCONTEXT_PARAM, MmcfeLog_t*rest
     var avgEnergy = 0.0;
     cpp_foreach(item, *engBuffer) avgEnergy+= *item;
     avgEnergy /= (double) list_Capacity(*engBuffer);
-
+    avgEnergy = round(avgEnergy);
     ChangeDynamicJumpHistogramSamplingAreaByRange(&log->Histogram, avgEnergy, log->ParamsState.HistogramRange);
 }
 
