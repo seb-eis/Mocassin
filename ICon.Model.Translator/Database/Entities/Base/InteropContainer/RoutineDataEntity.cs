@@ -114,7 +114,7 @@ namespace Mocassin.Model.Translator
         }
 
         /// <summary>
-        ///     Tries to parse a routine instruction string into the matching <see cref="RoutineDataEntity"/>
+        ///     Tries to parse a routine instruction from a <see cref="string"/> into the matching <see cref="RoutineDataEntity"/>
         /// </summary>
         /// <param name="str"></param>
         /// <param name="entity"></param>

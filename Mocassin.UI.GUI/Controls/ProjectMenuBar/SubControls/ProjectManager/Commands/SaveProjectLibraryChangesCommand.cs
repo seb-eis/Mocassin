@@ -18,8 +18,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager.Com
         public override bool CanExecuteInternal()
         {
             return ProjectControl.ProjectManagerViewModel != null
-                   && ProjectControl.OpenProjectLibrary != null
-                   && ProjectControl.OpenProjectLibrary.HasUnsavedChanges();
+                   && ProjectControl.OpenProjectLibrary != null;
         }
 
         /// <inheritdoc />

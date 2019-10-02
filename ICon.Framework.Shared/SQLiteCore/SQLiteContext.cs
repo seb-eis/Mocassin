@@ -68,7 +68,7 @@ namespace Mocassin.Framework.SQLiteCore
             }
 
             if (!context.GetService<IRelationalDatabaseCreator>().Exists())
-                throw new InvalidEnumArgumentException("The database does not exist!");
+                throw new InvalidOperationException("Requested database does not exist.");
 
             return context;
         }

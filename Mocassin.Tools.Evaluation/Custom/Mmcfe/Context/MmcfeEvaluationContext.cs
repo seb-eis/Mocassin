@@ -45,7 +45,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
                 .Include(x => x.TimeStamp)
                 .Include(x => x.HistogramBytes)
                 .Include(x => x.ParameterBytes)
-                .Include(x => x.StateBytes);
+                .Include(x => x.StateBytes)
+                .OrderBy(x => x.Alpha);
         }
 
         /// <summary>

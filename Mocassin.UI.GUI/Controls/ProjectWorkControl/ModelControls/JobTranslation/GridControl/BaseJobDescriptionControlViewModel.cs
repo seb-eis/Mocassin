@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Documents;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.Xml.Jobs;
@@ -22,8 +21,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// </summary>
         public SimulationExecutionOverwriteFlags? ExecutionFlags
         {
-            get => Enum.TryParse<SimulationExecutionOverwriteFlags>(JobDescription.ExecutionFlags, out var x) 
-                ? x 
+            get => Enum.TryParse<SimulationExecutionOverwriteFlags>(JobDescription.ExecutionFlags, out var x)
+                ? x
                 : (SimulationExecutionOverwriteFlags?) null;
             set
             {
@@ -85,7 +84,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the instruction <see cref="string"/> on the <see cref="JobDescriptionGraph" />
+        ///     Get or set the instruction <see cref="string" /> on the <see cref="JobDescriptionGraph" />
         /// </summary>
         public string Instruction
         {
@@ -99,7 +98,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get a read only single line <see cref="string"/> of the <see cref="Instruction"/> <see cref="string"/>
+        ///     Get a read only single line <see cref="string" /> of the <see cref="Instruction" /> <see cref="string" />
         /// </summary>
         public string SingleLineInstruction => Instruction?.Replace(Environment.NewLine, " ");
 

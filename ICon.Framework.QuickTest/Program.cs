@@ -5,10 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using Mocassin.Framework.Extensions;
-using Mocassin.Model.Translator;
 using Mocassin.Tools.Evaluation.Custom.Mmcfe;
 using Mocassin.Tools.UAccess.Readers;
 
@@ -16,35 +13,31 @@ namespace Mocassin.Framework.QuickTest
 {
     internal class Program
     {
+        private static double FBoltz { get; } = 8.617e-5;
+
+        private static double Temp { get; } = 273.15;
+
         private static void Main(string[] args)
         {
-            
-            RegexTest();
-            ExitOnKeyPress("Finished successfully...");
-
-            var logFile = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\mmcfelog.db";
-            var outFile = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\Histograms\hist";
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            var logFile = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\test1\mmcfelog.db";
+            var outFile = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\test1\Histograms\hist";
             var context = MmcfeEvaluationContext.OpenFile(logFile);
             var readers = context.FullReaderSet().ToList();
-            var parameters = readers.Select(x => x.ReadParameters()).ToList();
-            WriteHistogramFileCollection(outFile, readers);
+            var evaluator = new MmcfeEnergyEvaluator();
+            var energyStates = evaluator.CalculateEnergyStates(readers, 273);
+
+            var interpols = Enumerable.Range(0, 10).Select(x => evaluator.LinearInterpolateEnergyState(energyStates, 273 + x * 100)).ToList();
+            //WriteHistogramFileCollection(outFile, readers);
             ExitOnKeyPress("Finished successfully...");
         }
 
-        private static void RegexTest()
+        private static void WriteEnergiesToFile(IList<double> energies)
         {
-            var text = File.ReadAllText(@"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\mmcfe.info.txt");
-            var outerRegex = RoutineDataEntity.DefaultInstructionRegex;
-            var innerRegex = RoutineDataEntity.DefaultParameterRegex;
-
-            var matches = outerRegex.Matches(text);
-            foreach (Match match in matches)
+            using (var streamWriter =
+                File.AppendText(@"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\Histograms\Fint.txt"))
             {
-                Console.WriteLine(match.Groups["alias"]);
-                foreach (Match innerMatch in innerRegex.Matches(match.Groups["params"].Value))
-                {
-                    Console.WriteLine($"{innerMatch.Groups["name"].Value} = {innerMatch.Groups["value"].Value}");
-                }
+                for (var i = 0; i < energies.Count; i++) streamWriter.WriteLine($"{i} {energies[i]}");
             }
         }
 
@@ -67,9 +60,9 @@ namespace Mocassin.Framework.QuickTest
                 foreach (var counter in logReader.EnergyHistogramReader.ReadCounters())
                 {
                     sum += counter;
-                    if (counter >= 100) stream.WriteLine($"{0.5*energy:E7} {counter:E7}");
+                    if (counter >= 100) stream.WriteLine($"{0.5 * energy:E7} {counter:E7}");
                     energy += header.Stepping;
-                }   
+                }
             }
         }
 
@@ -90,8 +83,9 @@ namespace Mocassin.Framework.QuickTest
                     for (var j = 0; j < logReaders.Count; j++)
                     {
                         sum += matrix[j][i];
-                        stringBuilder.Append($"{baseEnergies[j]+energyOffset:E5} {matrix[j][i]:E5} ");
+                        stringBuilder.Append($"{baseEnergies[j] + energyOffset:E5} {matrix[j][i]:E5} ");
                     }
+
                     stringBuilder.PopBack(1);
                     if (sum >= 100) stream.WriteLine(stringBuilder.ToString());
                     energyOffset += header.Stepping;
