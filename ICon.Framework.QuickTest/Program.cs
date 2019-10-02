@@ -22,12 +22,14 @@ namespace Mocassin.Framework.QuickTest
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var logFile = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\test1\mmcfelog.db";
             var outFile = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\Tests\test1\Histograms\hist";
-            var context = MmcfeEvaluationContext.OpenFile(logFile);
-            var readers = context.FullReaderSet().ToList();
-            var evaluator = new MmcfeEnergyEvaluator();
-            var energyStates = evaluator.CalculateEnergyStates(readers, 273);
+            using (var context = MmcfeEvaluationContext.OpenFile(logFile))
+            {
+                var readers = context.FullReaderSet().ToList();
+                var evaluator = new MmcfeEnergyEvaluator();
+                var energyStates = evaluator.CalculateEnergyStates(readers, 273);
 
-            var interpols = Enumerable.Range(0, 10).Select(x => evaluator.LinearInterpolateEnergyState(energyStates, 273 + x * 100)).ToList();
+                var interpols = Enumerable.Range(0, 20).Select(x => evaluator.LinearInterpolateEnergyState(energyStates, 273 + x * 100)).ToList();   
+            }
             //WriteHistogramFileCollection(outFile, readers);
             ExitOnKeyPress("Finished successfully...");
         }

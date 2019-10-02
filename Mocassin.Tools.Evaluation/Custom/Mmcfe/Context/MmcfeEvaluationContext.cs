@@ -26,27 +26,12 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Gets a non-tracking <see cref="IQueryable{T}"/> of the <see cref="MmcfeRoutineLogEntry"/> set (No includes)
+        ///     Gets a non-tracking <see cref="IQueryable{T}"/> of the <see cref="MmcfeRoutineLogEntry"/> set
         /// </summary>
         /// <returns></returns>
-        public IQueryable<MmcfeRoutineLogEntry> BasicLogSet()
+        public IQueryable<MmcfeRoutineLogEntry> LogSet()
         {
             return DataContext.Set<MmcfeRoutineLogEntry>();
-        }
-
-        /// <summary>
-        ///     Gets a non-tracking <see cref="IQueryable{T}"/> of the <see cref="MmcfeRoutineLogEntry"/> set (All data is included)
-        /// </summary>
-        /// <returns></returns>
-        public IQueryable<MmcfeRoutineLogEntry> FullLogSet()
-        {
-            return BasicLogSet()
-                .Include(x => x.Alpha)
-                .Include(x => x.TimeStamp)
-                .Include(x => x.HistogramBytes)
-                .Include(x => x.ParameterBytes)
-                .Include(x => x.StateBytes)
-                .OrderBy(x => x.Alpha);
         }
 
         /// <summary>
@@ -55,7 +40,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <returns></returns>
         public IQueryable<MmcfeLogReader> FullReaderSet()
         {
-            return CreateReaders(FullLogSet());
+            return CreateReaders(LogSet());
         }
 
         /// <summary>

@@ -111,7 +111,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 
         /// <summary>
         ///     Linear interpolation of an <see cref="MmcfeEnergyState" /> for a target temperature from a list of known states.
-        ///     States have to be sorted by alpha value for the function to yield correct results
+        ///     States have to be sorted by ascending alpha value for the function to work correctly
         /// </summary>
         /// <param name="energyStates"></param>
         /// <param name="targetTemperature"></param>
