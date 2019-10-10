@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 
 namespace Mocassin.Model.Translator
@@ -6,7 +7,7 @@ namespace Mocassin.Model.Translator
     /// <summary>
     ///     Provides an interface for accessing simulation libraries
     /// </summary>
-    public interface ISimulationLibrary
+    public interface ISimulationLibrary : IDisposable
     {
         /// <summary>
         ///     Database set for translated simulation packages

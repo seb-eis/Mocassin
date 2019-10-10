@@ -10,7 +10,7 @@ namespace Mocassin.Tools.UAccess.Readers
     ///     Provides fast read only access to the unmanaged binary output of the MMCFE routine of the 'C' Mocassin.Simulator
     /// </summary>
     /// <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
-    public class MmcfeLogReader
+    public class MmcfeLogReader : IDisposable
     {
         /// <summary>
         ///     Get the <see cref="BinaryStructureReader"/> for the <see cref="CMmcfeParams"/> state bytes
@@ -63,6 +63,14 @@ namespace Mocassin.Tools.UAccess.Readers
             if (parameterBytes.Length != Marshal.SizeOf<CMmcfeParams>()) throw new InvalidOperationException("Parameter byte array has wrong size.");
             var parameterReader = new BinaryStructureReader(parameterBytes);
             return new MmcfeLogReader(parameterReader, stateReader, histogramReader);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            ParameterReader.Dispose();
+            StateReader.Dispose();
+            EnergyHistogramReader.Dispose();
         }
     }
 }

@@ -35,6 +35,7 @@ namespace Mocassin.Mathematics.Comparers
         /// <inheritdoc />
         public override int Compare(double lhs, double rhs)
         {
+            if (lhs == rhs) return 0;
             if (ZeroComparer.Equals(lhs, 0) || ZeroComparer.Equals(rhs, 0)) return ZeroComparer.Compare(lhs, rhs);
             return MainComparer.Compare(lhs, rhs);
         }

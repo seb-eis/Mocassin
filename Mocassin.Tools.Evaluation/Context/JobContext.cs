@@ -8,7 +8,7 @@ namespace Mocassin.Tools.Evaluation.Context
     /// <summary>
     ///     Provides a context for evaluation of the results of a single <see cref="SimulationJobModel" />
     /// </summary>
-    public class JobContext : IEquatable<JobContext>
+    public class JobContext : IEquatable<JobContext>, IDisposable
     {
         /// <summary>
         ///     Get the <see cref="MslEvaluationContext" /> that the job belongs to
@@ -147,6 +147,12 @@ namespace Mocassin.Tools.Evaluation.Context
         {
             if (JobModel.JobMetaData == null) return null;
             return $"{jobModel.JobMetaData.CollectionName}:{jobModel.JobMetaData.ConfigName}";
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            McsReader.Dispose();
         }
     }
 }

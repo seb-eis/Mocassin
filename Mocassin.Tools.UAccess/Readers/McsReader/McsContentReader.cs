@@ -9,9 +9,9 @@ namespace Mocassin.Tools.UAccess.Readers
     ///     Provides fast read only access to the unmanaged binary state raw output 'mcs' data file of the 'C' Mocassin.Simulator
     /// </summary>
     /// <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
-    public class McsContentReader
+    public class McsContentReader : IDisposable
     {
-        private readonly McsHeader _header;
+        private readonly McsHeader header;
 
         /// <summary>
         ///     Get the <see cref="BinaryReader" /> to access the byte array contents
@@ -21,7 +21,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// <summary>
         ///     Get a reference to the <see cref="McsHeader"/> read from the buffer at object creation
         /// </summary>
-        public ref readonly McsHeader Header => ref _header;
+        public ref readonly McsHeader Header => ref header;
 
         /// <summary>
         ///     Create a new <see cref="McsContentReader"/> that uses the passed <see cref="BinaryStructureReader"/>
@@ -30,7 +30,7 @@ namespace Mocassin.Tools.UAccess.Readers
         private McsContentReader(BinaryStructureReader binaryStructureReader)
         {
             BinaryReader = binaryStructureReader ?? throw new ArgumentNullException(nameof(binaryStructureReader));
-            _header = ReadHeader();
+            header = ReadHeader();
         }
 
         /// <summary>
@@ -133,6 +133,12 @@ namespace Mocassin.Tools.UAccess.Readers
 
             if (bytes.Length == 0) throw new ArgumentException("File is empty.", nameof(filename));
             return Create(bytes);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            BinaryReader.Dispose();
         }
     }
 }

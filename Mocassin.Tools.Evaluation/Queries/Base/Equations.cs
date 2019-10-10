@@ -102,7 +102,7 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
         public static class Statistics
         {
             /// <summary>
-            ///     Calculates the average values with standard deviation of a value sequence using a selector and
+            ///     Calculates the average values with standard deviation of a value sequence using a selector
             /// </summary>
             /// <typeparam name="T"></typeparam>
             /// <param name="source"></param>
@@ -110,9 +110,20 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <returns></returns>
             public static (double Average, double Deviation) Average<T>(IEnumerable<T> source, Func<T, double> selector)
             {
-                var values = source.Select(selector).ToList();
-                var average = values.Sum() / values.Count;
-                var deviation = Math.Sqrt(values.Sum(x => Math.Pow(x - average, 2)) / (values.Count - 1));
+                return Average(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
+            }
+
+            /// <summary>
+            ///     Calculates the average values with standard deviation of a value sequence using a selector
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="source"></param>
+            /// <param name="selector"></param>
+            /// <returns></returns>
+            public static (double Average, double Deviation) Average<T>(IReadOnlyCollection<T> source, Func<T, double> selector)
+            {
+                var average = source.Select(selector).Sum() / source.Count;
+                var deviation = Math.Sqrt(source.Select(selector).Sum(x => Math.Pow(x - average, 2)) / (source.Count - 1));
                 return (average, deviation);
             }
 

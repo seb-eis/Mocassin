@@ -7,7 +7,7 @@ namespace Mocassin.Framework.SQLiteCore
     /// <summary>
     ///     Adapter class to provide <see cref="DbContext"/> instances for read only query access
     /// </summary>
-    public sealed class ReadOnlyDbContext : IDisposable
+    public sealed class ReadOnlyDbContext : IDisposable, IQueryableDataSource
     {
         /// <summary>
         ///     The wrapped <see cref="DbContext"/>

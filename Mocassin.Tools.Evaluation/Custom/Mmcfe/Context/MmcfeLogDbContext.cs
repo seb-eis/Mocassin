@@ -1,18 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.SQLiteCore;
 
 namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 {
     /// <summary>
-    ///     The <see cref="SqLiteContext{T1}"/> for MMCFE routine log databases
+    ///     The <see cref="SqLiteContext{T1}" /> for MMCFE routine log databases
     /// </summary>
     public class MmcfeLogDbContext : SqLiteContext<MmcfeLogDbContext>
     {
         /// <summary>
-        ///     Get or set the <see cref="DbSet{TEntity}"/> of <see cref="MmcfeRoutineLogEntry"/>
+        ///     Get or set the <see cref="DbSet{TEntity}" /> of <see cref="MmcfeLogEntry" />
         /// </summary>
-        public DbSet<MmcfeRoutineLogEntry> RoutineLogEntries { get; set; }
+        public DbSet<MmcfeLogEntry> LogEntries { get; set; }
 
         /// <inheritdoc />
         public MmcfeLogDbContext(string optionsBuilderParameterString)
@@ -23,7 +22,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MmcfeRoutineLogEntry>().ToTable("LogEntries");
+            modelBuilder.Entity<MmcfeLogEntry>().ToTable("LogEntries");
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 {
@@ -28,6 +29,11 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public double InnerEnergy { get; }
 
         /// <summary>
+        ///     Get the entropy value resulting from free energy and inner energy under assumption of constant volume in [eV / K]
+        /// </summary>
+        public double Entropy { get; }
+
+        /// <summary>
         ///     Creates a new <see cref="MmcfeEnergyState"/>
         /// </summary>
         /// <param name="alpha"></param>
@@ -40,6 +46,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             Temperature = temperature;
             FreeEnergy = freeEnergy;
             InnerEnergy = innerEnergy;
+            Entropy = (InnerEnergy - FreeEnergy) / Temperature;
         }
     }
 }

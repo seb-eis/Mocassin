@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
-using Mocassin.Mathematics.Extensions;
 using Mocassin.Tools.Evaluation.Queries.Base;
 using Mocassin.Tools.UAccess.Readers;
 
@@ -48,7 +47,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 
                 integralJ += sumJ == 0 ? 0 : Math.Log(sumJ, Math.E);
                 integralI += sumI < double.Epsilon ? 0 : Math.Log(sumI, Math.E);
-                var (innerEnergy, freeEnergy) = (CalculateInnerEnergy(reader, minSampleCount), -temperature * Equations.Constants.BlotzmannEv * (integralJ - integralI));
+                var (innerEnergy, freeEnergy) = (CalculateInnerEnergy(reader, minSampleCount),
+                    -temperature * Equations.Constants.BlotzmannEv * (integralJ - integralI));
                 result.Add(new MmcfeEnergyState(routineParams.AlphaCurrent, temperature / routineParams.AlphaCurrent, freeEnergy, innerEnergy));
             }
 
@@ -64,8 +64,10 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public bool CheckLogReadersInEvaluationOrder(IReadOnlyList<MmcfeLogReader> logReaders)
         {
             for (var i = 1; i < logReaders.Count; i++)
+            {
                 if (logReaders[i].ReadParameters().AlphaCurrent <= logReaders[i - 1].ReadParameters().AlphaCurrent)
                     return false;
+            }
 
             return true;
         }
@@ -119,18 +121,51 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         public MmcfeEnergyState LinearInterpolateEnergyState(IList<MmcfeEnergyState> energyStates, double targetTemperature)
         {
             // Note: By default the list is sorted by alpha, and T is ~ 1 / alpha => Do the comparison inverse for the binary search to work
-            var i = energyStates.CppLowerBound(new MmcfeEnergyState(0, targetTemperature, 0, 0),
+            var index = energyStates.CppLowerBound(new MmcfeEnergyState(0, targetTemperature, 0, 0),
                 Comparer<MmcfeEnergyState>.Create((a, b) => b.Temperature.CompareTo(a.Temperature)));
 
-            if (i == 0) i = 1;
-            if (i >= energyStates.Count) i = energyStates.Count - 1;
-            var (lhs, rhs) = (energyStates[i-1], energyStates[i]);
+            if (index == 0) index = 1;
+            if (index >= energyStates.Count) index = energyStates.Count - 1;
+            var (lhs, rhs) = (energyStates[index - 1], energyStates[index]);
 
             var factor = (targetTemperature - lhs.Temperature) / (rhs.Temperature - lhs.Temperature);
             var alpha = lhs.Alpha + (rhs.Alpha - lhs.Alpha) * factor;
             var energyU = lhs.InnerEnergy + (rhs.InnerEnergy - lhs.InnerEnergy) * factor;
             var energyF = lhs.FreeEnergy + (rhs.FreeEnergy - lhs.FreeEnergy) * factor;
             return new MmcfeEnergyState(alpha, targetTemperature, energyF, energyU);
+        }
+
+        /// <summary>
+        ///     Calculates an average and deviation from an <see cref="IEnumerable{T}" /> of <see cref="MmcfeEnergyState" /> items
+        /// </summary>
+        /// <param name="energyStates"></param>
+        /// <returns></returns>
+        public (MmcfeEnergyState Average, MmcfeEnergyState Deviation) CalculateAverage(IEnumerable<MmcfeEnergyState> energyStates)
+        {
+            if (!(energyStates is IReadOnlyList<MmcfeEnergyState> list)) list = energyStates.ToList();
+            var alpha = Equations.Statistics.Average(list, x => x.Alpha);
+            var freeEnergy = Equations.Statistics.Average(list, x => x.FreeEnergy);
+            var innerEnergy = Equations.Statistics.Average(list, x => x.InnerEnergy);
+            var temperature = Equations.Statistics.Average(list, x => x.Temperature);
+
+            var average = new MmcfeEnergyState(alpha.Average, temperature.Average, freeEnergy.Average, innerEnergy.Average);
+            var deviation = new MmcfeEnergyState(alpha.Deviation, temperature.Deviation, freeEnergy.Deviation, innerEnergy.Deviation);
+            return (average, deviation);
+        }
+
+        /// <summary>
+        ///     Calculates a new <see cref="MmcfeEnergyState" /> that represents the delta to a reference (Optional defect count to
+        ///     create a "by defect" result)
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="reference"></param>
+        /// <param name="defectCount"></param>
+        /// <returns></returns>
+        public MmcfeEnergyState CalculateDeltaEnergyState(in MmcfeEnergyState state, in MmcfeEnergyState reference, int defectCount = 1)
+        {
+            var innerEnergy = (state.InnerEnergy - reference.InnerEnergy) / defectCount;
+            var freeEnergy = (state.FreeEnergy - reference.FreeEnergy) / defectCount;
+            return new MmcfeEnergyState(state.Alpha, state.Temperature, freeEnergy, innerEnergy);
         }
     }
 }

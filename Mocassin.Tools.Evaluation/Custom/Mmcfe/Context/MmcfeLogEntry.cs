@@ -7,7 +7,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
     /// <summary>
     ///     The <see cref="EntityBase" /> implementation for MMCFE routine log entities
     /// </summary>
-    public class MmcfeRoutineLogEntry : EntityBase
+    public class MmcfeLogEntry : EntityBase
     {
         /// <summary>
         ///     Get or set the <see cref="DateTime" /> log time stamp

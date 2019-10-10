@@ -9,7 +9,7 @@ namespace Mocassin.Tools.UAccess.Readers
     ///     Provides fast read only access to the unmanaged binary state raw variable size histograms of the 'C' Mocassin.Simulator
     /// </summary>
     /// <remarks>The access is context free and requires the affiliated model context for evaluation</remarks>
-    public class DynamicHistogramReader
+    public class DynamicHistogramReader : IDisposable
     {
         /// <summary>
         ///     Get the byte count of the <see cref="DynamicHistogramHeader"/>
@@ -60,6 +60,12 @@ namespace Mocassin.Tools.UAccess.Readers
             var byteCount = HeaderByteCount + entryCount * sizeof(long);
             if (byteCount != bytes.Length) throw new InvalidOperationException("Byte array has incorrect size.");
             return new DynamicHistogramReader(binaryReader);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            BinaryReader.Dispose();
         }
     }
 }

@@ -7,8 +7,13 @@ namespace Mocassin.Tools.UAccess.Readers.Base
     /// <summary>
     ///     Provides generic read only reference access to structure contents of a byte buffer
     /// </summary>
-    public class BinaryStructureReader
+    public class BinaryStructureReader : IDisposable
     {
+        /// <summary>
+        ///     Get the <see cref="GCHandle"/> that pins the <see cref="Bytes"/>
+        /// </summary>
+        private GCHandle BytesGcHandle { get; }
+
         /// <summary>
         ///     Get the byte array buffer that is accessed
         /// </summary>
@@ -20,13 +25,14 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         public int ByteCount => Bytes.Length;
 
         /// <summary>
-        ///     Creates a new <see cref="BinaryStructureReader" /> for the provided byte array
+        ///     Creates a new <see cref="BinaryStructureReader" /> for the provided byte array. Array is pinned till the reader is disposed
         /// </summary>
         /// <param name="bytes"></param>
         public BinaryStructureReader(byte[] bytes)
         {
             Bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
+            BytesGcHandle = GCHandle.Alloc(Bytes, GCHandleType.Pinned);
         }
 
         /// <summary>
@@ -81,6 +87,12 @@ namespace Mocassin.Tools.UAccess.Readers.Base
         public ReadOnlySpan<T> ReadAreaAs<T>(int startIndex, int endIndex) where T : struct
         {
             return ReadLengthAs<T>(startIndex, endIndex - startIndex);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            BytesGcHandle.Free();
         }
     }
 }

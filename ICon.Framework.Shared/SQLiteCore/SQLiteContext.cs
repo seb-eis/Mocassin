@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -71,6 +72,17 @@ namespace Mocassin.Framework.SQLiteCore
                 throw new InvalidOperationException("Requested database does not exist.");
 
             return context;
+        }
+
+        /// <summary>
+        ///     Detaches all entities from the context change tracking system
+        /// </summary>
+        public void DetachAllEntities()
+        {
+            foreach (var entityEntry in ChangeTracker.Entries().ToList())
+            {
+                entityEntry.State = EntityState.Detached;
+            }
         }
 
         /// <summary>

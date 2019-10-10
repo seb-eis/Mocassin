@@ -43,6 +43,17 @@ namespace Mocassin.Mathematics.Comparers
         }
 
         /// <summary>
+        ///     Creates a new combined comparator object with the specified absolute range
+        /// </summary>
+        /// <param name="absoluteRange"></param>
+        /// <returns></returns>
+        public static NumericComparer CreateRangedCombined(double absoluteRange = 1.0e-13)
+        {
+            var rangeComparer = CreateRanged(absoluteRange);
+            return new NumericCombinedComparer(rangeComparer, rangeComparer);
+        }
+
+        /// <summary>
         ///     Creates a new default tolerance comparer (range based, allows 1.0e-13 offset, overwrites Comparer.Default)
         /// </summary>
         /// <returns></returns>
