@@ -15,7 +15,7 @@ import threading as threading
 import sys as sys
 import glob as glob
 import time as time
-import asyncio as asyncio
+import multiprocessing as multiprocessing
 
 class MocassinJobRunner:
 
@@ -23,6 +23,7 @@ class MocassinJobRunner:
         self.ExecutableName = "Mocassin.Simulator"
         self.DbPath = ""
         self.Executable = "./{0}".format(self.ExecutableName)
+        self.ExtensionPath = "."
 
     def GetBaseSearchPath(self):
         if os.name == "nt":
@@ -42,6 +43,7 @@ class MocassinJobRunner:
         for value in glob.iglob(searchPath, recursive=True):
             print("First match at: {0}".format(value))
             self.Executable = value
+            self.ExtensionPath = self.SplitFilenameIntoPathAndName(value)[0]
             return
 
         raise Exception("Could not locate simulation executable")
@@ -70,17 +72,40 @@ class MocassinJobRunner:
     def RunMultiple(self, sequence):
         print("Start sequence is: {0}".format(sequence))
         threads = []
-        split = self.SplitFilenameIntoPathAndName(self.DbPath)
+        dbPathSplit = self.SplitFilenameIntoPathAndName(self.DbPath)
         for i in sequence:
-            executionPath = self.MakeJobDirectory(split[0], i)
+            executionPath = self.MakeJobDirectory(dbPathSplit[0], i)
             stdRedirect = "stdout.log"
-            args = [executionPath, "-dbPath", self.DbPath, "-jobId", str(i), "-ioPath", executionPath, "-stdout", stdRedirect, "-fexp", "false"]
+            args = [executionPath, "-dbPath", self.DbPath, "-jobId", str(i), "-ioPath", executionPath, "-stdout", stdRedirect, "-fexp", "false", "-extDir", self.ExtensionPath]
             print("Running: {}".format(args), flush=True)
             threads.append(self.RunSimulatorAsThread(args))
-        print("All Started at: {}".format(time.asctime()))
+        print("All Started at: {}".format(time.asctime()), flush=True)
         for thread in threads:
             thread.join()
-        print("All joined at: {}".format(time.asctime()))
+        print("All joined at: {}".format(time.asctime()), flush=True)
+
+    def RunSimulator(self, args):
+        self.FindExecutable()
+        popen = subprocess.Popen(executable=self.Executable, args=args)
+        popen.wait()
+        return popen.returncode
+
+    def RunMultipleInThreadPool(self, sequence):
+        print("Start sequence is: {0}".format(sequence))
+        threads = []
+        dbPathSplit = self.SplitFilenameIntoPathAndName(self.DbPath)
+        argsList = []
+        for i in sequence:
+            executionPath = self.MakeJobDirectory(dbPathSplit[0], i)
+            stdRedirect = "stdout.log"
+            args = [executionPath, "-dbPath", self.DbPath, "-jobId", str(i), "-ioPath", executionPath, "-stdout", stdRedirect, "-fexp", "false", "-extDir", self.ExtensionPath]
+            argsList.append(args)
+            print("Running: {}".format(args), flush=True)
+            threads.append(self.RunSimulatorAsThread(args))
+        threadpool = multiprocessing.Pool(len(argsList))
+        print("All Started at: {}".format(time.asctime()), flush=True)
+        threadpool.map(self.RunSimulator, argsList)
+        print("All joined at: {}".format(time.asctime()), flush=True)
 
     def SetDatabasePath(self, path):
         dbPath = os.path.expandvars(path)
@@ -91,4 +116,4 @@ class MocassinJobRunner:
 runner = MocassinJobRunner()
 runner.SetDatabasePath(sys.argv[1])
 runner.FindExecutable()
-runner.RunMultiple(sys.argv[2:])
+runner.RunMultipleInThreadPool(sys.argv[2:])

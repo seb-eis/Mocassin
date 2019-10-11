@@ -68,11 +68,11 @@
             fflush(stream);
         }
 
-        void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
+        void* DlLoading_ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
         {
             void* dlHandle, *function;
             
-            if ((dlHandle = GetLibraryHandle(libraryPath)) == NULL)
+            if ((dlHandle = DlLoading_GetLibraryHandle(libraryPath)) == NULL)
             {
                 LogOsApiError(stderr, "Call to 'dlopen(<FILENAME>, <FLAGS>)' returned NULL. Could not load library.");
                 *error = ERR_LIBRARYLOADING;
@@ -88,7 +88,7 @@
             return function;
         }
 
-        LIBHANDLE GetLibraryHandle(const char *restrict libraryPath)
+        LIBHANDLE DlLoading_GetLibraryHandle(const char *restrict libraryPath)
         {
             void* dlHandle;
             if ((dlHandle = dlopen(libraryPath, RTLD_NOLOAD)) == NULL)
@@ -97,9 +97,9 @@
             return dlHandle;
         }
 
-        bool_t UnloadDynamicLibrary(const char* restrict libraryName)
+        bool_t DlLoading_UnloadDynamicLibrary(const char* restrict libraryName)
         {
-	        void* dlHandle = GetLibraryHandle(libraryName);
+	        void* dlHandle = DlLoading_GetLibraryHandle(libraryName);
             return_if(dlHandle == NULL, false);
             return (bool_t) dlclose(dlHandle);
 

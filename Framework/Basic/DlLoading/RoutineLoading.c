@@ -15,7 +15,6 @@
 FMocExtEntry_t MocExt_TryFindExtensionRoutine(const moc_uuid_t* routineUuid, const char* searchPath)
 {
     return_if(searchPath == NULL || !IsAccessibleDirectory(searchPath), NULL);
-
     StringList_t libList;
     FMocExtEntry_t entryFunc = NULL;
 

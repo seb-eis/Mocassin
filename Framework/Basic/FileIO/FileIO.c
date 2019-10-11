@@ -197,7 +197,7 @@ error_t ListAllFilesByPattern(const char* root, const char* pattern, bool_t incl
     {
         continue_if(strcmp(direntry->d_name, ".") == 0 || strcmp(direntry->d_name, "..") == 0);
 
-        sprintf(buffer, "%s\\%s", root, direntry->d_name);
+        sprintf(buffer, "%s/%s", root, direntry->d_name);
         if (IsAccessibleFile(buffer) && pattern != NULL && strstr(buffer, pattern) != NULL)
         {
             SaveAddStringEntryToList(outList, buffer, true);

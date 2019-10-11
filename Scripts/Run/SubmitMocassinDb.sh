@@ -20,8 +20,9 @@ echo $jobCount
 SendPackage()
 {
 acEnd=$(($2-1))
-timeLimit="0-00:15:00"
+timeLimit="0-12:00:00"
 memPerCpu="3800M"
+accountName="jara0035"
 localScriptName=${scriptName}.$1-${acEnd}.sh
 localOutputFile=${scriptName}.$1-${acEnd}.log
 jobSequence=$(sqlite3 $dbPath "select Id from JobModels where Id >= $1 and Id < $2")
@@ -44,7 +45,7 @@ _endOfJobScript
 
 chmod 777 $localScriptName
 rehash
-sbatch --time=$timeLimit --ntasks=1 --nodes=1 --cpus-per-task=$localJobCount --mem-per-cpu=$memPerCpu --output=$localOutputFile $localScriptName
+sbatch --account=$accountName --time=$timeLimit --ntasks=1 --nodes=1 --cpus-per-task=$localJobCount --mem-per-cpu=$memPerCpu --output=$localOutputFile $localScriptName
 
 if [ "$rmScripts" = "True" ]; then
 	rm -f $localScriptName
