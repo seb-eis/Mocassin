@@ -136,21 +136,22 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         }
 
         /// <summary>
-        ///     Calculates an average and deviation from an <see cref="IEnumerable{T}" /> of <see cref="MmcfeEnergyState" /> items
+        ///     Calculates an average and deviation from an <see cref="IEnumerable{T}" /> of <see cref="MmcfeEnergyState" /> items (Temperature is excluded)
         /// </summary>
         /// <param name="energyStates"></param>
         /// <returns></returns>
-        public (MmcfeEnergyState Average, MmcfeEnergyState Deviation) CalculateAverage(IEnumerable<MmcfeEnergyState> energyStates)
+        public (MmcfeEnergyState Average, MmcfeEnergyState Error) AverageWithSem(IEnumerable<MmcfeEnergyState> energyStates)
         {
             if (!(energyStates is IReadOnlyList<MmcfeEnergyState> list)) list = energyStates.ToList();
-            var alpha = Equations.Statistics.Average(list, x => x.Alpha);
-            var freeEnergy = Equations.Statistics.Average(list, x => x.FreeEnergy);
-            var innerEnergy = Equations.Statistics.Average(list, x => x.InnerEnergy);
-            var temperature = Equations.Statistics.Average(list, x => x.Temperature);
+            var alpha = Equations.Statistics.AverageWithSem(list, x => x.Alpha);
+            var freeEnergy = Equations.Statistics.AverageWithSem(list, x => x.FreeEnergy);
+            var innerEnergy = Equations.Statistics.AverageWithSem(list, x => x.InnerEnergy);
+            var temperature = Equations.Statistics.AverageWithSem(list, x => x.Temperature);
+            var entropy = Equations.Statistics.AverageWithSem(list, x => x.Entropy);
 
-            var average = new MmcfeEnergyState(alpha.Average, temperature.Average, freeEnergy.Average, innerEnergy.Average);
-            var deviation = new MmcfeEnergyState(alpha.Deviation, temperature.Deviation, freeEnergy.Deviation, innerEnergy.Deviation);
-            return (average, deviation);
+            var average = new MmcfeEnergyState(alpha.Average, temperature.Average, freeEnergy.Average, innerEnergy.Average, entropy.Average);
+            var error = new MmcfeEnergyState(alpha.Error, temperature.Error, freeEnergy.Error, innerEnergy.Error, entropy.Error);
+            return (average, error);
         }
 
         /// <summary>

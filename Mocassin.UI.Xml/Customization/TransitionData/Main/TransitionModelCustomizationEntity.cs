@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
@@ -14,7 +14,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     the <see cref="IRuleSetterProvider" /> system
     /// </summary>
     [XmlRoot("TransitionModelCustomization")]
-    public class TransitionModelCustomizationEntity : ModelCustomizationEntity
+    public class TransitionModelCustomizationEntity : ModelCustomizationEntity, IDuplicable<TransitionModelCustomizationEntity>
     {
         private List<KineticRuleSetGraph> kineticTransitionParameterSets;
 
@@ -44,7 +44,7 @@ namespace Mocassin.UI.Xml.Customization
 
         /// <summary>
         ///     Create a new <see cref="TransitionModelCustomizationEntity" /> by pulling all data from the passed
-        ///     <see cref="IRuleSetterProvider" /> and <see cref="ProjectModelGraph"/> parent
+        ///     <see cref="IRuleSetterProvider" /> and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="ruleSetterProvider"></param>
         /// <param name="parent"></param>
@@ -63,6 +63,23 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public TransitionModelCustomizationEntity Duplicate()
+        {
+            var copy = new TransitionModelCustomizationEntity
+            {
+                Name = Name,
+                kineticTransitionParameterSets = kineticTransitionParameterSets.Select(x => x.Duplicate()).ToList()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     objects
     /// </summary>
     [XmlRoot("OccupationState")]
-    public class OccupationStateGraph : ProjectObjectGraph
+    public class OccupationStateGraph : ProjectObjectGraph, IDuplicable<OccupationStateGraph>
     {
         private List<ModelObjectReferenceGraph<Particle>> particles;
 
@@ -80,6 +80,17 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
+        public OccupationStateGraph Duplicate()
+        {
+            var copy = new OccupationStateGraph
+            {
+                Name = Name,
+                particles = particles.Select(x => x.Duplicate()).ToList()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
         public override string ToString()
         {
             var builder = new StringBuilder(200);
@@ -89,6 +100,12 @@ namespace Mocassin.UI.Xml.Customization
             }
 
             return builder.ToString();
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

@@ -51,9 +51,13 @@
       <ComboBox.ContextMenu>
         <ContextMenu>
           <MenuItem Header="New item" Command="{Binding AddCustomizationCommand}" />
-          <MenuItem Header="Delete item"
+          <MenuItem Header="Duplicate selected item" Command="{Binding DuplicateCustomizationCommand}"
+                    CommandParameter="{Binding SelectedCustomizationGraph}"/>
+          <Separator/>
+          <MenuItem Header="Delete selected item"
                     Command="{Binding DeleteCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationGraph}" />
+          <Separator/>
           <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}" 
                     IsCheckable="True"
                     Name="CustomizationBoxSearchToggle" />

@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Xml.Serialization;
-using Mocassin.Framework.Extensions;
+﻿using System.Xml.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Newtonsoft.Json;
 
@@ -11,7 +8,7 @@ namespace Mocassin.UI.Xml.Base
     ///     Serializable helper object for serialization of <see cref="Mocassin.Mathematics.ValueTypes.IVector3D" /> data
     /// </summary>
     [XmlRoot("Vector")]
-    public class VectorGraph3D : ProjectObjectGraph
+    public class VectorGraph3D : ProjectObjectGraph, IDuplicable<VectorGraph3D>
     {
         private double a;
         private double b;
@@ -60,7 +57,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        /// Creates a new serializable <see cref="VectorGraph3D"/> from a passed <see cref="IVector3D"/> interface
+        ///     Creates a new serializable <see cref="VectorGraph3D" /> from a passed <see cref="IVector3D" /> interface
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
@@ -70,9 +67,21 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
+        public VectorGraph3D Duplicate()
+        {
+            return new VectorGraph3D {a = a, b = b, c = c};
+        }
+
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"({A.ToString(DefaultCultureInfo)}, {B.ToString(DefaultCultureInfo)}, {C.ToString(DefaultCultureInfo)})";
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

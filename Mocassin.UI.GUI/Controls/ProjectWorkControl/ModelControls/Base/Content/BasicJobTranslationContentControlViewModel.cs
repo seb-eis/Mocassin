@@ -50,12 +50,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// </summary>
         public DeleteJobTranslationCommand DeleteTranslationCommand { get; }
 
+        /// <summary>
+        ///     Get the <see cref="DuplicateJobTranslationCommand"/> to add a <see cref="ProjectJobTranslationGraph"/> duplicate to the current project
+        /// </summary>
+        public DuplicateJobTranslationCommand DuplicateTranslationCommand { get; }
+
         /// <inheritdoc />
         public BasicJobTranslationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
             DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource());
+            DuplicateTranslationCommand = new DuplicateJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
             PropertyChanged += OnTranslationSourceChanged;
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
@@ -13,7 +14,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     interaction settings through the <see cref="IEnergySetterProvider" /> system
     /// </summary>
     [XmlRoot("EnergyModelCustomization")]
-    public class EnergyModelCustomizationGraph : ModelCustomizationEntity
+    public class EnergyModelCustomizationGraph : ModelCustomizationEntity, IDuplicable<EnergyModelCustomizationGraph>
     {
         private List<PairEnergySetGraph> stablePairEnergyParameterSets;
         private List<PairEnergySetGraph> unstablePairEnergyParameterSets;
@@ -130,6 +131,26 @@ namespace Mocassin.UI.Xml.Customization
             obj.OrderDataForUser();
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public EnergyModelCustomizationGraph Duplicate()
+        {
+            var copy = new EnergyModelCustomizationGraph
+            {
+                Parent = Parent,
+                Name = Name,
+                stablePairEnergyParameterSets = stablePairEnergyParameterSets.Select(x => x.Duplicate()).ToList(),
+                unstablePairEnergyParameterSets = unstablePairEnergyParameterSets.Select(x => x.Duplicate()).ToList(),
+                groupEnergyParameterSets = groupEnergyParameterSets.Select(x => x.Duplicate()).ToList()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

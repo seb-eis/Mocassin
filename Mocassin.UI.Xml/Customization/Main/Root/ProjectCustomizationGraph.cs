@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.Customization
@@ -13,7 +14,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     The main root for storage and serialization of customizable parametrization data of <see cref="IModelProject" />
     /// </summary>
     [XmlRoot("MocassinModelCustomizationGraph")]
-    public class ProjectCustomizationGraph : ModelCustomizationEntity
+    public class ProjectCustomizationGraph : ModelCustomizationEntity, IDuplicable<ProjectCustomizationGraph>
     {
         private string key;
         private EnergyModelCustomizationGraph energyModelCustomization;
@@ -93,9 +94,27 @@ namespace Mocassin.UI.Xml.Customization
                 EnergyModelCustomization = EnergyModelCustomizationGraph.Create(energySetterProvider, parent),
                 TransitionModelCustomization = TransitionModelCustomizationEntity.Create(ruleSetterProvider, parent)
             };
-            obj.Name = $"Customization {obj.Key}";
+            obj.Name = $"New customization [{obj.Parent.ProjectName}]";
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public ProjectCustomizationGraph Duplicate()
+        {
+            return new ProjectCustomizationGraph
+            {
+                Parent = Parent,
+                Name = $"{Name}(copy)",
+                TransitionModelCustomization = TransitionModelCustomization.Duplicate(),
+                EnergyModelCustomization = EnergyModelCustomization.Duplicate()
+            };
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

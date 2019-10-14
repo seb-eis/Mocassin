@@ -16,7 +16,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     objects
     /// </summary>
     [XmlRoot("GroupEnergyEntry")]
-    public class GroupEnergyGraph : ProjectObjectGraph, IComparable<GroupEnergyGraph>
+    public class GroupEnergyGraph : ProjectObjectGraph, IComparable<GroupEnergyGraph>, IDuplicable<GroupEnergyGraph>
     {
         private ModelObjectReferenceGraph<Particle> centerParticle;
         private double energy;
@@ -118,6 +118,25 @@ namespace Mocassin.UI.Xml.Customization
             foreach (var particle in center.AsSingleton().Concat(state)) builder.Append($"[{particle.GetIonString()}]");
 
             return builder.ToString();
+        }
+
+        /// <inheritdoc />
+        public GroupEnergyGraph Duplicate()
+        {
+            var copy = new GroupEnergyGraph
+            {
+                Name = Name,
+                energy = energy,
+                centerParticle = centerParticle.Duplicate(),
+                occupationState = occupationState.Duplicate()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

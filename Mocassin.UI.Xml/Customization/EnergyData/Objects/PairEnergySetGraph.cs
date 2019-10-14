@@ -15,7 +15,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     customization
     /// </summary>
     [XmlRoot]
-    public class PairEnergySetGraph : ProjectObjectGraph, IComparable<PairEnergySetGraph>
+    public class PairEnergySetGraph : ProjectObjectGraph, IComparable<PairEnergySetGraph>, IDuplicable<PairEnergySetGraph>
     {
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
         private ModelObjectReferenceGraph<UnitCellPosition> partnerPosition;
@@ -163,6 +163,29 @@ namespace Mocassin.UI.Xml.Customization
             return partnerUnitCellPositionKeyComparison != 0
                 ? distanceComparison
                 : PairInteractionIndex.CompareTo(other.PairInteractionIndex);
+        }
+
+        /// <inheritdoc />
+        public PairEnergySetGraph Duplicate()
+        {
+            var copy = new PairEnergySetGraph
+            {
+                Name = Name,
+                centerPosition = centerPosition.Duplicate(),
+                partnerPosition = partnerPosition.Duplicate(),
+                distance = distance,
+                startVector = startVector.Duplicate(),
+                endVector = endVector.Duplicate(),
+                pairInteractionIndex = pairInteractionIndex,
+                pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToList()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

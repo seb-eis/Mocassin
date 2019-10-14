@@ -36,7 +36,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <param name="filePath"></param>
         public void CopyDatabaseWithoutRawData(string filePath)
         {
-            using (var copyContext = SqLiteContext.OpenDatabase<MmcfeLogCollectionDbContext>(filePath, true))
+            using (var copyContext = OpenDatabase<MmcfeLogCollectionDbContext>(filePath, true))
             {
                 copyContext.EnergyEntries.AddRange(EnergyEntries.AsNoTracking());
                 copyContext.MetaEntries.AddRange(MetaEntries.AsNoTracking());

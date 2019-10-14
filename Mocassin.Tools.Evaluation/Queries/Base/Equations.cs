@@ -108,9 +108,9 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="source"></param>
             /// <param name="selector"></param>
             /// <returns></returns>
-            public static (double Average, double Deviation) Average<T>(IEnumerable<T> source, Func<T, double> selector)
+            public static (double Average, double Deviation) AverageWithDeviation<T>(IEnumerable<T> source, Func<T, double> selector)
             {
-                return Average(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
+                return AverageWithDeviation(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
             }
 
             /// <summary>
@@ -120,11 +120,36 @@ namespace Mocassin.Tools.Evaluation.Queries.Base
             /// <param name="source"></param>
             /// <param name="selector"></param>
             /// <returns></returns>
-            public static (double Average, double Deviation) Average<T>(IReadOnlyCollection<T> source, Func<T, double> selector)
+            public static (double Average, double Deviation) AverageWithDeviation<T>(IReadOnlyCollection<T> source, Func<T, double> selector)
             {
                 var average = source.Select(selector).Sum() / source.Count;
                 var deviation = Math.Sqrt(source.Select(selector).Sum(x => Math.Pow(x - average, 2)) / (source.Count - 1));
                 return (average, deviation);
+            }
+
+            /// <summary>
+            ///     Calculates the average values with standard error of measurement of a value sequence using a selector
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="source"></param>
+            /// <param name="selector"></param>
+            /// <returns></returns>
+            public static (double Average, double Error) AverageWithSem<T>(IEnumerable<T> source, Func<T, double> selector)
+            {
+                return AverageWithSem(source as IReadOnlyCollection<T> ?? source.ToList(), selector);
+            }
+
+            /// <summary>
+            ///     Calculates the average values with standard error of measurement of a value sequence using a selector
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="source"></param>
+            /// <param name="selector"></param>
+            /// <returns></returns>
+            public static (double Average, double Error) AverageWithSem<T>(IReadOnlyCollection<T> source, Func<T, double> selector)
+            {
+                var (average, deviation) = AverageWithDeviation(source, selector);
+                return (average, deviation / Math.Sqrt(source.Count));
             }
 
             /// <summary>

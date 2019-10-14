@@ -11,7 +11,7 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectCustomizationGraph" /> to the selected
+    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectJobTranslationGraph" /> to the selected
     ///     project
     /// </summary>
     public class AddNewJobTranslationCommand : AsyncProjectControlCommand
@@ -47,7 +47,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Tries to create and add a new <see cref="ProjectCustomizationGraph" /> to the passed
+        ///     Tries to create and add a new <see cref="ProjectJobTranslationGraph" /> to the passed
         ///     <see cref="MocassinProjectGraph" />
         /// </summary>
         /// <param name="projectGraph"></param>
@@ -88,7 +88,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <returns></returns>
         private ProjectJobTranslationGraph CreateJobTranslation()
         {
-            return new ProjectJobTranslationGraph {Parent = ProjectGetter()};
+            return ProjectJobTranslationGraph.Create(ProjectGetter.Invoke());
         }
     }
 }

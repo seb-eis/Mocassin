@@ -14,7 +14,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     the <see cref="IRuleSetterProvider" /> system
     /// </summary>
     [XmlRoot("TransitionModelParametrization")]
-    public class KineticRuleSetGraph : ProjectObjectGraph
+    public class KineticRuleSetGraph : ProjectObjectGraph, IDuplicable<KineticRuleSetGraph>
     {
         private ModelObjectReferenceGraph<KineticTransition> transition;
         private int transitionIndex;
@@ -90,6 +90,25 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public KineticRuleSetGraph Duplicate()
+        {
+            var copy = new KineticRuleSetGraph
+            {
+                Name = Name,
+                transition = transition.Duplicate(),
+                transitionIndex = transitionIndex,
+                kineticRules = kineticRules.Select(x => x.Duplicate()).ToList()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

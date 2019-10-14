@@ -48,12 +48,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// </summary>
         public DeleteCustomizationCommand DeleteCustomizationCommand { get; }
 
+        /// <summary>
+        ///     Get the <see cref="DuplicateCustomizationCommand"/> to duplicate a <see cref="ProjectCustomizationGraph"/> and add it to the current project
+        /// </summary>
+        public DuplicateCustomizationCommand DuplicateCustomizationCommand { get; }
+
         /// <inheritdoc />
         public BasicCustomizationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
             DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, () => ReloadSelectionSource());
+            DuplicateCustomizationCommand = new DuplicateCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
             PropertyChanged += OnCustomizationSourceChanged;
         }
 

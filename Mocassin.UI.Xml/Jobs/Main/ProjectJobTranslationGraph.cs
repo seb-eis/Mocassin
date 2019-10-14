@@ -15,7 +15,7 @@ namespace Mocassin.UI.Xml.Jobs
     ///     creation system
     /// </summary>
     [XmlRoot("DatabaseCreationInstruction")]
-    public sealed class ProjectJobTranslationGraph : MocassinProjectChildEntity<MocassinProjectGraph>
+    public sealed class ProjectJobTranslationGraph : MocassinProjectChildEntity<MocassinProjectGraph>, IDuplicable<ProjectJobTranslationGraph>
     {
         private string key;
         private List<KmcJobPackageDescriptionGraph> kmcJobPackageDescriptions;
@@ -67,7 +67,6 @@ namespace Mocassin.UI.Xml.Jobs
             KmcJobPackageDescriptions = new List<KmcJobPackageDescriptionGraph>();
             MmcJobPackageDescriptions = new List<MmcJobPackageDescriptionGraph>();
             Key = Guid.NewGuid().ToString();
-            Name = "New translation set";
         }
 
         /// <summary>
@@ -95,6 +94,41 @@ namespace Mocassin.UI.Xml.Jobs
                 .Cast<JobPackageDescriptionGraph>()
                 .Concat(MmcJobPackageDescriptions)
                 .Sum(x => x.GetTotalJobCount(modelProject));
+        }
+
+        /// <inheritdoc />
+        public ProjectJobTranslationGraph Duplicate()
+        {
+            var duplicate = new ProjectJobTranslationGraph
+            {
+                Parent = Parent,
+                Name = $"{Name}(copy)",
+                KmcJobPackageDescriptions = {Capacity = KmcJobPackageDescriptions.Count},
+                MmcJobPackageDescriptions = {Capacity = MmcJobPackageDescriptions.Count}
+            };
+            duplicate.KmcJobPackageDescriptions.AddRange(KmcJobPackageDescriptions.Select(x => x.Duplicate()));
+            duplicate.MmcJobPackageDescriptions.AddRange(MmcJobPackageDescriptions.Select(x => x.Duplicate()));
+            return duplicate;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
+        }
+
+        /// <summary>
+        ///     Creates  anew <see cref="ProjectJobTranslationGraph"/> that belongs to the passed parent <see cref="MocassinProjectGraph"/>
+        /// </summary>
+        /// <param name="parentProjectGraph"></param>
+        /// <returns></returns>
+        public static ProjectJobTranslationGraph Create(MocassinProjectGraph parentProjectGraph)
+        {
+            return new ProjectJobTranslationGraph
+            {
+                Parent = parentProjectGraph,
+                Name = $"Job translation [{parentProjectGraph.ProjectName}]"
+            };
         }
     }
 }

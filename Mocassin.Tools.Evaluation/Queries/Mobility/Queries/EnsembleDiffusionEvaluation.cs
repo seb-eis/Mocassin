@@ -31,9 +31,9 @@ namespace Mocassin.Tools.Evaluation.Queries
             var result = new List<(EnsembleDiffusion, EnsembleDiffusion)>();
             for (var i = 0; i < Result.First().Count; i++)
             {
-                var (cX, dX) = Equations.Statistics.Average(Result.Select(x => x[i]), y => y.CoefficientX);
-                var (cY, dY) = Equations.Statistics.Average(Result.Select(x => x[i]), y => y.CoefficientY);
-                var (cZ, dZ) = Equations.Statistics.Average(Result.Select(x => x[i]), y => y.CoefficientZ);
+                var (cX, dX) = Equations.Statistics.AverageWithDeviation(Result.Select(x => x[i]), y => y.CoefficientX);
+                var (cY, dY) = Equations.Statistics.AverageWithDeviation(Result.Select(x => x[i]), y => y.CoefficientY);
+                var (cZ, dZ) = Equations.Statistics.AverageWithDeviation(Result.Select(x => x[i]), y => y.CoefficientZ);
                 var avg = new EnsembleDiffusion(Result[0][i].Particle, cX, cY, cZ);
                 var dev = new EnsembleDiffusion(Result[0][i].Particle, dX, dY, dZ);
                 result.Add((avg, dev));

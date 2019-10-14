@@ -13,7 +13,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     Serializable helper object for serialization of <see cref="Mocassin.Model.Energies.PairEnergyEntry" /> data objects
     /// </summary>
     [XmlRoot("PairEnergyEntry")]
-    public class PairEnergyGraph : ProjectObjectGraph, IComparable<PairEnergyGraph>
+    public class PairEnergyGraph : ProjectObjectGraph, IComparable<PairEnergyGraph>, IDuplicable<PairEnergyGraph>
     {
         private ModelObjectReferenceGraph<Particle> centerParticle;
         private ModelObjectReferenceGraph<Particle> partnerParticle;
@@ -149,6 +149,25 @@ namespace Mocassin.UI.Xml.Customization
             return partnerParticleKeyComparison != 0
                 ? partnerParticleKeyComparison
                 : Energy.CompareTo(other.Energy);
+        }
+
+        /// <inheritdoc />
+        public PairEnergyGraph Duplicate()
+        {
+            var copy = new PairEnergyGraph
+            {
+                Name = Name,
+                energy = energy,
+                centerParticle = centerParticle.Duplicate(),
+                partnerParticle = partnerParticle.Duplicate()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

@@ -69,7 +69,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// <returns></returns>
         public IEnumerable<ModelObjectReferenceGraph<Particle>> GetSelectableParticleReferences(SelectionOptimizerGraph current)
         {
-            // ToDo: Change filter to remove duplicates and redundant definitions
             var baseCollection = ContentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
             return baseCollection?.Select(x => new ModelObjectReferenceGraph<Particle>(x));
         }

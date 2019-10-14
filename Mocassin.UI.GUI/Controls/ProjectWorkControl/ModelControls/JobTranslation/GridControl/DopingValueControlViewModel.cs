@@ -9,11 +9,17 @@ using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
+    /// <summary>
+    ///     Get the <see cref="CollectionControlViewModel{T}"/> for <see cref="DopingValueGraph"/> instances
+    /// </summary>
     public class DopingValueControlViewModel : CollectionControlViewModel<DopingValueGraph>, IContentSupplier<MocassinProjectGraph>
     {
         /// <inheritdoc />
         public MocassinProjectGraph ContentSource { get; set; }
 
+        /// <summary>
+        ///     Get the <see cref="LatticeConfigurationGraph"/> of the model parent
+        /// </summary>
         public LatticeConfigurationGraph ParentLatticeConfiguration { get; }
 
         public DopingValueControlViewModel(LatticeConfigurationGraph parentLatticeConfiguration)

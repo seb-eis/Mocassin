@@ -32,8 +32,9 @@ namespace Mocassin.Framework.QuickTest
 
         private static void TestHyperSurfaceEvaluator()
         {
-            var dataPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y005_y030\mmcfe_import_eval.db";
-            var mslPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y005_y030\y005_y030.msl";
+            var dataPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020\mmcfe_import_eval.db";
+            var mslPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020\y020_273K.msl";
+            var plotPathFormat = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020\Exports\ufs_y020_{0:F2}_{1}.txt";
 
             var mslContext = MslEvaluationContext.Create(mslPath);
             var projectContext = mslContext.GetProjectModelContext(1);
@@ -43,18 +44,29 @@ namespace Mocassin.Framework.QuickTest
                 var comparer = NumericComparer.CreateRanged(1.0e-10);
                 var evaluator = new MmcfeEnergyDataPointEvaluator(dataSource);
                 evaluator.LoadDataPoints();
-                var list0 = evaluator.GroupDataPointsByDopingByTemperature();
-                var list1 = evaluator.GroupDataPointsByTemperatureByDoping();
+                var data = evaluator.GroupDataPointsByTemperatureByDoping();
+                var defectIndex = particles.Single(x => x.Symbol == "H").Index;
+
+                foreach (var temperature in Enumerable.Range(0, 7).Select(x => 673 + x * 100))
+                {
+                    var rawData = data.First(x => x.Key <= temperature);
+                    Console.Write("Doing temperature target {0} (found {1}) K ...", temperature, rawData.Key);
+                    var plotData = evaluator.GetRelativeChangePerDefectPlotData2D(rawData.Value, 0, 0.2, 1, defectIndex);
+                    evaluator.WriteEnergyStateOverConcentrationPlotData2DToFile(plotData, string.Format(plotPathFormat, rawData.Key, "pd"));
+                    //plotData = evaluator.GetRelativeChangePerUnitCellPlotData2D(rawData.Value, 0, 0.2, 1, defectIndex);
+                    //evaluator.WriteEnergyStateOverConcentrationPlotData2DToFile(plotData, string.Format(plotPathFormat, rawData.Key, "pc"));
+                    Console.Write("Done!\n");
+                }
                 evaluator.Dispose();
             }
         }
 
         private static void ImportMmcfeCollection()
         {
-            var rawPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y005_y030\mmcfe_import_raw.db";
-            var evalPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y005_y030\mmcfe_import_eval.db";
-            var rootPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y005_y030";
-            var libraryPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y005_y030\y005_y030.msl";
+            var rawPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020\mmcfe_import_raw.db";
+            var evalPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020\mmcfe_import_eval.db";
+            var rootPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020";
+            var libraryPath = @"C:\Users\hims-user\Documents\Promotions_Unterlagen\Projekte\BaZrO3\Simulation\model0_y020\y020_273K.msl";
 
             var importer = new MmcfeJobFolderImporter(libraryPath, rootPath) {ImportsPerSave = 100};
             var exceptions = new List<Exception>();

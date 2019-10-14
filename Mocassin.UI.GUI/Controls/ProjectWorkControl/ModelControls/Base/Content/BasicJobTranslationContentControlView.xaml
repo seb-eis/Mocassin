@@ -52,8 +52,12 @@
       <ComboBox.ContextMenu>
         <ContextMenu>
           <MenuItem Header="New item" Command="{Binding AddJobTranslationCommand}" />
-          <MenuItem Header="Delete item" Command="{Binding DeleteTranslationCommand}"
+          <MenuItem Header="Duplicate selected item" Command="{Binding DuplicateTranslationCommand}"
+                    CommandParameter="{Binding SelectedJobTranslationGraph}"/>
+          <Separator/>
+          <MenuItem Header="Delete selected item" Command="{Binding DeleteTranslationCommand}"
                     CommandParameter="{Binding SelectedJobTranslationGraph}" />
+          <Separator/>
           <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}"
                     IsCheckable="True"
                     Name="JobsBoxSearchToggle" />

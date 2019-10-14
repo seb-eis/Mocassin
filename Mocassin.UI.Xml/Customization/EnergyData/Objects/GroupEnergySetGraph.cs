@@ -15,7 +15,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     customization
     /// </summary>
     [XmlRoot]
-    public class GroupEnergySetGraph : ProjectObjectGraph, IComparable<GroupEnergySetGraph>
+    public class GroupEnergySetGraph : ProjectObjectGraph, IComparable<GroupEnergySetGraph>, IDuplicable<GroupEnergySetGraph>
     {
         private ModelObjectReferenceGraph<GroupInteraction> groupInteraction;
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
@@ -129,6 +129,28 @@ namespace Mocassin.UI.Xml.Customization
             return groupInteractionKeyComparison != 0
                 ? groupInteractionKeyComparison
                 : string.Compare(CenterPosition?.Key, other.CenterPosition?.Key, StringComparison.Ordinal);
+        }
+
+        /// <inheritdoc />
+        public GroupEnergySetGraph Duplicate()
+        {
+            var copy = new GroupEnergySetGraph
+            {
+                Name = Name,
+                groupInteraction = groupInteraction.Duplicate(),
+                centerPosition = centerPosition.Duplicate(),
+                groupInteractionIndex = groupInteractionIndex,
+                baseGeometry = baseGeometry.Select(x => x.Duplicate()).ToList(),
+                energyEntries = energyEntries.Select(x => x.Duplicate()).ToList()
+            };
+
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }

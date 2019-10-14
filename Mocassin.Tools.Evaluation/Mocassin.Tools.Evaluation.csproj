@@ -17,9 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Filter\Base\" />
-    <Folder Include="Grouping\Base\" />
-    <Folder Include="Grouping\Result\" />
     <Folder Include="Queries\Special\Result\" />
   </ItemGroup>
 

@@ -41,7 +41,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             {
                 for (var j = i; j < average.GetLength(0); j++)
                 {
-                    var (avg, dev) = Equations.Statistics.Average(Result, x => x[i, j]);
+                    var (avg, dev) = Equations.Statistics.AverageWithDeviation(Result, x => x[i, j]);
                     average[i, j] = average[j, i] = avg;
                     deviation[i, j] = deviation[j, i] = dev;
                 }

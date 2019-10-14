@@ -12,7 +12,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     manipulation
     /// </summary>
     [XmlRoot("KineticRule")]
-    public class KineticRuleGraph : ProjectObjectGraph
+    public class KineticRuleGraph : ProjectObjectGraph, IDuplicable<KineticRuleGraph>
     {
         private double attemptFrequency;
         private string ruleFlags;
@@ -117,6 +117,29 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return obj;
+        }
+
+        /// <inheritdoc />
+        public KineticRuleGraph Duplicate()
+        {
+            var copy = new KineticRuleGraph
+            {
+                Name = Name,
+                attemptFrequency = attemptFrequency,
+                ruleFlags = ruleFlags,
+                ruleIndex = ruleIndex,
+                dependencyRuleCount = dependencyRuleCount,
+                startState = startState.Duplicate(),
+                transitionState = transitionState.Duplicate(),
+                finalState = finalState.Duplicate()
+            };
+            return copy;
+        }
+
+        /// <inheritdoc />
+        object IDuplicable.Duplicate()
+        {
+            return Duplicate();
         }
     }
 }
