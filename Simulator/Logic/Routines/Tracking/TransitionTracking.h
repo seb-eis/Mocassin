@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include "Simulator/Data/SimContext/ContextAccess.h"
 
-// Type for int64 spans
+// Type for int64_t spans
 // Layout@ggc_x86_64 => 16@[8,8]
 typedef Span_t(int64_t, Int64Span) Int64Span_t;
 

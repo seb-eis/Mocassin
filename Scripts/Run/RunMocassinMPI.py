@@ -11,11 +11,10 @@
 import os as os
 import re as re
 import subprocess as subprocess
-import threading as threading
 import sys as sys
 import glob as glob
 import time as time
-import multiprocessing as multiprocessing
+from mpi4py import MPI
 
 class MocassinJobRunner:
 
@@ -38,10 +37,7 @@ class MocassinJobRunner:
             return
 
         searchPath = self.GetBaseSearchPath()
-        print("Default executable {0} does not exist, searching for {1} ...".format(self.Executable, searchPath))
-
         for value in glob.iglob(searchPath, recursive=True):
-            print("First match at: {0}".format(value))
             self.Executable = value
             self.ExtensionPath = self.SplitFilenameIntoPathAndName(value)[0]
             return
@@ -66,23 +62,47 @@ class MocassinJobRunner:
     def StartSimulator(self, args):
         return subprocess.Popen(executable=self.Executable, args=args)
 
-    def RunAndAwaitMocassinProcesses(self, sequence):
-        cpuCount = multiprocessing.cpu_count()
-        print("System has {0} cores available.".format(cpuCount))
-        print("Start sequence is: {0}".format(sequence))
-        threads = []
+    def AwaitExecutionFinish(self, mpiComm):
+        mpiRank = mpiComm.Get_rank()
+        mpiSize = mpiComm.Get_size()
+        if mpiRank != 0:
+            send = mpiComm.isend(True, dest=0, tag=mpiRank)
+            send.wait()
+            return
+        for rank in range(1, mpiSize):
+            msg = mpiComm.irecv(source=rank, tag=rank)
+            msg.wait()
+            print("{} - Received OK @ MPI_Rank (0) from MPI_Rank ({} / {})".format(time.asctime(), rank, mpiSize), flush=True)
+        print("{} - MPI-Rank 0 is finished".format(time.asctime()), flush=True)
+
+    def WaitForAllRanks(self, root, mpiComm):
+        mpiRank = mpiComm.Get_rank()
+        mpiSize = mpiComm.Get_size()
+        if mpiRank == root:
+            for rank in range(0, mpiSize):
+                if rank == root:
+                    continue
+                mpiComm.isend(True, dest=rank, tag=rank).wait()
+        else:
+            mpiComm.irecv(source=root, tag=mpiRank).wait()
+
+    def RunAndAwaitMocassinProcess(self, sequence):
+        mpiComm = MPI.COMM_WORLD
+        mpiRank = mpiComm.Get_rank()
+        mpiSize = mpiComm.Get_size()
+        if mpiRank == 0:
+            print("Started with {} MPI ranks.".format(mpiSize))
+            print("Sequence is: {0}".format(sequence), flush=True)
+
+        self.WaitForAllRanks(0, mpiComm)
         dbPathSplit = self.SplitFilenameIntoPathAndName(self.DbPath)
-        processList = []
-        for i in sequence:
-            executionPath = self.MakeJobDirectory(dbPathSplit[0], i)
-            stdRedirect = "stdout.log"
-            args = [executionPath, "-dbPath", self.DbPath, "-jobId", str(i), "-ioPath", executionPath, "-stdout", stdRedirect, "-fexp", "false", "-extDir", self.ExtensionPath]
-            print("Running: {}".format(args), flush=True)
-            processList.append(self.StartSimulator(args))
-        print("All Started at: {}".format(time.asctime()), flush=True)
-        for process in processList:
-            process.wait()
-        print("All joined at: {}".format(time.asctime()), flush=True)
+        executionPath = self.MakeJobDirectory(dbPathSplit[0], mpiRank+1)
+        stdRedirect = "stdout.log"
+        jobId = sequence[mpiRank]
+        args = [executionPath, "-dbPath", self.DbPath, "-jobId", str(jobId), "-ioPath", executionPath, "-stdout", stdRedirect, "-fexp", "false", "-extDir", self.ExtensionPath]
+        print("{} - Start @ MPI_Rank ({}): {}".format(time.asctime(), mpiRank, args), flush=True)
+        self.StartSimulator(args).wait()
+        self.AwaitExecutionFinish(mpiComm)
 
     def SetDatabasePath(self, path):
         dbPath = os.path.expandvars(path)
@@ -90,7 +110,8 @@ class MocassinJobRunner:
             raise Exception("Db path does not point to a file")
         self.DbPath = dbPath
 
+
 runner = MocassinJobRunner()
 runner.SetDatabasePath(sys.argv[1])
 runner.FindExecutable()
-runner.RunAndAwaitMocassinProcesses(sys.argv[2:])
+runner.RunAndAwaitMocassinProcess(sys.argv[2:])
