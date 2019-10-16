@@ -19,6 +19,9 @@ from mpi4py import MPI
 class MocassinJobRunner:
 
     def __init__(self):
+        self.MpiRank = MPI.COMM_WORLD.Get_rank()
+        self.MpiSize = MPI.COMM_WORLD.Get_size()
+        self.MpiComm = MPI.COMM_WORLD
         self.ExecutableName = "Mocassin.Simulator"
         self.DbPath = ""
         self.Executable = "./{0}".format(self.ExecutableName)
@@ -62,47 +65,43 @@ class MocassinJobRunner:
     def StartSimulator(self, args):
         return subprocess.Popen(executable=self.Executable, args=args)
 
-    def AwaitExecutionFinish(self, mpiComm):
-        mpiRank = mpiComm.Get_rank()
-        mpiSize = mpiComm.Get_size()
-        if mpiRank != 0:
-            send = mpiComm.isend(True, dest=0, tag=mpiRank)
+    def AwaitExecutionFinish(self):
+        if self.MpiRank != 0:
+            send = self.MpiComm.isend(True, dest=0, tag=self.MpiRank)
             send.wait()
             return
-        for rank in range(1, mpiSize):
-            msg = mpiComm.irecv(source=rank, tag=rank)
+        for rank in range(1, self.MpiSize):
+            msg = self.MpiComm.irecv(source=rank, tag=rank)
             msg.wait()
-            print("{} - Received OK @ MPI_Rank (0) from MPI_Rank ({} / {})".format(time.asctime(), rank, mpiSize), flush=True)
+            print("{} - Received OK @ MPI_Rank (0) from MPI_Rank ({} / {})".format(time.asctime(), rank, self.MpiSize), flush=True)
         print("{} - MPI-Rank 0 is finished".format(time.asctime()), flush=True)
 
-    def WaitForAllRanks(self, root, mpiComm):
-        mpiRank = mpiComm.Get_rank()
-        mpiSize = mpiComm.Get_size()
-        if mpiRank == root:
-            for rank in range(0, mpiSize):
+    def WaitForAllRanks(self, root):
+        if self.MpiRank == root:
+            for rank in range(0, self.MpiSize):
                 if rank == root:
                     continue
-                mpiComm.isend(True, dest=rank, tag=rank).wait()
+                self.MpiComm.isend(True, dest=rank, tag=rank).wait()
         else:
-            mpiComm.irecv(source=root, tag=mpiRank).wait()
+            self.MpiComm.irecv(source=root, tag=self.MpiRank).wait()
 
-    def RunAndAwaitMocassinProcess(self, sequence):
-        mpiComm = MPI.COMM_WORLD
-        mpiRank = mpiComm.Get_rank()
-        mpiSize = mpiComm.Get_size()
-        if mpiRank == 0:
-            print("Started with {} MPI ranks.".format(mpiSize))
-            print("Sequence is: {0}".format(sequence), flush=True)
-
-        self.WaitForAllRanks(0, mpiComm)
+    def PrepareSimulatorArguments(self, sequence):
         dbPathSplit = self.SplitFilenameIntoPathAndName(self.DbPath)
-        executionPath = self.MakeJobDirectory(dbPathSplit[0], mpiRank+1)
+        executionPath = self.MakeJobDirectory(dbPathSplit[0], self.MpiRank + 1)
         stdRedirect = "stdout.log"
-        jobId = sequence[mpiRank]
+        jobId = sequence[self.MpiRank]
         args = [executionPath, "-dbPath", self.DbPath, "-jobId", str(jobId), "-ioPath", executionPath, "-stdout", stdRedirect, "-fexp", "false", "-extDir", self.ExtensionPath]
-        print("{} - Start @ MPI_Rank ({}): {}".format(time.asctime(), mpiRank, args), flush=True)
+        return args
+
+    def RunAndAwaitMocassinProcess(self, root, sequence):
+        if self.MpiRank == root:
+            print("Started with {} MPI ranks (Root = {}).".format(self.MpiSize, root))
+            print("Sequence is: {0}".format(sequence), flush=True)
+        self.WaitForAllRanks(root)
+        args = self.PrepareSimulatorArguments(sequence)
+        print("{} - Start @ MPI_Rank ({}): {}".format(time.asctime(), self.MpiRank, args), flush=True)
         self.StartSimulator(args).wait()
-        self.AwaitExecutionFinish(mpiComm)
+        self.AwaitExecutionFinish()
 
     def SetDatabasePath(self, path):
         dbPath = os.path.expandvars(path)
@@ -114,4 +113,4 @@ class MocassinJobRunner:
 runner = MocassinJobRunner()
 runner.SetDatabasePath(sys.argv[1])
 runner.FindExecutable()
-runner.RunAndAwaitMocassinProcess(sys.argv[2:])
+runner.RunAndAwaitMocassinProcess(0, sys.argv[2:])

@@ -19,7 +19,7 @@ static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAM)
     for (int32_t i = 1; i < args->Count; i++)
     {
         if (strcmp("--bcall", args->Values[i]) != 0) continue;
-        fprintf(stdout, "Build call flag detected, terminating now!");
+        fprintf(stdout, "Build call flag detected, terminating now!\n");
         exit(ERR_OK);
     }
 }
