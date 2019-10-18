@@ -23,7 +23,7 @@ class MpiCommDummy:
         return self.Size
 
 
-class MocsimStarter:
+class MocsimExecutionController:
 
     def __init__(self, config=None, mpiComm=None):
         self.Parameters = self.GetDefaultParameters()
@@ -75,9 +75,9 @@ class MocsimStarter:
         else:
             configStr = config
 
-        pattern = r"(?P<var>[^=\s]+)\s?=\s?\{}(?P<val>[^\{}]+)\{}"
+        pattern = r"(?P<var>[^=\s]+)\s*=\s*\{}(?P<val>[^\{}]+)\{}"
         if valDel == "None" or valDel == "":
-            pattern = r"(?P<var>[^=\s]+)\s?=\s?(?P<val>[^\s]+)"
+            pattern = r"(?P<var>[^=\s]+)\s*=\s*(?P<val>[^\s]+)"
         else:
             pattern = pattern.format(valDel[0], valDel[1], valDel[1])
         regex = re.compile(pattern)
@@ -217,7 +217,7 @@ class MocsimStarter:
         if jobCount == self.mpisize():
             return self.ExecuteJobsMPI(jobIds)
 
-        if self.mpisize() == 1:
+        if self.mpisize() == 0:
             return self.ExecuteJobsShared(jobIds)
 
         if jobCount > self.mpisize():
@@ -242,6 +242,8 @@ class MocsimStarter:
         return None
 
 
-mocsimStarter = MocsimStarter()
-mocsimStarter.LoadDatabaseAndJobsFromArguments(sys.argv[1:])
-mocsimStarter.ExecuteJobs()
+controller = MocsimExecutionController()
+if controller.mpirank() == 0:
+    print("CMD: {}".format(sys.argv), flush=True)
+controller.LoadDatabaseAndJobsFromArguments(sys.argv[1:])
+controller.ExecuteJobs()

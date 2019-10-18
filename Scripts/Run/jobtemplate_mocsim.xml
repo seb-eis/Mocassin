@@ -1,0 +1,21 @@
+<SlurmTemplate Shell="zsh" DeleteScripts="False">
+    <Execution Interpreter="python3.6" Executable="./mocassin_mt.py" ArgumentProvider="slurmprovider_mocsim:Provider"/>
+    <Modules>
+        <Module Group="DEVELOP" Value="python/3.6.0"/>
+    </Modules>
+    <BatchCookies Format="#SBATCH --{}={}" TaskTag="ntasks" CoreTag="cpus-per-task">
+        <Cookie Tag="job-name" Value="moc_%J"/>
+        <Cookie Tag="output" Value="moc_%J.log"/>
+        <Cookie Tag="time" Value="24:00:00"/>
+        <Cookie Tag="account" Value="jara0035"/>
+        <Cookie Tag="mem-per-cpu" Value="3800"/>
+        <Cookie Tag="ntasks" Value="2"/>
+        <Cookie Tag="cpus-per-task" Value="4"/>
+    </BatchCookies>
+    <ScriptTemplate>
+        $shell $nl $nl
+        $cookies $nl
+        $modules $nl
+        $mpiexe $mpiflags $interpreter $executable $args
+    </ScriptTemplate>
+</SlurmTemplate>
