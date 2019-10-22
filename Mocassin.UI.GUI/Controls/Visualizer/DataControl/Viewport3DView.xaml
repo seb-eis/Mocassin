@@ -20,70 +20,135 @@
                        Name="HelixViewport3D"
                        ShowFrameRate="{Binding IsFrameRateCounterActive}"
                        ShowCameraInfo="{Binding IsCameraInfoActive}"
-                       ShowTriangleCountInfo="{Binding IsRenderInfoActive}" 
-                       LimitFPS="True"/>
+                       ShowTriangleCountInfo="{Binding IsRenderInfoActive}"
+                       LimitFPS="True" />
     <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
       <Expander.Header>
-        <TextBlock Text="3D Viewer Settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" 
-                   Visibility="{Binding ElementName=SettingsExpander, Path=IsExpanded, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
+        <TextBlock Text="Viewer options:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"
+                   Visibility="{Binding ElementName=SettingsExpander, Path=IsExpanded, Converter={StaticResource App.Converter.BooleanToVisibility}}" />
       </Expander.Header>
       <Expander.ContextMenu>
-        <ContextMenu>
+        <ContextMenu Name="QuickActionContextMenu">
+          <MenuItem Header="Reset camera" Click="QuickActionContextMenu_ResetCameraItem_OnClick" />
           <MenuItem Header="Clear visual" Command="{Binding ClearVisualCommand}" />
           <MenuItem Header="Update visual" Command="{Binding UpdateVisualCommand}" />
-          <Separator />
-          <MenuItem Header="Auto update visual" IsCheckable="True" IsChecked="{Binding IsAutoUpdating}" />
         </ContextMenu>
       </Expander.ContextMenu>
       <Border>
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
 
           <GroupBox Grid.Row="0">
-            <GroupBox.Header>
-              <TextBlock Text="Viewer actions:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
-            </GroupBox.Header>
             <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
-              <Button Content="Clear visual" Command="{Binding ClearVisualCommand}"
-                      Margin="{StaticResource App.Margin.VerticalStack}" />
-              <Button Content="Update visual" Command="{Binding UpdateVisualCommand}"
-                      Margin="{StaticResource App.Margin.VerticalStack}" />
               <DockPanel Margin="0,5">
-                <TextBlock Text="Updating mode:" Margin="0,0,10,0" />
-                <RadioButton IsChecked="{Binding IsAutoUpdating}" Name="AutoUpdateRadioButton" Content="Auto"
+                <RadioButton IsChecked="{Binding IsAutoUpdating}" Name="AutoUpdateRadioButton" Content="Auto update"
                              Margin="0,2,10,0"
                              VerticalContentAlignment="Center" />
-                <RadioButton Content="Manual" VerticalContentAlignment="Center" Margin="0,2,10,0" />
+                <RadioButton Content="Manual update"
+                             Name="ManualUpdateRadioButton"
+                             VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                             Margin="0,2,0,0" />
               </DockPanel>
-              <DockPanel>
-                <TextBlock Text="Show:" Margin="0,0,10,0" />
-                <CheckBox IsChecked="{Binding IsVisualCubeActive}" Name="VisualCubeActiveCheckBox"
-                          Content="Cube"
-                          Margin="0,2,10,0" VerticalContentAlignment="Center" />
-                <CheckBox IsChecked="{Binding IsCoordinateSystemActive}" Content="Vectors"
-                          Name="CoordinateSystemActiveCheckBox"
-                          VerticalContentAlignment="Center" Margin="0,2,10,0" />
-              </DockPanel>
-              <DockPanel>
-                <TextBlock Text="Info:" Margin="0,0,10,0" />
-                <CheckBox IsChecked="{Binding IsFrameRateCounterActive}" Name="ShowFrameRateCheckBox"
-                          Content="Frames"
-                          Margin="0,2,10,0" VerticalContentAlignment="Center" />
-                <CheckBox IsChecked="{Binding IsCameraInfoActive}" Content="Camera"
-                          Name="ShowCameraInfoCheckBox"
-                          VerticalContentAlignment="Center" Margin="0,2,10,0" />
-                <CheckBox IsChecked="{Binding IsRenderInfoActive}" Content="Triangles"
-                          Name="ShowTriangleInfoCheckBox"
-                          VerticalContentAlignment="Center" Margin="0,2,10,0" />
-              </DockPanel>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="5"/>
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Content="Clear visual" Command="{Binding ClearVisualCommand}"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="0" Grid.Column="0"/>
+                <Button Content="Update visual" Command="{Binding UpdateVisualCommand}" 
+                        IsEnabled="{Binding ElementName=ManualUpdateRadioButton, Path=IsChecked}"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="0" Grid.Column="2"/>
+                <Button Content="Reset camera" Click="QuickActionContextMenu_ResetCameraItem_OnClick"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="1" Grid.Column="0"/>
+                <Button Content="Export" Command="{Binding ExportViewCommand}"
+                        CommandParameter="{Binding ElementName=HelixViewport3D, Path=Viewport}"
+                        Margin="{StaticResource App.Margin.VerticalStack}"
+                        Grid.Row="1" Grid.Column="2"
+                        ToolTip="Warning: Async export is currently not supported."/>
+                <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="Image export: " Grid.Column="0"/>
+                  <TextBox Text="{Binding ExportWidth, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                           Grid.Column="1">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                    </TextBox.InputBindings>
+                  </TextBox>
+                  <TextBlock Text=" x " Grid.Column="2"/>
+                  <TextBox Text="{Binding ExportHeight, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+                           Grid.Column="3">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                    </TextBox.InputBindings>
+                  </TextBox>
+                </Grid>
+              </Grid>
             </StackPanel>
           </GroupBox>
           <GroupBox Grid.Row="1">
             <GroupBox.Header>
-              <TextBlock Text="Object layers:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
+              <TextBlock Text="Toggle items:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
+            </GroupBox.Header>
+            <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}"> 
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="5"/>
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <ToggleButton IsChecked="{Binding IsVisualCubeActive}" Name="VisualCubeActiveCheckBox" 
+                              Grid.Row="0" Grid.Column="0"
+                              Content="View cube"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="{Binding IsCoordinateSystemActive}" Content="Coordinate system" 
+                              Grid.Row="0" Grid.Column="2"
+                              Name="CoordinateSystemActiveCheckBox"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="{Binding IsFrameRateCounterActive}" Name="ShowFrameRateCheckBox" 
+                              Grid.Row="1" Grid.Column="0"
+                              Content="Frame info"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                <ToggleButton IsChecked="{Binding IsCameraInfoActive}" Content="Camera info" 
+                              Grid.Row="1" Grid.Column="2"
+                              Name="ShowCameraInfoCheckBox"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}"
+                              VerticalContentAlignment="Center" />
+                <ToggleButton IsChecked="{Binding IsRenderInfoActive}" Content="Triangle info" Grid.Row="2"
+                              Grid.Column="0"
+                              Name="ShowTriangleInfoCheckBox"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+              </Grid>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox Grid.Row="2">
+            <GroupBox.Header>
+              <TextBlock Text="Display groups:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
             </GroupBox.Header>
             <DataGrid ItemsSource="{Binding VisualGroups}" CanUserAddRows="False" CanUserDeleteRows="False"
                       Margin="{StaticResource App.Margin.GroupBoxContent}"
@@ -95,10 +160,10 @@
                 </DataTemplate>
               </DataGrid.RowHeaderTemplate>
               <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}" />
                 <DataGridCheckBoxColumn Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}"
-                                        Header="Visible" />
+                                        Header="Render" />
               </DataGrid.Columns>
             </DataGrid>
           </GroupBox>

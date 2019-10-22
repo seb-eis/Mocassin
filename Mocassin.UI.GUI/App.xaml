@@ -188,7 +188,7 @@
       </Style>
 
       <Style TargetType="{x:Type DataGrid}">
-        <Setter Property="HeadersVisibility" Value="All" />
+        <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="GridLinesVisibility" Value="All"/>
         <Setter Property="RowBackground" Value="White"/>
         <Setter Property="Background" Value="Transparent"/>

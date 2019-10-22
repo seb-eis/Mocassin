@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
@@ -17,6 +18,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public void Dispose()
         {
             HelixViewport3D.DataContext = null;
+        }
+
+        private void QuickActionContextMenu_ResetCameraItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            HelixViewport3D.ResetCamera();
         }
     }
 }

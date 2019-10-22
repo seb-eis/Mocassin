@@ -10,6 +10,7 @@ using HelixToolkit.Wpf;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.Visualizer.Commands;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
@@ -29,6 +30,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private bool isFrameRateCounterActive;
         private bool isCameraInfoActive;
         private bool isRenderInfoActive;
+        private int imageExportScalingFactor;
+        private int exportWidth = 1920 * 2;
+        private int exportHeight = 1080 * 2;
 
         /// <summary>
         ///     Get the default light setup for the visual collection
@@ -122,6 +126,33 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
+        ///     Get or set the scaling factor for image exports
+        /// </summary>
+        public int ImageExportScalingFactor
+        {
+            get => imageExportScalingFactor;
+            set => SetProperty(ref imageExportScalingFactor, Math.Abs(value));
+        }
+
+        /// <summary>
+        ///     Get or set the export width for image exports in pixels
+        /// </summary>
+        public int ExportWidth
+        {
+            get => exportWidth;
+            set => SetProperty(ref exportWidth, Math.Abs(value));
+        }
+
+        /// <summary>
+        ///     Get or set the export height for image exports in pixels
+        /// </summary>
+        public int ExportHeight
+        {
+            get => exportHeight;
+            set => SetProperty(ref exportHeight, Math.Abs(value));
+        }
+
+        /// <summary>
         ///     Get a <see cref="ParameterlessCommand" /> to clear the visual data and reset to minimum contents
         /// </summary>
         public ParameterlessCommand ClearVisualCommand { get; }
@@ -130,6 +161,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         ///     Get a <see cref="ParameterlessCommand" /> to resynchronize the visual collection with the visual groups
         /// </summary>
         public ParameterlessCommand UpdateVisualCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ExportViewCommand"/> to create en export or image of the current viewport
+        /// </summary>
+        public ExportViewportCommand ExportViewCommand { get; }
 
         /// <summary>
         ///     Create sa new <see cref="Viewport3DViewModel" /> with default settings
@@ -142,6 +178,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             ClearVisualCommand = new RelayCommand(ClearVisual);
             UpdateVisualCommand = new RelayCommand(UpdateVisual);
             DefaultLightSetup = new DefaultLights();
+            ExportViewCommand = new ExportViewportCommand(() => (ExportWidth, ExportHeight));
             ClearVisual();
         }
 
