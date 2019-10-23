@@ -7,7 +7,7 @@ namespace Mocassin.UI.Xml.Base
     ///     Base class for all serializable data objects that supply <see cref="ModelParameter" /> conversion for data input
     /// </summary>
     [XmlRoot]
-    public abstract class ModelParameterGraph : ProjectObjectGraph
+    public abstract class ModelParameterGraph : ExtensibleProjectObjectGraph
     {
         /// <summary>
         ///     Get the <see cref="ModelParameter" /> object for the automated data input system of the model management

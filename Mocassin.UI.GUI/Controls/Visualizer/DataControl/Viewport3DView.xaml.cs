@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 {
@@ -12,6 +14,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public Viewport3DView()
         {
             InitializeComponent();
+            BackgroundColorComboBox.SelectedItem = typeof(Colors).GetProperties().First(x => x.Name == "Transparent");
         }
 
         /// <inheritdoc />

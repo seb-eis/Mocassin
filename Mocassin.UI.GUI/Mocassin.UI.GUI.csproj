@@ -289,6 +289,7 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobTranslationCommand.cs" />
     <Compile Include="Controls\Visualizer\Commands\ExportViewportCommand.cs" />
+    <Compile Include="Controls\Visualizer\Commands\ToggleViewportCameraCommand.cs" />
     <Compile Include="StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
@@ -1038,7 +1039,7 @@
     <Compile Include="Controls\Visualizer\Objects\Extensions\MeshBuilderExtensions.cs" />
     <Compile Include="Controls\Visualizer\Objects\Extensions\VisualExtensions.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\ColorToPropertyConverter.cs" />
-    <Compile Include="Controls\Visualizer\Objects\Helper\ModelObject3DViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\ProjectObject3DViewModel.cs" />
     <Compile Include="Controls\Visualizer\DataControl\ModelRenderResourcesViewModel.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />

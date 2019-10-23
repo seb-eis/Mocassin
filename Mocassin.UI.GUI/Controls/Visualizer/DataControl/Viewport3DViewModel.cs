@@ -30,7 +30,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private bool isFrameRateCounterActive;
         private bool isCameraInfoActive;
         private bool isRenderInfoActive;
-        private int imageExportScalingFactor;
         private int exportWidth = 1920 * 2;
         private int exportHeight = 1080 * 2;
 
@@ -126,15 +125,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
-        ///     Get or set the scaling factor for image exports
-        /// </summary>
-        public int ImageExportScalingFactor
-        {
-            get => imageExportScalingFactor;
-            set => SetProperty(ref imageExportScalingFactor, Math.Abs(value));
-        }
-
-        /// <summary>
         ///     Get or set the export width for image exports in pixels
         /// </summary>
         public int ExportWidth
@@ -168,6 +158,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public ExportViewportCommand ExportViewCommand { get; }
 
         /// <summary>
+        ///     Get the <see cref="ToggleViewportCameraCommand"/> to switch the camera modes
+        /// </summary>
+        public  ToggleViewportCameraCommand ToggleCameraCommand { get; }
+
+        /// <summary>
         ///     Create sa new <see cref="Viewport3DViewModel" /> with default settings
         /// </summary>
         public Viewport3DViewModel()
@@ -179,6 +174,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             UpdateVisualCommand = new RelayCommand(UpdateVisual);
             DefaultLightSetup = new DefaultLights();
             ExportViewCommand = new ExportViewportCommand(() => (ExportWidth, ExportHeight));
+            ToggleCameraCommand = new ToggleViewportCameraCommand();
             ClearVisual();
         }
 
@@ -234,6 +230,17 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 
             visualGroup.PropertyChanged += AutoUpdateVisualInternal;
             ExecuteOnDispatcher(() => VisualGroups.Add(visualGroup));
+        }
+
+        /// <summary>
+        ///     Adds a single <see cref="Visual3D" /> object as a new named <see cref="IVisualGroupViewModel" />
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <param name="name"></param>
+        /// <param name="isVisible"></param>
+        public void AddVisualGroup(Visual3D visual, string name, bool isVisible = true)
+        {
+            AddVisualGroup(visual.AsSingleton(), name, isVisible);
         }
 
         /// <summary>

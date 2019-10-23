@@ -10,10 +10,9 @@ namespace Mocassin.UI.Xml.Base
     ///     Base class for all serializable data objects that supply <see cref="ModelObject" /> conversion for data input
     /// </summary>
     [XmlRoot]
-    public abstract class ModelObjectGraph : ProjectObjectGraph
+    public abstract class ModelObjectGraph : ExtensibleProjectObjectGraph
     {
         private string key;
-        private ResourcesGraph resources;
 
         /// <summary>
         ///     The key of the model object. Has to be unique within the object graph type group
@@ -25,17 +24,6 @@ namespace Mocassin.UI.Xml.Base
         {
             get => key;
             set => SetProperty(ref key, value);
-        }
-
-        /// <summary>
-        ///     Get or set the <see cref="ResourcesGraph" /> for attached properties
-        /// </summary>
-        [XmlIgnore]
-        [NotMapped]
-        public ResourcesGraph Resources
-        {
-            get => resources;
-            set => SetProperty(ref resources, value);
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     customization
     /// </summary>
     [XmlRoot]
-    public class GroupEnergySetGraph : ProjectObjectGraph, IComparable<GroupEnergySetGraph>, IDuplicable<GroupEnergySetGraph>
+    public class GroupInteractionGraph : ProjectObjectGraph, IComparable<GroupInteractionGraph>, IDuplicable<GroupInteractionGraph>
     {
         private ModelObjectReferenceGraph<GroupInteraction> groupInteraction;
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
@@ -88,13 +88,13 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Creates a new serializable <see cref="GroupEnergySetGraph" /> by pulling all data defined in the passed
+        ///     Creates a new serializable <see cref="GroupInteractionGraph" /> by pulling all data defined in the passed
         ///     <see cref="IGroupEnergySetter" /> context and <see cref="ProjectModelGraph"/> parent
         /// </summary>
         /// <param name="energySetter"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static GroupEnergySetGraph Create(IGroupEnergySetter energySetter, ProjectModelGraph parent)
+        public static GroupInteractionGraph Create(IGroupEnergySetter energySetter, ProjectModelGraph parent)
         {
             if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
@@ -105,7 +105,7 @@ namespace Mocassin.UI.Xml.Customization
             var centerPosition =
                 parent.StructureModelGraph.UnitCellPositions.Single(x => x.Key == energySetter.GroupInteraction.CenterUnitCellPosition.Key);
 
-            var obj = new GroupEnergySetGraph
+            var obj = new GroupInteractionGraph
             {
                 Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
                 GroupInteractionIndex = energySetter.GroupInteraction.Index,
@@ -120,7 +120,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public int CompareTo(GroupEnergySetGraph other)
+        public int CompareTo(GroupInteractionGraph other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (other is null) return 1;
@@ -132,9 +132,9 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public GroupEnergySetGraph Duplicate()
+        public GroupInteractionGraph Duplicate()
         {
-            var copy = new GroupEnergySetGraph
+            var copy = new GroupInteractionGraph
             {
                 Name = Name,
                 groupInteraction = groupInteraction.Duplicate(),

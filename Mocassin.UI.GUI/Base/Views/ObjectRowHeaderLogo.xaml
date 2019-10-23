@@ -10,32 +10,23 @@
              Background="Transparent">
 
   <UserControl.Resources>
-    <Style TargetType="{x:Type TextBlock}" x:Key="ShadowTextStyle">
-      <Setter Property="FontSize" Value="14" />
-      <Setter Property="Foreground" Value="White" />
-      <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
     <Border x:Key="ObjectBorder"
-            Opacity=".75" Width="20" Height="20" CornerRadius="50"
-            BorderBrush="Black" BorderThickness="0"
-            Padding="0,0,0,1">
+            Opacity=".75" Width="20" Height="20" CornerRadius="20"
+            BorderBrush="Black" BorderThickness="4"
+            Padding="0,0,0,0">
+      <Border.Effect>
+        <DropShadowEffect BlurRadius="4" Opacity=".75" ShadowDepth="2"/>
+      </Border.Effect>
       <Border.Background>
         <RadialGradientBrush GradientOrigin=".25,.25" po:Freeze="True">
           <GradientStop Color="LightBlue" Offset="0.0" />
-          <GradientStop Color="Blue" Offset="0.5" />
-          <GradientStop Color="Black" Offset="1.0" />
+          <GradientStop Color="DarkBlue" Offset="0.5" />
+          <GradientStop Color="LightBlue" Offset="1.0" />
         </RadialGradientBrush>
       </Border.Background>
     </Border>
   </UserControl.Resources>
   <Grid>
     <ContentPresenter Content="{StaticResource ObjectBorder}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    <TextBlock Style="{StaticResource ShadowTextStyle}" Text="{Binding TargetNullValue=M}"
-               Margin="-1,0,0,1">
-      <TextBlock.Effect>
-        <DropShadowEffect ShadowDepth="1" Direction="330" Color="Black" Opacity="1" BlurRadius="4" />
-      </TextBlock.Effect>
-    </TextBlock>
   </Grid>
 </UserControl>

@@ -6,9 +6,16 @@
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.Visualizer.DataControl"
              xmlns:h="http://helix-toolkit.org/wpf"
              xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+             xmlns:objects="clr-namespace:Mocassin.UI.GUI.Controls.Visualizer.Objects"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:Viewport3DViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
+  <UserControl.Resources>
+    <objects:ColorToPropertyConverter x:Key="ColorConverter" />
+    <ObjectDataProvider x:Key="ColorProvider" ObjectInstance="{x:Type Colors}" MethodName="GetProperties" />
+    <system:Double x:Key="RenderAreaLabelWidth">50</system:Double>
+  </UserControl.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
@@ -21,7 +28,8 @@
                        ShowFrameRate="{Binding IsFrameRateCounterActive}"
                        ShowCameraInfo="{Binding IsCameraInfoActive}"
                        ShowTriangleCountInfo="{Binding IsRenderInfoActive}"
-                       LimitFPS="True" />
+                       LimitFPS="True"
+                       Background="{Binding ElementName=BackgroundColorComboBox, Path=Text}"/>
     <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
       <Expander.Header>
         <TextBlock Text="Viewer options:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"
@@ -75,10 +83,10 @@
                         Margin="{StaticResource App.Margin.VerticalStack}"
                         Grid.Row="1" Grid.Column="0"/>
                 <Button Content="Export" Command="{Binding ExportViewCommand}"
-                        CommandParameter="{Binding ElementName=HelixViewport3D, Path=Viewport}"
+                        CommandParameter="{Binding ElementName=HelixViewport3D}"
                         Margin="{StaticResource App.Margin.VerticalStack}"
                         Grid.Row="1" Grid.Column="2"
-                        ToolTip="Warning: Async export is currently not supported."/>
+                        ToolTip="Warning: Async image export is currently not supported."/>
                 <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -116,6 +124,7 @@
                   <RowDefinition />
                   <RowDefinition />
                   <RowDefinition />
+                  <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition />
@@ -126,7 +135,7 @@
                               Grid.Row="0" Grid.Column="0"
                               Content="View cube"
                               Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
-                <ToggleButton IsChecked="{Binding IsCoordinateSystemActive}" Content="Coordinate system" 
+                <ToggleButton IsChecked="{Binding IsCoordinateSystemActive}" Content="View arrows" 
                               Grid.Row="0" Grid.Column="2"
                               Name="CoordinateSystemActiveCheckBox"
                               Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
@@ -142,7 +151,36 @@
                 <ToggleButton IsChecked="{Binding IsRenderInfoActive}" Content="Triangle info" Grid.Row="2"
                               Grid.Column="0"
                               Name="ShowTriangleInfoCheckBox"
-                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" />
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}"/>
+                <ToggleButton IsChecked="True"
+                              Grid.Row="2" Grid.Column="2"
+                              Name="CameraSwitchToggleButton"
+                              Background="Transparent" Margin="{StaticResource App.Margin.VerticalStack}" 
+                              Command="{Binding ToggleCameraCommand}" CommandParameter="{Binding ElementName=HelixViewport3D}"
+                              ToolTip="Orthographic/Perspective camera">
+                  <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
+                      <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                          <Setter Property="Content" Value="Perspective"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                          <Setter Property="Content" Value="Orthographic"/>
+                        </Trigger>
+                      </Style.Triggers>
+                    </Style>
+                  </ToggleButton.Style>
+                </ToggleButton>
+                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
+                        BorderThickness="0,0,0,2" 
+                        BorderBrush="{Binding ElementName=BackgroundColorComboBox, Path=Text}">
+                  <ComboBox ToolTip="Background color"
+                            ItemsSource="{Binding Source={StaticResource ColorProvider}}" 
+                            Style="{StaticResource App.Style.ColorSelectionComboBox}"
+                            IsEditable="True"
+                            DisplayMemberPath="Name"
+                            Name="BackgroundColorComboBox"/>
+                </Border>
               </Grid>
             </StackPanel>
           </GroupBox>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Structures;
@@ -15,7 +16,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     customization
     /// </summary>
     [XmlRoot]
-    public class PairEnergySetGraph : ProjectObjectGraph, IComparable<PairEnergySetGraph>, IDuplicable<PairEnergySetGraph>
+    public class PairInteractionGraph : ExtensibleProjectObjectGraph, IComparable<PairInteractionGraph>, IDuplicable<PairInteractionGraph>
     {
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
         private ModelObjectReferenceGraph<UnitCellPosition> partnerPosition;
@@ -109,13 +110,13 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Creates a new serializable <see cref="PairEnergySetGraph" /> by pulling all data defined in the passed
+        ///     Creates a new serializable <see cref="PairInteractionGraph" /> by pulling all data defined in the passed
         ///     <see cref="IPairEnergySetter" /> context and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="energySetter"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static PairEnergySetGraph Create(IPairEnergySetter energySetter, ProjectModelGraph parent)
+        public static PairInteractionGraph Create(IPairEnergySetter energySetter, ProjectModelGraph parent)
         {
             if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
@@ -126,7 +127,7 @@ namespace Mocassin.UI.Xml.Customization
             var partnerPosition =
                 parent.StructureModelGraph.UnitCellPositions.Single(x => x.Key == energySetter.PairInteraction.Position1.Key);
 
-            var obj = new PairEnergySetGraph
+            var obj = new PairInteractionGraph
             {
                 Name = $"Pair.Energy.Set.{energySetter.PairInteraction.Index}",
                 PairInteractionIndex = energySetter.PairInteraction.Index,
@@ -144,7 +145,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public int CompareTo(PairEnergySetGraph other)
+        public int CompareTo(PairInteractionGraph other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (other is null) return 1;
@@ -166,9 +167,9 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public PairEnergySetGraph Duplicate()
+        public PairInteractionGraph Duplicate()
         {
-            var copy = new PairEnergySetGraph
+            var copy = new PairInteractionGraph
             {
                 Name = Name,
                 centerPosition = centerPosition.Duplicate(),
@@ -180,6 +181,16 @@ namespace Mocassin.UI.Xml.Customization
                 pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToList()
             };
             return copy;
+        }
+
+        /// <summary>
+        ///     Gets the interaction geometry as a <see cref="Fractional3D"/> path (Yields always two positions)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Fractional3D> AsVectorPath()
+        {
+            yield return new Fractional3D(StartVector.A, StartVector.B, StartVector.C);
+            yield return new Fractional3D(EndVector.A, EndVector.B, EndVector.C);
         }
 
         /// <inheritdoc />

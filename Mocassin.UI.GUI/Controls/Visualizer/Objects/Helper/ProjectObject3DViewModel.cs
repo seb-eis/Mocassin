@@ -8,9 +8,9 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
-    ///     A <see cref="ViewModelBase" /> for managing display data of <see cref="ModelObjectGraph" /> instances
+    ///     A <see cref="ViewModelBase" /> for managing display data resources on <see cref="ExtensibleProjectObjectGraph" /> instances
     /// </summary>
-    public class ModelObject3DViewModel : ViewModelBase
+    public class ProjectObject3DViewModel : ViewModelBase
     {
         private static string ResourceKey_Color => Resources.ResourceKey_ModelObject_RenderColor;
         private static string ResourceKey_Scaling => Resources.ResourceKey_ModelObject_RenderScaling;
@@ -21,9 +21,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         private static double ResourceDefault_MeshQuality => Settings.Default.Default_Render_Mesh_Quality;
 
         /// <summary>
-        ///     Get the <see cref="ModelObjectGraph" /> that the formatting is valid for
+        ///     Get the <see cref="ExtensibleProjectObjectGraph" /> that the formatting is valid for
         /// </summary>
-        public ModelObjectGraph ObjectGraph { get; }
+        public ExtensibleProjectObjectGraph ObjectGraph { get; }
 
         /// <summary>
         ///     Get or set the <see cref="System.Windows.Media.Color" /> for the object
@@ -82,10 +82,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Creates new <see cref="ModelObject3DViewModel" />
+        ///     Creates new <see cref="ProjectObject3DViewModel" /> from the provided <see cref="ExtensibleProjectObjectGraph"/>
         /// </summary>
         /// <param name="objectGraph"></param>
-        public ModelObject3DViewModel(ModelObjectGraph objectGraph)
+        public ProjectObject3DViewModel(ExtensibleProjectObjectGraph objectGraph)
         {
             ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
         }
