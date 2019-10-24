@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
-using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
@@ -152,7 +151,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Generates the <see cref="ProjectObject3DViewModel" /> instances for all displayable <see cref="ExtensibleProjectObjectGraph" />
+        ///     Generates the <see cref="ProjectObject3DViewModel" /> instances for all displayable
+        ///     <see cref="ExtensibleProjectObjectGraph" />
         ///     instances in the content source
         /// </summary>
         public void UpdateObjectViewModels()
@@ -175,7 +175,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObject3DViewModel" /> for the passed <see cref="ExtensibleProjectObjectGraph" /> or creates a new one
+        ///     Get the <see cref="ProjectObject3DViewModel" /> for the passed <see cref="ExtensibleProjectObjectGraph" /> or
+        ///     creates a new one
         ///     if none exists
         /// </summary>
         /// <param name="objectGraph"></param>
@@ -208,11 +209,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
                 foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
                     VisualViewModel.AddVisualGroup(CreateTransitionVisuals(item), item.Name, GetProjectObjectViewModel(item).IsVisible);
-
-                var test1 = new PairInteractionGraph {StartVector = new VectorGraph3D {A = 0, B = 0, C = 0}, EndVector = new VectorGraph3D {A = .25, B = .25, C = .25}};
-                var test2 = new PairInteractionGraph {StartVector = new VectorGraph3D {A = 0.75, B = 0.25, C = 0.25}, EndVector = new VectorGraph3D {A = .25, B = .25, C = .25}};
-                VisualViewModel.AddVisualGroup(CreatePairInteractionVisual(test1), "Test interaction 1");
-                VisualViewModel.AddVisualGroup(CreatePairInteractionVisual(test2), "Test interaction 2");
 
                 if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
             }
@@ -355,24 +351,31 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var points3D = new Point3DCollection(fractionalPath.Count * transforms.Count);
             var (point0, point1) = (VectorTransformer.ToCartesian(fractionalPath[0]).AsPoint3D(), VectorTransformer.ToCartesian(fractionalPath[1]).AsPoint3D());
 
-            var renderArea = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
             foreach (var (startPoint, endPoint) in transforms.Select(x => (x.Transform(point0), x.Transform(point1))))
             {
-                if (!RenderAreaContainsPoint(endPoint, renderArea.StartVector, renderArea.EndVector)) continue;
-                if (!RenderAreaContainsPoint(startPoint, renderArea.StartVector, renderArea.EndVector)) continue;
+                if (!RenderAreaContainsPoint(endPoint, renderAreaStart, renderAreaEnd)) continue;
+                if (!RenderAreaContainsPoint(startPoint, renderAreaStart, renderAreaEnd)) continue;
                 points3D.Add(startPoint);
                 points3D.Add(endPoint);
             }
-            points3D.Freeze();
 
-            var result = ExecuteOnDispatcher(() => new LinesVisual3D {Points = points3D, Color = objectVm.Color, Thickness = objectVm.Scaling});
+            var result = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(points3D));
+            result.Color = objectVm.Color;
+            result.Thickness = objectVm.Scaling;
             return result;
         }
 
-        private IList<MeshGeometry3D> CreateGroupInteractionVisuals()
+        /// <summary>
+        ///     Creates a <see cref="MeshGeometryVisual3D" /> for visualization of a <see cref="PairInteractionGraph" />
+        /// </summary>
+        /// <param name="interactionGraph"></param>
+        /// <returns></returns>
+        private IList<MeshGeometryVisual3D> CreateGroupInteractionVisuals(GroupInteractionGraph interactionGraph)
         {
-            var builder = new MeshBuilder();
-            return null;
+            var result = new List<MeshGeometryVisual3D>();
+            var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(interactionGraph.AsVectorPath());
+            return result;
         }
 
         /// <summary>
@@ -448,7 +451,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <param name="point"></param>
         /// <param name="renderAreaStart"></param>
         /// <param name="renderAreaEnd"></param>
-        /// <param name="strictUpper"></param>
+        /// <param name="includeUpper"></param>
         /// <param name="includeLower"></param>
         /// <returns></returns>
         private bool RenderAreaContainsPoint(in Point3D point, in Fractional3D renderAreaStart, in Fractional3D renderAreaEnd, bool includeLower = true,

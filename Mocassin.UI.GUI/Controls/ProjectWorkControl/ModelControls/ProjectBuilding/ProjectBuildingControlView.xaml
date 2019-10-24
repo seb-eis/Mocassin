@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:ProjectBuildingControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -33,7 +34,7 @@
         <Grid>
 
           <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
@@ -42,8 +43,7 @@
             <ColumnDefinition Width="100*" />
           </Grid.ColumnDefinitions>
 
-          <GroupBox Grid.Column="0" Grid.RowSpan="2" Name="BuildGraphControlGroupBox"
-                    Visibility="{Binding ContentSource, Converter={converter:NullToVisibilityConverter}}">
+          <GroupBox Grid.Column="0" Grid.Row="0" Name="BuildGraphControlGroupBox">
             <GroupBox.Header>
               <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
                 <Run Text="Translation job definition:" />
@@ -56,8 +56,7 @@
                                                       Margin="{StaticResource App.Margin.GroupBoxContent}" />
           </GroupBox>
 
-          <GroupBox Grid.Row="0" Grid.Column="2"
-                    Visibility="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem, Converter={converter:NullToVisibilityConverter}}">
+          <GroupBox Grid.Row="1" Grid.Column="0">
             <GroupBox.Header>
               <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
                 <Run
@@ -70,6 +69,20 @@
 
             <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}"
                                                        Margin="{StaticResource App.Margin.GroupBoxContent}" />
+          </GroupBox>
+          <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+            <GroupBox.Header>
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+                <Run Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}{0} -, TargetNullValue=??? -}" />
+                <Run Text="Meta table:" />
+                <Run Text="[?]" ToolTip="Meta data table of the last build job."
+                     Style="{StaticResource App.Style.Run.Keyword}" />
+              </TextBlock>
+            </GroupBox.Header>
+            <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}" 
+                      ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
+                      IsReadOnly="True">
+            </DataGrid>
           </GroupBox>
         </Grid>
       </TabItem>

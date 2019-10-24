@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -11,10 +12,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
     /// </summary>
     public partial class Viewport3DView : UserControl, IDisposable
     {
+        /// <summary>
+        ///     Get the <see cref="PropertyInfo"/> for the default <see cref="Color"/> property
+        /// </summary>
+        private static PropertyInfo DefaultColorPropertyInfo { get; }
+
+        static Viewport3DView()
+        {
+            DefaultColorPropertyInfo = typeof(Colors).GetProperties().First(x => x.Name == "Transparent");
+        }
+
         public Viewport3DView()
         {
             InitializeComponent();
-            BackgroundColorComboBox.SelectedItem = typeof(Colors).GetProperties().First(x => x.Name == "Transparent");
+            BackgroundColorComboBox.SelectedItem = DefaultColorPropertyInfo;
         }
 
         /// <inheritdoc />

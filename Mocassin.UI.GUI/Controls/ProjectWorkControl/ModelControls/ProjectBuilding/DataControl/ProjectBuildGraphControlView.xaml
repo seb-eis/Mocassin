@@ -41,16 +41,12 @@
         <DataGridTextColumn Header="Name"
                             Binding="{Binding Name}" />
 
-        <DataGridTextColumn Header="Model Source"
-                            Binding="{Binding ProjectModelGraph.Parent.Name}"
-                            IsReadOnly="True"/>
-
-        <comboBox:BindableDataGridComboBoxColumn Header="Customization Source"
+        <comboBox:BindableDataGridComboBoxColumn Header="Customization"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.ProjectCustomizationGraphs}"
                                                  SelectedItemBinding="{Binding ProjectCustomizationGraph}"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Job Definition Source"
+        <comboBox:BindableDataGridComboBoxColumn Header="Job Definition"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.ProjectJobTranslationGraphs}"
                                                  SelectedItemBinding="{Binding ProjectJobTranslationGraph}"
                                                  DisplayMemberPath="Name" />

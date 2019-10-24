@@ -96,15 +96,15 @@
                   </Grid.ColumnDefinitions>
                   <TextBlock Text="Image export: " Grid.Column="0"/>
                   <TextBox Text="{Binding ExportWidth, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                           Grid.Column="1">
+                           Grid.Column="1" HorizontalContentAlignment="Right">
                     <TextBox.InputBindings>
                       <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
                     </TextBox.InputBindings>
                   </TextBox>
-                  <TextBlock Text=" x " Grid.Column="2"/>
+                  <TextBlock Text="x" Grid.Column="2"/>
                   <TextBox Text="{Binding ExportHeight, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                           Grid.Column="3">
+                           Grid.Column="3" HorizontalContentAlignment="Left">
                     <TextBox.InputBindings>
                       <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                                   CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>

@@ -19,6 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 return !(buildStatus == LibraryBuildStatus.Unknown ||
                        buildStatus == LibraryBuildStatus.BuildProcessCompleted ||
                        buildStatus == LibraryBuildStatus.BuildingLibrary ||
+                       buildStatus == LibraryBuildStatus.Cancel ||
                        buildStatus.ToString().Contains("Error"));
             }
 

@@ -1,9 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.EntityFrameworkCore;
+using Mocassin.Framework.SQLiteCore;
+using Mocassin.Model.Translator;
+using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.IO;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Main;
@@ -17,17 +25,38 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
     /// </summary>
     public class LocalProjectDeployControlViewModel : ProjectGraphControlViewModel
     {
-        private string filePath;
+        private string buildTargetFilePath;
         private readonly UserFileSelectionSource fileSelectionSource;
         private int maxJobs;
         private int doneJobs;
         private LibraryBuildStatus buildStatus;
+        private bool isManualLibrarySaving;
+
+        /// <summary>
+        ///     Get or set the last build <see cref="ISimulationLibrary"/>
+        /// </summary>
+        private ISimulationLibrary BuildSimulationLibrary { get; set; }
+
+        /// <summary>
+        ///     Get or set the <see cref="CancellationTokenSource"/> for the build process
+        /// </summary>
+        private CancellationTokenSource BuildCancellationTokenSource { get; set; }
 
         /// <summary>
         ///     Get the <see cref="CollectionControlViewModel{T}" /> for all selectable <see cref="MocassinProjectBuildGraph" />
         ///     instances
         /// </summary>
         public CollectionControlViewModel<MocassinProjectBuildGraph> ProjectBuildGraphCollectionViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="CollectionControlViewModel{T}" /> for selection of meta data information
+        /// </summary>
+        public  ObservableCollectionViewModel<JobMetaDataEntity> JobMetaDataCollectionControlViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for progress console message <see cref="string"/> values with time info
+        /// </summary>
+        public ObservableCollectionViewModel<Tuple<DateTime, string>> LogConsoleMessages { get; }
 
         /// <summary>
         ///     Get a <see cref="ICommand" /> to request a file selection through the <see cref="UserFileSelectionSource" />
@@ -40,12 +69,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         public ICommand WriteDatabaseCommand { get; }
 
         /// <summary>
+        ///     Get the <see cref="ICommand" /> to write the translation database to the selected file target
+        /// </summary>
+        public ICommand CancelCurrentBuildCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ICommand" /> to manually save the last build library
+        /// </summary>
+        public ICommand ManualSaveLastLibraryCommand { get; }
+
+        /// <summary>
         ///     Get or set the file name <see cref="string" /> that is used for project building
         /// </summary>
-        public string FilePath
+        public string BuildTargetFilePath
         {
-            get => filePath;
-            set => SetProperty(ref filePath, value);
+            get => buildTargetFilePath;
+            set => SetProperty(ref buildTargetFilePath, value);
         }
 
         /// <summary>
@@ -67,6 +106,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
+        ///     Get or set a boolean flag if the library saving should be done manually
+        /// </summary>
+        public bool IsManualLibrarySaving
+        {
+            get => isManualLibrarySaving;
+            set => SetProperty(ref isManualLibrarySaving, value);
+        }
+
+        /// <summary>
         ///     Get or set the current <see cref="LibraryBuildStatus" />
         /// </summary>
         public LibraryBuildStatus BuildStatus
@@ -81,9 +129,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             : base(projectControl)
         {
             ProjectBuildGraphCollectionViewModel = projectBuildGraphCollectionViewModel;
+            LogConsoleMessages = new ObservableCollectionViewModel<Tuple<DateTime, string>>(1000);
             fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles();
-            GetFileSelectionCommand = new RelayCommand(() => FilePath = fileSelectionSource.GetFileSelection());
+            GetFileSelectionCommand = new RelayCommand(() => BuildTargetFilePath = fileSelectionSource.GetFileSelection());
             WriteDatabaseCommand = GetWriteDatabaseCommand();
+            JobMetaDataCollectionControlViewModel = new ObservableCollectionViewModel<JobMetaDataEntity>();
+            PropertyChanged += OnLibraryStatusChanged;
+            CancelCurrentBuildCommand = GetCancelBuildCommand();
+            ManualSaveLastLibraryCommand = GetManualSaveLibraryCommand();
+            AddConsoleMessage(GetStartupMessage());
         }
 
         /// <inheritdoc />
@@ -94,6 +148,58 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
+        ///     Get a <see cref="AsyncRelayCommand"/> to manually save the last <see cref="ISimulationLibrary"/> to its target file
+        /// </summary>
+        /// <returns></returns>
+        private AsyncRelayCommand GetManualSaveLibraryCommand()
+        {
+            void Execute()
+            {
+                BuildStatus = LibraryBuildStatus.SavingLibraryContents;
+                try
+                {
+                    BuildSimulationLibrary.SaveChanges();
+                    AddConsoleMessage("Reloading meta information table.");
+                    JobMetaDataCollectionControlViewModel.ClearCollection();
+                    JobMetaDataCollectionControlViewModel.AddCollectionItems(BuildSimulationLibrary.JobMetaData.Local);
+                }
+                catch (Exception e)
+                {
+                    AddConsoleError(e);
+                }
+                BuildStatus = LibraryBuildStatus.Unknown;
+            }
+
+            bool CanExecute()
+            {
+                return BuildSimulationLibrary != null;
+            }
+            return new AsyncRelayCommand(() => Task.Run(Execute), CanExecute);
+        }
+
+        /// <summary>
+        ///     Get a startup message <see cref="string"/> for the console
+        /// </summary>
+        /// <returns></returns>
+        private string GetStartupMessage()
+        {
+            return $"Async build with {Environment.ProcessorCount} cores.";
+        }
+
+        /// <summary>
+        ///     Get a <see cref="RelayCommand"/> to cancel the build process
+        /// </summary>
+        /// <returns></returns>
+        private RelayCommand GetCancelBuildCommand()
+        {
+            bool CanExecute()
+            {
+                return  BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
+            }
+            return new RelayCommand(() => BuildCancellationTokenSource.Cancel(), CanExecute);
+        }
+
+        /// <summary>
         ///     Builds an <see cref="AsyncRelayCommand" /> to create and write the job database
         /// </summary>
         /// <returns></returns>
@@ -101,28 +207,66 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             bool CanExecute()
             {
-                return !string.IsNullOrWhiteSpace(filePath) 
+                return !string.IsNullOrWhiteSpace(buildTargetFilePath) 
+                       && BuildCancellationTokenSource == null
                        && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationGraph != null
                        && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobTranslationGraph != null;
             }
+            return new AsyncRelayCommand(StartBuildProcess, CanExecute);
+        }
 
-            async Task Execute()
+        /// <summary>
+        ///     Executes the build process with the current status of the object
+        /// </summary>
+        private async Task StartBuildProcess()
+        {
+            BuildCancellationTokenSource = new CancellationTokenSource();
+            AddConsoleMessage($"Deployment start: {BuildTargetFilePath}");
+            using (var builder = new MocassinSimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving})
             {
-                var builder = new MocassinSimulationLibraryBuilder();
-                builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, e => SendCallErrorMessage(e));
+                BuildSimulationLibrary?.Dispose();
+                BuildSimulationLibrary = null;
+
+                builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, AddConsoleError);
                 builder.JobBuildCounterNotifications.Subscribe(UpdateBuildCountsOnMayorStep);
 
                 var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedItem;
-                var result = await Task.Run(() => builder.BuildLibrary(buildGraph, FilePath, ProjectControl.CreateModelProject()));
-                if (result != null)
+                var cancellationToken = BuildCancellationTokenSource.Token;
+                BuildSimulationLibrary = await Task.Run(() 
+                    => builder.BuildLibrary(buildGraph, BuildTargetFilePath, ProjectControl.CreateModelProject(), cancellationToken), cancellationToken);
+                if (BuildSimulationLibrary != null)
                 {
-                    SendCallInfoMessage($"Simulations deployed @ {FilePath}");
-                    return;
+                    AddConsoleMessage("Loading meta information table.");
+                    JobMetaDataCollectionControlViewModel.ClearCollection();
+                    JobMetaDataCollectionControlViewModel.AddCollectionItems(BuildSimulationLibrary.JobMetaData.Local);
+                    AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
                 }
-                BuildStatus = LibraryBuildStatus.Error;
-            }
+                else
+                {
+                    AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");   
+                }
 
-            return new AsyncRelayCommand(Execute, CanExecute);
+                BuildCancellationTokenSource.Dispose();
+                BuildCancellationTokenSource = null;   
+            }
+        }
+
+        /// <summary>
+        ///     Adds a standard formatted message to the progress console
+        /// </summary>
+        /// <param name="message"></param>
+        private void AddConsoleMessage(string message)
+        {
+            LogConsoleMessages.AddCollectionItem(Tuple.Create(DateTime.Now, message));
+        }
+
+        /// <summary>
+        ///     Add a standard formatted <see cref="Exception"/> message to the progress console
+        /// </summary>
+        /// <param name="exception"></param>
+        private void AddConsoleError(Exception exception)
+        {
+            AddConsoleMessage($"Exception: {exception.GetType()}");
         }
 
         /// <summary>
@@ -137,6 +281,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             if (!(done == 1 || done == total || done % div == 0)) return;
             MaxJobs = total;
             DoneJobs = done;
+        }
+
+        /// <summary>
+        ///     Action that is called when the <see cref="BuildStatus"/> changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnLibraryStatusChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(BuildStatus))
+            {
+                AddConsoleMessage($"Build status changed to {BuildStatus}.");
+            }
         }
     }
 }

@@ -111,9 +111,10 @@
               </StackPanel>
             </Grid>
           </GroupBox>
+
           <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <GroupBox.Header>
-              <TextBlock Text="Visual objects:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+              <TextBlock Text="Model object settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
             </GroupBox.Header>
             <DataGrid ItemsSource="{Binding ModelObjectViewModels.ObservableItems}" CanUserAddRows="False"
                       Margin="{StaticResource App.Margin.GroupBoxContent}"
@@ -140,6 +141,16 @@
                 <DataGridCheckBoxColumn Header="Visible (Default)" Binding="{Binding IsVisible}"/>
               </DataGrid.Columns>
             </DataGrid>
+          </GroupBox>
+
+          <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+            <GroupBox.Header>
+              <TextBlock Text="Interaction object settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+            </GroupBox.Header>
+            <StackPanel>
+              <ComboBox ItemsSource="{Binding ContentSource.ProjectCustomizationGraphs}" IsEditable="True"
+                        Name="CustomizationComboBox"/>
+            </StackPanel>
           </GroupBox>
         </Grid>
       </TabItem>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Extensions;
@@ -62,16 +63,16 @@ namespace Mocassin.Model.Translator.EntityBuilder
         }
 
         /// <inheritdoc />
-        public SimulationJobPackageModel BuildJobPackageModel(IJobCollection jobCollection)
+        public SimulationJobPackageModel BuildJobPackageModel(IJobCollection jobCollection, CancellationToken cancellationToken = default)
         {
             PrepareBuildComponents();
-
+            if (cancellationToken.IsCancellationRequested) throw new TaskCanceledException();
             var simulationModel = ProjectModelContext.SimulationModelContext.FindSimulationModel(jobCollection.GetSimulation());
             if (simulationModel == null)
                 throw new ArgumentException("Simulation cannot be found in the project model context");
 
             var packageModel = CreatePackageModel(simulationModel);
-            var jobModelTasks = GetJobModelBuildTasks(simulationModel, jobCollection);
+            var jobModelTasks = GetJobModelBuildTasks(simulationModel, jobCollection, cancellationToken);
             Task.WhenAll(jobModelTasks).Wait();
 
             packageModel.JobModels = new List<SimulationJobModel>(jobModelTasks.Count);
@@ -118,7 +119,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <param name="simulationModel"></param>
         /// <param name="jobCollection"></param>
         /// <returns></returns>
-        protected IList<Task<SimulationJobModel>> GetJobModelBuildTasks(ISimulationModel simulationModel, IJobCollection jobCollection)
+        protected IList<Task<SimulationJobModel>> GetJobModelBuildTasks(ISimulationModel simulationModel, IJobCollection jobCollection, CancellationToken cancellationToken = default)
         {
             var result = new List<Task<SimulationJobModel>>();
 
@@ -130,7 +131,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
                     var jobModel = GetJobModel(simulationModel, jobConfiguration, jobCollection);
                     JobIsBuildEvent.OnNext(index++);
                     return jobModel;
-                });
+                }, cancellationToken);
                 result.Add(jobModelTask);
             }
 

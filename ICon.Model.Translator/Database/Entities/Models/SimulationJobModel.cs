@@ -129,5 +129,11 @@ namespace Mocassin.Model.Translator
         [NotMapped]
         [OwnedBlobProperty(nameof(RoutineDataBinary))]
         public RoutineDataEntity RoutineData { get; set; }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"Job.{Id}";
+        }
     }
 }

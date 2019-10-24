@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Mocassin.Framework.Events;
+using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator;
@@ -24,6 +26,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     {
         Unknown,
         Error,
+        Cancel,
         BuildProcessCompleted,
         BuildProcessStarted,
         PreparingModelProject,
@@ -46,10 +49,20 @@ namespace Mocassin.UI.Xml.ProjectBuilding
     ///     Build system that translates <see cref="MocassinProjectBuildGraph" /> instances into
     ///     <see cref="ISimulationLibrary" /> interfaces
     /// </summary>
-    public class MocassinSimulationLibraryBuilder
+    public class MocassinSimulationLibraryBuilder : IDisposable
     {
         private readonly object lockObject = new object();
         private int BuildCounter { get; set; }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the builder should save the context after the process
+        /// </summary>
+        public bool IsAutoSaveAfterBuild { get; set; }
+
+        /// <summary>
+        ///     Get or set the <see cref="CancellationToken"/> for the build process
+        /// </summary>
+        private CancellationToken CancellationToken { get; set; }
 
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> for distribution of <see cref="LibraryBuildStatus" /> notifications
@@ -90,29 +103,42 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         /// <param name="projectBuildGraph"></param>
         /// <param name="filePath"></param>
         /// <param name="modelProject"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public ISimulationLibrary BuildLibrary(MocassinProjectBuildGraph projectBuildGraph, string filePath,
-            IModelProject modelProject)
+            IModelProject modelProject, CancellationToken cancellationToken = default)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessStarted);
-
-            if (!TryPrepareLibraryContext(filePath, out var libraryContext))
+            CancellationToken = cancellationToken;
+            if (CancelRequested() || !TryPrepareLibraryContext(filePath, out var libraryContext))
                 return null;
-            if (!TryPrepareModelProject(projectBuildGraph.ProjectModelGraph, modelProject))
+            if (CancelRequested() ||!TryPrepareModelProject(projectBuildGraph.ProjectModelGraph, modelProject))
                 return null;
-            if (!TryPrepareModelCustomization(modelProject, projectBuildGraph.ProjectCustomizationGraph))
+            if (CancelRequested() ||!TryPrepareModelCustomization(modelProject, projectBuildGraph.ProjectCustomizationGraph))
                 return null;
-            if (!TryBuildModelContext(modelProject, out var modelContext))
+            if (CancelRequested() ||!TryBuildModelContext(modelProject, out var modelContext))
                 return null;
-            if (!TryBuildLibraryContent(modelContext, projectBuildGraph.ProjectJobTranslationGraph, out var jobPackageModels))
+            if (CancelRequested() ||!TryBuildLibraryContent(modelContext, projectBuildGraph.ProjectJobTranslationGraph, out var jobPackageModels))
                 return null;
-            if (!TryAddBuildMetaData(jobPackageModels, projectBuildGraph))
+            if (CancelRequested() ||!TryAddBuildMetaData(jobPackageModels, projectBuildGraph))
                 return null;
-            if (!TrySaveLibraryContents(libraryContext, jobPackageModels))
+            if (CancelRequested() ||!TryAddContentsToLibrary(libraryContext, jobPackageModels))
                 return null;
 
             BuildStatusEvent.OnNext(LibraryBuildStatus.BuildProcessCompleted);
             return libraryContext;
+        }
+
+        /// <summary>
+        ///     Checks if cancellation is requested and changes the <see cref="LibraryBuildStatus"/> flag if required
+        /// </summary>
+        /// <returns></returns>
+        private bool CancelRequested()
+        {
+            if (!CancellationToken.IsCancellationRequested) return false;
+            BuildStatusEvent.OnNext(LibraryBuildStatus.Cancel);
+            return true;
+
         }
 
         /// <summary>
@@ -233,7 +259,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
                 BuildCounter = 0;
                 var totalJobCount = jobTranslation.GetTotalJobCount(modelContext.ModelProject);
                 jobPackageModels = jobTranslation.ToInternals(modelContext.ModelProject)
-                    .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount).BuildJobPackageModel(jobs))
+                    .Select(jobs => GetPreparedJobBuilder(modelContext, jobs, totalJobCount).BuildJobPackageModel(jobs, CancellationToken))
                     .ToList();
 
                 return true;
@@ -254,7 +280,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
         /// <param name="dbContext"></param>
         /// <param name="jobPackageModels"></param>
         /// <returns></returns>
-        private bool TrySaveLibraryContents(SimulationDbContext dbContext,
+        private bool TryAddContentsToLibrary(SimulationDbContext dbContext,
             IEnumerable<SimulationJobPackageModel> jobPackageModels)
         {
             BuildStatusEvent.OnNext(LibraryBuildStatus.SavingLibraryContents);
@@ -262,6 +288,7 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             try
             {
                 dbContext.AddRange(jobPackageModels);
+                if (!IsAutoSaveAfterBuild) return true;
                 dbContext.SaveChanges();
                 return true;
             }
@@ -330,6 +357,13 @@ namespace Mocassin.UI.Xml.ProjectBuilding
             foreach (var optimizer in jobCollection.GetPostBuildOptimizers()) builder.AddPostBuildOptimizer(optimizer);
 
             return builder;
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            JobBuildCounterEvent.OnCompleted();
+            BuildStatusEvent.OnCompleted();
         }
     }
 }

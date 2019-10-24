@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.Model.Translator.ModelContext;
@@ -27,8 +28,9 @@ namespace Mocassin.Model.Translator.EntityBuilder
         ///     Builds the simulation package model for the passed simulation job collection
         /// </summary>
         /// <param name="jobCollection"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        SimulationJobPackageModel BuildJobPackageModel(IJobCollection jobCollection);
+        SimulationJobPackageModel BuildJobPackageModel(IJobCollection jobCollection, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Builds the simulation package model for the passed simulation job collection asynchronously

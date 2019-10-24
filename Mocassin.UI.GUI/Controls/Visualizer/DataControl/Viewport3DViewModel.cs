@@ -160,7 +160,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <summary>
         ///     Get the <see cref="ToggleViewportCameraCommand"/> to switch the camera modes
         /// </summary>
-        public  ToggleViewportCameraCommand ToggleCameraCommand { get; }
+        public ToggleViewportCameraCommand ToggleCameraCommand { get; }
 
         /// <summary>
         ///     Create sa new <see cref="Viewport3DViewModel" /> with default settings
@@ -329,6 +329,27 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         }
 
         /// <summary>
+        ///     Creates a factory <see cref="Func{T,TResult}" /> to produce <see cref="LinesVisual3D" /> sharing a common
+        ///     <see cref="Point3DCollection" /> and a custom <see cref="Transform3D" />
+        /// </summary>
+        /// <param name="point3DCollection"></param>
+        /// <param name="freezePoints"></param>
+        /// <returns></returns>
+        public Func<Transform3D, LinesVisual3D> BuildLinesVisualFactory(Point3DCollection point3DCollection, bool freezePoints = true)
+        {
+            if (freezePoints) point3DCollection.Freeze();
+            LinesVisual3D CreateInternal(Transform3D transform)
+            {
+                return new LinesVisual3D
+                {
+                    Points = point3DCollection, Transform = transform
+                };
+            }
+
+            return CreateInternal;
+        }
+
+        /// <summary>
         ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
         ///     sphere shape sharing a common mesh for multiple <see cref="Transform3D" /> operations
         /// </summary>
@@ -423,6 +444,51 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             direction.Normalize();
             var end = start + direction * length;
             return BuildArrowVisualFactory(diameter, start, end, headLength, thetaDiv, freezeMesh);
+        }
+
+        /// <summary>
+        ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
+        ///     cylinder shape by two points sharing a common mesh for multiple <see cref="Transform3D" /> operations
+        /// </summary>
+        /// <param name="diameter"></param>
+        /// <param name="thetaDiv"></param>
+        /// <param name="freezeMesh"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public Func<Transform3D, MeshGeometryVisual3D> BuildCylinderVisualFactory(double diameter, in Point3D start, in Point3D end,
+            int thetaDiv, bool freezeMesh = true)
+        {
+            var meshBuilder = new MeshBuilder();
+            meshBuilder.AddCylinder(start, end, diameter, thetaDiv);
+            var meshGeometry = meshBuilder.ToMesh(freezeMesh);
+
+            return BuildMeshVisualFactory(meshGeometry);
+        }
+
+        /// <summary>
+        ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
+        ///     cylinder frame shape by multiple points sharing a common mesh for multiple <see cref="Transform3D" /> operations
+        /// </summary>
+        /// <param name="diameter"></param>
+        /// <param name="thetaDiv"></param>
+        /// <param name="freezeMesh"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public Func<Transform3D, MeshGeometryVisual3D> BuildCylinderFrameVisualFactory(double diameter, IList<Point3D> points,
+            int thetaDiv, bool freezeMesh = true)
+        {
+            var meshBuilder = new MeshBuilder();
+            for (var i = 0; i < points.Count; i++)
+            {
+                for (var j = i+1; j < points.Count; j++)
+                {
+                    meshBuilder.AddCylinder(points[i], points[j], diameter, thetaDiv);       
+                }
+            }
+            var meshGeometry = meshBuilder.ToMesh(freezeMesh);
+
+            return BuildMeshVisualFactory(meshGeometry);
         }
 
 

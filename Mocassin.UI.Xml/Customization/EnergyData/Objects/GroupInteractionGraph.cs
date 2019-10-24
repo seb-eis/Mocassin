@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Structures;
@@ -15,7 +16,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     customization
     /// </summary>
     [XmlRoot]
-    public class GroupInteractionGraph : ProjectObjectGraph, IComparable<GroupInteractionGraph>, IDuplicable<GroupInteractionGraph>
+    public class GroupInteractionGraph : ExtensibleProjectObjectGraph, IComparable<GroupInteractionGraph>, IDuplicable<GroupInteractionGraph>
     {
         private ModelObjectReferenceGraph<GroupInteraction> groupInteraction;
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
@@ -145,6 +146,15 @@ namespace Mocassin.UI.Xml.Customization
             };
 
             return copy;
+        }
+
+        /// <summary>
+        ///     Gets the surrounding geometry as a <see cref="IEnumerable{T}"/> of <see cref="Fractional3D"/> (Start position not included)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Fractional3D> AsVectorPath()
+        {
+            return BaseGeometry.Select(x => new Fractional3D(x.A, x.B, x.C));
         }
 
         /// <inheritdoc />
