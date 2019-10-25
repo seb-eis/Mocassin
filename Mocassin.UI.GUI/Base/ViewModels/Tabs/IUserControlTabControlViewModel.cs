@@ -24,6 +24,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         Dock TabStripPlacement { get; set; }
 
         /// <summary>
+        ///     Get or set a boolean flag if the control is currently active
+        /// </summary>
+        bool IsActive { get; set; }
+
+        /// <summary>
         ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a closable <see cref="UserControlTabItem" />
         /// </summary>
         /// <param name="tabName"></param>

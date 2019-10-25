@@ -9,19 +9,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     /// </summary>
     public class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabControlViewModel
     {
-        /// <summary>
-        ///     The <see cref="SelectedTab" /> backing field
-        /// </summary>
+        private bool isActive = true;
         private UserControlTabItem selectedTab;
-
-        /// <summary>
-        ///     The <see cref="HeaderFontSize" /> backing field
-        /// </summary>
         private int headerFontSize = 14;
-
-        /// <summary>
-        ///     The <see cref="TabStripPlacement" /> backing field
-        /// </summary>
         private Dock tabStripPlacement = Dock.Top;
 
         /// <inheritdoc />
@@ -29,6 +19,13 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         {
             get => tabStripPlacement;
             set => SetProperty(ref tabStripPlacement, value);
+        }
+
+        /// <inheritdoc />
+        public bool IsActive
+        {
+            get => isActive;
+            set => SetProperty(ref isActive, value);
         }
 
         /// <inheritdoc />

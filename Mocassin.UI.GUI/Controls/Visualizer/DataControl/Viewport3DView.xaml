@@ -198,10 +198,10 @@
                 </DataTemplate>
               </DataGrid.RowHeaderTemplate>
               <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=OneWay}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount, Mode=OneWay}" IsReadOnly="True"/>
                 <DataGridCheckBoxColumn Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}"
-                                        Header="Render" />
+                                        Header="Render"/>
               </DataGrid.Columns>
             </DataGrid>
           </GroupBox>

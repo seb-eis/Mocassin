@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser"
              xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
              xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+             xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -25,32 +26,35 @@
       </ListView.ContextMenu>
       <ListView.ItemTemplate>
         <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="10"/>
-              <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <views:ObjectRowHeaderLogo Grid.Column="0" DataContext="P" Margin="5,10,5,10"/>
+          <Border>
+            <Grid HorizontalAlignment="Stretch" ShowGridLines="True">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="150"/>
+              </Grid.ColumnDefinitions>
+              <views:ObjectRowHeaderLogo Grid.Column="0" Margin="5,10,5,10"/>
 
-            <TextBox Name="ProjectNameTextBox" MinWidth="50"
-                     Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" 
-                     Background="Transparent" BorderThickness="0">
-              <TextBox.Style>
-                <Style TargetType="{x:Type TextBox}">
-                  <Style.Triggers>
-                    <Trigger Property="IsKeyboardFocused" Value="True">
-                      <Setter Property="FontStyle" Value="Italic"/>
-                    </Trigger>
-                  </Style.Triggers>
-                </Style>
-              </TextBox.Style>
-              <TextBox.InputBindings>
-                <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                            CommandParameter="{Binding ElementName=ProjectNameTextBox}"/>
-              </TextBox.InputBindings>
-            </TextBox>
-          </Grid>
+              <TextBox Name="ProjectNameTextBox" MinWidth="50"
+                       Grid.Row="0"
+                       Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" 
+                       Background="Transparent" BorderThickness="0">
+                <TextBox.Style>
+                  <Style TargetType="{x:Type TextBox}">
+                    <Style.Triggers>
+                      <Trigger Property="IsKeyboardFocused" Value="True">
+                        <Setter Property="FontStyle" Value="Italic"/>
+                      </Trigger>
+                    </Style.Triggers>
+                  </Style>
+                </TextBox.Style>
+                <TextBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                              CommandParameter="{Binding ElementName=ProjectNameTextBox}"/>
+                </TextBox.InputBindings>
+              </TextBox>
+            </Grid>
+          </Border>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>

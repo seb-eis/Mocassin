@@ -210,6 +210,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
                     VisualViewModel.AddVisualGroup(CreateTransitionVisuals(item), item.Name, GetProjectObjectViewModel(item).IsVisible);
 
+                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.StablePairEnergyParameterSets ?? new List<PairInteractionGraph>())
+                    VisualViewModel.AddVisualGroup(CreatePairInteractionVisuals(item), $"{item.Name}(stable)", false);
+
+                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.UnstablePairEnergyParameterSets ?? new List<PairInteractionGraph>())
+                    VisualViewModel.AddVisualGroup(CreatePairInteractionVisuals(item), $"{item.Name}(unstable)", false);
+
                 if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
             }
             catch (Exception e)
@@ -343,27 +349,39 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// </summary>
         /// <param name="interactionGraph"></param>
         /// <returns></returns>
-        private LinesVisual3D CreatePairInteractionVisual(PairInteractionGraph interactionGraph)
+        private IList<LinesVisual3D> CreatePairInteractionVisuals(PairInteractionGraph interactionGraph)
         {
-            var objectVm = GetProjectObjectViewModel(interactionGraph);
             var fractionalPath = interactionGraph.AsVectorPath().ToList();
             var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath);
-            var points3D = new Point3DCollection(fractionalPath.Count * transforms.Count);
             var (point0, point1) = (VectorTransformer.ToCartesian(fractionalPath[0]).AsPoint3D(), VectorTransformer.ToCartesian(fractionalPath[1]).AsPoint3D());
 
+            var firstHalfPoints = new Point3DCollection(fractionalPath.Count * transforms.Count);
+            var secondHalfPoints = new Point3DCollection(fractionalPath.Count * transforms.Count);
             var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
+
             foreach (var (startPoint, endPoint) in transforms.Select(x => (x.Transform(point0), x.Transform(point1))))
             {
                 if (!RenderAreaContainsPoint(endPoint, renderAreaStart, renderAreaEnd)) continue;
                 if (!RenderAreaContainsPoint(startPoint, renderAreaStart, renderAreaEnd)) continue;
-                points3D.Add(startPoint);
-                points3D.Add(endPoint);
+                var middlePoint = startPoint + 0.5 * (endPoint - startPoint);
+                firstHalfPoints.Add(startPoint);
+                firstHalfPoints.Add(middlePoint);
+                secondHalfPoints.Add(middlePoint);
+                secondHalfPoints.Add(endPoint);
             }
+            var result0 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(firstHalfPoints));
+            var result1 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(secondHalfPoints));
 
-            var result = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(points3D));
-            result.Color = objectVm.Color;
-            result.Thickness = objectVm.Scaling;
-            return result;
+            var objectVm = GetProjectObjectViewModel(interactionGraph);
+            var (startAtomVm, endAtomVm) = (HitTestAtomObject3DViewModel(fractionalPath[0]), HitTestAtomObject3DViewModel(fractionalPath[1]));
+
+            objectVm.Scaling = 2;
+            result0.Thickness = objectVm.Scaling;
+            result0.Color = startAtomVm?.Color ?? objectVm.Color;
+            result1.Thickness = objectVm.Scaling;
+            result1.Color = endAtomVm?.Color ?? objectVm.Color;
+
+            return new List<LinesVisual3D> {result0, result1};
         }
 
         /// <summary>
@@ -436,12 +454,22 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var direction = point1 - point0;
             direction.Normalize();
 
-            var (trimmedStart, trimmedEnd) = (start.TrimToUnitCell(0), end.TrimToUnitCell(0));
-            var startVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, trimmedStart) == 0).ObjectViewModel;
-            var endVm = BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, trimmedEnd) == 0).ObjectViewModel;
+            var startVm = HitTestAtomObject3DViewModel(start);
+            var endVm = HitTestAtomObject3DViewModel(end);
             if (startVm != null) point0 += direction * startVm.Scaling;
             if (endVm != null) point1 -= direction * endVm.Scaling;
             return (point0, point1);
+        }
+
+        /// <summary>
+        ///     Get the <see cref="ProjectObject3DViewModel"/> if the provided <see cref="Fractional3D"/> points to an atom position or null otherwise
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        private ProjectObject3DViewModel HitTestAtomObject3DViewModel(in Fractional3D vector)
+        {
+            var trimmed = vector.TrimToUnitCell(0);
+            return BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, trimmed) == 0).ObjectViewModel;
         }
 
         /// <summary>
