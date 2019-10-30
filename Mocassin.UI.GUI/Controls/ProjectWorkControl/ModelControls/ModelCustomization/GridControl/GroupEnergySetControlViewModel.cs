@@ -13,9 +13,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     public sealed class GroupEnergySetControlViewModel : CollectionControlViewModel<GroupEnergyGraph>
     {
         /// <summary>
-        ///     Get the <see cref="GroupInteractionGraph"/> that the view model targets
+        ///     Get the <see cref="GroupEnergySetGraph"/> that the view model targets
         /// </summary>
-        public GroupInteractionGraph GroupInteraction { get; }
+        public GroupEnergySetGraph GroupEnergySet { get; }
 
         /// <summary>
         ///     Get the <see cref="string"/> description of the base geometry
@@ -23,26 +23,26 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public string BaseGeometryDescription { get; }
 
         /// <summary>
-        ///     Create new <see cref="GroupEnergySetControlViewModel"/> for the passed <see cref="GroupInteractionGraph"/>
+        ///     Create new <see cref="GroupEnergySetControlViewModel"/> for the passed <see cref="GroupEnergySetGraph"/>
         /// </summary>
-        /// <param name="groupInteraction"></param>
-        public GroupEnergySetControlViewModel(GroupInteractionGraph groupInteraction)
+        /// <param name="groupEnergySet"></param>
+        public GroupEnergySetControlViewModel(GroupEnergySetGraph groupEnergySet)
         {
-            GroupInteraction = groupInteraction ?? throw new ArgumentNullException(nameof(groupInteraction));
-            SetCollection(GroupInteraction.EnergyEntries);
+            GroupEnergySet = groupEnergySet ?? throw new ArgumentNullException(nameof(groupEnergySet));
+            SetCollection(GroupEnergySet.EnergyEntries);
             SelectedItem = Items?.FirstOrDefault();
-            BaseGeometryDescription = GetBaseGeometryDescription(groupInteraction);
+            BaseGeometryDescription = GetBaseGeometryDescription(groupEnergySet);
         }
 
         /// <summary>
-        ///     Builds a <see cref="string"/> description for the base geometry of the passed <see cref="GroupInteractionGraph"/>
+        ///     Builds a <see cref="string"/> description for the base geometry of the passed <see cref="GroupEnergySetGraph"/>
         /// </summary>
-        /// <param name="groupInteraction"></param>
+        /// <param name="groupEnergySet"></param>
         /// <returns></returns>
-        public string GetBaseGeometryDescription(GroupInteractionGraph groupInteraction)
+        public string GetBaseGeometryDescription(GroupEnergySetGraph groupEnergySet)
         {
             var builder = new StringBuilder(250);
-            foreach (var vector in groupInteraction.BaseGeometry)
+            foreach (var vector in groupEnergySet.BaseGeometry)
             {
                 builder.Append(vector);
                 builder.Append(" ");

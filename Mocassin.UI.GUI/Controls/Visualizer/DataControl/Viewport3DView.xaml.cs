@@ -34,6 +34,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             HelixViewport3D.DataContext = null;
         }
 
+        /// <summary>
+        ///     Action to reset the camera of the viewport
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void QuickActionContextMenu_ResetCameraItem_OnClick(object sender, RoutedEventArgs e)
         {
             HelixViewport3D.ResetCamera();

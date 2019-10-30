@@ -8,11 +8,13 @@ using System.Text;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Mathematics.Comparers;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Custom.Mmcfe;
 using Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer;
 using Mocassin.Tools.Evaluation.Extensions;
+using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.UAccess.Readers;
 
 namespace Mocassin.Framework.QuickTest
@@ -26,8 +28,29 @@ namespace Mocassin.Framework.QuickTest
         private static void Main(string[] args)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            TestHyperSurfaceEvaluator();
-            //ImportMmcfeCollection();
+
+            var size = new CrystalVector4D(10, 10, 10, 36);
+            var indexMapper = SimulationMappingHelper.GetPositionIndexToVector4DMapper(size);
+            var index = 0;
+            var watch = Stopwatch.StartNew();
+            for (var a = 0; a < size.A; a++)
+            {
+                for (int b = 0; b < size.B; b++)
+                {
+                    for (int c = 0; c < size.C; c++)
+                    {
+                        for (int p = 0; p < size.P; p++)
+                        {
+                            var mapped = indexMapper(index++);
+                            if (!mapped.Equals(new CrystalVector4D(a, b, c, p)))
+                            {
+                                Console.WriteLine("Mismatch");
+                            }
+                        }
+                    }
+                }
+            }
+            DisplayWatch(watch);
         }
 
         private static void TestHyperSurfaceEvaluator()
@@ -52,9 +75,9 @@ namespace Mocassin.Framework.QuickTest
                     var rawData = data.First(x => x.Key <= temperature);
                     Console.Write("Doing temperature target {0} (found {1}) K ...", temperature, rawData.Key);
                     var plotData = evaluator.GetRelativeChangePerDefectPlotData2D(rawData.Value, 0, 0.2, 1, defectIndex);
-                    evaluator.WriteEnergyStateOverConcentrationPlotData2DToFile(plotData, string.Format(plotPathFormat, rawData.Key, "pd"));
+                    //evaluator.WriteEnergyStateOverConcentrationPlotData2DToFile(plotData, string.Format(plotPathFormat, rawData.Key, "pd"));
                     //plotData = evaluator.GetRelativeChangePerUnitCellPlotData2D(rawData.Value, 0, 0.2, 1, defectIndex);
-                    //evaluator.WriteEnergyStateOverConcentrationPlotData2DToFile(plotData, string.Format(plotPathFormat, rawData.Key, "pc"));
+                    evaluator.WriteEnergyStateOverConcentrationPlotData2DToFile(plotData, string.Format(plotPathFormat, rawData.Key, "pc"));
                     Console.Write("Done!\n");
                 }
                 evaluator.Dispose();

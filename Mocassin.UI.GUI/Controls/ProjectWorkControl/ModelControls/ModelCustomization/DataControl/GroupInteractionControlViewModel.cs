@@ -7,9 +7,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="GroupInteractionControlView" /> that controls
-    ///     <see cref="GroupInteractionGraph" /> customization
+    ///     <see cref="GroupEnergySetGraph" /> customization
     /// </summary>
-    public class GroupInteractionControlViewModel : CollectionControlViewModel<GroupInteractionGraph>,
+    public class GroupInteractionControlViewModel : CollectionControlViewModel<GroupEnergySetGraph>,
         IContentSupplier<ProjectCustomizationGraph>
     {
         /// <inheritdoc />

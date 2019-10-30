@@ -8,7 +8,7 @@ namespace Mocassin.Tools.Evaluation.Context
     /// <summary>
     ///     Provides a context for evaluation of the results of a single <see cref="SimulationJobModel" />
     /// </summary>
-    public class JobContext : IEquatable<JobContext>, IDisposable
+    public class JobContext : IJobContext, IEquatable<JobContext>, IDisposable
     {
         /// <summary>
         ///     Get the <see cref="MslEvaluationContext" /> that the job belongs to
@@ -20,9 +20,7 @@ namespace Mocassin.Tools.Evaluation.Context
         /// </summary>
         public SimulationJobModel JobModel { get; }
 
-        /// <summary>
-        ///     Get a <see cref="McsContentReader" /> to read the contents of the binary state
-        /// </summary>
+        /// <inheritdoc />
         public McsContentReader McsReader { get; private set; }
 
         /// <summary>
@@ -30,14 +28,10 @@ namespace Mocassin.Tools.Evaluation.Context
         /// </summary>
         public bool IsReadingPrimaryState { get; private set; }
 
-        /// <summary>
-        ///     Get the <see cref="IProjectModelContext" /> of this job
-        /// </summary>
+        /// <inheritdoc />
         public IProjectModelContext ModelContext => EvaluationContext.GetProjectModelContext(JobModel);
 
-        /// <summary>
-        ///     Get the <see cref="ISimulationModel" /> of this job
-        /// </summary>
+        /// <inheritdoc />
         public ISimulationModel SimulationModel => EvaluationContext.GetSimulationModel(JobModel);
 
         /// <summary>

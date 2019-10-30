@@ -42,7 +42,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         public override async Task ExecuteAsync(ProjectJobTranslationGraph parameter)
         {
-            var isRemoved = await Task.Run(() => ProjectGetter().ProjectJobTranslationGraphs.Remove(parameter));
+            var isRemoved = false;
+            await AsyncExecuteWithoutProjectChangeDetection(() =>
+            {
+                isRemoved = ProjectGetter().ProjectJobTranslationGraphs.Remove(parameter);
+            });
             if (isRemoved) OnRemovalAction?.Invoke();
         }
     }

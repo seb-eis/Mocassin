@@ -24,7 +24,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 var positionId = trackerMapping[i];
                 var particle = context.ModelContext.GetModelObject<IParticle>(lattice[positionId]);
                 var vector = vectorTransformer.ToCartesian(trackerData[i]);
-                result.Add(new MobileTrackerResult(particle, positionId, vector * UnitConversions.Length.AngToMeter));
+                result.Add(new MobileTrackerResult(particle, positionId, vector * UnitConversions.Length.AngstromToMeter));
             }
 
             return result;

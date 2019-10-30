@@ -13,7 +13,6 @@
       <MenuItem Header="Visualization">
         <MenuItem Header="3D Model Viewer" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:AddModelViewport3DTabCommand}"/>
-        <MenuItem Header="3D Project Viewer"/>
       </MenuItem>
     </Menu>
   </Grid>

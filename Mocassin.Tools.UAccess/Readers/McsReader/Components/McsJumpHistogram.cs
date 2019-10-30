@@ -20,9 +20,9 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         [MarshalAs(UnmanagedType.R8)] public readonly double MaxEnergyValue;
 
         /// <summary>
-        ///     Get the tracked energy sample stepping
+        ///     Get the tracked energy sample stepping inverse
         /// </summary>
-        [MarshalAs(UnmanagedType.R8)] public readonly double Stepping;
+        [MarshalAs(UnmanagedType.R8)] public readonly double InverseStepping;
 
         /// <summary>
         ///     Get the counter for energy occurrences that where above or equal to the max energy value

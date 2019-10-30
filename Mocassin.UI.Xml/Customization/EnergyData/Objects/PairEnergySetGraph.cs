@@ -16,7 +16,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     customization
     /// </summary>
     [XmlRoot]
-    public class PairInteractionGraph : ExtensibleProjectObjectGraph, IComparable<PairInteractionGraph>, IDuplicable<PairInteractionGraph>
+    public class PairEnergySetGraph : ExtensibleProjectObjectGraph, IComparable<PairEnergySetGraph>, IDuplicable<PairEnergySetGraph>
     {
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
         private ModelObjectReferenceGraph<UnitCellPosition> partnerPosition;
@@ -110,13 +110,13 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Creates a new serializable <see cref="PairInteractionGraph" /> by pulling all data defined in the passed
+        ///     Creates a new serializable <see cref="PairEnergySetGraph" /> by pulling all data defined in the passed
         ///     <see cref="IPairEnergySetter" /> context and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="energySetter"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static PairInteractionGraph Create(IPairEnergySetter energySetter, ProjectModelGraph parent)
+        public static PairEnergySetGraph Create(IPairEnergySetter energySetter, ProjectModelGraph parent)
         {
             if (energySetter == null) throw new ArgumentNullException(nameof(energySetter));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
@@ -127,7 +127,7 @@ namespace Mocassin.UI.Xml.Customization
             var partnerPosition =
                 parent.StructureModelGraph.UnitCellPositions.Single(x => x.Key == energySetter.PairInteraction.Position1.Key);
 
-            var obj = new PairInteractionGraph
+            var obj = new PairEnergySetGraph
             {
                 Name = $"Pair.Energy.Set.{energySetter.PairInteraction.Index}",
                 PairInteractionIndex = energySetter.PairInteraction.Index,
@@ -145,7 +145,7 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public int CompareTo(PairInteractionGraph other)
+        public int CompareTo(PairEnergySetGraph other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (other is null) return 1;
@@ -167,9 +167,9 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public PairInteractionGraph Duplicate()
+        public PairEnergySetGraph Duplicate()
         {
-            var copy = new PairInteractionGraph
+            var copy = new PairEnergySetGraph
             {
                 Name = Name,
                 centerPosition = centerPosition.Duplicate(),

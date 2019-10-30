@@ -5,6 +5,7 @@ using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
@@ -160,6 +161,12 @@ namespace Mocassin.UI.GUI
         public void DisposeServices()
         {
             ChangeTriggerViewModel?.Dispose();
+        }
+
+        /// <inheritdoc />
+        public Task AsyncExecuteChangeCheckConflictAction(Action action, bool onDispatcher = false)
+        {
+            return ChangeTriggerViewModel.AttachAsyncConflictAction(action, onDispatcher);
         }
 
         /// <summary>

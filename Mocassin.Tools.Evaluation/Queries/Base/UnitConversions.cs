@@ -12,12 +12,12 @@ namespace Mocassin.Tools.Evaluation.Queries
             /// <summary>
             ///     Conversion factor from [Ang] to [m]
             /// </summary>
-            public static double AngToMeter { get; } = 1e-10;
+            public static double AngstromToMeter { get; } = 1e-10;
 
             /// <summary>
             ///     Conversion factor from [m] to [Ang]
             /// </summary>
-            public static double MeterToAng { get; } = 1 / AngToMeter;
+            public static double MeterToAngstrom { get; } = 1 / AngstromToMeter;
         }
     }
 }

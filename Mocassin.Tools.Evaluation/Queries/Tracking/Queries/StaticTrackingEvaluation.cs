@@ -19,18 +19,18 @@ namespace Mocassin.Tools.Evaluation.Queries
         protected override IReadOnlyList<StaticTrackerResult> GetValue(JobContext jobContext)
         {
             var trackerModels = jobContext.SimulationModel.SimulationTrackingModel.StaticTrackerModels;
-            var trackerCountPerCell = jobContext.SimulationModel.SimulationTrackingModel.StaticTrackerCount;
             var trackingData = jobContext.McsReader.ReadStaticTrackers();
             var result = new List<StaticTrackerResult>(trackingData.Length);
             var vectorTransformer = jobContext.ModelContext.GetUnitCellVectorEncoder().Transformer;
+            var metaData = jobContext.McsReader.ReadMetaData();
 
-            for (var offset = 0; offset < trackingData.Length; offset += trackingData.Length)
+            for (var idOffset = 0; idOffset < trackingData.Length; idOffset += trackingData.Length)
             {
                 foreach (var trackerModel in trackerModels)
                 {
-                    var vector = vectorTransformer.ToCartesian(trackingData[trackerModel.ModelId + offset]) *
-                                 UnitConversions.Length.AngToMeter;
-                    result.Add(new StaticTrackerResult(trackerModel.TrackedPositionIndex, trackerModel.TrackedParticle, vector));
+                    var trackerId = trackerModel.ModelId + idOffset;
+                    var velocityVector = (vectorTransformer.ToCartesian(trackingData[trackerId]) * UnitConversions.Length.AngstromToMeter) / metaData.SimulatedTime;
+                    result.Add(new StaticTrackerResult(trackerModel.TrackedPositionIndex, trackerModel.TrackedParticle, velocityVector));
                 }
             }
 

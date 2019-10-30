@@ -27,7 +27,7 @@
       <ListView.ItemTemplate>
         <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
           <Border>
-            <Grid HorizontalAlignment="Stretch" ShowGridLines="True">
+            <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>

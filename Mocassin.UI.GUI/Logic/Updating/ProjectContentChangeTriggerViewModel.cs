@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,10 +11,17 @@ using Mocassin.UI.Xml.ProjectLibrary;
 namespace Mocassin.UI.GUI.Logic.Updating
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> that continuously checks the active project library for content changes
+    ///     The <see cref="PrimaryControlViewModel" /> that checks the active project library for content changes
     /// </summary>
     public sealed class ProjectContentChangeTriggerViewModel : PrimaryControlViewModel
     {
+        private bool isChecking;
+
+        /// <summary>
+        ///     Get the <see cref="Queue{T}"/> that contains conflicting task
+        /// </summary>
+        private Queue<Task> ConflictingTasks { get; }
+
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> for the <see cref="CheckTriggerNotification" />
         /// </summary>
@@ -37,7 +45,16 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// <summary>
         ///     Get or set the check interval <see cref="TimeSpan" /> (defaults to 1s)
         /// </summary>
-        public TimeSpan CheckInterval { get; set; } = TimeSpan.FromSeconds(1);
+        public TimeSpan CheckInterval { get; set; } = TimeSpan.FromSeconds(2);
+
+        /// <summary>
+        ///     Get a boolean flag if the system is currently checking for changes
+        /// </summary>
+        public bool IsChecking
+        {
+            get => isChecking;
+            private set => SetProperty(ref isChecking, value);
+        }
 
         /// <inheritdoc />
         public ProjectContentChangeTriggerViewModel(IMocassinProjectControl projectControl)
@@ -47,6 +64,27 @@ namespace Mocassin.UI.GUI.Logic.Updating
             CancellationSource = new CancellationTokenSource();
             CheckTriggerNotification.Subscribe(x => RunChangeCheck(), () => CancellationSource.Cancel());
             TriggerTask = Task.Run(() => RunTriggerLoop(CancellationSource.Token));
+            ConflictingTasks = new Queue<Task>(10);
+        }
+
+        /// <summary>
+        ///     Attaches an async <see cref=" Action"/> and processes the task before the next check cycle is started
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="onDispatcher"></param>
+        /// <returns></returns>
+        public Task AttachAsyncConflictAction(Action action, bool onDispatcher = false)
+        {
+            var task = new Task(onDispatcher ? () => ExecuteOnDispatcher(action) : action);
+
+            void EnqueueAndStart()
+            {
+                ConflictingTasks.Enqueue(task);
+                task.Start();
+            }
+
+            AttachToPropertyChange<bool>(EnqueueAndStart, x => !x, nameof(IsChecking));
+            return task;
         }
 
         /// <summary>
@@ -54,7 +92,30 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// </summary>
         private void RunChangeCheck()
         {
-            if (ProjectControl.OpenProjectLibrary?.IsDisposed != true) ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
+            if (ProjectControl.OpenProjectLibrary?.IsDisposed == true || IsChecking) return;
+            IsChecking = true;
+            try
+            {
+                AwaitConflictingTasks();
+                ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
+            }
+            catch (Exception e)
+            {
+                SendCallErrorMessage(e);
+                IsChecking = false;
+            }
+            IsChecking = false;
+        }
+
+        /// <summary>
+        ///     Awaits for completion of all conflicting tasks in the queue
+        /// </summary>
+        private void AwaitConflictingTasks(int maxSeconds = 20)
+        {
+            while (ConflictingTasks.Count != 0)
+            {
+                ConflictingTasks.Dequeue().Wait(TimeSpan.FromSeconds(maxSeconds));
+            }
         }
 
         /// <summary>

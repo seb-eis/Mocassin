@@ -53,9 +53,9 @@
           </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <TextBlock Text="{Binding TabName, Mode=OneTime}">
+          <TextBlock Text="{Binding TabName, Mode=OneWay}">
             <TextBlock.ContextMenu>
-              <ContextMenu DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}">
+              <ContextMenu DataContext="{Binding Source={x:Reference Name=PrimaryTabControl}, Path=DataContext}">
                 <MenuItem Name="PanelContentActiveMenuItem" Header="Show panel" IsCheckable="True" 
                           IsChecked="{Binding IsActive}"/>
           
@@ -66,7 +66,7 @@
       </TabControl.Resources>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <ContentPresenter Content="{Binding UserControl, Mode=OneTime}" 
+          <ContentPresenter Content="{Binding UserControl, Mode=OneWay}" 
                             Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsActive, Converter={StaticResource App.Converter.BooleanToVisibility}}" />
         </DataTemplate>
       </TabControl.ContentTemplate>

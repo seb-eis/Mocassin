@@ -132,7 +132,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 
         /// <summary>
         ///     Gets a per defect <see cref="MmcfeEnergyState" /> plot information where all values are relative to entry with the
-        ///     lowest defect particle count
+        ///     lowest defect particle count (Normalized by affiliated defect counts)
         /// </summary>
         /// <param name="dataPoints"></param>
         /// <param name="fixedDopingValue"></param>
@@ -162,8 +162,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
 
 
         /// <summary>
-        ///     Gets a per unit cell <see cref="MmcfeEnergyState" /> plot information where all values are relative to entry with the
-        ///     lowest defect particle count
+        ///     Gets the absolute <see cref="MmcfeEnergyState" /> plot information where all values are relative to entry with the
+        ///     lowest defect particle count (No normalization)
         /// </summary>
         /// <param name="dataPoints"></param>
         /// <param name="fixedDopingValue"></param>
@@ -171,7 +171,7 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
         /// <param name="defectParticleId"></param>
         /// <param name="fixedDopingId"></param>
         /// <returns></returns>
-        public PlotData2D<double, MmcfeEnergyState> GetRelativeChangePerUnitCellPlotData2D(IDictionary<string, MmcfeEnergyDataPoint> dataPoints,
+        public PlotData2D<double, MmcfeEnergyState> GetAbsoluteChangePlotData2D(IDictionary<string, MmcfeEnergyDataPoint> dataPoints,
             int fixedDopingId, double fixedDopingValue, int variableDopingId, int defectParticleId)
         {
             var keySelectorFunction = GetDopingSelectorFunction(fixedDopingId, fixedDopingValue);
@@ -181,11 +181,8 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             var result = new PlotData2D<double, MmcfeEnergyState>(baseData.Count);
             foreach (var pair in baseData)
             {
-                var cellCount = ParseUnitCellCount(pair.Value.MetaEntry.LatticeInfo);
                 var dopingValue = ParseDopingValue(pair.Value.MetaEntry.DopingInfo, variableDopingId);
-                var y = pair.Value.EnergyState.AsRelative(baseState).AsPerDefect(cellCount);
-                var errorY = pair.Value.EnergyStateError.AsPerDefect(cellCount);
-                result.AddPoint(dopingValue, y, 0, errorY);
+                result.AddPoint(dopingValue, pair.Value.EnergyState.AsRelative(baseState), 0, pair.Value.EnergyStateError);
             }
 
             return result;

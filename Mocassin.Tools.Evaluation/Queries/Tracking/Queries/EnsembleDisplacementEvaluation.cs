@@ -84,7 +84,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 vectors[trackerModel.TrackedParticle.Index] += cartesian;
             }
 
-            for (var i = 1; i < vectors.Length; i++) vectors[i] *= UnitConversions.Length.AngToMeter;
+            for (var i = 1; i < vectors.Length; i++) vectors[i] *= UnitConversions.Length.AngstromToMeter;
         }
 
         /// <summary>

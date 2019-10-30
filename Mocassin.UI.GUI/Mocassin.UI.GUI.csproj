@@ -36,7 +36,7 @@
     <SuiteName>MOCASSIN</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>37</ApplicationRevision>
+    <ApplicationRevision>40</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -1090,15 +1090,11 @@
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\JobTranslation\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ProjectBuilding\GridControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\InfoControl\" />
-    <Folder Include="Controls\ProjectWorkControl\ModelControls\SimulationModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\StructureModel\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\InfoControl\" />

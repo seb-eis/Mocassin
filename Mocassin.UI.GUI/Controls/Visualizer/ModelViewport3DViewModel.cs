@@ -210,10 +210,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
                     VisualViewModel.AddVisualGroup(CreateTransitionVisuals(item), item.Name, GetProjectObjectViewModel(item).IsVisible);
 
-                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.StablePairEnergyParameterSets ?? new List<PairInteractionGraph>())
+                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.StablePairEnergyParameterSets ?? new List<PairEnergySetGraph>())
                     VisualViewModel.AddVisualGroup(CreatePairInteractionVisuals(item), $"{item.Name}(stable)", false);
 
-                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.UnstablePairEnergyParameterSets ?? new List<PairInteractionGraph>())
+                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.UnstablePairEnergyParameterSets ?? new List<PairEnergySetGraph>())
                     VisualViewModel.AddVisualGroup(CreatePairInteractionVisuals(item), $"{item.Name}(unstable)", false);
 
                 if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
@@ -345,13 +345,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a <see cref="LinesVisual3D" /> for visualization of a <see cref="PairInteractionGraph" />
+        ///     Creates a <see cref="LinesVisual3D" /> for visualization of a <see cref="PairEnergySetGraph" />
         /// </summary>
-        /// <param name="interactionGraph"></param>
+        /// <param name="energySetGraph"></param>
         /// <returns></returns>
-        private IList<LinesVisual3D> CreatePairInteractionVisuals(PairInteractionGraph interactionGraph)
+        private IList<LinesVisual3D> CreatePairInteractionVisuals(PairEnergySetGraph energySetGraph)
         {
-            var fractionalPath = interactionGraph.AsVectorPath().ToList();
+            var fractionalPath = energySetGraph.AsVectorPath().ToList();
             var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath);
             var (point0, point1) = (VectorTransformer.ToCartesian(fractionalPath[0]).AsPoint3D(), VectorTransformer.ToCartesian(fractionalPath[1]).AsPoint3D());
 
@@ -372,7 +372,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var result0 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(firstHalfPoints));
             var result1 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(secondHalfPoints));
 
-            var objectVm = GetProjectObjectViewModel(interactionGraph);
+            var objectVm = GetProjectObjectViewModel(energySetGraph);
             var (startAtomVm, endAtomVm) = (HitTestAtomObject3DViewModel(fractionalPath[0]), HitTestAtomObject3DViewModel(fractionalPath[1]));
 
             objectVm.Scaling = 2;
@@ -385,14 +385,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a <see cref="MeshGeometryVisual3D" /> for visualization of a <see cref="PairInteractionGraph" />
+        ///     Creates a <see cref="MeshGeometryVisual3D" /> for visualization of a <see cref="PairEnergySetGraph" />
         /// </summary>
-        /// <param name="interactionGraph"></param>
+        /// <param name="energySetGraph"></param>
         /// <returns></returns>
-        private IList<MeshGeometryVisual3D> CreateGroupInteractionVisuals(GroupInteractionGraph interactionGraph)
+        private IList<MeshGeometryVisual3D> CreateGroupInteractionVisuals(GroupEnergySetGraph energySetGraph)
         {
             var result = new List<MeshGeometryVisual3D>();
-            var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(interactionGraph.AsVectorPath());
+            var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(energySetGraph.AsVectorPath());
             return result;
         }
 

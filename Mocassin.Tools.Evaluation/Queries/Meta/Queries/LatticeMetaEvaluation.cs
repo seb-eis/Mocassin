@@ -23,7 +23,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             var vectorEncoder = jobContext.ModelContext.GetUnitCellVectorEncoder();
             var sizeInfo = GetLatticeSizeInfo(jobContext, vectorEncoder);
             var volume = vectorEncoder.GetCellVolume() * sizeInfo.A * sizeInfo.B * sizeInfo.C *
-                         Math.Pow(UnitConversions.Length.AngToMeter, 3);
+                         Math.Pow(UnitConversions.Length.AngstromToMeter, 3);
 
             return new LatticeMetaData(sizeInfo, volume);
         }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.MenuBar

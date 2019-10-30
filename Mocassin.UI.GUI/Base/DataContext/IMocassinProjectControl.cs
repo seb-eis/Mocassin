@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using Mocassin.Framework.Messaging;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
@@ -106,5 +107,13 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ///     Stops and disposes all services of the project control to prepare for application shutdown
         /// </summary>
         void DisposeServices();
+
+        /// <summary>
+        ///     Asynchronously handles an <see cref="Action"/> that conflicts with the change detection system
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="onDispatcher"></param>
+        /// <returns></returns>
+        Task AsyncExecuteChangeCheckConflictAction(Action action, bool onDispatcher = false);
     }
 }

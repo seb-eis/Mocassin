@@ -35,7 +35,7 @@
         <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
-        <Run Text="{Binding Path=GroupInteraction.CenterPosition.Name, Mode=OneWay}"
+        <Run Text="{Binding Path=GroupEnergySet.CenterPosition.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="center position. Surrounding symmetry reduced reference geometry" />
         <Run Text="{Binding BaseGeometryDescription, Mode=OneWay}"

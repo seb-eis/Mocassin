@@ -11,18 +11,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     public sealed class PairEnergySetControlViewModel : CollectionControlViewModel<PairEnergyGraph>
     {
         /// <summary>
-        ///     Get the <see cref="PairInteractionGraph" /> that the view model targets
+        ///     Get the <see cref="PairEnergySetGraph" /> that the view model targets
         /// </summary>
-        public PairInteractionGraph PairInteraction { get; }
+        public PairEnergySetGraph PairEnergySet { get; }
 
         /// <summary>
         ///     Create new <see cref="PairEnergySetControlViewModel" />
         /// </summary>
-        /// <param name="pairInteraction"></param>
-        public PairEnergySetControlViewModel(PairInteractionGraph pairInteraction)
+        /// <param name="pairEnergySet"></param>
+        public PairEnergySetControlViewModel(PairEnergySetGraph pairEnergySet)
         {
-            PairInteraction = pairInteraction ?? throw new ArgumentNullException(nameof(pairInteraction));
-            SetCollection(pairInteraction.PairEnergyEntries);
+            PairEnergySet = pairEnergySet ?? throw new ArgumentNullException(nameof(pairEnergySet));
+            SetCollection(pairEnergySet.PairEnergyEntries);
             SelectedItem = Items?.FirstOrDefault();
         }
     }

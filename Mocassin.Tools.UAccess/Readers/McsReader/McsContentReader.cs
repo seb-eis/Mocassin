@@ -24,6 +24,11 @@ namespace Mocassin.Tools.UAccess.Readers
         public ref readonly McsHeader Header => ref header;
 
         /// <summary>
+        ///     Get a boolean flag if the reader is reading an MMC file with reduced data
+        /// </summary>
+        public bool IsReadingMmcState { get; }
+
+        /// <summary>
         ///     Create a new <see cref="McsContentReader"/> that uses the passed <see cref="BinaryStructureReader"/>
         /// </summary>
         /// <param name="binaryStructureReader"></param>
@@ -31,6 +36,7 @@ namespace Mocassin.Tools.UAccess.Readers
         {
             BinaryReader = binaryStructureReader ?? throw new ArgumentNullException(nameof(binaryStructureReader));
             header = ReadHeader();
+            IsReadingMmcState = header.MobileTrackerOffset < 0;
         }
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsCycleCounter> ReadCycleCounters()
         {
-            return BinaryReader.ReadAreaAs<McsCycleCounter>(Header.CountersOffset, Header.GlobalTrackerOffset);
+            return BinaryReader.ReadAreaAs<McsCycleCounter>(Header.CountersOffset, IsReadingMmcState ? BinaryReader.ByteCount : Header.GlobalTrackerOffset);
         }
 
         /// <summary>
@@ -72,7 +78,9 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> ReadGlobalTrackers()
         {
-            return BinaryReader.ReadAreaAs<McsMovementTracker>(Header.GlobalTrackerOffset, Header.MobileTrackerOffset);
+            return IsReadingMmcState 
+                ? ReadOnlySpan<McsMovementTracker>.Empty 
+                : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.GlobalTrackerOffset, Header.MobileTrackerOffset);
         }
 
         /// <summary>
@@ -81,7 +89,9 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> ReadMobileTrackers()
         {
-            return BinaryReader.ReadAreaAs<McsMovementTracker>(Header.MobileTrackerOffset, Header.StaticTrackerOffset);
+            return IsReadingMmcState 
+                ? ReadOnlySpan<McsMovementTracker>.Empty 
+                : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.MobileTrackerOffset, Header.StaticTrackerOffset);
         }
 
         /// <summary>
@@ -90,7 +100,9 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsMovementTracker> ReadStaticTrackers()
         {
-            return BinaryReader.ReadAreaAs<McsMovementTracker>(Header.StaticTrackerOffset, Header.MobileTrackerIndexingOffset);
+            return IsReadingMmcState 
+                ? ReadOnlySpan<McsMovementTracker>.Empty 
+                : BinaryReader.ReadAreaAs<McsMovementTracker>(Header.StaticTrackerOffset, Header.MobileTrackerIndexingOffset);
         }
 
         /// <summary>
@@ -99,7 +111,9 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<int> ReadMobileTrackerMapping()
         {
-            return BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset);
+            return IsReadingMmcState 
+                ? ReadOnlySpan<int>.Empty 
+                : BinaryReader.ReadAreaAs<int>(Header.MobileTrackerIndexingOffset, Header.JumpStatisticsOffset);
         }
 
         /// <summary>
@@ -108,7 +122,9 @@ namespace Mocassin.Tools.UAccess.Readers
         /// </summary>
         public ReadOnlySpan<McsJumpStatistic> ReadJumpStatistics()
         {
-            return BinaryReader.ReadAreaAs<McsJumpStatistic>(Header.JumpStatisticsOffset, BinaryReader.ByteCount);
+            return IsReadingMmcState 
+                ? ReadOnlySpan<McsJumpStatistic>.Empty 
+                : BinaryReader.ReadAreaAs<McsJumpStatistic>(Header.JumpStatisticsOffset, BinaryReader.ByteCount);
         }
 
         /// <summary>

@@ -34,21 +34,21 @@
         <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
-        <Run Text="{Binding Path=PairInteraction.CenterPosition.Name, Mode=OneWay}"
+        <Run Text="{Binding Path=PairEnergySet.CenterPosition.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="center position and" />
         <Run Text="{Binding SelectedItem.PartnerParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="occupying the" />
-        <Run Text="{Binding PairInteraction.PartnerPosition.Name, Mode=OneWay}"
+        <Run Text="{Binding PairEnergySet.PartnerPosition.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="partner position at a distance of" />
-        <Run Text="{Binding PairInteraction.Distance, Mode=OneWay, StringFormat={}{0:##.###}}"
+        <Run Text="{Binding PairEnergySet.Distance, Mode=OneWay, StringFormat={}{0:##.###}}"
              Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="&#x212B;. Symmetry reduced geometry is described by the starting point" />
-        <Run Text="{Binding PairInteraction.StartVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="{Binding PairEnergySet.StartVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="and the end point" />
-        <Run Text="{Binding PairInteraction.EndVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
+        <Run Text="{Binding PairEnergySet.EndVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in the fractional coordinate context." />
         <LineBreak/>
         <LineBreak/>

@@ -36,7 +36,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 var shift = vectorTransformer.ToCartesian(trackingData[trackerModel.ModelId]);
                 var particleCount = ParticleCountEvaluation[context.DataId][trackerModel.TrackedParticle.Index];
                 var displacement = new EnsembleDisplacement(false, particleCount, trackerModel.TrackedParticle,
-                    shift * UnitConversions.Length.AngToMeter);
+                    shift * UnitConversions.Length.AngstromToMeter);
                 result.Add(new GlobalTrackerResult(trackerModel, displacement));
             }
 

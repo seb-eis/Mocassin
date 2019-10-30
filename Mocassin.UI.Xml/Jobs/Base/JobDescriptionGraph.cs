@@ -213,10 +213,10 @@ namespace Mocassin.UI.Xml.Jobs
         ///     default value is set
         /// </summary>
         /// <param name="s"></param>
-        /// <param name="defaultHours"></param>
         /// <returns></returns>
-        public static TimeSpan? ParseTimeString(string s, int defaultHours = 24)
+        public static TimeSpan? ParseTimeString(string s)
         {
+            if (string.IsNullOrWhiteSpace(s)) return null;
             if (TimeSpan.TryParse(s, out var timeLimit)) return timeLimit;
             try
             {

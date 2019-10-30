@@ -95,7 +95,7 @@ namespace Mocassin.Mathematics.Extensions
             where T3 : struct, IEquatable<T3>
             where T4 : struct, IEquatable<T4>
         {
-            return lhs.A.Equals(rhs.A) && lhs.B.Equals(rhs.B) && lhs.C.Equals(rhs.B) && lhs.D.Equals(rhs.D);
+            return lhs.A.Equals(rhs.A) && lhs.B.Equals(rhs.B) && lhs.C.Equals(rhs.C) && lhs.D.Equals(rhs.D);
         }
     }
 }

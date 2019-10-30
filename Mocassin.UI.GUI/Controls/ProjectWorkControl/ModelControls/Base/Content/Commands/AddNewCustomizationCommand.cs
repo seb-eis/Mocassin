@@ -36,7 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         public override Task ExecuteAsync(object parameter)
         {
-            return Task.Run(() => TryAddCustomization(ProjectGetter()));
+            return AsyncExecuteWithoutProjectChangeDetection(() => TryAddCustomization(ProjectGetter()));
         }
 
         /// <inheritdoc />

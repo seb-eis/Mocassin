@@ -9,14 +9,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for the <see cref="PairInteractionControlView" /> that control
-    ///     <see cref="PairInteractionGraph" /> customization data
+    ///     <see cref="PairEnergySetGraph" /> customization data
     /// </summary>
-    public class PairInteractionControlViewModel : CollectionControlViewModel<PairInteractionGraph>, IContentSupplier<ProjectCustomizationGraph>
+    public class PairInteractionControlViewModel : CollectionControlViewModel<PairEnergySetGraph>, IContentSupplier<ProjectCustomizationGraph>
     {
         /// <summary>
-        /// Get the <see cref="Func{T,TResult}"/> getter that provides the <see cref="ICollection{T}"/> of <see cref="PairInteractionGraph"/>
+        /// Get the <see cref="Func{T,TResult}"/> getter that provides the <see cref="ICollection{T}"/> of <see cref="PairEnergySetGraph"/>
         /// </summary>
-        private Func<ProjectCustomizationGraph, ICollection<PairInteractionGraph>> InteractionSetGetter { get; }
+        private Func<ProjectCustomizationGraph, ICollection<PairEnergySetGraph>> InteractionSetGetter { get; }
 
         /// <inheritdoc />
         public ProjectCustomizationGraph ContentSource { get; protected set; }
@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         ///     Creates new <see cref="PairInteractionControlViewModel"/> with the provided getter <see cref="Func{T,TResult}"/> for the target collection
         /// </summary>
         /// <param name="interactionSetGetter"></param>
-        public PairInteractionControlViewModel(Func<ProjectCustomizationGraph, ICollection<PairInteractionGraph>> interactionSetGetter)
+        public PairInteractionControlViewModel(Func<ProjectCustomizationGraph, ICollection<PairEnergySetGraph>> interactionSetGetter)
         {
             InteractionSetGetter = interactionSetGetter ?? throw new ArgumentNullException(nameof(interactionSetGetter));
         }
