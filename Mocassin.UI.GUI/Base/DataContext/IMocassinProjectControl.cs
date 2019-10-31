@@ -115,5 +115,15 @@ namespace Mocassin.UI.GUI.Base.DataContext
         /// <param name="onDispatcher"></param>
         /// <returns></returns>
         Task AsyncExecuteChangeCheckConflictAction(Action action, bool onDispatcher = false);
+
+        /// <summary>
+        ///     Stops all running project services
+        /// </summary>
+        void StopServices();
+
+        /// <summary>
+        ///     Starts all project services that are not already running
+        /// </summary>
+        void StartServices();
     }
 }

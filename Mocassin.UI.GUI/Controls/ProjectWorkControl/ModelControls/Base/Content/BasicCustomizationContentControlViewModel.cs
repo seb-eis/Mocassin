@@ -13,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class BasicCustomizationContentControlViewModel : BasicModelContentControlViewModel
     {
-        private IEnumerable<ProjectCustomizationGraph> customizationGraphs;
+        private IReadOnlyList<ProjectCustomizationGraph> customizationGraphs;
         private ProjectCustomizationGraph selectedCustomizationGraph;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}"/> of <see cref="ProjectCustomizationGraph"/> instances that can currently be selected
         /// </summary>
-        public IEnumerable<ProjectCustomizationGraph> CustomizationGraphs
+        public IReadOnlyList<ProjectCustomizationGraph> CustomizationGraphs
         {
             get => customizationGraphs;
             set => SetProperty(ref customizationGraphs, value);
@@ -57,9 +57,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicCustomizationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
-            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, () => ReloadSelectionSource());
-            DuplicateCustomizationCommand = new DuplicateCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
+            AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false, true));
+            DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl,() => SelectedProjectGraph, () => ReloadSelectionSource(true, true));
+            DuplicateCustomizationCommand = new DuplicateCustomizationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false, true));
             PropertyChanged += OnCustomizationSourceChanged;
         }
 
@@ -83,10 +83,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <summary>
         ///     Nulls the currently selected <see cref="ProjectCustomizationGraph"/> and reloads the option list
         /// </summary>
-        protected void ReloadSelectionSource(bool nullSelected = true)
+        protected void ReloadSelectionSource(bool nullSelected = true, bool selectLast = false)
         {
-            if (nullSelected) SelectedCustomizationGraph = null;
-            CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
+            ExecuteOnDispatcher(() =>
+            {
+                if (nullSelected) SelectedCustomizationGraph = null;
+                CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
+                if (selectLast) SelectedCustomizationGraph = CustomizationGraphs?.Last();
+            });
         }
 
         /// <inheritdoc />

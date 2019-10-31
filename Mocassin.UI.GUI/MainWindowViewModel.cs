@@ -91,12 +91,14 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
         {
+            StopServices();
             OpenProjectLibrary?.Dispose();
             ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
             OpenProjectLibrary = projectLibrary;
             ProjectLibraryChangedEvent.OnNext(projectLibrary);
             ChangeTriggerViewModel = ChangeTriggerViewModel ?? new ProjectContentChangeTriggerViewModel(this);
             WindowDescription = MakeWindowDescription();
+            StartServices();
         }
 
         /// <inheritdoc />
@@ -145,11 +147,11 @@ namespace Mocassin.UI.GUI
         ///     Creates <see cref="IModelProject" /> that supplies access to most model services with the custom project config.
         /// </summary>
         /// <returns></returns>
-        /// <remarks>Will return a default config project if the</remarks>
+        /// <remarks>Will return a default config project without any attached model managers</remarks>
         public IModelProject CreateServiceModelProject()
         {
             return ModelProject.Create(LoadProjectSettings());
-        }
+        } 
 
         /// <inheritdoc />
         public IModelProject CreateModelProject()
@@ -166,7 +168,19 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public Task AsyncExecuteChangeCheckConflictAction(Action action, bool onDispatcher = false)
         {
-            return ChangeTriggerViewModel.AttachAsyncConflictAction(action, onDispatcher);
+            return ChangeTriggerViewModel.AttachConflictingAction(action, onDispatcher);
+        }
+
+        /// <inheritdoc />
+        public void StopServices()
+        {
+            ChangeTriggerViewModel?.Stop();
+        }
+
+        /// <inheritdoc />
+        public void StartServices()
+        {
+            ChangeTriggerViewModel?.Start();
         }
 
         /// <summary>

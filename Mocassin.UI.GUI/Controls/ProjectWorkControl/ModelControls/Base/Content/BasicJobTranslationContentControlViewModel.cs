@@ -13,7 +13,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class BasicJobTranslationContentControlViewModel : BasicModelContentControlViewModel
     {
-        private IEnumerable<ProjectJobTranslationGraph> jobTranslationGraphs;
+        private IReadOnlyList<ProjectJobTranslationGraph> jobTranslationGraphs;
         private ProjectJobTranslationGraph selectedJobTranslationGraph;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ProjectJobTranslationGraph" /> instances that can currently be
         ///     selected
         /// </summary>
-        public IEnumerable<ProjectJobTranslationGraph> JobTranslationGraphs
+        public IReadOnlyList<ProjectJobTranslationGraph> JobTranslationGraphs
         {
             get => jobTranslationGraphs;
             set => SetProperty(ref jobTranslationGraphs, value);
@@ -59,9 +59,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicJobTranslationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
-            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource());
-            DuplicateTranslationCommand = new DuplicateJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false));
+            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false, true));
+            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(true, true));
+            DuplicateTranslationCommand = new DuplicateJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false, true));
             PropertyChanged += OnTranslationSourceChanged;
         }
 
@@ -85,10 +85,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <summary>
         ///     Nulls the currently selected <see cref="ProjectJobTranslationGraph"/> and reloads the option list
         /// </summary>
-        protected void ReloadSelectionSource(bool nullSelected = true)
+        protected void ReloadSelectionSource(bool nullSelected = true, bool selectLast = false)
         {
-            if (nullSelected) SelectedJobTranslationGraph = null;
-            JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
+            ExecuteOnDispatcher(() =>
+            {
+                if (nullSelected) SelectedJobTranslationGraph = null;
+                JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
+                if (selectLast) SelectedJobTranslationGraph = JobTranslationGraphs?.Last();
+            });
         }
 
         /// <inheritdoc />

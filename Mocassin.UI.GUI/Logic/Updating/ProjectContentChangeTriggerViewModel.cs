@@ -30,7 +30,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// <summary>
         ///     Get the <see cref="CancellationTokenSource" /> to cancel the trigger <see cref="Task" />
         /// </summary>
-        private CancellationTokenSource CancellationSource { get; }
+        private CancellationTokenSource CancellationSource { get; set; }
 
         /// <summary>
         ///     Get the <see cref="IObservable{T}" /> that informs when the change check is triggered
@@ -40,12 +40,12 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// <summary>
         ///     Get the running trigger <see cref="Task" />
         /// </summary>
-        public Task TriggerTask { get; }
+        public Task TriggerTask { get; private set; }
 
         /// <summary>
         ///     Get or set the check interval <see cref="TimeSpan" /> (defaults to 1s)
         /// </summary>
-        public TimeSpan CheckInterval { get; set; } = TimeSpan.FromSeconds(2);
+        public TimeSpan CheckInterval { get; set; } = TimeSpan.FromSeconds(1);
 
         /// <summary>
         ///     Get a boolean flag if the system is currently checking for changes
@@ -61,19 +61,38 @@ namespace Mocassin.UI.GUI.Logic.Updating
             : base(projectControl)
         {
             CheckTriggeredEvent = new ReactiveEvent<Unit>();
-            CancellationSource = new CancellationTokenSource();
-            CheckTriggerNotification.Subscribe(x => RunChangeCheck(), () => CancellationSource.Cancel());
-            TriggerTask = Task.Run(() => RunTriggerLoop(CancellationSource.Token));
             ConflictingTasks = new Queue<Task>(10);
         }
 
         /// <summary>
-        ///     Attaches an async <see cref=" Action"/> and processes the task before the next check cycle is started
+        ///     Starts the trigger service if not already running
+        /// </summary>
+        public void Start()
+        {
+            if (TriggerTask != null && !TriggerTask.IsCompleted) return;
+            CancellationSource = new CancellationTokenSource();
+            CheckTriggerNotification.Subscribe(x => RunChangeCheck(), () => CancellationSource.Cancel());
+            TriggerTask = Task.Run(() => RunTriggerLoop(CancellationSource.Token));
+        }
+
+        /// <summary>
+        ///     Stops the trigger service
+        /// </summary>
+        public void Stop()
+        {
+            CheckTriggeredEvent.OnCompleted();
+            TriggerTask.Wait();
+            CancellationSource = null;
+            TriggerTask = null;
+        }
+
+        /// <summary>
+        ///     Attaches an <see cref=" Action"/> and ensures that the change checking system is not running during execution
         /// </summary>
         /// <param name="action"></param>
         /// <param name="onDispatcher"></param>
         /// <returns></returns>
-        public Task AttachAsyncConflictAction(Action action, bool onDispatcher = false)
+        public Task AttachConflictingAction(Action action, bool onDispatcher = false)
         {
             var task = new Task(onDispatcher ? () => ExecuteOnDispatcher(action) : action);
 
@@ -101,7 +120,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
             }
             catch (Exception e)
             {
-                SendCallErrorMessage(e);
+                SendCallErrorMessage(new InvalidOperationException($"Unexpected error in change detection system: {e.Message}"));
                 IsChecking = false;
             }
             IsChecking = false;
@@ -139,8 +158,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// <inheritdoc />
         public override void Dispose()
         {
-            CheckTriggeredEvent.OnCompleted();
-            TriggerTask.Wait();
+            Stop();
             base.Dispose();
         }
     }
