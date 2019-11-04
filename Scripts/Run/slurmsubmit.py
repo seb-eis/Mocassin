@@ -10,8 +10,8 @@ class Dynamic:
 class SlurmCookie:
 
     StringFormat="#SBATCH --{}={}"
-    TaskTag = ""
-    CoreTag = ""
+    TaskTag = None
+    CoreTag = None
 
     def __init__(self, tag, value):
         self.Tag = tag
@@ -94,7 +94,9 @@ class SlurmJob:
         SlurmCookie.TaskTag = element.get("TaskTag") if not None else SlurmCookie.TaskTag
         SlurmCookie.CoreTag = element.get("CoreTag") if not None else SlurmCookie.CoreTag
 
-    def _AutoDetectMpi(self):
+    def _DetectMpiAndCoreSettings(self):
+        if SlurmCookie.TaskTag is None or SlurmCookie.CoreTag is None:
+            raise Exception("")
         for cookie in self.BatchCookies:
             if cookie.Tag == SlurmCookie.TaskTag:
                 self.TaskCount = int(cookie.Value)
@@ -111,7 +113,7 @@ class SlurmJob:
         self._LoadExecutionDataFromXml(xmlRoot)
         self._LoadScriptTemplateFromXml(xmlRoot)
         self._LoadBatchCookiesFromXml(xmlRoot)
-        self._AutoDetectMpi()
+        self._DetectMpiAndCoreSettings()
 
     def _SubShell(self, template):
         return re.sub(r"\$shell", "#!/usr/bin/env {}".format(self.Shell), template)
@@ -163,7 +165,7 @@ class SlurmJob:
     def Submit(self):
         index = 0
         for args in self.ArgumentProvider.ArgumentSet(self):
-            self._AutoDetectMpi()
+            self._DetectMpiAndCoreSettings()
             script = self.GetJobScript(args)
             print("submit: [{}] [PROVIDER DATA]: {}".format(index, args))
             print("submit: [{}] [RANKS: {:3d} CORES: {:3d}]: {}".format(index, self.TaskCount, self.CoreCountPerTask, script.File), flush=True)
@@ -172,6 +174,9 @@ class SlurmJob:
             index = index+1
 
     def OverwriteCookie(self, tag, value, sender=None):
+        if tag is None or str(tag).isspace():
+            raise Exception("Cannot overwrite a None or whitespace tag.")
+
         for cookie in self.BatchCookies:
             if cookie.Tag == tag:
                 cookie.Value = value
@@ -192,10 +197,11 @@ class SlurmJob:
             print("submit: Argument provider: {}".format(self.ArgumentProvider), flush=True)
             print("submit: Auto script deletion: [{}]".format(self.DeleteScripts))
             print("submit: Parallel default: [Ranks: {:3d} Cores: {:3d}]".format(self.TaskCount, self.CoreCountPerTask), flush=True)
-        except:
-            raise Exception("Could not load the template or template is missing.")
+        except Exception as e:
+            raise Exception("Error while parsing template:\n {}".format(e))
 
         self.ExeArguments = " ".join(args[2:])
+
 
 job = SlurmJob()
 job.ParseScriptAgruments(sys.argv)

@@ -1,5 +1,5 @@
 <SlurmTemplate Shell="zsh" DeleteScripts="False">
-    <Execution Interpreter="python3.6" Executable="./mocassin_mt.py" ArgumentProvider="slurmprovider_mocsim:Provider"/>
+    <Execution Interpreter="python3.6" Executable="./mocassin_mt.py" ArgumentProvider="mocsim_slurm:ArgumentProvider"/>
     <Modules>
         <Module Group="DEVELOP" Value="python/3.6.0"/>
     </Modules>

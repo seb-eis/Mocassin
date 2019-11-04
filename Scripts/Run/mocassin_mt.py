@@ -7,7 +7,7 @@ import sys as sys
 try:
     from mpi4py import MPI
 except:
-    print("MPI import failure, mocking .")
+    print("MPI import failure, mocking.")
 
 
 class MpiCommDummy:
@@ -94,6 +94,7 @@ class MocsimExecutionController:
         searchPattern = self.GetSimulatorSearchPattern()
         for item in glob.iglob(searchPattern, recursive=True):
             self.Parameters["ExecutablePath"] = item
+            return
 
     def FindExtensionPath(self):
         self.Parameters["ExtensionPath"] = os.path.dirname(self.Parameters["ExecutablePath"])

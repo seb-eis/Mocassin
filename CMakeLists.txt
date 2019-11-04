@@ -67,6 +67,9 @@ if (WIN32)
     #set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
     #set(CMAKE_C_FLAGS_RELEASE "-Wall -O3")
 
+    # Set the linker flags to allow unicode and wmain
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -municode")
+
     # Advanced compiler settings, small performance improvement
     set(CMAKE_C_FLAGS_DEBUG "${COMPILE_FLAGS_SSE_GNU} -g -fno-cx-limited-range -funroll-loops -march=native -mtune=native")
     set(CMAKE_C_FLAGS_RELEASE "${COMPILE_FLAGS_SSE_GNU} -O3 -w -fno-cx-limited-range -funroll-loops -march=native -mtune=native")

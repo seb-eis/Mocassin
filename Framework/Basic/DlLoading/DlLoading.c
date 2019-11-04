@@ -9,6 +9,7 @@
 //////////////////////////////////////////
 
 #include "Framework/Basic/DlLoading/DlLoading.h"
+#include "Framework/Basic/FileIO/FileIO.h"
 
 #if !defined(MC_USE_PLUGIN_SUPPORT)
     void* ImportFunction(const char* restrict libraryPath, const char* restrict exportName, error_t* restrict error)
@@ -44,19 +45,32 @@
             return function;
         }
 
+        static wchar_t * GetUnicodeLibraryName(const char* restrict libraryName)
+        {
+            wchar_t * libraryName16;
+            var error = Win32ConvertUtf8ToUtf16(libraryName, &libraryName16);
+            return_if(error <= 0, NULL);
+            return libraryName16;
+        }
+
         bool_t DlLoading_UnloadDynamicLibrary(const char* restrict libraryName)
         {
-            HMODULE module = GetModuleHandleA(libraryName);
+            var libraryName16 = GetUnicodeLibraryName(libraryName);
+
+            HMODULE module = GetModuleHandleW(libraryName16);
+            free(libraryName16);
+
             return_if(module == NULL, false);
             return (bool_t) FreeLibrary(module);
         }
 
         LIBHANDLE DlLoading_GetLibraryHandle(const char *restrict libraryPath)
         {
+            var libraryName16 = GetUnicodeLibraryName(libraryPath);
             HMODULE module;
-            if ((module = GetModuleHandleA(libraryPath)) == NULL)
-                module = LoadLibraryA(libraryPath);
-
+            if ((module = GetModuleHandleW(libraryPath)) == NULL)
+                module = LoadLibraryW(libraryPath);
+            free(libraryName16);
             return module;
         }
 

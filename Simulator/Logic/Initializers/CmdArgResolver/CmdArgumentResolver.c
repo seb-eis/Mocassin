@@ -24,6 +24,22 @@ static void TerminateOnSetBuildCallFlag(SCONTEXT_PARAM)
     }
 }
 
+// Wrapper for freopen() to correctly use utf8 encoded file names on both Win32 and linux
+static struct _iobuf* freopen_utf8(const char* filename, const char* mode, file_t* file)
+{
+#if defined(WIN32)
+    wchar_t * filename16, * mode16;
+    var error = Win32ConvertUtf8ToUtf16(filename, &filename16);
+    return_if(error <= 0, NULL);
+    error = Win32ConvertUtf8ToUtf16(mode, &mode16);
+    return_if(error <= 0, NULL);
+    var iobuf = _wfreopen(filename16, mode16, file);
+    return free(filename16), free(mode16), iobuf;
+#else
+    return freopen(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
+#endif
+}
+
 // Tries to redirect the stdout and stderr stream to file streams (stdout is selectable, stderr defaults to stderr.log)
 static void setStdoutRedirection(SCONTEXT_PARAM, const char* stdoutFile)
 {
@@ -35,14 +51,14 @@ static void setStdoutRedirection(SCONTEXT_PARAM, const char* stdoutFile)
     error_assert(error, "Stream redirection of stdout failed on target building");
     error = ConcatStrings(tmp, stdoutFile, &tmp1);
     error_assert(error, "Stream redirection of stdout failed on target building");
-    error = freopen(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
+    error = freopen_utf8(tmp1, "a", stdout) != NULL ? ERR_OK : ERR_STREAM;
     error_assert(error, "Stream redirection of stdout to a file returned a null stream");
 
     free(tmp1);
 
     error = ConcatStrings(tmp, "stderr.log", &tmp1);
     error_assert(error, "Stream redirection of stderr failed on target building");
-    error = freopen(tmp1, "a", stderr) != NULL ? ERR_OK : ERR_STREAM;
+    error = freopen_utf8(tmp1, "a", stderr) != NULL ? ERR_OK : ERR_STREAM;
     error_assert(error, "Stream redirection of stderr to a file returned a null stream");
 
     free(tmp);

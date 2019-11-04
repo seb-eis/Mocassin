@@ -1,8 +1,8 @@
-import re as re
-import os as os
+import re
+import os
 import sqlite3
 
-class Provider:
+class ArgumentProvider:
 
     def ArgumentSet(self, slurmJob):
         db = self.GetDatabase(slurmJob.ExeArguments)
