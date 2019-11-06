@@ -135,7 +135,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return $" Fractional ({A}, {B}, {C})";
+            return $"Fractional ({A}, {B}, {C})";
         }
 
         /// <summary>

@@ -113,7 +113,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return $"Crystal Vector ({A}, {B}, {C}, {P})";
+            return $"CrystalVector ({A}, {B}, {C}, {P})";
         }
 
         /// <summary>

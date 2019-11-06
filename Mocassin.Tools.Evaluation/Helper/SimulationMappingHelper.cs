@@ -102,6 +102,32 @@ namespace Mocassin.Tools.Evaluation.Helper
             return GetValue;
         }
 
+        /// <summary>
+        ///     Get a mapper <see cref="Func{T, TResult}" /> that translates linear lattice position indices into
+        ///     <see cref="Cartesian3D" />, <see cref="Fractional3D"/> and <see cref="CrystalVector4D"/> information
+        /// </summary>
+        /// <param name="latticeSize"></param>
+        /// <param name="vectorEncoder"></param>
+        /// <returns></returns>
+        public static Func<int, (CrystalVector4D, Fractional3D, Cartesian3D)> GetPositionIndexToCoordinateMapper(in CrystalVector4D latticeSize,
+            IUnitCellVectorEncoder vectorEncoder)
+        {
+            if (vectorEncoder.PositionCount != latticeSize.P) throw new ArgumentException("Size mismatch between encoder and lattice information.");
+            var mapper4D = GetPositionIndexToVector4DMapper(latticeSize);
+
+            (CrystalVector4D, Fractional3D, Cartesian3D) GetValue(int index)
+            {
+                var vector4D = mapper4D(index);
+                var fractional3D = vectorEncoder.TryDecode(vector4D, out Fractional3D decoded) 
+                    ? decoded 
+                    : throw new ArgumentException("Provided index cannot be mapped onto 3D information.");
+                var cartesian3D = vectorEncoder.Transformer.ToCartesian(fractional3D);
+                return (vector4D, fractional3D, cartesian3D);
+            }
+
+            return GetValue;
+        }
+
 
         /// <summary>
         ///     Generates a mapper <see cref="Func{T, TResult}" /> that translates static tracker indices into

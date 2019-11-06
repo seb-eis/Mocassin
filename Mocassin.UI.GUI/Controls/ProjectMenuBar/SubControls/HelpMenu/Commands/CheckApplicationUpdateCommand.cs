@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Deployment.Application;
+using System.Threading.Tasks;
 using System.Windows;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.Loading;
@@ -117,8 +118,20 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
         /// </summary>
         private void DoUpdate()
         {
-            var done = false;
-            AsyncWindowedBackgroundTask.RunWithLoadingWindow(() => done = ApplicationDeployment.CurrentDeployment.Update());
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            try
+            {
+                ApplicationDeployment.CurrentDeployment.Update();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Fatal error during update pull:\n{e.Message}");
+            }
+            finally
+            {
+                loadingWindow.Close();
+            }
         }
     }
 }

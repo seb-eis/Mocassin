@@ -72,14 +72,13 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Checks if three cartesian vectors form a linear indendent system
+        ///     Checks if three cartesian vectors form a linear independent system
         /// </summary>
         /// <param name="vecA"></param>
         /// <param name="vecB"></param>
-        /// <param name="vecC"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public bool IsLinearIndependetFrom(in Cartesian3D vecA, in Cartesian3D vecB, IEqualityComparer<double> comparer)
+        public bool IsLinearIndependentFrom(in Cartesian3D vecA, in Cartesian3D vecB, IEqualityComparer<double> comparer)
         {
             return Coordinates.IsLinearIndependentFrom(vecA.Coordinates, vecB.Coordinates, comparer);
         }
@@ -90,7 +89,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="vecA"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public bool IsLinearIndependetFrom(in Cartesian3D vecA, IEqualityComparer<double> comparer)
+        public bool IsLinearIndependentFrom(in Cartesian3D vecA, IEqualityComparer<double> comparer)
         {
             return Coordinates.IsLinearIndependentFrom(vecA.Coordinates, comparer);
         }
@@ -188,6 +187,12 @@ namespace Mocassin.Mathematics.ValueTypes
         public Cartesian3D GetSquared()
         {
             return new Cartesian3D(X * X, Y * Y, Z * Z);
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"Cartesian ({X}, {Y}, {Z})";
         }
     }
 }

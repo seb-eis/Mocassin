@@ -1,4 +1,5 @@
 ﻿using System;
+using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
@@ -11,12 +12,31 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     /// </summary>
     public sealed class MmcJobDescriptionSetControlViewModel : CollectionControlViewModel<MmcJobDescriptionGraph>
     {
+        private int duplicateCount;
+
         /// <summary>
         ///     Get the <see cref="MmcJobDescriptionGraph" /> that supplies the <see cref="MmcJobDescriptionGraph" /> collection
         /// </summary>
         public MmcJobPackageDescriptionGraph MmcJobPackage { get; }
 
+        /// <summary>
+        ///     The parent <see cref="MocassinProjectGraph"/>
+        /// </summary>
         public MocassinProjectGraph ProjectGraph { get; }
+
+        /// <summary>
+        ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
+        /// </summary>
+        public DuplicateCollectionItemCommand<MmcJobDescriptionGraph> DuplicateItemCommand { get; }
+
+        /// <summary>
+        ///     Get or set the duplicate count if the duplicate command is executed
+        /// </summary>
+        public int DuplicateCount
+        {
+            get => duplicateCount;
+            set => SetProperty(ref duplicateCount, value > 0 ? value : 1);
+        }
 
         /// <summary>
         ///     Creates new <see cref="MmcJobDescriptionSetControlViewModel" /> for the passed
@@ -29,6 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
             MmcJobPackage = mmcJobPackage ?? throw new ArgumentNullException(nameof(mmcJobPackage));
             ProjectGraph = projectGraph ?? throw new ArgumentNullException(nameof(projectGraph));
             SetCollection(mmcJobPackage.JobConfigurations);
+            DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobDescriptionGraph>(this) {CountProvider = () => DuplicateCount};
         }
     }
 }
