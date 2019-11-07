@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
@@ -34,6 +37,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
     public class ModelViewport3DViewModel : ProjectGraphControlViewModel
     {
         private bool isRefreshingVisuals;
+        private ProjectCustomizationGraph selectedCustomizationGraph;
 
         /// <summary>
         ///     Get or set a boolean flag if the viewport is synchronized with the model data
@@ -72,9 +76,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public ModelRenderResourcesViewModel RenderResourcesViewModel { get; }
 
         /// <summary>
-        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ProjectObject3DViewModel" />
+        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ProjectObject3DViewModel" /> of model
+        ///     objects
         /// </summary>
         public ObservableCollectionViewModel<ProjectObject3DViewModel> ModelObjectViewModels { get; }
+
+        /// <summary>
+        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ProjectObject3DViewModel" /> of
+        ///     customization objects
+        /// </summary>
+        public ObservableCollectionViewModel<ProjectObject3DViewModel> CustomizationObjectViewModels { get; }
 
         /// <summary>
         ///     Get a <see cref="RelayCommand" /> to update the model object render data list
@@ -82,9 +93,18 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public RelayCommand UpdateObjectViewModelsCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand" /> to refresh the visual object layer contents
+        ///     Get a <see cref="AsyncRelayCommand" /> to refresh the visual object layer contents
         /// </summary>
-        public RelayCommand RefreshVisualGroupsCommand { get; }
+        public AsyncRelayCommand RefreshVisualGroupsCommand { get; }
+
+        /// <summary>
+        ///     Get or set <see cref="ProjectCustomizationGraph" /> that is currently selected
+        /// </summary>
+        public ProjectCustomizationGraph SelectedCustomizationGraph
+        {
+            get => selectedCustomizationGraph;
+            set => SetProperty(ref selectedCustomizationGraph, value);
+        }
 
         /// <summary>
         ///     Get or set a boolean flag if the system is refreshing the visual data
@@ -102,37 +122,42 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             UtilityProject = projectControl.CreateModelProject();
             VisualViewModel = new Viewport3DViewModel();
             ModelObjectViewModels = new ObservableCollectionViewModel<ProjectObject3DViewModel>();
+            CustomizationObjectViewModels = new ObservableCollectionViewModel<ProjectObject3DViewModel>();
             RenderResourcesViewModel = new ModelRenderResourcesViewModel();
             UpdateObjectViewModelsCommand = new RelayCommand(SynchronizeWithModel);
-            RefreshVisualGroupsCommand = new RelayCommand(RefreshVisualGroups);
+            RefreshVisualGroupsCommand = new AsyncRelayCommand(() => RefreshVisualGroups());
+            PropertyChanged += OnCustomizationChanged;
         }
 
         /// <inheritdoc />
         public override async void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            await ExecuteIfConstantContentSource(RefreshVisualContent, TimeSpan.FromMilliseconds(250), true);
+            await ExecuteIfConstantContentSource(async () => await RefreshVisualContent(), TimeSpan.FromMilliseconds(250), true);
         }
 
         /// <summary>
         ///     Executes a full visual content update of the view model
         /// </summary>
-        private void RefreshVisualContent()
+        private async Task RefreshVisualContent()
         {
             if (ContentSource == null)
             {
+                SelectedCustomizationGraph = null;
                 VisualViewModel.ClearVisualGroups();
                 ModelObjectViewModels.ClearCollection();
                 IsSynchronizedWithModel = true;
                 return;
             }
 
+            if (!ContentSource.ProjectCustomizationGraphs.Contains(SelectedCustomizationGraph))
+                SelectedCustomizationGraph = ContentSource.ProjectCustomizationGraphs.FirstOrDefault();
+
             IsSynchronizedWithModel = false;
             VisualViewModel.ClearVisual();
             RenderResourcesViewModel.ChangeDataSource(ContentSource?.Resources);
             SynchronizeWithModel();
-            RefreshVisualGroups();
-            VisualViewModel.UpdateVisual();
+            await RefreshVisualGroups();
         }
 
         /// <summary>
@@ -153,7 +178,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <summary>
         ///     Generates the <see cref="ProjectObject3DViewModel" /> instances for all displayable
         ///     <see cref="ExtensibleProjectObjectGraph" />
-        ///     instances in the content source
+        ///     model object instances in the content source
         /// </summary>
         public void UpdateObjectViewModels()
         {
@@ -163,15 +188,30 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 return;
             }
 
-            var results = new List<ProjectObject3DViewModel>(ModelObjectViewModels.ObservableItems.Count)
-            {
-                GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo)
-            };
-            results.AddRange(ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions.Select(GetProjectObjectViewModel));
-            results.AddRange(ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions.Select(GetProjectObjectViewModel));
-
             ModelObjectViewModels.ClearCollection();
-            ModelObjectViewModels.AddCollectionItems(results);
+            ModelObjectViewModels.AddCollectionItem(GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo));
+            ModelObjectViewModels.AddCollectionItems(ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions.Select(GetProjectObjectViewModel));
+            ModelObjectViewModels.AddCollectionItems(ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions.Select(GetProjectObjectViewModel));
+        }
+
+        /// <summary>
+        ///     Generates the <see cref="ProjectObject3DViewModel" /> instances for all displayable
+        ///     <see cref="ExtensibleProjectObjectGraph" />
+        ///     customization object instances in the selected customization
+        /// </summary>
+        public void UpdateCustomizationViewModels()
+        {
+            if (ContentSource == null || SelectedCustomizationGraph == null)
+            {
+                CustomizationObjectViewModels.ClearCollection();
+                return;
+            }
+
+            var energyCustomization = SelectedCustomizationGraph.EnergyModelCustomization;
+            CustomizationObjectViewModels.ClearCollection();
+            CustomizationObjectViewModels.AddCollectionItems(energyCustomization.StablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
+            CustomizationObjectViewModels.AddCollectionItems(energyCustomization.UnstablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
+            CustomizationObjectViewModels.AddCollectionItems(energyCustomization.GroupEnergyParameterSets.Select(GetProjectObjectViewModel));
         }
 
         /// <summary>
@@ -183,14 +223,42 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <returns></returns>
         private ProjectObject3DViewModel GetProjectObjectViewModel(ExtensibleProjectObjectGraph objectGraph)
         {
-            return ModelObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph)
-                   ?? new ProjectObject3DViewModel(objectGraph);
+            var result = ModelObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph);
+            if (result != null) return result;
+
+            var objectCategory = VisualObjectCategory.Unknown;
+            switch (objectGraph)
+            {
+                case StructureInfoGraph _:
+                    objectCategory = VisualObjectCategory.Frame;
+                    break;
+
+                case KineticTransitionGraph _:
+                    objectCategory = VisualObjectCategory.Transition;
+                    break;
+
+                case UnitCellPositionGraph _:
+                    objectCategory = VisualObjectCategory.Position;
+                    break;
+
+                case PairEnergySetGraph _:
+                    objectCategory = VisualObjectCategory.Interaction;
+                    break;
+
+                case GroupEnergySetGraph _:
+                    objectCategory = VisualObjectCategory.Cluster;
+                    break;
+            }
+
+            return new ProjectObject3DViewModel(objectGraph, objectCategory);
         }
 
         /// <summary>
-        ///     Refreshes the set of <see cref="IVisualGroupViewModel" /> for each displayable model object
+        ///     Refreshes the set of <see cref="IVisualGroupViewModel" /> with an option to force a visual update
         /// </summary>
-        public void RefreshVisualGroups()
+        /// <param name="forceVisualUpdate"></param>
+        /// <returns></returns>
+        public async Task RefreshVisualGroups(bool forceVisualUpdate = false)
         {
             if (ContentSource == null) return;
 
@@ -201,22 +269,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 VisualViewModel.ClearVisualGroups();
                 SynchronizeWithModel();
 
-                VisualViewModel.AddVisualGroup(CreateCellFrameLineVisual(), Resources.DisplayName_ModelViewport_CellFrameLayer,
-                    GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo).IsVisible);
+                await Task.WhenAll(RefreshModelObjectVisualGroupsAsync(), RefreshCustomizationObjectVisualGroupsAsync());
 
-                foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
-                    VisualViewModel.AddVisualGroup(CreatePositionVisuals(item), item.Name, GetProjectObjectViewModel(item).IsVisible);
-
-                foreach (var item in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
-                    VisualViewModel.AddVisualGroup(CreateTransitionVisuals(item), item.Name, GetProjectObjectViewModel(item).IsVisible);
-
-                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.StablePairEnergyParameterSets ?? new List<PairEnergySetGraph>())
-                    VisualViewModel.AddVisualGroup(CreatePairInteractionVisuals(item), $"{item.Name}(stable)", false);
-
-                foreach (var item in ContentSource.ProjectCustomizationGraphs.FirstOrDefault()?.EnergyModelCustomization.UnstablePairEnergyParameterSets ?? new List<PairEnergySetGraph>())
-                    VisualViewModel.AddVisualGroup(CreatePairInteractionVisuals(item), $"{item.Name}(unstable)", false);
-
-                if (VisualViewModel.IsAutoUpdating) VisualViewModel.UpdateVisual();
+                if (VisualViewModel.IsAutoUpdating || forceVisualUpdate) VisualViewModel.UpdateVisual();
             }
             catch (Exception e)
             {
@@ -224,6 +279,61 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             }
 
             IsRefreshingVisuals = false;
+        }
+
+        /// <summary>
+        ///     Refreshes the set of <see cref="IVisualGroupViewModel" /> for each displayable model object asynchronously
+        /// </summary>
+        private async Task RefreshModelObjectVisualGroupsAsync()
+        {
+            var structureInfo = ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo;
+            var positionGraphs = ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions;
+            var transitionGraphs = ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions;
+
+            var cellFrameBuildTask = CreateCellFrameVisualAsync(structureInfo);
+            var positionBuildTasks = positionGraphs.Select(CreatePositionVisualsAsync).ToList();
+            var transitionBuildTasks = transitionGraphs.Select(CreateTransitionVisualsAsync).ToList();
+            var awaitables = transitionBuildTasks.Cast<Task>().Concat(cellFrameBuildTask.AsSingleton()).Concat(positionBuildTasks);
+
+            await Task.WhenAll(awaitables);
+
+            VisualViewModel.AddVisualGroup(cellFrameBuildTask.Result, Resources.DisplayName_ModelViewport_CellFrameLayer,
+                GetProjectObjectViewModel(structureInfo).IsVisible);
+
+            for (var i = 0; i < positionGraphs.Count; i++)
+                VisualViewModel.AddVisualGroup(positionBuildTasks[i].Result, positionGraphs[i].Name, GetProjectObjectViewModel(positionGraphs[i]).IsVisible);
+
+            for (var i = 0; i < transitionGraphs.Count; i++)
+                VisualViewModel.AddVisualGroup(transitionBuildTasks[i].Result, transitionGraphs[i].Name,
+                    GetProjectObjectViewModel(transitionGraphs[i]).IsVisible);
+        }
+
+        /// <summary>
+        ///     Refreshes the set of <see cref="IVisualGroupViewModel" /> for each displayable customization object asynchronously
+        /// </summary>
+        private async Task RefreshCustomizationObjectVisualGroupsAsync()
+        {
+            if (SelectedCustomizationGraph == null) return;
+            var stableInteractions = SelectedCustomizationGraph.EnergyModelCustomization.StablePairEnergyParameterSets;
+            var unstableInteractions = SelectedCustomizationGraph.EnergyModelCustomization.UnstablePairEnergyParameterSets;
+            var groupInteractions = SelectedCustomizationGraph.EnergyModelCustomization.GroupEnergyParameterSets;
+
+            var stableBuildTasks = stableInteractions.Select(CreatePairInteractionVisualsAsync).ToList();
+            var unstableBuildTasks = unstableInteractions.Select(CreatePairInteractionVisualsAsync).ToList();
+            var groupBuildTasks = groupInteractions.Select(CreateGroupInteractionVisualsAsync).ToList();
+
+            var awaitables = stableBuildTasks.Concat(unstableBuildTasks).Concat(groupBuildTasks);
+
+            await Task.WhenAll(awaitables);
+
+            for (var i = 0; i < stableInteractions.Count; i++)
+                VisualViewModel.AddVisualGroup(stableBuildTasks[i].Result, stableInteractions[i].Name, GetProjectObjectViewModel(stableInteractions[i]).IsVisible);
+
+            for (var i = 0; i < unstableInteractions.Count; i++)
+                VisualViewModel.AddVisualGroup(unstableBuildTasks[i].Result, unstableInteractions[i].Name, GetProjectObjectViewModel(unstableInteractions[i]).IsVisible);
+
+            for (var i = 0; i < groupInteractions.Count; i++)
+                VisualViewModel.AddVisualGroup(groupBuildTasks[i].Result, groupInteractions[i].Name, GetProjectObjectViewModel(groupInteractions[i]).IsVisible);
         }
 
         /// <summary>
@@ -253,28 +363,23 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> objects for a <see cref="UnitCellPositionGraph" />
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="UnitCellPositionGraph" /> visualization
+        ///     asynchronously
         /// </summary>
         /// <param name="positionGraph"></param>
         /// <returns></returns>
-        private IList<MeshGeometryVisual3D> CreatePositionVisuals(UnitCellPositionGraph positionGraph)
+        private async Task<IReadOnlyList<ModelVisual3D>> CreatePositionVisualsAsync(UnitCellPositionGraph positionGraph)
         {
             var objectViewModel = GetProjectObjectViewModel(positionGraph);
-            var sourceVector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
-            var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
-            var cellPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, startVector, endVector);
+            var positionTransforms = await Task.Run(() => CreatePositionVisualBuildData(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C)));
 
             var phiDiv = (int) (Settings.Default.Default_Render_Sphere_PhiDiv * objectViewModel.MeshQuality);
             var thetaDiv = (int) (Settings.Default.Default_Render_Sphere_ThetaDiv * objectViewModel.MeshQuality);
             var diameter = objectViewModel.Scaling;
             var visualFactory = VisualViewModel.BuildSphereVisualFactory(diameter, thetaDiv, phiDiv);
 
-            var result = new List<MeshGeometryVisual3D>(cellPositions.Count);
-            foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()))
-            {
-                var visual = VisualViewModel.CreateVisual(VisualViewModel.GetOriginOffsetTransform3D(center), visualFactory);
-                result.Add(visual);
-            }
+            var result = new List<MeshGeometryVisual3D>(positionTransforms.Count);
+            result.AddRange(positionTransforms.Select(x => VisualViewModel.CreateVisual(x, visualFactory)));
 
             var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
                 ? Settings.Default.Default_Render_UnstablePosition_Alpha
@@ -285,7 +390,27 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
+        ///     Creates the unique <see cref="Transform3D" /> collection to extend a <see cref="Fractional3D" /> source vector to
+        ///     its render area symmetry equivalents (Does not require dispatcher execution)
+        /// </summary>
+        /// <param name="sourceVector"></param>
+        /// <param name="freezeData"></param>
+        /// <returns></returns>
+        private IList<Transform3D> CreatePositionVisualBuildData(in Fractional3D sourceVector, bool freezeData = true)
+        {
+            var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var extendedPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, renderAreaStart, renderAreaEnd);
+            var result = new List<Transform3D>(extendedPositions.Count);
+            result.AddRange(extendedPositions.Select(x => VisualViewModel.GetOriginOffsetTransform3D(VectorTransformer.ToCartesian(x).AsPoint3D())).Action(x =>
+            {
+                if (freezeData) x.Freeze();
+            }));
+            return result;
+        }
+
+        /// <summary>
         ///     Creates a single <see cref="PointsVisual3D" /> point cloud objects for a <see cref="UnitCellPositionGraph" />
+        ///     visualization
         /// </summary>
         /// <param name="positionGraph"></param>
         /// <returns></returns>
@@ -308,36 +433,29 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a list of the <see cref="MeshGeometryVisual3D" /> items for visualization of the provided
-        ///     <see cref="KineticTransitionGraph" />
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="KineticTransitionGraph" /> visualization
+        ///     asynchronously
         /// </summary>
         /// <param name="transitionGraph"></param>
         /// <returns></returns>
-        private IList<MeshGeometryVisual3D> CreateTransitionVisuals(KineticTransitionGraph transitionGraph)
+        private async Task<IReadOnlyList<ModelVisual3D>> CreateTransitionVisualsAsync(KineticTransitionGraph transitionGraph)
         {
             var modelObjectVm = GetProjectObjectViewModel(transitionGraph);
             var fractionalPath = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
-            var pathTransforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath);
-            var renderArea = RenderResourcesViewModel.GetRenderCuboidVectors();
+
+            (Point3D StartPoint, Point3D EndPoint)[] pathPoints = null;
+            var pathTransforms = await Task.Run(() => CreateTransitionVisualBuildData(fractionalPath, out pathPoints));
 
             var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
             var thetaDiv = (int) (Settings.Default.Default_Render_Arrow_ThetaDiv * modelObjectVm.MeshQuality);
             var diameter = modelObjectVm.Scaling;
 
             var result = new List<MeshGeometryVisual3D>(pathTransforms.Count);
-
-            for (var i = 0; i < fractionalPath.Count - 1; i++)
+            for (var i = 0; i < pathPoints.Length; i++)
             {
-                var (startPoint, endPoint) = GetAtomRadiusCorrectedTransitionStepPoints(fractionalPath[i], fractionalPath[i + 1]);
-                var visualFactory = VisualViewModel.BuildDualHeadedArrowVisualFactory(diameter, startPoint, endPoint, headLength, thetaDiv);
-
-                var transformEnum = pathTransforms
-                    .Select(transform3D => (transform3D, transform3D.Transform(startPoint), transform3D.Transform(endPoint)))
-                    .Where(x => RenderAreaContainsPoint(x.Item2, renderArea.StartVector, renderArea.EndVector))
-                    .Where(x => RenderAreaContainsPoint(x.Item3, renderArea.StartVector, renderArea.EndVector))
-                    .Select(x => x.transform3D);
-
-                result.AddRange(transformEnum.Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
+                var visualFactory =
+                    VisualViewModel.BuildDualHeadedArrowVisualFactory(diameter, pathPoints[i].StartPoint, pathPoints[i].EndPoint, headLength, thetaDiv);
+                result.AddRange(pathTransforms[i].Select(transform3D => VisualViewModel.CreateVisual(transform3D, visualFactory)));
             }
 
             VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(modelObjectVm.Color));
@@ -345,67 +463,231 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a <see cref="LinesVisual3D" /> for visualization of a <see cref="PairEnergySetGraph" />
+        ///     Creates the <see cref="Transform3D" /> and corrected <see cref="Point3D" /> raw data for transition path
+        ///     visualization (Does not require dispatcher execution)
         /// </summary>
-        /// <param name="energySetGraph"></param>
+        /// <param name="fractionalPath"></param>
+        /// <param name="atomRadiusCorrectedStepPoints"></param>
+        /// <param name="freezeData"></param>
         /// <returns></returns>
-        private IList<LinesVisual3D> CreatePairInteractionVisuals(PairEnergySetGraph energySetGraph)
+        private IList<IList<Transform3D>> CreateTransitionVisualBuildData(IReadOnlyList<Fractional3D> fractionalPath,
+            out (Point3D StartPoint, Point3D EndPoint)[] atomRadiusCorrectedStepPoints, bool freezeData = true)
         {
-            var fractionalPath = energySetGraph.AsVectorPath().ToList();
-            var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath);
-            var (point0, point1) = (VectorTransformer.ToCartesian(fractionalPath[0]).AsPoint3D(), VectorTransformer.ToCartesian(fractionalPath[1]).AsPoint3D());
-
-            var firstHalfPoints = new Point3DCollection(fractionalPath.Count * transforms.Count);
-            var secondHalfPoints = new Point3DCollection(fractionalPath.Count * transforms.Count);
+            var pathStepCount = fractionalPath.Count - 1;
+            var rawPathTransforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath, freezeData);
             var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
 
-            foreach (var (startPoint, endPoint) in transforms.Select(x => (x.Transform(point0), x.Transform(point1))))
+            atomRadiusCorrectedStepPoints = new (Point3D, Point3D)[pathStepCount];
+            var result = new List<IList<Transform3D>>(pathStepCount);
+
+            for (var i = 0; i < pathStepCount; i++)
             {
-                if (!RenderAreaContainsPoint(endPoint, renderAreaStart, renderAreaEnd)) continue;
-                if (!RenderAreaContainsPoint(startPoint, renderAreaStart, renderAreaEnd)) continue;
-                var middlePoint = startPoint + 0.5 * (endPoint - startPoint);
-                firstHalfPoints.Add(startPoint);
-                firstHalfPoints.Add(middlePoint);
-                secondHalfPoints.Add(middlePoint);
-                secondHalfPoints.Add(endPoint);
+                var (startPoint, endPoint) = GetAtomRadiusCorrectedTransitionStepPoints(fractionalPath[i], fractionalPath[i + 1]);
+                atomRadiusCorrectedStepPoints[i] = (startPoint, endPoint);
+
+                var stepTransforms = new List<Transform3D>(rawPathTransforms.Count);
+                var filteredTransforms = rawPathTransforms
+                    .Select(transform3D => (transform3D, transform3D.Transform(startPoint), transform3D.Transform(endPoint)))
+                    .Where(x => RenderAreaContainsPoint(x.Item2, renderAreaStart, renderAreaEnd) &&
+                                RenderAreaContainsPoint(x.Item3, renderAreaStart, renderAreaEnd))
+                    .Select(x => x.transform3D);
+
+                stepTransforms.AddRange(filteredTransforms);
+                result.Add(stepTransforms);
             }
-            var result0 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(firstHalfPoints));
-            var result1 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(secondHalfPoints));
 
-            var objectVm = GetProjectObjectViewModel(energySetGraph);
-            var (startAtomVm, endAtomVm) = (HitTestAtomObject3DViewModel(fractionalPath[0]), HitTestAtomObject3DViewModel(fractionalPath[1]));
-
-            objectVm.Scaling = 2;
-            result0.Thickness = objectVm.Scaling;
-            result0.Color = startAtomVm?.Color ?? objectVm.Color;
-            result1.Thickness = objectVm.Scaling;
-            result1.Color = endAtomVm?.Color ?? objectVm.Color;
-
-            return new List<LinesVisual3D> {result0, result1};
-        }
-
-        /// <summary>
-        ///     Creates a <see cref="MeshGeometryVisual3D" /> for visualization of a <see cref="PairEnergySetGraph" />
-        /// </summary>
-        /// <param name="energySetGraph"></param>
-        /// <returns></returns>
-        private IList<MeshGeometryVisual3D> CreateGroupInteractionVisuals(GroupEnergySetGraph energySetGraph)
-        {
-            var result = new List<MeshGeometryVisual3D>();
-            var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(energySetGraph.AsVectorPath());
             return result;
         }
 
         /// <summary>
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="PairEnergySetGraph" /> visualization
+        ///     asynchronously
+        /// </summary>
+        /// <param name="energySetGraph"></param>
+        /// <returns></returns>
+        private async Task<IReadOnlyList<ModelVisual3D>> CreatePairInteractionVisualsAsync(PairEnergySetGraph energySetGraph)
+        {
+            var fractionalPath = energySetGraph.AsVectorPath().ToList();
+
+            var (firstPoints, secondPoints) = await Task.Run(() => CreatePairInteractionVisualBuildData(fractionalPath[0], fractionalPath[1]));
+
+            var result0 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(firstPoints));
+            var result1 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(secondPoints));
+
+            var objectVm = GetProjectObjectViewModel(energySetGraph);
+            var (startAtomVm, endAtomVm) = (HitTestAtomObject3DViewModel(fractionalPath[0]), HitTestAtomObject3DViewModel(fractionalPath[1]));
+
+            result0.Thickness = objectVm.Scaling;
+            result1.Thickness = objectVm.Scaling;
+            result0.Color = objectVm.Color.A != byte.MaxValue ? startAtomVm.Color : objectVm.Color;
+            result1.Color = objectVm.Color.A != byte.MaxValue ? endAtomVm.Color : objectVm.Color;
+
+            return new[] {result0, result1};
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="Point3DCollection" /> items for first and second half for pair interaction network
+        ///     visualization (Does not require dispatcher execution)
+        /// </summary>
+        /// <param name="startFractional"></param>
+        /// <param name="endFractional"></param>
+        /// <param name="freezeData"></param>
+        /// <returns></returns>
+        private (Point3DCollection, Point3DCollection) CreatePairInteractionVisualBuildData(in Fractional3D startFractional, in Fractional3D endFractional,
+            bool freezeData = true)
+        {
+            var pathTransforms = GetVisuallyUniqueP1PathTransformsForRenderArea(new[] {startFractional, endFractional}, freezeData);
+            var (point0, point1) = (VectorTransformer.ToCartesian(startFractional).AsPoint3D(), VectorTransformer.ToCartesian(endFractional).AsPoint3D());
+            var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
+
+            var firstPoints = new Point3DCollection(2 * pathTransforms.Count);
+            var secondPoints = new Point3DCollection(2 * pathTransforms.Count);
+
+            foreach (var transform in pathTransforms)
+            {
+                var (startPoint, endPoint) = (transform.Transform(point0), transform.Transform(point1));
+                if (!RenderAreaContainsPoint(startPoint, renderAreaStart, renderAreaEnd) ||
+                    !RenderAreaContainsPoint(endPoint, renderAreaStart, renderAreaEnd)) continue;
+                var middlePoint = startPoint + 0.5 * (endPoint - startPoint);
+                firstPoints.Add(startPoint);
+                firstPoints.Add(middlePoint);
+                secondPoints.Add(middlePoint);
+                secondPoints.Add(endPoint);
+            }
+
+            if (!freezeData) return (firstPoints, secondPoints);
+            firstPoints.Freeze();
+            secondPoints.Freeze();
+            return (firstPoints, secondPoints);
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="ModelVisual3D" /> collection for visualization of a <see cref="PairEnergySetGraph" /> asynchronously
+        /// </summary>
+        /// <param name="energySetGraph"></param>
+        /// <returns></returns>
+        private async Task<IReadOnlyList<ModelVisual3D>> CreateGroupInteractionVisualsAsync(GroupEnergySetGraph energySetGraph)
+        {
+            var objectVm = GetProjectObjectViewModel(energySetGraph);
+            var fractionalPath = energySetGraph.AsVectorPath(true).ToList();
+            var points = fractionalPath.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()).ToList();
+            var meshGeometry = await Task.Run(() => CreateGroupInteractionVisualNetworkMesh(fractionalPath));
+            var visualFactory = VisualViewModel.BuildMeshVisualFactory(meshGeometry);
+
+            var result = new List<MeshGeometryVisual3D>
+            {
+                VisualViewModel.CreateVisual(Transform3D.Identity, visualFactory)
+            };
+            VisualViewModel.SetMeshGeometryMaterial(result, MaterialHelper.CreateMaterial(new SolidColorBrush(objectVm.Color.ChangeAlpha(32)), 0, 255, true));
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates a unified <see cref="MeshGeometry3D" /> required to describe the group interaction visualization (Far better performance than single transforms)
+        /// </summary>
+        /// <param name="fractionalPath"></param>
+        /// <param name="freezeData"></param>
+        /// <returns></returns>
+        private MeshGeometry3D CreateGroupInteractionVisualNetworkMesh(IReadOnlyList<Fractional3D> fractionalPath, bool freezeData = true)
+        {
+            var transforms = CreateGroupInteractionVisualBuildData(fractionalPath, freezeData);
+            var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var points = fractionalPath.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()).ToList();
+
+            var result = new List<Point3D>(points.Count * transforms.Count);
+            var meshBuilder = new MeshBuilder();
+
+            for (var i = 0; i < points.Count; i++)
+            {
+                for (var j = i+1; j < points.Count; j++)
+                {
+                    for (var k = j+1; k < points.Count; k++)
+                    {
+                        foreach (var x in transforms)
+                        {
+                            meshBuilder.AddTriangle(x.Transform(points[i]), x.Transform(points[j]), x.Transform(points[k]));   
+                        }
+                    }
+                }
+            }
+            return meshBuilder.ToMesh(freezeData);
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="Transform3D" /> required to describe group interaction visualization (Does not require dispatcher execution)
+        /// </summary>
+        /// <param name="fractionalPath"></param>
+        /// <param name="freezeData"></param>
+        /// <returns></returns>
+        private IList<Transform3D> CreateGroupInteractionVisualBuildData(IReadOnlyList<Fractional3D> fractionalPath, bool freezeData = true)
+        {
+            var transforms = GetVisuallyUniqueP1PathTransformsForRenderArea(fractionalPath, freezeData);
+            var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
+            var points = fractionalPath.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()).ToList();
+            var result = new List<Transform3D>(transforms.Count);
+            result.AddRange(transforms.Where(transform => points.All(x => RenderAreaContainsPoint(transform.Transform(x), renderAreaStart, renderAreaEnd))));
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="ModelVisual3D" /> for a <see cref="StructureInfoGraph" /> cell frame visualization
+        ///     asynchronously
+        /// </summary>
+        private async Task<ModelVisual3D> CreateCellFrameVisualAsync(StructureInfoGraph structureInfoGraph)
+        {
+            var objectVm = GetProjectObjectViewModel(structureInfoGraph);
+            var framePoints = await Task.Run(() => CreateCellFrameVisualBuildData());
+            var result = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(framePoints));
+            result.Thickness = objectVm.Scaling;
+            result.Color = objectVm.Color;
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="Point3DCollection" /> required to describe the cell frame lines of the render area (Does not
+        ///     require dispatcher execution)
+        /// </summary>
+        /// <param name="freezeData"></param>
+        /// <returns></returns>
+        private Point3DCollection CreateCellFrameVisualBuildData(bool freezeData = true)
+        {
+            var comparer = UtilityProject.GeometryNumeric.RangeComparer;
+            var baseLinePairs = new[]
+            {
+                (new Fractional3D(0, 0, 0), new Fractional3D(1, 0, 0)),
+                (new Fractional3D(0, 0, 0), new Fractional3D(0, 1, 0)),
+                (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
+            };
+
+            var points3D = new Point3DCollection();
+            var max = RenderResourcesViewModel.GetRenderCuboidVectors().EndVector;
+            foreach (var (a, b, c) in EnumerateRenderedCellOffsets(false, true))
+            {
+                var shift = new Fractional3D(a, b, c);
+                foreach (var (start, end) in baseLinePairs.Select(x => (x.Item1 + shift, x.Item2 + shift)))
+                {
+                    if (comparer.Compare(end.A, max.A) > 0 || comparer.Compare(end.B, max.B) > 0 || comparer.Compare(end.C, max.C) > 0) continue;
+                    points3D.Add(VectorTransformer.ToCartesian(start).AsPoint3D());
+                    points3D.Add(VectorTransformer.ToCartesian(end).AsPoint3D());
+                }
+            }
+
+            if (freezeData) points3D.Freeze();
+            return points3D;
+        }
+
+        /// <summary>
         ///     Get the extended unique set of <see cref="Transform3D" /> required for P1 extension of the passed path geometry to
-        ///     the render area (Optional flag to get only transforms)
+        ///     the render area (Optional flag to freeze the objects)
         /// </summary>
         /// <param name="pathGeometry"></param>
+        /// <param name="freezeTransforms"></param>
         /// <returns></returns>
-        private IList<Transform3D> GetVisuallyUniqueP1PathTransformsForRenderArea(IEnumerable<Fractional3D> pathGeometry)
+        private IList<Transform3D> GetVisuallyUniqueP1PathTransformsForRenderArea(IEnumerable<Fractional3D> pathGeometry, bool freezeTransforms = true)
         {
             var cellTransforms = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathGeometry, true)
                 .Select(x => x.ToTransform3D(VectorTransformer.FractionalSystem));
+            if (freezeTransforms) cellTransforms = cellTransforms.Action(x => x.Freeze());
             return ExtendUnitCellTransformsToRenderArea(cellTransforms).ToList();
         }
 
@@ -462,7 +744,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObject3DViewModel"/> if the provided <see cref="Fractional3D"/> points to an atom position or null otherwise
+        ///     Get the <see cref="ProjectObject3DViewModel" /> if the provided <see cref="Fractional3D" /> points to an atom
+        ///     position or null otherwise
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
@@ -508,38 +791,6 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="LinesVisual3D" /> that describes the unit cell cell frame of the current render area
-        /// </summary>
-        private LinesVisual3D CreateCellFrameLineVisual()
-        {
-            var objectVm = GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
-            var comparer = UtilityProject.GeometryNumeric.RangeComparer;
-            var baseLinePairs = new[]
-            {
-                (new Fractional3D(0, 0, 0), new Fractional3D(1, 0, 0)),
-                (new Fractional3D(0, 0, 0), new Fractional3D(0, 1, 0)),
-                (new Fractional3D(0, 0, 0), new Fractional3D(0, 0, 1))
-            };
-
-            var points3D = new Point3DCollection();
-            var max = RenderResourcesViewModel.GetRenderCuboidVectors().EndVector;
-            foreach (var (a, b, c) in EnumerateRenderedCellOffsets(false, true))
-            {
-                var shift = new Fractional3D(a, b, c);
-                foreach (var (start, end) in baseLinePairs.Select(x => (x.Item1 + shift, x.Item2 + shift)))
-                {
-                    if (comparer.Compare(end.A, max.A) > 0 || comparer.Compare(end.B, max.B) > 0 || comparer.Compare(end.C, max.C) > 0) continue;
-                    points3D.Add(VectorTransformer.ToCartesian(start).AsPoint3D());
-                    points3D.Add(VectorTransformer.ToCartesian(end).AsPoint3D());
-                }
-            }
-
-            points3D.Freeze();
-            var result = ExecuteOnDispatcher(() => new LinesVisual3D {Points = points3D, Color = objectVm.Color, Thickness = objectVm.Scaling});
-            return result;
-        }
-
-        /// <summary>
         ///     Enumerates the (x,y,z) cell offsets of the current render area as index tuples with different properties
         /// </summary>
         /// <param name="skipOrigin"></param>
@@ -577,6 +828,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 PrepareUtilityProject(ContentSource);
                 UpdateObjectViewModels();
+                UpdateCustomizationViewModels();
             }
 
             IsSynchronizedWithModel = true;
@@ -593,6 +845,19 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             base.OnProjectContentChangedInternal();
             IsSynchronizedWithModel = false;
+        }
+
+        /// <summary>
+        ///     Event reaction for changed <see cref="SelectedCustomizationGraph"/>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnCustomizationChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(SelectedCustomizationGraph))
+            {
+                UpdateCustomizationViewModels();
+            }
         }
 
         /// <inheritdoc />

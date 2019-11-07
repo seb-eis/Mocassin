@@ -7,7 +7,6 @@
              xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.Visualizer.DataControl"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:objects="clr-namespace:Mocassin.UI.GUI.Controls.Visualizer.Objects"
-             xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib"
              xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ModelViewport3DViewModel, IsDesignTimeCreatable=True}"
@@ -35,76 +34,90 @@
           </Grid.RowDefinitions>
           <GroupBox Grid.Row="0" Grid.Column="0">
             <GroupBox.Header>
-              <TextBlock Text="Quick actions:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+              <TextBlock Text="Quick actions:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
             </GroupBox.Header>
             <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
-              <Button Command="{Binding UpdateObjectViewModelsCommand}" Content="Update object grid" Margin="{StaticResource App.Margin.VerticalStack}" />
-              <Button Command="{Binding RefreshVisualGroupsCommand}" Content="Update visual data" Margin="{StaticResource App.Margin.VerticalStack}" />
+              <Button Command="{Binding UpdateObjectViewModelsCommand}" Content="Update object grid"
+                      Margin="{StaticResource App.Margin.VerticalStack}" />
+              <Button Command="{Binding RefreshVisualGroupsCommand}" Content="Update visual data"
+                      Margin="{StaticResource App.Margin.VerticalStack}" />
             </StackPanel>
           </GroupBox>
           <GroupBox Grid.Row="0" Grid.Column="1">
             <GroupBox.Header>
-              <TextBlock Text="Render limits:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+              <TextBlock Text="Render limits:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
             </GroupBox.Header>
             <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
               <StackPanel Grid.Column="0" Margin="{StaticResource App.Margin.HorizontalStack}">
-              <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-                <TextBlock Text="Min. A:" Margin="{StaticResource App.Margin.HorizontalStack}" Width="{StaticResource RenderAreaLabelWidth}"/>
-                <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMinA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
-                  <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
-                  </TextBox.InputBindings>
-                </TextBox>
-              </DockPanel>
-              <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-                <TextBlock Text="Min. B:" Margin="{StaticResource App.Margin.HorizontalStack}" Width="{StaticResource RenderAreaLabelWidth}"/>
-                <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMinB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
-                  <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
-                  </TextBox.InputBindings>
-                </TextBox>
-              </DockPanel>
-              <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-                <TextBlock Text="Min. C:" Margin="{StaticResource App.Margin.HorizontalStack}" Width="{StaticResource RenderAreaLabelWidth}"/>
-                <TextBox  Text="{Binding RenderResourcesViewModel.RenderAreaMinC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
-                  <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
-                  </TextBox.InputBindings>
-                </TextBox>
-              </DockPanel>
+                <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
+                  <TextBlock Text="Min. A:" Margin="{StaticResource App.Margin.HorizontalStack}"
+                             Width="{StaticResource RenderAreaLabelWidth}" />
+                  <TextBox
+                    Text="{Binding RenderResourcesViewModel.RenderAreaMinA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
+                </DockPanel>
+                <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
+                  <TextBlock Text="Min. B:" Margin="{StaticResource App.Margin.HorizontalStack}"
+                             Width="{StaticResource RenderAreaLabelWidth}" />
+                  <TextBox
+                    Text="{Binding RenderResourcesViewModel.RenderAreaMinB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
+                </DockPanel>
+                <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
+                  <TextBlock Text="Min. C:" Margin="{StaticResource App.Margin.HorizontalStack}"
+                             Width="{StaticResource RenderAreaLabelWidth}" />
+                  <TextBox
+                    Text="{Binding RenderResourcesViewModel.RenderAreaMinC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+                    <TextBox.InputBindings>
+                      <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
+                    </TextBox.InputBindings>
+                  </TextBox>
+                </DockPanel>
               </StackPanel>
               <StackPanel Grid.Column="1">
                 <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-                  <TextBlock Text="Max. A:" Margin="{StaticResource App.Margin.HorizontalStack}" Width="{StaticResource RenderAreaLabelWidth}"/>
-                  <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMaxA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+                  <TextBlock Text="Max. A:" Margin="{StaticResource App.Margin.HorizontalStack}"
+                             Width="{StaticResource RenderAreaLabelWidth}" />
+                  <TextBox
+                    Text="{Binding RenderResourcesViewModel.RenderAreaMaxA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
                     <TextBox.InputBindings>
                       <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                     </TextBox.InputBindings>
                   </TextBox>
                 </DockPanel>
                 <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-                  <TextBlock Text="Max. B:" Margin="{StaticResource App.Margin.HorizontalStack}" Width="{StaticResource RenderAreaLabelWidth}"/>
-                  <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMaxB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+                  <TextBlock Text="Max. B:" Margin="{StaticResource App.Margin.HorizontalStack}"
+                             Width="{StaticResource RenderAreaLabelWidth}" />
+                  <TextBox
+                    Text="{Binding RenderResourcesViewModel.RenderAreaMaxB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
                     <TextBox.InputBindings>
                       <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                     </TextBox.InputBindings>
                   </TextBox>
                 </DockPanel>
                 <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-                  <TextBlock Text="Max. C:" Margin="{StaticResource App.Margin.HorizontalStack}" Width="{StaticResource RenderAreaLabelWidth}"/>
-                  <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMaxC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+                  <TextBlock Text="Max. C:" Margin="{StaticResource App.Margin.HorizontalStack}"
+                             Width="{StaticResource RenderAreaLabelWidth}" />
+                  <TextBox
+                    Text="{Binding RenderResourcesViewModel.RenderAreaMaxC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
                     <TextBox.InputBindings>
                       <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
                     </TextBox.InputBindings>
                   </TextBox>
                 </DockPanel>
@@ -114,7 +127,7 @@
 
           <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <GroupBox.Header>
-              <TextBlock Text="Model object settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+              <TextBlock Text="Model object settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
             </GroupBox.Header>
             <DataGrid ItemsSource="{Binding ModelObjectViewModels.ObservableItems}" CanUserAddRows="False"
                       Margin="{StaticResource App.Margin.GroupBoxContent}"
@@ -123,14 +136,15 @@
                       ColumnWidth="*">
               <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
-                  <views:ObjectRowHeaderLogo DataContext="V" />
+                  <views:ObjectRowHeaderLogo />
                 </DataTemplate>
               </DataGrid.RowHeaderTemplate>
               <DataGrid.Columns>
                 <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Type" Binding="{Binding ObjectCategory}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Scaling"
                                     Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-                <DataGridTextColumn Header="Mesh quality" 
+                <DataGridTextColumn Header="Mesh quality"
                                     Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                 <DataGridComboBoxColumn Header="Color"
                                         ItemsSource="{Binding Source={StaticResource ColorProvider}}"
@@ -138,19 +152,59 @@
                                         SelectedValuePath="."
                                         ElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"
                                         EditingElementStyle="{StaticResource App.Style.ColorSelectionComboBox}" />
-                <DataGridCheckBoxColumn Header="Visible (Default)" Binding="{Binding IsVisible}"/>
+                <DataGridCheckBoxColumn Header="Visible (Default)" Binding="{Binding IsVisible}" />
               </DataGrid.Columns>
             </DataGrid>
           </GroupBox>
 
           <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
             <GroupBox.Header>
-              <TextBlock Text="Interaction object settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"/>
+              <TextBlock Text="Interaction object settings:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
             </GroupBox.Header>
-            <StackPanel>
-              <ComboBox ItemsSource="{Binding ContentSource.ProjectCustomizationGraphs}" IsEditable="True"
-                        Name="CustomizationComboBox"/>
-            </StackPanel>
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+              </Grid.RowDefinitions>
+              <ComboBox Grid.Row="0"
+                        ItemsSource="{Binding ContentSource.ProjectCustomizationGraphs}"
+                        SelectedItem="{Binding SelectedCustomizationGraph}"
+                        Margin="{StaticResource App.Margin.GroupBoxContent}"
+                        IsEditable="True"
+                        Name="CustomizationComboBox"
+                        ToolTip="Customization" />
+              <DataGrid Grid.Row="1"
+                        ItemsSource="{Binding CustomizationObjectViewModels.ObservableItems}"
+                        CanUserAddRows="False"
+                        Margin="{StaticResource App.Margin.GroupBoxContent}"
+                        CanUserDeleteRows="False"
+                        AutoGenerateColumns="False"
+                        ColumnWidth="*">
+                <DataGrid.RowHeaderTemplate>
+                  <DataTemplate>
+                    <views:ObjectRowHeaderLogo />
+                  </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
+                <DataGrid.Columns>
+                  <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
+                  <DataGridTextColumn Header="Type" Binding="{Binding ObjectCategory}" IsReadOnly="True" />
+                  <DataGridTextColumn Header="Scaling"
+                                      Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  <!--
+                  <DataGridTextColumn Header="Mesh quality"
+                                      Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  -->
+                  <DataGridComboBoxColumn Header="Color"
+                                          x:Name="BoxColumn"
+                                          ItemsSource="{Binding Source={StaticResource ColorProvider}}"
+                                          SelectedValueBinding="{Binding Color, Converter={StaticResource ColorConverter}, ConverterParameter={StaticResource ColorProvider}}"
+                                          SelectedValuePath="."
+                                          ElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"
+                                          EditingElementStyle="{StaticResource App.Style.ColorSelectionComboBox}"/>
+                  <DataGridCheckBoxColumn Header="Visible (Default)" Binding="{Binding IsVisible}" />
+                </DataGrid.Columns>
+              </DataGrid>
+            </Grid>
           </GroupBox>
         </Grid>
       </TabItem>

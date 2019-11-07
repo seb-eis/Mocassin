@@ -8,6 +8,19 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
+    ///     Enum for defining the visual category of a project object 3D item
+    /// </summary>
+    public enum VisualObjectCategory
+    {
+        Unknown,
+        Frame,
+        Position,
+        Transition,
+        Interaction,
+        Cluster
+    }
+
+    /// <summary>
     ///     A <see cref="ViewModelBase" /> for managing display data resources on <see cref="ExtensibleProjectObjectGraph" /> instances
     /// </summary>
     public class ProjectObject3DViewModel : ViewModelBase
@@ -24,6 +37,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         ///     Get the <see cref="ExtensibleProjectObjectGraph" /> that the formatting is valid for
         /// </summary>
         public ExtensibleProjectObjectGraph ObjectGraph { get; }
+
+        /// <summary>
+        ///     Get the <see cref="VisualObjectCategory"/> of the view model
+        /// </summary>
+        public VisualObjectCategory ObjectCategory { get; }
 
         /// <summary>
         ///     Get or set the <see cref="System.Windows.Media.Color" /> for the object
@@ -82,12 +100,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Creates new <see cref="ProjectObject3DViewModel" /> from the provided <see cref="ExtensibleProjectObjectGraph"/>
+        ///     Creates new <see cref="ProjectObject3DViewModel" /> from the provided <see cref="ExtensibleProjectObjectGraph"/> and <see cref="VisualObjectCategory"/>
         /// </summary>
         /// <param name="objectGraph"></param>
-        public ProjectObject3DViewModel(ExtensibleProjectObjectGraph objectGraph)
+        /// <param name="objectCategory"></param>
+        public ProjectObject3DViewModel(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory objectCategory)
         {
             ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
+            ObjectCategory = objectCategory;
         }
     }
 }

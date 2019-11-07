@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
@@ -149,12 +150,14 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Gets the surrounding geometry as a <see cref="IEnumerable{T}"/> of <see cref="Fractional3D"/> (Start position not included)
+        ///     Gets the surrounding geometry as a <see cref="IEnumerable{T}"/> of <see cref="Fractional3D"/> (Center position not included on default)
         /// </summary>
+        /// <param name="includeCenter"></param>
         /// <returns></returns>
-        public IEnumerable<Fractional3D> AsVectorPath()
+        public IEnumerable<Fractional3D> AsVectorPath(bool includeCenter = false)
         {
-            return BaseGeometry.Select(x => new Fractional3D(x.A, x.B, x.C));
+            var baseEnum = BaseGeometry.Select(x => new Fractional3D(x.A, x.B, x.C));
+            return includeCenter ? ((IUnitCellPosition) CenterPosition.TargetGraph.GetInputObject()).Vector.AsSingleton().Concat(baseEnum) : baseEnum;
         }
 
         /// <inheritdoc />

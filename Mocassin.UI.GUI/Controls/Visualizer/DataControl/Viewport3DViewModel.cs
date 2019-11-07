@@ -468,6 +468,53 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 
         /// <summary>
         ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
+        ///     cylinder frame shape by a set of points a common mesh for multiple <see cref="Transform3D" /> operations
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="diameter"></param>
+        /// <param name="thetaDiv"></param>
+        /// <param name="freezeMesh"></param>
+        /// <returns></returns>
+        public Func<Transform3D, MeshGeometryVisual3D> BuildPipeFrameVisualFactory(IReadOnlyList<Point3D> points, double diameter, int thetaDiv, bool freezeMesh = true)
+        {
+            var meshBuilder = new MeshBuilder();
+            for (var i = 0; i < points.Count; i++)
+            {
+                for (var j = i+1; j < points.Count; j++)
+                {
+                    meshBuilder.AddCylinder(points[i], points[j], diameter, thetaDiv);
+                }
+            }
+            var meshGeometry = meshBuilder.ToMesh(true);
+            return BuildMeshVisualFactory(meshGeometry);
+        }
+
+        /// <summary>
+        ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
+        ///     polyhedron polygon star shape by a set of points a common mesh for multiple <see cref="Transform3D" /> operations
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="freezeMesh"></param>
+        /// <returns></returns>
+        public Func<Transform3D, MeshGeometryVisual3D> BuildPolyhedronVisualFactory(IReadOnlyList<Point3D> points, bool freezeMesh = true)
+        {
+            var meshBuilder = new MeshBuilder();
+            for (var i = 0; i < points.Count; i++)
+            {
+                for (var j = i+1; j < points.Count; j++)
+                {
+                    for (var k = j+1; k < points.Count; k++)
+                    {
+                        meshBuilder.AddTriangle(points[i], points[j], points[k]);
+                    }
+                }
+            }
+            var meshGeometry = meshBuilder.ToMesh(true);
+            return BuildMeshVisualFactory(meshGeometry);
+        }
+
+        /// <summary>
+        ///     Get a generator <see cref="Func{T,TResult}" /> to produce multiple <see cref="MeshGeometryVisual3D" /> objects in a
         ///     cylinder frame shape by multiple points sharing a common mesh for multiple <see cref="Transform3D" /> operations
         /// </summary>
         /// <param name="diameter"></param>
@@ -512,9 +559,36 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         {
             if (visuals == null) throw new ArgumentNullException(nameof(visuals));
             if (brush == null) throw new ArgumentNullException(nameof(brush));
+            ExecuteOnDispatcher(() =>
+            {
+                if (freezeBrush && brush.CanFreeze) brush.Freeze();
+                foreach (var visual in visuals) visual.Fill = brush;
+            });
+        }
 
-            if (freezeBrush && brush.CanFreeze) brush.Dispatcher?.Invoke(() => brush.Freeze());
-            foreach (var visual in visuals) visual.Dispatcher?.Invoke(() => visual.Fill = brush);
+        /// <summary>
+        ///     Sets the <see cref="Material"/> of a set of <see cref="MeshGeometryVisual3D"/> with the provided information
+        /// </summary>
+        /// <param name="visuals"></param>
+        /// <param name="material"></param>
+        /// <param name="setFront"></param>
+        /// <param name="setBack"></param>
+        /// <param name="freeze"></param>
+        public void SetMeshGeometryMaterial(IEnumerable<MeshGeometryVisual3D> visuals, Material material, bool setFront = true, bool setBack = true,
+            bool freeze = true)
+        {
+            if (visuals == null) throw new ArgumentNullException(nameof(visuals));
+            if (material == null) throw new ArgumentNullException(nameof(material));
+
+            ExecuteOnDispatcher(() =>
+            {
+                if (freeze && material.CanFreeze) material.Freeze();
+                foreach (var visual in visuals)
+                {
+                    if (setFront) visual.Material = material;
+                    if (setBack) visual.BackMaterial = material;
+                }
+            });
         }
 
         /// <summary>
