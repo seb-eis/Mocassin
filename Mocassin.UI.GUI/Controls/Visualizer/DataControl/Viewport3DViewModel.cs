@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.Visualizer.Commands;
@@ -540,13 +541,55 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 
 
         /// <summary>
-        ///     Get a <see cref="TranslateTransform3D" /> to the passed target <see cref="Point3D" /> from the origin (0,0,0)
+        ///     Get a <see cref="Transform3D" /> to the passed target <see cref="Point3D" /> from the origin (0,0,0)
         /// </summary>
         /// <param name="target"></param>
+        /// <param name="freeze"></param>
         /// <returns></returns>
-        public Transform3D GetOriginOffsetTransform3D(in Point3D target)
+        public Transform3D GetOriginOffsetTransform(in Point3D target, bool freeze = true)
         {
-            return new TranslateTransform3D(target.X, target.Y, target.Z);
+            var result = new TranslateTransform3D(target.X, target.Y, target.Z);
+            if (freeze) result.Freeze();
+            return result;
+        }
+
+        /// <summary>
+        ///     Get a <see cref="Transform3D" /> to the passed target <see cref="Cartesian3D" /> from the origin (0,0,0)
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="freeze"></param>
+        /// <returns></returns>
+        public Transform3D GetOriginOffsetTransform(in Cartesian3D target, bool freeze = true)
+        {
+            var result = new TranslateTransform3D(target.X, target.Y, target.Z);
+            if (freeze) result.Freeze();
+            return result;
+        }
+
+        /// <summary>
+        ///     Get a set of <see cref="Transform3D" /> to the passed target <see cref="Point3D" /> from the origin (0,0,0)
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="freeze"></param>
+        /// <returns></returns>
+        public IList<Transform3D> GetOriginOffsetTransforms(IList<Point3D> targets, bool freeze = true)
+        {
+            var result = new List<Transform3D>(targets.Count);
+            result.AddRange(targets.Select(point3D => GetOriginOffsetTransform(point3D, freeze)));
+            return result;
+        }
+
+        /// <summary>
+        ///     Get a set of <see cref="Transform3D" /> to the passed target <see cref="Cartesian3D" /> from the origin (0,0,0)
+        /// </summary>
+        /// <param name="targets"></param>
+        /// <param name="freeze"></param>
+        /// <returns></returns>
+        public IList<Transform3D> GetOriginOffsetTransforms(IList<Cartesian3D> targets, bool freeze = true)
+        {
+            var result = new List<Transform3D>(targets.Count);
+            result.AddRange(targets.Select(point3D => GetOriginOffsetTransform(point3D, freeze)));
+            return result;
         }
 
         /// <summary>

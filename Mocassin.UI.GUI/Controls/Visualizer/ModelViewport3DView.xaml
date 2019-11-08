@@ -167,7 +167,7 @@
                 <RowDefinition Height="*" />
               </Grid.RowDefinitions>
               <ComboBox Grid.Row="0"
-                        ItemsSource="{Binding ContentSource.ProjectCustomizationGraphs}"
+                        ItemsSource="{Binding SelectableCustomizationsViewModel.ObservableItems}"
                         SelectedItem="{Binding SelectedCustomizationGraph}"
                         Margin="{StaticResource App.Margin.GroupBoxContent}"
                         IsEditable="True"

@@ -25,6 +25,15 @@ namespace Mocassin.UI.Xml.Base
             Content = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        ///     Checks if the <see cref="ResourcesGraph"/> has a resource with the provided key
+        /// </summary>
+        /// <returns></returns>
+        public bool HasResource(string key)
+        {
+            return Content.ContainsKey(key);
+        }
+
                 /// <summary>
         ///     Sets a generic resource of type <see cref="T"/> with the supplied key and converter <see cref="Func{T,TResult}"/>
         /// </summary>

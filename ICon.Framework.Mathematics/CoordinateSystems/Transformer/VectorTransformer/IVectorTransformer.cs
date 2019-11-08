@@ -88,11 +88,25 @@ namespace Mocassin.Mathematics.Coordinates
         Cartesian3D ToCartesian(IFractional3D vector);
 
         /// <summary>
+        ///     Transforms the fractional coordinate info of fractional vector to a basic cartesian vector
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        Cartesian3D ToCartesian(in Fractional3D vector);
+
+        /// <summary>
         ///     Transforms the fractional coordinate info of fractional vector sequence to a basic cartesian vector sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
         IEnumerable<Cartesian3D> ToCartesian(IEnumerable<IFractional3D> vectors);
+
+        /// <summary>
+        ///     Transforms the fractional coordinate info of fractional vector sequence to a basic cartesian vector sequence
+        /// </summary>
+        /// <param name="vectors"></param>
+        /// <returns></returns>
+        IEnumerable<Cartesian3D> ToCartesian(IEnumerable<Fractional3D> vectors);
 
         /// <summary>
         ///     Transforms the cartesian coordinate info of a cartesian vector to a basic fractional vector
@@ -102,11 +116,25 @@ namespace Mocassin.Mathematics.Coordinates
         Fractional3D ToFractional(ICartesian3D vector);
 
         /// <summary>
+        ///     Transforms the cartesian coordinate info of a cartesian vector to a basic fractional vector
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        Fractional3D ToFractional(in Cartesian3D vector);
+
+        /// <summary>
         ///     Transforms the cartesian coordinate info of a cartesian vector sequence to a basic fractional vector sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
         IEnumerable<Fractional3D> ToFractional(IEnumerable<ICartesian3D> vectors);
+
+        /// <summary>
+        ///     Transforms the cartesian coordinate info of a cartesian vector sequence to a basic fractional vector sequence
+        /// </summary>
+        /// <param name="vectors"></param>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> ToFractional(IEnumerable<Cartesian3D> vectors);
 
         /// <summary>
         ///     Transforms the spherical coordinate info of a spherical vector to a basic fractional vector

@@ -21,6 +21,11 @@ namespace Mocassin.UI.Xml.Customization
         private TransitionModelCustomizationEntity transitionModelCustomization;
 
         /// <summary>
+        ///     Get the <see cref="ProjectCustomizationGraph"/> that represents an empty customization
+        /// </summary>
+        public static ProjectCustomizationGraph Empty { get; } = new ProjectCustomizationGraph {Name = "[Empty]"};
+
+        /// <summary>
         ///     Get or set a key for the customization
         /// </summary>
         [XmlAttribute("Key")]

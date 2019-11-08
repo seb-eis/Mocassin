@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using Mocassin.Framework.Constraints;
+using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
@@ -25,13 +27,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     /// </summary>
     public class ProjectObject3DViewModel : ViewModelBase
     {
+        private static Dictionary<VisualObjectCategory, (Color, double, double)> ResourceDefaults { get; }
+
         private static string ResourceKey_Color => Resources.ResourceKey_ModelObject_RenderColor;
         private static string ResourceKey_Scaling => Resources.ResourceKey_ModelObject_RenderScaling;
         private static string ResourceKey_IsVisible => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
         private static string ResourceKey_MeshQuality => Resources.ResourceKey_ModelObject_MeshQuality;
-        private static Color ResourceDefault_Color => Colors.Gray;
-        private static double ResourceDefault_Scaling => Settings.Default.Default_Render_Mesh_Scaling;
-        private static double ResourceDefault_MeshQuality => Settings.Default.Default_Render_Mesh_Quality;
 
         /// <summary>
         ///     Get the <see cref="ExtensibleProjectObjectGraph" /> that the formatting is valid for
@@ -50,7 +51,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         {
             get => ObjectGraph.Resources.TryGetResource(ResourceKey_Color, x => VisualExtensions.ParseArgbHex(x), out var color)
                 ? color
-                : ResourceDefault_Color;
+                : GetRenderDefaults(ObjectCategory).Color;
             set
             {
                 ObjectGraph.Resources.SetResource(ResourceKey_Color, value, x => x.ToArgbHex());
@@ -63,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public double Scaling
         {
-            get => ObjectGraph.Resources.TryGetResource(ResourceKey_Scaling, out double x) ? x : ResourceDefault_Scaling;
+            get => ObjectGraph.Resources.TryGetResource(ResourceKey_Scaling, out double x) ? x : GetRenderDefaults(ObjectCategory).Scaling;
             set
             {
                 ObjectGraph.Resources.SetResource(ResourceKey_Scaling, value);
@@ -76,7 +77,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public double MeshQuality
         {
-            get => ObjectGraph.Resources.TryGetResource(ResourceKey_MeshQuality, out double x) ? x : ResourceDefault_MeshQuality;
+            get => ObjectGraph.Resources.TryGetResource(ResourceKey_MeshQuality, out double x) ? x : GetRenderDefaults(ObjectCategory).MeshQuality;
             set
             {
                 var tmp = ValueConstraint<double>.EnsureLimit(value, Settings.Default.Limit_Render_MeshQuality_Lower,
@@ -108,6 +109,32 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         {
             ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
             ObjectCategory = objectCategory;
+        }
+
+        /// <summary>
+        ///     Gets the default render resource information of a <see cref="VisualObjectCategory"/> used as the fallback values
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public static (Color Color, double Scaling, double MeshQuality) GetRenderDefaults(VisualObjectCategory category)
+        {
+            switch (category)
+            {
+                case VisualObjectCategory.Unknown:
+                    return (Colors.Gray, 1.0, 1.0);
+                case VisualObjectCategory.Frame:
+                    return (Colors.Black, 1.0, 0);
+                case VisualObjectCategory.Position:
+                    return (Colors.Gray, .5, .5);
+                case VisualObjectCategory.Transition:
+                    return (Colors.Gray, .2, .5);
+                case VisualObjectCategory.Interaction:
+                    return (Colors.Transparent, 2.0, 0);
+                case VisualObjectCategory.Cluster:
+                    return (Colors.Gray, 0, 0);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(category), category, null);
+            }
         }
     }
 }

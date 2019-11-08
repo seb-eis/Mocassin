@@ -80,9 +80,21 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <inheritdoc />
+        public Cartesian3D ToCartesian(in Fractional3D vector)
+        {
+            return new Cartesian3D(FractionalSystem.ToReferenceSystem(vector.Coordinates));
+        }
+
+        /// <inheritdoc />
         public IEnumerable<Cartesian3D> ToCartesian(IEnumerable<IFractional3D> vectors)
         {
             return vectors.Select(ToCartesian);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<Cartesian3D> ToCartesian(IEnumerable<Fractional3D> vectors)
+        {
+            return vectors.Select(x => ToCartesian(x));
         }
 
         /// <inheritdoc />
@@ -92,9 +104,21 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <inheritdoc />
+        public Fractional3D ToFractional(in Cartesian3D vector)
+        {
+            return new Fractional3D(FractionalSystem.ToSystem(vector.Coordinates));
+        }
+
+        /// <inheritdoc />
         public IEnumerable<Fractional3D> ToFractional(IEnumerable<ICartesian3D> vectors)
         {
             return vectors.Select(ToFractional);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<Fractional3D> ToFractional(IEnumerable<Cartesian3D> vectors)
+        {
+            return vectors.Select(x => ToFractional(x));
         }
 
         /// <inheritdoc />

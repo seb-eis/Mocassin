@@ -98,6 +98,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public AsyncRelayCommand RefreshVisualGroupsCommand { get; }
 
         /// <summary>
+        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> instance for the selectable <see cref="ProjectCustomizationGraph"/> instances
+        /// </summary>
+        public ObservableCollectionViewModel<ProjectCustomizationGraph> SelectableCustomizationsViewModel { get; }
+
+
+        /// <summary>
         ///     Get or set <see cref="ProjectCustomizationGraph" /> that is currently selected
         /// </summary>
         public ProjectCustomizationGraph SelectedCustomizationGraph
@@ -123,6 +129,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             VisualViewModel = new Viewport3DViewModel();
             ModelObjectViewModels = new ObservableCollectionViewModel<ProjectObject3DViewModel>();
             CustomizationObjectViewModels = new ObservableCollectionViewModel<ProjectObject3DViewModel>();
+            SelectableCustomizationsViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
             RenderResourcesViewModel = new ModelRenderResourcesViewModel();
             UpdateObjectViewModelsCommand = new RelayCommand(SynchronizeWithModel);
             RefreshVisualGroupsCommand = new AsyncRelayCommand(() => RefreshVisualGroups());
@@ -150,7 +157,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                 return;
             }
 
-            if (!ContentSource.ProjectCustomizationGraphs.Contains(SelectedCustomizationGraph))
+            UpdateSelectableCustomizations();
+            if (!SelectableCustomizationsViewModel.ObservableItems.Contains(SelectedCustomizationGraph))
                 SelectedCustomizationGraph = ContentSource.ProjectCustomizationGraphs.FirstOrDefault();
 
             IsSynchronizedWithModel = false;
@@ -158,6 +166,22 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             RenderResourcesViewModel.ChangeDataSource(ContentSource?.Resources);
             SynchronizeWithModel();
             await RefreshVisualGroups();
+        }
+
+        /// <summary>
+        ///     Updates the collection of selectable <see cref="ProjectCustomizationGraph"/> instances
+        /// </summary>
+        private void UpdateSelectableCustomizations()
+        {
+            if (ContentSource == null)
+            {
+                SelectableCustomizationsViewModel.ClearCollection();
+                return;
+            }
+
+            SelectableCustomizationsViewModel.ClearCollection();
+            SelectableCustomizationsViewModel.AddCollectionItem(ProjectCustomizationGraph.Empty);
+            SelectableCustomizationsViewModel.AddCollectionItems(ContentSource.ProjectCustomizationGraphs);
         }
 
         /// <summary>
@@ -313,7 +337,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// </summary>
         private async Task RefreshCustomizationObjectVisualGroupsAsync()
         {
-            if (SelectedCustomizationGraph == null) return;
+            if (SelectedCustomizationGraph == null || ReferenceEquals(SelectedCustomizationGraph, ProjectCustomizationGraph.Empty)) return;
+
             var stableInteractions = SelectedCustomizationGraph.EnergyModelCustomization.StablePairEnergyParameterSets;
             var unstableInteractions = SelectedCustomizationGraph.EnergyModelCustomization.UnstablePairEnergyParameterSets;
             var groupInteractions = SelectedCustomizationGraph.EnergyModelCustomization.GroupEnergyParameterSets;
@@ -375,17 +400,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             var phiDiv = (int) (Settings.Default.Default_Render_Sphere_PhiDiv * objectViewModel.MeshQuality);
             var thetaDiv = (int) (Settings.Default.Default_Render_Sphere_ThetaDiv * objectViewModel.MeshQuality);
-            var diameter = objectViewModel.Scaling;
-            var visualFactory = VisualViewModel.BuildSphereVisualFactory(diameter, thetaDiv, phiDiv);
+            var renderSize = objectViewModel.Scaling;
+
+            var visualFactory = positionGraph.PositionStatus == PositionStatus.Stable
+                ? VisualViewModel.BuildSphereVisualFactory(renderSize, thetaDiv, phiDiv)
+                : VisualViewModel.BuildCubeVisualFactory(renderSize);
 
             var result = new List<MeshGeometryVisual3D>(positionTransforms.Count);
             result.AddRange(positionTransforms.Select(x => VisualViewModel.CreateVisual(x, visualFactory)));
 
-            var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
-                ? Settings.Default.Default_Render_UnstablePosition_Alpha
-                : (byte) 255;
-
-            VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color.ChangeAlpha(alpha)));
+            VisualViewModel.SetMeshGeometryVisualBrush(result, new SolidColorBrush(objectViewModel.Color));
             return result;
         }
 
@@ -401,10 +425,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
             var extendedPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, renderAreaStart, renderAreaEnd);
             var result = new List<Transform3D>(extendedPositions.Count);
-            result.AddRange(extendedPositions.Select(x => VisualViewModel.GetOriginOffsetTransform3D(VectorTransformer.ToCartesian(x).AsPoint3D())).Action(x =>
-            {
-                if (freezeData) x.Freeze();
-            }));
+            var transforms = VisualViewModel.GetOriginOffsetTransforms(extendedPositions.Select(x => VectorTransformer.ToCartesian(x)).ToList(), freezeData);
+            result.AddRange(transforms);
             return result;
         }
 
@@ -578,7 +600,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 VisualViewModel.CreateVisual(Transform3D.Identity, visualFactory)
             };
-            VisualViewModel.SetMeshGeometryMaterial(result, MaterialHelper.CreateMaterial(new SolidColorBrush(objectVm.Color.ChangeAlpha(32)), 0, 255, true));
+            VisualViewModel.SetMeshGeometryMaterial(result, MaterialHelper.CreateMaterial(new SolidColorBrush(objectVm.Color.ChangeAlpha(64)), 0, 255, true));
             return result;
         }
 
@@ -593,9 +615,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             var transforms = CreateGroupInteractionVisualBuildData(fractionalPath, freezeData);
             var (renderAreaStart, renderAreaEnd) = RenderResourcesViewModel.GetRenderCuboidVectors();
             var points = fractionalPath.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()).ToList();
-
-            var result = new List<Point3D>(points.Count * transforms.Count);
             var meshBuilder = new MeshBuilder();
+
 
             for (var i = 0; i < points.Count; i++)
             {
@@ -605,7 +626,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                     {
                         foreach (var x in transforms)
                         {
-                            meshBuilder.AddTriangle(x.Transform(points[i]), x.Transform(points[j]), x.Transform(points[k]));   
+                           meshBuilder.AddTriangle(x.Transform(points[i]), x.Transform(points[j]), x.Transform(points[k]));   
                         }
                     }
                 }
@@ -828,7 +849,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 PrepareUtilityProject(ContentSource);
                 UpdateObjectViewModels();
-                UpdateCustomizationViewModels();
+                if (!ReferenceEquals(SelectedCustomizationGraph, ProjectCustomizationGraph.Empty)) UpdateCustomizationViewModels();
             }
 
             IsSynchronizedWithModel = true;
