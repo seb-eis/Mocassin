@@ -22,6 +22,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ValueTypes\Coordinates\Coordinates.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.Memory" Version="4.5.3" />
     <PackageReference Include="System.Reactive" Version="4.1.6" />

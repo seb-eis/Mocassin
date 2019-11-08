@@ -7,13 +7,11 @@ namespace Mocassin.Mathematics.Bitmasks
     /// <summary>
     ///     Wrapped 32 bit unsigned integer to be used as 32 entry bitmask (Waring: Mutable struct!)
     /// </summary>
-    [DataContract]
     public struct Bitmask32 : IBitmask, IComparable<Bitmask32>, IEquatable<Bitmask32>
     {
         /// <summary>
         ///     The internal mask value
         /// </summary>
-        [DataMember]
         public uint Mask { get; set; }
 
         /// <summary>

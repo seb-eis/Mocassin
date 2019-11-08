@@ -7,19 +7,16 @@ namespace Mocassin.Mathematics.Bitmasks
     /// <summary>
     ///     Two wrapped 64 bit unsigned integer to be used as 128 entry bitmask (Waring: Mutable struct!)
     /// </summary>
-    [DataContract]
     public class Bitmask128 : IBitmask, IComparable<Bitmask128>, IEquatable<Bitmask128>
     {
         /// <summary>
         ///     The first internal 64 bit mask
         /// </summary>
-        [DataMember]
         public ulong Mask0 { get; set; }
 
         /// <summary>
         ///     The first internal 64 bit mask
         /// </summary>
-        [DataMember]
         public ulong Mask1 { get; set; }
 
         /// <summary>

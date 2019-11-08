@@ -72,6 +72,6 @@ namespace Mocassin.Mathematics.ValueTypes
             return A == vector.A && B == vector.B && C == vector.C;
         }
 
-		public VectorInt3D AsReadOnly() => new VectorInt3D(A, B, C);
+		public VectorI3 AsReadOnly() => new VectorI3(A, B, C);
 	}
 }

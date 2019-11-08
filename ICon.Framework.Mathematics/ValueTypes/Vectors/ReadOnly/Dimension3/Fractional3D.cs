@@ -1,13 +1,11 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Mathematics.Extensions;
+﻿using Mocassin.Mathematics.Extensions;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Basic fractional vector that carries fractional affine coordinate system information (A,B,C)
     /// </summary>
-    [DataContract]
-    public readonly struct Fractional3D : IFractional3D<Fractional3D>
+    public readonly struct Fractional3D : IFractional3D
     {
         /// <summary>
         ///     The null vector of this type
@@ -15,18 +13,15 @@ namespace Mocassin.Mathematics.ValueTypes
         public static readonly Fractional3D NullVector = new Fractional3D(0, 0, 0);
 
         /// <inheritdoc />
-        public Coordinates<double, double, double> Coordinates { get; }
+        public Coordinates3D Coordinates { get; }
 
         /// <inheritdoc />
-        [DataMember]
         public double A => Coordinates.A;
 
         /// <inheritdoc />
-        [DataMember]
         public double B => Coordinates.B;
 
         /// <inheritdoc />
-        [DataMember]
         public double C => Coordinates.C;
 
         /// <summary>
@@ -38,14 +33,14 @@ namespace Mocassin.Mathematics.ValueTypes
         public Fractional3D(double a, double b, double c)
             : this()
         {
-            Coordinates = new Coordinates<double, double, double>(a, b, c);
+            Coordinates = new Coordinates3D(a, b, c);
         }
 
         /// <summary>
         ///     Creates new fractional vector from 3D coordinate tuple
         /// </summary>
         /// <param name="coordinates"></param>
-        public Fractional3D(Coordinates<double, double, double> coordinates)
+        public Fractional3D(in Coordinates3D coordinates)
             : this()
         {
             Coordinates = coordinates;
@@ -58,20 +53,10 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <returns></returns>
         public Fractional3D TrimToUnitCell(double tolerance)
         {
-            return new Fractional3D(A.PeriodicTrim(0.0, 1.0, tolerance), B.PeriodicTrim(0.0, 1.0, tolerance),
+            return new Fractional3D(
+                A.PeriodicTrim(0.0, 1.0, tolerance),
+                B.PeriodicTrim(0.0, 1.0, tolerance),
                 C.PeriodicTrim(0.0, 1.0, tolerance));
-        }
-
-        /// <inheritdoc />
-        public Fractional3D CreateNew(double a, double b, double c)
-        {
-            return new Fractional3D(a, b, c);
-        }
-
-        /// <inheritdoc />
-        public Fractional3D CreateNew(Coordinates<double, double, double> coordinates)
-        {
-            return new Fractional3D(coordinates);
         }
 
         /// <summary>
@@ -135,7 +120,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <returns></returns>
         public override string ToString()
         {
-            return $"Fractional ({A}, {B}, {C})";
+            return $"Fractional3D ({A}, {B}, {C})";
         }
 
         /// <summary>
@@ -143,7 +128,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
-        public static Fractional3D GetMiddle(in Fractional3D lhs, in Fractional3D rhs)
+        public static Fractional3D CalculateMiddle(in Fractional3D lhs, in Fractional3D rhs)
         {
             return (lhs + rhs) * 0.5;
         }

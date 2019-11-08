@@ -1,22 +1,21 @@
 ﻿using System;
 using Mocassin.Framework.Exceptions;
 using Mocassin.Mathematics.ValueTypes;
-using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
 namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
     ///     Double precision cartesian coordinate system
     /// </summary>
-    public class CartesianCoordinateSystem : AffineCoordinateSystem3D<ACoordinates>
+    public class CartesianCoordinateSystem : AffineCoordinateSystem3D<Coordinates3D>
     {
         /// <summary>
         ///     The system base coordinate vectors as coordinate tuple information
         /// </summary>
-        public static readonly (ACoordinates A, ACoordinates B, ACoordinates C) BaseCoordinates;
+        public static readonly (Coordinates3D A, Coordinates3D B, Coordinates3D C) BaseCoordinates;
 
         /// <inheritdoc />
-        public override (ACoordinates A, ACoordinates B, ACoordinates C) BaseVectors
+        public override (Coordinates3D A, Coordinates3D B, Coordinates3D C) BaseVectors
         {
             get => BaseCoordinates;
             protected set => 

@@ -84,7 +84,7 @@ namespace Mocassin.Model.Transitions
 
             for (var i = 0; i < regularPositions.Count - 1; i++)
             {
-                var interPosition = Fractional3D.GetMiddle(regularPositions[i + 1], regularPositions[i]).TrimToUnitCell(tolerance);
+                var interPosition = Fractional3D.CalculateMiddle(regularPositions[i + 1], regularPositions[i]).TrimToUnitCell(tolerance);
                 if (!positionMap[i].Contains(interPosition)) 
                     return false;
             }

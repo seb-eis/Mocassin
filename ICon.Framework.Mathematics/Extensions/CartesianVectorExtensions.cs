@@ -11,13 +11,11 @@ namespace Mocassin.Mathematics.Extensions
     public static class CartesianVectorExtensions
     {
         /// <summary>
-        ///     Calculate the euclidean norm length (also called 2-norm)
+        ///     Get the two norm of a cartesian vector
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static double GetLength<T1>(this T1 vector)
-            where T1 : struct, ICartesian3D<T1>
+        public static double GetLength(this ICartesian3D vector)
         {
             return Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y + vector.Z * vector.Z);
         }
@@ -29,25 +27,22 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="second"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static bool IsLinearIndependent(this Cartesian3D first, in Cartesian3D second, IEqualityComparer<double> comparer)
+        public static bool IsLinearIndependent(this ICartesian3D first, ICartesian3D second, IEqualityComparer<double> comparer)
         {
             return first.Coordinates.IsLinearIndependentFrom(second.Coordinates, comparer);
         }
 
         /// <summary>
-        ///     Generic check if two cartesian vectors are linear independent
+        ///     Check if two vectors are linear dependent within the tolerance of the provided double comparer
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static bool IsLinearIndependent<T1, T2>(this T1 first, in T2 second, IEqualityComparer<double> comparer)
-            where T1 : struct, ICartesian3D 
-            where T2 : struct, ICartesian3D
+        public static bool IsLinearIndependent(this Cartesian3D first, in Cartesian3D second, IEqualityComparer<Cartesian3D> comparer)
         {
-            return first.Coordinates.IsLinearIndependentFrom(second.Coordinates, comparer);
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            return !comparer.Equals(first.GetCrossProduct(second), Cartesian3D.NullVector);
         }
 
         /// <summary>
@@ -57,41 +52,33 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="vector"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static T1 GetZeroCleaned<T1>(this T1 vector, IComparer<double> comparer)
-            where T1 : struct, ICartesian3D<T1>
+        public static Cartesian3D GetZeroCleaned(this Cartesian3D vector, IComparer<double> comparer)
         {
-            if (comparer == null) 
-                throw new ArgumentNullException(nameof(comparer));
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             var x = comparer.Compare(vector.X, 0.0) == 0 ? 0.0 : vector.X;
             var y = comparer.Compare(vector.Y, 0.0) == 0 ? 0.0 : vector.Y;
             var z = comparer.Compare(vector.Z, 0.0) == 0 ? 0.0 : vector.Z;
-            return vector.CreateNew(x, y, z);
+            return new Cartesian3D(x, y, z);
         }
 
         /// <summary>
         ///     Returns the normalized version of the vector
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static T1 GetNormalized<T1>(this T1 vector) 
-            where T1 : struct, ICartesian3D<T1>
+        public static Cartesian3D GetNormalized(this Cartesian3D vector)
         {
-            return vector.MultiplyWith(1.0 / vector.GetLength());
+            return vector * (1.0 / vector.GetLength());
         }
 
         /// <summary>
         ///     Get the angle between this and the second vector in radian
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetAngleTo<T1, T2>(this T1 first, T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static double GetAngleTo(this Cartesian3D first, in Cartesian3D second)
         {
             var dotProduct = first.GetNormalized().GetScalarProduct(second.GetNormalized());
             dotProduct = dotProduct > 1.0 ? 1.0 : dotProduct < -1.0 ? -1.0 : dotProduct;
@@ -99,105 +86,35 @@ namespace Mocassin.Mathematics.Extensions
         }
 
         /// <summary>
-        ///     Performs a generic scalar multiplication for the vector
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="vector"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static T1 MultiplyWith<T1>(this T1 vector, double value)
-            where T1 : struct, ICartesian3D<T1>
-        {
-            return vector.CreateNew(vector.X * value, vector.Y * value, vector.Z * value);
-        }
-
-        /// <summary>
-        ///     Performs a generic scalar division for the vector
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="vector"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static T1 DivideBy<T1>(this T1 vector, double value)
-            where T1 : struct, ICartesian3D<T1>
-        {
-            return vector.MultiplyWith(1.0 / value);
-        }
-
-        /// <summary>
-        ///     Adds the second vector onto the current one, result is of source type
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        public static T1 Add<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
-        {
-            return first.CreateNew(first.X + second.X, first.Y + second.Y, first.Z + second.Z);
-        }
-
-        /// <summary>
-        ///     Subtract the vector second vector from the current one, result is of source type
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        public static T1 Subtract<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
-        {
-            return first.CreateNew(first.X - second.X, first.Y - second.Y, first.Z - second.Z);
-        }
-
-        /// <summary>
         ///     Calculates the scalar product (dot product) of the two vectors
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetScalarProduct<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static double GetScalarProduct(this Cartesian3D first, in Cartesian3D second)
         {
             return first.X * second.X + first.Y * second.Y + first.Z * second.Z;
         }
 
         /// <summary>
-        ///     Gets the cross product of the first vector with the second, result is of same type as first
+        ///     Gets the cross product of the first vector with the second
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static T1 GetCrossProduct<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static Cartesian3D GetCrossProduct(this Cartesian3D first, in Cartesian3D second)
         {
-            return first.CreateNew(first.Coordinates.GetCrossProduct(second.Coordinates));
+            return new Cartesian3D(first.Coordinates.GetCrossProduct(second.Coordinates));
         }
 
         /// <summary>
         ///     Get the spat product between three cartesian vectors
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <typeparam name="T3"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <param name="third"></param>
         /// <returns></returns>
-        public static double GetSpatProduct<T1, T2, T3>(this T1 first, in T2 second, in T3 third)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
-            where T3 : struct, ICartesian3D<T3>
+        public static double GetSpatProduct(this Cartesian3D first, in Cartesian3D second, in Cartesian3D third)
         {
             return first.GetScalarProduct(second.GetCrossProduct(third));
         }
@@ -205,114 +122,46 @@ namespace Mocassin.Mathematics.Extensions
         /// <summary>
         ///     Calculates the projection length of this vector onto the other
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetProjectionLength<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static double GetProjectionLength(this Cartesian3D first, in Cartesian3D second)
         {
             return first.GetScalarProduct(second.GetNormalized());
         }
 
         /// <summary>
-        ///     Projects the vector onto another, the result vector is of the source type
+        ///     Projects the vector onto another
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static T1 GetSourceProjection<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static Cartesian3D GetProjection(this Cartesian3D first, in Cartesian3D second)
         {
-            var factor = first.GetScalarProduct(second) / second.GetLength();
-            return first.CreateNew(second.X, second.Y, second.Z).MultiplyWith(factor);
+            return second * (first.GetScalarProduct(second) / second.GetLength());
         }
 
         /// <summary>
-        ///     Projects the vector onto another, the result vector is of the target type
+        ///     Rejection of the vector with another
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static T2 GetTargetProjection<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static Cartesian3D GetRejection(this Cartesian3D first, in Cartesian3D second)
         {
-            var factor = first.GetScalarProduct(second) / second.GetLength();
-            return second.MultiplyWith(factor);
-        }
-
-        /// <summary>
-        ///     Rejection of the vector with another, the result vector is of the source type
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        public static T1 GetSourceRejection<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1> 
-            where T2 : struct, ICartesian3D<T2>
-        {
-            return first.Subtract(first.GetTargetProjection(second));
-        }
-
-        /// <summary>
-        ///     Rejection of the vector with another, the result vector is of the target type
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        public static T2 GetTargetRejection<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
-        {
-            var rejection = first.GetSourceRejection(second);
-            return second.CreateNew(rejection.X, rejection.Y, rejection.Z);
+            return first - first.GetProjection(second);
         }
 
         /// <summary>
         ///     Returns the shortest possible vector of source type from an axis defined by the second vector (New vector is
         ///     perpendicular to second)
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static T1 GetNormalVector<T1, T2>(this T1 first, in T2 second)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
+        public static Cartesian3D GetNormalVector(this Cartesian3D first, in Cartesian3D second)
         {
-            return first.Subtract(second.GetNormalized().MultiplyWith(first.GetProjectionLength(second)));
-        }
-
-        /// <summary>
-        ///     Check if two vectors are linear dependent within the tolerance of the provided double comparer
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        public static bool IsLinearIndependent<T1, T2>(this T1 first, in T2 second, IEqualityComparer<T1> comparer)
-            where T1 : struct, ICartesian3D<T1>
-            where T2 : struct, ICartesian3D<T2>
-        {
-            if (comparer == null) 
-                throw new ArgumentNullException(nameof(comparer));
-
-            return !comparer.Equals(first.GetCrossProduct(second), first.CreateNew(0.0, 0.0, 0.0));
+            return first - second.GetNormalized() * first.GetProjectionLength(second);
         }
     }
 }

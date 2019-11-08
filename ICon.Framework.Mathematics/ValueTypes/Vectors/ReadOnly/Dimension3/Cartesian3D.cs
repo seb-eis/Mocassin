@@ -1,32 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.Extensions;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
     ///     Basic cartesian vector that carries not additional information other than X,Y,Z coordinates
     /// </summary>
-    public readonly struct Cartesian3D : ICartesian3D<Cartesian3D>
+    public readonly struct Cartesian3D : ICartesian3D
     {
         /// <summary>
-        ///     The 3D coordinate tuple
+        ///     The null vector of this type
         /// </summary>
-        public Coordinates<double, double, double> Coordinates { get; }
+        public static readonly Cartesian3D NullVector = new Cartesian3D(0, 0, 0);
 
-        /// <summary>
-        ///     Get the X coordinate value
-        /// </summary>
+        /// <inheritdoc />
+        public Coordinates3D Coordinates { get; }
+
+        /// <inheritdoc />
         public double X => Coordinates.A;
 
-        /// <summary>
-        ///     Get the Y coordinate value
-        /// </summary>
+        /// <inheritdoc />
         public double Y => Coordinates.B;
 
-        /// <summary>
-        ///     Get the Z coordinate value
-        /// </summary>
+        /// <inheritdoc />
         public double Z => Coordinates.C;
 
         /// <summary>
@@ -35,40 +31,18 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public Cartesian3D(double x, double y, double z)
-            : this()
+        public Cartesian3D(double x, double y, double z) : this()
         {
-            Coordinates = new Coordinates<double, double, double>(x, y, z);
+            Coordinates = new Coordinates3D(x,y,z);
         }
 
         /// <summary>
         ///     Creates new cartesian vector from 3D coordinate tuple
         /// </summary>
         /// <param name="coordinates"></param>
-        public Cartesian3D(Coordinates<double, double, double> coordinates)
-            : this()
+        public Cartesian3D(in Coordinates3D coordinates) : this()
         {
             Coordinates = coordinates;
-        }
-
-        /// <summary>
-        ///     Factory function to create a new cartesian vector
-        /// </summary>
-        /// <param name="coordinates"></param>
-        /// <returns></returns>
-        public Cartesian3D CreateNew(double a, double b, double c)
-        {
-            return new Cartesian3D(a, b, c);
-        }
-
-        /// <summary>
-        ///     Factory function to create a new cartesian vector
-        /// </summary>
-        /// <param name="coordinates"></param>
-        /// <returns></returns>
-        public Cartesian3D CreateNew(Coordinates<double, double, double> coordinates)
-        {
-            return new Cartesian3D(coordinates);
         }
 
         /// <summary>
@@ -106,7 +80,7 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Vector substraction
+        ///     Vector subtraction
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
@@ -128,7 +102,7 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Vector substraction
+        ///     Vector subtraction
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
@@ -192,7 +166,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"Cartesian ({X}, {Y}, {Z})";
+            return $"Cartesian3D ({X}, {Y}, {Z})";
         }
     }
 }

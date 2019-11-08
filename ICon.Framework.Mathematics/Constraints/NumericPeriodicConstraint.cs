@@ -25,17 +25,17 @@ namespace Mocassin.Mathematics.Constraints
         public double ParseToPeriodicRange(double sourceValue)
         {
             var deltaValue = MaxValue - MinValue;
-            while (sourceValue < MinValue) 
+            while (sourceValue < MinValue)
                 sourceValue += deltaValue;
 
-            while (sourceValue > MaxValue) 
+            while (sourceValue > MaxValue)
                 sourceValue -= deltaValue;
 
             if (TryParseToMinValue(sourceValue, out sourceValue))
                 return sourceValue;
 
             TryParseToMaxValue(sourceValue, out sourceValue);
-                return sourceValue;
+            return sourceValue;
         }
 
         /// <summary>
