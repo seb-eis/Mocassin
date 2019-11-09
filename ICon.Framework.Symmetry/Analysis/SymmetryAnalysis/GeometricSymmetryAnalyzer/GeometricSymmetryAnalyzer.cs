@@ -16,8 +16,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="massPoints"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public SymmetryIndicator GetSymmetryIndicator<T1>(IEnumerable<T1> massPoints, IComparer<double> comparer)
-            where T1 : struct, ICartesianMassPoint3D<T1>
+        public SymmetryIndicator GetSymmetryIndicator(IEnumerable<CartesianMassPoint3D> massPoints, IComparer<double> comparer)
         {
             return GetSymmetryIndicator(new PointMechanicsSolver().CreateGeometryInfo(massPoints, comparer), comparer);
         }

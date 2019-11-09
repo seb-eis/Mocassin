@@ -3,7 +3,7 @@ using Mocassin.Framework.Exceptions;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.Extensions;
-using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
+using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.CrystalSystems
 {
@@ -155,7 +155,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <returns></returns>
         public FractionalCoordinateSystem3D CreateCoordinateSystem()
         {
-            if (!IsReady) 
+            if (!IsReady)
                 throw new InvalidObjectStateException("Cannot calculate a coordinate system, required parameters are not set");
 
             var (a, b, c) = CalculateBaseVectors();
@@ -214,7 +214,7 @@ namespace Mocassin.Symmetry.CrystalSystems
             if (!ValidateGeneralAngleCondition(alpha, beta, gamma))
                 return false;
 
-            return ValidateAngleConstraintCondition(alpha, beta, gamma) 
+            return ValidateAngleConstraintCondition(alpha, beta, gamma)
                    && ValidateSoftAngleCondition(alpha, beta, gamma);
         }
 
@@ -227,7 +227,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <returns></returns>
         public bool ValidateParameterConditions(double paramA, double paramB, double paramC)
         {
-            return ValidateParameterConstraintCondition(paramA, paramB, paramC) 
+            return ValidateParameterConstraintCondition(paramA, paramB, paramC)
                    && ValidateSoftParameterCondition(paramA, paramB, paramC);
         }
 
@@ -256,7 +256,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         ///     Calculates the base vectors from the crystal system parameters
         /// </summary>
         /// <returns></returns>
-        public (ACoordinates A, ACoordinates B, ACoordinates C) CalculateBaseVectors()
+        public (Coordinates3D A, Coordinates3D B, Coordinates3D C) CalculateBaseVectors()
         {
             return (GetLatticeVectorA(), GetLatticeVectorB(), GetLatticeVectorC());
         }
@@ -265,33 +265,33 @@ namespace Mocassin.Symmetry.CrystalSystems
         ///     Calculates the lattice vector in A direction from the system parameters
         /// </summary>
         /// <returns></returns>
-        public ACoordinates GetLatticeVectorA()
+        public Coordinates3D GetLatticeVectorA()
         {
-            return new ACoordinates(ParamA.Value, 0.0, 0.0);
+            return new Coordinates3D(ParamA.Value, 0.0, 0.0);
         }
 
         /// <summary>
         ///     Calculates the lattice vector in B direction from the system parameters
         /// </summary>
         /// <returns></returns>
-        public ACoordinates GetLatticeVectorB()
+        public Coordinates3D GetLatticeVectorB()
         {
             var a = (ParamB.Value * Math.Cos(Gamma.Value)).ZeroSafeRound(0.0, BasicConstraint.Comparer);
             var b = (ParamB.Value * Math.Sin(Gamma.Value)).ZeroSafeRound(0.0, BasicConstraint.Comparer);
-            return new ACoordinates(a, b, 0.0);
+            return new Coordinates3D(a, b, 0.0);
         }
 
         /// <summary>
         ///     Calculates the lattice vector in C direction from the system parameters
         /// </summary>
         /// <returns></returns>
-        public ACoordinates GetLatticeVectorC()
+        public Coordinates3D GetLatticeVectorC()
         {
             var a = (ParamC.Value * Math.Cos(Beta.Value)).ZeroSafeRound(0.0, BasicConstraint.Comparer);
             var b = (ParamC.Value * Math.Cos(Alpha.Value) - Math.Cos(Gamma.Value) * Math.Cos(Beta.Value) / Math.Sin(Gamma.Value))
                 .ZeroSafeRound(0.0, BasicConstraint.Comparer);
             var c = Math.Sqrt(ParamC.Value * ParamC.Value - a * a - b * b).ZeroSafeRound(0.0, BasicConstraint.Comparer);
-            return new ACoordinates(a, b, c);
+            return new Coordinates3D(a, b, c);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// <param name="vectorB"></param>
         /// <param name="vectorC"></param>
         /// <returns></returns>
-        public bool BasicVectorValidation(ACoordinates vectorA, ACoordinates vectorB, ACoordinates vectorC)
+        public bool BasicVectorValidation(Coordinates3D vectorA, Coordinates3D vectorB, Coordinates3D vectorC)
         {
             return vectorA.IsLinearIndependentFrom(vectorB, vectorC, BasicConstraint.Comparer);
         }
@@ -312,7 +312,7 @@ namespace Mocassin.Symmetry.CrystalSystems
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        protected bool ValidateVectorLength(ref ACoordinates vector)
+        protected bool ValidateVectorLength(in Coordinates3D vector)
         {
             return !BasicConstraint.Comparer.Equals(vector.GetLength(), 0.0);
         }

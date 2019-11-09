@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mocassin.Mathematics.Extensions;
-using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
@@ -27,11 +26,9 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <summary>
         ///     Generic application of the rotation onto a generic cartesian vector
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public T1 Transform<T1>(T1 vector)
-            where T1 : struct, IVector3D<T1>
+        public Cartesian3D Transform(in Cartesian3D vector)
         {
             return Values.MultiplyWith(vector);
         }
@@ -41,28 +38,17 @@ namespace Mocassin.Mathematics.ValueTypes
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public ACoordinates Transform(ACoordinates vector)
+        public Coordinates3D Transform(in Coordinates3D vector)
         {
             return Values.MultiplyWith(vector);
         }
-
-        /// <summary>
-        ///     Transform operation for non generic basic cartesian vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        public Cartesian3D Transform(Cartesian3D vector)
-        {
-            return Values.MultiplyWith(vector);
-        }
-
 
         /// <summary>
         ///     Transform operation for non generic basic fractional vector
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public Fractional3D Transform(Fractional3D vector)
+        public Fractional3D Transform(in Fractional3D vector)
         {
             return Values.MultiplyWith(vector);
         }
@@ -73,7 +59,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public Spherical3D Transform(Spherical3D vector)
+        public Spherical3D Transform(in Spherical3D vector)
         {
             return Values.MultiplyWith(vector);
         }
@@ -84,7 +70,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static ACoordinates operator *(TransformMatrix2D matrix, ACoordinates vector)
+        public static Coordinates3D operator *(TransformMatrix2D matrix, in Coordinates3D vector)
         {
             return matrix.Transform(vector);
         }
@@ -95,7 +81,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Cartesian3D operator *(TransformMatrix2D matrix, Cartesian3D vector)
+        public static Cartesian3D operator *(TransformMatrix2D matrix, in Cartesian3D vector)
         {
             return matrix.Transform(vector);
         }
@@ -106,7 +92,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Fractional3D operator *(TransformMatrix2D matrix, Fractional3D vector)
+        public static Fractional3D operator *(TransformMatrix2D matrix, in Fractional3D vector)
         {
             return matrix.Transform(vector);
         }
@@ -117,7 +103,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static Spherical3D operator *(TransformMatrix2D matrix, Spherical3D vector)
+        public static Spherical3D operator *(TransformMatrix2D matrix, in Spherical3D vector)
         {
             return matrix.Transform(vector);
         }

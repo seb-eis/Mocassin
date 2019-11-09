@@ -48,13 +48,13 @@ namespace Mocassin.Mathematics.ValueTypes
         public int CompareTo(Coordinates4I other)
         {
             var compA = A.CompareTo(other.A);
-            if (compA != 0) 
-                return compA;
+            if (compA != 0) return compA;
 
             var compB = B.CompareTo(other.B);
-            return compB == 0 
-                ? C.CompareTo(other.C) 
-                : compB;
+            if (compB != 0) return compB;
+
+            var compC = C.CompareTo(other.C);
+            return compC != 0 ? compC : D.CompareTo(other.D);
         }
 
         /// <inheritdoc />

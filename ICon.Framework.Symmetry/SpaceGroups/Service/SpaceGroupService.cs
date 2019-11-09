@@ -148,7 +148,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public SetList<Fractional3D> GetUnitCellP1PositionExtension(Fractional3D refVector)
+        public SetList<Fractional3D> GetUnitCellP1PositionExtension(in Fractional3D refVector)
         {
             return CreatePositionSetList(refVector);
         }
@@ -163,15 +163,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public SetList<TSource> GetUnitCellP1PositionExtension<TSource>(TSource refVector)
-            where TSource : struct, IFractional3D<TSource>
+        public SetList<Fractional3D> GetUnitCellP1PositionExtension<TSource>(TSource refVector) where TSource : IFractional3D
         {
-            return CreatePositionSetList(refVector);
+            return CreatePositionSetList(new Fractional3D(refVector.Coordinates));
         }
 
         /// <inheritdoc />
-        public List<SetList<TSource>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors)
-            where TSource : struct, IFractional3D<TSource>
+        public List<SetList<Fractional3D>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors)
+            where TSource : IFractional3D
         {
             if (refVectors == null)
                 throw new ArgumentNullException(nameof(refVectors));
@@ -217,10 +216,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <typeparam name="TSource"></typeparam>
         /// <param name="vector"></param>
         /// <returns></returns>
-        protected SetList<TSource> CreatePositionSetList<TSource>(TSource vector) where TSource : struct, IFractional3D<TSource>
+        protected SetList<Fractional3D> CreatePositionSetList<TSource>(TSource vector) where TSource : IFractional3D
         {
-            var results = new SetList<TSource>(VectorComparer.ToCompatibleComparer<TSource>(),
-                LoadedGroup.Operations.Count);
+            var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
 
             foreach (var operation in LoadedGroup.Operations)
                 results.Add(operation.ApplyWithTrim(vector));
@@ -275,14 +273,17 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence, bool filterInverses = false)
+        public IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence,
+            bool filterInverses = false)
         {
             if (!(refSequence is IReadOnlyList<Fractional3D> refVectors)) refVectors = refSequence.ToList();
 
             var operations = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
-            operations.AddRange(LoadedGroup.Operations.Select(x => GetOriginCellShiftedOperations(x.ApplyUntrimmed(refVectors[0]), x, 1.0e-10)));
+            operations.AddRange(LoadedGroup.Operations.Select(x =>
+                GetOriginCellShiftedOperations(x.ApplyUntrimmed(refVectors[0]), x, 1.0e-10)));
 
-            var sequences = new SetList<IList<Fractional3D>>(Comparer<IList<Fractional3D>>.Create((a, b) => a.LexicographicCompare(b, VectorComparer)),
+            var sequences = new SetList<IList<Fractional3D>>(
+                Comparer<IList<Fractional3D>>.Create((a, b) => a.LexicographicCompare(b, VectorComparer)),
                 operations.Count);
             var filteredOperations = new List<ISymmetryOperation>(LoadedGroup.Operations.Count / 2);
 
@@ -340,7 +341,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end)
         {
             var equalityComparer = VectorComparer.ValueComparer.ToEqualityComparer();
-            var (aMin, bMin, cMin) = (MocassinMath.FloorToInt(start.A, equalityComparer), MocassinMath.FloorToInt(start.B, equalityComparer),
+            var (aMin, bMin, cMin) = (MocassinMath.FloorToInt(start.A, equalityComparer),
+                MocassinMath.FloorToInt(start.B, equalityComparer),
                 MocassinMath.FloorToInt(start.C, equalityComparer));
             var (aMax, bMax, cMax) = (MocassinMath.FloorToInt(end.A, equalityComparer), MocassinMath.FloorToInt(end.B, equalityComparer),
                 MocassinMath.FloorToInt(end.C, equalityComparer));
@@ -390,7 +392,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IWyckoffOperationDictionary GetOperationDictionary(in Fractional3D sourceVector)
         {
-            var operationComparer = Comparer<ISymmetryOperation>.Create((a, b) => string.Compare(a.Literal, b.Literal, StringComparison.Ordinal));
+            var operationComparer =
+                Comparer<ISymmetryOperation>.Create((a, b) => string.Compare(a.Literal, b.Literal, StringComparison.Ordinal));
             var dictionary = new SortedDictionary<Fractional3D, SetList<ISymmetryOperation>>(VectorComparer);
 
             foreach (var operation in LoadedGroup.Operations)

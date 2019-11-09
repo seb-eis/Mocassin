@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {
@@ -13,7 +14,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     The size information (a,b,c,p) of the supercell by reference
         /// </summary>
-        ref Coordinates<int, int, int, int> CellSizeInfo { get; }
+        ref Coordinates4I CellSizeInfo { get; }
 
         /// <summary>
         ///     Access the geometric vector encoder that supplies the basic cell position info and conversions between the
@@ -35,7 +36,7 @@ namespace Mocassin.Symmetry.Analysis
         /// </summary>
         /// <param name="offset"></param>
         /// <returns></returns>
-        IUnitCell<T1> GetUnitCell(in Coordinates<int, int, int> offset);
+        IUnitCell<T1> GetUnitCell(in VectorI3 offset);
 
         /// <summary>
         ///     Get the cell entry at the specified (a,b,c,p) coordinates
@@ -53,7 +54,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="offset"></param>
         /// <param name="p"></param>
         /// <returns></returns>
-        CellEntry<T1> GetCellEntry(in Coordinates<int, int, int> offset, int p);
+        CellEntry<T1> GetCellEntry(in VectorI3 offset, int p);
 
         /// <summary>
         ///     Get the cell entry at the specified 4D crystal vector

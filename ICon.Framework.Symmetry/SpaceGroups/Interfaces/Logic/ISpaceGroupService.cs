@@ -67,19 +67,22 @@ namespace Mocassin.Symmetry.SpaceGroups
         IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence);
 
         /// <summary>
-        ///     Gets the ordered, filtered and trimmed list of all wyckoff extended sequences that begin in the (0,0,0) origin unit cell
+        ///     Gets the ordered, filtered and trimmed list of all wyckoff extended sequences that begin in the (0,0,0) origin unit
+        ///     cell
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
         SetList<Fractional3D[]> GetUnitCellP1PathExtension(IEnumerable<Fractional3D> refSequence);
 
         /// <summary>
-        ///     Gets a minimal set of <see cref="ISymmetryOperation"/> instances required to fully describe the passed vector set in a P1 extended unit cell context (Warning: Removing the inverses is only valid for display purposes)
+        ///     Gets a minimal set of <see cref="ISymmetryOperation" /> instances required to fully describe the passed vector set
+        ///     in a P1 extended unit cell context (Warning: Removing the inverses is only valid for display purposes)
         /// </summary>
         /// <param name="refSequence"></param>
         /// <param name="filterInverses"></param>
         /// <returns></returns>
-        IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence, bool filterInverses = false);
+        IList<ISymmetryOperation> GetMinimalUnitCellP1PathExtensionOperations(IEnumerable<Fractional3D> refSequence,
+            bool filterInverses = false);
 
         /// <summary>
         ///     Gets a sorted list of unique fractional vectors that represent all equivalent wyckoff positions to the original
@@ -87,7 +90,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="refVector"></param>
         /// <returns></returns>
-        SetList<Fractional3D> GetUnitCellP1PositionExtension(Fractional3D refVector);
+        SetList<Fractional3D> GetUnitCellP1PositionExtension(in Fractional3D refVector);
 
         /// <summary>
         ///     Get multiple sorted unique lists of wyckoff extended positions that each includes the original reference vector
@@ -103,7 +106,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <typeparam name="TSource"></typeparam>
         /// <param name="refVector"></param>
         /// <returns></returns>
-        SetList<TSource> GetUnitCellP1PositionExtension<TSource>(TSource refVector) where TSource : struct, IFractional3D<TSource>;
+        SetList<Fractional3D> GetUnitCellP1PositionExtension<TSource>(TSource refVector) where TSource : IFractional3D;
 
         /// <summary>
         ///     Get multiple sorted unique sets of wyckoff positions with the same type as the provided fractional vector type
@@ -111,8 +114,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <typeparam name="TSource"></typeparam>
         /// <param name="refVectors"></param>
         /// <returns></returns>
-        List<SetList<TSource>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors)
-            where TSource : struct, IFractional3D<TSource>;
+        List<SetList<Fractional3D>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors) where TSource : IFractional3D;
 
         /// <summary>
         ///     Translates a reference sequence of positions onto each wyckoff 1 position
@@ -144,7 +146,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         bool TryLoadGroup(SpaceGroupEntry entry);
 
         /// <summary>
-        ///     Loads the passed <see cref="ISpaceGroup"/> into the service
+        ///     Loads the passed <see cref="ISpaceGroup" /> into the service
         /// </summary>
         /// <param name="spaceGroup"></param>
         void LoadGroup(ISpaceGroup spaceGroup);
@@ -166,7 +168,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         IEnumerable<Fractional3D> ShiftFirstToOriginCell(IEnumerable<Fractional3D> source, double tolerance);
 
         /// <summary>
-        ///     Checks if the passed <see cref="ISymmetryOperation"/> pushes the provided vector outside of the origin cell and returns either the operation itself or a origin shift corrected version
+        ///     Checks if the passed <see cref="ISymmetryOperation" /> pushes the provided vector outside of the origin cell and
+        ///     returns either the operation itself or a origin shift corrected version
         /// </summary>
         /// <param name="start"></param>
         /// <param name="operation"></param>

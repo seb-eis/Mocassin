@@ -10,6 +10,7 @@ using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.Analysis;
+using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Structures
 {
@@ -155,10 +156,11 @@ namespace Mocassin.Model.Structures
         protected IList<SetList<FractionalPosition>> CreateExtendedPositionLists()
         {
             var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetUnitCellPositions());
-            return MocassinTaskingExtensions
+            var result = MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
                 .ToList();
+            return result;
         }
 
         /// <summary>
@@ -303,9 +305,11 @@ namespace Mocassin.Model.Structures
         {
             SetList<FractionalPosition> Create()
             {
-                return isDeprecated
-                    ? new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>())
-                    : ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position);
+                if (isDeprecated)
+                    return new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>());
+                var comparer = ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>();
+                var result = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position.Vector).Select(x => new FractionalPosition(x, position.OccupationIndex, position.Status)).ToSetList(comparer);
+                return result;
             }
 
             return Create;

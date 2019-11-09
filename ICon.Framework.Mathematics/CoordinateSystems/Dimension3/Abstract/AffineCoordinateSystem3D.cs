@@ -11,11 +11,11 @@ namespace Mocassin.Mathematics.Coordinates
         /// <summary>
         ///     The coordinate tuples that represent the basis vector coordinate information of the affine system
         /// </summary>
-        public abstract (T1 A, T1 B, T1 C) BaseVectors { get; protected set; }
+        public abstract (T1 A, T1 B, T1 C) BaseVectors { get; }
 
         /// <summary>
         ///     The coordinate tuples that represent the basis vector coordinate information of the affine reference system
         /// </summary>
-        public abstract (T1 A, T1 B, T1 C) ReferenceBaseVectors { get; protected set; }
+        public abstract (T1 A, T1 B, T1 C) ReferenceBaseVectors { get; }
     }
 }

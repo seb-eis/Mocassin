@@ -81,17 +81,17 @@ namespace Mocassin.Symmetry.SpaceGroups
         IEnumerable<Fractional3D> ApplyUntrimmed(IEnumerable<Fractional3D> vectors);
 
         /// <summary>
-        ///     Applies the symmetry operation to a 64 bit generic fractional vector (With trim to origin cell)
+        ///     Applies the symmetry operation to a fractional vector (With trim to origin cell)
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        T1 ApplyWithTrim<T1>(in T1 original) where T1 : struct, IFractional3D<T1>;
+        Fractional3D ApplyWithTrim(IFractional3D original);
 
         /// <summary>
-        ///     Applies the symmetry operation to a 64 bit generic fractional vector (No trim to origin cell)
+        ///     Applies the symmetry operation to a fractional vector (No trim to origin cell)
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        T1 ApplyUntrimmed<T1>(in T1 original) where T1 : struct, IFractional3D<T1>;
+        Fractional3D ApplyUntrimmed(IFractional3D original);
     }
 }

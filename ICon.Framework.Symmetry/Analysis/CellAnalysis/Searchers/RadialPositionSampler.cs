@@ -5,11 +5,13 @@ using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {
     /// <summary>
-    ///     Generic unit cell entry locator that performs a radial search with a provided search criteria around a start position
+    ///     Generic unit cell entry locator that performs a radial search with a provided search criteria around a start
+    ///     position
     ///     in a unit cell provider
     /// </summary>
     public class RadialPositionSampler
@@ -17,7 +19,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     The current basic offset for the active search
         /// </summary>
-        protected Coordinates<int, int, int> BaseOffset { get; set; }
+        protected VectorI3 BaseOffset { get; set; }
 
         /// <summary>
         ///     The currently active start position
@@ -93,7 +95,7 @@ namespace Mocassin.Symmetry.Analysis
         public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint,
             Predicate<T1> predicate)
         {
-            if (predicate == null) 
+            if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
             SetBasicCalculationProperties(provider, constraint, start);
@@ -124,7 +126,7 @@ namespace Mocassin.Symmetry.Analysis
         public IList<CellEntry<T1>> Search<T1>(IUnitCellProvider<T1> provider, in Fractional3D start, NumericConstraint constraint,
             Predicate<T1> predicate, IComparer<CellEntry<T1>> comparer)
         {
-            if (predicate == null) 
+            if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
             SetBasicCalculationProperties(provider, constraint, start);
@@ -133,7 +135,7 @@ namespace Mocassin.Symmetry.Analysis
             for (var offset = 0;; offset++)
             {
                 SearchCellSet(results, provider, predicate, offset);
-                if (CheckAndUpdateBoundaryInfo(offset, constraint)) 
+                if (CheckAndUpdateBoundaryInfo(offset, constraint))
                     break;
             }
 
@@ -159,7 +161,7 @@ namespace Mocassin.Symmetry.Analysis
                     {
                         if (Math.Abs(a) != offset && Math.Abs(b) != offset && Math.Abs(c) != offset) continue;
 
-                        var cellOffsets = new Coordinates<int, int, int>(BaseOffset.A + a, BaseOffset.B + b, BaseOffset.C + c);
+                        var cellOffsets = new VectorI3(BaseOffset.A + a, BaseOffset.B + b, BaseOffset.C + c);
                         var cellOffsetVector =
                             VectorEncoder.Transformer.ToCartesian(new Fractional3D(cellOffsets.A, cellOffsets.B, cellOffsets.C));
                         var unitCell = provider.GetUnitCell(cellOffsets.A, cellOffsets.B, cellOffsets.C);
@@ -205,10 +207,10 @@ namespace Mocassin.Symmetry.Analysis
         protected void SetBasicCalculationProperties<T1>(IUnitCellProvider<T1> provider, NumericConstraint constraint,
             in Fractional3D start)
         {
-            if (provider == null) 
+            if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
 
-            if (constraint == null) 
+            if (constraint == null)
                 throw new ArgumentNullException(nameof(constraint));
 
             VectorEncoder = provider.VectorEncoder;
@@ -233,7 +235,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <returns></returns>
         protected bool CheckAndUpdateBoundaryInfo(int offset, NumericConstraint constraint)
         {
-            if (offset != 0) 
+            if (offset != 0)
                 BoundaryInfo.ChangeAllDistances(1);
 
             return BoundaryInfo.DistanceWithinBoundaries(constraint.MaxValue, constraint.Comparer);

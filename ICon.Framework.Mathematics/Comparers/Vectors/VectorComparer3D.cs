@@ -8,7 +8,7 @@ namespace Mocassin.Mathematics.Comparers
     ///     Generic comparator object for structs that implement IVector3D, automatically provides generic comparisons for any
     ///     IVector3D types
     /// </summary>
-    public class VectorComparer3D<T> : Comparer<T>, IEqualityComparer<T>, IComparer<IVector3D> where T : struct, IVector3D
+    public class VectorComparer3D<T> : Comparer<T>, IEqualityComparer<T>, IComparer<IVector3D> where T : IVector3D
     {
         /// <summary>
         ///     The internal double value comparer for the vector coordinate values
@@ -62,7 +62,7 @@ namespace Mocassin.Mathematics.Comparers
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public int Compare<T1, T2>(T1 x, T2 y) where T1 : struct, IVector3D where T2 : struct, IVector3D
+        public int Compare<T1, T2>(T1 x, T2 y) where T1 : IVector3D where T2 : IVector3D
         {
             var compareA = ValueComparer.Compare(x.Coordinates.A, y.Coordinates.A);
             if (compareA != 0)
@@ -79,7 +79,7 @@ namespace Mocassin.Mathematics.Comparers
         /// </summary>
         /// <typeparam name="TVector"></typeparam>
         /// <returns></returns>
-        public VectorComparer3D<TVector> ToCompatibleComparer<TVector>() where TVector : struct, IVector3D
+        public VectorComparer3D<TVector> ToCompatibleComparer<TVector>() where TVector : IVector3D
         {
             return new VectorComparer3D<TVector>(ValueComparer);
         }

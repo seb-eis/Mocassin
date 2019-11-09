@@ -15,27 +15,17 @@ namespace Mocassin.Mathematics.Coordinates
         public static readonly (Coordinates3D A, Coordinates3D B, Coordinates3D C) BaseCoordinates;
 
         /// <inheritdoc />
-        public override (Coordinates3D A, Coordinates3D B, Coordinates3D C) BaseVectors
-        {
-            get => BaseCoordinates;
-            protected set => 
-                throw new InvalidStateChangeException("Cartesian base or reference vectors are constant and cannot be set");
-        }
+        public override (Coordinates3D A, Coordinates3D B, Coordinates3D C) BaseVectors => BaseCoordinates;
 
         /// <inheritdoc />
-        public override (ACoordinates A, ACoordinates B, ACoordinates C) ReferenceBaseVectors
-        {
-            get => BaseCoordinates;
-            protected set => 
-                throw new InvalidStateChangeException("Cartesian base or reference vectors are constant and cannot be set");
-        }
+        public override (Coordinates3D A, Coordinates3D B, Coordinates3D C) ReferenceBaseVectors => BaseCoordinates;
 
         /// <summary>
         ///     Static constructor, initializes the static cartesian base vectors
         /// </summary>
         static CartesianCoordinateSystem()
         {
-            BaseCoordinates = (new ACoordinates(1.0, 0.0, 0.0), new ACoordinates(0.0, 1.0, 0.0), new ACoordinates(0.0, 0.0, 1.0));
+            BaseCoordinates = (new Coordinates3D(1.0, 0.0, 0.0), new Coordinates3D(0.0, 1.0, 0.0), new Coordinates3D(0.0, 0.0, 1.0));
         }
 
 
@@ -43,13 +33,13 @@ namespace Mocassin.Mathematics.Coordinates
         public override Type ReferenceSystemType => typeof(CartesianCoordinateSystem);
 
         /// <inheritdoc />
-        public override ACoordinates ToReferenceSystem(in ACoordinates original)
+        public override Coordinates3D ToReferenceSystem(in Coordinates3D original)
         {
             return original;
         }
 
         /// <inheritdoc />
-        public override ACoordinates ToSystem(in ACoordinates original)
+        public override Coordinates3D ToSystem(in Coordinates3D original)
         {
             return original;
         }

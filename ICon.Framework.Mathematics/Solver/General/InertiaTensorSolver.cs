@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Extensions;
 
 namespace Mocassin.Mathematics.Solver
 {
     /// <summary>
-    /// Calculates the principal inertia tensor by the Oliver K. Smith trigonometric substitution
+    ///     Calculates the principal inertia tensor by the Oliver K. Smith trigonometric substitution
     /// </summary>
     public class InertiaTensorSolver
     {
         /// <summary>
-        /// Solves eigenvalue problem of the generic inertia tensor and returns the diagonal entries of the principal inertia tensor
+        ///     Solves eigenvalue problem of the generic inertia tensor and returns the diagonal entries of the principal inertia
+        ///     tensor
         /// </summary>
         /// <param name="tensor"></param>
         /// <param name="comparer"></param>
@@ -29,7 +28,7 @@ namespace Mocassin.Mathematics.Solver
         }
 
         /// <summary>
-        /// Get the length of the principal axis inertia tensor diagonal vector
+        ///     Get the length of the principal axis inertia tensor diagonal vector
         /// </summary>
         /// <param name="tensor"></param>
         /// <param name="comparer"></param>
@@ -41,14 +40,14 @@ namespace Mocassin.Mathematics.Solver
         }
 
         /// <summary>
-        /// Uses trigonometric substitution to solve 3x3 symmetric matrix eigenvalue problem
+        ///     Uses trigonometric substitution to solve 3x3 symmetric matrix eigenvalue problem
         /// </summary>
         /// <param name="tensor"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
         private static double[] CalculateEigenvalues(double[,] tensor, IComparer<double> comparer)
         {
-            var intValues = new [] { tensor[0, 0], tensor[1, 1], tensor[2, 2] };
+            var intValues = new[] {tensor[0, 0], tensor[1, 1], tensor[2, 2]};
 
             var devQuad = Quad(tensor[0, 1]) + Quad(tensor[0, 2]) + Quad(tensor[1, 2]);
             if (comparer.Compare(devQuad, 0.0) == 0)
@@ -57,7 +56,7 @@ namespace Mocassin.Mathematics.Solver
                 return intValues;
             }
 
-            var devValues = new [] { 0.0, 0.0, 0.0 };
+            var devValues = new[] {0.0, 0.0, 0.0};
             double intAngle;
             var intTrace = Trace(tensor) / 3.0;
             var intQuad = Quad(tensor[0, 0] - intTrace) + Quad(tensor[1, 1] - intTrace) + Quad(tensor[2, 2] - intTrace) + 2.0 * devQuad;
@@ -87,7 +86,7 @@ namespace Mocassin.Mathematics.Solver
         }
 
         /// <summary>
-        /// Calculates the determinant of a 3x3 symmetric array from the diagonal entries and the outer values
+        ///     Calculates the determinant of a 3x3 symmetric array from the diagonal entries and the outer values
         /// </summary>
         /// <param name="diagonal"></param>
         /// <param name="outer"></param>
@@ -95,12 +94,12 @@ namespace Mocassin.Mathematics.Solver
         private static double Determinant(IReadOnlyList<double> diagonal, IReadOnlyList<double> outer)
         {
             return diagonal[0] * (diagonal[1] * diagonal[2] - outer[2] * outer[2])
-                - outer[0] * (outer[0] * diagonal[2] - outer[1] * outer[2])
-                + outer[1] * (outer[0] * outer[2] - outer[1] * diagonal[1]);
+                   - outer[0] * (outer[0] * diagonal[2] - outer[1] * outer[2])
+                   + outer[1] * (outer[0] * outer[2] - outer[1] * diagonal[1]);
         }
 
         /// <summary>
-        /// Calculates the trace of a 3x3 double array
+        ///     Calculates the trace of a 3x3 double array
         /// </summary>
         /// <param name="tensor"></param>
         /// <returns></returns>
@@ -110,7 +109,7 @@ namespace Mocassin.Mathematics.Solver
         }
 
         /// <summary>
-        /// Quadratic of a double value
+        ///     Quadratic of a double value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

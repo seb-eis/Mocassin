@@ -4,7 +4,7 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Model.Structures
 {
     /// <inheritdoc cref="Mocassin.Model.Structures.ICartesianPosition"/>
-    public readonly struct CartesianPosition : ICartesianPosition, ICartesianMassPoint3D<CartesianPosition>
+    public readonly struct CartesianPosition : ICartesianPosition, ICartesianMassPoint3D
     {
         /// <inheritdoc />
         public Cartesian3D Vector { get; }
@@ -16,7 +16,10 @@ namespace Mocassin.Model.Structures
         public PositionStatus Status { get; }
 
         /// <inheritdoc />
-        public Coordinates<double, double, double> Coordinates => Vector.Coordinates;
+        public Coordinates3D Coordinates => Vector.Coordinates;
+
+        /// <inheritdoc />
+        public double Mass => OccupationIndex;
 
         /// <summary>
         ///     The coordinate value in A direction
@@ -48,48 +51,12 @@ namespace Mocassin.Model.Structures
         /// <param name="vector"></param>
         /// <param name="particleSetIndex"></param>
         /// <param name="status"></param>
-        public CartesianPosition(Cartesian3D vector, int particleSetIndex, PositionStatus status)
+        public CartesianPosition(in Cartesian3D vector, int particleSetIndex, PositionStatus status)
             : this()
         {
             Status = status;
             Vector = vector;
             OccupationIndex = particleSetIndex;
-        }
-
-        /// <inheritdoc />
-        public CartesianPosition CreateNew(double x, double y, double z, double mass)
-        {
-            return new CartesianPosition(new Cartesian3D(x, y, z), Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public CartesianPosition CreateNew(in Coordinates<double, double, double> coordinates, double mass)
-        {
-            return new CartesianPosition(new Cartesian3D(coordinates), Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public CartesianPosition CreateNew(in Cartesian3D vector, double mass)
-        {
-            return new CartesianPosition(vector, Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public CartesianPosition CreateNew(double x, double y, double z)
-        {
-            return new CartesianPosition(new Cartesian3D(x, y, z), OccupationIndex, Status);
-        }
-
-        /// <inheritdoc />
-        public CartesianPosition CreateNew(Coordinates<double, double, double> coordinates)
-        {
-            return new CartesianPosition(new Cartesian3D(coordinates), OccupationIndex, Status);
-        }
-
-        /// <inheritdoc />
-        public double GetMass()
-        {
-            return OccupationIndex;
         }
     }
 }

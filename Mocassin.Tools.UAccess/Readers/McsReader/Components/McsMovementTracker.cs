@@ -35,7 +35,7 @@ namespace Mocassin.Tools.UAccess.Readers.McsReader.Components
         double IFractional3D.C => C;
 
         /// <inheritdoc />
-        Coordinates<double, double, double> IVector3D.Coordinates => new Coordinates<double, double, double>(A, B, C);
+        Coordinates3D IVector3D.Coordinates => new Coordinates3D(A, B, C);
 
         /// <summary>
         ///     Get the contents of the <see cref="McsMovementTracker" /> as a <see cref="Fractional3D" /> vector type

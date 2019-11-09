@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.Mathematics.Extensions;
 
 namespace Mocassin.Mathematics.ValueTypes
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
-using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {
@@ -43,7 +43,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="unitCell"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public static SupercellAdapter<T1> CreateSupercell<T1>(IUnitCell<T1> unitCell, in Coordinates<int, int, int> size)
+        public static SupercellAdapter<T1> CreateSupercell<T1>(IUnitCell<T1> unitCell, in VectorI3 size)
         {
             return CreateSupercell(unitCell.GetAllEntries().Select(value => value.Entry), size, unitCell.VectorEncoder);
         }
@@ -56,10 +56,10 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="size"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static SupercellAdapter<T1> CreateSupercell<T1>(IEnumerable<T1> cellEntry, in Coordinates<int, int, int> size,
+        public static SupercellAdapter<T1> CreateSupercell<T1>(IEnumerable<T1> cellEntry, in VectorI3 size,
             IUnitCellVectorEncoder vectorEncoder)
         {
-            if (size.A < 1 || size.B < 1 || size.C < 1) 
+            if (size.A < 1 || size.B < 1 || size.C < 1)
                 throw new ArgumentException("Invalid size information", nameof(size));
 
             return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(cellEntry.ToArray), vectorEncoder);
@@ -74,10 +74,10 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="size"></param>
         /// <param name="vectorEncoder"></param>
         /// <returns></returns>
-        public static SupercellAdapter<T1> CreateSupercell<T1>(IEnumerable<T1[]> cellEntries, in Coordinates<int, int, int> size,
-            UnitCellVectorEncoder vectorEncoder)
+        public static SupercellAdapter<T1> CreateSupercell<T1>(IEnumerable<T1[]> cellEntries, in VectorI3 size,
+            IUnitCellVectorEncoder vectorEncoder)
         {
-            if (size.A < 1 || size.B < 1 || size.C < 1) 
+            if (size.A < 1 || size.B < 1 || size.C < 1)
                 throw new ArgumentException("Invalid size information", nameof(size));
 
             return CreateSupercell(new T1[size.A, size.B, size.C][].Populate(cellEntries), vectorEncoder);

@@ -6,6 +6,11 @@
     public interface ICrystalVector4D
     {
         /// <summary>
+        ///     Get the coordinate tuple
+        /// </summary>
+        Coordinates4I Coordinates { get; }
+
+        /// <summary>
         ///     Offset in A direction
         /// </summary>
         int A { get; }

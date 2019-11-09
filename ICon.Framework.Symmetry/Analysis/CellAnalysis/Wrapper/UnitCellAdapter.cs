@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.Analysis
 {
@@ -15,7 +16,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     The unit cell size info (1,1,1,#Entries)
         /// </summary>
-        protected Coordinates<int, int, int, int> SizeInfo;
+        protected Coordinates4I SizeInfo;
 
         /// <summary>
         ///     The list interface of unit cell entries without the vector information
@@ -25,16 +26,16 @@ namespace Mocassin.Symmetry.Analysis
         /// <summary>
         ///     The current offset of the cell
         /// </summary>
-        protected Coordinates<int, int, int> Offset { get; set; }
+        protected VectorI3 Offset { get; set; }
 
-        /// <inheritdoc cref="IUnitCellProvider{T1}.VectorEncoder"/>
+        /// <inheritdoc cref="IUnitCellProvider{T1}.VectorEncoder" />
         public IUnitCellVectorEncoder VectorEncoder { get; protected set; }
 
         /// <inheritdoc />
         public int EntryCount => CellEntries.Count;
 
         /// <inheritdoc />
-        public ref Coordinates<int, int, int, int> CellSizeInfo => ref SizeInfo;
+        public ref Coordinates4I CellSizeInfo => ref SizeInfo;
 
         /// <inheritdoc />
         public CellEntry<T1> this[int index] => GetCellEntry(Offset, index);
@@ -50,7 +51,7 @@ namespace Mocassin.Symmetry.Analysis
             if (entries.Count != vectorEncoder.PositionCount)
                 throw new ArgumentException("Entry count does not match vector encoder position count", nameof(entries));
 
-            SizeInfo = new Coordinates<int, int, int, int>(1, 1, 1, entries.Count);
+            SizeInfo = new Coordinates4I(1, 1, 1, entries.Count);
             CellEntries = entries;
         }
 
@@ -60,7 +61,7 @@ namespace Mocassin.Symmetry.Analysis
         /// <param name="entries"></param>
         /// <param name="vectorEncoder"></param>
         /// <param name="offset"></param>
-        public UnitCellAdapter(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder, in Coordinates<int, int, int> offset)
+        public UnitCellAdapter(IList<T1> entries, IUnitCellVectorEncoder vectorEncoder, in VectorI3 offset)
             : this(entries, vectorEncoder)
         {
             Offset = offset;
@@ -87,7 +88,7 @@ namespace Mocassin.Symmetry.Analysis
         }
 
         /// <inheritdoc />
-        public CellEntry<T1> GetCellEntry(in Coordinates<int, int, int> offset, int p)
+        public CellEntry<T1> GetCellEntry(in VectorI3 offset, int p)
         {
             return new CellEntry<T1>(new Fractional3D(offset.A, offset.B, offset.C) + VectorEncoder.PositionList[p], CellEntries[p]);
         }
@@ -98,7 +99,7 @@ namespace Mocassin.Symmetry.Analysis
             var result = new UnitCellAdapter<T1>
             {
                 CellEntries = CellEntries,
-                Offset = new Coordinates<int, int, int>(a, b, c),
+                Offset = new VectorI3(a, b, c),
                 SizeInfo = SizeInfo,
                 VectorEncoder = VectorEncoder
             };
@@ -106,7 +107,7 @@ namespace Mocassin.Symmetry.Analysis
         }
 
         /// <inheritdoc />
-        public IUnitCell<T1> GetUnitCell(in Coordinates<int, int, int> offset)
+        public IUnitCell<T1> GetUnitCell(in VectorI3 offset)
         {
             var result = new UnitCellAdapter<T1>
             {
@@ -127,8 +128,8 @@ namespace Mocassin.Symmetry.Analysis
         /// <inheritdoc />
         public T1 GetEntryValueAt(in Fractional3D vector)
         {
-            return !VectorEncoder.TryEncode(vector, out var encoded) 
-                ? default 
+            return !VectorEncoder.TryEncode(vector, out var encoded)
+                ? default
                 : CellEntries[encoded.P];
         }
     }

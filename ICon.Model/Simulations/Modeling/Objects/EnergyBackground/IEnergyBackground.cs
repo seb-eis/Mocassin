@@ -17,7 +17,7 @@ namespace Mocassin.Model.Simulations
         /// <param name="particles"></param>
         /// <param name="latticeDimension"></param>
         /// <returns></returns>
-        double[,,,,] GetHyperSurface(IEnumerable<IParticle> particles, ILinearVector4D latticeDimension);
+        double[,,,,] GetHyperSurface(IEnumerable<IParticle> particles, in CrystalVector4D latticeDimension);
 
         /// <summary>
         ///     Get the energy value belonging to the provided 4D coordinate information and particle
@@ -25,7 +25,7 @@ namespace Mocassin.Model.Simulations
         /// <param name="vector"></param>
         /// <param name="particle"></param>
         /// <returns></returns>
-        double GetValue(ILinearVector4D vector, IParticle particle);
+        double GetValue(in CrystalVector4D vector, IParticle particle);
 
         /// <summary>
         ///     Get an energy value belonging to the provided 3D fractional position and particle

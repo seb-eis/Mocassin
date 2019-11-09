@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Mocassin.Mathematics.Comparers;
 using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Mathematics.Coordinates
 {
@@ -21,7 +20,7 @@ namespace Mocassin.Mathematics.Coordinates
         public int PositionCount => PositionList.Count;
 
         /// <summary>
-        /// Creates new vector encoder with specified position list and vector transformer
+        ///     Creates new vector encoder with specified position list and vector transformer
         /// </summary>
         /// <param name="positionList"></param>
         /// <param name="vectorTransformer"></param>
@@ -31,8 +30,13 @@ namespace Mocassin.Mathematics.Coordinates
             Transformer = vectorTransformer ?? throw new ArgumentNullException(nameof(vectorTransformer));
         }
 
-        /// <inheritdoc />
-        public bool TryEncode(IFractional3D vector, out CrystalVector4D encoded)
+        /// <summary>
+        ///     Internal fractional encode function that uses a <see cref="Coordinates3D"/> input
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="encoded"></param>
+        /// <returns></returns>
+        private bool TryEncodeFractional(in Coordinates3D vector, out CrystalVector4D encoded)
         {
             var index = PositionList.IndexOf(GetOriginCellTrimmedVector(vector, out var offset));
             if (index < 0)
@@ -40,8 +44,21 @@ namespace Mocassin.Mathematics.Coordinates
                 encoded = default;
                 return false;
             }
+
             encoded = new CrystalVector4D(offset.A, offset.B, offset.C, index);
             return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryEncode(IFractional3D vector, out CrystalVector4D encoded)
+        {
+            return TryEncodeFractional(vector.Coordinates, out encoded);
+        }
+
+        /// <inheritdoc />
+        public bool TryEncode(in Fractional3D vector, out CrystalVector4D encoded)
+        {
+            return TryEncodeFractional(vector.Coordinates, out encoded);
         }
 
         /// <inheritdoc />
@@ -56,12 +73,23 @@ namespace Mocassin.Mathematics.Coordinates
             encoded = new List<CrystalVector4D>(100);
             foreach (var item in decoded)
             {
-                if (!TryEncode(item, out var singleEncoded))
-                {
-                    return false;
-                }
+                if (!TryEncode(item, out var singleEncoded)) return false;
                 encoded.Add(singleEncoded);
             }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryEncode(IEnumerable<Fractional3D> decoded, out List<CrystalVector4D> encoded)
+        {
+            encoded = new List<CrystalVector4D>(100);
+            foreach (var item in decoded)
+            {
+                if (!TryEncode(item, out var singleEncoded)) return false;
+                encoded.Add(singleEncoded);
+            }
+
             return true;
         }
 
@@ -75,12 +103,19 @@ namespace Mocassin.Mathematics.Coordinates
                 encoded = encodedEnd - encodedStart;
                 return true;
             }
+
             encoded = default;
             return false;
         }
 
         /// <inheritdoc />
         public bool TryEncode(ICartesian3D vector, out CrystalVector4D encoded)
+        {
+            return TryEncode(Transformer.ToFractional(vector), out encoded);
+        }
+
+        /// <inheritdoc />
+        public bool TryEncode(in Cartesian3D vector, out CrystalVector4D encoded)
         {
             return TryEncode(Transformer.ToFractional(vector), out encoded);
         }
@@ -133,17 +168,35 @@ namespace Mocassin.Mathematics.Coordinates
             return TryEncodeAsRelative(Transformer.ToFractional(origin), Transformer.ToFractional(vector), out encoded);
         }
 
-        /// <inheritdoc />
-        public bool TryDecode(ICrystalVector4D encoded, out Fractional3D decoded)
+        /// <summary>
+        ///     Internal decode from <see cref="Coordinates4I"/> to <see cref="Fractional3D"/>
+        /// </summary>
+        /// <param name="encoded"></param>
+        /// <param name="decoded"></param>
+        /// <returns></returns>
+        private bool TryDecodeFractional(in Coordinates4I encoded, out Fractional3D decoded)
         {
-            if (encoded.P < 0 || encoded.P >= PositionList.Count)
+            if (encoded.D < 0 || encoded.D >= PositionList.Count)
             {
                 decoded = default;
                 return false;
             }
-            var offset = PositionList[encoded.P];
+
+            var offset = PositionList[encoded.D];
             decoded = new Fractional3D(encoded.A + offset.A, encoded.B + offset.B, encoded.C + offset.C);
             return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryDecode(ICrystalVector4D encoded, out Fractional3D decoded)
+        {
+            return TryDecodeFractional(encoded.Coordinates, out decoded);
+        }
+
+        /// <inheritdoc />
+        public bool TryDecode(in CrystalVector4D encoded, out Fractional3D decoded)
+        {
+            return TryDecodeFractional(encoded.Coordinates, out decoded);
         }
 
         /// <inheritdoc />
@@ -157,8 +210,29 @@ namespace Mocassin.Mathematics.Coordinates
                     decoded = default;
                     return false;
                 }
+
                 result.Add(itemDecoded);
             }
+
+            decoded = result;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryDecode(IEnumerable<CrystalVector4D> encoded, out List<Fractional3D> decoded)
+        {
+            var result = new List<Fractional3D>();
+            foreach (var item in encoded)
+            {
+                if (!TryDecode(item, out Fractional3D itemDecoded))
+                {
+                    decoded = default;
+                    return false;
+                }
+
+                result.Add(itemDecoded);
+            }
+
             decoded = result;
             return true;
         }
@@ -166,11 +240,25 @@ namespace Mocassin.Mathematics.Coordinates
         /// <inheritdoc />
         public bool TryDecode(ICrystalVector4D encoded, out Cartesian3D decoded)
         {
-            if(!TryDecode(encoded, out Fractional3D fractional))
+            if (!TryDecode(encoded, out Fractional3D fractional))
             {
                 decoded = default;
                 return false;
             }
+
+            decoded = Transformer.ToCartesian(fractional);
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryDecode(in CrystalVector4D encoded, out Cartesian3D decoded)
+        {
+            if (!TryDecode(encoded, out Fractional3D fractional))
+            {
+                decoded = default;
+                return false;
+            }
+
             decoded = Transformer.ToCartesian(fractional);
             return true;
         }
@@ -183,6 +271,20 @@ namespace Mocassin.Mathematics.Coordinates
                 decoded = default;
                 return false;
             }
+
+            decoded = Transformer.ToSpherical(fractional);
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryDecode(in CrystalVector4D encoded, out Spherical3D decoded)
+        {
+            if (!TryDecode(encoded, out Fractional3D fractional))
+            {
+                decoded = default;
+                return false;
+            }
+
             decoded = Transformer.ToSpherical(fractional);
             return true;
         }
@@ -198,6 +300,7 @@ namespace Mocassin.Mathematics.Coordinates
                 decoded = totalDecoded - originDecoded;
                 return true;
             }
+
             decoded = default;
             return false;
         }
@@ -213,6 +316,7 @@ namespace Mocassin.Mathematics.Coordinates
                 decoded = totalDecoded - originDecoded;
                 return true;
             }
+
             decoded = default;
             return false;
         }
@@ -225,24 +329,58 @@ namespace Mocassin.Mathematics.Coordinates
                 decoded = default;
                 return false;
             }
+
             decoded = Transformer.ToSpherical(decodedCartesian);
             return true;
         }
 
-        /// <inheritdoc />
-        public Coordinates<int, int, int> GetTargetCellOffset(IFractional3D vector)
+        /// <summary>
+        ///     Calculates the target cell offset from a <see cref="Coordinates3D"/>
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        private VectorI3 GetTargetCellOffset(in Coordinates3D vector)
         {
             var a = MocassinMath.FloorToInt(vector.A, Transformer.FractionalSystem.Comparer);
             var b = MocassinMath.FloorToInt(vector.B, Transformer.FractionalSystem.Comparer);
             var c = MocassinMath.FloorToInt(vector.C, Transformer.FractionalSystem.Comparer);
-            return new Coordinates<int, int, int>(a, b, c);
+            return new VectorI3(a, b, c);
         }
 
         /// <inheritdoc />
-        public Fractional3D GetOriginCellTrimmedVector(IFractional3D vector, out Coordinates<int, int, int> offset)
+        public VectorI3 GetTargetCellOffset(IFractional3D vector)
+        {
+            return GetTargetCellOffset(vector.Coordinates);
+        }
+
+        /// <inheritdoc />
+        public VectorI3 GetTargetCellOffset(in Fractional3D vector)
+        {
+            return GetTargetCellOffset(vector.Coordinates);
+        }
+
+        /// <summary>
+        ///     Calculates an origin cell trimmed vector from a <see cref="Coordinates3D"/>
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        private Fractional3D GetOriginCellTrimmedVector(in Coordinates3D vector, out VectorI3 offset)
         {
             offset = GetTargetCellOffset(vector);
             return new Fractional3D(vector.A - offset.A, vector.B - offset.B, vector.C - offset.C);
+        }
+
+        /// <inheritdoc />
+        public Fractional3D GetOriginCellTrimmedVector(IFractional3D vector, out VectorI3 offset)
+        {
+            return GetOriginCellTrimmedVector(vector.Coordinates, out offset);
+        }
+
+        /// <inheritdoc />
+        public Fractional3D GetOriginCellTrimmedVector(in Fractional3D vector, out VectorI3 offset)
+        {
+            return GetOriginCellTrimmedVector(vector.Coordinates, out offset);
         }
 
         /// <inheritdoc />

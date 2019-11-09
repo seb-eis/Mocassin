@@ -1,10 +1,9 @@
-﻿using System;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="Mocassin.Model.Structures.IFractionalPosition"/>
-    public readonly struct FractionalPosition : IFractionalPosition, IFractionalMassPoint3D<FractionalPosition>
+    /// <inheritdoc cref="Mocassin.Model.Structures.IFractionalPosition" />
+    public readonly struct FractionalPosition : IFractionalPosition, IFractionalMassPoint3D
     {
         /// <inheritdoc />
         public Fractional3D Vector { get; }
@@ -16,7 +15,7 @@ namespace Mocassin.Model.Structures
         public PositionStatus Status { get; }
 
         /// <inheritdoc />
-        public Coordinates<double, double, double> Coordinates => Vector.Coordinates;
+        public Coordinates3D Coordinates => Vector.Coordinates;
 
         /// <inheritdoc />
         public double A => Vector.A;
@@ -26,6 +25,9 @@ namespace Mocassin.Model.Structures
 
         /// <inheritdoc />
         public double C => Vector.C;
+
+        /// <inheritdoc />
+        public double Mass => OccupationIndex;
 
         /// <summary>
         ///     Creates new cell position from fractional 3D vector and particle set index
@@ -39,42 +41,6 @@ namespace Mocassin.Model.Structures
             Status = status;
             Vector = vector;
             OccupationIndex = occupationIndex;
-        }
-
-        /// <inheritdoc />
-        public FractionalPosition CreateNew(double a, double b, double c, double mass)
-        {
-            return new FractionalPosition(new Fractional3D(a, b, c), Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public FractionalPosition CreateNew(in Coordinates<double, double, double> coordinates, double mass)
-        {
-            return new FractionalPosition(new Fractional3D(coordinates), Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public FractionalPosition CreateNew(in Fractional3D vector, double mass)
-        {
-            return new FractionalPosition(vector, Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public FractionalPosition CreateNew(double a, double b, double c)
-        {
-            return new FractionalPosition(new Fractional3D(a, b, c), OccupationIndex, Status);
-        }
-
-        /// <inheritdoc />
-        public FractionalPosition CreateNew(Coordinates<double, double, double> coordinates)
-        {
-            return new FractionalPosition(new Fractional3D(coordinates), OccupationIndex, Status);
-        }
-
-        /// <inheritdoc />
-        public double GetMass()
-        {
-            return OccupationIndex;
         }
     }
 }

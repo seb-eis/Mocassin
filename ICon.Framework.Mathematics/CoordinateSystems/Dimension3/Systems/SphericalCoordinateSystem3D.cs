@@ -3,7 +3,6 @@ using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.ValueTypes;
-using ACoordinates = Mocassin.Mathematics.ValueTypes.Coordinates<double, double, double>;
 
 namespace Mocassin.Mathematics.Coordinates
 {
@@ -11,7 +10,7 @@ namespace Mocassin.Mathematics.Coordinates
     ///     Defines double precision spherical coordinate system which follows the iso standard limitations (Theta: true, 0°,
     ///     180°, true, Phi: true, 0°, 360°, false)
     /// </summary>
-    public class SphericalCoordinateSystem3D : AngularCoordinateSystem<ACoordinates>
+    public class SphericalCoordinateSystem3D : AngularCoordinateSystem<Coordinates3D>
     {
         /// <summary>
         ///     The azimuthal constraint, ISO standard (true, 0.0, 2*PI, false) with construction specified boundary tolerance
@@ -75,18 +74,18 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <inheritdoc />
-        public override ACoordinates ToReferenceSystem(in ACoordinates original)
+        public override Coordinates3D ToReferenceSystem(in Coordinates3D original)
         {
-            return new ACoordinates(CalculateCoordinateX(original), CalculateCoordinateY(original), CalculateCoordinateZ(original));
+            return new Coordinates3D(GetCoordinateX(original), GetCoordinateY(original), GetCoordinateZ(original));
         }
 
         /// <inheritdoc />
-        public override ACoordinates ToSystem(in ACoordinates original)
+        public override Coordinates3D ToSystem(in Coordinates3D original)
         {
             var radius = CalculateRadius(original);
             var theta = CalculatePolarAngle(original, radius);
             var phi = CalculateAzimuthalAngle(original, theta);
-            return new ACoordinates(radius, theta, phi);
+            return new Coordinates3D(radius, theta, phi);
         }
 
         /// <summary>
@@ -94,7 +93,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        private static double CalculateRadius(in ACoordinates original)
+        private static double CalculateRadius(in Coordinates3D original)
         {
             return Math.Sqrt(original.A * original.A + original.B * original.B + original.C * original.C);
         }
@@ -105,7 +104,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="original"></param>
         /// <param name="radial"></param>
         /// <returns></returns>
-        private double CalculatePolarAngle(in ACoordinates original, double radial)
+        private double CalculatePolarAngle(in Coordinates3D original, double radial)
         {
             return PolarConstraint.ParseToPeriodicRange(Math.Acos(original.C / radial));
         }
@@ -117,7 +116,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// <param name="original"></param>
         /// <param name="theta"></param>
         /// <returns></returns>
-        private double CalculateAzimuthalAngle(in ACoordinates original, double theta)
+        private double CalculateAzimuthalAngle(in Coordinates3D original, double theta)
         {
             // The function has to return 0.0 if the theta angle is almost zero,
             // this is an inconsistent definition issue of z-aligned spherical coordinates
@@ -133,7 +132,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        private double CalculateCoordinateX(in ACoordinates original)
+        private double GetCoordinateX(in Coordinates3D original)
         {
             var x = original.A * Math.Sin(original.B) * Math.Cos(original.C);
             return x.IsAlmostZero(AlmostEqualRange) ? 0.0 : x;
@@ -144,7 +143,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        private double CalculateCoordinateY(in ACoordinates original)
+        private double GetCoordinateY(in Coordinates3D original)
         {
             var y = original.A * Math.Sin(original.B) * Math.Sin(original.C);
             return y.IsAlmostZero(AlmostEqualRange) ? 0.0 : y;
@@ -155,7 +154,7 @@ namespace Mocassin.Mathematics.Coordinates
         /// </summary>
         /// <param name="original"></param>
         /// <returns></returns>
-        private double CalculateCoordinateZ(in ACoordinates original)
+        private double GetCoordinateZ(in Coordinates3D original)
         {
             var z = original.A * Math.Cos(original.B);
             return z.IsAlmostZero(AlmostEqualRange) ? 0.0 : z;

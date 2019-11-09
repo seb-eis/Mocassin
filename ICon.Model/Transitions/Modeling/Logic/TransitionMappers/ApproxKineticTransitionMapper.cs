@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
@@ -85,7 +86,7 @@ namespace Mocassin.Model.Transitions
             for (var i = 0; i < regularPositions.Count - 1; i++)
             {
                 var interPosition = Fractional3D.CalculateMiddle(regularPositions[i + 1], regularPositions[i]).TrimToUnitCell(tolerance);
-                if (!positionMap[i].Contains(interPosition)) 
+                if (!positionMap[i].Contains(interPosition))
                     return false;
             }
 
@@ -106,8 +107,8 @@ namespace Mocassin.Model.Transitions
             var refIdentifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(reference));
             foreach (var geometry in GetUniquePaths(geometries, comparer))
             {
-                var indentifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(geometry));
-                if (SymmetryService.IndicatorComparer.Compare(refIdentifier, indentifier) == 0)
+                var identifier = SymmetryService.GetSymmetryIndicator(GetMassPointPath(geometry));
+                if (SymmetryService.IndicatorComparer.Compare(refIdentifier, identifier) == 0)
                     yield return geometry;
             }
         }
@@ -169,15 +170,16 @@ namespace Mocassin.Model.Transitions
         /// <typeparam name="T1"></typeparam>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        protected IEnumerable<CartesianMassPoint3D<T1>> GetMassPointPath<T1>(IEnumerable<CellEntry<T1>> sequence)
+        protected IEnumerable<CartesianMassPoint3D> GetMassPointPath<T1>(IEnumerable<CellEntry<T1>> sequence)
             where T1 : struct, IConvertible
         {
             return sequence.Select(value =>
-                new CartesianMassPoint3D<T1>(value.Entry, UnitCellProvider.VectorEncoder.Transformer.ToCartesian(value.AbsoluteVector)));
+                new CartesianMassPoint3D(value.Entry.ToDouble(CultureInfo.InvariantCulture),
+                    UnitCellProvider.VectorEncoder.Transformer.ToCartesian(value.AbsoluteVector)));
         }
 
         /// <summary>
-        ///     Takes a sequnce of cell entries and decodes them as a sequence of 4D crystal vectors
+        ///     Takes a sequence of cell entries and decodes them as a sequence of 4D crystal vectors
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="sequence"></param>
@@ -189,7 +191,7 @@ namespace Mocassin.Model.Transitions
                 if (!UnitCellProvider.VectorEncoder.TryEncode(item.AbsoluteVector, out var encoded))
                 {
                     throw new ArgumentException(
-                        "The provided sequnce contains fractional vectors that cannot be converted to 4D equivalents", nameof(sequence));
+                        "The provided sequence contains fractional vectors that cannot be converted to 4D equivalents", nameof(sequence));
                 }
 
                 yield return encoded;

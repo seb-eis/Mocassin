@@ -50,17 +50,15 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public T1 ApplyWithTrim<T1>(in T1 original) 
-            where T1 : struct, IFractional3D<T1>
+        public Fractional3D ApplyWithTrim(IFractional3D original)
         {
-            return original.CreateNew(ApplyWithTrim(original.A, original.B, original.C).Coordinates);
+            return new Fractional3D(ApplyWithTrim(original.A, original.B, original.C).Coordinates);
         }
 
         /// <inheritdoc />
-        public T1 ApplyUntrimmed<T1>(in T1 original) 
-            where T1 : struct, IFractional3D<T1>
+        public Fractional3D ApplyUntrimmed(IFractional3D original)
         {
-            return original.CreateNew(ApplyUntrimmed(original.A, original.B, original.C).Coordinates);
+            return new Fractional3D(ApplyUntrimmed(original.A, original.B, original.C).Coordinates);
         }
 
         /// <inheritdoc />

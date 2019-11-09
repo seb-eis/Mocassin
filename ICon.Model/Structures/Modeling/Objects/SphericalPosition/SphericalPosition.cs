@@ -1,10 +1,9 @@
-﻿using System;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="Mocassin.Model.Structures.ISphericalPosition"/>
-    public readonly struct SphericalPosition : ISphericalPosition, ISphericalMassPoint3D<SphericalPosition>
+    /// <inheritdoc cref="Mocassin.Model.Structures.ISphericalPosition" />
+    public readonly struct SphericalPosition : ISphericalPosition, ISphericalMassPoint3D
     {
         /// <inheritdoc />
         public Spherical3D Vector { get; }
@@ -16,7 +15,10 @@ namespace Mocassin.Model.Structures
         public PositionStatus Status { get; }
 
         /// <inheritdoc />
-        public Coordinates<double, double, double> Coordinates => Vector.Coordinates;
+        public Coordinates3D Coordinates => Vector.Coordinates;
+
+        /// <inheritdoc />
+        public double Mass => OccupationIndex;
 
         /// <summary>
         ///     The coordinate value in A direction
@@ -54,42 +56,6 @@ namespace Mocassin.Model.Structures
             Status = status;
             Vector = vector;
             OccupationIndex = occupationIndex;
-        }
-
-        /// <inheritdoc />
-        public SphericalPosition CreateNew(double radius, double theta, double phi, double mass)
-        {
-            return new SphericalPosition(new Spherical3D(radius, theta, phi), Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public SphericalPosition CreateNew(in Coordinates<double, double, double> coordinates, double mass)
-        {
-            return new SphericalPosition(new Spherical3D(coordinates), Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public SphericalPosition CreateNew(in Spherical3D vector, double mass)
-        {
-            return new SphericalPosition(vector, Convert.ToInt32(mass), Status);
-        }
-
-        /// <inheritdoc />
-        public SphericalPosition CreateNew(double radius, double theta, double phi)
-        {
-            return new SphericalPosition(new Spherical3D(radius, theta, phi), OccupationIndex, Status);
-        }
-
-        /// <inheritdoc />
-        public SphericalPosition CreateNew(Coordinates<double, double, double> coordinates)
-        {
-            return new SphericalPosition(new Spherical3D(coordinates), OccupationIndex, Status);
-        }
-
-        /// <inheritdoc />
-        public double GetMass()
-        {
-            return OccupationIndex;
         }
     }
 }

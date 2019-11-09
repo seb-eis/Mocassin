@@ -231,10 +231,10 @@ namespace Mocassin.Model.Translator.ModelContext
             var origin = geometry.First();
 
             var startChargeMassPoints = geometry
-                .Zip(ruleModel.StartState.Select(x => x.Index), (vector, mass) => new CartesianMassPoint3D<double>(mass, vector));
+                .Zip(ruleModel.StartState.Select(x => x.Index), (vector, mass) => new CartesianMassPoint3D(mass, vector));
 
             var finalChargeMassPoints = geometry
-                .Zip(ruleModel.FinalState.Select(x => x.Index), (vector, mass) => new CartesianMassPoint3D<double>(mass, vector));
+                .Zip(ruleModel.FinalState.Select(x => x.Index), (vector, mass) => new CartesianMassPoint3D(mass, vector));
 
             var startFocalPoint = solver.GetMassCenter(startChargeMassPoints, ModelProject.GeometryNumeric.RangeComparer);
             var endFocalPoint = solver.GetMassCenter(finalChargeMassPoints, ModelProject.GeometryNumeric.RangeComparer);

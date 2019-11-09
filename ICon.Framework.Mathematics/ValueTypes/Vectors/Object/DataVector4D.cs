@@ -1,49 +1,50 @@
-﻿using Newtonsoft.Json;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
     /// <summary>
-    /// Serializable version of the 4D 128bit Int-Vector that does not specify its coordinate system type. Intended for data storage and serialization
+    ///     Serializable version of the 4D 128bit Int-Vector that does not specify its coordinate system type. Intended for
+    ///     data storage and serialization
     /// </summary>
     [DataContract]
     public class DataVector4D
     {
         /// <summary>
-        /// Coordinate value in A direction
+        ///     Coordinate value in A direction
         /// </summary>
         [DataMember]
         public int A { get; set; }
 
         /// <summary>
-        /// Coordinate value in B direction
+        ///     Coordinate value in B direction
         /// </summary>
         [DataMember]
         public int B { get; set; }
 
         /// <summary>
-        /// Coordinate value in C direction
+        ///     Coordinate value in C direction
         /// </summary>
         [DataMember]
         public int C { get; set; }
 
         /// <summary>
-        /// Coordinate value in D direction
+        ///     Coordinate value in D direction
         /// </summary>
         [DataMember]
         public int D { get; set; }
 
 
-
         /// <summary>
-        /// Construct from any linear 4D vector interface
+        ///     Construct from any linear 4D vector interface
         /// </summary>
-        public DataVector4D(ILinearVector4D vector) : this(vector.Coordinates.A, vector.Coordinates.B, vector.Coordinates.C, vector.Coordinates.D)
+        public DataVector4D(ICrystalVector4D vector)
+            : this(vector.Coordinates.A, vector.Coordinates.B, vector.Coordinates.C, vector.Coordinates.D)
         {
         }
 
         /// <summary>
-        /// Construct from 4 integer coordinate values
+        ///     Construct from 4 integer coordinate values
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -58,7 +59,7 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        /// Returns JSON representation of the object
+        ///     Returns JSON representation of the object
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -67,7 +68,7 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        /// Returns the coordinate values a crystal vector struct
+        ///     Returns the coordinate values a crystal vector struct
         /// </summary>
         /// <returns></returns>
         public CrystalVector4D AsCrystalVector()

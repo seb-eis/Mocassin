@@ -8,25 +8,21 @@ namespace Mocassin.Mathematics.ValueTypes
     /// <summary>
     /// Serializable version of the 3D 192bit Flp-Vector that does not specify its coordinate system type. Intended for data storage and serialization
     /// </summary>
-    [DataContract]
     public class DataIntVector3D
     {
         /// <summary>
         /// Value in first direction
         /// </summary>
-        [DataMember]
         public int A { get; set; }
 
         /// <summary>
         /// Value in second direction
         /// </summary>
-        [DataMember]
         public int B { get; set; }
 
         /// <summary>
         /// Value in third direction
         /// </summary>
-        [DataMember]
         public int C { get; set; }
 
         /// <summary>
@@ -46,7 +42,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// Construct new data vector from coordinates
         /// </summary>
         /// <param name="coord"></param>
-        public DataIntVector3D(Coordinates<int,int,int> coord)
+        public DataIntVector3D(in VectorI3 coord)
         {
             A = coord.A;
             B = coord.B;

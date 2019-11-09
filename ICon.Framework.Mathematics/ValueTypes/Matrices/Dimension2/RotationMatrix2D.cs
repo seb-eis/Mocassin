@@ -92,8 +92,7 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="axis"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static TransformMatrix2D CreateForArbitraryAxis<T1>(double radian, in T1 axis, NumericComparer comparer)
-            where T1 : struct, ICartesian3D<T1>
+        public static TransformMatrix2D CreateForArbitraryAxis(double radian, in Cartesian3D axis, NumericComparer comparer) 
         {
             if (comparer.Compare(axis.GetLength(), 0.0) == 0)
                 throw new ArgumentException("Cannot created rotation axis around a zero vector", nameof(axis));
