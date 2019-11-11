@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using System.Globalization;
 using System.Xml.Serialization;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
@@ -15,19 +15,25 @@ namespace Mocassin.Symmetry.SpaceGroups
     [XmlRoot]
     public class SymmetryOperationEntity : SymmetryOperationBase
     {
+        public double Entry00 { get; private set; }
+        public double Entry01 { get; private set; }
+        public double Entry02 { get; private set; }
+        public double Entry03 { get; private set; }
+        public double Entry10 { get; private set; }
+        public double Entry11 { get; private set; }
+        public double Entry12 { get; private set; }
+        public double Entry13 { get; private set; }
+        public double Entry20 { get; private set; }
+        public double Entry21 { get; private set; }
+        public double Entry22 { get; private set; }
+        public double Entry23 { get; private set; }
+
         /// <summary>
         ///     Default trim tolerance value of 1.0e-10
         /// </summary>
         [XmlIgnore]
         [NotMapped]
         public new double TrimTolerance => 1.0e-10;
-
-        /// <summary>
-        ///     The operation matrix
-        /// </summary>
-        [XmlIgnore]
-        [NotMapped]
-        public double[,] OperationMatrix { get; set; }
 
         /// <summary>
         ///     The database context ID
@@ -63,9 +69,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public override Fractional3D ApplyUntrimmed(double orgA, double orgB, double orgC)
         {
-            var a = orgA * OperationMatrix[0, 0] + orgB * OperationMatrix[0, 1] + orgC * OperationMatrix[0, 2] + OperationMatrix[0, 3];
-            var b = orgA * OperationMatrix[1, 0] + orgB * OperationMatrix[1, 1] + orgC * OperationMatrix[1, 2] + OperationMatrix[1, 3];
-            var c = orgA * OperationMatrix[2, 0] + orgB * OperationMatrix[2, 1] + orgC * OperationMatrix[2, 2] + OperationMatrix[2, 3];
+            var a = orgA * Entry00 + orgB * Entry01 + orgC * Entry02 + Entry03;
+            var b = orgA * Entry10 + orgB * Entry11 + orgC * Entry12 + Entry13;
+            var c = orgA * Entry20 + orgB * Entry21 + orgC * Entry22 + Entry23;
             return new Fractional3D(a, b, c);
         }
 
@@ -73,18 +79,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         ///     Creates a string from the symmetry operation matrix
         /// </summary>
         /// <param name="separator"></param>
+        /// <param name="formatProvider"></param>
         /// <returns></returns>
-        public string SerializeToAttributeString(char separator = ',')
+        public string SerializeToAttributeString(char separator = ',', IFormatProvider formatProvider = null)
         {
-            var builder = new StringBuilder(100);
-            for (var row = 0; row < OperationMatrix.GetUpperBound(0) + 1; row++)
-            {
-                for (var col = 0; col < OperationMatrix.GetUpperBound(1) + 1; col++)
-                    builder.Append(OperationMatrix[row, col].PrimitiveToString() + ",");
-            }
-
-            builder.Remove(builder.Length - 1, 1);
-            return builder.ToString();
+            const string format = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}";
+            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            return string.Format(formatProvider, format, Entry00, Entry01, Entry02, Entry03, Entry10, Entry11, Entry12, Entry13, Entry20, Entry21, Entry22,
+                Entry23);
         }
 
         /// <summary>
@@ -92,29 +94,34 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// </summary>
         /// <param name="serial"></param>
         /// <param name="separator"></param>
-        public void DeserializeFromAttributeString(string serial, char separator = ',')
+        /// <param name="formatProvider"></param>
+        public void DeserializeFromAttributeString(string serial, char separator = ',', IFormatProvider formatProvider = null)
         {
+            formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
             serial.TrySplitToSpecificSubstringCount(12, separator, out var split);
-            var operationMatrix = new double[3, 4];
-            var counter = 0;
-            for (var row = 0; row < operationMatrix.GetUpperBound(0) + 1; row++)
-            {
-                for (var col = 0; col < operationMatrix.GetUpperBound(1) + 1; col++)
-                {
-                    operationMatrix[row, col] = split[counter].ToPrimitive<double>();
-                    counter++;
-                }
-            }
-
-            OperationMatrix = operationMatrix;
+            Entry00 = double.Parse(split[0], formatProvider);
+            Entry01 = double.Parse(split[1], formatProvider);
+            Entry02 = double.Parse(split[2], formatProvider);
+            Entry03 = double.Parse(split[3], formatProvider);
+            Entry10 = double.Parse(split[4], formatProvider);
+            Entry11 = double.Parse(split[5], formatProvider);
+            Entry12 = double.Parse(split[6], formatProvider);
+            Entry13 = double.Parse(split[7], formatProvider);
+            Entry20 = double.Parse(split[8], formatProvider);
+            Entry21 = double.Parse(split[9], formatProvider);
+            Entry22 = double.Parse(split[10], formatProvider);
+            Entry23 = double.Parse(split[11], formatProvider);
         }
 
         /// <inheritdoc />
         public override double[] GetOperationsArray()
         {
-            var result = new double[12];
-            Buffer.BlockCopy(OperationMatrix, 0, result, 0, 12 * sizeof(double));
-            return result;
+            return new[]
+            {
+                Entry00, Entry01, Entry02, Entry03,
+                Entry10, Entry11, Entry12, Entry13,
+                Entry20, Entry21, Entry22, Entry23
+            };
         }
     }
 }

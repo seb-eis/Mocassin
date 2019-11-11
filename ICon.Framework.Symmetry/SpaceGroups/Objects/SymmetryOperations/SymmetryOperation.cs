@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.SpaceGroups
@@ -7,13 +6,11 @@ namespace Mocassin.Symmetry.SpaceGroups
     /// <summary>
     ///     Serializable non entity version of the matrix based symmetry operation
     /// </summary>
-    [DataContract]
     public class SymmetryOperation : SymmetryOperationBase
     {
         /// <summary>
         ///     Linearized version of the 12 matrix operation entries
         /// </summary>
-        [DataMember]
         public double[] Operations { get; set; }
 
         /// <summary>
@@ -26,7 +23,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             if (operations == null)
                 throw new ArgumentNullException(nameof(operations));
 
-            if (operations.Length != 12) 
+            if (operations.Length != 12)
                 throw new ArgumentException("Operation array has wrong number of entries", nameof(operations));
 
             Operations = operations;

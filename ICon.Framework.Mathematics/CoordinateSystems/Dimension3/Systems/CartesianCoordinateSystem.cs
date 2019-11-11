@@ -1,5 +1,4 @@
 ﻿using System;
-using Mocassin.Framework.Exceptions;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Mathematics.Coordinates
