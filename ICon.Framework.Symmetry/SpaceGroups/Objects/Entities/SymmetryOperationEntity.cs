@@ -15,18 +15,41 @@ namespace Mocassin.Symmetry.SpaceGroups
     [XmlRoot]
     public class SymmetryOperationEntity : SymmetryOperationBase
     {
-        public double Entry00 { get; private set; }
-        public double Entry01 { get; private set; }
-        public double Entry02 { get; private set; }
-        public double Entry03 { get; private set; }
-        public double Entry10 { get; private set; }
-        public double Entry11 { get; private set; }
-        public double Entry12 { get; private set; }
-        public double Entry13 { get; private set; }
-        public double Entry20 { get; private set; }
-        public double Entry21 { get; private set; }
-        public double Entry22 { get; private set; }
-        public double Entry23 { get; private set; }
+        [NotMapped]
+        private double Entry00 { get; set; }
+
+        [NotMapped]
+        private double Entry01 { get; set; }
+
+        [NotMapped]
+        private double Entry02 { get; set; }
+
+        [NotMapped]
+        private double Entry03 { get; set; }
+
+        [NotMapped]
+        private double Entry10 { get; set; }
+
+        [NotMapped]
+        private double Entry11 { get; set; }
+
+        [NotMapped]
+        private double Entry12 { get; set; }
+
+        [NotMapped]
+        private double Entry13 { get; set; }
+
+        [NotMapped]
+        private double Entry20 { get; set; }
+
+        [NotMapped]
+        private double Entry21 { get; set; }
+
+        [NotMapped]
+        private double Entry22 { get; set; }
+
+        [NotMapped]
+        private double Entry23 { get; set; }
 
         /// <summary>
         ///     Default trim tolerance value of 1.0e-10
