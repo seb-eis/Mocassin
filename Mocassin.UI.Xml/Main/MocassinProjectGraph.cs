@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
 using Mocassin.Model.Translator;
@@ -19,9 +20,9 @@ namespace Mocassin.UI.Xml.Main
     {
         private string projectGuid;
         private ProjectModelGraph projectModelGraph;
-        private List<ProjectCustomizationGraph> projectCustomizationGraphs;
-        private List<ProjectJobTranslationGraph> projectJobTranslationGraphs;
-        private List<MocassinProjectBuildGraph> projectBuildGraphs;
+        private ObservableCollection<ProjectCustomizationGraph> projectCustomizationGraphs;
+        private ObservableCollection<ProjectJobTranslationGraph> projectJobTranslationGraphs;
+        private ObservableCollection<MocassinProjectBuildGraph> projectBuildGraphs;
         private ResourcesGraph resources;
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("ModelCustomizations")]
         [XmlArrayItem("ModelCustomization")]
         [NotMapped]
-        public List<ProjectCustomizationGraph> ProjectCustomizationGraphs
+        public ObservableCollection<ProjectCustomizationGraph> ProjectCustomizationGraphs
         {
             get => projectCustomizationGraphs;
             set => SetProperty(ref projectCustomizationGraphs, value);
@@ -91,7 +92,7 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("DbCreationInstructions")]
         [XmlArrayItem("DbCreationInstruction")]
         [NotMapped]
-        public List<ProjectJobTranslationGraph> ProjectJobTranslationGraphs
+        public ObservableCollection<ProjectJobTranslationGraph> ProjectJobTranslationGraphs
         {
             get => projectJobTranslationGraphs;
             set => SetProperty(ref projectJobTranslationGraphs, value);
@@ -104,7 +105,7 @@ namespace Mocassin.UI.Xml.Main
         [XmlArray("BuildGraphs")]
         [XmlArrayItem("BuildGraph")]
         [NotMapped]
-        public List<MocassinProjectBuildGraph> ProjectBuildGraphs
+        public ObservableCollection<MocassinProjectBuildGraph> ProjectBuildGraphs
         {
             get => projectBuildGraphs;
             set => SetProperty(ref projectBuildGraphs, value);
@@ -126,9 +127,9 @@ namespace Mocassin.UI.Xml.Main
         /// </summary>
         public MocassinProjectGraph()
         {
-            ProjectCustomizationGraphs = new List<ProjectCustomizationGraph>();
-            ProjectJobTranslationGraphs = new List<ProjectJobTranslationGraph>();
-            ProjectBuildGraphs = new List<MocassinProjectBuildGraph>();
+            ProjectCustomizationGraphs = new ObservableCollection<ProjectCustomizationGraph>();
+            ProjectJobTranslationGraphs = new ObservableCollection<ProjectJobTranslationGraph>();
+            ProjectBuildGraphs = new ObservableCollection<MocassinProjectBuildGraph>();
             Resources = new ResourcesGraph();
         }
 

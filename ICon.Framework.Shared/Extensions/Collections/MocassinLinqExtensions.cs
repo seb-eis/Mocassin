@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Mocassin.Framework.Extensions
@@ -163,6 +164,31 @@ namespace Mocassin.Framework.Extensions
 
                 index++;
             }
+        }
+
+        /// <summary>
+        ///     Linq style <see cref="List{T}"/> conversion extension with initial capacity value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="capacity"></param>
+        /// <returns></returns>
+        public static List<T> ToList<T>(this IEnumerable<T> source, int capacity)
+        {
+            var result = new List<T>(capacity);
+            result.AddRange(source);
+            return result;
+        }
+
+        /// <summary>
+        ///     Linq style <see cref="ObservableCollection{T}"/> conversion extension
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        {
+            return new ObservableCollection<T>(source);
         }
     }
 }
