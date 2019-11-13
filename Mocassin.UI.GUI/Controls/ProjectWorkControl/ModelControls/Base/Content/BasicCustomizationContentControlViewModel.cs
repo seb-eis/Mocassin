@@ -89,7 +89,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             {
                 if (nullSelected) SelectedCustomizationGraph = null;
                 CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();
-                if (selectLast) SelectedCustomizationGraph = CustomizationGraphs?.Last();
+                if (selectLast) SelectedCustomizationGraph = CustomizationGraphs?.LastOrDefault();
             });
         }
 

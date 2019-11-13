@@ -76,6 +76,7 @@ namespace Mocassin.Model.Translator
         {
             if (BinaryState != null)
             {
+                HeaderByteCount = (GetRankFromBinaryState() + 1) * sizeof(int);
                 var itemSize = Marshal.SizeOf(default(T));
                 var arraySize = (BinaryState.Length - HeaderByteCount) / itemSize;
 
@@ -107,6 +108,16 @@ namespace Mocassin.Model.Translator
 
             Values = null;
             IndexSkips = null;
+        }
+
+        /// <summary>
+        ///     reads the rank of the array from the binary state
+        /// </summary>
+        /// <returns></returns>
+        public int GetRankFromBinaryState()
+        {
+            if (BinaryState == null || BinaryState.Length == 0) return 0;
+            return BitConverter.ToInt32(BinaryState, 0);
         }
 
         /// <summary>

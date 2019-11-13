@@ -5,11 +5,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Particles;
+using Mocassin.Model.Translator;
 using Mocassin.Tools.Evaluation.Context;
 using Mocassin.Tools.Evaluation.Custom.Mmcfe;
 using Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer;
@@ -27,30 +29,20 @@ namespace Mocassin.Framework.QuickTest
 
         private static void Main(string[] args)
         {
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var size = new CrystalVector4D(10, 10, 10, 36);
-            var indexMapper = SimulationMappingHelper.GetPositionIndexToVector4DMapper(size);
-            var index = 0;
-            var watch = Stopwatch.StartNew();
-            for (var a = 0; a < size.A; a++)
+            var mslPath = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\Dotierung1000K.msl";
+	
+            using (var evaluationContext = MslEvaluationContext.Create(mslPath))
             {
-                for (int b = 0; b < size.B; b++)
+                var jobQueryable = evaluationContext.EvaluationJobSet().Include(x => x.SimulationLatticeModel);
+                var jobSet = evaluationContext.MakeEvaluableSet(jobQueryable);
+                foreach (var jobContext in jobSet)
                 {
-                    for (int c = 0; c < size.C; c++)
-                    {
-                        for (int p = 0; p < size.P; p++)
-                        {
-                            var mapped = indexMapper(index++);
-                            if (!mapped.Equals(new CrystalVector4D(a, b, c, p)))
-                            {
-                                Console.WriteLine("Mismatch");
-                            }
-                        }
-                    }
+                    var latticeInfoBinary = jobContext.JobModel.SimulationLatticeModel.LatticeInfoBinary;
+                    var latticeInfo = jobContext.EvaluationContext.MarshalService.GetStructure<CLatticeInfo>(latticeInfoBinary, 0);
                 }
             }
-            DisplayWatch(watch);
         }
 
         private static void TestHyperSurfaceEvaluator()

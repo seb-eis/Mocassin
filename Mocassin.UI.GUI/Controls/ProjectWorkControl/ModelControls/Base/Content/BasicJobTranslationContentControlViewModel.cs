@@ -91,7 +91,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             {
                 if (nullSelected) SelectedJobTranslationGraph = null;
                 JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
-                if (selectLast) SelectedJobTranslationGraph = JobTranslationGraphs?.Last();
+                if (selectLast) SelectedJobTranslationGraph = JobTranslationGraphs?.LastOrDefault();
             });
         }
 
