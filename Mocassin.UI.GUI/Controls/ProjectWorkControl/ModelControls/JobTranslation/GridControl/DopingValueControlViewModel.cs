@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Lattices;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
@@ -37,7 +38,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
                 {
                     ParentLatticeConfiguration.DopingValues = ContentSource.ProjectModelGraph.LatticeModelGraph.Dopings
                         .Select(x => new DopingValueGraph {Value = 0, Doping = new ModelObjectReferenceGraph<Doping>(x)})
-                        .ToList();
+                        .ToObservableCollection();
                 }
             }
 

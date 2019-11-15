@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Lattices;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator.Jobs;
@@ -18,7 +20,7 @@ namespace Mocassin.UI.Xml.Jobs
         private int sizeA;
         private int sizeB;
         private int sizeC;
-        private List<DopingValueGraph> dopingValues;
+        private ObservableCollection<DopingValueGraph> dopingValues;
 
         /// <summary>
         ///     Get or set the number of unit cells in 'A' direction
@@ -55,7 +57,7 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         [XmlArray("DopingValues")]
         [XmlArrayItem("DopingValue")]
-        public List<DopingValueGraph> DopingValues
+        public ObservableCollection<DopingValueGraph> DopingValues
         {
             get => dopingValues;
             set => SetProperty(ref dopingValues, value);
@@ -67,7 +69,7 @@ namespace Mocassin.UI.Xml.Jobs
         public LatticeConfigurationGraph()
         {
             SizeA = SizeB = SizeC = 10;
-            DopingValues = new List<DopingValueGraph>();
+            DopingValues = new ObservableCollection<DopingValueGraph>();
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace Mocassin.UI.Xml.Jobs
                 SizeA = SizeA,
                 SizeB = SizeB,
                 SizeC = SizeC,
-                DopingValues = DopingValues.Select(x => x.Duplicate()).ToList()
+                DopingValues = DopingValues.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return result;
         }

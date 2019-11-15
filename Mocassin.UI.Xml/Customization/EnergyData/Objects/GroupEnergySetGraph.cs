@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Framework.Extensions;
@@ -21,8 +22,8 @@ namespace Mocassin.UI.Xml.Customization
     {
         private ModelObjectReferenceGraph<GroupInteraction> groupInteraction;
         private ModelObjectReferenceGraph<UnitCellPosition> centerPosition;
-        private List<VectorGraph3D> baseGeometry;
-        private List<GroupEnergyGraph> energyEntries;
+        private ObservableCollection<VectorGraph3D> baseGeometry;
+        private ObservableCollection<GroupEnergyGraph> energyEntries;
         private int groupInteractionIndex;
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         [XmlArray("BaseGeometry")]
         [XmlArrayItem("Position")]
-        public List<VectorGraph3D> BaseGeometry
+        public ObservableCollection<VectorGraph3D> BaseGeometry
         {
             get => baseGeometry;
             set => SetProperty(ref baseGeometry, value);
@@ -61,7 +62,7 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         [XmlArray("Permutations")]
         [XmlArrayItem("Permutation")]
-        public List<GroupEnergyGraph> EnergyEntries
+        public ObservableCollection<GroupEnergyGraph> EnergyEntries
         {
             get => energyEntries;
             set => SetProperty(ref energyEntries, value);
@@ -111,13 +112,11 @@ namespace Mocassin.UI.Xml.Customization
             {
                 Name = $"Group.Energy.Set.{energySetter.GroupInteraction.Index}",
                 GroupInteractionIndex = energySetter.GroupInteraction.Index,
-                BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorGraph3D.Create(x)).ToList(),
+                BaseGeometry = energySetter.GroupInteraction.GetBaseGeometry().Select(x => VectorGraph3D.Create(x)).ToObservableCollection(),
                 GroupInteraction = new ModelObjectReferenceGraph<GroupInteraction>(groupInteraction),
                 CenterPosition = new ModelObjectReferenceGraph<UnitCellPosition>(centerPosition),
-                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyGraph.Create(x, parent)).ToList()
+                EnergyEntries = energySetter.EnergyEntries.Select(x => GroupEnergyGraph.Create(x, parent)).ToObservableCollection()
             };
-
-            obj.EnergyEntries.Sort();
             return obj;
         }
 
@@ -142,8 +141,8 @@ namespace Mocassin.UI.Xml.Customization
                 groupInteraction = groupInteraction.Duplicate(),
                 centerPosition = centerPosition.Duplicate(),
                 groupInteractionIndex = groupInteractionIndex,
-                baseGeometry = baseGeometry.Select(x => x.Duplicate()).ToList(),
-                energyEntries = energyEntries.Select(x => x.Duplicate()).ToList()
+                baseGeometry = baseGeometry.Select(x => x.Duplicate()).ToObservableCollection(),
+                energyEntries = energyEntries.Select(x => x.Duplicate()).ToObservableCollection()
             };
 
             return copy;

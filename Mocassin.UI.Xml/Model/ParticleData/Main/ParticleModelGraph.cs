@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -13,15 +14,15 @@ namespace Mocassin.UI.Xml.ParticleModel
     [XmlRoot("ParticleModel")]
     public class ParticleModelGraph : ModelManagerGraph
     {
-        private List<ParticleGraph> particles;
-        private List<ParticleSetGraph> particleSets;
+        private ObservableCollection<ParticleGraph> particles;
+        private ObservableCollection<ParticleSetGraph> particleSets;
 
         /// <summary>
         ///     The list of defines particles
         /// </summary>
         [XmlArray("Particles")]
         [XmlArrayItem("Particle")]
-        public List<ParticleGraph> Particles
+        public ObservableCollection<ParticleGraph> Particles
         {
             get => particles;
             set => SetProperty(ref particles, value);
@@ -32,7 +33,7 @@ namespace Mocassin.UI.Xml.ParticleModel
         /// </summary>
         [XmlArray("ParticleSets")]
         [XmlArrayItem("ParticleSet")]
-        public List<ParticleSetGraph> ParticleSets
+        public ObservableCollection<ParticleSetGraph> ParticleSets
         {
             get => particleSets;
             set => SetProperty(ref particleSets, value);
@@ -43,8 +44,8 @@ namespace Mocassin.UI.Xml.ParticleModel
         /// </summary>
         public ParticleModelGraph()
         {
-            Particles = new List<ParticleGraph>();
-            ParticleSets = new List<ParticleSetGraph>();
+            Particles = new ObservableCollection<ParticleGraph>();
+            ParticleSets = new ObservableCollection<ParticleSetGraph>();
         }
 
         /// <inheritdoc />

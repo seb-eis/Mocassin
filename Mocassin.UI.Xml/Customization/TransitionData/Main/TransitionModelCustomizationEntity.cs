@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
@@ -16,14 +18,14 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("TransitionModelCustomization")]
     public class TransitionModelCustomizationEntity : ModelCustomizationEntity, IDuplicable<TransitionModelCustomizationEntity>
     {
-        private List<KineticRuleSetGraph> kineticTransitionParameterSets;
+        private ObservableCollection<KineticRuleSetGraph> kineticTransitionParameterSets;
 
         /// <summary>
         ///     Get or set the list of <see cref="KineticRuleSetGraph" /> objects
         /// </summary>
         [XmlArray("KineticTransitionSets")]
         [XmlArrayItem("KineticTransitionSet")]
-        public List<KineticRuleSetGraph> KineticTransitionParameterSets
+        public ObservableCollection<KineticRuleSetGraph> KineticTransitionParameterSets
         {
             get => kineticTransitionParameterSets;
             set => SetProperty(ref kineticTransitionParameterSets, value);
@@ -59,7 +61,7 @@ namespace Mocassin.UI.Xml.Customization
                 KineticTransitionParameterSets = ruleSetterProvider
                     .GetRuleSetters()
                     .Select(x => KineticRuleSetGraph.Create(x, parent))
-                    .ToList()
+                    .ToObservableCollection()
             };
 
             return obj;
@@ -71,7 +73,7 @@ namespace Mocassin.UI.Xml.Customization
             var copy = new TransitionModelCustomizationEntity
             {
                 Name = Name,
-                kineticTransitionParameterSets = kineticTransitionParameterSets.Select(x => x.Duplicate()).ToList()
+                kineticTransitionParameterSets = kineticTransitionParameterSets.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;
         }

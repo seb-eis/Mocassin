@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Transitions;
 using Mocassin.UI.Xml.Base;
@@ -18,7 +20,7 @@ namespace Mocassin.UI.Xml.Customization
     {
         private ModelObjectReferenceGraph<KineticTransition> transition;
         private int transitionIndex;
-        private List<KineticRuleGraph> kineticRules;
+        private ObservableCollection<KineticRuleGraph> kineticRules;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}"/> for the affiliated <see cref="KineticTransition"/> 
@@ -45,7 +47,7 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         [XmlArray("TransitionRules")]
         [XmlArrayItem("TransitionRule")]
-        public List<KineticRuleGraph> KineticRules
+        public ObservableCollection<KineticRuleGraph> KineticRules
         {
             get => kineticRules;
             set => SetProperty(ref kineticRules, value);
@@ -86,7 +88,7 @@ namespace Mocassin.UI.Xml.Customization
                 Name = $"Kinetic.Rule.Set.{transitionGraph}",
                 TransitionIndex = ruleSetter.KineticTransition.Index,
                 Transition = new ModelObjectReferenceGraph<KineticTransition> {TargetGraph = transitionGraph},
-                KineticRules = ruleSetter.KineticRules.Select(x => KineticRuleGraph.Create(x, parent)).ToList()
+                KineticRules = ruleSetter.KineticRules.Select(x => KineticRuleGraph.Create(x, parent)).ToObservableCollection()
             };
 
             return obj;
@@ -100,7 +102,7 @@ namespace Mocassin.UI.Xml.Customization
                 Name = Name,
                 transition = transition.Duplicate(),
                 transitionIndex = transitionIndex,
-                kineticRules = kineticRules.Select(x => x.Duplicate()).ToList()
+                kineticRules = kineticRules.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;
         }

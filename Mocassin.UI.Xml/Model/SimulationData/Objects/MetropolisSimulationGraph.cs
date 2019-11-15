@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
@@ -17,7 +18,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         private int breakSampleLength = 1000;
         private int breakSampleIntervalMcs = 100;
         private int resultSampleMcs = 200;
-        private List<ModelObjectReferenceGraph<MetropolisTransition>> transitions;
+        private ObservableCollection<ModelObjectReferenceGraph<MetropolisTransition>> transitions;
 
         /// <summary>
         ///     Get or set the relative break tolerance value
@@ -64,7 +65,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         [XmlArray("Transitions")]
         [XmlArrayItem("Transition")]
-        public List<ModelObjectReferenceGraph<MetropolisTransition>> Transitions
+        public ObservableCollection<ModelObjectReferenceGraph<MetropolisTransition>> Transitions
         {
             get => transitions;
             set => SetProperty(ref transitions, value);
@@ -75,7 +76,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         public MetropolisSimulationGraph()
         {
-            Transitions = new List<ModelObjectReferenceGraph<MetropolisTransition>>();
+            Transitions = new ObservableCollection<ModelObjectReferenceGraph<MetropolisTransition>>();
         }
 
         /// <inheritdoc />

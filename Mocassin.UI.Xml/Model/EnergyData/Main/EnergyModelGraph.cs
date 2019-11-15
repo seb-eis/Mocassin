@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -14,8 +15,8 @@ namespace Mocassin.UI.Xml.EnergyModel
     public class EnergyModelGraph : ModelManagerGraph
     {
         private StableEnvironmentGraph stableEnvironment;
-        private List<UnstableEnvironmentGraph> unstableEnvironments;
-        private List<GroupInteractionGraph> groupInteractions;
+        private ObservableCollection<UnstableEnvironmentGraph> unstableEnvironments;
+        private ObservableCollection<GroupInteractionGraph> groupInteractions;
 
         /// <summary>
         ///     Get or set the stable environment info of the energy model
@@ -32,7 +33,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         [XmlArray("UnstableEnvironments")]
         [XmlArrayItem("UnstableEnvironment")]
-        public List<UnstableEnvironmentGraph> UnstableEnvironments
+        public ObservableCollection<UnstableEnvironmentGraph> UnstableEnvironments
         {
             get => unstableEnvironments;
             set => SetProperty(ref unstableEnvironments, value);
@@ -43,7 +44,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         [XmlArray("GroupInteractions")]
         [XmlArrayItem("GroupInteraction")]
-        public List<GroupInteractionGraph> GroupInteractions
+        public ObservableCollection<GroupInteractionGraph> GroupInteractions
         {
             get => groupInteractions;
             set => SetProperty(ref groupInteractions, value);
@@ -54,8 +55,8 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         public EnergyModelGraph()
         {
-            GroupInteractions = new List<GroupInteractionGraph>();
-            UnstableEnvironments = new List<UnstableEnvironmentGraph>();
+            GroupInteractions = new ObservableCollection<GroupInteractionGraph>();
+            UnstableEnvironments = new ObservableCollection<UnstableEnvironmentGraph>();
             StableEnvironment = new StableEnvironmentGraph();
         }
 

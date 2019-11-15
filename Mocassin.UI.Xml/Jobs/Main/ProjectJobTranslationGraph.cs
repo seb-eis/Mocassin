@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.Xml.Base;
@@ -18,8 +20,8 @@ namespace Mocassin.UI.Xml.Jobs
     public sealed class ProjectJobTranslationGraph : MocassinProjectChildEntity<MocassinProjectGraph>, IDuplicable<ProjectJobTranslationGraph>
     {
         private string key;
-        private List<KmcJobPackageDescriptionGraph> kmcJobPackageDescriptions;
-        private List<MmcJobPackageDescriptionGraph> mmcJobPackageDescriptions;
+        private ObservableCollection<KmcJobPackageDescriptionGraph> kmcJobPackageDescriptions;
+        private ObservableCollection<MmcJobPackageDescriptionGraph> mmcJobPackageDescriptions;
 
         /// <summary>
         ///     Get or set a key for the customization
@@ -39,7 +41,7 @@ namespace Mocassin.UI.Xml.Jobs
         [XmlArray("KmcJobPackages")]
         [XmlArrayItem("JobPackage")]
         [NotMapped]
-        public List<KmcJobPackageDescriptionGraph> KmcJobPackageDescriptions
+        public ObservableCollection<KmcJobPackageDescriptionGraph> KmcJobPackageDescriptions
         {
             get => kmcJobPackageDescriptions;
             set => SetProperty(ref kmcJobPackageDescriptions, value);
@@ -52,7 +54,7 @@ namespace Mocassin.UI.Xml.Jobs
         [XmlArray("MmcJobPackages")]
         [XmlArrayItem("JobPackage")]
         [NotMapped]
-        public List<MmcJobPackageDescriptionGraph> MmcJobPackageDescriptions
+        public ObservableCollection<MmcJobPackageDescriptionGraph> MmcJobPackageDescriptions
         {
             get => mmcJobPackageDescriptions;
             set => SetProperty(ref mmcJobPackageDescriptions, value);
@@ -64,8 +66,8 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         public ProjectJobTranslationGraph()
         {
-            KmcJobPackageDescriptions = new List<KmcJobPackageDescriptionGraph>();
-            MmcJobPackageDescriptions = new List<MmcJobPackageDescriptionGraph>();
+            KmcJobPackageDescriptions = new ObservableCollection<KmcJobPackageDescriptionGraph>();
+            MmcJobPackageDescriptions = new ObservableCollection<MmcJobPackageDescriptionGraph>();
             Key = Guid.NewGuid().ToString();
         }
 
@@ -103,11 +105,9 @@ namespace Mocassin.UI.Xml.Jobs
             {
                 Parent = Parent,
                 Name = $"{Name}(copy)",
-                KmcJobPackageDescriptions = {Capacity = KmcJobPackageDescriptions.Count},
-                MmcJobPackageDescriptions = {Capacity = MmcJobPackageDescriptions.Count}
+                KmcJobPackageDescriptions = KmcJobPackageDescriptions.ToObservableCollection(),
+                MmcJobPackageDescriptions = MmcJobPackageDescriptions.ToObservableCollection()
             };
-            duplicate.KmcJobPackageDescriptions.AddRange(KmcJobPackageDescriptions.Select(x => x.Duplicate()));
-            duplicate.MmcJobPackageDescriptions.AddRange(MmcJobPackageDescriptions.Select(x => x.Duplicate()));
             return duplicate;
         }
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Translator.Jobs;
 using Mocassin.UI.Xml.Base;
@@ -17,7 +19,7 @@ namespace Mocassin.UI.Xml.Jobs
     {
         private string rngSeed;
         private string jobCountPerConfig;
-        private List<SelectionOptimizerGraph> selectionOptimizers;
+        private ObservableCollection<SelectionOptimizerGraph> selectionOptimizers;
 
         /// <summary>
         ///     Get or set an rng seed string to overwrite the one defined in the affiliated
@@ -45,7 +47,7 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         [XmlArray("SelectionOptimizers")]
         [XmlArrayItem("SelectionOptimizer")]
-        public List<SelectionOptimizerGraph> SelectionOptimizers
+        public ObservableCollection<SelectionOptimizerGraph> SelectionOptimizers
         {
             get => selectionOptimizers;
             set => SetProperty(ref selectionOptimizers, value);
@@ -54,7 +56,7 @@ namespace Mocassin.UI.Xml.Jobs
         /// <inheritdoc />
         protected JobPackageDescriptionGraph()
         {
-            SelectionOptimizers = new List<SelectionOptimizerGraph>();
+            SelectionOptimizers = new ObservableCollection<SelectionOptimizerGraph>();
             RngSeed = Guid.NewGuid().ToString();
         }
 
@@ -97,7 +99,7 @@ namespace Mocassin.UI.Xml.Jobs
         {
             other.Name = Name;
             other.JobCountPerConfig = JobCountPerConfig;
-            other.SelectionOptimizers = SelectionOptimizers.Select(x => x.Duplicate()).ToList();
+            other.SelectionOptimizers = SelectionOptimizers.Select(x => x.Duplicate()).ToObservableCollection();
         }
     }
 }

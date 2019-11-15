@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -18,6 +20,11 @@ using Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer;
 using Mocassin.Tools.Evaluation.Extensions;
 using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.UAccess.Readers;
+using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Xml.Helper;
+using Mocassin.UI.Xml.LatticeModel;
+using Mocassin.UI.Xml.Main;
+using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.Framework.QuickTest
 {
@@ -29,20 +36,17 @@ namespace Mocassin.Framework.QuickTest
 
         private static void Main(string[] args)
         {
-            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-
-            var mslPath = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\Dotierung1000K.msl";
-	
-            using (var evaluationContext = MslEvaluationContext.Create(mslPath))
-            {
-                var jobQueryable = evaluationContext.EvaluationJobSet().Include(x => x.SimulationLatticeModel);
-                var jobSet = evaluationContext.MakeEvaluableSet(jobQueryable);
-                foreach (var jobContext in jobSet)
-                {
-                    var latticeInfoBinary = jobContext.JobModel.SimulationLatticeModel.LatticeInfoBinary;
-                    var latticeInfo = jobContext.EvaluationContext.MarshalService.GetStructure<CLatticeInfo>(latticeInfoBinary, 0);
-                }
-            }
+            var dbPath = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\BaZrO.mocprj";
+            var simLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(dbPath);
+            var project = simLibrary.MocassinProjectGraphs.First();
+            var objectObserver = new ObjectChangedEventObserver();
+            //objectObserver.ObjectObservationEndedNotifications.Subscribe(x => Console.WriteLine("Released: [{0}]", x));
+            objectObserver.ObserveObject(project);
+            //objectObserver.ObjectObservationStartedNotifications.Subscribe(x => Console.WriteLine("Watching: [{0}]", x));
+            var custom = project.ProjectCustomizationGraphs;
+            project.ProjectCustomizationGraphs = new ObservableCollection<ProjectCustomizationGraph>();
+            project.ProjectCustomizationGraphs = custom;
+            objectObserver.Dispose();
         }
 
         private static void TestHyperSurfaceEvaluator()

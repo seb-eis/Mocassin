@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -14,7 +15,7 @@ namespace Mocassin.UI.Xml.TransitionModel
     public class KineticTransitionGraph : ModelObjectGraph
     {
         private string abstractTransitionKey;
-        private List<VectorGraph3D> positionVectors;
+        private ObservableCollection<VectorGraph3D> positionVectors;
 
         /// <summary>
         ///     Get or set the abstract transition key for the transition logic
@@ -31,7 +32,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("BaseGeometry")]
         [XmlArrayItem("Position")]
-        public List<VectorGraph3D> PositionVectors
+        public ObservableCollection<VectorGraph3D> PositionVectors
         {
             get => positionVectors;
             set => SetProperty(ref positionVectors, value);
@@ -42,7 +43,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         public KineticTransitionGraph()
         {
-            PositionVectors = new List<VectorGraph3D>();
+            PositionVectors = new ObservableCollection<VectorGraph3D>();
         }
 
         /// <inheritdoc />

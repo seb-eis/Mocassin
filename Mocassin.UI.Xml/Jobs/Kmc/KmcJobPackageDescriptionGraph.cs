@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Simulations;
 using Mocassin.Model.Translator.Jobs;
@@ -17,7 +19,7 @@ namespace Mocassin.UI.Xml.Jobs
     {
         private ModelObjectReferenceGraph<KineticSimulation> simulation;
         private KmcJobDescriptionGraph jobBaseDescription;
-        private List<KmcJobDescriptionGraph> jobConfigurations;
+        private ObservableCollection<KmcJobDescriptionGraph> jobConfigurations;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the target <see cref="KineticSimulation" />
@@ -44,7 +46,7 @@ namespace Mocassin.UI.Xml.Jobs
         /// </summary>
         [XmlArray("JobConfigurations")]
         [XmlArrayItem("JobConfiguration")]
-        public List<KmcJobDescriptionGraph> JobConfigurations
+        public ObservableCollection<KmcJobDescriptionGraph> JobConfigurations
         {
             get => jobConfigurations;
             set => SetProperty(ref jobConfigurations, value);
@@ -53,7 +55,7 @@ namespace Mocassin.UI.Xml.Jobs
         /// <inheritdoc />
         public KmcJobPackageDescriptionGraph()
         {
-            JobConfigurations = new List<KmcJobDescriptionGraph>();
+            JobConfigurations = new ObservableCollection<KmcJobDescriptionGraph>();
             JobBaseDescription = new KmcJobDescriptionGraph();
         }
 
@@ -98,7 +100,7 @@ namespace Mocassin.UI.Xml.Jobs
             {
                 Simulation = Simulation?.Duplicate(),
                 JobBaseDescription = JobBaseDescription.Duplicate(),
-                JobConfigurations = JobConfigurations.Select(x => x.Duplicate()).ToList()
+                JobConfigurations = JobConfigurations.Select(x => x.Duplicate()).ToObservableCollection()
             };
             CopyBaseDataTo(result);
             return result;

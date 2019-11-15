@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
@@ -21,7 +22,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         public static readonly Regex ConnectorRegex = new Regex($"{ConnectorType.Static.ToString()}|{ConnectorType.Dynamic.ToString()}");
 
         private bool isAssociation;
-        private List<ModelObjectReferenceGraph<StateExchangeGroup>> stateExchangeGroups;
+        private ObservableCollection<ModelObjectReferenceGraph<StateExchangeGroup>> stateExchangeGroups;
         private string connectorString;
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("StateChangeOptions")]
         [XmlArrayItem("StateChangeGroup")]
-        public List<ModelObjectReferenceGraph<StateExchangeGroup>> StateExchangeGroups
+        public ObservableCollection<ModelObjectReferenceGraph<StateExchangeGroup>> StateExchangeGroups
         {
             get => stateExchangeGroups;
             set => SetProperty(ref stateExchangeGroups, value);
@@ -60,7 +61,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         public AbstractTransitionGraph()
         {
-            StateExchangeGroups = new List<ModelObjectReferenceGraph<StateExchangeGroup>>();
+            StateExchangeGroups = new ObservableCollection<ModelObjectReferenceGraph<StateExchangeGroup>>();
             ConnectorString = ConnectorType.Dynamic.ToString();
             Name = "New Abstract Transition";
         }

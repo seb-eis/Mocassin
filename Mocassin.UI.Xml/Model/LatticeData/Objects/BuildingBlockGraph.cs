@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -14,14 +15,14 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot("BuildingBlock")]
     public class BuildingBlockGraph : ModelObjectGraph
     {
-        private List<ModelObjectReferenceGraph<Particle>> particleList;
+        private ObservableCollection<ModelObjectReferenceGraph<Particle>> particleList;
 
         /// <summary>
         ///     List of particles which define the building block
         /// </summary>
         [XmlArray("ParticleList")]
         [XmlArrayItem("Particle")]
-        public List<ModelObjectReferenceGraph<Particle>> ParticleList
+        public ObservableCollection<ModelObjectReferenceGraph<Particle>> ParticleList
         {
             get => particleList;
             set => SetProperty(ref particleList, value);
@@ -29,7 +30,7 @@ namespace Mocassin.UI.Xml.LatticeModel
 
         public BuildingBlockGraph()
         {
-            ParticleList = new List<ModelObjectReferenceGraph<Particle>>();
+            ParticleList = new ObservableCollection<ModelObjectReferenceGraph<Particle>>();
         }
 
         /// <inheritdoc />

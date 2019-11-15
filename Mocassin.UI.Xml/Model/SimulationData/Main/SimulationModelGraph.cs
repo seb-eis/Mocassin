@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -14,15 +15,15 @@ namespace Mocassin.UI.Xml.SimulationModel
     [XmlRoot("SimulationModel")]
     public class SimulationModelGraph : ModelManagerGraph
     {
-        private List<MetropolisSimulationGraph> metropolisSimulations;
-        private List<KineticSimulationGraph> kineticSimulations;
+        private ObservableCollection<MetropolisSimulationGraph> metropolisSimulations;
+        private ObservableCollection<KineticSimulationGraph> kineticSimulations;
 
         /// <summary>
         ///     Get or set the list of metropolis simulations
         /// </summary>
         [XmlArray("MetropolisSimulations")]
         [XmlArrayItem("MetropolisSimulation")]
-        public List<MetropolisSimulationGraph> MetropolisSimulations
+        public ObservableCollection<MetropolisSimulationGraph> MetropolisSimulations
         {
             get => metropolisSimulations;
             set => SetProperty(ref metropolisSimulations, value);
@@ -33,7 +34,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         [XmlArray("KineticSimulations")]
         [XmlArrayItem("KineticSimulation")]
-        public List<KineticSimulationGraph> KineticSimulations
+        public ObservableCollection<KineticSimulationGraph> KineticSimulations
         {
             get => kineticSimulations;
             set => SetProperty(ref kineticSimulations, value);
@@ -44,8 +45,8 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         public SimulationModelGraph()
         {
-            MetropolisSimulations = new List<MetropolisSimulationGraph>();
-            KineticSimulations = new List<KineticSimulationGraph>();
+            MetropolisSimulations = new ObservableCollection<MetropolisSimulationGraph>();
+            KineticSimulations = new ObservableCollection<KineticSimulationGraph>();
         }
 
 

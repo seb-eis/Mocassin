@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -13,16 +14,16 @@ namespace Mocassin.UI.Xml.LatticeModel
     [XmlRoot("LatticeModel")]
     public class LatticeModelGraph : ModelManagerGraph
     {
-        private List<BuildingBlockGraph> buildingBlocks;
-        private List<DopingGraph> dopings;
-        private List<DopingCombinationGraph> dopingCombination;
+        private ObservableCollection<BuildingBlockGraph> buildingBlocks;
+        private ObservableCollection<DopingGraph> dopings;
+        private ObservableCollection<DopingCombinationGraph> dopingCombination;
 
         /// <summary>
         ///     The list of defines building blocks
         /// </summary>
         [XmlArray("BuildingBlocks")]
         [XmlArrayItem("BuildingBlock")]
-        public List<BuildingBlockGraph> BuildingBlocks
+        public ObservableCollection<BuildingBlockGraph> BuildingBlocks
         {
             get => buildingBlocks;
             set => SetProperty(ref buildingBlocks, value);
@@ -33,7 +34,7 @@ namespace Mocassin.UI.Xml.LatticeModel
         /// </summary>
         [XmlArray("Dopings")]
         [XmlArrayItem("Doping")]
-        public List<DopingGraph> Dopings
+        public ObservableCollection<DopingGraph> Dopings
         {
             get => dopings;
             set => SetProperty(ref dopings, value);
@@ -44,7 +45,7 @@ namespace Mocassin.UI.Xml.LatticeModel
         /// </summary>
         [XmlArray("DopingCombinations")]
         [XmlArrayItem("DopingCombination")]
-        public List<DopingCombinationGraph> DopingCombination
+        public ObservableCollection<DopingCombinationGraph> DopingCombination
         {
             get => dopingCombination;
             set => SetProperty(ref dopingCombination, value);
@@ -55,9 +56,9 @@ namespace Mocassin.UI.Xml.LatticeModel
         /// </summary>
         public LatticeModelGraph()
         {
-            BuildingBlocks = new List<BuildingBlockGraph>();
-            Dopings = new List<DopingGraph>();
-            DopingCombination = new List<DopingCombinationGraph>();
+            BuildingBlocks = new ObservableCollection<BuildingBlockGraph>();
+            Dopings = new ObservableCollection<DopingGraph>();
+            DopingCombination = new ObservableCollection<DopingCombinationGraph>();
         }
 
         /// <inheritdoc />

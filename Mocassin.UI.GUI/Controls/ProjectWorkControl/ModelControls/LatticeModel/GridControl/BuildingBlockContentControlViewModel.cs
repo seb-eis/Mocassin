@@ -53,7 +53,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
             var positions = BlockControlViewModel.CreateDefaultCellPositionList();
 
             if (!CheckCurrentPositionListValidity(positions))
-                ContentSource.ParticleList = positions.Select(x => x.Occupation).ToList();
+                ContentSource.ParticleList = positions.Select(x => x.Occupation).ToObservableCollection();
             else
             {
                 for (var i = 0; i < positions.Count; i++)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -17,8 +18,8 @@ namespace Mocassin.UI.Xml.StructureModel
         private StructureInfoGraph structureInfo;
         private SpaceGroupInfoGraph spaceGroupInfo;
         private CellParametersGraph cellParameters;
-        private List<UnitCellPositionGraph> unitCellPositions;
-        private List<DummyPositionGraph> dummyPositions;
+        private ObservableCollection<UnitCellPositionGraph> unitCellPositions;
+        private ObservableCollection<DummyPositionGraph> dummyPositions;
 
         /// <summary>
         ///     Get or set the xml structure info
@@ -55,7 +56,7 @@ namespace Mocassin.UI.Xml.StructureModel
         /// </summary>
         [XmlArray("WyckoffPositions")]
         [XmlArrayItem("Position")]
-        public List<UnitCellPositionGraph> UnitCellPositions
+        public ObservableCollection<UnitCellPositionGraph> UnitCellPositions
         {
             get => unitCellPositions;
             set => SetProperty(ref unitCellPositions, value);
@@ -66,7 +67,7 @@ namespace Mocassin.UI.Xml.StructureModel
         /// </summary>
         [XmlArray("DummyPositions")]
         [XmlArrayItem("Position")]
-        public List<DummyPositionGraph> DummyPositions
+        public ObservableCollection<DummyPositionGraph> DummyPositions
         {
             get => dummyPositions;
             set => SetProperty(ref dummyPositions, value);
@@ -80,8 +81,8 @@ namespace Mocassin.UI.Xml.StructureModel
             StructureInfo = new StructureInfoGraph();
             CellParameters = new CellParametersGraph();
             SpaceGroupInfo = new SpaceGroupInfoGraph();
-            UnitCellPositions = new List<UnitCellPositionGraph>();
-            DummyPositions = new List<DummyPositionGraph>();
+            UnitCellPositions = new ObservableCollection<UnitCellPositionGraph>();
+            DummyPositions = new ObservableCollection<DummyPositionGraph>();
         }
 
         /// <inheritdoc />

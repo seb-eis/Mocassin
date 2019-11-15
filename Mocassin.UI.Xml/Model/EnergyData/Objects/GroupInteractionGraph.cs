@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -15,7 +16,7 @@ namespace Mocassin.UI.Xml.EnergyModel
     public class GroupInteractionGraph : ModelObjectGraph
     {
         private string centerUnitCellPositionKey;
-        private List<VectorGraph3D> groupGeometry;
+        private ObservableCollection<VectorGraph3D> groupGeometry;
 
         /// <summary>
         ///     Get or set the key of the center unit cell position
@@ -32,7 +33,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         [XmlArray("BaseGeometry")]
         [XmlArrayItem("Position")]
-        public List<VectorGraph3D> GroupGeometry
+        public ObservableCollection<VectorGraph3D> GroupGeometry
         {
             get => groupGeometry;
             set => SetProperty(ref groupGeometry, value);
@@ -43,7 +44,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         public GroupInteractionGraph()
         {
-            GroupGeometry = new List<VectorGraph3D>();
+            GroupGeometry = new ObservableCollection<VectorGraph3D>();
         }
 
         /// <inheritdoc />

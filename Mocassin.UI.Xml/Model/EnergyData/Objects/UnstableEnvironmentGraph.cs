@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -16,7 +17,7 @@ namespace Mocassin.UI.Xml.EnergyModel
     {
         private double maxInteractionRange;
         private string unitCellPositionKey;
-        private List<InteractionFilterGraph> interactionFilters;
+        private ObservableCollection<InteractionFilterGraph> interactionFilters;
 
         /// <summary>
         ///     Get or set the maximum interaction range
@@ -43,7 +44,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         [XmlArray("InteractionFilters")]
         [XmlArrayItem("Filter")]
-        public List<InteractionFilterGraph> InteractionFilters
+        public ObservableCollection<InteractionFilterGraph> InteractionFilters
         {
             get => interactionFilters;
             set => SetProperty(ref interactionFilters, value);
@@ -54,7 +55,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         public UnstableEnvironmentGraph()
         {
-            InteractionFilters = new List<InteractionFilterGraph>();
+            InteractionFilters = new ObservableCollection<InteractionFilterGraph>();
         }
 
         /// <inheritdoc />

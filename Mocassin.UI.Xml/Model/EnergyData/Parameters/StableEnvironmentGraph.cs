@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -14,7 +15,7 @@ namespace Mocassin.UI.Xml.EnergyModel
     public class StableEnvironmentGraph : ModelParameterGraph
     {
         private double maxInteractionRange;
-        private List<InteractionFilterGraph> interactionFilters;
+        private ObservableCollection<InteractionFilterGraph> interactionFilters;
         private DefectBackgroundGraph defectBackground;
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         [XmlArray("InteractionFilters")]
         [XmlArrayItem("Filter")]
-        public List<InteractionFilterGraph> InteractionFilters
+        public ObservableCollection<InteractionFilterGraph> InteractionFilters
         {
             get => interactionFilters;
             set => SetProperty(ref interactionFilters, value);
@@ -53,7 +54,7 @@ namespace Mocassin.UI.Xml.EnergyModel
         /// </summary>
         public StableEnvironmentGraph()
         {
-            InteractionFilters = new List<InteractionFilterGraph>();
+            InteractionFilters = new ObservableCollection<InteractionFilterGraph>();
             DefectBackground = new DefectBackgroundGraph();
         }
 

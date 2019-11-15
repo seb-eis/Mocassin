@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
@@ -64,13 +65,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
             var occupations = contentSource.ProjectModelGraph.ParticleModelGraph.ParticleSets;
 
             var oldList = defectBackground.DefectEnergies;
-            var newList = new List<DefectEnergyGraph>();
+            var newList = new ObservableCollection<DefectEnergyGraph>();
             foreach (var position in positions)
             {
                 var particles = occupations.Single(x => x.Key == position.OccupationKey).Particles;
                 foreach (var particle in particles)
                 {
-                    var obj = oldList.Find(x => x.Particle.Equals(particle) && x.UnitCellPosition.TargetGraph.Equals(position));
+                    var obj = oldList.SingleOrDefault(x => x.Particle.Equals(particle) && x.UnitCellPosition.TargetGraph.Equals(position));
 
                     obj = obj ?? new DefectEnergyGraph
                     {

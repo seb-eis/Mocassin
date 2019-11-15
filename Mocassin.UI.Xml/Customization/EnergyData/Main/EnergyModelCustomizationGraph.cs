@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.Xml.Base;
@@ -16,16 +18,16 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("EnergyModelCustomization")]
     public class EnergyModelCustomizationGraph : ModelCustomizationEntity, IDuplicable<EnergyModelCustomizationGraph>
     {
-        private List<PairEnergySetGraph> stablePairEnergyParameterSets;
-        private List<PairEnergySetGraph> unstablePairEnergyParameterSets;
-        private List<GroupEnergySetGraph> groupEnergyParameterSets;
+        private ObservableCollection<PairEnergySetGraph> stablePairEnergyParameterSets;
+        private ObservableCollection<PairEnergySetGraph> unstablePairEnergyParameterSets;
+        private ObservableCollection<GroupEnergySetGraph> groupEnergyParameterSets;
 
         /// <summary>
         ///     Get or set the list of <see cref="Mocassin.Model.Energies.ISymmetricPairInteraction" /> customization data sets
         /// </summary>
         [XmlArray("StablePairEnergySets")]
         [XmlArrayItem("PairEnergySet")]
-        public List<PairEnergySetGraph> StablePairEnergyParameterSets
+        public ObservableCollection<PairEnergySetGraph> StablePairEnergyParameterSets
         {
             get => stablePairEnergyParameterSets;
             set => SetProperty(ref stablePairEnergyParameterSets, value);
@@ -36,7 +38,7 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         [XmlArray("UnstablePairEnergySets")]
         [XmlArrayItem("PairEnergySet")]
-        public List<PairEnergySetGraph> UnstablePairEnergyParameterSets
+        public ObservableCollection<PairEnergySetGraph> UnstablePairEnergyParameterSets
         {
             get => unstablePairEnergyParameterSets;
             set => SetProperty(ref unstablePairEnergyParameterSets, value);
@@ -47,7 +49,7 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         [XmlArray("GroupEnergySets")]
         [XmlArrayItem("GroupEnergySet")]
-        public List<GroupEnergySetGraph> GroupEnergyParameterSets
+        public ObservableCollection<GroupEnergySetGraph> GroupEnergyParameterSets
         {
             get => groupEnergyParameterSets;
             set => SetProperty(ref groupEnergyParameterSets, value);
@@ -78,26 +80,6 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Sort all contained lists of data in a user friendly order
-        /// </summary>
-        public void OrderDataForUser()
-        {
-            StablePairEnergyParameterSets.Sort();
-            UnstablePairEnergyParameterSets.Sort();
-            GroupEnergyParameterSets.Sort();
-        }
-
-        /// <summary>
-        ///     Sort all contained lists of data in a system friendly order
-        /// </summary>
-        public void OrderDataForSystem()
-        {
-            StablePairEnergyParameterSets.Sort((lhs, rhs) => lhs.PairInteractionIndex.CompareTo(rhs.PairInteractionIndex));
-            UnstablePairEnergyParameterSets.Sort((lhs, rhs) => lhs.PairInteractionIndex.CompareTo(rhs.PairInteractionIndex));
-            GroupEnergyParameterSets.Sort((lhs, rhs) => lhs.GroupInteractionIndex.CompareTo(rhs.GroupInteractionIndex));
-        }
-
-        /// <summary>
         ///     Creates a new <see cref="EnergyModelCustomizationGraph" /> by transforming all defined data in the passed
         ///     <see cref="IEnergySetterProvider" /> into serializable data formats referencing the
         ///     <see cref="ProjectModelGraph" /> parent
@@ -115,20 +97,18 @@ namespace Mocassin.UI.Xml.Customization
                 StablePairEnergyParameterSets = energySetterProvider
                     .GetStablePairEnergySetters()
                     .Select(x => PairEnergySetGraph.Create(x, parent))
-                    .ToList(),
+                    .ToObservableCollection(),
 
                 UnstablePairEnergyParameterSets = energySetterProvider
                     .GetUnstablePairEnergySetters()
                     .Select(x => PairEnergySetGraph.Create(x, parent))
-                    .ToList(),
+                    .ToObservableCollection(),
 
                 GroupEnergyParameterSets = energySetterProvider
                     .GetGroupEnergySetters()
                     .Select(x => GroupEnergySetGraph.Create(x, parent))
-                    .ToList()
+                    .ToObservableCollection()
             };
-
-            obj.OrderDataForUser();
 
             return obj;
         }
@@ -140,9 +120,9 @@ namespace Mocassin.UI.Xml.Customization
             {
                 Parent = Parent,
                 Name = Name,
-                stablePairEnergyParameterSets = stablePairEnergyParameterSets.Select(x => x.Duplicate()).ToList(),
-                unstablePairEnergyParameterSets = unstablePairEnergyParameterSets.Select(x => x.Duplicate()).ToList(),
-                groupEnergyParameterSets = groupEnergyParameterSets.Select(x => x.Duplicate()).ToList()
+                stablePairEnergyParameterSets = stablePairEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection(),
+                unstablePairEnergyParameterSets = unstablePairEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection(),
+                groupEnergyParameterSets = groupEnergyParameterSets.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;
         }

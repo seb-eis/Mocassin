@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Simulations;
@@ -18,7 +19,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         private double normalizationProbability = 1.0;
         private double electricFieldMagnitude = 10e6;
         private VectorGraph3D electricFieldVector = new VectorGraph3D {A = 1};
-        private List<ModelObjectReferenceGraph<KineticTransition>> transitions;
+        private ObservableCollection<ModelObjectReferenceGraph<KineticTransition>> transitions;
 
         /// <summary>
         ///     Get or set the pre-run mcsp for normalization and relaxation of the lattice
@@ -65,7 +66,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         [XmlArray("Transitions")]
         [XmlArrayItem("Transition")]
-        public List<ModelObjectReferenceGraph<KineticTransition>> Transitions
+        public ObservableCollection<ModelObjectReferenceGraph<KineticTransition>> Transitions
         {
             get => transitions;
             set => SetProperty(ref transitions, value);
@@ -76,7 +77,7 @@ namespace Mocassin.UI.Xml.SimulationModel
         /// </summary>
         public KineticSimulationGraph()
         {
-            Transitions = new List<ModelObjectReferenceGraph<KineticTransition>>();
+            Transitions = new ObservableCollection<ModelObjectReferenceGraph<KineticTransition>>();
         }
 
         /// <inheritdoc />

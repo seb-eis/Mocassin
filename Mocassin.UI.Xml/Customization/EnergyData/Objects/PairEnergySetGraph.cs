@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
@@ -24,7 +26,7 @@ namespace Mocassin.UI.Xml.Customization
         private VectorGraph3D startVector;
         private VectorGraph3D endVector;
         private int pairInteractionIndex;
-        private List<PairEnergyGraph> pairEnergyEntries;
+        private ObservableCollection<PairEnergyGraph> pairEnergyEntries;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center wyckoff position
@@ -91,7 +93,7 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         [XmlArray("Permutations")]
         [XmlArrayItem("Permutation")]
-        public List<PairEnergyGraph> PairEnergyEntries
+        public ObservableCollection<PairEnergyGraph> PairEnergyEntries
         {
             get => pairEnergyEntries;
             set => SetProperty(ref pairEnergyEntries, value);
@@ -136,10 +138,8 @@ namespace Mocassin.UI.Xml.Customization
                 Distance = energySetter.PairInteraction.Distance,
                 StartVector = VectorGraph3D.Create(energySetter.PairInteraction.Position0.Vector),
                 EndVector = VectorGraph3D.Create(energySetter.PairInteraction.GetSecondPositionVector()),
-                PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyGraph.Create(x, parent)).ToList()
+                PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyGraph.Create(x, parent)).ToObservableCollection()
             };
-
-            obj.PairEnergyEntries.Sort();
 
             return obj;
         }
@@ -178,7 +178,7 @@ namespace Mocassin.UI.Xml.Customization
                 startVector = startVector.Duplicate(),
                 endVector = endVector.Duplicate(),
                 pairInteractionIndex = pairInteractionIndex,
-                pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToList()
+                pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;
         }

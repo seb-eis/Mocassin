@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -13,13 +14,13 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("StateChangeGroup")]
     public class StateExchangeGroupGraph : ModelObjectGraph
     {
-        private List<ModelObjectReferenceGraph<StateExchangePair>> stateExchangePairs;
+        private ObservableCollection<ModelObjectReferenceGraph<StateExchangePair>> stateExchangePairs;
 
         /// <summary>
         ///     Get or set the list of state exchange pairs contained in the exchange group
         /// </summary>
         [XmlElement("StateChange")]
-        public List<ModelObjectReferenceGraph<StateExchangePair>> StateExchangePairs
+        public ObservableCollection<ModelObjectReferenceGraph<StateExchangePair>> StateExchangePairs
         {
             get => stateExchangePairs;
             set => SetProperty(ref stateExchangePairs, value);
@@ -30,7 +31,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         public StateExchangeGroupGraph()
         {
-            StateExchangePairs = new List<ModelObjectReferenceGraph<StateExchangePair>>();
+            StateExchangePairs = new ObservableCollection<ModelObjectReferenceGraph<StateExchangePair>>();
         }
 
         /// <inheritdoc />

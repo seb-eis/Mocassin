@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
@@ -18,13 +19,13 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("OccupationState")]
     public class OccupationStateGraph : ProjectObjectGraph, IDuplicable<OccupationStateGraph>
     {
-        private List<ModelObjectReferenceGraph<Particle>> particles;
+        private ObservableCollection<ModelObjectReferenceGraph<Particle>> particles;
 
         /// <summary>
         ///     Get or set the list of particles that describe the occupation
         /// </summary>
         [XmlElement("Particle")]
-        public List<ModelObjectReferenceGraph<Particle>> Particles
+        public ObservableCollection<ModelObjectReferenceGraph<Particle>> Particles
         {
             get => particles;
             set => SetProperty(ref particles, value);
@@ -74,7 +75,7 @@ namespace Mocassin.UI.Xml.Customization
             {
                 Particles = occupationParticles.Select(
                     x => new ModelObjectReferenceGraph<Particle> {TargetGraph = parents.Concat(ParticleGraph.VoidParticle.AsSingleton()).SingleOrDefault(y => y.Key == x.Key)})
-                    .ToList()
+                    .ToObservableCollection()
             };
             return obj;
         }
@@ -85,7 +86,7 @@ namespace Mocassin.UI.Xml.Customization
             var copy = new OccupationStateGraph
             {
                 Name = Name,
-                particles = particles.Select(x => x.Duplicate()).ToList()
+                particles = particles.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;
         }

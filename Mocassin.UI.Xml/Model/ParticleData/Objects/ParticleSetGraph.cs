@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -13,13 +14,13 @@ namespace Mocassin.UI.Xml.ParticleModel
     [XmlRoot("ParticleSet")]
     public class ParticleSetGraph : ModelObjectGraph
     {
-        private List<ModelObjectReferenceGraph<Particle>> particles;
+        private ObservableCollection<ModelObjectReferenceGraph<Particle>> particles;
 
         /// <summary>
         ///     List of particles contained in the set
         /// </summary>
         [XmlElement("Particle")]
-        public List<ModelObjectReferenceGraph<Particle>> Particles
+        public ObservableCollection<ModelObjectReferenceGraph<Particle>> Particles
         {
             get => particles;
             set => SetProperty(ref particles, value);
@@ -30,7 +31,7 @@ namespace Mocassin.UI.Xml.ParticleModel
         /// </summary>
         public ParticleSetGraph()
         {
-            Particles = new List<ModelObjectReferenceGraph<Particle>>();
+            Particles = new ObservableCollection<ModelObjectReferenceGraph<Particle>>();
         }
 
         /// <inheritdoc />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using Mocassin.Model.Basic;
@@ -14,18 +15,18 @@ namespace Mocassin.UI.Xml.TransitionModel
     [XmlRoot("TransitionModel")]
     public class TransitionModelGraph : ModelManagerGraph
     {
-        private List<StateExchangePairGraph> stateExchangePairs;
-        private List<StateExchangeGroupGraph> stateExchangeGroups;
-        private List<AbstractTransitionGraph> abstractTransitions;
-        private List<KineticTransitionGraph> kineticTransitions;
-        private List<MetropolisTransitionGraph> metropolisTransitions;
+        private ObservableCollection<StateExchangePairGraph> stateExchangePairs;
+        private ObservableCollection<StateExchangeGroupGraph> stateExchangeGroups;
+        private ObservableCollection<AbstractTransitionGraph> abstractTransitions;
+        private ObservableCollection<KineticTransitionGraph> kineticTransitions;
+        private ObservableCollection<MetropolisTransitionGraph> metropolisTransitions;
 
         /// <summary>
         ///     Get or set the list of state exchange input objects
         /// </summary>
         [XmlArray("StateChanges")]
         [XmlArrayItem("StateChange")]
-        public List<StateExchangePairGraph> StateExchangePairs
+        public ObservableCollection<StateExchangePairGraph> StateExchangePairs
         {
             get => stateExchangePairs;
             set => SetProperty(ref stateExchangePairs, value);
@@ -36,7 +37,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("StateChangeGroups")]
         [XmlArrayItem("StateChangeGroup")]
-        public List<StateExchangeGroupGraph> StateExchangeGroups
+        public ObservableCollection<StateExchangeGroupGraph> StateExchangeGroups
         {
             get => stateExchangeGroups;
             set => SetProperty(ref stateExchangeGroups, value);
@@ -47,7 +48,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("AbstractTransitions")]
         [XmlArrayItem("AbstractTransition")]
-        public List<AbstractTransitionGraph> AbstractTransitions
+        public ObservableCollection<AbstractTransitionGraph> AbstractTransitions
         {
             get => abstractTransitions;
             set => SetProperty(ref abstractTransitions, value);
@@ -58,7 +59,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("KineticTransitions")]
         [XmlArrayItem("KineticTransition")]
-        public List<KineticTransitionGraph> KineticTransitions
+        public ObservableCollection<KineticTransitionGraph> KineticTransitions
         {
             get => kineticTransitions;
             set => SetProperty(ref kineticTransitions, value);
@@ -69,7 +70,7 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         [XmlArray("MetropolisTransitions")]
         [XmlArrayItem("MetropolisTransition")]
-        public List<MetropolisTransitionGraph> MetropolisTransitions
+        public ObservableCollection<MetropolisTransitionGraph> MetropolisTransitions
         {
             get => metropolisTransitions;
             set => SetProperty(ref metropolisTransitions, value);
@@ -80,11 +81,11 @@ namespace Mocassin.UI.Xml.TransitionModel
         /// </summary>
         public TransitionModelGraph()
         {
-            StateExchangePairs = new List<StateExchangePairGraph>();
-            StateExchangeGroups = new List<StateExchangeGroupGraph>();
-            AbstractTransitions = new List<AbstractTransitionGraph>();
-            KineticTransitions = new List<KineticTransitionGraph>();
-            MetropolisTransitions = new List<MetropolisTransitionGraph>();
+            StateExchangePairs = new ObservableCollection<StateExchangePairGraph>();
+            StateExchangeGroups = new ObservableCollection<StateExchangeGroupGraph>();
+            AbstractTransitions = new ObservableCollection<AbstractTransitionGraph>();
+            KineticTransitions = new ObservableCollection<KineticTransitionGraph>();
+            MetropolisTransitions = new ObservableCollection<MetropolisTransitionGraph>();
         }
 
         /// <inheritdoc />
