@@ -7,6 +7,7 @@
              xmlns:main="clr-namespace:Mocassin.UI.Xml.Main;assembly=Mocassin.UI.Xml"
              xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
              xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
+             xmlns:jobs="clr-namespace:Mocassin.UI.Xml.Jobs;assembly=Mocassin.UI.Xml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -24,14 +25,24 @@
           </MenuItem>
         </ContextMenu>
       </ListView.ContextMenu>
+      <ListView.ItemContainerStyle>
+        <Style TargetType="{x:Type ListViewItem}">
+          <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Trigger.Setters>
+                <Setter Property="BorderThickness" Value="1,5,1,5" />
+              </Trigger.Setters>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </ListView.ItemContainerStyle>
       <ListView.ItemTemplate>
         <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
           <Border>
             <Grid>
               <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="150"/>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -39,14 +50,19 @@
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
               <views:ObjectRowHeaderLogo Grid.Column="0" Margin="5,10,5,10"/>
-
-              <TextBox Name="ProjectNameTextBox" MinWidth="50" Grid.Row="0" Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" 
-                       Background="Transparent" BorderThickness="0">
+              <TextBlock Text="P" Grid.Column="0" Grid.Row="0" 
+                         HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Margin="5,10,5,10" FontSize="12"/>
+              <TextBox Name="ProjectNameTextBox" MinWidth="50" Grid.Row="0" Grid.Column="1" Text="{Binding Name}" 
+                       VerticalAlignment="Center" BorderThickness="0">
                 <TextBox.Style>
                   <Style TargetType="{x:Type TextBox}">
                     <Style.Triggers>
                       <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="FontStyle" Value="Italic"/>
+                        <Setter Property="FontWeight" Value="DemiBold"/>
+                        <Setter Property="Background" Value="White"/>
+                      </Trigger>
+                      <Trigger Property="IsKeyboardFocused" Value="False">
+                        <Setter Property="Background" Value="Transparent"/>
                       </Trigger>
                     </Style.Triggers>
                   </Style>
@@ -57,6 +73,43 @@
                 </TextBox.InputBindings>
               </TextBox>
 
+              <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ProjectCustomizationGraphs}" BorderThickness="0">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate DataType="{x:Type customization:ProjectCustomizationGraph}">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <Grid Grid.Column="0">
+                        <views:ObjectRowHeaderLogo Margin="5,10,5,10"/>
+                        <TextBlock Text="C" Grid.Column="0" Grid.Row="0" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Margin="5,10,5,10" FontSize="12"/>
+                      </Grid>
+                      <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}" Margin="5,10,5,10"/>
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+
+              <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ProjectJobTranslationGraphs}" BorderThickness="0">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate DataType="{x:Type jobs:ProjectJobTranslationGraph}">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <Grid Grid.Column="0">
+                        <views:ObjectRowHeaderLogo Margin="5,10,5,10"/>
+                        <TextBlock Text="T" Grid.Column="0" Grid.Row="0" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Margin="5,10,5,10" FontSize="12"/>
+                      </Grid>
+                      <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}" Margin="5,10,5,10"/>
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
 
             </Grid>
           </Border>

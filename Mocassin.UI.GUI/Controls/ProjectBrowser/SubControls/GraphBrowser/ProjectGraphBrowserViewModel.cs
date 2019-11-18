@@ -52,6 +52,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
             ProjectGraphs = ProjectControl.ProjectGraphs;
+            SelectedProject = null;
         }
 
         /// <summary>

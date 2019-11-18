@@ -62,8 +62,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
                 {
                     ShowErrorMessageBox(status);
                     return;
-                }    
-                projectGraph.ProjectCustomizationGraphs.Add(customization);
+                }
+
+                ProjectControl.ExecuteOnDispatcher(() => projectGraph.ProjectCustomizationGraphs.Add(customization));
             }
             OnSuccessAction?.Invoke();
         }

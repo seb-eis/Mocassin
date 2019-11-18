@@ -63,7 +63,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         ///     Ensures that the provided <see cref="Action" /> is executed on the dispatcher thread
         /// </summary>
         /// <param name="action"></param>
-        protected void ExecuteOnDispatcher(Action action)
+        public void ExecuteOnDispatcher(Action action)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
             if (!dispatcher.CheckAccess())
@@ -79,7 +79,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         ///     Ensures that the provided <see cref="Func{TResult}" /> is executed on the dispatcher thread
         /// </summary>
         /// <param name="function"></param>
-        protected TResult ExecuteOnDispatcher<TResult>(Func<TResult> function)
+        public TResult ExecuteOnDispatcher<TResult>(Func<TResult> function)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
 
@@ -93,7 +93,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        protected async Task ExecuteOnDispatcherAsync(Action action)
+        public async Task ExecuteOnDispatcherAsync(Action action)
         {
             await Task.Run(() => ExecuteOnDispatcher(action));
         }
@@ -103,7 +103,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// </summary>
         /// <param name="function"></param>
         /// <returns></returns>
-        protected async Task<TResult> ExecuteOnDispatcherAsync<TResult>(Func<TResult> function)
+        public async Task<TResult> ExecuteOnDispatcherAsync<TResult>(Func<TResult> function)
         {
             return await Task.Run(() => ExecuteOnDispatcher(function));
         }
@@ -113,7 +113,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         ///     operation is not required and it does not matter when the execution takes place
         /// </summary>
         /// <param name="action"></param>
-        protected void SendToDispatcher(Action action)
+        public void SendToDispatcher(Action action)
         {
             Task.Run(() => ExecuteOnDispatcher(action));
         }

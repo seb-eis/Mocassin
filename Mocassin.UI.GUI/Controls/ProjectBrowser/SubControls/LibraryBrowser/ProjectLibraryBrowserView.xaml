@@ -53,8 +53,7 @@
             </MenuItem>
           </ContextMenu>
         </TabItem.ContextMenu>
-        <TextBox Text="{Binding ObjectXml, UpdateSourceTrigger=PropertyChanged}"
-                 MaxWidth="500" BorderThickness="0"
+        <TextBox Text="{Binding ObjectXml, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
       </TabItem>
 
@@ -76,8 +75,7 @@
             </MenuItem>
           </ContextMenu>
         </TabItem.ContextMenu>
-        <TextBox Text="{Binding ObjectJson, UpdateSourceTrigger=PropertyChanged}"
-                 MaxWidth="500" BorderThickness="0"
+        <TextBox Text="{Binding ObjectJson, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
       </TabItem>
     </TabControl>

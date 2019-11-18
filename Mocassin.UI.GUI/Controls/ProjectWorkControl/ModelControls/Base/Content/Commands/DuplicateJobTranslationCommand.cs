@@ -56,7 +56,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         {
             if (projectGraph == null) return;
 
-            projectGraph.ProjectJobTranslationGraphs.Add(source.Duplicate());
+            var duplicate = source.Duplicate();
+            ProjectControl.ExecuteOnDispatcher(() => projectGraph.ProjectJobTranslationGraphs.Add(duplicate));
             OnSuccessAction?.Invoke();
         }
     }

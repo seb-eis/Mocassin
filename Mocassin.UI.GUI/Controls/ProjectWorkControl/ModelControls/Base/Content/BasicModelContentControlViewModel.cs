@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private ContentControl dataContentControl;
 
         /// <summary>
-        ///     Stores a reference to the content control data context it implements <see cref="IDisposable"/>
+        ///     Stores a reference to the content control data context <see cref="IDisposable"/> interface (If it exists)
         /// </summary>
         private IDisposable DataContextDisposable { get; set; }
 
@@ -56,6 +56,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicModelContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
+
         }
 
         /// <summary>

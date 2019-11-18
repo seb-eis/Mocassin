@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
-using System.Threading.Tasks;
 using Mocassin.Framework.Messaging;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Controls.ProjectBrowser;
@@ -117,5 +116,10 @@ namespace Mocassin.UI.GUI.Base.DataContext
         ///     Starts all project services that are not already running
         /// </summary>
         void StartServices();
+
+        /// <summary>
+        ///     Executes the provided action on the dispatcher of the main <see cref="IMocassinProjectControl" />
+        /// </summary>
+        void ExecuteOnDispatcher(Action action);
     }
 }

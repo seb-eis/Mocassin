@@ -4,25 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
-             xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.Views"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
 
   <UserControl.Resources>
     <Border x:Key="ObjectBorder"
-            Opacity=".75" Width="20" Height="20" CornerRadius="20"
-            BorderBrush="Black" BorderThickness="4"
+            Opacity=".75" Width="20" Height="20" CornerRadius="5"
+            BorderBrush="Black" BorderThickness="2"
             Padding="0,0,0,0">
       <Border.Effect>
-        <DropShadowEffect BlurRadius="4" Opacity=".75" ShadowDepth="2"/>
+        <DropShadowEffect BlurRadius="4" Opacity=".75" ShadowDepth="0"/>
       </Border.Effect>
       <Border.Background>
-        <RadialGradientBrush GradientOrigin=".25,.25" po:Freeze="True">
+        <LinearGradientBrush po:Freeze="True">
           <GradientStop Color="LightBlue" Offset="0.0" />
           <GradientStop Color="DarkBlue" Offset="0.5" />
           <GradientStop Color="LightBlue" Offset="1.0" />
-        </RadialGradientBrush>
+        </LinearGradientBrush>
       </Border.Background>
     </Border>
   </UserControl.Resources>

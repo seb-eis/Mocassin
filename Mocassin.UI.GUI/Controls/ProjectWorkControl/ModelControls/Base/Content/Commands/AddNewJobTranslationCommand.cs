@@ -64,7 +64,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
                     ShowErrorMessageBox(status);
                     return;
                 }
-                projectGraph.ProjectJobTranslationGraphs.Add(CreateJobTranslation());
+
+                var newItem = CreateJobTranslation();
+                ProjectControl.ExecuteOnDispatcher(() => projectGraph.ProjectJobTranslationGraphs.Add(newItem));
             }
             OnSuccessAction?.Invoke();
         }
