@@ -37,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         public override Task ExecuteAsync(ProjectJobTranslationGraph parameter)
         {
-            return AsyncExecuteWithoutProjectChangeDetection(() => TryAddDuplicate(ProjectGetter(), parameter));
+            return Task.Run(() => TryAddDuplicate(ProjectGetter(), parameter));
         }
 
         /// <inheritdoc />

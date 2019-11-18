@@ -109,14 +109,6 @@ namespace Mocassin.UI.GUI.Base.DataContext
         void DisposeServices();
 
         /// <summary>
-        ///     Asynchronously handles an <see cref="Action"/> that conflicts with the change detection system
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="onDispatcher"></param>
-        /// <returns></returns>
-        Task AsyncExecuteChangeCheckConflictAction(Action action, bool onDispatcher = false);
-
-        /// <summary>
         ///     Stops all running project services
         /// </summary>
         void StopServices();

@@ -33,11 +33,14 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="150"/>
               </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
               <views:ObjectRowHeaderLogo Grid.Column="0" Margin="5,10,5,10"/>
 
-              <TextBox Name="ProjectNameTextBox" MinWidth="50"
-                       Grid.Row="0"
-                       Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" 
+              <TextBox Name="ProjectNameTextBox" MinWidth="50" Grid.Row="0" Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" 
                        Background="Transparent" BorderThickness="0">
                 <TextBox.Style>
                   <Style TargetType="{x:Type TextBox}">
@@ -53,6 +56,8 @@
                               CommandParameter="{Binding ElementName=ProjectNameTextBox}"/>
                 </TextBox.InputBindings>
               </TextBox>
+
+
             </Grid>
           </Border>
         </DataTemplate>

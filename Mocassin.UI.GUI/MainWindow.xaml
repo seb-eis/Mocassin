@@ -22,40 +22,35 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="80*" />
-      <RowDefinition>
-        <RowDefinition.Style>
-          <Style TargetType="{x:Type RowDefinition}">
-            <Style.Triggers>
-              <DataTrigger Binding="{Binding ProjectConsoleTabControlViewModel.TabControlViewModel.IsActive}" Value="True">
-                <Setter Property="Height" Value="20*"/>
-              </DataTrigger>
-              <DataTrigger Binding="{Binding ProjectConsoleTabControlViewModel.TabControlViewModel.IsActive}" Value="False">
-                <Setter Property="Height" Value="Auto"/>
-              </DataTrigger>
-            </Style.Triggers>
-          </Style>
-        </RowDefinition.Style>
-      </RowDefinition>
+      <RowDefinition Height="5"/>
+      <RowDefinition Height="20*"/>
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="4*" />
+      <ColumnDefinition Width="5"/>
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
                                        DataContext="{Binding ProjectMenuBarViewModel}" />
 
-    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"
+    <GridSplitter Width="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Background="Transparent" 
+                  ResizeBehavior="PreviousAndNext"/>
+
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Margin="0,0,-5,0"
                                        DataContext="{Binding ProjectBrowserViewModel}" />
 
-    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="1"
+    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="2" Margin="-5,0,0,-5"
                                                   DataContext="{Binding ProjectWorkTabControlViewModel}" />
 
-    <projectConsole:ProjectConsoleTabControlView Grid.Row="2" Grid.Column="1"
+    <GridSplitter Height="5" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Background="Transparent" 
+                  ResizeBehavior="PreviousAndNext"/>
+
+    <projectConsole:ProjectConsoleTabControlView Grid.Row="3" Grid.Column="2" Margin="-5,-5,0,0"
                                                  DataContext="{Binding ProjectConsoleTabControlViewModel}" />
 
-    <projectStatusBar:ProjectStatusBarView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+    <projectStatusBar:ProjectStatusBarView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
                                            DataContext="{Binding ProjectStatusBarViewModel}" />
   </Grid>
 </Window>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
@@ -16,6 +18,13 @@ namespace Mocassin.UI.Xml.Helper
     /// </summary>
     public class ObjectChangedEventObserver : IDisposable
     {
+        /// <summary>
+        ///     Get the <see cref="ImmutableHashSet{T}"/> of property <see cref="Type"/> values that are ignored by default
+        /// </summary>
+        public static ImmutableHashSet<Type> DefaultIgnoredPropertyTypes { get; }
+
+        private object LockObject { get; } = new object();
+
         /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> that relays change event arguments and sender
         /// </summary>
@@ -39,7 +48,7 @@ namespace Mocassin.UI.Xml.Helper
         /// <summary>
         ///     Get or set the observed root object
         /// </summary>
-        private object ObservedRootObject { get; set; }
+        private object RootObject { get; set; }
 
         /// <summary>
         ///     Get the <see cref="IObservable{T}" /> that provides change detected notifications
@@ -56,13 +65,33 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         public IObservable<object> ObjectObservationEndedNotifications => ObjectObservationEndedEvent.AsObservable();
 
+        /// <summary>
+        ///     Get a <see cref="HashSet{T}"/> of property <see cref="Type"/> that should be ignored during recursive event search
+        /// </summary>
+        public HashSet<Type> IgnoredTypes { get; }
+
+
         /// <inheritdoc />
-        public ObjectChangedEventObserver()
+        static ObjectChangedEventObserver()
+        {
+            DefaultIgnoredPropertyTypes = new HashSet<Type>
+            {
+                typeof(string), typeof(int), typeof(long), typeof(double), typeof(float), typeof(ulong), typeof(uint), typeof(byte), typeof(short),
+                typeof(ushort)
+            }.ToImmutableHashSet();
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="ObjectChangedEventObserver"/> with an optional set of ignored property <see cref="Type"/> values
+        /// </summary>
+        /// <param name="ignoredTypes"></param>
+        public ObjectChangedEventObserver(IEnumerable<Type> ignoredTypes = null)
         {
             ChangeDetectedEvent = new ReactiveEvent<(object Sender, EventArgs args)>();
             ObjectObservationEndedEvent = new ReactiveEvent<object>();
             ObjectObservationStartedEvent = new ReactiveEvent<object>();
             Subscriptions = new Dictionary<object, IDisposable>();
+            IgnoredTypes = new HashSet<Type>((ignoredTypes ?? Enumerable.Empty<Type>()).Concat(DefaultIgnoredPropertyTypes));
         }
 
         /// <summary>
@@ -71,10 +100,12 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="rootObject"></param>
         public void ObserveObject(object rootObject)
         {
-            if (ReferenceEquals(ObservedRootObject, rootObject)) return;
-            if (ObservedRootObject != null) throw new InvalidOperationException("Change subscriber already attached to another project.");
-            BeginListeningToAccessibleEvents(rootObject);
-            ObservedRootObject = rootObject;
+            if (rootObject == null) throw new ArgumentNullException(nameof(rootObject));
+            if (ReferenceEquals(RootObject, rootObject)) return;
+            if (RootObject != null) throw new InvalidOperationException("Change subscriber already attached to another project.");
+            if (IgnoredTypes.Contains(rootObject.GetType())) throw new InvalidOperationException("The object type is set to ignore.");
+            SubscribeToAccessibleEvents(rootObject);
+            RootObject = rootObject;
         }
 
         /// <summary>
@@ -82,10 +113,10 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         public void StopObservation()
         {
-            if (ObservedRootObject == null) return;
+            if (RootObject == null) return;
             foreach (var subscription in Subscriptions.Values) subscription.Dispose();
             Subscriptions.Clear();
-            ObservedRootObject = null;
+            RootObject = null;
         }
 
         /// <summary>
@@ -93,71 +124,73 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         /// <param name="root"></param>
         /// <param name="bindingFlags"></param>
-        private void BeginListeningToAccessibleEvents(object root, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        private void SubscribeToAccessibleEvents(object root, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            if (root == null || Subscriptions.ContainsKey(root)) return;
+            if (root == null || IgnoredTypes.Contains(root.GetType()) || Subscriptions.ContainsKey(root)) return;
             if (Subscriptions.Count == 0)
             {
-                foreach (var item in FindObservables(root)) CreateTrackingEntry(item);
+                foreach (var item in FindEventSuppliers(root, null, bindingFlags)) CreateSubscription(item);
                 return;
             }
 
-            foreach (var item in FindUnknownObjects(root)) CreateTrackingEntry(item);
+            foreach (var item in FindUnknownEventSuppliers(root)) CreateSubscription(item);
         }
 
         /// <summary>
-        ///     Stops to listen to all events that exist in the provided object tree but cannot be accessed through the observed root object
+        ///     Stops to listen to all events that exist in the provided object tree but cannot be accessed through the observed
+        ///     root object
         /// </summary>
         /// <param name="removedObject"></param>
         /// <param name="bindingFlags"></param>
-        private void StopListeningToInaccessibleEvents(object removedObject, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        private void UnsubscribeFromInaccessibleEvents(object removedObject, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            if (removedObject == null) return;
-            foreach (var item in FindInaccessibleObjects(removedObject)) RemoveTrackingEntry(item);
+            if (removedObject == null || IgnoredTypes.Contains(removedObject.GetType())) return;
+            foreach (var item in FindInaccessibleObjects(removedObject)) RemoveSubscription(item);
         }
 
         /// <summary>
-        ///     Adds a tracking reference for the provided object. Returns the new number of references or a negative value if the
+        ///     Adds a tracking subscription for the provided object. Returns the new number of references or a negative value if
+        ///     the
         ///     object cannot be tracked
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private void CreateTrackingEntry(object obj)
+        private void CreateSubscription(object obj)
         {
             switch (obj)
             {
                 case INotifyCollectionChanged notifyCollectionChanged:
-                    TrackCollectionProperty(notifyCollectionChanged);
+                    SubscribeToEvent(notifyCollectionChanged);
                     break;
 
                 case INotifyPropertyChanged notifyPropertyChanged:
-                    TrackProperty(notifyPropertyChanged);
+                    SubscribeToEvent(notifyPropertyChanged);
                     break;
 
                 default:
-                    throw new InvalidOperationException("Provided object cannot be tracked.");
+                    return;
             }
 
-            OnObservationStarted(obj);
+            NotifyObservationStarted(obj);
         }
 
         /// <summary>
-        ///     Removes the tracking entry fro the provided object
+        ///     Removes the tracking subscription for the provided object
         /// </summary>
         /// <param name="obj"></param>
-        private void RemoveTrackingEntry(object obj)
+        private void RemoveSubscription(object obj)
         {
             if (!Subscriptions.TryGetValue(obj, out var disposable)) return;
             disposable.Dispose();
             Subscriptions.Remove(obj);
-            OnObservationEnded(obj);
+            NotifyObservationEnded(obj);
         }
 
         /// <summary>
         ///     Creates and adds a subscription tracker for a <see cref="INotifyPropertyChanged" /> object
         /// </summary>
         /// <param name="notifyPropertyChanged"></param>
-        private void TrackProperty(INotifyPropertyChanged notifyPropertyChanged)
+        private void SubscribeToEvent(INotifyPropertyChanged notifyPropertyChanged)
         {
             notifyPropertyChanged.PropertyChanged += OnChangeDetected;
             var disposable = Disposable.Create(() => notifyPropertyChanged.PropertyChanged -= OnChangeDetected);
@@ -168,7 +201,7 @@ namespace Mocassin.UI.Xml.Helper
         ///     Creates and adds a subscription tracker for a <see cref="INotifyCollectionChanged" /> object
         /// </summary>
         /// <param name="notifyCollectionChanged"></param>
-        private void TrackCollectionProperty(INotifyCollectionChanged notifyCollectionChanged)
+        private void SubscribeToEvent(INotifyCollectionChanged notifyCollectionChanged)
         {
             notifyCollectionChanged.CollectionChanged += OnChangeDetected;
             var disposable = Disposable.Create(() => notifyCollectionChanged.CollectionChanged -= OnChangeDetected);
@@ -179,31 +212,32 @@ namespace Mocassin.UI.Xml.Helper
         ///     Recursively searches the object tree for all objects that are observable from it
         /// </summary>
         /// <param name="root"></param>
-        /// <param name="set"></param>
+        /// <param name="doneObjects"></param>
         /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        public HashSet<object> FindObservables(object root, HashSet<object> set = null, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        public HashSet<object> FindEventSuppliers(object root, HashSet<object> doneObjects = null,
+            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            set = set ?? new HashSet<object>();
-            if (set.Contains(root)) return set;
-            set.Add(root);
+            doneObjects = doneObjects ?? new HashSet<object>();
+            if (doneObjects.Contains(root)) return doneObjects;
+            doneObjects.Add(root);
 
             if (root is INotifyCollectionChanged notifyCollectionChanged)
             {
-                foreach (var item in EnsureIsCollection(notifyCollectionChanged)) FindObservables(item, set);
-                return set;
+                foreach (var item in EnsureIsCollection(notifyCollectionChanged)) FindEventSuppliers(item, doneObjects);
+                return doneObjects;
             }
 
-            foreach (var propertyInfo in root.GetType().GetProperties(bindingFlags))
+            foreach (var propertyInfo in root.GetType().GetProperties(bindingFlags).Where(x => !IgnoredTypes.Contains(x.PropertyType)))
             {
                 if (!typeof(INotifyPropertyChanged).IsAssignableFrom(propertyInfo.PropertyType) &&
                     !typeof(INotifyCollectionChanged).IsAssignableFrom(propertyInfo.PropertyType)) continue;
 
                 if (!(propertyInfo.GetValue(root) is object childObject)) continue;
-                FindObservables(childObject, set);
+                FindEventSuppliers(childObject, doneObjects);
             }
 
-            return set;
+            return doneObjects;
         }
 
         /// <summary>
@@ -211,43 +245,44 @@ namespace Mocassin.UI.Xml.Helper
         ///     object
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        private HashSet<object> FindInaccessibleObjects(object obj)
+        private HashSet<object> FindInaccessibleObjects(object obj, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var objObservables = FindObservables(obj);
-            foreach (var knownObject in FindObservables(ObservedRootObject)) objObservables.Remove(knownObject);
+            var objObservables = FindEventSuppliers(obj, null, bindingFlags);
+            foreach (var knownObject in FindEventSuppliers(RootObject, null, bindingFlags)) objObservables.Remove(knownObject);
             return objObservables;
         }
 
         /// <summary>
-        ///     Gets the <see cref="HashSet{T}" /> of objects that are currently unknown to the tracker but are accessible from the provided object
+        ///     Gets the <see cref="HashSet{T}" /> of objects that are currently unknown to the tracker but are accessible from the
+        ///     provided object
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        private HashSet<object> FindUnknownObjects(object obj)
+        private HashSet<object> FindUnknownEventSuppliers(object obj, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var objObservables = FindObservables(obj);
+            var objObservables = FindEventSuppliers(obj, null, bindingFlags);
             foreach (var knownObject in Subscriptions.Keys) objObservables.Remove(knownObject);
             return objObservables;
         }
 
         /// <summary>
-        ///     Removes subscriptions that have become inaccessible
+        ///     Disposes subscriptions that have become inaccessible from the root object
         /// </summary>
-        private void RemoveInaccessibleSubscriptions()
+        /// <param name="bindingFlags"></param>
+        private void DisposeInaccessibleSubscriptions(BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var accessibles = FindObservables(ObservedRootObject);
-            foreach (var key in Subscriptions.Keys.ToList().Where(x => !accessibles.Contains(x)))
-            {
-                RemoveTrackingEntry(key);
-            }
+            var eventSuppliers = FindEventSuppliers(RootObject, null, bindingFlags);
+            foreach (var key in Subscriptions.Keys.ToList().Where(x => !eventSuppliers.Contains(x))) RemoveSubscription(key);
         }
 
         /// <summary>
         ///     Action that is called when a previously unknown object is now observed
         /// </summary>
         /// <param name="obj"></param>
-        protected virtual void OnObservationStarted(object obj)
+        protected virtual void NotifyObservationStarted(object obj)
         {
             ObjectObservationStartedEvent.OnNext(obj);
         }
@@ -256,7 +291,7 @@ namespace Mocassin.UI.Xml.Helper
         ///     Action that is called when a previously known object was removed from the observation
         /// </summary>
         /// <param name="obj"></param>
-        protected virtual void OnObservationEnded(object obj)
+        protected virtual void NotifyObservationEnded(object obj)
         {
             ObjectObservationEndedEvent.OnNext(obj);
         }
@@ -280,35 +315,39 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="args"></param>
         private void OnChangeDetected(object sender, EventArgs args)
         {
-            switch (args)
+            lock (LockObject)
             {
-                case PropertyChangedEventArgs propertyChangedEventArgs:
-                    RemoveInaccessibleSubscriptions();
-                    var value = sender.GetType().GetProperty(propertyChangedEventArgs.PropertyName)?.GetValue(sender);
-                    if (value != null) BeginListeningToAccessibleEvents(value);
-                    break;
-
-                case NotifyCollectionChangedEventArgs collectionChangedEventArgs:
+                var watch = Stopwatch.StartNew();
+                switch (args)
                 {
-                    if (collectionChangedEventArgs.Action == NotifyCollectionChangedAction.Reset)
-                    {
-                        RemoveInaccessibleSubscriptions();
-                        return;
-                    }
+                    case PropertyChangedEventArgs propertyChangedEventArgs:
+                        DisposeInaccessibleSubscriptions();
+                        var value = sender.GetType().GetProperty(propertyChangedEventArgs.PropertyName)?.GetValue(sender);
+                        if (value != null) SubscribeToAccessibleEvents(value);
+                        break;
 
-                    foreach (var oldItem in (IEnumerable) collectionChangedEventArgs.OldItems ?? Enumerable.Empty<object>())
+                    case NotifyCollectionChangedEventArgs collectionChangedEventArgs:
                     {
-                        if (oldItem == null) continue;
-                        StopListeningToInaccessibleEvents(oldItem);
-                    }
+                        if (collectionChangedEventArgs.Action == NotifyCollectionChangedAction.Reset)
+                        {
+                            DisposeInaccessibleSubscriptions();
+                            break;
+                        }
 
-                    foreach (var newItem in (IEnumerable) collectionChangedEventArgs.NewItems ?? Enumerable.Empty<object>())
-                    {
-                        BeginListeningToAccessibleEvents(newItem);
-                    }
+                        foreach (var oldItem in (IEnumerable) collectionChangedEventArgs.OldItems ?? Enumerable.Empty<object>())
+                        {
+                            if (oldItem == null) continue;
+                            UnsubscribeFromInaccessibleEvents(oldItem);
+                        }
 
-                    break;
+                        foreach (var newItem in (IEnumerable) collectionChangedEventArgs.NewItems ?? Enumerable.Empty<object>())
+                            SubscribeToAccessibleEvents(newItem);
+
+                        break;
+                    }
                 }
+                watch.Stop();
+                Debug.WriteLine($"'{this}': Watch system update - {Subscriptions.Count} objects in {watch.Elapsed}.");
             }
 
             ChangeDetectedEvent.OnNext((sender, args));

@@ -5,7 +5,6 @@ using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Messaging;
@@ -20,7 +19,6 @@ using Mocassin.UI.GUI.Controls.ProjectMenuBar;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager;
 using Mocassin.UI.GUI.Controls.ProjectStatusBar;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl;
-using Mocassin.UI.GUI.Logic.Updating;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
@@ -82,12 +80,6 @@ namespace Mocassin.UI.GUI
             set => SetProperty(ref windowDescription, value);
         }
 
-        /// <summary>
-        ///     Get or set the <see cref="ProjectContentChangeTriggerViewModel" /> that periodically triggers the project content
-        ///     change
-        /// </summary>
-        public ProjectContentChangeTriggerViewModel ChangeTriggerViewModel { get; set; }
-
         /// <inheritdoc />
         public void ChangeOpenProjectLibrary(IMocassinProjectLibrary projectLibrary)
         {
@@ -96,7 +88,6 @@ namespace Mocassin.UI.GUI
             ProjectGraphs = projectLibrary?.MocassinProjectGraphs.Local.ToObservableCollection();
             OpenProjectLibrary = projectLibrary;
             ProjectLibraryChangedEvent.OnNext(projectLibrary);
-            ChangeTriggerViewModel = ChangeTriggerViewModel ?? new ProjectContentChangeTriggerViewModel(this);
             WindowDescription = MakeWindowDescription();
             StartServices();
         }
@@ -151,7 +142,7 @@ namespace Mocassin.UI.GUI
         public IModelProject CreateServiceModelProject()
         {
             return ModelProject.Create(LoadProjectSettings());
-        } 
+        }
 
         /// <inheritdoc />
         public IModelProject CreateModelProject()
@@ -162,25 +153,16 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public void DisposeServices()
         {
-            ChangeTriggerViewModel?.Dispose();
-        }
-
-        /// <inheritdoc />
-        public Task AsyncExecuteChangeCheckConflictAction(Action action, bool onDispatcher = false)
-        {
-            return ChangeTriggerViewModel.AttachConflictingAction(action, onDispatcher);
         }
 
         /// <inheritdoc />
         public void StopServices()
         {
-            ChangeTriggerViewModel?.Stop();
         }
 
         /// <inheritdoc />
         public void StartServices()
         {
-            ChangeTriggerViewModel?.Start();
         }
 
         /// <summary>
@@ -194,6 +176,7 @@ namespace Mocassin.UI.GUI
                 var currentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
                 return $"[{currentVersion}]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
             }
+
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             return $"[{version}, Non-Deploy]{(OpenProjectLibrary?.SourceName == null ? "" : $" - {OpenProjectLibrary.SourceName}")}";
         }
@@ -270,7 +253,8 @@ namespace Mocassin.UI.GUI
         }
 
         /// <summary>
-        ///     Handles the app startup program arguments, if the they are empty the system tries to get the data from the <see cref="AppDomain"/> activation arguments
+        ///     Handles the app startup program arguments, if the they are empty the system tries to get the data from the
+        ///     <see cref="AppDomain" /> activation arguments
         /// </summary>
         /// <param name="args"></param>
         public void OnStartup(string[] args)

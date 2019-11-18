@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Navigation;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Customization;
+using Mocassin.UI.Xml.Helper;
+using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.GUI.Logic.Validation
@@ -42,6 +46,11 @@ namespace Mocassin.UI.GUI.Logic.Validation
         ///     Get the <see cref="IModelProject" /> interface that provides the validation functionality
         /// </summary>
         private IModelProject ModelProject { get; }
+
+        /// <summary>
+        ///     Get or set the <see cref="ObjectChangedEventObserver"/> for the observed model
+        /// </summary>
+        private ObjectChangedEventObserver ModelChangedEventObserver { get; }
 
         /// <summary>
         ///     Get or set a boolean value if the validator is disposed
@@ -105,11 +114,6 @@ namespace Mocassin.UI.GUI.Logic.Validation
         public IObservable<ModelValidationStatus> StatusChangeNotification => ModelValidationStatusChangedEvent.AsObservable();
 
         /// <summary>
-        ///     Get or set the <see cref="TimeSpan" /> between validation cycles
-        /// </summary>
-        public TimeSpan ValidationInterval { get; set; } = TimeSpan.FromSeconds(5);
-
-        /// <summary>
         ///     Get the <see cref="AsyncRunValidationCommand" /> to start a single validation cycle
         /// </summary>
         public AsyncRunValidationCommand RunValidationCommand { get; }
@@ -137,47 +141,14 @@ namespace Mocassin.UI.GUI.Logic.Validation
             ModelValidationStatusChangedEvent = new ReactiveEvent<ModelValidationStatus>();
             RunValidationCommand = new AsyncRunValidationCommand(this);
             ModelProject = ProjectControl.CreateModelProject();
-        }
-
-        /// <summary>
-        ///     Starts the continues validation process. Returns false if the process could not be started or is already running
-        /// </summary>
-        /// <returns></returns>
-        public bool StartContinuousValidation()
-        {
-            lock (lockObject)
-            {
-                if (ValidationTask != null || IsDisposed) return false;
-                CancellationSource = new CancellationTokenSource();
-                ValidationTask = Task.Run(() =>
-                {
-                    RunModelValidationCycle(CancellationSource.Token);
-                    DisposeInternal();
-                });
-                return true;
-            }
-        }
-
-        /// <summary>
-        ///     Stops the continues validation process. Returns false if the process did not stop within an acceptable
-        ///     <see cref="TimeSpan" />
-        /// </summary>
-        /// <returns></returns>
-        public bool StopContinuousValidation()
-        {
-            lock (lockObject)
-            {
-                if (ValidationTask == null) return true;
-                CancellationSource?.Cancel();
-                ValidationTask.Wait(TimeSpan.FromSeconds(10));
-                return ValidationTask.IsCompleted;
-            }
+            ModelChangedEventObserver = new ObjectChangedEventObserver(new []{typeof(MocassinProjectGraph)});
+            ModelChangedEventObserver.ObserveObject(modelGraph);
+            ModelChangedEventObserver.ChangeDetectedNotifications.Subscribe(OnModelChanged);
         }
 
         /// <inheritdoc />
         public override void Dispose()
         {
-            StopContinuousValidation();
             DisposeInternal();
             base.Dispose();
         }
@@ -189,25 +160,10 @@ namespace Mocassin.UI.GUI.Logic.Validation
         {
             lock (lockObject)
             {
+                ModelChangedEventObserver.Dispose();
                 ReportSetChangedEvent.OnCompleted();
                 ModelValidationStatusChangedEvent.OnCompleted();
                 IsDisposed = true;
-            }
-        }
-
-        /// <summary>
-        ///     Runs the validation cycle with the set interval settings until cancellation is requested
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        private void RunModelValidationCycle(CancellationToken cancellationToken)
-        {
-            var lastCheck = DateTime.Now;
-            while (!cancellationToken.IsCancellationRequested
-                   && (ReportSetChangedEvent.HasObservers || ModelValidationStatusChangedEvent.HasObservers))
-            {
-                lastCheck = WaitForNextValidation(lastCheck);
-                RunValidation();
-                lastCheck = DateTime.Now;
             }
         }
 
@@ -275,18 +231,6 @@ namespace Mocassin.UI.GUI.Logic.Validation
         }
 
         /// <summary>
-        ///     Waits for the next validation time point and returns the time at which the method finished
-        /// </summary>
-        /// <param name="lastCheck"></param>
-        /// <returns></returns>
-        private DateTime WaitForNextValidation(DateTime lastCheck)
-        {
-            var delta = DateTime.Now - lastCheck;
-            if (delta < ValidationInterval) Thread.Sleep(ValidationInterval - delta);
-            return DateTime.Now;
-        }
-
-        /// <summary>
         ///     Tries to prepare a <see cref="IList{T}" /> of model input <see cref="object" /> instances from the internally set
         ///     <see cref="ProjectModelGraph" />. Returns false if the data is currently not convertible
         /// </summary>
@@ -348,8 +292,11 @@ namespace Mocassin.UI.GUI.Logic.Validation
             }
         }
 
-        /// <inheritdoc />
-        protected override async void OnProjectContentChangedInternal()
+        /// <summary>
+        ///     Action that is invoked if a model change is detected
+        /// </summary>
+        /// <param name="eventItems"></param>
+        protected async void OnModelChanged((object Sender, EventArgs Args) eventItems)
         {
             if (IsIgnoreContentChange || IsDisposed || RunValidationCommand == null) return;
             await RunValidationCommand.ExecuteAsync(null);

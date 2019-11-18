@@ -40,17 +40,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         {
             return true;
         }
-
-        /// <summary>
-        ///     Async save execution of the passed <see cref="Action"/> as a change check conflicting action
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="onDispatcher"></param>
-        /// <returns></returns>
-        protected Task AsyncExecuteWithoutProjectChangeDetection(Action action, bool onDispatcher = false)
-        {
-            return ProjectControl.AsyncExecuteChangeCheckConflictAction(action, onDispatcher);
-        }
     }
 
     /// <summary>
@@ -78,17 +67,6 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         {
             ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
             return true;
-        }
-
-        /// <summary>
-        ///     Async save execution of the passed <see cref="Action"/> as a change check conflicting action
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="onDispatcher"></param>
-        /// <returns></returns>
-        protected Task AsyncExecuteWithoutProjectChangeDetection(Action action, bool onDispatcher = false)
-        {
-            return ProjectControl.AsyncExecuteChangeCheckConflictAction(action, onDispatcher);
         }
     }
 }

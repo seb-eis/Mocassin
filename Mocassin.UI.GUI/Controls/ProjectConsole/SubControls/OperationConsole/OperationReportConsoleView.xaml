@@ -7,6 +7,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:system="clr-namespace:System;assembly=mscorlib"
   d:DataContext="{d:DesignInstance local:OperationReportConsoleViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -17,7 +18,11 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <ComboBox Grid.Row="0"
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    <ComboBox Grid.Row="0" Grid.ColumnSpan="2"
               ItemsSource="{Binding ProjectGraphs}"
               SelectedItem="{Binding SelectedProjectGraph}"
               Margin="{StaticResource App.Margin.VerticalStack}"
@@ -27,7 +32,7 @@
               DisplayMemberPath="ProjectName"
               Visibility="{Binding ElementName=ShowSelectionCheckMenuItem, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
 
-    <DataGrid Grid.Row="1"
+    <DataGrid Grid.Row="1" Grid.Column="0"
               Name="ReportDataGrid"
               ItemsSource="{Binding OperationCollectionViewModel.ObservableItems}"
               SelectedItem="{Binding SelectedReport}"
@@ -72,7 +77,7 @@
           </Setter>
         </Style>
       </DataGrid.RowStyle>
-
+ 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Time" Width="Auto"
                             Binding="{Binding TimeStamp, Mode=OneTime}" />
