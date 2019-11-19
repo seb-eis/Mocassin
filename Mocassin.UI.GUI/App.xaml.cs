@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace Mocassin.UI.GUI
@@ -16,7 +17,6 @@ namespace Mocassin.UI.GUI
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-
             using (var startupWindow = new StartupWindow())
             {
                 startupWindow.Show();
@@ -70,19 +70,38 @@ namespace Mocassin.UI.GUI
         /// <param name="args"></param>
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
-            if (!args.IsTerminating) return;
+            DebugRethrow(sender, args);
+            LogUncaughtExceptionAndKillIfTerminating(sender, args);
+        }
+
+        /// <summary>
+        ///     Logs the occurence of an uncaught <see cref="UnhandledExceptionEventArgs"/> and terminates the process if the event is terminating
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void LogUncaughtExceptionAndKillIfTerminating(object sender, UnhandledExceptionEventArgs args)
+        {
             var time = $"{DateTime.Now:yyyyMMddhmmss}";
-            var logPath = Environment.ExpandEnvironmentVariables($"{GUI.Properties.Resources.Folder_Userprofile_Resources}Crash.{time}.log");
             var baseMessage = GUI.Properties.Resources.Error_Uncaught_Exception_Message;
             var caption = GUI.Properties.Resources.Error_Uncaught_Exception_Caption;
+
+            var logPath = Environment.ExpandEnvironmentVariables($"{GUI.Properties.Resources.Folder_Userprofile_Resources}Crash.{time}.log");
             var exception = args.ExceptionObject as Exception ?? new Exception($"Non exception object thrown {args.ExceptionObject}.");
             MessageBox.Show($"{baseMessage}\n ({logPath})", caption, MessageBoxButton.OK, MessageBoxImage.Error);
 
             File.WriteAllText(logPath, $"{sender}\n\n{exception}");
+            if (args.IsTerminating) Process.GetCurrentProcess().Kill();
+        }
 
-#if (!DEBUG)
-            Process.GetCurrentProcess().Kill();
-#endif
+        /// <summary>
+        ///     Conditional method that rethrows an uncaught exception if the DEBUG flag is set
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        [Conditional("DEBUG")]
+        private static void DebugRethrow(object sender, UnhandledExceptionEventArgs args)
+        {
+            throw (Exception) args.ExceptionObject;
         }
     }
 }

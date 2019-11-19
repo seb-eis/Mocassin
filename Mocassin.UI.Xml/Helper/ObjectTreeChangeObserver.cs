@@ -27,11 +27,6 @@ namespace Mocassin.UI.Xml.Helper
         private object LockObject { get; } = new object();
 
         /// <summary>
-        ///     Get the internal <see cref="StopWatch"/>
-        /// </summary>
-        private Stopwatch StopWatch { get; }
-
-        /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> that relays change event arguments and sender
         /// </summary>
         private ReactiveEvent<(object Sender, EventArgs args)> ChangeEventOccuredEvent { get; }
@@ -111,7 +106,6 @@ namespace Mocassin.UI.Xml.Helper
             ObjectAddedEvent = new ReactiveEvent<object>();
             Subscriptions = new Dictionary<object, IDisposable>();
             IgnoredTypes = new HashSet<Type>((ignoredTypes ?? Enumerable.Empty<Type>()).Concat(DefaultIgnoredPropertyTypes));
-            StopWatch = new Stopwatch();
         }
 
         /// <summary>
@@ -360,11 +354,11 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnChangeDetected(object sender, EventArgs args)
+        protected void OnChangeDetected(object sender, EventArgs args)
         {
             lock (LockObject)
             {
-                StopWatch.Restart();
+                DebugLogEvent();
                 switch (args)
                 {
                     case PropertyChangedEventArgs propertyChangedEventArgs:
@@ -391,8 +385,7 @@ namespace Mocassin.UI.Xml.Helper
                         break;
                     }
                 }
-                StopWatch.Stop();
-                Debug.WriteLine($"'{this}': Watch system update - {Subscriptions.Count} objects in {StopWatch.Elapsed}.");
+                DebugLogEvent(false);
             }
 
             ChangeEventOccuredEvent.OnNext((sender, args));
@@ -413,6 +406,16 @@ namespace Mocassin.UI.Xml.Helper
         {
             StopObservation();
             NotifyEventsCompleted();
+        }
+
+        /// <summary>
+        ///     Conditional method that logs the time on DEBUG
+        /// </summary>
+        /// <param name="isStart"></param>
+        [Conditional("DEBUG")]
+        private void DebugLogEvent(bool isStart = true)
+        {
+            Debug.WriteLine($"'{this}': Tick {DateTime.Now.Ticks} : Observer event {(isStart ? "begin" : "done ")} - {Subscriptions.Count} watched objects.");
         }
     }
 }

@@ -81,7 +81,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
             if (updateCheckInfo == null) return false;
             if (!updateCheckInfo.UpdateAvailable)
             {
-                MessageBox.Show($"Latest version [{ApplicationDeployment.CurrentDeployment.CurrentVersion}] is already installed.");
+                MessageBox.Show($"Latest version [{ApplicationDeployment.CurrentDeployment.CurrentVersion}] is already installed.", "Info",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
                 return false;
             }
 
