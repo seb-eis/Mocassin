@@ -1,11 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.EntityFrameworkCore;
-using Mocassin.Framework.SQLiteCore;
 using Mocassin.Model.Translator;
 using Mocassin.Model.Translator.Database.Entities.Other.Meta;
 using Mocassin.UI.Base.Commands;
@@ -33,12 +30,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         private bool isManualLibrarySaving;
 
         /// <summary>
-        ///     Get or set the last build <see cref="ISimulationLibrary"/>
+        ///     Get or set the last build <see cref="ISimulationLibrary" />
         /// </summary>
         private ISimulationLibrary BuildSimulationLibrary { get; set; }
 
         /// <summary>
-        ///     Get or set the <see cref="CancellationTokenSource"/> for the build process
+        ///     Get or set the <see cref="CancellationTokenSource" /> for the build process
         /// </summary>
         private CancellationTokenSource BuildCancellationTokenSource { get; set; }
 
@@ -51,10 +48,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// <summary>
         ///     Get the <see cref="CollectionControlViewModel{T}" /> for selection of meta data information
         /// </summary>
-        public  ObservableCollectionViewModel<JobMetaDataEntity> JobMetaDataCollectionControlViewModel { get; }
+        public ObservableCollectionViewModel<JobMetaDataEntity> JobMetaDataCollectionControlViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for progress console message <see cref="string"/> values with time info
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for progress console message <see cref="string" /> values
+        ///     with time info
         /// </summary>
         public ObservableCollectionViewModel<Tuple<DateTime, string>> LogConsoleMessages { get; }
 
@@ -148,7 +146,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Get a <see cref="AsyncRelayCommand"/> to manually save the last <see cref="ISimulationLibrary"/> to its target file
+        ///     Get a <see cref="AsyncRelayCommand" /> to manually save the last <see cref="ISimulationLibrary" /> to its target
+        ///     file
         /// </summary>
         /// <returns></returns>
         private AsyncRelayCommand GetManualSaveLibraryCommand()
@@ -167,6 +166,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 {
                     AddConsoleError(e);
                 }
+
                 BuildStatus = LibraryBuildStatus.Unknown;
             }
 
@@ -174,11 +174,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             {
                 return BuildSimulationLibrary != null;
             }
+
             return new AsyncRelayCommand(() => Task.Run(Execute), CanExecute);
         }
 
         /// <summary>
-        ///     Get a startup message <see cref="string"/> for the console
+        ///     Get a startup message <see cref="string" /> for the console
         /// </summary>
         /// <returns></returns>
         private string GetStartupMessage()
@@ -187,15 +188,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to cancel the build process
+        ///     Get a <see cref="RelayCommand" /> to cancel the build process
         /// </summary>
         /// <returns></returns>
         private RelayCommand GetCancelBuildCommand()
         {
             bool CanExecute()
             {
-                return  BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
+                return BuildCancellationTokenSource != null && !BuildCancellationTokenSource.IsCancellationRequested;
             }
+
             return new RelayCommand(() => BuildCancellationTokenSource.Cancel(), CanExecute);
         }
 
@@ -207,11 +209,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             bool CanExecute()
             {
-                return !string.IsNullOrWhiteSpace(buildTargetFilePath) 
+                return !string.IsNullOrWhiteSpace(buildTargetFilePath)
                        && BuildCancellationTokenSource == null
                        && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationGraph != null
                        && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobTranslationGraph != null;
             }
+
             return new AsyncRelayCommand(StartBuildProcess, CanExecute);
         }
 
@@ -232,7 +235,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
 
                 var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedItem;
                 var cancellationToken = BuildCancellationTokenSource.Token;
-                BuildSimulationLibrary = await Task.Run(() 
+                BuildSimulationLibrary = await Task.Run(()
                     => builder.BuildLibrary(buildGraph, BuildTargetFilePath, ProjectControl.CreateModelProject(), cancellationToken), cancellationToken);
                 if (BuildSimulationLibrary != null)
                 {
@@ -242,12 +245,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                     AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
                 }
                 else
-                {
-                    AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");   
-                }
+                    AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
 
                 BuildCancellationTokenSource.Dispose();
-                BuildCancellationTokenSource = null;   
+                BuildCancellationTokenSource = null;
             }
         }
 
@@ -261,7 +262,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Add a standard formatted <see cref="Exception"/> message to the progress console
+        ///     Add a standard formatted <see cref="Exception" /> message to the progress console
         /// </summary>
         /// <param name="exception"></param>
         private void AddConsoleError(Exception exception)
@@ -284,16 +285,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="BuildStatus"/> changes
+        ///     Action that is called when the <see cref="BuildStatus" /> changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private void OnLibraryStatusChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (args.PropertyName == nameof(BuildStatus))
-            {
-                AddConsoleMessage($"Build status changed to {BuildStatus}.");
-            }
+            if (args.PropertyName == nameof(BuildStatus)) AddConsoleMessage($"Build status changed to {BuildStatus}.");
         }
     }
 }

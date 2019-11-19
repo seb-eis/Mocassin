@@ -17,10 +17,22 @@ namespace Mocassin.Framework.Messaging
         public object Sender { get; }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}"/> sequence of <see cref="string"/> that describe details fo the messsage
+        ///     Get an <see cref="IEnumerable{T}"/> sequence of <see cref="string"/> that describe details fo the message
         /// </summary>
         [JsonIgnore]
         public abstract IEnumerable<string> DetailSequence { get; }
+
+        /// <summary>
+        ///     Get an indented JSON representation of the message details
+        /// </summary>
+        [JsonIgnore]
+        public string IndentedDetailsJson => DetailsToJson(Formatting.Indented);
+
+        /// <summary>
+        ///     Get an default JSON representation of the message details
+        /// </summary>
+        [JsonIgnore]
+        public string DetailsJson => DetailsToJson();
 
         /// <summary>
         ///     Basic short message describing the contents of the model message
@@ -50,7 +62,17 @@ namespace Mocassin.Framework.Messaging
         /// <returns></returns>
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return JsonConvert.SerializeObject(this, Formatting.None);
+        }
+
+        /// <summary>
+        ///     Converts the message details to a JSON string
+        /// </summary>
+        /// <param name="formatting"></param>
+        /// <returns></returns>
+        public string DetailsToJson(Formatting formatting = Formatting.None)
+        {
+            return JsonConvert.SerializeObject(DetailSequence, formatting);
         }
     }
 }

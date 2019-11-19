@@ -9,14 +9,15 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
 using Mocassin.Framework.Events;
+using Mocassin.Framework.Extensions;
 
 namespace Mocassin.UI.Xml.Helper
 {
     /// <summary>
-    ///     Observer system to watch the entire <see cref="INotifyCollectionChanged" /> and
+    ///     Reflective watchdog system to watch all <see cref="INotifyCollectionChanged" /> and
     ///     <see cref="INotifyPropertyChanged" /> implementing properties of an object tree
     /// </summary>
-    public class ObjectChangedEventObserver : IDisposable
+    public class ObjectTreeChangeObserver : IDisposable
     {
         /// <summary>
         ///     Get the <see cref="ImmutableHashSet{T}"/> of property <see cref="Type"/> values that are ignored by default
@@ -26,19 +27,24 @@ namespace Mocassin.UI.Xml.Helper
         private object LockObject { get; } = new object();
 
         /// <summary>
+        ///     Get the internal <see cref="StopWatch"/>
+        /// </summary>
+        private Stopwatch StopWatch { get; }
+
+        /// <summary>
         ///     Get the <see cref="ReactiveEvent{TSubject}" /> that relays change event arguments and sender
         /// </summary>
-        private ReactiveEvent<(object Sender, EventArgs args)> ChangeDetectedEvent { get; }
+        private ReactiveEvent<(object Sender, EventArgs args)> ChangeEventOccuredEvent { get; }
 
         /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for observation starts
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for added observed objects
         /// </summary>
-        private ReactiveEvent<object> ObjectObservationStartedEvent { get; }
+        private ReactiveEvent<object> ObjectAddedEvent { get; }
 
         /// <summary>
-        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for observation ends
+        ///     Get the <see cref="ReactiveEvent{TSubject}" /> for removed observed objects
         /// </summary>
-        private ReactiveEvent<object> ObjectObservationEndedEvent { get; }
+        private ReactiveEvent<object> ObjectRemovedEvent { get; }
 
         /// <summary>
         ///     Get the <see cref="Dictionary{TKey,TValue}" /> that holds the <see cref="IDisposable" /> for each observed item
@@ -51,61 +57,76 @@ namespace Mocassin.UI.Xml.Helper
         private object RootObject { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="IObservable{T}" /> that provides change detected notifications
+        ///     Get the <see cref="IObservable{T}" /> that relays change event information
         /// </summary>
-        public IObservable<(object Sender, EventArgs args)> ChangeDetectedNotifications => ChangeDetectedEvent.AsObservable();
+        public IObservable<(object Sender, EventArgs args)> ChangeEventNotifications => ChangeEventOccuredEvent.AsObservable();
 
         /// <summary>
-        ///     Get the <see cref="IObservable{T}" /> that provides observation started notifications
+        ///     Get the <see cref="IObservable{T}" /> that provides notifications when an object is added to the subscription system
         /// </summary>
-        public IObservable<object> ObjectObservationStartedNotifications => ObjectObservationStartedEvent.AsObservable();
+        public IObservable<object> ObjectAddedNotifications => ObjectAddedEvent.AsObservable();
 
         /// <summary>
-        ///     Get the <see cref="IObservable{T}" /> that provides observation ended notifications
+        ///     Get the <see cref="IObservable{T}" /> that provides observation when an object is removed from the subscription system
         /// </summary>
-        public IObservable<object> ObjectObservationEndedNotifications => ObjectObservationEndedEvent.AsObservable();
+        public IObservable<object> ObjectRemovedNotifications => ObjectRemovedEvent.AsObservable();
 
         /// <summary>
         ///     Get a <see cref="HashSet{T}"/> of property <see cref="Type"/> that should be ignored during recursive event search
         /// </summary>
         public HashSet<Type> IgnoredTypes { get; }
 
+        /// <summary>
+        ///     Get or set a boolean flag if objects not implementing <see cref="INotifyCollectionChanged"/> or <see cref="INotifyPropertyChanged"/> should be included
+        /// </summary>
+        public bool IncludeSilentObjects { get; set; }
+
+        /// <summary>
+        ///     Get or set a boolean flag if <see cref="INotifyCollectionChanged"/> implementors should also be included as <see cref="INotifyPropertyChanged"/> if possible
+        /// </summary>
+        public bool IncludeCollectionProperties { get; set; }
+
+        /// <summary>
+        ///     Get a boolean flag indicating if the system is observing an object
+        /// </summary>
+        public bool IsObserving => Subscriptions.Count > 0;
 
         /// <inheritdoc />
-        static ObjectChangedEventObserver()
+        static ObjectTreeChangeObserver()
         {
             DefaultIgnoredPropertyTypes = new HashSet<Type>
             {
-                typeof(string), typeof(int), typeof(long), typeof(double), typeof(float), typeof(ulong), typeof(uint), typeof(byte), typeof(short),
-                typeof(ushort)
+                typeof(string)
             }.ToImmutableHashSet();
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ObjectChangedEventObserver"/> with an optional set of ignored property <see cref="Type"/> values
+        ///     Creates a new <see cref="ObjectTreeChangeObserver"/> with an optional set of ignored property <see cref="Type"/> values
         /// </summary>
         /// <param name="ignoredTypes"></param>
-        public ObjectChangedEventObserver(IEnumerable<Type> ignoredTypes = null)
+        public ObjectTreeChangeObserver(IEnumerable<Type> ignoredTypes = null)
         {
-            ChangeDetectedEvent = new ReactiveEvent<(object Sender, EventArgs args)>();
-            ObjectObservationEndedEvent = new ReactiveEvent<object>();
-            ObjectObservationStartedEvent = new ReactiveEvent<object>();
+            ChangeEventOccuredEvent = new ReactiveEvent<(object Sender, EventArgs args)>();
+            ObjectRemovedEvent = new ReactiveEvent<object>();
+            ObjectAddedEvent = new ReactiveEvent<object>();
             Subscriptions = new Dictionary<object, IDisposable>();
             IgnoredTypes = new HashSet<Type>((ignoredTypes ?? Enumerable.Empty<Type>()).Concat(DefaultIgnoredPropertyTypes));
+            StopWatch = new Stopwatch();
         }
 
         /// <summary>
-        ///     Sets the provided object as the observation root and attaches itself the the change notification events
+        ///     Sets the provided object as the new observation root and attaches itself the the change notification events if requested
         /// </summary>
         /// <param name="rootObject"></param>
-        public void ObserveObject(object rootObject)
+        /// <param name="startObservation"></param>
+        public void SetObservationRoot(object rootObject, bool startObservation = true)
         {
             if (rootObject == null) throw new ArgumentNullException(nameof(rootObject));
             if (ReferenceEquals(RootObject, rootObject)) return;
-            if (RootObject != null) throw new InvalidOperationException("Change subscriber already attached to another project.");
-            if (IgnoredTypes.Contains(rootObject.GetType())) throw new InvalidOperationException("The object type is set to ignore.");
-            SubscribeToAccessibleEvents(rootObject);
+            if (!TypeIsSearchIncluded(rootObject.GetType())) throw new InvalidOperationException("The root object type is not set to searchable.");
+            if (RootObject != null) StopObservation();
             RootObject = rootObject;
+            if (startObservation) StartObservation();
         }
 
         /// <summary>
@@ -114,9 +135,17 @@ namespace Mocassin.UI.Xml.Helper
         public void StopObservation()
         {
             if (RootObject == null) return;
-            foreach (var subscription in Subscriptions.Values) subscription.Dispose();
+            foreach (var subscription in Subscriptions.Values) subscription?.Dispose();
             Subscriptions.Clear();
-            RootObject = null;
+        }
+
+        /// <summary>
+        ///     Starts the observation of the currently set root object
+        /// </summary>
+        public void StartObservation()
+        {
+            if (IsObserving || RootObject == null) return;
+            SubscribeToAccessibleEvents(RootObject);
         }
 
         /// <summary>
@@ -126,10 +155,10 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="bindingFlags"></param>
         private void SubscribeToAccessibleEvents(object root, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            if (root == null || IgnoredTypes.Contains(root.GetType()) || Subscriptions.ContainsKey(root)) return;
+            if (root == null || !TypeIsSearchIncluded(root.GetType()) || Subscriptions.ContainsKey(root)) return;
             if (Subscriptions.Count == 0)
             {
-                foreach (var item in FindEventSuppliers(root, null, bindingFlags)) CreateSubscription(item);
+                foreach (var item in FindIncludedObjectsRecursive(root, bindingFlags)) CreateSubscription(item);
                 return;
             }
 
@@ -144,14 +173,12 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="bindingFlags"></param>
         private void UnsubscribeFromInaccessibleEvents(object removedObject, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            if (removedObject == null || IgnoredTypes.Contains(removedObject.GetType())) return;
-            foreach (var item in FindInaccessibleObjects(removedObject)) RemoveSubscription(item);
+            if (removedObject == null || !TypeIsSearchIncluded(removedObject.GetType())) return;
+            foreach (var item in FindInaccessibleObjects(removedObject, bindingFlags)) RemoveSubscription(item);
         }
 
         /// <summary>
-        ///     Adds a tracking subscription for the provided object. Returns the new number of references or a negative value if
-        ///     the
-        ///     object cannot be tracked
+        ///     Creates a subscription for the change events of the provided <see cref="object"/>. Has no effect if the object does not provide change events
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -203,20 +230,32 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="notifyCollectionChanged"></param>
         private void SubscribeToEvent(INotifyCollectionChanged notifyCollectionChanged)
         {
+            IDisposable disposable;
             notifyCollectionChanged.CollectionChanged += OnChangeDetected;
-            var disposable = Disposable.Create(() => notifyCollectionChanged.CollectionChanged -= OnChangeDetected);
+            if (IncludeCollectionProperties && notifyCollectionChanged is INotifyPropertyChanged notifyPropertyChanged)
+            {
+                notifyPropertyChanged.PropertyChanged += OnChangeDetected;
+                disposable = Disposable.Create(() =>
+                {
+                    notifyCollectionChanged.CollectionChanged -= OnChangeDetected;
+                    notifyPropertyChanged.PropertyChanged -= OnChangeDetected;
+                });
+            }
+            else
+            {
+                disposable = Disposable.Create(() => notifyCollectionChanged.CollectionChanged -= OnChangeDetected);   
+            }
             Subscriptions.Add(notifyCollectionChanged, disposable);
         }
 
         /// <summary>
-        ///     Recursively searches the object tree for all objects that are observable from it
+        ///     Recursively searches the object tree for all included objects while automatically handling cyclic reference
         /// </summary>
         /// <param name="root"></param>
         /// <param name="doneObjects"></param>
         /// <param name="bindingFlags"></param>
         /// <returns></returns>
-        public HashSet<object> FindEventSuppliers(object root, HashSet<object> doneObjects = null,
-            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        public HashSet<object> FindIncludedObjectsRecursive(object root, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance, HashSet<object> doneObjects = null)
         {
             doneObjects = doneObjects ?? new HashSet<object>();
             if (doneObjects.Contains(root)) return doneObjects;
@@ -224,17 +263,14 @@ namespace Mocassin.UI.Xml.Helper
 
             if (root is INotifyCollectionChanged notifyCollectionChanged)
             {
-                foreach (var item in EnsureIsCollection(notifyCollectionChanged)) FindEventSuppliers(item, doneObjects);
+                foreach (var item in AsCollectionInterface(notifyCollectionChanged)) FindIncludedObjectsRecursive(item, bindingFlags, doneObjects);
                 return doneObjects;
             }
 
-            foreach (var propertyInfo in root.GetType().GetProperties(bindingFlags).Where(x => !IgnoredTypes.Contains(x.PropertyType)))
+            foreach (var propertyInfo in root.GetType().GetProperties(bindingFlags).Where(x => TypeIsSearchIncluded(x.PropertyType)))
             {
-                if (!typeof(INotifyPropertyChanged).IsAssignableFrom(propertyInfo.PropertyType) &&
-                    !typeof(INotifyCollectionChanged).IsAssignableFrom(propertyInfo.PropertyType)) continue;
-
                 if (!(propertyInfo.GetValue(root) is object childObject)) continue;
-                FindEventSuppliers(childObject, doneObjects);
+                FindIncludedObjectsRecursive(childObject, bindingFlags, doneObjects);
             }
 
             return doneObjects;
@@ -249,9 +285,9 @@ namespace Mocassin.UI.Xml.Helper
         /// <returns></returns>
         private HashSet<object> FindInaccessibleObjects(object obj, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var objObservables = FindEventSuppliers(obj, null, bindingFlags);
-            foreach (var knownObject in FindEventSuppliers(RootObject, null, bindingFlags)) objObservables.Remove(knownObject);
-            return objObservables;
+            var objects = FindIncludedObjectsRecursive(obj, bindingFlags);
+            foreach (var knownObject in FindIncludedObjectsRecursive(RootObject, bindingFlags)) objects.Remove(knownObject);
+            return objects;
         }
 
         /// <summary>
@@ -263,9 +299,9 @@ namespace Mocassin.UI.Xml.Helper
         /// <returns></returns>
         private HashSet<object> FindUnknownEventSuppliers(object obj, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var objObservables = FindEventSuppliers(obj, null, bindingFlags);
-            foreach (var knownObject in Subscriptions.Keys) objObservables.Remove(knownObject);
-            return objObservables;
+            var objects = FindIncludedObjectsRecursive(obj, bindingFlags);
+            foreach (var knownObject in Subscriptions.Keys) objects.Remove(knownObject);
+            return objects;
         }
 
         /// <summary>
@@ -274,8 +310,19 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="bindingFlags"></param>
         private void DisposeInaccessibleSubscriptions(BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var eventSuppliers = FindEventSuppliers(RootObject, null, bindingFlags);
-            foreach (var key in Subscriptions.Keys.ToList().Where(x => !eventSuppliers.Contains(x))) RemoveSubscription(key);
+            var objects = FindIncludedObjectsRecursive(RootObject, bindingFlags);
+            foreach (var key in Subscriptions.Keys.ToList(Subscriptions.Count).Where(x => !objects.Contains(x))) RemoveSubscription(key);
+        }
+
+        /// <summary>
+        ///     Checks if the provided <see cref="Type"/> is included in the search routine
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool TypeIsSearchIncluded(Type type)
+        {
+            if (type.IsValueType || IgnoredTypes.Contains(type)) return false;
+            return IncludeSilentObjects || typeof(INotifyCollectionChanged).IsAssignableFrom(type) || typeof(INotifyPropertyChanged).IsAssignableFrom(type);
         }
 
         /// <summary>
@@ -284,7 +331,7 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="obj"></param>
         protected virtual void NotifyObservationStarted(object obj)
         {
-            ObjectObservationStartedEvent.OnNext(obj);
+            ObjectAddedEvent.OnNext(obj);
         }
 
         /// <summary>
@@ -293,7 +340,7 @@ namespace Mocassin.UI.Xml.Helper
         /// <param name="obj"></param>
         protected virtual void NotifyObservationEnded(object obj)
         {
-            ObjectObservationEndedEvent.OnNext(obj);
+            ObjectRemovedEvent.OnNext(obj);
         }
 
         /// <summary>
@@ -302,7 +349,7 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         /// <param name="notifyCollectionChanged"></param>
         /// <returns></returns>
-        protected ICollection EnsureIsCollection(INotifyCollectionChanged notifyCollectionChanged)
+        protected ICollection AsCollectionInterface(INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged as ICollection
                    ?? throw new InvalidOperationException("INotifyCollectionChanged requires ICollection to be implemented.");
@@ -317,13 +364,14 @@ namespace Mocassin.UI.Xml.Helper
         {
             lock (LockObject)
             {
-                var watch = Stopwatch.StartNew();
+                StopWatch.Restart();
                 switch (args)
                 {
                     case PropertyChangedEventArgs propertyChangedEventArgs:
+                        var propertyInfo = sender.GetType().GetProperty(propertyChangedEventArgs.PropertyName);
+                        if (propertyInfo == null || !TypeIsSearchIncluded(propertyInfo.PropertyType)) break;
                         DisposeInaccessibleSubscriptions();
-                        var value = sender.GetType().GetProperty(propertyChangedEventArgs.PropertyName)?.GetValue(sender);
-                        if (value != null) SubscribeToAccessibleEvents(value);
+                        if (propertyInfo.GetValue(sender) is object value) SubscribeToAccessibleEvents(value);
                         break;
 
                     case NotifyCollectionChangedEventArgs collectionChangedEventArgs:
@@ -335,10 +383,7 @@ namespace Mocassin.UI.Xml.Helper
                         }
 
                         foreach (var oldItem in (IEnumerable) collectionChangedEventArgs.OldItems ?? Enumerable.Empty<object>())
-                        {
-                            if (oldItem == null) continue;
                             UnsubscribeFromInaccessibleEvents(oldItem);
-                        }
 
                         foreach (var newItem in (IEnumerable) collectionChangedEventArgs.NewItems ?? Enumerable.Empty<object>())
                             SubscribeToAccessibleEvents(newItem);
@@ -346,11 +391,11 @@ namespace Mocassin.UI.Xml.Helper
                         break;
                     }
                 }
-                watch.Stop();
-                Debug.WriteLine($"'{this}': Watch system update - {Subscriptions.Count} objects in {watch.Elapsed}.");
+                StopWatch.Stop();
+                Debug.WriteLine($"'{this}': Watch system update - {Subscriptions.Count} objects in {StopWatch.Elapsed}.");
             }
 
-            ChangeDetectedEvent.OnNext((sender, args));
+            ChangeEventOccuredEvent.OnNext((sender, args));
         }
 
         /// <summary>
@@ -358,9 +403,9 @@ namespace Mocassin.UI.Xml.Helper
         /// </summary>
         public void NotifyEventsCompleted()
         {
-            ChangeDetectedEvent.OnCompleted();
-            ObjectObservationStartedEvent.OnCompleted();
-            ObjectObservationEndedEvent.OnCompleted();
+            ChangeEventOccuredEvent.OnCompleted();
+            ObjectAddedEvent.OnCompleted();
+            ObjectRemovedEvent.OnCompleted();
         }
 
         /// <inheritdoc />

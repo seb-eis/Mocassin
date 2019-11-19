@@ -39,10 +39,10 @@ namespace Mocassin.Framework.QuickTest
             var dbPath = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\BaZrO.mocprj";
             var simLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(dbPath);
             var project = simLibrary.MocassinProjectGraphs.First();
-            var objectObserver = new ObjectChangedEventObserver();
-            //objectObserver.ObjectObservationEndedNotifications.Subscribe(x => Console.WriteLine("Released: [{0}]", x));
-            objectObserver.ObserveObject(project);
-            //objectObserver.ObjectObservationStartedNotifications.Subscribe(x => Console.WriteLine("Watching: [{0}]", x));
+            var objectObserver = new ObjectTreeChangeObserver();
+            //objectObserver.ObjectRemovedNotifications.Subscribe(x => Console.WriteLine("Released: [{0}]", x));
+            objectObserver.SetObservationRoot(project);
+            //objectObserver.ObjectAddedNotifications.Subscribe(x => Console.WriteLine("Watching: [{0}]", x));
             var custom = project.ProjectCustomizationGraphs;
             project.ProjectCustomizationGraphs = new ObservableCollection<ProjectCustomizationGraph>();
             project.ProjectCustomizationGraphs = custom;

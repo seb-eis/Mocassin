@@ -11,32 +11,63 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ProjectGraphBrowserViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
+
+  <UserControl.Resources>
+    <Style TargetType="{x:Type TextBlock}" x:Key="Local.TypeTextBlockStyle">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Margin" Value="5,10,5,10"/>
+      <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style TargetType="{x:Type TextBox}" x:Key="Local.NamingTextBoxStyle">
+      <Setter Property="MinWidth" Value="50"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Style.Triggers>
+        <Trigger Property="IsKeyboardFocused" Value="True">
+          <Setter Property="FontWeight" Value="DemiBold"/>
+          <Setter Property="Background" Value="White"/>
+        </Trigger>
+        <Trigger Property="IsKeyboardFocused" Value="False">
+          <Setter Property="Background" Value="Transparent"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="{x:Type Line}" x:Key="Local.VerticalConnectorLineStyle">
+      <Setter Property="Stretch" Value="Fill"/>
+      <Setter Property="Stroke" Value="Gray"/>
+      <Setter Property="StrokeDashArray" Value="2 1"/>
+      <Setter Property="StrokeThickness" Value="2"/>
+      <Setter Property="Margin" Value="5,10,5,18"/>
+      <Setter Property="Y2" Value="1"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="{x:Type Line}" x:Key="Local.HorizontalConnectorLineStyle">
+      <Setter Property="Stretch" Value="Fill"/>
+      <Setter Property="Stroke" Value="Gray"/>
+      <Setter Property="StrokeDashArray" Value="2 1"/>
+      <Setter Property="StrokeThickness" Value="2"/>
+      <Setter Property="Margin" Value="-13,10,5,10"/>
+      <Setter Property="X2" Value="1"/>
+    </Style>
+  </UserControl.Resources>
+
   <Grid>
-    <ListView ItemsSource="{Binding ProjectGraphs}" SelectedItem="{Binding SelectedProject}" BorderThickness="0">
-      <ListView.ContextMenu>
+    <ListBox ItemsSource="{Binding ProjectGraphs}" SelectedItem="{Binding SelectedProject}" BorderThickness="0">
+      <ListBox.ContextMenu>
         <ContextMenu Visibility="{Binding SelectedProject, Converter={StaticResource App.Converter.NullToVisibility}}">
           <MenuItem Command="{Binding DeleteSelectedProjectCommand}">
             <MenuItem.Header>
               <TextBlock>
-                <Run Text="Delete project:"/>
+                <Run Text="Delete:"/>
                 <Run Text="{Binding SelectedProject.ProjectName}"/>
               </TextBlock>
             </MenuItem.Header>
           </MenuItem>
         </ContextMenu>
-      </ListView.ContextMenu>
-      <ListView.ItemContainerStyle>
-        <Style TargetType="{x:Type ListViewItem}">
-          <Style.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-              <Trigger.Setters>
-                <Setter Property="BorderThickness" Value="1,5,1,5" />
-              </Trigger.Setters>
-            </Trigger>
-          </Style.Triggers>
-        </Style>
-      </ListView.ItemContainerStyle>
-      <ListView.ItemTemplate>
+      </ListBox.ContextMenu>
+      <ListBox.ItemTemplate>
         <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
           <Border>
             <Grid>
@@ -49,30 +80,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
-              <views:ObjectRowHeaderLogo Grid.Column="0" Margin="5,10,5,10"/>
-              <TextBlock Text="P" Grid.Column="0" Grid.Row="0" 
-                         HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Margin="5,10,5,10" FontSize="12"/>
-              <TextBox Name="ProjectNameTextBox" MinWidth="50" Grid.Row="0" Grid.Column="1" Text="{Binding Name}" 
-                       VerticalAlignment="Center" BorderThickness="0">
-                <TextBox.Style>
-                  <Style TargetType="{x:Type TextBox}">
-                    <Style.Triggers>
-                      <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="FontWeight" Value="DemiBold"/>
-                        <Setter Property="Background" Value="White"/>
-                      </Trigger>
-                      <Trigger Property="IsKeyboardFocused" Value="False">
-                        <Setter Property="Background" Value="Transparent"/>
-                      </Trigger>
-                    </Style.Triggers>
-                  </Style>
-                </TextBox.Style>
+              <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Style="{StaticResource Local.VerticalConnectorLineStyle}"/>
+              <views:ObjectRowHeaderLogo Grid.Column="0" Grid.Row="0" Margin="5,10,5,10"/>
+              <TextBlock Text="P" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}"/>
+              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
                 <TextBox.InputBindings>
                   <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                              CommandParameter="{Binding ElementName=ProjectNameTextBox}"/>
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
                 </TextBox.InputBindings>
               </TextBox>
-
               <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ProjectCustomizationGraphs}" BorderThickness="0">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate DataType="{x:Type customization:ProjectCustomizationGraph}">
@@ -82,11 +98,16 @@
                         <ColumnDefinition Width="*"/>
                       </Grid.ColumnDefinitions>
                       <Grid Grid.Column="0">
+                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}"/>
                         <views:ObjectRowHeaderLogo Margin="5,10,5,10"/>
-                        <TextBlock Text="C" Grid.Column="0" Grid.Row="0" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Margin="5,10,5,10" FontSize="12"/>
+                        <TextBlock Text="C" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}"/>
                       </Grid>
-                      <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}" Margin="5,10,5,10"/>
+                      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
+                        <TextBox.InputBindings>
+                          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        </TextBox.InputBindings>
+                      </TextBox>
                     </Grid>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -101,11 +122,16 @@
                         <ColumnDefinition Width="*"/>
                       </Grid.ColumnDefinitions>
                       <Grid Grid.Column="0">
+                        <Line Style="{StaticResource Local.HorizontalConnectorLineStyle}"/>
                         <views:ObjectRowHeaderLogo Margin="5,10,5,10"/>
-                        <TextBlock Text="T" Grid.Column="0" Grid.Row="0" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Margin="5,10,5,10" FontSize="12"/>
+                        <TextBlock Text="T" Grid.Column="0" Grid.Row="0" Style="{StaticResource Local.TypeTextBlockStyle}"/>
                       </Grid>
-                      <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}" Margin="5,10,5,10"/>
+                      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Local.NamingTextBoxStyle}">
+                        <TextBox.InputBindings>
+                          <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                        </TextBox.InputBindings>
+                      </TextBox>
                     </Grid>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -114,7 +140,7 @@
             </Grid>
           </Border>
         </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </Grid>
 </UserControl>

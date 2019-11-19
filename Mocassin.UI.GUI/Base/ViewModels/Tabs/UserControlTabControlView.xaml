@@ -10,7 +10,7 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Height="Auto" Width="Auto">
 
-  <Grid Margin="5,5,5,5">
+  <Grid>
     <TabControl ItemsSource="{Binding ObservableItems}"
                 SelectedItem="{Binding SelectedTab}"
                 FontSize="{Binding HeaderFontSize}"
@@ -53,21 +53,12 @@
           </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <TextBlock Text="{Binding TabName, Mode=OneWay}">
-            <TextBlock.ContextMenu>
-              <ContextMenu DataContext="{Binding Source={x:Reference Name=PrimaryTabControl}, Path=DataContext}">
-                <MenuItem Name="PanelContentActiveMenuItem" Header="Show panel" IsCheckable="True" 
-                          IsChecked="{Binding IsActive}"/>
-          
-              </ContextMenu>
-            </TextBlock.ContextMenu>
-          </TextBlock>
+          <TextBlock Text="{Binding TabName, Mode=OneTime}"/>
         </DataTemplate>
       </TabControl.Resources>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <ContentPresenter Content="{Binding UserControl, Mode=OneWay}" 
-                            Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.IsActive, Converter={StaticResource App.Converter.BooleanToVisibility}}" />
+          <ContentPresenter Content="{Binding UserControl, Mode=OneTime}"/>
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>

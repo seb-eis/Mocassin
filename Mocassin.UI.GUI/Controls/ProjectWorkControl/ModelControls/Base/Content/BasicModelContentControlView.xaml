@@ -26,17 +26,9 @@
               ItemsSource="{Binding ProjectControl.ProjectGraphs}"
               SelectedItem="{Binding SelectedProjectGraph}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
-              Text="{Binding SelectedProjectGraph.Name}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="{Binding ElementName=ProjectBoxSearchToggle, Path=IsChecked}">
-      <ComboBox.ContextMenu>
-        <ContextMenu>
-          <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}"
-                    IsCheckable="True"
-                    Name="ProjectBoxSearchToggle" />
-        </ContextMenu>
-      </ComboBox.ContextMenu>
+              IsTextSearchEnabled="True">
     </ComboBox>
     <ContentPresenter Content="{Binding DataContentControl}"
                       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"

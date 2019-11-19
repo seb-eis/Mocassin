@@ -26,28 +26,18 @@
               ItemsSource="{Binding ProjectControl.ProjectGraphs}"
               SelectedItem="{Binding SelectedProjectGraph}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
-              Text="{Binding SelectedProjectGraph.Name}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="{Binding ElementName=ProjectBoxSearchToggle, Path=IsChecked}">
-
-      <ComboBox.ContextMenu>
-        <ContextMenu>
-          <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}"
-                    IsCheckable="True"
-                    Name="ProjectBoxSearchToggle" />
-        </ContextMenu>
-      </ComboBox.ContextMenu>
+              IsTextSearchEnabled="True">
     </ComboBox>
 
     <ComboBox Grid.Column="2" Grid.Row="0"
               ItemsSource="{Binding CustomizationGraphs}"
               SelectedItem="{Binding SelectedCustomizationGraph}"
               ToolTip="{StaticResource App.ToolTip.CustomizationSelection}"
-              Text="{Binding SelectedCustomizationGraph.Name}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="{Binding ElementName=CustomizationBoxSearchToggle, Path=IsChecked}">
+              IsTextSearchEnabled="True">
       <ComboBox.ContextMenu>
         <ContextMenu>
           <MenuItem Header="New item" Command="{Binding AddCustomizationCommand}" />
@@ -57,10 +47,6 @@
           <MenuItem Header="Delete selected item"
                     Command="{Binding DeleteCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationGraph}" />
-          <Separator/>
-          <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}" 
-                    IsCheckable="True"
-                    Name="CustomizationBoxSearchToggle" />
         </ContextMenu>
       </ComboBox.ContextMenu>
     </ComboBox>

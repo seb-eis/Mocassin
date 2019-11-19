@@ -39,6 +39,7 @@
               AutoGenerateColumns="False"
               IsReadOnly="True"
               GridLinesVisibility="None"
+              BorderThickness="0"
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>

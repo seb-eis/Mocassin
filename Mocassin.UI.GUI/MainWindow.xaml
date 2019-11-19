@@ -35,19 +35,17 @@
     <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
                                        DataContext="{Binding ProjectMenuBarViewModel}" />
 
-    <GridSplitter Width="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Background="Transparent" 
-                  ResizeBehavior="PreviousAndNext"/>
+    <GridSplitter Width="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Background="Transparent" ResizeBehavior="PreviousAndNext"/>
 
-    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Margin="0,0,-5,0"
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4"
                                        DataContext="{Binding ProjectBrowserViewModel}" />
 
-    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="2" Margin="-5,0,0,-5"
+    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="2"
                                                   DataContext="{Binding ProjectWorkTabControlViewModel}" />
 
-    <GridSplitter Height="5" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Background="Transparent" 
-                  ResizeBehavior="PreviousAndNext"/>
+    <GridSplitter Height="5" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Background="Transparent" ResizeBehavior="PreviousAndNext"/>
 
-    <projectConsole:ProjectConsoleTabControlView Grid.Row="3" Grid.Column="2" Margin="-5,-5,0,0"
+    <projectConsole:ProjectConsoleTabControlView Grid.Row="3" Grid.Column="2"
                                                  DataContext="{Binding ProjectConsoleTabControlViewModel}" />
 
     <projectStatusBar:ProjectStatusBarView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"

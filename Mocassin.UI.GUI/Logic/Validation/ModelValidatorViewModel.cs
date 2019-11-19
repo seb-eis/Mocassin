@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Mocassin.Framework.Events;
 using Mocassin.Framework.Operations;
 using Mocassin.Model.ModelProject;
 using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Helper;
@@ -48,9 +43,9 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private IModelProject ModelProject { get; }
 
         /// <summary>
-        ///     Get or set the <see cref="ObjectChangedEventObserver"/> for the observed model
+        ///     Get or set the <see cref="ObjectTreeChangeObserver" /> for the observed model
         /// </summary>
-        private ObjectChangedEventObserver ModelChangedEventObserver { get; }
+        private ObjectTreeChangeObserver ModelTreeChangeObserver { get; }
 
         /// <summary>
         ///     Get or set a boolean value if the validator is disposed
@@ -89,16 +84,6 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private ReactiveEvent<ModelValidationStatus> ModelValidationStatusChangedEvent { get; }
 
         /// <summary>
-        ///     Get or set the active validation routine <see cref="Task" />
-        /// </summary>
-        private Task ValidationTask { get; set; }
-
-        /// <summary>
-        ///     Get or set the <see cref="CancellationTokenSource" /> to stop the validation routine task
-        /// </summary>
-        private CancellationTokenSource CancellationSource { get; set; }
-
-        /// <summary>
         ///     Get the <see cref="ProjectModelGraph" /> that the validator is using
         /// </summary>
         public ProjectModelGraph ModelGraph { get; }
@@ -106,12 +91,12 @@ namespace Mocassin.UI.GUI.Logic.Validation
         /// <summary>
         ///     Gee the <see cref="IObservable{T}" /> for changes in the set of <see cref="IOperationReport" /> instances
         /// </summary>
-        public IObservable<IEnumerable<IOperationReport>> ReportsChangeNotification => ReportSetChangedEvent.AsObservable();
+        public IObservable<IEnumerable<IOperationReport>> ReportSetChangedNotifications => ReportSetChangedEvent.AsObservable();
 
         /// <summary>
         ///     Get the <see cref="IObservable{T}" /> for notifications about changes in the <see cref="ModelValidationStatus" />
         /// </summary>
-        public IObservable<ModelValidationStatus> StatusChangeNotification => ModelValidationStatusChangedEvent.AsObservable();
+        public IObservable<ModelValidationStatus> StatusChangedNotifications => ModelValidationStatusChangedEvent.AsObservable();
 
         /// <summary>
         ///     Get the <see cref="AsyncRunValidationCommand" /> to start a single validation cycle
@@ -141,9 +126,9 @@ namespace Mocassin.UI.GUI.Logic.Validation
             ModelValidationStatusChangedEvent = new ReactiveEvent<ModelValidationStatus>();
             RunValidationCommand = new AsyncRunValidationCommand(this);
             ModelProject = ProjectControl.CreateModelProject();
-            ModelChangedEventObserver = new ObjectChangedEventObserver(new []{typeof(MocassinProjectGraph)});
-            ModelChangedEventObserver.ObserveObject(modelGraph);
-            ModelChangedEventObserver.ChangeDetectedNotifications.Subscribe(OnModelChanged);
+            ModelTreeChangeObserver = new ObjectTreeChangeObserver(new[] {typeof(MocassinProjectGraph)});
+            ModelTreeChangeObserver.SetObservationRoot(modelGraph);
+            ModelTreeChangeObserver.ChangeEventNotifications.Subscribe(OnModelChanged);
         }
 
         /// <inheritdoc />
@@ -160,7 +145,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
         {
             lock (lockObject)
             {
-                ModelChangedEventObserver.Dispose();
+                ModelTreeChangeObserver.Dispose();
                 ReportSetChangedEvent.OnCompleted();
                 ModelValidationStatusChangedEvent.OnCompleted();
                 IsDisposed = true;

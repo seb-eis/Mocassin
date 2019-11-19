@@ -22,7 +22,6 @@ namespace Mocassin.Model.Structures.Validators
         public override IValidationReport Validate(ICellParameters obj)
         {
             var report = new ValidationReport();
-            AddGenericContentEqualityValidation(DataReader.Access.GetCellParameters(), obj, report);
             AddCrystalSystemCompatibilityValidation(obj, report);
             return report;
         }

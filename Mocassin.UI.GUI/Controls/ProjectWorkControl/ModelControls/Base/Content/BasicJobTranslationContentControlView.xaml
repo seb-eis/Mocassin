@@ -27,27 +27,18 @@
               ItemsSource="{Binding ProjectControl.ProjectGraphs}"
               SelectedItem="{Binding SelectedProjectGraph}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
-              Text="{Binding SelectedProjectGraph.Name}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="{Binding ElementName=ProjectBoxSearchToggle, Path=IsChecked}">
-      <ComboBox.ContextMenu>
-        <ContextMenu>
-          <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}"
-                    IsCheckable="True"
-                    Name="ProjectBoxSearchToggle" />
-        </ContextMenu>
-      </ComboBox.ContextMenu>
+              IsTextSearchEnabled="True">
     </ComboBox>
 
     <ComboBox Grid.Column="2" Grid.Row="0"
               ItemsSource="{Binding JobTranslationGraphs}"
               SelectedItem="{Binding SelectedJobTranslationGraph}"
               ToolTip="{StaticResource App.ToolTip.JobTranslationSelection}"
-              Text="{Binding SelectedJobTranslationGraph.Name}"
               DisplayMemberPath="Name"
               IsEditable="True"
-              IsTextSearchEnabled="{Binding ElementName=JobsBoxSearchToggle, Path=IsChecked}">
+              IsTextSearchEnabled="True">
 
       <ComboBox.ContextMenu>
         <ContextMenu>
@@ -57,10 +48,6 @@
           <Separator/>
           <MenuItem Header="Delete selected item" Command="{Binding DeleteTranslationCommand}"
                     CommandParameter="{Binding SelectedJobTranslationGraph}" />
-          <Separator/>
-          <MenuItem Header="{StaticResource App.String.ComboBox.SearchModeToggle}"
-                    IsCheckable="True"
-                    Name="JobsBoxSearchToggle" />
         </ContextMenu>
       </ComboBox.ContextMenu>
     </ComboBox>

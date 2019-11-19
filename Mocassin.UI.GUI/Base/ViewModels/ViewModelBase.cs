@@ -60,7 +60,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Ensures that the provided <see cref="Action" /> is executed on the dispatcher thread
+        ///     Synchronous execution of an <see cref="Action" /> on the dispatcher
         /// </summary>
         /// <param name="action"></param>
         public void ExecuteOnDispatcher(Action action)
@@ -76,7 +76,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Ensures that the provided <see cref="Func{TResult}" /> is executed on the dispatcher thread
+        ///     Synchronous execution of a <see cref="Func{TResult}" /> on the dispatcher
         /// </summary>
         /// <param name="function"></param>
         public TResult ExecuteOnDispatcher<TResult>(Func<TResult> function)
@@ -89,33 +89,36 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Queues the provided <see cref="Action" /> for invocation on the dispatcher thread
+        ///     Queues an <see cref="Action" /> for execution on the dispatcher. This method should be used when the dispatcher action requires awaiting
         /// </summary>
         /// <param name="action"></param>
-        /// <returns></returns>
-        public async Task ExecuteOnDispatcherAsync(Action action)
+        /// <param name="priority"></param>
+        public Task ExecuteOnDispatcherAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            await Task.Run(() => ExecuteOnDispatcher(action));
+            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
+            return dispatcher.InvokeAsync(action, priority).Task;
         }
 
         /// <summary>
-        ///     Queues the provided <see cref="Func{TResult}" /> for invocation on the dispatcher thread and
+        ///     Queues an <see cref="Func{TResult}" /> for execution on the dispatcher. This method should be used when the dispatcher action requires awaiting
         /// </summary>
         /// <param name="function"></param>
-        /// <returns></returns>
-        public async Task<TResult> ExecuteOnDispatcherAsync<TResult>(Func<TResult> function)
+        /// <param name="priority"></param>
+        public Task<TResult> ExecuteOnDispatcherAsync<TResult>(Func<TResult> function, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            return await Task.Run(() => ExecuteOnDispatcher(function));
+            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
+            return dispatcher.InvokeAsync(function, priority).Task;
         }
 
         /// <summary>
-        ///     Queues an <see cref="Action" /> for execution on the dispatcher. This method should be used when awaiting the
-        ///     operation is not required and it does not matter when the execution takes place
+        ///     Queues an <see cref="Action" /> for execution on the dispatcher. This method should be used when the dispatcher action is low priority fire-and-forget
         /// </summary>
         /// <param name="action"></param>
-        public void SendToDispatcher(Action action)
+        /// <param name="priority"></param>
+        public void SendToDispatcher(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            Task.Run(() => ExecuteOnDispatcher(action));
+            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
+            dispatcher.InvokeAsync(action, priority);
         }
 
         /// <summary>

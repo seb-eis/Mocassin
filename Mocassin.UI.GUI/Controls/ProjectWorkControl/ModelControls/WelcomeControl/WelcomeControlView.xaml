@@ -7,21 +7,8 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:WelcomeControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
-  <UserControl.Resources>
-    <Style TargetType="{x:Type TextBlock}" 
-           x:Key="WelcomeMessageStyle">
-      <Setter Property="FontSize" Value="60" />
-      <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-  </UserControl.Resources>
   <Grid>
-    <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity=".25"/>
-      <TextBlock Style="{StaticResource WelcomeMessageStyle}">
-        <Run Text="Monte Carlo for Solid State Ionics"/>
-        <TextBlock.Effect>
-        <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity=".5" BlurRadius="4" />
-      </TextBlock.Effect>
-    </TextBlock>
+    <Image Source="pack://application:,,,/Resources/Icons/MocassinLogoRound3.png" Opacity=".25">
+    </Image>
   </Grid>
 </UserControl>

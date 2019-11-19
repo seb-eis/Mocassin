@@ -5,33 +5,46 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole"
-  xmlns:messaging="clr-namespace:Mocassin.Framework.Messaging;assembly=Mocassin.Framework"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:MessageConsoleViewModel, IsDesignTimeCreatable=True}"
   Height="Auto" Width="Auto">
 
+  <UserControl.Resources>
+    <CollectionViewSource x:Key="Local.MessageCollectionViewSource" Source="{Binding ObservableItems}">
+      <CollectionViewSource.SortDescriptions>
+        <componentModel:SortDescription PropertyName="TimeStamp" Direction="Descending"/>
+      </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+  </UserControl.Resources>
   <Grid>
-    <DataGrid ItemsSource="{Binding ObservableItems}"
+    <DataGrid ItemsSource="{Binding Source={StaticResource Local.MessageCollectionViewSource}}"
               SelectedItem="{Binding SelectedMessage}"
               IsReadOnly="True"
               AutoGenerateColumns="False"
               GridLinesVisibility="None"
-              ColumnWidth="*">
+              ColumnWidth="Auto"
+              HeadersVisibility="Row"
+              BorderThickness="0">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="#"/> 
+          <Grid>
+            <views:ObjectRowHeaderLogo/>
+            <TextBlock Text="M" Foreground="White" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          </Grid>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp, Mode=OneTime}" />
+        <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding TimeStamp, Mode=OneTime}" Foreground="Gray" FontWeight="DemiBold" />
         <DataGridTextColumn Header="Type" Binding="{Binding ShortInfo, Mode=OneTime}" />
+        <DataGridTextColumn Header="Content" Binding="{Binding DetailsJson, Mode=OneTime}"/>
       </DataGrid.Columns>
       <DataGrid.RowStyle>
         <Style TargetType="{x:Type DataGridRow}">
           <Setter Property="ToolTip">
             <Setter.Value>
-              <TextBlock Text="{Binding Mode=OneTime}" TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding IndentedDetailsJson, Mode=OneTime}" TextWrapping="Wrap"/>
             </Setter.Value>
           </Setter>
         </Style>

@@ -182,7 +182,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 if (subscription == null && validator == null) return;
                 subscription?.Dispose();
                 validator.Dispose();
-                SendCallInfoMessage($"A [{validator?.ModelGraph.Parent.ProjectName}] validation subscription was disposed!");
+                SendCallInfoMessage($"Removed a change detector from the [{ValidatorViewModel.ModelGraph.Parent.ProjectName}] model tree.");
             });
         }
 
@@ -240,10 +240,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
             }
 
             var validator = new ModelValidatorViewModel(targetModelGraph, ProjectControl);
-            ChangeReportSubscription(validator.ReportsChangeNotification);
+            ChangeReportSubscription(validator.ReportSetChangedNotifications);
             ValidatorViewModel = validator;
             ValidatorViewModel.RunValidationCommand.Execute(null);
-            SendCallInfoMessage($"New [{targetModelGraph.Parent.ProjectName}] validation subscription created!");
+            SendCallInfoMessage($"Attached a change detector to the [{targetModelGraph.Parent.ProjectName}] model tree.");
         }
 
         /// <inheritdoc />
