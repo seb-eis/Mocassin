@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.DX3DViewportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.VisualizerDX.Viewport"
+             xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+             d:DataContext="{d:DesignInstance local:DX3DViewportViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <hx:Viewport3DX Grid.Column="1" Name="Viewport3Dx" Background="Transparent"
+                    EffectsManager="{Binding EffectsManager}" Camera="{Binding Camera}"
+                    CameraMode="{Binding CameraMode}" CameraRotationMode="{Binding CameraRotationMode}"
+                    BackgroundColor="{Binding BackgroundColor}" ShowViewCube="{Binding ShowViewCube}"
+                    ShowCoordinateSystem="{Binding ShowCoordinateSystem}" ShowFrameRate="{Binding ShowFrameRate}"
+                    ShowTriangleCountInfo="{Binding ShowTriangleCountInfo}" ShowCameraInfo="{Binding ShowCameraInfo}"
+                    ShowFrameDetails="{Binding ShowFrameDetails}" MSAA="{Binding MsaaLevel}" FXAALevel="{Binding FxaaLevel}"
+                    EnableSSAO="{Binding IsSsaoEnabled}" SSAOQuality="{Binding SsaoQuality}">
+
+      <hx:GroupModel3D ItemsSource="{Binding SceneLight3D}"/>
+      <hx:GroupModel3D ItemsSource="{Binding SceneElements3D}"/>
+    </hx:Viewport3DX>
+  </Grid>
+</UserControl>

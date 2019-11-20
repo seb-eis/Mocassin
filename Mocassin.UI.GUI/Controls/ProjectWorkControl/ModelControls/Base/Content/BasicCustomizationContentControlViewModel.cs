@@ -85,7 +85,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// </summary>
         protected void ReloadSelectionSource(bool nullSelected = true, bool selectLast = false)
         {
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() =>
             {
                 if (nullSelected) SelectedCustomizationGraph = null;
                 CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs?.ToList();

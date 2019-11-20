@@ -92,10 +92,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// </summary>
         private async Task SetActiveObjectTreeViewAsync(object obj)
         {
-            await ExecuteOnDispatcherAsync(() => JsonBrowserViewModel.SetRootViewToNoContent());
+            await ExecuteOnAppThreadAsync(() => JsonBrowserViewModel.SetRootViewToNoContent());
             if (obj == null) return;
 
-            await ExecuteOnDispatcherAsync(() => JsonBrowserViewModel.SetActiveTreeView(obj, "Object_Tree"));
+            await ExecuteOnAppThreadAsync(() => JsonBrowserViewModel.SetActiveTreeView(obj, "Object_Tree"));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
             try
             {
                 var json = await Task.Run(() => JsonConvert.SerializeObject(obj, Formatting.Indented, settings));
-                ExecuteOnDispatcher(() => ObjectJson = json);
+                ExecuteOnAppThread(() => ObjectJson = json);
             }
             catch (Exception e)
             {
@@ -157,7 +157,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-            SendToDispatcher(() => JsonBrowserViewModel.SetRootViewToNoContent());
+            QueueOnAppDispatcher(() => JsonBrowserViewModel.SetRootViewToNoContent());
         }
     }
 }

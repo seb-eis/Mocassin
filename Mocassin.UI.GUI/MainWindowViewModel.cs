@@ -120,7 +120,7 @@ namespace Mocassin.UI.GUI
         {
             PluginAssemblies = pluginAssemblies ?? new Assembly[0];
 
-            EnsureResourcesCreated(false);
+            EnsureResourcesDeployed(false);
             ServiceModelProject = CreateServiceModelProject();
             WindowDescription = MakeWindowDescription();
 
@@ -194,12 +194,10 @@ namespace Mocassin.UI.GUI
             }
             catch (Exception)
             {
-                MessageBox.Show("Your project settings file is corrupt, restoring defaults.",
-                    "Error - Settings",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
 
-                EnsureProjectConfigCreated(true);
+                MessageBox.Show("Project settings are corrupt, defaults will be restored.", "Error - Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                EnsureProjectConfigDeployed(true);
                 return ProjectSettings.CreateDefault();
             }
         }
@@ -209,18 +207,18 @@ namespace Mocassin.UI.GUI
         ///     overwrite flag can enforce recreation
         /// </summary>
         /// <param name="isOverwrite"></param>
-        public void EnsureResourcesCreated(bool isOverwrite)
+        public void EnsureResourcesDeployed(bool isOverwrite)
         {
             Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(Resources.Folder_Userprofile_Resources));
-            EnsureProjectConfigCreated(isOverwrite);
-            EnsureSymmetryDatabaseCreated(isOverwrite);
+            EnsureProjectConfigDeployed(isOverwrite);
+            EnsureSymmetryDatabaseDeployed(isOverwrite);
         }
 
         /// <summary>
         ///     Ensures that the default symmetry database is deployed to the config directory with optional enforced overwrite
         /// </summary>
         /// <param name="isOverwrite"></param>
-        public void EnsureSymmetryDatabaseCreated(bool isOverwrite)
+        public void EnsureSymmetryDatabaseDeployed(bool isOverwrite)
         {
             var dbPath = GetFullResourceFilePath(Resources.Filename_Symmetry_Default_Database);
             if (!File.Exists(dbPath) || isOverwrite) File.WriteAllBytes(dbPath, Resources.Symmetry_Database_Default);
@@ -231,7 +229,7 @@ namespace Mocassin.UI.GUI
         ///     overwrite
         /// </summary>
         /// <param name="isOverwrite"></param>
-        public void EnsureProjectConfigCreated(bool isOverwrite)
+        public void EnsureProjectConfigDeployed(bool isOverwrite)
         {
             var dbPath = GetFullResourceFilePath(Resources.Filename_Symmetry_Default_Database);
             var configPath = GetFullResourceFilePath(Resources.Filename_Project_Default_Configuration);

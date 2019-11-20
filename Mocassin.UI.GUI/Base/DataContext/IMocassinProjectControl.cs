@@ -118,8 +118,8 @@ namespace Mocassin.UI.GUI.Base.DataContext
         void StartServices();
 
         /// <summary>
-        ///     Executes the provided action on the dispatcher of the main <see cref="IMocassinProjectControl" />
+        ///     Executes the provided action on the application UI thread
         /// </summary>
-        void ExecuteOnDispatcher(Action action);
+        void ExecuteOnAppThread(Action action);
     }
 }

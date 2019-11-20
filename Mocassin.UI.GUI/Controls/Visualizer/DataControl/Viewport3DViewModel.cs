@@ -185,7 +185,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public void ClearVisual()
         {
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() =>
             {
                 Visuals.Clear();
                 Visuals.Add(LightSetup ?? DefaultLightSetup);
@@ -198,7 +198,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public void UpdateVisual()
         {
             ClearVisual();
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() =>
             {
                 foreach (var visualGroup in VisualGroups.Where(x => x.IsVisible && x.ModelVisual != null))
                     Visuals.Add(visualGroup.ModelVisual);
@@ -216,7 +216,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                 visualGroup.PropertyChanged -= AutoUpdateVisualInternal;
             }
 
-            ExecuteOnDispatcher(() => VisualGroups.Clear());
+            ExecuteOnAppThread(() => VisualGroups.Clear());
             ClearVisual();
         }
 
@@ -230,7 +230,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             if (VisualGroups.Contains(visualGroup)) return;
 
             visualGroup.PropertyChanged += AutoUpdateVisualInternal;
-            ExecuteOnDispatcher(() => VisualGroups.Add(visualGroup));
+            ExecuteOnAppThread(() => VisualGroups.Add(visualGroup));
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="isVisible"></param>
         public void AddVisualGroup(IEnumerable<Visual3D> visuals, string name, bool isVisible = true)
         {
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() =>
             {
                 var modelVisual = new ModelVisual3D();
                 modelVisual.Children.AddRange(visuals);
@@ -285,7 +285,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <returns></returns>
         public TVisual CreateVisual<TData, TVisual>(TData data, Func<TData, TVisual> generator)
         {
-            return ExecuteOnDispatcher(() => generator(data));
+            return ExecuteOnAppThread(() => generator(data));
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
                 return result.AsReadOnly();
             }
 
-            return ExecuteOnDispatcher(CreateInternal);
+            return ExecuteOnAppThread(CreateInternal);
         }
 
         /// <summary>
@@ -602,7 +602,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         {
             if (visuals == null) throw new ArgumentNullException(nameof(visuals));
             if (brush == null) throw new ArgumentNullException(nameof(brush));
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() =>
             {
                 if (freezeBrush && brush.CanFreeze) brush.Freeze();
                 foreach (var visual in visuals) visual.Fill = brush;
@@ -623,7 +623,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             if (visuals == null) throw new ArgumentNullException(nameof(visuals));
             if (material == null) throw new ArgumentNullException(nameof(material));
 
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() =>
             {
                 if (freeze && material.CanFreeze) material.Freeze();
                 foreach (var visual in visuals)

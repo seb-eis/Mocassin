@@ -49,25 +49,25 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <inheritdoc />
         public void InsertCollectionItem(int index, T value)
         {
-            ExecuteOnDispatcher(() => InsertCollectionItemInternal(index, value));
+            ExecuteOnAppThread(() => InsertCollectionItemInternal(index, value));
         }
 
         /// <inheritdoc />
         public void AddCollectionItem(T value)
         {
-            ExecuteOnDispatcher(() => AddCollectionItemInternal(value));
+            ExecuteOnAppThread(() => AddCollectionItemInternal(value));
         }
 
         /// <inheritdoc />
         public void AddCollectionItems(IEnumerable<T> values)
         {
-            ExecuteOnDispatcher(() => AddCollectionItemsInternal(values));
+            ExecuteOnAppThread(() => AddCollectionItemsInternal(values));
         }
 
         /// <inheritdoc />
         public void RemoveCollectionItem(T value)
         {
-            ExecuteOnDispatcher(() => RemoveCollectionItemInternal(value));
+            ExecuteOnAppThread(() => RemoveCollectionItemInternal(value));
         }
 
         /// <inheritdoc />
@@ -79,7 +79,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <inheritdoc />
         public void ClearCollection()
         {
-            ExecuteOnDispatcher(ClearCollectionInternal);
+            ExecuteOnAppThread(ClearCollectionInternal);
         }
 
         /// <summary>

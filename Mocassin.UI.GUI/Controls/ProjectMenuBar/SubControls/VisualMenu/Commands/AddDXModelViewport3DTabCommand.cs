@@ -1,17 +1,17 @@
 ﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
-using Mocassin.UI.GUI.Controls.Visualizer;
+using Mocassin.UI.GUI.Controls.VisualizerDX;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Commands
 {
     /// <summary>
-    ///     A <see cref="AddDefaultLayoutControlTabCommand" /> for adding a new <see cref="ModelViewport3DView" />
+    ///     The <see cref="AddDefaultLayoutControlTabCommand"/> that adds a new <see cref="DX3DModelDataView"/> tab to the work tab control
     /// </summary>
-    public class AddModelViewport3DTabCommand : AddDefaultLayoutControlTabCommand
+    public class AddDXModelViewport3DTabCommand : AddDefaultLayoutControlTabCommand
     {
         /// <inheritdoc />
-        public AddModelViewport3DTabCommand(IMocassinProjectControl projectControl)
+        public AddDXModelViewport3DTabCommand(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
         }
@@ -19,13 +19,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
         /// <inheritdoc />
         protected override ContentControl GetDataControl()
         {
-            return new ModelViewport3DView {DataContext = new ModelViewport3DViewModel(ProjectControl)};
+            return new DX3DModelDataView {DataContext = new DX3DModelDataViewModel(ProjectControl)};
         }
 
         /// <inheritdoc />
         protected override string GetTabName()
         {
-            return "3D Model Viewer [WPF]";
+            return "3D Model Viewer [DX]";
         }
     }
 }

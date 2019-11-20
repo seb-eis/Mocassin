@@ -49,8 +49,8 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         {
             var itemBackup = SelectedItem;
             var itemsBackup = Items;
-            ExecuteOnDispatcher(() => SetCollection(null));
-            ExecuteOnDispatcher(() =>
+            ExecuteOnAppThread(() => SetCollection(null));
+            ExecuteOnAppThread(() =>
             {
                 SetCollection(itemsBackup);
                 SelectedItem = itemBackup;

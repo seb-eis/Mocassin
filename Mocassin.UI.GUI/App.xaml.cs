@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace Mocassin.UI.GUI
@@ -56,11 +56,24 @@ namespace Mocassin.UI.GUI
         /// <summary>
         ///     Loads all plugin <see cref="Assembly" /> instances and returns the created <see cref="List{T}" />
         /// </summary>
-        /// <param name="sourceDirectory"></param>
+        /// <param name="directoryPath"></param>
+        /// <param name="searchOption"></param>
         /// <returns></returns>
-        public List<Assembly> LoadPlugins(string sourceDirectory)
+        public List<Assembly> LoadPlugins(string directoryPath, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            return null;
+            if (directoryPath == null || !Directory.Exists(directoryPath)) return null;
+            var fileNames = Directory.GetFiles(directoryPath, "*.dll", searchOption);
+            var result = new List<Assembly>(fileNames.Length);
+            try
+            {
+                result.AddRange(fileNames.Select(Assembly.LoadFile));
+                return result;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error on plugin loading:\n{e}", "Loading - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
 
         /// <summary>
@@ -71,15 +84,16 @@ namespace Mocassin.UI.GUI
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             DebugRethrow(sender, args);
-            LogUncaughtExceptionAndKillIfTerminating(sender, args);
+            LogUnhandledExceptionAndKillIfTerminating(sender, args);
         }
 
         /// <summary>
-        ///     Logs the occurence of an uncaught <see cref="UnhandledExceptionEventArgs"/> and terminates the process if the event is terminating
+        ///     Logs the occurence of an uncaught <see cref="UnhandledExceptionEventArgs" /> and terminates the process if the
+        ///     event is terminating
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void LogUncaughtExceptionAndKillIfTerminating(object sender, UnhandledExceptionEventArgs args)
+        private static void LogUnhandledExceptionAndKillIfTerminating(object sender, UnhandledExceptionEventArgs args)
         {
             var time = $"{DateTime.Now:yyyyMMddhmmss}";
             var baseMessage = GUI.Properties.Resources.Error_Uncaught_Exception_Message;

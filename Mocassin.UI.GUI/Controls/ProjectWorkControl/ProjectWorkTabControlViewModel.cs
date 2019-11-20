@@ -57,8 +57,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         /// <param name="args"></param>
         private void OnTabCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            if (TabControlViewModel.ObservableItems.Count == 0) SendToDispatcher(ActivateWelcomeTab);
-            if (TabControlViewModel.ObservableItems.Count > 1) SendToDispatcher(DeactivateWelcomeTab);
+            if (TabControlViewModel.ObservableItems.Count == 0) QueueOnAppDispatcher(ActivateWelcomeTab);
+            if (TabControlViewModel.ObservableItems.Count > 1) QueueOnAppDispatcher(DeactivateWelcomeTab);
         }
     }
 }

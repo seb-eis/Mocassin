@@ -45,7 +45,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
             if (!ReferenceEquals(oldSource, ContentSource)) return;
 
             if (onDispatcher) 
-                ExecuteOnDispatcher(action);
+                ExecuteOnAppThread(action);
             else
                 action();
         }

@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
                     return;
                 }
 
-                ProjectControl.ExecuteOnDispatcher(() => projectGraph.ProjectCustomizationGraphs.Add(customization));
+                ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectCustomizationGraphs.Add(customization));
             }
             OnSuccessAction?.Invoke();
         }

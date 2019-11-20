@@ -60,10 +60,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Synchronous execution of an <see cref="Action" /> on the dispatcher
+        ///     Synchronous execution of an <see cref="Action" /> on the UI thread
         /// </summary>
         /// <param name="action"></param>
-        public void ExecuteOnDispatcher(Action action)
+        public void ExecuteOnAppThread(Action action)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
             if (!dispatcher.CheckAccess())
@@ -76,10 +76,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Synchronous execution of a <see cref="Func{TResult}" /> on the dispatcher
+        ///     Synchronous execution of a <see cref="Func{TResult}" /> on the UI thread
         /// </summary>
         /// <param name="function"></param>
-        public TResult ExecuteOnDispatcher<TResult>(Func<TResult> function)
+        public TResult ExecuteOnAppThread<TResult>(Func<TResult> function)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
 
@@ -89,33 +89,33 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Queues an <see cref="Action" /> for execution on the dispatcher. This method should be used when the dispatcher action requires awaiting
+        ///     Async executes an <see cref="Action" /> on the UI thread. This method should be used when the UI action requires awaiting
         /// </summary>
         /// <param name="action"></param>
         /// <param name="priority"></param>
-        public Task ExecuteOnDispatcherAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+        public Task ExecuteOnAppThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
             return dispatcher.InvokeAsync(action, priority).Task;
         }
 
         /// <summary>
-        ///     Queues an <see cref="Func{TResult}" /> for execution on the dispatcher. This method should be used when the dispatcher action requires awaiting
+        ///     Async executes a <see cref="Func{TResult}" /> on the UI thread. This method should be used when the UI action requires awaiting
         /// </summary>
         /// <param name="function"></param>
         /// <param name="priority"></param>
-        public Task<TResult> ExecuteOnDispatcherAsync<TResult>(Func<TResult> function, DispatcherPriority priority = DispatcherPriority.Normal)
+        public Task<TResult> ExecuteOnAppThreadAsync<TResult>(Func<TResult> function, DispatcherPriority priority = DispatcherPriority.Normal)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
             return dispatcher.InvokeAsync(function, priority).Task;
         }
 
         /// <summary>
-        ///     Queues an <see cref="Action" /> for execution on the dispatcher. This method should be used when the dispatcher action is low priority fire-and-forget
+        ///     Queues an <see cref="Action" /> for execution on the UI thread. This method should be used when the UI action is low priority fire-and-forget
         /// </summary>
         /// <param name="action"></param>
         /// <param name="priority"></param>
-        public void SendToDispatcher(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+        public void QueueOnAppDispatcher(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
             if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
             dispatcher.InvokeAsync(action, priority);

@@ -94,7 +94,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
         /// <returns></returns>
         public Task AttachConflictingAction(Action action, bool onDispatcher = false)
         {
-            var task = new Task(onDispatcher ? () => ExecuteOnDispatcher(action) : action);
+            var task = new Task(onDispatcher ? () => ExecuteOnAppThread(action) : action);
 
             void EnqueueAndStart()
             {

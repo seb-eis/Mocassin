@@ -16,7 +16,6 @@ namespace Mocassin.UI.Xml.ProjectLibrary
     {
         private readonly object lockObject = new object();
         private bool isDisposed;
-        private int lastHash;
 
         /// <inheritdoc />
         public bool IsDisposed
@@ -71,14 +70,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         /// <inheritdoc />
         public bool CheckForModelChanges()
         {
-            if (IsDisposed || !HasUnsavedChanges()) return false;
-            lock (lockObject)
-            {
-                var hash = GetProjectModelHash();
-                if (hash != lastHash) StateChangedEvent.OnNext(Unit.Default);
-                lastHash = hash;
-                return lastHash != hash;
-            }
+            return !IsDisposed && HasUnsavedChanges();
         }
 
         /// <inheritdoc />

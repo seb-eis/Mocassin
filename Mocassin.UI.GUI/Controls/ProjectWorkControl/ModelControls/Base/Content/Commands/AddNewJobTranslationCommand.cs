@@ -66,7 +66,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
                 }
 
                 var newItem = CreateJobTranslation();
-                ProjectControl.ExecuteOnDispatcher(() => projectGraph.ProjectJobTranslationGraphs.Add(newItem));
+                ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectJobTranslationGraphs.Add(newItem));
             }
             OnSuccessAction?.Invoke();
         }

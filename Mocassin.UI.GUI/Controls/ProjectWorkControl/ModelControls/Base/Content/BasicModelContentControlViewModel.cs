@@ -100,14 +100,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-            ExecuteOnDispatcher(() => SelectedProjectGraph = null);
+            ExecuteOnAppThread(() => SelectedProjectGraph = null);
             base.OnProjectLibraryChangedInternal(newProjectLibrary);
         }
 
         /// <inheritdoc />
         protected override void OnProjectContentChangedInternal()
         {
-            if (!ProjectControl.ProjectGraphs.Contains(SelectedProjectGraph)) ExecuteOnDispatcher(() => SelectedProjectGraph = null);
+            if (!ProjectControl.ProjectGraphs.Contains(SelectedProjectGraph)) ExecuteOnAppThread(() => SelectedProjectGraph = null);
             base.OnProjectContentChangedInternal();
         }
 

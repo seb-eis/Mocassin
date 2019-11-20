@@ -11,8 +11,10 @@
   <Grid>
     <Menu Background="Transparent">
       <MenuItem Header="Visualization">
-        <MenuItem Header="3D Model Viewer" Command="{Binding CommandSource}" 
+        <MenuItem Header="3D Model Viewer [WPF]" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:AddModelViewport3DTabCommand}"/>
+        <MenuItem Header="3D Model Viewer [DX]" Command="{Binding CommandSource}" 
+                  CommandParameter="{x:Type commands:AddDXModelViewport3DTabCommand}"/>
       </MenuItem>
     </Menu>
   </Grid>
