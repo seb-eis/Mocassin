@@ -115,6 +115,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public override void Dispose()
         {
             DataContextDisposable?.Dispose();
+            (DataContentControl as IDisposable)?.Dispose();
             base.Dispose();
         }
     }

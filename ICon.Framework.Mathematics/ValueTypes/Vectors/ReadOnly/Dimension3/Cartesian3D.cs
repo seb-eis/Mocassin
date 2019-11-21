@@ -32,16 +32,18 @@ namespace Mocassin.Mathematics.ValueTypes
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public Cartesian3D(double x, double y, double z) : this()
+        public Cartesian3D(double x, double y, double z)
+            : this()
         {
-            Coordinates = new Coordinates3D(x,y,z);
+            Coordinates = new Coordinates3D(x, y, z);
         }
 
         /// <summary>
         ///     Creates new cartesian vector from 3D coordinate tuple
         /// </summary>
         /// <param name="coordinates"></param>
-        public Cartesian3D(in Coordinates3D coordinates) : this()
+        public Cartesian3D(in Coordinates3D coordinates)
+            : this()
         {
             Coordinates = coordinates;
         }
@@ -156,7 +158,7 @@ namespace Mocassin.Mathematics.ValueTypes
         }
 
         /// <summary>
-        ///     Get a <see cref="Cartesian3D"/> where each component is squared
+        ///     Get a <see cref="Cartesian3D" /> where each component is squared
         /// </summary>
         /// <returns></returns>
         public Cartesian3D GetSquared()

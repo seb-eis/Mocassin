@@ -296,7 +296,9 @@
       <DependentUpon>DX3DViewportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\VisualizerDX\Viewport\DX3DViewportViewModel.cs" />
-    <Compile Include="Controls\VisualizerDX\Viewport\Helper\LightHelper.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Helper\Light3DHelper.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Helper\MeshBuilderExtensionsDX.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Helper\SceneBuilder.cs" />
     <Compile Include="Controls\Visualizer\Commands\ExportViewportCommand.cs" />
     <Compile Include="Controls\Visualizer\Commands\ToggleViewportCameraCommand.cs" />
     <Compile Include="StartupWindow.xaml.cs">

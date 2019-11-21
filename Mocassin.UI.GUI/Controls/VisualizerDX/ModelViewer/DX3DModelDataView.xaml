@@ -11,7 +11,7 @@
     <Grid>
       <TabControl>
         <TabItem Header="3D Viewer">
-          <viewport:DX3DViewportView DataContext="{Binding ViewportViewModel}"/>
+          <viewport:DX3DViewportView x:Name="Dx3DViewportView" DataContext="{Binding ViewportViewModel}"/>
         </TabItem>
         <TabItem Header="Objects Settings">
 

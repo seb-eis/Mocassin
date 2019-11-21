@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
@@ -8,12 +6,12 @@ using HelixToolkit.Wpf;
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
-    ///     Provides extension methods for the <see cref="MeshBuilder"/> of the helix toolkit
+    ///     Provides extension methods for the <see cref="MeshBuilder" /> of the helix toolkit
     /// </summary>
     public static class MeshBuilderExtensions
     {
         /// <summary>
-        ///     Adds a two headed arrow shape mesh to the <see cref="MeshBuilder"/>
+        ///     Adds a two headed arrow shape mesh to the <see cref="MeshBuilder" />
         /// </summary>
         /// <param name="meshBuilder"></param>
         /// <param name="startPoint"></param>
@@ -21,7 +19,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// <param name="diameter"></param>
         /// <param name="headLength"></param>
         /// <param name="thetaDiv"></param>
-        public static void AddTwoHeadedArrow(this MeshBuilder meshBuilder, in Point3D startPoint, in Point3D endPoint, double diameter, double headLength, int thetaDiv)
+        public static void AddTwoHeadedArrow(this MeshBuilder meshBuilder, in Point3D startPoint, in Point3D endPoint, double diameter, double headLength,
+            int thetaDiv)
         {
             var direction = endPoint - startPoint;
             var length = direction.Length;

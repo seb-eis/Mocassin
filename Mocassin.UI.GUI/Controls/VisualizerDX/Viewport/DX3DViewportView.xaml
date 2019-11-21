@@ -13,14 +13,22 @@
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <hx:Viewport3DX Grid.Column="1" Name="Viewport3Dx" Background="Transparent"
-                    EffectsManager="{Binding EffectsManager}" Camera="{Binding Camera}"
-                    CameraMode="{Binding CameraMode}" CameraRotationMode="{Binding CameraRotationMode}"
-                    BackgroundColor="{Binding BackgroundColor}" ShowViewCube="{Binding ShowViewCube}"
-                    ShowCoordinateSystem="{Binding ShowCoordinateSystem}" ShowFrameRate="{Binding ShowFrameRate}"
-                    ShowTriangleCountInfo="{Binding ShowTriangleCountInfo}" ShowCameraInfo="{Binding ShowCameraInfo}"
-                    ShowFrameDetails="{Binding ShowFrameDetails}" MSAA="{Binding MsaaLevel}" FXAALevel="{Binding FxaaLevel}"
-                    EnableSSAO="{Binding IsSsaoEnabled}" SSAOQuality="{Binding SsaoQuality}">
+    <hx:Viewport3DX Grid.Column="1" Name="Viewport3Dx" EnableSwapChainRendering="True"
+                    EffectsManager="{Binding EffectsManager}" 
+                    Camera="{Binding Camera}"
+                    CameraMode="{Binding CameraMode}" 
+                    CameraRotationMode="{Binding CameraRotationMode}"
+                    BackgroundColor="{Binding BackgroundColor}" 
+                    ShowViewCube="{Binding ShowViewCube}"
+                    ShowCoordinateSystem="{Binding ShowCoordinateSystem}" 
+                    ShowFrameRate="{Binding ShowRenderInformation}"
+                    ShowTriangleCountInfo="{Binding ShowRenderInformation}" 
+                    ShowCameraInfo="{Binding ShowRenderInformation}"
+                    ShowFrameDetails="{Binding ShowRenderInformation}"
+                    MSAA="{Binding MsaaLevel}"
+                    FXAALevel="{Binding FxaaLevel}"
+                    EnableSSAO="{Binding IsSsaoEnabled}"
+                    SSAOQuality="{Binding SsaoQuality}">
 
       <hx:GroupModel3D ItemsSource="{Binding SceneLight3D}"/>
       <hx:GroupModel3D ItemsSource="{Binding SceneElements3D}"/>
