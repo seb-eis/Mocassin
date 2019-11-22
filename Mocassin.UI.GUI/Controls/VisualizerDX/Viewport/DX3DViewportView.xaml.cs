@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using HelixToolkit.Wpf.SharpDX;
 
 namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
 {

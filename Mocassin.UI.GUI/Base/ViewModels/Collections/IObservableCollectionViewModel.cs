@@ -47,6 +47,13 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         bool CollectionContains(T value);
 
         /// <summary>
+        ///     Moves a collection item from one index to another. Negative values for the new index default to the last entry
+        /// </summary>
+        /// <param name="oldIndex"></param>
+        /// <param name="newIndex"></param>
+        void MoveCollectionItem(int oldIndex, int newIndex);
+
+        /// <summary>
         ///     Clears all contents of the collection
         /// </summary>
         void ClearCollection();

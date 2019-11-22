@@ -6,7 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Base.ViewModels.Tabs"
   mc:Ignorable="d"
-  d:DataContext="{d:DesignInstance local:IUserControlTabControlViewModel, IsDesignTimeCreatable=True}"
+  d:DataContext="{d:DesignInstance local:IUserControlTabHost, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Height="Auto" Width="Auto">
 
@@ -18,7 +18,7 @@
                 Name="PrimaryTabControl">
       <TabControl.Resources>
         <DataTemplate DataType="{x:Type local:CloseableUserControlTabItem}">
-          <StackPanel Orientation="Horizontal">
+          <StackPanel Orientation="Horizontal" Visibility="{Binding Visibility}">
             <TextBlock>
               <TextBlock.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CloseTabCommand, Mode=OneTime}" />
@@ -53,12 +53,12 @@
           </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <TextBlock Text="{Binding TabName, Mode=OneTime}"/>
+          <TextBlock Text="{Binding TabName, Mode=OneTime}" Visibility="{Binding Visibility}"/>
         </DataTemplate>
       </TabControl.Resources>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <ContentPresenter Content="{Binding UserControl, Mode=OneTime}"/>
+          <ContentPresenter Content="{Binding ContentControl, Mode=OneTime}" Visibility="{Binding Visibility}"/>
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>

@@ -1,47 +1,57 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Mocassin.UI.Base.Commands;
-using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 {
     /// <summary>
+    ///     Extends the <see cref="UserControlTabItem" /> to provide a close command that removes it from its host view model
     /// </summary>
     public class CloseableUserControlTabItem : UserControlTabItem
     {
         /// <summary>
-        ///     Get a command to remove the tab fom its host <see cref="ObservableCollectionViewModel{T}"/>
+        ///     Get the hosting <see cref="IUserControlTabHost" />
+        /// </summary>
+        private IUserControlTabHost TabHost { get; }
+
+        /// <summary>
+        ///     Get a command to remove the tab fom its host <see cref="IUserControlTabHost" />
         /// </summary>
         public ICommand CloseTabCommand { get; }
 
         /// <summary>
-        ///     Creates new <see cref="CloseableUserControlTabItem" /> with a host <see cref="ObservableCollectionViewModel{T}" />
+        ///     Creates new <see cref="CloseableUserControlTabItem" /> that belongs to the provided
+        ///     <see cref="IUserControlTabHost" />
         /// </summary>
         /// <param name="tabName"></param>
         /// <param name="viewModelBase"></param>
         /// <param name="userControl"></param>
         /// <param name=""></param>
-        /// <param name="hostCollectionViewModel"></param>
-        public CloseableUserControlTabItem(string tabName, ViewModelBase viewModelBase, UserControl userControl,
-            IObservableCollectionViewModel<UserControlTabItem> hostCollectionViewModel)
+        /// <param name="tabHost"></param>
+        public CloseableUserControlTabItem(string tabName, ViewModelBase viewModelBase, UserControl userControl, IUserControlTabHost tabHost)
             : base(tabName, viewModelBase, userControl)
         {
-            CloseTabCommand = MakeTabCloseCommand(hostCollectionViewModel);
+            TabHost = tabHost ?? throw new ArgumentNullException(nameof(tabHost));
+            CloseTabCommand = MakeTabCloseCommand();
         }
 
         /// <summary>
-        ///     Creates an <see cref="ICommand"/> that removes the tab from its host <see cref="IObservableCollectionViewModel{T}"/>
+        ///     Creates an <see cref="ICommand" /> that removes the tab from its host <see cref="IUserControlTabHost" />
         /// </summary>
-        /// <param name="hostCollectionViewModel"></param>
         /// <returns></returns>
-        private ICommand MakeTabCloseCommand(IObservableCollectionViewModel<UserControlTabItem> hostCollectionViewModel)
+        private ICommand MakeTabCloseCommand()
         {
             void CloseTab()
             {
-                Dispose();
-                hostCollectionViewModel.RemoveCollectionItem(this);
+                TabHost.RemoveAndDispose(this);
             }
-            bool CanCloseTab() => hostCollectionViewModel.CollectionContains(this);
+
+            bool CanCloseTab()
+            {
+                return TabHost.CollectionContains(this);
+            }
+
             return new RelayCommand(CloseTab, CanCloseTab);
         }
     }

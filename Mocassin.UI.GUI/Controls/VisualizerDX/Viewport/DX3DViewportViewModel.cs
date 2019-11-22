@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Media;
 using HelixToolkit.Wpf.SharpDX;
-using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Framework.Random;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper;
@@ -19,12 +18,15 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
     /// </summary>
     public class DX3DViewportViewModel : ViewModelBase, IDisposable
     {
-        public static EffectsManager SharedEffectsManager { get; } = new DefaultEffectsManager();
+        /// <summary>
+        ///     Global hash set of available <see cref="EffectsManager"/> wth their affiliated thread IDs
+        /// </summary>
+        private static Dictionary<int, EffectsManager> GlobalEffectManagers { get; } = new Dictionary<int, EffectsManager>();
 
         private Camera camera = new PerspectiveCamera();
         private CameraMode cameraMode = CameraMode.Inspect;
         private CameraRotationMode cameraRotationMode = CameraRotationMode.Turntable;
-        private Color backgroundColor = Colors.Transparent;
+        private Color backgroundColor = Colors.White;
         private bool showViewCube;
         private bool showCoordinateSystem;
         private bool showRenderInformation = true;
@@ -163,24 +165,36 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         /// </summary>
         public DX3DViewportViewModel()
         {
-            EffectsManager = SharedEffectsManager;
+            EffectsManager = new DefaultEffectsManager();
             SceneElements3D = new ObservableElement3DCollection();
             SceneLight3D = new ObservableElement3DCollection {Light3DHelper.CreateDefaultLightModel()};
             LoadTestDataNodes();
+        }
+
+        /// <summary>
+        ///     Gets the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the calling thread
+        /// </summary>
+        /// <returns></returns>
+        private static EffectsManager GetCurrentThreadEffectsManager()
+        {
+            var threadId = Thread.CurrentThread.ManagedThreadId;
+            if (GlobalEffectManagers.TryGetValue(threadId, out var effectsManager)) return effectsManager;
+            effectsManager = new DefaultEffectsManager();
+            GlobalEffectManagers.Add(threadId, effectsManager);
+            return effectsManager;
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
             CleanElementCollections();
-            EffectsManager = null;
-            OnPropertyChanged(nameof(EffectsManager));
+            EffectsManager.Dispose();
         }
 
         private async void LoadTestDataNodes()
         {
             var meshBuilder = new MeshBuilder();
-            meshBuilder.AddSphere(new Vector3(0, 0, 0));
+            meshBuilder.AddSphere(new Vector3(0, 0, 0), 1, 8, 8);
             var mesh = meshBuilder.ToMesh();
 
             var rng = new PcgRandom32();
@@ -188,19 +202,22 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             material.Freeze();
 
             var sceneBuilder = new SceneBuilder();
-            await sceneBuilder.AddMeshTransformsAsync(mesh, material, new List<Matrix>() {Matrix.Identity});
+            var transforms = new List<Matrix>(10000);
+            for (var i = 0; i < 10000; i++)
+            {
+                transforms.Add(Matrix.Translation(rng.NextFloat(0, 100), rng.NextFloat(0, 100), rng.NextFloat(0, 100)));
+            }
+            await sceneBuilder.AddMeshTransformsAsync(mesh, material, transforms);
             var geometryModel = sceneBuilder.ToModel();
             geometryModel.IsHitTestVisible = false;
             ExecuteOnAppThread(() => SceneElements3D.Add(geometryModel));
         }
 
         /// <summary>
-        ///     Cleans the <see cref="Element3D"/> containers
+        ///     Cleans the <see cref="Element3D" /> containers
         /// </summary>
         private void CleanElementCollections()
         {
-            foreach (var item in SceneElements3D) item.Dispose();
-            foreach (var item in SceneLight3D) item.Dispose();
             SceneElements3D.Clear();
             SceneLight3D.Clear();
         }

@@ -76,6 +76,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         }
 
         /// <inheritdoc />
+        public void MoveCollectionItem(int oldIndex, int newIndex)
+        {
+            PushMessageCollectionViewModel.MoveCollectionItem(oldIndex, newIndex);
+        }
+
+        /// <inheritdoc />
         public void ClearCollection()
         {
             PushMessageCollectionViewModel.ClearCollection();

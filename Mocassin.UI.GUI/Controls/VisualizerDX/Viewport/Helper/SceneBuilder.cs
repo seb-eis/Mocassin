@@ -81,7 +81,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper
             var groupNode = new GroupNode();
             foreach (var matrix in transforms)
             {
-                var node = new MeshNode {Geometry = geometry, Material = material};
+                var node = new MeshNode {Geometry = geometry, Material = material, ModelMatrix = matrix};
                 groupNode.AddChildNode(node);
             }
             callback?.Invoke(groupNode);
@@ -124,17 +124,29 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper
         }
 
         /// <summary>
+        ///     Performs the <see cref="AddBatchedMeshTransforms"/> action asynchronously
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="material"></param>
+        /// <param name="transforms"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Task AddBatchedMeshTransformsAsync(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
+        {
+            ThrowIfNotFrozen(material);
+            return RunBuildTask(() => AddBatchedMeshTransforms(geometry, material, transforms, callback));
+        }
+
+        /// <summary>
         ///     Runs an <see cref="Action"/> as a build <see cref="Task"/>. Returned <see cref="Task"/> completes after the build process is detached from the scene builder
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
         private Task RunBuildTask(Action action)
         {
-            var mainTask = new Task(action);
+            var mainTask = Task.Run(action);
             AddBuildTask(mainTask);
-            var waitTask = mainTask.ContinueWith(RemoveBuildTask);
-            mainTask.Start();
-            return waitTask;
+            return mainTask.ContinueWith(RemoveBuildTask);
         }
 
         /// <summary>

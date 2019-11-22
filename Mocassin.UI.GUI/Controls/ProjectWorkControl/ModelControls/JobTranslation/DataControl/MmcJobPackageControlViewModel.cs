@@ -16,7 +16,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     public class MmcJobPackageControlViewModel : CollectionControlViewModel<MmcJobPackageDescriptionGraph>,
         IContentSupplier<ProjectJobTranslationGraph>
     {
-        private int duplicateCount;
+        private int duplicateCount = 1;
         private ProjectJobTranslationGraph contentSource;
         private IEnumerable<ModelObjectReferenceGraph<MetropolisSimulation>> selectableSimulations;
 
@@ -56,7 +56,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// </summary>
         public MmcJobPackageControlViewModel()
         {
-            duplicateCount = 1;
             DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobPackageDescriptionGraph>(this)
             {
                 CountProvider = () => DuplicateCount

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
@@ -7,11 +8,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     ///     Base <see cref="ViewModelBase" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
     ///     <see cref="System.Windows.Controls.TabControl" />
     /// </summary>
-    public class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabControlViewModel
+    public class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabHost
     {
         private UserControlTabItem selectedTab;
         private int headerFontSize = 14;
         private Dock tabStripPlacement = Dock.Top;
+        private bool isFrontInsertMode;
 
         /// <inheritdoc />
         public Dock TabStripPlacement
@@ -35,17 +37,53 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
-        public void AddCloseableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl)
+        public bool IsFrontInsertMode
         {
-            var tabItem = new CloseableUserControlTabItem(tabName, viewModelBase, userControl, this);
-            AddCollectionItem(tabItem);
+            get => isFrontInsertMode;
+            set => SetProperty(ref isFrontInsertMode, value);
         }
 
         /// <inheritdoc />
-        public void AddNonClosableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl)
+        public void RemoveAndDispose(UserControlTabItem tabItem)
+        {
+            var index = ObservableItems.IndexOf(tabItem);
+            if (index < 0) throw new InvalidOperationException("Tab does not belong to this host.");
+            ExecuteOnAppThread(() =>
+            {
+                if (ReferenceEquals(tabItem, SelectedTab)) SetActiveTabByIndex(index == 0 ? 1 : index - 1);
+                ObservableItems.Remove(tabItem);
+                tabItem.Dispose();
+            });
+        }
+
+        /// <inheritdoc />
+        public void MoveTab(int oldIndex, int newIndex)
+        {
+            MoveCollectionItem(oldIndex, newIndex);
+        }
+
+        /// <inheritdoc />
+        public void AddCloseableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl, bool selectTab = true)
+        {
+            var tabItem = new CloseableUserControlTabItem(tabName, viewModelBase, userControl, this);
+            if (IsFrontInsertMode) 
+                InsertCollectionItem(0, tabItem);
+            else
+                AddCollectionItem(tabItem);
+            if (!selectTab) return;
+            SelectedTab = tabItem;
+        }
+
+        /// <inheritdoc />
+        public void AddNonClosableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl, bool selectTab = true)
         {
             var tabItem = new UserControlTabItem(tabName, viewModelBase, userControl);
-            AddCollectionItem(tabItem);
+            if (IsFrontInsertMode) 
+                InsertCollectionItem(0, tabItem);
+            else
+                AddCollectionItem(tabItem);
+            if (!selectTab) return;
+            SelectedTab = tabItem;
         }
 
         /// <inheritdoc />
@@ -59,10 +97,19 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// </summary>
         public void SetActiveTabByIndex(int index)
         {
-            if (ObservableItems.Count == 0) return;
+            if (ObservableItems.Count == 0)
+            {
+                SelectedTab = null;
+                return;
+            }
             if (index < 0)
             {
                 SelectedTab = ObservableItems[ObservableItems.Count - 1];
+                return;
+            }
+            if (index == ObservableItems.Count)
+            {
+                SelectedTab = ObservableItems[index-1];
                 return;
             }
 

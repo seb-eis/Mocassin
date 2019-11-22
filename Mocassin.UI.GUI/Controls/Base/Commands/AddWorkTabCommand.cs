@@ -25,9 +25,8 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <inheritdoc />
         public override void Execute()
         {
-            ProjectControl.ProjectWorkTabControlViewModel.TabControlViewModel
-                .AddCloseableTab(GetTabName(), GetViewModel(), GetUserControl());
-            ProjectControl.ProjectWorkTabControlViewModel.TabControlViewModel.SetActiveTabByIndex(-1);
+            var (tabName, viewModel, control) = (GetTabName(), GetViewModel(), GetUserControl());
+            ProjectControl.ProjectWorkTabControlViewModel.TabControlViewModel.AddCloseableTab(tabName, viewModel, control);
         }
 
         /// <summary>

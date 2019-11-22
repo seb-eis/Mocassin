@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
     /// </summary>
     public sealed class KmcJobDescriptionSetControlViewModel : CollectionControlViewModel<KmcJobDescriptionGraph>
     {
-        private int duplicateCount;
+        private int duplicateCount = 1;
 
         /// <summary>
         ///     Get the <see cref="KmcJobDescriptionGraph" /> that supplies the <see cref="KmcJobDescriptionGraph" /> collection

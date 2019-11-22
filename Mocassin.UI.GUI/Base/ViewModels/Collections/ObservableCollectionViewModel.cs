@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Mocassin.UI.GUI.Base.ViewModels;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
@@ -10,9 +10,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
     public class ObservableCollectionViewModel<T> : ViewModelBase, IObservableCollectionViewModel<T>
     {
         /// <summary>
-        ///     The <see cref="Capacity" /> backing field
+        ///     The <see cref="MaxCapacity" /> backing field
         /// </summary>
-        private int capacity;
+        private int maxCapacity;
 
         /// <summary>
         ///     Get the <see cref="ObservableCollection{T}" /> that contains the string messages
@@ -22,27 +22,27 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <summary>
         ///     Get or set the max size of the string collection
         /// </summary>
-        public int Capacity
+        public int MaxCapacity
         {
-            get => capacity;
-            set => SetProperty(ref capacity, value);
+            get => maxCapacity;
+            set => SetProperty(ref maxCapacity, value);
         }
 
         /// <summary>
-        ///     Creates new <see cref="ObservableCollectionViewModel{T}" /> with unlimited capacity
+        ///     Creates new <see cref="ObservableCollectionViewModel{T}" /> with unlimited max capacity
         /// </summary>
         public ObservableCollectionViewModel()
         {
-            capacity = -1;
+            maxCapacity = -1;
             ObservableItems = new ObservableCollection<T>();
         }
 
         /// <summary>
-        ///     Creates new <see cref="ObservableCollectionViewModel{T}" /> with specified capacity limit
+        ///     Creates new <see cref="ObservableCollectionViewModel{T}" /> with specified maxCapacity limit
         /// </summary>
-        public ObservableCollectionViewModel(int capacity)
+        public ObservableCollectionViewModel(int maxCapacity)
         {
-            Capacity = capacity;
+            MaxCapacity = maxCapacity;
             ObservableItems = new ObservableCollection<T>();
         }
 
@@ -77,9 +77,26 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <inheritdoc />
+        public void MoveCollectionItem(int oldIndex, int newIndex)
+        {
+            ExecuteOnAppThread(() => MoveCollectionItemInternal(oldIndex, newIndex));
+        }
+
+        /// <inheritdoc />
         public void ClearCollection()
         {
             ExecuteOnAppThread(ClearCollectionInternal);
+        }
+        /// <summary>
+        ///     Internal implementation of <see cref="MoveCollectionItem"/>
+        /// </summary>
+        /// <param name="oldIndex"></param>
+        /// <param name="newIndex"></param>
+
+        protected virtual void MoveCollectionItemInternal(int oldIndex, int newIndex)
+        {
+            newIndex = newIndex >= 0 ? newIndex : ObservableItems.Count - 1;
+            ObservableItems.Move(oldIndex, newIndex);
         }
 
         /// <summary>
@@ -88,7 +105,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <param name="value"></param>
         protected virtual void AddCollectionItemInternal(T value)
         {
-            if (Capacity > 0 && ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
+            if (MaxCapacity > 0 && ObservableItems.Count >= MaxCapacity) ObservableItems.RemoveAt(0);
             ObservableItems.Add(value);
         }
 
@@ -109,7 +126,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         protected virtual void InsertCollectionItemInternal(int index, T value)
         {
             ObservableItems.Insert(index, value);
-            if (Capacity > 0 && ObservableItems.Count >= Capacity) ObservableItems.RemoveAt(0);
+            if (MaxCapacity > 0 && ObservableItems.Count >= MaxCapacity) ObservableItems.RemoveAt(0);
         }
 
         /// <summary>
