@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -13,6 +14,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
+        /// <summary>
+        ///     Get or set a <see cref="Dictionary{TKey,TValue}"/> for property backups
+        /// </summary>
+        private Dictionary<string, object> PropertyBackups { get; set; }
+
         /// <summary>
         ///     The <see cref="PropertyChangedEventHandler" /> that informs about changed properties
         /// </summary>
@@ -57,6 +63,32 @@ namespace Mocassin.UI.GUI.Base.ViewModels
 
             propertyInfo.SetValue(target, value);
             OnPropertyChanged(propertyName);
+        }
+
+        /// <summary>
+        ///     Get a property backup value by property name or a default value if the backup does not exist
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        protected T GetPropertyBackup<T>([CallerMemberName] string propertyName = null)
+        {
+            if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+            if (PropertyBackups == null || !PropertyBackups.TryGetValue(propertyName, out var propertyValue)) return default;
+            return (T) propertyValue;
+        }
+
+        /// <summary>
+        ///     Sets a property backup value by property name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="propertyName"></param>
+        protected void SetPropertyBackup<T>(T value, [CallerMemberName] string propertyName = null)
+        {
+            if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+            PropertyBackups = PropertyBackups ?? new Dictionary<string, object>();
+            PropertyBackups[propertyName] = value;
         }
 
         /// <summary>

@@ -288,17 +288,24 @@
     <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\AddDXModelViewport3DTabCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobTranslationCommand.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Attributes\RaiseInvalidateRenderAttribute.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Enums\CameraType.cs" />
     <Compile Include="Controls\VisualizerDX\ModelViewer\DX3DModelDataView.xaml.cs">
       <DependentUpon>DX3DModelDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\VisualizerDX\ModelViewer\DX3DModelDataViewModel.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\DX3DViewportSettingsView.xaml.cs">
+      <DependentUpon>DX3DViewportSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\VisualizerDX\Viewport\DX3DViewportView.xaml.cs">
       <DependentUpon>DX3DViewportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\VisualizerDX\Viewport\DX3DViewportViewModel.cs" />
-    <Compile Include="Controls\VisualizerDX\Viewport\Helper\Light3DHelper.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Enums\SceneLightSetting.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Helper\LightFactory.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Helper\MeshBuilderExtensionsDX.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Helper\SceneBuilder.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Helper\Viewport3DXExtensions.cs" />
     <Compile Include="Controls\Visualizer\Commands\ExportViewportCommand.cs" />
     <Compile Include="Controls\Visualizer\Commands\ToggleViewportCameraCommand.cs" />
     <Compile Include="StartupWindow.xaml.cs">
@@ -625,6 +632,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\VisualizerDX\ModelViewer\DX3DModelDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\VisualizerDX\Viewport\DX3DViewportSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

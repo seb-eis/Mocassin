@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using HelixToolkit.Wpf.SharpDX;
+﻿using System.Windows.Controls;
+using System.Windows.Input;
+using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper;
 
 namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
 {
@@ -13,6 +12,18 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         public DX3DViewportView()
         {
             InitializeComponent();
+        }
+
+        private void Viewport3Dx_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!ReferenceEquals(sender, Viewport3Dx)) return;
+            Viewport3Dx?.SetValue(Viewport3DXExtensions.IsInteractingProperty, true);
+        }
+
+        private void Viewport3Dx_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!ReferenceEquals(sender, Viewport3Dx)) return;
+            Viewport3Dx?.SetValue(Viewport3DXExtensions.IsInteractingProperty, false);
         }
     }
 }

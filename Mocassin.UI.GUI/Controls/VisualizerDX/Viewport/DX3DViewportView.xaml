@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.VisualizerDX.Viewport"
+             xmlns:helper="clr-namespace:Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper"
              xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
              d:DataContext="{d:DesignInstance local:DX3DViewportViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
@@ -13,6 +14,54 @@
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
+    <Border Grid.Column="0">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" Margin="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding ElementName=SettingsToggleButton, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}">
+          <local:DX3DViewportSettingsView DataContext="{Binding}"/>
+        </ScrollViewer>
+        <ToggleButton Grid.Row="1" x:Name="SettingsToggleButton" VerticalAlignment="Bottom" Background="Transparent" 
+                      BorderBrush="Transparent" BorderThickness="0,.5,0,0" Margin="-2,0,0,-2">
+          <ToggleButton.Content>
+            <TextBlock Text="Settings" Margin="5,0,5,0">
+              <TextBlock.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Reset Camera" 
+                            Command="{Binding Source={x:Reference Viewport3Dx}, Path=DataContext.ResetCameraCommand}"/>
+                </ContextMenu>
+              </TextBlock.ContextMenu>
+            </TextBlock>
+          </ToggleButton.Content>
+          <ToggleButton.Style>
+            <Style TargetType="{x:Type ToggleButton}">
+              <Style.Triggers>
+                <Trigger Property="IsChecked" Value="False">
+                  <Setter Property="LayoutTransform">
+                    <Setter.Value>
+                      <RotateTransform Angle="-90"/>
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                  <Setter Property="LayoutTransform">
+                    <Setter.Value>
+                      <RotateTransform Angle="0"/>
+                    </Setter.Value>
+                  </Setter>
+                </Trigger>
+              </Style.Triggers>
+            </Style>
+          </ToggleButton.Style>
+        </ToggleButton>
+      </Grid>
+    </Border>
     <hx:Viewport3DX Name="Viewport3Dx" Grid.Column="1"
                     SnapsToDevicePixels="True"
                     EnableSwapChainRendering="True"
@@ -30,10 +79,24 @@
                     MSAA="{Binding MsaaLevel}"
                     FXAALevel="{Binding FxaaLevel}"
                     EnableSSAO="{Binding IsSsaoEnabled}"
-                    SSAOQuality="{Binding SsaoQuality}">
+                    SSAOQuality="{Binding SsaoQuality}"
+                    InfoBackground="{Binding InfoBackgroundBrush}"
+                    InfoForeground="{Binding InfoForegroundBrush}"
+                    InfiniteSpin="{Binding EnableInfiniteSpin}"
+                    helper:Viewport3DXExtensions.DisableMssaOnInteraction="{Binding DisableMsaaOnInteraction}"
+                    helper:Viewport3DXExtensions.IsInteracting="{Binding IsInteracting, Mode=OneWayToSource}"
+                    PreviewMouseRightButtonDown="Viewport3Dx_OnPreviewMouseRightButtonDown"
+                    PreviewMouseRightButtonUp="Viewport3Dx_OnPreviewMouseRightButtonUp">
 
-        <hx:GroupModel3D ItemsSource="{Binding SceneLight3D}"/>
-        <hx:GroupModel3D ItemsSource="{Binding SceneElements3D}"/>
+      <hx:GroupModel3D x:Name="LightGroupModel" 
+                         ItemsSource="{Binding SceneLightCollection}" 
+                         IsHitTestVisible="False"/>
+        <hx:GroupModel3D x:Name="HitTestInvisibleGroupModels" 
+                         ItemsSource="{Binding HitTestInvisibleSceneElements}" 
+                         IsHitTestVisible="False"/>
+        <hx:GroupModel3D x:Name="HitTestVisibleGroupModels" 
+                         ItemsSource="{Binding HitTestVisibleSceneElements}" 
+                         IsHitTestVisible="True"/>
       </hx:Viewport3DX>
   </Grid>
 </UserControl>
