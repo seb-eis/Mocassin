@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.IO;
@@ -36,9 +38,9 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
         public override void Execute(Viewport3DX parameter)
         {
             var path = new UserFileSelectionSource(EnumerateSupportedImageFormats().ToArray()).GetFileSelection();
-            if (path == null) return;
+            if (string.IsNullOrWhiteSpace(path)) return;
             var (width, height) = GetOutputSize(parameter);
-            SaveImage(parameter, path, GetImageFormatForPath(path), width, height);
+            TrySaveImage(parameter, path, GetImageFormatForPath(path), width, height);
         }
 
         /// <inheritdoc />
@@ -68,7 +70,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
         /// <param name="format"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        protected virtual void SaveImage(Viewport3DX view, string path, Direct2DImageFormat format, int width, int height)
+        protected virtual void TrySaveImage(Viewport3DX view, string path, Direct2DImageFormat format, int width, int height)
         {
             var (oldWith, oldHeight) = ((int) view.ActualWidth, (int) view.ActualHeight);
 
@@ -76,11 +78,37 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
             {
                 view.OnRendered -= OnRendered;
                 view.SaveScreen(path, format);
-                view.ResizeAndArrange(oldWith, oldHeight);
+                ResizeViewport(view, oldWith, oldHeight);
             }
 
             view.OnRendered += OnRendered;
+            try
+            {
+                if (ResizeViewport(view, width, height)) return;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                MessageBox.Show($"Failed apply {width}x{height} pixels.", "Image - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ResizeViewport(view, oldWith, oldHeight);
+                return;
+            }
+
+            view.OnRendered -= OnRendered;
+            view.SaveScreen(path, format);
+        }
+
+        /// <summary>
+        ///     Resizes the <see cref="Viewport3DX"/> if the provided values differ from the current size. Returns true if the view was resized
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        protected virtual bool ResizeViewport(Viewport3DX view, int width, int height)
+        {
+            if (((int) view.ActualWidth, (int) view.ActualHeight) == (width, height)) return false;
             view.ResizeAndArrange(width, height);
+            return true;
         }
 
         /// <summary>

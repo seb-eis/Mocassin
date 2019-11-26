@@ -25,6 +25,16 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
     /// </summary>
     public class DX3DViewportViewModel : ViewModelBase, IDisposable
     {
+        /// <summary>
+        ///     Get or set the maximal supported image height of the image exporter. Default is 2160 pixels
+        /// </summary>
+        public static int MaxImageHeight { get; set; } = 2160;
+
+        /// <summary>
+        ///     Get or set the maximal supported image width of the image exporter. Default is 3840 pixels
+        /// </summary>
+        public static int MaxImageWidth { get; set; } = 3840;
+
         private Camera camera = new PerspectiveCamera();
         private CameraMode cameraMode = CameraMode.Inspect;
         private CameraRotationMode cameraRotationMode = CameraRotationMode.Turntable;
@@ -310,7 +320,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         public int ImageExportHeight
         {
             get => imageExportHeight;
-            set => SetProperty(ref imageExportHeight, EnsureTextureSizeSupported(value));
+            set => SetProperty(ref imageExportHeight, Math.Min(Math.Abs(value), MaxImageHeight));
         }
 
         /// <summary>
@@ -319,7 +329,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         public int ImageExportWidth
         {
             get => imageExportWidth;
-            set => SetProperty(ref imageExportWidth, EnsureTextureSizeSupported(value));
+            set => SetProperty(ref imageExportWidth, Math.Min(Math.Abs(value), MaxImageWidth));
         }
 
         /// <summary>
@@ -415,12 +425,12 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             var mesh = meshBuilder.ToMesh();
 
             var rng = new PcgRandom32();
-            var material = PhongMaterials.Gold;
+            var material = PhongMaterials.PolishedSilver;
             material.Freeze();
 
             var sceneBuilder = new SceneBuilder();
-            var transforms = new List<Matrix>(1000);
-            for (var i = 0; i < 1000; i++) transforms.Add(Matrix.Translation(rng.NextFloat(0, 100), rng.NextFloat(0, 100), rng.NextFloat(0, 100)));
+            var transforms = new List<Matrix>(5000);
+            for (var i = 0; i < 5000; i++) transforms.Add(Matrix.Translation(rng.NextFloat(0, 100), rng.NextFloat(0, 100), rng.NextFloat(0, 100)));
             await sceneBuilder.AddBatchedMeshTransformsAsync(mesh, material, transforms);
             var geometryModel = sceneBuilder.ToModel();
             geometryModel.IsHitTestVisible = false;
@@ -643,17 +653,6 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         {
             yield return SceneLightSetting.Default;
             yield return SceneLightSetting.OmniDirectional;
-        }
-
-        /// <summary>
-        ///     Ensures that the provided texture size is supported by the hardware and returns a supported value if not
-        /// </summary>
-        /// <returns></returns>
-        private int EnsureTextureSizeSupported(int size)
-        {
-            size = Math.Abs(size);
-            var maxSize = EffectsManager.GetMaxHardwareTextureDimension();
-            return size > maxSize ? maxSize : size;
         }
 
         /// <summary>
