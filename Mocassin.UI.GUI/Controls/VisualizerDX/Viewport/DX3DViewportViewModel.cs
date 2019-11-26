@@ -9,9 +9,11 @@ using Mocassin.Framework.Random;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Attributes;
+using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper;
 using SharpDX;
+using SharpDX.Direct3D;
 using Color = System.Windows.Media.Color;
 using Matrix = SharpDX.Matrix;
 
@@ -43,9 +45,12 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         private CameraType cameraType = CameraType.Perspective;
         private double cameraFarPlaneDistance = 10000;
         private double cameraNearPlaneDistance = 0.1;
-        private double cameraFieldOfView;
+        private double cameraFieldOfView = 45;
         private SceneLightSetting lightSetting = SceneLightSetting.Default;
         private Color lightColor = Colors.White;
+        private bool isSettingsActive;
+        private int imageExportHeight;
+        private int imageExportWidth;
 
         /// <summary>
         ///     Get the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the 3D system
@@ -300,6 +305,33 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
+        ///     Get or set the image export height in pixels
+        /// </summary>
+        public int ImageExportHeight
+        {
+            get => imageExportHeight;
+            set => SetProperty(ref imageExportHeight, EnsureTextureSizeSupported(value));
+        }
+
+        /// <summary>
+        ///     Get or set the image export width in pixels
+        /// </summary>
+        public int ImageExportWidth
+        {
+            get => imageExportWidth;
+            set => SetProperty(ref imageExportWidth, EnsureTextureSizeSupported(value));
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the settings are active
+        /// </summary>
+        public bool IsSettingsActive
+        {
+            get => isSettingsActive;
+            set => SetProperty(ref isSettingsActive, value);
+        }
+
+        /// <summary>
         ///     Get the selectable <see cref="MSAALevel" /> options
         /// </summary>
         public IEnumerable<MSAALevel> MsaaLevels => EnumerateMsaaLevels();
@@ -357,6 +389,11 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         public ParameterlessCommand ResetCameraCommand { get; }
 
         /// <summary>
+        ///     Get the <see cref="ExportViewportImageCommand"/> to export a viewport to an image
+        /// </summary>
+        public ExportViewportImageCommand ExportImageCommand { get; }
+
+        /// <summary>
         ///     Creates a new <see cref="DX3DViewportViewModel" />
         /// </summary>
         public DX3DViewportViewModel()
@@ -367,6 +404,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             SceneLightCollection = new ObservableElement3DCollection {LightFactory.DefaultLightModel3D(LightColor)};
             PropertyChanged += DX3DViewportViewModel_PropertyChanged;
             ResetCameraCommand = new RelayCommand(ResetCamera);
+            ExportImageCommand = new ExportViewportImageCommand(() => (ImageExportWidth, ImageExportHeight));
             LoadTestDataNodes();
         }
 
@@ -605,6 +643,17 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         {
             yield return SceneLightSetting.Default;
             yield return SceneLightSetting.OmniDirectional;
+        }
+
+        /// <summary>
+        ///     Ensures that the provided texture size is supported by the hardware and returns a supported value if not
+        /// </summary>
+        /// <returns></returns>
+        private int EnsureTextureSizeSupported(int size)
+        {
+            size = Math.Abs(size);
+            var maxSize = EffectsManager.GetMaxHardwareTextureDimension();
+            return size > maxSize ? maxSize : size;
         }
 
         /// <summary>

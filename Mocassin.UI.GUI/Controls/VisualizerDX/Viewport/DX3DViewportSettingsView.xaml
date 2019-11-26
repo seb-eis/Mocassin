@@ -34,6 +34,8 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
     <TextBlock Grid.Row="0" Grid.Column="0" Text="MSAA Samples" VerticalAlignment="Center" Margin="{StaticResource App.Margin.VerticalStack}"/>
@@ -156,5 +158,23 @@
     <TextBlock Grid.Row="19" Grid.Column="0" Text="Light Setting" VerticalAlignment="Center" Margin="{StaticResource App.Margin.VerticalStack}"/>
     <ComboBox Grid.Row="19" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding SceneLightSettings}" SelectedItem="{Binding LightSetting}"/>
+
+    <TextBlock Grid.Row="20" Grid.Column="0" Text="Export Width" VerticalAlignment="Center" Margin="{StaticResource App.Margin.VerticalStack}"/>
+    <TextBox Grid.Row="20" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
+             Text="{Binding ImageExportWidth, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+      <TextBox.InputBindings>
+        <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/> 
+      </TextBox.InputBindings>
+    </TextBox>
+
+    <TextBlock Grid.Row="21" Grid.Column="0" Text="Export Height" VerticalAlignment="Center" Margin="{StaticResource App.Margin.VerticalStack}"/>
+    <TextBox Grid.Row="21" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
+             Text="{Binding ImageExportHeight, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+      <TextBox.InputBindings>
+        <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/> 
+      </TextBox.InputBindings>
+    </TextBox>
   </Grid>
 </UserControl>

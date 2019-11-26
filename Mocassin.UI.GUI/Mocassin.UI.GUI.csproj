@@ -284,6 +284,7 @@
     <Compile Include="Base\Loading\ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\Commands\CheckApplicationUpdateCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuView.xaml.cs">
       <DependentUpon>HelpMenuView.xaml</DependentUpon>
@@ -293,6 +294,7 @@
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobTranslationCommand.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Attributes\RaiseInvalidateRenderAttribute.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Commands\ExportViewportImageCommand.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Enums\CameraType.cs" />
     <Compile Include="Controls\VisualizerDX\ModelViewer\DX3DModelDataView.xaml.cs">
       <DependentUpon>DX3DModelDataView.xaml</DependentUpon>
@@ -306,6 +308,7 @@
     </Compile>
     <Compile Include="Controls\VisualizerDX\Viewport\DX3DViewportViewModel.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Enums\SceneLightSetting.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Helper\EffectsManagerExtensions.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Helper\LightFactory.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Helper\MeshBuilderExtensionsDX.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Helper\SceneBuilder.cs" />
@@ -1137,7 +1140,6 @@
     <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\VisualControl\" />
     <Folder Include="Controls\VisualizerDX\Objects\" />
-    <Folder Include="Controls\VisualizerDX\Viewport\Commands\" />
     <Folder Include="Controls\VisualizerDX\Viewport\DataControl\" />
   </ItemGroup>
   <ItemGroup>
