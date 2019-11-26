@@ -32,23 +32,23 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
-                                       DataContext="{Binding ProjectMenuBarViewModel}" />
+    <projectMenuBar:ProjectMenuBarView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" SnapsToDevicePixels="True"
+                                       DataContext="{Binding ProjectMenuBarViewModel}"/>
 
-    <GridSplitter Width="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Background="Transparent" ResizeBehavior="PreviousAndNext"/>
+    <GridSplitter Width="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Background="Transparent" ResizeBehavior="PreviousAndNext" ShowsPreview="True"/>
 
-    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4"
+    <projectBrowser:ProjectBrowserView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" SnapsToDevicePixels="True"
                                        DataContext="{Binding ProjectBrowserViewModel}" />
 
-    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="2"
+    <projectWorkControl:ProjectWorkTabControlView Grid.Row="1" Grid.Column="2" SnapsToDevicePixels="True"
                                                   DataContext="{Binding ProjectWorkTabControlViewModel}" />
 
-    <GridSplitter Height="5" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Background="Transparent" ResizeBehavior="PreviousAndNext"/>
+    <GridSplitter Height="5" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Background="Transparent" ResizeBehavior="PreviousAndNext" ShowsPreview="True"/>
 
-    <projectConsole:ProjectConsoleTabControlView Grid.Row="3" Grid.Column="2"
+    <projectConsole:ProjectConsoleTabControlView Grid.Row="3" Grid.Column="2" SnapsToDevicePixels="True"
                                                  DataContext="{Binding ProjectConsoleTabControlViewModel}" />
 
-    <projectStatusBar:ProjectStatusBarView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+    <projectStatusBar:ProjectStatusBarView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" SnapsToDevicePixels="True"
                                            DataContext="{Binding ProjectStatusBarViewModel}" />
   </Grid>
 </Window>

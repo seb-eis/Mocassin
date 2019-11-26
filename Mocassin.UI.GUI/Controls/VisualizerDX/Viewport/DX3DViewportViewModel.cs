@@ -1,4 +1,10 @@
-﻿using HelixToolkit.Wpf.SharpDX;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using HelixToolkit.Wpf.SharpDX;
 using Mocassin.Framework.Random;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
@@ -6,15 +12,7 @@ using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Attributes;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper;
 using SharpDX;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using Color = System.Windows.Media.Color;
-using LightType = HelixToolkit.Wpf.SharpDX.LightType;
 using Matrix = SharpDX.Matrix;
 
 namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
@@ -231,7 +229,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Gets or set the used <see cref="CameraType"/>
+        ///     Gets or set the used <see cref="CameraType" />
         /// </summary>
         [RaiseInvalidateRender]
         public CameraType CameraType
@@ -246,7 +244,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Gets or sets the basic <see cref="SceneLightSetting"/> for the scene
+        ///     Gets or sets the basic <see cref="SceneLightSetting" /> for the scene
         /// </summary>
         public SceneLightSetting LightSetting
         {
@@ -260,7 +258,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Get or set the far plane distance value of the <see cref="Camera"/>
+        ///     Get or set the far plane distance value of the <see cref="Camera" />
         /// </summary>
         [RaiseInvalidateRender]
         public double CameraFarPlaneDistance
@@ -274,7 +272,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Get or set  the far plane distance value of the <see cref="Camera"/>
+        ///     Get or set  the far plane distance value of the <see cref="Camera" />
         /// </summary>
         [RaiseInvalidateRender]
         public double CameraNearPlaneDistance
@@ -288,7 +286,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Get or set the field of view of the <see cref="Camera"/>
+        ///     Get or set the field of view of the <see cref="Camera" />
         /// </summary>
         [RaiseInvalidateRender]
         public double CameraFieldOfView
@@ -354,7 +352,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         public ObservableElement3DCollection HitTestInvisibleSceneElements { get; }
 
         /// <summary>
-        ///     Get a <see cref="ParameterlessCommand"/> to reset the camera
+        ///     Get a <see cref="ParameterlessCommand" /> to reset the camera
         /// </summary>
         public ParameterlessCommand ResetCameraCommand { get; }
 
@@ -431,38 +429,33 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         /// <param name="value"></param>
         protected virtual void OnCameraTypeChanged(CameraType value)
         {
-            switch (value)
+            Camera = value switch
             {
-                case CameraType.Perspective:
-                    Camera = new PerspectiveCamera
-                    {
-                        CreateLeftHandSystem = Camera.CreateLeftHandSystem,
-                        LookDirection = Camera.LookDirection,
-                        Position = Camera.Position,
-                        UpDirection = Camera.UpDirection,
-                        FarPlaneDistance = CameraFarPlaneDistance,
-                        NearPlaneDistance = CameraNearPlaneDistance,
-                        FieldOfView = CameraFieldOfView
-                    };
-                    break;
-                case CameraType.Orthographic:
-                    Camera = new OrthographicCamera
-                    {
-                        CreateLeftHandSystem = Camera.CreateLeftHandSystem,
-                        LookDirection = Camera.LookDirection,
-                        Position = Camera.Position,
-                        UpDirection = Camera.UpDirection,
-                        FarPlaneDistance = CameraFarPlaneDistance,
-                        NearPlaneDistance = CameraNearPlaneDistance
-                    };
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Camera type is not supported!");
-            }
+                CameraType.Perspective => (Camera) new PerspectiveCamera
+                {
+                    CreateLeftHandSystem = Camera.CreateLeftHandSystem,
+                    LookDirection = Camera.LookDirection,
+                    Position = Camera.Position,
+                    UpDirection = Camera.UpDirection,
+                    FarPlaneDistance = CameraFarPlaneDistance,
+                    NearPlaneDistance = CameraNearPlaneDistance,
+                    FieldOfView = CameraFieldOfView
+                },
+                CameraType.Orthographic => new OrthographicCamera
+                {
+                    CreateLeftHandSystem = Camera.CreateLeftHandSystem,
+                    LookDirection = Camera.LookDirection,
+                    Position = Camera.Position,
+                    UpDirection = Camera.UpDirection,
+                    FarPlaneDistance = CameraFarPlaneDistance,
+                    NearPlaneDistance = CameraNearPlaneDistance
+                },
+                _ => throw new ArgumentOutOfRangeException(nameof(value), value, null),
+            };
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="CameraNearPlaneDistance"/> changes
+        ///     Action that is called if the <see cref="CameraNearPlaneDistance" /> changes
         /// </summary>
         /// <param name="value"></param>
         protected virtual void OnCameraNearPlaneDistanceChanged(double value)
@@ -472,7 +465,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="CameraFarPlaneDistance"/> changes
+        ///     Action that is called if the <see cref="CameraFarPlaneDistance" /> changes
         /// </summary>
         /// <param name="value"></param>
         protected virtual void OnCameraFarPlaneDistanceChanged(double value)
@@ -482,7 +475,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="CameraFieldOfView"/> changes
+        ///     Action that is called if the <see cref="CameraFieldOfView" /> changes
         /// </summary>
         /// <param name="value"></param>
         protected virtual void OnFieldOfViewChanged(double value)
@@ -492,7 +485,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="LightSetting"/> changes
+        ///     Action that is called if the <see cref="LightSetting" /> changes
         /// </summary>
         /// <param name="value"></param>
         protected virtual void OnLightSettingChanged(SceneLightSetting value)
@@ -507,12 +500,12 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
                     SceneLightCollection.Add(LightFactory.DefaultOmniDirectionalLightModel3D(LightColor, .5));
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "The setting is not supported");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, null);
             }
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="LightSetting"/> changes
+        ///     Action that is called if the <see cref="LightSetting" /> changes
         /// </summary>
         /// <param name="value"></param>
         protected virtual void OnLightColorChanged(in Color value)
@@ -521,7 +514,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Resets the <see cref="Camera"/> settings
+        ///     Resets the <see cref="Camera" /> settings
         /// </summary>
         protected virtual void ResetCamera()
         {
@@ -621,10 +614,8 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         /// <param name="args"></param>
         private void DX3DViewportViewModel_PropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (GetType().GetProperty(args.PropertyName)?.GetCustomAttribute<RaiseInvalidateRenderAttribute>() is RaiseInvalidateRenderAttribute attribute)
-            {
+            if (GetType().GetProperty(args.PropertyName)?.GetCustomAttribute<RaiseInvalidateRenderAttribute>() is { } attribute)
                 Task.Delay(attribute.Delay).ContinueWith(task => ExecuteOnAppThread(EffectsManager.RaiseInvalidateRender));
-            }
         }
     }
 }
