@@ -89,7 +89,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                MessageBox.Show($"Failed apply {width}x{height} pixels.", "Image - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Cannot apply {width}x{height} pixels.", "Image - Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 ResizeViewport(view, oldWith, oldHeight);
                 return;
             }

@@ -15,6 +15,8 @@ namespace Mocassin.UI.Xml.Base
     [XmlRoot]
     public sealed class ModelObjectReferenceGraph<T> : PropertyChangeNotifier,
         IEquatable<ModelObjectReferenceGraph<T>>,
+        IComparable<ModelObjectReferenceGraph<T>>,
+        IComparable,
         IDuplicable<ModelObjectReferenceGraph<T>> where T : ModelObject, new()
     {
         private ModelObjectGraph targetGraph;
@@ -102,11 +104,25 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <inheritdoc />
+        public int CompareTo(ModelObjectReferenceGraph<T> other)
+        {
+            if (other == null) return 1;
+            if (targetGraph == null || other.TargetGraph == null) return string.Compare(Key, other.Key, StringComparison.Ordinal);
+            return string.Compare(targetGraph.Name, other.TargetGraph.Name, StringComparison.Ordinal);
+        }
+
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             var hashCode = 1207054110;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TargetGraph?.Key);
             return hashCode;
+        }
+
+        /// <inheritdoc />
+        public int CompareTo(object obj)
+        {
+            return CompareTo(obj as ModelObjectReferenceGraph<T>);
         }
 
         /// <inheritdoc />
