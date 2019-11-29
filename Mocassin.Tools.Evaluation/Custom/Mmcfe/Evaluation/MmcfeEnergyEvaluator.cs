@@ -26,29 +26,32 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe
             if (!CheckLogReadersInEvaluationOrder(logReaders)) throw new InvalidOperationException("Readers are in wrong order for evaluation.");
 
             var result = new List<MmcfeEnergyState>(logReaders.Count);
-            var (integralJ, integralI, alphaDeltas) = (0.0, 0.0, GetAlphaDeltaList(logReaders));
+            var (sampleSumIntegral, weightedSumIntegral, alphaDeltas) = (0.0, 0.0, GetAlphaDeltaList(logReaders));
             foreach (var (reader, logIndex) in logReaders.Select((x, i) => (x, i)))
             {
-                var (sumJ, sumI, counterIndex, header, routineParams) = (0L, 0.0, -1, reader.EnergyHistogramReader.ReadHeader(), reader.ReadParameters());
+                var (header, routineParams) = (reader.EnergyHistogramReader.ReadHeader(), reader.ReadParameters());
+                var (sampleSum, weightedSum, counterIndex) = (0L, 0.0, -1);
 
                 foreach (var counter in reader.EnergyHistogramReader.ReadCounters())
                 {
                     counterIndex++;
                     if (counter < minSampleCount) continue;
-                    if (logIndex != 0) sumJ += counter;
+                    if (logIndex != 0) sampleSum += counter;
                     if (logIndex == logReaders.Count - 1) continue;
 
                     var energy = (header.MinValue + counterIndex * header.Stepping) * 0.5;
                     var expFactor = Math.Exp(energy * alphaDeltas[logIndex] / (temperature * Equations.Constants.BlotzmannEv));
-                    sumI += counter * expFactor;
+                    weightedSum += counter * expFactor;
                 }
 
-                if (double.IsNaN(sumI) || double.IsInfinity(sumI)) throw new InvalidOperationException("Calculation is numerically unstable.");
+                if (double.IsNaN(weightedSum) || double.IsInfinity(weightedSum))
+                    throw new InvalidOperationException("Calculation is numerically unstable.");
 
-                integralJ += sumJ == 0 ? 0 : Math.Log(sumJ, Math.E);
-                integralI += sumI < double.Epsilon ? 0 : Math.Log(sumI, Math.E);
-                var (innerEnergy, freeEnergy) = (CalculateInnerEnergy(reader, minSampleCount),
-                    -temperature * Equations.Constants.BlotzmannEv * (integralJ - integralI));
+                sampleSumIntegral += sampleSum == 0 ? 0 : Math.Log(sampleSum, Math.E);
+                weightedSumIntegral += weightedSum < double.Epsilon ? 0 : Math.Log(weightedSum, Math.E);
+
+                var innerEnergy = CalculateInnerEnergy(reader, minSampleCount);
+                var freeEnergy = -temperature * Equations.Constants.BlotzmannEv * (sampleSumIntegral - weightedSumIntegral);
                 result.Add(new MmcfeEnergyState(routineParams.AlphaCurrent, temperature / routineParams.AlphaCurrent, freeEnergy, innerEnergy));
             }
 

@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
+using HelixToolkit.Wpf.SharpDX.Utilities;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.IO;
+using SharpDX.Direct3D11;
 
 namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
 {
