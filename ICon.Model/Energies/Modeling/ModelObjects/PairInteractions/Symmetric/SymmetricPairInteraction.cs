@@ -9,11 +9,17 @@ namespace Mocassin.Model.Energies
     [DataContract]
     public class SymmetricPairInteraction : PairInteraction, ISymmetricPairInteraction
     {
+        private SymmetricPairInteraction ChiralPartnerInternal { get; set; }
+
         /// <summary>
         ///     The symmetric pair energy dictionary that assigns each possible particle pair an energy value
         /// </summary>
         [DataMember]
         public Dictionary<SymmetricParticlePair, double> EnergyDictionary { get; set; }
+
+        /// <inheritdoc />
+        [DataMember]
+        public override IPairInteraction ChiralPartner => ChiralPartnerInternal;
 
         /// <inheritdoc />
         public SymmetricPairInteraction()
@@ -69,6 +75,18 @@ namespace Mocassin.Model.Energies
         {
             foreach (var item in EnergyDictionary)
                 yield return new PairEnergyEntry(item.Key, item.Value);
+        }
+
+        /// <summary>
+        ///     Sets the chiral partner <see cref="SymmetricPairInteraction"/>
+        /// </summary>
+        /// <param name="partner"></param>
+        public void SetChiralPartner(SymmetricPairInteraction partner)
+        {
+            if (partner == null) throw new ArgumentNullException(nameof(partner));
+            if (ReferenceEquals(ChiralPartnerInternal, partner)) return;
+            ChiralPartnerInternal = partner;
+            if (!ReferenceEquals(ChiralPartner, partner.ChiralPartner)) partner.SetChiralPartner(this);
         }
     }
 }

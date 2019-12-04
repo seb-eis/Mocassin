@@ -46,6 +46,8 @@
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Partner wyckoff" Binding="{Binding PartnerPosition.Name}"
                             IsReadOnly="True" />
+        <DataGridTextColumn Header="Chiral" Binding="{Binding ChiralInteractionIndex}"
+                            IsReadOnly="True" />
         <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding Distance}" 
                             IsReadOnly="True" />
       </DataGrid.Columns>

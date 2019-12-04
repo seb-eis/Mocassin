@@ -58,17 +58,12 @@ namespace Mocassin.UI.Xml.Customization
         /// <returns></returns>
         public PairEnergyEntry ToInternal(IModelProject modelProject, IPairInteraction pairInteraction)
         {
-            switch (pairInteraction)
+            return pairInteraction switch
             {
-                case ISymmetricPairInteraction _:
-                    return ToSymmetricInternal(modelProject);
-
-                case IAsymmetricPairInteraction _:
-                    return ToAsymmetricInternal(modelProject);
-
-                default:
-                    throw new ArgumentException("Type of pair interaction is not supported", nameof(pairInteraction));
-            }
+                ISymmetricPairInteraction _ => ToSymmetricInternal(modelProject),
+                IAsymmetricPairInteraction _ => ToAsymmetricInternal(modelProject),
+                _ => throw new ArgumentException("Type of pair interaction is not supported", nameof(pairInteraction)),
+            };
         }
 
         /// <summary>

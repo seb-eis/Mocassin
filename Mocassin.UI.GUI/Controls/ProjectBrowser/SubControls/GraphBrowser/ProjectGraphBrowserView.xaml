@@ -65,6 +65,15 @@
               </TextBlock>
             </MenuItem.Header>
           </MenuItem>
+          <Separator/>
+          <MenuItem Command="{Binding DuplicateSelectedProjectCommand}">
+            <MenuItem.Header>
+              <TextBlock>
+                <Run Text="Duplicate:"/>
+                <Run Text="{Binding SelectedProject.ProjectName}"/>
+              </TextBlock>
+            </MenuItem.Header>
+          </MenuItem>
         </ContextMenu>
       </ListBox.ContextMenu>
       <ListBox.ItemTemplate>

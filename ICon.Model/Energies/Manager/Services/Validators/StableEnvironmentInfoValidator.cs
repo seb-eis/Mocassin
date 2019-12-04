@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Operations;
-using Mocassin.Framework.Xml;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Extensions;
@@ -61,7 +60,7 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        /// Validates that the interaction filter definitions of the environment are unique
+        ///     Validates that the interaction filter definitions of the environment are unique
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="report"></param>
@@ -81,7 +80,7 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        /// Validates that the interaction filter definitions of the environment have valid range definitions
+        ///     Validates that the interaction filter definitions of the environment have valid range definitions
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="report"></param>
@@ -93,13 +92,8 @@ namespace Mocassin.Model.Energies.Validators
             foreach (var filter in envInfo.GetInteractionFilters())
             {
                 if (!constraint.IsValid(filter.StartRadius) || !constraint.IsValid(filter.EndRadius))
-                {
                     details.Add($"Range ({filter.StartRadius} to {filter.EndRadius}) of filter ({index}) is out of constraint {constraint}");
-                }
-                if (filter.StartRadius > filter.EndRadius)
-                {
-                    details.Add($"Start radius of filter ({index}) is below its end radius!");
-                }
+                if (filter.StartRadius > filter.EndRadius) details.Add($"Start radius of filter ({index}) is below its end radius!");
 
                 index++;
             }
@@ -132,7 +126,8 @@ namespace Mocassin.Model.Energies.Validators
         }
 
         /// <summary>
-        ///     Validates the collection of <see cref="DefectEnergy"/> energies  in the <see cref="IStableEnvironmentInfo"/> and adds the results to the report
+        ///     Validates the collection of <see cref="DefectEnergy" /> energies  in the <see cref="IStableEnvironmentInfo" /> and
+        ///     adds the results to the report
         /// </summary>
         /// <param name="envInfo"></param>
         /// <param name="report"></param>
@@ -142,19 +137,13 @@ namespace Mocassin.Model.Energies.Validators
             foreach (var defectEnergy in envInfo.GetDefectEnergies())
             {
                 if (envInfo.GetDefectEnergies().SkipWhile(x => x != defectEnergy).Count(x => x.Equals(defectEnergy)) != 1)
-                {
                     details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has multiple definitions.");
-                }
 
                 if (defectEnergy.UnitCellPosition.IsValidAndStable() && defectEnergy.Particle.IsEmpty)
-                {
                     details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.UnitCellPosition}] (stable) has no effect.");
-                }
 
                 if (double.IsInfinity(defectEnergy.Energy) || double.IsNaN(defectEnergy.Energy))
-                {
                     details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has an infinity/NaN energy value.");
-                }
             }
 
             if (details.Count != 0)

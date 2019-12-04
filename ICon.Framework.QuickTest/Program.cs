@@ -12,6 +12,8 @@ using Mocassin.Framework.Extensions;
 using Mocassin.Framework.SQLiteCore;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.DataManagement;
+using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Translator;
 using Mocassin.Tools.Evaluation.Context;
@@ -36,17 +38,18 @@ namespace Mocassin.Framework.QuickTest
 
         private static void Main(string[] args)
         {
-            var dbPath = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\BaZrO.mocprj";
-            var simLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(dbPath);
-            var project = simLibrary.MocassinProjectGraphs.First();
-            var objectObserver = new ObjectTreeChangeObserver();
-            //objectObserver.ObjectRemovedNotifications.Subscribe(x => Console.WriteLine("Released: [{0}]", x));
-            objectObserver.SetObservationRoot(project);
-            //objectObserver.ObjectAddedNotifications.Subscribe(x => Console.WriteLine("Watching: [{0}]", x));
-            var custom = project.ProjectCustomizationGraphs;
-            project.ProjectCustomizationGraphs = new ObservableCollection<ProjectCustomizationGraph>();
-            project.ProjectCustomizationGraphs = custom;
-            objectObserver.Dispose();
+            var project = ModelProject.Create(ProjectSettings.CreateDefault());
+            project.SpaceGroupService.TryLoadGroup(x => x.Index == 221);
+            var watch = Stopwatch.StartNew();
+            for (int i = 0; i < 10000; i++)
+            {
+                var left0 = new Fractional3D(0, 0.7364, .5);
+                var right0 = new Fractional3D(-.5, 1, 0.2636);
+                var left1 = new Fractional3D(0, 0.7364, .5);
+                var right1 = new Fractional3D(.2636, .5, 0.0);
+                var result = project.SpaceGroupService.CheckInteractionGeometryIsChiralPair(left0, right0, left1, right1);   
+            }
+            DisplayWatch(watch);
         }
 
         private static void TestHyperSurfaceEvaluator()

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices.ComTypes;
+using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Constraints;
 using Mocassin.Mathematics.Permutation;
@@ -38,7 +41,48 @@ namespace Mocassin.Model.Energies
             var radialConstraint = new NumericConstraint(false, 0.0, environmentInfo.MaxInteractionRange, true, comparer);
             var acceptPredicate = GetSymmetricAcceptancePredicate(environmentInfo);
             var unfilteredPairs = MakeUniqueSymmetricPairs(positions, radialConstraint);
-            return FilterAndReindex(unfilteredPairs, acceptPredicate, 0);
+            var filteredPairs = FilterAndReindex(unfilteredPairs, acceptPredicate, 0);
+            return FindAndAssignChiralPartners(filteredPairs, comparer);
+        }
+
+        /// <summary>
+        ///     Fins chiral partner <see cref="SymmetricPairInteraction"/> entries and assigns the affiliated property
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public IEnumerable<SymmetricPairInteraction> FindAndAssignChiralPartners(IEnumerable<SymmetricPairInteraction> source, NumericComparer comparer)
+        {
+            var sourceList = source.AsList();
+            for (var i = 0; i < sourceList.Count; i++)
+            {
+                var first = sourceList[i];
+                if (first.ChiralPartner != null) continue;
+                for (var j = i; j < sourceList.Count; j++)
+                {
+                    var second = sourceList[j];
+                    var compValue = comparer.Compare(first.Distance, second.Distance);
+                    if (compValue < 0) continue;
+                    if (compValue > 0) break;
+                    if (!CheckIsChiralPair(first, second)) continue;
+                    first.SetChiralPartner(second);
+                }
+            }
+
+            return sourceList;
+        }
+
+        /// <summary>
+        ///     Checks if the two provided <see cref="SymmetricPairInteraction"/> entries meet the conditions to be chiral pairs
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        protected bool CheckIsChiralPair(SymmetricPairInteraction first, SymmetricPairInteraction second)
+        {
+            if (first.Position0 != first.Position1 || second.Position0 != second.Position1 || first.Position0 != second.Position1) return false;
+            return SpaceGroupService.CheckInteractionGeometryIsChiralPair(first.Position0.Vector, first.GetSecondPositionVector(),
+                second.Position0.Vector, second.GetSecondPositionVector());
         }
 
         /// <inheritdoc />

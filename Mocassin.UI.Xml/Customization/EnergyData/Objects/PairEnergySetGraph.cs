@@ -27,6 +27,7 @@ namespace Mocassin.UI.Xml.Customization
         private VectorGraph3D endVector;
         private int pairInteractionIndex;
         private ObservableCollection<PairEnergyGraph> pairEnergyEntries;
+        private int chiralInteractionIndex = -1;
 
         /// <summary>
         ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> that targets the center wyckoff position
@@ -100,6 +101,16 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
+        ///     Get or set the interaction index of a chiral partner. Negative values indicate that none exists
+        /// </summary>
+        [XmlAttribute("ChiralInteractionIndex")]
+        public int ChiralInteractionIndex
+        {
+            get => chiralInteractionIndex;
+            set => SetProperty(ref chiralInteractionIndex, value);
+        }
+
+        /// <summary>
         ///     Set all data on the passed <see cref="IPairEnergySetter" /> and push the values to the affiliated
         ///     <see cref="Mocassin.Model.ModelProject.IModelProject" />
         /// </summary>
@@ -133,6 +144,7 @@ namespace Mocassin.UI.Xml.Customization
             {
                 Name = $"Pair.Energy.Set.{energySetter.PairInteraction.Index}",
                 PairInteractionIndex = energySetter.PairInteraction.Index,
+                ChiralInteractionIndex = energySetter.PairInteraction.ChiralPartner?.Index ?? -1,
                 CenterPosition = new ModelObjectReferenceGraph<UnitCellPosition>(centerPosition),
                 PartnerPosition = new ModelObjectReferenceGraph<UnitCellPosition>(partnerPosition),
                 Distance = energySetter.PairInteraction.Distance,
@@ -178,6 +190,7 @@ namespace Mocassin.UI.Xml.Customization
                 startVector = startVector.Duplicate(),
                 endVector = endVector.Duplicate(),
                 pairInteractionIndex = pairInteractionIndex,
+                chiralInteractionIndex = chiralInteractionIndex,
                 pairEnergyEntries = pairEnergyEntries.Select(x => x.Duplicate()).ToObservableCollection()
             };
             return copy;

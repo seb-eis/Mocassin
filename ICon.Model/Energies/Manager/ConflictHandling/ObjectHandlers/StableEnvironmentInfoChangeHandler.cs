@@ -88,8 +88,11 @@ namespace Mocassin.Model.Energies.ConflictHandling
         {
             if (oldPairs.Count != newPairs.Count)
             {
-                var detail = $"The pair interaction set was updated ({oldPairs.Count}) to ({newPairs.Count}) interactions";
-                report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail));
+                var chiralPairCount = newPairs.Count(x => x.IsChiral);
+                var uniquePairCount = newPairs.Count - chiralPairCount / 2;
+                var detail0 = $"The pair interaction set was updated from ({oldPairs.Count}) to ({newPairs.Count}) interactions";
+                var detail1 = $"Chiral behavior was detected in ({chiralPairCount}) cases, yielding ({uniquePairCount}) unique pairs.";
+                report.AddWarning(ModelMessageSource.CreateConflictHandlingWarning(this, detail0, detail1));
             }
 
             oldPairs.Clear();

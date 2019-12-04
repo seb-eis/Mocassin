@@ -27,7 +27,17 @@ namespace Mocassin.Model.Energies
         double Distance { get; }
 
         /// <summary>
-        ///     Get the actual position vector for the second unit cell position in order to describe the refernce geometry of the
+        ///     Get a boolean flag if the interaction is chiral
+        /// </summary>
+        bool IsChiral { get; }
+
+        /// <summary>
+        ///     Get the <see cref="IPairInteraction" /> that is the L or R chiral partner
+        /// </summary>
+        IPairInteraction ChiralPartner { get; }
+
+        /// <summary>
+        ///     Get the actual position vector for the second unit cell position in order to describe the reference geometry of the
         ///     pair interaction
         /// </summary>
         /// <returns></returns>

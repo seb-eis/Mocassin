@@ -425,7 +425,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             var mesh = meshBuilder.ToMesh();
 
             var rng = new PcgRandom32();
-            var material = PhongMaterials.PolishedSilver;
+            var material = PhongMaterials.Gold;
             material.Freeze();
 
             var sceneBuilder = new SceneBuilder();

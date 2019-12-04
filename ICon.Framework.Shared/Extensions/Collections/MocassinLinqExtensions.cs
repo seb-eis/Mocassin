@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 
 namespace Mocassin.Framework.Extensions
@@ -181,6 +182,23 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
+        ///     Linq style <see cref="Array"/> conversion for cases where the size of the <see cref="IEnumerable{T}"/> is known
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static T[] ToArray<T>(this IEnumerable<T> source, int length)
+        {
+            if (length < 0) throw new ArgumentException("Length cannot be smaller than 0");
+            var result = new T[length];
+            var index = -1;
+            foreach (var item in source) result[++index] = item;
+
+            return result;
+        }
+
+        /// <summary>
         ///     Linq style <see cref="ObservableCollection{T}"/> conversion extension
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -189,6 +207,28 @@ namespace Mocassin.Framework.Extensions
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
         {
             return new ObservableCollection<T>(source);
+        }
+
+        /// <summary>
+        ///     Get an <see cref="ICollection{T}"/> from the provided <see cref="IEnumerable{T}"/>. If the source does not implement the interface a new collection is created by invoking the sequence
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static ICollection<T> AsCollection<T>(this IEnumerable<T> source)
+        {
+            return source as ICollection<T> ?? source.ToList();
+        }
+
+        /// <summary>
+        ///     Get an <see cref="IList{T}"/> from the provided <see cref="IEnumerable{T}"/>. If the source does not implement the interface a new list is created by invoking the sequence
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IList<T> AsList<T>(this IEnumerable<T> source)
+        {
+            return source as IList<T> ?? source.ToList();
         }
     }
 }

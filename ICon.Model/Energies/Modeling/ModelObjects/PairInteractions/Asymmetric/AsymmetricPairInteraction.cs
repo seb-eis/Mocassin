@@ -16,6 +16,10 @@ namespace Mocassin.Model.Energies
         public Dictionary<AsymmetricParticlePair, double> EnergyDictionary { get; set; }
 
         /// <inheritdoc />
+        [DataMember]
+        public override IPairInteraction ChiralPartner => null;
+
+        /// <inheritdoc />
         public AsymmetricPairInteraction()
         {
         }

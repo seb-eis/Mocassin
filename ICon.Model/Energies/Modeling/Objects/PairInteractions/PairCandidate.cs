@@ -4,7 +4,7 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <summary>
-    ///     Raw pair interaction candidate struct that is used to compare and assign the indexing to the rwa pair interactions
+    ///     Raw pair interaction candidate struct that is used to compare and assign the indexing to the raw pair interactions
     /// </summary>
     public readonly struct PairCandidate
     {

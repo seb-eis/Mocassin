@@ -28,6 +28,12 @@ namespace Mocassin.Model.Energies
         [DataMember]
         public double Distance { get; set; }
 
+        /// <inheritdoc />
+        public bool IsChiral => ChiralPartner != null;
+
+        /// <inheritdoc />
+        public abstract IPairInteraction ChiralPartner { get; }
+
         /// <summary>
         ///     Default constructor
         /// </summary>

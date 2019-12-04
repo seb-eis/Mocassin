@@ -46,9 +46,7 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public static ParticlePair MakePair(IParticle center, IParticle other, bool isAsymmetric)
         {
-            if (isAsymmetric) 
-                return new AsymmetricParticlePair {Particle0 = center, Particle1 = other};
-
+            if (isAsymmetric) return new AsymmetricParticlePair {Particle0 = center, Particle1 = other};
             return new SymmetricParticlePair {Particle0 = center, Particle1 = other};
         }
     }
