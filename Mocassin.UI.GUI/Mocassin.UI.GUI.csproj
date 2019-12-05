@@ -904,9 +904,6 @@
       <DependentUpon>TransitionCustomizationControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\DataControl\TransitionCustomizationControlViewModel.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\GroupEnergySetGroupEnergySetViewModelConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\KineticRuleSetKineticRuleSetViewModelConverter.cs" />
-    <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\PairEnergySetPairEnergySetViewModelConverter.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlViewModel.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\GroupEnergySetControlView.xaml.cs">
       <DependentUpon>GroupEnergySetControlView.xaml</DependentUpon>
@@ -1130,6 +1127,7 @@
     <Folder Include="Controls\ProjectStatusBar\SubControls\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\EnergyModel\VisualControl\" />
+    <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\GridControl\Adapter\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ModelCustomization\VisualControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\ParticleModel\InfoControl\" />

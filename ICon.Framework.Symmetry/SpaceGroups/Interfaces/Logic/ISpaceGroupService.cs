@@ -196,7 +196,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end);
 
         /// <summary>
-        ///     Checks a pair interaction geometry for chirality. Returns true only if both positions belong to the same sub-lattice and mapping A-A' to A'-A using the symmetry operations is impossible
+        ///     Checks a pair interaction geometry for chirality within the current space group. Caller has to ensure that both
+        ///     coordinates belong to the same sub-lattice
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -204,7 +205,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         bool CheckInteractionGeometryIsChiral(in Fractional3D left, in Fractional3D right);
 
         /// <summary>
-        ///     Checks if the provided interaction pair form a chiral pair. Returns true only if both interaction belong to the same sub-lattice and mapping A-A' to B-B' using the symmetry operations is impossible
+        ///     Checks two pair interaction geometries for being a chiral pair within the current space group. Caller has to ensure
+        ///     that all coordinates belong to the same sub-lattice
         /// </summary>
         /// <param name="left0"></param>
         /// <param name="right0"></param>

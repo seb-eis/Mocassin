@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl;
 using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl
 {
@@ -11,21 +13,23 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     ///     The <see cref="CollectionControlViewModel{T}" /> for the <see cref="PairInteractionControlView" /> that control
     ///     <see cref="PairEnergySetGraph" /> customization data
     /// </summary>
-    public class PairInteractionControlViewModel : CollectionControlViewModel<PairEnergySetGraph>, IContentSupplier<ProjectCustomizationGraph>
+    public class PairInteractionControlViewModel : CollectionControlViewModel<PairEnergySetControlViewModel>, IContentSupplier<ProjectCustomizationGraph>, IDisposable
     {
         /// <summary>
-        /// Get the <see cref="Func{T,TResult}"/> getter that provides the <see cref="ICollection{T}"/> of <see cref="PairEnergySetGraph"/>
+        ///     Get the <see cref="Func{T,TResult}" /> getter that provides the <see cref="IReadOnlyList{T}" /> of
+        ///     <see cref="PairEnergySetGraph" />
         /// </summary>
-        private Func<ProjectCustomizationGraph, ICollection<PairEnergySetGraph>> InteractionSetGetter { get; }
+        private Func<ProjectCustomizationGraph, IReadOnlyList<PairEnergySetGraph>> InteractionSetGetter { get; }
 
         /// <inheritdoc />
         public ProjectCustomizationGraph ContentSource { get; protected set; }
 
         /// <summary>
-        ///     Creates new <see cref="PairInteractionControlViewModel"/> with the provided getter <see cref="Func{T,TResult}"/> for the target collection
+        ///     Creates new <see cref="PairInteractionControlViewModel" /> with the provided getter <see cref="Func{T,TResult}" />
+        ///     for the target collection
         /// </summary>
         /// <param name="interactionSetGetter"></param>
-        public PairInteractionControlViewModel(Func<ProjectCustomizationGraph, ICollection<PairEnergySetGraph>> interactionSetGetter)
+        public PairInteractionControlViewModel(Func<ProjectCustomizationGraph, IReadOnlyList<PairEnergySetGraph>> interactionSetGetter)
         {
             InteractionSetGetter = interactionSetGetter ?? throw new ArgumentNullException(nameof(interactionSetGetter));
         }
@@ -34,7 +38,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public void ChangeContentSource(ProjectCustomizationGraph contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(InteractionSetGetter(contentSource));
+            CreateSetControlViewModels();
+        }
+
+        /// <summary>
+        ///     Creates and sets the new <see cref="PairEnergySetControlViewModel" /> collection
+        /// </summary>
+        private void CreateSetControlViewModels()
+        {
+            var interactionSets = InteractionSetGetter.Invoke(ContentSource);
+            if (interactionSets == null) return;
+            var viewModels = interactionSets.Select(x => new PairEnergySetControlViewModel(x, interactionSets)).ToList(interactionSets.Count);
+            SetCollection(viewModels);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            foreach (var item in Items) item.Dispose();
         }
     }
 }

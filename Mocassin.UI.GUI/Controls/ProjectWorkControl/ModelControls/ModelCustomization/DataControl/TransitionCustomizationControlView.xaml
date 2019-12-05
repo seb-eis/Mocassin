@@ -6,7 +6,6 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
-  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.Adapter"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:TransitionCustomizationControlViewModel, IsDesignTimeCreatable=True}"
@@ -41,14 +40,14 @@
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Source transition" Binding="{Binding Transition.Name}"
+        <DataGridTextColumn Header="Name" Binding="{Binding KineticRuleSet.Name}" />
+        <DataGridTextColumn Header="Source transition" Binding="{Binding KineticRuleSet.Transition.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
     </DataGrid>
 
     <gridControl:KineticRuleSetControlView Grid.Column="2"
-                                           DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedItem, Converter={adapter:KineticRuleSetKineticRuleSetViewModelConverter}}" 
+                                           DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedItem}" 
                                            Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
   </Grid>
 </UserControl>

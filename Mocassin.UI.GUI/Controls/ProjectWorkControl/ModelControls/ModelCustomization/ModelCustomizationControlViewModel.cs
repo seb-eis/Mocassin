@@ -15,7 +15,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectCustomizationGraph>
     {
         /// <summary>
-        ///     Get or set the <see cref="ProjectCustomizationGraph"/> that serves as the current content source
+        ///     Get or set the <see cref="ProjectCustomizationGraph" /> that serves as the current content source
         /// </summary>
         private ProjectCustomizationGraph CustomizationContentSource { get; set; }
 
@@ -25,17 +25,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public TransitionCustomizationControlViewModel TransitionCustomizationViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the stable pair interaction customization
+        ///     Get the <see cref="PairInteractionControlViewModel" /> that controls the stable pair interaction customization
         /// </summary>
         public PairInteractionControlViewModel StablePairInteractionViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="PairInteractionControlViewModel"/> that controls the unstable pair interaction customization
+        ///     Get the <see cref="PairInteractionControlViewModel" /> that controls the unstable pair interaction customization
         /// </summary>
         public PairInteractionControlViewModel UnstablePairInteractionViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="GroupInteractionControlViewModel"/> that controls the group interaction customization
+        ///     Get the <see cref="GroupInteractionControlViewModel" /> that controls the group interaction customization
         /// </summary>
         public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
 
@@ -60,7 +60,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             StablePairInteractionViewModel.ChangeContentSource(null);
             UnstablePairInteractionViewModel.ChangeContentSource(null);
             GroupInteractionViewModel.ChangeContentSource(null);
-
         }
 
         /// <inheritdoc />
@@ -71,6 +70,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
             UnstablePairInteractionViewModel.ChangeContentSource(contentSource);
             GroupInteractionViewModel.ChangeContentSource(contentSource);
             CustomizationContentSource = contentSource;
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            StablePairInteractionViewModel.Dispose();
+            base.Dispose();
         }
     }
 }

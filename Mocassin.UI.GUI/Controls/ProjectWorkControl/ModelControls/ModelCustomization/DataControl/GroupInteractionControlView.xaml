@@ -5,9 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl"
-  xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
-  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.Adapter"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   d:DataContext="{d:DesignInstance local:GroupInteractionControlViewModel, IsDesignTimeCreatable=True}"
@@ -40,18 +38,18 @@
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding GroupEnergySet.Name}" />
 
-        <DataGridTextColumn Header="Source interaction" Binding="{Binding GroupInteraction.Name}"
+        <DataGridTextColumn Header="Source interaction" Binding="{Binding GroupEnergySet.GroupInteraction.Name}"
                             IsReadOnly="True" />
 
-        <DataGridTextColumn Header="Center wyckoff" Binding="{Binding CenterPosition.Name}"
+        <DataGridTextColumn Header="Center wyckoff" Binding="{Binding GroupEnergySet.CenterPosition.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
 
     </DataGrid>
     <gridControl:GroupEnergySetControlView Grid.Column="2"
-      DataContext="{Binding SelectedItem, Converter={adapter:GroupEnergySetGroupEnergySetViewModelConverter}}"
+      DataContext="{Binding SelectedItem}"
       Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>
   </Grid>
 </UserControl>

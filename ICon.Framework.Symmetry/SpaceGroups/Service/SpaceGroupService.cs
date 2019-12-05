@@ -236,7 +236,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         public SetList<Fractional3D[]> GetWyckoffSequences(params Fractional3D[] refSequence)
         {
-            Fractional3D[] MoveStartToUnitCell(IReadOnlyList<Fractional3D> vectors)
+            Fractional3D[] MoveStartToUnitCell(IList<Fractional3D> vectors)
             {
                 var coordinateA = vectors[0].A.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].A;
                 var coordinateB = vectors[0].B.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].B;
@@ -249,7 +249,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var result = new SetList<Fractional3D[]>(comparer);
 
             foreach (var operation in LoadedGroup.Operations)
-                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToArray(refSequence.Length)));
+                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToList(refSequence.Length)));
 
             return result;
         }

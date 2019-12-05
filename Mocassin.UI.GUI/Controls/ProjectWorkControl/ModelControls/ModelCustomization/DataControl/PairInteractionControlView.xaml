@@ -5,9 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl"
-  xmlns:customization="clr-namespace:Mocassin.UI.Xml.Customization;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
-  xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl.Adapter"
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
   mc:Ignorable="d"
@@ -32,7 +30,6 @@
           <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                      Width="{StaticResource App.Size.RowHeaderLogo}"
                                      Height="{StaticResource App.Size.RowHeaderLogo}"
-                                     DataContext="C"
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                      PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                      PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
@@ -41,20 +38,20 @@
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Center wyckoff" Binding="{Binding CenterPosition.Name}" 
+        <DataGridTextColumn Header="Name" Binding="{Binding PairEnergySet.Name}" />
+        <DataGridTextColumn Header="Center wyckoff" Binding="{Binding PairEnergySet.CenterPosition.Name}" 
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Partner wyckoff" Binding="{Binding PartnerPosition.Name}"
+        <DataGridTextColumn Header="Partner wyckoff" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Chiral" Binding="{Binding ChiralInteractionIndex}"
+        <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding PairEnergySet.Distance}" 
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding Distance}" 
+        <DataGridTextColumn Header="Chiral partner" Binding="{Binding ChiralPairEnergySet.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
 
     </DataGrid>
     <gridControl:PairEnergySetControlView Grid.Column="2"
-                                          DataContext="{Binding SelectedItem, Converter={adapter:PairEnergySetPairEnergySetViewModelConverter}}"
+                                          DataContext="{Binding SelectedItem}"
                                           Visibility="{Binding Converter={converter:NullToVisibilityConverter}}" />
   </Grid>
 </UserControl>

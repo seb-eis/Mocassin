@@ -1,5 +1,8 @@
-﻿using Mocassin.UI.GUI.Base.DataContext;
+﻿using System.Linq;
+using Mocassin.Framework.Extensions;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl;
 using Mocassin.UI.Xml.Customization;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.DataControl
@@ -14,20 +17,31 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         ///     Get the <see cref="CollectionControlViewModel{T}" /> for the customizable <see cref="KineticRuleSetGraph" />
         ///     instances
         /// </summary>
-        public CollectionControlViewModel<KineticRuleSetGraph> KineticRuleSetCollectionViewModel { get; }
+        public CollectionControlViewModel<KineticRuleSetControlViewModel> KineticRuleSetCollectionViewModel { get; }
 
         /// <inheritdoc />
         public TransitionCustomizationControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            KineticRuleSetCollectionViewModel = new CollectionControlViewModel<KineticRuleSetGraph>();
+            KineticRuleSetCollectionViewModel = new CollectionControlViewModel<KineticRuleSetControlViewModel>();
         }
 
         /// <inheritdoc />
         public override void ChangeContentSource(ProjectCustomizationGraph contentSource)
         {
             ContentSource = contentSource;
-            KineticRuleSetCollectionViewModel.SetCollection(contentSource?.TransitionModelCustomization?.KineticTransitionParameterSets);
+            CreateSetControlViewModels();
+        }
+
+        /// <summary>
+        ///     Creates and sets the new <see cref="KineticRuleSetControlViewModel" /> collection
+        /// </summary>
+        private void CreateSetControlViewModels()
+        {
+            var interactionSets = ContentSource?.TransitionModelCustomization?.KineticTransitionParameterSets;
+            if (interactionSets == null) return;
+            var viewModels = interactionSets.Select(x => new KineticRuleSetControlViewModel(x)).ToList(interactionSets.Count);
+            KineticRuleSetCollectionViewModel.SetCollection(viewModels);
         }
     }
 }

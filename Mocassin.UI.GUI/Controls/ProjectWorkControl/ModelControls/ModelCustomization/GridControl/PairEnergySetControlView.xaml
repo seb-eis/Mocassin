@@ -52,6 +52,20 @@
         <Run Text="in the fractional coordinate context." />
         <LineBreak/>
         <LineBreak/>
+        <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}">
+          <Run.ToolTip>
+            <TextBlock TextAlignment="Justify" TextWrapping="Wrap" MaxWidth="400">
+              <Run Text="Physically, an A-A' pair interaction cannot be distinguished from its A'-A counterpart."/>
+              <Run Text="It is also impossible to calculate two distinct energy values for the two cases."/>
+              <Run Text="However, the mathematical A-A' symmetry extension with the space group does not always yield the A'-A direction."/>
+              <Run Text="This is caused by the fact that A-A' contains direction information and therefore even a pair interaction can be chiral."/>
+            </TextBlock>
+          </Run.ToolTip>
+        </Run>
+        <Run Text="Chiral partner interaction: "/>
+        <Run Text="{Binding ChiralPairEnergySet.Name, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
+        <LineBreak/>
+        <LineBreak/>
         <Run Text="Content grid:" FontWeight="DemiBold"/>
       </TextBlock>
     </Border>
