@@ -47,7 +47,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         private void CreateSetControlViewModels()
         {
             var interactionSets = InteractionSetGetter.Invoke(ContentSource);
-            if (interactionSets == null) return;
+            if (interactionSets == null)
+            {
+                SetCollection(null);
+                return;
+            }
             var viewModels = interactionSets.Select(x => new PairEnergySetControlViewModel(x, interactionSets)).ToList(interactionSets.Count);
             SetCollection(viewModels);
         }
@@ -55,7 +59,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         /// <inheritdoc />
         public void Dispose()
         {
-            foreach (var item in Items) item.Dispose();
+            foreach (var item in Items ?? Enumerable.Empty<PairEnergySetControlViewModel>()) item?.Dispose();
         }
     }
 }

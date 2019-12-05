@@ -30,7 +30,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         private void CreateSetControlViewModels()
         {
             var interactionSets = ContentSource?.EnergyModelCustomization?.GroupEnergyParameterSets;
-            if (interactionSets == null) return;
+            if (interactionSets == null)
+            {
+                SetCollection(null);
+                return;
+            }
             var viewModels = interactionSets.Select(x => new GroupEnergySetControlViewModel(x)).ToList(interactionSets.Count);
             SetCollection(viewModels);
         }

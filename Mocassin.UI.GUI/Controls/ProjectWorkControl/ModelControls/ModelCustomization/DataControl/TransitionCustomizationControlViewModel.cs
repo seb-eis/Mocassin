@@ -39,7 +39,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         private void CreateSetControlViewModels()
         {
             var interactionSets = ContentSource?.TransitionModelCustomization?.KineticTransitionParameterSets;
-            if (interactionSets == null) return;
+            if (interactionSets == null)
+            {
+                KineticRuleSetCollectionViewModel.SetCollection(null);
+                return;
+            }
             var viewModels = interactionSets.Select(x => new KineticRuleSetControlViewModel(x)).ToList(interactionSets.Count);
             KineticRuleSetCollectionViewModel.SetCollection(viewModels);
         }
