@@ -168,6 +168,15 @@ namespace Mocassin.Symmetry.SpaceGroups
         IEnumerable<Fractional3D> ShiftFirstToOriginCell(IEnumerable<Fractional3D> source, double tolerance);
 
         /// <summary>
+        ///     Shifts a sequence of fractional vectors in a manner that the first vector in the sequence is in the (0,0,0) origin
+        ///     cell
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        IEnumerable<Fractional3D> ShiftFirstToOriginCell(IEnumerable<Fractional3D> source, IComparer<double> comparer);
+
+        /// <summary>
         ///     Checks if the passed <see cref="ISymmetryOperation" /> pushes the provided vector outside of the origin cell and
         ///     returns either the operation itself or a origin shift corrected version
         /// </summary>
@@ -176,6 +185,16 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="tolerance"></param>
         /// <returns></returns>
         ISymmetryOperation GetOriginCellShiftedOperations(in Fractional3D start, ISymmetryOperation operation, double tolerance);
+
+        /// <summary>
+        ///     Checks if the passed <see cref="ISymmetryOperation" /> pushes the provided vector outside of the origin cell and
+        ///     returns either the operation itself or a origin shift corrected version
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="operation"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        ISymmetryOperation GetOriginCellShiftedOperations(in Fractional3D start, ISymmetryOperation operation, IComparer<double> comparer);
 
         /// <summary>
         ///     Creates the first possible operation that transforms the passed source vector onto the target.

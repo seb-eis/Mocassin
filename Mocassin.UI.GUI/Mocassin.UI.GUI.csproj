@@ -293,8 +293,13 @@
     <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\AddDXModelViewport3DTabCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobTranslationCommand.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\Attributes\TogglesOverlayAttribute.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Attributes\RaiseInvalidateRenderAttribute.cs" />
     <Compile Include="Controls\VisualizerDX\Viewport\Commands\ExportViewportImageCommand.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\DataControl\DX3DModelVisualizationViewModel.cs" />
+    <Compile Include="Controls\VisualizerDX\Viewport\DX3DViewportItemsView.xaml.cs">
+      <DependentUpon>DX3DViewportItemsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\VisualizerDX\Viewport\Enums\CameraType.cs" />
     <Compile Include="Controls\VisualizerDX\ModelViewer\DX3DModelDataView.xaml.cs">
       <DependentUpon>DX3DModelDataView.xaml</DependentUpon>
@@ -639,6 +644,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\VisualizerDX\ModelViewer\DX3DModelDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\VisualizerDX\Viewport\DX3DViewportItemsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1138,7 +1147,6 @@
     <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\InfoControl\" />
     <Folder Include="Controls\ProjectWorkControl\ModelControls\TransitionModel\VisualControl\" />
     <Folder Include="Controls\VisualizerDX\Objects\" />
-    <Folder Include="Controls\VisualizerDX\Viewport\DataControl\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICon.Framework.Mathematics\Mocassin.Mathematics.csproj">

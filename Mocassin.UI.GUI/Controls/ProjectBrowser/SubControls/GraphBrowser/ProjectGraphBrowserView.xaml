@@ -54,6 +54,7 @@
   </UserControl.Resources>
 
   <Grid>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
     <ListBox ItemsSource="{Binding ProjectGraphs}" SelectedItem="{Binding SelectedProject}" BorderThickness="0">
       <ListBox.ContextMenu>
         <ContextMenu Visibility="{Binding SelectedProject, Converter={StaticResource App.Converter.NullToVisibility}}">
@@ -151,5 +152,6 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
+    </ScrollViewer>
   </Grid>
 </UserControl>

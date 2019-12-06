@@ -4,7 +4,7 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Mathematics.Coordinates
 {
     /// <summary>
-    ///     Transformer between the fractional, cartesian and spherical vector system that supports coordinate systems
+    ///     Provides vector transformations between the cartesian system, a spherical and a fractional system
     /// </summary>
     public interface IVectorTransformer
     {

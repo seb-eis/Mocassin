@@ -33,7 +33,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
         public ExportViewportCommand(Func<(int Width, int Height)> exportSizeProvider)
         {
             if (exportSizeProvider != null) ExportSizeProvider = exportSizeProvider;
-            FileSelectionSource = new UserFileSelectionSource(GetSupportedFiles());
+            FileSelectionSource = new UserFileSelectionSource(true, GetSupportedFiles());
         }
 
         /// <inheritdoc />

@@ -5,10 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
-using HelixToolkit.Wpf.SharpDX.Utilities;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.IO;
-using SharpDX.Direct3D11;
 
 namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
 {
@@ -18,7 +16,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
     public class ExportViewportImageCommand : Command<Viewport3DX>
     {
         /// <summary>
-        ///     Get or set the callback <see cref="Func{TResult}"/> that the command uses to get the size information
+        ///     Get or set the callback <see cref="Func{TResult}" /> that the command uses to get the size information
         /// </summary>
         public Func<(int Width, int Height)> ExportSizeCallback { get; set; }
 
@@ -28,7 +26,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
         }
 
         /// <summary>
-        ///     Creates new <see cref="ExportViewportImageCommand"/> using the provided export size callback
+        ///     Creates new <see cref="ExportViewportImageCommand" /> using the provided export size callback
         /// </summary>
         /// <param name="exportSizeCallback"></param>
         public ExportViewportImageCommand(Func<(int Width, int Height)> exportSizeCallback)
@@ -39,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
         /// <inheritdoc />
         public override void Execute(Viewport3DX parameter)
         {
-            var path = new UserFileSelectionSource(EnumerateSupportedImageFormats().ToArray()).GetFileSelection();
+            var path = new UserFileSelectionSource(true, EnumerateSupportedImageFormats().ToArray()).GetFileSelection();
             if (string.IsNullOrWhiteSpace(path)) return;
             var (width, height) = GetOutputSize(parameter);
             TrySaveImage(parameter, path, GetImageFormatForPath(path), width, height);
@@ -58,7 +56,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
         /// <returns></returns>
         private (int Width, int Height) GetOutputSize(Viewport3DX view)
         {
-            var (width, height) = ExportSizeCallback?.Invoke() ?? (0,0);
+            var (width, height) = ExportSizeCallback?.Invoke() ?? (0, 0);
             width = width == 0 ? (int) view.ActualWidth : width;
             height = height == 0 ? (int) view.ActualHeight : height;
             return (width, height);
@@ -101,7 +99,8 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands
         }
 
         /// <summary>
-        ///     Resizes the <see cref="Viewport3DX"/> if the provided values differ from the current size. Returns true if the view was resized
+        ///     Resizes the <see cref="Viewport3DX" /> if the provided values differ from the current size. Returns true if the
+        ///     view was resized
         /// </summary>
         /// <param name="view"></param>
         /// <param name="width"></param>

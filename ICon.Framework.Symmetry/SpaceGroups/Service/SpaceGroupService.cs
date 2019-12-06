@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Symmetry.CrystalSystems;
-using Newtonsoft.Json;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -36,6 +34,11 @@ namespace Mocassin.Symmetry.SpaceGroups
 
         /// <inheritdoc />
         public IComparer<Fractional3D> Comparer => VectorComparer;
+
+        /// <summary>
+        ///     Get the <see cref="IComparer{T}"/> for double values used by the vector comparer
+        /// </summary>
+        public IComparer<double> DoubleComparer => VectorComparer.ValueComparer;
 
         /// <summary>
         ///     Creates new <see cref="SpaceGroupService" /> that uses the provided comparer and database file path
@@ -238,9 +241,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             Fractional3D[] MoveStartToUnitCell(IList<Fractional3D> vectors)
             {
-                var coordinateA = vectors[0].A.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].A;
-                var coordinateB = vectors[0].B.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].B;
-                var coordinateC = vectors[0].C.PeriodicTrim(0.0, 1.0, 1.0e-10) - vectors[0].C;
+                var coordinateA = vectors[0].A.PeriodicTrim(0.0, 1.0, DoubleComparer) - vectors[0].A;
+                var coordinateB = vectors[0].B.PeriodicTrim(0.0, 1.0, DoubleComparer) - vectors[0].B;
+                var coordinateC = vectors[0].C.PeriodicTrim(0.0, 1.0, DoubleComparer) - vectors[0].C;
                 var shift = new Fractional3D(coordinateA, coordinateB, coordinateC);
                 return vectors.Select(a => a + shift).ToArray(vectors.Count);
             }
@@ -260,7 +263,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var refCollection = refSequence.AsCollection();
             return LoadedGroup.Operations
                 .Select(operation => refCollection.Select(vector => operation.ApplyUntrimmed(vector)).ToArray(refCollection.Count))
-                .ToList();
+                .ToList(LoadedGroup.Operations.Count);
         }
 
         /// <inheritdoc />
@@ -271,7 +274,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
             var list = new SetList<Fractional3D[]>(comparer)
             {
-                GetFullP1PathExtension(refCollection).Select(sequence => ShiftFirstToOriginCell(sequence, 1.0e-10).ToArray(sequence.Length))
+                GetFullP1PathExtension(refCollection).Select(sequence => ShiftFirstToOriginCell(sequence, DoubleComparer).ToArray(sequence.Length))
             };
 
             return list;
@@ -285,7 +288,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
             var operations = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
             operations.AddRange(LoadedGroup.Operations.Select(x =>
-                GetOriginCellShiftedOperations(x.ApplyUntrimmed(refVectors[0]), x, 1.0e-10)));
+                GetOriginCellShiftedOperations(x.ApplyUntrimmed(refVectors[0]), x, DoubleComparer)));
 
             var sequences = new SetList<IList<Fractional3D>>(
                 Comparer<IList<Fractional3D>>.Create((a, b) => a.LexicographicCompare(b, VectorComparer)),
@@ -323,9 +326,26 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
+        public IEnumerable<Fractional3D> ShiftFirstToOriginCell(IEnumerable<Fractional3D> source, IComparer<double> comparer)
+        {
+            var sourceList = source.AsList();
+
+            var start = sourceList[0];
+            var shift = start.TrimToUnitCell(comparer) - start;
+            return sourceList.Select(value => value + shift);
+        }
+
+        /// <inheritdoc />
         public ISymmetryOperation GetOriginCellShiftedOperations(in Fractional3D start, ISymmetryOperation operation, double tolerance)
         {
             var shift = start.TrimToUnitCell(tolerance) - start;
+            return GetTranslationShiftedOperation(operation, shift);
+        }
+
+        /// <inheritdoc />
+        public ISymmetryOperation GetOriginCellShiftedOperations(in Fractional3D start, ISymmetryOperation operation, IComparer<double> comparer)
+        {
+            var shift = start.TrimToUnitCell(comparer) - start;
             return GetTranslationShiftedOperation(operation, shift);
         }
 
@@ -392,23 +412,6 @@ namespace Mocassin.Symmetry.SpaceGroups
         public bool CheckInteractionGeometryIsChiral(in Fractional3D left, in Fractional3D right)
         {
             return CheckInteractionGeometryIsChiralPair(left, right, right, left);
-        }
-
-        /// <summary>
-        ///     Performs a chiral extension of the provided set of <see cref="Fractional3D"/> sequences. The returned collection will have the same contents as the original if the set is not chiral
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        private SetList<Fractional3D[]> ChiralExtendSet(BinarySearchableList<Fractional3D[]> source)
-        {
-            var result = new SetList<Fractional3D[]>(source.Comparer);
-            foreach (var item in source)
-            {
-                result.Add(source);
-                result.Add(ShiftFirstToOriginCell(item.Reverse(), 1.0e-10).ToArray(item.Length));
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -593,7 +596,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IComparer<T1> GetSpecialVectorComparer<T1>() where T1 : IVector3D
         {
-            return Comparer<T1>.Create((a, b) => ((IComparer<IVector3D>) VectorComparer).Compare(a, b));
+            return new VectorComparer3D<T1>(DoubleComparer);
         }
     }
 }

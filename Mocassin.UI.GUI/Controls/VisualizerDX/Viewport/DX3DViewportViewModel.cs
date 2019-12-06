@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -13,7 +14,6 @@ using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Commands;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper;
 using SharpDX;
-using SharpDX.Direct3D;
 using Color = System.Windows.Media.Color;
 using Matrix = SharpDX.Matrix;
 
@@ -58,9 +58,10 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         private double cameraFieldOfView = 45;
         private SceneLightSetting lightSetting = SceneLightSetting.Default;
         private Color lightColor = Colors.White;
-        private bool isSettingsActive;
+        private bool settingsOverlayActive;
         private int imageExportHeight;
         private int imageExportWidth;
+        private bool itemsOverlayActive;
 
         /// <summary>
         ///     Get the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the 3D system
@@ -70,6 +71,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         /// <summary>
         ///     Get or set the <see cref="HelixToolkit.Wpf.SharpDX.Camera" />
         /// </summary>
+        [RaiseInvalidateRender]
         public Camera Camera
         {
             get => camera;
@@ -333,12 +335,23 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Get or set a boolean flag if the settings are active
+        ///     Get or set a boolean flag if the settings overlay is active
         /// </summary>
-        public bool IsSettingsActive
+        [TogglesOverlay]
+        public bool SettingsOverlayActive
         {
-            get => isSettingsActive;
-            set => SetProperty(ref isSettingsActive, value);
+            get => settingsOverlayActive;
+            set => SetProperty(ref settingsOverlayActive, value);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag if the object overlay is active
+        /// </summary>
+        [TogglesOverlay]
+        public bool ItemsOverlayActive
+        {
+            get => itemsOverlayActive;
+            set => SetProperty(ref itemsOverlayActive, value);
         }
 
         /// <summary>
@@ -411,7 +424,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             EffectsManager = new DefaultEffectsManager();
             HitTestVisibleSceneElements = new ObservableElement3DCollection();
             HitTestInvisibleSceneElements = new ObservableElement3DCollection();
-            SceneLightCollection = new ObservableElement3DCollection {LightFactory.DefaultLightModel3D(LightColor)};
+            SceneLightCollection = new ObservableElement3DCollection {LightFactory.DefaultLightModel3D(LightColor, "Light")};
             PropertyChanged += DX3DViewportViewModel_PropertyChanged;
             ResetCameraCommand = new RelayCommand(ResetCamera);
             ExportImageCommand = new ExportViewportImageCommand(() => (ImageExportWidth, ImageExportHeight));
@@ -429,8 +442,8 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             material.Freeze();
 
             var sceneBuilder = new SceneBuilder();
-            var transforms = new List<Matrix>(5000);
-            for (var i = 0; i < 5000; i++) transforms.Add(Matrix.Translation(rng.NextFloat(0, 100), rng.NextFloat(0, 100), rng.NextFloat(0, 100)));
+            var transforms = new List<Matrix>(1000);
+            for (var i = 0; i < 1000; i++) transforms.Add(Matrix.Translation(rng.NextFloat(0, 100), rng.NextFloat(0, 100), rng.NextFloat(0, 100)));
             await sceneBuilder.AddBatchedMeshTransformsAsync(mesh, material, transforms);
             var geometryModel = sceneBuilder.ToModel();
             geometryModel.IsHitTestVisible = false;
@@ -662,8 +675,35 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         /// <param name="args"></param>
         private void DX3DViewportViewModel_PropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (GetType().GetProperty(args.PropertyName)?.GetCustomAttribute<RaiseInvalidateRenderAttribute>() is { } attribute)
-                Task.Delay(attribute.Delay).ContinueWith(task => ExecuteOnAppThread(EffectsManager.RaiseInvalidateRender));
+            CheckPropertyChangeInvalidateRender(args.PropertyName);
+            CheckPropertyChangeTogglesOverlay(args.PropertyName);
+        }
+
+        /// <summary>
+        ///     Checks if a property change invalidates the render and triggers affiliated actions if required
+        /// </summary>
+        /// <param name="propertyName"></param>
+        private void CheckPropertyChangeInvalidateRender(string propertyName)
+        {
+            if (!(GetType().GetProperty(propertyName)?.GetCustomAttribute<RaiseInvalidateRenderAttribute>() is { } attribute)) return;
+            Task.Delay(attribute.Delay).ContinueWith(task => ExecuteOnAppThread(EffectsManager.RaiseInvalidateRender));
+        }
+
+        /// <summary>
+        ///     Checks if a property change toggles an overlay and triggers affiliated actions if required
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="bindingFlags"></param>
+        private void CheckPropertyChangeTogglesOverlay(string propertyName, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        {
+            if (!(GetType().GetProperty(propertyName)?.GetCustomAttribute<TogglesOverlayAttribute>() is { } attribute)) return;
+            if (!attribute.IsUniqueOverlay) return;
+            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUniqueOverlay ?? false).ToList();
+            if (properties.Count(x => (bool) x.GetValue(this)) <= 1) return;
+            foreach (var property in properties.Where(property => property.Name != propertyName))
+            {
+                property.SetValue(this, false);
+            }
         }
     }
 }

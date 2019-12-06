@@ -1,4 +1,5 @@
-﻿using Mocassin.Mathematics.Extensions;
+﻿using System.Collections.Generic;
+using Mocassin.Mathematics.Extensions;
 
 namespace Mocassin.Mathematics.ValueTypes
 {
@@ -57,6 +58,19 @@ namespace Mocassin.Mathematics.ValueTypes
                 A.PeriodicTrim(0.0, 1.0, tolerance),
                 B.PeriodicTrim(0.0, 1.0, tolerance),
                 C.PeriodicTrim(0.0, 1.0, tolerance));
+        }
+
+        /// <summary>
+        ///     Trims the fractional vector into [0.0;1.0) range of the unit cell
+        /// </summary>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        public Fractional3D TrimToUnitCell(IComparer<double> comparer)
+        {
+            return new Fractional3D(
+                A.PeriodicTrim(0.0, 1.0, comparer),
+                B.PeriodicTrim(0.0, 1.0, comparer),
+                C.PeriodicTrim(0.0, 1.0, comparer));
         }
 
         /// <summary>

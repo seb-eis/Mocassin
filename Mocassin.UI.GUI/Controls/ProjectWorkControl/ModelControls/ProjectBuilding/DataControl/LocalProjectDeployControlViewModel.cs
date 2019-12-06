@@ -128,7 +128,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             ProjectBuildGraphCollectionViewModel = projectBuildGraphCollectionViewModel;
             LogConsoleMessages = new ObservableCollectionViewModel<Tuple<DateTime, string>>(1000);
-            fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles();
+            fileSelectionSource = UserFileSelectionSource.CreateForJobDbFiles(true);
             GetFileSelectionCommand = new RelayCommand(() => BuildTargetFilePath = fileSelectionSource.GetFileSelection());
             WriteDatabaseCommand = GetWriteDatabaseCommand();
             JobMetaDataCollectionControlViewModel = new ObservableCollectionViewModel<JobMetaDataEntity>();

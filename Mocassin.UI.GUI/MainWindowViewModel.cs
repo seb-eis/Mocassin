@@ -257,7 +257,7 @@ namespace Mocassin.UI.GUI
         /// <param name="args"></param>
         public void OnStartup(string[] args)
         {
-            var fileSelectionSource = UserFileSelectionSource.CreateForProjectFiles();
+            var fileSelectionSource = UserFileSelectionSource.CreateForProjectFiles(false);
             if (args.Length == 0 && ApplicationDeployment.IsNetworkDeployed)
             {
                 var activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments?.ActivationData;

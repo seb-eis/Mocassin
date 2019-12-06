@@ -23,7 +23,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
         public ShowProjectLoadingDialogCommand(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            userFileSelectionSource = UserFileSelectionSource.CreateForProjectFiles();
+            userFileSelectionSource = UserFileSelectionSource.CreateForProjectFiles(false);
         }
 
         /// <inheritdoc />

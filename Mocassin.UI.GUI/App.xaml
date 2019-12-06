@@ -165,11 +165,17 @@
       <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="Transparent" />
         <Style.Triggers>
+          <Trigger Property="TabStripPlacement" Value="Left">
+            <Setter Property="BorderThickness" Value="2,1,1,1"/>
+          </Trigger>
           <Trigger Property="TabStripPlacement" Value="Top">
             <Setter Property="BorderThickness" Value="1,2,1,1"/>
           </Trigger>
-          <Trigger Property="TabStripPlacement" Value="Left">
-            <Setter Property="BorderThickness" Value="2,1,1,1"/>
+          <Trigger Property="TabStripPlacement" Value="Right">
+            <Setter Property="BorderThickness" Value="1,1,2,1"/>
+          </Trigger>
+          <Trigger Property="TabStripPlacement" Value="Bottom">
+            <Setter Property="BorderThickness" Value="1,1,1,2"/>
           </Trigger>
         </Style.Triggers>
       </Style>

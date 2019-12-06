@@ -136,13 +136,13 @@ namespace Mocassin.Mathematics.Extensions
 
         /// <summary>
         ///     Trims a double value into a specified range [lower, upper) constraint in steps of (upper - lower) using the
-        ///     provided tolerance comparer
+        ///     provided double comparer
         /// </summary>
         /// <param name="value"></param>
         /// <param name="lowerBound"></param>
         /// <param name="upperBound"></param>
         /// <param name="comparer"></param>
-        public static double PeriodicTrim(this double value, double lowerBound, double upperBound, NumericComparer comparer)
+        public static double PeriodicTrim(this double value, double lowerBound, double upperBound, IComparer<double> comparer)
         {
             if (comparer == null) 
                 throw new ArgumentNullException(nameof(comparer));
@@ -150,13 +150,13 @@ namespace Mocassin.Mathematics.Extensions
             if (lowerBound > upperBound)
                 throw new ArgumentException(paramName: nameof(lowerBound), message: "Value is larger than upper bound");
 
-            if (comparer.Equals(lowerBound, upperBound))
+            if (comparer.Compare(lowerBound, upperBound) == 0)
                 return upperBound;
 
             var trimValue = upperBound - lowerBound;
             value %= trimValue;
             value = value >= lowerBound ? value : value + trimValue;
-            if (comparer.Equals(value, upperBound) || comparer.Equals(value, lowerBound))
+            if (comparer.Compare(value, upperBound) == 0 || comparer.Compare(value, lowerBound) == 0)
                 return lowerBound;
 
             return value;

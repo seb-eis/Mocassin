@@ -14,10 +14,11 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport.Helper
         ///     Builds the default  <see cref="GroupModel3D"/> of <see cref="Light3D"/> instances using the provided base <see cref="Color"/>
         /// </summary>
         /// <param name="color"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public static GroupModel3D DefaultLightModel3D(in Color color)
+        public static GroupModel3D DefaultLightModel3D(in Color color, string name = null)
         {
-            var lightModel = new GroupModel3D() {IsHitTestVisible = false};
+            var lightModel = new GroupModel3D() {IsHitTestVisible = false, Name = name};
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(180.0 / byte.MaxValue), -1, -1, -1));
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(120.0 / byte.MaxValue), -1, -1, -.1));
             lightModel.Children.Add(DirectionalLight3D(color.ChangeIntensity(60.0 / byte.MaxValue), .1, 1, -1));

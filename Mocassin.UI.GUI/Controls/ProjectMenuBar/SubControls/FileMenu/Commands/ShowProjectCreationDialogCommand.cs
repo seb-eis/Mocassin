@@ -19,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu.Commands
         public ShowProjectCreationDialogCommand(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            userFileSelectionSource = UserFileSelectionSource.CreateForProjectFiles();
+            userFileSelectionSource = UserFileSelectionSource.CreateForProjectFiles(true);
         }
 
         /// <inheritdoc />

@@ -23,13 +23,20 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         public string FileFilter { get; }
 
         /// <summary>
+        ///     Get a boolean flag if the <see cref="SaveFileDialog"/> is used
+        /// </summary>
+        public bool UseSaveDialog { get; }
+
+        /// <summary>
         ///     Creates a new <see cref="UserFileSelectionSource" /> with the supported file types
         /// </summary>
+        /// <param name="useSaveDialog"></param>
         /// <param name="supportedFileTypes"></param>
-        public UserFileSelectionSource(params (string Name, string Extension)[] supportedFileTypes)
+        public UserFileSelectionSource(bool useSaveDialog, params (string Name, string Extension)[] supportedFileTypes)
         {
             SupportedFileTypes = supportedFileTypes ?? throw new ArgumentNullException(nameof(supportedFileTypes));
             FileFilter = BuildFilterString(supportedFileTypes);
+            UseSaveDialog = useSaveDialog;
         }
 
         /// <summary>
@@ -39,7 +46,7 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         /// <returns></returns>
         public string GetFileSelection(bool checkFileExists = false)
         {
-            var openFileDialog = new OpenFileDialog {Filter = FileFilter, CheckFileExists = checkFileExists};
+            var openFileDialog = GetFileDialog(checkFileExists);
             openFileDialog.ShowDialog();
             return openFileDialog.FileName;
         }
@@ -60,19 +67,21 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
         /// <summary>
         ///     Creates a new <see cref="UserFileSelectionSource" /> tailored to project files
         /// </summary>
+        /// <param name="useSaveDialog"></param>
         /// <returns></returns>
-        public static UserFileSelectionSource CreateForProjectFiles()
+        public static UserFileSelectionSource CreateForProjectFiles(bool useSaveDialog)
         {
-            return new UserFileSelectionSource(("Project file", "mocprj"));
+            return new UserFileSelectionSource(useSaveDialog, ("Project file", "mocprj"));
         }
 
         /// <summary>
         ///     Creates  a new <see cref="UserFileSelectionSource" /> tailored to simulation databases
         /// </summary>
+        /// <param name="useSaveDialog"></param>
         /// <returns></returns>
-        public static UserFileSelectionSource CreateForJobDbFiles()
+        public static UserFileSelectionSource CreateForJobDbFiles(bool useSaveDialog)
         {
-            return new UserFileSelectionSource(("Simulation library", "msl"));
+            return new UserFileSelectionSource(useSaveDialog, ("Simulation library", "msl"));
         }
 
         /// <summary>
@@ -88,6 +97,19 @@ namespace Mocassin.UI.GUI.Controls.Base.IO
             foreach (var (name, extension) in supportedFileTypes) builder.Append($"{name} (*.{extension})|*.{extension}|");
             builder.PopBack(1);
             return builder.ToString();
+        }
+
+        /// <summary>
+        ///     Get a new <see cref="FileDialog"/> based on the settings
+        /// </summary>
+        /// <param name="checkFileExists"></param>
+        /// <returns></returns>
+        private FileDialog GetFileDialog(bool checkFileExists)
+        {
+            var dialog = UseSaveDialog ? (FileDialog) new SaveFileDialog() : new OpenFileDialog();
+            dialog.CheckFileExists = checkFileExists;
+            dialog.Filter = FileFilter;
+            return dialog;
         }
     }
 }
