@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -87,7 +89,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         protected void SetPropertyBackup<T>(T value, [CallerMemberName] string propertyName = null)
         {
             if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
-            PropertyBackups = PropertyBackups ?? new Dictionary<string, object>();
+            PropertyBackups ??= new Dictionary<string, object>();
             PropertyBackups[propertyName] = value;
         }
 
@@ -97,7 +99,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="action"></param>
         public void ExecuteOnAppThread(Action action)
         {
-            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
+            if (!(Application.Current?.Dispatcher is { } dispatcher)) return;
             if (!dispatcher.CheckAccess())
             {
                 dispatcher.Invoke(action);
@@ -113,7 +115,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="function"></param>
         public TResult ExecuteOnAppThread<TResult>(Func<TResult> function)
         {
-            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
+            if (!(Application.Current?.Dispatcher is { } dispatcher)) return default;
 
             return dispatcher.CheckAccess()
                 ? function.Invoke()
@@ -127,8 +129,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="priority"></param>
         public Task ExecuteOnAppThreadAsync(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
-            return dispatcher.InvokeAsync(action, priority).Task;
+            return !(Application.Current?.Dispatcher is { } dispatcher) ? default : dispatcher.InvokeAsync(action, priority).Task;
         }
 
         /// <summary>
@@ -138,8 +139,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="priority"></param>
         public Task<TResult> ExecuteOnAppThreadAsync<TResult>(Func<TResult> function, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return default;
-            return dispatcher.InvokeAsync(function, priority).Task;
+            return !(Application.Current?.Dispatcher is { } dispatcher) ? default : dispatcher.InvokeAsync(function, priority).Task;
         }
 
         /// <summary>
@@ -149,18 +149,19 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         /// <param name="priority"></param>
         public void QueueOnAppDispatcher(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            if (!(Application.Current?.Dispatcher is Dispatcher dispatcher)) return;
+            if (!(Application.Current?.Dispatcher is { } dispatcher)) return;
             dispatcher.InvokeAsync(action, priority);
         }
 
         /// <summary>
-        ///     Attaches a single <see cref="Action"/> invoke to the next property change that fulfills the <see cref="Predicate{T}"/>
+        ///     Attaches a single <see cref="Action"/> invoke to the next property change that fulfills the <see cref="Predicate{T}"/>. The optional flag controls if an already matched predicate causes immediate execution
         /// </summary>
         /// <typeparam name="TProperty"></typeparam>
         /// <param name="action"></param>
         /// <param name="predicate"></param>
         /// <param name="propertyName"></param>
-        public void AttachToPropertyChange<TProperty>(Action action, Predicate<TProperty> predicate, string propertyName)
+        /// <param name="executeIfAlreadyTrue"></param>
+        public void AttachToPropertyChange<TProperty>(Action action, Predicate<TProperty> predicate, string propertyName, bool executeIfAlreadyTrue = true)
         {
             bool CheckProperty(string name)
             {
@@ -176,13 +177,41 @@ namespace Mocassin.UI.GUI.Base.ViewModels
                 PropertyChanged -= InvokeAction;
             }
 
-            if (CheckProperty(propertyName))
+            if (executeIfAlreadyTrue && CheckProperty(propertyName))
             {
                 action();
                 return;
             }
 
             PropertyChanged += InvokeAction;
+        }
+
+        /// <summary>
+        ///     Attaches a single <see cref="Action"/> invoke to the next property change. The optional flag controls if an already matched predicate causes immediate execution
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="executeIfAlreadyTrue"></param>
+        public void AttachToPropertyChange(Action action, string propertyName, bool executeIfAlreadyTrue = true)
+        {
+            AttachToPropertyChange<object>(action, x => true, propertyName, executeIfAlreadyTrue);
+        }
+
+        /// <summary>
+        ///     Performs a delayed execution of the passed <see cref="Action"/> if the property with the provided name does not change within the delay
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <param name="action"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="onAppThread"></param>
+        protected async Task ExecuteIfPropertyUnchanged(Action action, TimeSpan delay, string propertyName, bool onAppThread = false)
+        {
+            var abortExecution = false;
+            AttachToPropertyChange(() => abortExecution = true, propertyName, false);
+            await Task.Run(() => Thread.Sleep(delay));
+            if (abortExecution) return;
+            if (onAppThread) ExecuteOnAppThread(action);
+            else action();
         }
     }
 }

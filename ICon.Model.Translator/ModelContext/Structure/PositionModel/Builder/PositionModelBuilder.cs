@@ -94,7 +94,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 UnitCellPosition = environmentModel.UnitCellPosition,
                 EnvironmentModel = environmentModel,
                 TransformOperation = operation,
-                CenterVector = operation.ApplyUntrimmed(environmentModel.UnitCellPosition.Vector)
+                CenterVector = operation.Transform(environmentModel.UnitCellPosition.Vector)
             };
 
             positionModel.TargetPositionInfos = TransformTargetInfos(targetInfos, operation, positionModel.CenterVector);
@@ -119,7 +119,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 {
                     UnitCellPosition = positionInfo.UnitCellPosition,
                     Distance = positionInfo.Distance,
-                    AbsoluteFractional3D = operation.ApplyUntrimmed(positionInfo.AbsoluteFractional3D),
+                    AbsoluteFractional3D = operation.Transform(positionInfo.AbsoluteFractional3D),
                     PairInteractionModel = positionInfo.PairInteractionModel
                 };
 

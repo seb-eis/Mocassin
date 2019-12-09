@@ -63,7 +63,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             var vectorSequence = GetPointSequence().ToList();
             foreach (var operation in UniqueSequenceOperations)
-                yield return operation.ApplyUntrimmed(vectorSequence);
+                yield return operation.Transform(vectorSequence);
         }
 
         /// <inheritdoc />

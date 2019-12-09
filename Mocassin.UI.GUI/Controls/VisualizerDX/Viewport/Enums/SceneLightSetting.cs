@@ -6,6 +6,11 @@
     public enum SceneLightSetting
     {
         /// <summary>
+        ///     Defines no light, this is an internal default value
+        /// </summary>
+        None,
+
+        /// <summary>
         ///     Defines the default 4 directional light with a weak ambient light
         /// </summary>
         Default,

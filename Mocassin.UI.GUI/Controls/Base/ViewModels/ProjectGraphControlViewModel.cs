@@ -31,23 +31,15 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// <inheritdoc />
         public abstract void ChangeContentSource(MocassinProjectGraph contentSource);
 
-
         /// <summary>
-        ///     Delayed execution of the passed <see cref="Action"/> if the content source does not change for the passed time span
+        ///     Delayed execution of the passed <see cref="Action"/>. Action is not performed if the <see cref="ContentSource"/> property changes within the delay
         /// </summary>
         /// <param name="delay"></param>
         /// <param name="action"></param>
-        /// <param name="onDispatcher"></param>
-        protected async Task ExecuteIfConstantContentSource(Action action, TimeSpan delay, bool onDispatcher = false)
+        /// <param name="onAppThread"></param>
+        protected Task ExecuteIfContentSourceUnchanged(Action action, TimeSpan delay, bool onAppThread = false)
         {
-            var oldSource = ContentSource;
-            await Task.Run(() => Thread.Sleep(delay));
-            if (!ReferenceEquals(oldSource, ContentSource)) return;
-
-            if (onDispatcher) 
-                ExecuteOnAppThread(action);
-            else
-                action();
+            return ExecuteIfPropertyUnchanged(action, delay, nameof(ContentSource), onAppThread);
         }
     }
 }

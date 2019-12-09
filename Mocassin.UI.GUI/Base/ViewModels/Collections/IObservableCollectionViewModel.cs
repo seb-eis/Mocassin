@@ -6,7 +6,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
     /// <summary>
     ///     Represents a view model for an <see cref="ObservableCollection{T}" /> that supports affiliated remove, add and
-    ///     insert operations
+    ///     insert operations and ensures that the actions are performed on the app thread
     /// </summary>
     public interface IObservableCollectionViewModel<T> : INotifyPropertyChanged
     {

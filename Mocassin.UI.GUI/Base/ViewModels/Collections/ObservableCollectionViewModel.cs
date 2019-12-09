@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
     /// <summary>
-    ///     Base <see cref="ViewModelBase" /> for providing an <see cref="ObservableCollection{T}" /> with a limited size
+    ///     Base <see cref="ViewModelBase" /> for providing an <see cref="ObservableCollection{T}" /> with size restrictions
+    ///     and ensured app thread executed collection modification
     /// </summary>
     public class ObservableCollectionViewModel<T> : ViewModelBase, IObservableCollectionViewModel<T>
     {
@@ -87,12 +87,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         {
             ExecuteOnAppThread(ClearCollectionInternal);
         }
+
         /// <summary>
-        ///     Internal implementation of <see cref="MoveCollectionItem"/>
+        ///     Internal implementation of <see cref="MoveCollectionItem" />
         /// </summary>
         /// <param name="oldIndex"></param>
         /// <param name="newIndex"></param>
-
         protected virtual void MoveCollectionItemInternal(int oldIndex, int newIndex)
         {
             newIndex = newIndex >= 0 ? newIndex : ObservableItems.Count - 1;
@@ -130,7 +130,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="ClearCollection"/> method
+        ///     Internal implementation of the <see cref="ClearCollection" /> method
         /// </summary>
         protected virtual void ClearCollectionInternal()
         {

@@ -192,7 +192,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
             foreach (var operation in LoadedGroup.Operations)
-                results.Add(operation.ApplyWithTrim(vector));
+                results.Add(operation.TrimTransform(vector));
 
             results.List.TrimExcess();
             return results;
@@ -209,7 +209,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
             foreach (var operation in LoadedGroup.Operations)
-                results.Add(operation.ApplyWithTrim(a, b, c));
+                results.Add(operation.TrimTransform(a, b, c));
 
             results.List.TrimExcess();
             return results;
@@ -226,7 +226,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var results = new SetList<Fractional3D>(VectorComparer, LoadedGroup.Operations.Count);
 
             foreach (var operation in LoadedGroup.Operations)
-                results.Add(operation.ApplyWithTrim(vector));
+                results.Add(operation.TrimTransform(vector));
 
             results.List.TrimExcess();
             return results;
@@ -252,7 +252,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var result = new SetList<Fractional3D[]>(comparer);
 
             foreach (var operation in LoadedGroup.Operations)
-                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.ApplyUntrimmed(a.A, a.B, a.C)).ToList(refSequence.Length)));
+                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.Transform(a.A, a.B, a.C)).ToList(refSequence.Length)));
 
             return result;
         }
@@ -262,7 +262,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             var refCollection = refSequence.AsCollection();
             return LoadedGroup.Operations
-                .Select(operation => refCollection.Select(vector => operation.ApplyUntrimmed(vector)).ToArray(refCollection.Count))
+                .Select(operation => refCollection.Select(vector => operation.Transform(vector)).ToArray(refCollection.Count))
                 .ToList(LoadedGroup.Operations.Count);
         }
 
@@ -288,7 +288,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
             var operations = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
             operations.AddRange(LoadedGroup.Operations.Select(x =>
-                GetOriginCellShiftedOperations(x.ApplyUntrimmed(refVectors[0]), x, DoubleComparer)));
+                GetOriginCellShiftedOperations(x.Transform(refVectors[0]), x, DoubleComparer)));
 
             var sequences = new SetList<IList<Fractional3D>>(
                 Comparer<IList<Fractional3D>>.Create((a, b) => a.LexicographicCompare(b, VectorComparer)),
@@ -299,7 +299,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             foreach (var operation in operations)
             {
                 transformedVectors.Clear();
-                transformedVectors.AddRange(operation.ApplyUntrimmed(refVectors));
+                transformedVectors.AddRange(operation.Transform(refVectors));
                 if (sequences.Contains(transformedVectors)) continue;
                 if (filterInverses)
                 {
@@ -354,7 +354,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         {
             foreach (var operation in LoadedGroup.Operations)
             {
-                var vector = operation.ApplyWithTrim(source, out var trimVector);
+                var vector = operation.TrimTransform(source, out var trimVector);
                 if (Comparer.Compare(vector, target) == 0)
                     return GetTranslationShiftedOperation(operation, trimVector);
             }
@@ -437,7 +437,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
             foreach (var operation in LoadedGroup.Operations)
             {
-                var vector = operation.ApplyWithTrim(sourceVector);
+                var vector = operation.TrimTransform(sourceVector);
                 if (!dictionary.ContainsKey(vector))
                     dictionary[vector] = new SetList<ISymmetryOperation>(operationComparer);
 
@@ -453,7 +453,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             var result = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
             foreach (var operation in LoadedGroup.Operations)
             {
-                var untrimmedVector = operation.ApplyUntrimmed(sourceVector);
+                var untrimmedVector = operation.Transform(sourceVector);
                 if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) != 0)
                     continue;
 
@@ -481,7 +481,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
             var multiplicityOperations = GetMultiplicityOperations(originPoint, true);
             var resultSequences = multiplicityOperations
-                .Select(operation => operation.ApplyUntrimmed(pointList).ToList()).ToList();
+                .Select(operation => operation.Transform(pointList).ToList()).ToList();
 
             operationGroup.PointOperations = multiplicityOperations.Cast<SymmetryOperation>().ToList();
 
@@ -509,7 +509,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             foreach (var entry in wyckoffDictionary)
             {
                 var operation = entry.Value.ElementAt(0);
-                var sequence = ShiftFirstToPosition(refList.Select(value => operation.ApplyUntrimmed(value)), entry.Key);
+                var sequence = ShiftFirstToPosition(refList.Select(value => operation.Transform(value)), entry.Key);
                 result.Add(entry.Key, sequence.ToList());
             }
 
@@ -525,17 +525,10 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <returns></returns>
         public ISymmetryOperation GetTranslationShiftedOperation(ISymmetryOperation operation, in Fractional3D shift)
         {
-            var operationsArray = operation.GetOperationsArray();
-            operationsArray[3] += shift.A;
-            operationsArray[7] += shift.B;
-            operationsArray[11] += shift.C;
-
-            return new SymmetryOperation
-            {
-                Literal = $"({operation.Literal}) + ({shift.A} ,{shift.B}, {shift.C})",
-                TrimTolerance = operation.TrimTolerance,
-                Operations = operationsArray
-            };
+            var shifted = SymmetryOperation.CreateShifted(operation, shift);
+            shifted.Literal = $"({operation.Literal}) + ({shift.A} ,{shift.B}, {shift.C})";
+            shifted.TrimTolerance = operation.TrimTolerance;
+            return shifted;
         }
 
         /// <summary>
@@ -548,7 +541,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         protected List<List<int>> MakeProjectionMatrix(IEnumerable<Fractional3D> vectors,
             IEnumerable<ISymmetryOperation> symmetryOperations)
         {
-            var options = symmetryOperations.Select(operation => operation.ApplyUntrimmed(vectors).ToList()).ToList();
+            var options = symmetryOperations.Select(operation => operation.Transform(vectors).ToList()).ToList();
             var uniqueIndexSets = new HashSet<List<int>>(new EqualityCompareAdapter<List<int>>((a, b) => a.SequenceEqual(b), a => a.Sum()));
 
             foreach (var option in options)

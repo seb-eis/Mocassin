@@ -314,7 +314,7 @@ namespace Mocassin.Model.Energies
                 var uniqueCandidate = rawCandidates.First(value => value.Index == -1);
 
                 var possibleVectors = operationDictionary[uniqueCandidate.Position0]
-                    .Select(operation => operation.ApplyUntrimmed(uniqueCandidate.PositionVector));
+                    .Select(operation => operation.Transform(uniqueCandidate.PositionVector));
 
                 foreach (var vector in possibleVectors)
                 {

@@ -171,7 +171,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
             targetInfo.Distance = pairInteraction.Distance;
             targetInfo.UnitCellPosition = pairInteraction.Position0;
-            targetInfo.AbsoluteFractional3D = operation.ApplyUntrimmed(invertedPair[1]);
+            targetInfo.AbsoluteFractional3D = operation.Transform(invertedPair[1]);
             targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - pairInteraction.Position1.Vector;
             targetInfo.AbsoluteCartesian3D = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional3D);
 
@@ -194,7 +194,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var absoluteVectors = new SetList<Fractional3D>(ModelProject.SpaceGroupService.Comparer, multiplicityOperations.Count);
             foreach (var operation in multiplicityOperations)
             {
-                var vector = operation.ApplyUntrimmed(pairInteractionModel.TargetPositionInfo.AbsoluteFractional3D);
+                var vector = operation.Transform(pairInteractionModel.TargetPositionInfo.AbsoluteFractional3D);
                 absoluteVectors.Add(vector);
             }
 

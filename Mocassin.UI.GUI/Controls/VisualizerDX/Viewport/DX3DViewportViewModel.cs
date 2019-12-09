@@ -56,7 +56,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         private double cameraFarPlaneDistance = 10000;
         private double cameraNearPlaneDistance = 0.1;
         private double cameraFieldOfView = 45;
-        private SceneLightSetting lightSetting = SceneLightSetting.Default;
+        private SceneLightSetting lightSetting = SceneLightSetting.None;
         private Color lightColor = Colors.White;
         private bool settingsOverlayActive;
         private int imageExportHeight;
@@ -424,10 +424,11 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             EffectsManager = new DefaultEffectsManager();
             HitTestVisibleSceneElements = new ObservableElement3DCollection();
             HitTestInvisibleSceneElements = new ObservableElement3DCollection();
-            SceneLightCollection = new ObservableElement3DCollection {LightFactory.DefaultLightModel3D(LightColor, "Light")};
+            SceneLightCollection = new ObservableElement3DCollection();
             PropertyChanged += DX3DViewportViewModel_PropertyChanged;
             ResetCameraCommand = new RelayCommand(ResetCamera);
             ExportImageCommand = new ExportViewportImageCommand(() => (ImageExportWidth, ImageExportHeight));
+            Reset();
             LoadTestDataNodes();
         }
 
@@ -448,6 +449,21 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
             var geometryModel = sceneBuilder.ToModel();
             geometryModel.IsHitTestVisible = false;
             ExecuteOnAppThread(() => HitTestVisibleSceneElements.Add(geometryModel));
+        }
+
+        /// <summary>
+        ///     Resets the <see cref="DX3DModelDataViewModel"/> to default settings and clears all scene data. This action is always executed on the UI thread
+        /// </summary>
+        public void Reset()
+        {
+            void ResetInternal()
+            {
+                ClearSceneCollections();
+                ResetCamera();
+                ResetLight();
+            }
+
+            ExecuteOnAppThread(ResetInternal);
         }
 
         /// <summary>
@@ -560,6 +576,8 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
                 case SceneLightSetting.OmniDirectional:
                     SceneLightCollection.Add(LightFactory.DefaultOmniDirectionalLightModel3D(LightColor, .5));
                     break;
+                case SceneLightSetting.None:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(value), value, null);
             }
@@ -575,7 +593,7 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
         }
 
         /// <summary>
-        ///     Resets the <see cref="Camera" /> settings
+        ///     Resets the <see cref="Camera" /> to default settings
         /// </summary>
         protected virtual void ResetCamera()
         {
@@ -589,6 +607,16 @@ namespace Mocassin.UI.GUI.Controls.VisualizerDX.Viewport
                 NearPlaneDistance = CameraNearPlaneDistance,
                 FieldOfView = CameraFieldOfView
             };
+        }
+
+        /// <summary>
+        ///     Resets the scene light to default settings
+        /// </summary>
+        protected virtual void ResetLight()
+        {
+            LightSetting = SceneLightSetting.None;
+            LightColor = Colors.White;
+            LightSetting = SceneLightSetting.Default;
         }
 
         /// <summary>

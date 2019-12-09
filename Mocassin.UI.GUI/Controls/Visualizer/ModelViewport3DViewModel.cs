@@ -63,7 +63,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         ///     Get or set <see cref="IList{T}" /> of the position sin the base cuboid (In contrast to a unit cell the =1 values
         ///     are included)
         /// </summary>
-        private IList<(Fractional3D Vector, ProjectObject3DViewModel ObjectViewModel)> BaseCuboidPositionData { get; set; }
+        private IList<(Fractional3D Vector, ObjectRenderResourcesViewModel ObjectViewModel)> BaseCuboidPositionData { get; set; }
 
         /// <summary>
         ///     Get the <see cref="Viewport3DViewModel" /> that manages the visual objects
@@ -76,16 +76,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public ModelRenderResourcesViewModel RenderResourcesViewModel { get; }
 
         /// <summary>
-        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ProjectObject3DViewModel" /> of model
+        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ObjectRenderResourcesViewModel" /> of model
         ///     objects
         /// </summary>
-        public ObservableCollectionViewModel<ProjectObject3DViewModel> ModelObjectViewModels { get; }
+        public ObservableCollectionViewModel<ObjectRenderResourcesViewModel> ModelObjectViewModels { get; }
 
         /// <summary>
-        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ProjectObject3DViewModel" /> of
+        ///     Provides an <see cref="ObservableCollectionViewModel{T}" /> for <see cref="ObjectRenderResourcesViewModel" /> of
         ///     customization objects
         /// </summary>
-        public ObservableCollectionViewModel<ProjectObject3DViewModel> CustomizationObjectViewModels { get; }
+        public ObservableCollectionViewModel<ObjectRenderResourcesViewModel> CustomizationObjectViewModels { get; }
 
         /// <summary>
         ///     Get a <see cref="RelayCommand" /> to update the model object render data list
@@ -127,8 +127,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             UtilityProject = projectControl.CreateModelProject();
             VisualViewModel = new Viewport3DViewModel();
-            ModelObjectViewModels = new ObservableCollectionViewModel<ProjectObject3DViewModel>();
-            CustomizationObjectViewModels = new ObservableCollectionViewModel<ProjectObject3DViewModel>();
+            ModelObjectViewModels = new ObservableCollectionViewModel<ObjectRenderResourcesViewModel>();
+            CustomizationObjectViewModels = new ObservableCollectionViewModel<ObjectRenderResourcesViewModel>();
             SelectableCustomizationsViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
             RenderResourcesViewModel = new ModelRenderResourcesViewModel();
             UpdateObjectViewModelsCommand = new RelayCommand(SynchronizeWithModel);
@@ -140,7 +140,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public override async void ChangeContentSource(MocassinProjectGraph contentSource)
         {
             ContentSource = contentSource;
-            await ExecuteIfConstantContentSource(async () => await RefreshVisualContent(), TimeSpan.FromMilliseconds(250), true);
+            await ExecuteIfContentSourceUnchanged(async () => await RefreshVisualContent(), TimeSpan.FromMilliseconds(250), true);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Generates the <see cref="ProjectObject3DViewModel" /> instances for all displayable
+        ///     Generates the <see cref="ObjectRenderResourcesViewModel" /> instances for all displayable
         ///     <see cref="ExtensibleProjectObjectGraph" />
         ///     model object instances in the content source
         /// </summary>
@@ -219,7 +219,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Generates the <see cref="ProjectObject3DViewModel" /> instances for all displayable
+        ///     Generates the <see cref="ObjectRenderResourcesViewModel" /> instances for all displayable
         ///     <see cref="ExtensibleProjectObjectGraph" />
         ///     customization object instances in the selected customization
         /// </summary>
@@ -239,15 +239,17 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObject3DViewModel" /> for the passed <see cref="ExtensibleProjectObjectGraph" /> or
+        ///     Get the <see cref="ObjectRenderResourcesViewModel" /> for the passed <see cref="ExtensibleProjectObjectGraph" /> or
         ///     creates a new one
         ///     if none exists
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
-        private ProjectObject3DViewModel GetProjectObjectViewModel(ExtensibleProjectObjectGraph objectGraph)
+        private ObjectRenderResourcesViewModel GetProjectObjectViewModel(ExtensibleProjectObjectGraph objectGraph)
         {
             var result = ModelObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph);
+            if (result != null) return result;
+            result = CustomizationObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph);
             if (result != null) return result;
 
             var objectCategory = VisualObjectCategory.Unknown;
@@ -274,7 +276,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
                     break;
             }
 
-            return new ProjectObject3DViewModel(objectGraph, objectCategory);
+            return new ObjectRenderResourcesViewModel(objectGraph, objectCategory);
         }
 
         /// <summary>
@@ -377,7 +379,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         ///     Creates the base cuboid position to view model data for vector hit testing and size correction
         /// </summary>
         /// <returns></returns>
-        private IList<(Fractional3D, ProjectObject3DViewModel)> CreateBaseCuboidPositionData()
+        private IList<(Fractional3D, ObjectRenderResourcesViewModel)> CreateBaseCuboidPositionData()
         {
             var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
             return ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions
@@ -765,12 +767,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObject3DViewModel" /> if the provided <see cref="Fractional3D" /> points to an atom
+        ///     Get the <see cref="ObjectRenderResourcesViewModel" /> if the provided <see cref="Fractional3D" /> points to an atom
         ///     position or null otherwise
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        private ProjectObject3DViewModel HitTestAtomObject3DViewModel(in Fractional3D vector)
+        private ObjectRenderResourcesViewModel HitTestAtomObject3DViewModel(in Fractional3D vector)
         {
             var trimmed = vector.TrimToUnitCell(0);
             return BaseCuboidPositionData.FirstOrDefault(tuple => SpaceGroupService.Comparer.Compare(tuple.Vector, trimmed) == 0).ObjectViewModel;

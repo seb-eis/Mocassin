@@ -1085,7 +1085,7 @@
     <Compile Include="Controls\Visualizer\Objects\Extensions\MeshBuilderExtensions.cs" />
     <Compile Include="Controls\Visualizer\Objects\Extensions\VisualExtensions.cs" />
     <Compile Include="Controls\Visualizer\Objects\Helper\ColorToPropertyConverter.cs" />
-    <Compile Include="Controls\Visualizer\Objects\Helper\ProjectObject3DViewModel.cs" />
+    <Compile Include="Controls\Visualizer\Objects\Helper\ObjectRenderResourcesViewModel.cs" />
     <Compile Include="Controls\Visualizer\DataControl\ModelRenderResourcesViewModel.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />

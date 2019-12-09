@@ -17,9 +17,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
     /// </summary>
     public class ModelRenderResourcesViewModel : ViewModelBase
     {
-        private static string ResourceKey_RenderArea => Resources.ResourceKey_ModelViewport_RenderArea;
-        private static CultureInfo DefaultCulture => CultureInfo.InvariantCulture;
-        private static double[] ResourceDefault_RenderArea => new double[] {0, 0, 0, 1, 1, 1};
+        private static string RenderAreaResourceKey => Resources.ResourceKey_ModelViewport_RenderArea;
+        private static CultureInfo CultureDefault => CultureInfo.InvariantCulture;
+        private static double[] RenderAreaDefault => new double[] {0, 0, 0, 1, 1, 1};
         private double[] renderAreaValues { get; }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public ModelRenderResourcesViewModel()
         {
             DataSource = new ResourcesGraph();
-            renderAreaValues = ResourceDefault_RenderArea;
+            renderAreaValues = RenderAreaDefault;
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public void ChangeDataSource(ResourcesGraph resources)
         {
             DataSource = resources ?? new ResourcesGraph();
-            SetRenderAreaNoSaving(DataSource.TryGetResource(ResourceKey_RenderArea, ParseRenderAreaString, out var values) ? values : ResourceDefault_RenderArea);
+            SetRenderAreaNoSaving(DataSource.TryGetResource(RenderAreaResourceKey, ParseRenderAreaString, out var values) ? values : RenderAreaDefault);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <returns></returns>
         public (int MinA, int MinB, int MinC, int MaxA, int MaxB, int MaxC) GetFlooredRenderArea(IEqualityComparer<double> comparer = null)
         {
-            comparer = comparer ?? EqualityComparer<double>.Default;
+            comparer ??= EqualityComparer<double>.Default;
             var minA = MocassinMath.FloorToInt(RenderAreaMinA, comparer);
             var minB = MocassinMath.FloorToInt(RenderAreaMinB, comparer);
             var minC = MocassinMath.FloorToInt(RenderAreaMinC, comparer);
@@ -172,7 +172,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             var builder = new StringBuilder(100);
             foreach (var value in values)
             {
-                builder.Append(value.ToString(DefaultCulture));
+                builder.Append(value.ToString(CultureDefault));
                 builder.Append(';');
             }
 
@@ -185,17 +185,17 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        private double[] ParseRenderAreaString(string str)
+        private static double[] ParseRenderAreaString(string str)
         {
-            if (str == null) return ResourceDefault_RenderArea;
+            if (str == null) return RenderAreaDefault;
             var strValues = str.Split(';');
-            if (strValues.Length != 6) return ResourceDefault_RenderArea;
+            if (strValues.Length != 6) return RenderAreaDefault;
             var result = new double[6];
 
             for (var i = 0; i < strValues.Length; i++)
             {
-                if (!double.TryParse(strValues[i], NumberStyles.Float | NumberStyles.AllowThousands, DefaultCulture, out var value))
-                    return ResourceDefault_RenderArea;
+                if (!double.TryParse(strValues[i], NumberStyles.Float | NumberStyles.AllowThousands, CultureDefault, out var value))
+                    return RenderAreaDefault;
 
                 result[i] = value;
             }

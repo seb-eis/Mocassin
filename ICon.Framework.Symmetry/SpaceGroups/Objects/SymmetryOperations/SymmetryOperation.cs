@@ -1,5 +1,4 @@
-﻿using System;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -8,48 +7,21 @@ namespace Mocassin.Symmetry.SpaceGroups
     /// </summary>
     public class SymmetryOperation : SymmetryOperationBase
     {
-        /// <summary>
-        ///     Linearized version of the 12 matrix operation entries
-        /// </summary>
-        public double[] Operations { get; set; }
-
-        /// <summary>
-        ///     Creates new symmetry operation and checks passed operation array for correct size
-        /// </summary>
-        /// <param name="operations"></param>
-        public SymmetryOperation(double[] operations)
-            : this()
-        {
-            if (operations == null)
-                throw new ArgumentNullException(nameof(operations));
-
-            if (operations.Length != 12)
-                throw new ArgumentException("Operation array has wrong number of entries", nameof(operations));
-
-            Operations = operations;
-        }
-
-        /// <summary>
-        ///     Create new empty symmetry operation
-        /// </summary>
-        public SymmetryOperation()
-        {
-            TrimTolerance = 1.0e-10;
-        }
-
         /// <inheritdoc />
-        public override Fractional3D ApplyUntrimmed(double orgA, double orgB, double orgC)
-        {
-            var a = orgA * Operations[0] + orgB * Operations[1] + orgC * Operations[2] + Operations[3];
-            var b = orgA * Operations[4] + orgB * Operations[5] + orgC * Operations[6] + Operations[7];
-            var c = orgA * Operations[8] + orgB * Operations[9] + orgC * Operations[10] + Operations[11];
-            return new Fractional3D(a, b, c);
-        }
+        public override double TrimTolerance { get; set; } = 1.0e-10;
 
-        /// <inheritdoc />
-        public override double[] GetOperationsArray()
+
+        /// <summary>
+        ///     Creates a new <see cref="SymmetryOperation" /> by adding a shift to an existing <see cref="ISymmetryOperation" />
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="shift"></param>
+        /// <returns></returns>
+        public static SymmetryOperation CreateShifted(ISymmetryOperation source, in Fractional3D shift)
         {
-            return Operations;
+            var result = new SymmetryOperation();
+            result.SetCore(source.Core.Offset(shift));
+            return result;
         }
     }
 }

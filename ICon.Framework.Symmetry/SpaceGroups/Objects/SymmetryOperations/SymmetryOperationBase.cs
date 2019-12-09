@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
@@ -11,69 +12,93 @@ namespace Mocassin.Symmetry.SpaceGroups
     [DataContract]
     public abstract class SymmetryOperationBase : ISymmetryOperation
     {
+        /// <summary>
+        ///     The <see cref="SymmetryOperationCore" /> backing field
+        /// </summary>
+        [NotMapped] 
+        private SymmetryOperationCore operationCore;
+
         /// <inheritdoc />
-        [DataMember]
-        public double TrimTolerance { get; set; }
+        [NotMapped]
+        public ref SymmetryOperationCore Core => ref operationCore;
+
+        /// <inheritdoc />
+        public abstract double TrimTolerance { get; set; }
 
         /// <inheritdoc />
         [DataMember]
         public string Literal { get; set; }
 
         /// <inheritdoc />
-        public Fractional3D ApplyWithTrim(double orgA, double orgB, double orgC)
+        public Fractional3D TrimTransform(double orgA, double orgB, double orgC)
         {
-            return ApplyUntrimmed(orgA, orgB, orgC).TrimToUnitCell(TrimTolerance);
+            return Core.TrimTransform(orgA, orgB, orgC, TrimTolerance);
         }
 
         /// <inheritdoc />
-        public Fractional3D ApplyWithTrim(in Fractional3D vector, out Fractional3D trimVector)
+        public Fractional3D TrimTransform(in Fractional3D vector, out Fractional3D trimVector)
         {
-            var untrimmed = ApplyUntrimmed(vector);
+            var untrimmed = Transform(vector);
             var trimmed = untrimmed.TrimToUnitCell(TrimTolerance);
             trimVector = trimmed - untrimmed;
             return trimmed;
         }
 
         /// <inheritdoc />
-        public abstract Fractional3D ApplyUntrimmed(double orgA, double orgB, double orgC);
-
-        /// <inheritdoc />
-        public Fractional3D ApplyWithTrim(in Fractional3D vector)
+        public Fractional3D Transform(double orgA, double orgB, double orgC)
         {
-            return ApplyWithTrim(vector.A, vector.B, vector.C);
+            return Core.Transform(orgA, orgB, orgC);
         }
 
         /// <inheritdoc />
-        public Fractional3D ApplyUntrimmed(in Fractional3D vector)
+        public Fractional3D TrimTransform(in Fractional3D vector)
         {
-            return ApplyUntrimmed(vector.A, vector.B, vector.C);
+            return Core.TrimTransform(vector, TrimTolerance);
         }
 
         /// <inheritdoc />
-        public Fractional3D ApplyWithTrim(IFractional3D original)
+        public Fractional3D Transform(in Fractional3D vector)
         {
-            return new Fractional3D(ApplyWithTrim(original.A, original.B, original.C).Coordinates);
+            return Core.Transform(vector);
         }
 
         /// <inheritdoc />
-        public Fractional3D ApplyUntrimmed(IFractional3D original)
+        public Fractional3D TrimTransform(IFractional3D original)
         {
-            return new Fractional3D(ApplyUntrimmed(original.A, original.B, original.C).Coordinates);
+            return TrimTransform(original.A, original.B, original.C);
         }
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> ApplyWithTrim(IEnumerable<Fractional3D> vectors)
+        public Fractional3D Transform(IFractional3D original)
         {
-            return vectors.Select(value => ApplyWithTrim(value));
+            return Transform(original.A, original.B, original.C);
         }
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> ApplyUntrimmed(IEnumerable<Fractional3D> vectors)
+        public IEnumerable<Fractional3D> TrimTransform(IEnumerable<Fractional3D> vectors)
         {
-            return vectors.Select(value => ApplyUntrimmed(value));
+            return vectors.Select(vector => Core.TrimTransform(vector, TrimTolerance));
         }
 
         /// <inheritdoc />
-        public abstract double[] GetOperationsArray();
+        public IEnumerable<Fractional3D> Transform(IEnumerable<Fractional3D> vectors)
+        {
+            return vectors.Select(vector => Core.Transform(vector));
+        }
+
+        /// <inheritdoc />
+        public double[] GetOperationsArray()
+        {
+            return Core.ToArray();
+        }
+
+        /// <summary>
+        ///     Sets the <see cref="SymmetryOperationCore" /> from an implementing class
+        /// </summary>
+        /// <param name="core"></param>
+        protected void SetCore(in SymmetryOperationCore core)
+        {
+            operationCore = core;
+        }
     }
 }
