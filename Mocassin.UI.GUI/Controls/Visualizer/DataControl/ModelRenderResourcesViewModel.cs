@@ -94,8 +94,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         ///     Changes the data source to another <see cref="ResourcesGraph"/>
         /// </summary>
         /// <param name="resources"></param>
-        public void ChangeDataSource(ResourcesGraph resources)
+        public void SetDataSource(ResourcesGraph resources)
         {
+            if (DataSource != null && Equals(DataSource, resources)) return;
             DataSource = resources ?? new ResourcesGraph();
             SetRenderAreaNoSaving(DataSource.TryGetResource(RenderAreaResourceKey, ParseRenderAreaString, out var values) ? values : RenderAreaDefault);
         }
@@ -126,6 +127,16 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
             var startVector = new Fractional3D(RenderAreaMinA, RenderAreaMinB, RenderAreaMinC);
             var endVector = new Fractional3D(RenderAreaMaxA, RenderAreaMaxB, RenderAreaMaxC);
             return (startVector, endVector);
+        }
+
+        /// <summary>
+        ///     Returns a <see cref="FractionalBox3D"/> that describes the render limits
+        /// </summary>
+        /// <returns></returns>
+        public FractionalBox3D GetRenderBox3D()
+        {
+            var (start, end) = GetRenderCuboidVectors();
+            return new FractionalBox3D(start, end - start);
         }
 
         /// <summary>

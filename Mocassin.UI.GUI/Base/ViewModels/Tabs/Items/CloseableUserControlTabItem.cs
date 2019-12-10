@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 
             bool CanCloseTab()
             {
-                return TabHost.CollectionContains(this);
+                return TabHost.Contains(this);
             }
 
             return new RelayCommand(CloseTab, CanCloseTab);

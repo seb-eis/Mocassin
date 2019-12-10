@@ -133,8 +133,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 }
 
                 LastReportSet = reports;
-                OperationCollectionViewModel.ClearCollection();
-                OperationCollectionViewModel.AddCollectionItems(GetFilteredReports(LastReportSet));
+                OperationCollectionViewModel.Clear();
+                OperationCollectionViewModel.AddItems(GetFilteredReports(LastReportSet));
             }
         }
 

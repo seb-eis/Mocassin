@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
             ControlMenuViewModel = new ControlMenuViewModel(projectControl);
             VisualMenuViewModel = new VisualMenuViewModel(projectControl);
             HelpMenuViewModel = new HelpMenuViewModel(projectControl);
-            MenuBarViewModel.AddCollectionItem(new ProjectMenuView {DataContext = new ProjectMenuViewModel(projectControl)});
+            MenuBarViewModel.AddItem(new ProjectMenuView {DataContext = new ProjectMenuViewModel(projectControl)});
         }
     }
 }

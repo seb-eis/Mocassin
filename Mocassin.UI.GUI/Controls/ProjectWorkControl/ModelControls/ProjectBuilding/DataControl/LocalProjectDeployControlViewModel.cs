@@ -159,8 +159,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 {
                     BuildSimulationLibrary.SaveChanges();
                     AddConsoleMessage("Reloading meta information table.");
-                    JobMetaDataCollectionControlViewModel.ClearCollection();
-                    JobMetaDataCollectionControlViewModel.AddCollectionItems(BuildSimulationLibrary.JobMetaData.Local);
+                    JobMetaDataCollectionControlViewModel.Clear();
+                    JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
                 }
                 catch (Exception e)
                 {
@@ -240,8 +240,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                 if (BuildSimulationLibrary != null)
                 {
                     AddConsoleMessage("Loading meta information table.");
-                    JobMetaDataCollectionControlViewModel.ClearCollection();
-                    JobMetaDataCollectionControlViewModel.AddCollectionItems(BuildSimulationLibrary.JobMetaData.Local);
+                    JobMetaDataCollectionControlViewModel.Clear();
+                    JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
                     AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
                 }
                 else
@@ -258,7 +258,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         /// <param name="message"></param>
         private void AddConsoleMessage(string message)
         {
-            LogConsoleMessages.AddCollectionItem(Tuple.Create(DateTime.Now, message));
+            LogConsoleMessages.AddItem(Tuple.Create(DateTime.Now, message));
         }
 
         /// <summary>

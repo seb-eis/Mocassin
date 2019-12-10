@@ -9,7 +9,6 @@ using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Symmetry.SpaceGroups;
 using SharpDX;
 using Color = System.Windows.Media.Color;
-using Matrix = SharpDX.Matrix;
 
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
@@ -121,7 +120,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Converts a <see cref="string" /> to a <see cref="Color4" /> if in the ARGB #FFFFFFFF format (With option to suppress
+        ///     Converts a <see cref="string" /> to a <see cref="Color4" /> if in the ARGB #FFFFFFFF format (With option to
+        ///     suppress
         ///     conversion errors) and uses a default over an exception on parsing error
         /// </summary>
         /// <param name="str"></param>
@@ -151,7 +151,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Creates a <see cref="Matrix"/> that represents the provided <see cref="ISymmetryOperation"/> as a transform in cartesian space
+        ///     Creates a <see cref="Matrix" /> that represents the provided <see cref="ISymmetryOperation" /> as a transform in
+        ///     cartesian space
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="fractionalSystem"></param>
@@ -183,7 +184,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Creates a <see cref="Matrix"/> that represents the provided <see cref="ISymmetryOperation"/> with offset <see cref="Fractional3D"/> as a transform in cartesian space
+        ///     Creates a <see cref="Matrix" /> that represents the provided <see cref="ISymmetryOperation" /> with offset
+        ///     <see cref="Fractional3D" /> as a transform in cartesian space
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="fractionalSystem"></param>
@@ -326,7 +328,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Compares two <see cref="Rect3D"/> using the provided <see cref="IComparer{T}"/> for doubles
+        ///     Compares two <see cref="Rect3D" /> using the provided <see cref="IComparer{T}" /> for doubles
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
@@ -347,7 +349,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
-        ///     Compares the bounding <see cref="Rect3D"/> of two <see cref="MeshGeometryVisual3D"/> instances
+        ///     Compares the bounding <see cref="Rect3D" /> of two <see cref="MeshGeometryVisual3D" /> instances
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>

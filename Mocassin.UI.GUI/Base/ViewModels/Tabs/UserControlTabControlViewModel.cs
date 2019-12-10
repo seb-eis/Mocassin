@@ -59,7 +59,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <inheritdoc />
         public void MoveTab(int oldIndex, int newIndex)
         {
-            MoveCollectionItem(oldIndex, newIndex);
+            MoveItem(oldIndex, newIndex);
         }
 
         /// <inheritdoc />
@@ -67,9 +67,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         {
             var tabItem = new CloseableUserControlTabItem(tabName, viewModelBase, userControl, this);
             if (IsFrontInsertMode) 
-                InsertCollectionItem(0, tabItem);
+                InsertItem(0, tabItem);
             else
-                AddCollectionItem(tabItem);
+                AddItem(tabItem);
             if (!selectTab) return;
             SelectedTab = tabItem;
         }
@@ -79,9 +79,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         {
             var tabItem = new UserControlTabItem(tabName, viewModelBase, userControl);
             if (IsFrontInsertMode) 
-                InsertCollectionItem(0, tabItem);
+                InsertItem(0, tabItem);
             else
-                AddCollectionItem(tabItem);
+                AddItem(tabItem);
             if (!selectTab) return;
             SelectedTab = tabItem;
         }

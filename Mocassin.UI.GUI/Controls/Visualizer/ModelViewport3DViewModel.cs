@@ -152,7 +152,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 SelectedCustomizationGraph = null;
                 VisualViewModel.ClearVisualGroups();
-                ModelObjectViewModels.ClearCollection();
+                ModelObjectViewModels.Clear();
                 IsSynchronizedWithModel = true;
                 return;
             }
@@ -163,7 +163,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             IsSynchronizedWithModel = false;
             VisualViewModel.ClearVisual();
-            RenderResourcesViewModel.ChangeDataSource(ContentSource?.Resources);
+            RenderResourcesViewModel.SetDataSource(ContentSource?.Resources);
             SynchronizeWithModel();
             await RefreshVisualGroups();
         }
@@ -175,13 +175,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             if (ContentSource == null)
             {
-                SelectableCustomizationsViewModel.ClearCollection();
+                SelectableCustomizationsViewModel.Clear();
                 return;
             }
 
-            SelectableCustomizationsViewModel.ClearCollection();
-            SelectableCustomizationsViewModel.AddCollectionItem(ProjectCustomizationGraph.Empty);
-            SelectableCustomizationsViewModel.AddCollectionItems(ContentSource.ProjectCustomizationGraphs);
+            SelectableCustomizationsViewModel.Clear();
+            SelectableCustomizationsViewModel.AddItem(ProjectCustomizationGraph.Empty);
+            SelectableCustomizationsViewModel.AddItems(ContentSource.ProjectCustomizationGraphs);
         }
 
         /// <summary>
@@ -208,14 +208,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             if (ContentSource == null)
             {
-                ModelObjectViewModels.ClearCollection();
+                ModelObjectViewModels.Clear();
                 return;
             }
 
-            ModelObjectViewModels.ClearCollection();
-            ModelObjectViewModels.AddCollectionItem(GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo));
-            ModelObjectViewModels.AddCollectionItems(ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions.Select(GetProjectObjectViewModel));
-            ModelObjectViewModels.AddCollectionItems(ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions.Select(GetProjectObjectViewModel));
+            ModelObjectViewModels.Clear();
+            ModelObjectViewModels.AddItem(GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo));
+            ModelObjectViewModels.AddItems(ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions.Select(GetProjectObjectViewModel));
+            ModelObjectViewModels.AddItems(ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions.Select(GetProjectObjectViewModel));
         }
 
         /// <summary>
@@ -227,15 +227,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             if (ContentSource == null || SelectedCustomizationGraph == null)
             {
-                CustomizationObjectViewModels.ClearCollection();
+                CustomizationObjectViewModels.Clear();
                 return;
             }
 
             var energyCustomization = SelectedCustomizationGraph.EnergyModelCustomization;
-            CustomizationObjectViewModels.ClearCollection();
-            CustomizationObjectViewModels.AddCollectionItems(energyCustomization.StablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
-            CustomizationObjectViewModels.AddCollectionItems(energyCustomization.UnstablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
-            CustomizationObjectViewModels.AddCollectionItems(energyCustomization.GroupEnergyParameterSets.Select(GetProjectObjectViewModel));
+            CustomizationObjectViewModels.Clear();
+            CustomizationObjectViewModels.AddItems(energyCustomization.StablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
+            CustomizationObjectViewModels.AddItems(energyCustomization.UnstablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
+            CustomizationObjectViewModels.AddItems(energyCustomization.GroupEnergyParameterSets.Select(GetProjectObjectViewModel));
         }
 
         /// <summary>
@@ -252,29 +252,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             result = CustomizationObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph);
             if (result != null) return result;
 
-            var objectCategory = VisualObjectCategory.Unknown;
-            switch (objectGraph)
+            var objectCategory = objectGraph switch
             {
-                case StructureInfoGraph _:
-                    objectCategory = VisualObjectCategory.Frame;
-                    break;
-
-                case KineticTransitionGraph _:
-                    objectCategory = VisualObjectCategory.Transition;
-                    break;
-
-                case UnitCellPositionGraph _:
-                    objectCategory = VisualObjectCategory.Position;
-                    break;
-
-                case PairEnergySetGraph _:
-                    objectCategory = VisualObjectCategory.Interaction;
-                    break;
-
-                case GroupEnergySetGraph _:
-                    objectCategory = VisualObjectCategory.Cluster;
-                    break;
-            }
+                StructureInfoGraph _ => VisualObjectCategory.Frame,
+                KineticTransitionGraph _ => VisualObjectCategory.Transition,
+                UnitCellPositionGraph _ => VisualObjectCategory.Position,
+                PairEnergySetGraph _ => VisualObjectCategory.Interaction,
+                GroupEnergySetGraph _ => VisualObjectCategory.Cluster,
+                _ => VisualObjectCategory.Unknown
+            };
 
             return new ObjectRenderResourcesViewModel(objectGraph, objectCategory);
         }
@@ -390,8 +376,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="UnitCellPositionGraph" /> visualization
-        ///     asynchronously
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="UnitCellPositionGraph" /> visualization asynchronously
         /// </summary>
         /// <param name="positionGraph"></param>
         /// <returns></returns>

@@ -46,45 +46,45 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         public ObservableCollection<PushMessage> ObservableItems => PushMessageCollectionViewModel.ObservableItems;
 
         /// <inheritdoc />
-        public void InsertCollectionItem(int index, PushMessage value)
+        public void InsertItem(int index, PushMessage value)
         {
-            PushMessageCollectionViewModel.InsertCollectionItem(index, value);
+            PushMessageCollectionViewModel.InsertItem(index, value);
         }
 
         /// <inheritdoc />
-        public void AddCollectionItem(PushMessage value)
+        public void AddItem(PushMessage value)
         {
-            PushMessageCollectionViewModel.AddCollectionItem(value);
+            PushMessageCollectionViewModel.AddItem(value);
         }
 
         /// <inheritdoc />
-        public void AddCollectionItems(IEnumerable<PushMessage> values)
+        public void AddItems(IEnumerable<PushMessage> values)
         {
-            PushMessageCollectionViewModel.AddCollectionItems(values);
+            PushMessageCollectionViewModel.AddItems(values);
         }
 
         /// <inheritdoc />
-        public void RemoveCollectionItem(PushMessage value)
+        public void RemoveItem(PushMessage value)
         {
-            PushMessageCollectionViewModel.RemoveCollectionItem(value);
+            PushMessageCollectionViewModel.RemoveItem(value);
         }
 
         /// <inheritdoc />
-        public bool CollectionContains(PushMessage value)
+        public bool Contains(PushMessage value)
         {
-            return PushMessageCollectionViewModel.CollectionContains(value);
+            return PushMessageCollectionViewModel.Contains(value);
         }
 
         /// <inheritdoc />
-        public void MoveCollectionItem(int oldIndex, int newIndex)
+        public void MoveItem(int oldIndex, int newIndex)
         {
-            PushMessageCollectionViewModel.MoveCollectionItem(oldIndex, newIndex);
+            PushMessageCollectionViewModel.MoveItem(oldIndex, newIndex);
         }
 
         /// <inheritdoc />
-        public void ClearCollection()
+        public void Clear()
         {
-            PushMessageCollectionViewModel.ClearCollection();
+            PushMessageCollectionViewModel.Clear();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         /// <param name="messageSystem"></param>
         private void SubscribeToMessageSystem(IPushMessageSystem messageSystem)
         {
-            messageSystem?.AnyMessageNotification.Subscribe(AddCollectionItem);
+            messageSystem?.AnyMessageNotification.Subscribe(AddItem);
         }
     }
 }

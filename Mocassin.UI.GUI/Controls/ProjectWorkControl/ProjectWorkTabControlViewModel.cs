@@ -29,7 +29,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
             TabControlViewModel = new UserControlTabControlViewModel {IsFrontInsertMode = true};
             WelcomeTabItem = new UserControlTabItem("Welcome to Mocassin", new WelcomeControlViewModel(ProjectControl), new WelcomeControlView());
             TabControlViewModel.ObservableItems.CollectionChanged += OnTabCollectionChanged;
-            TabControlViewModel.AddCollectionItem(WelcomeTabItem);
+            TabControlViewModel.AddItem(WelcomeTabItem);
             TabControlViewModel.SelectedTab = WelcomeTabItem;
             EnsureWelcomeTabIsVisible();
         }

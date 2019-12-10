@@ -36,7 +36,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Sets a property value and invokes the changed event
+        ///     Sets a property value and invokes the changed event if the value was actually changed
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="backingField"></param>
@@ -47,6 +47,22 @@ namespace Mocassin.UI.GUI.Base.ViewModels
             if (Equals(backingField, value)) return;
 
             backingField = value;
+            OnPropertyChanged(propertyName);
+        }
+
+        /// <summary>
+        ///     Sets a property value, executes the provided callback and raises the change event if the value was actually changed
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="backingField"></param>
+        /// <param name="value"></param>
+        /// <param name="onChangeAction"></param>
+        /// <param name="propertyName"></param>
+        protected void SetProperty<T>(ref T backingField, T value, Action onChangeAction, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(backingField, value)) return;
+            backingField = value;
+            onChangeAction.Invoke();
             OnPropertyChanged(propertyName);
         }
 

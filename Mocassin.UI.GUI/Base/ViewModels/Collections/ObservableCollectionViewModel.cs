@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         public ObservableCollection<T> ObservableItems { get; }
 
         /// <summary>
-        ///     Get or set the max size of the string collection
+        ///     Get or set the max size of the collection. Negative values lift the capacity restriction
         /// </summary>
         public int MaxCapacity
         {
@@ -47,103 +47,103 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         }
 
         /// <inheritdoc />
-        public void InsertCollectionItem(int index, T value)
+        public void InsertItem(int index, T value)
         {
-            ExecuteOnAppThread(() => InsertCollectionItemInternal(index, value));
+            ExecuteOnAppThread(() => InsertItemInternal(index, value));
         }
 
         /// <inheritdoc />
-        public void AddCollectionItem(T value)
+        public void AddItem(T value)
         {
-            ExecuteOnAppThread(() => AddCollectionItemInternal(value));
+            ExecuteOnAppThread(() => AddItemInternal(value));
         }
 
         /// <inheritdoc />
-        public void AddCollectionItems(IEnumerable<T> values)
+        public void AddItems(IEnumerable<T> values)
         {
-            ExecuteOnAppThread(() => AddCollectionItemsInternal(values));
+            ExecuteOnAppThread(() => AddItemsInternal(values));
         }
 
         /// <inheritdoc />
-        public void RemoveCollectionItem(T value)
+        public void RemoveItem(T value)
         {
-            ExecuteOnAppThread(() => RemoveCollectionItemInternal(value));
+            ExecuteOnAppThread(() => RemoveItemInternal(value));
         }
 
         /// <inheritdoc />
-        public bool CollectionContains(T value)
+        public bool Contains(T value)
         {
             return ObservableItems.Contains(value);
         }
 
         /// <inheritdoc />
-        public void MoveCollectionItem(int oldIndex, int newIndex)
+        public void MoveItem(int oldIndex, int newIndex)
         {
-            ExecuteOnAppThread(() => MoveCollectionItemInternal(oldIndex, newIndex));
+            ExecuteOnAppThread(() => MoveItemInternal(oldIndex, newIndex));
         }
 
         /// <inheritdoc />
-        public void ClearCollection()
+        public void Clear()
         {
-            ExecuteOnAppThread(ClearCollectionInternal);
+            ExecuteOnAppThread(ClearInternal);
         }
 
         /// <summary>
-        ///     Internal implementation of <see cref="MoveCollectionItem" />
+        ///     Internal implementation of <see cref="MoveItem" />
         /// </summary>
         /// <param name="oldIndex"></param>
         /// <param name="newIndex"></param>
-        protected virtual void MoveCollectionItemInternal(int oldIndex, int newIndex)
+        protected virtual void MoveItemInternal(int oldIndex, int newIndex)
         {
             newIndex = newIndex >= 0 ? newIndex : ObservableItems.Count - 1;
             ObservableItems.Move(oldIndex, newIndex);
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="AddCollectionItem" /> method
+        ///     Internal implementation of the <see cref="AddItem" /> method
         /// </summary>
         /// <param name="value"></param>
-        protected virtual void AddCollectionItemInternal(T value)
+        protected virtual void AddItemInternal(T value)
         {
             if (MaxCapacity > 0 && ObservableItems.Count >= MaxCapacity) ObservableItems.RemoveAt(0);
             ObservableItems.Add(value);
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="RemoveCollectionItem" /> method
+        ///     Internal implementation of the <see cref="RemoveItem" /> method
         /// </summary>
         /// <param name="value"></param>
-        protected virtual void RemoveCollectionItemInternal(T value)
+        protected virtual void RemoveItemInternal(T value)
         {
             ObservableItems.Remove(value);
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="InsertCollectionItem" /> method
+        ///     Internal implementation of the <see cref="InsertItem" /> method
         /// </summary>
         /// <param name="value"></param>
         /// <param name="index"></param>
-        protected virtual void InsertCollectionItemInternal(int index, T value)
+        protected virtual void InsertItemInternal(int index, T value)
         {
             ObservableItems.Insert(index, value);
             if (MaxCapacity > 0 && ObservableItems.Count >= MaxCapacity) ObservableItems.RemoveAt(0);
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="ClearCollection" /> method
+        ///     Internal implementation of the <see cref="Clear" /> method
         /// </summary>
-        protected virtual void ClearCollectionInternal()
+        protected virtual void ClearInternal()
         {
             ObservableItems.Clear();
         }
 
         /// <summary>
-        ///     Internal implementation of the <see cref="AddCollectionItems" /> method
+        ///     Internal implementation of the <see cref="AddItems" /> method
         /// </summary>
-        protected virtual void AddCollectionItemsInternal(IEnumerable<T> values)
+        protected virtual void AddItemsInternal(IEnumerable<T> values)
         {
             if (values == null) return;
-            foreach (var item in values) AddCollectionItemInternal(item);
+            foreach (var item in values) AddItemInternal(item);
         }
     }
 }
