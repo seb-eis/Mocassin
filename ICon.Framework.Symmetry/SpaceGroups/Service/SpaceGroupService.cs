@@ -363,18 +363,16 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end)
+        public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in FractionalBox3D boundingBox)
         {
             var equalityComparer = VectorComparer.ValueComparer.ToEqualityComparer();
-            var (aMin, bMin, cMin) = (MocassinMath.FloorToInt(start.A, equalityComparer),
-                MocassinMath.FloorToInt(start.B, equalityComparer),
-                MocassinMath.FloorToInt(start.C, equalityComparer));
-            var (aMax, bMax, cMax) = (MocassinMath.FloorToInt(end.A, equalityComparer), MocassinMath.FloorToInt(end.B, equalityComparer),
-                MocassinMath.FloorToInt(end.C, equalityComparer));
-
             var basePositions = GetUnitCellP1PositionExtension(source);
-            var capacity = Math.Abs(aMax - aMin) * Math.Abs(bMax - bMin) * Math.Abs(cMax - cMin);
-            var result = new List<Fractional3D>(capacity * capacity);
+            var (start, end) = (boundingBox.Start, boundingBox.End);
+            var (aMin, bMin, cMin) = (start.A.FloorToInt(equalityComparer), start.B.FloorToInt(equalityComparer), start.C.FloorToInt(equalityComparer));
+            var (aMax, bMax, cMax) = (end.A.FloorToInt(equalityComparer), end.B.FloorToInt(equalityComparer), end.C.FloorToInt(equalityComparer));
+
+            var cellCount = Math.Abs(aMax - aMin) * Math.Abs(bMax - bMin) * Math.Abs(cMax - cMin);
+            var result = new List<Fractional3D>(cellCount * basePositions.Count);
             for (var a = aMin; a <= aMax; a++)
             {
                 for (var b = bMin; b <= bMax; b++)
@@ -383,13 +381,8 @@ namespace Mocassin.Symmetry.SpaceGroups
                     {
                         foreach (var entry in basePositions)
                         {
-                            var vector = entry + new Fractional3D(a, b, c);
-                            if (VectorComparer.ValueComparer.Compare(vector.A, start.A) < 0) continue;
-                            if (VectorComparer.ValueComparer.Compare(vector.B, start.B) < 0) continue;
-                            if (VectorComparer.ValueComparer.Compare(vector.C, start.C) < 0) continue;
-                            if (VectorComparer.ValueComparer.Compare(vector.A, end.A) > 0) continue;
-                            if (VectorComparer.ValueComparer.Compare(vector.B, end.B) > 0) continue;
-                            if (VectorComparer.ValueComparer.Compare(vector.C, end.C) > 0) continue;
+                            var vector = new Fractional3D(entry.A + a, entry.B + b, entry.C + c);
+                            if (!boundingBox.IsWithinBounds(vector, VectorComparer.ValueComparer)) continue;
                             result.Add(vector);
                         }
                     }
@@ -397,6 +390,13 @@ namespace Mocassin.Symmetry.SpaceGroups
             }
 
             return result;
+        }
+
+        /// <inheritdoc />
+        public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end)
+        {
+            var boundingBox = new FractionalBox3D(start, end);
+            return GetPositionsInCuboid(source, boundingBox);
         }
 
         /// <inheritdoc />

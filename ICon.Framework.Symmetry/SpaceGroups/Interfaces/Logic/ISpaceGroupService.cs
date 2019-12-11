@@ -215,6 +215,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end);
 
         /// <summary>
+        ///     Gets all symmetry equivalent positions to the source that are within the provided <see cref="FractionalBox3D"/>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="boundingBox"></param>
+        /// <returns></returns>
+        IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in FractionalBox3D boundingBox);
+
+        /// <summary>
         ///     Checks a pair interaction geometry for chirality within the current space group. Caller has to ensure that both
         ///     coordinates belong to the same sub-lattice
         /// </summary>

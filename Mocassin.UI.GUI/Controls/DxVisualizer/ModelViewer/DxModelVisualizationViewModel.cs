@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
+using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
+using Mocassin.Mathematics.Extensions;
+using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Base.Commands;
@@ -24,68 +28,75 @@ using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.Model;
 using Mocassin.UI.Xml.StructureModel;
 using Mocassin.UI.Xml.TransitionModel;
+using SharpDX;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel"/> that controls object generation and supply for model components to a <see cref="DxViewportViewModel"/>
+    ///     The <see cref="ProjectGraphControlViewModel" /> that controls object generation and supply for model components to
+    ///     a <see cref="DxViewportViewModel" />
     /// </summary>
     public class DxModelVisualizationViewModel : ProjectGraphControlViewModel
     {
         private ProjectCustomizationGraph selectedCustomization;
 
         /// <summary>
-        ///     Get or set the <see cref="IDisposable"/> that cancels the content synchronization for selectable <see cref="ProjectCustomizationGraph"/> intances
+        ///     Get or set the <see cref="IDisposable" /> that cancels the content synchronization for selectable
+        ///     <see cref="ProjectCustomizationGraph" /> intances
         /// </summary>
         private IDisposable CustomizationLinkDisposable { get; set; }
 
         /// <summary>
-        ///     Get the internal <see cref="IModelProject"/> that handles model data processing
+        ///     Get the internal <see cref="IModelProject" /> that handles model data processing
         /// </summary>
         private IModelProject ModelProject { get; }
 
         /// <summary>
-        ///     Get the <see cref="IVectorTransformer"/> that manages the transformations of the coordinate context
+        ///     Get the <see cref="IVectorTransformer" /> that manages the transformations of the coordinate context
         /// </summary>
-        private IVectorTransformer Transformer => ModelProject.CrystalSystemService.VectorTransformer;
+        private IVectorTransformer VectorTransformer => ModelProject.CrystalSystemService.VectorTransformer;
 
         /// <summary>
-        ///     Get the <see cref="ISpaceGroupService"/> that provided the space group operations and functionality
+        ///     Get the <see cref="ISpaceGroupService" /> that provided the space group operations and functionality
         /// </summary>
         private ISpaceGroupService SpaceGroupService => ModelProject.SpaceGroupService;
 
         /// <summary>
-        ///     Get the <see cref="DxViewportViewModel"/> that controls the 3D scene
+        ///     Get the <see cref="DxViewportViewModel" /> that controls the 3D scene
         /// </summary>
         public DxViewportViewModel ViewportViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="Visualizer.DataControl.ModelRenderResourcesViewModel"/> that controls the model render resources
+        ///     Get the <see cref="Visualizer.DataControl.ModelRenderResourcesViewModel" /> that controls the model render
+        ///     resources
         /// </summary>
         public ModelRenderResourcesViewModel ModelRenderResourcesViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of <see cref="ObjectRenderResourcesViewModel"/> that manages the model object render settings
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="ObjectRenderResourcesViewModel" /> that
+        ///     manages the model object render settings
         /// </summary>
         public ObservableCollectionViewModel<ObjectRenderResourcesViewModel> ModelObjectResourcesViewModels { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of <see cref="ObjectRenderResourcesViewModel"/> that manages the customization object render settings
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="ObjectRenderResourcesViewModel" /> that
+        ///     manages the customization object render settings
         /// </summary>
         public ObservableCollectionViewModel<ObjectRenderResourcesViewModel> CustomizationObjectResourcesViewModels { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of selectable <see cref="ProjectCustomizationGraph"/> instances
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of selectable <see cref="ProjectCustomizationGraph" />
+        ///     instances
         /// </summary>
         public ObservableCollectionViewModel<ProjectCustomizationGraph> CustomizationCollectionViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="AsyncCommand"/> to invalidate and rebuild the entire scene
+        ///     Get the <see cref="AsyncCommand" /> to invalidate and rebuild the entire scene
         /// </summary>
-        public AsyncCommand InvalidateSceneCommand { get; }
+        public ParameterlessAsyncCommand InvalidateSceneCommand { get; }
 
         /// <summary>
-        ///     Get or set the selected <see cref="ProjectCustomizationGraph"/>
+        ///     Get or set the selected <see cref="ProjectCustomizationGraph" />
         /// </summary>
         public ProjectCustomizationGraph SelectedCustomization
         {
@@ -114,7 +125,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Internal implementation of content source change that updates the view model if a new <see cref="MocassinProjectGraph"/> is set
+        ///     Internal implementation of content source change that updates the view model if a new
+        ///     <see cref="MocassinProjectGraph" /> is set
         /// </summary>
         /// <returns></returns>
         public void ChangeContentSourceInternal()
@@ -126,9 +138,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             }
 
             RebuildContentAccess();
-            var (count, batch) = (5000, true);
-            var time = ViewportViewModel.LoadTestScene(count, batch);
-            SendCallInfoMessage($"Test scene loaded: {count} elements in {time}.");
+            InvalidateSceneCommand.ExecuteAsync();
         }
 
         /// <summary>
@@ -146,7 +156,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Rebuilds and synchronizes the data access structure after a <see cref="MocassinProjectGraph"/> content source change
+        ///     Rebuilds and synchronizes the data access structure after a <see cref="MocassinProjectGraph" /> content source
+        ///     change
         /// </summary>
         private void RebuildContentAccess()
         {
@@ -156,7 +167,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Rebuilds and synchronizes the <see cref="ProjectModelGraph"/> content access after the primary content source has changed
+        ///     Rebuilds and synchronizes the <see cref="ProjectModelGraph" /> content access after the primary content source has
+        ///     changed
         /// </summary>
         private void RebuildModelAccess()
         {
@@ -170,7 +182,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Rebuilds and synchronizes the <see cref="ProjectCustomizationGraph"/> content access after the primary content source has changed
+        ///     Rebuilds and synchronizes the <see cref="ProjectCustomizationGraph" /> content access after the primary content
+        ///     source has changed
         /// </summary>
         private void RebuildCustomizationAccess()
         {
@@ -193,7 +206,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///    Rebuilds and synchronizes all render resource content access objects affiliated with the model source
+        ///     Rebuilds and synchronizes all render resource content access objects affiliated with the model source
         /// </summary>
         private void RebuildModelRenderResourceAccess()
         {
@@ -207,7 +220,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///    Rebuilds and synchronizes all render resource content access objects affiliated with the customization source
+        ///     Rebuilds and synchronizes all render resource content access objects affiliated with the customization source
         /// </summary>
         private void RebuildCustomizationRenderResourceAccess()
         {
@@ -220,7 +233,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the <see cref="ObjectRenderResourcesViewModel"/> for the provided <see cref="ExtensibleProjectObjectGraph"/> or creates the instance if required
+        ///     Get the <see cref="ObjectRenderResourcesViewModel" /> for the provided <see cref="ExtensibleProjectObjectGraph" />
+        ///     or creates the instance if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
@@ -230,7 +244,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the <see cref="ObjectRenderResourcesViewModel"/> for the provided <see cref="ExtensibleProjectObjectGraph"/> or creates the instance if required
+        ///     Get the <see cref="ObjectRenderResourcesViewModel" /> for the provided <see cref="ExtensibleProjectObjectGraph" />
+        ///     or creates the instance if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
@@ -246,7 +261,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="objectGraph"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        private ObjectRenderResourcesViewModel GetObjectRenderViewModelAny(ExtensibleProjectObjectGraph objectGraph, ICollection<ObjectRenderResourcesViewModel> source)
+        private ObjectRenderResourcesViewModel GetObjectRenderViewModelAny(ExtensibleProjectObjectGraph objectGraph,
+            ICollection<ObjectRenderResourcesViewModel> source)
         {
             var result = source.FirstOrDefault(x => ReferenceEquals(x.ObjectGraph, objectGraph));
             if (result != null) return result;
@@ -256,7 +272,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Gets the <see cref="VisualObjectCategory"/> for the provided <see cref="ExtensibleProjectObjectGraph"/>
+        ///     Gets the <see cref="VisualObjectCategory" /> for the provided <see cref="ExtensibleProjectObjectGraph" />
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
@@ -264,7 +280,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             return objectGraph switch
             {
-                StructureInfoGraph _ => VisualObjectCategory.Frame,
+                StructureInfoGraph _ => VisualObjectCategory.CellFrame,
                 KineticTransitionGraph _ => VisualObjectCategory.Transition,
                 UnitCellPositionGraph _ => VisualObjectCategory.Position,
                 PairEnergySetGraph _ => VisualObjectCategory.Interaction,
@@ -274,7 +290,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Handles the required actions if the target <see cref="ProjectCustomizationGraph"/> was changed
+        ///     Handles the required actions if the target <see cref="ProjectCustomizationGraph" /> was changed
         /// </summary>
         private void OnSelectedCustomizationChanged()
         {
@@ -282,7 +298,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Action that handles a render <see cref="Exception"/>
+        ///     Action that handles a render <see cref="Exception" />
         /// </summary>
         /// <param name="e"></param>
         /// <param name="callerMemberName"></param>
@@ -298,25 +314,147 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private async Task InvalidateSceneAsync()
         {
-            ViewportViewModel.Reset();
+            var watch = Stopwatch.StartNew();
+            ViewportViewModel.Reset(false);
+            SendCallInfoMessage($"Scene invalidation: Cleanup of old scene in {watch.Elapsed}.");
+            watch.Restart();
             var sceneModels = await BuildSceneComponentsAsync();
-            foreach (var model in sceneModels)
-            {
-                ViewportViewModel.AddElement3D(model);
-            }
+            SendCallInfoMessage($"Scene invalidation: Rebuild of new scene in {watch.Elapsed}.");
+            watch.Restart();
+            ViewportViewModel.AddSceneElements(sceneModels);
+            SendCallInfoMessage($"Scene invalidation: Rendering of new scene in {watch.Elapsed}.");
         }
 
         /// <summary>
-        ///     Asynchronously builds the 3D scene <see cref="SceneNodeGroupModel3D"/> instances
+        ///     Asynchronously builds the 3D scene <see cref="SceneNodeGroupModel3D" /> instances
         /// </summary>
         /// <returns></returns>
-        private Task<IList<SceneNodeGroupModel3D>> BuildSceneComponentsAsync()
+        private async Task<IList<SceneNodeGroupModel3D>> BuildSceneComponentsAsync()
         {
-            var sceneBuilder = new DxSceneBuilder();
-            var renderBox = ModelRenderResourcesViewModel.GetRenderBox3D();
-            return null;
+            var tasks = StartSceneComponentBuilding();
+            await Task.WhenAll(tasks);
+            return tasks.Select(x => x.Result).ToList(tasks.Count);
         }
 
+        /// <summary>
+        ///     Starts the parallel build process of the scene components and returns the <see cref="IList{T}" /> of build
+        ///     <see cref="Task" /> instances
+        /// </summary>
+        /// <returns></returns>
+        private IList<Task<SceneNodeGroupModel3D>> StartSceneComponentBuilding()
+        {
+            var renderBox = ModelRenderResourcesViewModel.GetRenderBox3D();
+            var result = new List<Task<SceneNodeGroupModel3D>>(10);
+            result.AddRange(StartCellPositionSceneBuilding(renderBox));
+            return result;
+        }
 
+        /// <summary>
+        ///     Starts the scene build tasks for all unit cell position in model of the current content source
+        /// </summary>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private IEnumerable<Task<SceneNodeGroupModel3D>> StartCellPositionSceneBuilding(FractionalBox3D renderBox)
+        {
+            return ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions
+                .Select(positionGraph => Task.Run(() => BuildCellPositionSceneNode(positionGraph, renderBox)));
+        }
+
+        /// <summary>
+        ///     Builds a <see cref="SceneNodeGroupModel3D" /> for the provided <see cref="UnitCellPositionGraph" />. The scene is
+        ///     extended based on the provided render box
+        /// </summary>
+        /// <param name="positionGraph"></param>
+        /// <param name="renderBox"></param>
+        /// <param name="useBatchedMesh"></param>
+        /// <returns></returns>
+        private SceneNodeGroupModel3D BuildCellPositionSceneNode(UnitCellPositionGraph positionGraph, in FractionalBox3D renderBox, bool useBatchedMesh = false)
+        {
+            var transformMatrices = GetCellPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
+            var resourcesViewModel = GetModelRenderResourcesViewModel(positionGraph);
+            var geometry = CreateSphereGeometry(resourcesViewModel);
+            var material = CreateFrozenMaterial(resourcesViewModel);
+            return BuildMeshSceneNode(geometry, material, transformMatrices, useBatchedMesh, x => x.IsHitTestVisible = false);
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="IList{T}" /> of <see cref="Matrix" /> transforms that represent the symmetry extension of
+        ///     the origin point into the provided <see cref="FractionalBox3D" /> when applied to a 0,0,0 vector
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private IList<Matrix> GetCellPositionSceneItemTransforms(in Fractional3D origin, in FractionalBox3D renderBox)
+        {
+            var positions = SpaceGroupService.GetPositionsInCuboid(origin, renderBox);
+            var result = new List<Matrix>(positions.Count);
+            foreach (var fractional3D in positions)
+            {
+                var cartesian3D = VectorTransformer.ToCartesian(fractional3D);
+                var matrix = Matrix.Translation((float) cartesian3D.X, (float) cartesian3D.Y, (float) cartesian3D.Z);
+                result.Add(matrix);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="Material" /> based on the settings in the provided
+        ///     <see cref="ObjectRenderResourcesViewModel" /> and freezes the object
+        /// </summary>
+        /// <param name="resourcesViewModel"></param>
+        /// <returns></returns>
+        private Material CreateFrozenMaterial(ObjectRenderResourcesViewModel resourcesViewModel)
+        {
+            var color = resourcesViewModel.Color.ToColor4();
+            var result = PhongMaterials.PolishedSilver;
+            result.DiffuseColor = color;
+            result.Freeze();
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates a new sphere <see cref="Geometry3D" /> object around (0,0,0) using the settings on the provided
+        ///     <see cref="ObjectRenderResourcesViewModel" />
+        /// </summary>
+        /// <param name="resourcesViewModel"></param>
+        /// <returns></returns>
+        private Geometry3D CreateSphereGeometry(ObjectRenderResourcesViewModel resourcesViewModel)
+        {
+            var meshBuilder = new MeshBuilder();
+            var radius = resourcesViewModel.Scaling;
+            var thetaDiv = (Settings.Default.Default_Render_Sphere_ThetaDiv * resourcesViewModel.MeshQuality).FloorToInt();
+            var phiDiv = (Settings.Default.Default_Render_Sphere_PhiDiv * resourcesViewModel.MeshQuality).FloorToInt();
+            meshBuilder.AddSphere(new Vector3(), radius, thetaDiv, phiDiv);
+            return meshBuilder.ToMesh();
+        }
+
+        /// <summary>
+        ///     Creates a batched or loose <see cref="SceneNodeGroupModel3D" /> from a prepared mesh <see cref="Geometry3D" /> and
+        ///     <see cref="Material" /> using a list of transform matrices
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="material"></param>
+        /// <param name="transforms"></param>
+        /// <param name="useBatchedMesh"></param>
+        /// <param name="nodeCallback"></param>
+        /// <returns></returns>
+        private SceneNodeGroupModel3D BuildMeshSceneNode(Geometry3D geometry, Material material, IList<Matrix> transforms, bool useBatchedMesh,
+            Action<SceneNode> nodeCallback = null)
+        {
+            var sceneBuilder = new DxSceneBuilder(useBatchedMesh ? 1 : transforms.Count);
+            if (useBatchedMesh)
+                sceneBuilder.AddBatchedMeshTransforms(geometry, material, transforms, nodeCallback);
+            else
+                sceneBuilder.AddMeshTransforms(geometry, material, transforms, nodeCallback);
+            return sceneBuilder.ToModel();
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            ViewportViewModel.Dispose();
+            base.Dispose();
+        }
     }
 }

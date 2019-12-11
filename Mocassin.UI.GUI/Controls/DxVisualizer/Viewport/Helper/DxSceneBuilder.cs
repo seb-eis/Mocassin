@@ -10,7 +10,7 @@ using SharpDX;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
 {
     /// <summary>
-    ///     Build class for multi-threaded creation <see cref="SceneNode" /> sets for 3D scenes
+    ///     Builder class for synchronous or asynchronous creation of <see cref="SceneNode" /> sets for 3D scenes
     /// </summary>
     public class DxSceneBuilder
     {
@@ -36,7 +36,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         ///     Creates a new <see cref="DxSceneBuilder" /> with the provided initial capacity
         /// </summary>
         /// <param name="capacity"></param>
-        public DxSceneBuilder(int capacity = 100)
+        public DxSceneBuilder(int capacity = 10)
         {
             SceneNodes = new HashSet<SceneNode>(capacity);
             ActiveBuildTasks = new HashSet<Task>();
@@ -56,46 +56,74 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Creates the <see cref="SceneNodeGroupModel3D" /> of the scene and cleans the builders node collection if requested.
-        ///     This function synchronously awaits completion of all pending build tasks
+        ///     Synchronously creates the unified <see cref="SceneNodeGroupModel3D"/>. This method will throw if any build tasks are still pending
         /// </summary>
         /// <param name="clear"></param>
         /// <param name="dispatcher"></param>
-        /// <remarks>Application.Current is used to get a <see cref="Dispatcher"/> if none is specified</remarks>
+        /// <exception cref="InvalidOperationException">If active build tasks collection is not empty or a  build task is added during the operation</exception>
         /// <returns></returns>
         public SceneNodeGroupModel3D ToModel(bool clear = true, Dispatcher dispatcher = null)
         {
             dispatcher ??= Application.Current.Dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
-            var result = dispatcher.Invoke(() => ToModelInternal(clear));
-            if (clear) SceneNodes.Clear();
-            return result;
+            IsCreatingModel = true;
+            try
+            {
+                if (ActiveBuildTasks.Count != 0) throw new InvalidOperationException("Cannot synchronously build the model if pending build tasks exist.");
+                var result = dispatcher.CheckAccess() ? CreateModel() : dispatcher.Invoke(CreateModel);
+                if (clear) ClearNodes();
+                IsCreatingModel = false;
+                return result;
+            }
+            finally
+            {
+                IsCreatingModel = false;
+            }
         }
 
         /// <summary>
-        ///     Performs the <see cref="ToModel"/> operation asynchronously
+        ///     Asynchronously awaits all active build tasks and builds a unified a <see cref="SceneNodeGroupModel3D"/>
         /// </summary>
         /// <param name="clear"></param>
         /// <param name="dispatcher"></param>
         /// <remarks>Application.Current is used to get a <see cref="Dispatcher"/> if none is specified</remarks>
         /// <returns></returns>
-        public Task<SceneNodeGroupModel3D> ToModelAsync(bool clear = true, Dispatcher dispatcher = null)
+        public async Task<SceneNodeGroupModel3D> ToModelAsync(bool clear = true, Dispatcher dispatcher = null)
         {
-            return Task.Run(() => ToModel(clear, dispatcher));
+            return await ToModelInternal(clear, dispatcher);
         }
 
         /// <summary>
         ///     Internal implementation of the <see cref="SceneNodeGroupModel3D"/> build process
         /// </summary>
         /// <param name="clear"></param>
+        /// <param name="dispatcher"></param>
         /// <returns></returns>
-        private SceneNodeGroupModel3D ToModelInternal(bool clear = true)
+        private async Task<SceneNodeGroupModel3D> ToModelInternal(bool clear = true, Dispatcher dispatcher = null)
         {
+            dispatcher ??= Application.Current.Dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             IsCreatingModel = true;
-            Task.WhenAll(ActiveBuildTasks).Wait();
+            try
+            {
+                if (ActiveBuildTasks.Count != 0) await Task.WhenAll(ActiveBuildTasks);
+                var result = dispatcher.CheckAccess() ? CreateModel() : dispatcher.Invoke(CreateModel);
+                if (clear) ClearNodes();
+                IsCreatingModel = false;
+                return result;
+            }
+            finally
+            {
+                IsCreatingModel = false;
+            }
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="SceneNodeGroupModel3D"/>
+        /// </summary>
+        /// <returns></returns>
+        private SceneNodeGroupModel3D CreateModel()
+        {
             var result = new SceneNodeGroupModel3D();
             foreach (var node in SceneNodes) result.AddNode(node);
-            if (clear) ClearNodes();
-            IsCreatingModel = false;
             return result;
         }
 
@@ -136,7 +164,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Performs the <see cref="AddMeshTransforms" /> action asynchronously.
+        ///     Starts performing the <see cref="AddMeshTransforms" /> as a background task
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
@@ -144,7 +172,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="callback"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Provided material is not frozen</exception>
-        public Task AddMeshTransformsAsync(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<GroupNode> callback = null)
+        public Task BeginAddMeshTransforms(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<GroupNode> callback = null)
         {
             ThrowIfNotFrozen(material);
             return RunBuildTask(() => AddMeshTransforms(geometry, material, transforms, callback));
@@ -172,14 +200,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Performs the <see cref="AddBatchedMeshTransforms" /> action asynchronously
+        ///     Start the <see cref="AddBatchedMeshTransforms" /> as a background task
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Task AddBatchedMeshTransformsAsync(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
+        public Task BeginAddBatchedMeshTransforms(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
         {
             ThrowIfNotFrozen(material);
             return RunBuildTask(() => AddBatchedMeshTransforms(geometry, material, transforms, callback));

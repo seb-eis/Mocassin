@@ -25,6 +25,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
     /// </summary>
     public class DxViewportViewModel : ViewModelBase, IDisposable
     {
+        private static EffectsManager _effectsManager = new DefaultEffectsManager();
+
         /// <summary>
         ///     Get or set the maximal supported image height of the image exporter. Default is 2160 pixels
         /// </summary>
@@ -62,11 +64,16 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private int imageExportHeight;
         private int imageExportWidth;
         private bool itemsOverlayActive;
+        private EffectsManager effectsManager;
 
         /// <summary>
         ///     Get the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the 3D system
         /// </summary>
-        public EffectsManager EffectsManager { get; }
+        public EffectsManager EffectsManager
+        {
+            get => effectsManager;
+            private set => SetProperty(ref effectsManager, value);
+        }
 
         /// <summary>
         ///     Get or set the <see cref="HelixToolkit.Wpf.SharpDX.Camera" />
@@ -421,7 +428,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// </summary>
         public DxViewportViewModel()
         {
-            EffectsManager = new DefaultEffectsManager();
+            effectsManager = _effectsManager;
             HitTestVisibleSceneElements = new ObservableElement3DCollection();
             HitTestInvisibleSceneElements = new ObservableElement3DCollection();
             SceneLightCollection = new ObservableElement3DCollection();
@@ -435,14 +442,28 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         ///     Adds an <see cref="Element3D"/> to the viewport
         /// </summary>
         /// <param name="element"></param>
-        public void AddElement3D(Element3D element)
+        public void AddSceneElement(Element3D element)
         {
-            if (element.IsHitTestVisible)
+            if (!element.CheckAccess())
             {
-                ExecuteOnAppThread(() => HitTestVisibleSceneElements.Add(element));
+                element.Dispatcher?.Invoke(() => AddSceneElement(element));
                 return;
             }
-            ExecuteOnAppThread(() => HitTestInvisibleSceneElements.Add(element));
+            if (element.IsHitTestVisible)
+            {
+                HitTestVisibleSceneElements.Add(element);
+                return;
+            }
+            HitTestInvisibleSceneElements.Add(element);
+        }
+
+        /// <summary>
+        ///     Adds a sequence of <see cref="Element3D"/> objects to the viewport
+        /// </summary>
+        /// <param name="elements"></param>
+        public void AddSceneElements(IEnumerable<Element3D> elements)
+        {
+            foreach (var element in elements) AddSceneElement(element);
         }
 
         /// <summary>
@@ -474,7 +495,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public void Dispose()
         {
             ClearSceneCollections();
-            EffectsManager.Dispose();
+            EffectsManager = null;
         }
 
         /// <summary>
@@ -734,7 +755,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// <param name="itemCount"></param>
         /// <param name="batchGeometry"></param>
         /// <returns></returns>
-        public TimeSpan LoadTestScene(int itemCount = 5000, bool batchGeometry = true)
+        public async Task<TimeSpan> LoadTestScene(int itemCount = 5000, bool batchGeometry = true)
         {
             Reset(false);
             var watch = Stopwatch.StartNew();
@@ -751,13 +772,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             for (var i = 0; i < itemCount; i++) transforms.Add(Matrix.Translation(rng.NextFloat(0, 200), rng.NextFloat(0, 200), rng.NextFloat(0, 200)));
             if (batchGeometry)
             {
-                sceneBuilder.AddBatchedMeshTransformsAsync(mesh, material, transforms);
+                await sceneBuilder.BeginAddBatchedMeshTransforms(mesh, material, transforms);
             }
             else
             {
-                sceneBuilder.AddMeshTransformsAsync(mesh, material, transforms);
+                await sceneBuilder.BeginAddMeshTransforms(mesh, material, transforms);
             }
-            var geometryModel = sceneBuilder.ToModel();
+            var geometryModel = await sceneBuilder.ToModelAsync();
             ExecuteOnAppThread(() => HitTestVisibleSceneElements.Add(geometryModel));
             watch.Stop();
             return watch.Elapsed;

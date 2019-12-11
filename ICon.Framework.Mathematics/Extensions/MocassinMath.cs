@@ -69,14 +69,10 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static double Floor(double value, IEqualityComparer<double> comparer)
+        public static double Floor(this double value, IEqualityComparer<double> comparer)
         {
-            if (comparer == null) 
-                throw new ArgumentNullException(nameof(comparer));
-
             var floor = Math.Floor(value);
             var ceil = floor + 1.0;
-            if (comparer.Equals(value, floor)) return floor;
             return comparer.Equals(value, ceil) ? ceil : floor;
         }
 
@@ -86,9 +82,19 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static int FloorToInt(double value, IEqualityComparer<double> comparer)
+        public static int FloorToInt(this double value, IEqualityComparer<double> comparer)
         {
             return (int) Floor(value, comparer);
+        }
+
+        /// <summary>
+        ///     Rounds the provided double value to the largest integer that compares less or equal to value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static int FloorToInt(this double value)
+        {
+            return (int) Math.Floor(value);
         }
 
         /// <summary>

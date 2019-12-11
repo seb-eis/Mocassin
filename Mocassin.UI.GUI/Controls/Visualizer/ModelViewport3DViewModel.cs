@@ -254,7 +254,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
             var objectCategory = objectGraph switch
             {
-                StructureInfoGraph _ => VisualObjectCategory.Frame,
+                StructureInfoGraph _ => VisualObjectCategory.CellFrame,
                 KineticTransitionGraph _ => VisualObjectCategory.Transition,
                 UnitCellPositionGraph _ => VisualObjectCategory.Position,
                 PairEnergySetGraph _ => VisualObjectCategory.Interaction,

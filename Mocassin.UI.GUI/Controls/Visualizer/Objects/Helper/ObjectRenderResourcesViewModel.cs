@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
     public enum VisualObjectCategory
     {
         Unknown,
-        Frame,
+        CellFrame,
         Position,
         Transition,
         Interaction,
@@ -122,7 +122,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
             return category switch
             {
                 VisualObjectCategory.Unknown => (Colors.Gray, 1.0, 1.0),
-                VisualObjectCategory.Frame => (Colors.Black, 1.0, 0),
+                VisualObjectCategory.CellFrame => (Colors.Black, 1.0, 0),
                 VisualObjectCategory.Position => (Colors.Gray, .5, .5),
                 VisualObjectCategory.Transition => (Colors.Gray, .2, .5),
                 VisualObjectCategory.Interaction => (Colors.Transparent, 2.0, 0),
