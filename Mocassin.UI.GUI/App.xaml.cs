@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,15 +18,15 @@ namespace Mocassin.UI.GUI
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-            using (var startupWindow = new StartupWindow())
-            {
-                startupWindow.Show();
-                var viewModel = CreateNewMainWindowViewModel();
-                viewModel.OnStartup(e.Args);
-                var mainWindow = CreateNewMainWindow(viewModel);
-                base.OnStartup(e);
-                mainWindow.Show();
-            }
+            using var startupWindow = new StartupWindow();
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            startupWindow.Show();
+            var viewModel = CreateNewMainWindowViewModel();
+            viewModel.OnStartup(e.Args);
+            var mainWindow = CreateNewMainWindow(viewModel);
+            base.OnStartup(e);
+            mainWindow.Show();
         }
 
         /// <summary>

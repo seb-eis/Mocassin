@@ -166,6 +166,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         }
 
         /// <summary>
+        ///     Creates a <see cref="Matrix" /> that represents the provided <see cref="ISymmetryOperation" /> as a transform in
+        ///     cartesian space specifically for cases where the input coordinates are in the fractional context and not the cartesian
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="fractionalSystem"></param>
+        /// <returns></returns>
+        public static Matrix ToDxMatrixForFractional(this ISymmetryOperation operation, FractionalCoordinateSystem3D fractionalSystem)
+        {
+            var toCartesianMatrix = fractionalSystem.ToCartesianMatrix.ToDxMatrix();
+            var operationMatrix = operation.ToDxMatrix();
+            return operationMatrix * toCartesianMatrix;
+        }
+
+        /// <summary>
         ///     Creates a <see cref="Transform3D" /> instance from a <see cref="ISymmetryOperation" /> and
         ///     <see cref="FractionalCoordinateSystem3D" />
         ///     with a <see cref="Fractional3D" /> offset that can directly transform cartesian coordinates using the space group

@@ -207,14 +207,25 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="transforms"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Task BeginAddBatchedMeshTransforms(MeshGeometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
+        public Task BeginAddBatchedMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
         {
             return RunBuildTask(() => AddBatchedMeshTransforms(geometry, material, transforms, callback));
         }
 
-        public void AddLineNetwork(LineGeometry3D geometry, LineMaterial material, Action<LineNode> callback = null)
+        /// <summary>
+        ///     Adds a <see cref="LineGeometry3D"/> using the provided model <see cref="Matrix"/> and <see cref="LineMaterialCore"/>
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="material"></param>
+        /// <param name="transform"></param>
+        /// <param name="callback"></param>
+        public void AddLineGeometry(LineGeometry3D geometry, LineMaterialCore material, in Matrix transform, Action<LineNode> callback = null)
         {
-
+            if (geometry == null) throw new ArgumentNullException(nameof(geometry));
+            if (material == null) throw new ArgumentNullException(nameof(material));
+            var node = new LineNode {Geometry = geometry, Material = material, ModelMatrix = transform};
+            callback?.Invoke(node);
+            AddNode(node);
         }
 
         /// <summary>

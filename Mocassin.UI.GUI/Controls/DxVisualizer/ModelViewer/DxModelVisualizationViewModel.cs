@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
+using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Coordinates;
@@ -310,13 +311,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var watch = Stopwatch.StartNew();
             ViewportViewModel.Reset(false);
-            SendCallInfoMessage($"Scene invalidation: Cleanup of old scene in {watch.Elapsed}.");
+            var invalidationTime = watch.Elapsed.TotalMilliseconds;
             watch.Restart();
             var sceneModel = await BuildSceneAsync();
-            SendCallInfoMessage($"Scene invalidation: Rebuild of new scene in {watch.Elapsed}.");
+            var sceneBuildTime = watch.Elapsed.TotalMilliseconds;
             watch.Restart();
             ViewportViewModel.AddSceneElement(sceneModel);
-            SendCallInfoMessage($"Scene invalidation: Rendering of new scene in {watch.Elapsed}.");
+            var viewportPassTime = watch.Elapsed.TotalMilliseconds;
+            SendCallInfoMessage($"Viewer CPU time info: {invalidationTime:0.0} ms (scene-clean); {sceneBuildTime:0.0} ms (scene-build); {viewportPassTime:0.0} ms (scene-setup);");
         }
 
         /// <summary>
@@ -337,7 +339,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var renderBox = ModelRenderResourcesViewModel.GetRenderBox3D();
             var sceneBuilder = new DxSceneBuilder(100);
-            //Task.Run(() => BuildCellFrameSceneNode(sceneBuilder, renderBox));
+            StartCellFrameSceneNodeBuilding(sceneBuilder, renderBox);
             StartCellPositionSceneNodeBuilding(sceneBuilder, renderBox);
             return sceneBuilder;
         }
@@ -350,8 +352,39 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void BuildCellFrameSceneNode(DxSceneBuilder sceneBuilder, in FractionalBox3D renderBox)
         {
+            var sceneConfig = GetModelObjectSceneConfig(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
+            var material = new LineMaterialCore {LineColor = sceneConfig.Color.ToColor4(), Thickness = (float) sceneConfig.Scaling};
+            var matrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
 
+            var lineBuilder = new LineBuilder();
+            var (sizeA, sizeB, sizeC) = (renderBox.Size.A.FloorToInt(), renderBox.Size.B.FloorToInt(), renderBox.Size.C.FloorToInt());
+            for (var a = 0; a <= sizeA; a++)
+            {
+                for (var b = 0; b <= sizeB; b++)
+                {
+                    for (var c = 0; c <= sizeC; c++)
+                    {
+                        var origin = new Vector3(a,b,c);
+                        if (a < sizeA) lineBuilder.AddLine(origin, new Vector3(a + 1, b, c));
+                        if (b < sizeB) lineBuilder.AddLine(origin, new Vector3(a, b + 1, c));
+                        if (c < sizeC) lineBuilder.AddLine(origin, new Vector3(a, b, c + 1));
+                    }
+                }
+            }
+            sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix);
         }
+
+        /// <summary>
+        ///     Starts the scene build task for the cell wire-frame in model of the current content source using the provided <see cref="DxSceneBuilder"/>
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private void StartCellFrameSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
+        {
+            sceneBuilder.AttachAsBuildTask(Task.Run(() => BuildCellFrameSceneNode(sceneBuilder, renderBox)));
+        }
+
 
         /// <summary>
         ///     Starts the scene build tasks for all unit cell position in model of the current content source using the provided <see cref="DxSceneBuilder"/>
@@ -363,18 +396,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
             {
-                sceneBuilder.AttachAsBuildTask(Task.Run(() => BuildCellPositionSceneNode(sceneBuilder, item, renderBox)));
+                sceneBuilder.AttachAsBuildTask(Task.Run(() => AddCellPositionNodeToScene(sceneBuilder, item, renderBox)));
             }
         }
 
         /// <summary>
-        ///     Prepares the scene elements for the provided <see cref="UnitCellPositionGraph" /> and begins the scene add on the <see cref="DxSceneBuilder"/>
+        ///     Prepares the scene elements for the provided <see cref="UnitCellPositionGraph" /> and adds the node one the <see cref="DxSceneBuilder"/>
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="positionGraph"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
-        private void BuildCellPositionSceneNode(DxSceneBuilder sceneBuilder, UnitCellPositionGraph positionGraph, in FractionalBox3D renderBox)
+        private void AddCellPositionNodeToScene(DxSceneBuilder sceneBuilder, UnitCellPositionGraph positionGraph, in FractionalBox3D renderBox)
         {
             var transformMatrices = GetCellPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
             var sceneConfig = GetModelObjectSceneConfig(positionGraph);
@@ -405,11 +438,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a new frozen <see cref="Material" /> based on the settings in the provided <see cref="IObjectSceneConfig" />
+        ///     Creates a new frozen <see cref="MaterialCore" /> based on the settings in the provided <see cref="IObjectSceneConfig" />
         /// </summary>
         /// <param name="objectConfig"></param>
         /// <returns></returns>
-        private Material CreateFrozenMaterial(IObjectSceneConfig objectConfig)
+        private MaterialCore CreateFrozenMaterial(IObjectSceneConfig objectConfig)
         {
             var color = objectConfig.Color.ToColor4();
             var result = ExecuteOnAppThread(() =>
@@ -417,7 +450,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 var material = PhongMaterials.GetMaterial(objectConfig.MaterialName).CloneMaterial();
                 material.DiffuseColor = color;
                 material.Freeze();
-                return material;
+                return material.Core;
             });
             return result;
         }

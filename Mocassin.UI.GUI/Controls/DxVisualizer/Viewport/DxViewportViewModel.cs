@@ -25,8 +25,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
     /// </summary>
     public class DxViewportViewModel : ViewModelBase, IDisposable
     {
-        private static EffectsManager _effectsManager = new DefaultEffectsManager();
-
         /// <summary>
         ///     Get or set the maximal supported image height of the image exporter. Default is 2160 pixels
         /// </summary>
@@ -423,7 +421,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// </summary>
         public DxViewportViewModel()
         {
-            EffectsManager = _effectsManager;
+            EffectsManager = new DefaultEffectsManager();
             HitTestVisibleSceneElements = new ObservableElement3DCollection();
             HitTestInvisibleSceneElements = new ObservableElement3DCollection();
             SceneLightCollection = new ObservableElement3DCollection();
@@ -490,6 +488,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public void Dispose()
         {
             ClearSceneCollections();
+            EffectsManager.Dispose();
         }
 
         /// <summary>
