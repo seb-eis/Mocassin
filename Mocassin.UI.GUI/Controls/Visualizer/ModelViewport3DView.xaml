@@ -141,11 +141,11 @@
               </DataGrid.RowHeaderTemplate>
               <DataGrid.Columns>
                 <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Type" Binding="{Binding ObjectCategory}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Type" Binding="{Binding VisualCategory}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Scaling"
                                     Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                 <DataGridTextColumn Header="Mesh quality"
-                                    Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                                    Binding="{Binding Quality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                 <DataGridComboBoxColumn Header="Color"
                                         ItemsSource="{Binding Source={StaticResource ColorProvider}}"
                                         SelectedValueBinding="{Binding Color, Converter={StaticResource ColorConverter}, ConverterParameter={StaticResource ColorProvider}}"
@@ -187,7 +187,7 @@
                 </DataGrid.RowHeaderTemplate>
                 <DataGrid.Columns>
                   <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
-                  <DataGridTextColumn Header="Type" Binding="{Binding ObjectCategory}" IsReadOnly="True" />
+                  <DataGridTextColumn Header="Type" Binding="{Binding VisualCategory}" IsReadOnly="True" />
                   <DataGridTextColumn Header="Scaling"
                                       Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
                   <!--

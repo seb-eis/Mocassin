@@ -64,18 +64,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private int imageExportHeight;
         private int imageExportWidth;
         private bool itemsOverlayActive;
-        private EffectsManager effectsManager;
 
         /// <summary>
         ///     Get the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the 3D system
         /// </summary>
-        public EffectsManager EffectsManager
-        {
-            get => effectsManager;
-            private set => SetProperty(ref effectsManager, value);
-        }
+        public EffectsManager EffectsManager { get; }
 
-        /// <summary>
+            /// <summary>
         ///     Get or set the <see cref="HelixToolkit.Wpf.SharpDX.Camera" />
         /// </summary>
         [RaiseInvalidateRender]
@@ -428,7 +423,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// </summary>
         public DxViewportViewModel()
         {
-            effectsManager = _effectsManager;
+            EffectsManager = _effectsManager;
             HitTestVisibleSceneElements = new ObservableElement3DCollection();
             HitTestInvisibleSceneElements = new ObservableElement3DCollection();
             SceneLightCollection = new ObservableElement3DCollection();
@@ -495,7 +490,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public void Dispose()
         {
             ClearSceneCollections();
-            EffectsManager = null;
         }
 
         /// <summary>

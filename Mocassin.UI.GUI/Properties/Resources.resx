@@ -154,6 +154,9 @@
   <data name="ResourceKey_ModelObject_RenderColor" xml:space="preserve">
     <value>Render_Color</value>
   </data>
+  <data name="ResourceKey_ModelObject_RenderMaterial" xml:space="preserve">
+    <value>Render_Material</value>
+  </data>
   <data name="ResourceKey_ModelObject_RenderScaling" xml:space="preserve">
     <value>Render_Scaling</value>
   </data>

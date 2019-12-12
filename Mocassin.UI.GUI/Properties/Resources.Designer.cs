@@ -170,6 +170,15 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Render_Material.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderMaterial {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Render_Scaling.
         /// </summary>
         public static string ResourceKey_ModelObject_RenderScaling {

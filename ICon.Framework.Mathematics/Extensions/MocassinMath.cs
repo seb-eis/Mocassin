@@ -98,6 +98,17 @@ namespace Mocassin.Mathematics.Extensions
         }
 
         /// <summary>
+        ///     Rounds the provided double value to an integer
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="midpointRounding"></param>
+        /// <returns></returns>
+        public static int RoundToInt(this double value, MidpointRounding midpointRounding = MidpointRounding.ToEven)
+        {
+            return (int) Math.Round(value, midpointRounding);
+        }
+
+        /// <summary>
         ///     Get the volume of a sphere with the provided radius
         /// </summary>
         /// <param name="radius"></param>

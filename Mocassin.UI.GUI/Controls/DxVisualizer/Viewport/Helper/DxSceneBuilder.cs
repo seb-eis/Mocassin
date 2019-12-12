@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using HelixToolkit.Wpf.SharpDX;
+using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using SharpDX;
 
@@ -140,12 +141,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
 
         /// <summary>
         ///     Adds a new <see cref="GroupNode" /> of <see cref="MeshNode" /> transforms sharing a common
-        ///     <see cref="Geometry3D" /> and <see cref="Material" />
+        ///     <see cref="MeshGeometry3D" /> and <see cref="MaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
-        public void AddMeshTransforms(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<GroupNode> callback = null)
+        public void AddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<GroupNode> callback = null)
         {
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
@@ -172,20 +173,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="callback"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Provided material is not frozen</exception>
-        public Task BeginAddMeshTransforms(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<GroupNode> callback = null)
+        public Task BeginAddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<GroupNode> callback = null)
         {
-            ThrowIfNotFrozen(material);
             return RunBuildTask(() => AddMeshTransforms(geometry, material, transforms, callback));
         }
 
         /// <summary>
-        ///     Adds a new <see cref="BatchedMeshNode" /> of mesh transforms sharing a common <see cref="Geometry3D" /> and
-        ///     <see cref="Material" />
+        ///     Adds a new <see cref="BatchedMeshNode" /> of mesh transforms sharing a common <see cref="MeshGeometry3D" /> and
+        ///     <see cref="MaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
-        public void AddBatchedMeshTransforms(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
+        public void AddBatchedMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
         {
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
@@ -200,22 +200,36 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Start the <see cref="AddBatchedMeshTransforms" /> as a background task
+        ///     Begins the <see cref="AddBatchedMeshTransforms" /> as a background task
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Task BeginAddBatchedMeshTransforms(Geometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
+        public Task BeginAddBatchedMeshTransforms(MeshGeometry3D geometry, Material material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
         {
-            ThrowIfNotFrozen(material);
             return RunBuildTask(() => AddBatchedMeshTransforms(geometry, material, transforms, callback));
         }
 
+        public void AddLineNetwork(LineGeometry3D geometry, LineMaterial material, Action<LineNode> callback = null)
+        {
+
+        }
+
         /// <summary>
-        ///     Runs an <see cref="Action" /> as a build <see cref="Task" />. Returned <see cref="Task" /> completes after the
-        ///     build process is detached from the scene builder
+        ///     Makes a an arbitrary <see cref="Task"/> a build task that requires awaiting when creating the model
+        /// </summary>
+        /// <param name="task"></param>
+        /// <remarks>Warning: Never attach a task that itself attaches a build task at some point, this causes an <see cref="InvalidOperationException"/> on model creation. </remarks>
+        public void AttachAsBuildTask(Task task)
+        {
+            AddBuildTask(task);
+            task.ContinueWith(RemoveBuildTask);
+        }
+
+        /// <summary>
+        ///     Runs an <see cref="Action" /> as a build <see cref="Task" />. Returned <see cref="Task" /> completes after the build process is detached from the scene builder
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
@@ -249,16 +263,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             {
                 ActiveBuildTasks.Remove(task);
             }
-        }
-
-        /// <summary>
-        ///     Throws if a <see cref="Freezable" /> object is not frozen
-        /// </summary>
-        /// <param name="freezable"></param>
-        private void ThrowIfNotFrozen(Freezable freezable)
-        {
-            if (freezable == null) throw new ArgumentNullException(nameof(freezable));
-            if (!freezable.IsFrozen) throw new InvalidOperationException("Operation requires involved Freezable objects to be frozen.");
         }
     }
 }
