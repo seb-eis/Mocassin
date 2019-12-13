@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
@@ -19,6 +21,8 @@ using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper;
 using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
@@ -37,13 +41,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
     ///     The <see cref="ProjectGraphControlViewModel" /> that controls object generation and supply for model components to
     ///     a <see cref="DxViewportViewModel" />
     /// </summary>
-    public class DxModelVisualizationViewModel : ProjectGraphControlViewModel
+    public class DxModelVisualizationViewModel : ProjectGraphControlViewModel, IDxSceneController
     {
         private ProjectCustomizationGraph selectedCustomization;
+        private bool canInvalidateScene = true;
 
         /// <summary>
         ///     Get or set the <see cref="IDisposable" /> that cancels the content synchronization for selectable
-        ///     <see cref="ProjectCustomizationGraph" /> intances
+        ///     <see cref="ProjectCustomizationGraph" /> instances
         /// </summary>
         private IDisposable CustomizationLinkDisposable { get; set; }
 
@@ -63,9 +68,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private ISpaceGroupService SpaceGroupService => ModelProject.SpaceGroupService;
 
         /// <summary>
-        ///     Get the <see cref="DxViewportViewModel" /> that controls the 3D scene
+        ///     Get the <see cref="IDxSceneHost" /> that hosts the created scene elements
         /// </summary>
-        public DxViewportViewModel ViewportViewModel { get; }
+        public IDxSceneHost SceneHost { get; }
 
         /// <summary>
         ///     Get the <see cref="Visualizer.DataControl.ModelRenderResourcesViewModel" /> that controls the model render
@@ -90,9 +95,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public ObservableCollectionViewModel<ProjectCustomizationGraph> CustomizationCollectionViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="AsyncCommand" /> to invalidate and rebuild the entire scene
+        ///     Get the <see cref="ICommand" /> to invalidate and rebuild the entire scene
         /// </summary>
-        public ParameterlessAsyncCommand InvalidateSceneCommand { get; }
+        public ICommand InvalidateSceneCommand { get; }
 
         /// <summary>
         ///     Get or set the selected <see cref="ProjectCustomizationGraph" />
@@ -104,16 +109,24 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <inheritdoc />
+        public bool CanInvalidateScene
+        {
+            get => canInvalidateScene && ContentSource != null;
+            protected set => SetProperty(ref canInvalidateScene, value);
+        }
+
+        /// <inheritdoc />
         public DxModelVisualizationViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             ModelProject = projectControl.CreateModelProject();
-            ViewportViewModel = new DxViewportViewModel();
+            SceneHost = new DxViewportViewModel();
             ModelRenderResourcesViewModel = new ModelRenderResourcesViewModel();
             ModelObjectSceneConfigs = new ObservableCollectionViewModel<IObjectSceneConfig>();
             CustomizationObjectSceneConfigs = new ObservableCollectionViewModel<IObjectSceneConfig>();
             CustomizationCollectionViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
-            InvalidateSceneCommand = new AsyncRelayCommand(InvalidateSceneAsync);
+            InvalidateSceneCommand = new AsyncRelayCommand(InvalidateSceneAsync, () => CanInvalidateScene);
+            SceneHost.AttachController(this);
         }
 
         /// <inheritdoc />
@@ -121,6 +134,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             ContentSource = contentSource;
             await ExecuteIfContentSourceUnchanged(() => Task.Run(ChangeContentSourceInternal), TimeSpan.FromMilliseconds(250));
+        }
+
+        /// <summary>
+        ///     Performs all tasks associated with invalidating and rebuilding the scene
+        /// </summary>
+        public void InvalidateScene()
+        {
+            if (!CanInvalidateScene) return;
+            InvalidateSceneCommand.Execute(null);
         }
 
         /// <summary>
@@ -137,7 +159,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             }
 
             RebuildContentAccess();
-            InvalidateSceneCommand.ExecuteAsync();
+            InvalidateScene();
         }
 
         /// <summary>
@@ -151,7 +173,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             ModelObjectSceneConfigs.Clear();
             CustomizationObjectSceneConfigs.Clear();
             CustomizationCollectionViewModel.Clear();
-            ViewportViewModel.Reset();
+            SceneHost.ResetScene(false);
         }
 
         /// <summary>
@@ -304,21 +326,34 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Asynchronously clears the scene data, rebuilds the scene and passes the provided data to the viewport
+        ///     Asynchronously clears the scene data, rebuilds the scene and passes the provided data to the scene host
         /// </summary>
         /// <returns></returns>
         private async Task InvalidateSceneAsync()
         {
-            var watch = Stopwatch.StartNew();
-            ViewportViewModel.Reset(false);
-            var invalidationTime = watch.Elapsed.TotalMilliseconds;
-            watch.Restart();
-            var sceneModel = await BuildSceneAsync();
-            var sceneBuildTime = watch.Elapsed.TotalMilliseconds;
-            watch.Restart();
-            ViewportViewModel.AddSceneElement(sceneModel);
-            var viewportPassTime = watch.Elapsed.TotalMilliseconds;
-            SendCallInfoMessage($"Viewer CPU time info: {invalidationTime:0.0} ms (scene-clean); {sceneBuildTime:0.0} ms (scene-build); {viewportPassTime:0.0} ms (scene-setup);");
+            if (!CanInvalidateScene) return;
+            CanInvalidateScene = false;
+            try
+            {
+                var watch = Stopwatch.StartNew();
+                SceneHost.ResetScene(false);
+                var invalidationTime = watch.Elapsed.TotalMilliseconds;
+                watch.Restart();
+                var sceneModel = await BuildSceneAsync();
+                var sceneBuildTime = watch.Elapsed.TotalMilliseconds;
+                watch.Restart();
+                SceneHost.AddSceneItem(sceneModel);
+                var viewportPassTime = watch.Elapsed.TotalMilliseconds;
+                SendCallInfoMessage($"Viewer CPU time info: {invalidationTime:0.0} ms (scene-clean); {sceneBuildTime:0.0} ms (scene-build); {viewportPassTime:0.0} ms (scene-setup);");
+            }
+            catch (Exception e)
+            {
+                OnRenderError(e);
+            }
+            finally
+            {
+                CanInvalidateScene = true;
+            }
         }
 
         /// <summary>
@@ -411,9 +446,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var transformMatrices = GetCellPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
             var sceneConfig = GetModelObjectSceneConfig(positionGraph);
-            var geometry = CreateSphereGeometry(sceneConfig);
+            var geometry = CreateAtomGeometry(sceneConfig);
             var material = CreateFrozenMaterial(sceneConfig);
-            sceneBuilder.AddBatchedMeshTransforms(geometry, material, transformMatrices, x => x.IsHitTestVisible = false);
+            AddToSceneBuilder(sceneBuilder, geometry, material, transformMatrices, x => x.IsHitTestVisible = false);
         }
 
         /// <summary>
@@ -456,24 +491,77 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a new sphere <see cref="Geometry3D" /> object around (0,0,0) using the settings on the provided <see cref="IObjectSceneConfig" />
+        ///     Creates a new atom <see cref="Geometry3D" /> around (0,0,0) using the settings on the provided <see cref="IObjectSceneConfig" />. If a sphere creation is not possible, a cube will be returned
         /// </summary>
         /// <param name="objectConfig"></param>
         /// <returns></returns>
-        private MeshGeometry3D CreateSphereGeometry(IObjectSceneConfig objectConfig)
+        private MeshGeometry3D CreateAtomGeometry(IObjectSceneConfig objectConfig)
         {
             var meshBuilder = new MeshBuilder();
             var radius = objectConfig.Scaling;
             var thetaDiv = (Settings.Default.Default_Render_Sphere_ThetaDiv * objectConfig.Quality).RoundToInt();
             var phiDiv = (Settings.Default.Default_Render_Sphere_PhiDiv * objectConfig.Quality).RoundToInt();
-            meshBuilder.AddSphere(Vector3.Zero, radius, thetaDiv, phiDiv);
+            if (thetaDiv < 4 || phiDiv < 4)
+                meshBuilder.AddBox(Vector3.Zero, radius, radius, radius, BoxFaces.All);
+            else
+                meshBuilder.AddSphere(Vector3.Zero, radius, thetaDiv, phiDiv);
             return meshBuilder.ToMesh();
         }
 
+        /// <summary>
+        ///     Adds prepared mesh information to a <see cref="DxSceneBuilder"/> utilizing the memory preferences of the attached secen host
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="geometry"></param>
+        /// <param name="matrices"></param>
+        /// <param name="callback"></param>
+        protected virtual void AddToSceneBuilder(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
+            Action<SceneNode> callback = null)
+        {
+            var batchSize = GetBatchingSize(SceneHost.SceneMemoryCostPreference);
+            switch (batchSize)
+            {
+                case 1:
+                    sceneBuilder.AddMeshTransforms(geometry, material, matrices, callback);
+                    return;
+                case int.MaxValue:
+                    sceneBuilder.AddBatchedMeshTransforms(geometry, material, matrices, callback);
+                    return;
+            }
+
+            var tmpMatrices = new List<Matrix>(batchSize);
+            for (var i = 0; i < matrices.Count; i += batchSize)
+            {
+                for (var j = i; j < matrices.Count && tmpMatrices.Count < batchSize; j++) tmpMatrices.Add(matrices[j]);
+                sceneBuilder.AddBatchedMeshTransforms(geometry, material, tmpMatrices, callback);
+                tmpMatrices.Clear();
+            }
+        }
+
+        /// <summary>
+        ///     Translates the <see cref="DxSceneMemoryCost"/> preference to a mesh batching size preference
+        /// </summary>
+        /// <param name="memoryCost"></param>
+        /// <returns></returns>
+        protected virtual int GetBatchingSize(DxSceneMemoryCost memoryCost)
+        {
+            return memoryCost switch
+            {
+                DxSceneMemoryCost.Lowest => 1,
+                DxSceneMemoryCost.Low => 16,
+                DxSceneMemoryCost.Medium => 128,
+                DxSceneMemoryCost.High => 256,
+                DxSceneMemoryCost.Highest => 1024,
+                DxSceneMemoryCost.Unlimited => int.MaxValue,
+                _ => throw new ArgumentOutOfRangeException(nameof(memoryCost), memoryCost, null)
+            };
+        }
+        
         /// <inheritdoc />
         public override void Dispose()
         {
-            ViewportViewModel.Dispose();
+            SceneHost.DetachController();
+            SceneHost.Dispose();
             base.Dispose();
         }
     }

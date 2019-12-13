@@ -78,6 +78,16 @@
               </TextBlock>
             </Button.Content>
           </Button>
+          <Button Background="Transparent" BorderThickness="0" Margin="-2,0,0,-2"
+                  Command="{Binding InvalidateSceneCommand}">
+            <Button.Content>
+              <TextBlock Text="Rebuild scene" Margin="0,5,0,5" FontSize="11">
+                <TextBlock.LayoutTransform>
+                  <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+              </TextBlock>
+            </Button.Content>
+          </Button>
         </WrapPanel>
       </Grid>
     </Border>
@@ -109,13 +119,10 @@
                     PreviewMouseRightButtonUp="Viewport3Dx_OnPreviewMouseRightButtonUp">
 
       <hx:GroupModel3D x:Name="LightGroupModel" 
-                         ItemsSource="{Binding SceneLightCollection}" 
+                         ItemsSource="{Binding SceneLights}" 
                          IsHitTestVisible="False"/>
-        <hx:GroupModel3D x:Name="HitTestInvisibleGroupModels" 
-                         ItemsSource="{Binding HitTestInvisibleSceneElements}" 
-                         IsHitTestVisible="False"/>
-        <hx:GroupModel3D x:Name="HitTestVisibleGroupModels" 
-                         ItemsSource="{Binding HitTestVisibleSceneElements}" 
+      <hx:GroupModel3D x:Name="HitTestVisibleGroupModels" 
+                         ItemsSource="{Binding SceneElements}" 
                          IsHitTestVisible="True"/>
       </hx:Viewport3DX>
   </Grid>

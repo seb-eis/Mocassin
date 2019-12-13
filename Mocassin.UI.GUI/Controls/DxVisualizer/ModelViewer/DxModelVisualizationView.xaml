@@ -11,7 +11,7 @@
     <Grid>
       <TabControl>
         <TabItem Header="Viewport">
-          <viewport:DxViewportView DataContext="{Binding ViewportViewModel}"/>
+          <viewport:DxViewportView DataContext="{Binding SceneHost}"/>
         </TabItem>
         <TabItem Header="Model">
           <Grid></Grid>

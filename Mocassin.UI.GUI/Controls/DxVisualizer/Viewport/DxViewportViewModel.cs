@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using HelixToolkit.Wpf.SharpDX;
-using Mocassin.Framework.Random;
+using Mocassin.Framework.Extensions;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Attributes;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Commands;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper;
-using SharpDX;
-using Color = System.Windows.Media.Color;
-using Matrix = SharpDX.Matrix;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
 {
     /// <summary>
     ///     The <see cref="ViewModelBase" /> implementation that manages 3D scene data for the <see cref="DxViewportView" />
     /// </summary>
-    public class DxViewportViewModel : ViewModelBase, IDisposable
+    public class DxViewportViewModel : ViewModelBase, IDxSceneHost
     {
         /// <summary>
         ///     Get or set the maximal supported image height of the image exporter. Default is 2160 pixels
@@ -45,7 +43,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private FXAALevel fxaaLevel = FXAALevel.None;
         private bool isSsaoEnabled;
         private SSAOQuality ssaoQuality = SSAOQuality.Low;
-        private bool useMeshBatching = true;
         private bool disableMsaaOnInteraction = true;
         private bool isInteracting;
         private Brush infoBackgroundBrush = Brushes.Transparent;
@@ -62,13 +59,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private int imageExportHeight;
         private int imageExportWidth;
         private bool itemsOverlayActive;
+        private DxSceneMemoryCost sceneMemoryCostPreference = DxSceneMemoryCost.Low;
+        private ICommand invalidateSceneCommand;
 
         /// <summary>
         ///     Get the <see cref="HelixToolkit.Wpf.SharpDX.EffectsManager" /> for the 3D system
         /// </summary>
         public EffectsManager EffectsManager { get; }
 
-            /// <summary>
+        /// <inheritdoc />
+        public IDxSceneController SceneController { get; protected set; }
+
+        /// <summary>
         ///     Get or set the <see cref="HelixToolkit.Wpf.SharpDX.Camera" />
         /// </summary>
         [RaiseInvalidateRender]
@@ -94,6 +96,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             get => cameraRotationMode;
             set => SetProperty(ref cameraRotationMode, value);
+        }
+
+        /// <inheritdoc />
+        public DxSceneMemoryCost SceneMemoryCostPreference
+        {
+            get => sceneMemoryCostPreference;
+            set
+            {
+                if (sceneMemoryCostPreference == value) return;
+                SetProperty(ref sceneMemoryCostPreference, value);
+                InvalidateSceneCommand?.Execute(null);
+            }
         }
 
         /// <summary>
@@ -211,15 +225,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             get => enableInfiniteSpin;
             set => SetProperty(ref enableInfiniteSpin, value);
-        }
-
-        /// <summary>
-        ///     Get or set a boolean flag if the system should batch meshes
-        /// </summary>
-        public bool UseMeshBatching
-        {
-            get => useMeshBatching;
-            set => SetProperty(ref useMeshBatching, value);
         }
 
         /// <summary>
@@ -377,7 +382,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// <summary>
         ///     Get the selectable <see cref="SsaoQuality" /> options
         /// </summary>
-        public IEnumerable<SSAOQuality> SsaoQualities => EnumeratSsaoQualities();
+        public IEnumerable<SSAOQuality> SsaoQualities => EnumerateSsaoQualities();
 
         /// <summary>
         ///     Get the selectable <see cref="DxCameraType" /> options
@@ -390,21 +395,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public IEnumerable<DxSceneLightSetting> SceneLightSettings => EnumerateLightSettings();
 
         /// <summary>
-        ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the <see cref="Light3D" /> items for the scene
+        ///     Get the selectable <see cref="SceneMemoryCostPreference" />
         /// </summary>
-        public ObservableElement3DCollection SceneLightCollection { get; }
+        public IEnumerable<DxSceneMemoryCost> SceneMemoryPreferences => EnumerateMemoryPreferences();
 
         /// <summary>
-        ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the hit test visible <see cref="Element3D" />
-        ///     items
+        ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the <see cref="Element3D" /> containing light
+        ///     information
         /// </summary>
-        public ObservableElement3DCollection HitTestVisibleSceneElements { get; }
+        public ObservableElement3DCollection SceneLights { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the hit test invisible <see cref="Element3D" />
-        ///     items
+        ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the scene <see cref="Element3D" /> instances
         /// </summary>
-        public ObservableElement3DCollection HitTestInvisibleSceneElements { get; }
+        public ObservableElement3DCollection SceneElements { get; }
 
         /// <summary>
         ///     Get a <see cref="ParameterlessCommand" /> to reset the camera
@@ -412,9 +416,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public ParameterlessCommand ResetCameraCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ExportDxViewportImageCommand"/> to export a viewport to an image
+        ///     Get the <see cref="ExportDxViewportImageCommand" /> to export a viewport to an image
         /// </summary>
         public ExportDxViewportImageCommand ExportDxImageCommand { get; }
+
+        /// <summary>
+        ///     Get the <see cref="ICommand" /> to instruct the <see cref="IDxSceneController" /> to invalidate the scene
+        /// </summary>
+        public ICommand InvalidateSceneCommand
+        {
+            get => invalidateSceneCommand;
+            set => SetProperty(ref invalidateSceneCommand, value);
+        }
 
         /// <summary>
         ///     Creates a new <see cref="DxViewportViewModel" />
@@ -422,56 +435,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public DxViewportViewModel()
         {
             EffectsManager = new DefaultEffectsManager();
-            HitTestVisibleSceneElements = new ObservableElement3DCollection();
-            HitTestInvisibleSceneElements = new ObservableElement3DCollection();
-            SceneLightCollection = new ObservableElement3DCollection();
+            SceneElements = new ObservableElement3DCollection();
+            SceneLights = new ObservableElement3DCollection();
             PropertyChanged += DX3DViewportViewModel_PropertyChanged;
             ResetCameraCommand = new RelayCommand(ResetCamera);
             ExportDxImageCommand = new ExportDxViewportImageCommand(() => (ImageExportWidth, ImageExportHeight));
-            Reset();
-        }
-
-        /// <summary>
-        ///     Adds an <see cref="Element3D"/> to the viewport
-        /// </summary>
-        /// <param name="element"></param>
-        public void AddSceneElement(Element3D element)
-        {
-            if (!element.CheckAccess())
-            {
-                element.Dispatcher?.Invoke(() => AddSceneElement(element));
-                return;
-            }
-            if (element.IsHitTestVisible)
-            {
-                HitTestVisibleSceneElements.Add(element);
-                return;
-            }
-            HitTestInvisibleSceneElements.Add(element);
-        }
-
-        /// <summary>
-        ///     Adds a sequence of <see cref="Element3D"/> objects to the viewport
-        /// </summary>
-        /// <param name="elements"></param>
-        public void AddSceneElements(IEnumerable<Element3D> elements)
-        {
-            foreach (var element in elements) AddSceneElement(element);
-        }
-
-        /// <summary>
-        ///     Resets the <see cref="DxViewportViewModel"/> to default settings and clears all scene data (Always executed on the main UI thread)
-        /// </summary>
-        public void Reset(bool resetCamera = true)
-        {
-            void ResetInternal()
-            {
-                ClearSceneCollections();
-                ResetLight();
-                if (resetCamera) ResetCamera();
-            }
-
-            ExecuteOnAppThread(ResetInternal);
+            ResetScene(true);
         }
 
         /// <summary>
@@ -479,9 +448,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// </summary>
         private void ClearSceneCollections()
         {
-            HitTestVisibleSceneElements.Clear();
-            HitTestInvisibleSceneElements.Clear();
-            SceneLightCollection.Clear();
+            SceneElements.Clear();
+            SceneLights.Clear();
         }
 
         /// <inheritdoc />
@@ -575,14 +543,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// <param name="value"></param>
         protected virtual void OnLightSettingChanged(DxSceneLightSetting value)
         {
-            SceneLightCollection.Clear();
+            SceneLights.Clear();
             switch (value)
             {
                 case DxSceneLightSetting.Default:
-                    SceneLightCollection.Add(DxLightFactory.DefaultLightModel3D(LightColor));
+                    SceneLights.Add(DxLightFactory.DefaultLightModel3D(LightColor));
                     break;
                 case DxSceneLightSetting.OmniDirectional:
-                    SceneLightCollection.Add(DxLightFactory.DefaultOmniDirectionalLightModel3D(LightColor, .5));
+                    SceneLights.Add(DxLightFactory.DefaultOmniDirectionalLightModel3D(LightColor, .5));
                     break;
                 case DxSceneLightSetting.None:
                     break;
@@ -600,10 +568,63 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             OnLightSettingChanged(LightSetting);
         }
 
+        /// <inheritdoc />
+        public void ResetScene(bool resetCamera)
+        {
+            void ResetInternal()
+            {
+                ClearSceneCollections();
+                ResetLight();
+                if (resetCamera) ResetCamera();
+            }
+
+            ExecuteOnAppThread(ResetInternal);
+        }
+
+        /// <inheritdoc />
+        public void ClearScene()
+        {
+            ExecuteOnAppThread(ClearSceneCollections);
+        }
+
+        /// <inheritdoc />
+        public void AddSceneItem(Element3D element)
+        {
+            ExecuteOnAppThread(() => SceneElements.Add(element));
+        }
+
+        /// <inheritdoc />
+        public void AddSceneItems(IEnumerable<Element3D> elements)
+        {
+            ExecuteOnAppThread(() => SceneElements.AddRange(elements));
+        }
+
+        /// <inheritdoc />
+        public bool RemoveSceneItem(Element3D element)
+        {
+            return ExecuteOnAppThread(() => SceneElements.Remove(element));
+        }
+
+        /// <inheritdoc />
+        public void AttachController(IDxSceneController controller)
+        {
+            DetachController();
+            SceneController = controller;
+            InvalidateSceneCommand = controller?.InvalidateSceneCommand;
+        }
+
+        /// <inheritdoc />
+        public void DetachController()
+        {
+            if (SceneController == null) return;
+            SceneController = null;
+            InvalidateSceneCommand = null;
+        }
+
         /// <summary>
         ///     Resets the <see cref="Camera" /> to default settings
         /// </summary>
-        protected virtual void ResetCamera()
+        public virtual void ResetCamera()
         {
             CameraFieldOfView = 45;
             CameraFarPlaneDistance = 10000;
@@ -678,7 +699,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         ///     Enumerates the selectable <see cref="SSAOQuality" /> options
         /// </summary>
         /// <returns></returns>
-        protected virtual IEnumerable<SSAOQuality> EnumeratSsaoQualities()
+        protected virtual IEnumerable<SSAOQuality> EnumerateSsaoQualities()
         {
             yield return SSAOQuality.Low;
             yield return SSAOQuality.High;
@@ -702,6 +723,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             yield return DxSceneLightSetting.Default;
             yield return DxSceneLightSetting.OmniDirectional;
+        }
+
+        /// <summary>
+        ///     Enumerates the selectable <see cref="DxSceneMemoryCost" /> preferences
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IEnumerable<DxSceneMemoryCost> EnumerateMemoryPreferences()
+        {
+            yield return DxSceneMemoryCost.Lowest;
+            yield return DxSceneMemoryCost.Low;
+            yield return DxSceneMemoryCost.Medium;
+            yield return DxSceneMemoryCost.High;
+            yield return DxSceneMemoryCost.Highest;
+            yield return DxSceneMemoryCost.Unlimited;
         }
 
         /// <summary>
@@ -734,47 +769,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             if (!(GetType().GetProperty(propertyName)?.GetCustomAttribute<TogglesOverlayAttribute>() is { } attribute)) return;
             if (!attribute.IsUniqueOverlay) return;
-            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUniqueOverlay ?? false).ToList();
+            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUniqueOverlay ?? false)
+                .ToList();
             if (properties.Count(x => (bool) x.GetValue(this)) <= 1) return;
-            foreach (var property in properties.Where(property => property.Name != propertyName))
-            {
-                property.SetValue(this, false);
-            }
-        }
-
-        /// <summary>
-        ///     Loads a test scene of spheres and returns the time it took to fully created the scene
-        /// </summary>
-        /// <param name="itemCount"></param>
-        /// <param name="batchGeometry"></param>
-        /// <returns></returns>
-        public async Task<TimeSpan> LoadTestScene(int itemCount = 5000, bool batchGeometry = true)
-        {
-            Reset(false);
-            var watch = Stopwatch.StartNew();
-            var meshBuilder = new MeshBuilder();
-            meshBuilder.AddSphere(new Vector3(0, 0, 0));
-            var mesh = meshBuilder.ToMesh();
-
-            var rng = new PcgRandom32();
-            var material = PhongMaterials.Gold;
-            material.Freeze();
-
-            var sceneBuilder = new DxSceneBuilder();
-            var transforms = new List<Matrix>(itemCount);
-            for (var i = 0; i < itemCount; i++) transforms.Add(Matrix.Translation(rng.NextFloat(0, 200), rng.NextFloat(0, 200), rng.NextFloat(0, 200)));
-            if (batchGeometry)
-            {
-                await sceneBuilder.BeginAddBatchedMeshTransforms(mesh, material, transforms);
-            }
-            else
-            {
-                await sceneBuilder.BeginAddMeshTransforms(mesh, material, transforms);
-            }
-            var geometryModel = await sceneBuilder.ToModelAsync();
-            ExecuteOnAppThread(() => HitTestVisibleSceneElements.Add(geometryModel));
-            watch.Stop();
-            return watch.Elapsed;
+            foreach (var property in properties.Where(property => property.Name != propertyName)) property.SetValue(this, false);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Mocassin.UI.GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public double Limit_Render_MeshQuality_Lower {
             get {
                 return ((double)(this["Limit_Render_MeshQuality_Lower"]));
@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public double Default_Render_Mesh_Quality {
             get {
                 return ((double)(this["Default_Render_Mesh_Quality"]));
@@ -109,7 +109,7 @@ namespace Mocassin.UI.GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
         public int Default_Render_Sphere_ThetaDiv {
             get {
                 return ((int)(this["Default_Render_Sphere_ThetaDiv"]));
@@ -121,7 +121,7 @@ namespace Mocassin.UI.GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
         public int Default_Render_Sphere_PhiDiv {
             get {
                 return ((int)(this["Default_Render_Sphere_PhiDiv"]));
@@ -133,7 +133,7 @@ namespace Mocassin.UI.GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
         public int Default_Render_Arrow_ThetaDiv {
             get {
                 return ((int)(this["Default_Render_Arrow_ThetaDiv"]));

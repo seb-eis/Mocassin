@@ -28,14 +28,7 @@
             </DataGrid.Columns>
           </DataGrid>
         </TabItem>
-        <TabItem Header="Static items">
-          <DataGrid>
-            <DataGrid.Columns>
-
-            </DataGrid.Columns>
-          </DataGrid>
-        </TabItem>
-        <TabItem Header="Dynamic items">
+        <TabItem Header="Scene items">
           <DataGrid>
             <DataGrid.Columns>
 
