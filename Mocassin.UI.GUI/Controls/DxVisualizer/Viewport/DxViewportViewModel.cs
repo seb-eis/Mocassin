@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -769,8 +770,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         {
             if (!(GetType().GetProperty(propertyName)?.GetCustomAttribute<TogglesOverlayAttribute>() is { } attribute)) return;
             if (!attribute.IsUniqueOverlay) return;
-            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUniqueOverlay ?? false)
-                .ToList();
+            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUniqueOverlay ?? false).ToList();
             if (properties.Count(x => (bool) x.GetValue(this)) <= 1) return;
             foreach (var property in properties.Where(property => property.Name != propertyName)) property.SetValue(this, false);
         }

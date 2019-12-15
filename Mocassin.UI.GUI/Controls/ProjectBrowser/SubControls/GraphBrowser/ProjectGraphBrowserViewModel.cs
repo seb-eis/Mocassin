@@ -76,7 +76,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
             if (result != MessageBoxResult.Yes) return;
 
             projectGraphs.Remove(SelectedProject);
-            SendCallInfoMessage($"Project {project.ProjectName} (ID = {project.ProjectGuid}) was deleted.");
+            PushInfoMessage($"Project {project.ProjectName} (ID = {project.ProjectGuid}) was deleted.");
             SelectedProject = null;
         }
 
@@ -111,7 +111,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
             }
 
             ExecuteOnAppThread(() => ProjectGraphs.Add(projectCopy));
-            SendCallInfoMessage($"Project {project.ProjectName} (ID = {project.ProjectGuid}) was copied.");
+            PushInfoMessage($"Project {project.ProjectName} (ID = {project.ProjectGuid}) was copied.");
         }
     }
 }

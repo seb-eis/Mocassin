@@ -120,7 +120,7 @@ namespace Mocassin.UI.GUI.Logic.Updating
             }
             catch (Exception e)
             {
-                SendCallErrorMessage(new InvalidOperationException($"Unexpected error in change detection system: {e.Message}"));
+                PushErrorMessage(new InvalidOperationException($"Unexpected error in change detection system: {e.Message}"));
                 IsChecking = false;
             }
             IsChecking = false;

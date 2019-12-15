@@ -210,14 +210,12 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="22" Grid.Column="0" Text="Memory preference" VerticalAlignment="Center"
+    <TextBlock Grid.Row="22" Grid.Column="0" Text="RAM/VRAM limit" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}">
       <TextBlock.ToolTip>
-        <TextBlock TextAlignment="Justify" Width="400">
-          <Run Text="Encourage the scene controller to reduce the CPU load in exchange for increased memory footprint."/>
-          <Run Text="Higher values will drastically reduce setup and cleanup time, especially when a huge amount of objects is displayed."/>
-          <Run Text="Additionally, it can drastically increase render performance when the CPU is the bottleneck (draw call reduction)."/>
-          <Run Text="If a GPU with a very small VRAM is installed (e.g. iGPU in a CPU) it will reduce render performance, even if the CPU is not stressed."/>
+        <TextBlock TextAlignment="Justify" TextWrapping="Wrap" Width="400">
+          <Run Text="Set a qualitative RAM/VRAM limit for the scene controller. Higher values will drastically improve the overall scene change CPU times."/>
+          <Run Text="It is highly recommended to use 'low' for large scenes and 'lowest' for small scenes when an iGPU with a small VRAM is used."/>
         </TextBlock>
       </TextBlock.ToolTip>
     </TextBlock>

@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 
             if (!TryPrepareModelProject())
             {
-                SendCallInfoMessage("Cannot access invalid model");
+                PushInfoMessage("Cannot access invalid model");
                 CanBeUsed = false;
             }
 
@@ -97,7 +97,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
             }
             catch (Exception)
             {
-                SendCallErrorMessage(new InvalidOperationException("Cannot define building block for invalid model"));
+                PushErrorMessage(new InvalidOperationException("Cannot define building block for invalid model"));
             }
 
             return false;

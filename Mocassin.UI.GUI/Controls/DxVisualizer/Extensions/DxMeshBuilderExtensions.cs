@@ -13,15 +13,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         ///     Adds a revolved geometry to the <see cref="MeshBuilder" /> that has the shape of a two headed arrow
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="point0"></param>
         /// <param name="point1"></param>
+        /// <param name="point2"></param>
         /// <param name="diameter"></param>
         /// <param name="headLength"></param>
         /// <param name="thetaDiv"></param>
-        public static void AddTwoHeadedArrow(this MeshBuilder builder, in Vector3 point0, in Vector3 point1, double diameter, double headLength = 3,
+        public static void AddTwoHeadedArrow(this MeshBuilder builder, in Vector3 point1, in Vector3 point2, double diameter, double headLength = 3,
             int thetaDiv = 18)
         {
-            var direction = point1 - point0;
+            var direction = point2 - point1;
             var length = direction.Length();
             var radius = (float) diameter / 2f;
             var headLengthTimesDiameter = (float) (diameter * headLength);
@@ -34,7 +34,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
                 new Vector2(length - headLengthTimesDiameter, (float) diameter),
                 new Vector2(length, 0)
             };
-            builder.AddRevolvedGeometry(revolvePoints, null, point0, direction, thetaDiv);
+            builder.AddRevolvedGeometry(revolvePoints, null, point1, direction, thetaDiv);
         }
     }
 }

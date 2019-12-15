@@ -356,7 +356,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// <param name="callMemberName"></param>
         private void OnRenderError(Exception e, [CallerMemberName] string callMemberName = null)
         {
-            SendCallErrorMessage(e, callMemberName);
+            PushErrorMessage(e, callMemberName);
             MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation,
                 Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }

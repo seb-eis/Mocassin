@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         public DxSceneBuilder(int capacity = 10)
         {
             SceneNodes = new HashSet<SceneNode>(capacity);
-            ActiveBuildTasks = new HashSet<Task>();
+            ActiveBuildTasks = new HashSet<Task>(capacity);
         }
 
         /// <summary>
@@ -88,9 +88,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="dispatcher"></param>
         /// <remarks>Application.Current is used to get a <see cref="Dispatcher"/> if none is specified</remarks>
         /// <returns></returns>
-        public async Task<SceneNodeGroupModel3D> ToModelAsync(bool clear = true, Dispatcher dispatcher = null)
+        public Task<SceneNodeGroupModel3D> ToModelAsync(bool clear = true, Dispatcher dispatcher = null)
         {
-            return await ToModelInternal(clear, dispatcher);
+            return ToModelInternal(clear, dispatcher);
         }
 
         /// <summary>
@@ -103,18 +103,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         {
             dispatcher ??= Application.Current.Dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             IsCreatingModel = true;
-            try
-            {
-                if (ActiveBuildTasks.Count != 0) await Task.WhenAll(ActiveBuildTasks);
-                var result = dispatcher.CheckAccess() ? CreateModel() : dispatcher.Invoke(CreateModel);
-                if (clear) ClearNodes();
-                IsCreatingModel = false;
-                return result;
-            }
-            finally
-            {
-                IsCreatingModel = false;
-            }
+            if (ActiveBuildTasks.Count != 0) await Task.WhenAll(ActiveBuildTasks);
+            var result = dispatcher.CheckAccess() ? CreateModel() : dispatcher.Invoke(CreateModel);
+            if (clear) ClearNodes();
+            IsCreatingModel = false;
+            return result;
         }
 
         /// <summary>
@@ -229,33 +222,33 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Makes a an arbitrary <see cref="Task"/> a build task that requires awaiting when creating the model
+        ///     Attaches a custom build <see cref="Task"/> that requires awaiting when creating the model
         /// </summary>
         /// <param name="task"></param>
-        /// <remarks>Warning: Never attach a task that itself attaches a build task at some point, this causes an <see cref="InvalidOperationException"/> on model creation. </remarks>
-        public void AttachAsBuildTask(Task task)
+        /// <remarks>Warning: Never attach a task that itself attaches a build task to the builder instance, this causes an <see cref="InvalidOperationException"/> on model creation. </remarks>
+        public void AttachCustomTask(Task task)
         {
-            AddBuildTask(task);
-            task.ContinueWith(RemoveBuildTask);
+            AttachBuildTask(task);
+            task.ContinueWith(DetachBuildTask);
         }
 
         /// <summary>
-        ///     Runs an <see cref="Action" /> as a build <see cref="Task" />. Returned <see cref="Task" /> completes after the build process is detached from the scene builder
+        ///     Runs an <see cref="Action" /> as a build <see cref="Task" /> that detaches itself on completion. Returned <see cref="Task" /> completes after the build process has detached from the scene builder
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
         private Task RunBuildTask(Action action)
         {
             var mainTask = Task.Run(action);
-            AddBuildTask(mainTask);
-            return mainTask.ContinueWith(RemoveBuildTask);
+            AttachBuildTask(mainTask);
+            return mainTask.ContinueWith(DetachBuildTask);
         }
 
         /// <summary>
         ///     Adds a <see cref="Task" /> to the active builds tasks
         /// </summary>
         /// <param name="task"></param>
-        private void AddBuildTask(Task task)
+        private void AttachBuildTask(Task task)
         {
             lock (BuildTasksLock)
             {
@@ -268,7 +261,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         ///     Removes a <see cref="Task" /> from the active builds tasks
         /// </summary>
         /// <param name="task"></param>
-        private void RemoveBuildTask(Task task)
+        private void DetachBuildTask(Task task)
         {
             lock (BuildTasksLock)
             {

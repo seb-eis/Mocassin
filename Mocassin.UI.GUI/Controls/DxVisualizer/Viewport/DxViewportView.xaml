@@ -118,12 +118,8 @@
                     PreviewMouseRightButtonDown="Viewport3Dx_OnPreviewMouseRightButtonDown"
                     PreviewMouseRightButtonUp="Viewport3Dx_OnPreviewMouseRightButtonUp">
 
-      <hx:GroupModel3D x:Name="LightGroupModel" 
-                         ItemsSource="{Binding SceneLights}" 
-                         IsHitTestVisible="False"/>
-      <hx:GroupModel3D x:Name="HitTestVisibleGroupModels" 
-                         ItemsSource="{Binding SceneElements}" 
-                         IsHitTestVisible="True"/>
+      <hx:GroupModel3D x:Name="LightGroupModel" ItemsSource="{Binding SceneLights}" IsHitTestVisible="False"/>
+      <hx:GroupModel3D x:Name="HitTestVisibleGroupModels" ItemsSource="{Binding SceneElements}" IsHitTestVisible="True"/>
       </hx:Viewport3DX>
   </Grid>
 </UserControl>

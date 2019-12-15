@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
@@ -93,7 +94,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.MessageConsole
         /// <param name="messageSystem"></param>
         private void SubscribeToMessageSystem(IPushMessageSystem messageSystem)
         {
-            messageSystem?.AnyMessageNotification.Subscribe(AddItem);
+            messageSystem?.AnyMessageNotification.Subscribe(x => QueueOnAppDispatcher(() => AddItem(x), DispatcherPriority.Background));
         }
     }
 }

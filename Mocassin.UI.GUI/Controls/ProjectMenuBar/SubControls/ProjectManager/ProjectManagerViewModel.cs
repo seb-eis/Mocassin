@@ -70,10 +70,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             if (TryCloseProjectLibrary(ProjectControl.OpenProjectLibrary))
             {
                 ProjectControl.ChangeOpenProjectLibrary(null);
-                SendCallInfoMessage("Project closed!");
+                PushInfoMessage("Project closed!");
             }
             else
-                SendCallInfoMessage("Project close aborted!");
+                PushInfoMessage("Project close aborted!");
         }
 
         /// <summary>
@@ -83,19 +83,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         {
             if (ProjectControl.OpenProjectLibrary == null)
             {
-                SendCallWarningMessage("Cannot save changes when no project is loaded!");
+                PushWarningMessage("Cannot save changes when no project is loaded!");
                 return;
             }
 
             try
             {
                 ProjectControl.OpenProjectLibrary.SaveChanges();
-                SendCallInfoMessage("Project changes saved!");
+                PushInfoMessage("Project changes saved!");
             }
             catch (Exception e)
             {
                 var exception = new InvalidOperationException("Internal error on saving", e);
-                SendCallErrorMessage(exception);
+                PushErrorMessage(exception);
             }
         }
 
@@ -108,14 +108,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         {
             if (!File.Exists(filePath))
             {
-                SendCallErrorMessage(new FileNotFoundException("Requested file does not exist!", filePath));
+                PushErrorMessage(new FileNotFoundException("Requested file does not exist!", filePath));
                 return;
             }
 
             if (!TryOpenProjectLibrary(filePath, false, out var exception))
-                SendCallErrorMessage(exception);
+                PushErrorMessage(exception);
             else
-                SendCallInfoMessage($"Project loaded from: {filePath}");
+                PushInfoMessage($"Project loaded from: {filePath}");
         }
 
         /// <summary>
@@ -127,19 +127,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                SendCallWarningMessage("Aborted due to null or white space creation path!");
+                PushWarningMessage("Aborted due to null or white space creation path!");
                 return;
             }
             if (File.Exists(filePath))
             {
-                SendCallErrorMessage(new FileNotFoundException("Requested file already exists!", filePath));
+                PushErrorMessage(new FileNotFoundException("Requested file already exists!", filePath));
                 return;
             }
 
             if (!TryOpenProjectLibrary(filePath, true, out var exception))
-                SendCallErrorMessage(exception);
+                PushErrorMessage(exception);
             else
-                SendCallInfoMessage($"Project created at: {filePath}");
+                PushInfoMessage($"Project created at: {filePath}");
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         {
             if (projectLibrary == null)
             {
-                SendCallWarningMessage("Cannot add project graph. Library is missing.");
+                PushWarningMessage("Cannot add project graph. Library is missing.");
                 return;
             }
 
@@ -158,12 +158,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             {
                 var projectGraph = MocassinProjectGraph.CreateNew();
                 projectLibrary.Add(projectGraph);
-                SendCallInfoMessage($"New project graph (ID = {projectGraph.ProjectGuid}) added to project");
+                PushInfoMessage($"New project graph (ID = {projectGraph.ProjectGuid}) added to project");
             }
             catch (Exception e)
             {
                 var exception = new InvalidOperationException("Internal error during graph adding!", e);
-                SendCallErrorMessage(exception);
+                PushErrorMessage(exception);
             }
         }
 
@@ -255,7 +255,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             const string caption = "Confirmation required";
             const string message = "Project entities have changed. Do you want to save the changes?";
             var choice = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-            SendCallInfoMessage($"Choice: {choice}");
+            PushInfoMessage($"Choice: {choice}");
             return projectLibrary == null ? MessageBoxResult.No : choice;
         }
     }

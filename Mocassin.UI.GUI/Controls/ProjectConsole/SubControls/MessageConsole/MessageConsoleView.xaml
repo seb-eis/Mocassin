@@ -44,7 +44,7 @@
         <Style TargetType="{x:Type DataGridRow}">
           <Setter Property="ToolTip">
             <Setter.Value>
-              <TextBlock Text="{Binding IndentedDetailsJson, Mode=OneTime}" TextWrapping="Wrap"/>
+              <TextBox Text="{Binding IndentedDetailsJson, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True"/>
             </Setter.Value>
           </Setter>
         </Style>

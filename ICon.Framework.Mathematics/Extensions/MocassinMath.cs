@@ -98,6 +98,16 @@ namespace Mocassin.Mathematics.Extensions
         }
 
         /// <summary>
+        ///     Rounds the provided double value to the smallest integer that compares greater or equal to value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static int CeilToInt(this double value)
+        {
+            return (int) Math.Ceiling(value);
+        }
+
+        /// <summary>
         ///     Rounds the provided double value to an integer
         /// </summary>
         /// <param name="value"></param>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -20,6 +19,7 @@ using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums;
@@ -84,7 +84,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public ObservableCollectionViewModel<IObjectSceneConfig> ModelObjectSceneConfigs { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="IObjectSceneConfig" /> for customization objects
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="IObjectSceneConfig" /> for customization
+        ///     objects
         /// </summary>
         public ObservableCollectionViewModel<IObjectSceneConfig> CustomizationObjectSceneConfigs { get; }
 
@@ -125,7 +126,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             ModelObjectSceneConfigs = new ObservableCollectionViewModel<IObjectSceneConfig>();
             CustomizationObjectSceneConfigs = new ObservableCollectionViewModel<IObjectSceneConfig>();
             CustomizationCollectionViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
-            InvalidateSceneCommand = new AsyncRelayCommand(InvalidateSceneAsync, () => CanInvalidateScene);
+            InvalidateSceneCommand = new AsyncRelayCommand(async () => await Task.Run(InvalidateSceneAsync), () => CanInvalidateScene);
             SceneHost.AttachController(this);
         }
 
@@ -158,6 +159,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 return;
             }
 
+            ExecuteOnAppThread(() => SelectedCustomization = ContentSource.ProjectCustomizationGraphs.FirstOrDefault());
             RebuildContentAccess();
             InvalidateScene();
         }
@@ -231,13 +233,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         private void RebuildModelRenderResourceAccess()
         {
-            ModelRenderResourcesViewModel.SetDataSource(ContentSource?.Resources);
             ModelObjectSceneConfigs.Clear();
+            ModelRenderResourcesViewModel.SetDataSource(ContentSource?.Resources);
             if (ContentSource == null) return;
             var source = ContentSource.ProjectModelGraph;
-            ModelObjectSceneConfigs.AddItem(GetModelObjectSceneConfig(source.StructureModelGraph.StructureInfo));
-            ModelObjectSceneConfigs.AddItems(source.StructureModelGraph.UnitCellPositions.Select(GetModelObjectSceneConfig));
-            ModelObjectSceneConfigs.AddItems(source.TransitionModelGraph.KineticTransitions.Select(GetModelObjectSceneConfig));
+            GetModelObjectSceneConfig(source.StructureModelGraph.StructureInfo);
+            source.StructureModelGraph.UnitCellPositions.Select(GetModelObjectSceneConfig).ToList();
+            source.TransitionModelGraph.KineticTransitions.Select(GetModelObjectSceneConfig).ToList();
         }
 
         /// <summary>
@@ -248,13 +250,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             CustomizationObjectSceneConfigs.Clear();
             if (ContentSource == null || SelectedCustomization == null || ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty)) return;
             var source = SelectedCustomization.EnergyModelCustomization;
-            CustomizationObjectSceneConfigs.AddItems(source.StablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig));
-            CustomizationObjectSceneConfigs.AddItems(source.UnstablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig));
-            CustomizationObjectSceneConfigs.AddItems(source.GroupEnergyParameterSets.Select(GetCustomizationObjectSceneConfig));
+            source.StablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).ToList();
+            source.UnstablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).ToList();
+            source.GroupEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).ToList();
         }
 
         /// <summary>
-        ///     Get the <see cref="IObjectSceneConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> or creates the instance if required
+        ///     Get the <see cref="IObjectSceneConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> or creates
+        ///     the instance if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
@@ -264,7 +267,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the <see cref="IObjectSceneConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> or creates the instance if required
+        ///     Get the <see cref="IObjectSceneConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> or creates
+        ///     the instance if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
@@ -274,7 +278,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the <see cref="IObjectSceneConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> from the provided source <see cref="ICollection{T}" /> or creates and adds a new one if required
+        ///     Get the <see cref="IObjectSceneConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> from the
+        ///     provided source <see cref="ICollection{T}" /> or creates and adds a new one if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <param name="source"></param>
@@ -321,7 +326,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="callerMemberName"></param>
         private void OnRenderError(Exception e, [CallerMemberName] string callerMemberName = null)
         {
-            SendCallErrorMessage(e, callerMemberName);
+            PushErrorMessage(e, callerMemberName);
             MessageBox.Show(Resources.Viewer3D_Error_Visual_Generation, Resources.Viewer3D_Error_Box_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
@@ -337,14 +342,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             {
                 var watch = Stopwatch.StartNew();
                 SceneHost.ResetScene(false);
-                var invalidationTime = watch.Elapsed.TotalMilliseconds;
+                var cleanTime = watch.Elapsed.TotalMilliseconds;
                 watch.Restart();
                 var sceneModel = await BuildSceneAsync();
-                var sceneBuildTime = watch.Elapsed.TotalMilliseconds;
+                var buildTime = watch.Elapsed.TotalMilliseconds;
                 watch.Restart();
                 SceneHost.AddSceneItem(sceneModel);
-                var viewportPassTime = watch.Elapsed.TotalMilliseconds;
-                SendCallInfoMessage($"Viewer CPU time info: {invalidationTime:0.0} ms (scene-clean); {sceneBuildTime:0.0} ms (scene-build); {viewportPassTime:0.0} ms (scene-setup);");
+                var setupTime = watch.Elapsed.TotalMilliseconds;
+                PushInfoMessage($"Scene CPU times: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
             }
             catch (Exception e)
             {
@@ -363,11 +368,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private async Task<SceneNodeGroupModel3D> BuildSceneAsync()
         {
             var sceneBuilder = StartSceneBuilder();
-            return await sceneBuilder.ToModelAsync();
+            var result = await sceneBuilder.ToModelAsync();
+            return result;
         }
 
         /// <summary>
-        ///     Starts the parallel build process of the scene components and provides the <see cref="DxSceneBuilder"/> to await completion
+        ///     Starts the parallel build process of the scene components and provides the <see cref="DxSceneBuilder" /> to await
+        ///     completion
         /// </summary>
         /// <returns></returns>
         private DxSceneBuilder StartSceneBuilder()
@@ -376,53 +383,59 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var sceneBuilder = new DxSceneBuilder(100);
             StartCellFrameSceneNodeBuilding(sceneBuilder, renderBox);
             StartCellPositionSceneNodeBuilding(sceneBuilder, renderBox);
+            StartTransitionSceneNodeBuilding(sceneBuilder, renderBox);
+            StartPairInteractionSceneNodeBuilding(sceneBuilder, renderBox);
             return sceneBuilder;
         }
 
         /// <summary>
-        ///     Builds the scene component that holds the cell frame to the provided <see cref="DxSceneBuilder"/>
+        ///     Builds the scene component that holds the cell frame to the provided <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
-        private void BuildCellFrameSceneNode(DxSceneBuilder sceneBuilder, in FractionalBox3D renderBox)
+        private void AddCellFrameSceneNode(DxSceneBuilder sceneBuilder, in FractionalBox3D renderBox)
         {
             var sceneConfig = GetModelObjectSceneConfig(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
             var material = new LineMaterialCore {LineColor = sceneConfig.Color.ToColor4(), Thickness = (float) sceneConfig.Scaling};
             var matrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
 
             var lineBuilder = new LineBuilder();
-            var (sizeA, sizeB, sizeC) = (renderBox.Size.A.FloorToInt(), renderBox.Size.B.FloorToInt(), renderBox.Size.C.FloorToInt());
-            for (var a = 0; a <= sizeA; a++)
+            var (aMax, bMax, cMax) = (renderBox.End.A.FloorToInt(), renderBox.End.B.FloorToInt(), renderBox.End.C.FloorToInt());
+            var (aMin, bMin, cMin) = (renderBox.Start.A.CeilToInt(), renderBox.Start.B.CeilToInt(), renderBox.Start.C.CeilToInt());
+            for (var a = aMin; a <= aMax; a++)
             {
-                for (var b = 0; b <= sizeB; b++)
+                for (var b = bMin; b <= bMax; b++)
                 {
-                    for (var c = 0; c <= sizeC; c++)
+                    for (var c = cMin; c <= cMax; c++)
                     {
-                        var origin = new Vector3(a,b,c);
-                        if (a < sizeA) lineBuilder.AddLine(origin, new Vector3(a + 1, b, c));
-                        if (b < sizeB) lineBuilder.AddLine(origin, new Vector3(a, b + 1, c));
-                        if (c < sizeC) lineBuilder.AddLine(origin, new Vector3(a, b, c + 1));
+                        var origin = new Vector3(a, b, c);
+                        if (a < aMax) lineBuilder.AddLine(origin, new Vector3(a + 1, b, c));
+                        if (b < bMax) lineBuilder.AddLine(origin, new Vector3(a, b + 1, c));
+                        if (c < cMax) lineBuilder.AddLine(origin, new Vector3(a, b, c + 1));
                     }
                 }
             }
+
             sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix);
         }
 
         /// <summary>
-        ///     Starts the scene build task for the cell wire-frame in model of the current content source using the provided <see cref="DxSceneBuilder"/>
+        ///     Starts the scene build task for the cell wire-frame in model of the current content source using the provided
+        ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
         private void StartCellFrameSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
-            sceneBuilder.AttachAsBuildTask(Task.Run(() => BuildCellFrameSceneNode(sceneBuilder, renderBox)));
+            sceneBuilder.AttachCustomTask(Task.Run(() => AddCellFrameSceneNode(sceneBuilder, renderBox)));
         }
 
 
         /// <summary>
-        ///     Starts the scene build tasks for all unit cell position in model of the current content source using the provided <see cref="DxSceneBuilder"/>
+        ///     Starts the scene build tasks for all unit cell position in model of the current content source using the provided
+        ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="renderBox"></param>
@@ -430,13 +443,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private void StartCellPositionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
             foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
-            {
-                sceneBuilder.AttachAsBuildTask(Task.Run(() => AddCellPositionNodeToScene(sceneBuilder, item, renderBox)));
-            }
+                sceneBuilder.AttachCustomTask(Task.Run(() => AddCellPositionNodeToScene(sceneBuilder, item, renderBox)));
         }
 
         /// <summary>
-        ///     Prepares the scene elements for the provided <see cref="UnitCellPositionGraph" /> and adds the node one the <see cref="DxSceneBuilder"/>
+        ///     Prepares the scene elements for the provided <see cref="UnitCellPositionGraph" /> and adds the node one the
+        ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="positionGraph"></param>
@@ -444,21 +456,21 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void AddCellPositionNodeToScene(DxSceneBuilder sceneBuilder, UnitCellPositionGraph positionGraph, in FractionalBox3D renderBox)
         {
-            var transformMatrices = GetCellPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
+            var matrices = GetPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
             var sceneConfig = GetModelObjectSceneConfig(positionGraph);
             var geometry = CreateAtomGeometry(sceneConfig);
-            var material = CreateFrozenMaterial(sceneConfig);
-            AddToSceneBuilder(sceneBuilder, geometry, material, transformMatrices, x => x.IsHitTestVisible = false);
+            var material = CreateMaterialCore(sceneConfig);
+            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, x => x.IsHitTestVisible = false);
         }
 
         /// <summary>
         ///     Creates the <see cref="IList{T}" /> of <see cref="Matrix" /> transforms that represent the symmetry extension of
-        ///     the origin point into the provided <see cref="FractionalBox3D" /> when applied to a 0,0,0 vector
+        ///     the origin point into the provided <see cref="FractionalBox3D" /> when applied to a (0,0,0) cartesian vector
         /// </summary>
         /// <param name="origin"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
-        private IList<Matrix> GetCellPositionSceneItemTransforms(in Fractional3D origin, in FractionalBox3D renderBox)
+        private IList<Matrix> GetPositionSceneItemTransforms(in Fractional3D origin, in FractionalBox3D renderBox)
         {
             var positions = SpaceGroupService.GetPositionsInCuboid(origin, renderBox);
             var result = new List<Matrix>(positions.Count);
@@ -473,11 +485,121 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a new frozen <see cref="MaterialCore" /> based on the settings in the provided <see cref="IObjectSceneConfig" />
+        ///     Prepares the scene elements for the provided <see cref="KineticTransitionGraph" /> and adds the node one the
+        ///     <see cref="DxSceneBuilder" />
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="transitionGraph"></param>
+        /// <param name="renderBox"></param>
+        private void AddTransitionNodeToScene(DxSceneBuilder sceneBuilder, KineticTransitionGraph transitionGraph, in FractionalBox3D renderBox)
+        {
+            var path = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
+            var matrices = GetPathSceneItemTransforms(path, renderBox);
+            var sceneConfig = GetModelObjectSceneConfig(transitionGraph);
+            var geometry = CreateTransitionGeometry(sceneConfig, path);
+            var material = CreateMaterialCore(sceneConfig);
+            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, x => x.IsHitTestVisible = false);
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="IList{T}" /> of <see cref="Matrix" /> transforms that represent the symmetry extension of
+        ///     the path vectors into the provided <see cref="FractionalBox3D" /> when applied to the original path in cartesian
+        ///     coordinates
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private IList<Matrix> GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox)
+        {
+            var cartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
+            var fractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
+            var result = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(path, true).Select(x => x.ToDxMatrix()).ToList();
+            var baseSetSize = result.Count;
+
+            var (aMax, bMax, cMax) = (renderBox.End.A.FloorToInt(), renderBox.End.B.FloorToInt(), renderBox.End.C.FloorToInt());
+            var (aMin, bMin, cMin) = (renderBox.Start.A.CeilToInt(), renderBox.Start.B.CeilToInt(), renderBox.Start.C.CeilToInt());
+            result.Capacity = baseSetSize * (aMax - aMin) * (bMax - bMin) * (cMax - cMin);
+
+            for (var baseIndex = 0; baseIndex < baseSetSize; baseIndex++)
+            {
+                for (var a = aMin; a < aMax; a++)
+                {
+                    for (var b = bMin; b < bMax; b++)
+                    {
+                        for (var c = cMin; c < cMax; c++)
+                        {
+                            if ((a, b, c) == (0, 0, 0)) continue;
+                            var operationMatrix = result[baseIndex];
+                            operationMatrix.M41 += a;
+                            operationMatrix.M42 += b;
+                            operationMatrix.M43 += c;
+                            result.Add(fractionalMatrix * operationMatrix * cartesianMatrix);
+                        }
+                    }
+                }
+            }
+
+            for (var i = 0; i < baseSetSize; i++) result[i] = fractionalMatrix * result[i] * cartesianMatrix;
+            return result;
+        }
+
+        /// <summary>
+        ///     Starts the scene build tasks for all kinetic transitions in model of the current content source using the provided
+        ///     <see cref="DxSceneBuilder" />
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private void StartTransitionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
+        {
+            foreach (var transitionGraph in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
+                sceneBuilder.AttachCustomTask(Task.Run(() => AddTransitionNodeToScene(sceneBuilder, transitionGraph, renderBox)));
+        }
+
+        /// <summary>
+        ///     Prepares the scene elements for the provided <see cref="PairEnergySetGraph" /> and adds the node one the
+        ///     <see cref="DxSceneBuilder" />
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="pairGraph"></param>
+        /// <param name="renderBox"></param>
+        private void AddPairInteractionNodeToScene(DxSceneBuilder sceneBuilder, PairEnergySetGraph pairGraph, in FractionalBox3D renderBox)
+        {
+            var path = pairGraph.AsVectorPath().ToList();
+            var sceneConfig = GetCustomizationObjectSceneConfig(pairGraph);
+            var middle = (path[1] + path[0]) * 0.5;
+            var geometry1 = CreateCylinderGeometry(sceneConfig, path[0], middle);
+            var geometry2 = CreateCylinderGeometry(sceneConfig, middle, path[1]);
+            var matrices1 = GetPathSceneItemTransforms(new[] {path[0], middle}, renderBox);
+            var matrices2 = GetPathSceneItemTransforms(new[] {middle, path[1]}, renderBox);
+            var material1 = new PhongMaterialCore {DiffuseColor = Color4.White};
+            var material2 = new PhongMaterialCore {DiffuseColor = Color4.Black};
+            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, x => x.IsHitTestVisible = false);
+            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, x => x.IsHitTestVisible = false);
+        }
+
+        /// <summary>
+        ///     Starts the scene build tasks for all kinetic transitions in model of the current content source using the provided
+        ///     <see cref="DxSceneBuilder" />
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private void StartPairInteractionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
+        {
+            if (SelectedCustomization?.EnergyModelCustomization == null) return;
+            foreach (var pairGraph in SelectedCustomization.EnergyModelCustomization.StablePairEnergyParameterSets)
+                sceneBuilder.AttachCustomTask(Task.Run(() => AddPairInteractionNodeToScene(sceneBuilder, pairGraph, renderBox)));
+            foreach (var pairGraph in SelectedCustomization.EnergyModelCustomization.UnstablePairEnergyParameterSets)
+                sceneBuilder.AttachCustomTask(Task.Run(() => AddPairInteractionNodeToScene(sceneBuilder, pairGraph, renderBox)));
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="MaterialCore" /> based on the settings in the provided <see cref="IObjectSceneConfig" />
         /// </summary>
         /// <param name="objectConfig"></param>
         /// <returns></returns>
-        private MaterialCore CreateFrozenMaterial(IObjectSceneConfig objectConfig)
+        private MaterialCore CreateMaterialCore(IObjectSceneConfig objectConfig)
         {
             var color = objectConfig.Color.ToColor4();
             var result = ExecuteOnAppThread(() =>
@@ -491,7 +613,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a new atom <see cref="Geometry3D" /> around (0,0,0) using the settings on the provided <see cref="IObjectSceneConfig" />. If a sphere creation is not possible, a cube will be returned
+        ///     Creates a new atom <see cref="MeshGeometry3D" /> around (0,0,0) using the settings on the provided
+        ///     <see cref="IObjectSceneConfig" />. If a sphere creation is not possible, a cube will be returned
         /// </summary>
         /// <param name="objectConfig"></param>
         /// <returns></returns>
@@ -509,13 +632,55 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Adds prepared mesh information to a <see cref="DxSceneBuilder"/> utilizing the memory preferences of the attached secen host
+        ///     Creates a new transition <see cref="MeshGeometry3D" /> using the settings on the provided
+        ///     <see cref="IObjectSceneConfig" />
+        /// </summary>
+        /// <param name="objectConfig"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private MeshGeometry3D CreateTransitionGeometry(IObjectSceneConfig objectConfig, IList<Fractional3D> path)
+        {
+            var meshBuilder = new MeshBuilder();
+            var diameter = objectConfig.Scaling;
+            var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
+            var thetaDiv = (Settings.Default.Default_Render_Arrow_ThetaDiv * objectConfig.Quality).RoundToInt();
+            for (var i = 1; i < path.Count; i++)
+            {
+                var (point1, point2) = (VectorTransformer.ToCartesian(path[i - 1]).ToDxVector(), VectorTransformer.ToCartesian(path[i]).ToDxVector());
+                meshBuilder.AddTwoHeadedArrow(point1, point2, diameter, headLength, thetaDiv);
+            }
+
+            return meshBuilder.ToMesh();
+        }
+
+        /// <summary>
+        ///     Creates a new cylinder <see cref="MeshGeometry3D" /> using the settings on the provided
+        ///     <see cref="IObjectSceneConfig" />
+        /// </summary>
+        /// <param name="objectConfig"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        private MeshGeometry3D CreateCylinderGeometry(IObjectSceneConfig objectConfig, in Fractional3D start, in Fractional3D end)
+        {
+            var meshBuilder = new MeshBuilder();
+            var radius = objectConfig.Scaling / 40;
+            var thetaDiv = 8;
+            var (point1, point2) = (VectorTransformer.ToCartesian(start).ToDxVector(), VectorTransformer.ToCartesian(end).ToDxVector());
+            meshBuilder.AddCylinder(point1, point2, radius, thetaDiv, true);
+            return meshBuilder.ToMesh();
+        }
+
+        /// <summary>
+        ///     Adds multiple mesh transforms to a <see cref="DxSceneBuilder" /> and performs batching based on the
+        ///     <see cref="DxSceneMemoryCost" /> preference of the scene host
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="geometry"></param>
+        /// <param name="material"></param>
         /// <param name="matrices"></param>
         /// <param name="callback"></param>
-        protected virtual void AddToSceneBuilder(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
+        protected virtual void AddMeshElementsToScene(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
             Action<SceneNode> callback = null)
         {
             var batchSize = GetBatchingSize(SceneHost.SceneMemoryCostPreference);
@@ -539,7 +704,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Translates the <see cref="DxSceneMemoryCost"/> preference to a mesh batching size preference
+        ///     Translates the <see cref="DxSceneMemoryCost" /> preference to a mesh batching size preference
         /// </summary>
         /// <param name="memoryCost"></param>
         /// <returns></returns>
@@ -548,15 +713,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             return memoryCost switch
             {
                 DxSceneMemoryCost.Lowest => 1,
-                DxSceneMemoryCost.Low => 16,
+                DxSceneMemoryCost.Low => 32,
                 DxSceneMemoryCost.Medium => 128,
-                DxSceneMemoryCost.High => 256,
-                DxSceneMemoryCost.Highest => 1024,
+                DxSceneMemoryCost.High => 512,
+                DxSceneMemoryCost.Highest => 2048,
                 DxSceneMemoryCost.Unlimited => int.MaxValue,
                 _ => throw new ArgumentOutOfRangeException(nameof(memoryCost), memoryCost, null)
             };
         }
-        
+
         /// <inheritdoc />
         public override void Dispose()
         {

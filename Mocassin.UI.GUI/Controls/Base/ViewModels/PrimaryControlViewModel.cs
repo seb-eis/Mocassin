@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Messaging;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.Base.Commands;
-using Mocassin.UI.GUI.Helper;
 using Mocassin.UI.Xml.ProjectLibrary;
 
 namespace Mocassin.UI.GUI.Controls.Base.ViewModels
@@ -107,7 +103,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="shortInfo"></param>
         /// <param name="details"></param>
-        protected void SendInfoMessage(string shortInfo, IEnumerable<string> details)
+        protected void PushInfoMessage(string shortInfo, IEnumerable<string> details)
         {
             var message = new InfoMessage(this, shortInfo)
             {
@@ -122,9 +118,9 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="details"></param>
         /// <param name="callMemberName"></param>
-        protected void SendCallInfoMessage(IEnumerable<string> details, [CallerMemberName] string callMemberName = default)
+        protected void PushInfoMessage(IEnumerable<string> details, [CallerMemberName] string callMemberName = default)
         {
-            SendInfoMessage($"Message @ {callMemberName}", details);
+            PushInfoMessage($"Message from {callMemberName}", details);
         }
 
         /// <summary>
@@ -133,9 +129,9 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="detail"></param>
         /// <param name="callMemberName"></param>
-        protected void SendCallInfoMessage(string detail, [CallerMemberName] string callMemberName = default)
+        protected void PushInfoMessage(string detail, [CallerMemberName] string callMemberName = default)
         {
-            SendCallInfoMessage(detail.AsSingleton(), callMemberName);
+            PushInfoMessage(detail.AsSingleton(), callMemberName);
         }
 
         /// <summary>
@@ -143,7 +139,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="shortInfo"></param>
         /// <param name="details"></param>
-        protected void SendWarningMessage(string shortInfo, IEnumerable<string> details)
+        protected void PushWarningMessage(string shortInfo, IEnumerable<string> details)
         {
             var message = new WarningMessage(this, shortInfo)
             {
@@ -158,9 +154,9 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="details"></param>
         /// <param name="callMemberName"></param>
-        protected void SendCallWarningMessage(IEnumerable<string> details, [CallerMemberName] string callMemberName = default)
+        protected void PushWarningMessage(IEnumerable<string> details, [CallerMemberName] string callMemberName = default)
         {
-            SendWarningMessage($"Warning @ {callMemberName}", details);
+            PushWarningMessage($"Warning from {callMemberName}", details);
         }
 
         /// <summary>
@@ -169,9 +165,9 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="detail"></param>
         /// <param name="callMemberName"></param>
-        protected void SendCallWarningMessage(string detail, [CallerMemberName] string callMemberName = default)
+        protected void PushWarningMessage(string detail, [CallerMemberName] string callMemberName = default)
         {
-            SendCallWarningMessage(detail.AsSingleton(), callMemberName);
+            PushWarningMessage(detail.AsSingleton(), callMemberName);
         }
 
         /// <summary>
@@ -179,7 +175,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="shortInfo"></param>
         /// <param name="exception"></param>
-        protected void SendErrorMessage(string shortInfo, Exception exception)
+        protected void PushErrorMessage(string shortInfo, Exception exception)
         {
             var message = new ErrorMessage(this, shortInfo)
             {
@@ -194,30 +190,9 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         /// </summary>
         /// <param name="callMemberName"></param>
         /// <param name="exception"></param>
-        protected void SendCallErrorMessage(Exception exception, [CallerMemberName] string callMemberName = default)
+        protected void PushErrorMessage(Exception exception, [CallerMemberName] string callMemberName = default)
         {
-            SendErrorMessage($"Error @ {callMemberName}", exception);
-        }
-
-        /// <summary>
-        ///     Searches the primary and plugin <see cref="Assembly" /> instances for marked <see cref="ProjectControlCommand" />
-        ///     types and creates a <see cref="IReadOnlyDictionary{TKey,TValue}" /> using the provided
-        ///     <see cref="Func{T, TResult}" /> and the <see cref="IMocassinProjectControl" /> the
-        ///     <see cref="PrimaryControlViewModel" /> is linked to
-        /// </summary>
-        /// <typeparam name="TAttribute"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="selector"></param>
-        /// <returns></returns>
-        public IReadOnlyDictionary<TValue, ICommand> CreateCommandLookupDictionary<TAttribute, TValue>(Func<TAttribute, TValue> selector)
-            where TAttribute : Attribute
-        {
-            var dictionary = Assembly.GetAssembly(typeof(ProjectControlCommand)).AsSingleton()
-                .Concat(ProjectControl.PluginAssemblies)
-                .SelectMany(x => x.MakeAttributedInstances<ProjectControlCommand, TAttribute>(ProjectControl))
-                .ToDictionary(y => selector(y.Value), z => (ICommand) z.Key);
-
-            return dictionary;
+            PushErrorMessage($"Error from {callMemberName}", exception);
         }
     }
 }

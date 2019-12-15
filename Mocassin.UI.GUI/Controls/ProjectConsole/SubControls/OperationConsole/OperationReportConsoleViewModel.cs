@@ -182,7 +182,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 if (subscription == null && validator == null) return;
                 subscription?.Dispose();
                 validator.Dispose();
-                SendCallInfoMessage($"Removed a change detector from the [{ValidatorViewModel.ModelGraph.Parent.ProjectName}] model tree.");
+                PushInfoMessage($"Removed a change detector from the [{ValidatorViewModel.ModelGraph.Parent.ProjectName}] model tree.");
             });
         }
 
@@ -243,7 +243,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
             ChangeReportSubscription(validator.ReportSetChangedNotifications);
             ValidatorViewModel = validator;
             ValidatorViewModel.RunValidationCommand.Execute(null);
-            SendCallInfoMessage($"Attached a change detector to the [{targetModelGraph.Parent.ProjectName}] model tree.");
+            PushInfoMessage($"Attached a change detector to the [{targetModelGraph.Parent.ProjectName}] model tree.");
         }
 
         /// <inheritdoc />
