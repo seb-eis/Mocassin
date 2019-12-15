@@ -673,7 +673,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
         /// <summary>
         ///     Adds multiple mesh transforms to a <see cref="DxSceneBuilder" /> and performs batching based on the
-        ///     <see cref="DxSceneMemoryCost" /> preference of the scene host
+        ///     <see cref="DxSceneBatchingMode" /> preference of the scene host
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="geometry"></param>
@@ -683,7 +683,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual void AddMeshElementsToScene(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
             Action<SceneNode> callback = null)
         {
-            var batchSize = GetBatchingSize(SceneHost.SceneMemoryCostPreference);
+            var batchSize = GetBatchingSize(SceneHost.SceneBatchingMode);
             switch (batchSize)
             {
                 case 1:
@@ -704,21 +704,21 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Translates the <see cref="DxSceneMemoryCost" /> preference to a mesh batching size preference
+        ///     Translates the <see cref="DxSceneBatchingMode" /> preference to a mesh batching size preference
         /// </summary>
-        /// <param name="memoryCost"></param>
+        /// <param name="batchingMode"></param>
         /// <returns></returns>
-        protected virtual int GetBatchingSize(DxSceneMemoryCost memoryCost)
+        protected virtual int GetBatchingSize(DxSceneBatchingMode batchingMode)
         {
-            return memoryCost switch
+            return batchingMode switch
             {
-                DxSceneMemoryCost.Lowest => 1,
-                DxSceneMemoryCost.Low => 32,
-                DxSceneMemoryCost.Medium => 128,
-                DxSceneMemoryCost.High => 512,
-                DxSceneMemoryCost.Highest => 2048,
-                DxSceneMemoryCost.Unlimited => int.MaxValue,
-                _ => throw new ArgumentOutOfRangeException(nameof(memoryCost), memoryCost, null)
+                DxSceneBatchingMode.None => 1,
+                DxSceneBatchingMode.Low => 32,
+                DxSceneBatchingMode.Moderate => 128,
+                DxSceneBatchingMode.High => 512,
+                DxSceneBatchingMode.Extreme => 2048,
+                DxSceneBatchingMode.Unlimited => int.MaxValue,
+                _ => throw new ArgumentOutOfRangeException(nameof(batchingMode), batchingMode, null)
             };
         }
 

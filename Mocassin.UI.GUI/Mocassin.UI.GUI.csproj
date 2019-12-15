@@ -285,7 +285,7 @@
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
-    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneMemoryCost.cs" />
+    <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneBatchingMode.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneHost.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneController.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\Commands\CheckApplicationUpdateCommand.cs" />

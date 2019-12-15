@@ -60,7 +60,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private int imageExportHeight;
         private int imageExportWidth;
         private bool itemsOverlayActive;
-        private DxSceneMemoryCost sceneMemoryCostPreference = DxSceneMemoryCost.Low;
+        private DxSceneBatchingMode sceneBatchingMode = DxSceneBatchingMode.Low;
         private ICommand invalidateSceneCommand;
 
         /// <summary>
@@ -100,13 +100,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         }
 
         /// <inheritdoc />
-        public DxSceneMemoryCost SceneMemoryCostPreference
+        public DxSceneBatchingMode SceneBatchingMode
         {
-            get => sceneMemoryCostPreference;
+            get => sceneBatchingMode;
             set
             {
-                if (sceneMemoryCostPreference == value) return;
-                SetProperty(ref sceneMemoryCostPreference, value);
+                if (sceneBatchingMode == value) return;
+                SetProperty(ref sceneBatchingMode, value);
                 InvalidateSceneCommand?.Execute(null);
             }
         }
@@ -396,9 +396,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public IEnumerable<DxSceneLightSetting> SceneLightSettings => EnumerateLightSettings();
 
         /// <summary>
-        ///     Get the selectable <see cref="SceneMemoryCostPreference" />
+        ///     Get the selectable <see cref="SceneBatchingMode" />
         /// </summary>
-        public IEnumerable<DxSceneMemoryCost> SceneMemoryPreferences => EnumerateMemoryPreferences();
+        public IEnumerable<DxSceneBatchingMode> SceneBatchingModes => EnumerateBatchingModes();
 
         /// <summary>
         ///     Get the <see cref="ObservableElement3DCollection" /> that supplies the <see cref="Element3D" /> containing light
@@ -727,17 +727,17 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         }
 
         /// <summary>
-        ///     Enumerates the selectable <see cref="DxSceneMemoryCost" /> preferences
+        ///     Enumerates the selectable <see cref="DxSceneBatchingMode" /> preferences
         /// </summary>
         /// <returns></returns>
-        protected virtual IEnumerable<DxSceneMemoryCost> EnumerateMemoryPreferences()
+        protected virtual IEnumerable<DxSceneBatchingMode> EnumerateBatchingModes()
         {
-            yield return DxSceneMemoryCost.Lowest;
-            yield return DxSceneMemoryCost.Low;
-            yield return DxSceneMemoryCost.Medium;
-            yield return DxSceneMemoryCost.High;
-            yield return DxSceneMemoryCost.Highest;
-            yield return DxSceneMemoryCost.Unlimited;
+            yield return DxSceneBatchingMode.None;
+            yield return DxSceneBatchingMode.Low;
+            yield return DxSceneBatchingMode.Moderate;
+            yield return DxSceneBatchingMode.High;
+            yield return DxSceneBatchingMode.Extreme;
+            yield return DxSceneBatchingMode.Unlimited;
         }
 
         /// <summary>

@@ -39,27 +39,27 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Row="0" Grid.Column="0" Text="MSAA Samples" VerticalAlignment="Center"
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="MSAA samples" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="0" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding MsaaLevels}" SelectedItem="{Binding MsaaLevel}" />
 
-    <TextBlock Grid.Row="1" Grid.Column="0" Text="FXAA Samples" VerticalAlignment="Center"
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="FXAA level" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="1" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding FxaaLevels}" SelectedItem="{Binding FxaaLevel}" />
 
-    <TextBlock Grid.Row="2" Grid.Column="0" Text="SSAO Quality" VerticalAlignment="Center"
+    <TextBlock Grid.Row="2" Grid.Column="0" Text="SSAO quality" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="2" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding SsaoQualities}" SelectedItem="{Binding SsaoQuality}" />
 
-    <TextBlock Grid.Row="3" Grid.Column="0" Text="Camera Mode" VerticalAlignment="Center"
+    <TextBlock Grid.Row="3" Grid.Column="0" Text="Camera mode" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="3" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding CameraModes}" SelectedItem="{Binding CameraMode}" />
 
-    <TextBlock Grid.Row="4" Grid.Column="0" Text="Rotation Mode" VerticalAlignment="Center"
+    <TextBlock Grid.Row="4" Grid.Column="0" Text="Rotation mode" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="4" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding CameraRotationModes}" SelectedItem="{Binding CameraRotationMode}" />
@@ -70,25 +70,25 @@
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="{Binding IsSsaoEnabled}" />
 
-    <TextBlock Grid.Row="6" Grid.Column="0" Text="Show Coordinate System" VerticalAlignment="Center"
+    <TextBlock Grid.Row="6" Grid.Column="0" Text="Coordinate system" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <CheckBox Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="{Binding ShowCoordinateSystem}" />
 
-    <TextBlock Grid.Row="7" Grid.Column="0" Text="Show View Cube" VerticalAlignment="Center"
+    <TextBlock Grid.Row="7" Grid.Column="0" Text="Orientation cube" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <CheckBox Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="{Binding ShowViewCube}" />
 
-    <TextBlock Grid.Row="8" Grid.Column="0" Text="Show Render Information" VerticalAlignment="Center"
+    <TextBlock Grid.Row="8" Grid.Column="0" Text="Render statistics" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <CheckBox Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="{Binding ShowRenderInformation}" />
 
-    <TextBlock Grid.Row="9" Grid.Column="0" Text="Render Background" VerticalAlignment="Center"
+    <TextBlock Grid.Row="9" Grid.Column="0" Text="Render background" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="9" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              FontFamily="Consolas"
@@ -102,7 +102,7 @@
       </TextBox.BorderBrush>
     </TextBox>
 
-    <TextBlock Grid.Row="10" Grid.Column="0" Text="Info Background" VerticalAlignment="Center"
+    <TextBlock Grid.Row="10" Grid.Column="0" Text="Info background" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="10" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              FontFamily="Consolas"
@@ -113,7 +113,7 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="11" Grid.Column="0" Text="Info Foreground" VerticalAlignment="Center"
+    <TextBlock Grid.Row="11" Grid.Column="0" Text="Info foreground" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="11" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              FontFamily="Consolas"
@@ -124,7 +124,7 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="12" Grid.Column="0" Text="Frictionless Spin" VerticalAlignment="Center"
+    <TextBlock Grid.Row="12" Grid.Column="0" Text="Frictionless spin" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <CheckBox Grid.Row="12" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
@@ -135,7 +135,7 @@
     <ComboBox Grid.Row="13" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding CameraTypes}" SelectedItem="{Binding DxCameraType}" />
 
-    <TextBlock Grid.Row="14" Grid.Column="0" Text="Field Of View" VerticalAlignment="Center"
+    <TextBlock Grid.Row="14" Grid.Column="0" Text="Field of view" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="14" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding CameraFieldOfView}">
@@ -145,7 +145,7 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="15" Grid.Column="0" Text="Far Plane Distance" VerticalAlignment="Center"
+    <TextBlock Grid.Row="15" Grid.Column="0" Text="Far plane distance" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="15" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding CameraFarPlaneDistance}">
@@ -155,7 +155,7 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="16" Grid.Column="0" Text="Near Plane Distance" VerticalAlignment="Center"
+    <TextBlock Grid.Row="16" Grid.Column="0" Text="Near plane distance" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="16" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding CameraNearPlaneDistance}">
@@ -165,13 +165,13 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="17" Grid.Column="0" Text="Smooth Interactions" VerticalAlignment="Center"
+    <TextBlock Grid.Row="17" Grid.Column="0" Text="Smooth interactions" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <CheckBox Grid.Row="17" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
               IsChecked="{Binding DisableMsaaOnInteraction}" />
 
-    <TextBlock Grid.Row="18" Grid.Column="0" Text="Scene Light Color" VerticalAlignment="Center"
+    <TextBlock Grid.Row="18" Grid.Column="0" Text="Light color" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="18" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              FontFamily="Consolas"
@@ -185,12 +185,12 @@
       </TextBox.BorderBrush>
     </TextBox>
 
-    <TextBlock Grid.Row="19" Grid.Column="0" Text="Light Setting" VerticalAlignment="Center"
+    <TextBlock Grid.Row="19" Grid.Column="0" Text="Light setting" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <ComboBox Grid.Row="19" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding SceneLightSettings}" SelectedItem="{Binding LightSetting}" />
 
-    <TextBlock Grid.Row="20" Grid.Column="0" Text="Export Width" VerticalAlignment="Center"
+    <TextBlock Grid.Row="20" Grid.Column="0" Text="Export width" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="20" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding ImageExportWidth, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
@@ -200,7 +200,7 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="21" Grid.Column="0" Text="Export Height" VerticalAlignment="Center"
+    <TextBlock Grid.Row="21" Grid.Column="0" Text="Export height" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="21" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding ImageExportHeight, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
@@ -210,16 +210,17 @@
       </TextBox.InputBindings>
     </TextBox>
 
-    <TextBlock Grid.Row="22" Grid.Column="0" Text="RAM/VRAM limit" VerticalAlignment="Center"
+    <TextBlock Grid.Row="22" Grid.Column="0" Text="Batching mode" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}">
       <TextBlock.ToolTip>
-        <TextBlock TextAlignment="Justify" TextWrapping="Wrap" Width="400">
-          <Run Text="Set a qualitative RAM/VRAM limit for the scene controller. Higher values will drastically improve the overall scene change CPU times."/>
-          <Run Text="It is highly recommended to use 'low' for large scenes and 'lowest' for small scenes when an iGPU with a small VRAM is used."/>
+        <TextBlock TextAlignment="Justify" TextWrapping="Wrap" Width="500">
+          <Run Text="Set the batching mode for the scene controller. Values above 'None' drastically reduce scene build time but greatly increase RAM/VRAM cost."/>
+          <Run Text="Batching increases render performance as long as the VRAM does not bottleneck the GPU."/>
+          <Run Text="Recommendation: Use 'None/Low' for an iGPU and 'Medium/High/Extreme' depending on VRAM and scene size."/>
         </TextBlock>
       </TextBlock.ToolTip>
     </TextBlock>
       <ComboBox Grid.Row="22" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
-              ItemsSource="{Binding SceneMemoryPreferences}" SelectedItem="{Binding SceneMemoryCostPreference}" />
+              ItemsSource="{Binding SceneBatchingModes}" SelectedItem="{Binding SceneBatchingMode}" />
   </Grid>
 </UserControl>
