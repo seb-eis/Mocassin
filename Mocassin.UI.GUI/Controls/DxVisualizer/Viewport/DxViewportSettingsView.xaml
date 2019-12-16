@@ -214,9 +214,8 @@
                Margin="{StaticResource App.Margin.VerticalStack}">
       <TextBlock.ToolTip>
         <TextBlock TextAlignment="Justify" TextWrapping="Wrap" Width="500">
-          <Run Text="Set the batching mode for the scene controller. Values above 'None' drastically reduce scene build time but greatly increase RAM/VRAM cost."/>
-          <Run Text="Batching increases render performance as long as the VRAM does not bottleneck the GPU."/>
-          <Run Text="Recommendation: Use 'None/Low' for an iGPU and 'Medium/High/Extreme' depending on VRAM and scene size."/>
+          <Run Text="Set how much model batching the scene controller can do to reduce draw-calls and scene management time."/>
+          <Run Text="Recommendation: Use 'None/Low' for GPUs with a very small VRAM size (e.g. iGPUs) and avoid using 'None' when displaying 1000+ objects."/>
         </TextBlock>
       </TextBlock.ToolTip>
     </TextBlock>

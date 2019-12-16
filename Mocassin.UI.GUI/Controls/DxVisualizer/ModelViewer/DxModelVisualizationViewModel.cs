@@ -9,7 +9,9 @@ using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
+using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
+using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
@@ -66,6 +68,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     Get the <see cref="ISpaceGroupService" /> that provided the space group operations and functionality
         /// </summary>
         private ISpaceGroupService SpaceGroupService => ModelProject.SpaceGroupService;
+
+        /// <summary>
+        ///     Get or set a <see cref="Dictionary{TKey,TValue}"/> that maps each <see cref="Fractional3D"/> of the unit cell to its <see cref="UnitCellPositionGraph"/>
+        /// </summary>
+        private Dictionary<Fractional3D, UnitCellPositionGraph> UnitCellPositionGraphs { get; }
 
         /// <summary>
         ///     Get the <see cref="IDxSceneHost" /> that hosts the created scene elements
@@ -127,6 +134,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             CustomizationObjectSceneConfigs = new ObservableCollectionViewModel<IObjectSceneConfig>();
             CustomizationCollectionViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
             InvalidateSceneCommand = new AsyncRelayCommand(async () => await Task.Run(InvalidateSceneAsync), () => CanInvalidateScene);
+            UnitCellPositionGraphs = new Dictionary<Fractional3D, UnitCellPositionGraph>(new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer));
             SceneHost.AttachController(this);
         }
 
@@ -175,6 +183,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             ModelObjectSceneConfigs.Clear();
             CustomizationObjectSceneConfigs.Clear();
             CustomizationCollectionViewModel.Clear();
+            UnitCellPositionGraphs.Clear();
             SceneHost.ResetScene(false);
         }
 
@@ -226,6 +235,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             RebuildModelRenderResourceAccess();
             RebuildCustomizationRenderResourceAccess();
+            RebuildHitTestResources();
         }
 
         /// <summary>
@@ -240,6 +250,24 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             GetModelObjectSceneConfig(source.StructureModelGraph.StructureInfo);
             source.StructureModelGraph.UnitCellPositions.Select(GetModelObjectSceneConfig).ToList();
             source.TransitionModelGraph.KineticTransitions.Select(GetModelObjectSceneConfig).ToList();
+            RebuildHitTestResources();
+        }
+
+        /// <summary>
+        ///     Rebuilds and synchronizes all hit test resources affiliated with the model source
+        /// </summary>
+        private void RebuildHitTestResources()
+        {
+            UnitCellPositionGraphs.Clear();
+            if (ContentSource == null) return;
+
+            foreach (var cellPosition in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
+            {
+                foreach (var vector in SpaceGroupService.GetUnitCellP1PositionExtension(new Fractional3D(cellPosition.A, cellPosition.B, cellPosition.C)))
+                {
+                    UnitCellPositionGraphs.Add(vector, cellPosition);
+                }
+            }
         }
 
         /// <summary>
@@ -349,7 +377,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 watch.Restart();
                 SceneHost.AddSceneItem(sceneModel);
                 var setupTime = watch.Elapsed.TotalMilliseconds;
-                PushInfoMessage($"Scene CPU times: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
+                PushInfoMessage($"Scene controller CPU info: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
             }
             catch (Exception e)
             {
@@ -379,6 +407,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private DxSceneBuilder StartSceneBuilder()
         {
+            ModelRenderResourcesViewModel.LoadSourceData();
             var renderBox = ModelRenderResourcesViewModel.GetRenderBox3D();
             var sceneBuilder = new DxSceneBuilder(100);
             StartCellFrameSceneNodeBuilding(sceneBuilder, renderBox);
@@ -416,8 +445,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                     }
                 }
             }
-
-            sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix);
+            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix, configurator);
         }
 
         /// <summary>
@@ -460,25 +489,25 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var sceneConfig = GetModelObjectSceneConfig(positionGraph);
             var geometry = CreateAtomGeometry(sceneConfig);
             var material = CreateMaterialCore(sceneConfig);
-            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, x => x.IsHitTestVisible = false);
+            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
 
         /// <summary>
-        ///     Creates the <see cref="IList{T}" /> of <see cref="Matrix" /> transforms that represent the symmetry extension of
+        ///     Creates an array of <see cref="Matrix" /> transforms that represent the symmetry extension of
         ///     the origin point into the provided <see cref="FractionalBox3D" /> when applied to a (0,0,0) cartesian vector
         /// </summary>
         /// <param name="origin"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
-        private IList<Matrix> GetPositionSceneItemTransforms(in Fractional3D origin, in FractionalBox3D renderBox)
+        private Matrix[] GetPositionSceneItemTransforms(in Fractional3D origin, in FractionalBox3D renderBox)
         {
             var positions = SpaceGroupService.GetPositionsInCuboid(origin, renderBox);
-            var result = new List<Matrix>(positions.Count);
-            foreach (var fractional3D in positions)
+            var result = new Matrix[positions.Count];
+            for (var i = 0; i < positions.Count; i++)
             {
-                var cartesian3D = VectorTransformer.ToCartesian(fractional3D);
-                var matrix = Matrix.Translation((float) cartesian3D.X, (float) cartesian3D.Y, (float) cartesian3D.Z);
-                result.Add(matrix);
+                var cartesian3D = VectorTransformer.ToCartesian(positions[i]);
+                result[i] = Matrix.Translation((float) cartesian3D.X, (float) cartesian3D.Y, (float) cartesian3D.Z);
             }
 
             return result;
@@ -498,7 +527,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var sceneConfig = GetModelObjectSceneConfig(transitionGraph);
             var geometry = CreateTransitionGeometry(sceneConfig, path);
             var material = CreateMaterialCore(sceneConfig);
-            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, x => x.IsHitTestVisible = false);
+            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
 
         /// <summary>
@@ -509,17 +539,17 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="path"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
-        private IList<Matrix> GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox)
+        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox)
         {
             var cartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
             var fractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
-            var result = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(path, true).Select(x => x.ToDxMatrix()).ToList();
-            var baseSetSize = result.Count;
+            var baseMatrices = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(path, true).Select(x => x.ToDxMatrix()).ToList();
+            var baseSetSize = baseMatrices.Count;
 
             var (aMax, bMax, cMax) = (renderBox.End.A.FloorToInt(), renderBox.End.B.FloorToInt(), renderBox.End.C.FloorToInt());
             var (aMin, bMin, cMin) = (renderBox.Start.A.CeilToInt(), renderBox.Start.B.CeilToInt(), renderBox.Start.C.CeilToInt());
-            result.Capacity = baseSetSize * (aMax - aMin) * (bMax - bMin) * (cMax - cMin);
-
+            var result = new Matrix[baseSetSize * (aMax - aMin) * (bMax - bMin) * (cMax - cMin)];
+            var index = 0;
             for (var baseIndex = 0; baseIndex < baseSetSize; baseIndex++)
             {
                 for (var a = aMin; a < aMax; a++)
@@ -528,18 +558,17 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                     {
                         for (var c = cMin; c < cMax; c++)
                         {
-                            if ((a, b, c) == (0, 0, 0)) continue;
-                            var operationMatrix = result[baseIndex];
-                            operationMatrix.M41 += a;
-                            operationMatrix.M42 += b;
-                            operationMatrix.M43 += c;
-                            result.Add(fractionalMatrix * operationMatrix * cartesianMatrix);
+                            var baseMatrix = baseMatrices[baseIndex];
+                            baseMatrix.M41 += a;
+                            baseMatrix.M42 += b;
+                            baseMatrix.M43 += c;
+                            result[index] = fractionalMatrix * baseMatrix * cartesianMatrix;
+                            index++;
                         }
                     }
                 }
             }
 
-            for (var i = 0; i < baseSetSize; i++) result[i] = fractionalMatrix * result[i] * cartesianMatrix;
             return result;
         }
 
@@ -574,8 +603,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var matrices2 = GetPathSceneItemTransforms(new[] {middle, path[1]}, renderBox);
             var material1 = new PhongMaterialCore {DiffuseColor = Color4.White};
             var material2 = new PhongMaterialCore {DiffuseColor = Color4.Black};
-            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, x => x.IsHitTestVisible = false);
-            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, x => x.IsHitTestVisible = false);
+            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, configurator);
+            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, configurator);
         }
 
         /// <summary>
@@ -633,24 +663,45 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
         /// <summary>
         ///     Creates a new transition <see cref="MeshGeometry3D" /> using the settings on the provided
-        ///     <see cref="IObjectSceneConfig" />
+        ///     <see cref="IObjectSceneConfig" />. By default the path is size corrected for hit atom geometries
         /// </summary>
         /// <param name="objectConfig"></param>
         /// <param name="path"></param>
+        /// <param name="checkAtoms"></param>
         /// <returns></returns>
-        private MeshGeometry3D CreateTransitionGeometry(IObjectSceneConfig objectConfig, IList<Fractional3D> path)
+        private MeshGeometry3D CreateTransitionGeometry(IObjectSceneConfig objectConfig, IList<Fractional3D> path, bool checkAtoms = true)
         {
             var meshBuilder = new MeshBuilder();
             var diameter = objectConfig.Scaling;
             var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
             var thetaDiv = (Settings.Default.Default_Render_Arrow_ThetaDiv * objectConfig.Quality).RoundToInt();
+            var sizeCorrections = checkAtoms ? CreatePathAtomSizeCorrections(path) : null;
             for (var i = 1; i < path.Count; i++)
             {
                 var (point1, point2) = (VectorTransformer.ToCartesian(path[i - 1]).ToDxVector(), VectorTransformer.ToCartesian(path[i]).ToDxVector());
+                if (checkAtoms)
+                {
+                    var directionToSecond = (point2 - point1).Normalized();
+                    point1 += (float) sizeCorrections[i - 1] * directionToSecond;
+                    point2 -= (float) sizeCorrections[i] * directionToSecond;
+                }
                 meshBuilder.AddTwoHeadedArrow(point1, point2, diameter, headLength, thetaDiv);
             }
 
             return meshBuilder.ToMesh();
+        }
+
+        /// <summary>
+        ///     Creates a size correction for each position of a path to prevent clipping with the target atom geometries
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private double[] CreatePathAtomSizeCorrections(IList<Fractional3D> path)
+        {
+            var sceneConfigs = path.Select(x => CheckCellPositionHit(x, out IObjectSceneConfig y) ? y : null).ToArray(path.Count);
+            var result = new double[sceneConfigs.Length];
+            for (var i = 0; i < sceneConfigs.Length; i++) result[i] = sceneConfigs[i]?.Scaling ?? 0;
+            return result;
         }
 
         /// <summary>
@@ -683,7 +734,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual void AddMeshElementsToScene(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
             Action<SceneNode> callback = null)
         {
-            var batchSize = GetBatchingSize(SceneHost.SceneBatchingMode);
+            var batchSize = GetMeshBatchSize(SceneHost.SceneBatchingMode);
             switch (batchSize)
             {
                 case 1:
@@ -704,22 +755,63 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Translates the <see cref="DxSceneBatchingMode" /> preference to a mesh batching size preference
+        ///     Translates the <see cref="DxSceneBatchingMode" /> setting of the scene host to an actual model count
         /// </summary>
         /// <param name="batchingMode"></param>
         /// <returns></returns>
-        protected virtual int GetBatchingSize(DxSceneBatchingMode batchingMode)
+        protected virtual int GetMeshBatchSize(DxSceneBatchingMode batchingMode)
         {
             return batchingMode switch
             {
                 DxSceneBatchingMode.None => 1,
-                DxSceneBatchingMode.Low => 32,
-                DxSceneBatchingMode.Moderate => 128,
-                DxSceneBatchingMode.High => 512,
+                DxSceneBatchingMode.Low => 64,
+                DxSceneBatchingMode.Moderate => 256,
+                DxSceneBatchingMode.High => 1024,
                 DxSceneBatchingMode.Extreme => 2048,
                 DxSceneBatchingMode.Unlimited => int.MaxValue,
                 _ => throw new ArgumentOutOfRangeException(nameof(batchingMode), batchingMode, null)
             };
+        }
+
+        /// <summary>
+        ///     Get a <see cref="Action{T}"/> configurator callback for <see cref="SceneNode"/> instances using the provided <see cref="IObjectSceneConfig"/>
+        /// </summary>
+        /// <param name="objectConfig"></param>
+        protected virtual Action<SceneNode> GetSceneNodeConfigurator(IObjectSceneConfig objectConfig)
+        {
+            var isVisible = objectConfig.IsVisible;
+            void ConfigNode(SceneNode sceneNode)
+            {
+                sceneNode.IsHitTestVisible = false;
+                sceneNode.Visible = isVisible;
+            }
+
+            return ConfigNode;
+        }
+
+        /// <summary>
+        ///     Tests if a <see cref="Fractional3D"/> hits an atom and provides the affiliated <see cref="IObjectSceneConfig"/> if true
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        protected bool CheckCellPositionHit(in Fractional3D vector, out IObjectSceneConfig config)
+        {
+            var result = CheckCellPositionHit(vector, out UnitCellPositionGraph positionGraph);
+            config = result ? GetModelObjectSceneConfig(positionGraph) : null;
+            return result;
+        }
+
+        /// <summary>
+        ///     Tests if a <see cref="Fractional3D"/> hits an atom and provides the affiliated <see cref="UnitCellPositionGraph"/> if true
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="positionGraph"></param>
+        /// <returns></returns>
+        protected bool CheckCellPositionHit(in Fractional3D vector, out UnitCellPositionGraph positionGraph)
+        {
+            var trimmedVector = vector.TrimToUnitCell(VectorTransformer.FractionalSystem.Comparer);
+            return UnitCellPositionGraphs.TryGetValue(trimmedVector, out positionGraph);
         }
 
         /// <inheritdoc />

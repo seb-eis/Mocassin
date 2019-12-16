@@ -98,6 +98,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         {
             if (DataSource != null && Equals(DataSource, resources)) return;
             DataSource = resources ?? new ResourcesGraph();
+            LoadSourceData();
+        }
+
+        /// <summary>
+        ///     Forces a load of the data stored in the <see cref="ResourcesGraph"/> effectively synchronizing the view model to its data source
+        /// </summary>
+        public void LoadSourceData()
+        {
             SetRenderAreaNoSaving(DataSource.TryGetResource(RenderAreaResourceKey, ParseRenderAreaString, out var values) ? values : RenderAreaDefault);
         }
 
@@ -109,12 +117,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public (int MinA, int MinB, int MinC, int MaxA, int MaxB, int MaxC) GetFlooredRenderArea(IEqualityComparer<double> comparer = null)
         {
             comparer ??= EqualityComparer<double>.Default;
-            var minA = MocassinMath.FloorToInt(RenderAreaMinA, comparer);
-            var minB = MocassinMath.FloorToInt(RenderAreaMinB, comparer);
-            var minC = MocassinMath.FloorToInt(RenderAreaMinC, comparer);
-            var maxA = MocassinMath.FloorToInt(RenderAreaMaxA, comparer);
-            var maxB = MocassinMath.FloorToInt(RenderAreaMaxB, comparer);
-            var maxC = MocassinMath.FloorToInt(RenderAreaMaxC, comparer);
+            var minA = RenderAreaMinA.FloorToInt(comparer);
+            var minB = RenderAreaMinB.FloorToInt(comparer);
+            var minC = RenderAreaMinC.FloorToInt(comparer);
+            var maxA = RenderAreaMaxA.FloorToInt(comparer);
+            var maxB = RenderAreaMaxB.FloorToInt(comparer);
+            var maxC = RenderAreaMaxC.FloorToInt(comparer);
             return (minA, minB, minC, maxA, maxB, maxC);
         }
 

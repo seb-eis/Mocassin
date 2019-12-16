@@ -20,7 +20,7 @@ namespace Mocassin.Model.ModelProject
         public NumericComparer RelativeComparer { get; protected set; }
 
         /// <inheritdoc />
-        public NumericComparer MainComparer { get; protected set; }
+        public NumericComparer ComboComparer { get; protected set; }
 
         /// <inheritdoc />
         public int ComparisonUlp => Settings.UlpValue;
@@ -41,7 +41,7 @@ namespace Mocassin.Model.ModelProject
             UlpComparer = NumericComparer.CreateUlp(settings.UlpValue);
             RangeComparer = NumericComparer.CreateRanged(settings.RangeValue);
             RelativeComparer = NumericComparer.CreateRelative(settings.FactorValue);
-            MainComparer = new NumericCombinedComparer(RangeComparer, RelativeComparer);
+            ComboComparer = new NumericCombinedComparer(RangeComparer, RelativeComparer);
         }
     }
 }
