@@ -395,7 +395,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IList<Fractional3D> GetPositionsInCuboid(in Fractional3D source, in Fractional3D start, in Fractional3D end)
         {
-            var boundingBox = new FractionalBox3D(start, end);
+            var boundingBox = new FractionalBox3D(start, end - start);
             return GetPositionsInCuboid(source, boundingBox);
         }
 

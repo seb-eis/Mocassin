@@ -2,8 +2,10 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace Mocassin.UI.GUI.Base.UiElements.Popup
 {
@@ -21,13 +23,17 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <summary>
         ///     The <see cref="Topmost" /> <see cref="DependencyProperty" />
         /// </summary>
-        public static DependencyProperty TopmostProperty =
-            Window.TopmostProperty.AddOwner(typeof(ControlOverlay), new FrameworkPropertyMetadata(false, OnIsTopmostChanged));
+        public static DependencyProperty TopmostProperty = Window.TopmostProperty.AddOwner(typeof(ControlOverlay), new FrameworkPropertyMetadata(false, OnIsTopmostChanged));
 
         /// <summary>
         ///     Get or set the parent <see cref="Window" />
         /// </summary>
         private Window ParentWindow { get; set; }
+
+        /// <summary>
+        ///     Get or set the parent <see cref="UserControl"/>
+        /// </summary>
+        private UserControl ParentControl { get; set; }
 
         /// <summary>
         ///     Get or set a boolean flag if the <see cref="ControlOverlay" /> was previously loaded
@@ -68,10 +74,21 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="args"></param>
         private void OnUnloaded(object sender, RoutedEventArgs args)
         {
-            if (ParentWindow == null) return;
-            ParentWindow.Activated -= OnParentWindowActivated;
-            ParentWindow.Deactivated -= OnParentWindowDeactivated;
-            AlreadyLoaded = false;
+            try
+            {
+                if (ParentWindow == null) return;
+                ParentWindow.Activated -= OnParentWindowActivated;
+                ParentWindow.Deactivated -= OnParentWindowDeactivated;
+                ParentWindow.LocationChanged -= OnForceResetRequired;
+                ParentWindow = null;
+                if (ParentControl == null) return;
+                ParentControl.SizeChanged -= OnForceResetRequired;
+                ParentControl = null;
+            }
+            finally
+            {
+                AlreadyLoaded = false;   
+            }
         }
 
         /// <summary>
@@ -81,21 +98,34 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="args"></param>
         private void OnLoaded(object sender, RoutedEventArgs args)
         {
-            if (!AlreadyLoaded)
+            if (AlreadyLoaded) return;
+            try
+            {
+                ForceIsOpenBindingTargetUpdate();
+                ParentWindow = Window.GetWindow(this);
+                ParentControl = FindParent<UserControl>(this);
+                if (ParentWindow != null)
+                {
+                    ParentWindow.Activated += OnParentWindowActivated;
+                    ParentWindow.Deactivated += OnParentWindowDeactivated;
+                    ParentWindow.LocationChanged += OnForceResetRequired;
+                }
+
+                if (ParentControl != null)
+                {
+                    ParentControl.SizeChanged += OnForceResetRequired;
+                }
+            }
+            finally
             {
                 AlreadyLoaded = true;
-                ParentWindow = Window.GetWindow(this);
-                if (ParentWindow == null) return;
-                ParentWindow.Activated += OnParentWindowActivated;
-                ParentWindow.Deactivated += OnParentWindowDeactivated;
             }
-            ForceIsOpenPropertyBindingUpdate();
         }
 
         /// <summary>
         ///     Forces the IsOpenProperty to update the binding target if a binding exists
         /// </summary>
-        private void ForceIsOpenPropertyBindingUpdate()
+        private void ForceIsOpenBindingTargetUpdate()
         {
             BindingOperations.GetBindingExpression(this, IsOpenProperty)?.UpdateTarget();
         }
@@ -107,6 +137,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="arg"></param>
         private void OnParentWindowActivated(object sender, EventArgs arg)
         {
+
         }
 
         /// <summary>
@@ -116,6 +147,27 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         /// <param name="arg"></param>
         private void OnParentWindowDeactivated(object sender, EventArgs arg)
         {
+
+        }
+
+        /// <summary>
+        ///     Event handler for changes of the parent <see cref="FrameworkElement"/> or <see cref="Window"/> that require a forced update of the overlay
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected virtual void OnForceResetRequired(object sender, EventArgs args)
+        {
+            if (!IsOpen) return;
+            var binding = BindingOperations.GetBinding(this, IsOpenProperty);
+            if (binding != null)
+            {
+                BindingOperations.ClearBinding(this, IsOpenProperty);
+                BindingOperations.SetBinding(this, IsOpenProperty, binding);
+                return;
+            }
+
+            IsOpen = false;
+            IsOpen = true;
         }
 
         /// <inheritdoc />
@@ -126,16 +178,32 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         }
 
         /// <summary>
+        ///     Finds the parent control of type <see cref="T"/> that hosts the provided <see cref="DependencyObject"/>
+        /// </summary>
+        /// <returns></returns>
+        protected T FindParent<T>(DependencyObject child = null) where  T : class
+        {
+            if (child == null) throw new ArgumentNullException(nameof(child));
+            while (child != null)
+            {
+                var parent = VisualTreeHelper.GetParent(child);
+                if (parent is T parent1) return parent1;
+                child = parent;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         ///     Updates the overlay position based on the <see cref="Topmost" /> setting
         /// </summary>
         private void UpdateOverlayPosition()
         {
             if (!(PresentationSource.FromVisual(Child) is HwndSource hwndSource)) return;
-
             var callOk = GetWindowRect(hwndSource.Handle, out var rect);
             Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(GetWindowRect)} returned false.");
             if (!callOk) return;
-            
+
             callOk = SetWindowPos(hwndSource.Handle, Topmost ? HWND_TOPMOST : HWND_NOTOPMOST, rect.Left, rect.Top, (int) Width, (int) Height, 0);
             Debug.WriteLineIf(!callOk, $"Cannot set window position: {nameof(SetWindowPos)} returned false.");
         }
@@ -143,6 +211,7 @@ namespace Mocassin.UI.GUI.Base.UiElements.Popup
         #region dllimport
 
         [StructLayout(LayoutKind.Sequential)]
+        [DebuggerDisplay("L:{Left},T:{Top},R:{Right},B:{Bottom}")]
         public struct RECT
         {
             public int Left;
