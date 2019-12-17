@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
@@ -19,13 +20,16 @@ using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
+using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
+using Mocassin.UI.GUI.Base.Views;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper;
+using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeControl;
 using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
@@ -36,6 +40,7 @@ using Mocassin.UI.Xml.Model;
 using Mocassin.UI.Xml.StructureModel;
 using Mocassin.UI.Xml.TransitionModel;
 using SharpDX;
+using SharpDX.Direct3D11;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 {
@@ -106,6 +111,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     Get the <see cref="ICommand" /> to invalidate and rebuild the entire scene
         /// </summary>
         public ICommand InvalidateSceneCommand { get; }
+
+        /// <inheritdoc />
+        public IEnumerable<VvmContainer> GetControlContainers()
+        {
+            yield return new VvmContainer(new LoadingSpinnerView()) {Name = "Spinner"};
+        }
 
         /// <summary>
         ///     Get or set the selected <see cref="ProjectCustomizationGraph" />
@@ -248,8 +259,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             if (ContentSource == null) return;
             var source = ContentSource.ProjectModelGraph;
             GetModelObjectSceneConfig(source.StructureModelGraph.StructureInfo);
-            source.StructureModelGraph.UnitCellPositions.Select(GetModelObjectSceneConfig).ToList();
-            source.TransitionModelGraph.KineticTransitions.Select(GetModelObjectSceneConfig).ToList();
+            source.StructureModelGraph.UnitCellPositions.Select(GetModelObjectSceneConfig).Load();
+            source.TransitionModelGraph.KineticTransitions.Select(GetModelObjectSceneConfig).Load();
             RebuildHitTestResources();
         }
 
@@ -278,9 +289,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             CustomizationObjectSceneConfigs.Clear();
             if (ContentSource == null || SelectedCustomization == null || ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty)) return;
             var source = SelectedCustomization.EnergyModelCustomization;
-            source.StablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).ToList();
-            source.UnstablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).ToList();
-            source.GroupEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).ToList();
+            source.StablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).Load();
+            source.UnstablePairEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).Load();
+            source.GroupEnergyParameterSets.Select(GetCustomizationObjectSceneConfig).Load();
         }
 
         /// <summary>
@@ -291,7 +302,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private IObjectSceneConfig GetModelObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph)
         {
-            return GetObjectRenderViewModelAny(objectGraph, ModelObjectSceneConfigs.ObservableItems);
+            return GetObjectSceneConfigAny(objectGraph, ModelObjectSceneConfigs.ObservableItems);
         }
 
         /// <summary>
@@ -302,7 +313,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private IObjectSceneConfig GetCustomizationObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph)
         {
-            return GetObjectRenderViewModelAny(objectGraph, CustomizationObjectSceneConfigs.ObservableItems);
+            return GetObjectSceneConfigAny(objectGraph, CustomizationObjectSceneConfigs.ObservableItems);
         }
 
         /// <summary>
@@ -312,7 +323,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="objectGraph"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        private IObjectSceneConfig GetObjectRenderViewModelAny(ExtensibleProjectObjectGraph objectGraph, ICollection<IObjectSceneConfig> source)
+        private IObjectSceneConfig GetObjectSceneConfigAny(ExtensibleProjectObjectGraph objectGraph, ICollection<IObjectSceneConfig> source)
         {
             var result = source.FirstOrDefault(x => x.IsApplicable(objectGraph));
             if (result != null) return result;
@@ -780,13 +791,46 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual Action<SceneNode> GetSceneNodeConfigurator(IObjectSceneConfig objectConfig)
         {
             var isVisible = objectConfig.IsVisible;
+            var cullMode = GetBestCullMode(objectConfig.VisualCategory);
             void ConfigNode(SceneNode sceneNode)
             {
                 sceneNode.IsHitTestVisible = false;
-                sceneNode.Visible = isVisible;
+                sceneNode.Visible = objectConfig.IsVisible;
+                switch (sceneNode)
+                {
+                    case BatchedMeshNode batchedMeshNode:
+                        batchedMeshNode.CullMode = cullMode;
+                        break;
+                    case MeshNode meshNode:
+                        meshNode.CullMode = cullMode;
+                        break;
+                }
             }
 
             return ConfigNode;
+        }
+
+        /// <summary>
+        ///     Get the best <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when the default mesh builder is
+        ///     used
+        /// </summary>
+        /// <param name="objectCategory"></param>
+        /// <returns></returns>
+        protected virtual CullMode GetBestCullMode(VisualObjectCategory objectCategory)
+        {
+            return objectCategory switch
+            {
+                VisualObjectCategory.Unknown => CullMode.None,
+                VisualObjectCategory.Frame => CullMode.None,
+                VisualObjectCategory.Line => CullMode.None,
+                VisualObjectCategory.PolygonSet => CullMode.None,
+                VisualObjectCategory.Sphere => CullMode.Back,
+                VisualObjectCategory.Cube => CullMode.Back,
+                VisualObjectCategory.DoubleArrow => CullMode.Back,
+                VisualObjectCategory.SingleArrow => CullMode.Back,
+                VisualObjectCategory.Cylinder => CullMode.Back,
+                _ => throw new ArgumentOutOfRangeException(nameof(objectCategory), objectCategory, null)
+            };
         }
 
         /// <summary>

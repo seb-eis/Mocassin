@@ -63,5 +63,15 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         ///     Initializes any default <see cref="UserControlTabItem" /> components
         /// </summary>
         void InitializeDefaultTabs();
+
+        /// <summary>
+        ///     Disposes all tab items and clears the collection
+        /// </summary>
+        void DisposeAndClearItems();
+
+        /// <summary>
+        ///     Sets the <see cref="SelectedTab" /> property to the item with the passed index. Negative values should default to the last item
+        /// </summary>
+        void SetActiveTabByIndex(int index);
     }
 }

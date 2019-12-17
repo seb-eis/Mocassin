@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using HelixToolkit.Wpf.SharpDX;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.Base.Commands;
+using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Base.ViewModels;
+using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Attributes;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Commands;
@@ -56,10 +58,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private double cameraFieldOfView = 45;
         private DxSceneLightSetting lightSetting = DxSceneLightSetting.None;
         private Color lightColor = Colors.White;
-        private bool settingsOverlayActive;
+        private bool isSettingsOverlayActive;
         private int imageExportHeight;
         private int imageExportWidth;
-        private bool itemsOverlayActive;
+        private bool isControlHostOverlayActive;
         private DxSceneBatchingMode sceneBatchingMode = DxSceneBatchingMode.Low;
         private ICommand invalidateSceneCommand;
 
@@ -70,6 +72,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
 
         /// <inheritdoc />
         public IDxSceneController SceneController { get; protected set; }
+
+        /// <summary>
+        ///     Get the <see cref="IUserControlTabHost"/> that provides control tabs in the overlay
+        /// </summary>
+        public IUserControlTabHost ControlTabHost { get; }
 
         /// <summary>
         ///     Get or set the <see cref="HelixToolkit.Wpf.SharpDX.Camera" />
@@ -344,20 +351,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         ///     Get or set a boolean flag if the settings overlay is active
         /// </summary>
         [TogglesOverlay]
-        public bool SettingsOverlayActive
+        public bool IsSettingsOverlayActive
         {
-            get => settingsOverlayActive;
-            set => SetProperty(ref settingsOverlayActive, value);
+            get => isSettingsOverlayActive;
+            set => SetProperty(ref isSettingsOverlayActive, value);
         }
 
         /// <summary>
         ///     Get or set a boolean flag if the object overlay is active
         /// </summary>
         [TogglesOverlay]
-        public bool ItemsOverlayActive
+        public bool IsControlHostOverlayActive
         {
-            get => itemsOverlayActive;
-            set => SetProperty(ref itemsOverlayActive, value);
+            get => isControlHostOverlayActive;
+            set => SetProperty(ref isControlHostOverlayActive, value);
         }
 
         /// <summary>
@@ -438,6 +445,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             EffectsManager = new DefaultEffectsManager();
             SceneElements = new ObservableElement3DCollection();
             SceneLights = new ObservableElement3DCollection();
+            ControlTabHost = new UserControlTabHostViewModel {TabStripPlacement = Dock.Bottom};
             PropertyChanged += DX3DViewportViewModel_PropertyChanged;
             ResetCameraCommand = new RelayCommand(ResetCamera);
             ExportDxImageCommand = new ExportDxViewportImageCommand(() => (ImageExportWidth, ImageExportHeight));
@@ -610,8 +618,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public void AttachController(IDxSceneController controller)
         {
             DetachController();
+            if (controller == null) return;
             SceneController = controller;
-            InvalidateSceneCommand = controller?.InvalidateSceneCommand;
+            InvalidateSceneCommand = controller.InvalidateSceneCommand;
+            HostControlTabs(controller.GetControlContainers());
         }
 
         /// <inheritdoc />
@@ -620,6 +630,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             if (SceneController == null) return;
             SceneController = null;
             InvalidateSceneCommand = null;
+            ControlTabHost.DisposeAndClearItems();
+        }
+
+        /// <summary>
+        ///     Host the provided set of <see cref="VvmContainer"/> instances in the control tab system
+        /// </summary>
+        /// <param name="containers"></param>
+        /// <param name="cleanCurrent"></param>
+        private void HostControlTabs(IEnumerable<VvmContainer> containers, bool cleanCurrent = false)
+        {
+            foreach (var container in containers) ControlTabHost.AddNonClosableTab(container.Name, container.ViewModel, container.View);
+            ControlTabHost.SetActiveTabByIndex(-1);
         }
 
         /// <summary>
@@ -769,8 +791,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private void CheckPropertyChangeTogglesOverlay(string propertyName, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
             if (!(GetType().GetProperty(propertyName)?.GetCustomAttribute<TogglesOverlayAttribute>() is { } attribute)) return;
-            if (!attribute.IsUniqueOverlay) return;
-            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUniqueOverlay ?? false).ToList();
+            if (!attribute.IsUnique) return;
+            var properties = GetType().GetProperties(bindingFlags).Where(x => x.GetCustomAttribute<TogglesOverlayAttribute>()?.IsUnique ?? false).ToList();
             if (properties.Count(x => (bool) x.GetValue(this)) <= 1) return;
             foreach (var property in properties.Where(property => property.Name != propertyName)) property.SetValue(this, false);
         }

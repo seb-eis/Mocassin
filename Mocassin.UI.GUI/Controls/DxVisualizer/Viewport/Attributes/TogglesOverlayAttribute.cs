@@ -11,15 +11,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Attributes
         /// <summary>
         ///     Get a boolean flag if the toggle should be unique
         /// </summary>
-        public bool IsUniqueOverlay { get; }
+        public bool IsUnique { get; }
 
         /// <summary>
         ///     Creates a new <see cref="TogglesOverlayAttribute"/>. By default the toggle effect is marked as unique
         /// </summary>
-        /// <param name="isUniqueOverlay"></param>
-        public TogglesOverlayAttribute(bool isUniqueOverlay = true)
+        /// <param name="isUnique"></param>
+        public TogglesOverlayAttribute(bool isUnique = true)
         {
-            IsUniqueOverlay = isUniqueOverlay;
+            IsUnique = isUnique;
         }
     }
 }

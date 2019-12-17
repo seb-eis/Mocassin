@@ -53,7 +53,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Perform an action on each element of an enumerable sequence and returns the modified value
+        ///     Perform an action on each element of an enumerable sequence and returns the modified value
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="values"></param>
@@ -229,6 +229,18 @@ namespace Mocassin.Framework.Extensions
         public static IList<T> AsList<T>(this IEnumerable<T> source)
         {
             return source as IList<T> ?? source.ToList();
+        }
+
+        /// <summary>
+        ///     Enumerates the provided <see cref="IEnumerable{T}"/>. Equivalent to calling ToList() without the overhead of actually creating a list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        public static void Load<T>(this IEnumerable<T> source)
+        {
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext()){}
+            enumerator.Dispose();
         }
     }
 }

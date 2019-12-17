@@ -12,6 +12,7 @@
         DoubleArrow,
         SingleArrow,
         Line,
+        Cylinder,
         PolygonSet
     }
 }

@@ -20,10 +20,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Comman
         {
             var view = new OperationReportConsoleView();
             var viewModel = new OperationReportConsoleViewModel(ProjectControl);
-            ProjectControl.ProjectConsoleTabControlViewModel.TabControlViewModel
+            ProjectControl.ProjectConsoleTabControlViewModel.TabHostViewModel
                 .AddCloseableTab("Validation Service", viewModel, view);
 
-            ProjectControl.ProjectConsoleTabControlViewModel.TabControlViewModel.SetActiveTabByIndex(-1);
+            ProjectControl.ProjectConsoleTabControlViewModel.TabHostViewModel.SetActiveTabByIndex(-1);
         }
     }
 }

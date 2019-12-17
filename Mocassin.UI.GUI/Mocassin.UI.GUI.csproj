@@ -284,6 +284,7 @@
     <Compile Include="Base\Loading\ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Base\Objects\VvmContainer.cs" />
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneBatchingMode.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneHost.cs" />
@@ -304,8 +305,8 @@
       <DependentUpon>DxModelVisualizationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DxVisualizer\ModelViewer\DxModelVisualizationViewModel.cs" />
-    <Compile Include="Controls\DxVisualizer\Viewport\DxViewportItemsView.xaml.cs">
-      <DependentUpon>DxViewportItemsView.xaml</DependentUpon>
+    <Compile Include="Controls\DxVisualizer\Viewport\DxViewportControlHostView.xaml.cs">
+      <DependentUpon>DxViewportControlHostView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxCameraType.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\DxViewportSettingsView.xaml.cs">
@@ -344,7 +345,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml">
+    <Page Include="Base\ViewModels\Tabs\UserControlTabHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -652,7 +653,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DxVisualizer\Viewport\DxViewportItemsView.xaml">
+    <Page Include="Controls\DxVisualizer\Viewport\DxViewportControlHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -717,11 +718,11 @@
     <Compile Include="Base\ViewModels\EmptyViewModel.cs" />
     <Compile Include="Base\ViewModels\Tabs\Items\CloseableUserControlTabItem.cs" />
     <Compile Include="Base\ViewModels\Tabs\IUserControlTabHost.cs" />
-    <Compile Include="Base\ViewModels\Tabs\UserControlTabControlView.xaml.cs">
-      <DependentUpon>UserControlTabControlView.xaml</DependentUpon>
+    <Compile Include="Base\ViewModels\Tabs\UserControlTabHostView.xaml.cs">
+      <DependentUpon>UserControlTabHostView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\ViewModels\Tabs\Items\UserControlTabItem.cs" />
-    <Compile Include="Base\ViewModels\Tabs\UserControlTabControlViewModel.cs" />
+    <Compile Include="Base\ViewModels\Tabs\UserControlTabHostViewModel.cs" />
     <Compile Include="Base\ViewModels\ViewModelBase.cs" />
     <Compile Include="Base\Views\ContentLoadingView.xaml.cs">
       <DependentUpon>ContentLoadingView.xaml</DependentUpon>

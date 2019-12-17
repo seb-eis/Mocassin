@@ -93,13 +93,13 @@
     <TextBox Grid.Row="9" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              FontFamily="Consolas"
              Text="{Binding BackgroundColor}">
+      <TextBox.BorderBrush>
+        <SolidColorBrush Color="{Binding BackgroundColor, Mode=OneWay}" />
+      </TextBox.BorderBrush>
       <TextBox.InputBindings>
         <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
       </TextBox.InputBindings>
-      <TextBox.BorderBrush>
-        <SolidColorBrush Color="{Binding BackgroundColor}" />
-      </TextBox.BorderBrush>
     </TextBox>
 
     <TextBlock Grid.Row="10" Grid.Column="0" Text="Info background" VerticalAlignment="Center"
@@ -176,13 +176,13 @@
     <TextBox Grid.Row="18" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              FontFamily="Consolas"
              Text="{Binding LightColor}">
+      <TextBox.BorderBrush>
+        <SolidColorBrush Color="{Binding LightColor, Mode=OneWay}" />
+      </TextBox.BorderBrush>
       <TextBox.InputBindings>
         <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
       </TextBox.InputBindings>
-      <TextBox.BorderBrush>
-        <SolidColorBrush Color="{Binding LightColor}" />
-      </TextBox.BorderBrush>
     </TextBox>
 
     <TextBlock Grid.Row="19" Grid.Column="0" Text="Light setting" VerticalAlignment="Center"

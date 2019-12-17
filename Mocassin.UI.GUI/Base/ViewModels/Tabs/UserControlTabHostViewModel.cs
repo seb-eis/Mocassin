@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Controls;
+using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
@@ -8,7 +10,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     ///     Base <see cref="ViewModelBase" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
     ///     <see cref="System.Windows.Controls.TabControl" />
     /// </summary>
-    public class UserControlTabControlViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabHost
+    public class UserControlTabHostViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabHost
     {
         private UserControlTabItem selectedTab;
         private int headerFontSize = 14;
@@ -91,11 +93,30 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         {
         }
 
-        /// <summary>
-        ///     Sets the <see cref="SelectedTab" /> property to the item with the passed index. Negative values default to the last
-        ///     item
-        /// </summary>
+        /// <inheritdoc />
+        public void DisposeAndClearItems()
+        {
+            var items = ObservableItems.ToList(ObservableItems.Count);
+            ExecuteOnAppThread(() =>
+            {
+                SelectedTab = null;
+                Clear();
+                foreach (var item in items) item.Dispose();
+            });
+            items.Clear();
+        }
+
+        /// <inheritdoc />
         public void SetActiveTabByIndex(int index)
+        {
+            ExecuteOnAppThread(() => SetActiveTabByIndexInternal(index));
+        }
+
+        /// <summary>
+        ///     Internal implementation of <see cref="SetActiveTabByIndex"/>
+        /// </summary>
+        /// <param name="index"></param>
+        private void SetActiveTabByIndexInternal(int index)
         {
             if (ObservableItems.Count == 0)
             {

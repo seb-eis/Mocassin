@@ -8,7 +8,7 @@ using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeControl;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="UserControlTabControlView" /> of work tabs
+    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="UserControlTabHostView" /> of work tabs
     /// </summary>
     public class ProjectWorkTabControlViewModel : PrimaryControlViewModel
     {
@@ -18,19 +18,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         private UserControlTabItem WelcomeTabItem { get; }
 
         /// <summary>
-        ///     Get the <see cref="UserControlTabControlViewModel" /> that controls the project control tabs
+        ///     Get the <see cref="UserControlTabHostViewModel" /> that controls the project control tabs
         /// </summary>
-        public UserControlTabControlViewModel TabControlViewModel { get; }
+        public UserControlTabHostViewModel TabHostViewModel { get; }
 
         /// <inheritdoc />
         public ProjectWorkTabControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            TabControlViewModel = new UserControlTabControlViewModel {IsFrontInsertMode = true};
+            TabHostViewModel = new UserControlTabHostViewModel {IsFrontInsertMode = true};
             WelcomeTabItem = new UserControlTabItem("Welcome to Mocassin", new WelcomeControlViewModel(ProjectControl), new WelcomeControlView());
-            TabControlViewModel.ObservableItems.CollectionChanged += OnTabCollectionChanged;
-            TabControlViewModel.AddItem(WelcomeTabItem);
-            TabControlViewModel.SelectedTab = WelcomeTabItem;
+            TabHostViewModel.ObservableItems.CollectionChanged += OnTabCollectionChanged;
+            TabHostViewModel.AddItem(WelcomeTabItem);
+            TabHostViewModel.SelectedTab = WelcomeTabItem;
             EnsureWelcomeTabIsVisible();
         }
 
@@ -60,8 +60,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
         private void OnTabCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action != NotifyCollectionChangedAction.Add && args.Action != NotifyCollectionChangedAction.Remove) return;
-            if (TabControlViewModel.ObservableItems.Count == 1) EnsureWelcomeTabIsVisible();
-            if (TabControlViewModel.ObservableItems.Count == 2) EnsureWelcomeTabIsHidden();
+            if (TabHostViewModel.ObservableItems.Count == 1) EnsureWelcomeTabIsVisible();
+            if (TabHostViewModel.ObservableItems.Count == 2) EnsureWelcomeTabIsHidden();
         }
     }
 }

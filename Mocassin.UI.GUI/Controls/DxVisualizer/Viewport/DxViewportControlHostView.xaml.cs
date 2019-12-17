@@ -3,11 +3,11 @@
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
 {
     /// <summary>
-    ///     Interaction logic for DxViewportItemsView.xaml
+    ///     Interaction logic for DxViewportControlHostView.xaml
     /// </summary>
-    public partial class DxViewportItemsView : UserControl
+    public partial class DxViewportControlHostView : UserControl
     {
-        public DxViewportItemsView()
+        public DxViewportControlHostView()
         {
             InitializeComponent();
         }

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Input;
+using Mocassin.UI.GUI.Base.Objects;
+using Mocassin.UI.GUI.Base.ViewModels.Tabs;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
 {
     /// <summary>
-    ///     Represents a controller for provision, setup and interaction with SharpDX based 3D scenes
+    ///     Represents a control interface for provision, setup and user interaction with SharpDX based 3D scene content
     /// </summary>
     public interface IDxSceneController : INotifyPropertyChanged, IDisposable
     {
@@ -15,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
         bool CanInvalidateScene { get; }
 
         /// <summary>
-        ///     Get the <see cref="IDxSceneHost" /> the controller manages
+        ///     Get the <see cref="IDxSceneHost" /> the controller supplies to
         /// </summary>
         IDxSceneHost SceneHost { get; }
 
@@ -24,5 +28,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
         /// </summary>
         /// <returns></returns>
         ICommand InvalidateSceneCommand { get; }
+
+        /// <summary>
+        ///     Get a set of <see cref="VvmContainer"/> instances that supply scene interaction controls
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<VvmContainer> GetControlContainers();
     }
 }
