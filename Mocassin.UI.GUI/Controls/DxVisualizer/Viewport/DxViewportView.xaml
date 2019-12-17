@@ -95,6 +95,7 @@
                     Name="Viewport3Dx"
                     EnableSwapChainRendering="True"
                     Background="White"
+                    SnapsToDevicePixels="True"
                     EffectsManager="{Binding EffectsManager, Mode=OneTime}"
                     Camera="{Binding Camera}"
                     CameraMode="{Binding CameraMode}"

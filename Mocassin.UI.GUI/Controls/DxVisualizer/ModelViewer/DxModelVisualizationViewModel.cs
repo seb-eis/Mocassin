@@ -10,7 +10,6 @@ using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
-using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Coordinates;
@@ -75,7 +74,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private ISpaceGroupService SpaceGroupService => ModelProject.SpaceGroupService;
 
         /// <summary>
-        ///     Get or set a <see cref="Dictionary{TKey,TValue}"/> that maps each <see cref="Fractional3D"/> of the unit cell to its <see cref="UnitCellPositionGraph"/>
+        ///     Get or set a <see cref="Dictionary{TKey,TValue}" /> that maps each <see cref="Fractional3D" /> of the unit cell to
+        ///     its <see cref="UnitCellPositionGraph" />
         /// </summary>
         private Dictionary<Fractional3D, UnitCellPositionGraph> UnitCellPositionGraphs { get; }
 
@@ -145,7 +145,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             CustomizationObjectSceneConfigs = new ObservableCollectionViewModel<IObjectSceneConfig>();
             CustomizationCollectionViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
             InvalidateSceneCommand = new AsyncRelayCommand(async () => await Task.Run(InvalidateSceneAsync), () => CanInvalidateScene);
-            UnitCellPositionGraphs = new Dictionary<Fractional3D, UnitCellPositionGraph>(new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer));
+            UnitCellPositionGraphs =
+                new Dictionary<Fractional3D, UnitCellPositionGraph>(new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer));
             SceneHost.AttachController(this);
         }
 
@@ -275,9 +276,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             foreach (var cellPosition in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
             {
                 foreach (var vector in SpaceGroupService.GetUnitCellP1PositionExtension(new Fractional3D(cellPosition.A, cellPosition.B, cellPosition.C)))
-                {
                     UnitCellPositionGraphs.Add(vector, cellPosition);
-                }
             }
         }
 
@@ -607,14 +606,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var path = pairGraph.AsVectorPath().ToList();
             var sceneConfig = GetCustomizationObjectSceneConfig(pairGraph);
+
             var middle = (path[1] + path[0]) * 0.5;
             var geometry1 = CreateCylinderGeometry(sceneConfig, path[0], middle);
             var geometry2 = CreateCylinderGeometry(sceneConfig, middle, path[1]);
             var matrices1 = GetPathSceneItemTransforms(new[] {path[0], middle}, renderBox);
             var matrices2 = GetPathSceneItemTransforms(new[] {middle, path[1]}, renderBox);
-            var material1 = new PhongMaterialCore {DiffuseColor = Color4.White};
-            var material2 = new PhongMaterialCore {DiffuseColor = Color4.Black};
+
+            CheckCellPositionHit(path[0], out IObjectSceneConfig atomConfig1);
+            CheckCellPositionHit(path[1], out IObjectSceneConfig atomConfig2);
+            var material1 = CreateMaterialCore(atomConfig1);
+            var material2 = atomConfig1.Equals(atomConfig2) ? material1 : CreateMaterialCore(atomConfig2);
             var configurator = GetSceneNodeConfigurator(sceneConfig);
+
             AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, configurator);
             AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, configurator);
         }
@@ -642,6 +646,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private MaterialCore CreateMaterialCore(IObjectSceneConfig objectConfig)
         {
+            if (objectConfig == null) return PhongMaterials.DefaultVRML.Core;
             var color = objectConfig.Color.ToColor4();
             var result = ExecuteOnAppThread(() =>
             {
@@ -669,6 +674,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 meshBuilder.AddBox(Vector3.Zero, radius, radius, radius, BoxFaces.All);
             else
                 meshBuilder.AddSphere(Vector3.Zero, radius, thetaDiv, phiDiv);
+
             return meshBuilder.ToMesh();
         }
 
@@ -696,6 +702,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                     point1 += (float) sizeCorrections[i - 1] * directionToSecond;
                     point2 -= (float) sizeCorrections[i] * directionToSecond;
                 }
+
                 meshBuilder.AddTwoHeadedArrow(point1, point2, diameter, headLength, thetaDiv);
             }
 
@@ -727,7 +734,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var meshBuilder = new MeshBuilder();
             var radius = objectConfig.Scaling / 40;
-            var thetaDiv = 8;
+            var thetaDiv = Settings.Default.Default_Render_Arrow_ThetaDiv;
             var (point1, point2) = (VectorTransformer.ToCartesian(start).ToDxVector(), VectorTransformer.ToCartesian(end).ToDxVector());
             meshBuilder.AddCylinder(point1, point2, radius, thetaDiv, true);
             return meshBuilder.ToMesh();
@@ -785,7 +792,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get a <see cref="Action{T}"/> configurator callback for <see cref="SceneNode"/> instances using the provided <see cref="IObjectSceneConfig"/>
+        ///     Get a <see cref="Action{T}" /> configurator callback for <see cref="SceneNode" /> instances using the provided
+        ///     <see cref="IObjectSceneConfig" />
         /// </summary>
         /// <param name="objectConfig"></param>
         protected virtual Action<SceneNode> GetSceneNodeConfigurator(IObjectSceneConfig objectConfig)
@@ -847,7 +855,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Tests if a <see cref="Fractional3D"/> hits an atom and provides the affiliated <see cref="UnitCellPositionGraph"/> if true
+        ///     Tests if a <see cref="Fractional3D" /> hits an atom and provides the affiliated
+        ///     <see cref="UnitCellPositionGraph" /> if true
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="positionGraph"></param>
