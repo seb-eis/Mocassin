@@ -27,5 +27,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
         {
             return new Vector3((float) source.A, (float) source.B, (float) source.C);
         }
+
+        /// <summary>
+        ///     Narrowing conversion of a <see cref="Coordinates3D"/> 192-bit source data to a SharpDX 96-bit <see cref="Vector3"/>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static Vector3 ToDxVector(this Coordinates3D source)
+        {
+            return new Vector3((float) source.A, (float) source.B, (float) source.C);
+        }
     }
 }

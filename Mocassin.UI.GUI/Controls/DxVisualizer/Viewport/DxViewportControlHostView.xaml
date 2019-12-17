@@ -10,13 +10,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" Name="ColumnDefinition"/>
-        <ColumnDefinition Width="2"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="5"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <Border HorizontalAlignment="Stretch" BorderThickness="2" Background="Black">
-        <tabs:UserControlTabHostView DataContext="{Binding ControlTabHost}"/>
-      </Border>
-      <GridSplitter Grid.Column="1" ShowsPreview="True" Width="2" Background="Black"/>
+      <tabs:UserControlTabHostView Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding ControlTabHost}"/>
+      <GridSplitter Grid.Column="1" ShowsPreview="True" Width="5" Background="Transparent"/>
     </Grid>
 </UserControl>

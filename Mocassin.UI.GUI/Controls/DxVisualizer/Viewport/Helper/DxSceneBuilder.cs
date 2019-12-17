@@ -221,6 +221,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             AddNode(node);
         }
 
+        public void AddCoordinateSystem(in Vector3 vectorA, in Vector3 vectorB, in Vector3 vectorC)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         ///     Attaches a custom build <see cref="Task"/> that requires awaiting when creating the model
         /// </summary>

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
@@ -15,6 +14,7 @@ using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
+using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Base.Commands;
@@ -28,7 +28,6 @@ using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeControl;
 using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
@@ -115,7 +114,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <inheritdoc />
         public IEnumerable<VvmContainer> GetControlContainers()
         {
-            yield return new VvmContainer(new LoadingSpinnerView()) {Name = "Spinner"};
+            yield return new VvmContainer(new DxViewportSettingsView()) {Name = "Spinner"};
         }
 
         /// <summary>
@@ -406,6 +405,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private async Task<SceneNodeGroupModel3D> BuildSceneAsync()
         {
             var sceneBuilder = StartSceneBuilder();
+            AddAffineCoordinateSystem(sceneBuilder);
             var result = await sceneBuilder.ToModelAsync();
             return result;
         }
@@ -424,7 +424,25 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             StartCellPositionSceneNodeBuilding(sceneBuilder, renderBox);
             StartTransitionSceneNodeBuilding(sceneBuilder, renderBox);
             StartPairInteractionSceneNodeBuilding(sceneBuilder, renderBox);
+            StartScreenSpacedNodeBuilding(sceneBuilder);
             return sceneBuilder;
+        }
+
+        /// <summary>
+        ///     Builds the scene component that holds screen spaced elements to the provided <see cref="DxSceneBuilder" />
+        /// </summary>
+        private void StartScreenSpacedNodeBuilding(DxSceneBuilder sceneBuilder)
+        {
+            sceneBuilder.AttachCustomTask(Task.Run(() => AddAffineCoordinateSystem(sceneBuilder)));
+        }
+
+        /// <summary>
+        ///     Adds the screen spaced affine coordinate system to the provided <see cref="DxSceneBuilder"/>
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        private void AddAffineCoordinateSystem(DxSceneBuilder sceneBuilder)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

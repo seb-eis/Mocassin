@@ -9,13 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-      <TabControl>
-        <TabItem Header="Viewport">
-          <viewport:DxViewportView DataContext="{Binding SceneHost}" x:Name="DxViewportView"/>
-        </TabItem>
-        <TabItem Header="Model">
-          <Grid></Grid>
-        </TabItem>
-      </TabControl>
+      <viewport:DxViewportView DataContext="{Binding SceneHost}" x:Name="DxViewportView"/>
     </Grid>
 </UserControl>
