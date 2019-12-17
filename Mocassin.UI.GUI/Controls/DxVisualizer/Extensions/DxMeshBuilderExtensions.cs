@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
             var length = direction.Length();
             var radius = (float) diameter / 2f;
             var headLengthTimesDiameter = (float) (diameter * headLength);
-            var revolvePoints = new List<Vector2>
+            var revolvePoints = new FastList<Vector2>(6)
             {
                 new Vector2(0, 0),
                 new Vector2(headLengthTimesDiameter, (float) diameter),

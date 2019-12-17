@@ -139,6 +139,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
+        /// <param name="callback"></param>
         public void AddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<GroupNode> callback = null)
         {
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
@@ -178,6 +179,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
+        /// <param name="callback"></param>
         public void AddBatchedMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<BatchedMeshNode> callback = null)
         {
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
@@ -221,7 +223,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             AddNode(node);
         }
 
-        public void AddCoordinateSystem(in Vector3 vectorA, in Vector3 vectorB, in Vector3 vectorC)
+        /// <summary>
+        ///     Adds a default styled screen spaced coordinate system with custom vectors
+        /// </summary>
+        /// <param name="vectorA"></param>
+        /// <param name="vectorB"></param>
+        /// <param name="vectorC"></param>
+        /// <param name="material"></param>
+        /// <param name="callback"></param>
+        public void AddCoordinateSystem(in Vector3 vectorA, in Vector3 vectorB, in Vector3 vectorC, MaterialCore material, Action<SceneNode> callback = null)
         {
             throw new NotImplementedException();
         }

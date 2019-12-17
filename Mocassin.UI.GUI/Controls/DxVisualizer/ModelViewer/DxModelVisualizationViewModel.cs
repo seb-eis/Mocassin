@@ -442,7 +442,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="sceneBuilder"></param>
         private void AddAffineCoordinateSystem(DxSceneBuilder sceneBuilder)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -754,7 +754,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var radius = objectConfig.Scaling / 40;
             var thetaDiv = Settings.Default.Default_Render_Arrow_ThetaDiv;
             var (point1, point2) = (VectorTransformer.ToCartesian(start).ToDxVector(), VectorTransformer.ToCartesian(end).ToDxVector());
-            meshBuilder.AddCylinder(point1, point2, radius, thetaDiv, true);
+            meshBuilder.AddCylinder(point1, point2, radius, thetaDiv, false, false);
             return meshBuilder.ToMesh();
         }
 
@@ -817,7 +817,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual Action<SceneNode> GetSceneNodeConfigurator(IObjectSceneConfig objectConfig)
         {
             var isVisible = objectConfig.IsVisible;
-            var cullMode = GetBestCullMode(objectConfig.VisualCategory);
+            var cullMode = GetOptimalCullMode(objectConfig.VisualCategory);
             void ConfigNode(SceneNode sceneNode)
             {
                 sceneNode.IsHitTestVisible = false;
@@ -837,12 +837,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the best <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when the default mesh builder is
-        ///     used
+        ///     Get the best <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when the default <see cref="MeshBuilder"/> is used
         /// </summary>
         /// <param name="objectCategory"></param>
         /// <returns></returns>
-        protected virtual CullMode GetBestCullMode(VisualObjectCategory objectCategory)
+        protected virtual CullMode GetOptimalCullMode(VisualObjectCategory objectCategory)
         {
             return objectCategory switch
             {
@@ -852,9 +851,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 VisualObjectCategory.PolygonSet => CullMode.None,
                 VisualObjectCategory.Sphere => CullMode.Back,
                 VisualObjectCategory.Cube => CullMode.Back,
-                VisualObjectCategory.DoubleArrow => CullMode.Back,
-                VisualObjectCategory.SingleArrow => CullMode.Back,
-                VisualObjectCategory.Cylinder => CullMode.Back,
+                VisualObjectCategory.DoubleArrow => CullMode.None,
+                VisualObjectCategory.SingleArrow => CullMode.None,
+                VisualObjectCategory.Cylinder => CullMode.None,
                 _ => throw new ArgumentOutOfRangeException(nameof(objectCategory), objectCategory, null)
             };
         }
