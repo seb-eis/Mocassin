@@ -170,6 +170,24 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Render_Display_Name.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderDisplayName {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Render_Inactive_Flag.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderInactiveFlag {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderInactiveFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Render_Material.
         /// </summary>
         public static string ResourceKey_ModelObject_RenderMaterial {

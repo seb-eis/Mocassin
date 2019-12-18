@@ -198,6 +198,28 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <summary>
+        ///     Get the determinant of the non translational part of the operation (Upper 3x3 matrix)
+        /// </summary>
+        /// <returns></returns>
+        public double DeterminantTop3X3()
+        {
+            var num0 = M22 * M33 - M23 * M32;
+            var num1 = M12 * M33 - M13 * M32;
+            var num2 = M12 * M23 - M13 * M22;
+            return M11 * num0 - M12 * num1 + M13 * num2;
+        }
+
+        /// <summary>
+        ///     Checks if the operation flips orientation of elements when used as a transform
+        /// </summary>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        public bool FlipsOrientation(double tolerance = 1.0e-10)
+        {
+            return DeterminantTop3X3() < -Math.Abs(tolerance);
+        }
+
+        /// <summary>
         ///     Get the <see cref="SymmetryOperationCore" /> operation entries as a 12 entry array
         /// </summary>
         /// <returns></returns>

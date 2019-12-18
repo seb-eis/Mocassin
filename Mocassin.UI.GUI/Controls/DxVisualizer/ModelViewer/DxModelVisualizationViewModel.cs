@@ -14,14 +14,12 @@ using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
-using Mocassin.Model.Energies;
 using Mocassin.Model.ModelProject;
 using Mocassin.Symmetry.SpaceGroups;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
-using Mocassin.UI.GUI.Base.Views;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport;
@@ -437,7 +435,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Adds the screen spaced affine coordinate system to the provided <see cref="DxSceneBuilder"/>
+        ///     Adds the screen spaced affine coordinate system to the provided <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         private void AddAffineCoordinateSystem(DxSceneBuilder sceneBuilder)
@@ -473,6 +471,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                     }
                 }
             }
+
             var configurator = GetSceneNodeConfigurator(sceneConfig);
             sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix, configurator);
         }
@@ -517,7 +516,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var sceneConfig = GetModelObjectSceneConfig(positionGraph);
             var geometry = CreateAtomGeometry(sceneConfig);
             var material = CreateMaterialCore(sceneConfig);
-            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            var configurator = GetSceneNodeConfigurator(sceneConfig, true);
             AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
 
@@ -551,11 +550,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private void AddTransitionNodeToScene(DxSceneBuilder sceneBuilder, KineticTransitionGraph transitionGraph, in FractionalBox3D renderBox)
         {
             var path = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
-            var matrices = GetPathSceneItemTransforms(path, renderBox);
+            var matrices = GetPathSceneItemTransforms(path, renderBox, out var anyFlipsOrientation);
             var sceneConfig = GetModelObjectSceneConfig(transitionGraph);
             var geometry = CreateTransitionGeometry(sceneConfig, path);
             var material = CreateMaterialCore(sceneConfig);
-            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            var configurator = GetSceneNodeConfigurator(sceneConfig, !anyFlipsOrientation);
             AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
 
@@ -566,8 +565,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         /// <param name="path"></param>
         /// <param name="renderBox"></param>
+        /// <param name="anyFlipsOrientation"></param>
         /// <returns></returns>
-        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox)
+        private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, out bool anyFlipsOrientation)
         {
             var cartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
             var fractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
@@ -597,6 +597,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 }
             }
 
+            anyFlipsOrientation = baseMatrices.Any(x => x.FlipsOrientation());
             return result;
         }
 
@@ -628,17 +629,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var middle = (path[1] + path[0]) * 0.5;
             var geometry1 = CreateCylinderGeometry(sceneConfig, path[0], middle);
             var geometry2 = CreateCylinderGeometry(sceneConfig, middle, path[1]);
-            var matrices1 = GetPathSceneItemTransforms(new[] {path[0], middle}, renderBox);
-            var matrices2 = GetPathSceneItemTransforms(new[] {middle, path[1]}, renderBox);
+            var matrices1 = GetPathSceneItemTransforms(new[] {path[0], middle}, renderBox, out var anyOrientationFlips1);
+            var matrices2 = GetPathSceneItemTransforms(new[] {middle, path[1]}, renderBox, out var anyOrientationFlips2);
 
             CheckCellPositionHit(path[0], out IObjectSceneConfig atomConfig1);
             CheckCellPositionHit(path[1], out IObjectSceneConfig atomConfig2);
             var material1 = CreateMaterialCore(atomConfig1);
             var material2 = atomConfig1.Equals(atomConfig2) ? material1 : CreateMaterialCore(atomConfig2);
-            var configurator = GetSceneNodeConfigurator(sceneConfig);
+            var configurator1 = GetSceneNodeConfigurator(sceneConfig, !anyOrientationFlips1);
+            var configurator2 = GetSceneNodeConfigurator(sceneConfig, !anyOrientationFlips2);
 
-            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, configurator);
-            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, configurator);
+            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, configurator1);
+            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, configurator2);
         }
 
         /// <summary>
@@ -814,10 +816,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     <see cref="IObjectSceneConfig" />
         /// </summary>
         /// <param name="objectConfig"></param>
-        protected virtual Action<SceneNode> GetSceneNodeConfigurator(IObjectSceneConfig objectConfig)
+        /// <param name="noOrientationFlips"></param>
+        protected virtual Action<SceneNode> GetSceneNodeConfigurator(IObjectSceneConfig objectConfig, bool noOrientationFlips = false)
         {
             var isVisible = objectConfig.IsVisible;
-            var cullMode = GetOptimalCullMode(objectConfig.VisualCategory);
+            var cullMode = GetOptimalCullMode(objectConfig.VisualCategory, noOrientationFlips);
+
             void ConfigNode(SceneNode sceneNode)
             {
                 sceneNode.IsHitTestVisible = false;
@@ -837,12 +841,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get the best <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when the default <see cref="MeshBuilder"/> is used
+        ///     Get the optimal <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when using the <see cref="MeshBuilder" />
         /// </summary>
         /// <param name="objectCategory"></param>
+        /// <param name="noOrientationFlips"></param>
         /// <returns></returns>
-        protected virtual CullMode GetOptimalCullMode(VisualObjectCategory objectCategory)
+        /// <remarks>More optimal values can be provided if it is ensured that triangles orientation does not change due to the model transform</remarks>
+        protected virtual CullMode GetOptimalCullMode(VisualObjectCategory objectCategory, bool noOrientationFlips = false)
         {
+            if (!noOrientationFlips) return CullMode.None;
             return objectCategory switch
             {
                 VisualObjectCategory.Unknown => CullMode.None,
@@ -851,15 +858,16 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 VisualObjectCategory.PolygonSet => CullMode.None,
                 VisualObjectCategory.Sphere => CullMode.Back,
                 VisualObjectCategory.Cube => CullMode.Back,
-                VisualObjectCategory.DoubleArrow => CullMode.None,
-                VisualObjectCategory.SingleArrow => CullMode.None,
-                VisualObjectCategory.Cylinder => CullMode.None,
+                VisualObjectCategory.DoubleArrow => CullMode.Back,
+                VisualObjectCategory.SingleArrow => CullMode.Back,
+                VisualObjectCategory.Cylinder =>CullMode.Back,
                 _ => throw new ArgumentOutOfRangeException(nameof(objectCategory), objectCategory, null)
             };
         }
 
         /// <summary>
-        ///     Tests if a <see cref="Fractional3D"/> hits an atom and provides the affiliated <see cref="IObjectSceneConfig"/> if true
+        ///     Tests if a <see cref="Fractional3D" /> hits an atom and provides the affiliated <see cref="IObjectSceneConfig" />
+        ///     if true
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="config"></param>

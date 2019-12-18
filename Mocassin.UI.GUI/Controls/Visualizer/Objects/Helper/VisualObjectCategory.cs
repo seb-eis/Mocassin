@@ -1,7 +1,7 @@
 ﻿namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
-    ///     Enum for defining the visual category of a project object 3D item
+    ///     Enum for defining a specific visual category for 3D scene item
     /// </summary>
     public enum VisualObjectCategory
     {

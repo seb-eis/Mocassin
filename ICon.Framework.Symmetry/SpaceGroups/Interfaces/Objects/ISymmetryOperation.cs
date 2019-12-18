@@ -19,6 +19,11 @@ namespace Mocassin.Symmetry.SpaceGroups
         string Literal { get; }
 
         /// <summary>
+        ///     Get a boolean flag if the operation causes an geometry orientation flip
+        /// </summary>
+        bool FlipsOrientation { get; }
+
+        /// <summary>
         ///     The trim tolerance value
         /// </summary>
         double TrimTolerance { get; }

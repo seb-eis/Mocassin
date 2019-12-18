@@ -10,7 +10,6 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public override double TrimTolerance { get; set; } = 1.0e-10;
 
-
         /// <summary>
         ///     Creates a new <see cref="SymmetryOperation" /> by adding a shift to an existing <see cref="ISymmetryOperation" />
         /// </summary>

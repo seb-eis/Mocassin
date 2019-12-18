@@ -154,6 +154,12 @@
   <data name="ResourceKey_ModelObject_RenderColor" xml:space="preserve">
     <value>Render_Color</value>
   </data>
+  <data name="ResourceKey_ModelObject_RenderDisplayName" xml:space="preserve">
+    <value>Render_Display_Name</value>
+  </data>
+  <data name="ResourceKey_ModelObject_RenderInactiveFlag" xml:space="preserve">
+    <value>Render_Inactive_Flag</value>
+  </data>
   <data name="ResourceKey_ModelObject_RenderMaterial" xml:space="preserve">
     <value>Render_Material</value>
   </data>

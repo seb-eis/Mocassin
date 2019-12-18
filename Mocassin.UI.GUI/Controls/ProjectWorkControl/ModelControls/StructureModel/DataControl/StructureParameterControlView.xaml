@@ -195,7 +195,7 @@
           </DataGrid.RowHeaderTemplate>
 
           <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}">
+            <DataGridTextColumn Binding="{Binding Literal, Mode=OneTime}" Width="Auto">
               <DataGridTextColumn.HeaderTemplate>
                 <DataTemplate>
                   <TextBlock DataContext="{Binding ElementName=SpaceGroupDataGrid, Path=DataContext.SelectedSpaceGroup}">
@@ -213,6 +213,13 @@
                 </DataTemplate>
               </DataGridTextColumn.HeaderTemplate>
             </DataGridTextColumn>
+            <DataGridCheckBoxColumn IsReadOnly="True" Binding="{Binding FlipsOrientation, Mode=OneTime}">
+              <DataGridCheckBoxColumn.HeaderTemplate>
+                <DataTemplate>
+                  <TextBlock Text="Affects orientation" ToolTip="Checked operations cause a flip in orientation when applied to a geometry."/>
+                </DataTemplate>
+              </DataGridCheckBoxColumn.HeaderTemplate>
+            </DataGridCheckBoxColumn>
           </DataGrid.Columns>
         </DataGrid>
       </Grid>

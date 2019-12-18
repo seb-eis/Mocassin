@@ -23,6 +23,9 @@ namespace Mocassin.Symmetry.SpaceGroups
         public ref SymmetryOperationCore Core => ref operationCore;
 
         /// <inheritdoc />
+        public bool FlipsOrientation => Core.FlipsOrientation(TrimTolerance);
+
+        /// <inheritdoc />
         public abstract double TrimTolerance { get; set; }
 
         /// <inheritdoc />
