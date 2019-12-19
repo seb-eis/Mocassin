@@ -39,7 +39,7 @@ namespace Mocassin.Mathematics.Comparers
         /// <inheritdoc />
         public override bool Equals(double x, double y)
         {
-            return x.IsAlmostEqualByRelative(y, RelativeRange);
+            return x.AlmostEqualByFactor(y, RelativeRange);
         }
     }
 }

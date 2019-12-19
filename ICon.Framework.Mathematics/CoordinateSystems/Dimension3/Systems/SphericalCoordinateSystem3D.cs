@@ -121,7 +121,7 @@ namespace Mocassin.Mathematics.Coordinates
             // The function has to return 0.0 if the theta angle is almost zero,
             // this is an inconsistent definition issue of z-aligned spherical coordinates
 
-            if (theta.IsAlmostEqualByRange(PolarConstraint.MaxValue, AlmostEqualRange) || theta.IsAlmostEqualByRange(PolarConstraint.MinValue, AlmostEqualRange))
+            if (theta.AlmostEqualByRange(PolarConstraint.MaxValue, AlmostEqualRange) || theta.AlmostEqualByRange(PolarConstraint.MinValue, AlmostEqualRange))
                 return 0.0;
 
             return AzimuthalConstraint.ParseToPeriodicRange(Math.Atan2(original.B, original.A));
@@ -135,7 +135,7 @@ namespace Mocassin.Mathematics.Coordinates
         private double GetCoordinateX(in Coordinates3D original)
         {
             var x = original.A * Math.Sin(original.B) * Math.Cos(original.C);
-            return x.IsAlmostZero(AlmostEqualRange) ? 0.0 : x;
+            return x.AlmostZero(AlmostEqualRange) ? 0.0 : x;
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Mocassin.Mathematics.Coordinates
         private double GetCoordinateY(in Coordinates3D original)
         {
             var y = original.A * Math.Sin(original.B) * Math.Sin(original.C);
-            return y.IsAlmostZero(AlmostEqualRange) ? 0.0 : y;
+            return y.AlmostZero(AlmostEqualRange) ? 0.0 : y;
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Mocassin.Mathematics.Coordinates
         private double GetCoordinateZ(in Coordinates3D original)
         {
             var z = original.A * Math.Cos(original.B);
-            return z.IsAlmostZero(AlmostEqualRange) ? 0.0 : z;
+            return z.AlmostZero(AlmostEqualRange) ? 0.0 : z;
         }
     }
 }

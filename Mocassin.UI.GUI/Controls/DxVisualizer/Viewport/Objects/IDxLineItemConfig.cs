@@ -26,6 +26,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects
         /// <summary>
         ///     Get or set the thickness of the line geometry
         /// </summary>
-        double Thickness { get; set; }
+        double LineThickness { get; set; }
     }
 }

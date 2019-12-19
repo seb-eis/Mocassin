@@ -136,5 +136,24 @@ namespace Mocassin.Framework.Extensions
             observable.CollectionChanged += OnChange;
             return Disposable.Create(() => observable.CollectionChanged -= OnChange);
         }
+
+        /// <summary>
+        ///     Tries to find and return the first item that matches the predicate or uses the provided constructor to create a new
+        ///     one. Optional flag to add/not add the item to the source collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="predicate"></param>
+        /// <param name="constructor"></param>
+        /// <param name="addNewToSource"></param>
+        /// <returns></returns>
+        public static T FirstOrNew<T>(this ICollection<T> collection, Func<T, bool> predicate, Func<T> constructor, bool addNewToSource = true) where T : class
+        {
+            var result = collection.FirstOrDefault(predicate);
+            if (result != null) return result;
+            result = constructor.Invoke();
+            if (addNewToSource) collection.Add(result);
+            return result;
+        }
     }
 }

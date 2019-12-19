@@ -40,7 +40,7 @@ namespace Mocassin.Mathematics.Comparers
         /// <inheritdoc />
         public override bool Equals(double x, double y)
         {
-            return x.IsAlmostEqualByUlp(y, Steps);
+            return x.AlmostEqualByUlp(y, Steps);
         }
     }
 }

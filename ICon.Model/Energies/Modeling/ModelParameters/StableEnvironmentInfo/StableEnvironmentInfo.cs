@@ -76,7 +76,7 @@ namespace Mocassin.Model.Energies
                 if (!info.GetDefectEnergies().Contains(defectEnergy))
                     return false;
             }
-            return MaxInteractionRange.IsAlmostEqualByRange(info.MaxInteractionRange);
+            return MaxInteractionRange.AlmostEqualByRange(info.MaxInteractionRange);
         }
 
         /// <summary>

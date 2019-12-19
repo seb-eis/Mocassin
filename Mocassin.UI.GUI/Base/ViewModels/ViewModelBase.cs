@@ -51,7 +51,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels
         }
 
         /// <summary>
-        ///     Sets a property value, executes the provided callback and raises the change event if the value was actually changed
+        ///     Sets a property value. Executes the provided callback and raises the change event only if the value was actually changed
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="backingField"></param>

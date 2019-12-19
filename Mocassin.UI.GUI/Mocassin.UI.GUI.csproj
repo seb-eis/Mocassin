@@ -287,6 +287,7 @@
     <Compile Include="Base\Objects\VvmContainer.cs" />
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxMatrixExtensions.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\Objects\DxProjectLineObjectSceneConfig.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\Objects\DxProjectMeshObjectSceneConfig.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\Objects\DxProjectObjectSceneConfig.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Objects\IDxLineItemConfig.cs" />

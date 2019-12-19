@@ -46,5 +46,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects
         /// <param name="model"></param>
         /// <returns></returns>
         bool CheckAccess(object model);
+
+        /// <summary>
+        ///     Check if a specific type of scene node is supported
+        /// </summary>
+        /// <param name="sceneNode"></param>
+        /// <returns></returns>
+        bool CheckSupport(SceneNode sceneNode);
     }
 }

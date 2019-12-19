@@ -11,7 +11,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
     /// <summary>
     ///     Base class for <see cref="IDxSceneItemConfig"/> implementations for <see cref="ExtensibleProjectObjectGraph"/>
     /// </summary>
-    public abstract class DxProjectObjectSceneConfig : ViewModelBase, IDxSceneItemConfig
+    public abstract class DxProjectObjectSceneConfig : ViewModelBase, IDxSceneItemConfig, IDisposable
     {
         private Action onChangeInvalidatesNode;
         private SceneNode sceneNode;
@@ -28,11 +28,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         public SceneNode SceneNode
         {
             get => sceneNode;
-            set => SetProperty(ref sceneNode, EnsureSupported(value));
+            set => SetProperty(ref sceneNode, EnsureNullOrSupported(value), OnSceneNodeChanged);
         }
 
         /// <inheritdoc />
-        public abstract VisualObjectCategory VisualCategory { get; }
+        public VisualObjectCategory VisualCategory { get; }
 
         /// <inheritdoc />
         public string Name
@@ -42,8 +42,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             {
                 if (Equals(Name, value)) return;
                 ObjectGraph.Resources.SetResource(NameKey, value);
+                OnNameChanged();
                 OnPropertyChanged();
-                SceneNode.Name = value;
             }
         }
 
@@ -55,8 +55,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             {
                 if (value == IsVisible) return;
                 ObjectGraph.Resources.SetResource(IsVisibleKey, value);
+                OnIsVisibleChanged();
                 OnPropertyChanged();
-                SceneNode.Visible = value;
             }
         }
 
@@ -68,8 +68,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             {
                 if (value == IsInactive) return;
                 ObjectGraph.Resources.SetResource(IsInactiveKey, value);
+                OnIsInactiveChanged();
                 OnPropertyChanged();
-                OnChangeInvalidatesNode?.Invoke();
             }
         }
 
@@ -84,9 +84,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         ///     Creates a new <see cref="DxProjectObjectSceneConfig"/> for a <see cref="ExtensibleProjectObjectGraph"/>
         /// </summary>
         /// <param name="objectGraph"></param>
-        protected DxProjectObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph)
+        /// <param name="visualCategory"></param>
+        protected DxProjectObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
         {
             ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
+            VisualCategory = visualCategory;
         }
 
         /// <inheritdoc />
@@ -102,12 +104,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Ensures that the provided object is actually supported or throws an exception otherwise
+        ///     Ensures that the provided object is null or an actually supported type. Throws an exception if the condition is not met
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private SceneNode EnsureSupported(SceneNode node)
+        private SceneNode EnsureNullOrSupported(SceneNode node)
         {
+            if (node == null) return null;
             return CheckSupport(node) ? node : throw new NotSupportedException("The provided scene node is not supported by this class.");
         }
 
@@ -116,6 +119,55 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        protected abstract bool CheckSupport(SceneNode node);
+        public abstract bool CheckSupport(SceneNode node);
+
+        /// <summary>
+        ///     Action that is called when the <see cref="Name"/> property changed
+        /// </summary>
+        protected virtual void OnNameChanged()
+        {
+            SceneNode.Name = Name;
+        }
+
+        /// <summary>
+        ///     Action that is called when the <see cref="IsVisible"/> property changed
+        /// </summary>
+        protected virtual void OnIsVisibleChanged()
+        {
+            SceneNode.Visible = IsVisible;
+        }
+
+        /// <summary>
+        ///     Action that is called when the <see cref="IsInactive"/> property changed
+        /// </summary>
+        protected virtual void OnIsInactiveChanged()
+        {
+            OnChangeInvalidatesNode?.Invoke();
+        }
+
+        /// <summary>
+        ///     Copies all data to the currently set scene node
+        /// </summary>
+        protected virtual void CopyValuesToSceneNode()
+        {
+            if (SceneNode == null) return;
+            SceneNode.Name = Name;
+            SceneNode.Visible = IsVisible;
+        }
+
+        /// <summary>
+        ///     Action that is called when the <see cref="SceneNode"/> property changed
+        /// </summary>
+        private void OnSceneNodeChanged()
+        {
+            CopyValuesToSceneNode();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            OnChangeInvalidatesNode = null;
+            SceneNode = null;
+        }
     }
 }

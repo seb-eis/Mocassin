@@ -38,7 +38,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="steps"></param>
         /// <returns></returns>
-        public static bool IsAlmostEqualByUlp(this double value, double other, int steps)
+        public static bool AlmostEqualByUlp(this double value, double other, int steps)
         {
             if (value == 0.0)
                 throw new ArgumentException(paramName: nameof(value), message: "ULP comparisons cannot be used to compare to zero!");
@@ -56,7 +56,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static bool IsAlmostEqualByRange(this double value, double other, double range = 1.0e-10)
+        public static bool AlmostEqualByRange(this double value, double other, double range = 1.0e-10)
         {
             return Math.Abs(value - other) <= Math.Abs(range);
         }
@@ -68,12 +68,11 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="other"></param>
         /// <param name="factor"></param>
         /// <returns></returns>
-        public static bool IsAlmostEqualByRelative(this double value, double other, double factor = 0.00001)
+        public static bool AlmostEqualByFactor(this double value, double other, double factor = 0.00001)
         {
             if (value == 0.0)
             {
-                if (other == 0.0) 
-                    return true;
+                if (other == 0.0) return true;
 
                 throw new ArgumentException(paramName: nameof(value),
                     message: "Factor comparisons cannot be used if the multiplication value is 0.0 while the other is not 0.0");
@@ -82,7 +81,7 @@ namespace Mocassin.Mathematics.Extensions
             if (factor == 0.0)
                 throw new ArgumentException(paramName: nameof(value),
                     message: "Factor comparisons cannot be used if the multiplication factor is 0.0");
-            return value.IsAlmostEqualByRange(other, value * factor);
+            return value.AlmostEqualByRange(other, value * factor);
         }
 
         /// <summary>
@@ -91,9 +90,9 @@ namespace Mocassin.Mathematics.Extensions
         /// <param name="value"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public static bool IsAlmostZero(this double value, double range)
+        public static bool AlmostZero(this double value, double range)
         {
-            return value.IsAlmostEqualByRange(0.0, range);
+            return value.AlmostEqualByRange(0.0, range);
         }
 
         /// <summary>
@@ -105,7 +104,7 @@ namespace Mocassin.Mathematics.Extensions
         /// <returns></returns>
         public static int CompareToByRange(this double value, double other, double range = 1.0e-10)
         {
-            if (value.IsAlmostEqualByRange(other, range))
+            if (value.AlmostEqualByRange(other, range))
                 return 0;
 
             return value < other ? -1 : 1;
@@ -123,13 +122,13 @@ namespace Mocassin.Mathematics.Extensions
             if (lowerBound > upperBound)
                 throw new ArgumentException(paramName: nameof(lowerBound), message: "Value is larger than upper bound");
 
-            if (lowerBound.IsAlmostEqualByRange(upperBound, almostEqualRange))
+            if (lowerBound.AlmostEqualByRange(upperBound, almostEqualRange))
                 return upperBound;
 
             var trimValue = upperBound - lowerBound;
             value %= trimValue;
             value = value >= lowerBound ? value : value + trimValue;
-            if (value.IsAlmostEqualByRange(upperBound, almostEqualRange) || value.IsAlmostEqualByRange(lowerBound, almostEqualRange))
+            if (value.AlmostEqualByRange(upperBound, almostEqualRange) || value.AlmostEqualByRange(lowerBound, almostEqualRange))
                 return lowerBound;
             return value;
         }

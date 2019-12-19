@@ -35,8 +35,8 @@ namespace Mocassin.Model.Energies
                       && centerUnitCellPosition == PartnerUnitCellPosition;
 
             result &= distance > StartRadius && distance < EndRadius 
-                      || distance.IsAlmostEqualByRange(StartRadius)
-                      || distance.IsAlmostEqualByRange(EndRadius);
+                      || distance.AlmostEqualByRange(StartRadius)
+                      || distance.AlmostEqualByRange(EndRadius);
 
             return result;
         }
@@ -62,8 +62,8 @@ namespace Mocassin.Model.Energies
             return other != null
                    && PartnerUnitCellPosition == other.PartnerUnitCellPosition
                    && CenterUnitCellPosition == other.CenterUnitCellPosition
-                   && EndRadius.IsAlmostEqualByRange(other.EndRadius)
-                   && StartRadius.IsAlmostEqualByRange(other.StartRadius);
+                   && EndRadius.AlmostEqualByRange(other.EndRadius)
+                   && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
 
         /// <summary>

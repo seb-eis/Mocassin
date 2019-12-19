@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.Mathematics.Extensions;
 using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Mathematics.Comparers

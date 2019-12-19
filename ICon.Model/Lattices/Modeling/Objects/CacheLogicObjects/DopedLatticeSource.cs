@@ -283,7 +283,7 @@ namespace Mocassin.Model.Lattices
             var secondaryExact = primaryCount * chargeFraction;
             var secondaryCount = (int) Math.Round(secondaryExact);
 
-            while (!(primaryCount * primaryDelta).IsAlmostEqualByRange(secondaryCount * secondaryDelta) && primaryCount > 0)
+            while (!(primaryCount * primaryDelta).AlmostEqualByRange(secondaryCount * secondaryDelta) && primaryCount > 0)
             {
                 primaryCount -= 1;
                 secondaryExact -= chargeFraction;
