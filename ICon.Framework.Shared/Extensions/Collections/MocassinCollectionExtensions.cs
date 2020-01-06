@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
+using Remotion.Linq.Clauses;
 
 namespace Mocassin.Framework.Extensions
 {
@@ -90,11 +91,9 @@ namespace Mocassin.Framework.Extensions
             for (var i = 0; i < collection.Count; i++)
             {
                 if (used == count) yield break;
-                if (count - used > (collection.Count - ++passed) * random.NextDouble())
-                {
-                    ++used;
-                    yield return i;
-                }
+                if (!(count - used > (collection.Count - ++passed) * random.NextDouble())) continue;
+                ++used;
+                yield return i;
             }
         }
 
@@ -154,6 +153,28 @@ namespace Mocassin.Framework.Extensions
             result = constructor.Invoke();
             if (addNewToSource) collection.Add(result);
             return result;
+        }
+
+        /// <summary>
+        ///     Disposes all disposables of a <see cref="ICollection{T}"/> of <see cref="IDisposable"/> and clears then clears the collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        public static void DisposeAllAndClear<T>(this ICollection<T> collection) where T : IDisposable
+        {
+            foreach (var item in collection) item.Dispose();
+            collection.Clear();
+        }
+
+        /// <summary>
+        ///     Disposes all disposables of a <see cref="ObservableCollection{T}"/> of <see cref="IDisposable"/> and clears then clears the collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        public static void DisposeAllAndClear<T>(this ObservableCollection<T> collection) where T : IDisposable
+        {
+            foreach (var item in collection) item.Dispose();
+            collection.Clear();
         }
     }
 }

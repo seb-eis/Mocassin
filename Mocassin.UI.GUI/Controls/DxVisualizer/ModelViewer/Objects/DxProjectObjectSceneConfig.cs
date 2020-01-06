@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects;
@@ -14,7 +15,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
     public abstract class DxProjectObjectSceneConfig : ViewModelBase, IDxSceneItemConfig, IDisposable
     {
         private Action onChangeInvalidatesNode;
-        private SceneNode sceneNode;
         private static string IsInactiveKey => Resources.ResourceKey_ModelObject_RenderInactiveFlag;
         private static string IsVisibleKey => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
         private static string NameKey => Resources.ResourceKey_ModelObject_RenderDisplayName;
@@ -24,12 +24,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         protected ExtensibleProjectObjectGraph ObjectGraph { get; }
 
-        /// <inheritdoc />
-        public SceneNode SceneNode
-        {
-            get => sceneNode;
-            set => SetProperty(ref sceneNode, EnsureNullOrSupported(value), OnSceneNodeChanged);
-        }
+        /// <summary>
+        ///     Get the <see cref="HashSet{T}"/> of managed <see cref="SceneNode"/> instances
+        /// </summary>
+        protected HashSet<SceneNode> SceneNodes { get; }
 
         /// <inheritdoc />
         public VisualObjectCategory VisualCategory { get; }
@@ -50,7 +48,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// <inheritdoc />
         public bool IsVisible
         {
-            get => !ObjectGraph.Resources.TryGetResource(IsVisibleKey, out bool value) || value;
+            get => ObjectGraph.Resources.TryGetResource(IsVisibleKey, out bool value) && value;
             set
             {
                 if (value == IsVisible) return;
@@ -89,6 +87,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         {
             ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
             VisualCategory = visualCategory;
+            SceneNodes = new HashSet<SceneNode>();
         }
 
         /// <inheritdoc />
@@ -104,14 +103,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Ensures that the provided object is null or an actually supported type. Throws an exception if the condition is not met
+        ///     Ensures that the provided <see cref="SceneNode"/> is not null and a supported a type. Throws an exception if the condition is not met
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private SceneNode EnsureNullOrSupported(SceneNode node)
+        private bool ThrowIfNodeNullOrUnsupported(SceneNode node)
         {
-            if (node == null) return null;
-            return CheckSupport(node) ? node : throw new NotSupportedException("The provided scene node is not supported by this class.");
+            if (node == null) throw new ArgumentNullException(nameof(node));
+            return CheckSupport(node) ? true : throw new NotSupportedException("The provided scene node is not supported.");
         }
 
         /// <summary>
@@ -121,20 +120,41 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// <returns></returns>
         public abstract bool CheckSupport(SceneNode node);
 
-        /// <summary>
-        ///     Action that is called when the <see cref="Name"/> property changed
-        /// </summary>
-        protected virtual void OnNameChanged()
+        /// <inheritdoc />
+        public void AttachNode(SceneNode sceneNode)
         {
-            SceneNode.Name = Name;
+            ThrowIfNodeNullOrUnsupported(sceneNode);
+            if (SceneNodes.Contains(sceneNode)) return;
+            CopyCurrentValuesToNode(sceneNode);
+            SceneNodes.Add(sceneNode);
+        }
+
+        /// <inheritdoc />
+        public void DetachNode(SceneNode sceneNode)
+        {
+            SceneNodes.Remove(sceneNode);
+        }
+
+        /// <inheritdoc />
+        public void DetachAll()
+        {
+            SceneNodes.Clear();
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="IsVisible"/> property changed
+        ///     Action that is called when the <see cref="Name" /> property changed
+        /// </summary>
+        protected virtual void OnNameChanged()
+        {
+            foreach (var sceneNode in SceneNodes) sceneNode.Name = Name;
+        }
+
+        /// <summary>
+        ///     Action that is called when the <see cref="IsVisible" /> property changed
         /// </summary>
         protected virtual void OnIsVisibleChanged()
         {
-            SceneNode.Visible = IsVisible;
+            foreach (var sceneNode in SceneNodes) sceneNode.Visible = IsVisible;
         }
 
         /// <summary>
@@ -146,28 +166,21 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Copies all data to the currently set scene node
+        ///     Copies the currently set properties to the passed <see cref="SceneNode"/>
         /// </summary>
-        protected virtual void CopyValuesToSceneNode()
+        /// <param name="sceneNode"></param>
+        protected virtual void CopyCurrentValuesToNode(SceneNode sceneNode)
         {
-            if (SceneNode == null) return;
-            SceneNode.Name = Name;
-            SceneNode.Visible = IsVisible;
-        }
-
-        /// <summary>
-        ///     Action that is called when the <see cref="SceneNode"/> property changed
-        /// </summary>
-        private void OnSceneNodeChanged()
-        {
-            CopyValuesToSceneNode();
+            if (sceneNode == null) throw new ArgumentNullException(nameof(sceneNode));
+            sceneNode.Name = Name;
+            sceneNode.Visible = IsVisible;
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
             OnChangeInvalidatesNode = null;
-            SceneNode = null;
+            DetachAll();
         }
     }
 }

@@ -13,7 +13,8 @@ using Color = System.Windows.Media.Color;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
 {
     /// <summary>
-    ///     Implementation of the <see cref="DxProjectObjectSceneConfig"/> extended by the <see cref="IDxLineItemConfig"/> interface
+    ///     Implementation of the <see cref="DxProjectObjectSceneConfig" /> extended by the <see cref="IDxLineItemConfig" />
+    ///     interface
     /// </summary>
     public class DxProjectLineObjectSceneConfig : DxProjectObjectSceneConfig, IDxLineItemConfig
     {
@@ -73,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="LineThickness"/> property changed
+        ///     Action that is called when the <see cref="LineThickness" /> property changed
         /// </summary>
         protected virtual void OnLineThicknessChanged()
         {
@@ -82,7 +83,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="DxColor"/> property changed
+        ///     Action that is called when the <see cref="DxColor" /> property changed
         /// </summary>
         protected virtual void OnDxColorChanged()
         {
@@ -90,7 +91,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="Color"/> property changed
+        ///     Action that is called when the <see cref="Color" /> property changed
         /// </summary>
         protected virtual void OnColorChanged()
         {
@@ -99,14 +100,23 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called when the <see cref="Material"/> property changed
+        ///     Action that is called when the <see cref="Material" /> property changed
         /// </summary>
         protected virtual void OnMaterialChanged()
         {
-            if (SceneNode == null || Material == null) return;
+            foreach (var sceneNode in SceneNodes) ChangeNodeMaterial((LineNode) sceneNode);
+        }
+
+        /// <summary>
+        ///     Changes the material of the provided <see cref="LineNode" /> to the current config
+        /// </summary>
+        /// <param name="lineNode"></param>
+        protected void ChangeNodeMaterial(LineNode lineNode)
+        {
+            if (lineNode == null || material == null) return;
             Material.LineColor = DxColor;
             Material.Thickness = (float) LineThickness;
-            ((LineNode) SceneNode).Material = Material;
+            lineNode.Material = Material;
         }
 
         /// <inheritdoc />
@@ -116,10 +126,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <inheritdoc />
-        protected override void CopyValuesToSceneNode()
+        protected override void CopyCurrentValuesToNode(SceneNode sceneNode)
         {
-            OnMaterialChanged();
-            base.CopyValuesToSceneNode();
+            ChangeNodeMaterial((LineNode) sceneNode);
+            base.CopyCurrentValuesToNode(sceneNode);
         }
     }
 }

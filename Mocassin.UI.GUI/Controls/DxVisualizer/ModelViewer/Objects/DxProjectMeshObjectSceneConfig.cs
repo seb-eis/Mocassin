@@ -6,7 +6,6 @@ using System.Windows.Media;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
-using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
@@ -19,7 +18,8 @@ using Matrix = SharpDX.Matrix;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
 {
     /// <summary>
-    ///     Implementation of the <see cref="DxProjectObjectSceneConfig"/> extended by the <see cref="IDxMeshItemConfig"/> interface
+    ///     Implementation of the <see cref="DxProjectObjectSceneConfig" /> extended by the <see cref="IDxMeshItemConfig" />
+    ///     interface
     /// </summary>
     public class DxProjectMeshObjectSceneConfig : DxProjectObjectSceneConfig, IDxMeshItemConfig
     {
@@ -29,7 +29,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         private static string UniformScalingKey => Resources.ResourceKey_ModelObject_RenderScaling;
 
         /// <summary>
-        ///     Get the <see cref="Dictionary{TKey,TValue}"/> of supported <see cref="Material"/> items
+        ///     Get the <see cref="Dictionary{TKey,TValue}" /> of supported <see cref="Material" /> items
         /// </summary>
         private static Dictionary<string, PhongMaterialCore> MaterialCatalog { get; }
 
@@ -100,9 +100,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             }
         }
 
-        /// <inheritdoc />
-        public bool IsBatched => SceneNode is BatchedMeshNode;
-
         /// <summary>
         ///     Static constructor that initializes the material catalog
         /// </summary>
@@ -117,7 +114,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         public DxProjectMeshObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
             : base(objectGraph, visualCategory)
         {
-
         }
 
         /// <inheritdoc />
@@ -127,7 +123,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Finds a <see cref="MaterialCore"/> by its name. Returns a default value if the name cannot be found
+        ///     Finds a <see cref="MaterialCore" /> by its name. Returns a default value if the name cannot be found
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -137,7 +133,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="DxDiffuseColor "/> property changed
+        ///     Action that is called if the <see cref="DxDiffuseColor " /> property changed
         /// </summary>
         protected virtual void OnDxDiffuseColorChanged()
         {
@@ -145,7 +141,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called if the<see cref="DiffuseColor"/> property changed
+        ///     Action that is called if the<see cref="DiffuseColor" /> property changed
         /// </summary>
         protected virtual void OnDiffuseColorChanged()
         {
@@ -153,7 +149,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called if the<see cref="MeshQuality"/> property changed
+        ///     Action that is called if the<see cref="MeshQuality" /> property changed
         /// </summary>
         protected virtual void OnMeshQualityChanged()
         {
@@ -161,31 +157,55 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Action that is called if the<see cref="UniformScaling"/> property changed
+        ///     Action that is called if the<see cref="UniformScaling" /> property changed
         /// </summary>
         protected virtual void OnUniformScalingChanged(double oldValue)
         {
             var rescalingMatrix = GetRescalingMatrix(oldValue, UniformScaling);
-            switch (SceneNode)
+            foreach (var sceneNode in SceneNodes) ChangeNodeScaling(sceneNode, ref rescalingMatrix);
+        }
+
+        /// <summary>
+        ///     Changes the scaling of the provided <see cref="SceneNode" /> using a scaling <see cref="Matrix" />
+        /// </summary>
+        /// <param name="sceneNode"></param>
+        /// <param name="rescalingMatrix"></param>
+        protected void ChangeNodeScaling(SceneNode sceneNode, ref Matrix rescalingMatrix)
+        {
+            switch (sceneNode)
             {
                 case MeshNode meshNode:
                     meshNode.ModelMatrix *= rescalingMatrix;
                     break;
                 case BatchedMeshNode batchedNode:
-                    var geometries = batchedNode.Geometries
-                        .Select(x => new BatchedMeshGeometryConfig(x.Geometry, x.ModelTransform * rescalingMatrix, x.MaterialIndex))
-                        .ToArray(batchedNode.Geometries.Length);
+                    var geometries = new BatchedMeshGeometryConfig[batchedNode.Geometries.Length];
+                    for (var i = 0; i < geometries.Length; i++)
+                    {
+                        var config = batchedNode.Geometries[i];
+                        geometries[i] = new BatchedMeshGeometryConfig(config.Geometry, config.ModelTransform * rescalingMatrix, config.MaterialIndex);
+                    }
+
                     batchedNode.Geometries = geometries;
                     break;
             }
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="Material"/> property changed
+        ///     Action that is called if the <see cref="Material" /> property changed
         /// </summary>
         protected virtual void OnMaterialChanged()
         {
-            switch (SceneNode)
+            foreach (var sceneNode in SceneNodes) ChangeNodeMaterial(sceneNode, Material);
+        }
+
+        /// <summary>
+        ///     Changes the <see cref="MaterialCore" /> of the provided <see cref="SceneNode" />
+        /// </summary>
+        /// <param name="sceneNode"></param>
+        /// <param name="material"></param>
+        protected void ChangeNodeMaterial(SceneNode sceneNode, MaterialCore material)
+        {
+            switch (sceneNode)
             {
                 case MeshNode meshNode:
                     meshNode.Material ??= Material;
@@ -208,7 +228,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <summary>
-        ///     Calculates a model <see cref="Matrix"/> to change the scaling of the model
+        ///     Calculates a model <see cref="Matrix" /> to change the scaling of the model
         /// </summary>
         /// <param name="oldValue"></param>
         /// <param name="newValue"></param>
@@ -220,10 +240,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <inheritdoc />
-        protected override void CopyValuesToSceneNode()
+        protected override void CopyCurrentValuesToNode(SceneNode sceneNode)
         {
-            OnMaterialChanged();
-            base.CopyValuesToSceneNode();
+            ChangeNodeMaterial(sceneNode, Material);
+            base.CopyCurrentValuesToNode(sceneNode);
         }
     }
 }

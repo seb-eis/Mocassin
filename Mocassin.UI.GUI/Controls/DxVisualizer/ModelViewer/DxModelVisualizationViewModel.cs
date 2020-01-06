@@ -218,15 +218,23 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             SelectedCustomization = null;
             ModelRenderResourcesViewModel.SetDataSource(null);
 
-            PositionItemConfigs.Clear();
-            TransitionItemConfigs.Clear();
-            PairInteractionItemConfigs.Clear();
-            GroupInteractionItemConfigs.Clear();
-            MiscItemConfigs.Clear();
+            ClearSceneConfigs();
 
             SelectableCustomizations.Clear();
             UnitCellPositionCatalog.Clear();
             SceneHost.ResetScene(false);
+        }
+
+        /// <summary>
+        ///     Disposes and clears all <see cref="IDxSceneItemConfig"/> containers
+        /// </summary>
+        private void ClearSceneConfigs()
+        {
+            PositionItemConfigs.DisposeAllAndClear();
+            TransitionItemConfigs.DisposeAllAndClear();
+            PairInteractionItemConfigs.DisposeAllAndClear();
+            GroupInteractionItemConfigs.DisposeAllAndClear();
+            MiscItemConfigs.DisposeAllAndClear();
         }
 
         /// <summary>
@@ -285,9 +293,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         private void RebuildModelRenderResourceAccess()
         {
-            PositionItemConfigs.Clear();
-            TransitionItemConfigs.Clear();
-            MiscItemConfigs.Clear();
+            PositionItemConfigs.DisposeAllAndClear();
+            TransitionItemConfigs.DisposeAllAndClear();
+            MiscItemConfigs.DisposeAllAndClear();
             ModelRenderResourcesViewModel.SetDataSource(ContentSource?.Resources);
             if (ContentSource == null) return;
             var source = ContentSource.ProjectModelGraph;
@@ -319,8 +327,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         private void RebuildCustomizationRenderResourceAccess()
         {
-            PairInteractionItemConfigs.Clear();
-            GroupInteractionItemConfigs.Clear();
+            PairInteractionItemConfigs.DisposeAllAndClear();
+            GroupInteractionItemConfigs.DisposeAllAndClear();
             if (ContentSource == null || SelectedCustomization == null || ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty)) return;
 
             var source = SelectedCustomization.EnergyModelCustomization;
@@ -723,7 +731,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var sizeCorrections = checkAtoms ? CreatePathAtomSizeCorrections(path) : null;
             for (var i = 1; i < path.Count; i++)
             {
-                var (point1, point2) = (VectorTransformer.ToCartesian(path[i - 1]).ToDxVector(), VectorTransformer.ToCartesian(path[i]).ToDxVector());
+                var point1 = VectorTransformer.ToCartesian(path[i - 1]).ToDxVector();
+                var point2 = VectorTransformer.ToCartesian(path[i]).ToDxVector();
                 if (checkAtoms)
                 {
                     var directionToSecond = (point2 - point1).Normalized();
@@ -827,13 +836,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="noOrientationFlips"></param>
         protected virtual Action<SceneNode> GetSceneNodeConfigurator(IDxSceneItemConfig itemConfig, bool noOrientationFlips = false)
         {
-            var isVisible = itemConfig.IsVisible;
             var cullMode = GetOptimalCullMode(itemConfig.VisualCategory, noOrientationFlips);
 
             void ConfigNodeAndAttach(SceneNode sceneNode)
             {
                 sceneNode.IsHitTestVisible = false;
-                sceneNode.Visible = isVisible;
                 switch (sceneNode)
                 {
                     case BatchedMeshNode batchedMeshNode:
@@ -843,8 +850,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                         meshNode.CullMode = cullMode;
                         break;
                 }
-
-                itemConfig.SceneNode = sceneNode;
+                itemConfig.AttachNode(sceneNode);
             }
 
             return ConfigNodeAndAttach;
@@ -918,6 +924,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <inheritdoc />
         public override void Dispose()
         {
+            ClearContent();
             SceneHost.DetachController();
             SceneHost.Dispose();
             base.Dispose();

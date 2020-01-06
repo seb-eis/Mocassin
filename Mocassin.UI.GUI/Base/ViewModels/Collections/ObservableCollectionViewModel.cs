@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
@@ -86,6 +87,23 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         public void Clear()
         {
             ExecuteOnAppThread(ClearInternal);
+        }
+
+        /// <summary>
+        ///     Calls dispose on all items that implement <see cref="IDisposable"/> and then clears the collection. This call is always executed on the application thread
+        /// </summary>
+        public void DisposeAllAndClear()
+        {
+            ExecuteOnAppThread(DisposeAllAndClearInternal);
+        }
+
+        /// <summary>
+        ///     Internal implementation of <see cref="DisposeAllAndClear"/>
+        /// </summary>
+        protected virtual void DisposeAllAndClearInternal()
+        {
+            foreach (var item in ObservableItems) (item as IDisposable)?.Dispose();
+            ObservableItems.Clear();
         }
 
         /// <summary>
