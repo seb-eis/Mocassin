@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
+using Mocassin.UI.GUI.Properties;
 using SharpDX;
 
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
@@ -133,29 +134,25 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         }
 
         /// <summary>
-        ///     Adds a new <see cref="GroupNode" /> of <see cref="MeshNode" /> transforms sharing a common
-        ///     <see cref="MeshGeometry3D" /> and <see cref="MaterialCore" />
+        ///     Adds a set of of <see cref="MeshNode" /> transforms sharing a common <see cref="MeshGeometry3D" /> and <see cref="MaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
         /// <param name="transforms"></param>
         /// <param name="callback"></param>
-        public void AddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<GroupNode> callback = null)
+        public void AddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<MeshNode> callback = null)
         {
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
             if (transforms == null) throw new ArgumentNullException(nameof(transforms));
-            if (transforms.Count == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(transforms));
+            if (transforms.Count == 0) throw new ArgumentException(Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
 
-            var groupNode = new GroupNode();
             foreach (var matrix in transforms)
             {
                 var node = new MeshNode {Geometry = geometry, Material = material, ModelMatrix = matrix};
-                groupNode.AddChildNode(node);
+                callback?.Invoke(node);
+                AddNode(node);
             }
-
-            callback?.Invoke(groupNode);
-            AddNode(groupNode);
         }
 
         /// <summary>
@@ -167,14 +164,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="callback"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Provided material is not frozen</exception>
-        public Task BeginAddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<GroupNode> callback = null)
+        public Task BeginAddMeshTransforms(MeshGeometry3D geometry, MaterialCore material, IList<Matrix> transforms, Action<MeshNode> callback = null)
         {
             return RunBuildTask(() => AddMeshTransforms(geometry, material, transforms, callback));
         }
 
         /// <summary>
-        ///     Adds a new <see cref="BatchedMeshNode" /> of mesh transforms sharing a common <see cref="MeshGeometry3D" /> and
-        ///     <see cref="MaterialCore" />
+        ///     Adds a new <see cref="BatchedMeshNode" /> of mesh transforms sharing a common <see cref="MeshGeometry3D" /> and <see cref="MaterialCore" />
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="material"></param>
@@ -185,7 +181,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
             if (geometry == null) throw new ArgumentNullException(nameof(geometry));
             if (material == null) throw new ArgumentNullException(nameof(material));
             if (transforms == null) throw new ArgumentNullException(nameof(transforms));
-            if (transforms.Count == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(transforms));
+            if (transforms.Count == 0) throw new ArgumentException(Resources.ErrorMsg_Argument_EmptyCollection, nameof(transforms));
 
             var geometries = new BatchedMeshGeometryConfig[transforms.Count];
             for (var i = 0; i < transforms.Count; i++) geometries[i] = new BatchedMeshGeometryConfig(geometry, transforms[i], 0);

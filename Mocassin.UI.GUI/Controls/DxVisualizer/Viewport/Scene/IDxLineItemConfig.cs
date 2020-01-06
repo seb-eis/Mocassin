@@ -1,7 +1,7 @@
 ﻿using HelixToolkit.Wpf.SharpDX.Model;
 using SharpDX;
 
-namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects
+namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
 {
     /// <summary>
     ///     Represents a view model for manipulation and configuration of display/generation of DX scene line items
@@ -27,5 +27,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects
         ///     Get or set the thickness of the line geometry
         /// </summary>
         double LineThickness { get; set; }
+
+        /// <summary>
+        ///     Creates a new <see cref="LineMaterialCore"/> using the current settings
+        /// </summary>
+        /// <returns></returns>
+        LineMaterialCore CreateMaterial();
     }
 }

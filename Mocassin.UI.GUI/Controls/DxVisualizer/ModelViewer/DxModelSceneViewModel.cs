@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -24,13 +23,13 @@ using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Extensions;
-using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects;
+using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl;
+using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Enums;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper;
-using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects;
-using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
@@ -45,10 +44,9 @@ using SharpDX.Direct3D11;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> that controls object generation and supply for model components to
-    ///     a <see cref="DxViewportViewModel" />
+    ///     The <see cref="ProjectGraphControlViewModel" /> that controls object generation and supply for model components to a <see cref="DxViewportViewModel" />
     /// </summary>
-    public class DxModelVisualizationViewModel : ProjectGraphControlViewModel, IDxSceneController
+    public class DxModelSceneViewModel : ProjectGraphControlViewModel, IDxSceneController
     {
         private ProjectCustomizationGraph selectedCustomization;
         private bool canInvalidateScene = true;
@@ -76,7 +74,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private ISpaceGroupService SpaceGroupService => ModelProject.SpaceGroupService;
 
         /// <summary>
-        ///     Get or set a <see cref="SetList{T}" /> that maps each <see cref="Fractional3D" /> of the unit cell to
+        ///     Get or set a <see cref="SetList{T1}" /> that maps each <see cref="Fractional3D" /> of the unit cell to
         ///     its <see cref="UnitCellPositionGraph" />
         /// </summary>
         private SetList<KeyValuePair<Fractional3D, UnitCellPositionGraph>> UnitCellPositionCatalog { get; }
@@ -87,10 +85,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public IDxSceneHost SceneHost { get; }
 
         /// <summary>
-        ///     Get the <see cref="Visualizer.DataControl.ModelRenderResourcesViewModel" /> that controls the model render
-        ///     resources
+        ///     Get the <see cref="DxModelControlViewModel" /> that controls the model render resources
         /// </summary>
-        public ModelRenderResourcesViewModel ModelRenderResourcesViewModel { get; }
+        public DxModelControlViewModel ModelControlViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of selectable <see cref="ProjectCustomizationGraph" />
@@ -99,29 +96,33 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public ObservableCollectionViewModel<ProjectCustomizationGraph> SelectableCustomizations { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for <see cref="IDxMeshItemConfig"/> accesses for positions
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for <see cref="IDxMeshItemConfig" /> accesses for positions
         /// </summary>
         public ObservableCollectionViewModel<IDxMeshItemConfig> PositionItemConfigs { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for <see cref="IDxMeshItemConfig"/> accesses for transitions
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for <see cref="IDxMeshItemConfig" /> accesses for
+        ///     transitions
         /// </summary>
         public ObservableCollectionViewModel<IDxMeshItemConfig> TransitionItemConfigs { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for <see cref="IDxMeshItemConfig"/> accesses for pair interactions
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for <see cref="IDxMeshItemConfig" /> accesses for pair
+        ///     interactions
         /// </summary>
         public ObservableCollectionViewModel<IDxMeshItemConfig> PairInteractionItemConfigs { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for <see cref="IDxMeshItemConfig"/> accesses for group interactions
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for <see cref="IDxMeshItemConfig" /> accesses for group
+        ///     interactions
         /// </summary>
         public ObservableCollectionViewModel<IDxMeshItemConfig> GroupInteractionItemConfigs { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> for <see cref="IDxSceneItemConfig"/> accesses for misc items
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for <see cref="IDxLineItemConfig" /> accesses for line
+        ///     items
         /// </summary>
-        public ObservableCollectionViewModel<IDxSceneItemConfig> MiscItemConfigs { get; }
+        public ObservableCollectionViewModel<IDxLineItemConfig> LineItemConfigs { get; }
 
         /// <summary>
         ///     Get the <see cref="ICommand" /> to invalidate and rebuild the entire scene
@@ -131,7 +132,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <inheritdoc />
         public IEnumerable<VvmContainer> GetControlContainers()
         {
-            yield return new VvmContainer(new DxViewportSettingsView()) {Name = "Spinner"};
+            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model controls"};
         }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <inheritdoc />
-        public DxModelVisualizationViewModel(IMocassinProjectControl projectControl)
+        public DxModelSceneViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             ModelProject = projectControl.CreateModelProject();
@@ -166,12 +167,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             SelectableCustomizations = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
             InvalidateSceneCommand = new AsyncRelayCommand(async () => await Task.Run(InvalidateSceneInternalAsync), () => CanInvalidateScene);
             UnitCellPositionCatalog = new SetList<KeyValuePair<Fractional3D, UnitCellPositionGraph>>(CreatePositionCatalogComparer());
-            ModelRenderResourcesViewModel = new ModelRenderResourcesViewModel();
             PositionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
             TransitionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
             PairInteractionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
             GroupInteractionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
-            MiscItemConfigs = new ObservableCollectionViewModel<IDxSceneItemConfig>();
+            LineItemConfigs = new ObservableCollectionViewModel<IDxLineItemConfig>();
+            ModelControlViewModel = new DxModelControlViewModel(projectControl, this);
             SceneHost.AttachController(this);
         }
 
@@ -205,6 +206,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             }
 
             ExecuteOnAppThread(() => SelectedCustomization = ContentSource.ProjectCustomizationGraphs.FirstOrDefault());
+            ModelControlViewModel.ChangeContentSource(ContentSource);
             RebuildContentAccess();
             InvalidateScene();
         }
@@ -216,7 +218,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             ContentSource = null;
             SelectedCustomization = null;
-            ModelRenderResourcesViewModel.SetDataSource(null);
+            ModelControlViewModel.ChangeContentSource(null);
 
             ClearSceneConfigs();
 
@@ -226,7 +228,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Disposes and clears all <see cref="IDxSceneItemConfig"/> containers
+        ///     Disposes and clears all <see cref="IDxSceneItemConfig" /> containers
         /// </summary>
         private void ClearSceneConfigs()
         {
@@ -234,7 +236,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             TransitionItemConfigs.DisposeAllAndClear();
             PairInteractionItemConfigs.DisposeAllAndClear();
             GroupInteractionItemConfigs.DisposeAllAndClear();
-            MiscItemConfigs.DisposeAllAndClear();
+            LineItemConfigs.DisposeAllAndClear();
+        }
+
+        /// <summary>
+        ///     Detaches all <see cref="SceneNode" /> instances from their affiliated <see cref="IDxSceneItemConfig" />
+        /// </summary>
+        private void DetachSceneNodesFromConfigs()
+        {
+            PositionItemConfigs.ObservableItems.Action(x => x.DetachAll()).Load();
+            TransitionItemConfigs.ObservableItems.Action(x => x.DetachAll()).Load();
+            PairInteractionItemConfigs.ObservableItems.Action(x => x.DetachAll()).Load();
+            GroupInteractionItemConfigs.ObservableItems.Action(x => x.DetachAll()).Load();
+            LineItemConfigs.ObservableItems.Action(x => x.DetachAll()).Load();
         }
 
         /// <summary>
@@ -295,8 +309,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             PositionItemConfigs.DisposeAllAndClear();
             TransitionItemConfigs.DisposeAllAndClear();
-            MiscItemConfigs.DisposeAllAndClear();
-            ModelRenderResourcesViewModel.SetDataSource(ContentSource?.Resources);
+            LineItemConfigs.DisposeAllAndClear();
             if (ContentSource == null) return;
             var source = ContentSource.ProjectModelGraph;
 
@@ -338,38 +351,66 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Gets the <see cref="IDxMeshItemConfig"/> for the provided <see cref="ExtensibleProjectObjectGraph"/> from the correct container or creates one if required
+        ///     Gets the <see cref="IDxMeshItemConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> from the
+        ///     correct container or creates one if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
         private IDxMeshItemConfig GetMeshItemConfigLazy(ExtensibleProjectObjectGraph objectGraph)
         {
-            IDxMeshItemConfig CreateNew() => new DxProjectMeshObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph)){OnChangeInvalidatesNode = MarkSceneAsInvalid};
-            bool CheckMatch(IDxSceneItemConfig config) => config.CheckAccess(objectGraph);
-            return objectGraph switch
+            IDxMeshItemConfig CreateNew()
             {
-                UnitCellPositionGraph _ => PositionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                PairEnergySetGraph _ => PairInteractionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                KineticTransitionGraph _ => TransitionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                GroupEnergySetGraph _ => GroupInteractionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                _ => throw new InvalidOperationException("Provided object does not support a mesh config.")
-            };
+                return new DxProjectMeshObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph)) {OnChangeInvalidatesNode = MarkSceneAsInvalid};
+            }
+
+            bool CheckMatch(IDxSceneItemConfig config)
+            {
+                return config.CheckAccess(objectGraph);
+            }
+
+            IDxMeshItemConfig FindOrCreateConfig()
+            {
+                return objectGraph switch
+                {
+                    UnitCellPositionGraph _ => PositionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
+                    PairEnergySetGraph _ => PairInteractionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
+                    KineticTransitionGraph _ => TransitionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
+                    GroupEnergySetGraph _ => GroupInteractionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
+                    _ => throw new InvalidOperationException("Provided object does not support a mesh config.")
+                };
+            }
+
+            return ExecuteOnAppThread(FindOrCreateConfig);
         }
 
         /// <summary>
-        ///     Gets the <see cref="IDxLineItemConfig"/> for the provided <see cref="ExtensibleProjectObjectGraph"/> from the correct container or creates one if required
+        ///     Gets the <see cref="IDxLineItemConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> from the
+        ///     correct container or creates one if required
         /// </summary>
         /// <param name="objectGraph"></param>
         /// <returns></returns>
         private IDxLineItemConfig GetLineItemConfigLazy(ExtensibleProjectObjectGraph objectGraph)
         {
-            IDxLineItemConfig CreateNew() => new DxProjectLineObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph)){OnChangeInvalidatesNode = MarkSceneAsInvalid};
-            bool CheckMatch(IDxSceneItemConfig config) => config.CheckAccess(objectGraph);
-            return objectGraph switch
+            IDxLineItemConfig CreateNew()
             {
-                StructureInfoGraph _ => (IDxLineItemConfig) MiscItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                _ => throw new InvalidOperationException("Provided object does not support a line config.")
-            };
+                return new DxProjectLineObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph)) {OnChangeInvalidatesNode = MarkSceneAsInvalid};
+            }
+
+            bool CheckMatch(IDxSceneItemConfig config)
+            {
+                return config.CheckAccess(objectGraph);
+            }
+
+            IDxLineItemConfig FindOrCreateConfig()
+            {
+                return objectGraph switch
+                {
+                    StructureInfoGraph _ => LineItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
+                    _ => throw new InvalidOperationException("Provided object does not support a line config.")
+                };
+            }
+
+            return ExecuteOnAppThread(FindOrCreateConfig);
         }
 
         /// <summary>
@@ -428,12 +469,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             try
             {
                 var watch = Stopwatch.StartNew();
+                DetachSceneNodesFromConfigs();
                 SceneHost.ResetScene(false);
                 var cleanTime = watch.Elapsed.TotalMilliseconds;
                 watch.Restart();
+
                 var sceneModel = await BuildSceneAsync();
                 var buildTime = watch.Elapsed.TotalMilliseconds;
                 watch.Restart();
+
                 SceneHost.AddSceneItem(sceneModel);
                 var setupTime = watch.Elapsed.TotalMilliseconds;
                 PushInfoMessage($"Scene controller CPU info: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
@@ -468,8 +512,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private DxSceneBuilder StartSceneBuilder()
         {
-            ModelRenderResourcesViewModel.LoadSourceData();
-            var renderBox = ModelRenderResourcesViewModel.GetRenderBox3D();
+            ModelControlViewModel.LoadSourceData();
+            var renderBox = ModelControlViewModel.GetRenderBox3D();
             var sceneBuilder = new DxSceneBuilder(100);
             StartCellFrameSceneNodeBuilding(sceneBuilder, renderBox);
             StartCellPositionSceneNodeBuilding(sceneBuilder, renderBox);
@@ -487,7 +531,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private void AddCellFrameSceneNode(DxSceneBuilder sceneBuilder, in FractionalBox3D renderBox)
         {
             var sceneConfig = GetLineItemConfigLazy(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
-            var material = new LineMaterialCore {LineColor = sceneConfig.Color.ToColor4(), Thickness = (float) sceneConfig.LineThickness};
+            var material = sceneConfig.CreateMaterial();
             var matrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
 
             var lineBuilder = new LineBuilder();
@@ -550,7 +594,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var matrices = GetPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
             var itemConfig = GetMeshItemConfigLazy(positionGraph);
             var geometry = CreateAtomGeometry(itemConfig);
-            var material = itemConfig.Material;
+            var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, true);
             AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
@@ -588,7 +632,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var matrices = GetPathSceneItemTransforms(path, renderBox, out var anyFlipsOrientation);
             var itemConfig = GetMeshItemConfigLazy(transitionGraph);
             var geometry = CreateTransitionGeometry(itemConfig, path);
-            var material = itemConfig.Material;
+            var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
             AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
@@ -669,8 +713,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
             CheckCellPositionHit(path[0], out IDxMeshItemConfig atomConfig1);
             CheckCellPositionHit(path[1], out IDxMeshItemConfig atomConfig2);
-            var material1 = atomConfig1.Material;
-            var material2 = atomConfig2.Material;
+
+            var material1 = atomConfig1.CreateMaterial();
+            var material2 = ReferenceEquals(atomConfig1, atomConfig2) ? material1 : atomConfig2.CreateMaterial();
+
             var configurator1 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips1);
             var configurator2 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips2);
 
@@ -751,7 +797,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private double[] CreatePathAtomSizeCorrections(IList<Fractional3D> path)
+        private double[] CreatePathAtomSizeCorrections(ICollection<Fractional3D> path)
         {
             var sceneConfigs = path.Select(x => CheckCellPositionHit(x, out IDxMeshItemConfig y) ? y : null).ToArray(path.Count);
             var result = new double[sceneConfigs.Length];
@@ -830,17 +876,21 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get a configuration and attachment callback <see cref="Action{T}" /> for a <see cref="SceneNode" /> using the provided <see cref="IDxSceneItemConfig" />
+        ///     Get a configuration and attachment callback <see cref="Action{T}" /> for a <see cref="SceneNode" /> using the
+        ///     provided <see cref="IDxSceneItemConfig" />
         /// </summary>
         /// <param name="itemConfig"></param>
         /// <param name="noOrientationFlips"></param>
         protected virtual Action<SceneNode> GetSceneNodeConfigurator(IDxSceneItemConfig itemConfig, bool noOrientationFlips = false)
         {
             var cullMode = GetOptimalCullMode(itemConfig.VisualCategory, noOrientationFlips);
+            var isVisible = itemConfig.IsVisible;
 
             void ConfigNodeAndAttach(SceneNode sceneNode)
             {
                 sceneNode.IsHitTestVisible = false;
+                sceneNode.Visible = isVisible;
+
                 switch (sceneNode)
                 {
                     case BatchedMeshNode batchedMeshNode:
@@ -850,19 +900,23 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                         meshNode.CullMode = cullMode;
                         break;
                 }
-                itemConfig.AttachNode(sceneNode);
+
+                itemConfig.AttachNode(sceneNode, true);
             }
 
             return ConfigNodeAndAttach;
         }
 
         /// <summary>
-        ///     Get the optimal <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when using the <see cref="MeshBuilder" />
+        ///     Get the optimal <see cref="CullMode" /> for a <see cref="VisualObjectCategory" /> when using the basic <see cref="MeshBuilder" />
         /// </summary>
         /// <param name="objectCategory"></param>
         /// <param name="noOrientationFlips"></param>
         /// <returns></returns>
-        /// <remarks>More optimal values can be provided if it is ensured that triangles orientation does not change due to the model transform</remarks>
+        /// <remarks>
+        ///     More optimal values can be provided if it is ensured that triangles orientation does not change due to the
+        ///     model transform
+        /// </remarks>
         protected virtual CullMode GetOptimalCullMode(VisualObjectCategory objectCategory, bool noOrientationFlips = false)
         {
             if (!noOrientationFlips) return CullMode.None;
@@ -876,7 +930,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 VisualObjectCategory.Cube => CullMode.Back,
                 VisualObjectCategory.DoubleArrow => CullMode.Back,
                 VisualObjectCategory.SingleArrow => CullMode.Back,
-                VisualObjectCategory.Cylinder =>CullMode.Back,
+                VisualObjectCategory.Cylinder => CullMode.Back,
                 _ => throw new ArgumentOutOfRangeException(nameof(objectCategory), objectCategory, null)
             };
         }
@@ -912,7 +966,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Creates a <see cref="IComparer{T}"/> to sort and search the position catalog
+        ///     Creates a <see cref="IComparer{T}" /> to sort and search the position catalog
         /// </summary>
         /// <returns></returns>
         private IComparer<KeyValuePair<Fractional3D, UnitCellPositionGraph>> CreatePositionCatalogComparer()

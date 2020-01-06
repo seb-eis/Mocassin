@@ -29,14 +29,14 @@
                             IsOpen="{Binding IsSettingsOverlayActive, Mode=OneWay}">
           <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#aaffffff"
                         Height="{Binding ElementName=PrimaryGrid, Path=ActualHeight}">
-            <local:DxViewportSettingsView DataContext="{Binding}" Margin="5,0,2,0"/>
+            <local:DxViewportSettingsView DataContext="{Binding}" Margin="5,0,2,0" MinWidth="250"/>
           </ScrollViewer>
         </popup:ControlOverlay>
         <popup:ControlOverlay Grid.Row="0" AllowsTransparency="True" Placement="Right" PopupAnimation="Fade"
                               IsOpen="{Binding IsControlHostOverlayActive, Mode=OneWay}">
           <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#aaffffff"
                         Height="{Binding ElementName=PrimaryGrid, Path=ActualHeight}">
-            <local:DxViewportControlHostView DataContext="{Binding}" Margin="0,0,0,-2"/>
+            <local:DxViewportControlHostView DataContext="{Binding}" Margin="0,0,0,-2" MinWidth="250"/>
           </ScrollViewer>
         </popup:ControlOverlay>
         <WrapPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Vertical">

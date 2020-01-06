@@ -115,6 +115,15 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value cannot be an empty collection..
+        /// </summary>
+        public static string ErrorMsg_Argument_EmptyCollection {
+            get {
+                return ResourceManager.GetString("ErrorMsg_Argument_EmptyCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mocassin.Project.Settings.Global.xml.
         /// </summary>
         public static string Filename_Project_Default_Configuration {

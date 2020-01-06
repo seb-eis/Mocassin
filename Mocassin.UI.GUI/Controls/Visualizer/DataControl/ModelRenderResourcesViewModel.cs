@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private static string RenderAreaResourceKey => Resources.ResourceKey_ModelViewport_RenderArea;
         private static CultureInfo CultureDefault => CultureInfo.InvariantCulture;
         private static double[] RenderAreaDefault => new double[] {0, 0, 0, 1, 1, 1};
-        private double[] renderAreaValues { get; }
+        private double[] RenderAreaValues { get; }
 
         /// <summary>
         ///     Get the <see cref="ResourcesGraph" /> that is used as a data source
@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public double RenderAreaMinA
         {
-            get => renderAreaValues[0];
+            get => RenderAreaValues[0];
             set => SetRenderAreaValue(value, 0);
         }
 
@@ -41,7 +41,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public double RenderAreaMinB
         {
-            get => renderAreaValues[1];
+            get => RenderAreaValues[1];
             set => SetRenderAreaValue(value, 1);
         }
 
@@ -50,7 +50,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public double RenderAreaMinC
         {
-            get => renderAreaValues[2];
+            get => RenderAreaValues[2];
             set => SetRenderAreaValue(value, 2);
         }
 
@@ -59,7 +59,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public double RenderAreaMaxA
         {
-            get => renderAreaValues[3];
+            get => RenderAreaValues[3];
             set => SetRenderAreaValue(value, 3);
         }
 
@@ -68,7 +68,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public double RenderAreaMaxB
         {
-            get => renderAreaValues[4];
+            get => RenderAreaValues[4];
             set => SetRenderAreaValue(value, 4);
         }
 
@@ -77,7 +77,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public double RenderAreaMaxC
         {
-            get => renderAreaValues[5];
+            get => RenderAreaValues[5];
             set => SetRenderAreaValue(value, 5);
         }
 
@@ -87,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         public ModelRenderResourcesViewModel()
         {
             DataSource = new ResourcesGraph();
-            renderAreaValues = RenderAreaDefault;
+            RenderAreaValues = RenderAreaDefault;
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="callerMemberName"></param>
         private void SetRenderAreaValue(double value, int index, [CallerMemberName] string callerMemberName = default)
         {
-            renderAreaValues[index] = value;
-            DataSource.SetResource(Resources.ResourceKey_ModelViewport_RenderArea, renderAreaValues, CreateRenderAreaString);
+            RenderAreaValues[index] = value;
+            DataSource.SetResource(Resources.ResourceKey_ModelViewport_RenderArea, RenderAreaValues, CreateRenderAreaString);
             OnPropertyChanged(callerMemberName);
         }
 
@@ -166,12 +166,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// <param name="values"></param>
         private void SetRenderAreaNoSaving(IReadOnlyList<double> values)
         {
-            renderAreaValues[0] = values[0];
-            renderAreaValues[1] = values[1];
-            renderAreaValues[2] = values[2];
-            renderAreaValues[3] = values[3];
-            renderAreaValues[4] = values[4];
-            renderAreaValues[5] = values[5];
+            RenderAreaValues[0] = values[0];
+            RenderAreaValues[1] = values[1];
+            RenderAreaValues[2] = values[2];
+            RenderAreaValues[3] = values[3];
+            RenderAreaValues[4] = values[4];
+            RenderAreaValues[5] = values[5];
             OnPropertyChanged(nameof(RenderAreaMinA));
             OnPropertyChanged(nameof(RenderAreaMinB));
             OnPropertyChanged(nameof(RenderAreaMinC));

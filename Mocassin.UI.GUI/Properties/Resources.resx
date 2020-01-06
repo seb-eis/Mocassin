@@ -181,4 +181,7 @@
   <data name="Viewer3D_Error_Visual_Generation" xml:space="preserve">
     <value>An exception occured during generation of the 3D model. This is most likley caused by ill defined geometry in one or more of the data sources.</value>
   </data>
+  <data name="ErrorMsg_Argument_EmptyCollection" xml:space="preserve">
+    <value>Value cannot be an empty collection.</value>
+  </data>
 </root>

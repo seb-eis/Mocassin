@@ -2,7 +2,7 @@
 using SharpDX;
 using Color = System.Windows.Media.Color;
 
-namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects
+namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
 {
     /// <summary>
     ///     Represents a view model for manipulation and configuration of display/generation of DX scene mesh items
@@ -33,5 +33,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects
         ///     Get or set a factor for the uniform mesh scaling (1.0 is the default quality)
         /// </summary>
         double UniformScaling { get; set; }
+
+        /// <summary>
+        ///     Creates a new <see cref="MaterialCore"/> of using the current material and color
+        /// </summary>
+        /// <returns></returns>
+        MaterialCore CreateMaterial();
     }
 }

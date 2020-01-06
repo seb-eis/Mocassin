@@ -7,7 +7,7 @@ using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Mathematics.Extensions;
-using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
@@ -15,7 +15,7 @@ using SharpDX;
 using Color = System.Windows.Media.Color;
 using Matrix = SharpDX.Matrix;
 
-namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
+namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {
     /// <summary>
     ///     Implementation of the <see cref="DxProjectObjectSceneConfig" /> extended by the <see cref="IDxMeshItemConfig" />
@@ -122,6 +122,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             return sceneNode is MeshNode || sceneNode is BatchedMeshNode;
         }
 
+        /// <inheritdoc />
+        public MaterialCore CreateMaterial()
+        {
+            var material = FindMaterial(Material.Name).Core;
+            UpdateMaterialColor(material);
+            return material;
+        }
+
         /// <summary>
         ///     Finds a <see cref="MaterialCore" /> by its name. Returns a default value if the name cannot be found
         /// </summary>
@@ -129,7 +137,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// <returns></returns>
         private Material FindMaterial(string name)
         {
-            return MaterialCatalog.TryGetValue(name, out var result) ? result : MaterialCatalog[nameof(PhongMaterials.DefaultVRML)];
+            var material = MaterialCatalog.TryGetValue(name, out var result) ? result : MaterialCatalog[nameof(PhongMaterials.DefaultVRML)];
+            return material.ConvertToPhongMaterial();
         }
 
         /// <summary>
@@ -161,6 +170,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         protected virtual void OnUniformScalingChanged(double oldValue)
         {
+            //OnChangeInvalidatesNode?.Invoke();
+            //return;
+            // Note: Direct scaling currently not supported as the scaling operation is much more complex
+
             var rescalingMatrix = GetRescalingMatrix(oldValue, UniformScaling);
             foreach (var sceneNode in SceneNodes) ChangeNodeScaling(sceneNode, ref rescalingMatrix);
         }
@@ -175,7 +188,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             switch (sceneNode)
             {
                 case MeshNode meshNode:
-                    meshNode.ModelMatrix *= rescalingMatrix;
+                    var originShiftMatrix = Matrix.Translation(-meshNode.ModelMatrix.TranslationVector);
+                    var backShift = Matrix.Translation(meshNode.ModelMatrix.TranslationVector);
+                    meshNode.ModelMatrix *= originShiftMatrix * rescalingMatrix * backShift;
                     break;
                 case BatchedMeshNode batchedNode:
                     var geometries = new BatchedMeshGeometryConfig[batchedNode.Geometries.Length];
@@ -195,7 +210,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         protected virtual void OnMaterialChanged()
         {
-            foreach (var sceneNode in SceneNodes) ChangeNodeMaterial(sceneNode, Material);
+            var material = CreateMaterial();
+            foreach (var sceneNode in SceneNodes) ChangeNodeMaterial(sceneNode, material);
         }
 
         /// <summary>
@@ -208,12 +224,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
             switch (sceneNode)
             {
                 case MeshNode meshNode:
-                    meshNode.Material ??= Material;
-                    UpdateMaterialColor(meshNode.Material);
+                    meshNode.Material = material;
                     break;
                 case BatchedMeshNode batchedNode:
-                    batchedNode.Material ??= Material;
-                    UpdateMaterialColor(batchedNode.Material);
+                    batchedNode.Material = material;
                     break;
             }
         }

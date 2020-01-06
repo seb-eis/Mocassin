@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.UI.GUI.Base.ViewModels;
-using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
 
-namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
+namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {
     /// <summary>
     ///     Base class for <see cref="IDxSceneItemConfig"/> implementations for <see cref="ExtensibleProjectObjectGraph"/>
@@ -107,10 +107,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private bool ThrowIfNodeNullOrUnsupported(SceneNode node)
+        private void ThrowIfNodeNullOrNotSupported(SceneNode node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
-            return CheckSupport(node) ? true : throw new NotSupportedException("The provided scene node is not supported.");
+            if (!CheckSupport(node)) throw new NotSupportedException($"The provided scene node ({node.GetType()}) is not supported.");
         }
 
         /// <summary>
@@ -121,11 +121,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         public abstract bool CheckSupport(SceneNode node);
 
         /// <inheritdoc />
-        public void AttachNode(SceneNode sceneNode)
+        public void AttachNode(SceneNode sceneNode, bool isPreConfigured = false)
         {
-            ThrowIfNodeNullOrUnsupported(sceneNode);
+            ThrowIfNodeNullOrNotSupported(sceneNode);
             if (SceneNodes.Contains(sceneNode)) return;
-            CopyCurrentValuesToNode(sceneNode);
+            if (!isPreConfigured) CopyCurrentValuesToNode(sceneNode);
             SceneNodes.Add(sceneNode);
         }
 
@@ -179,8 +179,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// <inheritdoc />
         public void Dispose()
         {
-            OnChangeInvalidatesNode = null;
             DetachAll();
+            OnChangeInvalidatesNode = null;
         }
     }
 }

@@ -1,16 +1,17 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Model;
 using HelixToolkit.Wpf.SharpDX.Model.Scene;
 using Mocassin.Mathematics.Extensions;
-using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Objects;
+using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.Objects;
 using Mocassin.UI.GUI.Properties;
 using Mocassin.UI.Xml.Base;
 using SharpDX;
 using Color = System.Windows.Media.Color;
 
-namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
+namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {
     /// <summary>
     ///     Implementation of the <see cref="DxProjectObjectSceneConfig" /> extended by the <see cref="IDxLineItemConfig" />
@@ -18,7 +19,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
     /// </summary>
     public class DxProjectLineObjectSceneConfig : DxProjectObjectSceneConfig, IDxLineItemConfig
     {
-        private LineMaterialCore material = new LineMaterialCore();
+        private readonly LineMaterialCore material = new LineMaterialCore();
         private static string ColorKey => Resources.ResourceKey_ModelObject_RenderColor;
         private static string LineThicknessKey => Resources.ResourceKey_ModelObject_RenderScaling;
 
@@ -26,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         public LineMaterialCore Material
         {
             get => material;
-            set => SetProperty(ref material, value, OnMaterialChanged);
+            set => throw new NotSupportedException("Setting the material to a custom value is currently not supported.");
         }
 
         /// <inheritdoc />
@@ -68,6 +69,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         }
 
         /// <inheritdoc />
+        public LineMaterialCore CreateMaterial()
+        {
+            return new LineMaterialCore {LineColor = DxColor, Thickness = (float) LineThickness};
+        }
+
+        /// <inheritdoc />
         public DxProjectLineObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
             : base(objectGraph, visualCategory)
         {
@@ -78,8 +85,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         protected virtual void OnLineThicknessChanged()
         {
-            if (Material == null) return;
-            Material.Thickness = (float) LineThickness;
+            OnMaterialChanged();
         }
 
         /// <summary>
@@ -95,8 +101,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         protected virtual void OnColorChanged()
         {
-            if (Material == null) return;
-            Material.LineColor = DxColor;
+            OnMaterialChanged();
         }
 
         /// <summary>
@@ -104,19 +109,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// </summary>
         protected virtual void OnMaterialChanged()
         {
-            foreach (var sceneNode in SceneNodes) ChangeNodeMaterial((LineNode) sceneNode);
+            var lineMaterial = CreateMaterial();
+            foreach (var sceneNode in SceneNodes) ChangeNodeMaterial((LineNode) sceneNode, lineMaterial);
         }
 
         /// <summary>
-        ///     Changes the material of the provided <see cref="LineNode" /> to the current config
+        ///     Changes the material of the provided <see cref="LineNode" /> to the provided <see cref="LineMaterialCore" />
         /// </summary>
         /// <param name="lineNode"></param>
-        protected void ChangeNodeMaterial(LineNode lineNode)
+        /// <param name="lineMaterial"></param>
+        protected void ChangeNodeMaterial(LineNode lineNode, LineMaterialCore lineMaterial)
         {
             if (lineNode == null || material == null) return;
-            Material.LineColor = DxColor;
-            Material.Thickness = (float) LineThickness;
-            lineNode.Material = Material;
+            lineNode.Material = lineMaterial;
         }
 
         /// <inheritdoc />
@@ -128,7 +133,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Objects
         /// <inheritdoc />
         protected override void CopyCurrentValuesToNode(SceneNode sceneNode)
         {
-            ChangeNodeMaterial((LineNode) sceneNode);
+            ChangeNodeMaterial((LineNode) sceneNode, Material);
             base.CopyCurrentValuesToNode(sceneNode);
         }
     }

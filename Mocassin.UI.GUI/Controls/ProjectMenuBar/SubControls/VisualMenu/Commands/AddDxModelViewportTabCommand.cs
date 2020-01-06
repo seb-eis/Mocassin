@@ -6,7 +6,7 @@ using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer;
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Commands
 {
     /// <summary>
-    ///     A <see cref="AddDefaultLayoutControlTabCommand" /> for adding a new <see cref="DxModelVisualizationView" /> tab
+    ///     A <see cref="AddDefaultLayoutControlTabCommand" /> for adding a new <see cref="DxModelSceneView" /> tab
     ///     that is based on SharpDX
     /// </summary>
     public class AddDxModelViewportTabCommand : AddDefaultLayoutControlTabCommand
@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
         /// <inheritdoc />
         protected override ContentControl GetDataControl()
         {
-            return new DxModelVisualizationView {DataContext = new DxModelVisualizationViewModel(ProjectControl)};
+            return new DxModelSceneView {DataContext = new DxModelSceneViewModel(ProjectControl)};
         }
 
         /// <inheritdoc />
