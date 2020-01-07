@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
         bool IsVisible { get; set; }
 
         /// <summary>
-        ///     Get or set a boolean flag if the item is inactive
+        ///     Get or set a boolean flag if the item is inactive and should be ignored on a scene rebuild
         /// </summary>
         bool IsInactive { get; set; }
 

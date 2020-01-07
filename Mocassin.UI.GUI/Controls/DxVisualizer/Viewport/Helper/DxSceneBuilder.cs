@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -16,8 +17,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
     /// </summary>
     public class DxSceneBuilder
     {
-        private object NodeContainerLock { get; } = new object();
-        private object BuildTasksLock { get; } = new object();
+        private object NodeCollectionLock { get; } = new object();
+        private object BuildTaskCollectionLock { get; } = new object();
 
         /// <summary>
         ///     Get or set a boolean flag if a model building call is in progress
@@ -51,7 +52,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         public void AddNode(SceneNode node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
-            lock (NodeContainerLock)
+            lock (NodeCollectionLock)
             {
                 SceneNodes.Add(node);
             }
@@ -104,7 +105,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         {
             dispatcher ??= Application.Current.Dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             IsCreatingModel = true;
-            if (ActiveBuildTasks.Count != 0) await Task.WhenAll(ActiveBuildTasks);
+            if (ActiveBuildTasks.Count != 0) await GetBuildAwaitTask();
             var result = dispatcher.CheckAccess() ? CreateModel() : dispatcher.Invoke(CreateModel);
             if (clear) ClearNodes();
             IsCreatingModel = false;
@@ -127,7 +128,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// </summary>
         public void ClearNodes()
         {
-            lock (NodeContainerLock)
+            lock (NodeCollectionLock)
             {
                 SceneNodes.Clear();
             }
@@ -261,7 +262,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="task"></param>
         private void AttachBuildTask(Task task)
         {
-            lock (BuildTasksLock)
+            lock (BuildTaskCollectionLock)
             {
                 if (IsCreatingModel) throw new InvalidOperationException("Cannot add scene node build tasks while the builder is creating a model.");
                 ActiveBuildTasks.Add(task);
@@ -274,9 +275,21 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         /// <param name="task"></param>
         private void DetachBuildTask(Task task)
         {
-            lock (BuildTasksLock)
+            lock (BuildTaskCollectionLock)
             {
                 ActiveBuildTasks.Remove(task);
+            }
+        }
+
+        /// <summary>
+        ///     Get a <see cref="Task"/> to await completion fo all active build tasks
+        /// </summary>
+        /// <returns></returns>
+        private Task GetBuildAwaitTask()
+        {
+            lock (BuildTaskCollectionLock)
+            {
+                return Task.WhenAll(ActiveBuildTasks.ToList());
             }
         }
     }

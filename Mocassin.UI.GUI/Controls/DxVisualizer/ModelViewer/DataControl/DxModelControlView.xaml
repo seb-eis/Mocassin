@@ -4,9 +4,51 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl"
+             xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
+             xmlns:converter="clr-namespace:Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converter"
+             xmlns:scene="clr-namespace:Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:DxModelControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
+  <UserControl.Resources>
+    <converter:PhongMaterialCoreToStringConverter x:Key="Local.PhongMaterialCoreToStringConverter" />
+    <Style TargetType="{x:Type DataGrid}">
+      <Setter Property="CanUserAddRows" Value="False" />
+      <Setter Property="CanUserDeleteRows" Value="False" />
+      <Setter Property="RowBackground" Value="Transparent" />
+      <Setter Property="AlternatingRowBackground" Value="Transparent" />
+      <Setter Property="AutoGenerateColumns" Value="False" />
+      <Setter Property="ColumnWidth" Value="Auto" />
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}" x:Key="Local.DataTemplate.MeshColorColumnCellTemplate">
+      <Grid>
+        <TextBlock Text="{Binding DiffuseColor}" Background="Transparent" HorizontalAlignment="Left" />
+        <Rectangle Height="16" Width="16" HorizontalAlignment="Right" Stroke="Black">
+          <Rectangle.Fill>
+            <SolidColorBrush Color="{Binding DiffuseColor, Mode=OneWay}" />
+          </Rectangle.Fill>
+        </Rectangle>
+      </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}" x:Key="Local.DataTemplate.MeshColorColumnCellEditingTemplate">
+      <TextBox Text="{Binding DiffuseColor}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type scene:IDxLineItemConfig}" x:Key="Local.DataTemplate.LineColorColumnCellTemplate">
+      <Grid>
+        <TextBlock Text="{Binding Color}" Background="Transparent" HorizontalAlignment="Left" />
+        <Rectangle Height="16" Width="16" HorizontalAlignment="Right" Stroke="Black">
+          <Rectangle.Fill>
+            <SolidColorBrush Color="{Binding Color, Mode=OneWay}" />
+          </Rectangle.Fill>
+        </Rectangle>
+      </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type scene:IDxLineItemConfig}" x:Key="Local.DataTemplate.LineColorColumnCellEditingTemplate">
+      <TextBox Text="{Binding Color}" />
+    </DataTemplate>
+  </UserControl.Resources>
+
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="10*" />
@@ -19,11 +61,13 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="20" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Row="0" Grid.Column="0" Text="Visible range A:" Margin="{StaticResource App.Margin.VerticalStack}" />
+    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Text="Visible range A:" Margin="{StaticResource App.Margin.VerticalStack}" />
     <TextBox Grid.Row="0" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding RenderResourcesViewModel.RenderAreaMinA, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
     <TextBlock Grid.Row="0" Grid.Column="3" Margin="{StaticResource App.Margin.VerticalStack}"
@@ -49,30 +93,55 @@
                Text="-" />
     <TextBox Grid.Row="2" Grid.Column="4" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
              Text="{Binding RenderResourcesViewModel.RenderAreaMaxC, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+    
+    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5"
+               Text="Info: Scene is currently marked as invalid and requires rebuilding." Foreground="Red" FontSize="14"
+               Visibility="{Binding SceneIsInvalid, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
 
-    <DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" Margin="{StaticResource App.Margin.VerticalStack}"
-              ItemsSource="{Binding PositionItemConfigs.ObservableItems}"
-              AutoGenerateColumns="False" ColumnWidth="Auto"
-              CanUserDeleteRows="False" CanUserAddRows="False">
+    <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Margin="{StaticResource App.Margin.VerticalStack}"
+              ItemsSource="{Binding LineItemConfigs.ObservableItems}">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-        <DataGridTextColumn Header="Category" Binding="{Binding VisualCategory, Mode=OneWay}" />
-        <DataGridTextColumn Header="Color (Diffuse)" Binding="{Binding DiffuseColor}" />
-        <DataGridTextColumn Header="Radius" Binding="{Binding UniformScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}"/>
+        <DataGridTextColumn Header="Name (Structure)" Binding="{Binding Name}" Width="180"/>
+        <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+                                CellTemplate="{StaticResource Local.DataTemplate.LineColorColumnCellTemplate}"
+                                CellEditingTemplate="{StaticResource Local.DataTemplate.LineColorColumnCellEditingTemplate}"/>
+        <DataGridTextColumn Header="Thickness" Binding="{Binding LineThickness, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
         <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
+        <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
       </DataGrid.Columns>
     </DataGrid>
 
-    <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5"
-              ItemsSource="{Binding LineItemConfigs.ObservableItems}"
-              AutoGenerateColumns="False" ColumnWidth="Auto"
-              CanUserDeleteRows="False" CanUserAddRows="False">
+    <DataGrid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="{StaticResource App.Margin.VerticalStack}" 
+              ItemsSource="{Binding PositionItemConfigs.ObservableItems}">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Category" Binding="{Binding VisualCategory, Mode=OneWay}" />
-        <DataGridTextColumn Header="Color (Diffuse)" Binding="{Binding Color}" />
-        <DataGridTextColumn Header="Thickness" Binding="{Binding LineThickness, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+        <DataGridTextColumn Header="Name (Position)" Binding="{Binding Name}" Width="180"/>
+        <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+                                CellTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellTemplate}"
+                                CellEditingTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellEditingTemplate}"/>
+        <comboBox:BindableDataGridComboBoxColumn Header="Material"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.MeshMaterialNames}" 
+                                                 SelectedItemBinding="{Binding Material, Converter={StaticResource Local.PhongMaterialCoreToStringConverter}}"/>
+        <DataGridTextColumn Header="Radius" Binding="{Binding MeshScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}"/>
+        <DataGridTextColumn Header="Quality" Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}"/>
         <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
+        <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <DataGrid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5"
+              ItemsSource="{Binding TransitionItemConfigs.ObservableItems}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name (Transition)" Binding="{Binding Name}" Width="180"/>
+        <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+                                CellTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellTemplate}"
+                                CellEditingTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellEditingTemplate}"/>
+        <comboBox:BindableDataGridComboBoxColumn Header="Material"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.MeshMaterialNames}" 
+                                                 SelectedItemBinding="{Binding Material, Converter={StaticResource Local.PhongMaterialCoreToStringConverter}}"/>
+        <DataGridTextColumn Header="Radius" Binding="{Binding MeshScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}"/>
+        <DataGridTextColumn Header="Quality" Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}"/>
+        <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
+        <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

@@ -146,10 +146,10 @@ namespace Mocassin.Framework.Extensions
         /// <param name="constructor"></param>
         /// <param name="addNewToSource"></param>
         /// <returns></returns>
-        public static T FirstOrNew<T>(this ICollection<T> collection, Func<T, bool> predicate, Func<T> constructor, bool addNewToSource = true) where T : class
+        public static T FirstOrNew<T>(this ICollection<T> collection, Func<T, bool> predicate, Func<T> constructor, bool addNewToSource = true)
         {
             var result = collection.FirstOrDefault(predicate);
-            if (result != null) return result;
+            if (result != null && !typeof(T).IsValueType || typeof(T).IsValueType && collection.Any(predicate)) return result;
             result = constructor.Invoke();
             if (addNewToSource) collection.Add(result);
             return result;

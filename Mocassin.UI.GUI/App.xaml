@@ -267,8 +267,7 @@
                 <Path x:Name="SortArrow" Visibility="Collapsed" Data="M 0,0 L 1,0 0.5,1 z" Stretch="Fill"
                       Grid.Column="1" Width="8" Height="6" Fill="Black" Margin="0,0,8,0"
                       VerticalAlignment="Center" RenderTransformOrigin="0.5, 0.4" />
-                <Rectangle Grid.Column="0" Width="1" Fill="#EEEEEE" HorizontalAlignment="Right" Grid.ColumnSpan="2" />
-                <Rectangle Grid.Column="0" Width="1" Margin="0,0,1,0" Fill="#DDDDDD" HorizontalAlignment="Right" Grid.ColumnSpan="2" />
+                <Rectangle Grid.Column="0" Width="1" Fill="#FF808080" HorizontalAlignment="Right" Grid.ColumnSpan="2" />
                 <Thumb x:Name="PART_LeftHeaderGripper"  Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource App.Style.ColumnHeader.ThumbStyle}" />
                 <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" HorizontalAlignment="Right"
                        Style="{StaticResource App.Style.ColumnHeader.ThumbStyle}" />

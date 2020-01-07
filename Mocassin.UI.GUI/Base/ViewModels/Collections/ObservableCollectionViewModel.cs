@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Collections
 {
@@ -95,6 +96,22 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         public void DisposeAllAndClear()
         {
             ExecuteOnAppThread(DisposeAllAndClearInternal);
+        }
+
+        /// <summary>
+        ///     Get the first occurence of item <see cref="T"/> that matches the predicate or creates a new one if no match is found. By default the new item is added to the collection
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="constructor"></param>
+        /// <param name="addNewToCollection"></param>
+        /// <returns></returns>
+        public T FirstOrNew(Func<T, bool> predicate, Func<T> constructor, bool addNewToCollection = true)
+        {
+            var result = ObservableItems.FirstOrDefault(predicate);
+            if (result != null && !typeof(T).IsValueType || typeof(T).IsValueType && ObservableItems.Any(predicate)) return result;
+            result = constructor.Invoke();
+            if (addNewToCollection) AddItem(result);
+            return result;
         }
 
         /// <summary>

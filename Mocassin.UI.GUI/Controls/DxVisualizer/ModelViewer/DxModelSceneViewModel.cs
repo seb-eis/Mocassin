@@ -132,7 +132,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <inheritdoc />
         public IEnumerable<VvmContainer> GetControlContainers()
         {
-            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model controls"};
+            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model configuration"};
         }
 
         /// <summary>
@@ -360,7 +360,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             IDxMeshItemConfig CreateNew()
             {
-                return new DxProjectMeshObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph)) {OnChangeInvalidatesNode = MarkSceneAsInvalid};
+                return new DxProjectMeshObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph))
+                {
+                    OnChangeInvalidatesNode = MarkSceneAsInvalid,
+                    CanResizeMeshAtOrigin = objectGraph is UnitCellPositionGraph
+                };
             }
 
             bool CheckMatch(IDxSceneItemConfig config)
@@ -368,19 +372,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 return config.CheckAccess(objectGraph);
             }
 
-            IDxMeshItemConfig FindOrCreateConfig()
+            return objectGraph switch
             {
-                return objectGraph switch
-                {
-                    UnitCellPositionGraph _ => PositionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                    PairEnergySetGraph _ => PairInteractionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                    KineticTransitionGraph _ => TransitionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                    GroupEnergySetGraph _ => GroupInteractionItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                    _ => throw new InvalidOperationException("Provided object does not support a mesh config.")
-                };
-            }
-
-            return ExecuteOnAppThread(FindOrCreateConfig);
+                UnitCellPositionGraph _ => PositionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                PairEnergySetGraph _ => PairInteractionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                KineticTransitionGraph _ => TransitionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                GroupEnergySetGraph _ => GroupInteractionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                _ => throw new InvalidOperationException("Provided object does not support a mesh config.")
+            };
         }
 
         /// <summary>
@@ -401,16 +400,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 return config.CheckAccess(objectGraph);
             }
 
-            IDxLineItemConfig FindOrCreateConfig()
+            return objectGraph switch
             {
-                return objectGraph switch
-                {
-                    StructureInfoGraph _ => LineItemConfigs.ObservableItems.FirstOrNew(CheckMatch, CreateNew),
-                    _ => throw new InvalidOperationException("Provided object does not support a line config.")
-                };
-            }
-
-            return ExecuteOnAppThread(FindOrCreateConfig);
+                StructureInfoGraph _ => LineItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                _ => throw new InvalidOperationException("Provided object does not support a line config.")
+            };
         }
 
         /// <summary>
@@ -530,8 +524,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void AddCellFrameSceneNode(DxSceneBuilder sceneBuilder, in FractionalBox3D renderBox)
         {
-            var sceneConfig = GetLineItemConfigLazy(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
-            var material = sceneConfig.CreateMaterial();
+            var itemConfig = GetLineItemConfigLazy(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
+            if (itemConfig.IsInactive) return;
+
+            var material = itemConfig.CreateMaterial();
             var matrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
 
             var lineBuilder = new LineBuilder();
@@ -551,7 +547,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 }
             }
 
-            var configurator = GetSceneNodeConfigurator(sceneConfig, true);
+            var configurator = GetSceneNodeConfigurator(itemConfig, true);
             sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix, configurator);
         }
 
@@ -591,8 +587,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void AddCellPositionNodeToScene(DxSceneBuilder sceneBuilder, UnitCellPositionGraph positionGraph, in FractionalBox3D renderBox)
         {
-            var matrices = GetPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
             var itemConfig = GetMeshItemConfigLazy(positionGraph);
+            if (itemConfig.IsInactive) return;
+
+            var matrices = GetPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
             var geometry = CreateAtomGeometry(itemConfig);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, true);
@@ -628,9 +626,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="renderBox"></param>
         private void AddTransitionNodeToScene(DxSceneBuilder sceneBuilder, KineticTransitionGraph transitionGraph, in FractionalBox3D renderBox)
         {
+            var itemConfig = GetMeshItemConfigLazy(transitionGraph);
+            if (itemConfig.IsInactive) return;
+
             var path = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
             var matrices = GetPathSceneItemTransforms(path, renderBox, out var anyFlipsOrientation);
-            var itemConfig = GetMeshItemConfigLazy(transitionGraph);
             var geometry = CreateTransitionGeometry(itemConfig, path);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
@@ -702,9 +702,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <param name="renderBox"></param>
         private void AddPairInteractionNodeToScene(DxSceneBuilder sceneBuilder, PairEnergySetGraph pairGraph, in FractionalBox3D renderBox)
         {
-            var path = pairGraph.AsVectorPath().ToList();
             var itemConfig = GetMeshItemConfigLazy(pairGraph);
+            if (itemConfig.IsInactive) return;
 
+            var path = pairGraph.AsVectorPath().ToList();
             var middle = (path[1] + path[0]) * 0.5;
             var geometry1 = CreateCylinderGeometry(itemConfig, path[0], middle);
             var geometry2 = CreateCylinderGeometry(itemConfig, middle, path[1]);
@@ -742,18 +743,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
         /// <summary>
         ///     Creates a new atom <see cref="MeshGeometry3D" /> around (0,0,0) using the settings on the provided
-        ///     <see cref="IDxMeshItemConfig" />. At very low mesh quality levels, a cube mesh will be returned
+        ///     <see cref="IDxMeshItemConfig" />. At very low mesh quality levels, a cube mesh will be returned instead
         /// </summary>
         /// <param name="itemConfig"></param>
         /// <returns></returns>
         private MeshGeometry3D CreateAtomGeometry(IDxMeshItemConfig itemConfig)
         {
             var meshBuilder = new MeshBuilder();
-            var radius = itemConfig.UniformScaling;
+            var radius = itemConfig.MeshScaling;
             var thetaDiv = (Settings.Default.Default_Render_Sphere_ThetaDiv * itemConfig.MeshQuality).RoundToInt();
             var phiDiv = (Settings.Default.Default_Render_Sphere_PhiDiv * itemConfig.MeshQuality).RoundToInt();
             if (thetaDiv < 4 || phiDiv < 4)
+            {
                 meshBuilder.AddBox(Vector3.Zero, radius, radius, radius, BoxFaces.All);
+            }
             else
                 meshBuilder.AddSphere(Vector3.Zero, radius, thetaDiv, phiDiv);
 
@@ -771,7 +774,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private MeshGeometry3D CreateTransitionGeometry(IDxMeshItemConfig itemConfig, IList<Fractional3D> path, bool checkAtoms = true)
         {
             var meshBuilder = new MeshBuilder();
-            var diameter = itemConfig.UniformScaling;
+            var diameter = itemConfig.MeshScaling;
             var headLength = Settings.Default.Default_Render_Arrow_HeadLength;
             var thetaDiv = (Settings.Default.Default_Render_Arrow_ThetaDiv * itemConfig.MeshQuality).RoundToInt();
             var sizeCorrections = checkAtoms ? CreatePathAtomSizeCorrections(path) : null;
@@ -801,7 +804,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             var sceneConfigs = path.Select(x => CheckCellPositionHit(x, out IDxMeshItemConfig y) ? y : null).ToArray(path.Count);
             var result = new double[sceneConfigs.Length];
-            for (var i = 0; i < sceneConfigs.Length; i++) result[i] = sceneConfigs[i]?.UniformScaling ?? 0;
+            for (var i = 0; i < sceneConfigs.Length; i++) result[i] = sceneConfigs[i]?.MeshScaling ?? 0;
             return result;
         }
 
@@ -815,9 +818,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private MeshGeometry3D CreateCylinderGeometry(IDxMeshItemConfig itemConfig, in Fractional3D start, in Fractional3D end)
         {
-            if (itemConfig == null) throw new ArgumentNullException(nameof(itemConfig));
             var meshBuilder = new MeshBuilder();
-            var radius = itemConfig.UniformScaling / 40;
+            var radius = itemConfig.MeshScaling / 40;
             var thetaDiv = Settings.Default.Default_Render_Arrow_ThetaDiv;
             var (point1, point2) = (VectorTransformer.ToCartesian(start).ToDxVector(), VectorTransformer.ToCartesian(end).ToDxVector());
             meshBuilder.AddCylinder(point1, point2, radius, thetaDiv, false, false);

@@ -166,5 +166,17 @@ namespace Mocassin.UI.GUI.Properties {
                 this["Default_Render_UnstablePosition_Alpha"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.01")]
+        public double Limit_Render_Scaling_Lower {
+            get {
+                return ((double)(this["Limit_Render_Scaling_Lower"]));
+            }
+            set {
+                this["Limit_Render_Scaling_Lower"] = value;
+            }
+        }
     }
 }

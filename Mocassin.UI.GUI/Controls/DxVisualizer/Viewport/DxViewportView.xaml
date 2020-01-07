@@ -34,10 +34,8 @@
         </popup:ControlOverlay>
         <popup:ControlOverlay Grid.Row="0" AllowsTransparency="True" Placement="Right" PopupAnimation="Fade"
                               IsOpen="{Binding IsControlHostOverlayActive, Mode=OneWay}">
-          <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#aaffffff"
-                        Height="{Binding ElementName=PrimaryGrid, Path=ActualHeight}">
-            <local:DxViewportControlHostView DataContext="{Binding}" Margin="0,0,0,-2" MinWidth="250"/>
-          </ScrollViewer>
+          <local:DxViewportControlHostView DataContext="{Binding}" Margin="0,0,0,-2" Background="#aaffffff" MinWidth="250"
+                                           Height="{Binding ElementName=PrimaryGrid, Path=ActualHeight}" />
         </popup:ControlOverlay>
         <WrapPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Vertical">
           <ToggleButton Background="Transparent" IsChecked="{Binding IsSettingsOverlayActive}" BorderThickness="0" Margin="-2,0,0,-2">

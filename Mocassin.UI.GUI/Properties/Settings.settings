@@ -38,5 +38,8 @@
     <Setting Name="Default_Render_UnstablePosition_Alpha" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">64</Value>
     </Setting>
+    <Setting Name="Limit_Render_Scaling_Lower" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.01</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

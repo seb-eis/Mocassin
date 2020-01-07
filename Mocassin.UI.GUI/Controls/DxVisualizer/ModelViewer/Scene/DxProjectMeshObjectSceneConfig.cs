@@ -23,6 +23,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
     /// </summary>
     public class DxProjectMeshObjectSceneConfig : DxProjectObjectSceneConfig, IDxMeshItemConfig
     {
+        private bool canResizeMeshAtOrigin;
         private static string MaterialKey => Resources.ResourceKey_ModelObject_RenderMaterial;
         private static string ColorKey => Resources.ResourceKey_ModelObject_RenderColor;
         private static string MeshQualityKey => Resources.ResourceKey_ModelObject_MeshQuality;
@@ -31,7 +32,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <summary>
         ///     Get the <see cref="Dictionary{TKey,TValue}" /> of supported <see cref="Material" /> items
         /// </summary>
-        private static Dictionary<string, PhongMaterialCore> MaterialCatalog { get; }
+        internal static Dictionary<string, PhongMaterialCore> MaterialCatalog { get; }
+
+        /// <inheritdoc />
+        public bool CanResizeMeshAtOrigin
+        {
+            get => canResizeMeshAtOrigin;
+            set => SetProperty(ref canResizeMeshAtOrigin, value);
+        }
 
         /// <inheritdoc />
         public MaterialCore Material
@@ -81,21 +89,22 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
             {
                 if (value.AlmostEqualByRange(MeshQuality)) return;
                 ObjectGraph.Resources.SetResource(MeshQualityKey, value);
-                OnMaterialChanged();
+                OnMeshQualityChanged();
                 OnPropertyChanged();
             }
         }
 
         /// <inheritdoc />
-        public double UniformScaling
+        public double MeshScaling
         {
             get => ObjectGraph.Resources.TryGetResource(UniformScalingKey, out double value) ? value : 1.0;
             set
             {
-                var oldValue = UniformScaling;
-                if (value.AlmostEqualByRange(oldValue)) return;
-                ObjectGraph.Resources.SetResource(UniformScalingKey, value);
-                OnUniformScalingChanged(oldValue);
+                var newValue = value < Settings.Default.Limit_Render_Scaling_Lower ? Settings.Default.Limit_Render_Scaling_Lower : value;
+                var oldValue = MeshScaling;
+                if (newValue.AlmostEqualByRange(oldValue)) return;
+                ObjectGraph.Resources.SetResource(UniformScalingKey, newValue);
+                OnUniformScalingChanged(oldValue, newValue);
                 OnPropertyChanged();
             }
         }
@@ -158,6 +167,26 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
+        ///     Updates the transparency flag on all <see cref="SceneNode"/> instances
+        /// </summary>
+        protected void UpdateTransparencyFlags()
+        {
+            var isTransparent = DiffuseColor.A < byte.MaxValue;
+            foreach (var sceneNode in SceneNodes)
+            {
+                switch (sceneNode)
+                {
+                    case MeshNode meshNode:
+                        meshNode.IsTransparent = isTransparent;
+                        break;
+                    case BatchedMeshNode batchedMeshNode:
+                        batchedMeshNode.IsTransparent = isTransparent;
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
         ///     Action that is called if the<see cref="MeshQuality" /> property changed
         /// </summary>
         protected virtual void OnMeshQualityChanged()
@@ -166,20 +195,23 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Action that is called if the<see cref="UniformScaling" /> property changed
+        ///     Action that is called if the<see cref="MeshScaling" /> property changed
         /// </summary>
-        protected virtual void OnUniformScalingChanged(double oldValue)
+        /// <param name="oldValue"></param>
+        /// <param name="newValue"></param>
+        protected virtual void OnUniformScalingChanged(double oldValue, double newValue)
         {
-            //OnChangeInvalidatesNode?.Invoke();
-            //return;
-            // Note: Direct scaling currently not supported as the scaling operation is much more complex
-
-            var rescalingMatrix = GetRescalingMatrix(oldValue, UniformScaling);
+            if (!CanResizeMeshAtOrigin)
+            {
+                OnChangeInvalidatesNode?.Invoke();
+                return;
+            }
+            var rescalingMatrix = GetRescalingMatrix(oldValue, newValue);
             foreach (var sceneNode in SceneNodes) ChangeNodeScaling(sceneNode, ref rescalingMatrix);
         }
 
         /// <summary>
-        ///     Changes the scaling of the provided <see cref="SceneNode" /> using a scaling <see cref="Matrix" />
+        ///     Changes the scaling of the provided <see cref="SceneNode" /> using a scaling <see cref="Matrix" /> and a temporary origin shift
         /// </summary>
         /// <param name="sceneNode"></param>
         /// <param name="rescalingMatrix"></param>
@@ -188,21 +220,35 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
             switch (sceneNode)
             {
                 case MeshNode meshNode:
-                    var originShiftMatrix = Matrix.Translation(-meshNode.ModelMatrix.TranslationVector);
-                    var backShift = Matrix.Translation(meshNode.ModelMatrix.TranslationVector);
-                    meshNode.ModelMatrix *= originShiftMatrix * rescalingMatrix * backShift;
+                    meshNode.ModelMatrix = RescaleModelMatrixAtOrigin(meshNode.ModelMatrix, ref rescalingMatrix);
                     break;
                 case BatchedMeshNode batchedNode:
                     var geometries = new BatchedMeshGeometryConfig[batchedNode.Geometries.Length];
                     for (var i = 0; i < geometries.Length; i++)
                     {
                         var config = batchedNode.Geometries[i];
-                        geometries[i] = new BatchedMeshGeometryConfig(config.Geometry, config.ModelTransform * rescalingMatrix, config.MaterialIndex);
+                        var matrix = RescaleModelMatrixAtOrigin(config.ModelTransform, ref rescalingMatrix);
+                        geometries[i] = new BatchedMeshGeometryConfig(config.Geometry, matrix, config.MaterialIndex);
                     }
 
                     batchedNode.Geometries = geometries;
                     break;
             }
+        }
+
+        /// <summary>
+        ///     Incorporates a rescaling transform into a model <see cref="Matrix"/> using a temporary (0,0,0) translation transform
+        /// </summary>
+        /// <param name="modelMatrix"></param>
+        /// <param name="rescalingMatrix"></param>
+        /// <returns></returns>
+        protected Matrix RescaleModelMatrixAtOrigin(Matrix modelMatrix, ref Matrix rescalingMatrix)
+        {
+            var translationVector = modelMatrix.TranslationVector;
+            modelMatrix.TranslationVector = Vector3.Zero;
+            modelMatrix *= rescalingMatrix;
+            modelMatrix.TranslationVector = translationVector;
+            return modelMatrix;
         }
 
         /// <summary>
@@ -212,6 +258,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         {
             var material = CreateMaterial();
             foreach (var sceneNode in SceneNodes) ChangeNodeMaterial(sceneNode, material);
+            UpdateTransparencyFlags();
         }
 
         /// <summary>

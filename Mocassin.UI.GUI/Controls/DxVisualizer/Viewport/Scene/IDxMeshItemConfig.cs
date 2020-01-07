@@ -10,6 +10,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
     public interface IDxMeshItemConfig : IDxSceneItemConfig
     {
         /// <summary>
+        ///     Get or set a boolean flag that indicates if mesh resizing can be done by: origin-shift -> rescale -> back-shift
+        /// </summary>
+        bool CanResizeMeshAtOrigin { get; set; }
+
+        /// <summary>
         ///     Get or set the <see cref="MaterialCore" /> of the mesh
         /// </summary>
         MaterialCore Material { get; set; }
@@ -32,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
         /// <summary>
         ///     Get or set a factor for the uniform mesh scaling (1.0 is the default quality)
         /// </summary>
-        double UniformScaling { get; set; }
+        double MeshScaling { get; set; }
 
         /// <summary>
         ///     Creates a new <see cref="MaterialCore"/> of using the current material and color
