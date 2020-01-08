@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using HelixToolkit.Wpf.SharpDX.Model;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -15,12 +14,13 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel"/> that provides the basic scene data control functionality for a <see cref="DxModelSceneViewModel"/>
+    ///     The <see cref="ProjectGraphControlViewModel" /> that provides the basic scene data control functionality for a
+    ///     <see cref="DxModelSceneViewModel" />
     /// </summary>
     public class DxModelControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="DxModelSceneViewModel"/> parent that controls scene build and supply
+        ///     Get the <see cref="DxModelSceneViewModel" /> parent that controls scene build and supply
         /// </summary>
         private DxModelSceneViewModel ParentModelSceneViewModel { get; }
 
@@ -30,29 +30,31 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public ModelRenderResourcesViewModel RenderResourcesViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of <see cref="IDxMeshItemConfig"/> for the position visuals
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="IDxMeshItemConfig" /> for the position
+        ///     visuals
         /// </summary>
         public ObservableCollectionViewModel<IDxMeshItemConfig> PositionItemConfigs => ParentModelSceneViewModel.PositionItemConfigs;
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of <see cref="IDxMeshItemConfig"/> for the transition visuals
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="IDxMeshItemConfig" /> for the transition
+        ///     visuals
         /// </summary>
         public ObservableCollectionViewModel<IDxMeshItemConfig> TransitionItemConfigs => ParentModelSceneViewModel.TransitionItemConfigs;
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> of <see cref="IDxLineItemConfig"/> for the line visuals
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of <see cref="IDxLineItemConfig" /> for the line visuals
         /// </summary>
         public ObservableCollectionViewModel<IDxLineItemConfig> LineItemConfigs => ParentModelSceneViewModel.LineItemConfigs;
 
         /// <summary>
         ///     Get a boolean flag if the scene is invalid and requires rebuilding
         /// </summary>
-        public bool SceneIsInvalid => ParentModelSceneViewModel.IsInvalid;
+        public bool IsInvalidScene => ParentModelSceneViewModel.IsInvalidScene;
 
         /// <summary>
-        ///     Get a <see cref="IReadOnlyCollection{T}"/> of all supported <see cref="PhongMaterialCore"/> names
+        ///     Get a <see cref="IReadOnlyCollection{T}" /> of all supported <see cref="PhongMaterialCore" /> names
         /// </summary>
-        public IReadOnlyCollection<string> MeshMaterialNames { get; }
+        public IReadOnlyCollection<string> MeshMaterialNames => PhongMaterialCoreToStringConverter.MaterialNameCollection;
 
         /// <inheritdoc />
         public DxModelControlViewModel(IMocassinProjectControl projectControl, DxModelSceneViewModel parentSceneViewModel)
@@ -60,13 +62,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         {
             RenderResourcesViewModel = new ModelRenderResourcesViewModel();
             ParentModelSceneViewModel = parentSceneViewModel ?? throw new ArgumentNullException(nameof(parentSceneViewModel));
-            MeshMaterialNames = PhongMaterialCoreToStringConverter.MaterialCatalog.Select(x => x.Key).ToList();
             ParentModelSceneViewModel.PropertyChanged += OnParentPropertyChanged;
         }
 
         /// <inheritdoc />
         public override void ChangeContentSource(MocassinProjectGraph contentSource)
         {
+            ContentSource = contentSource;
             RenderResourcesViewModel.SetDataSource(contentSource?.Resources);
         }
 
@@ -79,7 +81,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <summary>
-        ///     Get the <see cref="FractionalBox3D"/> that describes the render limits in fractional coordinates
+        ///     Get the <see cref="FractionalBox3D" /> that describes the render limits in fractional coordinates
         /// </summary>
         /// <returns></returns>
         public FractionalBox3D GetRenderBox3D()
@@ -88,13 +90,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <summary>
-        ///     Action that is called to handle property changes on the parent <see cref="DxModelSceneViewModel"/>
+        ///     Action that is called to handle property changes on the parent <see cref="DxModelSceneViewModel" />
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private void OnParentPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (args.PropertyName == nameof(DxModelSceneViewModel.IsInvalid)) OnPropertyChanged(nameof(SceneIsInvalid));
+            if (args.PropertyName == nameof(DxModelSceneViewModel.IsInvalidScene)) OnPropertyChanged(nameof(IsInvalidScene));
         }
 
         /// <inheritdoc />

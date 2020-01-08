@@ -50,7 +50,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
     {
         private ProjectCustomizationGraph selectedCustomization;
         private bool canInvalidateScene = true;
-        private bool isInvalid;
+        private bool isInvalidScene;
 
         /// <summary>
         ///     Get or set the <see cref="IDisposable" /> that cancels the content synchronization for selectable
@@ -85,9 +85,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public IDxSceneHost SceneHost { get; }
 
         /// <summary>
-        ///     Get the <see cref="DxModelControlViewModel" /> that controls the model render resources
+        ///     Get the <see cref="DxModelControlViewModel" /> that controls the model render configuration
         /// </summary>
         public DxModelControlViewModel ModelControlViewModel { get; }
+
+        /// <summary>
+        ///     Get the <see cref="DxCustomizationControlViewModel" /> that controls the model customization render configuration
+        /// </summary>
+        public DxCustomizationControlViewModel CustomizationControlViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of selectable <see cref="ProjectCustomizationGraph" />
@@ -132,7 +137,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <inheritdoc />
         public IEnumerable<VvmContainer> GetControlContainers()
         {
-            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model configuration"};
+            yield return new VvmContainer(new DxModelControlView(), ModelControlViewModel) {Name = "Model control"};
+            yield return new VvmContainer(new DxCustomizationControlView(), CustomizationControlViewModel) {Name = "Customization control"};
         }
 
         /// <summary>
@@ -152,10 +158,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <inheritdoc />
-        public bool IsInvalid
+        public bool IsInvalidScene
         {
-            get => isInvalid;
-            protected set => SetProperty(ref isInvalid, value);
+            get => isInvalidScene;
+            protected set => SetProperty(ref isInvalidScene, value);
         }
 
         /// <inheritdoc />
@@ -173,6 +179,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             GroupInteractionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
             LineItemConfigs = new ObservableCollectionViewModel<IDxLineItemConfig>();
             ModelControlViewModel = new DxModelControlViewModel(projectControl, this);
+            CustomizationControlViewModel = new DxCustomizationControlViewModel(projectControl, this);
             SceneHost.AttachController(this);
         }
 
@@ -205,8 +212,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 return;
             }
 
-            ExecuteOnAppThread(() => SelectedCustomization = ContentSource.ProjectCustomizationGraphs.FirstOrDefault());
             ModelControlViewModel.ChangeContentSource(ContentSource);
+            CustomizationControlViewModel.ChangeContentSource(ContentSource);
             RebuildContentAccess();
             InvalidateScene();
         }
@@ -219,7 +226,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             ContentSource = null;
             SelectedCustomization = null;
             ModelControlViewModel.ChangeContentSource(null);
-
+            CustomizationControlViewModel.ChangeContentSource(null);
             ClearSceneConfigs();
 
             SelectableCustomizations.Clear();
@@ -285,8 +292,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             CustomizationLinkDisposable?.Dispose();
             SelectableCustomizations.Clear();
+            SelectableCustomizations.AddItem(ProjectCustomizationGraph.Empty);
             if (ContentSource == null) return;
-            SelectableCustomizations.AddItems(ProjectCustomizationGraph.Empty.AsSingleton().Concat(ContentSource.ProjectCustomizationGraphs));
+            SelectableCustomizations.AddItems(ContentSource.ProjectCustomizationGraphs);
             CustomizationLinkDisposable = SelectableCustomizations.ObservableItems.ListenToContentChanges(ContentSource.ProjectCustomizationGraphs);
             if (SelectableCustomizations.ObservableItems.Contains(SelectedCustomization)) return;
             SelectedCustomization = ProjectCustomizationGraph.Empty;
@@ -430,7 +438,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         private void OnSelectedCustomizationChanged()
         {
-            RebuildCustomizationAccess();
+            RebuildCustomizationRenderResourceAccess();
+            IsInvalidScene = true;
         }
 
         /// <summary>
@@ -449,7 +458,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         private void MarkSceneAsInvalid()
         {
-            IsInvalid = true;
+            IsInvalidScene = true;
         }
 
         /// <summary>
@@ -475,11 +484,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 SceneHost.AddSceneItem(sceneModel);
                 var setupTime = watch.Elapsed.TotalMilliseconds;
                 PushInfoMessage($"Scene controller CPU info: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
-                IsInvalid = false;
+                IsInvalidScene = false;
             }
             catch (Exception e)
             {
-                IsInvalid = true;
+                IsInvalidScene = true;
                 OnRenderError(e);
             }
             finally
@@ -734,7 +743,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void StartPairInteractionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
-            if (SelectedCustomization?.EnergyModelCustomization == null) return;
+            if (ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty) || SelectedCustomization?.EnergyModelCustomization == null) return;
+
             foreach (var pairGraph in SelectedCustomization.EnergyModelCustomization.StablePairEnergyParameterSets)
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddPairInteractionNodeToScene(sceneBuilder, pairGraph, renderBox)));
             foreach (var pairGraph in SelectedCustomization.EnergyModelCustomization.UnstablePairEnergyParameterSets)
@@ -981,6 +991,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public override void Dispose()
         {
             ClearContent();
+            ModelControlViewModel.Dispose();
+            CustomizationControlViewModel.Dispose();
             SceneHost.DetachController();
             SceneHost.Dispose();
             base.Dispose();

@@ -24,7 +24,6 @@
       <Thickness x:Key="App.Margin.GroupBoxContentLarge" Bottom="0" Top="10" Left="2" Right="0" />
 
       <!-- Styles with keys -->
-
       <Style TargetType="{x:Type Button}"
              x:Key="App.Style.Button.NullCommand">
         <Style.Triggers>
@@ -97,6 +96,31 @@
             <Setter Property="Opacity" Value="1" />
           </Trigger>
         </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type HeaderedContentControl}" x:Key="App.Style.HeaderedContentControl.BoldText">
+        <Setter Property="HeaderTemplate">
+          <Setter.Value>
+            <DataTemplate DataType="{x:Type s:String}">
+              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}" Text="{Binding}" Margin="0,0,0,2"/>
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                  </Grid.RowDefinitions>
+                  <Rectangle Grid.RowSpan="2" Fill="{TemplateBinding Background}" />
+                  <ContentPresenter ContentSource="Header" Grid.Row="0" />
+                  <ContentPresenter ContentSource="Content" Grid.Row="1" />
+                </Grid>
+              </ControlTemplate>
+          </Setter.Value>
+        </Setter>
       </Style>
       
       <!-- Always on styles -->

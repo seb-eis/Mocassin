@@ -289,7 +289,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Helper
         {
             lock (BuildTaskCollectionLock)
             {
-                return Task.WhenAll(ActiveBuildTasks.ToList());
+                return Task.WhenAll(ActiveBuildTasks);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Base
         /// <summary>
         ///     Get a boolean flag if the currently supplied scene is invalid and requires invalidation
         /// </summary>
-        bool IsInvalid { get; }
+        bool IsInvalidScene { get; }
 
         /// <summary>
         ///     Get the <see cref="IDxSceneHost" /> the controller supplies to

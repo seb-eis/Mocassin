@@ -4,9 +4,96 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl"
+             xmlns:converter="clr-namespace:Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converter"
+             xmlns:scene="clr-namespace:Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene"
+             xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:DxCustomizationControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+<UserControl.Resources>
+    <converter:PhongMaterialCoreToStringConverter x:Key="Local.PhongMaterialCoreToStringConverter" />
+    <Style TargetType="{x:Type DataGrid}">
+      <Setter Property="CanUserAddRows" Value="False" />
+      <Setter Property="CanUserDeleteRows" Value="False" />
+      <Setter Property="RowBackground" Value="Transparent" />
+      <Setter Property="AlternatingRowBackground" Value="Transparent" />
+      <Setter Property="AutoGenerateColumns" Value="False" />
+      <Setter Property="ColumnWidth" Value="Auto" />
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}" x:Key="Local.DataTemplate.MeshColorColumnCellTemplate">
+      <Grid>
+        <TextBlock Text="{Binding DiffuseColor}" Background="Transparent" HorizontalAlignment="Left" />
+        <Rectangle Height="16" Width="16" HorizontalAlignment="Right" Stroke="Black">
+          <Rectangle.Fill>
+            <SolidColorBrush Color="{Binding DiffuseColor, Mode=OneWay}" />
+          </Rectangle.Fill>
+        </Rectangle>
+      </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}"
+                  x:Key="Local.DataTemplate.MeshColorColumnCellEditingTemplate">
+      <TextBox Text="{Binding DiffuseColor}" />
+    </DataTemplate>
+</UserControl.Resources>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <ComboBox Grid.Row="0" Margin="{StaticResource App.Margin.VerticalStack}"
+              IsEditable="True" IsTextSearchEnabled="True"
+              ItemsSource="{Binding SelectableCustomizations.ObservableItems}" SelectedItem="{Binding SelectedCustomization}"
+              ToolTip="Customization" DisplayMemberPath="Name"/>
+
+    <HeaderedContentControl Grid.Row="1" Header="Pair interactions config:"
+                            Style="{StaticResource App.Style.HeaderedContentControl.BoldText}"
+                            VerticalContentAlignment="Stretch"
+                            Margin="{StaticResource App.Margin.VerticalStack}">
+      <DataGrid ItemsSource="{Binding PairInteractionItemConfigs.ObservableItems}">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180" />
+          <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+                                  CellTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellTemplate}"
+                                  CellEditingTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellEditingTemplate}" />
+          <comboBox:BindableDataGridComboBoxColumn Header="Material"
+                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.MeshMaterialNames}"
+                                                   SelectedItemBinding="{Binding Material, Converter={StaticResource Local.PhongMaterialCoreToStringConverter}}" />
+          <DataGridTextColumn Header="Radius"
+                              Binding="{Binding MeshScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridTextColumn Header="Quality"
+                              Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
+          <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </HeaderedContentControl>
+
+    <HeaderedContentControl Grid.Row="2" Header="Group interactions config:"
+                            Style="{StaticResource App.Style.HeaderedContentControl.BoldText}">
+      <DataGrid ItemsSource="{Binding GroupInteractionItemConfigs.ObservableItems}">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180" />
+          <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+                                  CellTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellTemplate}"
+                                  CellEditingTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellEditingTemplate}" />
+          <comboBox:BindableDataGridComboBoxColumn Header="Material"
+                                                   ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.MeshMaterialNames}"
+                                                   SelectedItemBinding="{Binding Material, Converter={StaticResource Local.PhongMaterialCoreToStringConverter}}" />
+          <DataGridTextColumn Header="Radius"
+                              Binding="{Binding MeshScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridTextColumn Header="Quality"
+                              Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
+          <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </HeaderedContentControl>
+  </Grid>
 </UserControl>
