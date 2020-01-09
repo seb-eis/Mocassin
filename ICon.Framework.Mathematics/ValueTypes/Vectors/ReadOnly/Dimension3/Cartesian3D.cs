@@ -10,12 +10,17 @@ namespace Mocassin.Mathematics.ValueTypes
     public readonly struct Cartesian3D : ICartesian3D
     {
         /// <summary>
-        ///     The null vector of this type
+        ///     The readonly <see cref="Coordinates3D"/> backing field
         /// </summary>
-        public static readonly Cartesian3D NullVector = new Cartesian3D(0, 0, 0);
+        public readonly Coordinates3D Coordinates;
+
+        /// <summary>
+        ///     The zero vector (0,0,0) of this type
+        /// </summary>
+        public static readonly Cartesian3D Zero = new Cartesian3D(0, 0, 0);
 
         /// <inheritdoc />
-        public Coordinates3D Coordinates { get; }
+        Coordinates3D IVector3D.Coordinates => Coordinates;
 
         /// <inheritdoc />
         public double X => Coordinates.A;

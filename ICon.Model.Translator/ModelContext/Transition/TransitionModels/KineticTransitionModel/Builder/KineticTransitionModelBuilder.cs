@@ -225,7 +225,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected double GetChargeFocalPointDistanceShift(IKineticRuleModel ruleModel, PointMechanicsSolver solver,
             IVectorTransformer transformer)
         {
-            var geometry = transformer.ToCartesian(ruleModel.TransitionModel.Transition.GetGeometrySequence().Cast<IFractional3D>())
+            var geometry = transformer.ToCartesian(ruleModel.TransitionModel.Transition.GetGeometrySequence())
                 .ToList();
 
             var origin = geometry.First();

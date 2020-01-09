@@ -42,7 +42,7 @@ namespace Mocassin.Mathematics.Extensions
         public static bool IsLinearIndependent(this Cartesian3D first, in Cartesian3D second, IEqualityComparer<Cartesian3D> comparer)
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
-            return !comparer.Equals(first.GetCrossProduct(second), Cartesian3D.NullVector);
+            return !comparer.Equals(first.GetCrossProduct(second), Cartesian3D.Zero);
         }
 
         /// <summary>

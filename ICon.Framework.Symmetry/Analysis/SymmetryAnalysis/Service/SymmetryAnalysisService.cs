@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Mocassin.Framework.Extensions;
 using Mocassin.Framework.Provider;
 using Mocassin.Mathematics.Coordinates;
 using Mocassin.Mathematics.ValueTypes;
@@ -40,36 +38,10 @@ namespace Mocassin.Symmetry.Analysis
         }
 
         /// <inheritdoc />
-        public SymmetryIndicator GetSymmetryIndicatorAny(IEnumerable<IMassPoint3D> massPoints)
-        {
-            return GetSymmetryIndicator(GetCartesianSequence(massPoints));
-        }
-
-        /// <inheritdoc />
         public SymmetryCompareIndicator CompareSymmetryApprox(IEnumerable<CartesianMassPoint3D> firstSet,
             IEnumerable<CartesianMassPoint3D> secondSet)
         {
             return new SymmetryCompareIndicator(GetSymmetryIndicator(firstSet), GetSymmetryIndicator(secondSet), IndicatorComparer);
-        }
-
-        /// <inheritdoc />
-        public SymmetryCompareIndicator CompareSymmetryApproxAny(IEnumerable<IMassPoint3D> firstSet, IEnumerable<IMassPoint3D> secondSet)
-        {
-            return CompareSymmetryApprox(GetCartesianSequence(firstSet), GetCartesianSequence(secondSet));
-        }
-
-
-        /// <summary>
-        ///     Creates a sequence with cartesian coordinates from any kind of mass point sequence
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public IEnumerable<CartesianMassPoint3D> GetCartesianSequence(IEnumerable<IMassPoint3D> source)
-        {
-            var sourceCollection = source.ToCollection();
-            return sourceCollection.Zip(TransformerProvider.Get().ToCartesian(sourceCollection),
-                (org, vector) => new CartesianMassPoint3D(org.Mass, vector));
         }
     }
 }

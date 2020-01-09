@@ -19,164 +19,87 @@ namespace Mocassin.Mathematics.Coordinates
         SphericalCoordinateSystem3D SphericalSystem { get; }
 
         /// <summary>
-        ///     Determines the coordinate type of a 3D vector by implemented interface and transform the coordinates into a basic
-        ///     cartesian vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        Cartesian3D ToCartesian(IVector3D vector);
-
-        /// <summary>
-        ///     Determines the coordinate type of a 3D vector by implemented interface and transform the coordinates into a basic
-        ///     fractional vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        Fractional3D ToFractional(IVector3D vector);
-
-        /// <summary>
-        ///     Determines the coordinate type of a 3D vector by implemented interface and transform the coordinates into a basic
-        ///     spherical vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        Spherical3D ToSpherical(IVector3D vector);
-
-        /// <summary>
-        ///     Determines the coordinate type of a sequence of 3D vectors by implemented interface and transform the coordinates
-        ///     into a basic cartesian vector sequence
-        /// </summary>
-        /// <param name="vectors"></param>
-        /// <returns></returns>
-        IEnumerable<Cartesian3D> ToCartesian(IEnumerable<IVector3D> vectors);
-
-        /// <summary>
-        ///     Determines the coordinate type of a sequence of 3D vectors by implemented interface and transform the coordinates
-        ///     into a basic fractional vector sequence
-        /// </summary>
-        /// <param name="vectors"></param>
-        /// <returns></returns>
-        IEnumerable<Fractional3D> ToFractional(IEnumerable<IVector3D> vectors);
-
-        /// <summary>
-        ///     Determines the coordinate type of a sequence of 3D vectors by implemented interface and transform the coordinates
-        ///     into a basic cartesian vector sequence
-        /// </summary>
-        /// <param name="vectors"></param>
-        /// <returns></returns>
-        IEnumerable<Spherical3D> ToSpherical(IEnumerable<IVector3D> vectors);
-
-        /// <summary>
-        ///     Transforms the spherical coordinate info of a spherical vector to a basic cartesian vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        Cartesian3D ToCartesian(ISpherical3D vector);
-
-        /// <summary>
-        ///     Transforms the spherical coordinate info of a spherical vector sequence to a sequence of basic cartesian vector
-        /// </summary>
-        /// <param name="vectors"></param>
-        /// <returns></returns>
-        IEnumerable<Cartesian3D> ToCartesian(IEnumerable<ISpherical3D> vectors);
-
-        /// <summary>
-        ///     Transforms the fractional coordinate info of fractional vector to a basic cartesian vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        Cartesian3D ToCartesian(IFractional3D vector);
-
-        /// <summary>
-        ///     Transforms the fractional coordinate info of fractional vector to a basic cartesian vector
+        ///     Transforms from a <see cref="Fractional3D"/> to a <see cref="Cartesian3D"/>
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         Cartesian3D ToCartesian(in Fractional3D vector);
 
         /// <summary>
-        ///     Transforms the fractional coordinate info of fractional vector sequence to a basic cartesian vector sequence
+        ///     Transforms from a <see cref="Fractional3D"/> to a <see cref="Spherical3D"/>
         /// </summary>
-        /// <param name="vectors"></param>
+        /// <param name="vector"></param>
         /// <returns></returns>
-        IEnumerable<Cartesian3D> ToCartesian(IEnumerable<IFractional3D> vectors);
+        Spherical3D ToSpherical(in Fractional3D vector);
 
         /// <summary>
-        ///     Transforms the fractional coordinate info of fractional vector sequence to a basic cartesian vector sequence
+        ///     Transforms from a <see cref="Fractional3D"/> sequence to a <see cref="Cartesian3D"/> sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
         IEnumerable<Cartesian3D> ToCartesian(IEnumerable<Fractional3D> vectors);
 
         /// <summary>
-        ///     Transforms the cartesian coordinate info of a cartesian vector to a basic fractional vector
+        ///     Transforms from a <see cref="Fractional3D"/> sequence to a <see cref="Spherical3D"/> sequence
         /// </summary>
-        /// <param name="vector"></param>
+        /// <param name="vectors"></param>
         /// <returns></returns>
-        Fractional3D ToFractional(ICartesian3D vector);
+        IEnumerable<Spherical3D> ToSpherical(IEnumerable<Fractional3D> vectors);
 
         /// <summary>
-        ///     Transforms the cartesian coordinate info of a cartesian vector to a basic fractional vector
+        ///     Transforms from a <see cref="Cartesian3D"/> to a <see cref="Fractional3D"/>
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         Fractional3D ToFractional(in Cartesian3D vector);
 
         /// <summary>
-        ///     Transforms the cartesian coordinate info of a cartesian vector sequence to a basic fractional vector sequence
+        ///     Transforms from a <see cref="Cartesian3D"/> to a <see cref="Spherical3D"/>
         /// </summary>
-        /// <param name="vectors"></param>
+        /// <param name="vector"></param>
         /// <returns></returns>
-        IEnumerable<Fractional3D> ToFractional(IEnumerable<ICartesian3D> vectors);
+        Spherical3D ToSpherical(in Cartesian3D vector);
 
         /// <summary>
-        ///     Transforms the cartesian coordinate info of a cartesian vector sequence to a basic fractional vector sequence
+        ///     Transforms from a <see cref="Cartesian3D"/> sequence to a <see cref="Fractional3D"/> sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
         IEnumerable<Fractional3D> ToFractional(IEnumerable<Cartesian3D> vectors);
 
         /// <summary>
-        ///     Transforms the spherical coordinate info of a spherical vector to a basic fractional vector
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        Fractional3D ToFractional(ISpherical3D vector);
-
-        /// <summary>
-        ///     Transforms the spherical coordinate info of a spherical vector sequence to a basic fractional vector sequence
+        ///     Transforms from a <see cref="Cartesian3D"/> sequence to a <see cref="Spherical3D"/> sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
-        IEnumerable<Fractional3D> ToFractional(IEnumerable<ISpherical3D> vectors);
-
+        IEnumerable<Spherical3D> ToSpherical(IEnumerable<Cartesian3D> vectors);
 
         /// <summary>
-        ///     Transforms the cartesian coordinate info of a cartesian vector to a basic spherical vector
+        ///     Transforms from a <see cref="Spherical3D"/> to a <see cref="Fractional3D"/>
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        Spherical3D ToSpherical(ICartesian3D vector);
+        Fractional3D ToFractional(in Spherical3D vector);
 
         /// <summary>
-        ///     Transforms the cartesian coordinate info of a cartesian vector sequence to a basic spherical vector sequence
-        /// </summary>
-        /// <param name="vectors"></param>
-        /// <returns></returns>
-        IEnumerable<Spherical3D> ToSpherical(IEnumerable<ICartesian3D> vectors);
-
-        /// <summary>
-        ///     Transforms the fractional coordinate info of a fractional vector to a basic spherical vector
+        ///     Transforms from a <see cref="Spherical3D"/> to a <see cref="Cartesian3D"/>
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        Spherical3D ToSpherical(IFractional3D vector);
+        Cartesian3D ToCartesian(in Spherical3D vector);
 
         /// <summary>
-        ///     Transforms the fractional coordinate info of a fractional vector sequence to a basic spherical vector sequence
+        ///     Transforms from a <see cref="Spherical3D"/> sequence to a <see cref="Fractional3D"/> sequence
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
-        IEnumerable<Spherical3D> ToSpherical(IEnumerable<IFractional3D> vectors);
+        IEnumerable<Fractional3D> ToFractional(IEnumerable<Spherical3D> vectors);
+
+        /// <summary>
+        ///     Transforms from a <see cref="Spherical3D"/> sequence to a <see cref="Cartesian3D"/> sequence
+        /// </summary>
+        /// <param name="vectors"></param>
+        /// <returns></returns>
+        IEnumerable<Cartesian3D> ToCartesian(IEnumerable<Spherical3D> vectors);
     }
 }

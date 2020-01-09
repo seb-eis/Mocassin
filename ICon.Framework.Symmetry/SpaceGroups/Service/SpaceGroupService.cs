@@ -457,7 +457,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                 if (Comparer.Compare(untrimmedVector.TrimToUnitCell(operation.TrimTolerance), sourceVector) != 0)
                     continue;
 
-                var shift = shiftCorrection ? sourceVector - untrimmedVector : Fractional3D.NullVector;
+                var shift = shiftCorrection ? sourceVector - untrimmedVector : Fractional3D.Zero;
                 var newOperation = GetTranslationShiftedOperation(operation, shift);
                 result.Add(newOperation);
             }

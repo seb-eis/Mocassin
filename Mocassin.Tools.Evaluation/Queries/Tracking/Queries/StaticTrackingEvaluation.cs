@@ -29,7 +29,7 @@ namespace Mocassin.Tools.Evaluation.Queries
                 foreach (var trackerModel in trackerModels)
                 {
                     var trackerId = trackerModel.ModelId + idOffset;
-                    var velocityVector = (vectorTransformer.ToCartesian(trackingData[trackerId]) * UnitConversions.Length.AngstromToMeter) / metaData.SimulatedTime;
+                    var velocityVector = (vectorTransformer.ToCartesian(trackingData[trackerId].AsVector()) * UnitConversions.Length.AngstromToMeter) / metaData.SimulatedTime;
                     result.Add(new StaticTrackerResult(trackerModel.TrackedPositionIndex, trackerModel.TrackedParticle, velocityVector));
                 }
             }

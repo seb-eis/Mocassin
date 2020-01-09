@@ -79,6 +79,16 @@ namespace Mocassin.Mathematics.Coordinates
             return new Coordinates3D(GetCoordinateX(original), GetCoordinateY(original), GetCoordinateZ(original));
         }
 
+        /// <summary>
+        ///     Transforms a <see cref="Spherical3D"/> to a <see cref="Cartesian3D"/>
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns></returns>
+        public Cartesian3D ToReferenceSystem(in Spherical3D original)
+        {
+            return new Cartesian3D(ToReferenceSystem(original.Coordinates));
+        }
+
         /// <inheritdoc />
         public override Coordinates3D ToSystem(in Coordinates3D original)
         {
@@ -86,6 +96,16 @@ namespace Mocassin.Mathematics.Coordinates
             var theta = CalculatePolarAngle(original, radius);
             var phi = CalculateAzimuthalAngle(original, theta);
             return new Coordinates3D(radius, theta, phi);
+        }
+
+        /// <summary>
+        ///     Transforms a <see cref="Cartesian3D"/> to a <see cref="Spherical3D"/>
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns></returns>
+        public Spherical3D ToSystem(in Cartesian3D original)
+        {
+            return new Spherical3D(ToSystem(original.Coordinates));
         }
 
         /// <summary>

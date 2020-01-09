@@ -11,7 +11,7 @@ namespace Mocassin.Framework.Extensions
     public static class MocassinTaskingExtensions
     {
         /// <summary>
-        /// Starts many tasks on the task pool and returns an array of the task objects
+        ///     Starts many tasks on the task pool and returns an array of the task objects
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="runActions"></param>
@@ -22,7 +22,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        /// Starts multiple tasks on the task pool, await all results and returns the results in order
+        ///     Starts multiple tasks on the task pool, await all results and returns the results in order
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="runActions"></param>

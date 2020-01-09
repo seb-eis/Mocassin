@@ -207,7 +207,7 @@ namespace Mocassin.Model.Structures
                 var list = new SetList<CrystalVector4D>(Comparer<CrystalVector4D>.Default);
                 foreach (var position in positionSet)
                 {
-                    if (!encoder.TryEncode(position, out var encoded))
+                    if (!encoder.TryEncode(position.Vector, out var encoded))
                         throw new InvalidOperationException("Encoding of basic unit cell vectors did not yield a valid 4D position");
 
                     list.Add(encoded);

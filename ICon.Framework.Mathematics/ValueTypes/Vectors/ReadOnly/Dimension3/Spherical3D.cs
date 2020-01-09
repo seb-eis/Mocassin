@@ -5,8 +5,13 @@
     /// </summary>
     public readonly struct Spherical3D : ISpherical3D
     {
+        /// <summary>
+        ///     The readonly <see cref="Coordinates3D"/> backing field
+        /// </summary>
+        public readonly Coordinates3D Coordinates;
+
         /// <inheritdoc />
-        public Coordinates3D Coordinates { get; }
+        Coordinates3D IVector3D.Coordinates => Coordinates;
 
         /// <inheritdoc />
         public double Radius => Coordinates.A;

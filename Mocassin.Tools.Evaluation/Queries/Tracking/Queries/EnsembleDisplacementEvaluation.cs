@@ -80,7 +80,7 @@ namespace Mocassin.Tools.Evaluation.Queries
             foreach (var trackerModel in trackingModel.GlobalTrackerModels)
             {
                 var fractional = trackers[trackerModel.ModelId];
-                var cartesian = vectorTransformer.ToCartesian(fractional);
+                var cartesian = vectorTransformer.ToCartesian(fractional.AsVector());
                 vectors[trackerModel.TrackedParticle.Index] += cartesian;
             }
 

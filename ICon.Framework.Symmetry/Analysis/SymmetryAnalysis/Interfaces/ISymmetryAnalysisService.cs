@@ -22,13 +22,6 @@ namespace Mocassin.Symmetry.Analysis
         SymmetryIndicator GetSymmetryIndicator(IEnumerable<CartesianMassPoint3D> massPoints);
 
         /// <summary>
-        ///     Get an indicator object that can be used for approximated symmetry comparisons for mass point sets
-        /// </summary>
-        /// <param name="massPoints"></param>
-        /// <returns></returns>
-        SymmetryIndicator GetSymmetryIndicatorAny(IEnumerable<IMassPoint3D> massPoints);
-
-        /// <summary>
         ///     Performs an approximated symmetry comparison between two sequences of mass points and returns the comparison result
         ///     indicator (Fast, small chance of invalid result)
         /// </summary>
@@ -37,15 +30,5 @@ namespace Mocassin.Symmetry.Analysis
         /// <returns></returns>
         SymmetryCompareIndicator CompareSymmetryApprox(IEnumerable<CartesianMassPoint3D> firstSet,
             IEnumerable<CartesianMassPoint3D> secondSet);
-
-        /// <summary>
-        ///     Performs an approximated symmetry comparison between two sets of mass points in arbitrary coordinate systems
-        ///     (Expensive due to polymorphic system transformation)
-        /// </summary>
-        /// <param name="firstSet"></param>
-        /// <param name="secondSet"></param>
-        /// <returns></returns>
-        SymmetryCompareIndicator CompareSymmetryApproxAny(IEnumerable<IMassPoint3D> firstSet, IEnumerable<IMassPoint3D> secondSet);
-
     }
 }

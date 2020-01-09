@@ -287,6 +287,7 @@
     <Compile Include="Base\Objects\VvmContainer.cs" />
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxMatrixExtensions.cs" />
+    <Compile Include="Controls\DxVisualizer\Extensions\DxVectorTransformerExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\Converter\PhongMaterialCoreToStringConverter.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\DxCustomizationControlView.xaml.cs">
       <DependentUpon>DxCustomizationControlView.xaml</DependentUpon>
@@ -333,7 +334,6 @@
     </Compile>
     <Compile Include="Controls\DxVisualizer\Viewport\DxViewportViewModel.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneLightSetting.cs" />
-    <Compile Include="Controls\DxVisualizer\Extensions\DxEffectsManagerExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Helper\DxLightFactory.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxMeshBuilderExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Helper\DxSceneBuilder.cs" />

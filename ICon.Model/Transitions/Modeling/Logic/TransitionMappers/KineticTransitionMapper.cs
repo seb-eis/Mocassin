@@ -72,7 +72,7 @@ namespace Mocassin.Model.Transitions
 
             foreach (var fractionalSequence in SpaceGroupService.GetUnitCellP1PathExtension(geometryList))
             {
-                if (VectorEncoder.TryEncode(fractionalSequence.Cast<IFractional3D>(), out var encodedSequence))
+                if (VectorEncoder.TryEncode(fractionalSequence, out var encodedSequence))
                     yield return new KineticMapping(transition, start, end, encodedSequence.ToArray(), fractionalSequence);
                 else
                     throw new InvalidOperationException(

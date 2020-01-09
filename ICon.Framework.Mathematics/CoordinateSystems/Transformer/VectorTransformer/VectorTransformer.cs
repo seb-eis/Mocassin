@@ -9,10 +9,10 @@ namespace Mocassin.Mathematics.Coordinates
     public class VectorTransformer : IVectorTransformer
     {
         /// <inheritdoc />
-        public FractionalCoordinateSystem3D FractionalSystem { get; protected set; }
+        public FractionalCoordinateSystem3D FractionalSystem { get; }
 
         /// <inheritdoc />
-        public SphericalCoordinateSystem3D SphericalSystem { get; protected set; }
+        public SphericalCoordinateSystem3D SphericalSystem { get; }
 
         /// <summary>
         ///     Creates new vector transformer with the provided coordinate systems
@@ -26,69 +26,15 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <inheritdoc />
-        public Cartesian3D ToCartesian(IVector3D vector)
-        {
-            return TransformAny(vector, value => new Cartesian3D(value.Coordinates), ToCartesian, ToCartesian);
-        }
-
-        /// <inheritdoc />
-        public Fractional3D ToFractional(IVector3D vector)
-        {
-            return TransformAny(vector, ToFractional, value => new Fractional3D(value.Coordinates), ToFractional);
-        }
-
-        /// <inheritdoc />
-        public Spherical3D ToSpherical(IVector3D vector)
-        {
-            return TransformAny(vector, ToSpherical, ToSpherical, value => new Spherical3D(value.Coordinates));
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<Cartesian3D> ToCartesian(IEnumerable<IVector3D> vectors)
-        {
-            return vectors.Select(ToCartesian);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<Fractional3D> ToFractional(IEnumerable<IVector3D> vectors)
-        {
-            return vectors.Select(ToFractional);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<Spherical3D> ToSpherical(IEnumerable<IVector3D> vectors)
-        {
-            return vectors.Select(ToSpherical);
-        }
-
-        /// <inheritdoc />
-        public Cartesian3D ToCartesian(ISpherical3D vector)
-        {
-            return new Cartesian3D(SphericalSystem.ToReferenceSystem(vector.Coordinates));
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<Cartesian3D> ToCartesian(IEnumerable<ISpherical3D> vectors)
-        {
-            return vectors.Select(ToCartesian);
-        }
-
-        /// <inheritdoc />
-        public Cartesian3D ToCartesian(IFractional3D vector)
-        {
-            return new Cartesian3D(FractionalSystem.ToReferenceSystem(vector.Coordinates));
-        }
-
-        /// <inheritdoc />
         public Cartesian3D ToCartesian(in Fractional3D vector)
         {
-            return new Cartesian3D(FractionalSystem.ToReferenceSystem(vector.Coordinates));
+            return FractionalSystem.ToReferenceSystem(vector);
         }
 
         /// <inheritdoc />
-        public IEnumerable<Cartesian3D> ToCartesian(IEnumerable<IFractional3D> vectors)
+        public Spherical3D ToSpherical(in Fractional3D vector)
         {
-            return vectors.Select(ToCartesian);
+            return SphericalSystem.ToSystem(ToCartesian(vector));
         }
 
         /// <inheritdoc />
@@ -98,21 +44,21 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <inheritdoc />
-        public Fractional3D ToFractional(ICartesian3D vector)
+        public IEnumerable<Spherical3D> ToSpherical(IEnumerable<Fractional3D> vectors)
         {
-            return new Fractional3D(FractionalSystem.ToSystem(vector.Coordinates));
+            return vectors.Select(x => ToSpherical(x));
         }
 
         /// <inheritdoc />
         public Fractional3D ToFractional(in Cartesian3D vector)
         {
-            return new Fractional3D(FractionalSystem.ToSystem(vector.Coordinates));
+            return FractionalSystem.ToSystem(vector);
         }
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> ToFractional(IEnumerable<ICartesian3D> vectors)
+        public Spherical3D ToSpherical(in Cartesian3D vector)
         {
-            return vectors.Select(ToFractional);
+            return SphericalSystem.ToSystem(vector);
         }
 
         /// <inheritdoc />
@@ -122,68 +68,33 @@ namespace Mocassin.Mathematics.Coordinates
         }
 
         /// <inheritdoc />
-        public Fractional3D ToFractional(ISpherical3D vector)
+        public IEnumerable<Spherical3D> ToSpherical(IEnumerable<Cartesian3D> vectors)
         {
-            return new Fractional3D(FractionalSystem.ToSystem(ToCartesian(vector).Coordinates));
+            return vectors.Select(x => ToSpherical(in x));
         }
 
         /// <inheritdoc />
-        public IEnumerable<Fractional3D> ToFractional(IEnumerable<ISpherical3D> vectors)
+        public Fractional3D ToFractional(in Spherical3D vector)
         {
-            return vectors.Select(ToFractional);
+            return FractionalSystem.ToSystem(ToCartesian(vector));
         }
 
         /// <inheritdoc />
-        public Spherical3D ToSpherical(ICartesian3D vector)
+        public Cartesian3D ToCartesian(in Spherical3D vector)
         {
-            return new Spherical3D(SphericalSystem.ToSystem(vector.Coordinates));
+            return SphericalSystem.ToReferenceSystem(vector);
         }
 
         /// <inheritdoc />
-        public IEnumerable<Spherical3D> ToSpherical(IEnumerable<ICartesian3D> vectors)
+        public IEnumerable<Fractional3D> ToFractional(IEnumerable<Spherical3D> vectors)
         {
-            return vectors.Select(ToSpherical);
+            return vectors.Select(x => ToFractional(x));
         }
 
         /// <inheritdoc />
-        public Spherical3D ToSpherical(IFractional3D vector)
+        public IEnumerable<Cartesian3D> ToCartesian(IEnumerable<Spherical3D> vectors)
         {
-            return new Spherical3D(SphericalSystem.ToSystem(ToCartesian(vector).Coordinates));
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<Spherical3D> ToSpherical(IEnumerable<IFractional3D> vectors)
-        {
-            return vectors.Select(ToSpherical);
-        }
-
-        /// <summary>
-        ///     Transforms any vector to the specified type suing the provided conversion delegates (Throws if interface is not
-        ///     supported)
-        /// </summary>
-        /// <typeparam name="TVector"></typeparam>
-        /// <param name="vector"></param>
-        /// <param name="onCartesian"></param>
-        /// <param name="onFractional"></param>
-        /// <param name="onSpherical"></param>
-        /// <returns></returns>
-        protected TVector TransformAny<TVector>(IVector3D vector, Func<ICartesian3D, TVector> onCartesian,
-            Func<IFractional3D, TVector> onFractional, Func<ISpherical3D, TVector> onSpherical)
-        {
-            switch (vector)
-            {
-                case IFractional3D fractional:
-                    return onFractional(fractional);
-
-                case ISpherical3D spherical:
-                    return onSpherical(spherical);
-
-                case ICartesian3D cartesian:
-                    return onCartesian(cartesian);
-
-                default:
-                    throw new ArgumentException("Argument implements none of the supported interfaces", nameof(vector));
-            }
+            return vectors.Select(x => ToCartesian(x));
         }
     }
 }

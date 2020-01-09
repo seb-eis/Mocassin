@@ -80,7 +80,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public bool IntermediatePositionsValid(KineticMapping mapping, IList<SetList<Fractional3D>> positionMap, double tolerance)
         {
-            if (!UnitCellProvider.VectorEncoder.TryDecode(mapping.EncodedPath.Cast<ICrystalVector4D>(), out var regularPositions))
+            if (!UnitCellProvider.VectorEncoder.TryDecode(mapping.EncodedPath, out var regularPositions))
                 throw new ArgumentException("Passed mapping contains invalid 4D position information", nameof(mapping));
 
             for (var i = 0; i < regularPositions.Count - 1; i++)

@@ -9,27 +9,27 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
     public static class DxVectorExtensions
     {
         /// <summary>
-        ///     Narrowing conversion of a <see cref="Coordinates3D"/> 192-bit source vector to a SharpDX 96-bit <see cref="Vector3"/>
+        ///     Narrowing conversion of a double precision <see cref="Cartesian3D"/> to a SharpDX single precision <see cref="Vector3"/>
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
         public static Vector3 ToDxVector(this Cartesian3D source)
         {
-            return new Vector3((float) source.X, (float) source.Y, (float) source.Z);
+            return source.Coordinates.ToDxVector();
         }
 
         /// <summary>
-        ///     Narrowing conversion of a <see cref="Fractional3D"/> 192-bit source vector to a SharpDX 96-bit <see cref="Vector3"/>
+        ///     Narrowing conversion of a double precision <see cref="Fractional3D"/> to a SharpDX single precision <see cref="Vector3"/>
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
         public static Vector3 ToDxVector(this Fractional3D source)
         {
-            return new Vector3((float) source.A, (float) source.B, (float) source.C);
+            return source.Coordinates.ToDxVector();
         }
 
         /// <summary>
-        ///     Narrowing conversion of a <see cref="Coordinates3D"/> 192-bit source data to a SharpDX 96-bit <see cref="Vector3"/>
+        ///     Narrowing conversion of a double precision <see cref="Coordinates3D"/> to a SharpDX single precision <see cref="Vector3"/>
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>

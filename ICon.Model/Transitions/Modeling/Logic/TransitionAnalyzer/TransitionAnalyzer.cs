@@ -44,7 +44,7 @@ namespace Mocassin.Model.Transitions
             foreach (var vector in positionGeometry.SelectConsecutivePairs((a, b) => b - a))
             {
                 current += vector;
-                if (equalityComparer.Compare(current, Fractional3D.NullVector) == 0)
+                if (equalityComparer.Compare(current, Fractional3D.Zero) == 0)
                     return true;
             }
 

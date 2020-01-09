@@ -522,6 +522,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             StartCellPositionSceneNodeBuilding(sceneBuilder, renderBox);
             StartTransitionSceneNodeBuilding(sceneBuilder, renderBox);
             StartPairInteractionSceneNodeBuilding(sceneBuilder, renderBox);
+            StartGroupInteractionSceneNodeBuilding(sceneBuilder, renderBox);
             return sceneBuilder;
         }
 
@@ -707,14 +708,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
-        /// <param name="pairGraph"></param>
+        /// <param name="pairEnergySet"></param>
         /// <param name="renderBox"></param>
-        private void AddPairInteractionNodeToScene(DxSceneBuilder sceneBuilder, PairEnergySetGraph pairGraph, in FractionalBox3D renderBox)
+        private void AddPairInteractionNodeToScene(DxSceneBuilder sceneBuilder, PairEnergySetGraph pairEnergySet, in FractionalBox3D renderBox)
         {
-            var itemConfig = GetMeshItemConfigLazy(pairGraph);
+            var itemConfig = GetMeshItemConfigLazy(pairEnergySet);
             if (itemConfig.IsInactive) return;
 
-            var path = pairGraph.AsVectorPath().ToList();
+            var path = pairEnergySet.AsVectorPath().ToList();
             var middle = (path[1] + path[0]) * 0.5;
             var geometry1 = CreateCylinderGeometry(itemConfig, path[0], middle);
             var geometry2 = CreateCylinderGeometry(itemConfig, middle, path[1]);
@@ -735,8 +736,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Starts the scene build tasks for all kinetic transitions in model of the current content source using the provided
-        ///     <see cref="DxSceneBuilder" />
+        ///     Starts the scene build tasks for all pair interactions in the selected customization of the current content source
+        ///     using the provided <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="renderBox"></param>
@@ -749,6 +750,54 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddPairInteractionNodeToScene(sceneBuilder, pairGraph, renderBox)));
             foreach (var pairGraph in SelectedCustomization.EnergyModelCustomization.UnstablePairEnergyParameterSets)
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddPairInteractionNodeToScene(sceneBuilder, pairGraph, renderBox)));
+        }
+
+        /// <summary>
+        ///     Prepares the scene elements for the provided <see cref="GroupEnergySetGraph" /> and adds the node one the
+        ///     <see cref="DxSceneBuilder" />
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="groupEnergySet"></param>
+        /// <param name="renderBox"></param>
+        private void AddGroupInteractionNodeToScene(DxSceneBuilder sceneBuilder, GroupEnergySetGraph groupEnergySet, in FractionalBox3D renderBox)
+        {
+            var itemConfig = GetMeshItemConfigLazy(groupEnergySet);
+            if (itemConfig.IsInactive) return;
+
+            var positions = groupEnergySet.AsVectorPath(true).ToList();
+            var geometry = CreatePolygonFanGeometry(positions);
+            var matrices = GetPathSceneItemTransforms(positions, renderBox, out var anyFlipsOrientation);
+            var material = itemConfig.CreateMaterial();
+            var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
+
+            void ConfigLocal(SceneNode sceneNode)
+            {
+                configurator(sceneNode);
+                switch (sceneNode)
+                {
+                    case MeshNode meshNode:
+                        meshNode.RenderWireframe = true;
+                        break;
+                    case BatchedMeshNode meshNode:
+                        meshNode.RenderWireframe = true;
+                        break;
+                }
+            }
+            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, ConfigLocal);
+        }
+
+        /// <summary>
+        ///     Starts the scene build tasks for all group interactions in the selected customization of the current content source
+        ///     using the provided <see cref="DxSceneBuilder" />
+        /// </summary>
+        /// <param name="sceneBuilder"></param>
+        /// <param name="renderBox"></param>
+        /// <returns></returns>
+        private void StartGroupInteractionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
+        {
+            if (ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty) || SelectedCustomization?.EnergyModelCustomization == null) return;
+            foreach (var groupEnergySet in SelectedCustomization.EnergyModelCustomization.GroupEnergyParameterSets)
+                sceneBuilder.AttachCustomTask(Task.Run(() => AddGroupInteractionNodeToScene(sceneBuilder, groupEnergySet, renderBox)));
         }
 
         /// <summary>
@@ -790,8 +839,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var sizeCorrections = checkAtoms ? CreatePathAtomSizeCorrections(path) : null;
             for (var i = 1; i < path.Count; i++)
             {
-                var point1 = VectorTransformer.ToCartesian(path[i - 1]).ToDxVector();
-                var point2 = VectorTransformer.ToCartesian(path[i]).ToDxVector();
+                var point1 = VectorTransformer.ToCartesianDx(path[i - 1]);
+                var point2 = VectorTransformer.ToCartesianDx(path[i]);
                 if (checkAtoms)
                 {
                     var directionToSecond = (point2 - point1).Normalized();
@@ -829,10 +878,30 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private MeshGeometry3D CreateCylinderGeometry(IDxMeshItemConfig itemConfig, in Fractional3D start, in Fractional3D end)
         {
             var meshBuilder = new MeshBuilder();
-            var radius = itemConfig.MeshScaling / 40;
+            var radius = itemConfig.MeshScaling;
             var thetaDiv = Settings.Default.Default_Render_Arrow_ThetaDiv;
-            var (point1, point2) = (VectorTransformer.ToCartesian(start).ToDxVector(), VectorTransformer.ToCartesian(end).ToDxVector());
+            var (point1, point2) = (VectorTransformer.ToCartesianDx(start), VectorTransformer.ToCartesianDx(end));
             meshBuilder.AddCylinder(point1, point2, radius, thetaDiv, false, false);
+            return meshBuilder.ToMesh();
+        }
+
+        /// <summary>
+        ///     Creates a new polygon fan <see cref="MeshGeometry3D" /> using a set of <see cref="Fractional3D"/> positions
+        /// </summary>
+        /// <param name="positions"></param>
+        /// <returns></returns>
+        private MeshGeometry3D CreatePolygonFanGeometry(IList<Fractional3D> positions)
+        {
+            if (positions.Count < 3) throw new ArgumentException("At least three positions required.");
+            var meshBuilder = new MeshBuilder();
+            var dxVectors = positions.Select(x => VectorTransformer.ToCartesianDx(x)).ToList(positions.Count);
+            for (var i = 0; i < positions.Count - 2; i++)
+            {
+                for (var j = i + 1; j < positions.Count - 1; j++)
+                {
+                    for (var k = j + 1; k < positions.Count; k++) meshBuilder.AddTriangle(dxVectors[i], dxVectors[j], dxVectors[k]);
+                }
+            }
             return meshBuilder.ToMesh();
         }
 
@@ -902,7 +971,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             {
                 sceneNode.IsHitTestVisible = false;
                 sceneNode.Visible = isVisible;
-
                 switch (sceneNode)
                 {
                     case BatchedMeshNode batchedMeshNode:
