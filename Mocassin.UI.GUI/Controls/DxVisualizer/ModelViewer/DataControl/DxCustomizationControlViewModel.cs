@@ -47,6 +47,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public bool IsInvalidScene => ParentModelSceneViewModel.IsInvalidScene;
 
         /// <summary>
+        ///     Get or set a boolean flag if the scene is invalid and requires rebuilding
+        /// </summary>
+        public bool IsMatchInteractionToHit
+        {
+            get => ParentModelSceneViewModel.IsMatchInteractionToHit;
+            set
+            {
+                if (IsMatchInteractionToHit == value) return;
+                ParentModelSceneViewModel.IsMatchInteractionToHit = value;
+            }
+        }
+
+        /// <summary>
         ///     Get a <see cref="IReadOnlyCollection{T}" /> of all supported <see cref="PhongMaterialCore" /> names
         /// </summary>
         public IReadOnlyCollection<string> MeshMaterialNames => PhongMaterialCoreToStringConverter.MaterialNameCollection;
@@ -92,6 +105,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
                     break;
                 case nameof(DxModelSceneViewModel.SelectedCustomization):
                     OnPropertyChanged(nameof(SelectedCustomization));
+                    break;
+                case nameof(DxModelSceneViewModel.IsMatchInteractionToHit):
+                    OnPropertyChanged(nameof(IsMatchInteractionToHit));
                     break;
             }
         }

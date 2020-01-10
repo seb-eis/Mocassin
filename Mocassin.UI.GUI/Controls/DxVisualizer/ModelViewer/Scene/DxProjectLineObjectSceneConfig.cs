@@ -31,18 +31,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public Color4 DxColor
-        {
-            get => Color.ToColor4();
-            set
-            {
-                if (value.Equals(DxColor)) return;
-                OnDxColorChanged();
-                OnPropertyChanged();
-            }
-        }
-
-        /// <inheritdoc />
         public Color Color
         {
             get => ObjectGraph.Resources.TryGetResource(ColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
@@ -71,7 +59,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public LineMaterialCore CreateMaterial()
         {
-            return new LineMaterialCore {LineColor = DxColor, Thickness = (float) LineThickness};
+            return new LineMaterialCore {LineColor = Color.ToColor4(), Thickness = (float) LineThickness};
         }
 
         /// <inheritdoc />
@@ -86,14 +74,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         protected virtual void OnLineThicknessChanged()
         {
             OnMaterialChanged();
-        }
-
-        /// <summary>
-        ///     Action that is called when the <see cref="DxColor" /> property changed
-        /// </summary>
-        protected virtual void OnDxColorChanged()
-        {
-            Color = DxColor.ToColor();
         }
 
         /// <summary>

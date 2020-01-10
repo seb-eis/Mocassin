@@ -5,7 +5,7 @@ using NCalc;
 namespace Mocassin.UI.GUI.Base.Converter
 {
     /// <summary>
-    ///     A <see cref="ValueConverter" /> that converts numeric <see cref="object" /> into <see cref="string" /> values with
+    ///     A <see cref="ValueConverter" /> that converts numeric <see cref="string" /> expressions into <see cref="string" /> values with
     ///     backward conversion trough NCalc expression interpreter
     /// </summary>
     public class NumericExpressionToValueConverter : ValueConverter
@@ -13,14 +13,13 @@ namespace Mocassin.UI.GUI.Base.Converter
         /// <inheritdoc />
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IConvertible convertible) return convertible.ToString(culture);
-            return value?.ToString();
+            return value;
         }
 
         /// <inheritdoc />
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value?.ToString() is string code)) return null;
+            if (!(value?.ToString() is { } code)) return null;
             if (code == "null" || code == "Null") return null;
             try
             {

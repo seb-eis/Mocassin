@@ -18,7 +18,7 @@ namespace Mocassin.UI.Xml.Customization
     {
         private string key;
         private EnergyModelCustomizationGraph energyModelCustomization;
-        private TransitionModelCustomizationEntity transitionModelCustomization;
+        private TransitionModelCustomizationGraph transitionModelCustomization;
 
         /// <summary>
         ///     Get the <see cref="ProjectCustomizationGraph"/> that represents an empty customization
@@ -49,12 +49,12 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Get or set the <see cref="TransitionModelCustomizationEntity" /> that stores transition customization data
+        ///     Get or set the <see cref="TransitionModelCustomizationGraph" /> that stores transition customization data
         /// </summary>
         [XmlElement("TransitionCustomization")]
         [ModelCustomizationRoot]
         [NotMapped]
-        public TransitionModelCustomizationEntity TransitionModelCustomization
+        public TransitionModelCustomizationGraph TransitionModelCustomization
         {
             get => transitionModelCustomization;
             set => SetProperty(ref transitionModelCustomization, value);
@@ -98,7 +98,7 @@ namespace Mocassin.UI.Xml.Customization
             {
                 Parent = parent.Parent,
                 EnergyModelCustomization = EnergyModelCustomizationGraph.Create(energySetterProvider, parent),
-                TransitionModelCustomization = TransitionModelCustomizationEntity.Create(ruleSetterProvider, parent)
+                TransitionModelCustomization = TransitionModelCustomizationGraph.Create(ruleSetterProvider, parent)
             };
             obj.Name = $"New customization [{obj.Parent.ProjectName}]";
 

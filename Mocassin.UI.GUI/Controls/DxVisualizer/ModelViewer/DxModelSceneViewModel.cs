@@ -51,6 +51,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         private ProjectCustomizationGraph selectedCustomization;
         private bool canInvalidateScene = true;
         private bool isInvalidScene;
+        private bool isMatchInteractionToHit;
 
         /// <summary>
         ///     Get or set the <see cref="IDisposable" /> that cancels the content synchronization for selectable
@@ -148,6 +149,15 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             get => selectedCustomization;
             set => SetProperty(ref selectedCustomization, value, OnSelectedCustomizationChanged);
+        }
+
+        /// <summary>
+        ///     Get or set a boolean flag that indicates if interaction configurations should be overwritten by the position configs affiliated with them
+        /// </summary>
+        public bool IsMatchInteractionToHit
+        {
+            get => isMatchInteractionToHit;
+            set => SetProperty(ref isMatchInteractionToHit, value, MarkSceneAsInvalid);
         }
 
         /// <inheritdoc />
@@ -427,7 +437,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 StructureInfoGraph _ => VisualObjectCategory.Frame,
                 KineticTransitionGraph _ => VisualObjectCategory.DoubleArrow,
                 UnitCellPositionGraph _ => VisualObjectCategory.Sphere,
-                PairEnergySetGraph _ => VisualObjectCategory.Line,
+                PairEnergySetGraph _ => VisualObjectCategory.Cylinder,
                 GroupEnergySetGraph _ => VisualObjectCategory.PolygonSet,
                 _ => VisualObjectCategory.Unknown
             };
@@ -557,7 +567,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 }
             }
 
-            var configurator = GetSceneNodeConfigurator(itemConfig, true);
+            var configurator = GetSceneNodeConfigurator(itemConfig);
             sceneBuilder.AddLineGeometry(lineBuilder.ToLineGeometry3D(), material, matrix, configurator);
         }
 
@@ -725,8 +735,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             CheckCellPositionHit(path[0], out IDxMeshItemConfig atomConfig1);
             CheckCellPositionHit(path[1], out IDxMeshItemConfig atomConfig2);
 
-            var material1 = atomConfig1.CreateMaterial();
-            var material2 = ReferenceEquals(atomConfig1, atomConfig2) ? material1 : atomConfig2.CreateMaterial();
+            var material1 = IsMatchInteractionToHit ? atomConfig1.CreateMaterial() : itemConfig.CreateMaterial();
+            var material2 = !IsMatchInteractionToHit || ReferenceEquals(atomConfig1, atomConfig2) ? material1 : atomConfig2.CreateMaterial();
 
             var configurator1 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips1);
             var configurator2 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips2);
@@ -770,20 +780,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, !anyFlipsOrientation);
 
-            void ConfigLocal(SceneNode sceneNode)
-            {
-                configurator(sceneNode);
-                switch (sceneNode)
-                {
-                    case MeshNode meshNode:
-                        meshNode.RenderWireframe = true;
-                        break;
-                    case BatchedMeshNode meshNode:
-                        meshNode.RenderWireframe = true;
-                        break;
-                }
-            }
-            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, ConfigLocal);
+            AddMeshElementsToScene(sceneBuilder, geometry, material, matrices, configurator);
         }
 
         /// <summary>
@@ -961,27 +958,49 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     provided <see cref="IDxSceneItemConfig" />
         /// </summary>
         /// <param name="itemConfig"></param>
-        /// <param name="noOrientationFlips"></param>
-        protected virtual Action<SceneNode> GetSceneNodeConfigurator(IDxSceneItemConfig itemConfig, bool noOrientationFlips = false)
+        protected virtual Action<SceneNode> GetSceneNodeConfigurator(IDxSceneItemConfig itemConfig)
         {
-            var cullMode = GetOptimalCullMode(itemConfig.VisualCategory, noOrientationFlips);
             var isVisible = itemConfig.IsVisible;
 
             void ConfigNodeAndAttach(SceneNode sceneNode)
             {
                 sceneNode.IsHitTestVisible = false;
                 sceneNode.Visible = isVisible;
+                itemConfig.AttachNode(sceneNode, true);
+            }
+
+            return ConfigNodeAndAttach;
+        }
+
+        /// <summary>
+        ///     Get a configuration and attachment callback <see cref="Action{T}" /> for a <see cref="SceneNode" /> using the
+        ///     provided <see cref="IDxMeshItemConfig" />
+        /// </summary>
+        /// <param name="itemConfig"></param>
+        /// <param name="noOrientationFlips"></param>
+        protected virtual Action<SceneNode> GetSceneNodeConfigurator(IDxMeshItemConfig itemConfig, bool noOrientationFlips = false)
+        {
+            var baseConfigurator = GetSceneNodeConfigurator((IDxSceneItemConfig) itemConfig);
+            var cullMode = GetOptimalCullMode(itemConfig.VisualCategory, noOrientationFlips);
+            var isWireFrameVisible = itemConfig.IsWireframeVisible;
+            var wireframeColor = itemConfig.WireframeColor.ToColor4();
+
+            void ConfigNodeAndAttach(SceneNode sceneNode)
+            {
                 switch (sceneNode)
                 {
                     case BatchedMeshNode batchedMeshNode:
                         batchedMeshNode.CullMode = cullMode;
+                        batchedMeshNode.WireframeColor = wireframeColor;
+                        batchedMeshNode.RenderWireframe = isWireFrameVisible;
                         break;
                     case MeshNode meshNode:
                         meshNode.CullMode = cullMode;
+                        meshNode.WireframeColor = wireframeColor;
+                        meshNode.RenderWireframe = isWireFrameVisible;
                         break;
                 }
-
-                itemConfig.AttachNode(sceneNode, true);
+                baseConfigurator.Invoke(sceneNode);
             }
 
             return ConfigNodeAndAttach;
@@ -1002,16 +1021,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             if (!noOrientationFlips) return CullMode.None;
             return objectCategory switch
             {
-                VisualObjectCategory.Unknown => CullMode.None,
-                VisualObjectCategory.Frame => CullMode.None,
-                VisualObjectCategory.Line => CullMode.None,
-                VisualObjectCategory.PolygonSet => CullMode.None,
                 VisualObjectCategory.Sphere => CullMode.Back,
                 VisualObjectCategory.Cube => CullMode.Back,
                 VisualObjectCategory.DoubleArrow => CullMode.Back,
                 VisualObjectCategory.SingleArrow => CullMode.Back,
                 VisualObjectCategory.Cylinder => CullMode.Back,
-                _ => throw new ArgumentOutOfRangeException(nameof(objectCategory), objectCategory, null)
+                _ => CullMode.None
             };
         }
 

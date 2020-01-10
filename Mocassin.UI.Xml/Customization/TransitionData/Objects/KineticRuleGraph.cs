@@ -136,6 +136,20 @@ namespace Mocassin.UI.Xml.Customization
             return copy;
         }
 
+        /// <summary>
+        ///     Check if all occupation states are equal to the states on the provided <see cref="KineticRuleSetGraph"/>
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool HasEqualStates(KineticRuleGraph other)
+        {
+            return other != null && 
+                   (ReferenceEquals(this, other) ||
+                    StartState.HasEqualState(other.StartState) && 
+                    TransitionState.HasEqualState(other.TransitionState) &&
+                    FinalState.HasEqualState(other.FinalState));
+        }
+
         /// <inheritdoc />
         object IDuplicable.Duplicate()
         {

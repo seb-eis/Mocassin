@@ -232,7 +232,7 @@ namespace Mocassin.Framework.Extensions
         }
 
         /// <summary>
-        ///     Enumerates the provided <see cref="IEnumerable{T}"/>. Equivalent to calling ToList() without the overhead of actually creating a list
+        ///     Enumerates the provided <see cref="IEnumerable{T}"/>. Equivalent to calling ToList() and throwing away the list without the overhead of actually creating a list
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>

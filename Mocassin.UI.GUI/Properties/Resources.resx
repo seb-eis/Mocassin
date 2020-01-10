@@ -184,4 +184,10 @@
   <data name="ErrorMsg_Argument_EmptyCollection" xml:space="preserve">
     <value>Value cannot be an empty collection.</value>
   </data>
+  <data name="ResourceKey_ModelObject_RenderWireframeColor" xml:space="preserve">
+    <value>Render_Wireframe_Color</value>
+  </data>
+  <data name="ResourceKey_ModelObject_RenderWireframeFlag" xml:space="preserve">
+    <value>Render_Wireframe_Flag</value>
+  </data>
 </root>

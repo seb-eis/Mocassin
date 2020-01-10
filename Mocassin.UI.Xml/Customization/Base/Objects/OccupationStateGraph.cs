@@ -103,6 +103,16 @@ namespace Mocassin.UI.Xml.Customization
             return builder.ToString();
         }
 
+        /// <summary>
+        ///     Checks if the occupation describes by the other <see cref="OccupationStateGraph"/> is equal to this one
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool HasEqualState(OccupationStateGraph other)
+        {
+            return other != null && (ReferenceEquals(this, other) || Particles.SequenceEqual(other.Particles));
+        }
+
         /// <inheritdoc />
         object IDuplicable.Duplicate()
         {

@@ -78,7 +78,7 @@
         <DataGridTextColumn Binding="{Binding DependencyRuleCount}" Header="Hidden rule count"
                             IsReadOnly="True"/>
         <DataGridTextColumn
-          Binding="{Binding AttemptFrequency, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+          Binding="{Binding AttemptFrequency, StringFormat=E13, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
           Header="Attempt frequency [Hz]" />
       </DataGrid.Columns>
     </DataGrid>

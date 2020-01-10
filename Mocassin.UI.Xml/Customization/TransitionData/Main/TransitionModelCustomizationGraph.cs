@@ -16,7 +16,7 @@ namespace Mocassin.UI.Xml.Customization
     ///     the <see cref="IRuleSetterProvider" /> system
     /// </summary>
     [XmlRoot("TransitionModelCustomization")]
-    public class TransitionModelCustomizationEntity : ModelCustomizationEntity, IDuplicable<TransitionModelCustomizationEntity>
+    public class TransitionModelCustomizationGraph : ModelCustomizationEntity, IDuplicable<TransitionModelCustomizationGraph>
     {
         private ObservableCollection<KineticRuleSetGraph> kineticTransitionParameterSets;
 
@@ -45,18 +45,18 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <summary>
-        ///     Create a new <see cref="TransitionModelCustomizationEntity" /> by pulling all data from the passed
+        ///     Create a new <see cref="TransitionModelCustomizationGraph" /> by pulling all data from the passed
         ///     <see cref="IRuleSetterProvider" /> and <see cref="ProjectModelGraph" /> parent
         /// </summary>
         /// <param name="ruleSetterProvider"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static TransitionModelCustomizationEntity Create(IRuleSetterProvider ruleSetterProvider, ProjectModelGraph parent)
+        public static TransitionModelCustomizationGraph Create(IRuleSetterProvider ruleSetterProvider, ProjectModelGraph parent)
         {
             if (ruleSetterProvider == null) throw new ArgumentNullException(nameof(ruleSetterProvider));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
-            var obj = new TransitionModelCustomizationEntity
+            var obj = new TransitionModelCustomizationGraph
             {
                 KineticTransitionParameterSets = ruleSetterProvider
                     .GetRuleSetters()
@@ -68,9 +68,9 @@ namespace Mocassin.UI.Xml.Customization
         }
 
         /// <inheritdoc />
-        public TransitionModelCustomizationEntity Duplicate()
+        public TransitionModelCustomizationGraph Duplicate()
         {
-            var copy = new TransitionModelCustomizationEntity
+            var copy = new TransitionModelCustomizationGraph
             {
                 Name = Name,
                 kineticTransitionParameterSets = kineticTransitionParameterSets.Select(x => x.Duplicate()).ToObservableCollection()

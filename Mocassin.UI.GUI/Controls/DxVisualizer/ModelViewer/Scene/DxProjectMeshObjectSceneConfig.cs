@@ -28,6 +28,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         private static string ColorKey => Resources.ResourceKey_ModelObject_RenderColor;
         private static string MeshQualityKey => Resources.ResourceKey_ModelObject_MeshQuality;
         private static string UniformScalingKey => Resources.ResourceKey_ModelObject_RenderScaling;
+        private static string IsWireframeVisibleKey => Resources.ResourceKey_ModelObject_RenderWireframeFlag;
+        private static string WireframeColorKey => Resources.ResourceKey_ModelObject_RenderWireframeColor;
 
         /// <summary>
         ///     Get the <see cref="Dictionary{TKey,TValue}" /> of supported <see cref="Material" /> items
@@ -39,6 +41,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         {
             get => canResizeMeshAtOrigin;
             set => SetProperty(ref canResizeMeshAtOrigin, value);
+        }
+
+        /// <inheritdoc />
+        public bool IsWireframeVisible
+        {
+            get => ObjectGraph.Resources.TryGetResource(IsWireframeVisibleKey, out bool value) && value;
+            set
+            {
+                if (value == IsWireframeVisible) return;
+                ObjectGraph.Resources.SetResource(IsWireframeVisibleKey, value);
+                OnIsWireframeVisibleChanged();
+                OnPropertyChanged();
+            }
         }
 
         /// <inheritdoc />
@@ -57,18 +72,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public Color4 DxDiffuseColor
-        {
-            get => DiffuseColor.ToColor4();
-            set
-            {
-                if (value.Equals(DxDiffuseColor)) return;
-                OnDxDiffuseColorChanged();
-                OnPropertyChanged();
-            }
-        }
-
-        /// <inheritdoc />
         public Color DiffuseColor
         {
             get => ObjectGraph.Resources.TryGetResource(ColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
@@ -77,6 +80,19 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
                 if (value.Equals(DiffuseColor)) return;
                 ObjectGraph.Resources.SetResource(ColorKey, value, color => color.ToRgbaHex());
                 OnDiffuseColorChanged();
+                OnPropertyChanged();
+            }
+        }
+
+        /// <inheritdoc />
+        public Color WireframeColor
+        {
+            get => ObjectGraph.Resources.TryGetResource(WireframeColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
+            set
+            {
+                if (value.Equals(WireframeColor)) return;
+                ObjectGraph.Resources.SetResource(WireframeColorKey, value, color => color.ToRgbaHex());
+                OnWireframeColorChanged();
                 OnPropertyChanged();
             }
         }
@@ -97,7 +113,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public double MeshScaling
         {
-            get => ObjectGraph.Resources.TryGetResource(UniformScalingKey, out double value) ? value : 1.0;
+            get => ObjectGraph.Resources.TryGetResource(UniformScalingKey, out double value) ? value : GetDefaultScaling();
             set
             {
                 var newValue = value < Settings.Default.Limit_Render_Scaling_Lower ? Settings.Default.Limit_Render_Scaling_Lower : value;
@@ -151,14 +167,6 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="DxDiffuseColor " /> property changed
-        /// </summary>
-        protected virtual void OnDxDiffuseColorChanged()
-        {
-            DiffuseColor = DxDiffuseColor.ToColor();
-        }
-
-        /// <summary>
         ///     Action that is called if the<see cref="DiffuseColor" /> property changed
         /// </summary>
         protected virtual void OnDiffuseColorChanged()
@@ -167,23 +175,40 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
+        ///     Action that is called if the<see cref="WireframeColor" /> property changed
+        /// </summary>
+        protected virtual void OnWireframeColorChanged()
+        {
+            var color = WireframeColor.ToColor4();
+            foreach (var sceneNode in SceneNodes) ChangeNodeWireframeColor(sceneNode, color);
+        }
+
+        /// <summary>
+        ///     Changes the color of the wireframe of a <see cref="SceneNode"/>
+        /// </summary>
+        /// <param name="sceneNode"></param>
+        /// <param name="color"></param>
+        protected void ChangeNodeWireframeColor(SceneNode sceneNode, Color4 color)
+        {
+            UpdateNode(sceneNode, x => x.WireframeColor = color, x => x.WireframeColor = color);
+        }
+
+        /// <summary>
+        ///     Action that is called if the<see cref="IsWireframeVisible" /> property changed
+        /// </summary>
+        protected virtual void OnIsWireframeVisibleChanged()
+        {
+            var flag = IsWireframeVisible;
+            foreach (var sceneNode in SceneNodes) UpdateNode(sceneNode, x => x.RenderWireframe = flag, x => x.RenderWireframe = flag);
+        }
+
+        /// <summary>
         ///     Updates the transparency flag on all <see cref="SceneNode"/> instances
         /// </summary>
         protected void UpdateTransparencyFlags()
         {
-            var isTransparent = DiffuseColor.A < byte.MaxValue;
-            foreach (var sceneNode in SceneNodes)
-            {
-                switch (sceneNode)
-                {
-                    case MeshNode meshNode:
-                        meshNode.IsTransparent = isTransparent;
-                        break;
-                    case BatchedMeshNode batchedMeshNode:
-                        batchedMeshNode.IsTransparent = isTransparent;
-                        break;
-                }
-            }
+            var flag = DiffuseColor.A < byte.MaxValue;
+            foreach (var sceneNode in SceneNodes) UpdateNode(sceneNode, x => x.IsTransparent = flag, x => x.IsTransparent = flag);
         }
 
         /// <summary>
@@ -268,15 +293,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <param name="material"></param>
         protected void ChangeNodeMaterial(SceneNode sceneNode, MaterialCore material)
         {
-            switch (sceneNode)
-            {
-                case MeshNode meshNode:
-                    meshNode.Material = material;
-                    break;
-                case BatchedMeshNode batchedNode:
-                    batchedNode.Material = material;
-                    break;
-            }
+            UpdateNode(sceneNode, x => x.Material = material, x => x.Material = material);
         }
 
         /// <summary>
@@ -285,7 +302,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <param name="core"></param>
         protected void UpdateMaterialColor(MaterialCore core)
         {
-            if (core is PhongMaterialCore phongCore) phongCore.DiffuseColor = DxDiffuseColor;
+            if (core is PhongMaterialCore phongCore) phongCore.DiffuseColor = DiffuseColor.ToColor4();
         }
 
         /// <summary>
@@ -304,7 +321,45 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         protected override void CopyCurrentValuesToNode(SceneNode sceneNode)
         {
             ChangeNodeMaterial(sceneNode, Material);
+            ChangeNodeWireframeColor(sceneNode, WireframeColor.ToColor4());
+            UpdateNode(sceneNode, x => x.RenderWireframe = IsWireframeVisible, x => x.RenderWireframe = IsWireframeVisible);
             base.CopyCurrentValuesToNode(sceneNode);
+        }
+
+        /// <summary>
+        ///     Performs an action on a <see cref="SceneNode"/> depending on it being a <see cref="MeshNode"/> or a <see cref="BatchedMeshNode"/>
+        /// </summary>
+        /// <param name="sceneNode"></param>
+        /// <param name="meshNodeAction"></param>
+        /// <param name="batchedNodeAction"></param>
+        protected void UpdateNode(SceneNode sceneNode, Action<MeshNode> meshNodeAction, Action<BatchedMeshNode> batchedNodeAction)
+        {
+            switch (sceneNode)
+            {
+                case MeshNode meshNode:
+                    meshNodeAction(meshNode);
+                    break;
+                case BatchedMeshNode batchedMeshNode:
+                    batchedNodeAction(batchedMeshNode);
+                    break;
+            }
+        }
+
+        /// <summary>
+        ///     Get the default scaling value based on the <see cref="VisualObjectCategory"/>
+        /// </summary>
+        /// <returns></returns>
+        protected double GetDefaultScaling()
+        {
+            return VisualCategory switch
+            {
+                VisualObjectCategory.Sphere => Settings.Default.Default_Render_Sphere_Scaling,
+                VisualObjectCategory.Cube => Settings.Default.Default_Render_Cube_Scaling,
+                VisualObjectCategory.DoubleArrow => Settings.Default.Default_Render_Arrow_Scaling,
+                VisualObjectCategory.SingleArrow => Settings.Default.Default_Render_Arrow_Scaling,
+                VisualObjectCategory.Cylinder => Settings.Default.Default_Render_Cylinder_Scaling,
+                _ => 1.0
+            };
         }
     }
 }

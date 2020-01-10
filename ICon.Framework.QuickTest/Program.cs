@@ -24,6 +24,7 @@ using Mocassin.Tools.Evaluation.Helper;
 using Mocassin.Tools.UAccess.Readers;
 using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Helper;
+using Mocassin.UI.Xml.Helper.Migration;
 using Mocassin.UI.Xml.LatticeModel;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ProjectLibrary;
@@ -38,18 +39,15 @@ namespace Mocassin.Framework.QuickTest
 
         private static void Main(string[] args)
         {
-            var project = ModelProject.Create(ProjectSettings.CreateDefault());
-            project.SpaceGroupService.TryLoadGroup(x => x.Index == 221);
-            var watch = Stopwatch.StartNew();
-            for (int i = 0; i < 10000; i++)
-            {
-                var left0 = new Fractional3D(0, 0.7364, .5);
-                var right0 = new Fractional3D(-.5, 1, 0.2636);
-                var left1 = new Fractional3D(0, 0.7364, .5);
-                var right1 = new Fractional3D(.2636, .5, 0.0);
-                var result = project.SpaceGroupService.CheckInteractionGeometryIsChiralPair(left0, right0, left1, right1);   
-            }
-            DisplayWatch(watch);
+            var projectPath = @"C:\Users\hims-user\Documents\Gitlab\MocassinTestFiles\GuiTesting\meliliteTS.migrated.mocprj";
+            using var projectLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(projectPath);
+            projectLibrary.MocassinProjectGraphs.Load();
+            var project = projectLibrary.MocassinProjectGraphs.First();
+            var source = project.ProjectCustomizationGraphs.SingleOrDefault(x => x.Name.Contains("TS4"));
+            var target = project.ProjectCustomizationGraphs.SingleOrDefault(x => x.Name.Contains("TS5"));
+            var migrationTool = new ProjectCustomizationMigrationTool {IsRedundantReportEnabled = true};
+            migrationTool.Migrate(source, target);
+            var report = migrationTool.GenerateReport();
         }
 
         private static void TestHyperSurfaceEvaluator()

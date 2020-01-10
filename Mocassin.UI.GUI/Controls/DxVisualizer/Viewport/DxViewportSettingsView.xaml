@@ -226,19 +226,29 @@
     <ComboBox Grid.Row="22" Grid.Column="2" IsEditable="True" Margin="{StaticResource App.Margin.VerticalStack}"
               ItemsSource="{Binding SceneBatchingModes}" SelectedItem="{Binding SceneBatchingMode}" />
 
-    <TextBlock Grid.Row="23" Grid.Column="0" Text="Enable camera control" VerticalAlignment="Center"
+    <TextBlock Grid.Row="23" Grid.Column="0" Text="Manual camera" VerticalAlignment="Center"
                Margin="{StaticResource App.Margin.VerticalStack}"
                ToolTip="Allows manual vector definition for position, up-direction and look-direction of the camera."/>
     <CheckBox Grid.Row="23" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
               Margin="{StaticResource App.Margin.VerticalStack}"
-              IsChecked="False" Name="CheckBox_EnableManualCamera" />
+              IsChecked="False" Name="EnableManualCameraCheckBox" />
 
     <TextBlock Grid.Row="24" Grid.Column="0" Text="Camera (Position)" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}"
-               Visibility="{Binding ElementName=CheckBox_EnableManualCamera, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
+               Margin="{StaticResource App.Margin.VerticalStack}"/>
     <TextBox Grid.Row="24" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
-             Text="{Binding Camera.Position, StringFormat={}{0:f1}}" 
-             Visibility="{Binding ElementName=CheckBox_EnableManualCamera, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}">
+             IsEnabled="{Binding ElementName=EnableManualCameraCheckBox, Path=IsChecked}">
+      <TextBox.Style>
+        <Style TargetType="{x:Type TextBox}">
+          <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+              <Setter Property="Text" Value="{Binding Camera.Position, StringFormat={}{0:f1}}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Text" Value="{x:Null}"/>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </TextBox.Style>
       <TextBox.InputBindings>
         <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
@@ -246,11 +256,21 @@
     </TextBox>
 
     <TextBlock Grid.Row="25" Grid.Column="0" Text="Camera (Look Dir.)" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}"
-               Visibility="{Binding ElementName=CheckBox_EnableManualCamera, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
+               Margin="{StaticResource App.Margin.VerticalStack}"/>
     <TextBox Grid.Row="25" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
-             Text="{Binding Camera.LookDirection, StringFormat={}{0:f1}}" 
-             Visibility="{Binding ElementName=CheckBox_EnableManualCamera, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}">
+             IsEnabled="{Binding ElementName=EnableManualCameraCheckBox, Path=IsChecked}">
+      <TextBox.Style>
+        <Style TargetType="{x:Type TextBox}">
+          <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+              <Setter Property="Text" Value="{Binding Camera.LookDirection, StringFormat={}{0:f1}}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Text" Value="{x:Null}"/>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </TextBox.Style>
       <TextBox.InputBindings>
         <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
@@ -258,11 +278,21 @@
     </TextBox>
 
     <TextBlock Grid.Row="26" Grid.Column="0" Text="Camera (Up Dir.)" VerticalAlignment="Center"
-               Margin="{StaticResource App.Margin.VerticalStack}"
-               Visibility="{Binding ElementName=CheckBox_EnableManualCamera, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}"/>
+               Margin="{StaticResource App.Margin.VerticalStack}"/>
     <TextBox Grid.Row="26" Grid.Column="2" Margin="{StaticResource App.Margin.VerticalStack}" TextAlignment="Right"
-             Text="{Binding Camera.UpDirection, StringFormat={}{0:f1}}"
-             Visibility="{Binding ElementName=CheckBox_EnableManualCamera, Path=IsChecked, Converter={StaticResource App.Converter.BooleanToVisibility}}">
+             IsEnabled="{Binding ElementName=EnableManualCameraCheckBox, Path=IsChecked}">
+      <TextBox.Style>
+        <Style TargetType="{x:Type TextBox}">
+          <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+              <Setter Property="Text" Value="{Binding Camera.UpDirection, StringFormat={}{0:f1}}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Text" Value="{x:Null}"/>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </TextBox.Style>
       <TextBox.InputBindings>
         <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />

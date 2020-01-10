@@ -12,6 +12,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
   <UserControl.Resources>
     <converter:PhongMaterialCoreToStringConverter x:Key="Local.PhongMaterialCoreToStringConverter" />
+
     <Style TargetType="{x:Type DataGrid}">
       <Setter Property="CanUserAddRows" Value="False" />
       <Setter Property="CanUserDeleteRows" Value="False" />
@@ -21,30 +22,51 @@
       <Setter Property="ColumnWidth" Value="Auto" />
       <Setter Property="Background" Value="Transparent" />
     </Style>
+
     <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}" x:Key="Local.DataTemplate.MeshColorColumnCellTemplate">
-      <Grid>
-        <TextBlock Text="{Binding DiffuseColor}" Background="Transparent" HorizontalAlignment="Left" />
-        <Rectangle Height="16" Width="16" HorizontalAlignment="Right" Stroke="Black">
+      <DockPanel>
+        <Rectangle Height="16" Width="16" Stroke="Black" Margin="{StaticResource App.Margin.HorizontalStack}">
           <Rectangle.Fill>
             <SolidColorBrush Color="{Binding DiffuseColor, Mode=OneWay}" />
           </Rectangle.Fill>
         </Rectangle>
-      </Grid>
+        <TextBlock Text="{Binding DiffuseColor}" Background="Transparent" />
+      </DockPanel>
     </DataTemplate>
+
     <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}"
                   x:Key="Local.DataTemplate.MeshColorColumnCellEditingTemplate">
       <TextBox Text="{Binding DiffuseColor}" />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}"
+                  x:Key="Local.DataTemplate.WireframeColorColumnCellTemplate">
+      <DockPanel>
+        <Rectangle Height="16" Width="16" Stroke="Black" Margin="{StaticResource App.Margin.HorizontalStack}">
+          <Rectangle.Fill>
+            <SolidColorBrush Color="{Binding WireframeColor, Mode=OneWay}" />
+          </Rectangle.Fill>
+        </Rectangle>
+        <TextBlock Text="{Binding WireframeColor}" Background="Transparent" />
+      </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type scene:IDxMeshItemConfig}"
+                  x:Key="Local.DataTemplate.WireframeColorColumnCellEditingTemplate">
+      <TextBox Text="{Binding WireframeColor}" />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type scene:IDxLineItemConfig}" x:Key="Local.DataTemplate.LineColorColumnCellTemplate">
-      <Grid>
-        <TextBlock Text="{Binding Color}" Background="Transparent" HorizontalAlignment="Left" />
-        <Rectangle Height="16" Width="16" HorizontalAlignment="Right" Stroke="Black">
+      <DockPanel>
+        <Rectangle Height="16" Width="16" Stroke="Black" Margin="{StaticResource App.Margin.HorizontalStack}">
           <Rectangle.Fill>
             <SolidColorBrush Color="{Binding Color, Mode=OneWay}" />
           </Rectangle.Fill>
         </Rectangle>
-      </Grid>
+        <TextBlock Text="{Binding Color}" Background="Transparent" />
+      </DockPanel>
     </DataTemplate>
+
     <DataTemplate DataType="{x:Type scene:IDxLineItemConfig}"
                   x:Key="Local.DataTemplate.LineColorColumnCellEditingTemplate">
       <TextBox Text="{Binding Color}" />
@@ -62,65 +84,72 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <HeaderedContentControl Grid.Row="0" Header="General config:" Style="{StaticResource App.Style.HeaderedContentControl.BoldText}">
+    <HeaderedContentControl Grid.Row="0" Header="General config:"
+                            Style="{StaticResource App.Style.HeaderedContentControl.BoldText}">
       <HeaderedContentControl.Resources>
         <Style TargetType="{x:Type TextBox}">
-          <Setter Property="TextAlignment" Value="Right"/>
-          <Setter Property="DockPanel.Dock" Value="Right"/>
-          <Setter Property="Width" Value="75"/>
+          <Setter Property="TextAlignment" Value="Right" />
+          <Setter Property="DockPanel.Dock" Value="Right" />
+          <Setter Property="Width" Value="75" />
         </Style>
       </HeaderedContentControl.Resources>
       <StackPanel>
         <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-          <TextBlock Text="Boundary range A:" DockPanel.Dock="Left"/>
-          <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMaxA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBlock Text="Boundary range A:" DockPanel.Dock="Left" />
+          <TextBox
+            Text="{Binding RenderResourcesViewModel.RenderAreaMaxA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
-          <TextBlock Text="-" DockPanel.Dock="Right" Margin="2,0,2,0"/>
-          <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMinA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBlock Text="-" DockPanel.Dock="Right" Margin="2,0,2,0" />
+          <TextBox
+            Text="{Binding RenderResourcesViewModel.RenderAreaMinA, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
-          <Rectangle/>
+          <Rectangle />
         </DockPanel>
         <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-          <TextBlock Text="Boundary range B:" DockPanel.Dock="Left"/>
-          <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMaxB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBlock Text="Boundary range B:" DockPanel.Dock="Left" />
+          <TextBox
+            Text="{Binding RenderResourcesViewModel.RenderAreaMaxB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
-          <TextBlock Text="-" DockPanel.Dock="Right" Margin="2,0,2,0"/>
-          <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMinB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBlock Text="-" DockPanel.Dock="Right" Margin="2,0,2,0" />
+          <TextBox
+            Text="{Binding RenderResourcesViewModel.RenderAreaMinB, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
-          <Rectangle/>
+          <Rectangle />
         </DockPanel>
         <DockPanel Margin="{StaticResource App.Margin.VerticalStack}">
-          <TextBlock Text="Boundary range C:" DockPanel.Dock="Left"/>
-          <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMaxC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBlock Text="Boundary range C:" DockPanel.Dock="Left" />
+          <TextBox
+            Text="{Binding RenderResourcesViewModel.RenderAreaMaxC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
-          <TextBlock Text="-" DockPanel.Dock="Right" Margin="2,0,2,0"/>
-          <TextBox Text="{Binding RenderResourcesViewModel.RenderAreaMinC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
+          <TextBlock Text="-" DockPanel.Dock="Right" Margin="2,0,2,0" />
+          <TextBox
+            Text="{Binding RenderResourcesViewModel.RenderAreaMinC, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
             </TextBox.InputBindings>
           </TextBox>
-          <Rectangle/>
+          <Rectangle />
         </DockPanel>
       </StackPanel>
     </HeaderedContentControl>
@@ -148,9 +177,12 @@
       <DataGrid ItemsSource="{Binding PositionItemConfigs.ObservableItems}">
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180" />
-          <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+          <DataGridTemplateColumn Header="Color (Diffuse)" CanUserSort="False"
                                   CellTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellTemplate}"
                                   CellEditingTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellEditingTemplate}" />
+          <DataGridTemplateColumn Header="Color (Wireframe)" CanUserSort="False"
+                                  CellTemplate="{StaticResource Local.DataTemplate.WireframeColorColumnCellTemplate}"
+                                  CellEditingTemplate="{StaticResource Local.DataTemplate.WireframeColorColumnCellEditingTemplate}" />
           <comboBox:BindableDataGridComboBoxColumn Header="Material"
                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.MeshMaterialNames}"
                                                    SelectedItemBinding="{Binding Material, Converter={StaticResource Local.PhongMaterialCoreToStringConverter}}" />
@@ -158,6 +190,8 @@
                               Binding="{Binding MeshScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
           <DataGridTextColumn Header="Quality"
                               Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridCheckBoxColumn Header="Wireframe"
+                                  Binding="{Binding IsWireframeVisible, UpdateSourceTrigger=PropertyChanged}" />
           <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
           <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
         </DataGrid.Columns>
@@ -169,9 +203,12 @@
       <DataGrid ItemsSource="{Binding TransitionItemConfigs.ObservableItems}">
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180" />
-          <DataGridTemplateColumn Header="Color (ARGB)" CanUserSort="False"
+          <DataGridTemplateColumn Header="Color (Diffuse)" CanUserSort="False"
                                   CellTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellTemplate}"
                                   CellEditingTemplate="{StaticResource Local.DataTemplate.MeshColorColumnCellEditingTemplate}" />
+          <DataGridTemplateColumn Header="Color (Wireframe)" CanUserSort="False"
+                                  CellTemplate="{StaticResource Local.DataTemplate.WireframeColorColumnCellTemplate}"
+                                  CellEditingTemplate="{StaticResource Local.DataTemplate.WireframeColorColumnCellEditingTemplate}" />
           <comboBox:BindableDataGridComboBoxColumn Header="Material"
                                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.MeshMaterialNames}"
                                                    SelectedItemBinding="{Binding Material, Converter={StaticResource Local.PhongMaterialCoreToStringConverter}}" />
@@ -179,6 +216,8 @@
                               Binding="{Binding MeshScaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
           <DataGridTextColumn Header="Quality"
                               Binding="{Binding MeshQuality, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+          <DataGridCheckBoxColumn Header="Wireframe"
+                                  Binding="{Binding IsWireframeVisible, UpdateSourceTrigger=PropertyChanged}" />
           <DataGridCheckBoxColumn Header="Visible" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" />
           <DataGridCheckBoxColumn Header="Ignore" Binding="{Binding IsInactive, UpdateSourceTrigger=PropertyChanged}" />
         </DataGrid.Columns>

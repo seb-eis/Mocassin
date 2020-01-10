@@ -224,6 +224,24 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Render_Wireframe_Color.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderWireframeColor {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderWireframeColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Render_Wireframe_Flag.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderWireframeFlag {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderWireframeFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Model_Viewport_Render_Area.
         /// </summary>
         public static string ResourceKey_ModelViewport_RenderArea {

@@ -178,5 +178,17 @@ namespace Mocassin.UI.GUI.Properties {
                 this["Limit_Render_Scaling_Lower"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
+        public double Default_Render_Cylinder_Scaling {
+            get {
+                return ((double)(this["Default_Render_Cylinder_Scaling"]));
+            }
+            set {
+                this["Default_Render_Cylinder_Scaling"] = value;
+            }
+        }
     }
 }

@@ -640,8 +640,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         /// <param name="cleanCurrent"></param>
         private void HostControlTabs(IEnumerable<VvmContainer> containers, bool cleanCurrent = false)
         {
+            if (cleanCurrent) ControlTabHost.Clear();
             foreach (var container in containers) ControlTabHost.AddNonClosableTab(container.Name, container.ViewModel, container.View);
-            ControlTabHost.SetActiveTabByIndex(-1);
+            ControlTabHost.SetActiveTabByIndex(0);
         }
 
         /// <summary>
