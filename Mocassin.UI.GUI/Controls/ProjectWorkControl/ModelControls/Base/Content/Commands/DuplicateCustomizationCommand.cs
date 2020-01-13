@@ -16,48 +16,38 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     public class DuplicateCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationGraph>
     {
         /// <summary>
-        ///     Get the getter delegate for the <see cref="MocassinProjectGraph" />
-        /// </summary>
-        private Func<MocassinProjectGraph> ProjectGetter { get; }
-
-        /// <summary>
         ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
-        private Action OnSuccessAction { get; }
+        private Action<ProjectCustomizationGraph> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public DuplicateCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter, Action onSuccessAction)
+        public DuplicateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationGraph> onSuccessAction = null)
             : base(projectControl)
         {
-            ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
             OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
         public override Task ExecuteAsync(ProjectCustomizationGraph parameter)
         {
-            return Task.Run(() => TryAddDuplicate(ProjectGetter(), parameter));
+            return Task.Run(() => AddDuplicate(parameter));
         }
 
         /// <inheritdoc />
         public override bool CanExecuteInternal(ProjectCustomizationGraph parameter)
         {
-            return ProjectGetter() != null && parameter != null;
+            return parameter?.Parent != null && base.CanExecuteInternal(parameter);
         }
 
         /// <summary>
-        ///     Tries to create and add a duplicate <see cref="ProjectCustomizationGraph" /> to the passed
-        ///     <see cref="MocassinProjectGraph" />
+        ///     Creates and adds a duplicate of a <see cref="ProjectCustomizationGraph" /> to its parent project
         /// </summary>
-        /// <param name="projectGraph"></param>
         /// <param name="source"></param>
-        private void TryAddDuplicate(MocassinProjectGraph projectGraph, ProjectCustomizationGraph source)
+        private void AddDuplicate(ProjectCustomizationGraph source)
         {
-            if (projectGraph == null) return;
-
             var duplicate = source.Duplicate();
-            ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectCustomizationGraphs.Add(duplicate));
-            OnSuccessAction?.Invoke();
+            ProjectControl.ExecuteOnAppThread(() => source.Parent.ProjectCustomizationGraphs.Add(duplicate));
+            OnSuccessAction?.Invoke(duplicate);
         }
     }
 }

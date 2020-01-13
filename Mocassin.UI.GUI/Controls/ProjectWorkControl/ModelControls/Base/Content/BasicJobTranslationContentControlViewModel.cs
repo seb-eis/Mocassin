@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Mocassin.UI.GUI.Base.DataContext;
@@ -13,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class BasicJobTranslationContentControlViewModel : BasicModelContentControlViewModel
     {
-        private IReadOnlyList<ProjectJobTranslationGraph> jobTranslationGraphs;
+        private ObservableCollection<ProjectJobTranslationGraph> jobTranslationGraphs;
         private ProjectJobTranslationGraph selectedJobTranslationGraph;
 
         /// <summary>
@@ -22,21 +23,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public ProjectJobTranslationGraph SelectedJobTranslationGraph
         {
             get => selectedJobTranslationGraph;
-            set
-            {
-                SetProperty(ref selectedJobTranslationGraph, value);
-                OnSelectionChanged(value);
-            }
+            set => SetProperty(ref selectedJobTranslationGraph, value, () => OnSelectionChanged(value));
         }
 
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ProjectJobTranslationGraph" /> instances that can currently be
         ///     selected
         /// </summary>
-        public IReadOnlyList<ProjectJobTranslationGraph> JobTranslationGraphs
+        public ObservableCollection<ProjectJobTranslationGraph> JobTranslationGraphs
         {
             get => jobTranslationGraphs;
-            set => SetProperty(ref jobTranslationGraphs, value);
+            protected set => SetProperty(ref jobTranslationGraphs, value);
         }
 
         /// <summary>
@@ -59,9 +56,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicJobTranslationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false, true));
-            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(true, true));
-            DuplicateTranslationCommand = new DuplicateJobTranslationCommand(projectControl, () => SelectedProjectGraph, () => ReloadSelectionSource(false, true));
+            AddJobTranslationCommand = new AddNewJobTranslationCommand(projectControl, () => SelectedProjectGraph, x => ReloadSelectionSource(false, true));
+            DeleteTranslationCommand = new DeleteJobTranslationCommand(projectControl, () => ReloadSelectionSource(true, true));
+            DuplicateTranslationCommand = new DuplicateJobTranslationCommand(projectControl, x => ReloadSelectionSource(false, true));
             PropertyChanged += OnTranslationSourceChanged;
         }
 
@@ -79,7 +76,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         protected override void OnProjectContentChangedInternal()
         {
-            JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs.ToList();
+            JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs;
         }
 
         /// <summary>
@@ -90,7 +87,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             ExecuteOnAppThread(() =>
             {
                 if (nullSelected) SelectedJobTranslationGraph = null;
-                JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs?.ToList();
+                JobTranslationGraphs = SelectedProjectGraph?.ProjectJobTranslationGraphs;
                 if (selectLast) SelectedJobTranslationGraph = JobTranslationGraphs?.LastOrDefault();
             });
         }

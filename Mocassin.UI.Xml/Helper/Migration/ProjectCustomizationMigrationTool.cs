@@ -31,10 +31,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public void Migrate(ProjectCustomizationGraph source, ProjectCustomizationGraph target)
+        public MigrationReport Migrate(ProjectCustomizationGraph source, ProjectCustomizationGraph target)
         {
             Migrate(source.EnergyModelCustomization, target.EnergyModelCustomization);
             Migrate(source.TransitionModelCustomization, target.TransitionModelCustomization);
+            return GenerateReport(source, target);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public void Migrate(EnergyModelCustomizationGraph source, EnergyModelCustomizationGraph target)
+        private void Migrate(EnergyModelCustomizationGraph source, EnergyModelCustomizationGraph target)
         {
             Migrate(source.StablePairEnergyParameterSets, target.StablePairEnergyParameterSets);
             Migrate(source.UnstablePairEnergyParameterSets, target.UnstablePairEnergyParameterSets);
@@ -56,7 +57,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public void Migrate(TransitionModelCustomizationGraph source, TransitionModelCustomizationGraph target)
+        private void Migrate(TransitionModelCustomizationGraph source, TransitionModelCustomizationGraph target)
         {
             Migrate(source.KineticTransitionParameterSets, target.KineticTransitionParameterSets);
         }
@@ -153,7 +154,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         {
             if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
             
-            var comment = $"Property {nameof(PairEnergyGraph.Energy)}: {target.Energy} => {source.Energy}";
+            var comment = $"Energy: {target.Energy} => {source.Energy}";
             target.Energy = source.Energy;
             reporter.Invoke(source, target, comment);
         }
@@ -168,7 +169,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         {
             if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
             
-            var comment = $"Property {nameof(GroupEnergyGraph.Energy)}: {target.Energy} => {source.Energy}";
+            var comment = $"Energy: {target.Energy} => {source.Energy}";
             target.Energy = source.Energy;
             reporter.Invoke(source, target, comment);
         }
@@ -183,7 +184,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         {
             if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.AttemptFrequency, target.AttemptFrequency) == 0) return;
             
-            var comment = $"Property {nameof(KineticRuleGraph.AttemptFrequency)}: {target.AttemptFrequency} => {source.AttemptFrequency}";
+            var comment = $"Frequency: {target.AttemptFrequency} => {source.AttemptFrequency}";
             target.AttemptFrequency = source.AttemptFrequency;
             reporter.Invoke(source, target, comment);
         }

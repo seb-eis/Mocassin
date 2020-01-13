@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mocassin.UI.Xml.Base;
 
 namespace Mocassin.UI.Xml.Helper.Migration
 {
@@ -14,12 +15,32 @@ namespace Mocassin.UI.Xml.Helper.Migration
         public IReadOnlyList<MigrationReportEntry> Entries { get; }
 
         /// <summary>
+        ///     Get the <see cref="ProjectObjectGraph"/> that served as the data source
+        /// </summary>
+        public ProjectObjectGraph MigrationSource { get; set; }
+
+        /// <summary>
+        ///     Get the <see cref="ProjectObjectGraph"/> that served as the data target
+        /// </summary>
+        public ProjectObjectGraph MigrationTarget { get; set; }
+
+        /// <summary>
         ///     Creates a new <see cref="MigrationReport"/>
         /// </summary>
         /// <param name="reportEntries"></param>
-        public MigrationReport(IReadOnlyList<MigrationReportEntry> reportEntries)
+        /// <param name="migrationSource"></param>
+        /// <param name="migrationTarget"></param>
+        public MigrationReport(IReadOnlyList<MigrationReportEntry> reportEntries, ProjectObjectGraph migrationSource, ProjectObjectGraph migrationTarget)
         {
             Entries = reportEntries ?? throw new ArgumentNullException(nameof(reportEntries));
+            MigrationSource = migrationSource ?? throw new ArgumentNullException(nameof(migrationSource));
+            MigrationTarget = migrationTarget ?? throw new ArgumentNullException(nameof(migrationTarget));
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"Source: {MigrationSource}, Target: {MigrationTarget}, Count: {Entries.Count}";
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
         /// <inheritdoc />
         protected override string GetTabName()
         {
-            return "3D model viewer [DX9]";
+            return "3D Model Viewer [DX9]";
         }
     }
 }

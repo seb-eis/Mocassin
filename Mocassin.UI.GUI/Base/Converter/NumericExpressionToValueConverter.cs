@@ -28,7 +28,7 @@ namespace Mocassin.UI.GUI.Base.Converter
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
                 return null;
             }
         }

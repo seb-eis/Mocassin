@@ -15,9 +15,9 @@
     <Menu Background="Transparent">
       <MenuItem Header="_File">
         <MenuItem Header="_New">
-          <MenuItem Header="New project library" Command="{Binding CommandSource}"
+          <MenuItem Header="New Project Library" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type fileCommands:ShowProjectCreationDialogCommand}" />
-          <MenuItem Header="New project" Command="{Binding CommandSource}"
+          <MenuItem Header="New Project" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}" />
         </MenuItem>
         <MenuItem Header="_Open" Command="{Binding CommandSource}"

@@ -1,11 +1,9 @@
 ﻿using System.Windows.Controls;
 using Mocassin.UI.GUI.Base.DataContext;
-using Mocassin.UI.GUI.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding;
-using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl;
 
-namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Commands
+namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu.Commands
 {
     /// <summary>
     ///     The <see cref="AddDefaultLayoutControlTabCommand" /> implementation to add a new project deployment tab to the main tab control
@@ -27,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu.Comman
         /// <inheritdoc />
         protected override string GetTabName()
         {
-            return "Simulation Services";
+            return "Simulation Builder";
         }
     }
 }

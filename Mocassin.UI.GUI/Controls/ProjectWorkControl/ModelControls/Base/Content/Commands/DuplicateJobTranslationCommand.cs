@@ -17,48 +17,38 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     public class DuplicateJobTranslationCommand : AsyncProjectControlCommand<ProjectJobTranslationGraph>
     {
         /// <summary>
-        ///     Get the getter delegate for the <see cref="MocassinProjectGraph"/>
-        /// </summary>
-        private Func<MocassinProjectGraph> ProjectGetter { get; }
-
-        /// <summary>
         ///     Get an <see cref="Action"/> to be executed on success
         /// </summary>
-        private Action OnSuccessAction { get; }
+        private Action<ProjectJobTranslationGraph> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public DuplicateJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter, Action onSuccessAction)
+        public DuplicateJobTranslationCommand(IMocassinProjectControl projectControl, Action<ProjectJobTranslationGraph> onSuccessAction = null)
             : base(projectControl)
         {
-            ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
             OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
         public override Task ExecuteAsync(ProjectJobTranslationGraph parameter)
         {
-            return Task.Run(() => TryAddDuplicate(ProjectGetter(), parameter));
+            return Task.Run(() => AddDuplicate(parameter));
         }
 
         /// <inheritdoc />
         public override bool CanExecuteInternal(ProjectJobTranslationGraph parameter)
         {
-            return ProjectGetter() != null && parameter != null;
+            return parameter?.Parent != null && base.CanExecuteInternal(parameter);
         }
 
         /// <summary>
-        ///     Tries to create and add a duplicate <see cref="ProjectJobTranslationGraph" /> to the passed
-        ///     <see cref="MocassinProjectGraph" />
+        ///     Creates and adds  duplicate of a <see cref="ProjectJobTranslationGraph" /> to its parent project
         /// </summary>
-        /// <param name="projectGraph"></param>
         /// <param name="source"></param>
-        private void TryAddDuplicate(MocassinProjectGraph projectGraph, ProjectJobTranslationGraph source)
+        private void AddDuplicate(ProjectJobTranslationGraph source)
         {
-            if (projectGraph == null) return;
-
             var duplicate = source.Duplicate();
-            ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectJobTranslationGraphs.Add(duplicate));
-            OnSuccessAction?.Invoke();
+            ProjectControl.ExecuteOnAppThread(() => source.Parent.ProjectJobTranslationGraphs.Add(duplicate));
+            OnSuccessAction?.Invoke(duplicate);
         }
     }
 }

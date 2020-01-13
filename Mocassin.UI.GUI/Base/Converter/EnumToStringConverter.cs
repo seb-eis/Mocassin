@@ -17,7 +17,7 @@ namespace Mocassin.UI.GUI.Base.Converter
         /// <inheritdoc />
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value?.ToString() is string enumString)) return null;
+            if (!(value?.ToString() is { } enumString)) return null;
             try
             {
                 var enumType = targetType.GetGenericTypeDefinition() == typeof(Nullable<>)
@@ -25,8 +25,9 @@ namespace Mocassin.UI.GUI.Base.Converter
                     : targetType;
                 return enumType == null ? null : Enum.Parse(enumType, enumString);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 return null;
             }
         }

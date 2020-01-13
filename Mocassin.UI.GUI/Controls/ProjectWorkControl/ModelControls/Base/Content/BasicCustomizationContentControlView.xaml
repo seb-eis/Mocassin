@@ -40,12 +40,14 @@
               IsTextSearchEnabled="True">
       <ComboBox.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="New item" Command="{Binding AddCustomizationCommand}" />
-          <MenuItem Header="Duplicate selected item" Command="{Binding DuplicateCustomizationCommand}"
+          <MenuItem Header="Add Customization" Command="{Binding AddCustomizationCommand}"/>
+          <Separator/>
+          <MenuItem Header="Migrate Selected" Command="{Binding MigrateCustomizationCommand}"
+                    CommandParameter="{Binding SelectedCustomizationGraph}" />
+          <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationGraph}"/>
           <Separator/>
-          <MenuItem Header="Delete selected item"
-                    Command="{Binding DeleteCustomizationCommand}"
+          <MenuItem Header="Delete Selected" Command="{Binding DeleteCustomizationCommand}"
                     CommandParameter="{Binding SelectedCustomizationGraph}" />
         </ContextMenu>
       </ComboBox.ContextMenu>

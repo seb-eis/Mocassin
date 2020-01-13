@@ -16,17 +16,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     public class AddNewCustomizationCommand : AsyncProjectControlCommand
     {
         /// <summary>
-        ///     Get the getter delegate for the <see cref="MocassinProjectGraph"/>
+        ///     Get the getter delegate for the <see cref="MocassinProjectGraph" />
         /// </summary>
         private Func<MocassinProjectGraph> ProjectGetter { get; }
 
         /// <summary>
-        ///     Get an <see cref="Action"/> to be executed on success
+        ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
-        private Action OnSuccessAction { get; }
+        private Action<ProjectCustomizationGraph> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter, Action onSuccessAction)
+        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
+            Action<ProjectCustomizationGraph> onSuccessAction = null)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
@@ -42,7 +43,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         protected override bool CanExecuteInternal()
         {
-            return ProjectGetter() != null;
+            return ProjectGetter() != null && base.CanExecuteInternal();
         }
 
         /// <summary>
@@ -54,19 +55,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         {
             if (projectGraph == null) return;
 
-            using (var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl))
+            using var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl);
+            var status = validator.TryCreateCustomization(out var customization);
+
+            if (status != ModelValidationStatus.NoErrorsDetected)
             {
-                var status = validator.TryCreateCustomization(out var customization);
-
-                if (status != ModelValidationStatus.NoErrorsDetected)
-                {
-                    ShowErrorMessageBox(status);
-                    return;
-                }
-
-                ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectCustomizationGraphs.Add(customization));
+                ShowErrorMessageBox(status);
+                return;
             }
-            OnSuccessAction?.Invoke();
+
+            ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectCustomizationGraphs.Add(customization));
+            OnSuccessAction?.Invoke(customization);
         }
 
         /// <summary>

@@ -42,11 +42,12 @@
 
       <ComboBox.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="New item" Command="{Binding AddJobTranslationCommand}" />
-          <MenuItem Header="Duplicate selected item" Command="{Binding DuplicateTranslationCommand}"
+          <MenuItem Header="Add Translation" Command="{Binding AddJobTranslationCommand}" />
+          <Separator/>
+          <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateTranslationCommand}"
                     CommandParameter="{Binding SelectedJobTranslationGraph}"/>
           <Separator/>
-          <MenuItem Header="Delete selected item" Command="{Binding DeleteTranslationCommand}"
+          <MenuItem Header="Delete Selected" Command="{Binding DeleteTranslationCommand}"
                     CommandParameter="{Binding SelectedJobTranslationGraph}" />
         </ContextMenu>
       </ComboBox.ContextMenu>

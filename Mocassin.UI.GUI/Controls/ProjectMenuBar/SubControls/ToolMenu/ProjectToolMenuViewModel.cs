@@ -2,12 +2,12 @@
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 
-namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu
+namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu
 {
     /// <summary>
-    ///The <see cref="PrimaryControlViewModel"/> for <see cref="ProjectMenuView"/> that supplies project related commands
+    ///The <see cref="PrimaryControlViewModel"/> for <see cref="ProjectToolMenuView"/> that supplies project related tool
     /// </summary>
-    public class ProjectMenuViewModel : PrimaryControlViewModel
+    public class ProjectToolMenuViewModel : PrimaryControlViewModel
     {
         /// <summary>
         ///     Get the <see cref="AutoProjectCommandSource" /> that supplies command instances
@@ -15,7 +15,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu
         public AutoProjectCommandSource CommandSource { get; }
 
         /// <inheritdoc />
-        public ProjectMenuViewModel(IMocassinProjectControl projectControl)
+        public ProjectToolMenuViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
             CommandSource = new AutoProjectCommandSource(ProjectControl);

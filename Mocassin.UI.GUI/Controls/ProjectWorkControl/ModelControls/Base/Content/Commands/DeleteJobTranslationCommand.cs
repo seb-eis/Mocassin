@@ -14,36 +14,29 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     public class DeleteJobTranslationCommand : AsyncProjectControlCommand<ProjectJobTranslationGraph>
     {
         /// <summary>
-        ///     The getter delegate for the target <see cref="MocassinProjectGraph" />
-        /// </summary>
-        private Func<MocassinProjectGraph> ProjectGetter { get; }
-
-        /// <summary>
         ///     Additional <see cref="Action" /> to be invoked on successful removal
         /// </summary>
         private Action OnRemovalAction { get; }
 
         /// <inheritdoc />
-        public DeleteJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
-            Action onRemovalAction)
+        public DeleteJobTranslationCommand(IMocassinProjectControl projectControl, Action onRemovalAction = null)
             : base(projectControl)
         {
-            ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
             OnRemovalAction = onRemovalAction;
         }
 
         /// <inheritdoc />
         public override bool CanExecuteInternal(ProjectJobTranslationGraph parameter)
         {
-            if (parameter == null || ProjectGetter() == null) return false;
-            return base.CanExecuteInternal(parameter) && ProjectGetter().ProjectJobTranslationGraphs.Contains(parameter);
+            if (parameter?.Parent == null) return false;
+            return base.CanExecuteInternal(parameter) && parameter.Parent.ProjectJobTranslationGraphs.Contains(parameter);
         }
 
         /// <inheritdoc />
         public override async Task ExecuteAsync(ProjectJobTranslationGraph parameter)
         {
             var isRemoved = false;
-            await Task.Run(() => { ProjectControl.ExecuteOnAppThread(() => { isRemoved = ProjectGetter().ProjectJobTranslationGraphs.Remove(parameter); }); });
+            await Task.Run(() => { ProjectControl.ExecuteOnAppThread(() => { isRemoved = parameter.Parent.ProjectJobTranslationGraphs.Remove(parameter); }); });
             if (isRemoved) OnRemovalAction?.Invoke();
         }
     }

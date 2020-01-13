@@ -13,7 +13,7 @@
     <Menu Background="Transparent">
       <MenuItem Header="Help">
 
-        <MenuItem Header="Check for update" Command="{Binding CommandSource}" 
+        <MenuItem Header="Check for Updates" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:CheckApplicationUpdateCommand}"/>
 
       </MenuItem>

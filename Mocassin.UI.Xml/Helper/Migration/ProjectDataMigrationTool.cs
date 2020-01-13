@@ -36,12 +36,14 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Generates a new <see cref="MigrationReport" /> from the stored report entries
+        ///     Generates a new <see cref="MigrationReport" /> from the stored report entries and a source and target information
         /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
         /// <returns></returns>
-        public MigrationReport GenerateReport()
+        protected MigrationReport GenerateReport(ProjectObjectGraph source, ProjectObjectGraph target)
         {
-            return new MigrationReport(ReportEntries.ToList(ReportEntries.Count).AsReadOnly());
+            return new MigrationReport(ReportEntries.ToList(ReportEntries.Count).AsReadOnly(), source, target);
         }
 
         /// <summary>

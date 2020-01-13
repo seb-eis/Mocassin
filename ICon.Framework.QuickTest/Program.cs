@@ -46,8 +46,7 @@ namespace Mocassin.Framework.QuickTest
             var source = project.ProjectCustomizationGraphs.SingleOrDefault(x => x.Name.Contains("TS4"));
             var target = project.ProjectCustomizationGraphs.SingleOrDefault(x => x.Name.Contains("TS5"));
             var migrationTool = new ProjectCustomizationMigrationTool {IsRedundantReportEnabled = true};
-            migrationTool.Migrate(source, target);
-            var report = migrationTool.GenerateReport();
+            var report = migrationTool.Migrate(source, target);
         }
 
         private static void TestHyperSurfaceEvaluator()

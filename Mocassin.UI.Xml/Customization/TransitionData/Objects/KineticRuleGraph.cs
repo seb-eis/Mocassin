@@ -14,7 +14,12 @@ namespace Mocassin.UI.Xml.Customization
     [XmlRoot("KineticRule")]
     public class KineticRuleGraph : ProjectObjectGraph, IDuplicable<KineticRuleGraph>
     {
-        private double attemptFrequency;
+        /// <summary>
+        ///     Get or set the default value used for the <see cref="AttemptFrequency"/>. Standard ist 1.0e13 Hz
+        /// </summary>
+        public static double DefaultAttemptFrequency { get; set; } = 1.0e13;
+
+        private double attemptFrequency = DefaultAttemptFrequency;
         private string ruleFlags;
         private int ruleIndex;
         private OccupationStateGraph startState;

@@ -5,7 +5,7 @@ using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.FileMenu;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu;
-using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectMenu;
+using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu;
 using Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu;
 
 namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar
             ControlMenuViewModel = new ControlMenuViewModel(projectControl);
             VisualMenuViewModel = new VisualMenuViewModel(projectControl);
             HelpMenuViewModel = new HelpMenuViewModel(projectControl);
-            MenuBarViewModel.AddItem(new ProjectMenuView {DataContext = new ProjectMenuViewModel(projectControl)});
+            MenuBarViewModel.AddItem(new ProjectToolMenuView {DataContext = new ProjectToolMenuViewModel(projectControl)});
         }
     }
 }

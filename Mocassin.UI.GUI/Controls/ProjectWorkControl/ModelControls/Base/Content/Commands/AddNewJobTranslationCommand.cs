@@ -4,30 +4,31 @@ using System.Windows;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.GUI.Logic.Validation;
-using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectJobTranslationGraph" /> to the selected
+    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectJobTranslationGraph" /> to the
+    ///     selected
     ///     project
     /// </summary>
     public class AddNewJobTranslationCommand : AsyncProjectControlCommand
     {
         /// <summary>
-        ///     Get the getter delegate for the <see cref="MocassinProjectGraph"/>
+        ///     Get the getter delegate for the <see cref="MocassinProjectGraph" />
         /// </summary>
         private Func<MocassinProjectGraph> ProjectGetter { get; }
 
         /// <summary>
-        ///     Get an <see cref="Action"/> to be executed on success
+        ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
-        private Action OnSuccessAction { get; }
+        private Action<ProjectJobTranslationGraph> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter, Action onSuccessAction)
+        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
+            Action<ProjectJobTranslationGraph> onSuccessAction = null)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
@@ -55,20 +56,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         {
             if (projectGraph == null) return;
 
-            using (var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl))
+            using var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl);
+            var status = validator.TryCreateCustomization(out var customization);
+
+            if (status != ModelValidationStatus.NoErrorsDetected)
             {
-                var status = validator.TryCreateCustomization(out var customization);
-
-                if (status != ModelValidationStatus.NoErrorsDetected)
-                {
-                    ShowErrorMessageBox(status);
-                    return;
-                }
-
-                var newItem = CreateJobTranslation();
-                ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectJobTranslationGraphs.Add(newItem));
+                ShowErrorMessageBox(status);
+                return;
             }
-            OnSuccessAction?.Invoke();
+
+            var newItem = CreateJobTranslation();
+            ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectJobTranslationGraphs.Add(newItem));
+            OnSuccessAction?.Invoke(newItem);
         }
 
         /// <summary>
