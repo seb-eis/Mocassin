@@ -15,6 +15,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
     public abstract class DxProjectObjectSceneConfig : ViewModelBase, IDxSceneItemConfig, IDisposable
     {
         private Action onChangeInvalidatesNode;
+        private string description;
         private static string IsInactiveKey => Resources.ResourceKey_ModelObject_RenderInactiveFlag;
         private static string IsVisibleKey => Resources.ResourceKey_ModelObject_RenderVisibilityFlag;
         private static string NameKey => Resources.ResourceKey_ModelObject_RenderDisplayName;
@@ -43,6 +44,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
                 OnNameChanged();
                 OnPropertyChanged();
             }
+        }
+
+        /// <inheritdoc />
+        public string Description
+        {
+            get => description;
+            set => SetProperty(ref description, value);
         }
 
         /// <inheritdoc />

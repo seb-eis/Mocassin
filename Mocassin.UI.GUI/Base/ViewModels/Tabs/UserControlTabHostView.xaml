@@ -13,7 +13,6 @@
   <Grid>
     <TabControl ItemsSource="{Binding ObservableItems}"
                 SelectedItem="{Binding SelectedTab}"
-                FontSize="{Binding HeaderFontSize}"
                 TabStripPlacement="{Binding TabStripPlacement}"
                 Name="PrimaryTabControl">
       <TabControl.Resources>

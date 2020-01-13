@@ -31,7 +31,7 @@
         <DataTemplate>
           <Grid>
             <views:ObjectRowHeaderLogo/>
-            <TextBlock Text="M" Foreground="White" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="M" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
           </Grid>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>

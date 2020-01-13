@@ -16,6 +16,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene
         string Name { get; set; }
 
         /// <summary>
+        ///     Get or set an additional description for the item
+        /// </summary>
+        string Description { get; set; }
+
+        /// <summary>
         ///     Get or set boolean flag if the scene item is visible
         /// </summary>
         bool IsVisible { get; set; }

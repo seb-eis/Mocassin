@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Mocassin.Symmetry.SpaceGroups
 {
@@ -13,6 +14,11 @@ namespace Mocassin.Symmetry.SpaceGroups
     [XmlRoot]
     public class SpaceGroupEntity : ISpaceGroup, IEquatable<SpaceGroupEntity>
     {
+        /// <summary>
+        ///     Get the <see cref="IReadOnlyList{T}"/> of <see cref="ISymmetryOperation"/> where orientation flipping operations are at the end
+        /// </summary>
+        private IReadOnlyList<ISymmetryOperation> OrderedOperations { get; set; }
+
         /// <inheritdoc />
         [XmlAttribute("Literal")]
         [Column("Literal")]
@@ -39,7 +45,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public int CrystalSystemIndex { get; set; }
 
         /// <inheritdoc />
-        public IReadOnlyList<ISymmetryOperation> Operations => BaseSymmetryOperations.AsReadOnly();
+        public IReadOnlyList<ISymmetryOperation> Operations => OrderedOperations ??= BaseSymmetryOperations.OrderBy(x => x.FlipsOrientation).ToList().AsReadOnly();
 
         /// <inheritdoc />
         public IEnumerable<string> OperationLiterals => BaseSymmetryOperations?.Select(x => x.Literal);

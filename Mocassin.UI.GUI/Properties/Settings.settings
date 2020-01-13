@@ -44,5 +44,8 @@
     <Setting Name="Default_Render_Cylinder_Scaling" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.05</Value>
     </Setting>
+    <Setting Name="Default_FontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

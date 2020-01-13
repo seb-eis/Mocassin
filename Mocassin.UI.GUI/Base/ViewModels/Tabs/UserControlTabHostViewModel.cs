@@ -13,7 +13,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     public class UserControlTabHostViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabHost
     {
         private UserControlTabItem selectedTab;
-        private int headerFontSize = 14;
         private Dock tabStripPlacement = Dock.Top;
         private bool isFrontInsertMode;
 
@@ -29,13 +28,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         {
             get => selectedTab;
             set => SetProperty(ref selectedTab, value);
-        }
-
-        /// <inheritdoc />
-        public int HeaderFontSize
-        {
-            get => headerFontSize;
-            set => SetProperty(ref headerFontSize, value);
         }
 
         /// <inheritdoc />

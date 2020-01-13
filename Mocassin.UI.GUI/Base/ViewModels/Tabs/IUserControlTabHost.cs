@@ -14,11 +14,6 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         UserControlTabItem SelectedTab { get; set; }
 
         /// <summary>
-        ///     Get or set the header font size
-        /// </summary>
-        int HeaderFontSize { get; set; }
-
-        /// <summary>
         ///     Get or set the <see cref="Dock"/> for the tab strip position
         /// </summary>
         Dock TabStripPlacement { get; set; }

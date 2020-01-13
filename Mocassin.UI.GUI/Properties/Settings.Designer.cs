@@ -190,5 +190,17 @@ namespace Mocassin.UI.GUI.Properties {
                 this["Default_Render_Cylinder_Scaling"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public double Default_FontSize {
+            get {
+                return ((double)(this["Default_FontSize"]));
+            }
+            set {
+                this["Default_FontSize"] = value;
+            }
+        }
     }
 }

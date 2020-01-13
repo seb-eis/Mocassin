@@ -23,6 +23,8 @@
       <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0" />
       <Thickness x:Key="App.Margin.GroupBoxContentLarge" Bottom="0" Top="10" Left="2" Right="0" />
 
+      <!-- Default values -->
+      <s:Double x:Key="App.Default.FontSize">12</s:Double>
       <!-- Styles with keys -->
       <Style TargetType="{x:Type Button}"
              x:Key="App.Style.Button.NullCommand">
@@ -188,6 +190,7 @@
 
       <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}"/>
         <Style.Triggers>
           <Trigger Property="TabStripPlacement" Value="Left">
             <Setter Property="BorderThickness" Value="2,1,1,1"/>
@@ -323,15 +326,15 @@
       </Style>
 
       <Style TargetType="{x:Type Menu}">
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}"/>
       </Style>
 
       <Style TargetType="{x:Type TextBlock}">
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}"/>
       </Style>
 
       <Style TargetType="{x:Type TextBox}">
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{DynamicResource App.Default.FontSize}"/>
         <Style.Triggers>
           <Trigger Property="IsReadOnly" Value="True">
             <Setter Property="Opacity" Value=".5" />

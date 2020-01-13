@@ -9,7 +9,7 @@
              Width="Auto" Height="Auto">
   <Grid Background="Transparent">
     
-    <TextBlock Text="Working" FontSize="10" Foreground="Black" Opacity=".5" 
+    <TextBlock Text="Working" FontSize="{DynamicResource App.Default.FontSize}" Foreground="Black" Opacity=".5" 
                VerticalAlignment="Center" HorizontalAlignment="Center"/>
     <local:LoadingSpinnerView />
   </Grid>

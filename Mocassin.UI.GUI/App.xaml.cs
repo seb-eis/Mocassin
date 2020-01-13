@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using Mocassin.UI.GUI.Properties;
 
 namespace Mocassin.UI.GUI
 {
@@ -49,7 +50,8 @@ namespace Mocassin.UI.GUI
             if (mainWindowViewModel == null) throw new ArgumentNullException(nameof(mainWindowViewModel));
             var mainWindow = new MainWindow
             {
-                DataContext = mainWindowViewModel
+                DataContext = mainWindowViewModel, 
+                Resources = {["App.Default.FontSize"] = Settings.Default.Default_FontSize}
             };
             return mainWindow;
         }

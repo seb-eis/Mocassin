@@ -4,7 +4,6 @@ using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Controls.Base.Commands;
 using Mocassin.UI.Xml.Customization;
 using Mocassin.UI.Xml.Jobs;
-using Mocassin.UI.Xml.Main;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
