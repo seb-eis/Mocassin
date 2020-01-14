@@ -15,13 +15,11 @@
 
     <TabControl>
       <TabItem Header="Metropolis Bases">
-        <dataControl:MetropolisSimulationControlView DataContext="{Binding MetropolisSimulationViewModel}"
-                                                     Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        <dataControl:MetropolisSimulationControlView DataContext="{Binding MetropolisSimulationViewModel}"/>
       </TabItem>
       <TabItem Header="Kinetic Bases">
 
-        <dataControl:KineticSimulationControlView DataContext="{Binding KineticSimulationViewModel}"
-                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
+        <dataControl:KineticSimulationControlView DataContext="{Binding KineticSimulationViewModel}"/>
       </TabItem>
     </TabControl>
   </Grid>

@@ -43,47 +43,44 @@
             <ColumnDefinition Width="100*" />
           </Grid.ColumnDefinitions>
 
-          <GroupBox Grid.Column="0" Grid.Row="0" Name="BuildGraphControlGroupBox">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <HeaderedContentControl Grid.Column="0" Grid.Row="0" Name="BuildGraphControlGroupBox">
+            <HeaderedContentControl.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
                 <Run Text="Translation job definition:" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.DeployInstruction}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
-            </GroupBox.Header>
+            </HeaderedContentControl.Header>
 
-            <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}"
-                                                      Margin="{StaticResource App.Margin.GroupBoxContent}" />
-          </GroupBox>
+            <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}"/>
+          </HeaderedContentControl>
 
-          <GroupBox Grid.Row="1" Grid.Column="0">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <HeaderedContentControl Grid.Row="1" Grid.Column="0">
+            <HeaderedContentControl.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
                 <Run
                   Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}" />
                 <Run Text="Deploy to localhost:" />
                 <Run Text="[?]" ToolTip="{StaticResource ToolTip.LocalDeployment}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
-            </GroupBox.Header>
+            </HeaderedContentControl.Header>
 
-            <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}"
-                                                       Margin="{StaticResource App.Margin.GroupBoxContent}" />
-          </GroupBox>
-          <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+            <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}"/>
+          </HeaderedContentControl>
+          <HeaderedContentControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+            <HeaderedContentControl.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
                 <Run Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}{0} -, TargetNullValue=??? -}" />
                 <Run Text="Meta table:" />
                 <Run Text="[?]" ToolTip="Meta data table of the last build job."
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
-            </GroupBox.Header>
-            <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}" 
-                      ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
+            </HeaderedContentControl.Header>
+            <DataGrid ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
                       IsReadOnly="True">
             </DataGrid>
-          </GroupBox>
+          </HeaderedContentControl>
         </Grid>
       </TabItem>
     </TabControl>

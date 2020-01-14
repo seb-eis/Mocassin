@@ -10,13 +10,6 @@
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
-
-  <UserControl.Resources>
-    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-      <Setter Property="Margin" Value="{StaticResource App.Margin.GroupBoxContent}"/>
-    </Style>
-  </UserControl.Resources>
-
   <Grid>
 
     <Grid.ColumnDefinitions>
@@ -31,76 +24,76 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Grid.Column="0" Header="Temperature [K]:">
+    <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="Temperature [K]:">
       <TextBox Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="0" Grid.Column="1" Header="Target steps per particle:">
+    <HeaderedContentControl Grid.Row="0" Grid.Column="1" Header="Target steps per particle:">
       <TextBox Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="0" Grid.Column="2" Header="Simulation block count:">
+    <HeaderedContentControl Grid.Row="0" Grid.Column="2" Header="Simulation block count:">
       <TextBox Text="{Binding SimulationBlockCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="1" Grid.Column="0" Header="Random generator seed:">
+    <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="Random generator seed:">
       <TextBox Text="{Binding CustomRngSeed}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="1" Grid.Column="1" Header="ISO8601 time limit:">
+    <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="ISO8601 time limit:">
       <TextBox Text="{Binding SaveRunTimeLimit}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="1" Grid.Column="2" Header="Minimal step rate [Hz]:">
+    <HeaderedContentControl Grid.Row="1" Grid.Column="2" Header="Minimal step rate [Hz]:">
       <TextBox Text="{Binding LowerSuccessRateLimit, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="2" Grid.Column="0" Header="Auto job duplication:">
+    <HeaderedContentControl Grid.Row="2" Grid.Column="0" Header="Auto job duplication:">
       <TextBox Text="{Binding JobCount, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
         <TextBox.InputBindings>
           <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                       CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
         </TextBox.InputBindings>
       </TextBox>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="2" Grid.Column="1" Header="Key">
+    <HeaderedContentControl Grid.Row="2" Grid.Column="1" Header="Key">
       <TextBox Text="{Binding Key}" IsReadOnly="True" />
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="2" Grid.Column="2" Header="Name">
+    <HeaderedContentControl Grid.Row="2" Grid.Column="2" Header="Name">
       <TextBox Text="{Binding Name}" IsReadOnly="True" />
-    </GroupBox>
+    </HeaderedContentControl>
 
   </Grid>
 </UserControl>

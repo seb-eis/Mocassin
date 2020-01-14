@@ -5,14 +5,18 @@
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:uiCommands="clr-namespace:Mocassin.UI.Base.Commands.UiCommands"
              xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
-             xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib">
+             xmlns:reflection="clr-namespace:System.Reflection;assembly=mscorlib"
+             xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content">
   <Application.Resources>
     <ResourceDictionary>
-      <!-- Converters -->
+
+      <!-- Converters and commands -->
       <BooleanToVisibilityConverter x:Key="App.Converter.BooleanToVisibility"/>
       <converter:NullToVisibilityConverter x:Key="App.Converter.NullToVisibility"/>
       <converter:NumericExpressionToValueConverter x:Key="App.Converter.NumericExpressionToValue"/>
       <converter:EnumToStringConverter x:Key="App.Converter.EnumToString"/>
+      <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
+
       <!-- System color overwrites -->
 
       <!-- Margins -->
@@ -20,111 +24,14 @@
       <Thickness x:Key="App.Margin.HorizontalStack" Bottom="0" Top="0" Left="0" Right="4" />
       <Thickness x:Key="App.Margin.VerticalStack" Bottom="4" Top="0" Left="0" Right="0" />
       <Thickness x:Key="App.Margin.VerticalStackLarge" Bottom="10" Top="0" Left="0" Right="0" />
-      <Thickness x:Key="App.Margin.GroupBoxContent" Bottom="0" Top="2" Left="2" Right="0" />
-      <Thickness x:Key="App.Margin.GroupBoxContentLarge" Bottom="0" Top="10" Left="2" Right="0" />
+      <Thickness x:Key="App.Margin.HeaderedContent.Content" Bottom="0" Top="4" Left="0" Right="0" />
+      <Thickness x:Key="App.Margin.HeaderedContent.Header" Bottom="0" Top="2" Left="0" Right="0" />
 
       <!-- Default values -->
       <s:Double x:Key="App.Default.FontSize">12</s:Double>
-      <!-- Styles with keys -->
-      <Style TargetType="{x:Type Button}"
-             x:Key="App.Style.Button.NullCommand">
-        <Style.Triggers>
-          <Trigger Property="Command" Value="{x:Null}">
-            <Setter Property="IsEnabled" Value="False" />
-          </Trigger>
-        </Style.Triggers>
-      </Style>
+      <s:Double x:Key="App.Default.Size.Splitter">12</s:Double>
+      <GridLength x:Key="App.Default.GridLength.Splitter">5</GridLength>
 
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.Keyword">
-        <Setter Property="Foreground" Value="Blue" />
-        <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.Important">
-        <Setter Property="FontStyle" Value="Italic" />
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.ModelObject">
-        <Setter Property="Foreground" Value="ForestGreen" />
-        <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type Run}"
-             x:Key="App.Style.Run.Property">
-        <Setter Property="Foreground" Value="OrangeRed" />
-        <Setter Property="FontWeight" Value="Bold" />
-      </Style>
-
-      <Style TargetType="{x:Type ToolTip}"
-             x:Key="App.Style.ToolTip.Default">
-        <Setter Property="MaxWidth" Value="500" />
-      </Style>
-
-      <Style TargetType="{x:Type TextBlock}"
-             x:Key="App.Style.ToolTip.TextBlock">
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="TextAlignment" Value="Justify" />
-      </Style>
-
-      <Style TargetType="{x:Type TextBlock}"
-             x:Key="App.Style.ContentHeaderTextBlock">
-        <Setter Property="FontWeight" Value="DemiBold"/>
-      </Style>
-
-      <Style TargetType="Border" x:Key="App.Style.Border.Box">
-        <Setter Property="BorderThickness" Value=".5" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.NoBorder">
-        <Setter Property="BorderThickness" Value="0,0,0,0" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
-        <Setter Property="BorderThickness" Value="0,0,2,0" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-      </Style>
-
-      <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
-        <Style.Triggers>
-          <Trigger Property="IsReadOnly" Value="True">
-            <Setter Property="Opacity" Value=".5" />
-          </Trigger>
-          <Trigger Property="IsReadOnly" Value="False">
-            <Setter Property="Opacity" Value="1" />
-          </Trigger>
-        </Style.Triggers>
-      </Style>
-
-      <Style TargetType="{x:Type HeaderedContentControl}" x:Key="App.Style.HeaderedContentControl.BoldText">
-        <Setter Property="HeaderTemplate">
-          <Setter.Value>
-            <DataTemplate DataType="{x:Type s:String}">
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}" Text="{Binding}" Margin="0,0,0,2"/>
-            </DataTemplate>
-          </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-          <Setter.Value>
-            <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
-                <Grid>
-                  <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                  </Grid.RowDefinitions>
-                  <Rectangle Grid.RowSpan="2" Fill="{TemplateBinding Background}" />
-                  <ContentPresenter ContentSource="Header" Grid.Row="0" />
-                  <ContentPresenter ContentSource="Content" Grid.Row="1" />
-                </Grid>
-              </ControlTemplate>
-          </Setter.Value>
-        </Setter>
-      </Style>
-      
       <!-- Always on styles -->
       <Style TargetType="{x:Type UserControl}">
         <Setter Property="Background" Value="Transparent"/>
@@ -345,7 +252,13 @@
         </Style.Triggers>
       </Style>
 
-      <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource App.Style.GroupBox.NoBorder}"/>
+      <Style TargetType="{x:Type GridSplitter}">
+        <Setter Property="ShowsPreview" Value="True"/>
+        <Setter Property="ResizeBehavior" Value="PreviousAndNext"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+      </Style>
 
       <Style TargetType="{x:Type ComboBox}" x:Key="App.Style.ColorSelectionComboBox">
         <Setter Property="ItemTemplate">
@@ -360,13 +273,93 @@
         </Setter>
       </Style>
 
+      <Style TargetType="{x:Type TextBlock}" x:Key="App.Style.TextBlock.DemiBold">
+        <Setter Property="FontWeight" Value="DemiBold"/>
+      </Style>
+
+      <Style TargetType="{x:Type content:HeaderedGroup}">
+        <Setter Property="ContentMargin" Value="{StaticResource App.Margin.HeaderedContent.Content}"/>
+        <Setter Property="HeaderMargin" Value="{StaticResource App.Margin.HeaderedContent.Header}"/>
+      </Style>
+
+      <Style TargetType="{x:Type content:HeaderedGroup}" BasedOn="{StaticResource {x:Type content:HeaderedGroup}}" x:Key="App.Style.HeaderedGroup.BoldText">
+        <Setter Property="HeaderTemplate">
+          <Setter.Value>
+            <DataTemplate>
+              <TextBlock Text="{Binding}" Style="{StaticResource App.Style.TextBlock.DemiBold}"/>
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <!-- Styles with keys -->
+
+      <Style TargetType="{x:Type Button}" x:Key="App.Style.Button.NullCommand">
+        <Style.Triggers>
+          <Trigger Property="Command" Value="{x:Null}">
+            <Setter Property="IsEnabled" Value="False" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Keyword">
+        <Setter Property="Foreground" Value="Blue" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Important">
+        <Setter Property="FontStyle" Value="Italic" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.ModelObject">
+        <Setter Property="Foreground" Value="ForestGreen" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type Run}" x:Key="App.Style.Run.Property">
+        <Setter Property="Foreground" Value="OrangeRed" />
+        <Setter Property="FontWeight" Value="Bold" />
+      </Style>
+
+      <Style TargetType="{x:Type ToolTip}" x:Key="App.Style.ToolTip.Default">
+        <Setter Property="MaxWidth" Value="500" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBlock}" x:Key="App.Style.ToolTip.TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Justify" />
+      </Style>
+
+      <Style TargetType="Border" x:Key="App.Style.Border.Box">
+        <Setter Property="BorderThickness" Value=".5" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.NoBorder">
+        <Setter Property="BorderThickness" Value="0,0,0,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type GroupBox}" x:Key="App.Style.GroupBox.RightBorder">
+        <Setter Property="BorderThickness" Value="0,0,2,0" />
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+      </Style>
+
+      <Style TargetType="{x:Type TextBox}" x:Key="App.Style.TextBox.GreyOutIfReadOnly">
+        <Style.Triggers>
+          <Trigger Property="IsReadOnly" Value="True">
+            <Setter Property="Opacity" Value=".5" />
+          </Trigger>
+          <Trigger Property="IsReadOnly" Value="False">
+            <Setter Property="Opacity" Value="1" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
       <!-- Static objects -->
 
       <s:Boolean x:Key="Bool.True">True</s:Boolean>
       <s:Boolean x:Key="Bool.False">False</s:Boolean>
       <s:Double x:Key="App.Size.RowHeaderLogo">20</s:Double>
-
-      <uiCommands:UpdateTextBoxSourceCommand x:Key="App.Command.UpdateTextBoxSource" />
 
       <s:String x:Key="App.String.ToolTip.PropertyInfo">[Property Information]</s:String>
 

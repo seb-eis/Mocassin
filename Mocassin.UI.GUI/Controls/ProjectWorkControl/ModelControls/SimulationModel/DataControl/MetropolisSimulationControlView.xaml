@@ -81,18 +81,17 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <GroupBox Grid.Column="0" Grid.RowSpan="3">
+    <HeaderedContentControl Grid.Column="0" Grid.RowSpan="3">
 
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="Metropolis simulation base definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.MetropolisSimulations}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
       <DataGrid Name="SimulationDataGrid"
-                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
@@ -131,35 +130,34 @@
         </DataGrid.Columns>
 
       </DataGrid>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Column="1" Grid.Row="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="1" Grid.Row="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="General base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.GeneralSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"
-                                             Margin="{StaticResource App.Margin.GroupBoxContent}" />
-    </GroupBox>
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"/>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Column="1" Grid.Row="1">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="1" Grid.Row="1">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Metropolis base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.MetropolisSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <Grid>
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
@@ -171,38 +169,34 @@
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Rel. energy break tolerance:">
-          <TextBox Text="{Binding SelectedItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="Rel. energy break tolerance:">
+          <TextBox Text="{Binding SelectedItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </GroupBox>
+        </HeaderedContentControl>
 
-        <GroupBox Grid.Row="0" Grid.Column="1" Header="Break check sample [MCS]:">
-          <TextBox Text="{Binding SelectedItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <HeaderedContentControl Grid.Row="0" Grid.Column="1" Header="Break check sample [MCS]:">
+          <TextBox Text="{Binding SelectedItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </GroupBox>
+        </HeaderedContentControl>
 
-        <GroupBox Grid.Row="0" Grid.Column="2" Header="Break check interval [MCS]:">
+        <HeaderedContentControl Grid.Row="0" Grid.Column="2" Header="Break check interval [MCS]:">
           <TextBox Text="{Binding SelectedItem.BreakSampleIntervalMcs}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}"
                    IsReadOnly="True" />
-        </GroupBox>
+        </HeaderedContentControl>
 
-        <GroupBox Grid.Row="1" Grid.Column="0" Header="Result sample size [MCS]:">
+        <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="Result sample size [MCS]:">
           <TextBox Text="{Binding SelectedItem.ResultSampleMcs}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}"
                    IsReadOnly="True" />
-        </GroupBox>
+        </HeaderedContentControl>
       </Grid>
-    </GroupBox>
+    </HeaderedContentControl>
   </Grid>
 </UserControl>

@@ -137,31 +137,29 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <GroupBox Grid.Column="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="Metropolis transition definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.MetropolisTransitions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
-      <gridControl:MetropolisTransitionGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                                       DataContext="{Binding MetropolisTransitionGridViewModel}" />
-    </GroupBox>
+      </HeaderedContentControl.Header>
+      <gridControl:MetropolisTransitionGridControlView DataContext="{Binding MetropolisTransitionGridViewModel}" />
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Column="1">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="1">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="Kinetic transition definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticTransitions}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
-      <gridControl:KineticTransitionGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                                    DataContext="{Binding KineticTransitionGridViewModel}" />
-    </GroupBox>
+      </HeaderedContentControl.Header>
+      <gridControl:KineticTransitionGridControlView DataContext="{Binding KineticTransitionGridViewModel}" />
+    </HeaderedContentControl>
 
   </Grid>
 </UserControl>

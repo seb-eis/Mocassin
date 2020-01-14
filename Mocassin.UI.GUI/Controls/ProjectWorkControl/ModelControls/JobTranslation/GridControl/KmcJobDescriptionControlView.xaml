@@ -24,46 +24,42 @@
     <local:BaseJobDescriptionControlView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
                                          DataContext="{Binding}" />
     <StackPanel Grid.Column="0" Grid.Row="1">
-      <GroupBox Header="Relaxation steps per particle:">
-        <TextBox Text="{Binding PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <HeaderedContentControl Header="Relaxation steps per particle:">
+        <TextBox Text="{Binding PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </GroupBox>
+      </HeaderedContentControl>
 
-      <GroupBox Header="Electric field modulus [V/m]:">
-        <TextBox Text="{Binding ElectricFieldModulus, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <HeaderedContentControl Header="Electric field modulus [V/m]:">
+        <TextBox Text="{Binding ElectricFieldModulus, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </GroupBox>
+      </HeaderedContentControl>
     </StackPanel>
     <StackPanel Grid.Column="1" Grid.Row="1">
-      <GroupBox Header="Normalization probability:">
-        <TextBox Text="{Binding NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <HeaderedContentControl Header="Normalization probability:">
+        <TextBox Text="{Binding NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </GroupBox>
+      </HeaderedContentControl>
 
-      <GroupBox Header="Max attempt frequency [Hz]:">
-        <TextBox Text="{Binding MaxAttemptFrequency, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}"
-                 Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <HeaderedContentControl Header="Max attempt frequency [Hz]:">
+        <TextBox Text="{Binding MaxAttemptFrequency, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </GroupBox>
+      </HeaderedContentControl>
     </StackPanel>
   </Grid>
 </UserControl>

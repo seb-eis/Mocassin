@@ -6,6 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.DataControl"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:ParticleModelControlViewModel, IsDesignTimeCreatable = True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -13,7 +14,7 @@
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.Particle" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.Particle" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -56,14 +57,14 @@
 
       </StackPanel>
     </ToolTip>
-    <ToolTip x:Key="ToolTip.ParticleSet" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.ParticleSet" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="{StaticResource App.String.ParticleSet}" Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="objects describe groupings of" />
           <Run Text="{StaticResource App.String.Particle}" Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects to from distinct occupation option sets." />
-          <Run Text="When used sd unstable/transition position occupation, the" />
+          <Run Text="objects that define the permutation basis for cases where the system requires information about allowed particle options." />
+          <Run Text="When used as unstable/transition position occupation options, the" />
           <Run Text="{StaticResource App.String.Particle.Void}" Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="state is implicitly included. Add objects by drag &amp; drop." />
           <LineBreak />
@@ -86,39 +87,25 @@
 
   <Grid>
     <TabControl>
-      <TabItem Header="Particles &amp; Occupation Sets">
+      <TabItem Header="Particles &amp; Particle Sets">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
 
-          <GroupBox Grid.Column="0">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-                <Run Text="Particle definitions:" TextDecorations="" />
-                <Run Text="[?]" ToolTip="{StaticResource ToolTip.Particle}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </GroupBox.Header>
-
-            <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}"
-                                             Margin="{StaticResource App.Margin.GroupBoxContent}" />
-          </GroupBox>
-
-          <GroupBox Grid.Column="1">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-                <Run Text="Occupation set definitions:" />
-                <Run Text="[?]" ToolTip="{StaticResource ToolTip.ParticleSet}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </GroupBox.Header>
-
-            <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}"
-                                                Margin="{StaticResource App.Margin.GroupBoxContent}" />
-          </GroupBox>
-
+          <content:HeaderedGroup Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                              HeaderToolTip="{StaticResource Local.ToolTip.Particle}"
+                                              Header="Particle Definitions:">
+            <dataControl:ParticleControlView DataContext="{Binding ParticleControlViewModel}"/>
+          </content:HeaderedGroup>
+          <GridSplitter Grid.Column="1"/>
+          <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                              HeaderToolTip="{StaticResource Local.ToolTip.ParticleSet}"
+                                              Header="Particle Set Definitions:">
+            <dataControl:ParticleSetControlView DataContext="{Binding ParticleSetControlViewModel}"/>
+          </content:HeaderedGroup>
         </Grid>
       </TabItem>
     </TabControl>

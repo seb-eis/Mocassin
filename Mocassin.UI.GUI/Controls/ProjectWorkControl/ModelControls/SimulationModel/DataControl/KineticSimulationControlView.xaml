@@ -81,18 +81,17 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Column="0" Grid.RowSpan="3">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="0" Grid.RowSpan="3">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="Kinetic simulation base definitions:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSimulations}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
       <DataGrid Name="SimulationDataGrid"
-                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
                 ColumnWidth="*"
@@ -130,34 +129,33 @@
 
         </DataGrid.Columns>
       </DataGrid>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Column="1" Grid.Row="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="1" Grid.Row="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="General base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.GeneralSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
-      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"
-                                             Margin="{StaticResource App.Margin.GroupBoxContent}"/>
-    </GroupBox>
+      </HeaderedContentControl.Header>
+      <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"/>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Column="1" Grid.Row="1">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Column="1" Grid.Row="1">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Kinetic base settings:" />
           <Run Text="[?]"
                ToolTip="{StaticResource ToolTip.KineticSettings}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <Grid>
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
@@ -169,42 +167,39 @@
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Relaxation steps per particle:">
-          <TextBox Text="{Binding SelectedItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}" >
+        <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="Relaxation steps per particle:">
+          <TextBox Text="{Binding SelectedItem.PreRunMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </GroupBox>
+        </HeaderedContentControl>
 
-        <GroupBox Grid.Row="0" Grid.Column="1" Header="Normalization probability:">
-          <TextBox Text="{Binding SelectedItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+        <HeaderedContentControl Grid.Row="0" Grid.Column="1" Header="Normalization probability:">
+          <TextBox Text="{Binding SelectedItem.NormalizationProbability, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </GroupBox>
+        </HeaderedContentControl>
 
-        <GroupBox Grid.Row="0"
+        <HeaderedContentControl Grid.Row="0"
                   Grid.Column="2"
                   Header="Electric field modulus [V/m]:">
-          <TextBox Text="{Binding SelectedItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-                   Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <TextBox Text="{Binding SelectedItem.ElectricFieldMagnitude, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </GroupBox>
+        </HeaderedContentControl>
 
-        <GroupBox Grid.Row="1"
+        <HeaderedContentControl Grid.Row="1"
                   Grid.Column="0"
                   Header="Electric field vector (A,B,C):">
-          <Grid Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
@@ -232,10 +227,10 @@
               </TextBox.InputBindings>
             </TextBox>
           </Grid>
-        </GroupBox>
+        </HeaderedContentControl>
 
       </Grid>
-    </GroupBox>
+    </HeaderedContentControl>
 
   </Grid>
 

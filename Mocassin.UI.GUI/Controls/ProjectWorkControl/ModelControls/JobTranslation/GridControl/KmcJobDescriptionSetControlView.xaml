@@ -20,17 +20,16 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding KmcJobPackage.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Job configurations definitions:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
       <DataGrid Name="JobConfigurationsDataGrid"
-                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
@@ -70,32 +69,31 @@
           <DataGridTextColumn Header="Cell size C" Binding="{Binding LatticeConfiguration.SizeC}" />
         </DataGrid.Columns>
       </DataGrid>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="1" Name="ConfigurationSettingsGroupBox">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="1" Name="ConfigurationSettingsGroupBox">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Configuration settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
       <local:KmcJobDescriptionControlView
-        DataContext="{Binding SelectedItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"
-        Margin="{StaticResource App.Margin.GroupBoxContent}" />
-    </GroupBox>
+        DataContext="{Binding SelectedItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"/>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="2">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="2">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Block doping settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <local:DopingValueControlView Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <local:DopingValueControlView>
         <local:DopingValueControlView.DataContext>
           <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
@@ -105,7 +103,7 @@
           </MultiBinding>
         </local:DopingValueControlView.DataContext>
       </local:DopingValueControlView>
-    </GroupBox>
+    </HeaderedContentControl>
 
   </Grid>
 </UserControl>

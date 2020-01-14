@@ -27,15 +27,14 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Grid.Column="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="0" Grid.Column="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="Job collection definitions:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
       <DataGrid Name="JobCollectionsDataGrid"
-                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
@@ -80,31 +79,31 @@
         </DataGrid.Columns>
 
       </DataGrid>
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="1" Grid.Column="0" Name="CollectionSettingsGroupBox">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="1" Grid.Column="0" Name="CollectionSettingsGroupBox">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Collection settings:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <gridControl:KmcJobDescriptionControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
+      <gridControl:KmcJobDescriptionControlView 
                                                 DataContext="{Binding SelectedItem.JobBaseDescription, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}" />
-    </GroupBox>
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="2" Grid.Column="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="2" Grid.Column="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
           <Run Text="Collection selection optimizers:"/>
           <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <gridControl:SelectionOptimizerSetControlView Margin="{StaticResource App.Margin.GroupBoxContent}">
+      <gridControl:SelectionOptimizerSetControlView>
         <gridControl:SelectionOptimizerSetControlView.DataContext>
           <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
@@ -114,7 +113,7 @@
           </MultiBinding>
         </gridControl:SelectionOptimizerSetControlView.DataContext>
       </gridControl:SelectionOptimizerSetControlView>
-    </GroupBox>
+    </HeaderedContentControl>
 
     <gridControl:KmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3">
       <gridControl:KmcJobDescriptionSetControlView.DataContext>

@@ -18,12 +18,10 @@
     <TabControl Grid.Row="0">
 
       <TabItem Header="Geometry &amp; Space Group">
-
         <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" />
       </TabItem>
 
-      <TabItem Header="Positions">
-
+      <TabItem Header="Wyckoff Positions">
         <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" />
       </TabItem>
     </TabControl>

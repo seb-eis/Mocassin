@@ -195,46 +195,43 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <GroupBox Grid.Row="0" Grid.Column="0">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="0" Grid.Column="0">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="State changes definitions:" />
           <Run Text="[?]" 
                ToolTip="{StaticResource ToolTip.StateExchangePair}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <gridControl:ExchangePairGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                               DataContext="{Binding ExchangePairGridViewModel}" />
-    </GroupBox>
+      <gridControl:ExchangePairGridControlView DataContext="{Binding ExchangePairGridViewModel}" />
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="0" Grid.Column="1">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="0" Grid.Column="1">
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="State change groupings:" />
           <Run Text="[?]" 
                ToolTip="{StaticResource ToolTip.StateExchangeGroup}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <gridControl:ExchangeGroupGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                                DataContext="{Binding ExchangeGroupGridViewModel}" /> 
-    </GroupBox>
+      <gridControl:ExchangeGroupGridControlView DataContext="{Binding ExchangeGroupGridViewModel}" /> 
+    </HeaderedContentControl>
 
-    <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+    <HeaderedContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
           <Run Text="State change chains definitions:" />
           <Run Text="[?]" 
                ToolTip="{StaticResource AbstractTransition}"
                Style="{StaticResource App.Style.Run.Keyword}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <gridControl:AbstractTransitionGridControlView Margin="{StaticResource App.Margin.GroupBoxContent}"
-                                                     DataContext="{Binding AbstractTransitionGridViewModel}" />
-    </GroupBox>
+      <gridControl:AbstractTransitionGridControlView DataContext="{Binding AbstractTransitionGridViewModel}" />
+    </HeaderedContentControl>
   </Grid>
 </UserControl>

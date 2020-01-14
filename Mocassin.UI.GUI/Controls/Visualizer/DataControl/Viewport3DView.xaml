@@ -32,7 +32,7 @@
                        Background="{Binding ElementName=BackgroundColorComboBox, Path=Text}"/>
     <Expander Name="SettingsExpander" Grid.Column="0" ExpandDirection="Down" Background="White" IsExpanded="True">
       <Expander.Header>
-        <TextBlock Text="Viewer options:" Style="{StaticResource App.Style.ContentHeaderTextBlock}"
+        <TextBlock Text="Viewer options:" Style="{StaticResource App.Style.TextBlock.DemiBold}"
                    Visibility="{Binding ElementName=SettingsExpander, Path=IsExpanded, Converter={StaticResource App.Converter.BooleanToVisibility}}" />
       </Expander.Header>
       <Expander.ContextMenu>
@@ -50,8 +50,8 @@
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
 
-          <GroupBox Grid.Row="0">
-            <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}">
+          <HeaderedContentControl Grid.Row="0">
+            <StackPanel>
               <DockPanel Margin="0,5">
                 <RadioButton IsChecked="{Binding IsAutoUpdating}" Name="AutoUpdateRadioButton" Content="Auto update"
                              Margin="0,2,10,0"
@@ -113,12 +113,12 @@
                 </Grid>
               </Grid>
             </StackPanel>
-          </GroupBox>
-          <GroupBox Grid.Row="1">
-            <GroupBox.Header>
-              <TextBlock Text="Toggle items:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
-            </GroupBox.Header>
-            <StackPanel Margin="{StaticResource App.Margin.GroupBoxContent}"> 
+          </HeaderedContentControl>
+          <HeaderedContentControl Grid.Row="1">
+            <HeaderedContentControl.Header>
+              <TextBlock Text="Toggle items:" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
+            </HeaderedContentControl.Header>
+            <StackPanel> 
               <Grid>
                 <Grid.RowDefinitions>
                   <RowDefinition />
@@ -183,13 +183,12 @@
                 </Border>
               </Grid>
             </StackPanel>
-          </GroupBox>
-          <GroupBox Grid.Row="2">
-            <GroupBox.Header>
-              <TextBlock Text="Display groups:" Style="{StaticResource App.Style.ContentHeaderTextBlock}" />
-            </GroupBox.Header>
+          </HeaderedContentControl>
+          <HeaderedContentControl Grid.Row="2">
+            <HeaderedContentControl.Header>
+              <TextBlock Text="Display groups:" Style="{StaticResource App.Style.TextBlock.DemiBold}" />
+            </HeaderedContentControl.Header>
             <DataGrid ItemsSource="{Binding VisualGroups}" CanUserAddRows="False" CanUserDeleteRows="False"
-                      Margin="{StaticResource App.Margin.GroupBoxContent}"
                       AutoGenerateColumns="False"
                       ColumnWidth="Auto">
               <DataGrid.RowHeaderTemplate>
@@ -204,7 +203,7 @@
                                         Header="Render"/>
               </DataGrid.Columns>
             </DataGrid>
-          </GroupBox>
+          </HeaderedContentControl>
         </Grid>
       </Border>
     </Expander>

@@ -54,63 +54,59 @@
   <Grid>
     <TabControl>
       <TabItem Header="Transition Rules (Kinetic)">
-        <GroupBox>
-          <GroupBox.Header>
-            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+        <HeaderedContentControl>
+          <HeaderedContentControl.Header>
+            <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
               <Run Text="Kinetic rule settings:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
-          </GroupBox.Header>
-          <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}"
-                                                          Margin="{StaticResource App.Margin.GroupBoxContent}" />
-        </GroupBox>
+          </HeaderedContentControl.Header>
+          <dataControl:TransitionCustomizationControlView DataContext="{Binding TransitionCustomizationViewModel}"/>
+        </HeaderedContentControl>
       </TabItem>
 
       <TabItem Header="Pair Energies (Stable)">
-        <GroupBox>
-          <GroupBox.Header>
-            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+        <HeaderedContentControl>
+          <HeaderedContentControl.Header>
+            <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
               <Run Text="Pair energy settings:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
-          </GroupBox.Header>
-          <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"
-                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
-        </GroupBox>
+          </HeaderedContentControl.Header>
+          <dataControl:PairInteractionControlView DataContext="{Binding StablePairInteractionViewModel}"/>
+        </HeaderedContentControl>
       </TabItem>
 
       <TabItem Header="Pair Energies (Unstable)">
-        <GroupBox>
-          <GroupBox.Header>
-            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+        <HeaderedContentControl>
+          <HeaderedContentControl.Header>
+            <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
               <Run Text="Pair energy settings:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
-          </GroupBox.Header>
-          <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"
-                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
-        </GroupBox>
+          </HeaderedContentControl.Header>
+          <dataControl:PairInteractionControlView DataContext="{Binding UnstablePairInteractionViewModel}"/>
+        </HeaderedContentControl>
       </TabItem>
 
       <TabItem Header="Group Energies (All)">
-        <GroupBox>
-          <GroupBox.Header>
-            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+        <HeaderedContentControl>
+          <HeaderedContentControl.Header>
+            <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
               <Run Text="Group energy settings:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.KineticRules}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
-          </GroupBox.Header>
-          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
-                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
-        </GroupBox>
+          </HeaderedContentControl.Header>
+          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"/>
+        </HeaderedContentControl>
       </TabItem>
     </TabControl>
 

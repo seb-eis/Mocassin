@@ -39,19 +39,18 @@
     <TabControl>
 
       <TabItem Header="Building Blocks">
-        <GroupBox>
-          <GroupBox.Header>
-            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+        <HeaderedContentControl>
+          <HeaderedContentControl.Header>
+            <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
               <Run Text="Building block definitions:" />
               <Run Text="[?]"
                    ToolTip="{StaticResource ToolTip.BuildingBlocks}"
                    Style="{StaticResource App.Style.Run.Keyword}" />
             </TextBlock>
-          </GroupBox.Header>
+          </HeaderedContentControl.Header>
 
-          <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}"
-                                                Margin="{StaticResource App.Margin.GroupBoxContent}"/>
-        </GroupBox>
+          <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}"/>
+        </HeaderedContentControl>
       </TabItem>
 
       <TabItem Header="Block Doping">
@@ -61,33 +60,31 @@
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
 
-          <GroupBox Grid.Row="0">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <HeaderedContentControl Grid.Row="0">
+            <HeaderedContentControl.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
                 <Run Text="Occupation change definitions:" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.DopingCombination}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
-            </GroupBox.Header>
+            </HeaderedContentControl.Header>
 
-            <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}"
-                                                      Margin="{StaticResource App.Margin.GroupBoxContent}"/>
-          </GroupBox>
+            <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}"/>
+          </HeaderedContentControl>
 
-          <GroupBox Grid.Row="1">
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
+          <HeaderedContentControl Grid.Row="1">
+            <HeaderedContentControl.Header>
+              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
                 <Run Text="Doping definitions:" />
                 <Run Text="[?]"
                      ToolTip="{StaticResource ToolTip.Doping}"
                      Style="{StaticResource App.Style.Run.Keyword}" />
               </TextBlock>
-            </GroupBox.Header>
+            </HeaderedContentControl.Header>
 
-            <dataControl:DopingControlView DataContext="{Binding DopingViewModel}"
-                                           Margin="{StaticResource App.Margin.GroupBoxContent}"/>
-          </GroupBox>
+            <dataControl:DopingControlView DataContext="{Binding DopingViewModel}"/>
+          </HeaderedContentControl>
 
         </Grid>
       </TabItem>

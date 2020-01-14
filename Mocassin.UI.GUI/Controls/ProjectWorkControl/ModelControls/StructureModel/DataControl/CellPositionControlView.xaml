@@ -9,6 +9,7 @@
   xmlns:structures="clr-namespace:Mocassin.Model.Structures;assembly=Mocassin.Model"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:CellPositionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -23,7 +24,7 @@
         <x:Type TypeName="structures:PositionStatus" />
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
-    <ToolTip x:Key="ToolTip.Wyckoff" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.Wyckoff" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -80,7 +81,7 @@
       </StackPanel>
 
     </ToolTip>
-    <ToolTip x:Key="ToolTip.ExtendedPositions" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.ExtendedPositions" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -97,20 +98,12 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <GroupBox Grid.Column="0" Name="PositionContentControl"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="Wyckoff position definitions:" />
-          <Run Text="[?]" ToolTip="{StaticResource ToolTip.Wyckoff}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </GroupBox.Header>
-
+    <content:HeaderedGroup Grid.Column="0" x:Name="PositionContentControl" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           Header="Wyckoff Position Definitions:" HeaderToolTip="{StaticResource Local.ToolTip.Wyckoff}">
       <DataGrid Name="PositionDataGrid"
-                Margin="{StaticResource App.Margin.GroupBoxContent}"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
                 AutoGenerateColumns="False"
@@ -149,29 +142,27 @@
         </DataGrid.Columns>
       </DataGrid>
 
-    </GroupBox>
+    </content:HeaderedGroup>
 
-    <GroupBox Grid.Column="1" Name="ExpansionContentControl"
-              Style="{StaticResource App.Style.GroupBox.NoBorder}">
+    <GridSplitter Grid.Column="1"/>
 
-      <GroupBox.Header>
-        <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
-          <Run Text="Equivalent cell positions:" />
-          <Run Text="{Binding SelectedVectorExpansionCount, Mode=OneWay, StringFormat= #{0}}" />
-          <Run Text="[?]" ToolTip="{StaticResource ToolTip.ExtendedPositions}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
+    <content:HeaderedGroup Grid.Column="2" x:Name="ExpansionContentControl" HeaderToolTip="{StaticResource Local.ToolTip.ExtendedPositions}">
+
+      <HeaderedContentControl.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Equivalent Cell Positions:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}], TargetNullValue=???}"/>
+          <Run Text="{Binding SelectedVectorExpansionCount, Mode=OneWay, StringFormat={}(#{0})}" />
         </TextBlock>
-      </GroupBox.Header>
+      </HeaderedContentControl.Header>
 
-      <DataGrid Margin="{StaticResource App.Margin.GroupBoxContent}"
-                ItemsSource="{Binding SelectedVectorExpansion}"
+      <DataGrid ItemsSource="{Binding SelectedVectorExpansion}"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
                 ColumnWidth="*">
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
-            <views:ObjectRowHeaderLogo DataContext="I" />
+            <views:ObjectRowHeaderLogo/>
           </DataTemplate>
         </DataGrid.RowHeaderTemplate>
 
@@ -181,6 +172,6 @@
           <DataGridTextColumn Header="C" Binding="{Binding C, Mode=OneTime}" />
         </DataGrid.Columns>
       </DataGrid>
-    </GroupBox>
+    </content:HeaderedGroup>
   </Grid>
 </UserControl>

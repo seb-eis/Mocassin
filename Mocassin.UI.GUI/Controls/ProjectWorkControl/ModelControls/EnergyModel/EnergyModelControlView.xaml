@@ -6,12 +6,13 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:EnergyModelControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.UnstableEnvironment" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.UnstableEnvironment" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -24,8 +25,9 @@
           <Run Text="object, each surrounding can be defined independently." />
           <Run Text="The interaction behavior is asymmetric, A-B is not equal to B-A." />
           <LineBreak />
-          <Run Text="Keep in mind: These objects cannot be defined manually, use the context menu to refresh after model changes."
-               Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="Keep in mind: These objects cannot be defined manually, use the context menu to refresh after model changes."
+            Style="{StaticResource App.Style.Run.Important}" />
           <LineBreak />
         </TextBlock>
 
@@ -53,14 +55,15 @@
           <Run Text="Define the" />
           <Run Text="{StaticResource App.String.InteractionFilter}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects of the environment (see affiliated tooltip). The center is implicit and cannot be changed." />
+          <Run
+            Text="objects of the environment (see affiliated tooltip). The center is implicit and cannot be changed." />
           <LineBreak />
         </TextBlock>
 
       </StackPanel>
 
     </ToolTip>
-    <ToolTip x:Key="ToolTip.GroupInteractions" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.GroupInteractions" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -71,10 +74,12 @@
           <LineBreak />
           <Run Text="Keep in mind: Symmetry in crystal systems is described by the operation sets of the space groups."
                Style="{StaticResource App.Style.Run.Important}" />
-          <Run Text="The reduced permutation set of your cluster is generated accordingly, ignoring the isolated point symmetry of the cluster."
-               Style="{StaticResource App.Style.Run.Important}" />        
-          <Run Text="[Warning: It is strongly recommended to use multi-position interactions for KMC transition positions only!]"
-               Style="{StaticResource App.Style.Run.Important}" Foreground="Red"/>
+          <Run
+            Text="The reduced permutation set of your cluster is generated accordingly, ignoring the isolated point symmetry of the cluster."
+            Style="{StaticResource App.Style.Run.Important}" />
+          <Run
+            Text="[Warning: It is strongly recommended to use multi-position interactions for KMC transition positions only!]"
+            Style="{StaticResource App.Style.Run.Important}" Foreground="Red" />
           <LineBreak />
         </TextBlock>
 
@@ -91,7 +96,8 @@
           <Run Text="Define the" />
           <Run Text="{StaticResource App.String.UnitCellPosition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="that functions as the start position. The coordinates (A,B,C) follow your previous wyckoff definition." />
+          <Run
+            Text="that functions as the start position. The coordinates (A,B,C) follow your previous wyckoff definition." />
           <LineBreak />
         </TextBlock>
 
@@ -100,21 +106,21 @@
                Style="{StaticResource App.Style.Run.Property}" />
           <LineBreak />
           <Run Text="Define up to 8 surrounding positions through their absolute (A,B,C) coordinates." />
-          <Run Text="Important: Filter-affected pair interactions cannot be used for cluster definitions due to optimization." />
-          <Run Text="If you don't want to model required pairs as such, leave them at 0 eV to not affect simulation outcomes." />
+          <Run
+            Text="Important: Filter-affected pair interactions cannot be used for cluster definitions due to optimization." />
+          <Run
+            Text="If you don't want to model required pairs as such, leave them at 0 eV to not affect simulation outcomes." />
           <LineBreak />
         </TextBlock>
 
       </StackPanel>
 
-      </ToolTip>
-      <ToolTip x:Key="ToolTip.DefectEnergies" Style="{StaticResource App.Style.ToolTip.Default}">
+    </ToolTip>
+    <ToolTip x:Key="Local.ToolTip.DefectEnergies" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
-
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="Define background defect energy values for your structure." />
         </TextBlock>
-
       </StackPanel>
 
     </ToolTip>
@@ -125,65 +131,36 @@
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
-
-          <dataControl:EnergyParameterControlView Grid.Column="0"
-                                                  DataContext="{Binding ParameterControlViewModel}"
-                                                  Margin="{StaticResource App.Margin.GroupBoxContent}" />
-
-          <GroupBox Grid.Column="1">
-
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-                <Run Text="Transition environment settings:" />
-                <Run Text="[?]"
-                     ToolTip="{StaticResource ToolTip.UnstableEnvironment}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </GroupBox.Header>
-
-            <dataControl:UnstableEnvironmentControlView DataContext="{Binding UnstableEnvironmentViewModel}"
-                                                        Margin="{StaticResource App.Margin.GroupBoxContent}" />
-          </GroupBox>
+          <dataControl:EnergyParameterControlView Grid.Column="0" DataContext="{Binding ParameterControlViewModel}"/>
+          <GridSplitter Grid.Column="1"/>
+          <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.UnstableEnvironment}"
+                                 Header="Unstable Environment Settings:">
+            <dataControl:UnstableEnvironmentControlView DataContext="{Binding UnstableEnvironmentViewModel}"/>
+          </content:HeaderedGroup>
         </Grid>
       </TabItem>
 
       <TabItem Header="Advanced Options">
         <Grid>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
-          <GroupBox Grid.Column="0">
+          <content:HeaderedGroup Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.GroupInteractions}"
+                                 Header="Interaction Group Definitions:">
+            <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"/>
+          </content:HeaderedGroup>
 
-          <GroupBox.Header>
-            <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-              <Run Text="Interaction group definitions:" />
-              <Run Text="[?]"
-                   ToolTip="{StaticResource ToolTip.GroupInteractions}"
-                   Style="{StaticResource App.Style.Run.Keyword}" />
-            </TextBlock>
-          </GroupBox.Header>
-
-          <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"
-                                                   Margin="{StaticResource App.Margin.GroupBoxContent}" />
-        </GroupBox>
-
-          <GroupBox Grid.Column="1">
-
-            <GroupBox.Header>
-              <TextBlock Style="{StaticResource App.Style.ContentHeaderTextBlock}">
-                <Run Text="Position defect definitions:" />
-                <Run Text="[?]"
-                     ToolTip="{StaticResource ToolTip.DefectEnergies}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </GroupBox.Header>
-
-            <dataControl:DefectEnergyControlView DataContext="{Binding DefectEnergyViewModel}"
-                                                 Margin="{StaticResource App.Margin.GroupBoxContent}" />
-          </GroupBox>
+          <content:HeaderedGroup Grid.Column="1" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.DefectEnergies}"
+                                 Header="Position Defect Energies:">
+            <dataControl:DefectEnergyControlView DataContext="{Binding DefectEnergyViewModel}"/>
+          </content:HeaderedGroup>
         </Grid>
       </TabItem>
     </TabControl>

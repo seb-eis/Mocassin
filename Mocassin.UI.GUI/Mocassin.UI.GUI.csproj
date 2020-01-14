@@ -285,6 +285,7 @@
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\Objects\VvmContainer.cs" />
+    <Compile Include="Base\UiElements\Content\HeaderedGroup.cs" />
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxMatrixExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxVectorTransformerExtensions.cs" />
@@ -1139,6 +1140,10 @@
     <Page Include="StartupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
