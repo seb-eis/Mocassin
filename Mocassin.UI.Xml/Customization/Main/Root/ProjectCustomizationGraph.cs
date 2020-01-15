@@ -100,7 +100,7 @@ namespace Mocassin.UI.Xml.Customization
                 EnergyModelCustomization = EnergyModelCustomizationGraph.Create(energySetterProvider, parent),
                 TransitionModelCustomization = TransitionModelCustomizationGraph.Create(ruleSetterProvider, parent)
             };
-            obj.Name = $"New customization [{obj.Parent.ProjectName}]";
+            obj.Name = $"New Customization [{obj.Parent.ProjectName}]";
 
             return obj;
         }

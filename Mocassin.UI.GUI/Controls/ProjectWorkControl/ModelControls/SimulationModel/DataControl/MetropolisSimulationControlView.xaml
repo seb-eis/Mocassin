@@ -10,13 +10,14 @@
   xmlns:hosting="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationModel.GridControl.Adapter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance local:MetropolisSimulationControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.MetropolisSimulations" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.MetropolisSimulations" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -55,14 +56,14 @@
       </StackPanel>
 
     </ToolTip>
-    <ToolTip x:Key="ToolTip.GeneralSettings" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.GeneralSettings" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="Defines the global overrides for general simulation settings that exist for both KMC and MMC." />
         </TextBlock>
       </StackPanel>
     </ToolTip>
-    <ToolTip x:Key="ToolTip.MetropolisSettings">
+    <ToolTip x:Key="Local.ToolTip.MetropolisSettings">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="Defines the global overrides for simulation settings that exist only for MMC." />
@@ -74,23 +75,19 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
       <ColumnDefinition Width="2*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <HeaderedContentControl Grid.Column="0" Grid.RowSpan="3">
 
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Metropolis simulation base definitions:" />
-          <Run Text="[?]"
-               ToolTip="{StaticResource ToolTip.MetropolisSimulations}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Column="0" Grid.RowSpan="4" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.MetropolisSimulations}"
+                           Header="Metropolis Simulation Base Definitions:">
       <DataGrid Name="SimulationDataGrid"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
@@ -130,73 +127,70 @@
         </DataGrid.Columns>
 
       </DataGrid>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Column="1" Grid.Row="0">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="0" HeaderToolTip="{StaticResource Local.ToolTip.GeneralSettings}">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
-          <Run Text="General base settings:" />
-          <Run Text="[?]"
-               ToolTip="{StaticResource ToolTip.GeneralSettings}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
+          <Run Text="General Fallback Values:"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <gridControl:SimulationBaseControlView DataContext="{Binding SelectedItem}"/>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Column="1" Grid.Row="1">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Column="2" Grid.Row="2" HeaderToolTip="{StaticResource Local.ToolTip.MetropolisSettings}">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
-          <Run Text="Metropolis base settings:" />
-          <Run Text="[?]"
-               ToolTip="{StaticResource ToolTip.MetropolisSettings}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
+          <Run Text="MMC Fallback Values:"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <Grid>
 
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
           <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="*" />
+          <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="Rel. energy break tolerance:">
+        <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Header="Relative Energy Break Tolerance:">
           <TextBox Text="{Binding SelectedItem.RelativeBreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </HeaderedContentControl>
+        </content:HeaderedGroup>
 
-        <HeaderedContentControl Grid.Row="0" Grid.Column="1" Header="Break check sample [MCS]:">
+        <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Header="Break Check Sample [MCS]:">
           <TextBox Text="{Binding SelectedItem.BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}}">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
             </TextBox.InputBindings>
           </TextBox>
-        </HeaderedContentControl>
+        </content:HeaderedGroup>
 
-        <HeaderedContentControl Grid.Row="0" Grid.Column="2" Header="Break check interval [MCS]:">
+        <content:HeaderedGroup Grid.Row="0" Grid.Column="4" Header="Break Check Interval [MCS]:">
           <TextBox Text="{Binding SelectedItem.BreakSampleIntervalMcs}"
                    IsReadOnly="True" />
-        </HeaderedContentControl>
+        </content:HeaderedGroup>
 
-        <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="Result sample size [MCS]:">
+        <content:HeaderedGroup Grid.Row="2" Grid.Column="0" Header="Result Sample Size [MCS]:">
           <TextBox Text="{Binding SelectedItem.ResultSampleMcs}"
                    IsReadOnly="True" />
-        </HeaderedContentControl>
+        </content:HeaderedGroup>
       </Grid>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
   </Grid>
 </UserControl>

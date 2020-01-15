@@ -14,9 +14,9 @@
   Background="Transparent">
   <Grid>
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="100*" />
-        <ColumnDefinition Width="1*" />
-        <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
     <DataGrid Name="GroupEnergySetDataGrid" Grid.Column="0"
               ItemsSource="{Binding Items}"
@@ -27,7 +27,6 @@
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
           <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
-                                     DataContext="C"
                                      Width="{StaticResource App.Size.RowHeaderLogo}" 
                                      Height="{StaticResource App.Size.RowHeaderLogo}"
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
@@ -40,14 +39,15 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding GroupEnergySet.Name}" />
 
-        <DataGridTextColumn Header="Source interaction" Binding="{Binding GroupEnergySet.GroupInteraction.Name}"
+        <DataGridTextColumn Header="Source Interaction" Binding="{Binding GroupEnergySet.GroupInteraction.Name}"
                             IsReadOnly="True" />
 
-        <DataGridTextColumn Header="Center wyckoff" Binding="{Binding GroupEnergySet.CenterPosition.Name}"
+        <DataGridTextColumn Header="Center Cell Position" Binding="{Binding GroupEnergySet.CenterPosition.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
 
     </DataGrid>
+    <GridSplitter Grid.Column="1"/>
     <gridControl:GroupEnergySetControlView Grid.Column="2"
       DataContext="{Binding SelectedItem}"
       Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>

@@ -15,9 +15,9 @@
 
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="100*" />
-      <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <DataGrid Name="KineticRuleSetDataGrid" Grid.Column="0"
               ItemsSource="{Binding KineticRuleSetCollectionViewModel.Items}"
@@ -29,7 +29,6 @@
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
           <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
-                                     DataContext="C"
                                      Width="{StaticResource App.Size.RowHeaderLogo}" 
                                      Height="{StaticResource App.Size.RowHeaderLogo}"
                                      PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
@@ -41,11 +40,11 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding KineticRuleSet.Name}" />
-        <DataGridTextColumn Header="Source transition" Binding="{Binding KineticRuleSet.Transition.Name}"
+        <DataGridTextColumn Header="Source Transition" Binding="{Binding KineticRuleSet.Transition.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
     </DataGrid>
-
+    <GridSplitter Grid.Column="1"/>
     <gridControl:KineticRuleSetControlView Grid.Column="2"
                                            DataContext="{Binding KineticRuleSetCollectionViewModel.SelectedItem}" 
                                            Visibility="{Binding Converter={converter:NullToVisibilityConverter}}"/>

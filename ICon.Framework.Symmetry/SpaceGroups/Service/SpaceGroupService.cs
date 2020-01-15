@@ -232,31 +232,6 @@ namespace Mocassin.Symmetry.SpaceGroups
             return results;
         }
 
-        /// <summary>
-        ///     Get all wyckoff sequences for the provided reference sequence of fractional vectors
-        /// </summary>
-        /// <param name="refSequence"></param>
-        /// <returns></returns>
-        public SetList<Fractional3D[]> GetWyckoffSequences(params Fractional3D[] refSequence)
-        {
-            Fractional3D[] MoveStartToUnitCell(IList<Fractional3D> vectors)
-            {
-                var coordinateA = vectors[0].A.PeriodicTrim(0.0, 1.0, DoubleComparer) - vectors[0].A;
-                var coordinateB = vectors[0].B.PeriodicTrim(0.0, 1.0, DoubleComparer) - vectors[0].B;
-                var coordinateC = vectors[0].C.PeriodicTrim(0.0, 1.0, DoubleComparer) - vectors[0].C;
-                var shift = new Fractional3D(coordinateA, coordinateB, coordinateC);
-                return vectors.Select(a => a + shift).ToArray(vectors.Count);
-            }
-
-            var comparer = Comparer<Fractional3D[]>.Create((a, b) => a.LexicographicCompare(b, VectorComparer));
-            var result = new SetList<Fractional3D[]>(comparer);
-
-            foreach (var operation in LoadedGroup.Operations)
-                result.Add(MoveStartToUnitCell(refSequence.Select(a => operation.Transform(a.A, a.B, a.C)).ToList(refSequence.Length)));
-
-            return result;
-        }
-
         /// <inheritdoc />
         public IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence)
         {
@@ -402,8 +377,8 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public bool CheckInteractionGeometryIsChiralPair(in Fractional3D left0, in Fractional3D right0, in Fractional3D left1, in Fractional3D right1)
         {
-            var leftSet = GetWyckoffSequences(left0, right0);
-            var rightSet = GetWyckoffSequences(right0, left0);
+            var leftSet = GetUnitCellP1PathExtension(new []{left0, right0});
+            var rightSet = GetUnitCellP1PathExtension(new []{right0, left0});
             var testArray = new[] {left1, right1};
             return !leftSet.Contains(testArray) && rightSet.Contains(testArray);
         }
@@ -429,7 +404,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         }
 
         /// <inheritdoc />
-        public IWyckoffOperationDictionary GetOperationDictionary(in Fractional3D sourceVector)
+        public IPositionOperationDictionary GetOperationDictionary(in Fractional3D sourceVector)
         {
             var operationComparer =
                 Comparer<ISymmetryOperation>.Create((a, b) => string.Compare(a.Literal, b.Literal, StringComparison.Ordinal));
@@ -444,11 +419,11 @@ namespace Mocassin.Symmetry.SpaceGroups
                 dictionary[vector].Add(operation);
             }
 
-            return new WyckoffOperationDictionary(sourceVector, LoadedGroup, dictionary);
+            return new PositionOperationDictionary(sourceVector, LoadedGroup, dictionary);
         }
 
         /// <inheritdoc />
-        public IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection)
+        public IList<ISymmetryOperation> GetSelfProjectionOperations(in Fractional3D sourceVector, bool shiftCorrection)
         {
             var result = new List<ISymmetryOperation>(LoadedGroup.Operations.Count);
             foreach (var operation in LoadedGroup.Operations)
@@ -479,7 +454,7 @@ namespace Mocassin.Symmetry.SpaceGroups
                 SelfProjectionOperations = new List<SymmetryOperation>()
             };
 
-            var multiplicityOperations = GetMultiplicityOperations(originPoint, true);
+            var multiplicityOperations = GetSelfProjectionOperations(originPoint, true);
             var resultSequences = multiplicityOperations
                 .Select(operation => operation.Transform(pointList).ToList()).ToList();
 
@@ -504,9 +479,9 @@ namespace Mocassin.Symmetry.SpaceGroups
             var refList = refSequence.AsList();
 
             var result = new SortedDictionary<Fractional3D, List<Fractional3D>>(VectorComparer);
-            var wyckoffDictionary = GetOperationDictionary(refList[0]);
+            var operationDictionary = GetOperationDictionary(refList[0]);
 
-            foreach (var entry in wyckoffDictionary)
+            foreach (var entry in operationDictionary)
             {
                 var operation = entry.Value.ElementAt(0);
                 var sequence = ShiftFirstToPosition(refList.Select(value => operation.Transform(value)), entry.Key);

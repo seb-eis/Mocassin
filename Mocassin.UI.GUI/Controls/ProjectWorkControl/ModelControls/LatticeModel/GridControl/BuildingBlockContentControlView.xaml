@@ -20,13 +20,13 @@
               CanUserDeleteRows="False">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="D"/>
+          <views:ObjectRowHeaderLogo/>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Wyckoff" Binding="{Binding WyckoffPosition.Name}"
+        <DataGridTextColumn Header="Cell Position" Binding="{Binding WyckoffPosition.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="A" Binding="{Binding Vector.A}"
                             IsReadOnly="True" />
@@ -35,6 +35,7 @@
         <DataGridTextColumn Header="C" Binding="{Binding Vector.C}"
                             IsReadOnly="True" />
         <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
+                                                 CanUserSort="False"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableOccupationParticles}"
                                                  SelectedItemBinding="{Binding Occupation}"
                                                  DisplayMemberPath="Name"

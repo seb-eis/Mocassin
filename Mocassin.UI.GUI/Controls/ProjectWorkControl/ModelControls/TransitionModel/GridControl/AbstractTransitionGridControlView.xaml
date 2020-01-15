@@ -37,7 +37,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-        <DataGridTextColumn Header="Connection pattern" Binding="{Binding ConnectorString}">
+        <DataGridTextColumn Header="Connection Pattern" Binding="{Binding ConnectorString}">
 
           <DataGridTextColumn.ElementStyle>
             <Style TargetType="{x:Type TextBlock}">
@@ -53,9 +53,9 @@
 
         </DataGridTextColumn>
 
-        <DataGridCheckBoxColumn Header="Association flag" Binding="{Binding IsAssociation}"/>
+        <DataGridCheckBoxColumn Header="Association Flag" Binding="{Binding IsAssociation}"/>
 
-        <DataGridTemplateColumn Header="Change group chain">
+        <DataGridTemplateColumn Header="State Change Groups">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionGraph}">
               <gridControl:HostGraphModelObjectDropSelectionView>

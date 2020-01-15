@@ -21,7 +21,7 @@
         <dataControl:StructureParameterControlView DataContext="{Binding ParameterControlViewModel}" />
       </TabItem>
 
-      <TabItem Header="Wyckoff Positions">
+      <TabItem Header="Cell Positions">
         <dataControl:CellPositionControlView DataContext="{Binding PositionControlViewModel}" />
       </TabItem>
     </TabControl>

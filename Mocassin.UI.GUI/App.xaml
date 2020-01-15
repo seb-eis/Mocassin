@@ -372,7 +372,7 @@
       <s:String x:Key="App.String.ParticleSet">[ParticleSet]</s:String>
       <s:String x:Key="App.String.ParticleSet.Particles">[ParticleSet.Particles]</s:String>
 
-      <s:String x:Key="App.String.UnitCellPosition">Wyckoff Position</s:String>
+      <s:String x:Key="App.String.UnitCellPosition">Cell Position</s:String>
       <s:String x:Key="App.String.UnitCellPosition.A">Coordinate 'A'</s:String>
       <s:String x:Key="App.String.UnitCellPosition.B">Coordinate 'B'</s:String>
       <s:String x:Key="App.String.UnitCellPosition.C">Coordinate 'C'</s:String>
@@ -408,8 +408,8 @@
 
       <s:String x:Key="App.String.MetropolisTransition">Metropolis Transition</s:String>
       <s:String x:Key="App.String.MetropolisTransition.Abstract">State Change Chain</s:String>
-      <s:String x:Key="App.String.MetropolisTransition.FirstWyckoff">1. Wyckoff Position</s:String>
-      <s:String x:Key="App.String.MetropolisTransition.SecondWyckoff">2. Wyckoff Position</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.FirstWyckoff">1. Cell Position</s:String>
+      <s:String x:Key="App.String.MetropolisTransition.SecondWyckoff">2. Cell Position</s:String>
 
       <s:String x:Key="App.String.KineticsTransition">Kinetic Transition</s:String>
       <s:String x:Key="App.String.KineticsTransition.Abstract">State Change Chain</s:String>
@@ -420,17 +420,17 @@
       <s:String x:Key="App.String.InteractionFilter">Hollow Sphere Interaction Filter</s:String>
       <s:String x:Key="App.String.InteractionFilter.StartRadius">Min Filter Radius</s:String>
       <s:String x:Key="App.String.InteractionFilter.EndRadius">Max Filter Radius</s:String>
-      <s:String x:Key="App.String.InteractionFilter.CenterWyckoff">Center Wyckoff</s:String>
-      <s:String x:Key="App.String.InteractionFilter.PartnerWyckoff">Partner Wyckoff</s:String>
+      <s:String x:Key="App.String.InteractionFilter.CenterWyckoff">Center Position</s:String>
+      <s:String x:Key="App.String.InteractionFilter.PartnerWyckoff">Partner Position</s:String>
 
       <s:String x:Key="App.String.SymmetricPairInteraction">Regular Pair Interaction</s:String>
 
       <s:String x:Key="App.String.UnstableEnvironment">Transition Environment</s:String>
-      <s:String x:Key="App.String.UnstableEnvironment.CenterWyckoff">Center Wyckoff</s:String>
+      <s:String x:Key="App.String.UnstableEnvironment.CenterWyckoff">Center Position</s:String>
       <s:String x:Key="App.String.UnstableEnvironment.InteractionFilters">Hollow Sphere Interaction Filter</s:String>
 
       <s:String x:Key="App.String.GroupInteraction">Interaction Group</s:String>
-      <s:String x:Key="App.String.GroupInteraction.CenterWyckoff">Center Wyckoff</s:String>
+      <s:String x:Key="App.String.GroupInteraction.CenterWyckoff">Center Position</s:String>
       <s:String x:Key="App.String.GroupInteraction.Geometry">Surrounding Geometry</s:String>
 
       <s:String x:Key="App.String.MetropolisSimulation">Metropolis Simulation Base</s:String>

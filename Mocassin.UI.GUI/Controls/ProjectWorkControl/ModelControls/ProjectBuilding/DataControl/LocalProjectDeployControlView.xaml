@@ -34,11 +34,11 @@
     </Grid.RowDefinitions>
 
     <Button Margin="0,0,2,2" Grid.Row="0" Grid.Column="0"
-            Content="Select file target"
+            Content="Select File"
             Command="{Binding GetFileSelectionCommand}"/>
 
     <Button Margin="2,0,2,2" Grid.Row="0" Grid.Column="1"
-            Content="Start build process"
+            Content="Start Build"
             Command="{Binding WriteDatabaseCommand}"/>
 
     <ToggleButton Margin="2,0,0,2" Grid.Row="0" Grid.Column="2"
@@ -47,14 +47,14 @@
             Background="Transparent">
       <ToggleButton.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="Save library" Command="{Binding ManualSaveLastLibraryCommand}"/>
+          <MenuItem Header="Save Library" Command="{Binding ManualSaveLastLibraryCommand}"/>
         </ContextMenu>
       </ToggleButton.ContextMenu>
       <ToggleButton.Style>
         <Style TargetType="{x:Type ToggleButton}">
           <Style.Triggers>
             <Trigger Property="IsChecked" Value="False">
-              <Setter Property="Content" Value="Create + Save"/>
+              <Setter Property="Content" Value="Create &amp; Save"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
               <Setter Property="Content" Value="Create"/>
@@ -89,7 +89,7 @@
                  IsIndeterminate="{Binding BuildStatus, Converter={converter:BuildStatusIsIndeterminateConverter}}"/>
 
     <TextBlock Margin="{StaticResource App.Margin.VerticalStack}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
-               ToolTip="Deploy progress"
+               ToolTip="Deploy Progress"
                TextAlignment="Center">
       <Run Text="{Binding DoneJobs}" />
       <Run Text="/" />

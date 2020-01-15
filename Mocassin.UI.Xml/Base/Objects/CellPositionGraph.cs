@@ -25,8 +25,7 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the affiliated wyckoff
-        ///     <see cref="UnitCellPosition" />
+        ///     Get or set the <see cref="ModelObjectReferenceGraph{T}" /> to the affiliated <see cref="UnitCellPosition" />
         /// </summary>
         [XmlElement("Wyckoff")]
         public ModelObjectReferenceGraph<UnitCellPosition> WyckoffPosition

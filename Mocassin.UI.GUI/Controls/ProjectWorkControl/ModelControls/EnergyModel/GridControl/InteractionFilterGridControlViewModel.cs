@@ -28,13 +28,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         ///     Get an <see cref="IEnumerable{T}" /> of <see cref="UnitCellPositionGraph" /> instances that can be used as
         ///     centers <see cref="InteractionFilterGraph" /> instances
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> CenterWyckoffOptions => IsStableEnvironment ? GetWyckoffOptions() : null;
+        public IEnumerable<UnitCellPositionGraph> CenterPositionOptions => IsStableEnvironment ? GetPositionOptions() : null;
 
         /// <summary>
         ///     Get an <see cref="IEnumerable{T}" /> of <see cref="UnitCellPositionGraph" /> instances that can be used as
         ///     partners <see cref="InteractionFilterGraph" /> instances
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> PartnerWyckoffOptions => GetWyckoffOptions();
+        public IEnumerable<UnitCellPositionGraph> PartnerPositionOptions => GetPositionOptions();
 
         /// <summary>
         ///     Creates a new <see cref="InteractionFilterGridControlViewModel" /> with the passed stability flag
@@ -56,7 +56,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         ///     center or partner
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UnitCellPositionGraph> GetWyckoffOptions()
+        public IEnumerable<UnitCellPositionGraph> GetPositionOptions()
         {
             return ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions
                 ?.Where(x => x.PositionStatus == PositionStatus.Stable);

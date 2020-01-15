@@ -18,14 +18,14 @@
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="D"/>
+          <views:ObjectRowHeaderLogo/>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff"
+        <comboBox:BindableDataGridComboBoxColumn Header="Cell Position"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePositions}"
                                                  SelectedItemBinding="{Binding StartUnitCellPosition}"
                                                  DisplayMemberPath="Name" />

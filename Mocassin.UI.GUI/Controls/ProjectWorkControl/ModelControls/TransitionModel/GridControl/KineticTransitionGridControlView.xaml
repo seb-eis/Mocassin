@@ -41,7 +41,7 @@
                                                  DisplayMemberPath="Name"
                                                  SelectedValuePath="Key" />
 
-        <DataGridTemplateColumn Header="Binding geometry (A,B,C)">
+        <DataGridTemplateColumn Header="Binding Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type transitionModel:KineticTransitionGraph}">
               <DataGrid ItemsSource="{Binding PositionVectors}"

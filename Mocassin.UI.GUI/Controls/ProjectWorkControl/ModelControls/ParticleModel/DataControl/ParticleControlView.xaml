@@ -36,7 +36,7 @@
         <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" />
         <DataGridTextColumn Header="Charge"
                             Binding="{Binding Charge, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-        <DataGridCheckBoxColumn Header="Vacancy flag" Binding="{Binding IsVacancy}" />
+        <DataGridCheckBoxColumn Header="Vacancy Flag" Binding="{Binding IsVacancy}" />
       </DataGrid.Columns>
     </DataGrid>
 

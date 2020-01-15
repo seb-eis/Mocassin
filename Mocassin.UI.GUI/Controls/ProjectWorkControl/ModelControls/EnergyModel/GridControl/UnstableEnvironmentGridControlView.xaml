@@ -60,9 +60,14 @@
                             Binding="{Binding MaxInteractionRange, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
       </DataGrid.Columns>
     </DataGrid>
-    <content:HeaderedGroup Grid.Row="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
-                           Header="{Binding SelectedItem.Name, StringFormat={}[{0}]:}">
-      <local:InteractionFilterGridControlView Grid.Row="2">
+    <content:HeaderedGroup Grid.Row="2">
+      <content:HeaderedGroup.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Interaction Filters:"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
+        </TextBlock>
+      </content:HeaderedGroup.Header>
+      <local:InteractionFilterGridControlView>
         <local:InteractionFilterGridControlView.DataContext>
           <MultiBinding Converter="{adapter:UnstableEnvironmentInteractionFilterVmConverter}">
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:UnstableEnvironmentGridControlView}}"

@@ -33,21 +33,21 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Min radius [&#x212b;]" 
+        <DataGridTextColumn Header="Min. Radius [&#x212b;]" 
                             Binding="{Binding StartRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-        <DataGridTextColumn Header="Max radius [&#x212b;]" 
+        <DataGridTextColumn Header="Max. Radius [&#x212b;]" 
                             Binding="{Binding EndRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Center"
-          ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.CenterWyckoffOptions}"
+          Header="Center Pos."
+          ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.CenterPositionOptions}"
           DisplayMemberPath="Name"
           SelectedValuePath="Key"
           SelectedValueBinding="{Binding CenterUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Partner"
-          ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.PartnerWyckoffOptions}"
+          Header="Partner Pos."
+          ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.PartnerPositionOptions}"
           DisplayMemberPath="Name"
           SelectedValuePath="Key"
           SelectedValueBinding="{Binding PartnerUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}" />

@@ -225,31 +225,29 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             BuildCancellationTokenSource = new CancellationTokenSource();
             AddConsoleMessage($"Deployment start: {BuildTargetFilePath}");
-            using (var builder = new MocassinSimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving})
+            using var builder = new MocassinSimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving};
+            BuildSimulationLibrary?.Dispose();
+            BuildSimulationLibrary = null;
+
+            builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, AddConsoleError, () => DoneJobs = MaxJobs);
+            builder.JobBuildCounterNotifications.Subscribe(UpdateBuildCountsOnMayorStep);
+
+            var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedItem;
+            var cancellationToken = BuildCancellationTokenSource.Token;
+            BuildSimulationLibrary = await Task.Run(()
+                => builder.BuildLibrary(buildGraph, BuildTargetFilePath, ProjectControl.CreateModelProject(), cancellationToken), cancellationToken);
+            if (BuildSimulationLibrary != null)
             {
-                BuildSimulationLibrary?.Dispose();
-                BuildSimulationLibrary = null;
-
-                builder.LibraryBuildStatusNotifications.Subscribe(x => BuildStatus = x, AddConsoleError);
-                builder.JobBuildCounterNotifications.Subscribe(UpdateBuildCountsOnMayorStep);
-
-                var buildGraph = ProjectBuildGraphCollectionViewModel.SelectedItem;
-                var cancellationToken = BuildCancellationTokenSource.Token;
-                BuildSimulationLibrary = await Task.Run(()
-                    => builder.BuildLibrary(buildGraph, BuildTargetFilePath, ProjectControl.CreateModelProject(), cancellationToken), cancellationToken);
-                if (BuildSimulationLibrary != null)
-                {
-                    AddConsoleMessage("Loading meta information table.");
-                    JobMetaDataCollectionControlViewModel.Clear();
-                    JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
-                    AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
-                }
-                else
-                    AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
-
-                BuildCancellationTokenSource.Dispose();
-                BuildCancellationTokenSource = null;
+                AddConsoleMessage("Loading meta information table.");
+                JobMetaDataCollectionControlViewModel.Clear();
+                JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
+                AddConsoleMessage($"Successfully created at [{(IsManualLibrarySaving ? "MEMORY" : BuildTargetFilePath)}]");
             }
+            else
+                AddConsoleMessage($"Creation failed! ({(cancellationToken.IsCancellationRequested ? "Cancelled" : "Error")})");
+
+            BuildCancellationTokenSource.Dispose();
+            BuildCancellationTokenSource = null;
         }
 
         /// <summary>
@@ -292,6 +290,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         private void OnLibraryStatusChanged(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(BuildStatus)) AddConsoleMessage($"Build status changed to {BuildStatus}.");
+        }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            JobMetaDataCollectionControlViewModel.Clear();
+            BuildSimulationLibrary?.Dispose();
+            base.Dispose();
         }
     }
 }

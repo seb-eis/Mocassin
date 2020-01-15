@@ -211,7 +211,7 @@
             <DataGridCheckBoxColumn IsReadOnly="True" Binding="{Binding FlipsOrientation, Mode=OneTime}" Width="Auto">
               <DataGridCheckBoxColumn.HeaderTemplate>
                 <DataTemplate>
-                  <TextBlock Text="Det(M) &lt; 0" ToolTip="Marks if the equivalent 4x4 transform matrix has a negative determinant (Causes orientation change)."/>
+                  <TextBlock Text="Det(T) &lt; 0" ToolTip="Marks if the equivalent 4x4 transform matrix has a negative determinant (Causes orientation change)."/>
                 </DataTemplate>
               </DataGridCheckBoxColumn.HeaderTemplate>
             </DataGridCheckBoxColumn>
@@ -239,7 +239,7 @@
           </Grid.ColumnDefinitions>
 
           <StackPanel Grid.Column="0">
-            <content:HeaderedGroup Header="Cell parameter 'a' [&#x212b;]:">
+            <content:HeaderedGroup Header="Cell Parameter 'a' [&#x212b;]:">
               <TextBox Text="{Binding ParamA, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                        x:Name="CellParameterATextBox"
                        IsReadOnly="{Binding IsReadOnlyParamA}">
@@ -249,7 +249,7 @@
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
-            <content:HeaderedGroup Header="Cell parameter 'b' [&#x212b;]:">
+            <content:HeaderedGroup Header="Cell Parameter 'b' [&#x212b;]:">
               <TextBox Text="{Binding ParamB, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyParamB}">
                 <TextBox.InputBindings>
@@ -258,7 +258,7 @@
                 </TextBox.InputBindings>
               </TextBox>
             </content:HeaderedGroup>
-            <content:HeaderedGroup Header="Cell parameter 'c' [&#x212b;]:">
+            <content:HeaderedGroup Header="Cell Parameter 'c' [&#x212b;]:">
               <TextBox Text="{Binding ParamC, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
                        IsReadOnly="{Binding IsReadOnlyParamC}">
                 <TextBox.InputBindings>

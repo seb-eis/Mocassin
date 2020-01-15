@@ -17,7 +17,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <DataGrid Name="BuildingBlockDataGrid" Grid.Column="0"
@@ -41,13 +41,12 @@
       </DataGrid.Columns>
 
     </DataGrid>
-    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="&#x2794;" FontSize="20" FontWeight="Bold"/>
     <gridControl:BuildingBlockContentControlView Grid.Column="2">
       <gridControl:BuildingBlockContentControlView.DataContext>
         <MultiBinding Converter="{adapter:BuildingBlockBuildingBlockContentViewModelConverter}">
-          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:BuildingBlockControlView}}"
                    Path="DataContext" />
-          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:BuildingBlockControlView}}"
                    Path="DataContext.BuildingBlockCollectionViewModel.SelectedItem" />
         </MultiBinding>
       </gridControl:BuildingBlockContentControlView.DataContext>

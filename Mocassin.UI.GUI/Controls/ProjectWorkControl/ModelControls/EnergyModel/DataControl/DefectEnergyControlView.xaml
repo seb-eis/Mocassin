@@ -33,13 +33,13 @@
 
       <DataGrid.ContextMenu>
         <ContextMenu>
-          <MenuItem Header="Update defect list" Command="{Binding UpdateDefectCollectionCommand}" />
+          <MenuItem Header="Refresh" Command="{Binding UpdateDefectCollectionCommand}" />
         </ContextMenu>
       </DataGrid.ContextMenu>
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Particle" Binding="{Binding Particle.Name}" IsReadOnly="True" />
-        <DataGridTextColumn Header="Wyckoff" Binding="{Binding UnitCellPosition.Name}" IsReadOnly="True" />
+        <DataGridTextColumn Header="Cell Position" Binding="{Binding UnitCellPosition.Name}" IsReadOnly="True" />
         <DataGridTextColumn Header="Energy"
                             Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
       </DataGrid.Columns>

@@ -88,7 +88,7 @@ namespace Mocassin.UI.Xml.Customization
                 Name = $"Kinetic.Rule.Set.{transitionGraph}",
                 TransitionIndex = ruleSetter.KineticTransition.Index,
                 Transition = new ModelObjectReferenceGraph<KineticTransition> {TargetGraph = transitionGraph},
-                KineticRules = ruleSetter.KineticRules.Select(x => KineticRuleGraph.Create(x, parent)).ToObservableCollection()
+                KineticRules = ruleSetter.KineticRules.Select((x,i) => KineticRuleGraph.Create(x, parent, i)).ToObservableCollection()
             };
 
             return obj;

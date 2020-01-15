@@ -94,7 +94,7 @@ namespace Mocassin.Model.Translator.ModelContext
                 throw new InvalidOperationException("Cannot resolve pair interactions for the environment model");
 
             var multiplicityOperations = ModelProject.SpaceGroupService
-                .GetMultiplicityOperations(environmentModel.UnitCellPosition.Vector, true);
+                .GetSelfProjectionOperations(environmentModel.UnitCellPosition.Vector, true);
 
             var index = 0;
             var pairInteractionModels = interactions

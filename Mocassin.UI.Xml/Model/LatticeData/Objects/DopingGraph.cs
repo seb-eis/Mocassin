@@ -63,7 +63,7 @@ namespace Mocassin.UI.Xml.LatticeModel
         }
 
         /// <summary>
-        ///     The priority oder in which the doping is applied
+        ///     The priority order in which the doping is applied
         /// </summary>
         [XmlAttribute("Priority")]
         [JsonProperty("Priority")]

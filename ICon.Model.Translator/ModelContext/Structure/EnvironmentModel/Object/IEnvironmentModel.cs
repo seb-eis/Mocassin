@@ -27,6 +27,6 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Wyckoff operation dictionary that contains all transform operations that reach equivalent center positions
         /// </summary>
-        IWyckoffOperationDictionary TransformOperations { get; set; }
+        IPositionOperationDictionary TransformOperations { get; set; }
     }
 }

@@ -17,20 +17,27 @@
                 Name="PrimaryTabControl">
       <TabControl.Resources>
         <DataTemplate DataType="{x:Type local:CloseableUserControlTabItem}">
-          <StackPanel Orientation="Horizontal" Visibility="{Binding Visibility}">
-            <TextBlock>
+          <Grid Visibility="{Binding Visibility}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" x:Name="HeaderTextBlock" VerticalAlignment="Center">
               <TextBlock.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CloseTabCommand, Mode=OneTime}" />
                 <MouseBinding MouseAction="MiddleClick" Command="{Binding CloseTabCommand, Mode=OneTime}"/>
               </TextBlock.InputBindings>
               <Run Text="{Binding TabName, Mode=OneTime}"/>
             </TextBlock>
-            <Border Width="15" Height="15" Margin="10,2,0,0" ToolTip="Close tab" CornerRadius="15"
+            <Border Grid.Column="1"
+                    Width="{Binding ElementName=HeaderTextBlock, Path=ActualHeight}"
+                    Height="{Binding ElementName=HeaderTextBlock, Path=ActualHeight}"
+                    Margin="10,0,0,0" ToolTip="Close Tab" CornerRadius="5"
                     SnapsToDevicePixels="True" BorderThickness="1">
               <Border.Background>
                 <RadialGradientBrush GradientOrigin=".25,.25">
                   <GradientStop Color="White" Offset=".1"/>
-                  <GradientStop Color="LightBlue" Offset=".5"/>
+                  <GradientStop Color="Black" Offset=".5"/>
                 </RadialGradientBrush>
               </Border.Background>
               <Border.InputBindings>
@@ -45,14 +52,25 @@
                     <Trigger Property="IsMouseOver" Value="False">
                       <Setter Property="Opacity" Value=".5"/>
                     </Trigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Path=IsSelected}" Value="False">
+                      <Setter Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Path=IsMouseOver}" Value="True">
+                      <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
                   </Style.Triggers>
                 </Style>
               </Border.Style>
             </Border>
-          </StackPanel>
+          </Grid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <TextBlock Text="{Binding TabName, Mode=OneTime}" Visibility="{Binding Visibility}"/>
+          <Grid Visibility="{Binding Visibility, Mode=OneTime}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding TabName, Mode=OneTime}"/>
+          </Grid>
         </DataTemplate>
       </TabControl.Resources>
       <TabControl.ContentTemplate>

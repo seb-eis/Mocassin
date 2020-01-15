@@ -8,7 +8,7 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <inheritdoc />
-    public class WyckoffOperationDictionary : IWyckoffOperationDictionary
+    public class PositionOperationDictionary : IPositionOperationDictionary
     {
         /// <inheritdoc />
         public ISpaceGroup SpaceGroup { get; set; }
@@ -17,7 +17,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public Fractional3D SourcePosition { get; set; }
 
         /// <summary>
-        ///     Sorted position dictionary that holds a list of operations for each of the wyckoff 1 positions
+        ///     Sorted position dictionary that holds a list of operations for each of the equivalent positions
         /// </summary>
         public SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> OperationDictionary { get; set; }
 
@@ -35,12 +35,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         public IEnumerable<ISymmetryOperation> this[Fractional3D key] => OperationDictionary[key].AsEnumerable();
 
         /// <summary>
-        ///     Creates new wyckoff operation dictionary with the passed source position and operation dictionary
+        ///     Creates new operation dictionary with the passed source position and operation dictionary
         /// </summary>
         /// <param name="sourcePosition"></param>
         /// <param name="spaceGroup"></param>
         /// <param name="operationDictionary"></param>
-        public WyckoffOperationDictionary(Fractional3D sourcePosition, ISpaceGroup spaceGroup,
+        public PositionOperationDictionary(Fractional3D sourcePosition, ISpaceGroup spaceGroup,
             SortedDictionary<Fractional3D, SetList<ISymmetryOperation>> operationDictionary)
         {
             SourcePosition = sourcePosition;

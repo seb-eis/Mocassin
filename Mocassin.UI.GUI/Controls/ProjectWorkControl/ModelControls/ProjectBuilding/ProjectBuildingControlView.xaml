@@ -6,20 +6,19 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding"
   xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl"
-  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
-  xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance local:ProjectBuildingControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.DeployInstruction" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.DeployInstruction" Style="{StaticResource App.Style.ToolTip.Default}">
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
-        <Run Text="Define a full translation group through a project, customization and job source." />
+        <Run Text="Define a full translation group containing a model project, customization and job definition source." />
       </TextBlock>
     </ToolTip>
-    <ToolTip x:Key="ToolTip.LocalDeployment" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.LocalDeployment" Style="{StaticResource App.Style.ToolTip.Default}">
       <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
         <Run Text="Automatic deploy of simulation databases to your local machine." />
         <Run Text="The time and memory requirements primarily depend on the simulation count and lattice sizes." />
@@ -30,57 +29,52 @@
   <Grid>
     <TabControl>
 
-      <TabItem Header="Parametrization &amp; Deploy">
+      <TabItem Header="Localhost Deploy">
         <Grid>
 
           <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+            <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
 
-          <HeaderedContentControl Grid.Column="0" Grid.Row="0" Name="BuildGraphControlGroupBox">
-            <HeaderedContentControl.Header>
-              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run Text="Translation job definition:" />
-                <Run Text="[?]" ToolTip="{StaticResource ToolTip.DeployInstruction}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </HeaderedContentControl.Header>
-
+          <content:HeaderedGroup Grid.Column="0" Grid.Row="0" x:Name="BuildGraphControlGroupBox"
+                                 Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.DeployInstruction}"
+                                 Header="Build Instruction Definitions:">
             <dataControl:ProjectBuildGraphControlView DataContext="{Binding BuildGraphControlViewModel}"/>
-          </HeaderedContentControl>
+          </content:HeaderedGroup>
 
-          <HeaderedContentControl Grid.Row="1" Grid.Column="0">
-            <HeaderedContentControl.Header>
+          <content:HeaderedGroup Grid.Row="2" Grid.Column="0"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.LocalDeployment}">
+            <content:HeaderedGroup.Header>
               <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run
-                  Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}" />
-                <Run Text="Deploy to localhost:" />
-                <Run Text="[?]" ToolTip="{StaticResource ToolTip.LocalDeployment}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
+                <Run Text="Deploy to Localhost:"/>
+                <Run Text="{Binding BuildGraphControlViewModel.ProjectBuildCollectionViewModel.SelectedItem.Name, StringFormat={}[{0}]}" />
               </TextBlock>
-            </HeaderedContentControl.Header>
+            </content:HeaderedGroup.Header>
 
             <dataControl:LocalProjectDeployControlView DataContext="{Binding LocalDeployControlViewModel}"/>
-          </HeaderedContentControl>
-          <HeaderedContentControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+          </content:HeaderedGroup>
+
+          <GridSplitter Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
+
+          <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" HeaderToolTip="Metadata table of the last deploy process.">
             <HeaderedContentControl.Header>
               <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}{0} -, TargetNullValue=??? -}" />
-                <Run Text="Meta table:" />
-                <Run Text="[?]" ToolTip="Meta data table of the last build job."
-                     Style="{StaticResource App.Style.Run.Keyword}" />
+                <Run Text="Deploy Metadata Table:"/>
+                <Run Text="{Binding LocalDeployControlViewModel.BuildTargetFilePath, StringFormat={}[{0}], TargetNullValue={}}" />
               </TextBlock>
             </HeaderedContentControl.Header>
             <DataGrid ItemsSource="{Binding LocalDeployControlViewModel.JobMetaDataCollectionControlViewModel.ObservableItems}"
                       IsReadOnly="True">
             </DataGrid>
-          </HeaderedContentControl>
+          </content:HeaderedGroup>
         </Grid>
       </TabItem>
     </TabControl>

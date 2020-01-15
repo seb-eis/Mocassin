@@ -28,13 +28,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         ///     Get the possible set of <see cref="UnitCellPositionGraph" /> instances for the currently selected
         ///     <see cref="MetropolisTransitionGraph" /> for exchanging the first key
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> FirstWyckoffOptions => GetWyckoffOptions(SelectedItem, false);
+        public IEnumerable<UnitCellPositionGraph> FirstPositionOptions => GetPositionOptions(SelectedItem, false);
 
         /// <summary>
         ///     Get the possible set of <see cref="UnitCellPositionGraph" /> instances for the currently selected
         ///     <see cref="MetropolisTransitionGraph" /> for exchanging the second key
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> SecondWyckoffOptions => GetWyckoffOptions(SelectedItem, true);
+        public IEnumerable<UnitCellPositionGraph> SecondPositionOptions => GetPositionOptions(SelectedItem, true);
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)
@@ -74,10 +74,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         /// </summary>
         /// <param name="current"></param>
         /// <returns></returns>
-        public IEnumerable<UnitCellPositionGraph> GetWyckoffOptions(MetropolisTransitionGraph current, bool exchangeSecond)
+        public IEnumerable<UnitCellPositionGraph> GetPositionOptions(MetropolisTransitionGraph current, bool exchangeSecond)
         {
             if (ContentSource == null) yield break;
-            if (!(ContentSource.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions is var source)) yield break;
+            if (!(ContentSource.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions is { } source)) yield break;
             if (current != null && current.AbstractTransitionKey == null) yield break;
 
             var option = new MetropolisTransitionGraph

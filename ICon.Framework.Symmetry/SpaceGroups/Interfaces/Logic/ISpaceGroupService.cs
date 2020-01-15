@@ -34,12 +34,12 @@ namespace Mocassin.Symmetry.SpaceGroups
         CrystalSystem CreateCrystalSystem(ICrystalSystemSource source);
 
         /// <summary>
-        ///     Creates a wyckoff operation dictionary for the provided source vector that informs about which operations can be
+        ///     Creates a <see cref="IPositionOperationDictionary"/> for the provided source vector that informs about which operations can be
         ///     used to create which position
         /// </summary>
         /// <param name="sourceVector"></param>
         /// <returns></returns>
-        IWyckoffOperationDictionary GetOperationDictionary(in Fractional3D sourceVector);
+        IPositionOperationDictionary GetOperationDictionary(in Fractional3D sourceVector);
 
         /// <summary>
         ///     Get a list interface of all symmetry operations that do not change the input vector (Optional with shift
@@ -48,7 +48,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <param name="sourceVector"></param>
         /// <param name="shiftCorrection"></param>
         /// <returns></returns>
-        IList<ISymmetryOperation> GetMultiplicityOperations(in Fractional3D sourceVector, bool shiftCorrection);
+        IList<ISymmetryOperation> GetSelfProjectionOperations(in Fractional3D sourceVector, bool shiftCorrection);
 
         /// <summary>
         ///     Get the point operation group for the provided origin point and point sequence based upon the currently loaded
@@ -60,14 +60,14 @@ namespace Mocassin.Symmetry.SpaceGroups
         IPointOperationGroup GetPointOperationGroup(in Fractional3D originPoint, IEnumerable<Fractional3D> pointSequence);
 
         /// <summary>
-        ///     Gets the unfiltered and untrimmed list of all wyckoff extended sequences symmetry equivalent to the input sequence
+        ///     Gets the unfiltered and untrimmed list of all extended position sequences symmetry equivalent to the input sequence
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>
         IList<Fractional3D[]> GetFullP1PathExtension(IEnumerable<Fractional3D> refSequence);
 
         /// <summary>
-        ///     Gets the ordered, filtered and trimmed list of all wyckoff extended sequences that begin in the (0,0,0) origin unit
+        ///     Gets the ordered, filtered and trimmed list of all extended position sequences that begin in the (0,0,0) origin unit
         ///     cell
         /// </summary>
         /// <param name="refSequence"></param>
@@ -85,7 +85,7 @@ namespace Mocassin.Symmetry.SpaceGroups
             bool filterInverses = false);
 
         /// <summary>
-        ///     Gets a sorted list of unique fractional vectors that represent all equivalent wyckoff positions to the original
+        ///     Gets a sorted list of unique fractional vectors that represent all positions equivalent to the original
         ///     (Including original)
         /// </summary>
         /// <param name="refVector"></param>
@@ -93,7 +93,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         SetList<Fractional3D> GetUnitCellP1PositionExtension(in Fractional3D refVector);
 
         /// <summary>
-        ///     Get multiple sorted unique lists of wyckoff extended positions that each includes the original reference vector
+        ///     Get multiple sorted unique lists of extended positions that each includes the original reference vector
         /// </summary>
         /// <param name="refVectors"></param>
         /// <returns></returns>
@@ -101,7 +101,7 @@ namespace Mocassin.Symmetry.SpaceGroups
 
         /// <summary>
         ///     Gets a sorted list of unique structs that implement the fractional vector interface that represent all equivalent
-        ///     wyckoff positions to the original (Including original)
+        ///     positions to the original (Including original)
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="refVector"></param>
@@ -109,7 +109,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         SetList<Fractional3D> GetUnitCellP1PositionExtension<TSource>(TSource refVector) where TSource : IFractional3D;
 
         /// <summary>
-        ///     Get multiple sorted unique sets of wyckoff positions with the same type as the provided fractional vector type
+        ///     Get multiple sorted unique sets of positions with the same type as the provided fractional vector type
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="refVectors"></param>
@@ -117,7 +117,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         List<SetList<Fractional3D>> GetUnitCellP1PositionExtensions<TSource>(IEnumerable<TSource> refVectors) where TSource : IFractional3D;
 
         /// <summary>
-        ///     Translates a reference sequence of positions onto each wyckoff 1 position
+        ///     Translates a reference sequence of positions onto each equivalent start position in the unit cell
         /// </summary>
         /// <param name="refSequence"></param>
         /// <returns></returns>

@@ -5,7 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
-  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance local:MmcJobDescriptionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800">
@@ -13,6 +13,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
@@ -20,45 +21,46 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <local:BaseJobDescriptionControlView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
+    <local:BaseJobDescriptionControlView Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
                                          DataContext="{Binding}" />
     <StackPanel Grid.Column="0" Grid.Row="1">
-      <HeaderedContentControl Header="Energy fluctuation break tolerance:">
+      <content:HeaderedGroup Header="Relative Energy Break Tolerance:">
         <TextBox Text="{Binding BreakTolerance, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
 
-      <HeaderedContentControl Header="Break sample size:">
+      <content:HeaderedGroup Header="Break Sample Size:">
         <TextBox Text="{Binding BreakSampleLength, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-        </HeaderedContentControl>
+        </content:HeaderedGroup>
     </StackPanel>
-    <StackPanel Grid.Column="1" Grid.Row="1">
-      <HeaderedContentControl Header="Break sample interval:"  Opacity=".5" ToolTip="Currently no effect!">
+
+    <StackPanel Grid.Column="2" Grid.Row="1">
+      <content:HeaderedGroup Header="Break Sample Interval:"  Opacity=".5" HeaderToolTip="Info: Currently not implemented!">
         <TextBox Text="{Binding BreakSampleInterval, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
 
-      <HeaderedContentControl Header="Result sample size:" Opacity=".5" ToolTip="Currently no effect!">
+      <content:HeaderedGroup Header="Result Sample Size:" Opacity=".5" HeaderToolTip="Info: Currently not implemented!">
         <TextBox Text="{Binding ResultSampleMcs, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
             <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
     </StackPanel>
   </Grid>
 </UserControl>

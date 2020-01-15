@@ -5,29 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel"
              xmlns:dataControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.DataControl"
+             xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:LatticeModelControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.BuildingBlocks" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.BuildingBlocks" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="Define the basic building blocks of your lattice. Currently only the default block can be used!"/>
-          <Run Text="The default occupation ist automatically set to the first entry of the affiliated wyckoff occupation option list."/>
+          <Run Text="The default occupation is automatically set to the first entry of the affiliated position occupation option list."/>
         </TextBlock>
       </StackPanel>
 
     </ToolTip>
-    <ToolTip x:Key="ToolTip.Doping" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.Doping" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="Define how actual dopings are applied to a building block."/>
         </TextBlock>
       </StackPanel>
     </ToolTip>
-    <ToolTip x:Key="ToolTip.DopingCombination" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.DopingCombination" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="Define how one particle can replace another on which position."/>
@@ -39,52 +40,32 @@
     <TabControl>
 
       <TabItem Header="Building Blocks">
-        <HeaderedContentControl>
-          <HeaderedContentControl.Header>
-            <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-              <Run Text="Building block definitions:" />
-              <Run Text="[?]"
-                   ToolTip="{StaticResource ToolTip.BuildingBlocks}"
-                   Style="{StaticResource App.Style.Run.Keyword}" />
-            </TextBlock>
-          </HeaderedContentControl.Header>
-
+        <content:HeaderedGroup Style="{StaticResource App.Style.HeaderedGroup.BoldText}" 
+                               HeaderToolTip="{StaticResource Local.ToolTip.BuildingBlocks}"
+                               Header="Building Block Definitions:">
           <dataControl:BuildingBlockControlView DataContext="{Binding BlockControlViewModel}"/>
-        </HeaderedContentControl>
+        </content:HeaderedGroup>
       </TabItem>
 
       <TabItem Header="Block Doping">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
 
-          <HeaderedContentControl Grid.Row="0">
-            <HeaderedContentControl.Header>
-              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run Text="Occupation change definitions:" />
-                <Run Text="[?]"
-                     ToolTip="{StaticResource ToolTip.DopingCombination}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </HeaderedContentControl.Header>
-
+          <content:HeaderedGroup Grid.Row="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.DopingCombination}"
+                                 Header="Occupation Exchange Definitions:">
             <dataControl:DopingCombinationControlView DataContext="{Binding DopingCombinationViewModel}"/>
-          </HeaderedContentControl>
+          </content:HeaderedGroup>
 
-          <HeaderedContentControl Grid.Row="1">
-            <HeaderedContentControl.Header>
-              <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-                <Run Text="Doping definitions:" />
-                <Run Text="[?]"
-                     ToolTip="{StaticResource ToolTip.Doping}"
-                     Style="{StaticResource App.Style.Run.Keyword}" />
-              </TextBlock>
-            </HeaderedContentControl.Header>
-
+          <content:HeaderedGroup Grid.Row="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                                 HeaderToolTip="{StaticResource Local.ToolTip.Doping}"
+                                 Header="Doping Definitions">
             <dataControl:DopingControlView DataContext="{Binding DopingViewModel}"/>
-          </HeaderedContentControl>
+          </content:HeaderedGroup>
 
         </Grid>
       </TabItem>

@@ -103,15 +103,16 @@ namespace Mocassin.UI.Xml.Customization
         /// </summary>
         /// <param name="rule"></param>
         /// <param name="parent"></param>
+        /// <param name="localIndex"></param>
         /// <returns></returns>
-        public static KineticRuleGraph Create(IKineticRule rule, ProjectModelGraph parent)
+        public static KineticRuleGraph Create(IKineticRule rule, ProjectModelGraph parent, int localIndex)
         {
             if (rule == null) throw new ArgumentNullException(nameof(rule));
             if (parent == null) throw new ArgumentNullException(nameof(parent));
 
             var obj = new KineticRuleGraph
             {
-                Name = $"Rule.{rule.Index}",
+                Name = $"Rule.{localIndex}",
                 DependencyRuleCount = rule.GetDependentRules().Count(),
                 RuleIndex = rule.Index,
                 AttemptFrequency = rule.AttemptFrequency,

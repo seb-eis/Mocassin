@@ -6,6 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:PairEnergySetControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -14,7 +15,9 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
@@ -24,12 +27,16 @@
               DisplayMemberPath="Name"
               ToolTip="Search permutation"
               IsTextSearchEnabled="True"
-              IsEditable="True"/>
+              IsEditable="True" />
 
-    <Border Grid.Row="1" Margin="{StaticResource App.Margin.VerticalStackLarge}">
-      <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
-        <Run Text="Description:" FontWeight="DemiBold"/>
-        <LineBreak/>
+    <content:HeaderedGroup Grid.Row="2">
+      <content:HeaderedGroup.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Description:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </content:HeaderedGroup.Header>
+      <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="0,0,1,0">
         <Run Text="Pair interaction between" />
         <Run Text="{Binding SelectedItem.CenterParticle.Name, Mode=OneWay}"
              Style="{StaticResource App.Style.Run.Keyword}" />
@@ -50,50 +57,57 @@
         <Run Text="and the end point" />
         <Run Text="{Binding PairEnergySet.EndVector, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="in the fractional coordinate context." />
-        <LineBreak/>
-        <LineBreak/>
-        <Run Text="Chiral partner interaction: "/>
-        <Run Text="{Binding ChiralPairEnergySet.Name, Mode=OneWay}" Style="{StaticResource App.Style.Run.Keyword}" />
+        <LineBreak />
+        <LineBreak />
+        <Run Text="Chiral Partner Interaction: " />
+        <Run Text="{Binding ChiralPairEnergySet, Mode=OneWay, TargetNullValue=None}" Style="{StaticResource App.Style.Run.Keyword}" />
         <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}">
           <Run.ToolTip>
             <TextBlock TextAlignment="Justify" TextWrapping="Wrap" MaxWidth="400">
-              <Run Text="Physically, an A-A' pair interaction cannot be distinguished from its A'-A counterpart."/>
-              <Run Text="It is impossible to calculate two distinct energy values for the two cases."/>
-              <Run Text="However, the mathematical A-A' symmetry extension with the space group does not always yield the A'-A direction."/>
-              <Run Text="This is caused by the fact that A-A' contains direction information and therefore even a pair interaction can be chiral."/>
+              <Run Text="Physically, an A-A' pair interaction cannot be distinguished from its A'-A counterpart." />
+              <Run Text="It is impossible to calculate two distinct energy values for the two cases." />
+              <Run
+                Text="However, the mathematical A-A' symmetry extension with the space group does not always yield the A'-A direction." />
+              <Run
+                Text="This is caused by the fact that A-A' contains direction information and therefore even a pair interaction can be chiral." />
             </TextBlock>
           </Run.ToolTip>
         </Run>
-        <LineBreak/>
-        <LineBreak/>
-        <Run Text="Content grid:" FontWeight="DemiBold"/>
       </TextBlock>
-    </Border>
+    </content:HeaderedGroup>
+    <content:HeaderedGroup Grid.Row="4">
+      <content:HeaderedGroup.Header>
+        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
+          <Run Text="Interaction Set Content:" />
+          <Run Text="{Binding PairEnergySet.Name, StringFormat={}[{0}]}" />
+        </TextBlock>
+      </content:HeaderedGroup.Header>
 
-    <DataGrid Name="PermutationsDataGrid" Grid.Row="2"
-              ItemsSource="{Binding Items}"
-              SelectedItem="{Binding SelectedItem}"
-              ColumnWidth="*"
-              CanUserDeleteRows="False"
-              CanUserAddRows="False"
-              AutoGenerateColumns="False">
-      <DataGrid.RowHeaderTemplate>
-        <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="D" />
-        </DataTemplate>
-      </DataGrid.RowHeaderTemplate>
+      <DataGrid Name="PermutationsDataGrid"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
+                ColumnWidth="*"
+                CanUserDeleteRows="False"
+                CanUserAddRows="False"
+                AutoGenerateColumns="False">
+        <DataGrid.RowHeaderTemplate>
+          <DataTemplate>
+            <views:ObjectRowHeaderLogo />
+          </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
 
-      <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding Name}" Header="Name"
-                            IsReadOnly="True"/>
-        <DataGridTextColumn Binding="{Binding CenterParticle.Name}" Header="Center particle"
-                            IsReadOnly="True"/>
-        <DataGridTextColumn Binding="{Binding PartnerParticle.Name}" Header="Partner particle"
-                            IsReadOnly="True"/>
-        <DataGridTextColumn
-          Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
-          Header="Energy [eV]" />
-      </DataGrid.Columns>
-    </DataGrid>
+        <DataGrid.Columns>
+          <DataGridTextColumn Binding="{Binding Name}" Header="Name"
+                              IsReadOnly="True" />
+          <DataGridTextColumn Binding="{Binding CenterParticle.Name}" Header="Center Particle"
+                              IsReadOnly="True" />
+          <DataGridTextColumn Binding="{Binding PartnerParticle.Name}" Header="Partner Particle"
+                              IsReadOnly="True" />
+          <DataGridTextColumn
+            Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}"
+            Header="Energy [eV]" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </content:HeaderedGroup>
   </Grid>
 </UserControl>

@@ -12,7 +12,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
     public class StructureModelControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="CellPositionControlViewModel" /> that controls wyckoff positions
+        ///     Get the <see cref="CellPositionControlViewModel" /> that controls cell positions
         /// </summary>
         public CellPositionControlViewModel PositionControlViewModel { get; }
 

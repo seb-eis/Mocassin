@@ -36,20 +36,20 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="State change chain"
+        <comboBox:BindableDataGridComboBoxColumn Header="State Change Chain"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
                                                  SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff 1"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.FirstWyckoffOptions}"
+        <comboBox:BindableDataGridComboBoxColumn Header="Cell Position (1)"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.FirstPositionOptions}"
                                                  SelectedValueBinding="{Binding FirstUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff 2"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SecondWyckoffOptions}"
+        <comboBox:BindableDataGridComboBoxColumn Header="Cell Position (2)"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SecondPositionOptions}"
                                                  SelectedValueBinding="{Binding SecondUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
                                                  SelectedValuePath="Key"
                                                  DisplayMemberPath="Name" />

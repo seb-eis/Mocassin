@@ -17,6 +17,6 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IGroupInteractionModel> GroupInteractionModels { get; set; }
 
         /// <inheritdoc />
-        public IWyckoffOperationDictionary TransformOperations { get; set; }
+        public IPositionOperationDictionary TransformOperations { get; set; }
     }
 }

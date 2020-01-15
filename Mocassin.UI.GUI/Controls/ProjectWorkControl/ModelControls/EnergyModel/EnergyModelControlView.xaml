@@ -97,7 +97,7 @@
           <Run Text="{StaticResource App.String.UnitCellPosition}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run
-            Text="that functions as the start position. The coordinates (A,B,C) follow your previous wyckoff definition." />
+            Text="that functions as the start position. The coordinates (A,B,C) follow your previous cell position definition." />
           <LineBreak />
         </TextBlock>
 
@@ -134,12 +134,12 @@
             <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
-          <dataControl:EnergyParameterControlView Grid.Column="0" DataContext="{Binding ParameterControlViewModel}"/>
-          <GridSplitter Grid.Column="1"/>
+          <dataControl:EnergyParameterControlView Grid.Column="0" DataContext="{Binding ParameterControlViewModel}" />
+          <GridSplitter Grid.Column="1" />
           <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                  HeaderToolTip="{StaticResource Local.ToolTip.UnstableEnvironment}"
                                  Header="Unstable Environment Settings:">
-            <dataControl:UnstableEnvironmentControlView DataContext="{Binding UnstableEnvironmentViewModel}"/>
+            <dataControl:UnstableEnvironmentControlView DataContext="{Binding UnstableEnvironmentViewModel}" />
           </content:HeaderedGroup>
         </Grid>
       </TabItem>
@@ -148,18 +148,19 @@
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
           <content:HeaderedGroup Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                  HeaderToolTip="{StaticResource Local.ToolTip.GroupInteractions}"
                                  Header="Interaction Group Definitions:">
-            <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}"/>
+            <dataControl:GroupInteractionControlView DataContext="{Binding GroupInteractionViewModel}" />
           </content:HeaderedGroup>
-
-          <content:HeaderedGroup Grid.Column="1" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+          <GridSplitter Grid.Column="1" />
+          <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
                                  HeaderToolTip="{StaticResource Local.ToolTip.DefectEnergies}"
                                  Header="Position Defect Energies:">
-            <dataControl:DefectEnergyControlView DataContext="{Binding DefectEnergyViewModel}"/>
+            <dataControl:DefectEnergyControlView DataContext="{Binding DefectEnergyViewModel}" />
           </content:HeaderedGroup>
         </Grid>
       </TabItem>

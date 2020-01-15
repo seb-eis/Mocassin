@@ -4,9 +4,9 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <summary>
-    ///     Represents a wyckoff operation dictionary for lookup of the operation lists of specific positions
+    ///     Represents a position operation dictionary for lookup of the operation lists of specific positions
     /// </summary>
-    public interface IWyckoffOperationDictionary : IReadOnlyDictionary<Fractional3D, IEnumerable<ISymmetryOperation>>
+    public interface IPositionOperationDictionary : IReadOnlyDictionary<Fractional3D, IEnumerable<ISymmetryOperation>>
     {
         /// <summary>
         ///     The space group the dictionary belongs to

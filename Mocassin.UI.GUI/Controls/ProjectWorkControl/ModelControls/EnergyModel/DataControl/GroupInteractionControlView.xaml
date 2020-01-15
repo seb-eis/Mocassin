@@ -39,12 +39,12 @@
 
         <comboBox:BindableDataGridComboBoxColumn
           Header="Center"
-          ItemsSource="{Binding ElementName=GroupInteractionDataGrid, Path=DataContext.WyckoffOptions}"
+          ItemsSource="{Binding ElementName=GroupInteractionDataGrid, Path=DataContext.PositionOptions}"
           DisplayMemberPath="Name"
           SelectedValuePath="Key"
           SelectedValueBinding="{Binding CenterUnitCellPositionKey}" />
 
-        <DataGridTemplateColumn Header="Surrounding geometry (A,B,C)">
+        <DataGridTemplateColumn Header="Surrounding Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate DataType="{x:Type energyModel:GroupInteractionGraph}">
               <DataGrid ItemsSource="{Binding GroupGeometry}"

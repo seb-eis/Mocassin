@@ -350,7 +350,7 @@ namespace Mocassin.Model.Energies
         {
             var result = new Dictionary<IUnitCellPosition, IList<ISymmetryOperation>>();
             foreach (var position in positions)
-                result[position] = SpaceGroupService.GetMultiplicityOperations(position.Vector, true);
+                result[position] = SpaceGroupService.GetSelfProjectionOperations(position.Vector, true);
 
             return result;
         }

@@ -8,6 +8,7 @@
   xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:system="clr-namespace:System;assembly=mscorlib"
   xmlns:jobs="clr-namespace:Mocassin.Model.Translator.Jobs;assembly=Mocassin.Model.Translator"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance local:BaseJobDescriptionControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -26,11 +27,12 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
     <StackPanel Grid.Column="0">
-      <HeaderedContentControl Header="Temperature [K]:">
+      <content:HeaderedGroup Header="Temperature [K]:">
         <TextBox
           Text="{Binding Temperature, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
@@ -38,9 +40,9 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
 
-      <HeaderedContentControl Header="Steps per particle:">
+      <content:HeaderedGroup Header="Steps Per Particle (MCSP):">
         <TextBox
           Text="{Binding TargetMcsp, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
@@ -48,15 +50,15 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
 
-      <HeaderedContentControl Header="Execution flags:">
-        <HeaderedContentControl.ToolTip>
+      <content:HeaderedGroup Header="Execution Flags:">
+        <content:HeaderedGroup.HeaderToolTip>
           <StackPanel>
-            <TextBlock Text="Possible flag values:" />
+            <TextBlock Text="Possible Flags:" />
             <ListView ItemsSource="{Binding Source={StaticResource FlagValues}}" Background="Transparent" />
           </StackPanel>
-        </HeaderedContentControl.ToolTip>
+        </content:HeaderedGroup.HeaderToolTip>
         <TextBox
           Text="{Binding ExecutionFlags, Converter={StaticResource App.Converter.EnumToString}, TargetNullValue=...}">
           <TextBox.InputBindings>
@@ -64,10 +66,10 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
     </StackPanel>
-    <StackPanel Grid.Column="1">
-      <HeaderedContentControl Header="Time limit (dd.hh:mm:ss):">
+    <StackPanel Grid.Column="2">
+      <content:HeaderedGroup Header="Time Limit (dd.hh:mm:ss):">
         <TextBox
           Text="{Binding TimeLimit, StringFormat={}{0:dd\\.hh\\:mm\\:ss}, Converter={converter:StringToNullableConverter}, TargetNullValue=...}">
           <TextBox.InputBindings>
@@ -75,9 +77,9 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
 
-      <HeaderedContentControl Header="Minimal success rate [Hz]:">
+      <content:HeaderedGroup Header="Minimal Success Rate [Hz]:">
         <TextBox
           Text="{Binding MinimalSuccessRate, Converter={StaticResource App.Converter.NumericExpressionToValue}, TargetNullValue=...}">
           <TextBox.InputBindings>
@@ -85,22 +87,16 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" />
           </TextBox.InputBindings>
         </TextBox>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
 
-      <HeaderedContentControl>
-        <HeaderedContentControl.Header>
-          <TextBlock>
-            <Run Text="Instructions:"/>
-            <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"
-                 ToolTip="Attaches a string instruction for the build system (e.g. custom routine)"/>
-          </TextBlock>
-        </HeaderedContentControl.Header>
+      <content:HeaderedGroup HeaderToolTip="Advanced Option: Attaches a string instruction for the build system (e.g. custom routine data)"
+                             Header="Instruction String:">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
           <TextBox Name="InstructionTextBox" Grid.Column="0"
-                   Text="{Binding SingleLineInstruction, Mode=OneWay, TargetNullValue=...}"
+                   Text="{Binding SingleLineInstruction, Mode=OneWay}"
                    IsReadOnly="True">
             <TextBox.InputBindings>
               <KeyBinding Key="Enter" Command="{StaticResource App.Command.UpdateTextBoxSource}"
@@ -136,7 +132,7 @@
             </Grid>
           </Popup>
         </Grid>
-      </HeaderedContentControl>
+      </content:HeaderedGroup>
     </StackPanel>
   </Grid>
 </UserControl>

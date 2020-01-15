@@ -38,15 +38,14 @@
       </i:Interaction.Triggers>
 
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Name"
-                            Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Customization"
+        <comboBox:BindableDataGridComboBoxColumn Header="Customization Source"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.ProjectCustomizationGraphs}"
                                                  SelectedItemBinding="{Binding ProjectCustomizationGraph}"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Job Definition"
+        <comboBox:BindableDataGridComboBoxColumn Header="Job Set Source"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.ProjectJobTranslationGraphs}"
                                                  SelectedItemBinding="{Binding ProjectJobTranslationGraph}"
                                                  DisplayMemberPath="Name" />

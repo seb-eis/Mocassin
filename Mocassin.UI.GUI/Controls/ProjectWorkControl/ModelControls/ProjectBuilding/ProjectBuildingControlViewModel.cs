@@ -38,5 +38,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             BuildGraphControlViewModel.ChangeContentSource(contentSource);
             LocalDeployControlViewModel.ChangeContentSource(contentSource);
         }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            BuildGraphControlViewModel.Dispose();
+            LocalDeployControlViewModel.Dispose();
+            base.Dispose();
+        }
     }
 }

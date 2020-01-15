@@ -32,17 +32,17 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Wyckoff"
+        <comboBox:BindableDataGridComboBoxColumn Header="Cell Position"
                                                  ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectablePositions}"
                                                  SelectedItemBinding="{Binding UnitCellPosition}"
                                                  DisplayMemberPath="Name"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Dopant particle"
+        <comboBox:BindableDataGridComboBoxColumn Header="New Particle"
                                                  ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectableDopantParticles}"
                                                  SelectedItemBinding="{Binding Dopant}"
                                                  DisplayMemberPath="Name"/>
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Original particle"
+        <comboBox:BindableDataGridComboBoxColumn Header="Old Particle"
                                                  ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectableDopableParticles}"
                                                  SelectedItemBinding="{Binding Dopable}"
                                                  DisplayMemberPath="Name"/>

@@ -6,8 +6,8 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
-  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance local:KmcJobDescriptionSetControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -16,18 +16,19 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <HeaderedContentControl Grid.Row="0">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Row="0">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding KmcJobPackage.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
-          <Run Text="Job configurations definitions:"/>
-          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
+          <Run Text="Job Collection Configurations:"/>
+          <Run Text="{Binding KmcJobPackage.Name, StringFormat={}[{0}]}"/>
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <DataGrid Name="JobConfigurationsDataGrid"
                 ItemsSource="{Binding Items}"
@@ -41,7 +42,7 @@
             <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedItem}">
               <MenuItem.Header>
                 <WrapPanel>
-                  <TextBlock Text="Make duplicates: "/>
+                  <TextBlock Text="Make Duplicates:" Margin="0,0,5,0"/>
                   <TextBox Text="{Binding Path=DuplicateCount, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                 </WrapPanel>
               </MenuItem.Header>
@@ -54,7 +55,6 @@
             <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
                                        Width="{StaticResource App.Size.RowHeaderLogo}" 
                                        Height="{StaticResource App.Size.RowHeaderLogo}"
-                                       DataContext="J"
                                        PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                        PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                        PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
@@ -64,46 +64,44 @@
 
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-          <DataGridTextColumn Header="Cell size A" Binding="{Binding LatticeConfiguration.SizeA}" />
-          <DataGridTextColumn Header="Cell size B" Binding="{Binding LatticeConfiguration.SizeB}" />
-          <DataGridTextColumn Header="Cell size C" Binding="{Binding LatticeConfiguration.SizeC}" />
+          <DataGridTextColumn Header="Cell Size A" Binding="{Binding LatticeConfiguration.SizeA}" />
+          <DataGridTextColumn Header="Cell Size B" Binding="{Binding LatticeConfiguration.SizeB}" />
+          <DataGridTextColumn Header="Cell Size C" Binding="{Binding LatticeConfiguration.SizeC}" />
         </DataGrid.Columns>
       </DataGrid>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Row="1" Name="ConfigurationSettingsGroupBox">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Row="2" x:Name="ConfigurationSettingsGroupBox">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
-          <Run Text="Configuration settings:"/>
-          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
+          <Run Text="Configuration Settings:"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <local:KmcJobDescriptionControlView
         DataContext="{Binding SelectedItem, Converter={adapter:KmcJobDescriptionKmcJobDescriptionViewModelConverter}}"/>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Row="2">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Row="4">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}"/>
-          <Run Text="Block doping settings:"/>
-          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}"/>
+          <Run Text="Configuration Block Doping Settings:"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}"/>
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <local:DopingValueControlView>
         <local:DopingValueControlView.DataContext>
           <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:KmcJobDescriptionSetControlView}}"
                      Path="DataContext.ProjectGraph" />
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:KmcJobDescriptionSetControlView}}"
                      Path="DataContext.SelectedItem.LatticeConfiguration" />
           </MultiBinding>
         </local:DopingValueControlView.DataContext>
       </local:DopingValueControlView>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
   </Grid>
 </UserControl>

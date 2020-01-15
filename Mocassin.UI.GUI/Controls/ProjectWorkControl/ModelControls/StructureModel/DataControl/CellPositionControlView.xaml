@@ -24,13 +24,13 @@
         <x:Type TypeName="structures:PositionStatus" />
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
-    <ToolTip x:Key="Local.ToolTip.Wyckoff" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.UnitCellPosition" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
           <Run Text="{StaticResource App.String.UnitCellPosition}" Style="{StaticResource App.Style.Run.ModelObject}" />
           <Run Text="objects describe the symmetry reduced positions of your unit cell." />
-          <Run Text="Both stable wyckoff positions and unstable migration positions of your model have to be defined." />
+          <Run Text="Both stable cell positions and unstable migration positions of your model have to be defined." />
           <LineBreak />
         </TextBlock>
 
@@ -102,7 +102,7 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <content:HeaderedGroup Grid.Column="0" x:Name="PositionContentControl" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
-                           Header="Wyckoff Position Definitions:" HeaderToolTip="{StaticResource Local.ToolTip.Wyckoff}">
+                           Header="Cell Position Definitions:" HeaderToolTip="{StaticResource Local.ToolTip.UnitCellPosition}">
       <DataGrid Name="PositionDataGrid"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"

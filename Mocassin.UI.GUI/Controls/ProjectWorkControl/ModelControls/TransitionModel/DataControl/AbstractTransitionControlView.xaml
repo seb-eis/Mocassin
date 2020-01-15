@@ -6,13 +6,14 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:AbstractTransitionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.StateExchangePair" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.StateExchangePair" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -75,7 +76,7 @@
       </StackPanel>
 
     </ToolTip>
-    <ToolTip x:Key="ToolTip.StateExchangeGroup" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.StateExchangeGroup" Style="{StaticResource App.Style.ToolTip.Default}">
   <StackPanel>
 
     <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -117,7 +118,7 @@
   </StackPanel>
 
 </ToolTip>
-    <ToolTip x:Key="AbstractTransition" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.AbstractTransition" Style="{StaticResource App.Style.ToolTip.Default}">
   <StackPanel>
 
     <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -127,7 +128,7 @@
       <Run Text="Each position involved in a transition is assigned a" />
       <Run Text="{StaticResource App.String.StateExchangeGroup}" 
            Style="{StaticResource App.Style.Run.ModelObject}" />
-      <Run Text="to describe allowed changes. Connection flags for consecutive members describe if they exchange information or not." />
+      <Run Text="to provide the local state change permutation basis. A connection pattern describes where consecutive state changes affect each other." />
       <LineBreak />
       <LineBreak />
       <Run Text="Keep in mind: This is the third step of movement abstraction which contains the 1D behavior basis of transitions." 
@@ -138,11 +139,13 @@
            Style="{StaticResource App.Style.Run.Important}"/>
       <Run Text="The attached sequence of required state change options is ['Vc,O','Void,O','Vc,O']." 
            Style="{StaticResource App.Style.Run.Important}"/>
-      <Run Text="If we describe information exchange, oxygen is passed from position (1) to (2) (State 0 to 1) and then from (2) to (3) (State 1 to 2) or vise-versa." 
+      <Run Text="If we describe this as an information exchange, oxygen is passed from position (1) to (2) (State 0 to 1) and then from (2) to (3) (State 1 to 2) or vise-versa." 
            Style="{StaticResource App.Style.Run.Important}"/>
       <Run Text="Therefore, the linking of position (1) to (2) and (2) to (3) both require the 'Dynamic' connection flag." 
            Style="{StaticResource App.Style.Run.Important}"/>
       <Run Text="Form this, two co-dependent options emerge that actually change the state of the lattice - oxygen can move from (1) to a vacancy at (3) or the other way around." 
+           Style="{StaticResource App.Style.Run.Important}"/>
+      <Run Text="Including the law of mass conservation, the only option is that the oxygen particle is on the unstable position in the transition state." 
            Style="{StaticResource App.Style.Run.Important}"/>
       <LineBreak/>
     </TextBlock>
@@ -158,6 +161,7 @@
            Style="{StaticResource App.Style.Run.Property}" />
       <LineBreak />
       <Run Text="Set the regex interpreted connection description string. Requires (#Positions - 1) occurrences of the words 'Dynamic' or 'Static' in the correct order." />
+      <Run Text="'Dynamic' defines affiliated state changes as co-dependent (exchange information) while 'Static' is a connector that separates sub-movement." />
       <LineBreak />
     </TextBlock>
 
@@ -188,50 +192,31 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <HeaderedContentControl Grid.Row="0" Grid.Column="0">
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="State changes definitions:" />
-          <Run Text="[?]" 
-               ToolTip="{StaticResource ToolTip.StateExchangePair}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
-
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.StateExchangePair}"
+                           Header="State Change Definitions:">
       <gridControl:ExchangePairGridControlView DataContext="{Binding ExchangePairGridViewModel}" />
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Row="0" Grid.Column="1">
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="State change groupings:" />
-          <Run Text="[?]" 
-               ToolTip="{StaticResource ToolTip.StateExchangeGroup}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
-
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.StateExchangeGroup}"
+                           Header="State Change Group Definitions:">
       <gridControl:ExchangeGroupGridControlView DataContext="{Binding ExchangeGroupGridViewModel}" /> 
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="State change chains definitions:" />
-          <Run Text="[?]" 
-               ToolTip="{StaticResource AbstractTransition}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
-
+    <content:HeaderedGroup Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.AbstractTransition}"
+                           Header="State Change Chain Definitions:">
       <gridControl:AbstractTransitionGridControlView DataContext="{Binding AbstractTransitionGridViewModel}" />
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
   </Grid>
 </UserControl>

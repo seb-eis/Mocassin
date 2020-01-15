@@ -6,13 +6,14 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.DataControl"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   mc:Ignorable="d"
   d:DataContext="{d:DesignInstance local:TransitionControlViewModel, IsDesignTimeCreatable=True}"
   d:DesignHeight="450" d:DesignWidth="800"
   Background="Transparent">
 
   <UserControl.Resources>
-    <ToolTip x:Key="ToolTip.MetropolisTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.MetropolisTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -80,7 +81,7 @@
       </StackPanel>
 
     </ToolTip>
-    <ToolTip x:Key="ToolTip.KineticTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
+    <ToolTip x:Key="Local.ToolTip.KineticTransitions" Style="{StaticResource App.Style.ToolTip.Default}">
       <StackPanel>
 
         <TextBlock Style="{StaticResource App.Style.ToolTip.TextBlock}">
@@ -134,32 +135,23 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}"/>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <HeaderedContentControl Grid.Column="0">
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Metropolis transition definitions:" />
-          <Run Text="[?]"
-               ToolTip="{StaticResource ToolTip.MetropolisTransitions}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.MetropolisTransitions}"
+                           Header="Metropolis Transition Base Definitions:">
       <gridControl:MetropolisTransitionGridControlView DataContext="{Binding MetropolisTransitionGridViewModel}" />
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Column="1">
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Kinetic transition definitions:" />
-          <Run Text="[?]"
-               ToolTip="{StaticResource ToolTip.KineticTransitions}"
-               Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
+    <GridSplitter Grid.Column="1"/>
+
+    <content:HeaderedGroup Grid.Column="2" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           HeaderToolTip="{StaticResource Local.ToolTip.KineticTransitions}"
+                           Header="Kinetic Transition Base Definitions:">
       <gridControl:KineticTransitionGridControlView DataContext="{Binding KineticTransitionGridViewModel}" />
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
   </Grid>
 </UserControl>

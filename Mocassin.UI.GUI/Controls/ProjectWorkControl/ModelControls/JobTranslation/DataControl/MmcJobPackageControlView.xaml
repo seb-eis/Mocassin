@@ -6,11 +6,10 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.DataControl"
   xmlns:comboBox="clr-namespace:Mocassin.UI.GUI.Base.UiElements.ComboBox"
-  xmlns:jobs="clr-namespace:Mocassin.UI.Xml.Jobs;assembly=Mocassin.UI.Xml"
   xmlns:gridControl="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl"
   xmlns:adapter="clr-namespace:Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter"
-  xmlns:converter="clr-namespace:Mocassin.UI.GUI.Base.Converter"
   xmlns:views="clr-namespace:Mocassin.UI.GUI.Base.Views"
+  xmlns:content="clr-namespace:Mocassin.UI.GUI.Base.UiElements.Content"
   d:DataContext="{d:DesignInstance local:MmcJobPackageControlViewModel, IsDesignTimeCreatable=True}"
   mc:Ignorable="d"
   d:DesignHeight="450" d:DesignWidth="800"
@@ -18,23 +17,20 @@
 
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="100*" />
-      <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="{StaticResource App.Default.GridLength.Splitter}"/>
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <HeaderedContentControl Grid.Row="0" Grid.Column="0">
-      <HeaderedContentControl.Header>
-        <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="Job collection definitions:" />
-          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}" />
-        </TextBlock>
-      </HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Row="0" Grid.Column="0" Style="{StaticResource App.Style.HeaderedGroup.BoldText}"
+                           Header="Job Collection Definitions:">
       <DataGrid Name="JobCollectionsDataGrid"
                 ItemsSource="{Binding Items}"
                 SelectedItem="{Binding SelectedItem}"
@@ -47,7 +43,7 @@
             <MenuItem Command="{Binding DuplicateItemCommand}" CommandParameter="{Binding SelectedItem}">
               <MenuItem.Header>
                 <WrapPanel>
-                  <TextBlock Text="Make duplicates: " />
+                  <TextBlock Text="Make Duplicates:" Margin="0,0,5,0" />
                   <TextBox Text="{Binding Path=DuplicateCount, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                 </WrapPanel>
               </MenuItem.Header>
@@ -59,7 +55,6 @@
             <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
                                        Width="{StaticResource App.Size.RowHeaderLogo}"
                                        Height="{StaticResource App.Size.RowHeaderLogo}"
-                                       DataContext="J"
                                        PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
                                        PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
                                        PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
@@ -80,49 +75,46 @@
 
         </DataGrid.Columns>
       </DataGrid>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Row="1" Grid.Column="0"
-                            Name="CollectionSettingsGroupBox">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Row="2" Grid.Column="0" x:Name="CollectionSettingsGroupBox">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}" />
-          <Run Text="Collection settings:" />
-          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}" />
+          <Run Text="Collection Settings:"/>
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <gridControl:MmcJobDescriptionControlView
         DataContext="{Binding SelectedItem.JobBaseDescription, Converter={adapter:MmcJobDescriptionMmcJobDescriptionViewModelConverter}}" />
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <HeaderedContentControl Grid.Row="2" Grid.Column="0">
-      <HeaderedContentControl.Header>
+    <content:HeaderedGroup Grid.Row="4" Grid.Column="0">
+      <content:HeaderedGroup.Header>
         <TextBlock Style="{StaticResource App.Style.TextBlock.DemiBold}">
-          <Run Text="{Binding SelectedItem.Name, StringFormat={}{0} -, TargetNullValue=??? -}" />
-          <Run Text="Collection selection optimizers:" />
-          <Run Text="[?]" Style="{StaticResource App.Style.Run.Keyword}" />
+          <Run Text="Collection Selection Optimizers:" />
+          <Run Text="{Binding SelectedItem.Name, StringFormat={}[{0}]}" />
         </TextBlock>
-      </HeaderedContentControl.Header>
+      </content:HeaderedGroup.Header>
 
       <gridControl:SelectionOptimizerSetControlView>
         <gridControl:SelectionOptimizerSetControlView.DataContext>
           <MultiBinding Converter="{adapter:JobPackageDescriptionSelectionOptimizerSetViewModelConverter}">
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
                      Path="DataContext.ContentSource.Parent" />
-            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
                      Path="DataContext.SelectedItem" />
           </MultiBinding>
         </gridControl:SelectionOptimizerSetControlView.DataContext>
       </gridControl:SelectionOptimizerSetControlView>
-    </HeaderedContentControl>
+    </content:HeaderedGroup>
 
-    <gridControl:MmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="3">
+    <gridControl:MmcJobDescriptionSetControlView Grid.Row="0" Grid.Column="2" Grid.RowSpan="5">
       <gridControl:MmcJobDescriptionSetControlView.DataContext>
         <MultiBinding Converter="{adapter:MmcJobPackageMmcJobDescriptionSetViewModelConverter}">
-          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
                    Path="DataContext.ContentSource.Parent" />
-          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+          <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobPackageControlView}}"
                    Path="DataContext.SelectedItem" />
         </MultiBinding>
       </gridControl:MmcJobDescriptionSetControlView.DataContext>

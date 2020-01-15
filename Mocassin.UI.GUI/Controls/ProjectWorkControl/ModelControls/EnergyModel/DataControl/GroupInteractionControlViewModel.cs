@@ -22,7 +22,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         ///     instances
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UnitCellPositionGraph> WyckoffOptions => GetWyckoffOptions();
+        public IEnumerable<UnitCellPositionGraph> PositionOptions => GetPositionOptions();
 
         /// <inheritdoc />
         public void ChangeContentSource(MocassinProjectGraph contentSource)
@@ -36,7 +36,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         ///     instances
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UnitCellPositionGraph> GetWyckoffOptions()
+        public IEnumerable<UnitCellPositionGraph> GetPositionOptions()
         {
             return ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions;
         }

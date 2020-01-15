@@ -47,7 +47,7 @@
           <Run Text="objects allow specific" />
           <Run Text="{StaticResource App.String.SymmetricPairInteraction}"
                Style="{StaticResource App.Style.Run.ModelObject}" />
-          <Run Text="objects between two 'stable' wyckoff positions to be excluded during interaction sampling." />
+          <Run Text="objects between two 'stable' cell positions to be excluded during interaction sampling." />
           <LineBreak />
           <Run Text="Keep in mind: The behavior is symmetric, A-B and B-A cannot be removed independently."
                Style="{StaticResource App.Style.Run.Important}" />

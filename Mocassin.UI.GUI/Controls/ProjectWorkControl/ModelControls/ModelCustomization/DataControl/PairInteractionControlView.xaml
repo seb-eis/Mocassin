@@ -14,9 +14,9 @@
   Background="Transparent">
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="100*" />
-      <ColumnDefinition Width="1*" />
-      <ColumnDefinition Width="100*" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="{StaticResource App.Default.GridLength.Splitter}" />
+      <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <DataGrid Name="PairInteractionDataGrid" Grid.Column="0"
               ItemsSource="{Binding Items}"
@@ -39,17 +39,20 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding PairEnergySet.Name}" />
-        <DataGridTextColumn Header="Center wyckoff" Binding="{Binding PairEnergySet.CenterPosition.Name}" 
+        <DataGridTextColumn Header="Center Cell Position" Binding="{Binding PairEnergySet.CenterPosition.Name}" 
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Partner wyckoff" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
+        <DataGridTextColumn Header="Partner Cell Position" Binding="{Binding PairEnergySet.PartnerPosition.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="Distance [&#x212b;]" Binding="{Binding PairEnergySet.Distance}" 
                             IsReadOnly="True" />
-        <DataGridTextColumn Header="Chiral partner" Binding="{Binding ChiralPairEnergySet.Name}"
+        <DataGridTextColumn Header="Chiral Partner" Binding="{Binding ChiralPairEnergySet.Name}"
                             IsReadOnly="True" />
       </DataGrid.Columns>
 
     </DataGrid>
+
+    <GridSplitter Grid.Column="1"/>
+
     <gridControl:PairEnergySetControlView Grid.Column="2"
                                           DataContext="{Binding SelectedItem}"
                                           Visibility="{Binding Converter={converter:NullToVisibilityConverter}}" />

@@ -59,7 +59,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         public int Id { get; set; }
 
         /// <summary>
-        ///     The list of matrix symmetry operations for Wyckoff-1 positions
+        ///     The list of matrix symmetry operations of the group
         /// </summary>
         [XmlArray("Operations")]
         [XmlArrayItem("Operation")]
