@@ -190,4 +190,7 @@
   <data name="ResourceKey_ModelObject_RenderWireframeFlag" xml:space="preserve">
     <value>Render_Wireframe_Flag</value>
   </data>
+  <data name="ResourceKey_ModelObject_RenderExtensionMode" xml:space="preserve">
+    <value>Render_Extension_Mode</value>
+  </data>
 </root>

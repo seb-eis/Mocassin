@@ -22,6 +22,11 @@ namespace Mocassin.UI.GUI.Base.DataContext
     public interface IMocassinProjectControl : INotifyPropertyChanged
     {
         /// <summary>
+        ///     Get the window description <see cref="string" />
+        /// </summary>
+        string WindowDescription { get; }
+
+        /// <summary>
         ///     Get an <see cref="IObservable{T}" /> that informs about replacement of the open
         ///     <see cref="IMocassinProjectLibrary" />
         /// </summary>

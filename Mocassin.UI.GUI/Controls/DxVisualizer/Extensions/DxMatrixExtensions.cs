@@ -8,7 +8,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Extensions
     public static class DxMatrixExtensions
     {
         /// <summary>
-        ///     Checks if a <see cref="Matrix"/> inverts the orientation of elements. Only works if the matrix is a proper affine transformation
+        ///     Checks if a <see cref="Matrix"/> inverts the orientation of elements. Only works if the matrix is a proper transformation matrix
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>

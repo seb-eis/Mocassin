@@ -3,6 +3,7 @@ using System.Linq;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.ValueTypes;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Customization;
 
 namespace Mocassin.UI.Xml.Helper.Migration
@@ -83,6 +84,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(KineticRuleSetGraph source, KineticRuleSetGraph target)
         {
             var migrationReporter = GetMigrationReporter(source, target);
+            MigrateName(source, target, migrationReporter);
             source.KineticRules.Select(x => (SourceItem: x, TargetItem: FindMigrationTarget(x, target.KineticRules)))
                 .Where(pair => pair.TargetItem != null)
                 .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
@@ -110,6 +112,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(PairEnergySetGraph source, PairEnergySetGraph target)
         {
             var migrationReporter = GetMigrationReporter(source, target);
+            MigrateName(source, target, migrationReporter);
             source.PairEnergyEntries.Select(x => (SourceItem: x, TargetItem: FindMigrationTarget(x, target.PairEnergyEntries)))
                 .Where(pair => pair.TargetItem != null)
                 .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
@@ -138,6 +141,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         private void Migrate(GroupEnergySetGraph source, GroupEnergySetGraph target)
         {
             var migrationReporter = GetMigrationReporter(source, target);
+            MigrateName(source, target, migrationReporter);
             source.EnergyEntries.Select(x => (SourceItem: x, TargetItem: FindMigrationTarget(x, target.EnergyEntries)))
                 .Where(pair => pair.TargetItem != null)
                 .Action(pair => Migrate(pair.SourceItem, pair.TargetItem, migrationReporter))
@@ -152,10 +156,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="reporter"></param>
         private void Migrate(PairEnergyGraph source, PairEnergyGraph target, DataMigrationReporter reporter)
         {
-            if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
+            if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
             
-            var comment = $"Energy: {target.Energy} => {source.Energy}";
+            var comment = $"Energy: \"{source.Energy}\", Name: \"{source.Name}\"";
             target.Energy = source.Energy;
+            target.Name = source.Name;
             reporter.Invoke(source, target, comment);
         }
 
@@ -167,10 +172,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="reporter"></param>
         private void Migrate(GroupEnergyGraph source, GroupEnergyGraph target, DataMigrationReporter reporter)
         {
-            if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
+            if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
             
-            var comment = $"Energy: {target.Energy} => {source.Energy}";
+            var comment = $"Energy: \"{source.Energy}\", Name: \"{source.Name}\"";
             target.Energy = source.Energy;
+            target.Name = source.Name;
             reporter.Invoke(source, target, comment);
         }
 
@@ -182,10 +188,25 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="reporter"></param>
         private void Migrate(KineticRuleGraph source, KineticRuleGraph target, DataMigrationReporter reporter)
         {
-            if (!IsRedundantReportEnabled && VectorComparer.ValueComparer.Compare(source.AttemptFrequency, target.AttemptFrequency) == 0) return;
+            if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.AttemptFrequency, target.AttemptFrequency) == 0) return;
             
-            var comment = $"Frequency: {target.AttemptFrequency} => {source.AttemptFrequency}";
+            var comment = $"Frequency: \"{source.AttemptFrequency}\", Name: \"{source.Name}\"";
             target.AttemptFrequency = source.AttemptFrequency;
+            target.Name = source.Name;
+            reporter.Invoke(source, target, comment);
+        }
+
+        /// <summary>
+        ///     Overwrites the name of the source <see cref="ProjectObjectGraph"/> to the target and reports the action with the provided delegate
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="reporter"></param>
+        private void MigrateName(ProjectObjectGraph source, ProjectObjectGraph target, DataMigrationReporter reporter)
+        {
+            if (!IsRedundantReportEnabled && source.Name == target.Name) return;
+            var comment = $"Name: \"{source.Name}\"";
+            target.Name = source.Name;
             reporter.Invoke(source, target, comment);
         }
 

@@ -65,7 +65,7 @@
           </Grid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:UserControlTabItem}">
-          <Grid Visibility="{Binding Visibility, Mode=OneTime}">
+          <Grid Visibility="{Binding Visibility}">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>

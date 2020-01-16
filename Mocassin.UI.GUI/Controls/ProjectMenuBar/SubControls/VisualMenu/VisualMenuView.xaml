@@ -15,6 +15,8 @@
                   CommandParameter="{x:Type commands:AddWpfModelViewportTabCommand}"/>
         <MenuItem Header="3D Model Viewer [DX10+]" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:AddDxModelViewportTabCommand}"/>
+        <MenuItem Header="3D Model Viewer [DX10+] (Window)" Command="{Binding CommandSource}" 
+                  CommandParameter="{x:Type commands:OpenDxModelViewportWindowCommand}"/>
       </MenuItem>
     </Menu>
   </Grid>

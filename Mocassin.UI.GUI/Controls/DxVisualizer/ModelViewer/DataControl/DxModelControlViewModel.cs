@@ -7,6 +7,7 @@ using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
 using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl.Converter;
+using Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene;
 using Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Scene;
 using Mocassin.UI.GUI.Controls.Visualizer.DataControl;
 using Mocassin.UI.Xml.Main;
@@ -19,6 +20,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
     /// </summary>
     public class DxModelControlViewModel : ProjectGraphControlViewModel
     {
+        private PathSymmetryExtensionMode pathSymmetryExtensionMode = PathSymmetryExtensionMode.None;
+
         /// <summary>
         ///     Get the <see cref="DxModelSceneViewModel" /> parent that controls scene build and supply
         /// </summary>
@@ -50,6 +53,20 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         ///     Get a boolean flag if the scene is invalid and requires rebuilding
         /// </summary>
         public bool IsInvalidScene => ParentModelSceneViewModel.IsInvalidScene;
+
+        /// <summary>
+        ///     Get or set the <see cref="Scene.PathSymmetryExtensionMode"/> for the rendering of path objects
+        /// </summary>
+        public PathSymmetryExtensionMode PathSymmetryExtensionMode
+        {
+            get => pathSymmetryExtensionMode;
+            set => SetProperty(ref pathSymmetryExtensionMode, value, () => ParentModelSceneViewModel.MarkSceneAsInvalid());
+        }
+
+        /// <summary>
+        ///     Get the selectable <see cref="Scene.PathSymmetryExtensionMode"/> modes
+        /// </summary>
+        public IEnumerable<PathSymmetryExtensionMode> PathSymmetryExtensionModes => EnumeratePathSymmetryExtensionModes();
 
         /// <summary>
         ///     Get a <see cref="IReadOnlyCollection{T}" /> of all supported <see cref="PhongMaterialCore" /> names
@@ -87,6 +104,17 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public FractionalBox3D GetRenderBox3D()
         {
             return RenderResourcesViewModel.GetRenderBox3D();
+        }
+
+        /// <summary>
+        ///     Get an <see cref="IEnumerable{T}"/> of all selectable <see cref="Scene.PathSymmetryExtensionMode"/> values
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PathSymmetryExtensionMode> EnumeratePathSymmetryExtensionModes()
+        {
+            yield return PathSymmetryExtensionMode.None;
+            yield return PathSymmetryExtensionMode.Local;
+            yield return PathSymmetryExtensionMode.Full;
         }
 
         /// <summary>

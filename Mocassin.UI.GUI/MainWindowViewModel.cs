@@ -71,9 +71,7 @@ namespace Mocassin.UI.GUI
         /// <inheritdoc />
         public IEnumerable<Assembly> PluginAssemblies { get; }
 
-        /// <summary>
-        ///     Get or set the window description <see cref="string" />
-        /// </summary>
+        /// <inheritdoc />
         public string WindowDescription
         {
             get => windowDescription;

@@ -466,7 +466,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <summary>
         ///     Marks the currently supplied scene as invalid without triggering invalidation actions
         /// </summary>
-        private void MarkSceneAsInvalid()
+        public void MarkSceneAsInvalid()
         {
             IsInvalidScene = true;
         }
@@ -668,8 +668,52 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private Matrix[] GetPathSceneItemTransforms(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, out bool anyFlipsOrientation)
         {
+            anyFlipsOrientation = false;
+            return ModelControlViewModel.PathSymmetryExtensionMode switch
+            {
+                PathSymmetryExtensionMode.None => new[] {Matrix.Identity},
+                PathSymmetryExtensionMode.Local => GetPathSceneItemTransformsLocal(path, out anyFlipsOrientation),
+                PathSymmetryExtensionMode.Full => GetPathSceneItemTransformsFull(path, renderBox, out anyFlipsOrientation),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="IList{T}" /> of <see cref="Matrix" /> transforms that represent the symmetry extension of
+        ///     the path vectors on the start position (Local extension)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="anyFlipsOrientation"></param>
+        /// <returns></returns>
+        private Matrix[] GetPathSceneItemTransformsLocal(IEnumerable<Fractional3D> path, out bool anyFlipsOrientation)
+        {
+            var pathList = path.AsList();
             var cartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
             var fractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
+            var firstVector = pathList[0];
+            var vectorComparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
+            var result = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(pathList)
+                .Where(x => vectorComparer.Compare(x.Transform(firstVector).TrimToUnitCell(vectorComparer.ValueComparer), firstVector) == 0)
+                .Select(x => fractionalMatrix * x.ToDxMatrix() * cartesianMatrix)
+                .ToArray();
+
+            anyFlipsOrientation = result.Any(x => x.FlipsOrientation());
+            return result;
+        }
+
+        /// <summary>
+        ///     Creates the <see cref="IList{T}" /> of <see cref="Matrix" /> transforms that represent the symmetry extension of
+        ///     the path vectors into the provided <see cref="FractionalBox3D" /> when applied to the original path in cartesian
+        ///     coordinates (Full extension)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="renderBox"></param>
+        /// <param name="anyFlipsOrientation"></param>
+        /// <returns></returns>
+        private Matrix[] GetPathSceneItemTransformsFull(IEnumerable<Fractional3D> path, in FractionalBox3D renderBox, out bool anyFlipsOrientation)
+        {
+            var toCartesianMatrix = VectorTransformer.FractionalSystem.ToCartesianMatrix.ToDxMatrix();
+            var toFractionalMatrix = VectorTransformer.FractionalSystem.ToFractionalMatrix.ToDxMatrix();
             var baseMatrices = SpaceGroupService.GetMinimalUnitCellP1PathExtensionOperations(path, true).Select(x => x.ToDxMatrix()).ToList();
             var baseSetSize = baseMatrices.Count;
 
@@ -689,7 +733,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                             baseMatrix.M41 += a;
                             baseMatrix.M42 += b;
                             baseMatrix.M43 += c;
-                            result[index] = fractionalMatrix * baseMatrix * cartesianMatrix;
+                            result[index] = toFractionalMatrix * baseMatrix * toCartesianMatrix;
                             index++;
                         }
                     }
@@ -729,8 +773,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var middle = (path[1] + path[0]) * 0.5;
             var geometry1 = CreateCylinderGeometry(itemConfig, path[0], middle);
             var geometry2 = CreateCylinderGeometry(itemConfig, middle, path[1]);
-            var matrices1 = GetPathSceneItemTransforms(new[] {path[0], middle}, renderBox, out var anyOrientationFlips1);
-            var matrices2 = GetPathSceneItemTransforms(new[] {middle, path[1]}, renderBox, out var anyOrientationFlips2);
+            var matrices = GetPathSceneItemTransforms(new[] {path[0], path[1]}, renderBox, out var anyOrientationFlips);
 
             CheckCellPositionHit(path[0], out IDxMeshItemConfig atomConfig1);
             CheckCellPositionHit(path[1], out IDxMeshItemConfig atomConfig2);
@@ -738,11 +781,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             var material1 = IsMatchInteractionToHit ? atomConfig1.CreateMaterial() : itemConfig.CreateMaterial();
             var material2 = !IsMatchInteractionToHit || ReferenceEquals(atomConfig1, atomConfig2) ? material1 : atomConfig2.CreateMaterial();
 
-            var configurator1 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips1);
-            var configurator2 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips2);
+            var configurator1 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips);
+            var configurator2 = GetSceneNodeConfigurator(itemConfig, !anyOrientationFlips);
 
-            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices1, configurator1);
-            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices2, configurator2);
+            AddMeshElementsToScene(sceneBuilder, geometry1, material1, matrices, configurator1);
+            AddMeshElementsToScene(sceneBuilder, geometry2, material2, matrices, configurator2);
         }
 
         /// <summary>
@@ -914,6 +957,12 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         protected virtual void AddMeshElementsToScene(DxSceneBuilder sceneBuilder, MeshGeometry3D geometry, MaterialCore material, IList<Matrix> matrices,
             Action<SceneNode> callback = null)
         {
+            if (matrices.Count == 1)
+            {
+                sceneBuilder.AddMeshTransforms(geometry, material, matrices, callback);
+                return;
+            }
+
             var batchSize = GetMeshBatchSize(SceneHost.SceneBatchingMode);
             switch (batchSize)
             {

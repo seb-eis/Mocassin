@@ -188,6 +188,15 @@ namespace Mocassin.UI.GUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Render_Extension_Mode.
+        /// </summary>
+        public static string ResourceKey_ModelObject_RenderExtensionMode {
+            get {
+                return ResourceManager.GetString("ResourceKey_ModelObject_RenderExtensionMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Render_Inactive_Flag.
         /// </summary>
         public static string ResourceKey_ModelObject_RenderInactiveFlag {

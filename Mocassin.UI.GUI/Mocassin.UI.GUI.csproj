@@ -287,6 +287,11 @@
     <Compile Include="Base\Objects\VvmContainer.cs" />
     <Compile Include="Base\UiElements\Content\HeaderedGroup.cs" />
     <Compile Include="Base\UiElements\Popup\ControlOverlay.cs" />
+    <Compile Include="Base\ViewModels\Content\ContentWindow.xaml.cs">
+      <DependentUpon>ContentWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ViewModels\Content\ContentWindowViewModel.cs" />
+    <Compile Include="Controls\Base\Commands\OpenDefaultContentWindowCommand.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxMatrixExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxVectorTransformerExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\DataControl\Converter\PhongMaterialCoreToStringConverter.cs" />
@@ -301,6 +306,7 @@
     <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\DxProjectLineObjectSceneConfig.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\DxProjectMeshObjectSceneConfig.cs" />
     <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\DxProjectObjectSceneConfig.cs" />
+    <Compile Include="Controls\DxVisualizer\ModelViewer\Scene\PathSymmetryExtensionMode.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxLineItemConfig.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxMeshItemConfig.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Scene\IDxSceneItemConfig.cs" />
@@ -313,6 +319,7 @@
     </Compile>
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuViewModel.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\AddDxModelViewportTabCommand.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\VisualMenu\Commands\OpenDxModelViewportWindowCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateCustomizationCommand.cs" />
     <Compile Include="Controls\ProjectWorkControl\ModelControls\Base\Content\Commands\DuplicateJobTranslationCommand.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxVectorExtensions.cs" />
@@ -356,6 +363,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Base\Loading\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Base\ViewModels\Content\ContentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
