@@ -78,7 +78,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             var viewModel = new MigrationReportViewModel {Report = report};
             var view = new MigrationReportView();
             var name = $"Migration Report [{report.MigrationSource}]";
-            ProjectControl.ProjectWorkTabControlViewModel.TabHostViewModel.AddCloseableTab(name, viewModel, view);
+            ProjectControl.ProjectWorkTabControlViewModel.TabHostViewModel.AddDynamicTab(name, viewModel, view);
         }
 
         /// <summary>

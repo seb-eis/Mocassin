@@ -6,12 +6,12 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     /// <summary>
     ///     Represents a <see cref="TabControl" /> host that provides collections of <see cref="UserControl" /> instances
     /// </summary>
-    public interface IUserControlTabHost : IObservableCollectionViewModel<UserControlTabItem>
+    public interface IControlTabHost : IObservableCollectionViewModel<ControlTabItem>
     {
         /// <summary>
-        ///     Get or set the currently selected <see cref="UserControlTabItem" />
+        ///     Get or set the currently selected <see cref="ControlTabItem" />
         /// </summary>
-        UserControlTabItem SelectedTab { get; set; }
+        ControlTabItem SelectedTab { get; set; }
 
         /// <summary>
         ///     Get or set the <see cref="Dock"/> for the tab strip position
@@ -19,10 +19,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         Dock TabStripPlacement { get; set; }
 
         /// <summary>
-        ///     Removes the tab affiliated with the provided <see cref="UserControlTabItem"/>
+        ///     Removes the tab affiliated with the provided <see cref="ControlTabItem"/>
         /// </summary>
         /// <param name="tabItem"></param>
-        void RemoveAndDispose(UserControlTabItem tabItem);
+        void RemoveAndDispose(ControlTabItem tabItem);
 
         /// <summary>
         ///     Get or set a boolean flag if new tabs should be inserted at the front instead of the back
@@ -37,25 +37,32 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         void MoveTab(int oldIndex, int newIndex);
 
         /// <summary>
-        ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a closable <see cref="UserControlTabItem" />
+        ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a closable <see cref="ControlTabItem" />
         /// </summary>
         /// <param name="tabName"></param>
-        /// <param name="viewModelBase"></param>
-        /// <param name="userControl"></param>
+        /// <param name="contentViewModel"></param>
+        /// <param name="content"></param>
         /// <param name="selectTab"></param>
-        void AddCloseableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl, bool selectTab = true);
+        void AddDynamicTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true);
 
         /// <summary>
-        ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a non closable <see cref="UserControlTabItem" />
+        ///     Adds a <see cref="ViewModelBase" /> and <see cref="UserControl" /> as a non closable <see cref="ControlTabItem" />
         /// </summary>
         /// <param name="tabName"></param>
-        /// <param name="viewModelBase"></param>
-        /// <param name="userControl"></param>
+        /// <param name="contentViewModel"></param>
+        /// <param name="content"></param>
         /// <param name="selectTab"></param>
-        void AddNonClosableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl, bool selectTab = true);
+        void AddStaticTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true);
 
         /// <summary>
-        ///     Initializes any default <see cref="UserControlTabItem" /> components
+        ///     Adds a new <see cref="ControlTabItem"/> to the host
+        /// </summary>
+        /// <param name="tabItem"></param>
+        /// <param name="selectTab"></param>
+        void AddTab(ControlTabItem tabItem, bool selectTab = true);
+
+        /// <summary>
+        ///     Initializes any default <see cref="ControlTabItem" /> components
         /// </summary>
         void InitializeDefaultTabs();
 

@@ -14,7 +14,7 @@
         <ColumnDefinition Width="5"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <tabs:UserControlTabHostView Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding ControlTabHost}"/>
+      <tabs:ControlTabHostView Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding ControlTabHost}"/>
       <GridSplitter Grid.Column="1" ShowsPreview="True" Width="5" Background="Transparent"/>
     </Grid>
 </UserControl>

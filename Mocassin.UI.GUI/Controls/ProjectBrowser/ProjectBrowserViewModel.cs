@@ -23,9 +23,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         private ProjectLibraryBrowserViewModel LibraryBrowserViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="UserControlTabHostViewModel" /> that controls the browser tabs
+        ///     Get the <see cref="ControlTabHostViewModel" /> that controls the browser tabs
         /// </summary>
-        public UserControlTabHostViewModel TabHostViewModel { get; }
+        public ControlTabHostViewModel TabHostViewModel { get; }
 
         /// <inheritdoc />
         public ProjectBrowserViewModel(IMocassinProjectControl projectControl)
@@ -33,9 +33,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         {
             GraphBrowserViewModel = new ProjectGraphBrowserViewModel(projectControl);
             LibraryBrowserViewModel = new ProjectLibraryBrowserViewModel(projectControl);
-            TabHostViewModel = new UserControlTabHostViewModel();
-            TabHostViewModel.AddNonClosableTab("Solution Explorer", GraphBrowserViewModel, new ProjectGraphBrowserView());
-            TabHostViewModel.AddNonClosableTab("Data Viewers", LibraryBrowserViewModel, new ProjectLibraryBrowserView());
+            TabHostViewModel = new ControlTabHostViewModel();
+            TabHostViewModel.AddStaticTab("Solution Explorer", GraphBrowserViewModel, new ProjectGraphBrowserView());
+            TabHostViewModel.AddStaticTab("Data Viewers", LibraryBrowserViewModel, new ProjectLibraryBrowserView());
             TabHostViewModel.SetActiveTabByIndex(0);
         }
 

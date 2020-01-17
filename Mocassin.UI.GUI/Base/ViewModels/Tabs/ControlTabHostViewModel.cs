@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Controls;
 using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
@@ -10,9 +9,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     ///     Base <see cref="ViewModelBase" /> for providing sets of <see cref="System.Windows.Controls.UserControl" /> through a
     ///     <see cref="System.Windows.Controls.TabControl" />
     /// </summary>
-    public class UserControlTabHostViewModel : ObservableCollectionViewModel<UserControlTabItem>, IUserControlTabHost
+    public class ControlTabHostViewModel : ObservableCollectionViewModel<ControlTabItem>, IControlTabHost
     {
-        private UserControlTabItem selectedTab;
+        private ControlTabItem selectedTab;
         private Dock tabStripPlacement = Dock.Top;
         private bool isFrontInsertMode;
 
@@ -24,7 +23,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
-        public UserControlTabItem SelectedTab
+        public ControlTabItem SelectedTab
         {
             get => selectedTab;
             set => SetProperty(ref selectedTab, value);
@@ -38,7 +37,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
-        public void RemoveAndDispose(UserControlTabItem tabItem)
+        public void RemoveAndDispose(ControlTabItem tabItem)
         {
             var index = ObservableItems.IndexOf(tabItem);
             if (index < 0) throw new InvalidOperationException("Tab does not belong to this host.");
@@ -57,21 +56,26 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
-        public void AddCloseableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl, bool selectTab = true)
+        public void AddDynamicTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true)
         {
-            var tabItem = new CloseableUserControlTabItem(tabName, viewModelBase, userControl, this);
-            if (IsFrontInsertMode) 
-                InsertItem(0, tabItem);
-            else
-                AddItem(tabItem);
-            if (!selectTab) return;
-            SelectedTab = tabItem;
+            AddTab(new DynamicControlTabItem(tabName, contentViewModel, content, this));
         }
 
         /// <inheritdoc />
-        public void AddNonClosableTab(string tabName, ViewModelBase viewModelBase, UserControl userControl, bool selectTab = true)
+        public void AddStaticTab(string tabName, ViewModelBase contentViewModel, Control content, bool selectTab = true)
         {
-            var tabItem = new UserControlTabItem(tabName, viewModelBase, userControl);
+            AddTab(new ControlTabItem(tabName, contentViewModel, content));
+        }
+
+        /// <inheritdoc />
+        public void AddTab(ControlTabItem tabItem, bool selectTab = true)
+        {
+            if (Contains(tabItem))
+            {
+                if (selectTab) SelectedTab = tabItem;
+                return;
+            }
+
             if (IsFrontInsertMode) 
                 InsertItem(0, tabItem);
             else

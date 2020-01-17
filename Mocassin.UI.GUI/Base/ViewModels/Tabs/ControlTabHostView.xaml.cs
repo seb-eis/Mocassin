@@ -3,11 +3,11 @@
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
 {
     /// <summary>
-    ///     Interaktionslogik für UserControlTabHostView.xaml
+    ///     Interaktionslogik für ControlTabHostView.xaml
     /// </summary>
-    public partial class UserControlTabHostView : UserControl
+    public partial class ControlTabHostView : UserControl
     {
-        public UserControlTabHostView()
+        public ControlTabHostView()
         {
             InitializeComponent();
         }

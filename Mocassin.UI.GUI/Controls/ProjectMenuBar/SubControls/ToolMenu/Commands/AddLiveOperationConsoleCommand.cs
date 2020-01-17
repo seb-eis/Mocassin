@@ -20,7 +20,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ToolMenu.Commands
         {
             var view = new OperationReportConsoleView();
             var viewModel = new OperationReportConsoleViewModel(ProjectControl);
-            ProjectControl.ProjectConsoleTabControlViewModel.TabHostViewModel.AddCloseableTab("Model Validator", viewModel, view);
+            ProjectControl.ProjectConsoleTabControlViewModel.TabHostViewModel.AddDynamicTab("Model Validator", viewModel, view);
             ProjectControl.ProjectConsoleTabControlViewModel.TabHostViewModel.SetActiveTabByIndex(-1);
         }
     }

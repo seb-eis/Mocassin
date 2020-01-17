@@ -74,9 +74,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         public IDxSceneController SceneController { get; protected set; }
 
         /// <summary>
-        ///     Get the <see cref="IUserControlTabHost"/> that provides control tabs in the overlay
+        ///     Get the <see cref="IControlTabHost"/> that provides control tabs in the overlay
         /// </summary>
-        public IUserControlTabHost ControlTabHost { get; }
+        public IControlTabHost ControlTabHost { get; }
 
         /// <summary>
         ///     Get or set the <see cref="HelixToolkit.Wpf.SharpDX.Camera" />
@@ -445,7 +445,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
             EffectsManager = new DefaultEffectsManager();
             SceneElements = new ObservableElement3DCollection();
             SceneLights = new ObservableElement3DCollection();
-            ControlTabHost = new UserControlTabHostViewModel {TabStripPlacement = Dock.Bottom};
+            ControlTabHost = new ControlTabHostViewModel {TabStripPlacement = Dock.Bottom};
             PropertyChanged += DX3DViewportViewModel_PropertyChanged;
             ResetCameraCommand = new RelayCommand(ResetCamera);
             ExportDxImageCommand = new ExportDxViewportImageCommand(() => (ImageExportWidth, ImageExportHeight));
@@ -641,7 +641,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport
         private void HostControlTabs(IEnumerable<VvmContainer> containers, bool cleanCurrent = false)
         {
             if (cleanCurrent) ControlTabHost.Clear();
-            foreach (var container in containers) ControlTabHost.AddNonClosableTab(container.Name, container.ViewModel, container.View);
+            foreach (var container in containers) ControlTabHost.AddStaticTab(container.Name, container.ViewModel, container.View);
             ControlTabHost.SetActiveTabByIndex(0);
         }
 

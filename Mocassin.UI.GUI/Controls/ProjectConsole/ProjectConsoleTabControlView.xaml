@@ -9,6 +9,6 @@
              d:DataContext="{d:DesignInstance local:ProjectConsoleTabControlViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
-    <tabs:UserControlTabHostView DataContext="{Binding TabHostViewModel}" />
+    <tabs:ControlTabHostView DataContext="{Binding TabHostViewModel}" />
   </Grid>
 </UserControl>

@@ -8,26 +8,26 @@ using Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.WelcomeControl;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
 {
     /// <summary>
-    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="UserControlTabHostView" /> of work tabs
+    ///     The <see cref="PrimaryControlViewModel" /> for the <see cref="ControlTabHostView" /> of work tabs
     /// </summary>
     public class ProjectWorkTabControlViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the welcome <see cref="UserControlTabItem" />
+        ///     Get the welcome <see cref="ControlTabItem" />
         /// </summary>
-        private UserControlTabItem WelcomeTabItem { get; }
+        private ControlTabItem WelcomeTabItem { get; }
 
         /// <summary>
-        ///     Get the <see cref="UserControlTabHostViewModel" /> that controls the project control tabs
+        ///     Get the <see cref="ControlTabHostViewModel" /> that controls the project control tabs
         /// </summary>
-        public UserControlTabHostViewModel TabHostViewModel { get; }
+        public ControlTabHostViewModel TabHostViewModel { get; }
 
         /// <inheritdoc />
         public ProjectWorkTabControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            TabHostViewModel = new UserControlTabHostViewModel {IsFrontInsertMode = true};
-            WelcomeTabItem = new UserControlTabItem("Welcome to Mocassin", new WelcomeControlViewModel(ProjectControl), new WelcomeControlView());
+            TabHostViewModel = new ControlTabHostViewModel {IsFrontInsertMode = true};
+            WelcomeTabItem = new ControlTabItem("Welcome to Mocassin", new WelcomeControlViewModel(ProjectControl), new WelcomeControlView());
             TabHostViewModel.ObservableItems.CollectionChanged += OnTabCollectionChanged;
             TabHostViewModel.AddItem(WelcomeTabItem);
             TabHostViewModel.SelectedTab = WelcomeTabItem;

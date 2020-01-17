@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         void RemoveItem(T value);
 
         /// <summary>
-        ///     Checks if the vale <see cref="T" /> is part of the view model collection
+        ///     Checks if the value <see cref="T" /> is part of the view model collection
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

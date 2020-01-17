@@ -13,9 +13,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
     public class ProjectConsoleTabControlViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="UserControlTabHostViewModel" /> that controls the additional tabs of the console control
+        ///     Get the <see cref="ControlTabHostViewModel" /> that controls the additional tabs of the console control
         /// </summary>
-        public UserControlTabHostViewModel TabHostViewModel { get; }
+        public ControlTabHostViewModel TabHostViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="SubControls.MessageConsole.MessageConsoleViewModel" /> that controls the display of string
@@ -27,9 +27,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole
         public ProjectConsoleTabControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            TabHostViewModel = new UserControlTabHostViewModel {TabStripPlacement = Dock.Top};
+            TabHostViewModel = new ControlTabHostViewModel {TabStripPlacement = Dock.Top};
             MessageConsoleViewModel = new MessageConsoleViewModel(projectControl);
-            TabHostViewModel.AddNonClosableTab("Notifications", MessageConsoleViewModel, new MessageConsoleView());
+            TabHostViewModel.AddStaticTab("Notifications", MessageConsoleViewModel, new MessageConsoleView());
             TabHostViewModel.SetActiveTabByIndex(0);
         }
     }
