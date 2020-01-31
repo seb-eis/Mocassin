@@ -27,6 +27,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         public string TabName { get; }
 
         /// <summary>
+        ///     Boolean flag that indicates if the tab can be moved manually
+        /// </summary>
+        public virtual bool IsUserMovable => false;
+
+        /// <summary>
         ///     Get or set the <see cref="System.Windows.Visibility"/> of the tab
         /// </summary>
         public Visibility Visibility

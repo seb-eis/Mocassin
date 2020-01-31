@@ -4,7 +4,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
   xmlns:local="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu"
   xmlns:tabCommands="clr-namespace:Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ControlMenu.Commands"
   mc:Ignorable="d"
@@ -14,30 +13,28 @@
   <Grid>
     <Menu Background="Transparent">
       <MenuItem Header="Project">
-        <MenuItem Header="New Particle Model Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Particle Model Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddParticleControlTabCommand}" />
 
-        <MenuItem Header="New Structure Model Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Structure Model Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddStructureControlTabCommand}" />
 
-        <MenuItem Header="New Transition Model Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Transition Model Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddTransitionControlTabCommand}" />
 
-        <MenuItem Header="New Energy Model Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Energy Model Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddEnergyControlTabCommand}" />
 
-        <MenuItem Header="New Simulation Model Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Simulation Model Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddSimulationControlTabCommand}" />
 
-        <MenuItem Header="New Lattice Model tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Lattice Model Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddLatticeControlTabCommand}" />
         <Separator />
 
-        <MenuItem Header="New Customization Control Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Customization Template Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddCustomizationControlTabCommand}" />
-        <Separator />
-
-        <MenuItem Header="New Job Control Tab" Command="{Binding CommandSource}"
+        <MenuItem Header="Job Template Control" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type tabCommands:AddJobTranslationControlTabCommand}" />
 
       </MenuItem>

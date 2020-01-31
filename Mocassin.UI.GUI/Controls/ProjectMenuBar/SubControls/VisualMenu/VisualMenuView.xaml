@@ -10,12 +10,13 @@
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
     <Menu Background="Transparent">
-      <MenuItem Header="Visualization">
+      <MenuItem Header="Viewers">
         <MenuItem Header="3D Model Viewer [DX9]" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:AddWpfModelViewportTabCommand}"/>
         <MenuItem Header="3D Model Viewer [DX10+]" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:AddDxModelViewportTabCommand}"/>
-        <MenuItem Header="3D Model Viewer [DX10+] (Window)" Command="{Binding CommandSource}" 
+        <Separator/>
+        <MenuItem Header="3D Model Viewer [DX10+] (Windowed)" Command="{Binding CommandSource}" 
                   CommandParameter="{x:Type commands:OpenDxModelViewportWindowCommand}"/>
       </MenuItem>
     </Menu>

@@ -28,7 +28,7 @@ namespace Mocassin.UI.GUI.Base
         /// <summary>
         ///     Get or set the allowed <see cref="DragDropEffects" />, defaults to all behavior
         /// </summary>
-        public DragDropEffects AllowedEffects { get; set; } = DragDropEffects.Link;
+        public DragDropEffects AllowedEffects { get; set; } = DragDropEffects.All | DragDropEffects.Link;
 
         /// <summary>
         ///     Creates new <see cref="DragHandler{TElement}" /> with the provided packer <see cref="Func{TResult}" /> and
@@ -77,7 +77,6 @@ namespace Mocassin.UI.GUI.Base
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        /// <param name="effects"></param>
         public void TryDoDragDrop(TElement sender, MouseEventArgs args)
         {
             if (StartPoint == null) return;

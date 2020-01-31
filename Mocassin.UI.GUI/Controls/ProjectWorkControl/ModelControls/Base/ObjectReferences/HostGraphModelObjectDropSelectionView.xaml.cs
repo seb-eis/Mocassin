@@ -21,7 +21,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
 
         private void HostGrid_OnDragOver(object sender, DragEventArgs e)
         {
-            this.RelayDragOverToContext(sender as ItemsControl, e);
+            this.RelayDragOverToContext(e, DragDropEffects.Link);
         }
     }
 }

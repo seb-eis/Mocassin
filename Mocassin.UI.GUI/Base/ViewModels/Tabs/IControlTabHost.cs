@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
@@ -6,7 +7,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
     /// <summary>
     ///     Represents a <see cref="TabControl" /> host that provides collections of <see cref="UserControl" /> instances
     /// </summary>
-    public interface IControlTabHost : IObservableCollectionViewModel<ControlTabItem>
+    public interface IControlTabHost : IObservableCollectionViewModel<ControlTabItem>, IObjectDropAcceptor
     {
         /// <summary>
         ///     Get or set the currently selected <see cref="ControlTabItem" />
@@ -60,6 +61,13 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// <param name="tabItem"></param>
         /// <param name="selectTab"></param>
         void AddTab(ControlTabItem tabItem, bool selectTab = true);
+
+        /// <summary>
+        ///     Removes a <see cref="ControlTabItem"/> from the host
+        /// </summary>
+        /// <param name="tabItem"></param>
+        /// <returns></returns>
+        void RemoveTab(ControlTabItem tabItem);
 
         /// <summary>
         ///     Initializes any default <see cref="ControlTabItem" /> components

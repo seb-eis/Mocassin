@@ -81,6 +81,7 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Collections
         /// <inheritdoc />
         public void MoveItem(int oldIndex, int newIndex)
         {
+            if (oldIndex == newIndex) return;
             ExecuteOnAppThread(() => MoveItemInternal(oldIndex, newIndex));
         }
 

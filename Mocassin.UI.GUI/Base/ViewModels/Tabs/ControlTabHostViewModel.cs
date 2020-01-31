@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Mocassin.Framework.Extensions;
+using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Base.ViewModels.Collections;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
@@ -14,6 +16,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         private ControlTabItem selectedTab;
         private Dock tabStripPlacement = Dock.Top;
         private bool isFrontInsertMode;
+
+        /// <inheritdoc />
+        public Command<IDataObject> HandleDropAddCommand { get; }
 
         /// <inheritdoc />
         public Dock TabStripPlacement
@@ -34,6 +39,11 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         {
             get => isFrontInsertMode;
             set => SetProperty(ref isFrontInsertMode, value);
+        }
+
+        public ControlTabHostViewModel()
+        {
+            HandleDropAddCommand = new RelayCommand<IDataObject>(HandleDataDrop, CanHandleDataDrop);
         }
 
         /// <inheritdoc />
@@ -85,6 +95,18 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         }
 
         /// <inheritdoc />
+        public void RemoveTab(ControlTabItem tabItem)
+        {
+            var index = ObservableItems.IndexOf(tabItem);
+            if (index < 0) throw new InvalidOperationException("Tab does not belong to this host.");
+            ExecuteOnAppThread(() =>
+            {
+                if (ReferenceEquals(tabItem, SelectedTab)) SetActiveTabByIndex(index == 0 ? 1 : index - 1);
+                ObservableItems.Remove(tabItem);
+            });
+        }
+
+        /// <inheritdoc />
         public virtual void InitializeDefaultTabs()
         {
         }
@@ -124,13 +146,33 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
                 SelectedTab = ObservableItems[ObservableItems.Count - 1];
                 return;
             }
-            if (index == ObservableItems.Count)
+            if (index >= ObservableItems.Count)
             {
                 SelectedTab = ObservableItems[index-1];
                 return;
             }
 
             SelectedTab = ObservableItems[index];
+        }
+
+        /// <summary>
+        ///     Handles the processing of a dropped <see cref="IDataObject"/> if it contains a movable <see cref="DynamicControlTabItem"/>
+        /// </summary>
+        /// <param name="dataObject"></param>
+        private void HandleDataDrop(IDataObject dataObject)
+        {
+            if (!(dataObject.GetData(typeof(TabMoveData)) is TabMoveData tabMoveData)) return;
+            tabMoveData.ControlTabItem.SwitchHost(this, tabMoveData.InsertIndex);
+        }
+
+        /// <summary>
+        ///     Checks if a <see cref="IDataObject"/> of a drop event can be processed
+        /// </summary>
+        /// <param name="dataObject"></param>
+        /// <returns></returns>
+        private bool CanHandleDataDrop(IDataObject dataObject)
+        {
+            return dataObject.GetDataPresent(typeof(TabMoveData));
         }
     }
 }

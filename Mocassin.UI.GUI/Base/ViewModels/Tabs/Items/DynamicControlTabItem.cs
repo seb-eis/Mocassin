@@ -21,6 +21,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         /// </summary>
         public ICommand CloseTabCommand { get; }
 
+        /// <inheritdoc />
+        public override bool IsUserMovable => true;
+
         /// <summary>
         ///     Creates new <see cref="DynamicControlTabItem" /> that belongs to the provided
         ///     <see cref="IControlTabHost" />
@@ -53,12 +56,33 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Tabs
         ///     Detaches the <see cref="DynamicControlTabItem" /> from its current <see cref="IControlTabHost" /> and reattaches it to a new one
         /// </summary>
         /// <param name="newTabHost"></param>
-        private void SwitchHost(IControlTabHost newTabHost)
+        /// <param name="insertIndex"></param>
+        public void SwitchHost(IControlTabHost newTabHost, int insertIndex = -1)
         {
-            if (Equals(TabHost, newTabHost)) return;
-            TabHost.RemoveItem(this);
-            newTabHost.AddTab(this);
+            if (!ReferenceEquals(TabHost, newTabHost))
+            {
+                TabHost.RemoveTab(this);
+                newTabHost.AddTab(this);
+            }
+
+            var tabIndex = newTabHost.ObservableItems.IndexOf(this);
+            var realInsertIndex = insertIndex < 0 || insertIndex > newTabHost.ObservableItems.Count ? newTabHost.ObservableItems.Count - 1 : insertIndex;
+            if (newTabHost.ObservableItems[realInsertIndex].IsUserMovable)
+            {
+                newTabHost.MoveTab(tabIndex, realInsertIndex);
+                tabIndex = realInsertIndex;
+            }
+            newTabHost.SetActiveTabByIndex(tabIndex);
             TabHost = newTabHost;
+        }
+
+        /// <summary>
+        ///     Determines the current index of the <see cref="DynamicControlTabItem"/> in its <see cref="IControlTabHost"/>
+        /// </summary>
+        /// <returns></returns>
+        public int GetIndexInHost()
+        {
+            return TabHost.ObservableItems.IndexOf(this);
         }
     }
 }

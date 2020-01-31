@@ -10,14 +10,22 @@
   d:DesignHeight="450" d:DesignWidth="800"
   Height="Auto" Width="Auto">
 
-  <Grid>
+  <Grid AllowDrop="True"
+        Drop="HeaderItemGrid_OnDrop"
+        DragOver="HeaderItemGrid_OnDragOver">
     <TabControl ItemsSource="{Binding ObservableItems}"
                 SelectedItem="{Binding SelectedTab}"
                 TabStripPlacement="{Binding TabStripPlacement}"
                 Name="PrimaryTabControl">
       <TabControl.Resources>
         <DataTemplate DataType="{x:Type local:DynamicControlTabItem}">
-          <Grid Visibility="{Binding Visibility}">
+          <Grid Visibility="{Binding Visibility}"
+                AllowDrop="True"
+                PreviewMouseLeftButtonDown="HeaderItemGrid_OnPreviewMouseLeftButtonDown"
+                PreviewMouseLeftButtonUp="HeaderItemGrid_OnPreviewMouseLeftButtonUp"
+                PreviewMouseMove="HeaderItemGrid_OnPreviewMouseMove"
+                Drop="HeaderItemGrid_OnDrop"
+                DragOver="HeaderItemGrid_OnDragOver">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto"/>
               <ColumnDefinition Width="Auto"/>
@@ -74,7 +82,9 @@
           </Grid>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:ControlTabItem}">
-          <Grid Visibility="{Binding Visibility}">
+          <Grid Visibility="{Binding Visibility}" AllowDrop="True"
+                Drop="HeaderItemGrid_OnDrop"
+                DragOver="HeaderItemGrid_OnDragOver">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>

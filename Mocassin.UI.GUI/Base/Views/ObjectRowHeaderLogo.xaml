@@ -13,9 +13,6 @@
             Opacity=".75" Width="20" Height="20" CornerRadius="5"
             BorderBrush="Black" BorderThickness="2"
             Padding="0,0,0,0">
-      <Border.Effect>
-        <DropShadowEffect BlurRadius="4" Opacity=".75" ShadowDepth="0"/>
-      </Border.Effect>
       <Border.Background>
         <LinearGradientBrush po:Freeze="True">
           <GradientStop Color="LightBlue" Offset="0.0" />

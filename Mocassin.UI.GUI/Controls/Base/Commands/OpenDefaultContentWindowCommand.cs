@@ -14,12 +14,13 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// <summary>
         ///     Get the base window description string that
         /// </summary>
-        protected abstract string BaseWindowDescription { get; }
+        protected virtual string BaseWindowDescription { get; }
 
         /// <inheritdoc />
         protected OpenDefaultContentWindowCommand(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
+            BaseWindowDescription = "Mocassin";
         }
 
         /// <inheritdoc />

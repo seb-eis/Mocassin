@@ -291,6 +291,7 @@
       <DependentUpon>ContentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\ViewModels\Content\ContentWindowViewModel.cs" />
+    <Compile Include="Base\ViewModels\Tabs\Items\TabMoveData.cs" />
     <Compile Include="Controls\Base\Commands\OpenDefaultContentWindowCommand.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxMatrixExtensions.cs" />
     <Compile Include="Controls\DxVisualizer\Extensions\DxVectorTransformerExtensions.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="Controls\DxVisualizer\Viewport\Enums\DxSceneBatchingMode.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneHost.cs" />
     <Compile Include="Controls\DxVisualizer\Viewport\Base\IDxSceneController.cs" />
+    <Compile Include="Controls\ProjectMenuBar\SubControls\FileMenu\Commands\OpenProjectWorkTabHostWindow.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\Commands\CheckApplicationUpdateCommand.cs" />
     <Compile Include="Controls\ProjectMenuBar\SubControls\HelpMenu\HelpMenuView.xaml.cs">
       <DependentUpon>HelpMenuView.xaml</DependentUpon>

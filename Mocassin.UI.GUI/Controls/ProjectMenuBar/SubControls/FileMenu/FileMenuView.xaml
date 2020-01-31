@@ -15,16 +15,20 @@
     <Menu Background="Transparent">
       <MenuItem Header="_File">
         <MenuItem Header="_New">
-          <MenuItem Header="New Project Library" Command="{Binding CommandSource}"
+          <MenuItem Header="Project" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type fileCommands:ShowProjectCreationDialogCommand}" />
-          <MenuItem Header="New Project" Command="{Binding CommandSource}"
+          <MenuItem Header="Model" Command="{Binding CommandSource}"
                     CommandParameter="{x:Type projectCommands:AddNewProjectGraphCommand}" />
         </MenuItem>
-        <MenuItem Header="_Open" Command="{Binding CommandSource}"
+        <Separator/>
+        <MenuItem Header="New Work Window" Command="{Binding CommandSource}"
+                  CommandParameter="{x:Type fileCommands:OpenProjectWorkTabHostWindow}"/>
+        <Separator/>
+        <MenuItem Header="_Open Project" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type fileCommands:ShowProjectLoadingDialogCommand}" />
-        <MenuItem Header="_Close" Command="{Binding CommandSource}"
+        <MenuItem Header="_Close Project" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type projectCommands:CloseProjectLibraryCommand}" />
-        <MenuItem Header="_Save" Command="{Binding CommandSource}"
+        <MenuItem Header="_Save Project" Command="{Binding CommandSource}"
                   CommandParameter="{x:Type projectCommands:SaveProjectLibraryChangesCommand}" />
         <Separator />
         <MenuItem Header="_Exit" Command="{Binding CommandSource}"

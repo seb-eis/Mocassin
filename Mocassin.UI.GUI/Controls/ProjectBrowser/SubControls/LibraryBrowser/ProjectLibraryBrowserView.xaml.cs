@@ -18,7 +18,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
         private void UIElement_OnDragOver(object sender, DragEventArgs e)
         {
             AddSenderConversionFormatToDragEventArgs(sender, e);
-            this.RelayDragOverToContext(null, e);
+            this.RelayDragOverToContext(e, DragDropEffects.Copy);
         }
 
         private void UIElement_OnDrop(object sender, DragEventArgs e)

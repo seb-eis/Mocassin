@@ -167,7 +167,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 
         /// <summary>
         ///     Creates a <see cref="Matrix" /> that represents the provided <see cref="ISymmetryOperation" /> as a transform in
-        ///     cartesian space specifically for cases where the input coordinates are in the fractional context and not the cartesian
+        ///     cartesian space specifically for cases where the input coordinates are in the fractional context and not the
+        ///     cartesian
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="fractionalSystem"></param>

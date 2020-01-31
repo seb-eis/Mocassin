@@ -12,9 +12,6 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.VisualMenu.Command
     public class OpenDxModelViewportWindowCommand : OpenDefaultContentWindowCommand
     {
         /// <inheritdoc />
-        protected override string BaseWindowDescription => "Model Viewer";
-
-        /// <inheritdoc />
         public OpenDxModelViewportWindowCommand(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
