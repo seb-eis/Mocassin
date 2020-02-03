@@ -7,17 +7,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     The <see cref="ViewModelBase" /> for <see cref="BaseJobDescriptionControlView" /> that controls manipulation of
-    ///     <see cref="JobDescriptionGraph" /> data
+    ///     <see cref="JobConfigData" /> data
     /// </summary>
     public class BaseJobDescriptionControlViewModel : ViewModelBase
     {
         /// <summary>
-        ///     Get the <see cref="JobDescriptionGraph" /> that the view model targets
+        ///     Get the <see cref="JobConfigData" /> that the view model targets
         /// </summary>
-        private JobDescriptionGraph JobDescription { get; }
+        private JobConfigData JobDescription { get; }
 
         /// <summary>
-        ///     Get or set the <see cref="SimulationExecutionOverwriteFlags" /> of the targeted <see cref="JobDescriptionGraph" />
+        ///     Get or set the <see cref="SimulationExecutionOverwriteFlags" /> of the targeted <see cref="JobConfigData" />
         /// </summary>
         public SimulationExecutionOverwriteFlags? ExecutionFlags
         {
@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the target MCSP of the targeted <see cref="JobDescriptionGraph" />
+        ///     Get or set the target MCSP of the targeted <see cref="JobConfigData" />
         /// </summary>
         public int? TargetMcsp
         {
@@ -45,11 +45,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the time limit <see cref="TimeSpan" /> of the targeted <see cref="JobDescriptionGraph" />
+        ///     Get or set the time limit <see cref="TimeSpan" /> of the targeted <see cref="JobConfigData" />
         /// </summary>
         public TimeSpan? TimeLimit
         {
-            get => JobDescriptionGraph.ParseTimeString(JobDescription.TimeLimit);
+            get => JobConfigData.ParseTimeString(JobDescription.TimeLimit);
             set
             {
                 JobDescription.TimeLimit = value?.ToString();
@@ -58,7 +58,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the simulation temperature in [K] of the targeted <see cref="JobDescriptionGraph" />
+        ///     Get or set the simulation temperature in [K] of the targeted <see cref="JobConfigData" />
         /// </summary>
         public double? Temperature
         {
@@ -71,7 +71,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the minimal success rate in [Hz] of the targeted <see cref="JobDescriptionGraph" />
+        ///     Get or set the minimal success rate in [Hz] of the targeted <see cref="JobConfigData" />
         /// </summary>
         public double? MinimalSuccessRate
         {
@@ -84,7 +84,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the instruction <see cref="string" /> on the <see cref="JobDescriptionGraph" />
+        ///     Get or set the instruction <see cref="string" /> on the <see cref="JobConfigData" />
         /// </summary>
         public string Instruction
         {
@@ -103,10 +103,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         public string SingleLineInstruction => Instruction?.Replace(Environment.NewLine, " ");
 
         /// <summary>
-        ///     Creates new <see cref="BaseJobDescriptionControlViewModel" /> for the passed <see cref="JobDescriptionGraph" />
+        ///     Creates new <see cref="BaseJobDescriptionControlViewModel" /> for the passed <see cref="JobConfigData" />
         /// </summary>
         /// <param name="jobDescription"></param>
-        public BaseJobDescriptionControlViewModel(JobDescriptionGraph jobDescription)
+        public BaseJobDescriptionControlViewModel(JobConfigData jobDescription)
         {
             JobDescription = jobDescription ?? throw new ArgumentNullException(nameof(jobDescription));
         }

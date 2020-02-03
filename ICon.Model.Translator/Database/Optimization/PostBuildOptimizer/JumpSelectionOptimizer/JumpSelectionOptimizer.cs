@@ -24,9 +24,9 @@ namespace Mocassin.Model.Translator.Optimization
         protected SimulationJobPackageModel JobPackage { get; set; }
 
         /// <summary>
-        ///     The list of <see cref="IParticle" /> objects to remove on their affiliated <see cref="IUnitCellPosition" />
+        ///     The list of <see cref="IParticle" /> objects to remove on their affiliated <see cref="ICellReferencePosition" />
         /// </summary>
-        public IList<(IParticle, IUnitCellPosition)> RemoveCombinations { get; set; }
+        public IList<(IParticle, ICellReferencePosition)> RemoveCombinations { get; set; }
 
         /// <inheritdoc />
         public SimulationExecutionFlags Run(IProjectModelContext modelContext, SimulationJobPackageModel jobPackage)
@@ -53,9 +53,9 @@ namespace Mocassin.Model.Translator.Optimization
         /// <returns></returns>
         protected virtual IParticleSet GetOptimizedSelectionParticles(EnvironmentDefinitionEntity environmentDefinition)
         {
-            var unitCellPosition = ModelContext.StructureModelContext.PositionModels[environmentDefinition.ObjectId].UnitCellPosition;
+            var cellReferencePosition = ModelContext.StructureModelContext.PositionModels[environmentDefinition.ObjectId].CellReferencePosition;
             var rawSet = DecodeSelectionMask(environmentDefinition.SelectionParticleMask).ToList();
-            rawSet.RemoveAll(x => RemoveCombinations.FirstOrDefault(pair => pair.Item1 == x && pair.Item2 == unitCellPosition).Item1 != null);
+            rawSet.RemoveAll(x => RemoveCombinations.FirstOrDefault(pair => pair.Item1 == x && pair.Item2 == cellReferencePosition).Item1 != null);
             return ParticleSet.ToSortedSet(rawSet);
         }
 

@@ -40,10 +40,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser
         }
 
         /// <summary>
-        ///     Retrieves the currently user selected <see cref="MocassinProjectGraph"/>
+        ///     Retrieves the currently user selected <see cref="MocassinProject"/>
         /// </summary>
         /// <returns></returns>
-        public MocassinProjectGraph GetWorkProject()
+        public MocassinProject GetWorkProject()
         {
             return GraphBrowserViewModel.SelectedProject;
         }

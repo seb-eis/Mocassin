@@ -4,10 +4,7 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Mocassin.UI.Xml.Customization;
-using Mocassin.UI.Xml.Jobs;
 using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.Model;
 
 namespace Mocassin.UI.Xml.ProjectLibrary
 {
@@ -23,14 +20,14 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         bool IsDisposed { get; }
 
         /// <summary>
-        ///     Get a <see cref="string"/> that describes the data source (e.g. file location)
+        ///     Get a <see cref="string" /> that describes the data source (e.g. file location)
         /// </summary>
         string SourceName { get; }
 
         /// <summary>
-        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="MocassinProjectGraph" /> objects stored in the library
+        ///     Get the <see cref="DbSet{TEntity}" /> of <see cref="MocassinProject" /> objects stored in the library
         /// </summary>
-        DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; }
+        DbSet<MocassinProject> MocassinProjectGraphs { get; }
 
         /// <summary>
         ///     Adds the given <see cref="TEntity" /> objects to the <see cref="IMocassinProjectLibrary" />
@@ -79,7 +76,8 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         bool CheckForModelChanges();
 
         /// <summary>
-        ///     Async checks if the contents of the library have changed since the last check and triggers affiliated events if required
+        ///     Async checks if the contents of the library have changed since the last check and triggers affiliated events if
+        ///     required
         /// </summary>
         /// <returns></returns>
         Task<bool> CheckForModelChangesAsync();

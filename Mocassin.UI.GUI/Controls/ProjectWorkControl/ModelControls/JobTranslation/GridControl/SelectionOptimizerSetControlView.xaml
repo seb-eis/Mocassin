@@ -27,7 +27,7 @@
 
         <comboBox:BindableDataGridComboBoxColumn Header="Cell Position"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectablePositions}"
-                                                 SelectedItemBinding="{Binding StartUnitCellPosition}"
+                                                 SelectedItemBinding="{Binding StartReferencePosition}"
                                                  DisplayMemberPath="Name" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Removed Selectable"

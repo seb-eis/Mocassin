@@ -77,7 +77,7 @@
         </ContextMenu>
       </ListBox.ContextMenu>
       <ListBox.ItemTemplate>
-        <DataTemplate DataType="{x:Type main:MocassinProjectGraph}">
+        <DataTemplate DataType="{x:Type main:MocassinProject}">
           <Border>
             <Grid>
               <Grid.ColumnDefinitions>
@@ -98,9 +98,9 @@
                               CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"/>
                 </TextBox.InputBindings>
               </TextBox>
-              <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ProjectCustomizationGraphs}" BorderThickness="0">
+              <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CustomizationTemplates}" BorderThickness="0">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate DataType="{x:Type customization:ProjectCustomizationGraph}">
+                  <DataTemplate DataType="{x:Type customization:ProjectCustomizationTemplate}">
                     <Grid>
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -122,9 +122,9 @@
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
 
-              <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ProjectJobTranslationGraphs}" BorderThickness="0">
+              <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding JobSetTemplates}" BorderThickness="0">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate DataType="{x:Type jobs:ProjectJobTranslationGraph}">
+                  <DataTemplate DataType="{x:Type jobs:ProjectJobSetTemplate}">
                     <Grid>
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

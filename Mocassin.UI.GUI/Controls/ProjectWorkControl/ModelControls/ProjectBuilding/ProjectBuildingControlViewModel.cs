@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             BuildGraphControlViewModel.ChangeContentSource(contentSource);

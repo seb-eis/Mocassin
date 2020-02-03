@@ -13,7 +13,7 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
 {
     /// <summary>
-    ///     The <see cref="ViewModelBase" /> that manages the <see cref="ResourcesGraph" /> of typical render resources
+    ///     The <see cref="ViewModelBase" /> that manages the <see cref="ResourcesData" /> of typical render resources
     /// </summary>
     public class ModelRenderResourcesViewModel : ViewModelBase
     {
@@ -23,9 +23,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         private double[] RenderAreaValues { get; }
 
         /// <summary>
-        ///     Get the <see cref="ResourcesGraph" /> that is used as a data source
+        ///     Get the <see cref="ResourcesData" /> that is used as a data source
         /// </summary>
-        private ResourcesGraph DataSource { get; set; }
+        private ResourcesData DataSource { get; set; }
 
         /// <summary>
         ///     Get the minimal render area value for direction 'A' (Fractional coordinates)
@@ -86,23 +86,23 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.DataControl
         /// </summary>
         public ModelRenderResourcesViewModel()
         {
-            DataSource = new ResourcesGraph();
+            DataSource = new ResourcesData();
             RenderAreaValues = RenderAreaDefault;
         }
 
         /// <summary>
-        ///     Changes the data source to another <see cref="ResourcesGraph"/>
+        ///     Changes the data source to another <see cref="ResourcesData"/>
         /// </summary>
         /// <param name="resources"></param>
-        public void SetDataSource(ResourcesGraph resources)
+        public void SetDataSource(ResourcesData resources)
         {
             if (DataSource != null && Equals(DataSource, resources)) return;
-            DataSource = resources ?? new ResourcesGraph();
+            DataSource = resources ?? new ResourcesData();
             LoadSourceData();
         }
 
         /// <summary>
-        ///     Forces a load of the data stored in the <see cref="ResourcesGraph"/> effectively synchronizing the view model to its data source
+        ///     Forces a load of the data stored in the <see cref="ResourcesData"/> effectively synchronizing the view model to its data source
         /// </summary>
         public void LoadSourceData()
         {

@@ -12,11 +12,11 @@ namespace Mocassin.Model.Energies
     public class AsymmetricInteractionFilter : IInteractionFilter, IEquatable<AsymmetricInteractionFilter>
     {
         /// <inheritdoc />
-        public IUnitCellPosition CenterUnitCellPosition => null;
+        public ICellReferencePosition CenterCellReferencePosition => null;
 
         /// <inheritdoc />
         [UseTrackedReferences]
-        public IUnitCellPosition PartnerUnitCellPosition { get; set; }
+        public ICellReferencePosition PartnerCellReferencePosition { get; set; }
 
         /// <inheritdoc />
         public double StartRadius { get; set; }
@@ -25,9 +25,9 @@ namespace Mocassin.Model.Energies
         public double EndRadius { get; set; }
 
         /// <inheritdoc />
-        public bool IsApplicable(double distance, IUnitCellPosition centerUnitCellPosition, IUnitCellPosition partnerUnitCellPosition)
+        public bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition)
         {
-            var result = partnerUnitCellPosition == PartnerUnitCellPosition;
+            var result = partnerCellReferencePosition == PartnerCellReferencePosition;
             result &= distance > StartRadius && distance < EndRadius
                       || distance.AlmostEqualByRange(StartRadius)
                       || distance.AlmostEqualByRange(EndRadius);
@@ -54,7 +54,7 @@ namespace Mocassin.Model.Energies
         public bool Equals(AsymmetricInteractionFilter other)
         {
             return other != null
-                   && PartnerUnitCellPosition == other.PartnerUnitCellPosition
+                   && PartnerCellReferencePosition == other.PartnerCellReferencePosition
                    && EndRadius.AlmostEqualByRange(other.EndRadius)
                    && StartRadius.AlmostEqualByRange(other.StartRadius);
         }
@@ -71,7 +71,7 @@ namespace Mocassin.Model.Energies
             {
                 StartRadius = interactionFilter.StartRadius,
                 EndRadius = interactionFilter.EndRadius,
-                PartnerUnitCellPosition = interactionFilter.PartnerUnitCellPosition
+                PartnerCellReferencePosition = interactionFilter.PartnerCellReferencePosition
             };
         }
     }

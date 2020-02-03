@@ -8,26 +8,26 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="MmcJobDescriptionSetControlView" /> that controls
-    ///     manipulation of <see cref="MmcJobDescriptionGraph" />
+    ///     manipulation of <see cref="MmcJobConfigData" />
     /// </summary>
-    public sealed class MmcJobDescriptionSetControlViewModel : CollectionControlViewModel<MmcJobDescriptionGraph>
+    public sealed class MmcJobDescriptionSetControlViewModel : CollectionControlViewModel<MmcJobConfigData>
     {
         private int duplicateCount = 1;
 
         /// <summary>
-        ///     Get the <see cref="MmcJobDescriptionGraph" /> that supplies the <see cref="MmcJobDescriptionGraph" /> collection
+        ///     Get the <see cref="MmcJobConfigData" /> that supplies the <see cref="MmcJobConfigData" /> collection
         /// </summary>
-        public MmcJobPackageDescriptionGraph MmcJobPackage { get; }
+        public MmcJobPackageData MmcJobPackage { get; }
 
         /// <summary>
-        ///     The parent <see cref="MocassinProjectGraph"/>
+        ///     The parent <see cref="MocassinProject"/>
         /// </summary>
-        public MocassinProjectGraph ProjectGraph { get; }
+        public MocassinProject Project { get; }
 
         /// <summary>
         ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
         /// </summary>
-        public DuplicateCollectionItemCommand<MmcJobDescriptionGraph> DuplicateItemCommand { get; }
+        public DuplicateCollectionItemCommand<MmcJobConfigData> DuplicateItemCommand { get; }
 
         /// <summary>
         ///     Get or set the duplicate count if the duplicate command is executed
@@ -40,16 +40,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 
         /// <summary>
         ///     Creates new <see cref="MmcJobDescriptionSetControlViewModel" /> for the passed
-        ///     <see cref="MmcJobPackageDescriptionGraph" />
+        ///     <see cref="MmcJobPackageData" />
         /// </summary>
         /// <param name="mmcJobPackage"></param>
-        /// <param name="projectGraph"></param>
-        public MmcJobDescriptionSetControlViewModel(MmcJobPackageDescriptionGraph mmcJobPackage, MocassinProjectGraph projectGraph)
+        /// <param name="project"></param>
+        public MmcJobDescriptionSetControlViewModel(MmcJobPackageData mmcJobPackage, MocassinProject project)
         {
             MmcJobPackage = mmcJobPackage ?? throw new ArgumentNullException(nameof(mmcJobPackage));
-            ProjectGraph = projectGraph ?? throw new ArgumentNullException(nameof(projectGraph));
+            Project = project ?? throw new ArgumentNullException(nameof(project));
             SetCollection(mmcJobPackage.JobConfigurations);
-            DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobDescriptionGraph>(this) {CountProvider = () => DuplicateCount};
+            DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobConfigData>(this) {CountProvider = () => DuplicateCount};
         }
     }
 }

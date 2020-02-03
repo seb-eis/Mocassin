@@ -68,7 +68,7 @@ namespace Mocassin.Model.Lattices
 		/// </summary>
 		/// <param name="lattice"></param>
 		/// <param name="dopings"></param>
-		public void DopeLattice(LatticeEntry[,,][] lattice, ReadOnlyListAdapter<IDoping> dopings,
+		public void DopeLattice(LatticeEntry[,,][] lattice, ListReadOnlyWrapper<IDoping> dopings,
 			IDictionary<IDoping, double> dopingConcentrations)
 		{
 			var orderedDopings = GenerateDopingOrder(dopings);
@@ -142,14 +142,14 @@ namespace Mocassin.Model.Lattices
 			LatticeEntry dopedCellEntry = new LatticeEntry()
 			{
 				Particle = doping.PrimaryDoping.Dopable,
-				CellPosition = doping.PrimaryDoping.UnitCellPosition,
+				CellPosition = doping.PrimaryDoping.CellReferencePosition,
 				Block = doping.BuildingBlock
 			};
 
 			LatticeEntry counterDopedCellEntry = new LatticeEntry()
 			{
 				Particle = doping.CounterDoping.Dopable,
-				CellPosition = doping.CounterDoping.UnitCellPosition,
+				CellPosition = doping.CounterDoping.CellReferencePosition,
 				Block = doping.BuildingBlock
 			};
 

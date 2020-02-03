@@ -10,9 +10,9 @@ namespace Mocassin.Model.Energies
     public interface IDefectEnergy : IComparable<IDefectEnergy>, IEquatable<IDefectEnergy>
     {
         /// <summary>
-        ///     Get the <see cref="IUnitCellPosition" /> the defect belongs to
+        ///     Get the <see cref="ICellReferencePosition" /> the defect belongs to
         /// </summary>
-        IUnitCellPosition UnitCellPosition { get; }
+        ICellReferencePosition CellReferencePosition { get; }
 
         /// <summary>
         ///     Get the <see cref="IParticle" /> that describes the defect

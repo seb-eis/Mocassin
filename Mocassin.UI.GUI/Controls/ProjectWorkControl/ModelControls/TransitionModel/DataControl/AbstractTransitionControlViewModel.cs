@@ -16,19 +16,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
     {
         /// <summary>
         ///     Get the <see cref="ExchangePairGridControlViewModel" /> that controls the collection of
-        ///     <see cref="StateExchangePairGraph" /> instances
+        ///     <see cref="StateExchangePairData" /> instances
         /// </summary>
         public ExchangePairGridControlViewModel ExchangePairGridViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="ExchangeGroupGridControlViewModel" /> that controls the collection of
-        ///     <see cref="StateExchangeGroupGraph" /> instances
+        ///     <see cref="StateExchangeGroupData" /> instances
         /// </summary>
         public ExchangeGroupGridControlViewModel ExchangeGroupGridViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="AbstractTransitionGridControlViewModel" /> that controls the collection of
-        ///     <see cref="AbstractTransitionGraph" /> instances
+        ///     <see cref="AbstractTransitionData" /> instances
         /// </summary>
         public AbstractTransitionGridControlViewModel AbstractTransitionGridViewModel { get; }
 
@@ -42,7 +42,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             ExchangePairGridViewModel.ChangeContentSource(contentSource);

@@ -22,15 +22,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
     public class OperationReportConsoleViewModel : PrimaryControlViewModel
     {
         /// <summary>
-        ///     Get a dummy <see cref="MocassinProjectGraph" /> that serves as a stop dummy for the live validation
+        ///     Get a dummy <see cref="MocassinProject" /> that serves as a stop dummy for the live validation
         /// </summary>
-        public static readonly MocassinProjectGraph DummyProjectGraph = new MocassinProjectGraph {ProjectName = "Empty"};
+        public static readonly MocassinProject DummyProject = new MocassinProject {ProjectName = "Empty"};
 
         private readonly object lockObject = new object();
         private bool isErrorContentFiltered;
         private bool isSoftUpdateStop;
         private IOperationReport selectedReport;
-        private MocassinProjectGraph selectedProjectGraph = DummyProjectGraph;
+        private MocassinProject selectedProject = DummyProject;
         private ModelValidatorViewModel validatorViewModel;
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         /// <summary>
         ///     Get the <see cref="IEnumerable{T}" /> of selectable project graphs
         /// </summary>
-        public IEnumerable<MocassinProjectGraph> ProjectGraphs => GetProjectGraphs();
+        public IEnumerable<MocassinProject> ProjectGraphs => GetProjectGraphs();
 
         /// <summary>
         ///     Get or set a <see cref="ModelValidatorViewModel" /> instance that periodically checks its linked model definition
@@ -72,12 +72,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         }
 
         /// <summary>
-        ///     Get or set the selected <see cref="MocassinProjectGraph" /> that is live validated
+        ///     Get or set the selected <see cref="MocassinProject" /> that is live validated
         /// </summary>
-        public MocassinProjectGraph SelectedProjectGraph
+        public MocassinProject SelectedProject
         {
-            get => selectedProjectGraph;
-            set => SetProperty(ref selectedProjectGraph, value);
+            get => selectedProject;
+            set => SetProperty(ref selectedProject, value);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
                 if (subscription == null && validator == null) return;
                 subscription?.Dispose();
                 validator.Dispose();
-                PushInfoMessage($"Removed a change detector from the [{ValidatorViewModel.ModelGraph.Parent.ProjectName}] model tree.");
+                PushInfoMessage($"Removed a change detector from the [{ValidatorViewModel.ProjectModelData.Parent.ProjectName}] model tree.");
             });
         }
 
@@ -194,13 +194,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> of selectable <see cref="MocassinProjectGraph" /> instances for live
+        ///     Get the <see cref="IEnumerable{T}" /> of selectable <see cref="MocassinProject" /> instances for live
         ///     validation
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<MocassinProjectGraph> GetProjectGraphs()
+        private IEnumerable<MocassinProject> GetProjectGraphs()
         {
-            yield return DummyProjectGraph;
+            yield return DummyProject;
             if (ProjectControl.ProjectGraphs == null) yield break;
             foreach (var projectGraph in ProjectControl.ProjectGraphs) yield return projectGraph;
         }
@@ -216,34 +216,34 @@ namespace Mocassin.UI.GUI.Controls.ProjectConsole.SubControls.OperationConsole
         }
 
         /// <summary>
-        ///     Action that is called if the <see cref="SelectedProjectGraph" /> property changes
+        ///     Action that is called if the <see cref="SelectedProject" /> property changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private async void OnProjectGraphChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(SelectedProjectGraph)) return;
-            await Task.Run(() => SwitchValidationTarget(SelectedProjectGraph?.ProjectModelGraph));
+            if (e.PropertyName != nameof(SelectedProject)) return;
+            await Task.Run(() => SwitchValidationTarget(SelectedProject?.ProjectModelData));
         }
 
         /// <summary>
-        ///     Switches the <see cref="ModelValidatorViewModel" /> system to target the passed <see cref="ProjectModelGraph" /> or
+        ///     Switches the <see cref="ModelValidatorViewModel" /> system to target the passed <see cref="ProjectModelData" /> or
         ///     stops the system if the argument is null
         /// </summary>
-        /// <param name="targetModelGraph"></param>
-        public void SwitchValidationTarget(ProjectModelGraph targetModelGraph)
+        /// <param name="targetProjectModelData"></param>
+        public void SwitchValidationTarget(ProjectModelData targetProjectModelData)
         {
-            if (targetModelGraph == null || ReferenceEquals(targetModelGraph, DummyProjectGraph.ProjectModelGraph))
+            if (targetProjectModelData == null || ReferenceEquals(targetProjectModelData, DummyProject.ProjectModelData))
             {
                 ChangeReportSubscription(null);
                 return;
             }
 
-            var validator = new ModelValidatorViewModel(targetModelGraph, ProjectControl);
+            var validator = new ModelValidatorViewModel(targetProjectModelData, ProjectControl);
             ChangeReportSubscription(validator.ReportSetChangedNotifications);
             ValidatorViewModel = validator;
             ValidatorViewModel.RunValidationCommand.Execute(null);
-            PushInfoMessage($"Attached a change detector to the [{targetModelGraph.Parent.ProjectName}] model tree.");
+            PushInfoMessage($"Attached a change detector to the [{targetProjectModelData.Parent.ProjectName}] model tree.");
         }
 
         /// <inheritdoc />

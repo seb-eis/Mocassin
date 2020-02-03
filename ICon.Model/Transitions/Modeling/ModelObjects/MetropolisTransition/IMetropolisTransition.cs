@@ -13,12 +13,12 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The first unit cell position that describes the first sub-lattice
         /// </summary>
-        IUnitCellPosition FirstUnitCellPosition { get; }
+        ICellReferencePosition FirstCellReferencePosition { get; }
 
         /// <summary>
         ///     The second unit cell position that describes the second sub-lattice
         /// </summary>
-        IUnitCellPosition SecondUnitCellPosition { get; }
+        ICellReferencePosition SecondCellReferencePosition { get; }
 
         /// <summary>
         ///     The affiliated abstract transition describing the transition process

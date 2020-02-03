@@ -30,7 +30,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ParameterControlViewModel.ChangeContentSource(contentSource);
             PositionControlViewModel.ChangeContentSource(contentSource);

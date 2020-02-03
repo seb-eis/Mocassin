@@ -29,9 +29,9 @@ namespace Mocassin.Model.Lattices
         private IBuildingBlock DefaultBlock { get; }
 
         /// <summary>
-        ///     List that maps the corresponding <see cref="IUnitCellPosition"/> to the linear position index
+        ///     List that maps the corresponding <see cref="ICellReferencePosition"/> to the linear position index
         /// </summary>
-        private IReadOnlyList<IUnitCellPosition> PositionIndexToCellPositionList { get; }
+        private IReadOnlyList<ICellReferencePosition> PositionIndexToCellPositionList { get; }
 
         /// <summary>
         ///     Vector encoder for supercellWrapper
@@ -41,7 +41,7 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         ///     List of dopings
         /// </summary>
-        private ReadOnlyListAdapter<IDoping> Dopings { get; }
+        private ListReadOnlyWrapper<IDoping> Dopings { get; }
 
         /// <summary>
         ///     Doping tolerance for automated calculation of counter dopant
@@ -90,7 +90,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="latticeSize"></param>
         /// <returns></returns>
         private LatticeEntry[,,][] GenerateDefaultLattice(IBuildingBlock buildingBlock,
-            IReadOnlyList<IUnitCellPosition> sublatticeIDs, DataIntVector3D latticeSize)
+            IReadOnlyList<ICellReferencePosition> sublatticeIDs, DataIntVector3D latticeSize)
         {
             var workLattice = new LatticeEntry[latticeSize.A, latticeSize.B, latticeSize.C][];
 
@@ -105,7 +105,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="buildingBlock"></param>
         /// <param name="sublatticeIDs"></param>
         /// <returns></returns>
-        private LatticeEntry[] CreateWorkCell(IBuildingBlock buildingBlock, IReadOnlyList<IUnitCellPosition> sublatticeIDs)
+        private LatticeEntry[] CreateWorkCell(IBuildingBlock buildingBlock, IReadOnlyList<ICellReferencePosition> sublatticeIDs)
         {
             if (buildingBlock.CellEntries.Count != sublatticeIDs.Count)
                 throw new ArgumentException("Building block does not match sub lattice indexing", nameof(sublatticeIDs));

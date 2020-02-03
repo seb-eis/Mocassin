@@ -373,6 +373,7 @@ namespace Mocassin.Model.Basic
                 }
                 catch (Exception exception)
                 {
+                    Console.WriteLine(exception);
                     operationResult.AddException(exception);
                 }
 
@@ -407,6 +408,7 @@ namespace Mocassin.Model.Basic
                 }
                 catch (Exception exception)
                 {
+                    Console.WriteLine(exception);
                     operationResult.AddException(exception);
                 }
 
@@ -798,6 +800,7 @@ namespace Mocassin.Model.Basic
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 message = e.Message;
                 modelObject = null;
                 return false;
@@ -834,6 +837,7 @@ namespace Mocassin.Model.Basic
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 message = e.Message;
                 modelObject = null;
                 return false;

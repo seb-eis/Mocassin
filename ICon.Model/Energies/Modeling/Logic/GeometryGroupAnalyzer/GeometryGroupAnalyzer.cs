@@ -28,7 +28,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The unit cell provider that supplies the information about the super-cell the group is located in
         /// </summary>
-        public IUnitCellProvider<IUnitCellPosition> UnitCellProvider { get; }
+        public IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
 
         /// <summary>
         ///     The space group service that supplies the symmetry information about the unit cell
@@ -41,7 +41,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="unitCellProvider"></param>
         /// <param name="spaceGroupService"></param>
-        public GeometryGroupAnalyzer(IUnitCellProvider<IUnitCellPosition> unitCellProvider, ISpaceGroupService spaceGroupService)
+        public GeometryGroupAnalyzer(IUnitCellProvider<ICellReferencePosition> unitCellProvider, ISpaceGroupService spaceGroupService)
         {
             UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
@@ -56,12 +56,12 @@ namespace Mocassin.Model.Energies
         public ExtendedPositionGroup CreateExtendedPositionGroup(IGroupInteraction groupInteraction)
         {
             var extGroup = new ExtendedPositionGroup
-                {GroupInteraction = groupInteraction, CenterPosition = groupInteraction.CenterUnitCellPosition};
+                {GroupInteraction = groupInteraction, CenterPosition = groupInteraction.CenterCellReferencePosition};
 
             if (groupInteraction.IsDeprecated)
                 return extGroup;
 
-            extGroup.SurroundingUnitCellPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
+            extGroup.SurroundingCellReferencePositions = GetGroupCellReferencePositions(groupInteraction).ToList();
             extGroup.PointOperationGroup =
                 SpaceGroupService.GetPointOperationGroup(extGroup.CenterPosition.Vector, groupInteraction.GetBaseGeometry());
 
@@ -96,9 +96,9 @@ namespace Mocassin.Model.Energies
         public IEnumerable<SymmetricParticlePair> GetAllGroupPairs(IGroupInteraction group)
         {
             var particles =
-                new HashSet<IParticle>(GetGroupUnitCellPositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
+                new HashSet<IParticle>(GetGroupCellReferencePositions(group).SelectMany(value => value.OccupationSet.GetParticles()));
             var permutationSource =
-                new PermutationSlotMachine<IParticle>(group.CenterUnitCellPosition.OccupationSet.GetParticles(), particles);
+                new PermutationSlotMachine<IParticle>(group.CenterCellReferencePosition.OccupationSet.GetParticles(), particles);
             return new HashSet<SymmetricParticlePair>(permutationSource.Select(perm => new SymmetricParticlePair
                 {Particle0 = perm[0], Particle1 = perm[1]})).AsEnumerable();
         }
@@ -108,7 +108,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="groupInteraction"></param>
         /// <returns></returns>
-        public IEnumerable<IUnitCellPosition> GetGroupUnitCellPositions(IGroupInteraction groupInteraction)
+        public IEnumerable<ICellReferencePosition> GetGroupCellReferencePositions(IGroupInteraction groupInteraction)
         {
             return groupInteraction.GetBaseGeometry().Select(vector => UnitCellProvider.GetEntryValueAt(vector));
         }
@@ -121,17 +121,17 @@ namespace Mocassin.Model.Energies
         /// <returns></returns>
         public GroupGeometryValidity CheckGroupGeometryValidity(IGroupInteraction groupInteraction, IEnumerable<IInteractionFilter> filters)
         {         
-            var partnerPositions = GetGroupUnitCellPositions(groupInteraction).ToList();
+            var partnerPositions = GetGroupCellReferencePositions(groupInteraction).ToList();
             if (partnerPositions.Any(x => x == null)) return GroupGeometryValidity.ContainsNonExistentPositions;
             if (partnerPositions.Any(x => !x.IsValidAndStable())) return GroupGeometryValidity.ContainsUnstablePositions;
 
             var distances = groupInteraction.GetBaseGeometry()
-                .Select(vector => vector - groupInteraction.CenterUnitCellPosition.Vector)
+                .Select(vector => vector - groupInteraction.CenterCellReferencePosition.Vector)
                 .Select(x => UnitCellProvider.VectorEncoder.Transformer.ToCartesian(x).GetLength())
                 .ToList();
 
             return filters.Any(x =>
-                distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterUnitCellPosition, partnerPositions[i])).Any())
+                distances.Where((t, i) => x.IsApplicable(t, groupInteraction.CenterCellReferencePosition, partnerPositions[i])).Any())
                 ? GroupGeometryValidity.ContainsFilteredPositions
                 : GroupGeometryValidity.IsValid;
         }
@@ -159,7 +159,7 @@ namespace Mocassin.Model.Energies
         /// <param name="centerPosition"></param>
         /// <returns></returns>
         protected Dictionary<IParticle, Dictionary<OccupationState, double>> MakeFullEnergyDictionary(
-            IEnumerable<OccupationState> occStates, IUnitCellPosition centerPosition)
+            IEnumerable<OccupationState> occStates, ICellReferencePosition centerPosition)
         {
             if (!(occStates is ICollection<OccupationState> occStateCollection))
                 occStateCollection = occStates.ToList();

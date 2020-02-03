@@ -17,32 +17,32 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
     /// </summary>
     public class ProjectGraphBrowserViewModel : PrimaryControlViewModel
     {
-        private MocassinProjectGraph selectedProject;
-        private ObservableCollection<MocassinProjectGraph> projectGraphs;
+        private MocassinProject selectedProject;
+        private ObservableCollection<MocassinProject> projectGraphs;
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to remove the currently selected <see cref="MocassinProjectGraph"/>
+        ///     Get a <see cref="RelayCommand"/> to remove the currently selected <see cref="MocassinProject"/>
         /// </summary>
         public RelayCommand DeleteSelectedProjectCommand { get; }
 
         /// <summary>
-        ///     Get a <see cref="RelayCommand"/> to duplicate the selected <see cref="MocassinProjectGraph"/>
+        ///     Get a <see cref="RelayCommand"/> to duplicate the selected <see cref="MocassinProject"/>
         /// </summary>
         public RelayCommand DuplicateSelectedProjectCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollection{T}" /> of <see cref="MocassinProjectGraph" /> for the browser
+        ///     Get the <see cref="ObservableCollection{T}" /> of <see cref="MocassinProject" /> for the browser
         /// </summary>
-        public ObservableCollection<MocassinProjectGraph> ProjectGraphs
+        public ObservableCollection<MocassinProject> ProjectGraphs
         {
             get => projectGraphs;
             private set => SetProperty(ref projectGraphs, value);
         }
 
         /// <summary>
-        ///     Get or set the selected <see cref="MocassinProjectGraph" />
+        ///     Get or set the selected <see cref="MocassinProject" />
         /// </summary>
-        public MocassinProjectGraph SelectedProject
+        public MocassinProject SelectedProject
         {
             get => selectedProject;
             set => SetProperty(ref selectedProject, value);
@@ -67,7 +67,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
         ///     Deletes a project from the project library with a confirmation request
         /// </summary>
         /// <param name="project"></param>
-        protected void DeleteProjectWithConfirmation(MocassinProjectGraph project)
+        protected void DeleteProjectWithConfirmation(MocassinProject project)
         {
             if (project == null) throw new ArgumentNullException(nameof(project));
             const string caption = "Confirmation - Delete project!";
@@ -81,10 +81,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
         }
 
         /// <summary>
-        ///     Creates a deep copy of the provided <see cref="MocassinProjectGraph"/> and adds it to the project collection
+        ///     Creates a deep copy of the provided <see cref="MocassinProject"/> and adds it to the project collection
         /// </summary>
         /// <param name="project"></param>
-        protected void DuplicateProject(MocassinProjectGraph project)
+        protected void DuplicateProject(MocassinProject project)
         {
             if (project == null) throw new ArgumentNullException(nameof(project));
 
@@ -93,21 +93,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.GraphBrowser
             var result = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Cancel) return;
 
-            var projectCopy = (MocassinProjectGraph) project.DeepCopy();
+            var projectCopy = (MocassinProject) project.DeepCopy();
             projectCopy.ProjectName = $"{projectCopy.ProjectName}(copy)";
             projectCopy.ProjectGuid = Guid.NewGuid().ToString();
-            projectCopy.ProjectModelGraph.Parent = projectCopy;
+            projectCopy.ProjectModelData.Parent = projectCopy;
 
             if (result == MessageBoxResult.Yes)
             {
-                projectCopy.ProjectCustomizationGraphs.Clear();
-                projectCopy.ProjectJobTranslationGraphs.Clear();
-                projectCopy.ProjectBuildGraphs.Clear();
+                projectCopy.CustomizationTemplates.Clear();
+                projectCopy.JobSetTemplates.Clear();
+                projectCopy.SimulationDbBuildTemplates.Clear();
             }
             else
             {
-                foreach (var item in projectCopy.ProjectCustomizationGraphs.Cast<MocassinProjectChildEntity<MocassinProjectGraph>>()
-                    .Concat(projectCopy.ProjectJobTranslationGraphs).Concat(projectCopy.ProjectBuildGraphs)) item.Parent = projectCopy;
+                foreach (var item in projectCopy.CustomizationTemplates.Cast<ProjectChildEntity<MocassinProject>>()
+                    .Concat(projectCopy.JobSetTemplates).Concat(projectCopy.SimulationDbBuildTemplates)) item.Parent = projectCopy;
             }
 
             ExecuteOnAppThread(() => ProjectGraphs.Add(projectCopy));

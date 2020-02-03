@@ -15,12 +15,12 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         [DataMember]
         [UseTrackedReferences]
-        public IUnitCellPosition FirstUnitCellPosition { get; set; }
+        public ICellReferencePosition FirstCellReferencePosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
         [UseTrackedReferences]
-        public IUnitCellPosition SecondUnitCellPosition { get; set; }
+        public ICellReferencePosition SecondCellReferencePosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
@@ -57,13 +57,13 @@ namespace Mocassin.Model.Transitions
         public bool Equals(IMetropolisTransition other)
         {
             if (other != null 
-                && FirstUnitCellPosition.Index == other.FirstUnitCellPosition.Index 
-                && SecondUnitCellPosition.Index == other.SecondUnitCellPosition.Index)
+                && FirstCellReferencePosition.Index == other.FirstCellReferencePosition.Index 
+                && SecondCellReferencePosition.Index == other.SecondCellReferencePosition.Index)
                 return AbstractTransition == other.AbstractTransition;
 
             return other != null 
-                   && FirstUnitCellPosition.Index == other.SecondUnitCellPosition.Index 
-                   && SecondUnitCellPosition.Index == other.FirstUnitCellPosition.Index 
+                   && FirstCellReferencePosition.Index == other.SecondCellReferencePosition.Index 
+                   && SecondCellReferencePosition.Index == other.FirstCellReferencePosition.Index 
                    && AbstractTransition == other.AbstractTransition;
         }
 
@@ -77,8 +77,8 @@ namespace Mocassin.Model.Transitions
             if (!(CastIfNotDeprecated<IMetropolisTransition>(obj) is IMetropolisTransition transition)) 
                 return null;
 
-            FirstUnitCellPosition = transition.FirstUnitCellPosition;
-            SecondUnitCellPosition = transition.SecondUnitCellPosition;
+            FirstCellReferencePosition = transition.FirstCellReferencePosition;
+            SecondCellReferencePosition = transition.SecondCellReferencePosition;
             AbstractTransition = transition.AbstractTransition;
             return this;
 
@@ -87,7 +87,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public bool MappingsContainInversion()
         {
-            return FirstUnitCellPosition == SecondUnitCellPosition;
+            return FirstCellReferencePosition == SecondCellReferencePosition;
         }
     }
 }

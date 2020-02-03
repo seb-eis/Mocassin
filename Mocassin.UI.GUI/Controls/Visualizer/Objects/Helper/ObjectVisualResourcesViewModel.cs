@@ -8,7 +8,7 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
 {
     /// <summary>
-    ///     A <see cref="ViewModelBase" /> for managing display data resources on <see cref="ExtensibleProjectObjectGraph" />
+    ///     A <see cref="ViewModelBase" /> for managing display data resources on <see cref="ExtensibleProjectDataObject" />
     ///     instances
     /// </summary>
     public class ObjectVisualResourcesViewModel : ViewModelBase, IObjectSceneConfig
@@ -20,9 +20,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         private static string MaterialResourceKey => Resources.ResourceKey_ModelObject_RenderMaterial;
 
         /// <summary>
-        ///     Get the <see cref="ExtensibleProjectObjectGraph" /> that the formatting is valid for
+        ///     Get the <see cref="ExtensibleProjectDataObject" /> that the formatting is valid for
         /// </summary>
-        public ExtensibleProjectObjectGraph ObjectGraph { get; }
+        public ExtensibleProjectDataObject DataObject { get; }
 
         /// <summary>
         ///     Get the <see cref="VisualObjectCategory" /> of the view model
@@ -34,12 +34,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public Color Color
         {
-            get => ObjectGraph.Resources.TryGetResource(ColorResourceKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color)
+            get => DataObject.Resources.TryGetResource(ColorResourceKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color)
                 ? color
                 : GetRenderDefaults(VisualCategory).Color;
             set
             {
-                ObjectGraph.Resources.SetResource(ColorResourceKey, value, x => x.ToRgbaHex());
+                DataObject.Resources.SetResource(ColorResourceKey, value, x => x.ToRgbaHex());
                 OnPropertyChanged();
             }
         }
@@ -49,10 +49,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public string MaterialName
         {
-            get => ObjectGraph.Resources.TryGetResource(MaterialResourceKey, out string value) ? value : null;
+            get => DataObject.Resources.TryGetResource(MaterialResourceKey, out string value) ? value : null;
             set
             {
-                ObjectGraph.Resources.SetResource(MaterialResourceKey, value);
+                DataObject.Resources.SetResource(MaterialResourceKey, value);
                 OnPropertyChanged();
             }
         }
@@ -62,10 +62,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public double Scaling
         {
-            get => ObjectGraph.Resources.TryGetResource(ScalingResourceKey, out double x) ? x : GetRenderDefaults(VisualCategory).Scaling;
+            get => DataObject.Resources.TryGetResource(ScalingResourceKey, out double x) ? x : GetRenderDefaults(VisualCategory).Scaling;
             set
             {
-                ObjectGraph.Resources.SetResource(ScalingResourceKey, value);
+                DataObject.Resources.SetResource(ScalingResourceKey, value);
                 OnPropertyChanged();
             }
         }
@@ -75,12 +75,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public double Quality
         {
-            get => ObjectGraph.Resources.TryGetResource(MeshQualityResourceKey, out double x) ? x : GetRenderDefaults(VisualCategory).MeshQuality;
+            get => DataObject.Resources.TryGetResource(MeshQualityResourceKey, out double x) ? x : GetRenderDefaults(VisualCategory).MeshQuality;
             set
             {
                 var tmp = ValueConstraint<double>.EnsureLimit(value, Settings.Default.Limit_Render_MeshQuality_Lower,
                     Settings.Default.Limit_Render_MeshQuality_Upper);
-                ObjectGraph.Resources.SetResource(MeshQualityResourceKey, tmp);
+                DataObject.Resources.SetResource(MeshQualityResourceKey, tmp);
                 OnPropertyChanged();
             }
         }
@@ -90,10 +90,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// </summary>
         public bool IsVisible
         {
-            get => ObjectGraph.Resources.TryGetResource(VisibilityResourceKey, out bool value) && value;
+            get => DataObject.Resources.TryGetResource(VisibilityResourceKey, out bool value) && value;
             set
             {
-                ObjectGraph.Resources.SetResource(VisibilityResourceKey, value);
+                DataObject.Resources.SetResource(VisibilityResourceKey, value);
                 OnPropertyChanged();
             }
         }
@@ -101,20 +101,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         /// <inheritdoc />
         public bool IsApplicable(object obj)
         {
-            if (obj == null || !(obj is ExtensibleProjectObjectGraph objectGraph)) return false;
-            return ReferenceEquals(ObjectGraph, objectGraph);
+            if (obj == null || !(obj is ExtensibleProjectDataObject objectGraph)) return false;
+            return ReferenceEquals(DataObject, objectGraph);
         }
 
         /// <summary>
         ///     Creates new <see cref="ObjectVisualResourcesViewModel" /> from the provided
-        ///     <see cref="ExtensibleProjectObjectGraph" />
+        ///     <see cref="ExtensibleProjectDataObject" />
         ///     and <see cref="VisualObjectCategory" />
         /// </summary>
-        /// <param name="objectGraph"></param>
+        /// <param name="dataObject"></param>
         /// <param name="visualCategory"></param>
-        public ObjectVisualResourcesViewModel(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
+        public ObjectVisualResourcesViewModel(ExtensibleProjectDataObject dataObject, VisualObjectCategory visualCategory)
         {
-            ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
+            DataObject = dataObject ?? throw new ArgumentNullException(nameof(dataObject));
             VisualCategory = visualCategory;
         }
 
@@ -141,7 +141,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Objects
         public bool Equals(IObjectSceneConfig other)
         {
             if (other == null) return false;
-            return ReferenceEquals(this, other) || ReferenceEquals(ObjectGraph, (other as ObjectVisualResourcesViewModel)?.ObjectGraph);
+            return ReferenceEquals(this, other) || ReferenceEquals(DataObject, (other as ObjectVisualResourcesViewModel)?.DataObject);
         }
     }
 }

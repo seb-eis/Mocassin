@@ -20,7 +20,7 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         /// Sublattice information on cell entry position
         /// </summary>
-        public IUnitCellPosition CellPosition { get; set; }
+        public ICellReferencePosition CellPosition { get; set; }
 
         /// <summary>
         /// BuildingBlock information on cell entry position

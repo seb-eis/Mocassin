@@ -10,28 +10,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
 {
     /// <summary>
     ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
-    ///     <see cref="KineticTransitionGraph" /> to <see cref="KineticSimulationGraph" /> host instances
+    ///     <see cref="KineticTransitionData" /> to <see cref="KineticSimulationData" /> host instances
     /// </summary>
     public sealed class KineticSimulationTransitionSelectionViewModel :
-        HostGraphModelObjectSelectionViewModel<KineticTransition, KineticSimulationGraph>
+        HostGraphModelObjectSelectionViewModel<KineticTransition, KineticSimulationData>
     {
         /// <inheritdoc />
-        public KineticSimulationTransitionSelectionViewModel(KineticSimulationGraph hostObject)
+        public KineticSimulationTransitionSelectionViewModel(KineticSimulationData hostObject)
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<KineticTransitionGraph>();
+            HandleDropAddCommand = GetDropAddObjectCommand<KineticTransitionData>();
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
         {
-            return projectGraph?.ProjectModelGraph?.TransitionModelGraph?.KineticTransitions;
+            return project?.ProjectModelData?.TransitionModelData?.KineticTransitions;
         }
 
         /// <inheritdoc />
-        protected override ICollection<ModelObjectReferenceGraph<KineticTransition>> GetTargetCollection(
-            KineticSimulationGraph sourceObject)
+        protected override ICollection<ModelObjectReference<KineticTransition>> GetTargetCollection(
+            KineticSimulationData sourceObject)
         {
             return sourceObject?.Transitions;
         }

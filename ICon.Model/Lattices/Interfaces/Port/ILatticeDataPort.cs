@@ -19,19 +19,19 @@ namespace Mocassin.Model.Lattices
         /// Get read only list of used dopings
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IDoping> GetDopings();
+        ListReadOnlyWrapper<IDoping> GetDopings();
 
         /// <summary>
         /// Get read only list of DopingCombinations (dopant, doped element, unit cell entry)
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IDopingCombination> GetDopingCombinations();
+        ListReadOnlyWrapper<IDopingCombination> GetDopingCombinations();
 
         /// <summary>
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IBuildingBlock> GetBuildingBlocks();
+        ListReadOnlyWrapper<IBuildingBlock> GetBuildingBlocks();
 
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using Mocassin.Framework.Extensions;
 using Mocassin.UI.GUI.Base.DataContext;
 using Mocassin.UI.GUI.Base.Objects;
 using Mocassin.UI.GUI.Base.ViewModels.Content;
@@ -36,7 +38,8 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         {
             var container = CreateVvmContainer();
             var viewModel = new ContentWindowViewModel(container.View, container.ViewModel) {WindowDescription = BuildWindowDescription()};
-            viewModel.OnDisposeAction = RelayWindowDescriptionChanges(viewModel);
+            viewModel.DisposeActions.Add(RelayWindowDescriptionChanges(viewModel));
+            viewModel.DisposeActions.AddRange(GetAdditionalDisposeActions(container));
             var window = new ContentWindow {DataContext = viewModel};
             window.Show();
         }
@@ -75,5 +78,13 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
         /// </summary>
         /// <returns></returns>
         protected abstract VvmContainer CreateVvmContainer();
+
+        /// <summary>
+        ///     Implementation dependent behavior that provides a set of <see cref="Action" /> delegates that perform cleanup on
+        ///     <see cref="VvmContainer" /> components not covered by the basic dispose interfaces
+        /// </summary>
+        /// <param name="vvmContainer"></param>
+        /// <returns></returns>
+        protected abstract IEnumerable<Action> GetAdditionalDisposeActions(VvmContainer vvmContainer);
     }
 }

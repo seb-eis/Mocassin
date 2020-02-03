@@ -39,18 +39,16 @@
                             Binding="{Binding EndRadius, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Center Pos."
+          Header="Center Reference Pos."
           ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.CenterPositionOptions}"
           DisplayMemberPath="Name"
-          SelectedValuePath="Key"
-          SelectedValueBinding="{Binding CenterUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}" />
+          SelectedItemBinding="{Binding CenterCellReferencePosition}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Partner Pos."
+          Header="Partner Reference Pos."
           ItemsSource="{Binding ElementName=FilterDataGrid, Path=DataContext.PartnerPositionOptions}"
           DisplayMemberPath="Name"
-          SelectedValuePath="Key"
-          SelectedValueBinding="{Binding PartnerUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}" />
+          SelectedItemBinding="{Binding PartnerCellReferencePosition}" />
 
       </DataGrid.Columns>
     </DataGrid>

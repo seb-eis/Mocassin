@@ -11,43 +11,43 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to duplicate a <see cref="ProjectJobTranslationGraph" /> and add the copy to the selected
+    ///     The <see cref="AsyncProjectControlCommand" /> to duplicate a <see cref="ProjectJobSetTemplate" /> and add the copy to the selected
     ///     project
     /// </summary>
-    public class DuplicateJobTranslationCommand : AsyncProjectControlCommand<ProjectJobTranslationGraph>
+    public class DuplicateJobTranslationCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
     {
         /// <summary>
         ///     Get an <see cref="Action"/> to be executed on success
         /// </summary>
-        private Action<ProjectJobTranslationGraph> OnSuccessAction { get; }
+        private Action<ProjectJobSetTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public DuplicateJobTranslationCommand(IMocassinProjectControl projectControl, Action<ProjectJobTranslationGraph> onSuccessAction = null)
+        public DuplicateJobTranslationCommand(IMocassinProjectControl projectControl, Action<ProjectJobSetTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
-        public override Task ExecuteAsync(ProjectJobTranslationGraph parameter)
+        public override Task ExecuteAsync(ProjectJobSetTemplate parameter)
         {
             return Task.Run(() => AddDuplicate(parameter));
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectJobTranslationGraph parameter)
+        public override bool CanExecuteInternal(ProjectJobSetTemplate parameter)
         {
             return parameter?.Parent != null && base.CanExecuteInternal(parameter);
         }
 
         /// <summary>
-        ///     Creates and adds  duplicate of a <see cref="ProjectJobTranslationGraph" /> to its parent project
+        ///     Creates and adds  duplicate of a <see cref="ProjectJobSetTemplate" /> to its parent project
         /// </summary>
         /// <param name="source"></param>
-        private void AddDuplicate(ProjectJobTranslationGraph source)
+        private void AddDuplicate(ProjectJobSetTemplate source)
         {
             var duplicate = source.Duplicate();
-            ProjectControl.ExecuteOnAppThread(() => source.Parent.ProjectJobTranslationGraphs.Add(duplicate));
+            ProjectControl.ExecuteOnAppThread(() => source.Parent.JobSetTemplates.Add(duplicate));
             OnSuccessAction?.Invoke(duplicate);
         }
     }

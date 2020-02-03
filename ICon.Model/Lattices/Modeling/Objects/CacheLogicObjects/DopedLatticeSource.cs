@@ -21,14 +21,14 @@ namespace Mocassin.Model.Lattices
         private IBuildingBlock BaseBuildingBlock { get; }
 
         /// <summary>
-        ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="IUnitCellPosition" /> that supplies the cell information
+        ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell information
         /// </summary>
-        private IUnitCellProvider<IUnitCellPosition> UnitCellProvider { get; }
+        private IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
 
         /// <summary>
-        ///     Get the <see cref="IUnitCell{T1}" /> of <see cref="IUnitCellPosition" /> that supplies the cell information
+        ///     Get the <see cref="IUnitCell{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell information
         /// </summary>
-        private IUnitCell<IUnitCellPosition> UnitCell { get; }
+        private IUnitCell<ICellReferencePosition> UnitCell { get; }
 
         /// <summary>
         ///     Get a list of integer tuples that contains all positions index and affiliated wyckoff index values for unit cell
@@ -187,14 +187,14 @@ namespace Mocassin.Model.Lattices
         public int[,] CreateBasePopulationTable(int a, int b, int c)
         {
             var particleCount = ModelProject.DataTracker.ObjectCount<IParticle>();
-            var wyckoffCount = ModelProject.DataTracker.ObjectCount<IUnitCellPosition>();
+            var wyckoffCount = ModelProject.DataTracker.ObjectCount<ICellReferencePosition>();
             var result = new int[wyckoffCount, particleCount];
 
             var cellCount = a * b * c;
             for (var i = 0; i < BaseBuildingBlock.CellEntries.Count; i++)
             {
                 var wyckoff = UnitCell[i].Entry;
-                if (wyckoff.Status == PositionStatus.Unstable) continue;
+                if (wyckoff.Stability == PositionStability.Unstable) continue;
                 result[wyckoff.Index, BaseBuildingBlock.CellEntries[i].Index] += cellCount;
             }
 
@@ -215,7 +215,7 @@ namespace Mocassin.Model.Lattices
             var result = CreateBasePopulationTable(a, b, c);
             foreach (var item in CreateOrderedDopingSequence(dopingDictionary))
             {
-                var originalCount = result[item.Key.PrimaryDoping.UnitCellPosition.Index, item.Key.PrimaryDoping.Dopable.Index];
+                var originalCount = result[item.Key.PrimaryDoping.CellReferencePosition.Index, item.Key.PrimaryDoping.Dopable.Index];
                 var populationCounts = DopingToPopulationCount(item, originalCount);
                 ApplyPopulationChangesToTable(result, item.Key, populationCounts);
             }
@@ -231,12 +231,12 @@ namespace Mocassin.Model.Lattices
         /// <param name="populations"></param>
         public void ApplyPopulationChangesToTable(int[,] populationTable, IDoping doping, in (int Primary, int Secondary) populations)
         {
-            populationTable[doping.PrimaryDoping.UnitCellPosition.Index, doping.PrimaryDoping.Dopable.Index] -= populations.Primary;
-            populationTable[doping.PrimaryDoping.UnitCellPosition.Index, doping.PrimaryDoping.Dopant.Index] += populations.Primary;
+            populationTable[doping.PrimaryDoping.CellReferencePosition.Index, doping.PrimaryDoping.Dopable.Index] -= populations.Primary;
+            populationTable[doping.PrimaryDoping.CellReferencePosition.Index, doping.PrimaryDoping.Dopant.Index] += populations.Primary;
 
             if (populations.Secondary == 0) return;
-            populationTable[doping.CounterDoping.UnitCellPosition.Index, doping.CounterDoping.Dopable.Index] -= populations.Secondary;
-            populationTable[doping.CounterDoping.UnitCellPosition.Index, doping.CounterDoping.Dopant.Index] += populations.Secondary;
+            populationTable[doping.CounterDoping.CellReferencePosition.Index, doping.CounterDoping.Dopable.Index] -= populations.Secondary;
+            populationTable[doping.CounterDoping.CellReferencePosition.Index, doping.CounterDoping.Dopant.Index] += populations.Secondary;
         }
 
         /// <summary>

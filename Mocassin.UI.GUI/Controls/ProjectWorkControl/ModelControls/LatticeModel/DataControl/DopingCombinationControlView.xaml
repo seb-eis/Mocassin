@@ -34,7 +34,7 @@
 
         <comboBox:BindableDataGridComboBoxColumn Header="Cell Position"
                                                  ItemsSource="{Binding ElementName=DopingCombinationDataGrid, Path=DataContext.SelectablePositions}"
-                                                 SelectedItemBinding="{Binding UnitCellPosition}"
+                                                 SelectedItemBinding="{Binding CellReferencePosition}"
                                                  DisplayMemberPath="Name"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="New Particle"

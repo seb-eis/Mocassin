@@ -69,13 +69,13 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary()
+        public IDictionary<ICellReferencePosition, HashSet<IKineticTransition>> GetKineticTransitionPositionDictionary()
         {
             return GetResultFromCache(CreateKineticTransitionPositionDictionary);
         }
 
         /// <inheritdoc />
-        public IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary()
+        public IDictionary<ICellReferencePosition, HashSet<IMetropolisTransition>> GetMetropolisTransitionPositionDictionary()
         {
             return GetResultFromCache(CreateMetropolisTransitionPositionDictionary);
         }
@@ -103,13 +103,13 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IDictionary<IUnitCellPosition, HashSet<IMetropolisTransition>> CreateMetropolisTransitionPositionDictionary()
+        protected IDictionary<ICellReferencePosition, HashSet<IMetropolisTransition>> CreateMetropolisTransitionPositionDictionary()
         {
             var structureManager = ModelProject.GetManager<IStructureManager>();
             var transitionManager = ModelProject.GetManager<ITransitionManager>();
-            var result = new Dictionary<IUnitCellPosition, HashSet<IMetropolisTransition>>();
+            var result = new Dictionary<ICellReferencePosition, HashSet<IMetropolisTransition>>();
 
-            foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            foreach (var position in structureManager.QueryPort.Query(port => port.GetCellReferencePositions()))
                 result.Add(position, new HashSet<IMetropolisTransition>());
 
             foreach (var transition in transitionManager.QueryPort.Query(port => port.GetMetropolisTransitions()))
@@ -117,8 +117,8 @@ namespace Mocassin.Model.Transitions
                 if (transition.IsDeprecated)
                     continue;
 
-                result[transition.FirstUnitCellPosition].Add(transition);
-                result[transition.SecondUnitCellPosition].Add(transition);
+                result[transition.FirstCellReferencePosition].Add(transition);
+                result[transition.SecondCellReferencePosition].Add(transition);
             }
 
             return result;
@@ -129,12 +129,12 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IDictionary<IUnitCellPosition, HashSet<IKineticTransition>> CreateKineticTransitionPositionDictionary()
+        protected IDictionary<ICellReferencePosition, HashSet<IKineticTransition>> CreateKineticTransitionPositionDictionary()
         {
             var structureManager = ModelProject.GetManager<IStructureManager>();
-            var result = new Dictionary<IUnitCellPosition, HashSet<IKineticTransition>>();
+            var result = new Dictionary<ICellReferencePosition, HashSet<IKineticTransition>>();
 
-            foreach (var position in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            foreach (var position in structureManager.QueryPort.Query(port => port.GetCellReferencePositions()))
                 result.Add(position, new HashSet<IKineticTransition>());
 
             foreach (var mappingList in GetAllKineticMappingLists())
@@ -143,8 +143,8 @@ namespace Mocassin.Model.Transitions
                     continue;
 
                 var mapping = mappingList[0];
-                result[mapping.StartUnitCellPosition].Add(mapping.Transition);
-                result[mapping.EndUnitCellPosition].Add(mapping.Transition);
+                result[mapping.StartCellReferencePosition].Add(mapping.Transition);
+                result[mapping.EndCellReferencePosition].Add(mapping.Transition);
             }
 
             return result;

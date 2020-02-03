@@ -43,10 +43,10 @@ namespace Mocassin.UI.GUI.Base.DataContext
         IModelProject ServiceModelProject { get; }
 
         /// <summary>
-        ///     Get an <see cref="ObservableCollection{T}" /> of <see cref="MocassinProjectGraph" /> that stays in sync with the
+        ///     Get an <see cref="ObservableCollection{T}" /> of <see cref="MocassinProject" /> that stays in sync with the
         ///     loaded <see cref="IMocassinProjectLibrary" />
         /// </summary>
-        ObservableCollection<MocassinProjectGraph> ProjectGraphs { get; }
+        ObservableCollection<MocassinProject> ProjectGraphs { get; }
 
         /// <summary>
         ///     Get or set the main <see cref="PushMessageSystem" />

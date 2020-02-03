@@ -57,7 +57,7 @@
 
         <DataGridTemplateColumn Header="State Change Groups">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionGraph}">
+            <DataTemplate DataType="{x:Type transitionModel:AbstractTransitionData}">
               <gridControl:HostGraphModelObjectDropSelectionView>
                 <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
                   <MultiBinding Converter="{adapter:AbstractTransitionExchangeGroupSelectionVmConverter}">

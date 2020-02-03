@@ -10,25 +10,25 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectJobTranslationGraph" /> to the
+    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectJobSetTemplate" /> to the
     ///     selected
     ///     project
     /// </summary>
     public class AddNewJobTranslationCommand : AsyncProjectControlCommand
     {
         /// <summary>
-        ///     Get the getter delegate for the <see cref="MocassinProjectGraph" />
+        ///     Get the getter delegate for the <see cref="MocassinProject" />
         /// </summary>
-        private Func<MocassinProjectGraph> ProjectGetter { get; }
+        private Func<MocassinProject> ProjectGetter { get; }
 
         /// <summary>
         ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
-        private Action<ProjectJobTranslationGraph> OnSuccessAction { get; }
+        private Action<ProjectJobSetTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
-            Action<ProjectJobTranslationGraph> onSuccessAction = null)
+        public AddNewJobTranslationCommand(IMocassinProjectControl projectControl, Func<MocassinProject> projectGetter,
+            Action<ProjectJobSetTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
@@ -48,15 +48,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Tries to create and add a new <see cref="ProjectJobTranslationGraph" /> to the passed
-        ///     <see cref="MocassinProjectGraph" />
+        ///     Tries to create and add a new <see cref="ProjectJobSetTemplate" /> to the passed
+        ///     <see cref="MocassinProject" />
         /// </summary>
-        /// <param name="projectGraph"></param>
-        private void TryAddTranslation(MocassinProjectGraph projectGraph)
+        /// <param name="project"></param>
+        private void TryAddTranslation(MocassinProject project)
         {
-            if (projectGraph == null) return;
+            if (project == null) return;
 
-            using var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl);
+            using var validator = new ModelValidatorViewModel(project.ProjectModelData, ProjectControl);
             var status = validator.TryCreateCustomization(out var customization);
 
             if (status != ModelValidationStatus.NoErrorsDetected)
@@ -66,7 +66,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
             }
 
             var newItem = CreateJobTranslation();
-            ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectJobTranslationGraphs.Add(newItem));
+            ProjectControl.ExecuteOnAppThread(() => project.JobSetTemplates.Add(newItem));
             OnSuccessAction?.Invoke(newItem);
         }
 
@@ -83,13 +83,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ProjectJobTranslationGraph" /> that is linked to the <see cref="MocassinProjectGraph" />
+        ///     Creates a new <see cref="ProjectJobSetTemplate" /> that is linked to the <see cref="MocassinProject" />
         ///     supplied by the internal getter
         /// </summary>
         /// <returns></returns>
-        private ProjectJobTranslationGraph CreateJobTranslation()
+        private ProjectJobSetTemplate CreateJobTranslation()
         {
-            return ProjectJobTranslationGraph.Create(ProjectGetter.Invoke());
+            return ProjectJobSetTemplate.Create(ProjectGetter.Invoke());
         }
     }
 }

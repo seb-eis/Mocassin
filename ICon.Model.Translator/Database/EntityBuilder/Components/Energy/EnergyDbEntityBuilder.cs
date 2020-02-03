@@ -137,7 +137,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
 
             for (var positionId = 0; positionId < ucpList.Count; positionId++)
             {
-                foreach (var defect in defects.Where(x => x.UnitCellPosition.Index == ucpList[positionId].Index))
+                foreach (var defect in defects.Where(x => x.CellReferencePosition.Index == ucpList[positionId].Index))
                 {
                     array[positionId, defect.Particle.Index] = defect.Energy;
                 }

@@ -7,19 +7,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="KineticSimulationControlView" /> that controls
-    ///     <see cref="KineticSimulationGraph" /> instances
+    ///     <see cref="KineticSimulationData" /> instances
     /// </summary>
-    public class KineticSimulationControlViewModel : CollectionControlViewModel<KineticSimulationGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class KineticSimulationControlViewModel : CollectionControlViewModel<KineticSimulationData>,
+        IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.SimulationModelGraph?.KineticSimulations);
+            SetCollection(ContentSource?.ProjectModelData?.SimulationModelData?.KineticSimulations);
         }
     }
 }

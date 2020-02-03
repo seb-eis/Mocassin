@@ -17,18 +17,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
     public class StructureParameterControlViewModel : ProjectGraphControlViewModel
     {
         private static IList<ISpaceGroup> spaceGroups;
-        private StructureModelGraph modelGraph;
+        private StructureModelData structureModelData;
         private ISpaceGroup selectedSpaceGroup;
         private CrystalParameterSetter parameterSetter;
-        private StructureInfoGraph structureInfo;
+        private StructureInfoData structureInfo;
 
         /// <summary>
-        ///     Get or set the current <see cref="StructureModelGraph" />
+        ///     Get or set the current <see cref="StructureModelData" />
         /// </summary>
-        public StructureModelGraph ModelGraph
+        public StructureModelData StructureModelData
         {
-            get => modelGraph;
-            protected set => SetProperty(ref modelGraph, value);
+            get => structureModelData;
+            protected set => SetProperty(ref structureModelData, value);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
             set
             {
                 SetProperty(ref selectedSpaceGroup, value);
-                ModelGraph?.SpaceGroupInfo?.PopulateFrom(value?.GetGroupEntry());
+                StructureModelData?.SpaceGroupInfo?.PopulateFrom(value?.GetGroupEntry());
                 ParameterSetter = CreateParameterSetter(value);
                 SpaceGroupService.LoadGroup(value ?? SpaceGroups.First());
                 OnPropertyChanged(nameof(CurrentSymmetryOperations));
@@ -62,9 +62,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Get or set the <see cref="StructureInfoGraph" /> that controls misc information
+        ///     Get or set the <see cref="StructureInfoData" /> that controls misc information
         /// </summary>
-        public StructureInfoGraph StructureInfo
+        public StructureInfoData StructureInfo
         {
             get => structureInfo;
             protected set => SetProperty(ref structureInfo, value);
@@ -90,12 +90,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            ModelGraph = ContentSource?.ProjectModelGraph?.StructureModelGraph;
-            StructureInfo = ModelGraph?.StructureInfo;
-            SelectedSpaceGroup = FindSpaceGroup(ModelGraph?.SpaceGroupInfo?.GetSpaceGroupEntry());
+            StructureModelData = ContentSource?.ProjectModelData?.StructureModelData;
+            StructureInfo = StructureModelData?.StructureInfo;
+            SelectedSpaceGroup = FindSpaceGroup(StructureModelData?.SpaceGroupInfo?.GetSpaceGroupEntry());
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         }
 
         /// <summary>
-        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProjectGraph" /> using the
+        ///     Creates a <see cref="CrystalParameterSetter" /> for the current <see cref="MocassinProject" /> using the
         ///     provided <see cref="ISpaceGroup" />
         /// </summary>
         /// <param name="spaceGroup"></param>
@@ -123,10 +123,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public CrystalParameterSetter CreateParameterSetter(ISpaceGroup spaceGroup)
         {
             var crystalSystem = ProjectControl.ServiceModelProject.CrystalSystemService.GetSystem(spaceGroup);
-            var parameterGraph = ModelGraph?.CellParameters;
+            var parameterGraph = StructureModelData?.CellParameters;
             if (parameterGraph != null) return new CrystalParameterSetter(crystalSystem, parameterGraph);
 
-            parameterGraph = new CellParametersGraph();
+            parameterGraph = new CellParametersData();
             parameterGraph.PopulateFrom(crystalSystem.GetDefaultParameterSet());
             return new CrystalParameterSetter(crystalSystem, parameterGraph);
         }

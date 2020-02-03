@@ -63,5 +63,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl
             if (TabHostViewModel.ObservableItems.Count == 1) EnsureWelcomeTabIsVisible();
             if (TabHostViewModel.ObservableItems.Count == 2) EnsureWelcomeTabIsHidden();
         }
+
+        /// <inheritdoc />
+        public override void Dispose()
+        {
+            TabHostViewModel.DisposeAndClearItems();
+            base.Dispose();
+        }
     }
 }

@@ -11,42 +11,42 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
 {
     /// <summary>
     ///     A <see cref="AsyncProjectControlCommand" /> implementation that enables partial recycling of deprecated
-    ///     <see cref="ProjectCustomizationGraph" /> instances
+    ///     <see cref="ProjectCustomizationTemplate" /> instances
     /// </summary>
-    public class MigrateCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationGraph>
+    public class MigrateCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationTemplate>
     {
         /// <summary>
         ///     Get the <see cref="Action{T}"/> that is called on success
         /// </summary>
-        public Action<ProjectCustomizationGraph> OnSuccessAction { get; }
+        public Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public MigrateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationGraph> onSuccessAction =null)
+        public MigrateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction =null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
-        public override Task ExecuteAsync(ProjectCustomizationGraph parameter)
+        public override Task ExecuteAsync(ProjectCustomizationTemplate parameter)
         {
             return Task.Run(async () => await AddNewAndMigrateSource(parameter));
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectCustomizationGraph parameter)
+        public override bool CanExecuteInternal(ProjectCustomizationTemplate parameter)
         {
             return parameter?.Parent != null && base.CanExecuteInternal(parameter);
         }
 
         /// <summary>
-        ///     Creates a new <see cref="ProjectCustomizationGraph" />, adds it to its parent project and migrates matching data
+        ///     Creates a new <see cref="ProjectCustomizationTemplate" />, adds it to its parent project and migrates matching data
         ///     from the source
         /// </summary>
         /// <param name="source"></param>
-        private async Task AddNewAndMigrateSource(ProjectCustomizationGraph source)
+        private async Task AddNewAndMigrateSource(ProjectCustomizationTemplate source)
         {
-            ProjectCustomizationGraph target = null;
+            ProjectCustomizationTemplate target = null;
             var command = new AddNewCustomizationCommand(ProjectControl, () => source.Parent, x => target = x);
             await command.ExecuteAsync(null);
             Migrate(source, target);
@@ -54,12 +54,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Migrates the source <see cref="ProjectCustomizationGraph" /> to the target
+        ///     Migrates the source <see cref="ProjectCustomizationTemplate" /> to the target
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        private void Migrate(ProjectCustomizationGraph source, ProjectCustomizationGraph target)
+        private void Migrate(ProjectCustomizationTemplate source, ProjectCustomizationTemplate target)
         {
             target.Name = $"{source.Name} (Migrated)";
             var promptResult = GetRedundantReportUserPromptResult(source);
@@ -85,7 +85,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         ///     Prompt the user if redundant data should be reported and returns the result (Options: Yes, No)
         /// </summary>
         /// <returns></returns>
-        private MessageBoxResult GetRedundantReportUserPromptResult(ProjectCustomizationGraph source)
+        private MessageBoxResult GetRedundantReportUserPromptResult(ProjectCustomizationTemplate source)
         {
             var caption = $"Migrating - {source.Name}";
             const string message = "Should redundant data be migrated and included in the report?";

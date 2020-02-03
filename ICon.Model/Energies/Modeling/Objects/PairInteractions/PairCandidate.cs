@@ -11,12 +11,12 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The first unit cell position
         /// </summary>
-        public IUnitCellPosition Position0 { get; }
+        public ICellReferencePosition Position0 { get; }
 
         /// <summary>
         ///     The second unit cell position
         /// </summary>
-        public IUnitCellPosition Position1 { get; }
+        public ICellReferencePosition Position1 { get; }
 
         /// <summary>
         ///     The actual position vector of the second position
@@ -40,7 +40,7 @@ namespace Mocassin.Model.Energies
         /// <param name="position1"></param>
         /// <param name="positionVector"></param>
         /// <param name="distance"></param>
-        public PairCandidate(IUnitCellPosition position0, IUnitCellPosition position1, Fractional3D positionVector, double distance)
+        public PairCandidate(ICellReferencePosition position0, ICellReferencePosition position1, Fractional3D positionVector, double distance)
             : this()
         {
             Position0 = position0;
@@ -58,7 +58,7 @@ namespace Mocassin.Model.Energies
         /// <param name="positionVector"></param>
         /// <param name="distance"></param>
         /// <param name="index"></param>
-        public PairCandidate(IUnitCellPosition position0, IUnitCellPosition position1, Fractional3D positionVector, double distance,
+        public PairCandidate(ICellReferencePosition position0, ICellReferencePosition position1, Fractional3D positionVector, double distance,
             int index)
             : this()
         {

@@ -3,7 +3,7 @@
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuilding.DataControl.Objects
 {
     /// <summary>
-    ///     Contains required information for a local deploy of a <see cref="MocassinProjectBuildGraph" /> into a simulation
+    ///     Contains required information for a local deploy of a <see cref="SimulationDbBuildTemplate" /> into a simulation
     ///     database
     /// </summary>
     public class LocalProjectDeployData
@@ -14,8 +14,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         public string FilePath { get; set; }
 
         /// <summary>
-        ///     Gte or set the <see cref="MocassinProjectBuildGraph" /> that describes the build process
+        ///     Gte or set the <see cref="SimulationDbBuildTemplate" /> that describes the build process
         /// </summary>
-        public MocassinProjectBuildGraph BuildInstruction { get; set; }
+        public SimulationDbBuildTemplate BuildInstruction { get; set; }
     }
 }

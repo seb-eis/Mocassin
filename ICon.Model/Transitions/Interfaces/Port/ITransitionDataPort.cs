@@ -13,7 +13,7 @@ namespace Mocassin.Model.Transitions
         ///     Get a read only list containing all state exchange pairs
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IStateExchangePair> GetStateExchangePairs();
+        ListReadOnlyWrapper<IStateExchangePair> GetStateExchangePairs();
 
         /// <summary>
         ///     Get the state exchange pair at the specified index
@@ -26,7 +26,7 @@ namespace Mocassin.Model.Transitions
         ///     Get a read only list containing all state exchange groups groups
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IStateExchangeGroup> GetStateExchangeGroups();
+        ListReadOnlyWrapper<IStateExchangeGroup> GetStateExchangeGroups();
 
         /// <summary>
         ///     Get the property group at the specified index
@@ -39,7 +39,7 @@ namespace Mocassin.Model.Transitions
         ///     Get a read only list containing all abstract transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IAbstractTransition> GetAbstractTransitions();
+        ListReadOnlyWrapper<IAbstractTransition> GetAbstractTransitions();
 
         /// <summary>
         ///     Get the abstract transition with the provided index
@@ -52,13 +52,13 @@ namespace Mocassin.Model.Transitions
         ///     Get a read only list containing all kinetic transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IKineticTransition> GetKineticTransitions();
+        ListReadOnlyWrapper<IKineticTransition> GetKineticTransitions();
 
         /// <summary>
         ///     Get a read only list containing all metropolis transitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IMetropolisTransition> GetMetropolisTransitions();
+        ListReadOnlyWrapper<IMetropolisTransition> GetMetropolisTransitions();
 
         /// <summary>
         ///     Get the number of kinetic transitions

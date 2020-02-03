@@ -26,9 +26,9 @@ namespace Mocassin.UI.GUI.Base.Converter
                 var converted = new Expression(RemoveLeadingPlusSign(code)).Evaluate();
                 return targetType == typeof(string) ? converted?.ToString() : converted;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(exception);
                 return null;
             }
         }

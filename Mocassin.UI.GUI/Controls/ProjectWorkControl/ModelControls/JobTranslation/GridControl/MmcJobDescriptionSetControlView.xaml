@@ -95,7 +95,7 @@
         <local:DopingValueControlView.DataContext>
           <MultiBinding Converter="{adapter:LatticeConfigurationDopingValueControlViewModelConverter}">
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobDescriptionSetControlView}}"
-                     Path="DataContext.ProjectGraph" />
+                     Path="DataContext.Project" />
             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:MmcJobDescriptionSetControlView}}"
                      Path="DataContext.SelectedItem.LatticeConfiguration" />
           </MultiBinding>

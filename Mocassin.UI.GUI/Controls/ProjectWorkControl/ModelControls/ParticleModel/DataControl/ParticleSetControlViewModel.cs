@@ -6,20 +6,20 @@ using Mocassin.UI.Xml.ParticleModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="CollectionControlViewModel{T}" /> for controlling sets of <see cref="ParticleSetGraph" /> of a
-    ///     selectable <see cref="MocassinProjectGraph" />
+    ///     The <see cref="CollectionControlViewModel{T}" /> for controlling sets of <see cref="ParticleSetData" /> of a
+    ///     selectable <see cref="MocassinProject" />
     /// </summary>
-    public class ParticleSetControlViewModel : CollectionControlViewModel<ParticleSetGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class ParticleSetControlViewModel : CollectionControlViewModel<ParticleSetData>,
+        IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            var modelGraph = contentSource?.ProjectModelGraph?.ParticleModelGraph;
+            var modelGraph = contentSource?.ProjectModelData?.ParticleModelData;
             Items = modelGraph?.ParticleSets;
         }
     }

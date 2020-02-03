@@ -38,15 +38,14 @@
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
         <comboBox:BindableDataGridComboBoxColumn
-          Header="Center"
-          ItemsSource="{Binding ElementName=GroupInteractionDataGrid, Path=DataContext.PositionOptions}"
+          Header="Center Reference Pos."
+          ItemsSource="{Binding ElementName=GroupInteractionDataGrid, Path=DataContext.CenterPositionOptions}"
           DisplayMemberPath="Name"
-          SelectedValuePath="Key"
-          SelectedValueBinding="{Binding CenterUnitCellPositionKey}" />
+          SelectedItemBinding="{Binding CenterCellReferencePosition}" />
 
         <DataGridTemplateColumn Header="Surrounding Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type energyModel:GroupInteractionGraph}">
+            <DataTemplate DataType="{x:Type energyModel:GroupInteractionData}">
               <DataGrid ItemsSource="{Binding GroupGeometry}"
                         AutoGenerateColumns="False"
                         ColumnWidth="*"

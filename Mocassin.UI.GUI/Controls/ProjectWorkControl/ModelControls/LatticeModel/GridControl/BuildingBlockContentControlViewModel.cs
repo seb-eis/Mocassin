@@ -16,24 +16,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="BuildingBlockContentControlView" /> that controls
-    ///     the content of a <see cref="BuildingBlockGraph" /> instance
+    ///     the content of a <see cref="BuildingBlockData" /> instance
     /// </summary>
-    public sealed class BuildingBlockContentControlViewModel : CollectionControlViewModel<CellPositionGraph>,
-        IContentSupplier<BuildingBlockGraph>
+    public sealed class BuildingBlockContentControlViewModel : CollectionControlViewModel<CellPositionData>,
+        IContentSupplier<BuildingBlockData>
     {
         /// <summary>
-        ///     Get the <see cref="BuildingBlockControlViewModel" /> that supplies the <see cref="BuildingBlockGraph" /> instances
+        ///     Get the <see cref="BuildingBlockControlViewModel" /> that supplies the <see cref="BuildingBlockData" /> instances
         /// </summary>
         public BuildingBlockControlViewModel BlockControlViewModel { get; }
 
         /// <inheritdoc />
-        public BuildingBlockGraph ContentSource { get; private set; }
+        public BuildingBlockData ContentSource { get; private set; }
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReferenceGraph{T}" /> to <see cref="Particle" /> model objects that are
-        ///     selectable in the context of currently selected <see cref="CellPositionGraph" />
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> to <see cref="Particle" /> model objects that are
+        ///     selectable in the context of currently selected <see cref="CellPositionData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableOccupationParticles =>
+        public IEnumerable<ModelObjectReference<Particle>> SelectableOccupationParticles =>
             GetSelectableOccupationParticles(SelectedItem);
 
         /// <summary>
@@ -47,55 +47,55 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(BuildingBlockGraph contentSource)
+        public void ChangeContentSource(BuildingBlockData contentSource)
         {
             ContentSource = contentSource;
             var positions = BlockControlViewModel.CreateDefaultCellPositionList();
 
             if (!CheckCurrentPositionListValidity(positions))
-                ContentSource.ParticleList = positions.Select(x => x.Occupation).ToObservableCollection();
+                ContentSource.ParticleList = positions.Select(x => x.Particle).ToObservableCollection();
             else
             {
                 for (var i = 0; i < positions.Count; i++)
-                    positions[i].Occupation = ContentSource.ParticleList[i];
+                    positions[i].Particle = ContentSource.ParticleList[i];
             }
 
             SetCollection(positions);
         }
 
         /// <summary>
-        ///     Checks if the current <see cref="BuildingBlockGraph" /> state is valid in the context of the passed new
-        ///     <see cref="CellPositionGraph" /> list
+        ///     Checks if the current <see cref="BuildingBlockData" /> state is valid in the context of the passed new
+        ///     <see cref="CellPositionData" /> list
         /// </summary>
         /// <param name="positions"></param>
         /// <returns></returns>
-        private bool CheckCurrentPositionListValidity(IList<CellPositionGraph> positions)
+        private bool CheckCurrentPositionListValidity(IList<CellPositionData> positions)
         {
             // ToDo: Change this to detect all possible invalidity reasons 
             return positions.Count == ContentSource.ParticleList.Count;
         }
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReferenceGraph{T}" /> to <see cref="Particle" /> model objects that are
-        ///     selectable in the context of the passed <see cref="CellPositionGraph" />
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> to <see cref="Particle" /> model objects that are
+        ///     selectable in the context of the passed <see cref="CellPositionData" />
         /// </summary>
         /// <param name="cellPosition"></param>
         /// <returns></returns>
-        private IEnumerable<ModelObjectReferenceGraph<Particle>> GetSelectableOccupationParticles(CellPositionGraph cellPosition)
+        private IEnumerable<ModelObjectReference<Particle>> GetSelectableOccupationParticles(CellPositionData cellPosition)
         {
-            var voidResult = new ModelObjectReferenceGraph<Particle>(ParticleGraph.VoidParticle).AsSingleton();
+            var voidResult = new ModelObjectReference<Particle>(ParticleData.VoidParticle).AsSingleton();
             if (cellPosition == null)
             {
-                return BlockControlViewModel.ContentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles?
-                    .Select(x => new ModelObjectReferenceGraph<Particle>(x)).Concat(voidResult);
+                return BlockControlViewModel.ContentSource?.ProjectModelData?.ParticleModelData?.Particles?
+                    .Select(x => new ModelObjectReference<Particle>(x)).Concat(voidResult);
             }
 
-            var positionGraph = (UnitCellPositionGraph) cellPosition.WyckoffPosition.TargetGraph;
+            var positionGraph = (CellReferencePositionData) cellPosition.ReferencePosition.Target;
 
-            if (positionGraph.PositionStatus == PositionStatus.Unstable) return voidResult;
+            if (positionGraph.Stability == PositionStability.Unstable) return voidResult;
 
-            return BlockControlViewModel.ContentSource?.ProjectModelGraph?.ParticleModelGraph?.ParticleSets
-                ?.Single(x => x.Key == positionGraph.OccupationKey).Particles;
+            return BlockControlViewModel.ContentSource?.ProjectModelData?.ParticleModelData?.ParticleSets
+                ?.Single(x => x.Key == positionGraph.Occupation.Key).Particles;
         }
     }
 }

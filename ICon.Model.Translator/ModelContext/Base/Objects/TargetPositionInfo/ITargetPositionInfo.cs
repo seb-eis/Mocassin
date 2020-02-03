@@ -16,7 +16,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The unit cell position at the target
         /// </summary>
-        IUnitCellPosition UnitCellPosition { get; set; }
+        ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <summary>
         ///     The distance to the target in internal units

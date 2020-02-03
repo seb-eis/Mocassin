@@ -9,7 +9,7 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.Base.Commands
 {
     /// <summary>
-    ///     Async command to duplicate a <see cref="ProjectObjectGraph" /> contained in a collection
+    ///     Async command to duplicate a <see cref="ProjectDataObject" /> contained in a collection
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DuplicateCollectionItemCommand<T> : AsyncCommand<T> where T : IDuplicable<T>

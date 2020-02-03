@@ -4,17 +4,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     Extended implementation of the <see cref="BaseJobDescriptionControlViewModel" /> for
-    ///     <see cref="MmcJobDescriptionGraph" /> instances
+    ///     <see cref="MmcJobConfigData" /> instances
     /// </summary>
     public class MmcJobDescriptionControlViewModel : BaseJobDescriptionControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="MmcJobDescriptionGraph" /> that the view model targets
+        ///     Get the <see cref="MmcJobConfigData" /> that the view model targets
         /// </summary>
-        private MmcJobDescriptionGraph JobDescription { get; }
+        private MmcJobConfigData JobDescription { get; }
 
         /// <summary>
-        ///     Get or set the abort tolerance value on the target <see cref="MmcJobDescriptionGraph" />
+        ///     Get or set the abort tolerance value on the target <see cref="MmcJobConfigData" />
         /// </summary>
         public double? BreakTolerance
         {
@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the abort sequence length on the target <see cref="MmcJobDescriptionGraph" />
+        ///     Get or set the abort sequence length on the target <see cref="MmcJobConfigData" />
         /// </summary>
         public int? BreakSampleLength
         {
@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the abort sample interval on the target <see cref="MmcJobDescriptionGraph" />
+        ///     Get or set the abort sample interval on the target <see cref="MmcJobConfigData" />
         /// </summary>
         public int? BreakSampleInterval
         {
@@ -53,7 +53,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the result sample mcs on the target <see cref="MmcJobDescriptionGraph" />
+        ///     Get or set the result sample mcs on the target <see cref="MmcJobConfigData" />
         /// </summary>
         public int? ResultSampleMcs
         {
@@ -66,7 +66,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public MmcJobDescriptionControlViewModel(MmcJobDescriptionGraph jobDescription)
+        public MmcJobDescriptionControlViewModel(MmcJobConfigData jobDescription)
             : base(jobDescription)
         {
             JobDescription = jobDescription;

@@ -5,41 +5,41 @@ using Mocassin.Model.Structures;
 using Mocassin.UI.Base.Commands;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.EnergyModel;
 using Mocassin.UI.Xml.Main;
-using Mocassin.UI.Xml.StructureModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> implementation for
-    ///     <see cref="UnstableEnvironmentGridControlView" /> that controls <see cref="UnstableEnvironmentGraph" /> definitions
+    ///     <see cref="UnstableEnvironmentGridControlView" /> that controls <see cref="UnstableEnvironmentData" /> definitions
     /// </summary>
-    public class UnstableEnvironmentGridControlViewModel : CollectionControlViewModel<UnstableEnvironmentGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class UnstableEnvironmentGridControlViewModel : CollectionControlViewModel<UnstableEnvironmentData>,
+        IContentSupplier<MocassinProject>
     {
-        private MocassinProjectGraph contentSource;
+        private MocassinProject contentSource;
 
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource
+        public MocassinProject ContentSource
         {
             get => contentSource;
             protected set => SetProperty(ref contentSource, value);
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}" /> sequence of all available unstable <see cref="UnitCellPositionGraph" />
-        ///     instances
+        ///     Get an <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for unstable
+        ///     <see cref="CellReferencePosition" /> instances
         /// </summary>
-        public IEnumerable<UnitCellPositionGraph> UnstablePositionOptions => GetUnstablePositions();
+        public IEnumerable<ModelObjectReference<CellReferencePosition>> UnstablePositionOptions => EnumerateUnstableReferencePositions();
 
         /// <summary>
-        ///     Get a <see cref="ICommand"/> to resynchronize the environment collection
+        ///     Get a <see cref="ICommand" /> to resynchronize the environment collection
         /// </summary>
         public ICommand SynchronizeEnvironmentCollectionCommand { get; }
 
         /// <summary>
-        ///     Creates new <see cref="UnstableEnvironmentGridControlViewModel"/>
+        ///     Creates new <see cref="UnstableEnvironmentGridControlViewModel" />
         /// </summary>
         public UnstableEnvironmentGridControlViewModel()
         {
@@ -47,55 +47,55 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject project)
         {
-            ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.EnergyModelGraph?.UnstableEnvironments);
+            ContentSource = project;
+            SetCollection(ContentSource?.ProjectModelData?.EnergyModelData?.UnstableEnvironments);
         }
 
         /// <inheritdoc />
-        public override void SetCollection(ICollection<UnstableEnvironmentGraph> collection)
+        public override void SetCollection(ICollection<UnstableEnvironmentData> collection)
         {
             EnsureEnvironmentToPositionSync(collection);
             base.SetCollection(collection);
         }
 
         /// <summary>
-        ///     Ensures that the set of <see cref="UnstableEnvironmentGraph" /> contains only existing entries of positions and
+        ///     Ensures that the set of <see cref="UnstableEnvironmentData" /> contains only existing entries of positions and
         ///     that all unstable entries are created
         /// </summary>
         /// <param name="collection"></param>
-        public void EnsureEnvironmentToPositionSync(ICollection<UnstableEnvironmentGraph> collection)
+        public void EnsureEnvironmentToPositionSync(ICollection<UnstableEnvironmentData> collection)
         {
             if (collection == null) return;
 
-            var positions = GetUnstablePositions()?.ToList();
-            if (positions == null) return;
+            var positionReferences = EnumerateUnstableReferencePositions()?.ToList();
+            if (positionReferences == null) return;
 
-            if (positions.Count == collection.Count && collection.All(x => positions.Any(y => x.UnitCellPositionKey == y.Key)))
+            if (positionReferences.Count == collection.Count && collection.All(x => positionReferences.Any(y => x.CellReferencePosition.Key == y.Key)))
                 return;
 
             var originalEnvironments = collection.ToList();
             collection.Clear();
 
-            foreach (var position in positions)
+            foreach (var positionReference in positionReferences)
             {
-                if (originalEnvironments.FirstOrDefault(x => x.UnitCellPositionKey == position.Key) is UnstableEnvironmentGraph environment)
-                    collection.Add(environment);
-                else
-                    collection.Add(new UnstableEnvironmentGraph {UnitCellPositionKey = position.Key});
+                collection.Add(originalEnvironments.FirstOrDefault(x => x.CellReferencePosition?.Key == positionReference.Key) is { } environment
+                    ? environment
+                    : new UnstableEnvironmentData {CellReferencePosition = positionReference.Duplicate()});
             }
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}" /> of all <see cref="UnitCellPositionGraph" /> instances that describes unstable
-        ///     positions
+        ///     Get an <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> for
+        ///     <see cref="CellReferencePosition" /> instances that describes unstable positions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UnitCellPositionGraph> GetUnstablePositions()
+        public IEnumerable<ModelObjectReference<CellReferencePosition>> EnumerateUnstableReferencePositions()
         {
-            return ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions
-                ?.Where(x => x.PositionStatus == PositionStatus.Unstable);
+            return ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions
+                ?.Where(x => x.Stability == PositionStability.Unstable)
+                .Select(x => new ModelObjectReference<CellReferencePosition>(x));
         }
     }
 }

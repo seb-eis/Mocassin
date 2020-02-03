@@ -83,7 +83,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             RenderResourcesViewModel.SetDataSource(contentSource?.Resources);

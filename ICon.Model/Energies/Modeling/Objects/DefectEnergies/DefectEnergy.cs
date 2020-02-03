@@ -7,7 +7,7 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <summary>
-    ///     Describes a defect energy of an <see cref="IParticle" /> on a specific <see cref="IUnitCellPosition" />
+    ///     Describes a defect energy of an <see cref="IParticle" /> on a specific <see cref="ICellReferencePosition" />
     /// </summary>
     [DataContract]
     public class DefectEnergy : IDefectEnergy
@@ -20,7 +20,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         [DataMember]
         [UseTrackedReferences]
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
         [DataMember]
@@ -32,7 +32,7 @@ namespace Mocassin.Model.Energies
             if (other == null) return -1;
             if (ReferenceEquals(this, other)) return 0;
             var particleCompare = Particle.Index.CompareTo(other.Particle.Index);
-            return particleCompare == 0 ? UnitCellPosition.Index.CompareTo(other.UnitCellPosition.Index) : particleCompare;
+            return particleCompare == 0 ? CellReferencePosition.Index.CompareTo(other.CellReferencePosition.Index) : particleCompare;
         }
 
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace Mocassin.Model.Energies
         {
             var hashCode = 254019327;
             hashCode = hashCode * -1521134295 + Particle.Index;
-            hashCode = hashCode * -1521134295 + UnitCellPosition.Index;
+            hashCode = hashCode * -1521134295 + CellReferencePosition.Index;
             return hashCode;
         }
 
@@ -62,7 +62,7 @@ namespace Mocassin.Model.Energies
             {
                 Energy = source.Energy,
                 Particle = source.Particle,
-                UnitCellPosition = source.UnitCellPosition
+                CellReferencePosition = source.CellReferencePosition
             };
         }
     }

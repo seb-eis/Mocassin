@@ -12,13 +12,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     ///     <see cref="GroupEnergySetControlViewModel" /> customization
     /// </summary>
     public class GroupInteractionControlViewModel : CollectionControlViewModel<GroupEnergySetControlViewModel>,
-        IContentSupplier<ProjectCustomizationGraph>
+        IContentSupplier<ProjectCustomizationTemplate>
     {
         /// <inheritdoc />
-        public ProjectCustomizationGraph ContentSource { get; protected set; }
+        public ProjectCustomizationTemplate ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(ProjectCustomizationGraph contentSource)
+        public void ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             ContentSource = contentSource;
             CreateSetControlViewModels();

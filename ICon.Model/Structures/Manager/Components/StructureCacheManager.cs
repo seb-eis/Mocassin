@@ -75,7 +75,7 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public IUnitCellProvider<IUnitCellPosition> GetFullUnitCellProvider()
+        public IUnitCellProvider<ICellReferencePosition> GetFullUnitCellProvider()
         {
             return GetResultFromCache(CreateFullUnitCellProvider);
         }
@@ -87,12 +87,12 @@ namespace Mocassin.Model.Structures
                 throw new ArgumentException("4D vector cannot be decoded into a valid 3D equivalent", nameof(vector));
 
             return GetExtendedPositionLists()
-                .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStatus.Undefined)))
+                .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStability.Undefined)))
                 .First();
         }
 
         /// <inheritdoc />
-        public IReadOnlyList<IUnitCellPosition> GetExtendedIndexToPositionList()
+        public IReadOnlyList<ICellReferencePosition> GetExtendedIndexToPositionList()
         {
             return GetResultFromCache(CreateExtendedIndexToPositionList);
         }
@@ -141,7 +141,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IList<SetList<Fractional3D>> CreateExtendedDummyPositionLists()
         {
-            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetPositionDummies());
+            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetDummyPositions());
             return MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.Vector, value.IsDeprecated)))
@@ -155,7 +155,7 @@ namespace Mocassin.Model.Structures
         [CacheMethodResult]
         protected IList<SetList<FractionalPosition>> CreateExtendedPositionLists()
         {
-            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetUnitCellPositions());
+            var positions = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetCellReferencePositions());
             var result = MocassinTaskingExtensions
                 .RunAndGetResults(positions
                     .Select(value => MakeWyckoffExtensionDelegate(value.AsPosition(), value.IsDeprecated)))
@@ -224,15 +224,15 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected List<IUnitCellPosition> CreateExtendedIndexToPositionList()
+        protected List<ICellReferencePosition> CreateExtendedIndexToPositionList()
         {
             var encodedExtendedPositionLists = GetEncodedExtendedPositionLists();
             var ucpList = ModelProject
                 .GetManager<IStructureManager>().QueryPort
-                .Query(port => port.GetUnitCellPositions());
+                .Query(port => port.GetCellReferencePositions());
 
             var index = 0;
-            var result = encodedExtendedPositionLists.SelectMany(x => x).Select(x => default(IUnitCellPosition)).ToList();
+            var result = encodedExtendedPositionLists.SelectMany(x => x).Select(x => default(ICellReferencePosition)).ToList();
             foreach (var positionList in encodedExtendedPositionLists)
             {
                 foreach (var vector in positionList)
@@ -259,7 +259,7 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IUnitCellProvider<IUnitCellPosition> CreateFullUnitCellProvider()
+        protected IUnitCellProvider<ICellReferencePosition> CreateFullUnitCellProvider()
         {
             return CellWrapperFactory.CreateUnitCell(GetExtendedIndexToPositionList().ToList(), GetVectorEncoder());
         }
@@ -308,7 +308,7 @@ namespace Mocassin.Model.Structures
                 if (isDeprecated)
                     return new SetList<FractionalPosition>(ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>());
                 var comparer = ModelProject.SpaceGroupService.GetSpecialVectorComparer<FractionalPosition>();
-                var result = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position.Vector).Select(x => new FractionalPosition(x, position.OccupationIndex, position.Status)).ToSetList(comparer);
+                var result = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(position.Vector).Select(x => new FractionalPosition(x, position.OccupationIndex, position.Stability)).ToSetList(comparer);
                 return result;
             }
 

@@ -24,7 +24,7 @@
 
     <ComboBox Grid.Column="0" Grid.ColumnSpan="3"
               ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-              SelectedItem="{Binding SelectedProjectGraph}"
+              SelectedItem="{Binding SelectedProject}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"

@@ -10,7 +10,7 @@ namespace Mocassin.Model.Structures.Validators
     ///     Validator for new unit cell position model objects that checks for compatibility with existing data and general
     ///     object constraints
     /// </summary>
-    public class PositionDummyValidator : DataValidator<IPositionDummy, MocassinStructureSettings, IStructureDataPort>
+    public class PositionDummyValidator : DataValidator<ICellDummyPosition, MocassinStructureSettings, IStructureDataPort>
     {
         /// <inheritdoc />
         public PositionDummyValidator(IModelProject modelProject, MocassinStructureSettings settings,
@@ -20,7 +20,7 @@ namespace Mocassin.Model.Structures.Validators
         }
 
         /// <inheritdoc />
-        public override IValidationReport Validate(IPositionDummy obj)
+        public override IValidationReport Validate(ICellDummyPosition obj)
         {
             var report = new ValidationReport();
             AddConstraintValidation(obj, report);
@@ -32,15 +32,15 @@ namespace Mocassin.Model.Structures.Validators
         ///     Validates that a new cell position is within the general restraints of the system and adds the results to the
         ///     validation report
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="cellDummyPosition"></param>
         /// <param name="report"></param>
-        private void AddConstraintValidation(IPositionDummy position, ValidationReport report)
+        private void AddConstraintValidation(ICellDummyPosition cellDummyPosition, ValidationReport report)
         {
             var constraint = new NumericConstraint(true, 0.0, 1.0, false,
                 NumericComparer.CreateRanged(ModelProject.CommonNumeric.ComparisonRange));
 
-            if (constraint.IsValid(position.Vector.A) && constraint.IsValid(position.Vector.B) &&
-                constraint.IsValid(position.Vector.C)) 
+            if (constraint.IsValid(cellDummyPosition.Vector.A) && constraint.IsValid(cellDummyPosition.Vector.B) &&
+                constraint.IsValid(cellDummyPosition.Vector.C)) 
                 return;
 
             var detail = $"The dummy violates the unit cell boundaries {constraint}";
@@ -52,17 +52,17 @@ namespace Mocassin.Model.Structures.Validators
         ///     already defined positions that are not deprecated
         ///     and adds the results to the validation report
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="cellDummyPosition"></param>
         /// <param name="report"></param>
-        private void AddObjectUniquenessValidation(IPositionDummy position, ValidationReport report)
+        private void AddObjectUniquenessValidation(ICellDummyPosition cellDummyPosition, ValidationReport report)
         {
-            foreach (var item in DataReader.Access.GetPositionDummies())
+            foreach (var item in DataReader.Access.GetDummyPositions())
             {
                 if (item.IsDeprecated) 
                     continue;
 
                 var extended = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(item.Vector);
-                if (extended.GetCppLowerBound(position.Vector) == extended.Count) 
+                if (extended.GetCppLowerBound(cellDummyPosition.Vector) == extended.Count) 
                     continue;
 
                 const string detail = "Provided dummy position is already present or part of the wyckoff set of another existing dummy";

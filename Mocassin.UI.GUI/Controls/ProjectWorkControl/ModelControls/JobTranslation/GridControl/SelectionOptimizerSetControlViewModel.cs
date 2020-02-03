@@ -13,40 +13,40 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="SelectionOptimizerSetControlView" /> that controls
-    ///     creation of <see cref="SelectionOptimizerGraph" /> instances
+    ///     creation of <see cref="SelectionOptimizerData" /> instances
     /// </summary>
-    public sealed class SelectionOptimizerSetControlViewModel : CollectionControlViewModel<SelectionOptimizerGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public sealed class SelectionOptimizerSetControlViewModel : CollectionControlViewModel<SelectionOptimizerData>,
+        IContentSupplier<MocassinProject>
     {
         /// <summary>
-        ///     Get the <see cref="JobPackageDescriptionGraph" /> that hosts the optimizer list
+        ///     Get the <see cref="JobPackageData" /> that hosts the optimizer list
         /// </summary>
-        private JobPackageDescriptionGraph ParentJobPackageDescription { get; }
+        private JobPackageData ParentJobPackageDescription { get; }
 
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; set; }
+        public MocassinProject ContentSource { get; set; }
 
         /// <summary>
-        ///     Get the sequence <see cref="ModelObjectReferenceGraph{T}" /> instances of <see cref="Particle" /> that are
+        ///     Get the sequence <see cref="ModelObjectReference{T}" /> instances of <see cref="Particle" /> that are
         ///     selectable in the current state of the object
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableParticles =>
+        public IEnumerable<ModelObjectReference<Particle>> SelectableParticles =>
             GetSelectableParticleReferences(SelectedItem);
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReferenceGraph{T}" /> instances of <see cref="UnitCellPosition" /> that
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="CellReferencePosition" /> that
         ///     are selectable in the current state of the object
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> SelectablePositions =>
-            GetSelectableUnitCellPositionReferences(SelectedItem);
+        public IEnumerable<ModelObjectReference<CellReferencePosition>> SelectablePositions =>
+            GetSelectableCellReferencePositionReferences(SelectedItem);
 
         /// <summary>
         ///     Creates new <see cref="SelectionOptimizerSetControlViewModel" />
         /// </summary>
         /// <param name="parentJobPackageDescription"></param>
         /// <param name="contentSource"></param>
-        public SelectionOptimizerSetControlViewModel(JobPackageDescriptionGraph parentJobPackageDescription,
-            MocassinProjectGraph contentSource)
+        public SelectionOptimizerSetControlViewModel(JobPackageData parentJobPackageDescription,
+            MocassinProject contentSource)
         {
             ParentJobPackageDescription =
                 parentJobPackageDescription ?? throw new ArgumentNullException(nameof(parentJobPackageDescription));
@@ -55,37 +55,37 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             SelectedItem = null;
         }
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReferenceGraph{T}" /> instances of <see cref="Particle" /> that
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="Particle" /> that
         ///     are selectable in the current state of the object
         /// </summary>
         /// <param name="current"></param>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> GetSelectableParticleReferences(SelectionOptimizerGraph current)
+        public IEnumerable<ModelObjectReference<Particle>> GetSelectableParticleReferences(SelectionOptimizerData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<Particle>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.ParticleModelData?.Particles;
+            return baseCollection?.Select(x => new ModelObjectReference<Particle>(x));
         }
 
         /// <summary>
-        ///     Get the sequence of <see cref="ModelObjectReferenceGraph{T}" /> instances of <see cref="UnitCellPosition" /> that
+        ///     Get the sequence of <see cref="ModelObjectReference{T}" /> instances of <see cref="CellReferencePosition" /> that
         ///     are selectable in the current state of the object
         /// </summary>
         /// <param name="current"></param>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> GetSelectableUnitCellPositionReferences(
-            SelectionOptimizerGraph current)
+        public IEnumerable<ModelObjectReference<CellReferencePosition>> GetSelectableCellReferencePositionReferences(
+            SelectionOptimizerData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions;
+            var baseCollection = ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions;
             return baseCollection
-                ?.Where(x => x.PositionStatus == PositionStatus.Stable)
-                .Select(x => new ModelObjectReferenceGraph<UnitCellPosition>(x));
+                ?.Where(x => x.Stability == PositionStability.Stable)
+                .Select(x => new ModelObjectReference<CellReferencePosition>(x));
         }
     }
 }

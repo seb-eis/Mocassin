@@ -11,7 +11,7 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The status of the position the state pair belongs to
         /// </summary>
-        public PositionStatus PositionStatus { get; }
+        public PositionStability PositionStability { get; }
 
         /// <summary>
         ///     The acceptor particle index
@@ -28,13 +28,13 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="donorIndex"></param>
         /// <param name="acceptorIndex"></param>
-        /// <param name="positionStatus"></param>
-        public StatePair(int donorIndex, int acceptorIndex, PositionStatus positionStatus)
+        /// <param name="positionStability"></param>
+        public StatePair(int donorIndex, int acceptorIndex, PositionStability positionStability)
             : this()
         {
             DonorIndex = donorIndex;
             AcceptorIndex = acceptorIndex;
-            PositionStatus = positionStatus;
+            PositionStability = positionStability;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public static StatePair MakeUnstable(int donorIndex)
         {
-            return new StatePair(donorIndex, 0, PositionStatus.Unstable);
+            return new StatePair(donorIndex, 0, PositionStability.Unstable);
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="donorIndex"></param>
         /// <param name="acceptorIndex"></param>
-        /// <param name="positionStatus"></param>
+        /// <param name="positionStability"></param>
         /// <returns></returns>
-        public static StatePair CreateForStatus(int donorIndex, int acceptorIndex, PositionStatus positionStatus)
+        public static StatePair CreateForStatus(int donorIndex, int acceptorIndex, PositionStability positionStability)
         {
-            return positionStatus == PositionStatus.Unstable
+            return positionStability == PositionStability.Unstable
                 ? MakeUnstable(donorIndex)
-                : new StatePair(donorIndex, acceptorIndex, positionStatus);
+                : new StatePair(donorIndex, acceptorIndex, positionStability);
         }
 
         /// <summary>

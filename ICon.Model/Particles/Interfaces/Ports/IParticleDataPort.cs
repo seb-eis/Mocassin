@@ -54,12 +54,12 @@ namespace Mocassin.Model.Particles
         /// <summary>
         ///     Get a read only collection of the particle interfaces stored in the manager
         /// </summary>
-        ReadOnlyListAdapter<IParticle> GetParticles();
+        ListReadOnlyWrapper<IParticle> GetParticles();
 
         /// <summary>
         ///     Get a read only collection of the particle set interfaces stored in the manager
         /// </summary>
-        ReadOnlyListAdapter<IParticleSet> GetParticleSets();
+        ListReadOnlyWrapper<IParticleSet> GetParticleSets();
 
         /// <summary>
         ///     Get a clean indexing information for the particles that is equivalent to the reindexing info after a deprecated

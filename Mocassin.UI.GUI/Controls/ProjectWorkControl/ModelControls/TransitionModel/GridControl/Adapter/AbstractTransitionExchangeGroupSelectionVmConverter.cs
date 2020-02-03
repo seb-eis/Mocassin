@@ -7,13 +7,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 {
     /// <summary>
     ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> implementation for wrapping
-    ///     <see cref="AbstractTransitionGraph" /> instances into host view models for <see cref="StateExchangeGroupGraph" />
+    ///     <see cref="AbstractTransitionData" /> instances into host view models for <see cref="StateExchangeGroupData" />
     ///     references
     /// </summary>
-    public class AbstractTransitionExchangeGroupSelectionVmConverter : HostGraphGuestSelectionVmConverter<AbstractTransitionGraph>
+    public class AbstractTransitionExchangeGroupSelectionVmConverter : HostGraphGuestSelectionVmConverter<AbstractTransitionData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProjectGraph> CreateSelectionViewModel(AbstractTransitionGraph host)
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(AbstractTransitionData host)
         {
             return new AbstractTransitionExchangeGroupSelectionViewModel(host);
         }

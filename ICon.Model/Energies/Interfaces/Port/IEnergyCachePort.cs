@@ -33,13 +33,13 @@ namespace Mocassin.Model.Energies
         ///     Get a read only dictionary that assigns each unit cell position its set of defined pair interactions
         /// </summary>
         /// <returns></returns>
-        IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions();
+        IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions();
 
         /// <summary>
         ///     Get a read only dictionary that assigns each unit cell position its set of defined group interactions
         /// </summary>
         /// <returns></returns>
-        IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions();
+        IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions();
 
         /// <summary>
         ///     Get an energy setter provider that has the value constraints set to their project settings defined values

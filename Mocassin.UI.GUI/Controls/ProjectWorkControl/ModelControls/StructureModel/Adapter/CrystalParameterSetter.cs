@@ -7,7 +7,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
 {
     /// <summary>
     ///     Adapter class that wraps a <see cref="Symmetry.CrystalSystems.CrystalSystem" /> and
-    ///     <see cref="CellParametersGraph" /> into a
+    ///     <see cref="CellParametersData" /> into a
     ///     <see cref="ViewModelBase" />
     /// </summary>
     public class CrystalParameterSetter : ViewModelBase
@@ -18,9 +18,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         public CrystalSystem CrystalSystem { get; }
 
         /// <summary>
-        ///     Get the <see cref="CellParametersGraph" /> that is used as a value target
+        ///     Get the <see cref="CellParametersData" /> that is used as a value target
         /// </summary>
-        public CellParametersGraph ParametersGraph { get; }
+        public CellParametersData ParametersData { get; }
 
         /// <summary>
         ///     Get a boolean flag if <see cref="Alpha" /> is read only
@@ -58,10 +58,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public double ParamA
         {
-            get => ParametersGraph.ParamA;
+            get => ParametersData.ParamA;
             set
             {
-                ParametersGraph.ParamA = value;
+                ParametersData.ParamA = value;
                 OnParameterChanged();
             }
         }
@@ -71,10 +71,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public double ParamB
         {
-            get => ParametersGraph.ParamB;
+            get => ParametersData.ParamB;
             set
             {
-                ParametersGraph.ParamB = value;
+                ParametersData.ParamB = value;
                 OnParameterChanged();
             }
         }
@@ -84,10 +84,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public double ParamC
         {
-            get => ParametersGraph.ParamC;
+            get => ParametersData.ParamC;
             set
             {
-                ParametersGraph.ParamC = value;
+                ParametersData.ParamC = value;
                 OnParameterChanged();
             }
         }
@@ -97,10 +97,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public double Alpha
         {
-            get => ParametersGraph.Alpha;
+            get => ParametersData.Alpha;
             set
             {
-                ParametersGraph.Alpha = value;
+                ParametersData.Alpha = value;
                 OnParameterChanged();
             }
         }
@@ -110,10 +110,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public double Beta
         {
-            get => ParametersGraph.Beta;
+            get => ParametersData.Beta;
             set
             {
-                ParametersGraph.Beta = value;
+                ParametersData.Beta = value;
                 OnParameterChanged();
             }
         }
@@ -123,10 +123,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public double Gamma
         {
-            get => ParametersGraph.Gamma;
+            get => ParametersData.Gamma;
             set
             {
-                ParametersGraph.Gamma = value;
+                ParametersData.Gamma = value;
                 OnParameterChanged();
             }
         }
@@ -136,33 +136,33 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.StructureMod
         /// </summary>
         public bool IsRadian
         {
-            get => ParametersGraph.IsRadian;
+            get => ParametersData.IsRadian;
             set
             {
-                ParametersGraph.IsRadian = value;
+                ParametersData.IsRadian = value;
                 OnParameterChanged();
             }
         }
 
         /// <summary>
         ///     Create new <see cref="CrystalParameterSetter" /> from <see cref="Mocassin.Symmetry.CrystalSystems.CrystalSystem" />
-        ///     and <see cref="CellParametersGraph" />
+        ///     and <see cref="CellParametersData" />
         /// </summary>
         /// <param name="crystalSystem"></param>
-        /// <param name="parametersGraph"></param>
-        public CrystalParameterSetter(CrystalSystem crystalSystem, CellParametersGraph parametersGraph)
+        /// <param name="parametersData"></param>
+        public CrystalParameterSetter(CrystalSystem crystalSystem, CellParametersData parametersData)
         {
             CrystalSystem = crystalSystem ?? throw new ArgumentNullException(nameof(crystalSystem));
-            ParametersGraph = parametersGraph ?? throw new ArgumentNullException(nameof(parametersGraph));
+            ParametersData = parametersData ?? throw new ArgumentNullException(nameof(parametersData));
         }
 
         /// <summary>
-        ///     Corrects the current <see cref="CellParametersGraph" /> using the internal constraints
+        ///     Corrects the current <see cref="CellParametersData" /> using the internal constraints
         /// </summary>
         private void CorrectParameterGraph()
         {
-            var correctedSet = GetCorrectedParameterSet(ParametersGraph.GetParameterSet());
-            ParametersGraph.PopulateFrom(correctedSet);
+            var correctedSet = GetCorrectedParameterSet(ParametersData.GetParameterSet());
+            ParametersData.PopulateFrom(correctedSet);
         }
 
         /// <summary>

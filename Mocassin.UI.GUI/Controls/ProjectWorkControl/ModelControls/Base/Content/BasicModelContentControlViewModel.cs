@@ -17,7 +17,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
     /// </summary>
     public class BasicModelContentControlViewModel : PrimaryControlViewModel
     {
-        private MocassinProjectGraph selectedProjectGraph;
+        private MocassinProject selectedProject;
         private ContentControl dataContentControl;
 
         /// <summary>
@@ -26,14 +26,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         private IDisposable DataContextDisposable { get; set; }
 
         /// <summary>
-        ///     Get or set the selected <see cref="MocassinProjectGraph" />
+        ///     Get or set the selected <see cref="MocassinProject" />
         /// </summary>
-        public MocassinProjectGraph SelectedProjectGraph
+        public MocassinProject SelectedProject
         {
-            get => selectedProjectGraph;
+            get => selectedProject;
             set
             {
-                SetProperty(ref selectedProjectGraph, value);
+                SetProperty(ref selectedProject, value);
                 OnProjectGraphSelectionChanged();
             }
         }
@@ -60,7 +60,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Action that is invoked if the selected <see cref="MocassinProjectGraph" /> changes
+        ///     Action that is invoked if the selected <see cref="MocassinProject" /> changes
         /// </summary>
         protected void OnProjectGraphSelectionChanged()
         {
@@ -77,12 +77,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Tries to notify a <see cref="ContentControl" /> about a change in the selected <see cref="MocassinProjectGraph" />
+        ///     Tries to notify a <see cref="ContentControl" /> about a change in the selected <see cref="MocassinProject" />
         /// </summary>
         /// <param name="contentControl"></param>
         protected void NotifyGraphSelectionChanged(ContentControl contentControl)
         {
-            (contentControl.DataContext as IContentSupplier<MocassinProjectGraph>)?.ChangeContentSource(SelectedProjectGraph);
+            (contentControl.DataContext as IContentSupplier<MocassinProject>)?.ChangeContentSource(SelectedProject);
         }
 
         /// <summary>
@@ -100,14 +100,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <inheritdoc />
         protected override void OnProjectLibraryChangedInternal(IMocassinProjectLibrary newProjectLibrary)
         {
-            ExecuteOnAppThread(() => SelectedProjectGraph = null);
+            ExecuteOnAppThread(() => SelectedProject = null);
             base.OnProjectLibraryChangedInternal(newProjectLibrary);
         }
 
         /// <inheritdoc />
         protected override void OnProjectContentChangedInternal()
         {
-            if (!ProjectControl.ProjectGraphs.Contains(SelectedProjectGraph)) ExecuteOnAppThread(() => SelectedProjectGraph = null);
+            if (!ProjectControl.ProjectGraphs.Contains(SelectedProject)) ExecuteOnAppThread(() => SelectedProject = null);
             base.OnProjectContentChangedInternal();
         }
 

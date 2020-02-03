@@ -17,15 +17,15 @@ namespace Mocassin.Model.Particles
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IParticle> GetParticles()
+        public ListReadOnlyWrapper<IParticle> GetParticles()
         {
-            return ReadOnlyListAdapter<IParticle>.FromEnumerable(Data.Particles);
+            return ListReadOnlyWrapper<IParticle>.FromEnumerable(Data.Particles);
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IParticleSet> GetParticleSets()
+        public ListReadOnlyWrapper<IParticleSet> GetParticleSets()
         {
-            return ReadOnlyListAdapter<IParticleSet>.FromEnumerable(Data.ParticleSets);
+            return ListReadOnlyWrapper<IParticleSet>.FromEnumerable(Data.ParticleSets);
         }
 
         /// <inheritdoc />

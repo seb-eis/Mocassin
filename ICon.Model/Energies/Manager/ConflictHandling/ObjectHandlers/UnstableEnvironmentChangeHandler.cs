@@ -76,7 +76,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var dataList = DataAccess.Query(data => data.UnstablePairInteractions);
             var uniquePairs = new MultisetList<AsymmetricPairInteraction>(GetInteractionComparer(), 100) {newPairs};
 
-            foreach (var item in dataList.Where(value => value.Position0 != envInfo.UnitCellPosition)) 
+            foreach (var item in dataList.Where(value => value.Position0 != envInfo.CellReferencePosition)) 
                 uniquePairs.Add(item);
 
             dataList.Clear();

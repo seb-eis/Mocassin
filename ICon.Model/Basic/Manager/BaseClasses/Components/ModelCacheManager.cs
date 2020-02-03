@@ -116,15 +116,14 @@ namespace Mocassin.Model.Basic
 
         /// <summary>
         ///     Searches the manager for all <see cref="CacheMethodResultAttribute" /> marked methods and creates the sequence of
-        ///     <see cref="ICachedObjectSource"/> provider interfaces
+        ///     <see cref="ICachedObjectSource" /> provider interfaces
         /// </summary>
         /// <returns></returns>
         protected IEnumerable<ICachedObjectSource> FindAndMakeCacheEntries()
         {
             foreach (var method in GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic))
             {
-                if (!(method.GetCustomAttribute<CacheMethodResultAttribute>() is CacheMethodResultAttribute attribute))
-                    continue;
+                if (!(method.GetCustomAttribute<CacheMethodResultAttribute>() is { } attribute)) continue;
 
                 var delegateType = typeof(Func<>).MakeGenericType(method.ReturnType);
                 var wrapperType = attribute.GenericDataWrapperType.MakeGenericType(method.ReturnType);
@@ -136,7 +135,7 @@ namespace Mocassin.Model.Basic
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidOperationException("Instance cached object provider failed", e);
+                    throw new InvalidOperationException("Instance creation of cached object provider failed", e);
                 }
 
                 yield return cachedData;

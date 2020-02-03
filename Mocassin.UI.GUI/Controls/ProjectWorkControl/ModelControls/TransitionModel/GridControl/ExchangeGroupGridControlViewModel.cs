@@ -8,19 +8,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="ExchangeGroupGridControlView" /> that controls
-    ///     definition of <see cref="StateExchangeGroupGraph" /> instances
+    ///     definition of <see cref="StateExchangeGroupData" /> instances
     /// </summary>
-    public class ExchangeGroupGridControlViewModel : CollectionControlViewModel<StateExchangeGroupGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class ExchangeGroupGridControlViewModel : CollectionControlViewModel<StateExchangeGroupData>,
+        IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.TransitionModelGraph?.StateExchangeGroups);
+            SetCollection(ContentSource?.ProjectModelData?.TransitionModelData?.StateExchangeGroups);
         }
     }
 }

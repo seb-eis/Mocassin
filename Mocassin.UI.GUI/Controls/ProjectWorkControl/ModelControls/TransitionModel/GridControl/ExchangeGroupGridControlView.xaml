@@ -42,7 +42,7 @@
 
         <DataGridTemplateColumn Header="State Changes">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type transitionModel:StateExchangeGroupGraph}">
+            <DataTemplate DataType="{x:Type transitionModel:StateExchangeGroupData}">
               <gridControl:HostGraphModelObjectDropSelectionView>
                 <gridControl:HostGraphModelObjectDropSelectionView.DataContext>
                   <MultiBinding Converter="{adapter:ExchangeGroupExchangePairSelectionVmConverter}">

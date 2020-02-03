@@ -25,9 +25,9 @@ namespace Mocassin.UI.GUI.Base.Converter
                     : targetType;
                 return enumType == null ? null : Enum.Parse(enumType, enumString);
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(exception);
                 return null;
             }
         }

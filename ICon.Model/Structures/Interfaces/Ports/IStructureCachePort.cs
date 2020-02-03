@@ -71,7 +71,7 @@ namespace Mocassin.Model.Structures
         ///     Get a unit cell provider that carries the unit cell position interfaces for advanced analysis queries
         /// </summary>
         /// <returns></returns>
-        IUnitCellProvider<IUnitCellPosition> GetFullUnitCellProvider();
+        IUnitCellProvider<ICellReferencePosition> GetFullUnitCellProvider();
 
         /// <summary>
         ///     Gets all positions of the unit cell that are symmetry equivalent to the position at the provided 4D vector
@@ -84,7 +84,7 @@ namespace Mocassin.Model.Structures
         ///     Get read only list that assigns each extended position index the correct unit cell position interface
         /// </summary>
         /// <returns></returns>
-        IReadOnlyList<IUnitCellPosition> GetExtendedIndexToPositionList();
+        IReadOnlyList<ICellReferencePosition> GetExtendedIndexToPositionList();
 
         /// <summary>
         ///     Get a sorted unique list of all the wyckoff extension of the position dummy at the specified index

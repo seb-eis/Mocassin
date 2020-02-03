@@ -46,10 +46,10 @@ namespace Mocassin.Model.Energies.ConflictHandling
         /// <param name="report"></param>
         protected void LinkToUnstableEnvironment(GroupInteraction group, ConflictReport report)
         {
-            if (group.CenterUnitCellPosition.Status != PositionStatus.Unstable) return;
+            if (group.CenterCellReferencePosition.Stability != PositionStability.Unstable) return;
 
             var environment = DataAccess.Query(data =>
-                data.UnstableEnvironments.Find(value => value.UnitCellPosition == group.CenterUnitCellPosition));
+                data.UnstableEnvironments.Find(value => value.CellReferencePosition == group.CenterCellReferencePosition));
 
             if (environment.GroupInteractions.Contains(group))
                 return;

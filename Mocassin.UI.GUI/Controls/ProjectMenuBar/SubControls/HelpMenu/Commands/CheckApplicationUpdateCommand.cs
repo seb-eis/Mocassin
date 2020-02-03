@@ -49,21 +49,24 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
             {
                 info = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
             }
-            catch (DeploymentDownloadException e)
+            catch (DeploymentDownloadException exception)
             {
-                MessageBox.Show($"Failed to download the new application version:\n{e.Message}", "Update Error", MessageBoxButton.OK,
+                Console.WriteLine(exception);
+                MessageBox.Show($"Failed to download the new application version:\n{exception.Message}", "Update Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return false;
             }
-            catch (InvalidDeploymentException e)
+            catch (InvalidDeploymentException exception)
             {
-                MessageBox.Show($"Deployment of application is corrupt:\n{e.Message}", "Update Error", MessageBoxButton.OK,
+                Console.WriteLine(exception);
+                MessageBox.Show($"Deployment of application is corrupt:\n{exception.Message}", "Update Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return false;
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException exception)
             {
-                MessageBox.Show($"Application update is impossible, not a deploy version:\n{e.Message}", "Update Error", MessageBoxButton.OK,
+                Console.WriteLine(exception);
+                MessageBox.Show($"Application update is impossible, not a deploy version:\n{exception.Message}", "Update Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return false;
             }
@@ -104,13 +107,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
                 System.Windows.Forms.Application.Restart();
                 Application.Current.Shutdown();
             }
-            catch (DeploymentDownloadException e)
+            catch (DeploymentDownloadException exception)
             {
-                MessageBox.Show($"Failed to download the update data:\n{e.Message}");
+                Console.WriteLine(exception);
+                MessageBox.Show($"Failed to download the update data:\n{exception.Message}");
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                MessageBox.Show($"Fatal error during application update:\n{e.Message}");
+                Console.WriteLine(exception);
+                MessageBox.Show($"Fatal error during application update:\n{exception.Message}");
             }
         }
 
@@ -125,9 +130,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.HelpMenu.Commands
             {
                 ApplicationDeployment.CurrentDeployment.Update();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                MessageBox.Show($"Fatal error during update pull:\n{e.Message}");
+                Console.WriteLine(exception);
+                MessageBox.Show($"Fatal error during update pull:\n{exception.Message}");
             }
             finally
             {

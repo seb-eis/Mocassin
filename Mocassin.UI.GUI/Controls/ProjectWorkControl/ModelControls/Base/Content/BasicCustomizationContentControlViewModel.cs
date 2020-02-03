@@ -10,48 +10,48 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
 {
     /// <summary>
     ///     Basic customization content control that extends <see cref="BasicModelContentControlViewModel" /> with a
-    ///     <see cref="ProjectCustomizationGraph" /> selection
+    ///     <see cref="ProjectCustomizationTemplate" /> selection
     /// </summary>
     public class BasicCustomizationContentControlViewModel : BasicModelContentControlViewModel
     {
-        private ObservableCollection<ProjectCustomizationGraph> customizationGraphs;
-        private ProjectCustomizationGraph selectedCustomizationGraph;
+        private ObservableCollection<ProjectCustomizationTemplate> customizationGraphs;
+        private ProjectCustomizationTemplate selectedCustomizationTemplate;
 
         /// <summary>
-        ///     Get or set the currently selected <see cref="ProjectCustomizationGraph" />
+        ///     Get or set the currently selected <see cref="ProjectCustomizationTemplate" />
         /// </summary>
-        public ProjectCustomizationGraph SelectedCustomizationGraph
+        public ProjectCustomizationTemplate SelectedCustomizationTemplate
         {
-            get => selectedCustomizationGraph;
-            set => SetProperty(ref selectedCustomizationGraph, value, () => OnSelectionChanged(value));
+            get => selectedCustomizationTemplate;
+            set => SetProperty(ref selectedCustomizationTemplate, value, () => OnSelectionChanged(value));
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}"/> of <see cref="ProjectCustomizationGraph"/> instances that can currently be selected
+        ///     Get the <see cref="IEnumerable{T}"/> of <see cref="ProjectCustomizationTemplate"/> instances that can currently be selected
         /// </summary>
-        public ObservableCollection<ProjectCustomizationGraph> CustomizationGraphs
+        public ObservableCollection<ProjectCustomizationTemplate> CustomizationGraphs
         {
             get => customizationGraphs;
             protected set => SetProperty(ref customizationGraphs, value);
         }
 
         /// <summary>
-        ///     Get the command to create a new <see cref="ProjectCustomizationGraph"/> on the current project
+        ///     Get the command to create a new <see cref="ProjectCustomizationTemplate"/> on the current project
         /// </summary>
         public AddNewCustomizationCommand AddCustomizationCommand { get; }
 
         /// <summary>
-        ///     Get the command to delete a <see cref="ProjectCustomizationGraph"/> from the current project
+        ///     Get the command to delete a <see cref="ProjectCustomizationTemplate"/> from the current project
         /// </summary>
         public DeleteCustomizationCommand DeleteCustomizationCommand { get; }
 
         /// <summary>
-        ///     Get the command to duplicate a <see cref="ProjectCustomizationGraph"/> and add it to the current project
+        ///     Get the command to duplicate a <see cref="ProjectCustomizationTemplate"/> and add it to the current project
         /// </summary>
         public DuplicateCustomizationCommand DuplicateCustomizationCommand { get; }
 
         /// <summary>
-        ///     Get the command to migrate a <see cref="ProjectCustomizationGraph"/> and add it to the current project
+        ///     Get the command to migrate a <see cref="ProjectCustomizationTemplate"/> and add it to the current project
         /// </summary>
         public MigrateCustomizationCommand MigrateCustomizationCommand { get; }
 
@@ -59,7 +59,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         public BasicCustomizationContentControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProjectGraph, x => ReloadSelectionSource(false, true));
+            AddCustomizationCommand = new AddNewCustomizationCommand(projectControl, () => SelectedProject, x => ReloadSelectionSource(false, true));
             DeleteCustomizationCommand = new DeleteCustomizationCommand(projectControl, () => ReloadSelectionSource(true, true));
             DuplicateCustomizationCommand = new DuplicateCustomizationCommand(projectControl, x => ReloadSelectionSource(false, true));
             MigrateCustomizationCommand = new MigrateCustomizationCommand(projectControl, x => ReloadSelectionSource(false, true));
@@ -73,26 +73,26 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         /// <param name="e"></param>
         private void OnCustomizationSourceChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(SelectedProjectGraph)) return;
+            if (e.PropertyName != nameof(SelectedProject)) return;
             ReloadSelectionSource();
         }
 
         /// <inheritdoc />
         protected override void OnProjectContentChangedInternal()
         {
-            CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs;
+            CustomizationGraphs = SelectedProject?.CustomizationTemplates;
         }
 
         /// <summary>
-        ///     Nulls the currently selected <see cref="ProjectCustomizationGraph"/> and reloads the option list
+        ///     Nulls the currently selected <see cref="ProjectCustomizationTemplate"/> and reloads the option list
         /// </summary>
         protected void ReloadSelectionSource(bool nullSelected = true, bool selectLast = false)
         {
             ExecuteOnAppThread(() =>
             {
-                if (nullSelected) SelectedCustomizationGraph = null;
-                CustomizationGraphs = SelectedProjectGraph?.ProjectCustomizationGraphs;
-                if (selectLast) SelectedCustomizationGraph = CustomizationGraphs?.LastOrDefault();
+                if (nullSelected) SelectedCustomizationTemplate = null;
+                CustomizationGraphs = SelectedProject?.CustomizationTemplates;
+                if (selectLast) SelectedCustomizationTemplate = CustomizationGraphs?.LastOrDefault();
             });
         }
 

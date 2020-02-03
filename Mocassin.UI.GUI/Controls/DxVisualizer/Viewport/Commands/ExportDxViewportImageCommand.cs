@@ -86,9 +86,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.Viewport.Commands
             {
                 if (ResizeViewport(view, width, height)) return;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Debug.WriteLine(e);
+                Debug.WriteLine(exception);
                 MessageBox.Show($"Cannot apply {width}x{height} pixels.", "Image - Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 ResizeViewport(view, oldWith, oldHeight);
                 return;

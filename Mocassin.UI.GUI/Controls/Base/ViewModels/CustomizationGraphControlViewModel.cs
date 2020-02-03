@@ -6,12 +6,12 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
     ///     Base class for aa <see cref="PrimaryControlViewModel" /> types that control
-    ///     <see cref="ProjectCustomizationGraph" /> content
+    ///     <see cref="ProjectCustomizationTemplate" /> content
     /// </summary>
-    public abstract class CustomizationGraphControlViewModel : PrimaryControlViewModel, IContentSupplier<ProjectCustomizationGraph>
+    public abstract class CustomizationGraphControlViewModel : PrimaryControlViewModel, IContentSupplier<ProjectCustomizationTemplate>
     {
         /// <inheritdoc />
-        public ProjectCustomizationGraph ContentSource { get; protected set; }
+        public ProjectCustomizationTemplate ContentSource { get; protected set; }
 
         /// <inheritdoc />
         protected CustomizationGraphControlViewModel(IMocassinProjectControl projectControl)
@@ -20,6 +20,6 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <inheritdoc />
-        public abstract void ChangeContentSource(ProjectCustomizationGraph contentSource);
+        public abstract void ChangeContentSource(ProjectCustomizationTemplate contentSource);
     }
 }

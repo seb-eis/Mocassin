@@ -7,7 +7,7 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="MultiValueConverter" /> implementation to wrap <see cref="JobPackageDescriptionGraph" /> instances
+    ///     The <see cref="MultiValueConverter" /> implementation to wrap <see cref="JobPackageData" /> instances
     ///     into <see cref="SelectionOptimizerSetControlViewModel" /> objects
     /// </summary>
     public class JobPackageDescriptionSelectionOptimizerSetViewModelConverter : MultiValueConverter
@@ -15,8 +15,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// <inheritdoc />
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(values[0] is MocassinProjectGraph projectGraph)) return null;
-            if (!(values[1] is JobPackageDescriptionGraph packageDescription)) return null;
+            if (!(values[0] is MocassinProject projectGraph)) return null;
+            if (!(values[1] is JobPackageData packageDescription)) return null;
             return new SelectionOptimizerSetControlViewModel(packageDescription, projectGraph);
         }
     }

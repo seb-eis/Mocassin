@@ -58,7 +58,7 @@ namespace Mocassin.Model.Translator.ModelContext
             foreach (var positionModel in StructureModelContext.PositionModels)
             {
                 positionModel.PositionTransitionModel = TransitionModelContext.PositionTransitionModels
-                    .Single(a => a.UnitCellPosition == positionModel.UnitCellPosition);
+                    .Single(a => a.CellReferencePosition == positionModel.CellReferencePosition);
             }
         }
 

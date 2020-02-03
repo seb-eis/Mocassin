@@ -11,27 +11,27 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="MmcJobPackageControlView" /> that controls
-    ///     manipulation of <see cref="MmcJobDescriptionGraph" /> instances
+    ///     manipulation of <see cref="MmcJobConfigData" /> instances
     /// </summary>
-    public class MmcJobPackageControlViewModel : CollectionControlViewModel<MmcJobPackageDescriptionGraph>,
-        IContentSupplier<ProjectJobTranslationGraph>
+    public class MmcJobPackageControlViewModel : CollectionControlViewModel<MmcJobPackageData>,
+        IContentSupplier<ProjectJobSetTemplate>
     {
         private int duplicateCount = 1;
-        private ProjectJobTranslationGraph contentSource;
-        private IEnumerable<ModelObjectReferenceGraph<MetropolisSimulation>> selectableSimulations;
+        private ProjectJobSetTemplate contentSource;
+        private IEnumerable<ModelObjectReference<MetropolisSimulation>> selectableSimulations;
 
         /// <inheritdoc />
-        public ProjectJobTranslationGraph ContentSource
+        public ProjectJobSetTemplate ContentSource
         {
             get => contentSource;
             set => SetProperty(ref contentSource, value);
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReferenceGraph{T}" /> instances that describe the
+        ///     Get the <see cref="IEnumerable{T}" /> of <see cref="ModelObjectReference{T}" /> instances that describe the
         ///     target <see cref="MetropolisSimulation" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<MetropolisSimulation>> SelectableSimulations
+        public IEnumerable<ModelObjectReference<MetropolisSimulation>> SelectableSimulations
         {
             get => selectableSimulations;
             set => SetProperty(ref selectableSimulations, value);
@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// <summary>
         ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
         /// </summary>
-        public DuplicateCollectionItemCommand<MmcJobPackageDescriptionGraph> DuplicateItemCommand { get; }
+        public DuplicateCollectionItemCommand<MmcJobPackageData> DuplicateItemCommand { get; }
 
         /// <summary>
         ///     Get or set the duplicate count if the duplicate command is executed
@@ -56,14 +56,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// </summary>
         public MmcJobPackageControlViewModel()
         {
-            DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobPackageDescriptionGraph>(this)
+            DuplicateItemCommand = new DuplicateCollectionItemCommand<MmcJobPackageData>(this)
             {
                 CountProvider = () => DuplicateCount
             };
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(ProjectJobTranslationGraph contentSource)
+        public void ChangeContentSource(ProjectJobSetTemplate contentSource)
         {
             ContentSource = contentSource;
             SetCollection(contentSource?.MmcJobPackageDescriptions);
@@ -71,16 +71,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get the sequence selectable <see cref="ModelObjectReferenceGraph{T}" /> of <see cref="KineticSimulation" />
-        ///     instances that are available for the passed <see cref="ProjectJobTranslationGraph" />
+        ///     Get the sequence selectable <see cref="ModelObjectReference{T}" /> of <see cref="KineticSimulation" />
+        ///     instances that are available for the passed <see cref="ProjectJobSetTemplate" />
         /// </summary>
         /// <param name="jobTranslation"></param>
         /// <returns></returns>
-        public IEnumerable<ModelObjectReferenceGraph<MetropolisSimulation>> GetSelectableSimulations(
-            ProjectJobTranslationGraph jobTranslation)
+        public IEnumerable<ModelObjectReference<MetropolisSimulation>> GetSelectableSimulations(
+            ProjectJobSetTemplate jobTranslation)
         {
-            return jobTranslation?.Parent?.ProjectModelGraph?.SimulationModelGraph?.MetropolisSimulations
-                ?.Select(x => new ModelObjectReferenceGraph<MetropolisSimulation>(x));
+            return jobTranslation?.Parent?.ProjectModelData?.SimulationModelData?.MetropolisSimulations
+                ?.Select(x => new ModelObjectReference<MetropolisSimulation>(x));
         }
     }
 }

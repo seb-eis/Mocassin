@@ -39,7 +39,7 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Particle" Binding="{Binding Particle.Name}" IsReadOnly="True" />
-        <DataGridTextColumn Header="Cell Position" Binding="{Binding UnitCellPosition.Name}" IsReadOnly="True" />
+        <DataGridTextColumn Header="Cell Position" Binding="{Binding CellReferencePosition.Name}" IsReadOnly="True" />
         <DataGridTextColumn Header="Energy"
                             Binding="{Binding Energy, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
       </DataGrid.Columns>

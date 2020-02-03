@@ -118,9 +118,10 @@ namespace Mocassin.UI.GUI.Logic.Updating
                 AwaitConflictingTasks();
                 ProjectControl.OpenProjectLibrary?.CheckForModelChanges();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                PushErrorMessage(new InvalidOperationException($"Unexpected error in change detection system: {e.Message}"));
+                Console.WriteLine(exception);
+                PushErrorMessage(new InvalidOperationException($"Unexpected error in change detection system: {exception.Message}"));
                 IsChecking = false;
             }
             IsChecking = false;

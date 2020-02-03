@@ -38,7 +38,7 @@
       <DataGrid.Columns>
         <DataGridTemplateColumn>
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type base:ModelObjectGraph}">
+            <DataTemplate DataType="{x:Type base:ModelDataObject}">
               <TextBlock Text="{Binding Name}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>

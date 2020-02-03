@@ -58,6 +58,6 @@ namespace Mocassin.Model.Translator.ModelContext
         ///     Get the start unit cell position this transition model is valid for
         /// </summary>
         /// <returns></returns>
-        IUnitCellPosition GetStartUnitCellPosition();
+        ICellReferencePosition GetStartCellReferencePosition();
     }
 }

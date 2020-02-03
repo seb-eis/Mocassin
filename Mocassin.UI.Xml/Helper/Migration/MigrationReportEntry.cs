@@ -13,24 +13,24 @@ namespace Mocassin.UI.Xml.Helper.Migration
         public string Comment { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObjectGraph"/> parent of the migration source if it exists
+        ///     Get the <see cref="ProjectDataObject"/> parent of the migration source if it exists
         /// </summary>
-        public ProjectObjectGraph SourceParent { get; }
+        public ProjectDataObject SourceParent { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObjectGraph"/> parent of the migration target if it exists
+        ///     Get the <see cref="ProjectDataObject"/> parent of the migration target if it exists
         /// </summary>
-        public ProjectObjectGraph TargetParent { get; }
+        public ProjectDataObject TargetParent { get; }
 
         /// <summary>
-        ///     Get the migration data source <see cref="ProjectObjectGraph"/>
+        ///     Get the migration data source <see cref="ProjectDataObject"/>
         /// </summary>
-        public ProjectObjectGraph DataSource { get; }
+        public ProjectDataObject DataSource { get; }
 
         /// <summary>
-        ///     Get the migration data target <see cref="ProjectObjectGraph"/>
+        ///     Get the migration data target <see cref="ProjectDataObject"/>
         /// </summary>
-        public ProjectObjectGraph DataTarget { get; }
+        public ProjectDataObject DataTarget { get; }
 
         /// <summary>
         ///     Creates a new <see cref="MigrationReportEntry"/>
@@ -39,7 +39,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="dataSource"></param>
         /// <param name="dataTarget"></param>
         /// <param name="comment"></param>
-        public MigrationReportEntry(ProjectObjectGraph sourceParent, ProjectObjectGraph targetParent, ProjectObjectGraph dataSource, ProjectObjectGraph dataTarget, string comment)
+        public MigrationReportEntry(ProjectDataObject sourceParent, ProjectDataObject targetParent, ProjectDataObject dataSource, ProjectDataObject dataTarget, string comment)
         {
             Comment = comment;
             SourceParent = sourceParent;

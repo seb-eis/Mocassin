@@ -14,12 +14,12 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The unit cell position that describes the start point
         /// </summary>
-        public IUnitCellPosition StartUnitCellPosition { get; }
+        public ICellReferencePosition StartCellReferencePosition { get; }
 
         /// <summary>
         ///     The unit cell position that describes the end point
         /// </summary>
-        public IUnitCellPosition EndUnitCellPosition { get; }
+        public ICellReferencePosition EndCellReferencePosition { get; }
 
         /// <summary>
         ///     The interface of the transition the mapping is valid for
@@ -66,17 +66,17 @@ namespace Mocassin.Model.Transitions
         ///     path
         /// </summary>
         /// <param name="transition"></param>
-        /// <param name="startUnitCellPosition"></param>
-        /// <param name="endUnitCellPosition"></param>
+        /// <param name="startCellReferencePosition"></param>
+        /// <param name="endCellReferencePosition"></param>
         /// <param name="encodedPath"></param>
         /// <param name="fractionalPath"></param>
-        public KineticMapping(IKineticTransition transition, IUnitCellPosition startUnitCellPosition, IUnitCellPosition endUnitCellPosition,
+        public KineticMapping(IKineticTransition transition, ICellReferencePosition startCellReferencePosition, ICellReferencePosition endCellReferencePosition,
             CrystalVector4D[] encodedPath, Fractional3D[] fractionalPath)
             : this()
         {
             Transition = transition;
-            StartUnitCellPosition = startUnitCellPosition;
-            EndUnitCellPosition = endUnitCellPosition;
+            StartCellReferencePosition = startCellReferencePosition;
+            EndCellReferencePosition = endCellReferencePosition;
             EncodedPath = encodedPath ?? throw new ArgumentNullException(nameof(encodedPath));
             FractionalPath = fractionalPath;
         }
@@ -96,7 +96,7 @@ namespace Mocassin.Model.Transitions
             var inverseEncodedPath = EncodedPath.Reverse().ToArray();
             var inverseFractionalPath = FractionalPath.Reverse().ToArray();
             return new KineticMapping(
-                Transition, EndUnitCellPosition, StartUnitCellPosition, inverseEncodedPath, inverseFractionalPath
+                Transition, EndCellReferencePosition, StartCellReferencePosition, inverseEncodedPath, inverseFractionalPath
             );
         }
     }

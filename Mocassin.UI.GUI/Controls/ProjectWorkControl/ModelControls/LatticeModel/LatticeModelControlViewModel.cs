@@ -35,7 +35,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             BlockControlViewModel.ChangeContentSource(contentSource);

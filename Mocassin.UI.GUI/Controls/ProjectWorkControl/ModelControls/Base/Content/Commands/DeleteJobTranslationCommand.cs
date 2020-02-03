@@ -8,10 +8,10 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectJobTranslationGraph" /> from a
-    ///     <see cref="MocassinProjectGraph" />
+    ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectJobSetTemplate" /> from a
+    ///     <see cref="MocassinProject" />
     /// </summary>
-    public class DeleteJobTranslationCommand : AsyncProjectControlCommand<ProjectJobTranslationGraph>
+    public class DeleteJobTranslationCommand : AsyncProjectControlCommand<ProjectJobSetTemplate>
     {
         /// <summary>
         ///     Additional <see cref="Action" /> to be invoked on successful removal
@@ -26,17 +26,17 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectJobTranslationGraph parameter)
+        public override bool CanExecuteInternal(ProjectJobSetTemplate parameter)
         {
             if (parameter?.Parent == null) return false;
-            return base.CanExecuteInternal(parameter) && parameter.Parent.ProjectJobTranslationGraphs.Contains(parameter);
+            return base.CanExecuteInternal(parameter) && parameter.Parent.JobSetTemplates.Contains(parameter);
         }
 
         /// <inheritdoc />
-        public override async Task ExecuteAsync(ProjectJobTranslationGraph parameter)
+        public override async Task ExecuteAsync(ProjectJobSetTemplate parameter)
         {
             var isRemoved = false;
-            await Task.Run(() => { ProjectControl.ExecuteOnAppThread(() => { isRemoved = parameter.Parent.ProjectJobTranslationGraphs.Remove(parameter); }); });
+            await Task.Run(() => { ProjectControl.ExecuteOnAppThread(() => { isRemoved = parameter.Parent.JobSetTemplates.Remove(parameter); }); });
             if (isRemoved) OnRemovalAction?.Invoke();
         }
     }

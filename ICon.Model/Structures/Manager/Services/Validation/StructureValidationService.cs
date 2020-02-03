@@ -31,21 +31,21 @@ namespace Mocassin.Model.Structures
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidateUnitCellPosition(IUnitCellPosition position, IDataReader<IStructureDataPort> dataReader)
+        protected IValidationReport ValidateCellReferencePosition(ICellReferencePosition position, IDataReader<IStructureDataPort> dataReader)
         {
-            return new UnitCellPositionValidator(ModelProject, Settings, dataReader).Validate(position);
+            return new CellReferencePositionValidator(ModelProject, Settings, dataReader).Validate(position);
         }
 
         /// <summary>
         ///     Validates a position dummy in terms of conflicts with basic limitations
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="cellDummyPosition"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]
-        protected IValidationReport ValidatePositionDummy(IPositionDummy position, IDataReader<IStructureDataPort> dataReader)
+        protected IValidationReport ValidatePositionDummy(ICellDummyPosition cellDummyPosition, IDataReader<IStructureDataPort> dataReader)
         {
-            return new PositionDummyValidator(ModelProject, Settings, dataReader).Validate(position);
+            return new PositionDummyValidator(ModelProject, Settings, dataReader).Validate(cellDummyPosition);
         }
 
         /// <summary>

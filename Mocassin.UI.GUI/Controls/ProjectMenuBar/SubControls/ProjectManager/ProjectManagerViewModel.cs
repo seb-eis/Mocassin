@@ -94,6 +94,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 var exception = new InvalidOperationException("Internal error on saving", e);
                 PushErrorMessage(exception);
             }
@@ -143,7 +144,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
         }
 
         /// <summary>
-        ///     Creates a new <see cref="MocassinProjectGraph" /> and adds it to the passed <see cref="IMocassinProjectLibrary" />
+        ///     Creates a new <see cref="MocassinProject" /> and adds it to the passed <see cref="IMocassinProjectLibrary" />
         /// </summary>
         /// <param name="projectLibrary"></param>
         public void AddNewProjectGraphToProject(IMocassinProjectLibrary projectLibrary)
@@ -156,12 +157,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
 
             try
             {
-                var projectGraph = MocassinProjectGraph.CreateNew();
+                var projectGraph = MocassinProject.CreateNew();
                 projectLibrary.Add(projectGraph);
                 PushInfoMessage($"New project graph (ID = {projectGraph.ProjectGuid}) added to project");
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 var exception = new InvalidOperationException("Internal error during graph adding!", e);
                 PushErrorMessage(exception);
             }
@@ -189,6 +191,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectMenuBar.SubControls.ProjectManager
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 ForceCloseProjectLibrary(newProjectLibrary);
                 ProjectControl.ChangeOpenProjectLibrary(null);
                 OpenDatabaseFilePath = "";

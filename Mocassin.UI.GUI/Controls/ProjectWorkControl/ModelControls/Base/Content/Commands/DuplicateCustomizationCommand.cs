@@ -8,44 +8,44 @@ using Mocassin.UI.Xml.Jobs;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to duplicate a <see cref="ProjectJobTranslationGraph" /> and add the
+    ///     The <see cref="AsyncProjectControlCommand" /> to duplicate a <see cref="ProjectJobSetTemplate" /> and add the
     ///     copy to the selected
     ///     project
     /// </summary>
-    public class DuplicateCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationGraph>
+    public class DuplicateCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationTemplate>
     {
         /// <summary>
         ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
-        private Action<ProjectCustomizationGraph> OnSuccessAction { get; }
+        private Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public DuplicateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationGraph> onSuccessAction = null)
+        public DuplicateCustomizationCommand(IMocassinProjectControl projectControl, Action<ProjectCustomizationTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             OnSuccessAction = onSuccessAction;
         }
 
         /// <inheritdoc />
-        public override Task ExecuteAsync(ProjectCustomizationGraph parameter)
+        public override Task ExecuteAsync(ProjectCustomizationTemplate parameter)
         {
             return Task.Run(() => AddDuplicate(parameter));
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectCustomizationGraph parameter)
+        public override bool CanExecuteInternal(ProjectCustomizationTemplate parameter)
         {
             return parameter?.Parent != null && base.CanExecuteInternal(parameter);
         }
 
         /// <summary>
-        ///     Creates and adds a duplicate of a <see cref="ProjectCustomizationGraph" /> to its parent project
+        ///     Creates and adds a duplicate of a <see cref="ProjectCustomizationTemplate" /> to its parent project
         /// </summary>
         /// <param name="source"></param>
-        private void AddDuplicate(ProjectCustomizationGraph source)
+        private void AddDuplicate(ProjectCustomizationTemplate source)
         {
             var duplicate = source.Duplicate();
-            ProjectControl.ExecuteOnAppThread(() => source.Parent.ProjectCustomizationGraphs.Add(duplicate));
+            ProjectControl.ExecuteOnAppThread(() => source.Parent.CustomizationTemplates.Add(duplicate));
             OnSuccessAction?.Invoke(duplicate);
         }
     }

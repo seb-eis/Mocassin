@@ -32,8 +32,9 @@ namespace Mocassin.UI.GUI.Base.Converter
             {
                 return GetParseFunction(targetType)?.DynamicInvoke(value as string, culture);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 return null;
             }
         }
@@ -56,8 +57,9 @@ namespace Mocassin.UI.GUI.Base.Converter
                 var delegateType = typeof(ParseDelegate<>).MakeGenericType(underlyingType);
                 ParsingDictionary[targetType] = method?.CreateDelegate(delegateType);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 ParsingDictionary[targetType] = null;
             }
 

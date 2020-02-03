@@ -15,6 +15,6 @@ namespace Mocassin.Model.Structures
         /// <summary>
         ///     The status of the position (Stable, unstable)
         /// </summary>
-        PositionStatus Status { get; }
+        PositionStability Stability { get; }
     }
 }

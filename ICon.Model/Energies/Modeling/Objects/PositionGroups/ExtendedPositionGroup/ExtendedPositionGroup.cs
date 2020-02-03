@@ -19,12 +19,12 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The center position
         /// </summary>
-        public IUnitCellPosition CenterPosition { get; set; }
+        public ICellReferencePosition CenterPosition { get; set; }
 
         /// <summary>
         ///     The unit cell positions of the group sequences
         /// </summary>
-        public List<IUnitCellPosition> SurroundingUnitCellPositions { get; set; }
+        public List<ICellReferencePosition> SurroundingCellReferencePositions { get; set; }
 
         /// <summary>
         ///     The point operation group describing the symmetry operation information of the group

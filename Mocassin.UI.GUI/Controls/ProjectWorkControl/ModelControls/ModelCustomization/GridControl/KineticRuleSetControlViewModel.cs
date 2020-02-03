@@ -10,18 +10,18 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     /// <summary>
     ///     The <see cref="ViewModelBase"/> for the <see cref="KineticRuleSetControlView"/> that enables customization of
     /// </summary>
-    public sealed class KineticRuleSetControlViewModel : CollectionControlViewModel<KineticRuleGraph>
+    public sealed class KineticRuleSetControlViewModel : CollectionControlViewModel<KineticRuleData>
     {
         /// <summary>
-        ///     Get the <see cref="KineticRuleSetGraph"/> that the view model targets
+        ///     Get the <see cref="KineticRuleSetData"/> that the view model targets
         /// </summary>
-        public KineticRuleSetGraph KineticRuleSet { get; }
+        public KineticRuleSetData KineticRuleSet { get; }
 
         /// <summary>
-        ///     Create new <see cref="KineticRuleSetControlViewModel"/> for the passed <see cref="KineticRuleGraph"/>
+        ///     Create new <see cref="KineticRuleSetControlViewModel"/> for the passed <see cref="KineticRuleData"/>
         /// </summary>
         /// <param name="kineticRuleSet"></param>
-        public KineticRuleSetControlViewModel(KineticRuleSetGraph kineticRuleSet)
+        public KineticRuleSetControlViewModel(KineticRuleSetData kineticRuleSet)
         {
             KineticRuleSet = kineticRuleSet ?? throw new ArgumentNullException(nameof(kineticRuleSet));
             SetCollection(kineticRuleSet.KineticRules);

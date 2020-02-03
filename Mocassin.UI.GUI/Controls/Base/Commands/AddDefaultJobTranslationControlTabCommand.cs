@@ -48,8 +48,8 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
             var viewModel = new BasicJobTranslationContentControlViewModel(ProjectControl)
             {
                 DataContentControl = GetDataControl(),
-                SelectedProjectGraph = ProjectControl.ProjectBrowserViewModel.GetWorkProject(),
-                SelectedJobTranslationGraph = null
+                SelectedProject = ProjectControl.ProjectBrowserViewModel.GetWorkProject(),
+                SelectedJobSetTemplate = null
             };
             return viewModel;
         }

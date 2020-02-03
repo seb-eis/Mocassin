@@ -22,7 +22,7 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         ///     unit cell position (contains information about the sublattice)
         /// </summary>
-        IUnitCellPosition UnitCellPosition { get; }
+        ICellReferencePosition CellReferencePosition { get; }
 
         /// <summary>
         ///     Get the charge delta [Replacement] - [Original] occupation

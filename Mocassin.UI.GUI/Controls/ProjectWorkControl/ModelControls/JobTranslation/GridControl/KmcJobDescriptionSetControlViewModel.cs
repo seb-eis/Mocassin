@@ -8,26 +8,26 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="KmcJobDescriptionSetControlView" /> that controls
-    ///     manipulation of <see cref="KmcJobDescriptionGraph" />
+    ///     manipulation of <see cref="KmcJobConfigData" />
     /// </summary>
-    public sealed class KmcJobDescriptionSetControlViewModel : CollectionControlViewModel<KmcJobDescriptionGraph>
+    public sealed class KmcJobDescriptionSetControlViewModel : CollectionControlViewModel<KmcJobConfigData>
     {
         private int duplicateCount = 1;
 
         /// <summary>
-        ///     Get the <see cref="KmcJobDescriptionGraph" /> that supplies the <see cref="KmcJobDescriptionGraph" /> collection
+        ///     Get the <see cref="KmcJobConfigData" /> that supplies the <see cref="KmcJobConfigData" /> collection
         /// </summary>
-        public KmcJobPackageDescriptionGraph KmcJobPackage { get; }
+        public KmcJobPackageData KmcJobPackage { get; }
 
         /// <summary>
-        ///     Get the parent <see cref="MocassinProjectGraph" />
+        ///     Get the parent <see cref="MocassinProject" />
         /// </summary>
-        public MocassinProjectGraph ProjectGraph { get; }
+        public MocassinProject Project { get; }
 
         /// <summary>
         ///     Get the <see cref="DuplicateCollectionItemCommand{T}"/> for the collection
         /// </summary>
-        public DuplicateCollectionItemCommand<KmcJobDescriptionGraph> DuplicateItemCommand { get; }
+        public DuplicateCollectionItemCommand<KmcJobConfigData> DuplicateItemCommand { get; }
 
         /// <summary>
         ///     Get or set the duplicate count if the duplicate command is executed
@@ -40,16 +40,16 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 
         /// <summary>
         ///     Creates new <see cref="KmcJobDescriptionSetControlViewModel" /> for the passed
-        ///     <see cref="KmcJobPackageDescriptionGraph" />
+        ///     <see cref="KmcJobPackageData" />
         /// </summary>
         /// <param name="kmcJobPackage"></param>
         /// <param name="project"></param>
-        public KmcJobDescriptionSetControlViewModel(KmcJobPackageDescriptionGraph kmcJobPackage, MocassinProjectGraph project)
+        public KmcJobDescriptionSetControlViewModel(KmcJobPackageData kmcJobPackage, MocassinProject project)
         {
             KmcJobPackage = kmcJobPackage ?? throw new ArgumentNullException(nameof(kmcJobPackage));
-            ProjectGraph = project ?? throw new ArgumentNullException(nameof(project));
+            Project = project ?? throw new ArgumentNullException(nameof(project));
             SetCollection(kmcJobPackage.JobConfigurations);
-            DuplicateItemCommand = new DuplicateCollectionItemCommand<KmcJobDescriptionGraph>(this) {CountProvider = () => DuplicateCount};
+            DuplicateItemCommand = new DuplicateCollectionItemCommand<KmcJobConfigData>(this) {CountProvider = () => DuplicateCount};
         }
     }
 }

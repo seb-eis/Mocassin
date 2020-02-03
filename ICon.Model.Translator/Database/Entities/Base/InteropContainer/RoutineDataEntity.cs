@@ -206,8 +206,9 @@ namespace Mocassin.Model.Translator
                     var convertedValue = Convert.ChangeType(value, property.PropertyType, CultureInfo.InvariantCulture);
                     property.SetValue(boxedStructure, convertedValue);
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    Console.WriteLine(exception);
                     return false;
                 }
             }

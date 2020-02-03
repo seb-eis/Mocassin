@@ -25,9 +25,9 @@ namespace Mocassin.Model.Structures
         /// <param name="position"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.NewObject)]
-        protected IOperationReport TryRegisterUnitCellPosition(IUnitCellPosition position)
+        protected IOperationReport TryRegisterCellReferencePosition(ICellReferencePosition position)
         {
-            return DefaultRegisterModelObject(position, accessor => accessor.Query(data => data.UnitCellPositions));
+            return DefaultRegisterModelObject(position, accessor => accessor.Query(data => data.CellReferencePositions));
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace Mocassin.Model.Structures
         /// <param name="position"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectRemoval)]
-        protected IOperationReport TryRemoveUnitCellPosition(IUnitCellPosition position)
+        protected IOperationReport TryRemoveCellReferencePosition(ICellReferencePosition position)
         {
-            return DefaultRemoveModelObject(position, accessor => accessor.Query(data => data.UnitCellPositions));
+            return DefaultRemoveModelObject(position, accessor => accessor.Query(data => data.CellReferencePositions));
         }
 
         /// <summary>
@@ -50,46 +50,46 @@ namespace Mocassin.Model.Structures
         /// <param name="newPosition"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
-        protected IOperationReport TryReplaceUnitCellPosition(IUnitCellPosition orgPosition, IUnitCellPosition newPosition)
+        protected IOperationReport TryReplaceCellReferencePosition(ICellReferencePosition orgPosition, ICellReferencePosition newPosition)
         {
-            return DefaultReplaceModelObject(orgPosition, newPosition, accessor => accessor.Query(data => data.UnitCellPositions));
+            return DefaultReplaceModelObject(orgPosition, newPosition, accessor => accessor.Query(data => data.CellReferencePositions));
         }
 
         /// <summary>
         ///     Tries to register a new unit cell position in the manager if it passes validation (Awaits distribution of
         ///     affiliated events on operation success)
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="cellDummyPosition"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.NewObject)]
-        protected IOperationReport TryRegisterPositionDummy(IPositionDummy position)
+        protected IOperationReport TryRegisterPositionDummy(ICellDummyPosition cellDummyPosition)
         {
-            return DefaultRegisterModelObject(position, accessor => accessor.Query(data => data.PositionDummies));
+            return DefaultRegisterModelObject(cellDummyPosition, accessor => accessor.Query(data => data.PositionDummies));
         }
 
         /// <summary>
         ///     Tries to remove a unit cell position from the manager by deprecation (Awaits distribution of affiliated events on
         ///     operation success)
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="cellDummyPosition"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectRemoval)]
-        protected IOperationReport TryRemovePositionDummy(IPositionDummy position)
+        protected IOperationReport TryRemovePositionDummy(ICellDummyPosition cellDummyPosition)
         {
-            return DefaultRemoveModelObject(position, accessor => accessor.Query(data => data.PositionDummies));
+            return DefaultRemoveModelObject(cellDummyPosition, accessor => accessor.Query(data => data.PositionDummies));
         }
 
         /// <summary>
         ///     Tries to replace a unit cell position from the manager if it passes validation (Awaits distribution of affiliated
         ///     events on operation success)
         /// </summary>
-        /// <param name="orgPosition"></param>
-        /// <param name="newPosition"></param>
+        /// <param name="orgCellDummyPosition"></param>
+        /// <param name="newCellDummyPosition"></param>
         /// <returns></returns>
         [DataOperation(DataOperationType.ObjectChange)]
-        protected IOperationReport TryReplacePositionDummy(IPositionDummy orgPosition, IPositionDummy newPosition)
+        protected IOperationReport TryReplacePositionDummy(ICellDummyPosition orgCellDummyPosition, ICellDummyPosition newCellDummyPosition)
         {
-            return DefaultReplaceModelObject(orgPosition, newPosition, accessor => accessor.Query(data => data.PositionDummies));
+            return DefaultReplaceModelObject(orgCellDummyPosition, newCellDummyPosition, accessor => accessor.Query(data => data.PositionDummies));
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ using Mocassin.UI.Xml.Base;
 namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
 {
     /// <summary>
-    ///     Base class for <see cref="IDxSceneItemConfig"/> implementations for <see cref="ExtensibleProjectObjectGraph"/>
+    ///     Base class for <see cref="IDxSceneItemConfig"/> implementations for <see cref="ExtensibleProjectDataObject"/>
     /// </summary>
     public abstract class DxProjectObjectSceneConfig : ViewModelBase, IDxSceneItemConfig, IDisposable
     {
@@ -21,9 +21,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         private static string NameKey => Resources.ResourceKey_ModelObject_RenderDisplayName;
 
         /// <summary>
-        ///     Get the <see cref="ExtensibleProjectObjectGraph"/> that provides the scene resources
+        ///     Get the <see cref="ExtensibleProjectDataObject"/> that provides the scene resources
         /// </summary>
-        protected ExtensibleProjectObjectGraph ObjectGraph { get; }
+        protected ExtensibleProjectDataObject DataObject { get; }
 
         /// <summary>
         ///     Get the <see cref="HashSet{T}"/> of managed <see cref="SceneNode"/> instances
@@ -36,11 +36,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public string Name
         {
-            get => ObjectGraph.Resources.TryGetResource(NameKey, out string value) ? value : ObjectGraph.Name;
+            get => DataObject.Resources.TryGetResource(NameKey, out string value) ? value : DataObject.Name;
             set
             {
                 if (Equals(Name, value)) return;
-                ObjectGraph.Resources.SetResource(NameKey, value);
+                DataObject.Resources.SetResource(NameKey, value);
                 OnNameChanged();
                 OnPropertyChanged();
             }
@@ -56,11 +56,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public bool IsVisible
         {
-            get => ObjectGraph.Resources.TryGetResource(IsVisibleKey, out bool value) && value;
+            get => DataObject.Resources.TryGetResource(IsVisibleKey, out bool value) && value;
             set
             {
                 if (value == IsVisible) return;
-                ObjectGraph.Resources.SetResource(IsVisibleKey, value);
+                DataObject.Resources.SetResource(IsVisibleKey, value);
                 OnIsVisibleChanged();
                 OnPropertyChanged();
             }
@@ -69,11 +69,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public bool IsInactive
         {
-            get => !ObjectGraph.Resources.TryGetResource(IsInactiveKey, out bool value) || value;
+            get => !DataObject.Resources.TryGetResource(IsInactiveKey, out bool value) || value;
             set
             {
                 if (value == IsInactive) return;
-                ObjectGraph.Resources.SetResource(IsInactiveKey, value);
+                DataObject.Resources.SetResource(IsInactiveKey, value);
                 OnIsInactiveChanged();
                 OnPropertyChanged();
             }
@@ -87,13 +87,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DxProjectObjectSceneConfig"/> for a <see cref="ExtensibleProjectObjectGraph"/>
+        ///     Creates a new <see cref="DxProjectObjectSceneConfig"/> for a <see cref="ExtensibleProjectDataObject"/>
         /// </summary>
-        /// <param name="objectGraph"></param>
+        /// <param name="dataObject"></param>
         /// <param name="visualCategory"></param>
-        protected DxProjectObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
+        protected DxProjectObjectSceneConfig(ExtensibleProjectDataObject dataObject, VisualObjectCategory visualCategory)
         {
-            ObjectGraph = objectGraph ?? throw new ArgumentNullException(nameof(objectGraph));
+            DataObject = dataObject ?? throw new ArgumentNullException(nameof(dataObject));
             VisualCategory = visualCategory;
             SceneNodes = new HashSet<SceneNode>();
         }
@@ -107,7 +107,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public virtual bool CheckAccess(object model)
         {
-            return model != null && ReferenceEquals(model, ObjectGraph);
+            return model != null && ReferenceEquals(model, DataObject);
         }
 
         /// <summary>

@@ -31,9 +31,9 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IGroupInteraction> GetGroupInteractions()
+        public ListReadOnlyWrapper<IGroupInteraction> GetGroupInteractions()
         {
-            return ReadOnlyListAdapter<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
+            return ListReadOnlyWrapper<IGroupInteraction>.FromEnumerable(Data.GroupInteractions);
         }
 
         /// <inheritdoc />
@@ -43,9 +43,9 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<ISymmetricPairInteraction> GetStablePairInteractions()
+        public ListReadOnlyWrapper<ISymmetricPairInteraction> GetStablePairInteractions()
         {
-            return ReadOnlyListAdapter<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
+            return ListReadOnlyWrapper<ISymmetricPairInteraction>.FromEnumerable(Data.StablePairInteractions);
         }
 
         /// <inheritdoc />
@@ -56,15 +56,15 @@ namespace Mocassin.Model.Energies
 
 
         /// <inheritdoc />
-        public IUnstableEnvironment GetUnstableEnvironment(IUnitCellPosition unitCellPosition)
+        public IUnstableEnvironment GetUnstableEnvironment(ICellReferencePosition cellReferencePosition)
         {
-            return Data.UnstableEnvironments.SingleOrDefault(x => x.UnitCellPosition == unitCellPosition);
+            return Data.UnstableEnvironments.SingleOrDefault(x => x.CellReferencePosition == cellReferencePosition);
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IUnstableEnvironment> GetUnstableEnvironments()
+        public ListReadOnlyWrapper<IUnstableEnvironment> GetUnstableEnvironments()
         {
-            return ReadOnlyListAdapter<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironments);
+            return ListReadOnlyWrapper<IUnstableEnvironment>.FromEnumerable(Data.UnstableEnvironments);
         }
 
         /// <inheritdoc />
@@ -74,9 +74,9 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IAsymmetricPairInteraction> GetUnstablePairInteractions()
+        public ListReadOnlyWrapper<IAsymmetricPairInteraction> GetUnstablePairInteractions()
         {
-            return ReadOnlyListAdapter<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
+            return ListReadOnlyWrapper<IAsymmetricPairInteraction>.FromEnumerable(Data.UnstablePairInteractions);
         }
 
         /// <inheritdoc />

@@ -10,29 +10,29 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for the<see cref="PairEnergySetControlView" />
     /// </summary>
-    public sealed class PairEnergySetControlViewModel : CollectionControlViewModel<PairEnergyGraph>, IDisposable
+    public sealed class PairEnergySetControlViewModel : CollectionControlViewModel<PairEnergyData>, IDisposable
     {
         /// <summary>
-        ///     Get the <see cref="PairEnergySetGraph" /> that is the chiral partner of the controlled one
+        ///     Get the <see cref="PairEnergySetData" /> that is the chiral partner of the controlled one
         /// </summary>
-        public PairEnergySetGraph ChiralPairEnergySet { get; }
+        public PairEnergySetData ChiralPairEnergySet { get; }
 
         /// <summary>
-        ///     Get the <see cref="PairEnergySetGraph" /> that the view model targets
+        ///     Get the <see cref="PairEnergySetData" /> that the view model targets
         /// </summary>
-        public PairEnergySetGraph PairEnergySet { get; }
+        public PairEnergySetData PairEnergySet { get; }
 
         /// <summary>
         ///     Get a boolean flag if the control is chiral dependent from another
         /// </summary>
-        public bool IsChiralDependent => ChiralPairEnergySet != null && PairEnergySet.PairInteractionIndex < ChiralPairEnergySet.PairInteractionIndex;
+        public bool IsChiralDependent => ChiralPairEnergySet != null && PairEnergySet.ModelIndex < ChiralPairEnergySet.ModelIndex;
 
         /// <summary>
         ///     Create new <see cref="PairEnergySetControlViewModel" />
         /// </summary>
         /// <param name="pairEnergySet"></param>
         /// <param name="parentCollection"></param>
-        public PairEnergySetControlViewModel(PairEnergySetGraph pairEnergySet, IReadOnlyList<PairEnergySetGraph> parentCollection)
+        public PairEnergySetControlViewModel(PairEnergySetData pairEnergySet, IReadOnlyList<PairEnergySetData> parentCollection)
         {
             if (parentCollection == null) throw new ArgumentNullException(nameof(parentCollection));
             PairEnergySet = pairEnergySet ?? throw new ArgumentNullException(nameof(pairEnergySet));
@@ -43,44 +43,44 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <summary>
-        ///     Finds the chiral partner <see cref="PairEnergySetGraph" /> within the provided <see cref="IReadOnlyList{T}" />.
+        ///     Finds the chiral partner <see cref="PairEnergySetData" /> within the provided <see cref="IReadOnlyList{T}" />.
         ///     Returns null if it doesn't exist
         /// </summary>
         /// <param name="original"></param>
         /// <param name="collection"></param>
         /// <returns></returns>
-        private static PairEnergySetGraph FindChiralPartner(PairEnergySetGraph original, IReadOnlyList<PairEnergySetGraph> collection)
+        private static PairEnergySetData FindChiralPartner(PairEnergySetData original, IReadOnlyList<PairEnergySetData> collection)
         {
-            if (original.ChiralInteractionIndex < 0 || original.ChiralInteractionIndex >= collection.Count) return null;
-            return collection[original.ChiralInteractionIndex];
+            if (original.ChiralPartnerModelIndex < 0 || original.ChiralPartnerModelIndex >= collection.Count) return null;
+            return collection[original.ChiralPartnerModelIndex];
         }
 
         /// <summary>
-        ///     Subscribes to the property change events of all <see cref="PairEnergyGraph" /> entries in the provided
-        ///     <see cref="PairEnergySetGraph" />
+        ///     Subscribes to the property change events of all <see cref="PairEnergyData" /> entries in the provided
+        ///     <see cref="PairEnergySetData" />
         /// </summary>
         /// <param name="source"></param>
-        private void SubscribeToEnergyChanges(PairEnergySetGraph source)
+        private void SubscribeToEnergyChanges(PairEnergySetData source)
         {
             if (source == null) return;
             foreach (var energyEntry in ChiralPairEnergySet.PairEnergyEntries) energyEntry.PropertyChanged += RelayPartnerEnergyChange;
         }
 
         /// <summary>
-        ///     Catches the energy change of a chiral partner <see cref="PairEnergyGraph" /> and copies the value to the managed
+        ///     Catches the energy change of a chiral partner <see cref="PairEnergyData" /> and copies the value to the managed
         ///     one
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private void RelayPartnerEnergyChange(object sender, PropertyChangedEventArgs args)
         {
-            static bool PairGraphsAreEqual(PairEnergyGraph first, PairEnergyGraph second)
+            static bool PairGraphsAreEqual(PairEnergyData first, PairEnergyData second)
             {
                 return first.CenterParticle.Equals(second.CenterParticle) && first.PartnerParticle.Equals(second.PartnerParticle);
             }
 
-            if (args.PropertyName != nameof(PairEnergyGraph.Energy)) return;
-            if (!(sender is PairEnergyGraph source)) return;
+            if (args.PropertyName != nameof(PairEnergyData.Energy)) return;
+            if (!(sender is PairEnergyData source)) return;
             var match = PairEnergySet.PairEnergyEntries.FirstOrDefault(x => PairGraphsAreEqual(x, source));
             if (match == null) throw new InvalidOperationException("Relay to chiral partner failed, no match for the source was found.");
             match.Energy = source.Energy;

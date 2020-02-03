@@ -52,8 +52,7 @@
         <comboBox:BindableDataGridComboBoxColumn Header="Center"
                                                  ItemsSource="{Binding ElementName=UnstableEnvironmentDataGrid, Path=DataContext.UnstablePositionOptions}"
                                                  DisplayMemberPath="Name"
-                                                 SelectedValuePath="Key"
-                                                 SelectedValueBinding="{Binding UnitCellPositionKey}"
+                                                 SelectedItemBinding="{Binding CellReferencePosition}"
                                                  IsReadOnly="True" />
 
         <DataGridTextColumn Header="Cutoff Radius [&#x212b;]"

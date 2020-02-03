@@ -8,13 +8,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
 {
     /// <summary>
     ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> implementation for wrapping
-    ///     <see cref="KineticSimulationGraph" /> instances into host view models for <see cref="KineticTransitionGraph" />
+    ///     <see cref="KineticSimulationData" /> instances into host view models for <see cref="KineticTransitionData" />
     ///     references
     /// </summary>
-    public class KineticSimulationTransitionSelectionVmConverter : HostGraphGuestSelectionVmConverter<KineticSimulationGraph>
+    public class KineticSimulationTransitionSelectionVmConverter : HostGraphGuestSelectionVmConverter<KineticSimulationData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProjectGraph> CreateSelectionViewModel(KineticSimulationGraph host)
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(KineticSimulationData host)
         {
             return new KineticSimulationTransitionSelectionViewModel(host);
         }

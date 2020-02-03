@@ -40,15 +40,13 @@
 
         <comboBox:BindableDataGridComboBoxColumn Header="Acceptor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
-                                                 SelectedValuePath="Key"
                                                  DisplayMemberPath="Name"
-                                                 SelectedValueBinding="{Binding AcceptorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
+                                                 SelectedItemBinding="{Binding AcceptorParticle}"/>
 
         <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
-                                                 SelectedValuePath="Key"
                                                  DisplayMemberPath="Name"
-                                                 SelectedValueBinding="{Binding DonorParticleKey, UpdateSourceTrigger=PropertyChanged}"/>
+                                                 SelectedItemBinding="{Binding DonorParticle}"/>
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

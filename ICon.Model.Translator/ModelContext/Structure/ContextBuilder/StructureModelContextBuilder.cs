@@ -27,8 +27,8 @@ namespace Mocassin.Model.Translator.ModelContext
             if (!CheckBuildRequirements()) return modelContext;
 
             var manager = ModelProject.GetManager<IStructureManager>();
-            var unitCellPositions = manager.QueryPort.Query(port => port.GetUnitCellPositions());
-            var environmentModels = EnvironmentModelBuilder.BuildModels(unitCellPositions);
+            var cellReferencePositions = manager.QueryPort.Query(port => port.GetCellReferencePositions());
+            var environmentModels = EnvironmentModelBuilder.BuildModels(cellReferencePositions);
             var positionModels = PositionModelBuilder.BuildModels(environmentModels);
             var rangeModel = InteractionRangeModelBuilder.BuildModel(ModelProject);
 
@@ -47,9 +47,9 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <inheritdoc />
         protected override void SetNullBuildersToDefault()
         {
-            EnvironmentModelBuilder = EnvironmentModelBuilder ?? new EnvironmentModelBuilder(ModelProject);
-            PositionModelBuilder = PositionModelBuilder ?? new PositionModelBuilder(ModelProject);
-            InteractionRangeModelBuilder = InteractionRangeModelBuilder ?? new InteractionRangeModelBuilder();
+            EnvironmentModelBuilder ??= new EnvironmentModelBuilder(ModelProject);
+            PositionModelBuilder ??= new PositionModelBuilder(ModelProject);
+            InteractionRangeModelBuilder ??= new InteractionRangeModelBuilder();
         }
 
         /// <inheritdoc />

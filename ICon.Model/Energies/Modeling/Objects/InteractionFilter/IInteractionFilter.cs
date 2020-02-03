@@ -10,12 +10,12 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     Get the unit cell position of the center
         /// </summary>
-        IUnitCellPosition CenterUnitCellPosition { get; }
+        ICellReferencePosition CenterCellReferencePosition { get; }
 
         /// <summary>
         ///     Get the unit cell position of the partner
         /// </summary>
-        IUnitCellPosition PartnerUnitCellPosition { get; }
+        ICellReferencePosition PartnerCellReferencePosition { get; }
 
         /// <summary>
         ///     Get  the start radius for the filter
@@ -31,10 +31,10 @@ namespace Mocassin.Model.Energies
         ///     Check if the passed interaction properties fall within the constraints of the interaction filter
         /// </summary>
         /// <param name="distance"></param>
-        /// <param name="centerUnitCellPosition"></param>
-        /// <param name="partnerUnitCellPosition"></param>
+        /// <param name="centerCellReferencePosition"></param>
+        /// <param name="partnerCellReferencePosition"></param>
         /// <returns></returns>
-        bool IsApplicable(double distance, IUnitCellPosition centerUnitCellPosition, IUnitCellPosition partnerUnitCellPosition);
+        bool IsApplicable(double distance, ICellReferencePosition centerCellReferencePosition, ICellReferencePosition partnerCellReferencePosition);
 
         /// <summary>
         /// Check if the passed pair interaction falls within the constraints of the interaction filter

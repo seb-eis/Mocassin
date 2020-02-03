@@ -20,7 +20,7 @@ namespace Mocassin.Model.Energies
         ///     Get a read only list of all stable pair infos
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<ISymmetricPairInteraction> GetStablePairInteractions();
+        ListReadOnlyWrapper<ISymmetricPairInteraction> GetStablePairInteractions();
 
         /// <summary>
         ///     Get the stable pair info at the specified index
@@ -33,7 +33,7 @@ namespace Mocassin.Model.Energies
         ///     GEt a read only list of all unstable pair interactions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IAsymmetricPairInteraction> GetUnstablePairInteractions();
+        ListReadOnlyWrapper<IAsymmetricPairInteraction> GetUnstablePairInteractions();
 
         /// <summary>
         ///     Get the unstable pair interactions at the specified index
@@ -46,7 +46,7 @@ namespace Mocassin.Model.Energies
         ///     Get a read only list of all existing group interaction definitions
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IGroupInteraction> GetGroupInteractions();
+        ListReadOnlyWrapper<IGroupInteraction> GetGroupInteractions();
 
         /// <summary>
         ///     Get the group interaction ath the specified index
@@ -59,7 +59,7 @@ namespace Mocassin.Model.Energies
         ///     Get a read only list of all unstable environment infos
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IUnstableEnvironment> GetUnstableEnvironments();
+        ListReadOnlyWrapper<IUnstableEnvironment> GetUnstableEnvironments();
 
         /// <summary>
         ///     Get the unstable environment info at the specified index
@@ -71,9 +71,9 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     Get the unstable environment that belongs to the passed unit cell position. Returns null if it does not exist
         /// </summary>
-        /// <param name="unitCellPosition"></param>
+        /// <param name="cellReferencePosition"></param>
         /// <returns></returns>
-        IUnstableEnvironment GetUnstableEnvironment(IUnitCellPosition unitCellPosition);
+        IUnstableEnvironment GetUnstableEnvironment(ICellReferencePosition cellReferencePosition);
 
         /// <summary>
         ///     Get an <see cref="IEnergySetterProvider" /> for all interactions that conforms to the passed

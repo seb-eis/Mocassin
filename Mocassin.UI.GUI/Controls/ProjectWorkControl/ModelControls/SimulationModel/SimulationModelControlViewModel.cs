@@ -32,7 +32,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             MetropolisSimulationViewModel.ChangeContentSource(contentSource);

@@ -7,7 +7,7 @@ using Mocassin.UI.Xml.LatticeModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="MultiValueConverter" /> to wrap <see cref="BuildingBlockGraph" /> and
+    ///     The <see cref="MultiValueConverter" /> to wrap <see cref="BuildingBlockData" /> and
     ///     <see cref="BuildingBlockControlViewModel" /> instances into <see cref="BuildingBlockContentControlViewModel" />
     ///     instances
     /// </summary>
@@ -17,7 +17,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(values[0] is BuildingBlockControlViewModel blockControlViewModel)) return null;
-            if (!(values[1] is BuildingBlockGraph buildingBlock)) return null;
+            if (!(values[1] is BuildingBlockData buildingBlock)) return null;
 
             var viewModel = new BuildingBlockContentControlViewModel(blockControlViewModel);
             viewModel.ChangeContentSource(buildingBlock);

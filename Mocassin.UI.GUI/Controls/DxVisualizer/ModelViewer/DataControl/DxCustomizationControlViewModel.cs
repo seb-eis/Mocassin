@@ -37,9 +37,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
 
         /// <summary>
         ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of currently selectable
-        ///     <see cref="ProjectCustomizationGraph" /> instances
+        ///     <see cref="ProjectCustomizationTemplate" /> instances
         /// </summary>
-        public ObservableCollectionViewModel<ProjectCustomizationGraph> SelectableCustomizations => ParentModelSceneViewModel.SelectableCustomizations;
+        public ObservableCollectionViewModel<ProjectCustomizationTemplate> SelectableCustomizations => ParentModelSceneViewModel.SelectableCustomizations;
 
         /// <summary>
         ///     Get a boolean flag if the scene is invalid and requires rebuilding
@@ -65,9 +65,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         public IReadOnlyCollection<string> MeshMaterialNames => PhongMaterialCoreToStringConverter.MaterialNameCollection;
 
         /// <summary>
-        ///     Get or set the currently selected <see cref="ProjectCustomizationGraph"/>
+        ///     Get or set the currently selected <see cref="ProjectCustomizationTemplate"/>
         /// </summary>
-        public ProjectCustomizationGraph SelectedCustomization
+        public ProjectCustomizationTemplate SelectedCustomization
         {
             get => ParentModelSceneViewModel.SelectedCustomization;
             set
@@ -86,7 +86,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.DataControl
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
         }

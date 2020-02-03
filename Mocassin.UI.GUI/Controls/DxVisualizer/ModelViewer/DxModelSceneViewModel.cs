@@ -48,14 +48,14 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
     /// </summary>
     public class DxModelSceneViewModel : ProjectGraphControlViewModel, IDxSceneController
     {
-        private ProjectCustomizationGraph selectedCustomization;
+        private ProjectCustomizationTemplate selectedCustomization;
         private bool canInvalidateScene = true;
         private bool isInvalidScene;
         private bool isMatchInteractionToHit;
 
         /// <summary>
         ///     Get or set the <see cref="IDisposable" /> that cancels the content synchronization for selectable
-        ///     <see cref="ProjectCustomizationGraph" /> instances
+        ///     <see cref="ProjectCustomizationTemplate" /> instances
         /// </summary>
         private IDisposable CustomizationLinkDisposable { get; set; }
 
@@ -76,9 +76,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
         /// <summary>
         ///     Get or set a <see cref="SetList{T1}" /> that maps each <see cref="Fractional3D" /> of the unit cell to
-        ///     its <see cref="UnitCellPositionGraph" />
+        ///     its <see cref="CellReferencePositionData" />
         /// </summary>
-        private SetList<KeyValuePair<Fractional3D, UnitCellPositionGraph>> UnitCellPositionCatalog { get; }
+        private SetList<KeyValuePair<Fractional3D, CellReferencePositionData>> CellReferencePositionCatalog { get; }
 
         /// <summary>
         ///     Get the <see cref="IDxSceneHost" /> that hosts the created scene elements
@@ -96,10 +96,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         public DxCustomizationControlViewModel CustomizationControlViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of selectable <see cref="ProjectCustomizationGraph" />
+        ///     Get the <see cref="ObservableCollectionViewModel{T}" /> of selectable <see cref="ProjectCustomizationTemplate" />
         ///     instances
         /// </summary>
-        public ObservableCollectionViewModel<ProjectCustomizationGraph> SelectableCustomizations { get; }
+        public ObservableCollectionViewModel<ProjectCustomizationTemplate> SelectableCustomizations { get; }
 
         /// <summary>
         ///     Get the <see cref="ObservableCollectionViewModel{T}" /> for <see cref="IDxMeshItemConfig" /> accesses for positions
@@ -143,9 +143,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Get or set the selected <see cref="ProjectCustomizationGraph" />
+        ///     Get or set the selected <see cref="ProjectCustomizationTemplate" />
         /// </summary>
-        public ProjectCustomizationGraph SelectedCustomization
+        public ProjectCustomizationTemplate SelectedCustomization
         {
             get => selectedCustomization;
             set => SetProperty(ref selectedCustomization, value, OnSelectedCustomizationChanged);
@@ -180,9 +180,9 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             ModelProject = projectControl.CreateModelProject();
             SceneHost = new DxViewportViewModel();
-            SelectableCustomizations = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
+            SelectableCustomizations = new ObservableCollectionViewModel<ProjectCustomizationTemplate>();
             InvalidateSceneCommand = new AsyncRelayCommand(async () => await Task.Run(InvalidateSceneInternalAsync), () => CanInvalidateScene);
-            UnitCellPositionCatalog = new SetList<KeyValuePair<Fractional3D, UnitCellPositionGraph>>(CreatePositionCatalogComparer());
+            CellReferencePositionCatalog = new SetList<KeyValuePair<Fractional3D, CellReferencePositionData>>(CreatePositionCatalogComparer());
             PositionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
             TransitionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
             PairInteractionItemConfigs = new ObservableCollectionViewModel<IDxMeshItemConfig>();
@@ -194,7 +194,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <inheritdoc />
-        public override async void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override async void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             await ExecuteIfContentSourceUnchanged(() => Task.Run(ChangeContentSourceInternal), TimeSpan.FromMilliseconds(250));
@@ -211,7 +211,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
 
         /// <summary>
         ///     Internal implementation of content source change that updates the view model if a new
-        ///     <see cref="MocassinProjectGraph" /> is set
+        ///     <see cref="MocassinProject" /> is set
         /// </summary>
         /// <returns></returns>
         public void ChangeContentSourceInternal()
@@ -240,7 +240,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             ClearSceneConfigs();
 
             SelectableCustomizations.Clear();
-            UnitCellPositionCatalog.Clear();
+            CellReferencePositionCatalog.Clear();
             SceneHost.ResetScene(false);
         }
 
@@ -269,7 +269,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Rebuilds and synchronizes the data access structure after a <see cref="MocassinProjectGraph" /> content source
+        ///     Rebuilds and synchronizes the data access structure after a <see cref="MocassinProject" /> content source
         ///     change
         /// </summary>
         private void RebuildContentAccess()
@@ -280,34 +280,34 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Rebuilds and synchronizes the <see cref="ProjectModelGraph" /> content access after the primary content source has
+        ///     Rebuilds and synchronizes the <see cref="ProjectModelData" /> content access after the primary content source has
         ///     changed
         /// </summary>
         private void RebuildModelAccess()
         {
             ModelProject.ResetProject();
-            if (ContentSource?.ProjectModelGraph == null) return;
+            if (ContentSource?.ProjectModelData == null) return;
 
-            var spaceGroupData = ContentSource.ProjectModelGraph.StructureModelGraph.SpaceGroupInfo.GetInputObject();
-            var cellData = ContentSource.ProjectModelGraph.StructureModelGraph.CellParameters.GetInputObject();
+            var spaceGroupData = ContentSource.ProjectModelData.StructureModelData.SpaceGroupInfo.GetInputObject();
+            var cellData = ContentSource.ProjectModelData.StructureModelData.CellParameters.GetInputObject();
             ModelProject.InputPipeline.PushToProject(spaceGroupData);
             ModelProject.InputPipeline.PushToProject(cellData);
         }
 
         /// <summary>
-        ///     Rebuilds and synchronizes the <see cref="ProjectCustomizationGraph" /> content access after the primary content
+        ///     Rebuilds and synchronizes the <see cref="ProjectCustomizationTemplate" /> content access after the primary content
         ///     source has changed
         /// </summary>
         private void RebuildCustomizationAccess()
         {
             CustomizationLinkDisposable?.Dispose();
             SelectableCustomizations.Clear();
-            SelectableCustomizations.AddItem(ProjectCustomizationGraph.Empty);
+            SelectableCustomizations.AddItem(ProjectCustomizationTemplate.Empty);
             if (ContentSource == null) return;
-            SelectableCustomizations.AddItems(ContentSource.ProjectCustomizationGraphs);
-            CustomizationLinkDisposable = SelectableCustomizations.ObservableItems.ListenToContentChanges(ContentSource.ProjectCustomizationGraphs);
+            SelectableCustomizations.AddItems(ContentSource.CustomizationTemplates);
+            CustomizationLinkDisposable = SelectableCustomizations.ObservableItems.ListenToContentChanges(ContentSource.CustomizationTemplates);
             if (SelectableCustomizations.ObservableItems.Contains(SelectedCustomization)) return;
-            SelectedCustomization = ProjectCustomizationGraph.Empty;
+            SelectedCustomization = ProjectCustomizationTemplate.Empty;
         }
 
         /// <summary>
@@ -329,11 +329,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
             TransitionItemConfigs.DisposeAllAndClear();
             LineItemConfigs.DisposeAllAndClear();
             if (ContentSource == null) return;
-            var source = ContentSource.ProjectModelGraph;
+            var source = ContentSource.ProjectModelData;
 
-            GetLineItemConfigLazy(source.StructureModelGraph.StructureInfo);
-            source.StructureModelGraph.UnitCellPositions.Select(GetMeshItemConfigLazy).Load();
-            source.TransitionModelGraph.KineticTransitions.Select(GetMeshItemConfigLazy).Load();
+            GetLineItemConfigLazy(source.StructureModelData.StructureInfo);
+            source.StructureModelData.CellReferencePositions.Select(GetMeshItemConfigLazy).Load();
+            source.TransitionModelData.KineticTransitions.Select(GetMeshItemConfigLazy).Load();
 
             RebuildHitTestResources();
         }
@@ -343,13 +343,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// </summary>
         private void RebuildHitTestResources()
         {
-            UnitCellPositionCatalog.Clear();
+            CellReferencePositionCatalog.Clear();
             if (ContentSource == null) return;
 
-            foreach (var cellPosition in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
+            foreach (var cellPosition in ContentSource.ProjectModelData.StructureModelData.CellReferencePositions)
             {
                 foreach (var vector in SpaceGroupService.GetUnitCellP1PositionExtension(new Fractional3D(cellPosition.A, cellPosition.B, cellPosition.C)))
-                    UnitCellPositionCatalog.Add(new KeyValuePair<Fractional3D, UnitCellPositionGraph>(vector, cellPosition));
+                    CellReferencePositionCatalog.Add(new KeyValuePair<Fractional3D, CellReferencePositionData>(vector, cellPosition));
             }
         }
 
@@ -360,7 +360,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         {
             PairInteractionItemConfigs.DisposeAllAndClear();
             GroupInteractionItemConfigs.DisposeAllAndClear();
-            if (ContentSource == null || SelectedCustomization == null || ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty)) return;
+            if (ContentSource == null || SelectedCustomization == null || ReferenceEquals(SelectedCustomization, ProjectCustomizationTemplate.Empty)) return;
 
             var source = SelectedCustomization.EnergyModelCustomization;
             source.StablePairEnergyParameterSets.Select(GetMeshItemConfigLazy).Load();
@@ -369,82 +369,82 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Gets the <see cref="IDxMeshItemConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> from the
+        ///     Gets the <see cref="IDxMeshItemConfig" /> for the provided <see cref="ExtensibleProjectDataObject" /> from the
         ///     correct container or creates one if required
         /// </summary>
-        /// <param name="objectGraph"></param>
+        /// <param name="dataObject"></param>
         /// <returns></returns>
-        private IDxMeshItemConfig GetMeshItemConfigLazy(ExtensibleProjectObjectGraph objectGraph)
+        private IDxMeshItemConfig GetMeshItemConfigLazy(ExtensibleProjectDataObject dataObject)
         {
             IDxMeshItemConfig CreateNew()
             {
-                return new DxProjectMeshObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph))
+                return new DxProjectMeshObjectSceneConfig(dataObject, GetVisualObjectCategory(dataObject))
                 {
                     OnChangeInvalidatesNode = MarkSceneAsInvalid,
-                    CanResizeMeshAtOrigin = objectGraph is UnitCellPositionGraph
+                    CanResizeMeshAtOrigin = dataObject is CellReferencePositionData
                 };
             }
 
             bool CheckMatch(IDxSceneItemConfig config)
             {
-                return config.CheckAccess(objectGraph);
+                return config.CheckAccess(dataObject);
             }
 
-            return objectGraph switch
+            return dataObject switch
             {
-                UnitCellPositionGraph _ => PositionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
-                PairEnergySetGraph _ => PairInteractionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
-                KineticTransitionGraph _ => TransitionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
-                GroupEnergySetGraph _ => GroupInteractionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                CellReferencePositionData _ => PositionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                PairEnergySetData _ => PairInteractionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                KineticTransitionData _ => TransitionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                GroupEnergySetData _ => GroupInteractionItemConfigs.FirstOrNew(CheckMatch, CreateNew),
                 _ => throw new InvalidOperationException("Provided object does not support a mesh config.")
             };
         }
 
         /// <summary>
-        ///     Gets the <see cref="IDxLineItemConfig" /> for the provided <see cref="ExtensibleProjectObjectGraph" /> from the
+        ///     Gets the <see cref="IDxLineItemConfig" /> for the provided <see cref="ExtensibleProjectDataObject" /> from the
         ///     correct container or creates one if required
         /// </summary>
-        /// <param name="objectGraph"></param>
+        /// <param name="dataObject"></param>
         /// <returns></returns>
-        private IDxLineItemConfig GetLineItemConfigLazy(ExtensibleProjectObjectGraph objectGraph)
+        private IDxLineItemConfig GetLineItemConfigLazy(ExtensibleProjectDataObject dataObject)
         {
             IDxLineItemConfig CreateNew()
             {
-                return new DxProjectLineObjectSceneConfig(objectGraph, GetVisualObjectCategory(objectGraph)) {OnChangeInvalidatesNode = MarkSceneAsInvalid};
+                return new DxProjectLineObjectSceneConfig(dataObject, GetVisualObjectCategory(dataObject)) {OnChangeInvalidatesNode = MarkSceneAsInvalid};
             }
 
             bool CheckMatch(IDxSceneItemConfig config)
             {
-                return config.CheckAccess(objectGraph);
+                return config.CheckAccess(dataObject);
             }
 
-            return objectGraph switch
+            return dataObject switch
             {
-                StructureInfoGraph _ => LineItemConfigs.FirstOrNew(CheckMatch, CreateNew),
+                StructureInfoData _ => LineItemConfigs.FirstOrNew(CheckMatch, CreateNew),
                 _ => throw new InvalidOperationException("Provided object does not support a line config.")
             };
         }
 
         /// <summary>
-        ///     Gets the <see cref="VisualObjectCategory" /> for the provided <see cref="ExtensibleProjectObjectGraph" />
+        ///     Gets the <see cref="VisualObjectCategory" /> for the provided <see cref="ExtensibleProjectDataObject" />
         /// </summary>
-        /// <param name="objectGraph"></param>
+        /// <param name="dataObject"></param>
         /// <returns></returns>
-        private VisualObjectCategory GetVisualObjectCategory(ExtensibleProjectObjectGraph objectGraph)
+        private VisualObjectCategory GetVisualObjectCategory(ExtensibleProjectDataObject dataObject)
         {
-            return objectGraph switch
+            return dataObject switch
             {
-                StructureInfoGraph _ => VisualObjectCategory.Frame,
-                KineticTransitionGraph _ => VisualObjectCategory.DoubleArrow,
-                UnitCellPositionGraph _ => VisualObjectCategory.Sphere,
-                PairEnergySetGraph _ => VisualObjectCategory.Cylinder,
-                GroupEnergySetGraph _ => VisualObjectCategory.PolygonSet,
+                StructureInfoData _ => VisualObjectCategory.Frame,
+                KineticTransitionData _ => VisualObjectCategory.DoubleArrow,
+                CellReferencePositionData _ => VisualObjectCategory.Sphere,
+                PairEnergySetData _ => VisualObjectCategory.Cylinder,
+                GroupEnergySetData _ => VisualObjectCategory.PolygonSet,
                 _ => VisualObjectCategory.Unknown
             };
         }
 
         /// <summary>
-        ///     Handles the required actions if the target <see cref="ProjectCustomizationGraph" /> was changed
+        ///     Handles the required actions if the target <see cref="ProjectCustomizationTemplate" /> was changed
         /// </summary>
         private void OnSelectedCustomizationChanged()
         {
@@ -496,10 +496,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
                 PushInfoMessage($"Scene controller CPU info: {cleanTime:0.0} ms (clean); {buildTime:0.0} ms (model); {setupTime:0.0} ms (setup);");
                 IsInvalidScene = false;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 IsInvalidScene = true;
-                OnRenderError(e);
+                OnRenderError(exception);
             }
             finally
             {
@@ -544,7 +545,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void AddCellFrameSceneNode(DxSceneBuilder sceneBuilder, in FractionalBox3D renderBox)
         {
-            var itemConfig = GetLineItemConfigLazy(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo);
+            var itemConfig = GetLineItemConfigLazy(ContentSource.ProjectModelData.StructureModelData.StructureInfo);
             if (itemConfig.IsInactive) return;
 
             var material = itemConfig.CreateMaterial();
@@ -593,24 +594,24 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void StartCellPositionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
-            foreach (var item in ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions)
+            foreach (var item in ContentSource.ProjectModelData.StructureModelData.CellReferencePositions)
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddCellPositionNodeToScene(sceneBuilder, item, renderBox)));
         }
 
         /// <summary>
-        ///     Prepares the scene elements for the provided <see cref="UnitCellPositionGraph" /> and adds the node one the
+        ///     Prepares the scene elements for the provided <see cref="CellReferencePositionData" /> and adds the node one the
         ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
-        /// <param name="positionGraph"></param>
+        /// <param name="positionDatah"></param>
         /// <param name="renderBox"></param>
         /// <returns></returns>
-        private void AddCellPositionNodeToScene(DxSceneBuilder sceneBuilder, UnitCellPositionGraph positionGraph, in FractionalBox3D renderBox)
+        private void AddCellPositionNodeToScene(DxSceneBuilder sceneBuilder, CellReferencePositionData referencePositionData, in FractionalBox3D renderBox)
         {
-            var itemConfig = GetMeshItemConfigLazy(positionGraph);
+            var itemConfig = GetMeshItemConfigLazy(referencePositionData);
             if (itemConfig.IsInactive) return;
 
-            var matrices = GetPositionSceneItemTransforms(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C), renderBox);
+            var matrices = GetPositionSceneItemTransforms(new Fractional3D(referencePositionData.A, referencePositionData.B, referencePositionData.C), renderBox);
             var geometry = CreateAtomGeometry(itemConfig);
             var material = itemConfig.CreateMaterial();
             var configurator = GetSceneNodeConfigurator(itemConfig, true);
@@ -638,18 +639,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Prepares the scene elements for the provided <see cref="KineticTransitionGraph" /> and adds the node one the
+        ///     Prepares the scene elements for the provided <see cref="KineticTransitionData" /> and adds the node one the
         ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
-        /// <param name="transitionGraph"></param>
+        /// <param name="transitionData"></param>
         /// <param name="renderBox"></param>
-        private void AddTransitionNodeToScene(DxSceneBuilder sceneBuilder, KineticTransitionGraph transitionGraph, in FractionalBox3D renderBox)
+        private void AddTransitionNodeToScene(DxSceneBuilder sceneBuilder, KineticTransitionData transitionData, in FractionalBox3D renderBox)
         {
-            var itemConfig = GetMeshItemConfigLazy(transitionGraph);
+            var itemConfig = GetMeshItemConfigLazy(transitionData);
             if (itemConfig.IsInactive) return;
 
-            var path = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
+            var path = transitionData.PathVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
             var matrices = GetPathSceneItemTransforms(path, renderBox, out var anyFlipsOrientation);
             var geometry = CreateTransitionGeometry(itemConfig, path);
             var material = itemConfig.CreateMaterial();
@@ -753,18 +754,18 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void StartTransitionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
-            foreach (var transitionGraph in ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions)
+            foreach (var transitionGraph in ContentSource.ProjectModelData.TransitionModelData.KineticTransitions)
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddTransitionNodeToScene(sceneBuilder, transitionGraph, renderBox)));
         }
 
         /// <summary>
-        ///     Prepares the scene elements for the provided <see cref="PairEnergySetGraph" /> and adds the node one the
+        ///     Prepares the scene elements for the provided <see cref="PairEnergySetData" /> and adds the node one the
         ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="pairEnergySet"></param>
         /// <param name="renderBox"></param>
-        private void AddPairInteractionNodeToScene(DxSceneBuilder sceneBuilder, PairEnergySetGraph pairEnergySet, in FractionalBox3D renderBox)
+        private void AddPairInteractionNodeToScene(DxSceneBuilder sceneBuilder, PairEnergySetData pairEnergySet, in FractionalBox3D renderBox)
         {
             var itemConfig = GetMeshItemConfigLazy(pairEnergySet);
             if (itemConfig.IsInactive) return;
@@ -797,7 +798,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void StartPairInteractionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
-            if (ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty) || SelectedCustomization?.EnergyModelCustomization == null) return;
+            if (ReferenceEquals(SelectedCustomization, ProjectCustomizationTemplate.Empty) || SelectedCustomization?.EnergyModelCustomization == null) return;
 
             foreach (var pairGraph in SelectedCustomization.EnergyModelCustomization.StablePairEnergyParameterSets)
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddPairInteractionNodeToScene(sceneBuilder, pairGraph, renderBox)));
@@ -806,13 +807,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         }
 
         /// <summary>
-        ///     Prepares the scene elements for the provided <see cref="GroupEnergySetGraph" /> and adds the node one the
+        ///     Prepares the scene elements for the provided <see cref="GroupEnergySetData" /> and adds the node one the
         ///     <see cref="DxSceneBuilder" />
         /// </summary>
         /// <param name="sceneBuilder"></param>
         /// <param name="groupEnergySet"></param>
         /// <param name="renderBox"></param>
-        private void AddGroupInteractionNodeToScene(DxSceneBuilder sceneBuilder, GroupEnergySetGraph groupEnergySet, in FractionalBox3D renderBox)
+        private void AddGroupInteractionNodeToScene(DxSceneBuilder sceneBuilder, GroupEnergySetData groupEnergySet, in FractionalBox3D renderBox)
         {
             var itemConfig = GetMeshItemConfigLazy(groupEnergySet);
             if (itemConfig.IsInactive) return;
@@ -835,7 +836,7 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         private void StartGroupInteractionSceneNodeBuilding(DxSceneBuilder sceneBuilder, FractionalBox3D renderBox)
         {
-            if (ReferenceEquals(SelectedCustomization, ProjectCustomizationGraph.Empty) || SelectedCustomization?.EnergyModelCustomization == null) return;
+            if (ReferenceEquals(SelectedCustomization, ProjectCustomizationTemplate.Empty) || SelectedCustomization?.EnergyModelCustomization == null) return;
             foreach (var groupEnergySet in SelectedCustomization.EnergyModelCustomization.GroupEnergyParameterSets)
                 sceneBuilder.AttachCustomTask(Task.Run(() => AddGroupInteractionNodeToScene(sceneBuilder, groupEnergySet, renderBox)));
         }
@@ -1088,24 +1089,24 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         /// <returns></returns>
         protected bool CheckCellPositionHit(in Fractional3D vector, out IDxMeshItemConfig config)
         {
-            var result = CheckCellPositionHit(vector, out UnitCellPositionGraph positionGraph);
+            var result = CheckCellPositionHit(vector, out CellReferencePositionData positionGraph);
             config = result ? GetMeshItemConfigLazy(positionGraph) : null;
             return result;
         }
 
         /// <summary>
         ///     Tests if a <see cref="Fractional3D" /> hits an atom and provides the affiliated
-        ///     <see cref="UnitCellPositionGraph" /> if true
+        ///     <see cref="CellReferencePositionData" /> if true
         /// </summary>
         /// <param name="vector"></param>
-        /// <param name="positionGraph"></param>
+        /// <param name="positionDatah"></param>
         /// <returns></returns>
-        protected bool CheckCellPositionHit(in Fractional3D vector, out UnitCellPositionGraph positionGraph)
+        protected bool CheckCellPositionHit(in Fractional3D vector, out CellReferencePositionData referencePositionData)
         {
             var trimmedVector = vector.TrimToUnitCell(VectorTransformer.FractionalSystem.Comparer);
-            var index = UnitCellPositionCatalog.IndexOf(new KeyValuePair<Fractional3D, UnitCellPositionGraph>(trimmedVector, null));
-            var isHit = index >= 0 && index < UnitCellPositionCatalog.Count;
-            positionGraph = isHit ? UnitCellPositionCatalog[index].Value : null;
+            var index = CellReferencePositionCatalog.IndexOf(new KeyValuePair<Fractional3D, CellReferencePositionData>(trimmedVector, null));
+            var isHit = index >= 0 && index < CellReferencePositionCatalog.Count;
+            referencePositionData = isHit ? CellReferencePositionCatalog[index].Value : null;
             return isHit;
         }
 
@@ -1113,10 +1114,10 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer
         ///     Creates a <see cref="IComparer{T}" /> to sort and search the position catalog
         /// </summary>
         /// <returns></returns>
-        private IComparer<KeyValuePair<Fractional3D, UnitCellPositionGraph>> CreatePositionCatalogComparer()
+        private IComparer<KeyValuePair<Fractional3D, CellReferencePositionData>> CreatePositionCatalogComparer()
         {
             var vectorComparer = new VectorComparer3D<Fractional3D>(ModelProject.GeometryNumeric.RangeComparer);
-            return Comparer<KeyValuePair<Fractional3D, UnitCellPositionGraph>>.Create((a, b) => vectorComparer.Compare(a.Key, b.Key));
+            return Comparer<KeyValuePair<Fractional3D, CellReferencePositionData>>.Create((a, b) => vectorComparer.Compare(a.Key, b.Key));
         }
 
         /// <inheritdoc />

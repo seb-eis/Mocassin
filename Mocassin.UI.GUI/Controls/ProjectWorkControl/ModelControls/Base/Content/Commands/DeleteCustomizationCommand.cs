@@ -8,10 +8,10 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectCustomizationGraph" /> from a
-    ///     <see cref="MocassinProjectGraph" />
+    ///     The <see cref="AsyncProjectControlCommand{T}" /> to remove a <see cref="ProjectCustomizationTemplate" /> from a
+    ///     <see cref="MocassinProject" />
     /// </summary>
-    public class DeleteCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationGraph>
+    public class DeleteCustomizationCommand : AsyncProjectControlCommand<ProjectCustomizationTemplate>
     {
         /// <summary>
         ///     Additional <see cref="Action" /> to be invoked on successful removal
@@ -26,21 +26,21 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <inheritdoc />
-        public override bool CanExecuteInternal(ProjectCustomizationGraph parameter)
+        public override bool CanExecuteInternal(ProjectCustomizationTemplate parameter)
         {
             if (parameter?.Parent == null) return false;
-            return base.CanExecuteInternal(parameter) && parameter.Parent.ProjectCustomizationGraphs.Contains(parameter);
+            return base.CanExecuteInternal(parameter) && parameter.Parent.CustomizationTemplates.Contains(parameter);
         }
 
         /// <inheritdoc />
-        public override async Task ExecuteAsync(ProjectCustomizationGraph parameter)
+        public override async Task ExecuteAsync(ProjectCustomizationTemplate parameter)
         {
             var isRemoved = false;
             await Task.Run(() =>
             {
                 ProjectControl.ExecuteOnAppThread(() =>
                 {
-                    isRemoved = parameter.Parent.ProjectCustomizationGraphs.Remove(parameter);
+                    isRemoved = parameter.Parent.CustomizationTemplates.Remove(parameter);
                 });
             });
             if (isRemoved) OnRemovalAction?.Invoke();

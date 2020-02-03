@@ -127,9 +127,9 @@ namespace Mocassin.UI.GUI.Controls.ProjectBrowser.SubControls.LibraryBrowser
                 var json = await Task.Run(() => JsonConvert.SerializeObject(obj, Formatting.Indented, settings));
                 ExecuteOnAppThread(() => ObjectJson = json);
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(exception);
                 ObjectJson = null;
             }
         }

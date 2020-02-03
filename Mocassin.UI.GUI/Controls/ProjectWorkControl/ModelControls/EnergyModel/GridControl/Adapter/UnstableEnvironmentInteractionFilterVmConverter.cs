@@ -7,7 +7,7 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.GridControl.Adapter
 {
     /// <summary>
-    ///     <see cref="MultiValueConverter" /> that wraps <see cref="UnstableEnvironmentGraph" /> instances into
+    ///     <see cref="MultiValueConverter" /> that wraps <see cref="UnstableEnvironmentData" /> instances into
     ///     <see cref="InteractionFilterGridControlViewModel" /> instances
     /// </summary>
     public class UnstableEnvironmentInteractionFilterVmConverter : MultiValueConverter
@@ -17,22 +17,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         {
             if (values.Length != 2) throw new InvalidOperationException("Two conversion objects expected");
 
-            return MakeViewModel(values[0] as MocassinProjectGraph, values[1] as UnstableEnvironmentGraph);
+            return MakeViewModel(values[0] as MocassinProject, values[1] as UnstableEnvironmentData);
         }
 
         /// <summary>
-        ///     Wraps the passed <see cref="MocassinProjectGraph" /> and <see cref="UnstableEnvironmentGraph" /> into a
+        ///     Wraps the passed <see cref="MocassinProject" /> and <see cref="UnstableEnvironmentData" /> into a
         ///     <see cref="InteractionFilterGridControlViewModel" /> with set content information
         /// </summary>
-        /// <param name="projectGraph"></param>
-        /// <param name="environmentGraph"></param>
+        /// <param name="project"></param>
+        /// <param name="environmentData"></param>
         /// <returns></returns>
-        public object MakeViewModel(MocassinProjectGraph projectGraph, UnstableEnvironmentGraph environmentGraph)
+        public object MakeViewModel(MocassinProject project, UnstableEnvironmentData environmentData)
         {
-            if (projectGraph == null || environmentGraph == null) return null;
+            if (project == null || environmentData == null) return null;
             var viewModel = new InteractionFilterGridControlViewModel(false);
-            viewModel.ChangeContentSource(projectGraph);
-            viewModel.SetCollection(environmentGraph.InteractionFilters);
+            viewModel.ChangeContentSource(project);
+            viewModel.SetCollection(environmentData.InteractionFilters);
             return viewModel;
         }
     }

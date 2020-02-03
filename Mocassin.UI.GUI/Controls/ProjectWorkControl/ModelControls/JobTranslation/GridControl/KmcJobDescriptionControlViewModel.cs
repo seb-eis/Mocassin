@@ -3,17 +3,17 @@
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
     /// <summary>
-    ///     Extended implementation of the <see cref="BaseJobDescriptionControlViewModel"/> for <see cref="KmcJobDescriptionGraph"/> instances
+    ///     Extended implementation of the <see cref="BaseJobDescriptionControlViewModel"/> for <see cref="KmcJobConfigData"/> instances
     /// </summary>
     public class KmcJobDescriptionControlViewModel : BaseJobDescriptionControlViewModel 
     {
         /// <summary>
-        ///     Get the <see cref="KmcJobDescriptionGraph"/> that the view model targets
+        ///     Get the <see cref="KmcJobConfigData"/> that the view model targets
         /// </summary>
-        private KmcJobDescriptionGraph JobDescription { get; }
+        private KmcJobConfigData JobDescription { get; }
 
         /// <summary>
-        ///     Get or set the target MCSP of the targeted <see cref="KmcJobDescriptionGraph" />
+        ///     Get or set the target MCSP of the targeted <see cref="KmcJobConfigData" />
         /// </summary>
         public int? PreRunMcsp
         {
@@ -22,7 +22,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the electric field modulus in [V/m] of the targeted <see cref="KmcJobDescriptionGraph" />
+        ///     Get or set the electric field modulus in [V/m] of the targeted <see cref="KmcJobConfigData" />
         /// </summary>
         public double? ElectricFieldModulus
         {
@@ -31,7 +31,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the fixed normalization probability of the targeted <see cref="KmcJobDescriptionGraph" />
+        ///     Get or set the fixed normalization probability of the targeted <see cref="KmcJobConfigData" />
         /// </summary>
         public double? NormalizationProbability
         {
@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <summary>
-        ///     Get or set the max attempt frequency [Hz] of the targeted <see cref="KmcJobDescriptionGraph" />
+        ///     Get or set the max attempt frequency [Hz] of the targeted <see cref="KmcJobConfigData" />
         /// </summary>
         public double? MaxAttemptFrequency
         {
@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public KmcJobDescriptionControlViewModel(KmcJobDescriptionGraph jobDescription)
+        public KmcJobDescriptionControlViewModel(KmcJobConfigData jobDescription)
             : base(jobDescription)
         {
             JobDescription = jobDescription;

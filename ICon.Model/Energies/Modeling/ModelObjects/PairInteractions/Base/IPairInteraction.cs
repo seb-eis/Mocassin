@@ -14,12 +14,12 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The first reference unit cell position
         /// </summary>
-        IUnitCellPosition Position0 { get; }
+        ICellReferencePosition Position0 { get; }
 
         /// <summary>
         ///     The second reference unit cell position
         /// </summary>
-        IUnitCellPosition Position1 { get; }
+        ICellReferencePosition Position1 { get; }
 
         /// <summary>
         ///     The distance value between the positions in internal units

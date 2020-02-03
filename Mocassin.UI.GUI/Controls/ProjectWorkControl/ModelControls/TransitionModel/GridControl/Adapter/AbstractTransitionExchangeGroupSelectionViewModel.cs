@@ -11,28 +11,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 {
     /// <summary>
     ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
-    ///     <see cref="StateExchangeGroupGraph" /> to <see cref="AbstractTransitionGraph" /> host instances
+    ///     <see cref="StateExchangeGroupData" /> to <see cref="AbstractTransitionData" /> host instances
     /// </summary>
     public sealed class AbstractTransitionExchangeGroupSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangeGroup,
-        AbstractTransitionGraph>
+        AbstractTransitionData>
     {
         /// <inheritdoc />
-        public AbstractTransitionExchangeGroupSelectionViewModel(AbstractTransitionGraph hostObject)
+        public AbstractTransitionExchangeGroupSelectionViewModel(AbstractTransitionData hostObject)
             : base(hostObject, false)
         {
-            HandleDropAddCommand = GetDropAddObjectCommand<StateExchangeGroupGraph>();
+            HandleDropAddCommand = GetDropAddObjectCommand<StateExchangeGroupData>();
             Items = GetTargetCollection(hostObject);
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
         {
-            return projectGraph?.ProjectModelGraph?.TransitionModelGraph?.StateExchangeGroups;
+            return project?.ProjectModelData?.TransitionModelData?.StateExchangeGroups;
         }
 
         /// <inheritdoc />
-        protected override ICollection<ModelObjectReferenceGraph<StateExchangeGroup>> GetTargetCollection(
-            AbstractTransitionGraph sourceObject)
+        protected override ICollection<ModelObjectReference<StateExchangeGroup>> GetTargetCollection(
+            AbstractTransitionData sourceObject)
         {
             return sourceObject?.StateExchangeGroups;
         }
@@ -50,7 +50,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
         public bool HostCollectionIsFull()
         {
             return HostObject.StateExchangeGroups.Count
-                   >= AbstractTransitionGraph.ConnectorRegex.Matches(HostObject.ConnectorString).Count + 1;
+                   >= AbstractTransitionData.ConnectorRegex.Matches(HostObject.ConnectorString).Count + 1;
         }
     }
 }

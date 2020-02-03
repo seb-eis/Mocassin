@@ -105,7 +105,7 @@ namespace Mocassin.Model.Transitions
         {
             var objectSet = statePairGroups
                 .Select(group =>
-                    group.StatePairs.Select(value => StatePair.CreateForStatus(value.Donor, value.Acceptor, group.PositionStatus)))
+                    group.StatePairs.Select(value => StatePair.CreateForStatus(value.Donor, value.Acceptor, group.PositionStability)))
                 .ToArray();
 
             return new PermutationSlotMachine<StatePair>(objectSet);
@@ -205,7 +205,7 @@ namespace Mocassin.Model.Transitions
 
             foreach (var pair in statePairs)
             {
-                var index = pair.PositionStatus == PositionStatus.Unstable ? pair.DonorIndex : 0;
+                var index = pair.PositionStability == PositionStability.Unstable ? pair.DonorIndex : 0;
                 rule.TransitionState.Particles.Add(ParticleDictionary[index]);
             }
         }
@@ -232,7 +232,7 @@ namespace Mocassin.Model.Transitions
             for (var i = 0; i < connectorTypes.Length; i++)
             {
                 var lastIndex = i;
-                while (statePairs[i + 1].PositionStatus == PositionStatus.Unstable)
+                while (statePairs[i + 1].PositionStability == PositionStability.Unstable)
                     i++;
 
                 var states = (rule.FinalState[lastIndex].Index, rule.FinalState[i + 1].Index);
@@ -260,13 +260,13 @@ namespace Mocassin.Model.Transitions
             var (donors, stables) = (0, rule.StartState.StateLength);
             for (var i = 0; i < rule.PathLength; i++)
             {
-                if (statePairs[i].PositionStatus == PositionStatus.Unstable)
+                if (statePairs[i].PositionStability == PositionStability.Unstable)
                 {
                     if (rule.StartState[i].Index != 0) return false;
                     stables--;
                 }
 
-                if (statePairs[i].PositionStatus != PositionStatus.Unstable)
+                if (statePairs[i].PositionStability != PositionStability.Unstable)
                     donors += rule.StartState[i].Index == statePairs[i].DonorIndex ? 1 : 0;
             }
 
@@ -287,7 +287,7 @@ namespace Mocassin.Model.Transitions
                 if (connectorTypes[current] != ConnectorType.Dynamic)
                     continue;
 
-                while (pairGroups[i + 1].PositionStatus == PositionStatus.Unstable)
+                while (pairGroups[i + 1].PositionStability == PositionStability.Unstable)
                     i++;
 
                 exchangeList.Add(current);

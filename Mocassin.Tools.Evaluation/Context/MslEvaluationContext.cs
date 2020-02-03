@@ -122,9 +122,9 @@ namespace Mocassin.Tools.Evaluation.Context
         /// <returns></returns>
         public IProjectModelContext RestoreProjectModelContext(string projectXml)
         {
-            var projectGraph = ProjectObjectGraph.CreateFromXml<MocassinProjectBuildGraph>(projectXml);
+            var projectGraph = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(projectXml);
             var modelProject = ModelProjectProvider.Invoke();
-            modelProject.InputPipeline.PushToProject(projectGraph.ProjectModelGraph.GetInputSequence());
+            modelProject.InputPipeline.PushToProject(projectGraph.ProjectModelData.GetInputSequence());
             var builder = new ProjectModelContextBuilder(modelProject);
             return builder.BuildContextAsync().Result;
         }
@@ -207,8 +207,8 @@ namespace Mocassin.Tools.Evaluation.Context
             var modelContext = GetProjectModelContext(jobModel);
             if (SimulationModelCache.TryGetValue(jobModel.SimulationPackageId, out var result)) return result;
 
-            var buildGraph = ProjectObjectGraph.CreateFromXml<MocassinProjectBuildGraph>(jobModel.SimulationJobPackageModel.ProjectXml);
-            var simulation = buildGraph.ProjectJobTranslationGraph.ToInternals(modelContext.ModelProject).First().GetSimulation();
+            var buildGraph = ProjectDataObject.CreateFromXml<SimulationDbBuildTemplate>(jobModel.SimulationJobPackageModel.ProjectXml);
+            var simulation = buildGraph.ProjectJobSetTemplate.ToInternals(modelContext.ModelProject).First().GetSimulation();
             var simulationModel = modelContext.SimulationModelContext.FindSimulationModel(simulation);
 
             lock (lockObject)

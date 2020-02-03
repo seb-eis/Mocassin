@@ -31,32 +31,32 @@ namespace Mocassin.Model.Structures
         ///     Get read only access to the unit cell position list
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IUnitCellPosition> GetUnitCellPositions();
+        ListReadOnlyWrapper<ICellReferencePosition> GetCellReferencePositions();
 
         /// <summary>
         ///     Get a unit cell position by index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IUnitCellPosition GetUnitCellPosition(int index);
+        ICellReferencePosition GetCellReferencePosition(int index);
 
         /// <summary>
         ///     Get a read only list of all position dummies
         /// </summary>
         /// <returns></returns>
-        ReadOnlyListAdapter<IPositionDummy> GetPositionDummies();
+        ListReadOnlyWrapper<ICellDummyPosition> GetDummyPositions();
 
         /// <summary>
         ///     Get the position dummy at the specified index
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        IPositionDummy GetPositionDummy(int index);
+        ICellDummyPosition GetDummyPosition(int index);
 
         /// <summary>
         ///     Get a cleaned indexing for the unit cell positions (Where deprecated data is removed)
         /// </summary>
         /// <returns></returns>
-        ReindexingList GetCleanUnitCellPositionIndexing();
+        ReindexingList GetCleanReferencePositionIndexing();
     }
 }

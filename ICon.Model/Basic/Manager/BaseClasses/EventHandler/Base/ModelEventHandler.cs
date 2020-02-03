@@ -145,13 +145,13 @@ namespace Mocassin.Model.Basic
         }
 
         /// <summary>
-        ///     Placeholder debug dummy reaction that writes the passed information to the messaging system and returns empty report
+        ///     Default dummy reaction for model events
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected virtual IConflictReport EventTestReaction(object obj)
+        protected virtual IConflictReport DummyHandleEvent(object obj)
         {
-            ModelProject.MessageSystem.SendMessage(new InfoMessage(this, $"{obj} received on {ToString()}"));
+            //ModelProject.MessageSystem.SendMessage(new InfoMessage(this, $"{obj} received on {ToString()}"));
             return new ConflictReport();
         }
     }

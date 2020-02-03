@@ -124,8 +124,9 @@ namespace Mocassin.Model.DataManagement
                 LinkModelObject(obj);
                 return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 return false;
             }
         }

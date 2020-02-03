@@ -19,14 +19,14 @@ namespace Mocassin.Model.Transitions.Handler
         }
 
         /// <summary>
-        /// Event reaction to a unit cell position change change in the structure manager
+        ///     Event reaction to a unit cell position change change in the structure manager
         /// </summary>
         /// <param name="eventArgs"></param>
         /// <returns></returns>
         [EventHandlingMethod]
-        protected IConflictReport HandleUnitCellPositionChange(IModelObjectEventArgs<IUnitCellPosition> eventArgs)
+        protected IConflictReport HandleCellReferencePositionChange(IModelObjectEventArgs<ICellReferencePosition> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
     }
 }

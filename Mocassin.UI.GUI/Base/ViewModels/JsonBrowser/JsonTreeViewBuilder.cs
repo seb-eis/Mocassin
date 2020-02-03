@@ -51,9 +51,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
 
                 return treeView;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                return MakeExceptionItem(e);
+                Console.WriteLine(exception);
+                return MakeExceptionItem(exception);
             }
         }
 
@@ -72,9 +73,10 @@ namespace Mocassin.UI.GUI.Base.ViewModels.JsonBrowser
                 AddToTreeView(jObject, rootViewItem);
                 return rootViewItem;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                return MakeExceptionItem(e);
+                Console.WriteLine(exception);
+                return MakeExceptionItem(exception);
             }
         }
 

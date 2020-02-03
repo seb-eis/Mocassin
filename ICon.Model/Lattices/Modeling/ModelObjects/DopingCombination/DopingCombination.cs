@@ -30,7 +30,7 @@ namespace Mocassin.Model.Lattices
         /// </summary>
         [DataMember]
         [UseTrackedReferences]
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
         public double GetChargeDelta()
@@ -55,7 +55,7 @@ namespace Mocassin.Model.Lattices
 
             Dopant = casted.Dopant;
             Dopable = casted.Dopable;
-            UnitCellPosition = casted.UnitCellPosition;
+            CellReferencePosition = casted.CellReferencePosition;
             return this;
         }
     }

@@ -7,7 +7,7 @@ using Mocassin.UI.Xml.Jobs;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="IValueConverter" /> to convert <see cref="MmcJobDescriptionGraph" /> instances into
+    ///     The <see cref="IValueConverter" /> to convert <see cref="MmcJobConfigData" /> instances into
     ///     <see cref="MmcJobDescriptionControlViewModel" /> instances
     /// </summary>
     public class MmcJobDescriptionMmcJobDescriptionViewModelConverter : ValueConverter
@@ -15,7 +15,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// <inheritdoc />
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is MmcJobDescriptionGraph jobDescription) return new MmcJobDescriptionControlViewModel(jobDescription);
+            if (value is MmcJobConfigData jobDescription) return new MmcJobDescriptionControlViewModel(jobDescription);
             return null;
         }
     }

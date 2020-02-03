@@ -26,7 +26,7 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <DataGridTextColumn Header="Cell Position" Binding="{Binding WyckoffPosition.Name}"
+        <DataGridTextColumn Header="Cell Position" Binding="{Binding ReferencePosition.Name}"
                             IsReadOnly="True" />
         <DataGridTextColumn Header="A" Binding="{Binding Vector.A}"
                             IsReadOnly="True" />
@@ -37,7 +37,7 @@
         <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
                                                  CanUserSort="False"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.SelectableOccupationParticles}"
-                                                 SelectedItemBinding="{Binding Occupation}"
+                                                 SelectedItemBinding="{Binding Particle}"
                                                  DisplayMemberPath="Name"
                                                  IsReadOnly="True"/>
       </DataGrid.Columns>

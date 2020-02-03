@@ -33,11 +33,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public Color Color
         {
-            get => ObjectGraph.Resources.TryGetResource(ColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
+            get => DataObject.Resources.TryGetResource(ColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
             set
             {
                 if (value.Equals(Color)) return;
-                ObjectGraph.Resources.SetResource(ColorKey, value, color => color.ToRgbaHex());
+                DataObject.Resources.SetResource(ColorKey, value, color => color.ToRgbaHex());
                 OnColorChanged();
                 OnPropertyChanged();
             }
@@ -46,11 +46,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public double LineThickness
         {
-            get => ObjectGraph.Resources.TryGetResource(LineThicknessKey, out double value) ? value : 1;
+            get => DataObject.Resources.TryGetResource(LineThicknessKey, out double value) ? value : 1;
             set
             {
                 if (value.AlmostEqualByRange(LineThickness)) return;
-                ObjectGraph.Resources.SetResource(LineThicknessKey, value);
+                DataObject.Resources.SetResource(LineThicknessKey, value);
                 OnLineThicknessChanged();
                 OnPropertyChanged();
             }
@@ -63,8 +63,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public DxProjectLineObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
-            : base(objectGraph, visualCategory)
+        public DxProjectLineObjectSceneConfig(ExtensibleProjectDataObject dataObject, VisualObjectCategory visualCategory)
+            : base(dataObject, visualCategory)
         {
         }
 

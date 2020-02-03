@@ -39,7 +39,7 @@
 
         <DataGridTemplateColumn Header="Particles">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type particleModel:ParticleSetGraph}">
+            <DataTemplate DataType="{x:Type particleModel:ParticleSetData}">
               <hosting:HostGraphModelObjectDropSelectionView>
                 <hosting:HostGraphModelObjectDropSelectionView.DataContext>
                   <MultiBinding Converter="{particleGridControl:ParticleSetParticleSelectionVmConverter}">

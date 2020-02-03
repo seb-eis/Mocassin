@@ -32,7 +32,7 @@
         <comboBox:BindableDataGridComboBoxColumn
           ItemsSource="{Binding ElementName=HostDataGrid, Path=DataContext.SelectableReferences}"
           DisplayMemberPath="Name"
-          SelectedItemBinding="{Binding TargetGraph}"/>
+          SelectedItemBinding="{Binding Target}"/>
       </DataGrid.Columns>
 
     </DataGrid>

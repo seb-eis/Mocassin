@@ -10,27 +10,27 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
 {
     /// <summary>
     ///     The <see cref="PrimaryControlViewModel" /> for <see cref="JobTranslationControlView" /> that supplies content for
-    ///     manipulation <see cref="ProjectJobTranslationGraph" /> instances
+    ///     manipulation <see cref="ProjectJobSetTemplate" /> instances
     /// </summary>
-    public class JobTranslationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectJobTranslationGraph>
+    public class JobTranslationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectJobSetTemplate>
     {
         /// <summary>
-        ///     Get or set the current <see cref="ProjectJobTranslationGraph"/> that serves as a content source
+        ///     Get or set the current <see cref="ProjectJobSetTemplate"/> that serves as a content source
         /// </summary>
-        private ProjectJobTranslationGraph JobTranslationContentSource { get; set; }
+        private ProjectJobSetTemplate JobTranslationContentSource { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="KmcJobPackageControlViewModel"/> that controls the <see cref="KmcJobPackageDescriptionGraph"/> collection
+        ///     Get the <see cref="KmcJobPackageControlViewModel"/> that controls the <see cref="KmcJobPackageData"/> collection
         /// </summary>
         public KmcJobPackageControlViewModel KmcJobPackageViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="MmcJobPackageControlViewModel"/> that controls the <see cref="MmcJobPackageDescriptionGraph"/> collection
+        ///     Get the <see cref="MmcJobPackageControlViewModel"/> that controls the <see cref="MmcJobPackageData"/> collection
         /// </summary>
         public MmcJobPackageControlViewModel MmcJobPackageViewModel { get; }
 
         /// <inheritdoc />
-        ProjectJobTranslationGraph IContentSupplier<ProjectJobTranslationGraph>.ContentSource => JobTranslationContentSource;
+        ProjectJobSetTemplate IContentSupplier<ProjectJobSetTemplate>.ContentSource => JobTranslationContentSource;
 
         /// <inheritdoc />
         public JobTranslationControlViewModel(IMocassinProjectControl projectControl)
@@ -41,7 +41,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             KmcJobPackageViewModel.ChangeContentSource(null);
@@ -49,7 +49,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         }
 
         /// <inheritdoc />
-        void IContentSupplier<ProjectJobTranslationGraph>.ChangeContentSource(ProjectJobTranslationGraph contentSource)
+        void IContentSupplier<ProjectJobSetTemplate>.ChangeContentSource(ProjectJobSetTemplate contentSource)
         {
             KmcJobPackageViewModel.ChangeContentSource(contentSource);
             MmcJobPackageViewModel.ChangeContentSource(contentSource);

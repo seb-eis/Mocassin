@@ -9,24 +9,24 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.DataControl
 {
     /// <summary>
-    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="InteractionFilterGraph" /> and radius definitions
+    ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="RadialInteractionFilterData" /> and radius definitions
     ///     of the stable environment
     /// </summary>
     public class EnergyParameterControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
         ///     Get the <see cref="InteractionFilterGridControlViewModel" /> that controls the affiliated
-        ///     <see cref="InteractionFilterGraph" /> instances
+        ///     <see cref="RadialInteractionFilterData" /> instances
         /// </summary>
         public InteractionFilterGridControlViewModel InteractionFilterGridViewModel { get; }
 
         /// <summary>
-        ///     Get the <see cref="StableEnvironmentGraph" /> of the currently < set <see cref="MocassinProjectGraph" />
+        ///     Get the <see cref="StableEnvironmentData" /> of the currently < set <see cref="MocassinProject" />
         /// </summary>
-        public StableEnvironmentGraph Environment => ContentSource?.ProjectModelGraph?.EnergyModelGraph?.StableEnvironment;
+        public StableEnvironmentData Environment => ContentSource?.ProjectModelData?.EnergyModelData?.StableEnvironment;
 
         /// <summary>
-        ///     Get or set the interaction radius of the currently set <see cref="StableEnvironmentGraph" /> in [Ang]
+        ///     Get or set the interaction radius of the currently set <see cref="StableEnvironmentData" /> in [Ang]
         /// </summary>
         public double InteractionRadius
         {
@@ -47,7 +47,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             InteractionFilterGridViewModel.ChangeContentSource(contentSource);

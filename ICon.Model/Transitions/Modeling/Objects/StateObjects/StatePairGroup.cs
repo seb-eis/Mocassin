@@ -12,7 +12,7 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     Defines the position status of the state pair group
         /// </summary>
-        public PositionStatus PositionStatus { get; }
+        public PositionStability PositionStability { get; }
 
         /// <summary>
         ///     The particle index decoded state pairs belonging to the group
@@ -23,12 +23,12 @@ namespace Mocassin.Model.Transitions
         ///     Create new state pair group from a set of donor and acceptor states and the provided position status
         /// </summary>
         /// <param name="statePairs"></param>
-        /// <param name="positionStatus"></param>
-        public StatePairGroup((int DonorIndex, int AcceptorIndex)[] statePairs, PositionStatus positionStatus)
+        /// <param name="positionStability"></param>
+        public StatePairGroup((int DonorIndex, int AcceptorIndex)[] statePairs, PositionStability positionStability)
             : this()
         {
             StatePairs = statePairs ?? throw new ArgumentNullException(nameof(statePairs));
-            PositionStatus = positionStatus;
+            PositionStability = positionStability;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Mocassin.Model.Transitions
         /// </summary>
         /// <param name="statePairs"></param>
         public StatePairGroup((int DonorIndex, int AcceptorIndex)[] statePairs)
-            : this(statePairs, PositionStatus.Undefined)
+            : this(statePairs, PositionStability.Undefined)
         {
         }
 
@@ -48,16 +48,16 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public StatePairGroup AutoChangeStatus()
         {
-            return GetStatusChanged(StatePairs.Any(value => value.Acceptor == 0) ? PositionStatus.Unstable : PositionStatus.Stable);
+            return GetStatusChanged(StatePairs.Any(value => value.Acceptor == 0) ? PositionStability.Unstable : PositionStability.Stable);
         }
 
         /// <summary>
         ///     Returns a new state pair group that contains the same information but carries a new position status
         /// </summary>
-        /// <param name="status"></param>
-        public StatePairGroup GetStatusChanged(PositionStatus status)
+        /// <param name="stability"></param>
+        public StatePairGroup GetStatusChanged(PositionStability stability)
         {
-            return new StatePairGroup(StatePairs, status);
+            return new StatePairGroup(StatePairs, stability);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public static StatePairGroup CreateEmpty()
         {
-            return new StatePairGroup(new (int, int)[0], PositionStatus.Undefined);
+            return new StatePairGroup(new (int, int)[0], PositionStability.Undefined);
         }
     }
 }

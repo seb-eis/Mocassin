@@ -9,13 +9,13 @@ using Mocassin.UI.Xml.TransitionModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> to wrap <see cref="StateExchangeGroupGraph" /> into
-    ///     host view models for <see cref="StateExchangePairGraph" /> instances
+    ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> to wrap <see cref="StateExchangeGroupData" /> into
+    ///     host view models for <see cref="StateExchangePairData" /> instances
     /// </summary>
-    public class ExchangeGroupExchangePairSelectionVmConverter : HostGraphGuestSelectionVmConverter<StateExchangeGroupGraph>
+    public class ExchangeGroupExchangePairSelectionVmConverter : HostGraphGuestSelectionVmConverter<StateExchangeGroupData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProjectGraph> CreateSelectionViewModel(StateExchangeGroupGraph host)
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(StateExchangeGroupData host)
         {
             return new ExchangeGroupExchangePairSelectionViewModel(host);
         }

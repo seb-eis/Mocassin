@@ -12,11 +12,11 @@ namespace Mocassin.Model.Energies
     {
         /// <inheritdoc />
         [DataMember]
-        public IUnitCellPosition Position0 { get; set; }
+        public ICellReferencePosition Position0 { get; set; }
 
         /// <inheritdoc />
         [DataMember]
-        public IUnitCellPosition Position1 { get; set; }
+        public ICellReferencePosition Position1 { get; set; }
 
         /// <summary>
         ///     The actual position vector for the second unit cell position

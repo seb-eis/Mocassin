@@ -25,7 +25,7 @@
     <ComboBox Grid.Column="0" Grid.Row="0"
               Margin="{StaticResource App.Margin.HorizontalStack}"
               ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-              SelectedItem="{Binding SelectedProjectGraph}"
+              SelectedItem="{Binding SelectedProject}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
@@ -34,7 +34,7 @@
 
     <ComboBox Grid.Column="2" Grid.Row="0"
               ItemsSource="{Binding JobTranslationGraphs}"
-              SelectedItem="{Binding SelectedJobTranslationGraph}"
+              SelectedItem="{Binding SelectedJobSetTemplate}"
               ToolTip="{StaticResource App.ToolTip.JobTranslationSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
@@ -45,10 +45,10 @@
           <MenuItem Header="Add Translation" Command="{Binding AddJobTranslationCommand}" />
           <Separator/>
           <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateTranslationCommand}"
-                    CommandParameter="{Binding SelectedJobTranslationGraph}"/>
+                    CommandParameter="{Binding SelectedJobSetTemplate}"/>
           <Separator/>
           <MenuItem Header="Delete Selected" Command="{Binding DeleteTranslationCommand}"
-                    CommandParameter="{Binding SelectedJobTranslationGraph}" />
+                    CommandParameter="{Binding SelectedJobSetTemplate}" />
         </ContextMenu>
       </ComboBox.ContextMenu>
     </ComboBox>

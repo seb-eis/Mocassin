@@ -8,13 +8,13 @@ using Mocassin.UI.Xml.ParticleModel;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleModel.GridControl
 {
     /// <summary>
-    ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> implementation to wrap <see cref="ParticleSetGraph" />
-    ///     into host view models for <see cref="ParticleGraph" /> instances
+    ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> implementation to wrap <see cref="ParticleSetData" />
+    ///     into host view models for <see cref="ParticleData" /> instances
     /// </summary>
-    public class ParticleSetParticleSelectionVmConverter : HostGraphGuestSelectionVmConverter<ParticleSetGraph>
+    public class ParticleSetParticleSelectionVmConverter : HostGraphGuestSelectionVmConverter<ParticleSetData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProjectGraph> CreateSelectionViewModel(ParticleSetGraph host)
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(ParticleSetData host)
         {
             return  new ParticleSetParticleSelectionViewModel(host);
         }

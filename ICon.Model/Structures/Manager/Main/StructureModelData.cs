@@ -38,15 +38,15 @@ namespace Mocassin.Model.Structures
         ///     The list of reference unit cell positions
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(IUnitCellPosition))]
-        public List<UnitCellPosition> UnitCellPositions { get; set; }
+        [IndexedModelData(typeof(ICellReferencePosition))]
+        public List<CellReferencePosition> CellReferencePositions { get; set; }
 
         /// <summary>
         ///     The list of reference unit cell position dummies
         /// </summary>
         [DataMember]
-        [IndexedModelData(typeof(IPositionDummy))]
-        public List<PositionDummy> PositionDummies { get; set; }
+        [IndexedModelData(typeof(ICellDummyPosition))]
+        public List<CellDummyPosition> PositionDummies { get; set; }
 
         /// <inheritdoc />
         public override IStructureDataPort AsReadOnly()

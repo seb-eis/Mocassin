@@ -24,7 +24,7 @@
     <ComboBox Grid.Column="0" Grid.Row="0"
               Margin="{StaticResource App.Margin.HorizontalStack}"
               ItemsSource="{Binding ProjectControl.ProjectGraphs}"
-              SelectedItem="{Binding SelectedProjectGraph}"
+              SelectedItem="{Binding SelectedProject}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
@@ -33,7 +33,7 @@
 
     <ComboBox Grid.Column="2" Grid.Row="0"
               ItemsSource="{Binding CustomizationGraphs}"
-              SelectedItem="{Binding SelectedCustomizationGraph}"
+              SelectedItem="{Binding SelectedCustomizationTemplate}"
               ToolTip="{StaticResource App.ToolTip.CustomizationSelection}"
               DisplayMemberPath="Name"
               IsEditable="True"
@@ -43,12 +43,12 @@
           <MenuItem Header="Add Customization" Command="{Binding AddCustomizationCommand}"/>
           <Separator/>
           <MenuItem Header="Migrate Selected" Command="{Binding MigrateCustomizationCommand}"
-                    CommandParameter="{Binding SelectedCustomizationGraph}" />
+                    CommandParameter="{Binding SelectedCustomizationTemplate}" />
           <MenuItem Header="Duplicate Selected" Command="{Binding DuplicateCustomizationCommand}"
-                    CommandParameter="{Binding SelectedCustomizationGraph}"/>
+                    CommandParameter="{Binding SelectedCustomizationTemplate}"/>
           <Separator/>
           <MenuItem Header="Delete Selected" Command="{Binding DeleteCustomizationCommand}"
-                    CommandParameter="{Binding SelectedCustomizationGraph}" />
+                    CommandParameter="{Binding SelectedCustomizationTemplate}" />
         </ContextMenu>
       </ComboBox.ContextMenu>
     </ComboBox>

@@ -7,7 +7,7 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl.Adapter
 {
     /// <summary>
-    ///     The <see cref="MultiValueConverter" /> to wrap <see cref="KmcJobPackageDescriptionGraph" /> instances into
+    ///     The <see cref="MultiValueConverter" /> to wrap <see cref="KmcJobPackageData" /> instances into
     ///     <see cref="KmcJobDescriptionSetControlViewModel" /> instances
     /// </summary>
     public class KmcJobPackageKmcJobDescriptionSetViewModelConverter : MultiValueConverter
@@ -15,8 +15,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslati
         /// <inheritdoc />
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(values[0] is MocassinProjectGraph projectGraph)) return null;
-            if (!(values[1] is KmcJobPackageDescriptionGraph packageDescription)) return null;
+            if (!(values[0] is MocassinProject projectGraph)) return null;
+            if (!(values[1] is KmcJobPackageData packageDescription)) return null;
             return new KmcJobDescriptionSetControlViewModel(packageDescription, projectGraph);
         }
     }

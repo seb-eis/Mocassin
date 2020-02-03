@@ -199,7 +199,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
             var entity = new EnvironmentDefinitionEntity
             {
                 ObjectId = positionModel.ModelId,
-                PositionParticleIds = GetParticleIdBuffer(positionModel.UnitCellPosition.OccupationSet),
+                PositionParticleIds = GetParticleIdBuffer(positionModel.CellReferencePosition.OccupationSet),
                 PairDefinitionList = GetPairDefinitionList(positionModel),
                 ClusterDefinitionList = GetClusterDefinitionList(positionModel.EnvironmentModel.GroupInteractionModels)
             };

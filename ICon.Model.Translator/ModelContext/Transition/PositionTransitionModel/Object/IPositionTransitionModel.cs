@@ -11,7 +11,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     The unit cell position the position transition model belongs to
         /// </summary>
-        IUnitCellPosition UnitCellPosition { get; set; }
+        ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <summary>
         ///     The list of possible kinetic transition models on this position

@@ -110,7 +110,7 @@
 
           <DataGridTemplateColumn Header="Transitions">
             <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate DataType="{x:Type simulationModel:MetropolisSimulationGraph}">
+              <DataTemplate DataType="{x:Type simulationModel:MetropolisSimulationData}">
                 <hosting:HostGraphModelObjectBoxSelectionView>
                   <hosting:HostGraphModelObjectBoxSelectionView.DataContext>
                     <MultiBinding Converter="{adapter:MetropolisSimulationTransitionSelectionVmConverter}">

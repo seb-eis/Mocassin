@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
     }
 
     /// <summary>
-    ///     A <see cref="PrimaryControlViewModel" /> live validator for <see cref="ProjectModelGraph" /> instances that
+    ///     A <see cref="PrimaryControlViewModel" /> live validator for <see cref="ProjectModelData" /> instances that
     ///     provides affiliated
     ///     update events and supports continuous validation cycles
     /// </summary>
@@ -43,9 +43,9 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private IModelProject ModelProject { get; }
 
         /// <summary>
-        ///     Get or set the <see cref="ObjectTreeChangeObserver" /> for the observed model
+        ///     Get or set the <see cref="ObjectGraphChangeObserver" /> for the observed model
         /// </summary>
-        private ObjectTreeChangeObserver ModelTreeChangeObserver { get; }
+        private ObjectGraphChangeObserver ModelGraphChangeObserver { get; }
 
         /// <summary>
         ///     Get or set a boolean value if the validator is disposed
@@ -84,9 +84,9 @@ namespace Mocassin.UI.GUI.Logic.Validation
         private ReactiveEvent<ModelValidationStatus> ModelValidationStatusChangedEvent { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectModelGraph" /> that the validator is using
+        ///     Get the <see cref="ProjectModelData" /> that the validator is using
         /// </summary>
-        public ProjectModelGraph ModelGraph { get; }
+        public ProjectModelData ProjectModelData { get; }
 
         /// <summary>
         ///     Gee the <see cref="IObservable{T}" /> for changes in the set of <see cref="IOperationReport" /> instances
@@ -113,22 +113,22 @@ namespace Mocassin.UI.GUI.Logic.Validation
         }
 
         /// <summary>
-        ///     Creates new <see cref="ModelValidatorViewModel" /> for the passed <see cref="ProjectModelGraph" /> and
+        ///     Creates new <see cref="ModelValidatorViewModel" /> for the passed <see cref="ProjectModelData" /> and
         ///     <see cref="IMocassinProjectControl" />
         /// </summary>
-        /// <param name="modelGraph"></param>
+        /// <param name="projectModelData"></param>
         /// <param name="projectControl"></param>
-        public ModelValidatorViewModel(ProjectModelGraph modelGraph, IMocassinProjectControl projectControl)
+        public ModelValidatorViewModel(ProjectModelData projectModelData, IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            ModelGraph = modelGraph ?? throw new ArgumentNullException(nameof(modelGraph));
+            ProjectModelData = projectModelData ?? throw new ArgumentNullException(nameof(projectModelData));
             ReportSetChangedEvent = new ReactiveEvent<IEnumerable<IOperationReport>>();
             ModelValidationStatusChangedEvent = new ReactiveEvent<ModelValidationStatus>();
             RunValidationCommand = new AsyncRunValidationCommand(this);
             ModelProject = ProjectControl.CreateModelProject();
-            ModelTreeChangeObserver = new ObjectTreeChangeObserver(new[] {typeof(MocassinProjectGraph)});
-            ModelTreeChangeObserver.SetObservationRoot(modelGraph);
-            ModelTreeChangeObserver.ChangeEventNotifications.Subscribe(OnModelChanged);
+            ModelGraphChangeObserver = new ObjectGraphChangeObserver(new[] {typeof(MocassinProject)});
+            ModelGraphChangeObserver.SetObservationRoot(projectModelData);
+            ModelGraphChangeObserver.ChangeEventNotifications.Subscribe(OnModelChanged);
         }
 
         /// <inheritdoc />
@@ -145,7 +145,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
         {
             lock (lockObject)
             {
-                ModelTreeChangeObserver.Dispose();
+                ModelGraphChangeObserver.Dispose();
                 ReportSetChangedEvent.OnCompleted();
                 ModelValidationStatusChangedEvent.OnCompleted();
                 IsDisposed = true;
@@ -153,7 +153,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
         }
 
         /// <summary>
-        ///     Performs a single validation cycle run on the internally set <see cref="ProjectModelGraph" />
+        ///     Performs a single validation cycle run on the internally set <see cref="ProjectModelData" />
         /// </summary>
         public void RunValidation()
         {
@@ -196,11 +196,11 @@ namespace Mocassin.UI.GUI.Logic.Validation
         }
 
         /// <summary>
-        ///     Tries to create a new <see cref="ProjectCustomizationGraph" /> for the current <see cref="ProjectModelGraph" />
+        ///     Tries to create a new <see cref="ProjectCustomizationTemplate" /> for the current <see cref="ProjectModelData" />
         /// </summary>
         /// <param name="customization"></param>
         /// <returns></returns>
-        public ModelValidationStatus TryCreateCustomization(out ProjectCustomizationGraph customization)
+        public ModelValidationStatus TryCreateCustomization(out ProjectCustomizationTemplate customization)
         {
             ModelProject.ResetProject();
             customization = null;
@@ -217,7 +217,7 @@ namespace Mocassin.UI.GUI.Logic.Validation
 
         /// <summary>
         ///     Tries to prepare a <see cref="IList{T}" /> of model input <see cref="object" /> instances from the internally set
-        ///     <see cref="ProjectModelGraph" />. Returns false if the data is currently not convertible
+        ///     <see cref="ProjectModelData" />. Returns false if the data is currently not convertible
         /// </summary>
         /// <param name="inputObjects"></param>
         /// <returns></returns>
@@ -225,11 +225,12 @@ namespace Mocassin.UI.GUI.Logic.Validation
         {
             try
             {
-                inputObjects = ModelGraph.GetInputSequence().ToList();
+                inputObjects = ProjectModelData.GetInputSequence().ToList();
                 return inputObjects.All(x => x != null);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 inputObjects = null;
                 return false;
             }
@@ -250,28 +251,30 @@ namespace Mocassin.UI.GUI.Logic.Validation
                 reports = modelProject.InputPipeline.PushToProject(inputObjects);
                 return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 reports = null;
                 return false;
             }
         }
 
         /// <summary>
-        ///     Tries to generate a <see cref="ProjectCustomizationGraph" /> from the provided <see cref="IModelProject" />
+        ///     Tries to generate a <see cref="ProjectCustomizationTemplate" /> from the provided <see cref="IModelProject" />
         /// </summary>
         /// <param name="modelProject"></param>
         /// <param name="customization"></param>
         /// <returns></returns>
-        private bool TryGenerateModelCustomization(IModelProject modelProject, out ProjectCustomizationGraph customization)
+        private bool TryGenerateModelCustomization(IModelProject modelProject, out ProjectCustomizationTemplate customization)
         {
             try
             {
-                customization = ProjectCustomizationGraph.Create(modelProject, ModelGraph);
+                customization = ProjectCustomizationTemplate.Create(modelProject, ProjectModelData);
                 return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 customization = null;
                 return false;
             }

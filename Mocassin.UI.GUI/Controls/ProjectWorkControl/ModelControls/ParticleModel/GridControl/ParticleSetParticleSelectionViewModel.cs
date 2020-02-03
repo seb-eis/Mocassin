@@ -9,27 +9,27 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ParticleMode
 {
     /// <summary>
     ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
-    ///     <see cref="ParticleGraph" /> to <see cref="ParticleSetGraph" /> host instances
+    ///     <see cref="ParticleData" /> to <see cref="ParticleSetData" /> host instances
     /// </summary>
     public sealed class ParticleSetParticleSelectionViewModel
-        : HostGraphModelObjectSelectionViewModel<Particle, ParticleSetGraph>
+        : HostGraphModelObjectSelectionViewModel<Particle, ParticleSetData>
     {
         /// <inheritdoc />
-        public ParticleSetParticleSelectionViewModel(ParticleSetGraph hostObject)
+        public ParticleSetParticleSelectionViewModel(ParticleSetData hostObject)
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<ParticleGraph>();
+            HandleDropAddCommand = GetDropAddObjectCommand<ParticleData>();
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
         {
-            return projectGraph?.ProjectModelGraph?.ParticleModelGraph?.Particles;
+            return project?.ProjectModelData?.ParticleModelData?.Particles;
         }
 
         /// <inheritdoc />
-        protected override ICollection<ModelObjectReferenceGraph<Particle>> GetTargetCollection(ParticleSetGraph sourceObject)
+        protected override ICollection<ModelObjectReference<Particle>> GetTargetCollection(ParticleSetData sourceObject)
         {
             return sourceObject?.Particles;
         }

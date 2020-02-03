@@ -73,10 +73,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer.Commands
                         break;
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 window.Close();
-                MessageBox.Show($"Export error:\n{e.Message}", "Export", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Export error:\n{exception.Message}", "Export", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             window.Close();
         }

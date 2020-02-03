@@ -152,23 +152,22 @@ namespace Mocassin.Tools.Evaluation.Custom.Mmcfe.Importer
             {
                 var energyEvaluator = new MmcfeEnergyEvaluator();
                 var results = new List<object>(250);
-                using (var context = GetEvaluationContext(metaData))
-                {
-                    var readers = context.FullReaderSet().ToList();
-                    var metaEntry = new MmcfeLogMetaEntry(metaData);
-                    var logEntries = context.LogSet().OrderBy(x => x.Alpha).Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData)).ToList();
-                    var energyEntries = energyEvaluator.CalculateEnergyStates(readers, metaData.Temperature)
-                        .Zip(logEntries, (state, entry) => MmcfeLogEnergyEntry.Create(state, entry));
+                using var context = GetEvaluationContext(metaData);
+                var readers = context.FullReaderSet().ToList();
+                var metaEntry = new MmcfeLogMetaEntry(metaData);
+                var logEntries = context.LogSet().OrderBy(x => x.Alpha).Select(x => MmcfeExtendedLogEntry.Create(x, metaEntry, IsExcludeRawData)).ToList();
+                var energyEntries = energyEvaluator.CalculateEnergyStates(readers, metaData.Temperature)
+                    .Zip(logEntries, (state, entry) => MmcfeLogEnergyEntry.Create(state, entry));
 
-                    results.Add(metaEntry);
-                    results.AddRange(logEntries);
-                    results.AddRange(energyEntries);
-                    foreach (var item in readers) item.Dispose();
-                    return results;
-                }
+                results.Add(metaEntry);
+                results.AddRange(logEntries);
+                results.AddRange(energyEntries);
+                foreach (var item in readers) item.Dispose();
+                return results;
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 exception = e;
                 return null;
             }

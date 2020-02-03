@@ -26,7 +26,7 @@ namespace Mocassin.Model.Energies.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleAbstractTransition(IModelObjectEventArgs<IAbstractTransition> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Mocassin.Model.Energies.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleStateExchangePair(IModelObjectEventArgs<IStateExchangePair> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Mocassin.Model.Energies.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleKineticTransition(IModelObjectEventArgs<IKineticTransition> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Mocassin.Model.Energies.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleMetropolisStatePair(IModelObjectEventArgs<IMetropolisTransition> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Mocassin.Model.Energies.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleStateExchangeGroup(IModelObjectEventArgs<IStateExchangeGroup> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
     }
 }

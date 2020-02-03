@@ -114,7 +114,7 @@ namespace Mocassin.Model.Energies.Validators
         {
             long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
                                               .Query(port => port.GetLinearizedExtendedPositionList())
-                                              .Count(position => position.Status == PositionStatus.Stable) - 1;
+                                              .Count(position => position.Stability == PositionStability.Stable) - 1;
 
             interactionPerUnitCell = Math.Max(interactionPerUnitCell, 1);
 
@@ -137,13 +137,13 @@ namespace Mocassin.Model.Energies.Validators
             foreach (var defectEnergy in envInfo.GetDefectEnergies())
             {
                 if (envInfo.GetDefectEnergies().SkipWhile(x => x != defectEnergy).Count(x => x.Equals(defectEnergy)) != 1)
-                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has multiple definitions.");
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellReferencePosition}] has multiple definitions.");
 
-                if (defectEnergy.UnitCellPosition.IsValidAndStable() && defectEnergy.Particle.IsEmpty)
-                    details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.UnitCellPosition}] (stable) has no effect.");
+                if (defectEnergy.CellReferencePosition.IsValidAndStable() && defectEnergy.Particle.IsEmpty)
+                    details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.CellReferencePosition}] (stable) has no effect.");
 
                 if (double.IsInfinity(defectEnergy.Energy) || double.IsNaN(defectEnergy.Energy))
-                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.UnitCellPosition}] has an infinity/NaN energy value.");
+                    details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellReferencePosition}] has an infinity/NaN energy value.");
             }
 
             if (details.Count != 0)

@@ -139,7 +139,7 @@
                 </DataTemplate>
               </DataGrid.RowHeaderTemplate>
               <DataGrid.Columns>
-                <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Source" Binding="{Binding DataObject.Name}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Type" Binding="{Binding VisualCategory}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Scaling"
                                     Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
@@ -167,7 +167,7 @@
               </Grid.RowDefinitions>
               <ComboBox Grid.Row="0"
                         ItemsSource="{Binding SelectableCustomizationsViewModel.ObservableItems}"
-                        SelectedItem="{Binding SelectedCustomizationGraph}"
+                        SelectedItem="{Binding SelectedCustomizationTemplate}"
                         IsEditable="True"
                         Name="CustomizationComboBox"
                         ToolTip="Customization" />
@@ -183,7 +183,7 @@
                   </DataTemplate>
                 </DataGrid.RowHeaderTemplate>
                 <DataGrid.Columns>
-                  <DataGridTextColumn Header="Source" Binding="{Binding ObjectGraph.Name}" IsReadOnly="True" />
+                  <DataGridTextColumn Header="Source" Binding="{Binding DataObject.Name}" IsReadOnly="True" />
                   <DataGridTextColumn Header="Type" Binding="{Binding VisualCategory}" IsReadOnly="True" />
                   <DataGridTextColumn Header="Scaling"
                                       Binding="{Binding Scaling, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />

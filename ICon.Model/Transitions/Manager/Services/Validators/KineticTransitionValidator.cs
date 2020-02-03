@@ -85,33 +85,33 @@ namespace Mocassin.Model.Transitions.Validators
         {
             var details = new List<string>();
             var unitCellProvider = ModelProject.GetManager<IStructureManager>().QueryPort.Query(port => port.GetFullUnitCellProvider());
-            var unitCellPositions = transition.GetGeometrySequence().Select(x => unitCellProvider.GetEntryValueAt(x)).ToList();
+            var cellReferencePositions = transition.GetGeometrySequence().Select(x => unitCellProvider.GetEntryValueAt(x)).ToList();
 
-            AddExchangeGroupGeometryValidation(unitCellPositions, transition.AbstractTransition.GetStateExchangeGroups().ToList(), report);
+            AddExchangeGroupGeometryValidation(cellReferencePositions, transition.AbstractTransition.GetStateExchangeGroups().ToList(), report);
             if (!report.IsGood) return false;
 
-            if (!unitCellPositions[0].IsValidAndStable() || !unitCellPositions[unitCellPositions.Count - 1].IsValidAndStable())
+            if (!cellReferencePositions[0].IsValidAndStable() || !cellReferencePositions[cellReferencePositions.Count - 1].IsValidAndStable())
             {
                 const string detail0 = "Tailing positions of the transition are invalid or unstable!";
                 details.Add(detail0);
             }
 
-            if (unitCellPositions.Any(x => !x.IsValidAndUnstable() && !x.IsValidAndStable()))
+            if (cellReferencePositions.Any(x => !x.IsValidAndUnstable() && !x.IsValidAndStable()))
             {
                 const string detail1 = "Geometry sequence contains deprecated unit cell positions!";
                 details.Add(detail1);
             }
 
-            for (var i = 1; i < unitCellPositions.Count - 1; i++)
+            for (var i = 1; i < cellReferencePositions.Count - 1; i++)
             {
-                if (!unitCellPositions[i].IsValidAndUnstable() || !unitCellPositions[i + 1].IsValidAndUnstable()) 
+                if (!cellReferencePositions[i].IsValidAndUnstable() || !cellReferencePositions[i + 1].IsValidAndUnstable()) 
                     continue;
 
                 var detail2 = $"The geometry position contains consecutive unstable positions at positions ({i}) and ({i+1})";
                 break;
             }
 
-            if (unitCellPositions.All(x => x.Status != PositionStatus.Unstable))
+            if (cellReferencePositions.All(x => x.Stability != PositionStability.Unstable))
             {
                 const string detail3 = "The geometry set does not contain any unstable position for the transition state";
                 details.Add(detail3);
@@ -134,28 +134,28 @@ namespace Mocassin.Model.Transitions.Validators
         /// <summary>
         /// Validates that the set of passed exchange groups matches the set of binding unit cell positions and adds the results to the passed validation report
         /// </summary>
-        /// <param name="unitCellPositions"></param>
+        /// <param name="cellReferencePositions"></param>
         /// <param name="stateExchangeGroups"></param>
         /// <param name="report"></param>
         /// <returns></returns>
-        protected void AddExchangeGroupGeometryValidation(IList<IUnitCellPosition> unitCellPositions,
+        protected void AddExchangeGroupGeometryValidation(IList<ICellReferencePosition> cellReferencePositions,
             IList<IStateExchangeGroup> stateExchangeGroups, ValidationReport report)
         {
-            if (unitCellPositions.Count != stateExchangeGroups.Count)
+            if (cellReferencePositions.Count != stateExchangeGroups.Count)
                 return;
 
             var details = new List<string>();
-            for (var i = 0; i < unitCellPositions.Count; i++)
+            for (var i = 0; i < cellReferencePositions.Count; i++)
             {
-                if (unitCellPositions[i] == null)
+                if (cellReferencePositions[i] == null)
                 {
                     var detail1 = $"Position at geometry step ({i}) does not exist in the defined unit cell.";
                     details.Add(detail1);
                     continue;
                 }
 
-                if ((unitCellPositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup) ||
-                    (unitCellPositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup))
+                if ((cellReferencePositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup) ||
+                    (cellReferencePositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup))
                     continue;
 
                 var detail2 = $"Exchange group and position at geometry step ({i}) do not match in stability";

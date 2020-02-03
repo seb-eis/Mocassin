@@ -26,7 +26,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
 
             var report = new ConflictReport();
             MatchCrystalSystemAndCellParameters(report);
-            MatchUnitCellPositionsToSpaceGroup(report);
+            MatchCellReferencePositionsToSpaceGroup(report);
             return report;
         }
 
@@ -54,13 +54,12 @@ namespace Mocassin.Model.Structures.ConflictHandling
         }
 
         /// <summary>
-        ///     Checks the unit cell position list from first to last and marks later duplicates as deprecated if they produce
-        ///     equal sequence of wyckoffs to former positions
+        ///     Checks the unit cell position list from first to last and marks later duplicates as deprecated if they produce equal sequences to former positions
         /// </summary>
         /// <param name="report"></param>
-        protected void MatchUnitCellPositionsToSpaceGroup(ConflictReport report)
+        protected void MatchCellReferencePositionsToSpaceGroup(ConflictReport report)
         {
-            var currentPositions = DataAccess.Query(data => data.UnitCellPositions.Select(position => position.Vector.AsFractional()));
+            var currentPositions = DataAccess.Query(data => data.CellReferencePositions.Select(position => position.Vector.AsFractional()));
             var extendedPositions = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtensions(currentPositions);
 
             var comparer = ModelProject.SpaceGroupService.Comparer.ToEqualityComparer();
@@ -68,7 +67,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
             for (var i = 0; i < extendedPositions.Count; i++)
             {
                 var i1 = i;
-                if (!DataAccess.Query(data => data.UnitCellPositions[i1].IsDeprecated))
+                if (!DataAccess.Query(data => data.CellReferencePositions[i1].IsDeprecated))
                 {
                     for (var j = i + 1; j < extendedPositions.Count; j++)
                     {
@@ -76,7 +75,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
                             continue;
 
                         var j1 = j;
-                        DataAccess.Query(data => data.UnitCellPositions[j1].Deprecate());
+                        DataAccess.Query(data => data.CellReferencePositions[j1].Deprecate());
 
                         var detail0 = $"The unit cell position at index ({j}) is now equivalent to position at index ({i})";
                         var detail1 = $"Conflict was resolved by marking position at index ({j}) as deprecated";

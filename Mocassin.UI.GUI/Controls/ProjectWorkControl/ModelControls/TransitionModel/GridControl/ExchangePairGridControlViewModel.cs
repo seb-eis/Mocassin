@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Mocassin.Model.Particles;
 using Mocassin.UI.GUI.Controls.Base.Interfaces;
 using Mocassin.UI.GUI.Controls.Base.ViewModels;
+using Mocassin.UI.Xml.Base;
 using Mocassin.UI.Xml.Main;
 using Mocassin.UI.Xml.ParticleModel;
 using Mocassin.UI.Xml.TransitionModel;
@@ -11,84 +13,82 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" />
     /// </summary>
-    public class ExchangePairGridControlViewModel : CollectionControlViewModel<StateExchangePairGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class ExchangePairGridControlViewModel : CollectionControlViewModel<StateExchangePairData>,
+        IContentSupplier<MocassinProject>
     {
         /// <summary>
         ///     Get or set the <see cref="ICollection{T}" /> of all available particles
         /// </summary>
-        private ICollection<ParticleGraph> BaseParticleOptions => ContentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
+        private ICollection<ParticleData> BaseParticleOptions => ContentSource?.ProjectModelData?.ParticleModelData?.Particles;
 
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <summary>
-        ///     Get a <see cref="IEnumerable{T}" /> of possible donor <see cref="ParticleGraph" /> options for the currently
-        ///     selected <see cref="StateExchangePairGraph" />
+        ///     Get a <see cref="IEnumerable{T}" /> of possible donor <see cref="ParticleData" /> options for the currently
+        ///     selected <see cref="StateExchangePairData" />
         /// </summary>
-        public IEnumerable<ParticleGraph> CurrentDonorOptions => GetCurrentDonorOptions();
+        public IEnumerable<ModelObjectReference<Particle>> CurrentDonorOptions => EnumerateCurrentDonorOptions();
 
         /// <summary>
-        ///     Get a <see cref="IEnumerable{T}" /> of possible donor <see cref="ParticleGraph" /> options for the currently
-        ///     selected <see cref="StateExchangePairGraph" />
+        ///     Get a <see cref="IEnumerable{T}" /> of possible donor <see cref="ParticleData" /> options for the currently
+        ///     selected <see cref="StateExchangePairData" />
         /// </summary>
-        public IEnumerable<ParticleGraph> CurrentAcceptorOptions => GetCurrentAcceptorOptions();
+        public IEnumerable<ModelObjectReference<Particle>> CurrentAcceptorOptions => EnumerateCurrentAcceptorOptions();
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.TransitionModelGraph?.StateExchangePairs);
+            SetCollection(ContentSource?.ProjectModelData?.TransitionModelData?.StateExchangePairs);
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}" /> of the donor <see cref="ParticleGraph" /> options for the currently selected
-        ///     <see cref="StateExchangePairGraph" />
+        ///     Get an <see cref="IEnumerable{T}" /> for the donor <see cref="ModelObjectReference{T}" /> options of the currently selected <see cref="StateExchangePairData" />
         /// </summary>
         /// <returns></returns>
         /// <remarks> This method ensures that on loading (Selection is null) the full collection is returned </remarks>
-        private IEnumerable<ParticleGraph> GetCurrentDonorOptions()
+        private IEnumerable<ModelObjectReference<Particle>> EnumerateCurrentDonorOptions()
         {
             if (BaseParticleOptions == null) yield break;
-            foreach (var particleGraph in BaseParticleOptions)
+            foreach (var particleData in BaseParticleOptions)
             {
-                if (!PairIsAlreadyDefined(Items, particleGraph.Key, SelectedItem?.AcceptorParticleKey))
-                    yield return particleGraph;
+                if (!PairIsAlreadyDefined(Items, particleData.Key, SelectedItem?.AcceptorParticle?.Key))
+                    yield return new ModelObjectReference<Particle>(particleData);
             }
         }
 
         /// <summary>
-        ///     Get an <see cref="IEnumerable{T}" /> of the acceptor <see cref="ParticleGraph" /> options for the currently
-        ///     selected <see cref="StateExchangePairGraph" />
+        ///     Get an <see cref="IEnumerable{T}" /> for the acceptor <see cref="ModelObjectReference{T}" /> options of the currently selected <see cref="StateExchangePairData" />
         /// </summary>
         /// <returns></returns>
         /// <remarks> This method ensures that on loading (Selection is null) the full collection is returned </remarks>
-        private IEnumerable<ParticleGraph> GetCurrentAcceptorOptions()
+        private IEnumerable<ModelObjectReference<Particle>> EnumerateCurrentAcceptorOptions()
         {
             if (BaseParticleOptions == null) yield break;
-            foreach (var particleGraph in BaseParticleOptions)
+            foreach (var particleData in BaseParticleOptions)
             {
-                if (!PairIsAlreadyDefined(Items, SelectedItem?.DonorParticleKey, particleGraph.Key))
-                    yield return particleGraph;
+                if (!PairIsAlreadyDefined(Items, SelectedItem?.DonorParticle?.Key, particleData?.Key))
+                    yield return new ModelObjectReference<Particle>(particleData);
             }
 
-            yield return ParticleGraph.VoidParticle;
+            yield return new ModelObjectReference<Particle>(ParticleData.VoidParticle);
         }
 
         /// <summary>
-        ///     Checks if th passed <see cref="ParticleGraph" /> key combination is already defined as a
-        ///     <see cref="StateExchangePairGraph" />
+        ///     Checks if th passed <see cref="ParticleData" /> key combination is already defined as a
+        ///     <see cref="StateExchangePairData" />
         /// </summary>
         /// <param name="defined"></param>
         /// <param name="donorKey"></param>
         /// <param name="acceptorKey"></param>
         /// <returns></returns>
-        private bool PairIsAlreadyDefined(ICollection<StateExchangePairGraph> defined, string donorKey, string acceptorKey)
+        private bool PairIsAlreadyDefined(ICollection<StateExchangePairData> defined, string donorKey, string acceptorKey)
         {
             return donorKey == acceptorKey 
                    || defined != null && defined
                        .Where(x => x != SelectedItem)
-                       .Any(x => x.AcceptorParticleKey == acceptorKey && x.DonorParticleKey == donorKey);
+                       .Any(x => x.AcceptorParticle?.Key == acceptorKey && x.DonorParticle?.Key == donorKey);
         }
     }
 }

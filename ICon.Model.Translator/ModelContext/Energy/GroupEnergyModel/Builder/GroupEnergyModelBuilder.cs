@@ -64,7 +64,7 @@ namespace Mocassin.Model.Translator.ModelContext
             var index = 0;
             energyModel.ParticleIndexToTableMapping = new Dictionary<IParticle, int>();
 
-            foreach (var entry in energyModel.GroupInteraction.CenterUnitCellPosition.OccupationSet.GetParticles())
+            foreach (var entry in energyModel.GroupInteraction.CenterCellReferencePosition.OccupationSet.GetParticles())
                 energyModel.ParticleIndexToTableMapping.Add(entry, index++);
         }
 

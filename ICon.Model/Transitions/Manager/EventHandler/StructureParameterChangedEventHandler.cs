@@ -26,7 +26,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleChangedCellParameters(IModelParameterEventArgs<ICellParameters> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleChangedSpaceGroupInfo(IModelParameterEventArgs<ISpaceGroupInfo> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Mocassin.Model.Transitions.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleStructureInfoChange(IModelParameterEventArgs<IStructureInfo> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
     }
 }

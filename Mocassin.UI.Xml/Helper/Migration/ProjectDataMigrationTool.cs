@@ -10,12 +10,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
     public abstract class ProjectDataMigrationTool
     {
         /// <summary>
-        ///     Defines the delegate for reporting data migrations of a known <see cref="ProjectObjectGraph" /> parent pair
+        ///     Defines the delegate for reporting data migrations of a known <see cref="ProjectDataObject" /> parent pair
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="comment"></param>
-        public delegate void DataMigrationReporter(ProjectObjectGraph source, ProjectObjectGraph target, string comment);
+        public delegate void DataMigrationReporter(ProjectDataObject source, ProjectDataObject target, string comment);
 
         /// <summary>
         ///     Get the <see cref="List{T}" /> of <see cref="MigrationReportEntry" /> instances
@@ -41,7 +41,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        protected MigrationReport GenerateReport(ProjectObjectGraph source, ProjectObjectGraph target)
+        protected MigrationReport GenerateReport(ProjectDataObject source, ProjectDataObject target)
         {
             return new MigrationReport(ReportEntries.ToList(ReportEntries.Count).AsReadOnly(), source, target);
         }
@@ -62,21 +62,21 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="dataSource"></param>
         /// <param name="dataTarget"></param>
         /// <param name="comment"></param>
-        protected void AddReportEntry(ProjectObjectGraph sourceParent, ProjectObjectGraph targetParent, ProjectObjectGraph dataSource,
-            ProjectObjectGraph dataTarget, string comment)
+        protected void AddReportEntry(ProjectDataObject sourceParent, ProjectDataObject targetParent, ProjectDataObject dataSource,
+            ProjectDataObject dataTarget, string comment)
         {
             ReportEntries.Add(new MigrationReportEntry(sourceParent, targetParent, dataSource, dataTarget, comment));
         }
 
         /// <summary>
-        ///     Get a reporter delegate associated with a specific pair of <see cref="ProjectObjectGraph" /> data parents
+        ///     Get a reporter delegate associated with a specific pair of <see cref="ProjectDataObject" /> data parents
         /// </summary>
         /// <param name="sourceParent"></param>
         /// <param name="targetParent"></param>
         /// <returns></returns>
-        protected DataMigrationReporter GetMigrationReporter(ProjectObjectGraph sourceParent, ProjectObjectGraph targetParent)
+        protected DataMigrationReporter GetMigrationReporter(ProjectDataObject sourceParent, ProjectDataObject targetParent)
         {
-            void ReportInternal(ProjectObjectGraph source, ProjectObjectGraph target, string comment)
+            void ReportInternal(ProjectDataObject source, ProjectDataObject target, string comment)
             {
                 AddReportEntry(sourceParent, targetParent, source, target, comment);
             }

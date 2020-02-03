@@ -11,8 +11,8 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Builds the environment model for each passed unit cell position
         /// </summary>
-        /// <param name="unitCellPositions"></param>
+        /// <param name="cellReferencePositions"></param>
         /// <returns></returns>
-        IList<IEnvironmentModel> BuildModels(IEnumerable<IUnitCellPosition> unitCellPositions);
+        IList<IEnvironmentModel> BuildModels(IEnumerable<ICellReferencePosition> cellReferencePositions);
     }
 }

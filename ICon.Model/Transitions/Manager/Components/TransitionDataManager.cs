@@ -24,9 +24,9 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IAbstractTransition> GetAbstractTransitions()
+        public ListReadOnlyWrapper<IAbstractTransition> GetAbstractTransitions()
         {
-            return ReadOnlyListAdapter<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
+            return ListReadOnlyWrapper<IAbstractTransition>.FromEnumerable(Data.AbstractTransitions);
         }
 
         /// <inheritdoc />
@@ -36,15 +36,15 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IKineticTransition> GetKineticTransitions()
+        public ListReadOnlyWrapper<IKineticTransition> GetKineticTransitions()
         {
-            return ReadOnlyListAdapter<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
+            return ListReadOnlyWrapper<IKineticTransition>.FromEnumerable(Data.KineticTransitions);
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IMetropolisTransition> GetMetropolisTransitions()
+        public ListReadOnlyWrapper<IMetropolisTransition> GetMetropolisTransitions()
         {
-            return ReadOnlyListAdapter<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
+            return ListReadOnlyWrapper<IMetropolisTransition>.FromEnumerable(Data.MetropolisTransitions);
         }
 
         /// <inheritdoc />
@@ -63,15 +63,15 @@ namespace Mocassin.Model.Transitions
         ///     Get a read only list of all state exchange groups
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyListAdapter<IStateExchangeGroup> GetStateExchangeGroups()
+        public ListReadOnlyWrapper<IStateExchangeGroup> GetStateExchangeGroups()
         {
-            return ReadOnlyListAdapter<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
+            return ListReadOnlyWrapper<IStateExchangeGroup>.FromEnumerable(Data.StateExchangeGroups);
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IStateExchangePair> GetStateExchangePairs()
+        public ListReadOnlyWrapper<IStateExchangePair> GetStateExchangePairs()
         {
-            return ReadOnlyListAdapter<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
+            return ListReadOnlyWrapper<IStateExchangePair>.FromEnumerable(Data.StateExchangePairs);
         }
 
         /// <inheritdoc />

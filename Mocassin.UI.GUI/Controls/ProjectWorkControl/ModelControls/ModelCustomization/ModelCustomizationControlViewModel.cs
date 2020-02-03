@@ -12,12 +12,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     ///     model
     ///     translation data customization
     /// </summary>
-    public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectCustomizationGraph>
+    public class ModelCustomizationControlViewModel : ProjectGraphControlViewModel, IContentSupplier<ProjectCustomizationTemplate>
     {
         /// <summary>
-        ///     Get or set the <see cref="ProjectCustomizationGraph" /> that serves as the current content source
+        ///     Get or set the <see cref="ProjectCustomizationTemplate" /> that serves as the current content source
         /// </summary>
-        private ProjectCustomizationGraph CustomizationContentSource { get; set; }
+        private ProjectCustomizationTemplate CustomizationContentSource { get; set; }
 
         /// <summary>
         ///     Get the <see cref="TransitionCustomizationControlViewModel" /> that controls the transition customization
@@ -40,7 +40,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public GroupInteractionControlViewModel GroupInteractionViewModel { get; }
 
         /// <inheritdoc />
-        ProjectCustomizationGraph IContentSupplier<ProjectCustomizationGraph>.ContentSource => CustomizationContentSource;
+        ProjectCustomizationTemplate IContentSupplier<ProjectCustomizationTemplate>.ContentSource => CustomizationContentSource;
 
         /// <inheritdoc />
         public ModelCustomizationControlViewModel(IMocassinProjectControl projectControl)
@@ -53,7 +53,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             TransitionCustomizationViewModel.ChangeContentSource(null);
@@ -63,7 +63,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <inheritdoc />
-        void IContentSupplier<ProjectCustomizationGraph>.ChangeContentSource(ProjectCustomizationGraph contentSource)
+        void IContentSupplier<ProjectCustomizationTemplate>.ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             TransitionCustomizationViewModel.ChangeContentSource(contentSource);
             StablePairInteractionViewModel.ChangeContentSource(contentSource);

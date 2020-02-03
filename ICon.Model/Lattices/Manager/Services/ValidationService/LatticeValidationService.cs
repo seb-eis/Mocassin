@@ -40,9 +40,9 @@ namespace Mocassin.Model.Lattices
 
 
         /// <summary>
-        /// Validate a DopingCombination in terms of conflicts with basic limitations and ParticleSets of UnitcellPosition
+        ///     Validate a DopingCombination in terms of conflicts with basic limitations and ParticleSets of cell reference Position
         /// </summary>
-        /// <param name="doping"></param>
+        /// <param name="dopingCombination"></param>
         /// <param name="dataReader"></param>
         /// <returns></returns>
         [ValidationOperation(ValidationType.Object)]

@@ -13,7 +13,7 @@ namespace Mocassin.Model.Structures
         public int OccupationIndex { get; }
 
         /// <inheritdoc />
-        public PositionStatus Status { get; }
+        public PositionStability Stability { get; }
 
         /// <inheritdoc />
         public Coordinates3D Coordinates => Vector.Coordinates;
@@ -50,11 +50,11 @@ namespace Mocassin.Model.Structures
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="particleSetIndex"></param>
-        /// <param name="status"></param>
-        public CartesianPosition(in Cartesian3D vector, int particleSetIndex, PositionStatus status)
+        /// <param name="stability"></param>
+        public CartesianPosition(in Cartesian3D vector, int particleSetIndex, PositionStability stability)
             : this()
         {
-            Status = status;
+            Stability = stability;
             Vector = vector;
             OccupationIndex = particleSetIndex;
         }

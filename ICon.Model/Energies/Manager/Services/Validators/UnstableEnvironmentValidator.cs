@@ -46,10 +46,10 @@ namespace Mocassin.Model.Energies.Validators
         protected void AddObjectUniquenessValidation(IUnstableEnvironment envInfo, ValidationReport report)
         {
             var objects = DataReader.Access.GetUnstableEnvironments().Where(value => !value.IsDeprecated);
-            if (!objects.Select(value => value.UnitCellPosition).Contains(envInfo.UnitCellPosition))
+            if (!objects.Select(value => value.CellReferencePosition).Contains(envInfo.CellReferencePosition))
                 return;
 
-            var detail0 = $"The unit cell position with index ({envInfo.UnitCellPosition.Index}) already has a defined environment";
+            var detail0 = $"The unit cell position with index ({envInfo.CellReferencePosition.Index}) already has a defined environment";
             const string detail1 = "The generation and selection of multiple environments per position is currently not supported";
             report.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail0, detail1));
         }
@@ -63,7 +63,7 @@ namespace Mocassin.Model.Energies.Validators
         {
             var approxInteractionCount = ApproximatePairInteractionCount(envInfo);
 
-            if (envInfo.UnitCellPosition.Status != PositionStatus.Unstable)
+            if (envInfo.CellReferencePosition.Stability != PositionStability.Unstable)
             {
                 const string detail0 = "Cannot define an unstable environment for a stable position";
                 const string detail1 = "Stable environments are defined through one entity to avoid generation of 'energy holes' breaking the MMC routine";
@@ -144,7 +144,7 @@ namespace Mocassin.Model.Energies.Validators
         {
             long interactionPerUnitCell = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetExtendedIndexToPositionList())
-                .Count(entry => entry.Status == PositionStatus.Stable);
+                .Count(entry => entry.Stability == PositionStability.Stable);
 
             var unitCellVolume = ModelProject.GetManager<IStructureManager>().QueryPort
                 .Query(port => port.GetVectorEncoder())

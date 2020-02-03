@@ -47,11 +47,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public bool IsWireframeVisible
         {
-            get => ObjectGraph.Resources.TryGetResource(IsWireframeVisibleKey, out bool value) && value;
+            get => DataObject.Resources.TryGetResource(IsWireframeVisibleKey, out bool value) && value;
             set
             {
                 if (value == IsWireframeVisible) return;
-                ObjectGraph.Resources.SetResource(IsWireframeVisibleKey, value);
+                DataObject.Resources.SetResource(IsWireframeVisibleKey, value);
                 OnIsWireframeVisibleChanged();
                 OnPropertyChanged();
             }
@@ -60,13 +60,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public MaterialCore Material
         {
-            get => ObjectGraph.Resources.TryGetResource(MaterialKey, out string name)
+            get => DataObject.Resources.TryGetResource(MaterialKey, out string name)
                 ? FindMaterial(name)
                 : MaterialCatalog[nameof(PhongMaterials.DefaultVRML)];
             set
             {
                 if (value.Name.Equals(Material.Name)) return;
-                ObjectGraph.Resources.SetResource(MaterialKey, value.Name);
+                DataObject.Resources.SetResource(MaterialKey, value.Name);
                 OnMaterialChanged();
                 OnPropertyChanged();
             }
@@ -75,11 +75,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public Color DiffuseColor
         {
-            get => ObjectGraph.Resources.TryGetResource(ColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
+            get => DataObject.Resources.TryGetResource(ColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
             set
             {
                 if (value.Equals(DiffuseColor)) return;
-                ObjectGraph.Resources.SetResource(ColorKey, value, color => color.ToRgbaHex());
+                DataObject.Resources.SetResource(ColorKey, value, color => color.ToRgbaHex());
                 OnDiffuseColorChanged();
                 OnPropertyChanged();
             }
@@ -88,11 +88,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public Color WireframeColor
         {
-            get => ObjectGraph.Resources.TryGetResource(WireframeColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
+            get => DataObject.Resources.TryGetResource(WireframeColorKey, x => VisualExtensions.ParseRgbaHexToColor(x), out var color) ? color : Colors.Gray;
             set
             {
                 if (value.Equals(WireframeColor)) return;
-                ObjectGraph.Resources.SetResource(WireframeColorKey, value, color => color.ToRgbaHex());
+                DataObject.Resources.SetResource(WireframeColorKey, value, color => color.ToRgbaHex());
                 OnWireframeColorChanged();
                 OnPropertyChanged();
             }
@@ -101,11 +101,11 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public double MeshQuality
         {
-            get => ObjectGraph.Resources.TryGetResource(MeshQualityKey, out double value) ? value : 1.0;
+            get => DataObject.Resources.TryGetResource(MeshQualityKey, out double value) ? value : 1.0;
             set
             {
                 if (value.AlmostEqualByRange(MeshQuality)) return;
-                ObjectGraph.Resources.SetResource(MeshQualityKey, value);
+                DataObject.Resources.SetResource(MeshQualityKey, value);
                 OnMeshQualityChanged();
                 OnPropertyChanged();
             }
@@ -114,13 +114,13 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         /// <inheritdoc />
         public double MeshScaling
         {
-            get => ObjectGraph.Resources.TryGetResource(UniformScalingKey, out double value) ? value : GetDefaultScaling();
+            get => DataObject.Resources.TryGetResource(UniformScalingKey, out double value) ? value : GetDefaultScaling();
             set
             {
                 var newValue = value < Settings.Default.Limit_Render_Scaling_Lower ? Settings.Default.Limit_Render_Scaling_Lower : value;
                 var oldValue = MeshScaling;
                 if (newValue.AlmostEqualByRange(oldValue)) return;
-                ObjectGraph.Resources.SetResource(UniformScalingKey, newValue);
+                DataObject.Resources.SetResource(UniformScalingKey, newValue);
                 OnUniformScalingChanged(oldValue, newValue);
                 OnPropertyChanged();
             }
@@ -137,8 +137,8 @@ namespace Mocassin.UI.GUI.Controls.DxVisualizer.ModelViewer.Scene
         }
 
         /// <inheritdoc />
-        public DxProjectMeshObjectSceneConfig(ExtensibleProjectObjectGraph objectGraph, VisualObjectCategory visualCategory)
-            : base(objectGraph, visualCategory)
+        public DxProjectMeshObjectSceneConfig(ExtensibleProjectDataObject dataObject, VisualObjectCategory visualCategory)
+            : base(dataObject, visualCategory)
         {
         }
 

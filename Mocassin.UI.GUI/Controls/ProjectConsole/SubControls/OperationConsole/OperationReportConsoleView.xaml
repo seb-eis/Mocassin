@@ -24,7 +24,7 @@
     </Grid.ColumnDefinitions>
     <ComboBox Grid.Row="0" Grid.ColumnSpan="2"
               ItemsSource="{Binding ProjectGraphs}"
-              SelectedItem="{Binding SelectedProjectGraph}"
+              SelectedItem="{Binding SelectedProject}"
               Margin="{StaticResource App.Margin.VerticalStack}"
               ToolTip="{StaticResource App.ToolTip.ProjectSelection}"
               VerticalAlignment="Center"

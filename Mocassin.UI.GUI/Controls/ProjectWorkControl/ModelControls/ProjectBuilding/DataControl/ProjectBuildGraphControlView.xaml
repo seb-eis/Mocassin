@@ -41,13 +41,13 @@
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Customization Source"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.ProjectCustomizationGraphs}"
-                                                 SelectedItemBinding="{Binding ProjectCustomizationGraph}"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.CustomizationTemplates}"
+                                                 SelectedItemBinding="{Binding ProjectCustomizationTemplate}"
                                                  DisplayMemberPath="Name" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Job Set Source"
-                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.ProjectJobTranslationGraphs}"
-                                                 SelectedItemBinding="{Binding ProjectJobTranslationGraph}"
+                                                 ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ContentSource.JobSetTemplates}"
+                                                 SelectedItemBinding="{Binding ProjectJobSetTemplate}"
                                                  DisplayMemberPath="Name" />
 
       </DataGrid.Columns>

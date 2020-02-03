@@ -5,17 +5,17 @@ using Mocassin.UI.Xml.TransitionModel;
 
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionModel.GridControl
 {
-    public class AbstractTransitionGridControlViewModel : CollectionControlViewModel<AbstractTransitionGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class AbstractTransitionGridControlViewModel : CollectionControlViewModel<AbstractTransitionData>,
+        IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.TransitionModelGraph?.AbstractTransitions);
+            SetCollection(ContentSource?.ProjectModelData?.TransitionModelData?.AbstractTransitions);
         }
     }
 }

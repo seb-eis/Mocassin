@@ -8,13 +8,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
 {
     /// <summary>
     ///     The <see cref="HostGraphGuestSelectionVmConverter{THost}" /> implementation for wrapping
-    ///     <see cref="MetropolisSimulationGraph" /> instances into host view models for
-    ///     <see cref="MetropolisTransitionGraph" /> references
+    ///     <see cref="MetropolisSimulationData" /> instances into host view models for
+    ///     <see cref="MetropolisTransitionData" /> references
     /// </summary>
-    public class MetropolisSimulationTransitionSelectionVmConverter : HostGraphGuestSelectionVmConverter<MetropolisSimulationGraph>
+    public class MetropolisSimulationTransitionSelectionVmConverter : HostGraphGuestSelectionVmConverter<MetropolisSimulationData>
     {
         /// <inheritdoc />
-        protected override IContentSupplier<MocassinProjectGraph> CreateSelectionViewModel(MetropolisSimulationGraph host)
+        protected override IContentSupplier<MocassinProject> CreateSelectionViewModel(MetropolisSimulationData host)
         {
             return new MetropolisSimulationTransitionSelectionViewModel(host);
         }

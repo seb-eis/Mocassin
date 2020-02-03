@@ -9,28 +9,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.TransitionMo
 {
     /// <summary>
     ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
-    ///     <see cref="StateExchangePairGraph" /> to <see cref="StateExchangeGroupGraph" /> host instances
+    ///     <see cref="StateExchangePairData" /> to <see cref="StateExchangeGroupData" /> host instances
     /// </summary>
     public sealed class ExchangeGroupExchangePairSelectionViewModel : HostGraphModelObjectSelectionViewModel<StateExchangePair,
-        StateExchangeGroupGraph>
+        StateExchangeGroupData>
     {
         /// <inheritdoc />
-        public ExchangeGroupExchangePairSelectionViewModel(StateExchangeGroupGraph hostObject)
+        public ExchangeGroupExchangePairSelectionViewModel(StateExchangeGroupData hostObject)
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<StateExchangePairGraph>();
+            HandleDropAddCommand = GetDropAddObjectCommand<StateExchangePairData>();
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
         {
-            return projectGraph?.ProjectModelGraph?.TransitionModelGraph?.StateExchangePairs;
+            return project?.ProjectModelData?.TransitionModelData?.StateExchangePairs;
         }
 
         /// <inheritdoc />
-        protected override ICollection<ModelObjectReferenceGraph<StateExchangePair>> GetTargetCollection(
-            StateExchangeGroupGraph sourceObject)
+        protected override ICollection<ModelObjectReference<StateExchangePair>> GetTargetCollection(
+            StateExchangeGroupData sourceObject)
         {
             return sourceObject?.StateExchangePairs;
         }

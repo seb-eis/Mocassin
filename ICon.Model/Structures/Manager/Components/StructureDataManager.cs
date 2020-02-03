@@ -33,31 +33,31 @@ namespace Mocassin.Model.Structures
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IUnitCellPosition> GetUnitCellPositions()
+        public ListReadOnlyWrapper<ICellReferencePosition> GetCellReferencePositions()
         {
-            return ReadOnlyListAdapter<IUnitCellPosition>.FromEnumerable(Data.UnitCellPositions);
+            return ListReadOnlyWrapper<ICellReferencePosition>.FromEnumerable(Data.CellReferencePositions);
         }
 
         /// <inheritdoc />
-        public ReindexingList GetCleanUnitCellPositionIndexing()
+        public ReindexingList GetCleanReferencePositionIndexing()
         {
-            return CreateReindexing(Data.UnitCellPositions, Data.UnitCellPositions.Count);
+            return CreateReindexing(Data.CellReferencePositions, Data.CellReferencePositions.Count);
         }
 
         /// <inheritdoc />
-        public IUnitCellPosition GetUnitCellPosition(int index)
+        public ICellReferencePosition GetCellReferencePosition(int index)
         {
-            return Data.UnitCellPositions[index];
+            return Data.CellReferencePositions[index];
         }
 
         /// <inheritdoc />
-        public ReadOnlyListAdapter<IPositionDummy> GetPositionDummies()
+        public ListReadOnlyWrapper<ICellDummyPosition> GetDummyPositions()
         {
-            return ReadOnlyListAdapter<IPositionDummy>.FromEnumerable(Data.PositionDummies);
+            return ListReadOnlyWrapper<ICellDummyPosition>.FromEnumerable(Data.PositionDummies);
         }
 
         /// <inheritdoc />
-        public IPositionDummy GetPositionDummy(int index)
+        public ICellDummyPosition GetDummyPosition(int index)
         {
             return Data.PositionDummies[index];
         }

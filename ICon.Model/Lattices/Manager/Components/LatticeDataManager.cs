@@ -25,27 +25,27 @@ namespace Mocassin.Model.Lattices
         /// Get read only list of used dopings
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyListAdapter<IDoping> GetDopings()
+        public ListReadOnlyWrapper<IDoping> GetDopings()
         {
-            return ReadOnlyListAdapter<IDoping>.FromEnumerable(Data.Dopings);
+            return ListReadOnlyWrapper<IDoping>.FromEnumerable(Data.Dopings);
         }
 
         /// <summary>
         /// Get read only list of building blocks
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyListAdapter<IBuildingBlock> GetBuildingBlocks()
+        public ListReadOnlyWrapper<IBuildingBlock> GetBuildingBlocks()
         {
-            return ReadOnlyListAdapter<IBuildingBlock>.FromEnumerable(Data.BuildingBlocks);
+            return ListReadOnlyWrapper<IBuildingBlock>.FromEnumerable(Data.BuildingBlocks);
         }
 
         /// <summary>
         /// Get read only list of DopingCombinations
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyListAdapter<IDopingCombination> GetDopingCombinations()
+        public ListReadOnlyWrapper<IDopingCombination> GetDopingCombinations()
         {
-            return ReadOnlyListAdapter<IDopingCombination>.FromEnumerable(Data.DopingCombinations);
+            return ListReadOnlyWrapper<IDopingCombination>.FromEnumerable(Data.DopingCombinations);
         }
     }
 }

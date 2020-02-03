@@ -19,10 +19,10 @@ namespace Mocassin.Model.Energies
         public IGroupInteraction GroupInteraction => ExtendedPositionGroup.GroupInteraction;
 
         /// <inheritdoc />
-        public IUnitCellPosition CenterPosition => ExtendedPositionGroup.CenterPosition;
+        public ICellReferencePosition CenterPosition => ExtendedPositionGroup.CenterPosition;
 
         /// <inheritdoc />
-        public IReadOnlyList<IUnitCellPosition> SurroundingPositions => ExtendedPositionGroup.SurroundingUnitCellPositions;
+        public IReadOnlyList<ICellReferencePosition> SurroundingPositions => ExtendedPositionGroup.SurroundingCellReferencePositions;
 
         /// <inheritdoc />
         public IReadOnlyList<IOccupationState> UniqueOccupationStates => ExtendedPositionGroup.UniqueOccupationStates;

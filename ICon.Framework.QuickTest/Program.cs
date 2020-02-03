@@ -43,8 +43,8 @@ namespace Mocassin.Framework.QuickTest
             using var projectLibrary = SqLiteContext.OpenDatabase<MocassinProjectContext>(projectPath);
             projectLibrary.MocassinProjectGraphs.Load();
             var project = projectLibrary.MocassinProjectGraphs.First();
-            var source = project.ProjectCustomizationGraphs.SingleOrDefault(x => x.Name.Contains("TS4"));
-            var target = project.ProjectCustomizationGraphs.SingleOrDefault(x => x.Name.Contains("TS5"));
+            var source = project.CustomizationTemplates.SingleOrDefault(x => x.Name.Contains("TS4"));
+            var target = project.CustomizationTemplates.SingleOrDefault(x => x.Name.Contains("TS5"));
             var migrationTool = new ProjectCustomizationMigrationTool {IsRedundantReportEnabled = true};
             var report = migrationTool.Migrate(source, target);
         }

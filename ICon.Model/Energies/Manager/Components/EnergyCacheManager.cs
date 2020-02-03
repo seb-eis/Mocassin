@@ -28,13 +28,13 @@ namespace Mocassin.Model.Energies
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions()
+        public IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IPairInteraction>> GetPositionPairInteractions()
         {
             return GetResultFromCache(CreatePositionPairInteractions);
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions()
+        public IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IGroupInteraction>> GetPositionGroupInteractions()
         {
             return GetResultFromCache(CreatePositionGroupInteractions);
         }
@@ -165,7 +165,7 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
+        protected IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IPairInteraction>> CreatePositionPairInteractions()
         {
             var energyManager = ModelProject.GetManager<IEnergyManager>();
             var structureManager = ModelProject.GetManager<IStructureManager>();
@@ -178,9 +178,9 @@ namespace Mocassin.Model.Energies
                 .Concat(asymmetricResult)
                 .ToDictionary(item => item.Key, item => (IReadOnlyList<IPairInteraction>) item.Value);
 
-            foreach (var unitCellPosition in structureManager.QueryPort.Query(port => port.GetUnitCellPositions()))
+            foreach (var referencePosition in structureManager.QueryPort.Query(port => port.GetCellReferencePositions()))
             {
-                if (!result.ContainsKey(unitCellPosition)) result.Add(unitCellPosition, new List<IPairInteraction>());
+                if (!result.ContainsKey(referencePosition)) result.Add(referencePosition, new List<IPairInteraction>());
             }
 
             return result;
@@ -191,11 +191,11 @@ namespace Mocassin.Model.Energies
         ///     position only
         /// </summary>
         /// <returns></returns>
-        protected IDictionary<IUnitCellPosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(
+        protected IDictionary<ICellReferencePosition, List<IPairInteraction>> AssignPairInteractionsToPosition<T>(
             IEnumerable<T> pairInteractions)
             where T : IPairInteraction
         {
-            var localResult = new Dictionary<IUnitCellPosition, List<IPairInteraction>>();
+            var localResult = new Dictionary<ICellReferencePosition, List<IPairInteraction>>();
 
             foreach (var pairInteraction in pairInteractions)
             {
@@ -227,17 +227,17 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <returns></returns>
         [CacheMethodResult]
-        protected IReadOnlyDictionary<IUnitCellPosition, IReadOnlyList<IGroupInteraction>> CreatePositionGroupInteractions()
+        protected IReadOnlyDictionary<ICellReferencePosition, IReadOnlyList<IGroupInteraction>> CreatePositionGroupInteractions()
         {
             var manager = ModelProject.GetManager<IEnergyManager>();
             var groupInteractions = manager.QueryPort.Query(port => port.GetGroupInteractions());
-            var localResult = new Dictionary<IUnitCellPosition, List<IGroupInteraction>>();
+            var localResult = new Dictionary<ICellReferencePosition, List<IGroupInteraction>>();
             foreach (var groupInteraction in groupInteractions)
             {
-                if (!localResult.TryGetValue(groupInteraction.CenterUnitCellPosition, out var list))
+                if (!localResult.TryGetValue(groupInteraction.CenterCellReferencePosition, out var list))
                 {
                     list = new List<IGroupInteraction>();
-                    localResult.Add(groupInteraction.CenterUnitCellPosition, list);
+                    localResult.Add(groupInteraction.CenterCellReferencePosition, list);
                 }
 
                 list.Add(groupInteraction);

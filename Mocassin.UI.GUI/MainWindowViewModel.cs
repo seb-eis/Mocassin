@@ -45,7 +45,7 @@ namespace Mocassin.UI.GUI
         /// <summary>
         ///     The <see cref="ProjectGraphs" /> backing field
         /// </summary>
-        private ObservableCollection<MocassinProjectGraph> projectGraphs;
+        private ObservableCollection<MocassinProject> projectGraphs;
 
         /// <inheritdoc />
         public IPushMessageSystem PushMessageSystem { get; set; }
@@ -101,7 +101,7 @@ namespace Mocassin.UI.GUI
         public IModelProject ServiceModelProject { get; }
 
         /// <inheritdoc />
-        public ObservableCollection<MocassinProjectGraph> ProjectGraphs
+        public ObservableCollection<MocassinProject> ProjectGraphs
         {
             get => projectGraphs;
             set => SetProperty(ref projectGraphs, value);
@@ -190,9 +190,9 @@ namespace Mocassin.UI.GUI
                 var filePath = GetFullResourceFilePath(Resources.Filename_Project_Default_Configuration);
                 return ProjectSettings.Deserialize(filePath, PluginAssemblies);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                Console.WriteLine(exception);
                 MessageBox.Show("Project settings are corrupt, defaults will be restored.", "Error - Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 EnsureProjectConfigDeployed(true);

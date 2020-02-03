@@ -18,7 +18,7 @@ namespace Mocassin.Model.Energies
     public class PairInteractionFinder : IPairInteractionFinder
     {
         /// <inheritdoc />
-        public IUnitCellProvider<IUnitCellPosition> UnitCellProvider { get; protected set; }
+        public IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; protected set; }
 
         /// <inheritdoc />
         public ISpaceGroupService SpaceGroupService { get; protected set; }
@@ -28,14 +28,14 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="unitCellProvider"></param>
         /// <param name="spaceGroupService"></param>
-        public PairInteractionFinder(IUnitCellProvider<IUnitCellPosition> unitCellProvider, ISpaceGroupService spaceGroupService)
+        public PairInteractionFinder(IUnitCellProvider<ICellReferencePosition> unitCellProvider, ISpaceGroupService spaceGroupService)
         {
             UnitCellProvider = unitCellProvider ?? throw new ArgumentNullException(nameof(unitCellProvider));
             SpaceGroupService = spaceGroupService ?? throw new ArgumentNullException(nameof(spaceGroupService));
         }
 
         /// <inheritdoc />
-        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions,
+        public IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<ICellReferencePosition> positions,
             IStableEnvironmentInfo environmentInfo, NumericComparer comparer)
         {
             var radialConstraint = new NumericConstraint(false, 0.0, environmentInfo.MaxInteractionRange, true, comparer);
@@ -95,7 +95,7 @@ namespace Mocassin.Model.Energies
             {
                 var radialConstraint = new NumericConstraint(false, 0.0, environment.MaxInteractionRange, true, comparer);
                 var acceptPredicate = MakeAsymmetricAcceptancePredicate(environment);
-                var singleResult = MakeUniqueAsymmetricPairs(new[] {environment.UnitCellPosition}, radialConstraint);
+                var singleResult = MakeUniqueAsymmetricPairs(new[] {environment.CellReferencePosition}, radialConstraint);
                 unfilteredPairs.AddRange(singleResult.Where(x => acceptPredicate(x)));
             }
 
@@ -109,10 +109,10 @@ namespace Mocassin.Model.Energies
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
         /// <returns></returns>
-        protected IEnumerable<SymmetricPairInteraction> MakeUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions,
+        protected IEnumerable<SymmetricPairInteraction> MakeUniqueSymmetricPairs(IEnumerable<ICellReferencePosition> positions,
             NumericConstraint radialConstraint)
         {
-            bool Predicate(IUnitCellPosition position) => position.IsValidAndStable();
+            bool Predicate(ICellReferencePosition position) => position.IsValidAndStable();
 
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, false);
             var values = CreateUniquePairs(candidateDictionary, CreateSymmetricPair);
@@ -125,10 +125,10 @@ namespace Mocassin.Model.Energies
         /// <param name="positions"></param>
         /// <param name="radialConstraint"></param>
         /// <returns></returns>
-        public IEnumerable<AsymmetricPairInteraction> MakeUniqueAsymmetricPairs(IEnumerable<IUnitCellPosition> positions,
+        public IEnumerable<AsymmetricPairInteraction> MakeUniqueAsymmetricPairs(IEnumerable<ICellReferencePosition> positions,
             NumericConstraint radialConstraint)
         {
-            bool Predicate(IUnitCellPosition position) => position.IsValidAndStable();
+            bool Predicate(ICellReferencePosition position) => position.IsValidAndStable();
 
             var candidateDictionary = CreateUniquePairCandidateDictionary(positions, radialConstraint, Predicate, true);
             var values = CreateUniquePairs(candidateDictionary, CreateAsymmetricPair);
@@ -167,7 +167,7 @@ namespace Mocassin.Model.Energies
         protected IEnumerable<PairInteraction> CreateUniquePairs(IDictionary<double, List<PairCandidate>> candidateDictionary,
             Func<PairCandidate, IPermutationSource<IParticle>, PairInteraction> pairMaker)
         {
-            var permutationSources = new Dictionary<(IUnitCellPosition, IUnitCellPosition), IPermutationSource<IParticle>>();
+            var permutationSources = new Dictionary<(ICellReferencePosition, ICellReferencePosition), IPermutationSource<IParticle>>();
             foreach (var candidate in candidateDictionary.Values.SelectMany(list => list))
             {
                 if (!permutationSources.TryGetValue((candidate.Position0, candidate.Position1), out var permutationSource))
@@ -218,10 +218,10 @@ namespace Mocassin.Model.Energies
         /// <param name="predicate"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected IDictionary<double, List<PairCandidate>> CreateUniquePairCandidateDictionary(IEnumerable<IUnitCellPosition> positions,
-            NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
+        protected IDictionary<double, List<PairCandidate>> CreateUniquePairCandidateDictionary(IEnumerable<ICellReferencePosition> positions,
+            NumericConstraint radialConstraint, Predicate<ICellReferencePosition> predicate, bool skipInversionFiltering)
         {
-            if (!(positions is ICollection<IUnitCellPosition> positionCollection))
+            if (!(positions is ICollection<ICellReferencePosition> positionCollection))
                 positionCollection = positions.ToList();
 
             var baseCandidateDictionary =
@@ -237,7 +237,7 @@ namespace Mocassin.Model.Energies
         /// <param name="position0"></param>
         /// <param name="position1"></param>
         /// <returns></returns>
-        public IPermutationSource<IParticle> CreateParticlePermutationSource(IUnitCellPosition position0, IUnitCellPosition position1)
+        public IPermutationSource<IParticle> CreateParticlePermutationSource(ICellReferencePosition position0, ICellReferencePosition position1)
         {
             return new PermutationSlotMachine<IParticle>(position0.OccupationSet.GetParticles(), position1.OccupationSet.GetParticles());
         }
@@ -252,8 +252,8 @@ namespace Mocassin.Model.Energies
         /// <param name="predicate"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected SortedDictionary<double, List<PairCandidate>> CreateCandidateDictionary(IEnumerable<IUnitCellPosition> positions,
-            NumericConstraint radialConstraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
+        protected SortedDictionary<double, List<PairCandidate>> CreateCandidateDictionary(IEnumerable<ICellReferencePosition> positions,
+            NumericConstraint radialConstraint, Predicate<ICellReferencePosition> predicate, bool skipInversionFiltering)
         {
             var resultDictionary =
                 new SortedDictionary<double, List<PairCandidate>>(UnitCellProvider.VectorEncoder.Transformer.FractionalSystem.Comparer);
@@ -276,7 +276,7 @@ namespace Mocassin.Model.Energies
         /// <param name="positions"></param>
         /// <returns></returns>
         protected SortedDictionary<double, List<PairCandidate>> CreateUniqueCandidateDictionary(
-            SortedDictionary<double, List<PairCandidate>> rawDictionary, IEnumerable<IUnitCellPosition> positions)
+            SortedDictionary<double, List<PairCandidate>> rawDictionary, IEnumerable<ICellReferencePosition> positions)
         {
             var result = new SortedDictionary<double, List<PairCandidate>>();
             var operationDictionary = GetMultiplicityDictionary(positions);
@@ -306,7 +306,7 @@ namespace Mocassin.Model.Energies
         /// <param name="startIndex"></param>
         /// <returns></returns>
         protected IEnumerable<PairCandidate> FilterCandidatesAndAssignIndices(List<PairCandidate> rawCandidates,
-            IDictionary<IUnitCellPosition, IList<ISymmetryOperation>> operationDictionary, int startIndex)
+            IDictionary<ICellReferencePosition, IList<ISymmetryOperation>> operationDictionary, int startIndex)
         {
             var remaining = rawCandidates.Count;
             while (remaining > 0)
@@ -345,10 +345,10 @@ namespace Mocassin.Model.Energies
         /// </summary>
         /// <param name="positions"></param>
         /// <returns></returns>
-        protected IDictionary<IUnitCellPosition, IList<ISymmetryOperation>> GetMultiplicityDictionary(
-            IEnumerable<IUnitCellPosition> positions)
+        protected IDictionary<ICellReferencePosition, IList<ISymmetryOperation>> GetMultiplicityDictionary(
+            IEnumerable<ICellReferencePosition> positions)
         {
-            var result = new Dictionary<IUnitCellPosition, IList<ISymmetryOperation>>();
+            var result = new Dictionary<ICellReferencePosition, IList<ISymmetryOperation>>();
             foreach (var position in positions)
                 result[position] = SpaceGroupService.GetSelfProjectionOperations(position.Vector, true);
 
@@ -382,7 +382,7 @@ namespace Mocassin.Model.Energies
         /// <param name="start"></param>
         /// <param name="positions"></param>
         /// <returns></returns>
-        protected IEnumerable<PairCandidate> MakePairCandidates(IUnitCellPosition start, IEnumerable<CellEntry<IUnitCellPosition>> positions)
+        protected IEnumerable<PairCandidate> MakePairCandidates(ICellReferencePosition start, IEnumerable<CellEntry<ICellReferencePosition>> positions)
         {
             foreach (var position in positions)
             {
@@ -404,15 +404,15 @@ namespace Mocassin.Model.Energies
         /// <param name="predicate"></param>
         /// <param name="skipInversionFiltering"></param>
         /// <returns></returns>
-        protected RadialSearchQuery<IUnitCellPosition>[] GetSearchQueries(IEnumerable<IUnitCellPosition> starts, NumericConstraint constraint, Predicate<IUnitCellPosition> predicate, bool skipInversionFiltering)
+        protected RadialSearchQuery<ICellReferencePosition>[] GetSearchQueries(IEnumerable<ICellReferencePosition> starts, NumericConstraint constraint, Predicate<ICellReferencePosition> predicate, bool skipInversionFiltering)
         {
             var positionSet = starts.ToList();
-            var result = new RadialSearchQuery<IUnitCellPosition>[positionSet.Count];
+            var result = new RadialSearchQuery<ICellReferencePosition>[positionSet.Count];
             for (var i = 0; i < positionSet.Count; i++)
             {
-                result[i] = new RadialSearchQuery<IUnitCellPosition>
+                result[i] = new RadialSearchQuery<ICellReferencePosition>
                 {
-                    StartCellEntry = new CellEntry<IUnitCellPosition>(positionSet[i].Vector, positionSet[i]),
+                    StartCellEntry = new CellEntry<ICellReferencePosition>(positionSet[i].Vector, positionSet[i]),
                     AcceptancePredicate = skipInversionFiltering
                         ? predicate
                         : MakeSymmetricInversionAcceptancePredicate(positionSet, predicate, i),
@@ -432,9 +432,9 @@ namespace Mocassin.Model.Energies
         /// <param name="positions"></param>
         /// <param name="currentSearchIndex"></param>
         /// <returns></returns>
-        protected Predicate<IUnitCellPosition> MakeSymmetricInversionAcceptancePredicate(IList<IUnitCellPosition> positions, Predicate<IUnitCellPosition> orgPredicate, int currentSearchIndex)
+        protected Predicate<ICellReferencePosition> MakeSymmetricInversionAcceptancePredicate(IList<ICellReferencePosition> positions, Predicate<ICellReferencePosition> orgPredicate, int currentSearchIndex)
         {
-            bool AcceptPredicate(IUnitCellPosition position)
+            bool AcceptPredicate(ICellReferencePosition position)
             {
                 return positions.Take(currentSearchIndex).All(x => x != position) && orgPredicate(position);
             }

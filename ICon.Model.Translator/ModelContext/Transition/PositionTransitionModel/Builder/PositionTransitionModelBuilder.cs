@@ -21,11 +21,11 @@ namespace Mocassin.Model.Translator.ModelContext
         public IList<IPositionTransitionModel> BuildModels(ITransitionModelContext modelContext, Task transitionBuildTask)
         {
             transitionBuildTask.Wait();
-            var unitCellPositions = ModelProject
+            var cellReferencePositions = ModelProject
                 .GetManager<IStructureManager>().QueryPort
-                .Query(port => port.GetUnitCellPositions());
+                .Query(port => port.GetCellReferencePositions());
 
-            return unitCellPositions
+            return cellReferencePositions
                 .Select(a => CreatePositionTransitionModel(a, modelContext))
                 .ToList();
         }
@@ -33,17 +33,17 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Creates the position transition model for the passed transition model
         /// </summary>
-        /// <param name="unitCellPosition"></param>
+        /// <param name="cellReferencePosition"></param>
         /// <param name="modelContext"></param>
         /// <returns></returns>
-        protected IPositionTransitionModel CreatePositionTransitionModel(IUnitCellPosition unitCellPosition,
+        protected IPositionTransitionModel CreatePositionTransitionModel(ICellReferencePosition cellReferencePosition,
             ITransitionModelContext modelContext)
         {
             var model = new PositionTransitionModel
             {
-                UnitCellPosition = unitCellPosition,
-                KineticTransitionModels = GetPossibleModels(unitCellPosition, modelContext.KineticTransitionModels),
-                MetropolisTransitionModels = GetPossibleModels(unitCellPosition, modelContext.MetropolisTransitionModels)
+                CellReferencePosition = cellReferencePosition,
+                KineticTransitionModels = GetPossibleModels(cellReferencePosition, modelContext.KineticTransitionModels),
+                MetropolisTransitionModels = GetPossibleModels(cellReferencePosition, modelContext.MetropolisTransitionModels)
             };
 
             return model;
@@ -52,28 +52,28 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <summary>
         ///     Searches a list of kinetic transition models for entries that are possible on the passed unit cell position
         /// </summary>
-        /// <param name="unitCellPosition"></param>
+        /// <param name="cellReferencePosition"></param>
         /// <param name="transitionModels"></param>
         /// <returns></returns>
-        protected IList<IKineticTransitionModel> GetPossibleModels(IUnitCellPosition unitCellPosition,
+        protected IList<IKineticTransitionModel> GetPossibleModels(ICellReferencePosition cellReferencePosition,
             IList<IKineticTransitionModel> transitionModels)
         {
             return transitionModels
-                .Where(a => a.GetStartUnitCellPosition() == unitCellPosition)
+                .Where(a => a.GetStartCellReferencePosition() == cellReferencePosition)
                 .ToList();
         }
 
         /// <summary>
         ///     Searches a list of metropolis transition models for entries that are possible on the passed unit cell position
         /// </summary>
-        /// <param name="unitCellPosition"></param>
+        /// <param name="cellReferencePosition"></param>
         /// <param name="transitionModels"></param>
         /// <returns></returns>
-        protected IList<IMetropolisTransitionModel> GetPossibleModels(IUnitCellPosition unitCellPosition,
+        protected IList<IMetropolisTransitionModel> GetPossibleModels(ICellReferencePosition cellReferencePosition,
             IList<IMetropolisTransitionModel> transitionModels)
         {
             return transitionModels
-                .Where(a => a.Transition.FirstUnitCellPosition == unitCellPosition)
+                .Where(a => a.Transition.FirstCellReferencePosition == cellReferencePosition)
                 .ToList();
         }
     }

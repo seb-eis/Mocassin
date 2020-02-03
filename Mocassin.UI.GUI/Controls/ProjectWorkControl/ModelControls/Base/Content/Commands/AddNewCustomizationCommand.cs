@@ -10,24 +10,24 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content.Commands
 {
     /// <summary>
-    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectCustomizationGraph" /> to the selected
+    ///     The <see cref="AsyncProjectControlCommand" /> to add a new <see cref="ProjectCustomizationTemplate" /> to the selected
     ///     project
     /// </summary>
     public class AddNewCustomizationCommand : AsyncProjectControlCommand
     {
         /// <summary>
-        ///     Get the getter delegate for the <see cref="MocassinProjectGraph" />
+        ///     Get the getter delegate for the <see cref="MocassinProject" />
         /// </summary>
-        private Func<MocassinProjectGraph> ProjectGetter { get; }
+        private Func<MocassinProject> ProjectGetter { get; }
 
         /// <summary>
         ///     Get an <see cref="Action" /> to be executed on success
         /// </summary>
-        private Action<ProjectCustomizationGraph> OnSuccessAction { get; }
+        private Action<ProjectCustomizationTemplate> OnSuccessAction { get; }
 
         /// <inheritdoc />
-        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProjectGraph> projectGetter,
-            Action<ProjectCustomizationGraph> onSuccessAction = null)
+        public AddNewCustomizationCommand(IMocassinProjectControl projectControl, Func<MocassinProject> projectGetter,
+            Action<ProjectCustomizationTemplate> onSuccessAction = null)
             : base(projectControl)
         {
             ProjectGetter = projectGetter ?? throw new ArgumentNullException(nameof(projectGetter));
@@ -47,15 +47,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
         }
 
         /// <summary>
-        ///     Tries to create and add a new <see cref="ProjectCustomizationGraph" /> to the passed
-        ///     <see cref="MocassinProjectGraph" />
+        ///     Tries to create and add a new <see cref="ProjectCustomizationTemplate" /> to the passed
+        ///     <see cref="MocassinProject" />
         /// </summary>
-        /// <param name="projectGraph"></param>
-        private void TryAddCustomization(MocassinProjectGraph projectGraph)
+        /// <param name="project"></param>
+        private void TryAddCustomization(MocassinProject project)
         {
-            if (projectGraph == null) return;
+            if (project == null) return;
 
-            using var validator = new ModelValidatorViewModel(projectGraph.ProjectModelGraph, ProjectControl);
+            using var validator = new ModelValidatorViewModel(project.ProjectModelData, ProjectControl);
             var status = validator.TryCreateCustomization(out var customization);
 
             if (status != ModelValidationStatus.NoErrorsDetected)
@@ -64,7 +64,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.Content
                 return;
             }
 
-            ProjectControl.ExecuteOnAppThread(() => projectGraph.ProjectCustomizationGraphs.Add(customization));
+            ProjectControl.ExecuteOnAppThread(() => project.CustomizationTemplates.Add(customization));
             OnSuccessAction?.Invoke(customization);
         }
 

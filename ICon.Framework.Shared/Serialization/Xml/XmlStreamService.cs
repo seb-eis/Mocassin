@@ -165,15 +165,16 @@ namespace Mocassin.Framework.Xml
         /// <returns></returns>
         public static string Serialize(object obj, Encoding encoding, XmlEventHandlers eventHandlers = null)
         {
-            encoding = encoding ?? Encoding.UTF8;
+            encoding ??= Encoding.UTF8;
             var stream = new MemoryStream(1000000);
             try
             {
                 var serializer = GetSerializer(obj.GetType(), eventHandlers);
                 serializer.Serialize(stream, obj);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 return null;
             }
             return encoding.GetString(stream.ToArray());
@@ -194,8 +195,9 @@ namespace Mocassin.Framework.Xml
             {
                 return serializer.Deserialize(reader);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
                 return null;
             }
         }
@@ -225,6 +227,7 @@ namespace Mocassin.Framework.Xml
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     exception = e;
                     return false;
                 }
@@ -272,21 +275,20 @@ namespace Mocassin.Framework.Xml
         public bool TryDeserialize(FileStream stream, XmlEventHandlers handlers, out T1 obj, out Exception exception)
         {
             exception = default;
-            using (var reader = NewDefaultReader(stream))
+            using var reader = NewDefaultReader(stream);
+            try
             {
-                try
-                {
-                    var serializer = GetSerializer(typeof(T1), handlers);
-                    var result = serializer.Deserialize(reader);
-                    obj = (T1) result;
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    obj = default;
-                    exception = e;
-                    return false;
-                }
+                var serializer = GetSerializer(typeof(T1), handlers);
+                var result = serializer.Deserialize(reader);
+                obj = (T1)result;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                obj = default;
+                exception = e;
+                return false;
             }
         }
 
@@ -302,13 +304,12 @@ namespace Mocassin.Framework.Xml
         {
             try
             {
-                using (var stream = new FileStream(filepath, FileMode.Open))
-                {
-                    return TryDeserialize(stream, handlers, out obj, out exception);
-                }
+                using var stream = new FileStream(filepath, FileMode.Open);
+                return TryDeserialize(stream, handlers, out obj, out exception);
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 exception = e;
                 obj = default;
                 return false;

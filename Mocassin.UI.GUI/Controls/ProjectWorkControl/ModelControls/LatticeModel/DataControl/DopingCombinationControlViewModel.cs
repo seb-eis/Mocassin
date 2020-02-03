@@ -12,70 +12,70 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="DopingCombinationControlView" /> that controls the
-    ///     collection of <see cref="DopingCombinationGraph" /> instances
+    ///     collection of <see cref="DopingAbstractData" /> instances
     /// </summary>
-    public sealed class DopingCombinationControlViewModel : CollectionControlViewModel<DopingCombinationGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public sealed class DopingCombinationControlViewModel : CollectionControlViewModel<DopingAbstractData>,
+        IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; private set; }
+        public MocassinProject ContentSource { get; private set; }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable
-        ///     <see cref="UnitCellPosition" /> instances
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable
+        ///     <see cref="CellReferencePosition" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> SelectablePositions =>
+        public IEnumerable<ModelObjectReference<CellReferencePosition>> SelectablePositions =>
             GetSelectablePositions(SelectedItem);
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable dopant
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable dopant
         ///     <see cref="Particle" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableDopantParticles =>
+        public IEnumerable<ModelObjectReference<Particle>> SelectableDopantParticles =>
             GetSelectableDopantParticles(SelectedItem);
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable dopable
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable dopable
         ///     <see cref="Particle" /> instances
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> SelectableDopableParticles =>
+        public IEnumerable<ModelObjectReference<Particle>> SelectableDopableParticles =>
             GetSelectableDopableParticles(SelectedItem);
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.LatticeModelGraph?.DopingCombination);
+            SetCollection(ContentSource?.ProjectModelData?.LatticeModelData?.DopingCombination);
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable
-        ///     <see cref="UnitCellPosition" /> instances in the context of the passed <see cref="DopingCombinationGraph" />
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable
+        ///     <see cref="CellReferencePosition" /> instances in the context of the passed <see cref="DopingAbstractData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<UnitCellPosition>> GetSelectablePositions(DopingCombinationGraph current)
+        public IEnumerable<ModelObjectReference<CellReferencePosition>> GetSelectablePositions(DopingAbstractData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.StructureModelGraph?.UnitCellPositions;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<UnitCellPosition>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.StructureModelData?.CellReferencePositions;
+            return baseCollection?.Select(x => new ModelObjectReference<CellReferencePosition>(x));
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable dopant
-        ///     <see cref="Particle" /> instances in the context of the passed <see cref="DopingCombinationGraph" />
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable dopant
+        ///     <see cref="Particle" /> instances in the context of the passed <see cref="DopingAbstractData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> GetSelectableDopantParticles(DopingCombinationGraph current)
+        public IEnumerable<ModelObjectReference<Particle>> GetSelectableDopantParticles(DopingAbstractData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<Particle>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.ParticleModelData?.Particles;
+            return baseCollection?.Select(x => new ModelObjectReference<Particle>(x));
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> of selectable dopable
-        ///     <see cref="Particle" /> instances in the context of the passed <see cref="DopingCombinationGraph" />
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> of selectable dopable
+        ///     <see cref="Particle" /> instances in the context of the passed <see cref="DopingAbstractData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<Particle>> GetSelectableDopableParticles(DopingCombinationGraph current)
+        public IEnumerable<ModelObjectReference<Particle>> GetSelectableDopableParticles(DopingAbstractData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.ParticleModelGraph?.Particles;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<Particle>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.ParticleModelData?.Particles;
+            return baseCollection?.Select(x => new ModelObjectReference<Particle>(x));
         }
     }
 }

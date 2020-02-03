@@ -10,28 +10,28 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
 {
     /// <summary>
     ///     The <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> for the relation of
-    ///     <see cref="MetropolisTransitionGraph" /> to <see cref="MetropolisSimulationGraph" /> host instances
+    ///     <see cref="MetropolisTransitionData" /> to <see cref="MetropolisSimulationData" /> host instances
     /// </summary>
     public sealed class MetropolisSimulationTransitionSelectionViewModel :
-        HostGraphModelObjectSelectionViewModel<MetropolisTransition, MetropolisSimulationGraph>
+        HostGraphModelObjectSelectionViewModel<MetropolisTransition, MetropolisSimulationData>
     {
         /// <inheritdoc />
-        public MetropolisSimulationTransitionSelectionViewModel(MetropolisSimulationGraph hostObject)
+        public MetropolisSimulationTransitionSelectionViewModel(MetropolisSimulationData hostObject)
             : base(hostObject, true)
         {
             Items = GetTargetCollection(hostObject);
-            HandleDropAddCommand = GetDropAddObjectCommand<MetropolisSimulationGraph>();
+            HandleDropAddCommand = GetDropAddObjectCommand<MetropolisSimulationData>();
         }
 
         /// <inheritdoc />
-        protected override IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph)
+        protected override IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project)
         {
-            return projectGraph?.ProjectModelGraph?.TransitionModelGraph?.MetropolisTransitions;
+            return project?.ProjectModelData?.TransitionModelData?.MetropolisTransitions;
         }
 
         /// <inheritdoc />
-        protected override ICollection<ModelObjectReferenceGraph<MetropolisTransition>> GetTargetCollection(
-            MetropolisSimulationGraph sourceObject)
+        protected override ICollection<ModelObjectReference<MetropolisTransition>> GetTargetCollection(
+            MetropolisSimulationData sourceObject)
         {
             return sourceObject?.Transitions;
         }

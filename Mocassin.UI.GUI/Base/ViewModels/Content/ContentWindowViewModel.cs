@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
+using Mocassin.Framework.Extensions;
 
 namespace Mocassin.UI.GUI.Base.ViewModels.Content
 {
@@ -11,9 +13,9 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Content
         private string windowDescription;
 
         /// <summary>
-        ///     Get or set an <see cref="Action"/> that performs additional actions when the object is disposed
+        ///     Get the <see cref="HashSet{T}"/> of <see cref="Action"/> delegates to be called when disposing the view model
         /// </summary>
-        public Action OnDisposeAction { get; set; } 
+        public HashSet<Action> DisposeActions { get; }
 
         /// <summary>
         ///     Get the <see cref="ContentControl"/> that supplies the content
@@ -39,13 +41,14 @@ namespace Mocassin.UI.GUI.Base.ViewModels.Content
         {
             Content = content ?? throw new ArgumentNullException(nameof(content));
             ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+            DisposeActions = new HashSet<Action>();
             Content.DataContext = ViewModel;
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            OnDisposeAction?.Invoke();
+            DisposeActions.Action(x => x?.Invoke()).Load();
             (Content as IDisposable)?.Dispose();
             (ViewModel as IDisposable)?.Dispose();
         }

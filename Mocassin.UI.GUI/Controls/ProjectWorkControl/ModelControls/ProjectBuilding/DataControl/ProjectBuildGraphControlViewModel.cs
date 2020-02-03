@@ -8,14 +8,14 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
 {
     /// <summary>
     ///     The <see cref="ProjectGraphControlViewModel" /> for <see cref="ProjectBuildGraphControlView" /> that controls
-    ///     creation of <see cref="MocassinProjectBuildGraph" /> instances
+    ///     creation of <see cref="SimulationDbBuildTemplate" /> instances
     /// </summary>
     public class ProjectBuildGraphControlViewModel : ProjectGraphControlViewModel
     {
         /// <summary>
-        ///     The <see cref="CollectionControlViewModel{T}" /> for the set of <see cref="MocassinProjectBuildGraph" /> instances
+        ///     The <see cref="CollectionControlViewModel{T}" /> for the set of <see cref="SimulationDbBuildTemplate" /> instances
         /// </summary>
-        public CollectionControlViewModel<MocassinProjectBuildGraph> ProjectBuildCollectionViewModel { get; }
+        public CollectionControlViewModel<SimulationDbBuildTemplate> ProjectBuildCollectionViewModel { get; }
 
         /// <summary>
         ///     Automatically assigns the current content source to the last build collection entry
@@ -26,15 +26,15 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         public ProjectBuildGraphControlViewModel(IMocassinProjectControl projectControl)
             : base(projectControl)
         {
-            ProjectBuildCollectionViewModel = new CollectionControlViewModel<MocassinProjectBuildGraph>();
+            ProjectBuildCollectionViewModel = new CollectionControlViewModel<SimulationDbBuildTemplate>();
             AutoAssignBuildModelContextCommand = MakeAutoAssignBuildModelContextCommand();
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            ProjectBuildCollectionViewModel.SetCollection(ContentSource?.ProjectBuildGraphs);
+            ProjectBuildCollectionViewModel.SetCollection(ContentSource?.SimulationDbBuildTemplates);
         }
 
         /// <summary>
@@ -46,13 +46,13 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             void Execute()
             {
-                ContentSource.ProjectBuildGraphs.Last().Parent = ContentSource;
-                ContentSource.ProjectBuildGraphs.Last().ProjectModelGraph = ContentSource.ProjectModelGraph;
+                ContentSource.SimulationDbBuildTemplates.Last().Parent = ContentSource;
+                ContentSource.SimulationDbBuildTemplates.Last().ProjectModelData = ContentSource.ProjectModelData;
             }
 
             bool CanExecute()
             {
-                return ContentSource?.ProjectBuildGraphs?.LastOrDefault() != null;
+                return ContentSource?.SimulationDbBuildTemplates?.LastOrDefault() != null;
             }
 
             return new RelayCommand(Execute, CanExecute);

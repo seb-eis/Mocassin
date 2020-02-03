@@ -9,7 +9,7 @@ using Mocassin.UI.Xml.Customization;
 namespace Mocassin.UI.Xml.Helper.Migration
 {
     /// <summary>
-    ///     Migration tool that partially recycles content of <see cref="ProjectCustomizationGraph" /> instances
+    ///     Migration tool that partially recycles content of <see cref="ProjectCustomizationTemplate" /> instances
     /// </summary>
     public class ProjectCustomizationMigrationTool : ProjectDataMigrationTool
     {
@@ -28,11 +28,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="ProjectCustomizationGraph" /> by values that also exist on the source
+        ///     Overwrites all data of the target <see cref="ProjectCustomizationTemplate" /> by values that also exist on the source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public MigrationReport Migrate(ProjectCustomizationGraph source, ProjectCustomizationGraph target)
+        public MigrationReport Migrate(ProjectCustomizationTemplate source, ProjectCustomizationTemplate target)
         {
             Migrate(source.EnergyModelCustomization, target.EnergyModelCustomization);
             Migrate(source.TransitionModelCustomization, target.TransitionModelCustomization);
@@ -40,12 +40,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="EnergyModelCustomizationGraph" /> by values that also exist on the
+        ///     Overwrites all data of the target <see cref="EnergyModelCustomizationData" /> by values that also exist on the
         ///     source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(EnergyModelCustomizationGraph source, EnergyModelCustomizationGraph target)
+        private void Migrate(EnergyModelCustomizationData source, EnergyModelCustomizationData target)
         {
             Migrate(source.StablePairEnergyParameterSets, target.StablePairEnergyParameterSets);
             Migrate(source.UnstablePairEnergyParameterSets, target.UnstablePairEnergyParameterSets);
@@ -53,12 +53,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="EnergyModelCustomizationGraph" /> by values that also exist on the
+        ///     Overwrites all data of the target <see cref="EnergyModelCustomizationData" /> by values that also exist on the
         ///     source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(TransitionModelCustomizationGraph source, TransitionModelCustomizationGraph target)
+        private void Migrate(TransitionModelCustomizationData source, TransitionModelCustomizationData target)
         {
             Migrate(source.KineticTransitionParameterSets, target.KineticTransitionParameterSets);
         }
@@ -68,7 +68,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(ICollection<KineticRuleSetGraph> source, ICollection<KineticRuleSetGraph> target)
+        private void Migrate(ICollection<KineticRuleSetData> source, ICollection<KineticRuleSetData> target)
         {
             source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
                 .Where(pair => pair.TargetItem != null)
@@ -77,11 +77,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="KineticRuleSetGraph" /> by values that also exist on the source
+        ///     Overwrites all data of the target <see cref="KineticRuleSetData" /> by values that also exist on the source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(KineticRuleSetGraph source, KineticRuleSetGraph target)
+        private void Migrate(KineticRuleSetData source, KineticRuleSetData target)
         {
             var migrationReporter = GetMigrationReporter(source, target);
             MigrateName(source, target, migrationReporter);
@@ -96,7 +96,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(ICollection<PairEnergySetGraph> source, ICollection<PairEnergySetGraph> target)
+        private void Migrate(ICollection<PairEnergySetData> source, ICollection<PairEnergySetData> target)
         {
             source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
                 .Where(pair => pair.TargetItem != null)
@@ -105,11 +105,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="PairEnergySetGraph" /> by values that also exist on the source
+        ///     Overwrites all data of the target <see cref="PairEnergySetData" /> by values that also exist on the source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(PairEnergySetGraph source, PairEnergySetGraph target)
+        private void Migrate(PairEnergySetData source, PairEnergySetData target)
         {
             var migrationReporter = GetMigrationReporter(source, target);
             MigrateName(source, target, migrationReporter);
@@ -124,7 +124,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(ICollection<GroupEnergySetGraph> source, ICollection<GroupEnergySetGraph> target)
+        private void Migrate(ICollection<GroupEnergySetData> source, ICollection<GroupEnergySetData> target)
         {
            source.Select(x => (SourceItem: x, TargetItem: target.FirstOrDefault(y => AreModelCompatible(x, y))))
                 .Where(pair => pair.TargetItem != null)
@@ -134,11 +134,11 @@ namespace Mocassin.UI.Xml.Helper.Migration
 
         
         /// <summary>
-        ///     Overwrites all data of the target <see cref="GroupEnergySetGraph" /> by values that also exist on the source
+        ///     Overwrites all data of the target <see cref="GroupEnergySetData" /> by values that also exist on the source
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void Migrate(GroupEnergySetGraph source, GroupEnergySetGraph target)
+        private void Migrate(GroupEnergySetData source, GroupEnergySetData target)
         {
             var migrationReporter = GetMigrationReporter(source, target);
             MigrateName(source, target, migrationReporter);
@@ -149,12 +149,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="PairEnergyGraph" /> by values that also exist on the source and reports the action with the provided reporter delegate
+        ///     Overwrites all data of the target <see cref="PairEnergyData" /> by values that also exist on the source and reports the action with the provided reporter delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="reporter"></param>
-        private void Migrate(PairEnergyGraph source, PairEnergyGraph target, DataMigrationReporter reporter)
+        private void Migrate(PairEnergyData source, PairEnergyData target, DataMigrationReporter reporter)
         {
             if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
             
@@ -165,12 +165,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="GroupEnergyGraph" /> by values that also exist on the source and reports the action with the provided reporter delegate
+        ///     Overwrites all data of the target <see cref="GroupEnergyData" /> by values that also exist on the source and reports the action with the provided reporter delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="reporter"></param>
-        private void Migrate(GroupEnergyGraph source, GroupEnergyGraph target, DataMigrationReporter reporter)
+        private void Migrate(GroupEnergyData source, GroupEnergyData target, DataMigrationReporter reporter)
         {
             if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.Energy, target.Energy) == 0) return;
             
@@ -181,12 +181,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites all data of the target <see cref="KineticRuleGraph" /> by values that also exist on the source and reports the action with the provided reporter delegate
+        ///     Overwrites all data of the target <see cref="KineticRuleData" /> by values that also exist on the source and reports the action with the provided reporter delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="reporter"></param>
-        private void Migrate(KineticRuleGraph source, KineticRuleGraph target, DataMigrationReporter reporter)
+        private void Migrate(KineticRuleData source, KineticRuleData target, DataMigrationReporter reporter)
         {
             if (!IsRedundantReportEnabled && source.Name == target.Name && VectorComparer.ValueComparer.Compare(source.AttemptFrequency, target.AttemptFrequency) == 0) return;
             
@@ -197,12 +197,12 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Overwrites the name of the source <see cref="ProjectObjectGraph"/> to the target and reports the action with the provided delegate
+        ///     Overwrites the name of the source <see cref="ProjectDataObject"/> to the target and reports the action with the provided delegate
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="reporter"></param>
-        private void MigrateName(ProjectObjectGraph source, ProjectObjectGraph target, DataMigrationReporter reporter)
+        private void MigrateName(ProjectDataObject source, ProjectDataObject target, DataMigrationReporter reporter)
         {
             if (!IsRedundantReportEnabled && source.Name == target.Name) return;
             var comment = $"Name: \"{source.Name}\"";
@@ -211,45 +211,45 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Searches for a matching <see cref="PairEnergyGraph" /> in the provided target <see cref="ICollection{T}"/>
+        ///     Searches for a matching <see cref="PairEnergyData" /> in the provided target <see cref="ICollection{T}"/>
         /// </summary>
         /// <param name="source"></param>
         /// <param name="targets"></param>
         /// <returns></returns>
-        private PairEnergyGraph FindMigrationTarget(PairEnergyGraph source, ICollection<PairEnergyGraph> targets)
+        private PairEnergyData FindMigrationTarget(PairEnergyData source, ICollection<PairEnergyData> targets)
         {
             return targets.FirstOrDefault(x => x.CenterParticle.Equals(source.CenterParticle) && x.PartnerParticle.Equals(source.PartnerParticle));
         }
 
         /// <summary>
-        ///     Searches for a matching <see cref="GroupEnergyGraph" /> in the provided target <see cref="ICollection{T}"/>
+        ///     Searches for a matching <see cref="GroupEnergyData" /> in the provided target <see cref="ICollection{T}"/>
         /// </summary>
         /// <param name="source"></param>
         /// <param name="targets"></param>
         /// <returns></returns>
-        private GroupEnergyGraph FindMigrationTarget(GroupEnergyGraph source, ICollection<GroupEnergyGraph> targets)
+        private GroupEnergyData FindMigrationTarget(GroupEnergyData source, ICollection<GroupEnergyData> targets)
         {
             return targets.FirstOrDefault(x => x.CenterParticle.Equals(source.CenterParticle) && x.OccupationState.HasEqualState(source.OccupationState));
         }
 
         /// <summary>
-        ///     Searches for a matching <see cref="KineticRuleGraph" /> in the provided target <see cref="ICollection{T}"/>
+        ///     Searches for a matching <see cref="KineticRuleData" /> in the provided target <see cref="ICollection{T}"/>
         /// </summary>
         /// <param name="source"></param>
         /// <param name="targets"></param>
         /// <returns></returns>
-        private KineticRuleGraph FindMigrationTarget(KineticRuleGraph source, ICollection<KineticRuleGraph> targets)
+        private KineticRuleData FindMigrationTarget(KineticRuleData source, ICollection<KineticRuleData> targets)
         {
             return targets.FirstOrDefault(x => x.HasEqualStates(source));
         }
 
         /// <summary>
-        ///     Basic check if two sets of <see cref="PairEnergySetGraph" /> contain compatible model data that can be migrated
+        ///     Basic check if two sets of <see cref="PairEnergySetData" /> contain compatible model data that can be migrated
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        private bool AreModelCompatible(PairEnergySetGraph first, PairEnergySetGraph second)
+        private bool AreModelCompatible(PairEnergySetData first, PairEnergySetData second)
         {
             if (VectorComparer.ValueComparer.Compare(first.Distance, second.Distance) != 0) return false;
             if (first.CenterPosition.CompareTo(second.CenterPosition) != 0) return false;
@@ -258,23 +258,23 @@ namespace Mocassin.UI.Xml.Helper.Migration
         }
 
         /// <summary>
-        ///     Basic check if two sets of <see cref="GroupEnergySetGraph" /> contain compatible model data that can be migrated
+        ///     Basic check if two sets of <see cref="GroupEnergySetData" /> contain compatible model data that can be migrated
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        private bool AreModelCompatible(GroupEnergySetGraph first, GroupEnergySetGraph second)
+        private bool AreModelCompatible(GroupEnergySetData first, GroupEnergySetData second)
         {
             return first.AsVectorPath(true).Zip(second.AsVectorPath(true), VectorComparer.Equals).All(x => x);
         }
 
         /// <summary>
-        ///     Basic check if two sets of <see cref="KineticRuleSetGraph" /> contain compatible model data that can be migrated
+        ///     Basic check if two sets of <see cref="KineticRuleSetData" /> contain compatible model data that can be migrated
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        private bool AreModelCompatible(KineticRuleSetGraph first, KineticRuleSetGraph second)
+        private bool AreModelCompatible(KineticRuleSetData first, KineticRuleSetData second)
         {
             return first.Transition.Equals(second.Transition);
         }

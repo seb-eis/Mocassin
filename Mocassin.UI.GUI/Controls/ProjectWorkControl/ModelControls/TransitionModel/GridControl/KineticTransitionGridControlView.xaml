@@ -35,22 +35,21 @@
 
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-        <comboBox:BindableDataGridComboBoxColumn Header="State change chain"
+        <comboBox:BindableDataGridComboBoxColumn Header="State Change Chain"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
-                                                 SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
-                                                 DisplayMemberPath="Name"
-                                                 SelectedValuePath="Key" />
+                                                 SelectedItemBinding="{Binding AbstractTransition}"
+                                                 DisplayMemberPath="Name"/>
 
         <DataGridTemplateColumn Header="Binding Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate DataType="{x:Type transitionModel:KineticTransitionGraph}">
-              <DataGrid ItemsSource="{Binding PositionVectors}"
+            <DataTemplate DataType="{x:Type transitionModel:KineticTransitionData}">
+              <DataGrid ItemsSource="{Binding PathVectors}"
                         AutoGenerateColumns="False"
                         ColumnWidth="*"
                         HeadersVisibility="Row">
                 <DataGrid.RowHeaderTemplate>
                   <DataTemplate>
-                    <views:ObjectRowHeaderLogo DataContext="D"/>
+                    <views:ObjectRowHeaderLogo/>
                   </DataTemplate>
                 </DataGrid.RowHeaderTemplate>
 

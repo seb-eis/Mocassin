@@ -18,7 +18,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The unit cell position the environment info belongs to
         /// </summary>
-        IUnitCellPosition UnitCellPosition { get; }
+        ICellReferencePosition CellReferencePosition { get; }
 
         /// <summary>
         ///     Get all interaction filters of the unstable environment

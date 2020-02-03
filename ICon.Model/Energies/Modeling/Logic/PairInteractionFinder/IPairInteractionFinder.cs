@@ -20,7 +20,7 @@ namespace Mocassin.Model.Energies
         /// <summary>
         ///     The used unit cell provider
         /// </summary>
-        IUnitCellProvider<IUnitCellPosition> UnitCellProvider { get; }
+        IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
 
         /// <summary>
         ///     Create a unique set of asymmetric pair interactions that results from the passed unstable environment information.
@@ -41,7 +41,7 @@ namespace Mocassin.Model.Energies
         /// <param name="environmentInfo"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<IUnitCellPosition> positions,
+        IEnumerable<SymmetricPairInteraction> CreateUniqueSymmetricPairs(IEnumerable<ICellReferencePosition> positions,
             IStableEnvironmentInfo environmentInfo, NumericComparer comparer);
     }
 }

@@ -9,7 +9,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public class PositionModel : ModelComponentBase, IPositionModel
     {
         /// <inheritdoc />
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
         public Fractional3D CenterVector { get; set; }

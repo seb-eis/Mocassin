@@ -11,7 +11,7 @@ namespace Mocassin.Model.Translator.ModelContext
         public IPairInteractionModel PairInteractionModel { get; set; }
 
         /// <inheritdoc />
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
         public double Distance { get; set; }

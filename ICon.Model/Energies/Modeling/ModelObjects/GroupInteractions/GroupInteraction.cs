@@ -19,7 +19,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         [DataMember]
         [UseTrackedReferences]
-        public IUnitCellPosition CenterUnitCellPosition { get; set; }
+        public ICellReferencePosition CenterCellReferencePosition { get; set; }
 
         /// <summary>
         ///     The list of 3D fractional vectors that describe the group geometry
@@ -61,7 +61,7 @@ namespace Mocassin.Model.Energies
             if (!(CastIfNotDeprecated<IGroupInteraction>(obj) is IGroupInteraction interaction))
                 return null;
 
-            CenterUnitCellPosition = interaction.CenterUnitCellPosition;
+            CenterCellReferencePosition = interaction.CenterCellReferencePosition;
             GeometryVectors = interaction.GetBaseGeometry().Select(vector => new DataVector3D(vector)).ToList();
             EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
 

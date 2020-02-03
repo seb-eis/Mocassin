@@ -7,19 +7,19 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.SimulationMo
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="MetropolisSimulationControlView" /> that controls
-    ///     <see cref="MetropolisSimulationGraph" /> instances
+    ///     <see cref="MetropolisSimulationData" /> instances
     /// </summary>
-    public class MetropolisSimulationControlViewModel : CollectionControlViewModel<MetropolisSimulationGraph>,
-        IContentSupplier<MocassinProjectGraph>
+    public class MetropolisSimulationControlViewModel : CollectionControlViewModel<MetropolisSimulationData>,
+        IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.SimulationModelGraph?.MetropolisSimulations);
+            SetCollection(ContentSource?.ProjectModelData?.SimulationModelData?.MetropolisSimulations);
         }
     }
 }

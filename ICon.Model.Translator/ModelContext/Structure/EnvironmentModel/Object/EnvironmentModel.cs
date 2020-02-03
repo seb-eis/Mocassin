@@ -8,7 +8,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public class EnvironmentModel : ModelComponentBase, IEnvironmentModel
     {
         /// <inheritdoc />
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
         public IList<IPairInteractionModel> PairInteractionModels { get; set; }

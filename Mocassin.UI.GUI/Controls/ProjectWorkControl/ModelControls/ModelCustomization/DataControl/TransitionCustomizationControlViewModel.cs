@@ -14,7 +14,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
     public class TransitionCustomizationControlViewModel : CustomizationGraphControlViewModel
     {
         /// <summary>
-        ///     Get the <see cref="CollectionControlViewModel{T}" /> for the customizable <see cref="KineticRuleSetGraph" />
+        ///     Get the <see cref="CollectionControlViewModel{T}" /> for the customizable <see cref="KineticRuleSetData" />
         ///     instances
         /// </summary>
         public CollectionControlViewModel<KineticRuleSetControlViewModel> KineticRuleSetCollectionViewModel { get; }
@@ -27,7 +27,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(ProjectCustomizationGraph contentSource)
+        public override void ChangeContentSource(ProjectCustomizationTemplate contentSource)
         {
             ContentSource = contentSource;
             CreateSetControlViewModels();

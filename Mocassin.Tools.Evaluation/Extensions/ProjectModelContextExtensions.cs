@@ -50,7 +50,7 @@ namespace Mocassin.Tools.Evaluation.Extensions
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static IUnitCellProvider<IUnitCellPosition> GetUnitCellProvider(this IProjectModelContext value)
+        public static IUnitCellProvider<ICellReferencePosition> GetUnitCellProvider(this IProjectModelContext value)
         {
             return value.ModelProject.GetManager<IStructureManager>().QueryPort.Query(x => x.GetFullUnitCellProvider());
         }

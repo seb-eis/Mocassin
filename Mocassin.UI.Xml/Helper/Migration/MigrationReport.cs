@@ -15,14 +15,14 @@ namespace Mocassin.UI.Xml.Helper.Migration
         public IReadOnlyList<MigrationReportEntry> Entries { get; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObjectGraph"/> that served as the data source
+        ///     Get the <see cref="ProjectDataObject"/> that served as the data source
         /// </summary>
-        public ProjectObjectGraph MigrationSource { get; set; }
+        public ProjectDataObject MigrationSource { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="ProjectObjectGraph"/> that served as the data target
+        ///     Get the <see cref="ProjectDataObject"/> that served as the data target
         /// </summary>
-        public ProjectObjectGraph MigrationTarget { get; set; }
+        public ProjectDataObject MigrationTarget { get; set; }
 
         /// <summary>
         ///     Creates a new <see cref="MigrationReport"/>
@@ -30,7 +30,7 @@ namespace Mocassin.UI.Xml.Helper.Migration
         /// <param name="reportEntries"></param>
         /// <param name="migrationSource"></param>
         /// <param name="migrationTarget"></param>
-        public MigrationReport(IReadOnlyList<MigrationReportEntry> reportEntries, ProjectObjectGraph migrationSource, ProjectObjectGraph migrationTarget)
+        public MigrationReport(IReadOnlyList<MigrationReportEntry> reportEntries, ProjectDataObject migrationSource, ProjectDataObject migrationTarget)
         {
             Entries = reportEntries ?? throw new ArgumentNullException(nameof(reportEntries));
             MigrationSource = migrationSource ?? throw new ArgumentNullException(nameof(migrationSource));

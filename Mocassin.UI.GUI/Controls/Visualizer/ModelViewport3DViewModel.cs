@@ -37,7 +37,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
     public class ModelViewport3DViewModel : ProjectGraphControlViewModel
     {
         private bool isRefreshingVisuals;
-        private ProjectCustomizationGraph selectedCustomizationGraph;
+        private ProjectCustomizationTemplate selectedCustomizationTemplate;
 
         /// <summary>
         ///     Get or set a boolean flag if the viewport is synchronized with the model data
@@ -98,18 +98,18 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         public AsyncRelayCommand RefreshVisualGroupsCommand { get; }
 
         /// <summary>
-        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> instance for the selectable <see cref="ProjectCustomizationGraph"/> instances
+        ///     Get the <see cref="ObservableCollectionViewModel{T}"/> instance for the selectable <see cref="ProjectCustomizationTemplate"/> instances
         /// </summary>
-        public ObservableCollectionViewModel<ProjectCustomizationGraph> SelectableCustomizationsViewModel { get; }
+        public ObservableCollectionViewModel<ProjectCustomizationTemplate> SelectableCustomizationsViewModel { get; }
 
 
         /// <summary>
-        ///     Get or set <see cref="ProjectCustomizationGraph" /> that is currently selected
+        ///     Get or set <see cref="ProjectCustomizationTemplate" /> that is currently selected
         /// </summary>
-        public ProjectCustomizationGraph SelectedCustomizationGraph
+        public ProjectCustomizationTemplate SelectedCustomizationTemplate
         {
-            get => selectedCustomizationGraph;
-            set => SetProperty(ref selectedCustomizationGraph, value);
+            get => selectedCustomizationTemplate;
+            set => SetProperty(ref selectedCustomizationTemplate, value);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             VisualViewModel = new Viewport3DViewModel();
             ModelObjectViewModels = new ObservableCollectionViewModel<ObjectVisualResourcesViewModel>();
             CustomizationObjectViewModels = new ObservableCollectionViewModel<ObjectVisualResourcesViewModel>();
-            SelectableCustomizationsViewModel = new ObservableCollectionViewModel<ProjectCustomizationGraph>();
+            SelectableCustomizationsViewModel = new ObservableCollectionViewModel<ProjectCustomizationTemplate>();
             RenderResourcesViewModel = new ModelRenderResourcesViewModel();
             UpdateObjectViewModelsCommand = new RelayCommand(SynchronizeWithModel);
             RefreshVisualGroupsCommand = new AsyncRelayCommand(() => RefreshVisualGroups());
@@ -137,7 +137,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <inheritdoc />
-        public override async void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override async void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             await ExecuteIfContentSourceUnchanged(async () => await RefreshVisualContent(), TimeSpan.FromMilliseconds(250), true);
@@ -150,7 +150,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         {
             if (ContentSource == null)
             {
-                SelectedCustomizationGraph = null;
+                SelectedCustomizationTemplate = null;
                 VisualViewModel.ClearVisualGroups();
                 ModelObjectViewModels.Clear();
                 IsSynchronizedWithModel = true;
@@ -158,8 +158,8 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             }
 
             UpdateSelectableCustomizations();
-            if (!SelectableCustomizationsViewModel.ObservableItems.Contains(SelectedCustomizationGraph))
-                SelectedCustomizationGraph = ContentSource.ProjectCustomizationGraphs.FirstOrDefault();
+            if (!SelectableCustomizationsViewModel.ObservableItems.Contains(SelectedCustomizationTemplate))
+                SelectedCustomizationTemplate = ContentSource.CustomizationTemplates.FirstOrDefault();
 
             IsSynchronizedWithModel = false;
             VisualViewModel.ClearVisual();
@@ -169,7 +169,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Updates the collection of selectable <see cref="ProjectCustomizationGraph"/> instances
+        ///     Updates the collection of selectable <see cref="ProjectCustomizationTemplate"/> instances
         /// </summary>
         private void UpdateSelectableCustomizations()
         {
@@ -180,28 +180,28 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             }
 
             SelectableCustomizationsViewModel.Clear();
-            SelectableCustomizationsViewModel.AddItem(ProjectCustomizationGraph.Empty);
-            SelectableCustomizationsViewModel.AddItems(ContentSource.ProjectCustomizationGraphs);
+            SelectableCustomizationsViewModel.AddItem(ProjectCustomizationTemplate.Empty);
+            SelectableCustomizationsViewModel.AddItems(ContentSource.CustomizationTemplates);
         }
 
         /// <summary>
-        ///     Prepares the utility project for usage with the passed <see cref="MocassinProjectGraph" />
+        ///     Prepares the utility project for usage with the passed <see cref="MocassinProject" />
         /// </summary>
-        /// <param name="projectGraph"></param>
-        private void PrepareUtilityProject(MocassinProjectGraph projectGraph)
+        /// <param name="project"></param>
+        private void PrepareUtilityProject(MocassinProject project)
         {
             UtilityProject.ResetProject();
-            if (projectGraph == null) return;
+            if (project == null) return;
 
-            var spaceGroupData = projectGraph.ProjectModelGraph.StructureModelGraph.SpaceGroupInfo.GetInputObject();
-            var cellData = projectGraph.ProjectModelGraph.StructureModelGraph.CellParameters.GetInputObject();
+            var spaceGroupData = project.ProjectModelData.StructureModelData.SpaceGroupInfo.GetInputObject();
+            var cellData = project.ProjectModelData.StructureModelData.CellParameters.GetInputObject();
             UtilityProject.InputPipeline.PushToProject(spaceGroupData);
             UtilityProject.InputPipeline.PushToProject(cellData);
         }
 
         /// <summary>
         ///     Generates the <see cref="ObjectVisualResourcesViewModel" /> instances for all displayable
-        ///     <see cref="ExtensibleProjectObjectGraph" />
+        ///     <see cref="ExtensibleProjectDataObject" />
         ///     model object instances in the content source
         /// </summary>
         public void UpdateObjectViewModels()
@@ -213,25 +213,25 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             }
 
             ModelObjectViewModels.Clear();
-            ModelObjectViewModels.AddItem(GetProjectObjectViewModel(ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo));
-            ModelObjectViewModels.AddItems(ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions.Select(GetProjectObjectViewModel));
-            ModelObjectViewModels.AddItems(ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions.Select(GetProjectObjectViewModel));
+            ModelObjectViewModels.AddItem(GetProjectObjectViewModel(ContentSource.ProjectModelData.StructureModelData.StructureInfo));
+            ModelObjectViewModels.AddItems(ContentSource.ProjectModelData.StructureModelData.CellReferencePositions.Select(GetProjectObjectViewModel));
+            ModelObjectViewModels.AddItems(ContentSource.ProjectModelData.TransitionModelData.KineticTransitions.Select(GetProjectObjectViewModel));
         }
 
         /// <summary>
         ///     Generates the <see cref="ObjectVisualResourcesViewModel" /> instances for all displayable
-        ///     <see cref="ExtensibleProjectObjectGraph" />
+        ///     <see cref="ExtensibleProjectDataObject" />
         ///     customization object instances in the selected customization
         /// </summary>
         public void UpdateCustomizationViewModels()
         {
-            if (ContentSource == null || SelectedCustomizationGraph == null)
+            if (ContentSource == null || SelectedCustomizationTemplate == null)
             {
                 CustomizationObjectViewModels.Clear();
                 return;
             }
 
-            var energyCustomization = SelectedCustomizationGraph.EnergyModelCustomization;
+            var energyCustomization = SelectedCustomizationTemplate.EnergyModelCustomization;
             CustomizationObjectViewModels.Clear();
             CustomizationObjectViewModels.AddItems(energyCustomization.StablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
             CustomizationObjectViewModels.AddItems(energyCustomization.UnstablePairEnergyParameterSets.Select(GetProjectObjectViewModel));
@@ -239,30 +239,30 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Get the <see cref="ObjectVisualResourcesViewModel" /> for the passed <see cref="ExtensibleProjectObjectGraph" /> or
+        ///     Get the <see cref="ObjectVisualResourcesViewModel" /> for the passed <see cref="ExtensibleProjectDataObject" /> or
         ///     creates a new one
         ///     if none exists
         /// </summary>
-        /// <param name="objectGraph"></param>
+        /// <param name="dataObject"></param>
         /// <returns></returns>
-        private ObjectVisualResourcesViewModel GetProjectObjectViewModel(ExtensibleProjectObjectGraph objectGraph)
+        private ObjectVisualResourcesViewModel GetProjectObjectViewModel(ExtensibleProjectDataObject dataObject)
         {
-            var result = ModelObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph);
+            var result = ModelObjectViewModels.ObservableItems.FirstOrDefault(x => x.DataObject == dataObject);
             if (result != null) return result;
-            result = CustomizationObjectViewModels.ObservableItems.FirstOrDefault(x => x.ObjectGraph == objectGraph);
+            result = CustomizationObjectViewModels.ObservableItems.FirstOrDefault(x => x.DataObject == dataObject);
             if (result != null) return result;
 
-            var objectCategory = objectGraph switch
+            var objectCategory = dataObject switch
             {
-                StructureInfoGraph _ => VisualObjectCategory.Frame,
-                KineticTransitionGraph _ => VisualObjectCategory.DoubleArrow,
-                UnitCellPositionGraph _ => VisualObjectCategory.Sphere,
-                PairEnergySetGraph _ => VisualObjectCategory.Line,
-                GroupEnergySetGraph _ => VisualObjectCategory.PolygonSet,
+                StructureInfoData _ => VisualObjectCategory.Frame,
+                KineticTransitionData _ => VisualObjectCategory.DoubleArrow,
+                CellReferencePositionData _ => VisualObjectCategory.Sphere,
+                PairEnergySetData _ => VisualObjectCategory.Line,
+                GroupEnergySetData _ => VisualObjectCategory.PolygonSet,
                 _ => VisualObjectCategory.Unknown
             };
 
-            return new ObjectVisualResourcesViewModel(objectGraph, objectCategory);
+            return new ObjectVisualResourcesViewModel(dataObject, objectCategory);
         }
 
         /// <summary>
@@ -285,9 +285,10 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
 
                 if (VisualViewModel.IsAutoUpdating || forceVisualUpdate) VisualViewModel.UpdateVisual();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                OnRenderError(e);
+                Console.WriteLine(exception);
+                OnRenderError(exception);
             }
 
             IsRefreshingVisuals = false;
@@ -298,9 +299,9 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// </summary>
         private async Task RefreshModelObjectVisualGroupsAsync()
         {
-            var structureInfo = ContentSource.ProjectModelGraph.StructureModelGraph.StructureInfo;
-            var positionGraphs = ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions;
-            var transitionGraphs = ContentSource.ProjectModelGraph.TransitionModelGraph.KineticTransitions;
+            var structureInfo = ContentSource.ProjectModelData.StructureModelData.StructureInfo;
+            var positionGraphs = ContentSource.ProjectModelData.StructureModelData.CellReferencePositions;
+            var transitionGraphs = ContentSource.ProjectModelData.TransitionModelData.KineticTransitions;
 
             var cellFrameBuildTask = CreateCellFrameVisualAsync(structureInfo);
             var positionBuildTasks = positionGraphs.Select(CreatePositionVisualsAsync).ToList();
@@ -325,11 +326,11 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         /// </summary>
         private async Task RefreshCustomizationObjectVisualGroupsAsync()
         {
-            if (SelectedCustomizationGraph == null || ReferenceEquals(SelectedCustomizationGraph, ProjectCustomizationGraph.Empty)) return;
+            if (SelectedCustomizationTemplate == null || ReferenceEquals(SelectedCustomizationTemplate, ProjectCustomizationTemplate.Empty)) return;
 
-            var stableInteractions = SelectedCustomizationGraph.EnergyModelCustomization.StablePairEnergyParameterSets;
-            var unstableInteractions = SelectedCustomizationGraph.EnergyModelCustomization.UnstablePairEnergyParameterSets;
-            var groupInteractions = SelectedCustomizationGraph.EnergyModelCustomization.GroupEnergyParameterSets;
+            var stableInteractions = SelectedCustomizationTemplate.EnergyModelCustomization.StablePairEnergyParameterSets;
+            var unstableInteractions = SelectedCustomizationTemplate.EnergyModelCustomization.UnstablePairEnergyParameterSets;
+            var groupInteractions = SelectedCustomizationTemplate.EnergyModelCustomization.GroupEnergyParameterSets;
 
             var stableBuildTasks = stableInteractions.Select(CreatePairInteractionVisualsAsync).ToList();
             var unstableBuildTasks = unstableInteractions.Select(CreatePairInteractionVisualsAsync).ToList();
@@ -368,7 +369,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         private IList<(Fractional3D, ObjectVisualResourcesViewModel)> CreateBaseCuboidPositionData()
         {
             var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
-            return ContentSource.ProjectModelGraph.StructureModelGraph.UnitCellPositions
+            return ContentSource.ProjectModelData.StructureModelData.CellReferencePositions
                 .Select(graph => (new Fractional3D(graph.A, graph.B, graph.C), GetProjectObjectViewModel(graph)))
                 .SelectMany(tuple => SpaceGroupService.GetPositionsInCuboid(tuple.Item1, startVector, endVector).Select(vec => (vec, tuple.Item2)))
                 .OrderBy(value => value.vec, SpaceGroupService.Comparer)
@@ -376,20 +377,20 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="UnitCellPositionGraph" /> visualization asynchronously
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="CellReferencePositionData" /> visualization asynchronously
         /// </summary>
-        /// <param name="positionGraph"></param>
+        /// <param name="positionDatah"></param>
         /// <returns></returns>
-        private async Task<IReadOnlyList<ModelVisual3D>> CreatePositionVisualsAsync(UnitCellPositionGraph positionGraph)
+        private async Task<IReadOnlyList<ModelVisual3D>> CreatePositionVisualsAsync(CellReferencePositionData referencePositionData)
         {
-            var objectViewModel = GetProjectObjectViewModel(positionGraph);
-            var positionTransforms = await Task.Run(() => CreatePositionVisualBuildData(new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C)));
+            var objectViewModel = GetProjectObjectViewModel(referencePositionData);
+            var positionTransforms = await Task.Run(() => CreatePositionVisualBuildData(new Fractional3D(referencePositionData.A, referencePositionData.B, referencePositionData.C)));
 
             var phiDiv = (int) (Settings.Default.Default_Render_Sphere_PhiDiv * objectViewModel.Quality);
             var thetaDiv = (int) (Settings.Default.Default_Render_Sphere_ThetaDiv * objectViewModel.Quality);
             var renderSize = objectViewModel.Scaling;
 
-            var visualFactory = positionGraph.PositionStatus == PositionStatus.Stable
+            var visualFactory = referencePositionData.Stability == PositionStability.Stable
                 ? VisualViewModel.BuildSphereVisualFactory(renderSize, thetaDiv, phiDiv)
                 : VisualViewModel.BuildCubeVisualFactory(renderSize);
 
@@ -418,22 +419,22 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates a single <see cref="PointsVisual3D" /> point cloud objects for a <see cref="UnitCellPositionGraph" />
+        ///     Creates a single <see cref="PointsVisual3D" /> point cloud objects for a <see cref="CellReferencePositionData" />
         ///     visualization
         /// </summary>
-        /// <param name="positionGraph"></param>
+        /// <param name="positionDatah"></param>
         /// <returns></returns>
-        private PointsVisual3D CreatePositionVisualPointCloud(UnitCellPositionGraph positionGraph)
+        private PointsVisual3D CreatePositionVisualPointCloud(CellReferencePositionData referencePositionData)
         {
-            var objectViewModel = GetProjectObjectViewModel(positionGraph);
-            var sourceVector = new Fractional3D(positionGraph.A, positionGraph.B, positionGraph.C);
+            var objectViewModel = GetProjectObjectViewModel(referencePositionData);
+            var sourceVector = new Fractional3D(referencePositionData.A, referencePositionData.B, referencePositionData.C);
             var (startVector, endVector) = RenderResourcesViewModel.GetRenderCuboidVectors();
             var cellPositions = SpaceGroupService.GetPositionsInCuboid(sourceVector, startVector, endVector);
 
             var points = new Point3DCollection(cellPositions.Count);
             foreach (var center in cellPositions.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D())) points.Add(center);
 
-            var alpha = positionGraph.PositionStatus == PositionStatus.Unstable
+            var alpha = referencePositionData.Stability == PositionStability.Unstable
                 ? Settings.Default.Default_Render_UnstablePosition_Alpha
                 : (byte) 255;
 
@@ -442,15 +443,15 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="KineticTransitionGraph" /> visualization
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="KineticTransitionData" /> visualization
         ///     asynchronously
         /// </summary>
-        /// <param name="transitionGraph"></param>
+        /// <param name="transitionData"></param>
         /// <returns></returns>
-        private async Task<IReadOnlyList<ModelVisual3D>> CreateTransitionVisualsAsync(KineticTransitionGraph transitionGraph)
+        private async Task<IReadOnlyList<ModelVisual3D>> CreateTransitionVisualsAsync(KineticTransitionData transitionData)
         {
-            var modelObjectVm = GetProjectObjectViewModel(transitionGraph);
-            var fractionalPath = transitionGraph.PositionVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
+            var modelObjectVm = GetProjectObjectViewModel(transitionData);
+            var fractionalPath = transitionData.PathVectors.Select(x => new Fractional3D(x.A, x.B, x.C)).ToList();
 
             (Point3D StartPoint, Point3D EndPoint)[] pathPoints = null;
             var pathTransforms = await Task.Run(() => CreateTransitionVisualBuildData(fractionalPath, out pathPoints));
@@ -509,21 +510,21 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="PairEnergySetGraph" /> visualization
+        ///     Creates the <see cref="ModelVisual3D" /> collection for a <see cref="PairEnergySetData" /> visualization
         ///     asynchronously
         /// </summary>
-        /// <param name="energySetGraph"></param>
+        /// <param name="energySetData"></param>
         /// <returns></returns>
-        private async Task<IReadOnlyList<ModelVisual3D>> CreatePairInteractionVisualsAsync(PairEnergySetGraph energySetGraph)
+        private async Task<IReadOnlyList<ModelVisual3D>> CreatePairInteractionVisualsAsync(PairEnergySetData energySetData)
         {
-            var fractionalPath = energySetGraph.AsVectorPath().ToList();
+            var fractionalPath = energySetData.AsVectorPath().ToList();
 
             var (firstPoints, secondPoints) = await Task.Run(() => CreatePairInteractionVisualBuildData(fractionalPath[0], fractionalPath[1]));
 
             var result0 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(firstPoints));
             var result1 = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(secondPoints));
 
-            var objectVm = GetProjectObjectViewModel(energySetGraph);
+            var objectVm = GetProjectObjectViewModel(energySetData);
             var (startAtomVm, endAtomVm) = (HitTestAtomObject3DViewModel(fractionalPath[0]), HitTestAtomObject3DViewModel(fractionalPath[1]));
 
             result0.Thickness = objectVm.Scaling;
@@ -571,14 +572,14 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="ModelVisual3D" /> collection for visualization of a <see cref="PairEnergySetGraph" /> asynchronously
+        ///     Creates the <see cref="ModelVisual3D" /> collection for visualization of a <see cref="PairEnergySetData" /> asynchronously
         /// </summary>
-        /// <param name="energySetGraph"></param>
+        /// <param name="energySetData"></param>
         /// <returns></returns>
-        private async Task<IReadOnlyList<ModelVisual3D>> CreateGroupInteractionVisualsAsync(GroupEnergySetGraph energySetGraph)
+        private async Task<IReadOnlyList<ModelVisual3D>> CreateGroupInteractionVisualsAsync(GroupEnergySetData energySetData)
         {
-            var objectVm = GetProjectObjectViewModel(energySetGraph);
-            var fractionalPath = energySetGraph.AsVectorPath(true).ToList();
+            var objectVm = GetProjectObjectViewModel(energySetData);
+            var fractionalPath = energySetData.AsVectorPath(true).ToList();
             var points = fractionalPath.Select(x => VectorTransformer.ToCartesian(x).AsPoint3D()).ToList();
             var meshGeometry = await Task.Run(() => CreateGroupInteractionVisualNetworkMesh(fractionalPath));
             var visualFactory = VisualViewModel.BuildMeshVisualFactory(meshGeometry);
@@ -638,12 +639,12 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Creates the <see cref="ModelVisual3D" /> for a <see cref="StructureInfoGraph" /> cell frame visualization
+        ///     Creates the <see cref="ModelVisual3D" /> for a <see cref="StructureInfoData" /> cell frame visualization
         ///     asynchronously
         /// </summary>
-        private async Task<ModelVisual3D> CreateCellFrameVisualAsync(StructureInfoGraph structureInfoGraph)
+        private async Task<ModelVisual3D> CreateCellFrameVisualAsync(StructureInfoData structureInfoData)
         {
-            var objectVm = GetProjectObjectViewModel(structureInfoGraph);
+            var objectVm = GetProjectObjectViewModel(structureInfoData);
             var framePoints = await Task.Run(() => CreateCellFrameVisualBuildData());
             var result = VisualViewModel.CreateVisual(Transform3D.Identity, VisualViewModel.BuildLinesVisualFactory(framePoints));
             result.Thickness = objectVm.Scaling;
@@ -836,7 +837,7 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
             {
                 PrepareUtilityProject(ContentSource);
                 UpdateObjectViewModels();
-                if (!ReferenceEquals(SelectedCustomizationGraph, ProjectCustomizationGraph.Empty)) UpdateCustomizationViewModels();
+                if (!ReferenceEquals(SelectedCustomizationTemplate, ProjectCustomizationTemplate.Empty)) UpdateCustomizationViewModels();
             }
 
             IsSynchronizedWithModel = true;
@@ -856,13 +857,13 @@ namespace Mocassin.UI.GUI.Controls.Visualizer
         }
 
         /// <summary>
-        ///     Event reaction for changed <see cref="SelectedCustomizationGraph"/>
+        ///     Event reaction for changed <see cref="SelectedCustomizationTemplate"/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private void OnCustomizationChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (args.PropertyName == nameof(SelectedCustomizationGraph))
+            if (args.PropertyName == nameof(SelectedCustomizationTemplate))
             {
                 UpdateCustomizationViewModels();
             }

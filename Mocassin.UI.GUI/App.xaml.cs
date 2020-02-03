@@ -72,9 +72,10 @@ namespace Mocassin.UI.GUI
                 result.AddRange(fileNames.Select(Assembly.LoadFile));
                 return result;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                MessageBox.Show($"Error on plugin loading:\n{e}", "Loading - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine(exception);
+                MessageBox.Show($"Error on plugin loading:\n{exception}", "Loading - Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }

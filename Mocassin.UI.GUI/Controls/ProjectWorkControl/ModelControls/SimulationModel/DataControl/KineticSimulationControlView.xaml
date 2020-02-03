@@ -109,7 +109,7 @@
 
           <DataGridTemplateColumn Header="Transitions">
             <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate DataType="{x:Type simulationModel:KineticSimulationGraph}">
+              <DataTemplate DataType="{x:Type simulationModel:KineticSimulationData}">
                 <hosting:HostGraphModelObjectBoxSelectionView>
                   <hosting:HostGraphModelObjectBoxSelectionView.DataContext>
                     <MultiBinding Converter="{adapter:KineticSimulationTransitionSelectionVmConverter}">

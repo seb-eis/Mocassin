@@ -27,7 +27,7 @@ namespace Mocassin.Model.Structures.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleParticleRemoval(IModelObjectEventArgs<IParticle> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Mocassin.Model.Structures.Handler
         [EventHandlingMethod]
         protected IConflictReport HandleParticleSetRemoval(IModelObjectEventArgs<IParticleSet> eventArgs)
         {
-            return EventTestReaction(eventArgs);
+            return DummyHandleEvent(eventArgs);
         }
     }
 }

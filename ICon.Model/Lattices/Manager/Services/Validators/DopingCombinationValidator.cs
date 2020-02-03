@@ -34,8 +34,8 @@ namespace Mocassin.Model.Lattices.Validators
         public override IValidationReport Validate(IDopingCombination obj)
         {
             var report = new ValidationReport();
-            AddOccupationValidation(obj.Dopant, obj.UnitCellPosition, report);
-            AddOccupationValidation(obj.Dopable, obj.UnitCellPosition, report);
+            AddOccupationValidation(obj.Dopant, obj.CellReferencePosition, report);
+            AddOccupationValidation(obj.Dopable, obj.CellReferencePosition, report);
             return report;
         }
 
@@ -45,7 +45,7 @@ namespace Mocassin.Model.Lattices.Validators
         /// <param name="particle"></param>
         /// <param name="position"></param>
         /// <param name="report"></param>
-        protected void AddOccupationValidation(IParticle particle, IUnitCellPosition position, ValidationReport report)
+        protected void AddOccupationValidation(IParticle particle, ICellReferencePosition position, ValidationReport report)
         {
             if (position.OccupationSet.GetParticles().Contains(particle) == false)
             {

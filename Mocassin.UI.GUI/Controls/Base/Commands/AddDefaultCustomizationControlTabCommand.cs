@@ -48,8 +48,8 @@ namespace Mocassin.UI.GUI.Controls.Base.Commands
             var viewModel = new BasicCustomizationContentControlViewModel(ProjectControl)
             {
                 DataContentControl = GetDataControl(),
-                SelectedProjectGraph = ProjectControl.ProjectBrowserViewModel.GetWorkProject(),
-                SelectedCustomizationGraph = null
+                SelectedProject = ProjectControl.ProjectBrowserViewModel.GetWorkProject(),
+                SelectedCustomizationTemplate = null
             };
             return viewModel;
         }

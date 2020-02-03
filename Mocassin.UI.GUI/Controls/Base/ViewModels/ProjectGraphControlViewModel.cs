@@ -9,14 +9,14 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
 {
     /// <summary>
     ///     Base class for all <see cref="PrimaryControlViewModel" /> instances that control
-    ///     <see cref="MocassinProjectGraph" /> content
+    ///     <see cref="MocassinProject" /> content
     /// </summary>
-    public abstract class ProjectGraphControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProjectGraph>
+    public abstract class ProjectGraphControlViewModel : PrimaryControlViewModel, IContentSupplier<MocassinProject>
     {
-        private MocassinProjectGraph contentSource;
+        private MocassinProject contentSource;
 
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource
+        public MocassinProject ContentSource
         {
             get => contentSource;
             protected set => SetProperty(ref contentSource, value);
@@ -29,7 +29,7 @@ namespace Mocassin.UI.GUI.Controls.Base.ViewModels
         }
 
         /// <inheritdoc />
-        public abstract void ChangeContentSource(MocassinProjectGraph contentSource);
+        public abstract void ChangeContentSource(MocassinProject contentSource);
 
         /// <summary>
         ///     Delayed execution of the passed <see cref="Action"/>. Action is not performed if the <see cref="ContentSource"/> property changes within the delay

@@ -7,7 +7,7 @@ namespace Mocassin.Model.Translator.ModelContext
     public class PositionTransitionModel : ModelComponentBase, IPositionTransitionModel
     {
         /// <inheritdoc />
-        public IUnitCellPosition UnitCellPosition { get; set; }
+        public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
         public IList<IKineticTransitionModel> KineticTransitionModels { get; set; }

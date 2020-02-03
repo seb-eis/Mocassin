@@ -127,7 +127,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var structureQueries = ModelProject.GetManager<IStructureManager>().QueryPort;
 
             var unitCellProvider = structureQueries.Query(port => port.GetFullUnitCellProvider());
-            var positions = structureQueries.Query(port => port.GetUnitCellPositions().Where(value => value.IsValidAndStable()));
+            var positions = structureQueries.Query(port => port.GetCellReferencePositions().Where(value => value.IsValidAndStable()));
             var comparer = ModelProject.GeometryNumeric.RangeComparer;
 
             var interactionFinder = new PairInteractionFinder(unitCellProvider, ModelProject.SpaceGroupService);
@@ -145,7 +145,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
             var counter = 0;
             foreach (var item in DataAccess.Query(data => data.GroupInteractions))
             {
-                if (item.CenterUnitCellPosition.Status != PositionStatus.Stable)
+                if (item.CenterCellReferencePosition.Stability != PositionStability.Stable)
                     continue;
 
                 counter++;

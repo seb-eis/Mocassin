@@ -25,7 +25,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.EnergyModel.
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             EnvironmentGridControlViewModel.ChangeContentSource(contentSource);

@@ -11,69 +11,69 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.LatticeModel
 {
     /// <summary>
     ///     The <see cref="CollectionControlViewModel{T}" /> for <see cref="DopingControlView" /> that controls the collection
-    ///     of <see cref="DopingGraph" /> instances
+    ///     of <see cref="DopingData" /> instances
     /// </summary>
-    public sealed class DopingControlViewModel : CollectionControlViewModel<DopingGraph>, IContentSupplier<MocassinProjectGraph>
+    public sealed class DopingControlViewModel : CollectionControlViewModel<DopingData>, IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; private set; }
+        public MocassinProject ContentSource { get; private set; }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for selectable
         ///     primary <see cref="DopingCombination" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<DopingCombination>> SelectablePrimaryDopingCombinations =>
+        public IEnumerable<ModelObjectReference<DopingCombination>> SelectablePrimaryDopingCombinations =>
             GetSelectablePrimaryDopingCombinations(SelectedItem);
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for selectable
         ///     counter <see cref="DopingCombination" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<DopingCombination>> SelectableCounterDopingCombinations =>
+        public IEnumerable<ModelObjectReference<DopingCombination>> SelectableCounterDopingCombinations =>
             GetSelectableCounterDopingCombinations(SelectedItem);
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for selectable
         ///     <see cref="BuildingBlock" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<BuildingBlock>> SelectableBuildingBlocks =>
+        public IEnumerable<ModelObjectReference<BuildingBlock>> SelectableBuildingBlocks =>
             GetSelectableBuildingBlocks(SelectedItem);
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            SetCollection(ContentSource?.ProjectModelGraph?.LatticeModelGraph?.Dopings);
+            SetCollection(ContentSource?.ProjectModelData?.LatticeModelData?.Dopings);
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
-        ///     primary <see cref="DopingCombination" /> in the content of the passed current <see cref="DopingGraph" />
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for selectable
+        ///     primary <see cref="DopingCombination" /> in the content of the passed current <see cref="DopingData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<DopingCombination>> GetSelectablePrimaryDopingCombinations(DopingGraph current)
+        public IEnumerable<ModelObjectReference<DopingCombination>> GetSelectablePrimaryDopingCombinations(DopingData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.LatticeModelGraph?.DopingCombination;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<DopingCombination>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.LatticeModelData?.DopingCombination;
+            return baseCollection?.Select(x => new ModelObjectReference<DopingCombination>(x));
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
-        ///     counter <see cref="DopingCombination" /> in the content of the passed current <see cref="DopingGraph" />
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for selectable
+        ///     counter <see cref="DopingCombination" /> in the content of the passed current <see cref="DopingData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<DopingCombination>> GetSelectableCounterDopingCombinations(DopingGraph current)
+        public IEnumerable<ModelObjectReference<DopingCombination>> GetSelectableCounterDopingCombinations(DopingData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.LatticeModelGraph?.DopingCombination;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<DopingCombination>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.LatticeModelData?.DopingCombination;
+            return baseCollection?.Select(x => new ModelObjectReference<DopingCombination>(x));
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReferenceGraph{T}" /> for selectable
-        ///     <see cref="BuildingBlock" /> in the content of the passed current <see cref="DopingGraph" />
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectReference{T}" /> for selectable
+        ///     <see cref="BuildingBlock" /> in the content of the passed current <see cref="DopingData" />
         /// </summary>
-        public IEnumerable<ModelObjectReferenceGraph<BuildingBlock>> GetSelectableBuildingBlocks(DopingGraph current)
+        public IEnumerable<ModelObjectReference<BuildingBlock>> GetSelectableBuildingBlocks(DopingData current)
         {
-            var baseCollection = ContentSource?.ProjectModelGraph?.LatticeModelGraph?.BuildingBlocks;
-            return baseCollection?.Select(x => new ModelObjectReferenceGraph<BuildingBlock>(x));
+            var baseCollection = ContentSource?.ProjectModelData?.LatticeModelData?.BuildingBlocks;
+            return baseCollection?.Select(x => new ModelObjectReference<BuildingBlock>(x));
         }
     }
 }

@@ -11,33 +11,33 @@ using Mocassin.UI.Xml.Main;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.JobTranslation.GridControl
 {
     /// <summary>
-    ///     Get the <see cref="CollectionControlViewModel{T}"/> for <see cref="DopingValueGraph"/> instances
+    ///     Get the <see cref="CollectionControlViewModel{T}"/> for <see cref="DopingValueData"/> instances
     /// </summary>
-    public class DopingValueControlViewModel : CollectionControlViewModel<DopingValueGraph>, IContentSupplier<MocassinProjectGraph>
+    public class DopingValueControlViewModel : CollectionControlViewModel<DopingValueData>, IContentSupplier<MocassinProject>
     {
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; set; }
+        public MocassinProject ContentSource { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="LatticeConfigurationGraph"/> of the model parent
+        ///     Get the <see cref="LatticeConfigData"/> of the model parent
         /// </summary>
-        public LatticeConfigurationGraph ParentLatticeConfiguration { get; }
+        public LatticeConfigData ParentLatticeConfiguration { get; }
 
-        public DopingValueControlViewModel(LatticeConfigurationGraph parentLatticeConfiguration)
+        public DopingValueControlViewModel(LatticeConfigData parentLatticeConfiguration)
         {
             ParentLatticeConfiguration = parentLatticeConfiguration ?? throw new ArgumentNullException(nameof(parentLatticeConfiguration));
         }
 
         /// <inheritdoc />
-        public void ChangeContentSource(MocassinProjectGraph contentSource)
+        public void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             if (ContentSource != null)
             {
-                if (ParentLatticeConfiguration.DopingValues.Count != ContentSource.ProjectModelGraph.LatticeModelGraph.Dopings.Count)
+                if (ParentLatticeConfiguration.DopingValues.Count != ContentSource.ProjectModelData.LatticeModelData.Dopings.Count)
                 {
-                    ParentLatticeConfiguration.DopingValues = ContentSource.ProjectModelGraph.LatticeModelGraph.Dopings
-                        .Select(x => new DopingValueGraph {Value = 0, Doping = new ModelObjectReferenceGraph<Doping>(x)})
+                    ParentLatticeConfiguration.DopingValues = ContentSource.ProjectModelData.LatticeModelData.Dopings
+                        .Select(x => new DopingValueData {Value = 0, Doping = new ModelObjectReference<Doping>(x)})
                         .ToObservableCollection();
                 }
             }

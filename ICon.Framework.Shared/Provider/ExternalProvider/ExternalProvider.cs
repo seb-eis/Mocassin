@@ -70,6 +70,7 @@ namespace Mocassin.Framework.Provider
             }
             catch (Exception localException)
             {
+                Console.WriteLine(localException);
                 exception = localException;
                 IsLoaded = false;
             }

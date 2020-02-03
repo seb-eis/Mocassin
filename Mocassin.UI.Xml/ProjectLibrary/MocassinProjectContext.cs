@@ -38,7 +38,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
         private ReactiveEvent<Unit> StateChangedEvent { get; }
 
         /// <inheritdoc />
-        public DbSet<MocassinProjectGraph> MocassinProjectGraphs { get; set; }
+        public DbSet<MocassinProject> MocassinProjectGraphs { get; set; }
 
         /// <inheritdoc />
         public IObservable<Unit> ModelChangedNotification => StateChangedEvent.AsObservable();
@@ -60,7 +60,7 @@ namespace Mocassin.UI.Xml.ProjectLibrary
             {
                 unchecked
                 {
-                    result += projectGraph.ProjectModelGraph.ToJson().GetHashCode();
+                    result += projectGraph.ProjectModelData.ToJson().GetHashCode();
                 }
             }
 

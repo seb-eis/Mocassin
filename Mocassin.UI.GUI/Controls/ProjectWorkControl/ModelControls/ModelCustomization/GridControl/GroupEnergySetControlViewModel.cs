@@ -8,14 +8,14 @@ using Mocassin.UI.Xml.Customization;
 namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomization.GridControl
 {
     /// <summary>
-    ///     The <see cref="CollectionControlViewModel{T}"/> for <see cref="GroupEnergySetControlView"/> that controls the <see cref="GroupEnergyGraph"/> customization
+    ///     The <see cref="CollectionControlViewModel{T}"/> for <see cref="GroupEnergySetControlView"/> that controls the <see cref="GroupEnergyData"/> customization
     /// </summary>
-    public sealed class GroupEnergySetControlViewModel : CollectionControlViewModel<GroupEnergyGraph>
+    public sealed class GroupEnergySetControlViewModel : CollectionControlViewModel<GroupEnergyData>
     {
         /// <summary>
-        ///     Get the <see cref="GroupEnergySetGraph"/> that the view model targets
+        ///     Get the <see cref="GroupEnergySetData"/> that the view model targets
         /// </summary>
-        public GroupEnergySetGraph GroupEnergySet { get; }
+        public GroupEnergySetData GroupEnergySet { get; }
 
         /// <summary>
         ///     Get the <see cref="string"/> description of the base geometry
@@ -23,10 +23,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         public string BaseGeometryDescription { get; }
 
         /// <summary>
-        ///     Create new <see cref="GroupEnergySetControlViewModel"/> for the passed <see cref="GroupEnergySetGraph"/>
+        ///     Create new <see cref="GroupEnergySetControlViewModel"/> for the passed <see cref="GroupEnergySetData"/>
         /// </summary>
         /// <param name="groupEnergySet"></param>
-        public GroupEnergySetControlViewModel(GroupEnergySetGraph groupEnergySet)
+        public GroupEnergySetControlViewModel(GroupEnergySetData groupEnergySet)
         {
             GroupEnergySet = groupEnergySet ?? throw new ArgumentNullException(nameof(groupEnergySet));
             SetCollection(GroupEnergySet.EnergyEntries);
@@ -35,11 +35,11 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ModelCustomi
         }
 
         /// <summary>
-        ///     Builds a <see cref="string"/> description for the base geometry of the passed <see cref="GroupEnergySetGraph"/>
+        ///     Builds a <see cref="string"/> description for the base geometry of the passed <see cref="GroupEnergySetData"/>
         /// </summary>
         /// <param name="groupEnergySet"></param>
         /// <returns></returns>
-        public string GetBaseGeometryDescription(GroupEnergySetGraph groupEnergySet)
+        public string GetBaseGeometryDescription(GroupEnergySetData groupEnergySet)
         {
             var builder = new StringBuilder(250);
             foreach (var vector in groupEnergySet.BaseGeometry)

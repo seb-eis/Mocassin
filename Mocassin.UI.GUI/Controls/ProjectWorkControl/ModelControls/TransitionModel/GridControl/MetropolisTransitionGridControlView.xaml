@@ -38,20 +38,17 @@
 
         <comboBox:BindableDataGridComboBoxColumn Header="State Change Chain"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
-                                                 SelectedValueBinding="{Binding AbstractTransitionKey, UpdateSourceTrigger=PropertyChanged}"
-                                                 SelectedValuePath="Key"
+                                                 SelectedItemBinding="{Binding AbstractTransition}"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Cell Position (1)"
+        <comboBox:BindableDataGridComboBoxColumn Header="Reference Position (1)"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.FirstPositionOptions}"
-                                                 SelectedValueBinding="{Binding FirstUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
-                                                 SelectedValuePath="Key"
+                                                 SelectedItemBinding="{Binding FirstCellReferencePosition}"
                                                  DisplayMemberPath="Name" />
 
-        <comboBox:BindableDataGridComboBoxColumn Header="Cell Position (2)"
+        <comboBox:BindableDataGridComboBoxColumn Header="Reference Position (2)"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}, Path=DataContext.SecondPositionOptions}"
-                                                 SelectedValueBinding="{Binding SecondUnitCellPositionKey, UpdateSourceTrigger=PropertyChanged}"
-                                                 SelectedValuePath="Key"
+                                                 SelectedItemBinding="{Binding SecondCellReferencePosition}"
                                                  DisplayMemberPath="Name" />
 
       </DataGrid.Columns>

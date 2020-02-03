@@ -21,7 +21,7 @@
                         ObjectType="{x:Type system:Enum}"
                         x:Key="StabilityEnumValues">
       <ObjectDataProvider.MethodParameters>
-        <x:Type TypeName="structures:PositionStatus" />
+        <x:Type TypeName="structures:PositionStability" />
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
     <ToolTip x:Key="Local.ToolTip.UnitCellPosition" Style="{StaticResource App.Style.ToolTip.Default}">
@@ -132,13 +132,12 @@
 
           <DataGridComboBoxColumn Header="Stability"
                                   ItemsSource="{Binding Source={StaticResource StabilityEnumValues}}"
-                                  SelectedItemBinding="{Binding PositionStatus}" />
+                                  SelectedItemBinding="{Binding Stability}" />
 
           <comboBox:BindableDataGridComboBoxColumn Header="Occupation"
                                                    ItemsSource="{Binding ElementName=PositionDataGrid, Path=DataContext.OccupationSetOptions}"
-                                                   SelectedValuePath="Key"
                                                    DisplayMemberPath="Name"
-                                                   SelectedValueBinding="{Binding OccupationKey}" />
+                                                   SelectedItemBinding="{Binding Occupation}" />
         </DataGrid.Columns>
       </DataGrid>
 

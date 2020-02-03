@@ -40,10 +40,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         private CancellationTokenSource BuildCancellationTokenSource { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="CollectionControlViewModel{T}" /> for all selectable <see cref="MocassinProjectBuildGraph" />
+        ///     Get the <see cref="CollectionControlViewModel{T}" /> for all selectable <see cref="SimulationDbBuildTemplate" />
         ///     instances
         /// </summary>
-        public CollectionControlViewModel<MocassinProjectBuildGraph> ProjectBuildGraphCollectionViewModel { get; }
+        public CollectionControlViewModel<SimulationDbBuildTemplate> ProjectBuildGraphCollectionViewModel { get; }
 
         /// <summary>
         ///     Get the <see cref="CollectionControlViewModel{T}" /> for selection of meta data information
@@ -123,7 +123,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
 
         /// <inheritdoc />
         public LocalProjectDeployControlViewModel(IMocassinProjectControl projectControl,
-            CollectionControlViewModel<MocassinProjectBuildGraph> projectBuildGraphCollectionViewModel)
+            CollectionControlViewModel<SimulationDbBuildTemplate> projectBuildGraphCollectionViewModel)
             : base(projectControl)
         {
             ProjectBuildGraphCollectionViewModel = projectBuildGraphCollectionViewModel;
@@ -139,10 +139,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         }
 
         /// <inheritdoc />
-        public override void ChangeContentSource(MocassinProjectGraph contentSource)
+        public override void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
-            ProjectBuildGraphCollectionViewModel.SetCollection(contentSource?.ProjectBuildGraphs);
+            ProjectBuildGraphCollectionViewModel.SetCollection(contentSource?.SimulationDbBuildTemplates);
         }
 
         /// <summary>
@@ -162,9 +162,10 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
                     JobMetaDataCollectionControlViewModel.Clear();
                     JobMetaDataCollectionControlViewModel.AddItems(BuildSimulationLibrary.JobMetaData.Local);
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
-                    AddConsoleError(e);
+                    Console.WriteLine(exception);
+                    AddConsoleError(exception);
                 }
 
                 BuildStatus = LibraryBuildStatus.Unknown;
@@ -211,8 +212,8 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
             {
                 return !string.IsNullOrWhiteSpace(buildTargetFilePath)
                        && BuildCancellationTokenSource == null
-                       && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationGraph != null
-                       && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobTranslationGraph != null;
+                       && ProjectBuildGraphCollectionViewModel.SelectedItem?.ProjectCustomizationTemplate != null
+                       && ProjectBuildGraphCollectionViewModel.SelectedItem.ProjectJobSetTemplate != null;
             }
 
             return new AsyncRelayCommand(StartBuildProcess, CanExecute);
@@ -225,7 +226,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.ProjectBuild
         {
             BuildCancellationTokenSource = new CancellationTokenSource();
             AddConsoleMessage($"Deployment start: {BuildTargetFilePath}");
-            using var builder = new MocassinSimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving};
+            using var builder = new SimulationLibraryBuilder {IsAutoSaveAfterBuild = !IsManualLibrarySaving};
             BuildSimulationLibrary?.Dispose();
             BuildSimulationLibrary = null;
 

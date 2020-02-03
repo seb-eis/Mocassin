@@ -345,7 +345,7 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <param name="connectorTypes"></param>
         /// <param name="positions"></param>
         /// <returns></returns>
-        protected IList<int> CalculateAbstractMovement(IList<ConnectorType> connectorTypes, IList<IUnitCellPosition> positions)
+        protected IList<int> CalculateAbstractMovement(IList<ConnectorType> connectorTypes, IList<ICellReferencePosition> positions)
         {
             var result = new List<int>(connectorTypes.Count);
 
@@ -363,7 +363,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
             for (var i = 1; i < result.Count; i++)
             {
-                if (positions[i].Status != PositionStatus.Unstable || connectorTypes[i - 1] != ConnectorType.Dynamic)
+                if (positions[i].Stability != PositionStability.Unstable || connectorTypes[i - 1] != ConnectorType.Dynamic)
                     continue;
 
                 result[i - 1]++;

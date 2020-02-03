@@ -65,12 +65,12 @@ namespace Mocassin.Model.Translator.ModelContext
         /// <returns></returns>
         protected IEnumerable<IPositionModel> CreatePositionModels(IEnvironmentModel environmentModel)
         {
-            var sourceVector = environmentModel.UnitCellPosition.Vector;
+            var sourceVector = environmentModel.CellReferencePosition.Vector;
             var targetInfos = environmentModel.PairInteractionModels
                 .Select(a => a.TargetPositionInfo)
                 .ToList();
 
-            var targetVectors = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(environmentModel.UnitCellPosition.Vector);
+            var targetVectors = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtension(environmentModel.CellReferencePosition.Vector);
             var positionModels = targetVectors
                 .Select(target => ModelProject.SpaceGroupService.GetOperationToTarget(sourceVector, target))
                 .Select(operation => CreatePositionModel(environmentModel, operation, targetInfos));
@@ -91,10 +91,10 @@ namespace Mocassin.Model.Translator.ModelContext
         {
             var positionModel = new PositionModel
             {
-                UnitCellPosition = environmentModel.UnitCellPosition,
+                CellReferencePosition = environmentModel.CellReferencePosition,
                 EnvironmentModel = environmentModel,
                 TransformOperation = operation,
-                CenterVector = operation.Transform(environmentModel.UnitCellPosition.Vector)
+                CenterVector = operation.Transform(environmentModel.CellReferencePosition.Vector)
             };
 
             positionModel.TargetPositionInfos = TransformTargetInfos(targetInfos, operation, positionModel.CenterVector);
@@ -117,7 +117,7 @@ namespace Mocassin.Model.Translator.ModelContext
             {
                 var targetInfo = new TargetPositionInfo
                 {
-                    UnitCellPosition = positionInfo.UnitCellPosition,
+                    CellReferencePosition = positionInfo.CellReferencePosition,
                     Distance = positionInfo.Distance,
                     AbsoluteFractional3D = operation.Transform(positionInfo.AbsoluteFractional3D),
                     PairInteractionModel = positionInfo.PairInteractionModel

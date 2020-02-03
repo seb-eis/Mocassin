@@ -15,22 +15,22 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
 {
     /// <summary>
     ///     Base <see cref="ViewModelBase" /> for types that control grid data manipulation of
-    ///     <see cref="ModelObjectReferenceGraph{T}" /> collection selections for a hosting <see cref="ModelObjectGraph" />
+    ///     <see cref="ModelObjectReference{T}" /> collection selections for a hosting <see cref="ModelDataObject" />
     /// </summary>
     /// <typeparam name="TModelObject"></typeparam>
     /// <typeparam name="TObjectGraph"></typeparam>
     public abstract class HostGraphModelObjectSelectionViewModel<TModelObject, TObjectGraph> :
-        CollectionControlViewModel<ModelObjectReferenceGraph<TModelObject>>,
-        IContentSupplier<MocassinProjectGraph>,
+        CollectionControlViewModel<ModelObjectReference<TModelObject>>,
+        IContentSupplier<MocassinProject>,
         IObjectDropAcceptor
         where TModelObject : ModelObject, new()
-        where TObjectGraph : ModelObjectGraph
+        where TObjectGraph : ModelDataObject
     {
         /// <summary>
-        ///     Get or set the <see cref="IReadOnlyCollection{T}" /> of <see cref="MocassinProjectGraph" /> instances that can be
+        ///     Get or set the <see cref="IReadOnlyCollection{T}" /> of <see cref="MocassinProject" /> instances that can be
         ///     referenced
         /// </summary>
-        public IReadOnlyCollection<ModelObjectGraph> ReferenceObjectGraphs { get; private set; }
+        public IReadOnlyCollection<ModelDataObject> ReferenceObjectGraphs { get; private set; }
 
         /// <summary>
         ///     Get the boolean flag if the key selection filters out duplicate key <see cref="string" /> values
@@ -46,12 +46,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         public Command<IDataObject> HandleDropAddCommand { get; set; }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> of currently selectable <see cref="ModelObjectGraph" /> instances
+        ///     Get the <see cref="IEnumerable{T}" /> of currently selectable <see cref="ModelDataObject" /> instances
         /// </summary>
-        public virtual IEnumerable<ModelObjectGraph> SelectableReferences => FilterReferences(ReferenceObjectGraphs);
+        public virtual IEnumerable<ModelDataObject> SelectableReferences => FilterReferences(ReferenceObjectGraphs);
 
         /// <inheritdoc />
-        public MocassinProjectGraph ContentSource { get; protected set; }
+        public MocassinProject ContentSource { get; protected set; }
 
         /// <summary>
         ///     Creates new <see cref="HostGraphModelObjectSelectionViewModel{TModelObject,TObjectGraph}" /> with a boolean
@@ -67,12 +67,12 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         }
 
         /// <summary>
-        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelObjectGraph" /> values that remains after internal
+        ///     Get the <see cref="IEnumerable{T}" /> sequence of <see cref="ModelDataObject" /> values that remains after internal
         ///     filtering is applied
         /// </summary>
         /// <param name="baseCollection"></param>
         /// <returns></returns>
-        public virtual IEnumerable<ModelObjectGraph> FilterReferences(IReadOnlyCollection<ModelObjectGraph> baseCollection)
+        public virtual IEnumerable<ModelDataObject> FilterReferences(IReadOnlyCollection<ModelDataObject> baseCollection)
         {
             if (!IsDuplicateFiltered || SelectedItem == null) return baseCollection;
 
@@ -83,7 +83,7 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         }
 
         /// <inheritdoc />
-        public virtual void ChangeContentSource(MocassinProjectGraph contentSource)
+        public virtual void ChangeContentSource(MocassinProject contentSource)
         {
             ContentSource = contentSource;
             ReferenceObjectGraphs = GetSourceCollection(ContentSource);
@@ -91,32 +91,32 @@ namespace Mocassin.UI.GUI.Controls.ProjectWorkControl.ModelControls.Base.GridCon
         }
 
         /// <summary>
-        ///     Extract the <see cref="IReadOnlyCollection{T}" /> of reference <see cref="ModelObjectGraph" /> from the passed
-        ///     <see cref="MocassinProjectGraph" />
+        ///     Extract the <see cref="IReadOnlyCollection{T}" /> of reference <see cref="ModelDataObject" /> from the passed
+        ///     <see cref="MocassinProject" />
         /// </summary>
-        /// <param name="projectGraph"></param>
+        /// <param name="project"></param>
         /// <returns></returns>
-        protected abstract IReadOnlyCollection<ModelObjectGraph> GetSourceCollection(MocassinProjectGraph projectGraph);
+        protected abstract IReadOnlyCollection<ModelDataObject> GetSourceCollection(MocassinProject project);
 
         /// <summary>
-        ///     Extract the <see cref="ICollection{T}" /> of already defined <see cref="ModelObjectReferenceGraph{T}" /> on the
+        ///     Extract the <see cref="ICollection{T}" /> of already defined <see cref="ModelObjectReference{T}" /> on the
         ///     passed source graph
         /// </summary>
         /// <param name="sourceObject"></param>
         /// <returns></returns>
-        protected abstract ICollection<ModelObjectReferenceGraph<TModelObject>> GetTargetCollection(TObjectGraph sourceObject);
+        protected abstract ICollection<ModelObjectReference<TModelObject>> GetTargetCollection(TObjectGraph sourceObject);
 
         /// <summary>
         ///     Get a <see cref="Command{T}" /> to add a <see cref="TGraph" /> reference from a <see cref="IDataObject" /> drop to
         ///     the host collection
         /// </summary>
         /// <returns></returns>
-        public Command<IDataObject> GetDropAddObjectCommand<TGraph>() where TGraph : ModelObjectGraph
+        public Command<IDataObject> GetDropAddObjectCommand<TGraph>() where TGraph : ModelDataObject
         {
             void Execute(IDataObject obj)
             {
                 if (!(obj.GetData(typeof(TGraph)) is TGraph graph)) return;
-                Items.Add(new ModelObjectReferenceGraph<TModelObject> {Key = graph.Key, TargetGraph = graph});
+                Items.Add(new ModelObjectReference<TModelObject> {Key = graph.Key, Target = graph});
             }
 
             bool CanExecute(IDataObject obj)

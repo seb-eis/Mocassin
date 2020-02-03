@@ -78,9 +78,10 @@ namespace Mocassin.Framework.Provider
                 exception = new InvalidOperationException("The output argument of the provider function has the wrong type");
                 return false;
             }
-            catch (Exception caught)
+            catch (Exception caughtException)
             {
-                exception = caught;
+                Console.WriteLine(caughtException);
+                exception = caughtException;
                 return false;
             }
         }
