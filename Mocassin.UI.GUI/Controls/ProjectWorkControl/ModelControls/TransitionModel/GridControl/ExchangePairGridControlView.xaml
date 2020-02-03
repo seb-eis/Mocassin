@@ -25,13 +25,11 @@
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
-                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
-                                         Height="{StaticResource App.Size.RowHeaderLogo}"
-                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
-                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
-                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                         Cursor="Hand"/>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -41,12 +39,12 @@
         <comboBox:BindableDataGridComboBoxColumn Header="Acceptor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentAcceptorOptions}"
                                                  DisplayMemberPath="Name"
-                                                 SelectedItemBinding="{Binding AcceptorParticle}"/>
+                                                 SelectedItemBinding="{Binding AcceptorParticle}" />
 
         <comboBox:BindableDataGridComboBoxColumn Header="Donor State"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CurrentDonorOptions}"
                                                  DisplayMemberPath="Name"
-                                                 SelectedItemBinding="{Binding DonorParticle}"/>
+                                                 SelectedItemBinding="{Binding DonorParticle}" />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

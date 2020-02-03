@@ -43,7 +43,7 @@
               ColumnWidth="*">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="#"/> 
+          <views:ObjectRowHeaderLogo/> 
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 

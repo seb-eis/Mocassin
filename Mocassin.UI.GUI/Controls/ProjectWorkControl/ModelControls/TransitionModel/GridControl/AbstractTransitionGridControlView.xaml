@@ -24,13 +24,11 @@
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
-                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
-                                         Height="{StaticResource App.Size.RowHeaderLogo}"
-                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
-                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
-                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                         Cursor="Hand"/>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -41,19 +39,19 @@
 
           <DataGridTextColumn.ElementStyle>
             <Style TargetType="{x:Type TextBlock}">
-              <Setter Property="TextWrapping" Value="Wrap"/>
+              <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
           </DataGridTextColumn.ElementStyle>
 
           <DataGridTextColumn.EditingElementStyle>
             <Style TargetType="{x:Type TextBox}">
-              <Setter Property="TextWrapping" Value="Wrap"/>
+              <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
           </DataGridTextColumn.EditingElementStyle>
 
         </DataGridTextColumn>
 
-        <DataGridCheckBoxColumn Header="Association Flag" Binding="{Binding IsAssociation}"/>
+        <DataGridCheckBoxColumn Header="Association Flag" Binding="{Binding IsAssociation}" />
 
         <DataGridTemplateColumn Header="State Change Groups">
           <DataGridTemplateColumn.CellTemplate>

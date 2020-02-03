@@ -31,7 +31,7 @@
               DragOver="HostGrid_OnDragOver">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="R"/>
+          <views:ObjectRowHeaderLogo/>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 

@@ -24,13 +24,11 @@
 
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
-                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
-                                         Height="{StaticResource App.Size.RowHeaderLogo}"
-                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
-                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
-                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                         Cursor="Hand"/>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 

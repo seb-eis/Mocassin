@@ -24,7 +24,7 @@
               HeadersVisibility="Row">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo DataContext="R"/>
+          <views:ObjectRowHeaderLogo/>
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 

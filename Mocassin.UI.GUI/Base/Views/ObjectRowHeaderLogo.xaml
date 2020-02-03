@@ -3,15 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
+             xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Transparent">
 
   <UserControl.Resources>
     <Border x:Key="ObjectBorder"
-            Opacity="1" Width="20" Height="20" CornerRadius="5"
-            BorderBrush="Black" BorderThickness="2"
+            Opacity="1" Width="20" Height="20" CornerRadius="5" Margin="2"
+            BorderBrush="Black" BorderThickness="0"
             Padding="0,0,0,0">
       <Border.Background>
         <LinearGradientBrush po:Freeze="True">
@@ -23,6 +23,8 @@
     </Border>
   </UserControl.Resources>
   <Grid>
-    <ContentPresenter Content="{StaticResource ObjectBorder}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <Border Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="5">
+      <ContentPresenter Content="{StaticResource ObjectBorder}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+    </Border>
   </Grid>
 </UserControl>

@@ -193,7 +193,7 @@
                       ColumnWidth="Auto">
               <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
-                  <views:ObjectRowHeaderLogo DataContext="V" />
+                  <views:ObjectRowHeaderLogo />
                 </DataTemplate>
               </DataGrid.RowHeaderTemplate>
               <DataGrid.Columns>

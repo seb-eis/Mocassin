@@ -23,13 +23,11 @@
               Background="Transparent">
       <DataGrid.RowHeaderTemplate>
         <DataTemplate>
-          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo" 
-                                         Width="{StaticResource App.Size.RowHeaderLogo}" 
-                                         Height="{StaticResource App.Size.RowHeaderLogo}"
-                                         PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
-                                         PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
-                                         PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
-                                         Cursor="Hand"/>
+          <views:ObjectRowHeaderLogo x:Name="RowHeaderLogo"
+                                     PreviewMouseLeftButtonDown="RowHeaderLogo_OnPreviewMouseLeftButtonDown"
+                                     PreviewMouseLeftButtonUp="RowHeaderLogo_OnPreviewMouseLeftButtonUp"
+                                     PreviewMouseMove="RowHeaderLogo_OnPreviewMouseMove"
+                                     Cursor="Hand" />
         </DataTemplate>
       </DataGrid.RowHeaderTemplate>
 
@@ -38,7 +36,7 @@
         <comboBox:BindableDataGridComboBoxColumn Header="State Change Chain"
                                                  ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.AbstractTransitionOptions}"
                                                  SelectedItemBinding="{Binding AbstractTransition}"
-                                                 DisplayMemberPath="Name"/>
+                                                 DisplayMemberPath="Name" />
 
         <DataGridTemplateColumn Header="Binding Geometry (A,B,C)">
           <DataGridTemplateColumn.CellTemplate>
@@ -49,14 +47,17 @@
                         HeadersVisibility="Row">
                 <DataGrid.RowHeaderTemplate>
                   <DataTemplate>
-                    <views:ObjectRowHeaderLogo/>
+                    <views:ObjectRowHeaderLogo />
                   </DataTemplate>
                 </DataGrid.RowHeaderTemplate>
 
                 <DataGrid.Columns>
-                  <DataGridTextColumn Binding="{Binding A, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-                  <DataGridTextColumn Binding="{Binding B, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
-                  <DataGridTextColumn Binding="{Binding C, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  <DataGridTextColumn
+                    Binding="{Binding A, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  <DataGridTextColumn
+                    Binding="{Binding B, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
+                  <DataGridTextColumn
+                    Binding="{Binding C, Converter={StaticResource App.Converter.NumericExpressionToValue}}" />
 
                 </DataGrid.Columns>
               </DataGrid>

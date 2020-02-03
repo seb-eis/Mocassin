@@ -71,7 +71,7 @@
                 AutoGenerateColumns="False">
         <DataGrid.RowHeaderTemplate>
           <DataTemplate>
-            <views:ObjectRowHeaderLogo DataContext="D" />
+            <views:ObjectRowHeaderLogo />
           </DataTemplate>
         </DataGrid.RowHeaderTemplate>
 
