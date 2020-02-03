@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 
@@ -8,21 +7,18 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Abstract base class for particle pair implementations that describe a specific pair interaction occupation.
     /// </summary>
-    [DataContract]
     public abstract class ParticlePair : IEquatable<ParticlePair>
     {
         /// <summary>
         ///     The first particle interface
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle Particle0 { get; set; }
 
         /// <summary>
         ///     The second particle interface
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle Particle1 { get; set; }
 
         /// <inheritdoc />

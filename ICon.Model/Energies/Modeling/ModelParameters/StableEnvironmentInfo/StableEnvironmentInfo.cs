@@ -1,31 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
-    /// <inheritdoc cref="IStableEnvironmentInfo"/>
-    [DataContract(Name = "StableEnvironmentInfo")]
+    /// <inheritdoc cref="IStableEnvironmentInfo" />
     public class StableEnvironmentInfo : ModelParameter, IStableEnvironmentInfo
     {
         /// <inheritdoc />
-        [DataMember]
         public double MaxInteractionRange { get; set; }
 
         /// <summary>
         ///     The list of interaction filters for stable environments
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
         public List<SymmetricInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>
         ///     Get or set the list of defect energy entries
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
         public List<DefectEnergy> DefectEnergies { get; set; }
 
         /// <inheritdoc />
@@ -49,14 +44,13 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)
         {
-            if (!(modelParameter is IStableEnvironmentInfo info)) 
+            if (!(modelParameter is IStableEnvironmentInfo info))
                 return null;
 
             MaxInteractionRange = info.MaxInteractionRange;
             InteractionFilters = info.GetInteractionFilters().Select(SymmetricInteractionFilter.FromInterface).ToList();
             DefectEnergies = info.GetDefectEnergies().Select(DefectEnergy.FromInterface).ToList();
             return this;
-
         }
 
         /// <inheritdoc />
@@ -76,6 +70,7 @@ namespace Mocassin.Model.Energies
                 if (!info.GetDefectEnergies().Contains(defectEnergy))
                     return false;
             }
+
             return MaxInteractionRange.AlmostEqualByRange(info.MaxInteractionRange);
         }
 
@@ -87,7 +82,7 @@ namespace Mocassin.Model.Energies
         {
             return new StableEnvironmentInfo
             {
-                InteractionFilters = new List<SymmetricInteractionFilter>(0), 
+                InteractionFilters = new List<SymmetricInteractionFilter>(0),
                 DefectEnergies = new List<DefectEnergy>(0),
                 MaxInteractionRange = 1.0
             };

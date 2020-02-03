@@ -77,7 +77,7 @@ namespace Mocassin.UI.Xml.StructureModel
             {
                 OccupationSet = new ParticleSet {Key = Occupation.Key},
                 Stability = Stability,
-                Vector = new DataVector3D(Math.Abs(A), Math.Abs(B), Math.Abs(C))
+                Vector = new Fractional3D(Math.Abs(A), Math.Abs(B), Math.Abs(C))
             };
             return obj;
         }

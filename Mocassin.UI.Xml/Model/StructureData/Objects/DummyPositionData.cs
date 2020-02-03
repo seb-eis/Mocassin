@@ -52,7 +52,7 @@ namespace Mocassin.UI.Xml.StructureModel
         {
             var obj = new CellDummyPosition
             {
-                Vector = new DataVector3D(Math.Abs(A), Math.Abs(B), Math.Abs(C))
+                Vector = new Fractional3D(Math.Abs(A), Math.Abs(B), Math.Abs(C))
             };
             return obj;
         }

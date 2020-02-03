@@ -14,7 +14,7 @@ namespace Mocassin.UI.Xml.ParticleModel
         /// <summary>
         ///     Get the <see cref="ParticleData" /> equivalent to the model <see cref="Particle" /> that represents the void state
         /// </summary>
-        public static readonly ParticleData VoidParticle = new ParticleData {Key = Particle.CreateEmpty().Key, Name = "Void"};
+        public static readonly ParticleData VoidParticle = new ParticleData {Key = Particle.CreateVoid().Key, Name = "Void"};
 
         private double charge;
         private string symbol;

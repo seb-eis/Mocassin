@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Framework.Collections;
 
 namespace Mocassin.Model.Transitions
@@ -8,7 +7,6 @@ namespace Mocassin.Model.Transitions
     /// <summary>
     ///     Describes a physical movement during a transition as a set of integer values
     /// </summary>
-    [DataContract]
     public class MovementCode : ArrayCode<int>
     {
         /// <summary>

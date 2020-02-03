@@ -1,41 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="Mocassin.Model.Transitions.IAbstractTransition"/>
-    [DataContract(Name = "AbstractTransition")]
+    /// <inheritdoc cref="Mocassin.Model.Transitions.IAbstractTransition" />
     public class AbstractTransition : ModelObject, IAbstractTransition
     {
         /// <summary>
         ///     List of affiliated state change group for each step
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public List<IStateExchangeGroup> StateExchangeGroups { get; set; }
 
         /// <summary>
         ///     Connector types for each step
         /// </summary>
-        [DataMember]
         public List<ConnectorType> Connectors { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int StateCount => StateExchangeGroups?.Count ?? 0;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int ConnectorCount => Connectors?.Count ?? 0;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public bool IsMetropolis => StateCount == 2;
 
         /// <inheritdoc />
-        [DataMember]
         public bool IsAssociation { get; set; }
 
         /// <inheritdoc />
@@ -50,27 +42,25 @@ namespace Mocassin.Model.Transitions
             return (StateExchangeGroups ?? new List<IStateExchangeGroup>()).AsEnumerable();
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Abstract Transition";
+        /// <inheritdoc />
+        public override string ObjectName => "Abstract Transition";
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IAbstractTransition>(obj) is IAbstractTransition transition)) 
-                return null;
+            if (!(CastIfNotDeprecated<IAbstractTransition>(obj) is { } transition)) return null;
 
             Name = transition.Name;
             IsAssociation = transition.IsAssociation;
             StateExchangeGroups = transition.GetStateExchangeGroups().ToList();
             Connectors = transition.GetConnectorSequence().ToList();
             return this;
-
         }
 
         /// <inheritdoc />
         public bool Equals(IAbstractTransition other)
         {
-            if (other == null) 
+            if (other == null)
                 return false;
 
             if (IsAssociation != other.IsAssociation)

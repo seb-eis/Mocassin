@@ -18,7 +18,7 @@ namespace Mocassin.Model.Transitions
         /// <summary>
         ///     The rule flags of the rule
         /// </summary>
-        RuleFlags RuleFlags { get; }
+        TransitionRuleFlags TransitionRuleFlags { get; }
 
         /// <summary>
         ///     The type of movement the rule describes

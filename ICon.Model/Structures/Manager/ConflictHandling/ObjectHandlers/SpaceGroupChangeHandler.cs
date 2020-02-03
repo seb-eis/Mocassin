@@ -59,7 +59,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
         /// <param name="report"></param>
         protected void MatchCellReferencePositionsToSpaceGroup(ConflictReport report)
         {
-            var currentPositions = DataAccess.Query(data => data.CellReferencePositions.Select(position => position.Vector.AsFractional()));
+            var currentPositions = DataAccess.Query(data => data.CellReferencePositions.Select(position => position.Vector));
             var extendedPositions = ModelProject.SpaceGroupService.GetUnitCellP1PositionExtensions(currentPositions);
 
             var comparer = ModelProject.SpaceGroupService.Comparer.ToEqualityComparer();
@@ -67,7 +67,7 @@ namespace Mocassin.Model.Structures.ConflictHandling
             for (var i = 0; i < extendedPositions.Count; i++)
             {
                 var i1 = i;
-                if (!DataAccess.Query(data => data.CellReferencePositions[i1].IsDeprecated))
+                if (DataAccess.Query(data => data.CellReferencePositions[i1].IsDeprecated)) continue;
                 {
                     for (var j = i + 1; j < extendedPositions.Count; j++)
                     {

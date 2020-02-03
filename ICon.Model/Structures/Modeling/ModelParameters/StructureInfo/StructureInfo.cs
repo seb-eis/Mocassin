@@ -1,14 +1,11 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="Mocassin.Model.Structures.IStructureInfo"/>
-    [DataContract(Name = "StructureInfo")]
+    /// <inheritdoc cref="Mocassin.Model.Structures.IStructureInfo" />
     public class StructureInfo : ModelParameter, IStructureInfo
     {
         /// <inheritdoc />
-        [DataMember]
         public string Name { get; set; }
 
         /// <inheritdoc />
@@ -29,19 +26,17 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)
         {
-            if (!(modelParameter is IStructureInfo structureInfo)) 
+            if (!(modelParameter is IStructureInfo structureInfo))
                 return null;
 
             Name = structureInfo.Name;
             return this;
-
         }
 
         /// <inheritdoc />
         public override bool Equals(IModelParameter other)
         {
-            if (other is IStructureInfo otherInfo)
-                return Name == otherInfo.Name;
+            if (other is IStructureInfo otherInfo) return Name == otherInfo.Name;
 
             return false;
         }

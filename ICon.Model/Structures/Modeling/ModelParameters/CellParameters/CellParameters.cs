@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Mathematics.Comparers;
+﻿using Mocassin.Mathematics.Comparers;
 using Mocassin.Mathematics.Extensions;
 using Mocassin.Model.Basic;
 using Mocassin.Symmetry.CrystalSystems;
@@ -7,49 +6,38 @@ using Mocassin.Symmetry.CrystalSystems;
 namespace Mocassin.Model.Structures
 {
     /// <inheritdoc cref="Mocassin.Model.Structures.ICellParameters" />
-    [DataContract(Name = "CellParameters")]
     public class CellParameters : ModelParameter, ICellParameters
     {
         /// <summary>
         ///     The crystal parameter set
         /// </summary>
-        [DataMember]
         public CrystalParameterSet ParameterSet { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double ParamA => ParameterSet.ParamA;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double ParamB => ParameterSet.ParamB;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double ParamC => ParameterSet.ParamC;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double Alpha => ParameterSet.Alpha;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double Beta => ParameterSet.Beta;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double Gamma => ParameterSet.Gamma;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double AlphaDegree => MocassinMath.RadianToDegree(Alpha);
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double BetaDegree => MocassinMath.RadianToDegree(Beta);
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public double GammaDegree => MocassinMath.RadianToDegree(Gamma);
 
         /// <summary>

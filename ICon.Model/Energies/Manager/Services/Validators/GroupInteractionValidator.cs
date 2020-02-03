@@ -220,9 +220,6 @@ namespace Mocassin.Model.Energies.Validators
 
                     return analyzer.CheckGroupGeometryValidity(group, unstableFilters);
 
-                case PositionStability.Undefined:
-                    throw new InvalidOperationException("Undefined position reached environment check");
-
                 default:
                     throw new InvalidOperationException("Undefined position reached environment check");
             }
@@ -236,21 +233,13 @@ namespace Mocassin.Model.Energies.Validators
         /// <returns></returns>
         protected object GetGroupAffiliatedEnvironment(IGroupInteraction group)
         {
-            switch (group.CenterCellReferencePosition.Stability)
+            return group.CenterCellReferencePosition.Stability switch
             {
-                case PositionStability.Stable:
-                    return DataReader.Access.GetStableEnvironmentInfo();
-
-                case PositionStability.Unstable:
-                    return DataReader.Access
-                        .GetUnstableEnvironments()
-                        .SingleOrDefault(value => value.CellReferencePosition == group.CenterCellReferencePosition);
-
-                case PositionStability.Undefined:
-                    return null;
-                default:
-                    return null;
-            }
+                PositionStability.Stable => (object) DataReader.Access.GetStableEnvironmentInfo(),
+                PositionStability.Unstable => DataReader.Access.GetUnstableEnvironments()
+                    .SingleOrDefault(value => value.CellReferencePosition == group.CenterCellReferencePosition),
+                _ => null
+            };
         }
     }
 }

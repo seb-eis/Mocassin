@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Lattices;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Translator.Jobs
 {
@@ -27,10 +26,10 @@ namespace Mocassin.Model.Translator.Jobs
         /// </summary>
         public int SizeC { get; set; }
 
-		/// <summary>
-		///		Get or set the doping concentrations
-		/// </summary>
-		public IDictionary<IDoping, double> DopingConcentrations { get; set; }
+        /// <summary>
+        ///     Get or set the doping concentrations
+        /// </summary>
+        public IDictionary<IDoping, double> DopingConcentrations { get; set; }
 
         /// <summary>
         ///     Copies the information to another lattice configuration
@@ -41,20 +40,20 @@ namespace Mocassin.Model.Translator.Jobs
             latticeConfiguration.SizeA = SizeA;
             latticeConfiguration.SizeB = SizeB;
             latticeConfiguration.SizeC = SizeC;
-	        latticeConfiguration.DopingConcentrations = new Dictionary<IDoping, double>(DopingConcentrations);
+            latticeConfiguration.DopingConcentrations = new Dictionary<IDoping, double>(DopingConcentrations);
         }
 
         /// <summary>
-        ///     Get the size as an <see cref="DataIntVector3D"/>
+        ///     Get the size as an <see cref="VectorI3" />
         /// </summary>
         /// <returns></returns>
-	    public DataIntVector3D GetIntVector3D()
-	    {
-			return new DataIntVector3D(SizeA, SizeB, SizeC);
-	    }
+        public VectorI3 GetSizeVector()
+        {
+            return new VectorI3(SizeA, SizeB, SizeC);
+        }
 
         /// <summary>
-        ///     Get set size as a default formatted <see cref="string"/>
+        ///     Get set size as a default formatted <see cref="string" />
         /// </summary>
         /// <returns></returns>
         public string GetSizeString()
@@ -63,7 +62,7 @@ namespace Mocassin.Model.Translator.Jobs
         }
 
         /// <summary>
-        ///     Get the set dopings as a default formatted <see cref="string"/>
+        ///     Get the set dopings as a default formatted <see cref="string" />
         /// </summary>
         /// <returns></returns>
         public string GetDopingString()

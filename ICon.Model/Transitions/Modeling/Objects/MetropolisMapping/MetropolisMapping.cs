@@ -5,7 +5,7 @@ namespace Mocassin.Model.Transitions
     /// <summary>
     ///     Mapping for a metropolis transition that describes an exchange between two unit cell positions
     /// </summary>
-    public readonly struct MetropolisMapping : IComparable<MetropolisMapping>, IEquatable<MetropolisMapping>
+    public class MetropolisMapping : IComparable<MetropolisMapping>, IEquatable<MetropolisMapping>
     {
         /// <summary>
         ///     The parent metropolis transition this mapping is valid for
@@ -29,7 +29,6 @@ namespace Mocassin.Model.Transitions
         /// <param name="secondPositionIndex"></param>
         /// <param name="transition"></param>
         public MetropolisMapping(IMetropolisTransition transition, int firstPositionIndex, int secondPositionIndex)
-            : this()
         {
             Transition = transition;
             PositionIndex0 = firstPositionIndex;
@@ -52,7 +51,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public bool Equals(MetropolisMapping other)
         {
-            return PositionIndex0 == other.PositionIndex0 && PositionIndex1 == other.PositionIndex1;
+            return other != null && PositionIndex0 == other.PositionIndex0 && PositionIndex1 == other.PositionIndex1;
         }
 
         /// <summary>

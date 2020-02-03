@@ -32,11 +32,11 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <summary>
-        ///     Create new state pair group from a set of donor and acceptor states with undefined position status
+        ///     Create new state pair group from a set of donor and acceptor states with stable position status
         /// </summary>
         /// <param name="statePairs"></param>
         public StatePairGroup((int DonorIndex, int AcceptorIndex)[] statePairs)
-            : this(statePairs, PositionStability.Undefined)
+            : this(statePairs, PositionStability.Stable)
         {
         }
 
@@ -66,7 +66,7 @@ namespace Mocassin.Model.Transitions
         /// <returns></returns>
         public static StatePairGroup CreateEmpty()
         {
-            return new StatePairGroup(new (int, int)[0], PositionStability.Undefined);
+            return new StatePairGroup(new (int, int)[0], PositionStability.Stable);
         }
     }
 }

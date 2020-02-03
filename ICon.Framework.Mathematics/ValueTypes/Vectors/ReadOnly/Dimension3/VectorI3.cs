@@ -1,5 +1,4 @@
 ﻿using System;
-using Mocassin.Mathematics.ValueTypes;
 
 namespace Moccasin.Mathematics.ValueTypes
 {
@@ -35,15 +34,6 @@ namespace Moccasin.Mathematics.ValueTypes
             A = a;
             B = b;
             C = c;
-        }
-
-        /// <summary>
-        ///     Construct from DataIntVector3D
-        /// </summary>
-        /// <param name="vector"></param>
-        public VectorI3(DataIntVector3D vector)
-            : this(vector.A, vector.B, vector.C)
-        {
         }
 
         /// <summary>

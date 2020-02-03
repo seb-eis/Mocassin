@@ -15,7 +15,7 @@ namespace Mocassin.Model.Energies
         public ICellReferencePosition CenterCellReferencePosition => null;
 
         /// <inheritdoc />
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition PartnerCellReferencePosition { get; set; }
 
         /// <inheritdoc />

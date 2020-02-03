@@ -222,7 +222,7 @@ namespace Mocassin.Model.Transitions
         {
             if (!CanHaveValidEndState(rule, statePairs))
             {
-                rule.RuleFlags |= RuleFlags.PhysicallyInvalid;
+                rule.TransitionRuleFlags |= TransitionRuleFlags.PhysicallyInvalid;
                 return false;
             }
 
@@ -238,7 +238,7 @@ namespace Mocassin.Model.Transitions
                 var states = (rule.FinalState[lastIndex].Index, rule.FinalState[i + 1].Index);
                 if (!TryChangeStateStep(ref states, (statePairs[lastIndex], statePairs[i + 1]), connectorTypes[lastIndex]))
                 {
-                    rule.RuleFlags |= RuleFlags.PhysicallyInvalid;
+                    rule.TransitionRuleFlags |= TransitionRuleFlags.PhysicallyInvalid;
                     return false;
                 }
 
@@ -408,7 +408,7 @@ namespace Mocassin.Model.Transitions
 
             var inverseRule = new TRule
             {
-                RuleFlags = rule.RuleFlags,
+                TransitionRuleFlags = rule.TransitionRuleFlags,
                 AbstractTransition = rule.AbstractTransition,
                 StartState = rule.FinalState.DeepCopy(),
                 TransitionState = rule.TransitionState.DeepCopy(),
@@ -500,7 +500,7 @@ namespace Mocassin.Model.Transitions
 
             for (var i = 0; i < rule.PathLength; i++)
             {
-                if (rule.StartState[i].IsEmpty) 
+                if (rule.StartState[i].IsVoid) 
                     continue;
 
                 if (statePairMap[i].Count(x => x.DonorParticle == rule.StartState[i]) == 0)

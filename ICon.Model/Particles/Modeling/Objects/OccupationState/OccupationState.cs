@@ -7,22 +7,18 @@ using Mocassin.Framework.Extensions;
 
 namespace Mocassin.Model.Particles
 {
-    /// <inheritdoc />
-    [DataContract]
+    /// <inheritdoc cref="IOccupationState" />
     public class OccupationState : IEquatable<OccupationState>, IOccupationState
     {
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int StateLength => Particles.Count;
 
         /// <summary>
         ///     The particle array that describes the occupation state of a sequence of positions
         /// </summary>
-        [DataMember]
         public List<IParticle> Particles { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         IReadOnlyList<IParticle> IOccupationState.Particles => Particles;
 
         /// <inheritdoc />
@@ -46,15 +42,6 @@ namespace Mocassin.Model.Particles
         public OccupationState(IOccupationState state)
         {
             Particles = state.ToList();
-        }
-
-        /// <summary>
-        ///     Creates an index occupation code from the particle sequence of the occupation state
-        /// </summary>
-        /// <returns></returns>
-        public OccupationCode AsCode()
-        {
-            return new OccupationCode {CodeValues = Particles.Select(a => a.Index).ToArray()};
         }
 
         /// <summary>

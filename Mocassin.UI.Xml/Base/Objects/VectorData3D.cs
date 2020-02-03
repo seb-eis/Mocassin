@@ -44,12 +44,12 @@ namespace Mocassin.UI.Xml.Base
         }
 
         /// <summary>
-        ///     Returns the helper object content as a <see cref="Mocassin.Mathematics.ValueTypes.DataVector3D" /> object
+        ///     Get the data as a <see cref="Fractional3D" />
         /// </summary>
         /// <returns></returns>
-        public DataVector3D AsDataVector3D()
+        public Fractional3D AsFractional3D()
         {
-            return new DataVector3D(A, B, C);
+            return new Fractional3D(A, B, C);
         }
 
         /// <summary>

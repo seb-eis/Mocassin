@@ -136,7 +136,7 @@ namespace Mocassin.Model.Energies.ConflictHandling
         {
             return lhs.Position0 == rhs.Position0
                    && lhs.Position1 == rhs.Position1
-                   && comparer.Equals(lhs.GetSecondPositionVector(), rhs.GetSecondPositionVector());
+                   && comparer.Equals(lhs.SecondPositionVector, rhs.SecondPositionVector);
         }
 
         /// <summary>

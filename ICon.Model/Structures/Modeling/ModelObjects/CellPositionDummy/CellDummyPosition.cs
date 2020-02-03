@@ -1,35 +1,26 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="ICellDummyPosition"/>
-    [DataContract(Name = "DummyPosition")]
+    /// <inheritdoc cref="ICellDummyPosition" />
     public class CellDummyPosition : ModelObject, ICellDummyPosition
     {
         /// <summary>
         ///     The fractional position 3D vector data
         /// </summary>
-        [DataMember]
-        public DataVector3D Vector { get; set; }
+        public Fractional3D Vector { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
-        Fractional3D ICellDummyPosition.Vector => Vector.AsFractional();
+        public override string ObjectName => "Dummy Position";
 
-		/// <inheritdoc />
-		public override string ObjectName => "Dummy Position";
-
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<ICellDummyPosition>(obj) is ICellDummyPosition dummy))
-                return null;
+            if (!(CastIfNotDeprecated<ICellDummyPosition>(obj) is { } dummy)) return null;
 
-            Vector = new DataVector3D(dummy.Vector);
+            Vector = dummy.Vector;
             return this;
-
         }
     }
 }

@@ -1,27 +1,21 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 using Mocassin.Symmetry.SpaceGroups;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="Mocassin.Model.Structures.ISpaceGroupInfo"/>
-    [DataContract(Name = "SpaceGroupInfo")]
+    /// <inheritdoc cref="Mocassin.Model.Structures.ISpaceGroupInfo" />
     public class SpaceGroupInfo : ModelParameter, ISpaceGroupInfo
     {
         /// <inheritdoc />
-        [DataMember]
         public SpaceGroupEntry GroupEntry { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int GroupIndex => GroupEntry.Index;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public string GroupLiteral => GroupEntry.Literal;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public string SpecifierName => GroupEntry.Specifier;
 
         /// <inheritdoc />
@@ -42,12 +36,11 @@ namespace Mocassin.Model.Structures
         /// <inheritdoc />
         public override ModelParameter PopulateObject(IModelParameter modelParameter)
         {
-            if (!(modelParameter is ISpaceGroupInfo groupInfo)) 
+            if (!(modelParameter is ISpaceGroupInfo groupInfo))
                 return null;
 
             GroupEntry = new SpaceGroupEntry(groupInfo.GroupIndex, groupInfo.GroupLiteral, groupInfo.SpecifierName);
             return this;
-
         }
 
         /// <inheritdoc />

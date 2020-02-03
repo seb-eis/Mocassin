@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
@@ -9,60 +8,55 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <inheritdoc cref="IGroupInteraction" />
-    [DataContract(Name = "GroupInteraction")]
     public class GroupInteraction : ModelObject, IGroupInteraction
     {
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int GroupSize => GeometryVectors.Count + 1;
 
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition CenterCellReferencePosition { get; set; }
 
         /// <summary>
         ///     The list of 3D fractional vectors that describe the group geometry
         /// </summary>
-        [DataMember]
-        public List<DataVector3D> GeometryVectors { get; set; }
+        public List<Fractional3D> GeometryVectors { get; set; }
 
         /// <summary>
         ///     The energy dictionaries for each center particle and surrounding occupation state (Auto managed by model)
         /// </summary>
-        [DataMember]
         public Dictionary<IParticle, Dictionary<OccupationState, double>> EnergyDictionarySet { get; set; }
 
         /// <inheritdoc />
         public IEnumerable<Fractional3D> GetBaseGeometry()
         {
-            return (GeometryVectors ?? new List<DataVector3D>()).Select(a => a.AsFractional());
+            return (GeometryVectors ?? new List<Fractional3D>()).AsEnumerable();
         }
 
         /// <inheritdoc />
         public IReadOnlyDictionary<IParticle, IReadOnlyDictionary<OccupationState, double>> GetEnergyDictionarySet()
         {
             var result = new Dictionary<IParticle, IReadOnlyDictionary<OccupationState, double>>();
-            if (EnergyDictionarySet == null) 
+            if (EnergyDictionarySet == null)
                 return result;
 
-            foreach (var item in EnergyDictionarySet) 
+            foreach (var item in EnergyDictionarySet)
                 result.Add(item.Key, item.Value);
 
             return result;
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Group Interaction";
+        /// <inheritdoc />
+        public override string ObjectName => "Group Interaction";
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IGroupInteraction>(obj) is IGroupInteraction interaction))
+            if (!(CastIfNotDeprecated<IGroupInteraction>(obj) is { } interaction))
                 return null;
 
             CenterCellReferencePosition = interaction.CenterCellReferencePosition;
-            GeometryVectors = interaction.GetBaseGeometry().Select(vector => new DataVector3D(vector)).ToList();
+            GeometryVectors = interaction.GetBaseGeometry().ToList();
             EnergyDictionarySet = new Dictionary<IParticle, Dictionary<OccupationState, double>>();
 
             foreach (var item in interaction.GetEnergyDictionarySet())
@@ -98,7 +92,7 @@ namespace Mocassin.Model.Energies
         {
             foreach (var outerItem in EnergyDictionarySet)
             {
-                foreach (var innerItem in outerItem.Value) 
+                foreach (var innerItem in outerItem.Value)
                     yield return new GroupEnergyEntry(outerItem.Key, innerItem.Key, innerItem.Value);
             }
         }

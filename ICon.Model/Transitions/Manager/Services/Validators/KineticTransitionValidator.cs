@@ -27,8 +27,7 @@ namespace Mocassin.Model.Transitions.Validators
             var report = new ValidationReport();
 
             AddHasContentValidation(obj, report);
-            if (!report.IsGood)
-                return report;
+            if (!report.IsGood) return report;
 
             AddAbstractTransitionValidation(obj, report);
             AddTransitionGeometryValidation(obj, report);
@@ -67,8 +66,7 @@ namespace Mocassin.Model.Transitions.Validators
                 report.AddWarning(ModelMessageSource.CreateContentMismatchWarning(this, detail0, detail1));
             }
 
-            if (TransitionGeometryIsPlausible(transition, report)) 
-                return;
+            if (TransitionGeometryIsPlausible(transition, report)) return;
 
             const string detail2 = "Transition geometry does not form a meaningful kinetic transition!";
             report.AddWarning(ModelMessageSource.CreateRestrictionViolationWarning(this, detail2));
@@ -108,6 +106,7 @@ namespace Mocassin.Model.Transitions.Validators
                     continue;
 
                 var detail2 = $"The geometry position contains consecutive unstable positions at positions ({i}) and ({i+1})";
+                details.Add(detail2);
                 break;
             }
 
@@ -154,8 +153,8 @@ namespace Mocassin.Model.Transitions.Validators
                     continue;
                 }
 
-                if ((cellReferencePositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup) ||
-                    (cellReferencePositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup))
+                if (cellReferencePositions[i].IsValidAndStable() && !stateExchangeGroups[i].IsUnstablePositionGroup ||
+                    cellReferencePositions[i].IsValidAndUnstable() && stateExchangeGroups[i].IsUnstablePositionGroup)
                     continue;
 
                 var detail2 = $"Exchange group and position at geometry step ({i}) do not match in stability";

@@ -148,7 +148,7 @@ namespace Mocassin.UI.Xml.Customization
                 PartnerPosition = new ModelObjectReference<CellReferencePosition>(partnerPosition),
                 Distance = energySetter.PairInteraction.Distance,
                 StartVector = VectorData3D.Create(energySetter.PairInteraction.Position0.Vector),
-                EndVector = VectorData3D.Create(energySetter.PairInteraction.GetSecondPositionVector()),
+                EndVector = VectorData3D.Create(energySetter.PairInteraction.SecondPositionVector),
                 PairEnergyEntries = energySetter.EnergyEntries.Select(x => PairEnergyData.Create(x, parent)).ToObservableCollection()
             };
 

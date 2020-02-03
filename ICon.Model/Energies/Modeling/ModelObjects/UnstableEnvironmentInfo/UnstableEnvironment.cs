@@ -1,45 +1,39 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Structures;
 
 namespace Mocassin.Model.Energies
 {
     /// <inheritdoc cref="IUnstableEnvironment" />
-    [DataContract(Name = "UnstableEnvironmentInfo")]
     public class UnstableEnvironment : ModelObject, IUnstableEnvironment
     {
         /// <inheritdoc />
-        [DataMember]
         public double MaxInteractionRange { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <summary>
         ///     The set of defined interaction filters of the unstable environment (Can be empty)
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences(ReferenceLevel = ReferenceLevel.Content)]
+        [UseTrackedData(ReferenceLevel = ReferenceLevel.Content)]
         public List<AsymmetricInteractionFilter> InteractionFilters { get; set; }
 
         /// <summary>
         ///     The list of generated pair interactions (Can be null, automatically managed and linked property, not part of object
         ///     population)
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public List<IAsymmetricPairInteraction> PairInteractions { get; set; }
 
         /// <summary>
-        ///     The list of generated group interactions (Can be null, automatically managed and linked property, not part of object
+        ///     The list of generated group interactions (Can be null, automatically managed and linked property, not part of
+        ///     object
         ///     population)
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public List<IGroupInteraction> GroupInteractions { get; set; }
 
         /// <summary>
@@ -70,13 +64,13 @@ namespace Mocassin.Model.Energies
             return (GroupInteractions ?? new List<IGroupInteraction>()).AsEnumerable();
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Unstable Environment Info";
+        /// <inheritdoc />
+        public override string ObjectName => "Unstable Environment Info";
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IUnstableEnvironment>(obj) is IUnstableEnvironment info))
+            if (!(CastIfNotDeprecated<IUnstableEnvironment>(obj) is { } info))
                 return null;
 
             CellReferencePosition = info.CellReferencePosition;

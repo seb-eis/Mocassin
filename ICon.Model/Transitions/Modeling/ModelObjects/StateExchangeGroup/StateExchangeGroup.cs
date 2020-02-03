@@ -1,31 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangeGroup"/>
-    [DataContract]
+    /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangeGroup" />
     public class StateExchangeGroup : ModelObject, IStateExchangeGroup
     {
         /// <summary>
         ///     The state exchange pairs affiliated with this state exchange group group
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public List<IStateExchangePair> StateExchangePairs { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public bool IsVacancyGroup => StateExchangePairs?.Any(x => x.IsVacancyPair) ?? false;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public bool IsUnstablePositionGroup => StateExchangePairs?.Any(x => x.IsUnstablePositionPair) ?? false;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int StatePairCount => StateExchangePairs.Count;
 
         /// <inheritdoc />
@@ -34,25 +28,24 @@ namespace Mocassin.Model.Transitions
             return (StateExchangePairs ?? new List<IStateExchangePair>()).AsEnumerable();
         }
 
-	    /// <inheritdoc />
-	    public override string ObjectName => "State Exchange Group";
+        /// <inheritdoc />
+        public override string ObjectName => "State Exchange Group";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IStateExchangeGroup>(obj) is IStateExchangeGroup group))
+            if (!(CastIfNotDeprecated<IStateExchangeGroup>(obj) is { } group))
                 return null;
 
             Index = group.Index;
             StateExchangePairs = group.GetStateExchangePairs().ToList();
             return this;
-
         }
 
         /// <inheritdoc />
         public bool Equals(IStateExchangeGroup other)
-        {            
-            if (other == null) 
+        {
+            if (other == null)
                 return false;
 
             var firstContainsSecond = other.GetStateExchangePairs()

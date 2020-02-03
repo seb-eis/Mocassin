@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
@@ -9,21 +8,17 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Describes a defect energy of an <see cref="IParticle" /> on a specific <see cref="ICellReferencePosition" />
     /// </summary>
-    [DataContract]
     public class DefectEnergy : IDefectEnergy
     {
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle Particle { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
         public double Energy { get; set; }
 
         /// <inheritdoc />
@@ -51,7 +46,7 @@ namespace Mocassin.Model.Energies
         }
 
         /// <summary>
-        ///     Creates a new <see cref="DefectEnergy"/> form an <see cref="IDefectEnergy"/> interface
+        ///     Creates a new <see cref="DefectEnergy" /> form an <see cref="IDefectEnergy" /> interface
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>

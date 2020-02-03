@@ -18,7 +18,7 @@ namespace Mocassin.Model.Particles
         /// <summary>
         ///     Get the bitmask encoded version of the particle set
         /// </summary>
-        Bitmask64 GetEncoded();
+        Bitmask64 AsBitmask();
 
         /// <summary>
         ///     Get the sequence of particles that belong to this particle set
@@ -40,7 +40,7 @@ namespace Mocassin.Model.Particles
         bool IsEmpty();
 
         /// <summary>
-        ///     Returns the indices of the contained particles as a long bitmask
+        ///     Returns the indices of the contained particles as a long value
         /// </summary>
         /// <returns></returns>
         long AsLong();

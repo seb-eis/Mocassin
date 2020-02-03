@@ -1,9 +1,8 @@
-﻿using System;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Structures
 {
-    /// <inheritdoc cref="Mocassin.Model.Structures.ICartesianPosition"/>
+    /// <inheritdoc cref="Mocassin.Model.Structures.ICartesianPosition" />
     public readonly struct CartesianPosition : ICartesianPosition, ICartesianMassPoint3D
     {
         /// <inheritdoc />

@@ -76,14 +76,14 @@ namespace Mocassin.Model.Particles.Validators
         /// <param name="result"></param>
         protected void AddOccupantsValidation(IParticleSet particleSet, ValidationReport result)
         {
-            var encodedSet = particleSet.GetEncoded();
+            var encodedSet = particleSet.AsBitmask();
             if (encodedSet.Mask == 0)
             {
                 const string detail = "Custom definition of the empty particle set is not allowed as is always exists";
                 result.AddWarning(ModelMessageSource.CreateModelDuplicateWarning(this, detail));
             }
 
-            if ((encodedSet.Mask & DataReader.Access.GetValidParticlesAsSet().GetEncoded().Mask) - encodedSet.Mask != 0)
+            if ((encodedSet.Mask & DataReader.Access.GetValidParticlesAsSet().AsBitmask().Mask) - encodedSet.Mask != 0)
                 throw new ArgumentException("Particle mask contains deprecated or out of range particles", nameof(particleSet));
         }
     }

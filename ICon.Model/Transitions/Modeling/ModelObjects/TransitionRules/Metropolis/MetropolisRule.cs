@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
-    /// <inheritdoc cref="Mocassin.Model.Transitions.IMetropolisRule"/>
-    [DataContract]
+    /// <inheritdoc cref="Mocassin.Model.Transitions.IMetropolisRule" />
     public class MetropolisRule : TransitionRule, IMetropolisRule
     {
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IMetropolisTransition Transition { get; set; }
 
         /// <summary>
         ///     The list of dependent rules that are a direct result of this rule
         /// </summary>
-        [DataMember]
         public List<MetropolisRule> DependentRules { get; set; }
 
 
@@ -36,19 +32,18 @@ namespace Mocassin.Model.Transitions
             return DependentRules.AsEnumerable();
         }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Metropolis Rule";
+        /// <inheritdoc />
+        public override string ObjectName => "Metropolis Rule";
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IMetropolisRule>(obj) is IMetropolisRule rule))
+            if (!(CastIfNotDeprecated<IMetropolisRule>(obj) is { } rule))
                 return null;
 
             base.PopulateFrom(obj);
             Transition = rule.Transition;
             return this;
-
         }
 
         /// <inheritdoc />

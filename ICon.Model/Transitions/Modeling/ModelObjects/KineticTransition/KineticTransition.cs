@@ -1,37 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Transitions
 {
     /// <inheritdoc cref="IKineticTransition" />
-    [Serializable]
-    [DataContract(Name = "KineticTransition")]
     public class KineticTransition : ModelObject, IKineticTransition
     {
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IAbstractTransition AbstractTransition { get; set; }
 
         /// <summary>
         ///     The geometry of the transition as 3D fractional coordinates
         /// </summary>
-        [DataMember]
-        public List<DataVector3D> PathGeometry { get; set; }
+        public List<Fractional3D> PathGeometry { get; set; }
 
         /// <summary>
         ///     The list of affiliated kinetic transition rules (auto-managed by the model)
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public List<KineticRule> TransitionRules { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int GeometryStepCount => PathGeometry.Count;
 
         /// <inheritdoc />
@@ -49,7 +41,7 @@ namespace Mocassin.Model.Transitions
         /// <inheritdoc />
         public IEnumerable<Fractional3D> GetGeometrySequence()
         {
-            return (PathGeometry ?? new List<DataVector3D>()).Select(value => value.AsFractional());
+            return (PathGeometry ?? new List<Fractional3D>()).AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -59,22 +51,17 @@ namespace Mocassin.Model.Transitions
         }
 
         /// <inheritdoc />
-        //TODO: correct this if neccessary
-        public override string ObjectName
-        {
-	        get { return "Kinetic Transition"; }
-        }
+        public override string ObjectName => "Kinetic Transition";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IKineticTransition>(obj) is IKineticTransition transition))
+            if (!(CastIfNotDeprecated<IKineticTransition>(obj) is { } transition))
                 return null;
 
-            PathGeometry = transition.GetGeometrySequence().Select(value => new DataVector3D(value)).ToList();
+            PathGeometry = transition.GetGeometrySequence().ToList();
             AbstractTransition = transition.AbstractTransition;
             return this;
-
         }
     }
 }

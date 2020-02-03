@@ -142,7 +142,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
             targetInfo.Distance = pairInteraction.Distance;
             targetInfo.CellReferencePosition = pairInteraction.Position1;
-            targetInfo.AbsoluteFractional3D = pairInteraction.GetSecondPositionVector();
+            targetInfo.AbsoluteFractional3D = pairInteraction.SecondPositionVector;
             targetInfo.RelativeFractional3D = targetInfo.AbsoluteFractional3D - pairInteraction.Position0.Vector;
             targetInfo.AbsoluteCartesian3D = VectorEncoder.Transformer.ToCartesian(targetInfo.AbsoluteFractional3D);
 
@@ -161,7 +161,7 @@ namespace Mocassin.Model.Translator.ModelContext
         protected void SetInteractionDataAsInverted(IPairInteractionModel pairModel, IPairInteraction pairInteraction)
         {
             var targetInfo = pairModel.TargetPositionInfo;
-            var positionPair = new[] {pairInteraction.GetSecondPositionVector(), pairInteraction.Position0.Vector};
+            var positionPair = new[] {pairInteraction.SecondPositionVector, pairInteraction.Position0.Vector};
             var invertedPair = ModelProject.SpaceGroupService
                 .ShiftFirstToOriginCell(positionPair, ModelProject.GeometryNumeric.ComparisonRange)
                 .ToList();

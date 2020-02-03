@@ -85,7 +85,7 @@ namespace Mocassin.UI.Xml.SimulationModel
             {
                 NormalizationProbability = NormalizationProbability,
                 ElectricFieldMagnitude = Math.Abs(ElectricFieldMagnitude),
-                ElectricFieldVector = ElectricFieldVector.AsDataVector3D(),
+                ElectricFieldVector = ElectricFieldVector.AsFractional3D(),
                 Transitions = Transitions.Select(x => x.GetInputObject()).Cast<IKineticTransition>().ToList(),
                 PreRunMcsp = PreRunMcsp
             };

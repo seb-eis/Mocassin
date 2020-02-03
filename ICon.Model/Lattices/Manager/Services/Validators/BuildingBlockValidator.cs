@@ -50,7 +50,7 @@ namespace Mocassin.Model.Lattices.Validators
 
             for (var i = 0; i < occupationList.Count; i++)
             {
-                if (occupationList[i].IsValidAndUnstable() && buildingBlock.CellEntries[i].IsEmpty) continue;
+                if (occupationList[i].IsValidAndUnstable() && buildingBlock.CellEntries[i].IsVoid) continue;
 
                 if (occupationList[i].OccupationSet.GetParticles().Contains(buildingBlock.CellEntries[i]))
                     continue;

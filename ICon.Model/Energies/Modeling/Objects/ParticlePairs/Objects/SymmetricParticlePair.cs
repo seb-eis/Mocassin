@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Mocassin.Model.Energies
 {
     /// <summary>
     ///     Represents an symmetric pair of particles to identify pair interactions where the order is not relevant
     /// </summary>
-    [DataContract]
     public class SymmetricParticlePair : ParticlePair, IEquatable<SymmetricParticlePair>
     {
         /// <inheritdoc />
@@ -21,7 +19,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override bool Equals(ParticlePair other)
         {
-            if (other is SymmetricParticlePair pair) 
+            if (other is SymmetricParticlePair pair)
                 return Equals(pair);
 
             return false;

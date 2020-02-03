@@ -12,11 +12,11 @@ namespace Mocassin.Model.Energies
     public class SymmetricInteractionFilter : IInteractionFilter, IEquatable<SymmetricInteractionFilter>
     {
         /// <inheritdoc />
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition CenterCellReferencePosition { get; set; }
 
         /// <inheritdoc />
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition PartnerCellReferencePosition { get; set; }
 
         /// <inheritdoc />

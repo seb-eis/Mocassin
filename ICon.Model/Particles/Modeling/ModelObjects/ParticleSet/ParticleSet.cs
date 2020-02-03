@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Framework.Collections;
 using Mocassin.Framework.Extensions;
 using Mocassin.Mathematics.Bitmasks;
@@ -11,18 +10,15 @@ using Mocassin.Model.Basic;
 namespace Mocassin.Model.Particles
 {
     /// <inheritdoc cref="IParticleSet" />
-    [DataContract(Name = "ParticleSet")]
     public class ParticleSet : ModelObject, IParticleSet
     {
         /// <inheritdoc />
-        [IgnoreDataMember]
         public int ParticleCount => Particles.Count;
 
         /// <summary>
         ///     The list of particles belonging to the particle set
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public List<IParticle> Particles { get; set; }
 
         /// <inheritdoc />
@@ -33,16 +29,13 @@ namespace Mocassin.Model.Particles
 
 
         /// <inheritdoc />
-        public Bitmask64 GetEncoded()
+        public Bitmask64 AsBitmask()
         {
-            ulong mask = 1;
+            ulong mask = 0;
             foreach (var particle in Particles)
             {
-                if (particle.Index == 0) 
-                    continue;
-
-                if (!particle.IsDeprecated) 
-                    mask = mask + (1UL << particle.Index);
+                if (particle.Index == 0) continue;
+                if (!particle.IsDeprecated) mask += 1UL << particle.Index;
             }
 
             return new Bitmask64(mask);
@@ -60,7 +53,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public bool EqualsInModelProperties(IParticleSet other)
         {
-            return GetEncoded().Equals(other.GetEncoded());
+            return AsBitmask().Equals(other.AsBitmask());
         }
 
 		/// <inheritdoc />
@@ -69,8 +62,7 @@ namespace Mocassin.Model.Particles
 		/// <inheritdoc />
 		public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IParticleSet>(obj) is IParticleSet particleSet))
-                return null;
+            if (!(CastIfNotDeprecated<IParticleSet>(obj) is { } particleSet)) return null;
 
             Particles = particleSet.GetParticles().ToList();
             return this;
@@ -86,7 +78,7 @@ namespace Mocassin.Model.Particles
         /// <inheritdoc />
         public long AsLong()
         {
-            return Particles.Where(x => !x.IsEmpty).Aggregate(0L, (current, particle) => current | 1L << particle.Index);
+            return Particles.Where(x => !x.IsVoid).Aggregate(0L, (current, particle) => current | 1L << particle.Index);
         }
 
         /// <inheritdoc />
@@ -110,7 +102,7 @@ namespace Mocassin.Model.Particles
         /// <returns></returns>
         public static IParticleSet ToSortedSet(IEnumerable<IParticle> particles, IComparer<IParticle> comparer = null)
         {
-            comparer = comparer ?? Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
+            comparer ??= Comparer<IParticle>.Create((a, b) => a.Index.CompareTo(b.Index));
             var setList = new SetList<IParticle>(comparer);
             setList.AddRange(particles);
             return new ParticleSet {Particles = setList.ToList()};

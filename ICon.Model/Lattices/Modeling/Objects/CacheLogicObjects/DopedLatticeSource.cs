@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mocassin.Mathematics.Extensions;
-using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.ModelProject;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 using Mocassin.Symmetry.Analysis;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {
@@ -21,7 +21,8 @@ namespace Mocassin.Model.Lattices
         private IBuildingBlock BaseBuildingBlock { get; }
 
         /// <summary>
-        ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell information
+        ///     Get the <see cref="IUnitCellProvider{T1}" /> of <see cref="ICellReferencePosition" /> that supplies the cell
+        ///     information
         /// </summary>
         private IUnitCellProvider<ICellReferencePosition> UnitCellProvider { get; }
 
@@ -62,7 +63,7 @@ namespace Mocassin.Model.Lattices
         }
 
         /// <inheritdoc />
-        public byte[,,,] BuildByteLattice(DataIntVector3D sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng)
+        public byte[,,,] BuildByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng)
         {
             var (a, b, c) = (sizeVector.A, sizeVector.B, sizeVector.C);
             var result = CreateEmptyLattice(a, b, c);
@@ -78,13 +79,14 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         private List<(int PositionIndex, int WyckoffIndex)> MakeDopingApplicationSequence()
         {
-            var result = new List<(int,int)>();
+            var result = new List<(int, int)>();
             for (var i = 0; i < UnitCell.EntryCount; i++)
             {
                 var wyckoff = UnitCell[i].Entry;
                 if (!wyckoff.IsValidAndStable()) continue;
                 result.Add((i, wyckoff.Index));
             }
+
             return result;
         }
 
@@ -96,7 +98,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="rng"></param>
         public void ApplyPopulationTableToLattice(byte[,,,] lattice, int[,] populationTable, Random rng)
         {
-            var (sizeA, sizeB, sizeC, sizeD) = (lattice.GetLength(0), lattice.GetLength(1), lattice.GetLength(2), lattice.GetLength(3));
+            var (sizeA, sizeB, sizeC) = (lattice.GetLength(0), lattice.GetLength(1), lattice.GetLength(2));
             var countTable = PopulationTableToPopulationCountSet(populationTable);
 
             for (var a = 0; a < sizeA; a++)
@@ -114,7 +116,7 @@ namespace Mocassin.Model.Lattices
                 }
             }
 
-            if (countTable.Any(x => x  !=  0)) throw new InvalidOperationException("Count table is not zeroed out. Doping is invalid.");
+            if (countTable.Any(x => x != 0)) throw new InvalidOperationException("Count table is not zeroed out. Doping is invalid.");
         }
 
         /// <summary>
@@ -283,7 +285,7 @@ namespace Mocassin.Model.Lattices
             var secondaryExact = primaryCount * chargeFraction;
             var secondaryCount = (int) Math.Round(secondaryExact);
 
-            while (!(primaryCount * primaryDelta).AlmostEqualByRange(secondaryCount * secondaryDelta) && primaryCount > 0)
+            while (!(primaryCount * primaryDelta).AlmostEqualByRange(secondaryCount * secondaryDelta, tolerance) && primaryCount > 0)
             {
                 primaryCount -= 1;
                 secondaryExact -= chargeFraction;

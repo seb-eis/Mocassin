@@ -23,17 +23,30 @@
 
   <ItemGroup>
     <Compile Remove="MStructure\**" />
+    <Compile Remove="Particles\Modeling\Logic\**" />
+    <Compile Remove="Simulations\Modeling\Logic\**" />
+    <Compile Remove="Simulations\Modeling\ModelParameters\**" />
     <Compile Remove="Simulation\**" />
+    <Compile Remove="Structures\Modeling\Logic\**" />
+    <Compile Remove="Transitions\Modeling\ModelParameters\**" />
     <EmbeddedResource Remove="MStructure\**" />
+    <EmbeddedResource Remove="Particles\Modeling\Logic\**" />
+    <EmbeddedResource Remove="Simulations\Modeling\Logic\**" />
+    <EmbeddedResource Remove="Simulations\Modeling\ModelParameters\**" />
     <EmbeddedResource Remove="Simulation\**" />
+    <EmbeddedResource Remove="Structures\Modeling\Logic\**" />
+    <EmbeddedResource Remove="Transitions\Modeling\ModelParameters\**" />
     <None Remove="MStructure\**" />
+    <None Remove="Particles\Modeling\Logic\**" />
+    <None Remove="Simulations\Modeling\Logic\**" />
+    <None Remove="Simulations\Modeling\ModelParameters\**" />
     <None Remove="Simulation\**" />
+    <None Remove="Structures\Modeling\Logic\**" />
+    <None Remove="Transitions\Modeling\ModelParameters\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Energies\Manager\Services\EnergyConflictResolver.cs" />
-    <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\ISimulationSeriesBase.cs" />
-    <Compile Remove="Simulations\Modeling\ModelObjects\SimulationSeries\Base\SimulationSeriesBase.cs" />
     <Compile Remove="Structures\Manager\Services\StructureConflictResolver.cs" />
     <Compile Remove="Transitions\Manager\Services\TransitionConflictResolver.cs" />
   </ItemGroup>
@@ -54,12 +67,6 @@
   <ItemGroup>
     <Folder Include="Particles\Manager\ConflictHandling\DataHandlers\" />
     <Folder Include="Particles\Manager\ConflictHandling\ObjectHandlers\" />
-    <Folder Include="Particles\Modeling\Logic\" />
-    <Folder Include="Simulations\Modeling\Logic\" />
-    <Folder Include="Simulations\Modeling\ModelObjects\SimulationSeries\Base\" />
-    <Folder Include="Simulations\Modeling\ModelParameters\" />
-    <Folder Include="Structures\Modeling\Logic\" />
-    <Folder Include="Transitions\Modeling\ModelParameters\" />
   </ItemGroup>
 
 </Project>

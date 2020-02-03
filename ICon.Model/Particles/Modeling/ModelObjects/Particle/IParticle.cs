@@ -25,10 +25,9 @@ namespace Mocassin.Model.Particles
         bool IsVacancy { get; }
 
         /// <summary>
-        ///     Flag that marks the particle as the 'Null-Particle' (Particle exists but cannot be accessed, only relevant for
-        ///     disabled periodic boundaries)
+        ///     Flag that marks the particle as the 'Null-Particle' representing the nothing state
         /// </summary>
-        bool IsEmpty { get; }
+        bool IsVoid { get; }
 
         /// <summary>
         ///     Compares to another particle interface for equality in model relevant properties using the provided double comparer

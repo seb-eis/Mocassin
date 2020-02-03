@@ -87,7 +87,7 @@ namespace Mocassin.Model.Structures
                 throw new ArgumentException("4D vector cannot be decoded into a valid 3D equivalent", nameof(vector));
 
             return GetExtendedPositionLists()
-                .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStability.Undefined)))
+                .SkipWhile(set => !set.Contains(new FractionalPosition(decoded, 0, PositionStability.Stable)))
                 .First();
         }
 

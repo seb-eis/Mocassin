@@ -1,38 +1,32 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Transitions
 {
     /// <inheritdoc cref="Mocassin.Model.Transitions.IStateExchangePair" />
-    [DataContract]
     public class StateExchangePair : ModelObject, IStateExchangePair
     {
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle DonorParticle { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle AcceptorParticle { get; set; }
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public bool IsUnstablePositionPair => AcceptorParticle.Index == Particle.VoidIndex;
 
         /// <inheritdoc />
-        [IgnoreDataMember]
         public bool IsVacancyPair => (DonorParticle?.IsVacancy ?? false) ^ (AcceptorParticle?.IsVacancy ?? false);
 
-	    /// <inheritdoc />
-	    public override string ObjectName => "State Exchange Pair";
+        /// <inheritdoc />
+        public override string ObjectName => "State Exchange Pair";
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IStateExchangePair>(obj) is IStateExchangePair statePair))
+            if (!(CastIfNotDeprecated<IStateExchangePair>(obj) is { } statePair))
                 return null;
 
             DonorParticle = statePair.DonorParticle;

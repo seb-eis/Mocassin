@@ -81,8 +81,8 @@ namespace Mocassin.Model.Energies
         protected bool CheckIsChiralPair(SymmetricPairInteraction first, SymmetricPairInteraction second)
         {
             if (first.Position0 != first.Position1 || second.Position0 != second.Position1 || first.Position0 != second.Position1) return false;
-            return SpaceGroupService.CheckInteractionGeometryIsChiralPair(first.Position0.Vector, first.GetSecondPositionVector(),
-                second.Position0.Vector, second.GetSecondPositionVector());
+            return SpaceGroupService.CheckInteractionGeometryIsChiralPair(first.Position0.Vector, first.SecondPositionVector,
+                second.Position0.Vector, second.SecondPositionVector);
         }
 
         /// <inheritdoc />

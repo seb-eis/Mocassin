@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Energies
 {
     /// <inheritdoc cref="IAsymmetricPairInteraction" />
-    [DataContract]
     public class AsymmetricPairInteraction : PairInteraction, IAsymmetricPairInteraction
     {
         /// <summary>
         ///     The polar pair energy dictionary that assigns each possible particle pair an energy value
         /// </summary>
-        [DataMember]
         public Dictionary<AsymmetricParticlePair, double> EnergyDictionary { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
         public override IPairInteraction ChiralPartner => null;
 
         /// <inheritdoc />
@@ -38,19 +35,19 @@ namespace Mocassin.Model.Energies
         }
 
 
-		/// <inheritdoc />
-		public override string ObjectName => "Asymmetric Pair Interaction";
+        /// <inheritdoc />
+        public override string ObjectName => "Asymmetric Pair Interaction";
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IAsymmetricPairInteraction>(obj) is IAsymmetricPairInteraction interaction))
+            if (!(CastIfNotDeprecated<IAsymmetricPairInteraction>(obj) is { } interaction))
                 return null;
 
             base.PopulateFrom(obj);
 
             EnergyDictionary = new Dictionary<AsymmetricParticlePair, double>(interaction.GetEnergyDictionary().Count);
-            foreach (var item in interaction.GetEnergyDictionary()) 
+            foreach (var item in interaction.GetEnergyDictionary())
                 EnergyDictionary.Add(item.Key, item.Value);
 
             return null;
@@ -72,8 +69,7 @@ namespace Mocassin.Model.Energies
         /// <inheritdoc />
         public override IEnumerable<PairEnergyEntry> GetEnergyEntries()
         {
-            foreach (var item in EnergyDictionary) 
-                yield return new PairEnergyEntry(item.Key, item.Value);
+            return EnergyDictionary.Select(item => new PairEnergyEntry(item.Key, item.Value));
         }
     }
 }

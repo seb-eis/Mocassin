@@ -8,10 +8,6 @@ namespace Mocassin.Model.Particles
     /// </summary>
     public interface IParticleCachePort : IModelCachePort
     {
-        /// <summary>
-        ///     Get an enumerable sequence of all possible pair codes that can exist in the system
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<PairCode> GetPossiblePairCodes();
+
     }
 }

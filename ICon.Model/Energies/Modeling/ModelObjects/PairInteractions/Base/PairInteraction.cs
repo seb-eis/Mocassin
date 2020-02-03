@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Structures;
@@ -7,25 +6,22 @@ using Mocassin.Model.Structures;
 namespace Mocassin.Model.Energies
 {
     /// <inheritdoc cref="IPairInteraction" />
-    [DataContract]
     public abstract class PairInteraction : ModelObject, IPairInteraction
     {
         /// <inheritdoc />
-        [DataMember]
+        [UseTrackedData]
         public ICellReferencePosition Position0 { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
+        [UseTrackedData]
         public ICellReferencePosition Position1 { get; set; }
 
         /// <summary>
         ///     The actual position vector for the second unit cell position
         /// </summary>
-        [DataMember]
-        public DataVector3D SecondPositionVector { get; set; }
+        public Fractional3D SecondPositionVector { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
         public double Distance { get; set; }
 
         /// <inheritdoc />
@@ -49,25 +45,19 @@ namespace Mocassin.Model.Energies
             Index = candidate.Index;
             Position0 = candidate.Position0;
             Position1 = candidate.Position1;
-            SecondPositionVector = new DataVector3D(candidate.PositionVector);
+            SecondPositionVector = candidate.PositionVector;
             Distance = candidate.Distance;
-        }
-
-        /// <inheritdoc />
-        public Fractional3D GetSecondPositionVector()
-        {
-            return SecondPositionVector.AsFractional();
         }
 
         /// <inheritdoc />
         public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IPairInteraction>(obj) is IPairInteraction interaction))
+            if (!(CastIfNotDeprecated<IPairInteraction>(obj) is { } interaction))
                 return null;
 
             Position0 = interaction.Position0;
             Position1 = interaction.Position1;
-            SecondPositionVector = new DataVector3D(interaction.GetSecondPositionVector());
+            SecondPositionVector = interaction.SecondPositionVector;
             Distance = interaction.Distance;
             return this;
         }

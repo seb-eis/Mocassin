@@ -51,7 +51,7 @@ namespace Mocassin.UI.Xml.EnergyModel
             var obj = new GroupInteraction
             {
                 CenterCellReferencePosition = new CellReferencePosition {Key = CenterCellReferencePosition.Key},
-                GeometryVectors = GroupGeometry.Select(x => x.AsDataVector3D()).ToList()
+                GeometryVectors = GroupGeometry.Select(x => x.AsFractional3D()).ToList()
             };
             return obj;
         }

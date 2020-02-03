@@ -9,7 +9,7 @@ namespace Mocassin.Model.Transitions
     ///     Mapping for a kinetic transition that describes a 4D encoded transition path belonging to a specific kinetic
     ///     reference transition
     /// </summary>
-    public readonly struct KineticMapping
+    public class KineticMapping
     {
         /// <summary>
         ///     The unit cell position that describes the start point
@@ -72,7 +72,6 @@ namespace Mocassin.Model.Transitions
         /// <param name="fractionalPath"></param>
         public KineticMapping(IKineticTransition transition, ICellReferencePosition startCellReferencePosition, ICellReferencePosition endCellReferencePosition,
             CrystalVector4D[] encodedPath, Fractional3D[] fractionalPath)
-            : this()
         {
             Transition = transition;
             StartCellReferencePosition = startCellReferencePosition;

@@ -449,8 +449,8 @@ namespace Mocassin.Symmetry.SpaceGroups
             var operationGroup = new PointOperationGroup
             {
                 SpaceGroupEntry = LoadedGroup.GetGroupEntry(),
-                OriginPoint = new DataVector3D(originPoint),
-                PointSequence = pointList.Select(value => new DataVector3D(value)).ToList(),
+                OriginPoint = originPoint,
+                PointSequence = pointList.ToList(),
                 SelfProjectionOperations = new List<SymmetryOperation>()
             };
 

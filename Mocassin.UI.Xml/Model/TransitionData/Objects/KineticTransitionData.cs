@@ -50,7 +50,7 @@ namespace Mocassin.UI.Xml.TransitionModel
             var obj = new KineticTransition
             {
                 AbstractTransition = new AbstractTransition {Key = AbstractTransition.Key},
-                PathGeometry = PathVectors.Select(x => x.AsDataVector3D()).ToList()
+                PathGeometry = PathVectors.Select(x => x.AsFractional3D()).ToList()
             };
             return obj;
         }

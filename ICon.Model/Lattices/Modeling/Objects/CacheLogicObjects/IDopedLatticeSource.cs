@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mocassin.Mathematics.ValueTypes;
+using Moccasin.Mathematics.ValueTypes;
 
 namespace Mocassin.Model.Lattices
 {
@@ -16,6 +16,6 @@ namespace Mocassin.Model.Lattices
         /// <param name="dopingDictionary"></param>
         /// <param name="rng"></param>
         /// <returns></returns>
-        byte[,,,] BuildByteLattice(DataIntVector3D sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng);
+        byte[,,,] BuildByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng);
     }
 }

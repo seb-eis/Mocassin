@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Mocassin.Model.Basic;
 
 namespace Mocassin.Model.Particles
 {
     /// <inheritdoc cref="IParticle" />
-    [DataContract]
     public class Particle : ModelObject, IParticle
     {
         /// <summary>
@@ -15,20 +13,16 @@ namespace Mocassin.Model.Particles
         public const int VoidIndex = 0;
 
         /// <inheritdoc />
-        [DataMember]
         public double Charge { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
         public string Symbol { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
         public bool IsVacancy { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        public bool IsEmpty { get; set; }
+        public bool IsVoid { get; private set; }
 
         /// <summary>
         ///     Compares particle by name, symbol and then charge (Charge is not compared with tolerance)
@@ -59,13 +53,13 @@ namespace Mocassin.Model.Particles
         }
 
         /// <summary>
-        ///     Creates a void particle, this particle represents an active by context unavailable particle and should always have
+        ///     Creates a void particle, this particle represents an active but context unavailable particle and should always have
         ///     the index 0 in a particle manager
         /// </summary>
         /// <returns></returns>
-        public static Particle CreateEmpty()
+        public static Particle CreateVoid()
         {
-            return new Particle {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsEmpty = true};
+            return new Particle {Name = "Void", Symbol = "Void", Key = "Particle.Void", Charge = 0.0, Index = VoidIndex, IsVoid = true};
         }
 
 		/// <inheritdoc />
@@ -75,11 +69,8 @@ namespace Mocassin.Model.Particles
 		/// <inheritdoc />
 		public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<IParticle>(obj) is IParticle particle))
-                return null;
-
-            if (particle.IsEmpty)
-                throw new ArgumentException("Empty particle object interface reached consume function");
+            if (!(CastIfNotDeprecated<IParticle>(obj) is { } particle)) return null;
+            if (particle.IsVoid) throw new ArgumentException("Empty particle object interface reached consume function");
 
             Name = particle.Name;
             Symbol = particle.Symbol;

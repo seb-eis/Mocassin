@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Mocassin.Framework.Collections;
 using Mocassin.Mathematics.Permutation;
 using Mocassin.Mathematics.ValueTypes;
@@ -9,54 +8,42 @@ using Mocassin.Mathematics.ValueTypes;
 namespace Mocassin.Symmetry.SpaceGroups
 {
     /// <inheritdoc />
-    [DataContract]
     public class PointOperationGroup : IPointOperationGroup
     {
         /// <inheritdoc />
-        [DataMember]
         public SpaceGroupEntry SpaceGroupEntry { get; set; }
 
         /// <summary>
         ///     The origin point for the operation collection
         /// </summary>
-        [DataMember]
-        public DataVector3D OriginPoint { get; set; }
+        public Fractional3D OriginPoint { get; set; }
 
         /// <summary>
         ///     The point sequence the collection is valid for
         /// </summary>
-        [DataMember]
-        public List<DataVector3D> PointSequence { get; set; }
+        public List<Fractional3D> PointSequence { get; set; }
 
         /// <summary>
         ///     The unfiltered list of all point symmetry operations of the origin point
         /// </summary>
-        [DataMember]
         public List<SymmetryOperation> PointOperations { get; set; }
 
         /// <summary>
         ///     The filtered list of all operations that yield unique vector sequences of the original point sequence
         /// </summary>
         /// <remarks> Unique in the sense that two sequences are not identical cannot trivially matched by inverting one </remarks>
-        [DataMember]
         public List<SymmetryOperation> UniqueSequenceOperations { get; set; }
 
         /// <summary>
         ///     Get all operations that project the original point sequence onto itself
         /// </summary>
-        [DataMember]
         public List<SymmetryOperation> SelfProjectionOperations { get; set; }
 
         /// <summary>
         ///     Matrix that describes all possible equivalent orders of the vector sequence when performing a self projection (For
         ///     value permutations)
         /// </summary>
-        [DataMember]
         public List<List<int>> UniqueSelfProjectionOrders { get; set; }
-
-        /// <inheritdoc />
-        [IgnoreDataMember]
-        Fractional3D IPointOperationGroup.OriginPoint => OriginPoint.AsFractional();
 
         /// <inheritdoc />
         public IEnumerable<IEnumerable<Fractional3D>> GetUniquePointSequences()
@@ -75,7 +62,7 @@ namespace Mocassin.Symmetry.SpaceGroups
         /// <inheritdoc />
         public IEnumerable<Fractional3D> GetPointSequence()
         {
-            return PointSequence.Select(value => value.AsFractional());
+            return PointSequence.AsReadOnly();
         }
 
         /// <inheritdoc />

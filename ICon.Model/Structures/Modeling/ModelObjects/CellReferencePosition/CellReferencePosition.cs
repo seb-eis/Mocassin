@@ -1,63 +1,42 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Mathematics.ValueTypes;
+﻿using Mocassin.Mathematics.ValueTypes;
 using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 
 namespace Mocassin.Model.Structures
 {
-    /// <summary>
-    ///     Enum to describe the unit cell position status (Stable, unstable,...)
-    /// </summary>
-    public enum PositionStability
-    {
-        Undefined,
-        Stable,
-        Unstable
-    }
-
-    /// <inheritdoc cref="ICellReferencePosition"/>
-    [DataContract]
+    /// <inheritdoc cref="ICellReferencePosition" />
     public class CellReferencePosition : ModelObject, ICellReferencePosition
     {
-        /// <inheritdoc />
-        [IgnoreDataMember]
-        Fractional3D ICellReferencePosition.Vector => Vector?.AsFractional() ?? new Fractional3D();
-
         /// <summary>
         ///     The fractional position vector of the unit cell position
         /// </summary>
-        [DataMember]
-        public DataVector3D Vector { get; set; }
+        public Fractional3D Vector { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticleSet OccupationSet { get; set; }
 
         /// <inheritdoc />
-        [DataMember]
         public PositionStability Stability { get; set; }
 
-		/// <inheritdoc />
-		public override string ObjectName => "Unit Cell Position";
+        /// <inheritdoc />
+        public override string ObjectName => "Unit Cell Position";
 
-		/// <inheritdoc />
-		public override ModelObject PopulateFrom(IModelObject obj)
+        /// <inheritdoc />
+        public override ModelObject PopulateFrom(IModelObject obj)
         {
-            if (!(CastIfNotDeprecated<ICellReferencePosition>(obj) is ICellReferencePosition position))
-                return null;
+            if (!(CastIfNotDeprecated<ICellReferencePosition>(obj) is { } position)) return null;
 
             Stability = position.Stability;
-            Vector = new DataVector3D(position.Vector);
+            Vector = position.Vector;
             OccupationSet = position.OccupationSet;
             return this;
-
         }
 
         /// <inheritdoc />
         public FractionalPosition AsPosition()
         {
-            return new FractionalPosition(Vector.AsFractional(), OccupationSet.Index, Stability);
+            return new FractionalPosition(Vector, OccupationSet.Index, Stability);
         }
 
         /// <inheritdoc />

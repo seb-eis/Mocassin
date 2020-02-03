@@ -172,7 +172,7 @@ namespace Mocassin.Model.DataManagement
             var linkers = new List<Action<object>>();
             foreach (var property in objectType.GetProperties(flags))
             {
-                if (!(property.GetCustomAttribute(typeof(UseTrackedReferencesAttribute)) is UseTrackedReferencesAttribute attribute))
+                if (!(property.GetCustomAttribute(typeof(UseTrackedDataAttribute)) is UseTrackedDataAttribute attribute))
                     continue;
 
                 switch (attribute.ReferenceLevel)

@@ -12,6 +12,6 @@ namespace Mocassin.Model.Lattices
         /// <summary>
         ///     The occupation of the building block
         /// </summary>
-        List<IParticle> CellEntries { get; }
+        IReadOnlyList<IParticle> CellEntries { get; }
     }
 }

@@ -139,7 +139,7 @@ namespace Mocassin.Model.Energies.Validators
                 if (envInfo.GetDefectEnergies().SkipWhile(x => x != defectEnergy).Count(x => x.Equals(defectEnergy)) != 1)
                     details.Add($"Defect [{defectEnergy.Particle}] @ [{defectEnergy.CellReferencePosition}] has multiple definitions.");
 
-                if (defectEnergy.CellReferencePosition.IsValidAndStable() && defectEnergy.Particle.IsEmpty)
+                if (defectEnergy.CellReferencePosition.IsValidAndStable() && defectEnergy.Particle.IsVoid)
                     details.Add($"Defect [{defectEnergy.Particle}] (void) @ [{defectEnergy.CellReferencePosition}] (stable) has no effect.");
 
                 if (double.IsInfinity(defectEnergy.Energy) || double.IsNaN(defectEnergy.Energy))

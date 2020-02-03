@@ -118,7 +118,7 @@ namespace Mocassin.Model.Translator.ModelContext
 
             foreach (var particle in mobileParticles.Skip(1))
             {
-                if (particle.IsEmpty)
+                if (particle.IsVoid)
                     continue;
 
                 if (particle.IsVacancy && comparer.Compare(particle.Charge, 0.0) == 0)

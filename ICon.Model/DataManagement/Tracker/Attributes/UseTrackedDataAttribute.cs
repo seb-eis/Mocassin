@@ -17,7 +17,7 @@ namespace Mocassin.Model.Basic
     ///     the known reference by the model data tracker
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class UseTrackedReferencesAttribute : Attribute
+    public class UseTrackedDataAttribute : Attribute
     {
         /// <summary>
         ///     Flags that marks the performed level of resolving (Default: Property itself is resolvable or implements non-generic

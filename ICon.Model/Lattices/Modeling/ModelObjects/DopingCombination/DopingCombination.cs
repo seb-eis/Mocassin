@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using Mocassin.Model.Basic;
+﻿using Mocassin.Model.Basic;
 using Mocassin.Model.Particles;
 using Mocassin.Model.Structures;
 
@@ -8,28 +7,24 @@ namespace Mocassin.Model.Lattices
     /// <summary>
     ///     Contains the information about the particles and unit cell positions which are involved in the doping process
     /// </summary>
-    [DataContract(Name = "Doping")]
     public class DopingCombination : ModelObject, IDopingCombination
     {
         /// <summary>
         ///     Dopand particle
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle Dopant { set; get; }
 
         /// <summary>
         ///     Particle that is doped
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public IParticle Dopable { set; get; }
 
         /// <summary>
         ///     Unit cell position that should be doped
         /// </summary>
-        [DataMember]
-        [UseTrackedReferences]
+        [UseTrackedData]
         public ICellReferencePosition CellReferencePosition { get; set; }
 
         /// <inheritdoc />
@@ -51,11 +46,11 @@ namespace Mocassin.Model.Lattices
         /// <returns></returns>
         public override ModelObject PopulateFrom(IModelObject modelObject)
         {
-            if (!(CastIfNotDeprecated<IDopingCombination>(modelObject) is var casted)) return null;
+            if (!(CastIfNotDeprecated<IDopingCombination>(modelObject) is {} dopingCombination)) return null;
 
-            Dopant = casted.Dopant;
-            Dopable = casted.Dopable;
-            CellReferencePosition = casted.CellReferencePosition;
+            Dopant = dopingCombination.Dopant;
+            Dopable = dopingCombination.Dopable;
+            CellReferencePosition = dopingCombination.CellReferencePosition;
             return this;
         }
     }

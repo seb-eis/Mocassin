@@ -41,7 +41,7 @@ namespace Mocassin.Model.Energies
         ///     pair interaction
         /// </summary>
         /// <returns></returns>
-        Fractional3D GetSecondPositionVector();
+        Fractional3D SecondPositionVector { get; }
 
         /// <summary>
         ///     Get all possible pair occupations of the pair with the corresponding energy value

@@ -6,7 +6,7 @@ namespace Mocassin.Model.Energies
     /// <summary>
     ///     Raw pair interaction candidate struct that is used to compare and assign the indexing to the raw pair interactions
     /// </summary>
-    public readonly struct PairCandidate
+    public class PairCandidate
     {
         /// <summary>
         ///     The first unit cell position
@@ -41,7 +41,6 @@ namespace Mocassin.Model.Energies
         /// <param name="positionVector"></param>
         /// <param name="distance"></param>
         public PairCandidate(ICellReferencePosition position0, ICellReferencePosition position1, Fractional3D positionVector, double distance)
-            : this()
         {
             Position0 = position0;
             Position1 = position1;
@@ -60,7 +59,6 @@ namespace Mocassin.Model.Energies
         /// <param name="index"></param>
         public PairCandidate(ICellReferencePosition position0, ICellReferencePosition position1, Fractional3D positionVector, double distance,
             int index)
-            : this()
         {
             Position0 = position0;
             Position1 = position1;

@@ -43,7 +43,7 @@ namespace Mocassin.Model.Translator.EntityBuilder
         /// <returns></returns>
         public SimulationLatticeModel BuildLatticeModelEntity(LatticeConfiguration latticeConfiguration, ISimulationModel simulationModel)
         {
-            var rawLattice = DopedLatticeSource.BuildByteLattice(latticeConfiguration.GetIntVector3D(),
+            var rawLattice = DopedLatticeSource.BuildByteLattice(latticeConfiguration.GetSizeVector(),
                 latticeConfiguration.DopingConcentrations, Rng);
             var interopLattice = new LatticeEntity(rawLattice);
             return new SimulationLatticeModel {Lattice = interopLattice};
