@@ -17,5 +17,14 @@ namespace Mocassin.Model.Lattices
         /// <param name="rng"></param>
         /// <returns></returns>
         byte[,,,] BuildByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng);
+
+        /// <summary>
+        ///     Populates a <see cref="IByteArray4D"/> with a new lattice
+        /// </summary>
+        /// <param name="sizeVector"></param>
+        /// <param name="dopingDictionary"></param>
+        /// <param name="rng"></param>
+        /// <returns></returns>
+        void PopulateByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng, IByteArray4D target);
     }
 }

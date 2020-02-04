@@ -69,7 +69,13 @@ namespace Mocassin.Model.Lattices
             var result = CreateEmptyLattice(a, b, c);
             var populationTable = CreateDopedPopulationTable(dopingDictionary, a, b, c);
             ApplyPopulationTableToLattice(result, populationTable, rng);
-            return result;
+            return result.AsArray();
+        }
+
+        /// <inheritdoc />
+        public void PopulateByteLattice(VectorI3 sizeVector, IDictionary<IDoping, double> dopingDictionary, Random rng, IByteArray4D target)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -96,7 +102,7 @@ namespace Mocassin.Model.Lattices
         /// <param name="lattice"></param>
         /// <param name="populationTable"></param>
         /// <param name="rng"></param>
-        public void ApplyPopulationTableToLattice(byte[,,,] lattice, int[,] populationTable, Random rng)
+        public void ApplyPopulationTableToLattice(IByteArray4D lattice, int[,] populationTable, Random rng)
         {
             var (sizeA, sizeB, sizeC) = (lattice.GetLength(0), lattice.GetLength(1), lattice.GetLength(2));
             var countTable = PopulationTableToPopulationCountSet(populationTable);
@@ -173,9 +179,9 @@ namespace Mocassin.Model.Lattices
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        public byte[,,,] CreateEmptyLattice(int a, int b, int c)
+        public IByteArray4D CreateEmptyLattice(int a, int b, int c)
         {
-            return new byte[a, b, c, UnitCellProvider.VectorEncoder.PositionCount];
+            return new ByteArray4D(new byte[a, b, c, UnitCellProvider.VectorEncoder.PositionCount]);
         }
 
         /// <summary>
